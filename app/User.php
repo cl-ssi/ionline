@@ -39,6 +39,11 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function organizationalUnit() {
+        return $this->belongsTo('\App\OrganizationalUnit');
+    }
+
+
     /**
      * The attributes that should be cast to native types.
      *
