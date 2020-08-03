@@ -20,3 +20,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+Route::prefix('rrhh')->as('rrhh.')->group(function(){
+    Route::resource('organizationalUnits','Rrhh\OrganizationalUnitController')->middleware(['auth']);
+});
