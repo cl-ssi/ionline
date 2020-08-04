@@ -43,6 +43,27 @@ class User extends Authenticatable
         return $this->belongsTo('\App\Rrhh\OrganizationalUnit');
     }
 
+    public function scopeSearch($query, $name) {
+        if($name != "") {
+            return $query->where('name', 'LIKE', '%'.$name.'%')
+                         ->orWhere('fathers_family', 'LIKE', '%'.$name.'%')
+                         ->orWhere('mothers_family', 'LIKE', '%'.$name.'%');
+        }
+    }
+
+    public function runFormat() {
+        return number_format($this->id, 0,'.','.') . '-' . $this->dv;
+    }
+    
+    public function getFullNameAttribute()
+    {
+        return "{$this->name} {$this->fathers_family} {$this->mothers_family}";
+    }
+
+    public function getInitialsAttribute()
+    {
+        return "{$this->name[0]}{$this->fathers_family[0]}{$this->mothers_family[0]}";
+    }
 
     /**
      * The attributes that should be cast to native types.
