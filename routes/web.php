@@ -37,3 +37,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
 
 });
+
+Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(function(){
+    Route::resource('permissions','Parameters\PermissionController');
+});
