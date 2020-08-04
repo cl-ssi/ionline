@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
-use App\OrganizationalUnit;
+use App\Rrhh\OrganizationalUnit;
 
 
 class UserSeeder extends Seeder

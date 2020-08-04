@@ -27,7 +27,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'id', 'dv', 'name', 'fathers_family','mothers_family', 'email',
-        'password', 'birthday', 'position'
+        'password','birthday','position','active'
     ];
 
     /**
@@ -40,7 +40,7 @@ class User extends Authenticatable
     ];
 
     public function organizationalUnit() {
-        return $this->belongsTo('\App\OrganizationalUnit');
+        return $this->belongsTo('\App\Rrhh\OrganizationalUnit');
     }
 
 

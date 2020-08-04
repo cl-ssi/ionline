@@ -14,8 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    //return view('welcome');
-    //return view('index');
+    return view('welcome');
 });
 
 Auth::routes();
@@ -24,9 +23,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
-    
+
     //rrhh/organizationalunits
-    Route::prefix('organizationalunits')->name('organizationalunits.')->group(function () {
+    Route::prefix('organizational-units')->name('organizationalunits.')->group(function () {
         Route::get('/', 'Rrhh\OrganizationalUnitController@index')->name('index');
         Route::get('/create', 'Rrhh\OrganizationalUnitController@create')->name('create');
         Route::post('/store', 'Rrhh\OrganizationalUnitController@store')->name('store');
