@@ -24,7 +24,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
-    
+
     //rrhh/organizationalunits
     Route::prefix('organizationalunits')->name('organizationalunits.')->group(function () {
         Route::get('/', 'Rrhh\OrganizationalUnitController@index')->name('index');
@@ -34,11 +34,10 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::put('{organizationalUnit}', 'Rrhh\OrganizationalUnitController@update')->name('update');
     });
 
-
-
-
 });
 
 Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(function(){
     Route::resource('permissions','Parameters\PermissionController');
+    Route::resource('roles','Parameters\RoleController');
+
 });
