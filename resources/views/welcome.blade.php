@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    Laravel Nueva Intranet
                 </div>
 
                 <div class="links">

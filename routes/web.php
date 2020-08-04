@@ -14,7 +14,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    //return view('welcome');
+    //return view('index');
 });
 
 Auth::routes();
@@ -22,6 +23,18 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
-Route::prefix('rrhh')->as('rrhh.')->group(function(){
-    Route::resource('organizationalUnits','Rrhh\OrganizationalUnitController')->middleware(['auth']);
+Route::prefix('rrhh')->as('rrhh.')->group(function () {
+    
+    //rrhh/organizationalunits
+    Route::prefix('organizationalunits')->name('organizationalunits.')->group(function () {
+        Route::get('/', 'Rrhh\OrganizationalUnitController@index')->name('index');
+        Route::get('/create', 'Rrhh\OrganizationalUnitController@create')->name('create');
+        Route::post('/store', 'Rrhh\OrganizationalUnitController@store')->name('store');
+        Route::get('{organizationalUnit}/edit', 'Rrhh\OrganizationalUnitController@edit')->name('edit');
+        Route::put('{organizationalUnit}', 'Rrhh\OrganizationalUnitController@update')->name('update');
+    });
+
+
+
+
 });
