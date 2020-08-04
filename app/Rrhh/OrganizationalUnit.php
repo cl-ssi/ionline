@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Rrhh;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,7 +15,7 @@ class OrganizationalUnit extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'organizational_units_id'
+        'name', 'organizational_unit_id'
     ];
 
     public function users() {
@@ -23,11 +23,11 @@ class OrganizationalUnit extends Model
     }
 
     public function father() {
-        return $this->belongsTo('\App\rrhh\OrganizationalUnit', 'organizational_unit_id');
+        return $this->belongsTo('\App\Rrhh\OrganizationalUnit', 'organizational_unit_id');
     }
 
     public function childs() {
-        return $this->hasMany('\App\rrhh\OrganizationalUnit', 'organizational_unit_id');
+        return $this->hasMany('\App\Rrhh\OrganizationalUnit', 'organizational_unit_id');
     }
 
     public function documents() {
