@@ -25,3 +25,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::prefix('rrhh')->as('rrhh.')->group(function(){
     Route::resource('organizationalUnits','Rrhh\OrganizationalUnitController')->middleware(['auth']);
 });
+
+Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(function(){
+    Route::resource('permissions','Parameters\PermissionController');
+});
