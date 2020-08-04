@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\OrganizationalUnit;
+use App\Rrhh\OrganizationalUnit;
 
 
 class OrganizationalUnitSeeder extends Seeder

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -21,12 +22,6 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
      * Create a new controller instance.
@@ -36,5 +31,39 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Handle an authentication attempt.
+     *
+     * @param  \Illuminate\Http\Request $request
+     *
+     * @return Response
+     */
+    public function attemptLogin(Request $request)
+    {
+        $credentials = $request->only('id', 'password');
+
+        /*
+        * Limpiar run y quitar el DV
+        */
+        $credentials['id'] = str_replace('.','',$credentials['id']);
+        $credentials['id'] = str_replace('-','',$credentials['id']);
+        $credentials['id'] = substr($credentials['id'], 0, -1);
+
+
+        if (Auth::attempt($credentials, $request->filled('remember'))) {
+            // Authentication passed...
+            return redirect()->intended('dashboard');
+        }
+    }
+
+    /**
+     * Overwrite username por id
+     *
+     */
+    public function username()
+    {
+        return 'id';
     }
 }

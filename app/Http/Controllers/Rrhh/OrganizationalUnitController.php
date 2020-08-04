@@ -15,10 +15,10 @@ class OrganizationalUnitController extends Controller
      */
     public function index()
     {
-        
+
         $organizationalunits = OrganizationalUnit::orderBy('name', 'asc')->get();
         //dd($organizationalunits);
-        return view('rrhh.organizationalunit.index', compact('organizationalunits'));        
+        return view('rrhh.organizationalunit.index', compact('organizationalunits'));
 
     }
 
@@ -42,7 +42,7 @@ class OrganizationalUnitController extends Controller
      */
     public function store(Request $request)
     {
-        $organizationalunit = new OrganizationalUnit($request->All());        
+        $organizationalunit = new OrganizationalUnit($request->All());
         $organizationalunit->save();
         return redirect()->route('rrhh.organizationalunits.index');
     }
@@ -66,7 +66,7 @@ class OrganizationalUnitController extends Controller
      */
     public function edit(OrganizationalUnit $organizationalUnit)
     {
-        
+
         $organizationalUnits = OrganizationalUnit::All();
         return view('rrhh.organizationalunit.edit', compact('organizationalUnit','organizationalUnits'));
     }
@@ -81,7 +81,7 @@ class OrganizationalUnitController extends Controller
     public function update(Request $request, OrganizationalUnit $organizationalUnit)
     {
         //
-        $organizationalUnit->fill($request->all());        
+        $organizationalUnit->fill($request->all());
         $organizationalUnit->save();
         return redirect()->route('rrhh.organizationalunits.index');
 
