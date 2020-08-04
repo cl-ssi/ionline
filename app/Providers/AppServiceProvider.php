@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Http\Request;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Blade::directive('active', function ($route) {
+            //$route = array('home','login');
+            if( is_array( $route ) ){
+                return in_array(request()->is(), $route) ? 'active' : '';
+            }
+            return request()->is($route) ? 'active' : '';
+        });
+
+
+        Blade::directive('datetime', function ($expression) {
+            return "<?php echo ($expression)?($expression)->format('Y-m-d H:i:s'):''; ?>";
+        });
     }
 }

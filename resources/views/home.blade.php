@@ -7,6 +7,9 @@
             <div class="card">
                 <div class="card-header">{{ __('Dashboard') }}</div>
 
+                <button type="submit" class="btn btn-primary"><i class="fas fa-rocket"></i> Guardar</button>
+
+
                 <div class="card-body">
                     @if (session('status'))
                         <div class="alert alert-success" role="alert">
