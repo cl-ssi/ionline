@@ -5,7 +5,7 @@ use App\User;
 use App\OrganizationalUnit;
 
 
-class UsersTableSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
