@@ -10,7 +10,43 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
+                @canany(['Users: create', 'Users: edit','Users: delete',
+                    'OrganizationalUnits: create',
+                    'OrganizationalUnits: edit',
+                    'OrganizationalUnits: delete',
+                    'Authorities: manager',
+                    'Authorities: view'])
+                <li class="nav-item dropdown @active(['rrhh.users.*','rrhh.organizationalUnits.*']">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-users"></i> RRHH
+                    </a>
 
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        @canany(['Users: create', 'Users: edit','Users: delete'])
+                        <a class="dropdown-item @active('rrhh.users.index')"
+                            href="{{ route('rrhh.users.index') }}">
+                            <i class="fas fa-user fa-fw"></i> Usuarios
+                        </a>
+                        @endcan
+
+                        @canany(['OrganizationalUnits: create', 'OrganizationalUnits: edit', 'OrganizationalUnits: delete'])
+                        <a class="dropdown-item @active('rrhh.organizationalUnits.*')"
+                            href="{{ route('rrhh.organizationalUnits.index') }}">
+                            <i class="fas fa-sitemap fa-fw"></i> Unidades organizacionales
+                        </a>
+                        @endcan
+
+                        @canany(['Authorities: manager', 'Authorities: view'])
+                        <a class="dropdown-item @active('rrhh.authorities.*')"
+                            href="{{ route('rrhh.authorities.index') }}">
+                            <i class="fas fa-chess-king fa-fw"></i> Autoridades
+                        </a>
+                        @endcan
+                    </div>
+
+                </li>
+                @endcan
             </ul>
 
             <!-- Right Side Of Navbar -->

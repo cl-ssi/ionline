@@ -7,13 +7,14 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Servicio de Salud') }}</title>
-
-    <!-- Scripts -->
-    <!-- <script src="{{ asset('js/app.js') }}" defer></script> -->
+    <title>{{ config('app.name', 'Servicio de Salud') }} @yield('title')</title>
 
     <link href="{{ asset('favicon-'. env('APP_ENV') .'.ico') }}"
         rel="icon" type="image/x-icon">
+
+    <!-- Scripts -->
+    <!-- <script src="{{ asset('js/app.js') }}" defer></script> -->
+    @yield('custom_js_head')
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -34,15 +35,23 @@
             @endswitch
         }
     </style>
+    @yield('custom_css')
 
     <!-- Place your kit's code here -->
-    <script src="https://kit.fontawesome.com/7c4f606aba.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/7c4f606aba.js" SameSite="None"
+        crossorigin="anonymous"></script>
 </head>
 <body>
     <div id="app">
         @include('layouts.partials.nav')
 
-        <main class="py-4">
+        <main class="container">
+            <div class="d-none d-print-block">
+                <strong>{{ config('app.ss') }}</strong><br>
+                Ministerio de Salud
+            </div>
+            @include('layouts.partials.errors')
+            @include('layouts.partials.flash_message')
             @yield('content')
         </main>
 
@@ -62,5 +71,6 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
         integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
+    @yield('custom_js')
 </body>
 </html>
