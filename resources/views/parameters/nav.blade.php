@@ -18,16 +18,16 @@
     </li>--}}
 
     <li class="nav-item">
-        <a class="nav-link {{ (Request::is('parameters/permissions*')) ? 'active' : '' }}"
+        <a class="nav-link {{ Request::is('parameters/permissions*') ? 'active' : '' }}"
             href="{{ route('parameters.permissions.index') }}">
             <i class="fas fa-chalkboard-teacher"></i> Permisos</a>
     </li>
 
-{{--    <li class="nav-item">
-        <a class="nav-link {{ active('parameters.roles.*') }}"
+    <li class="nav-item">
+        <a class="nav-link {{ Request::is('parameters/roles*') ? 'active' : ''}}"
             href="{{ route('parameters.roles.index') }}">
             <i class="fas fa-chalkboard-teacher"></i> Roles</a>
-    </li>--}}
+    </li>
 
   {{--  <li class="nav-item">
         <a class="nav-link {{ active('parameters.locations.*') }}"
