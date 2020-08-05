@@ -37,5 +37,10 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('datetime', function ($expression) {
             return "<?php echo ($expression)?($expression)->format('Y-m-d H:i:s'):''; ?>";
         });
+
+        /* Helper para imprimir un número con separador de miles */
+        Blade::directive('numero', function ($numero) {
+            return "<?php echo number_format($numero, 0, '.', '.'); ?>";
+        });
     }
 }
