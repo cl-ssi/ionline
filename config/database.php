@@ -63,6 +63,21 @@ return [
             ]) : [],
         ],
 
+        'mysql_rem' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST_REM', '127.0.0.1'),
+            'port' => env('DB_PORT_REM', '3306'),
+            'database' => env('DB_DATABASE_REM', 'forge'),
+            'username' => env('DB_USERNAME_REM', 'forge'),
+            'password' => env('DB_PASSWORD_REM', ''),
+            'unix_socket' => env('DB_SOCKET_REM', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
