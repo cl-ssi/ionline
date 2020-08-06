@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class SingleParameter extends Model
 {
+    protected $table = 'ind_single_parameters';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -41,5 +43,4 @@ class SingleParameter extends Model
         return $query;
     }
 
-    protected $table = 'ind_single_parameters';
 }
