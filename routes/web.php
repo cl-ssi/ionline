@@ -55,11 +55,109 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
 
 Route::prefix('indicators')->as('indicators.')->group(function(){
     Route::get('/', function () { return view('indicators.index'); })->name('index');
+    Route::get('single_parameter/comgescreate2020/{id}/{indicador}/{mes}/{nd}', 'Indicators\SingleParameterController@comges')->name('comgescreate2020')->middleware('auth');
 
     Route::prefix('comges')->as('comges.')->group(function(){
+        Route::get('/', function () { return view('indicators.comges.index'); })->name('index');
+
         Route::prefix('2020')->as('2020.')->group(function(){
             Route::get('/', 'Indicators\_2020\ComgesController@index')->name('index');
 
+            //COMGES 1
+            Route::get('/comges1', 'Indicators\_2020\ComgesController@comges1')->name('comges1');
+            Route::get('/comges1corte1', 'Indicators\_2020\ComgesController@comges1corte1')->name('comges1corte1');
+
+            //COMGES 2
+            Route::get('/comges2', 'Indicators\_2020\ComgesController@comges2')->name('comges2');
+            Route::get('/comges2corte1', 'Indicators\_2020\ComgesController@comges2corte1')->name('comges2corte1');
+
+            //COMGES 3
+            Route::get('/comges3', 'Indicators\_2020\ComgesController@comges3')->name('comges3');
+            Route::get('/comges3corte1', 'Indicators\_2020\ComgesController@comges3corte1')->name('comges3corte1');
+
+            //COMGES 4
+            Route::get('/comges4', 'Indicators\_2020\ComgesController@comges4')->name('comges4');
+            Route::get('/comges4corte1', 'Indicators\_2020\ComgesController@comges4corte1')->name('comges4corte1');
+
+            //COMGES 5
+            Route::get('/comges5', 'Indicators\_2020\ComgesController@comges5')->name('comges5');
+            Route::get('/comges5corte1', 'Indicators\_2020\ComgesController@comges5corte1')->name('comges5corte1');
+
+            //COMGES 6
+            Route::get('/comges6', 'Indicators\_2020\ComgesController@comges6')->name('comges6');
+            Route::get('/comges6corte1', 'Indicators\_2020\ComgesController@comges6corte1')->name('comges6corte1');
+
+            //COMGES 7
+            Route::get('/comges7', 'Indicators\_2020\ComgesController@comges7')->name('comges7');
+            Route::get('/comges7corte1', 'Indicators\_2020\ComgesController@comges7corte1')->name('comges7corte1');
+
+            //COMGES 8
+            Route::get('/comges8', 'Indicators\_2020\ComgesController@comges8')->name('comges8');
+            Route::get('/comges8corte1', 'Indicators\_2020\ComgesController@comges8corte1')->name('comges8corte1');
+
+            //COMGES 9
+            Route::get('/comges9', 'Indicators\_2020\ComgesController@comges9')->name('comges9');
+            Route::get('/comges9corte1', 'Indicators\_2020\ComgesController@comges9corte1')->name('comges9corte1');
+
+            //COMGES 10
+            Route::get('/comges10', 'Indicators\_2020\ComgesController@comges10')->name('comges10');
+            Route::get('/comges10corte1', 'Indicators\_2020\ComgesController@comges10corte1')->name('comges10corte1');
+
+            //COMGES 11
+            Route::get('/comges11', 'Indicators\_2020\ComgesController@comges11')->name('comges11');
+            Route::get('/comges11corte1', 'Indicators\_2020\ComgesController@comges11corte1')->name('comges11corte1');
+
+            //COMGES 12
+            Route::get('/comges12', 'Indicators\_2020\ComgesController@comges12')->name('comges12');
+            Route::get('/comges12corte1', 'Indicators\_2020\ComgesController@comges12corte1')->name('comges12corte1');
+
+            //COMGES 13
+            Route::get('/comges13', 'Indicators\_2020\ComgesController@comges13')->name('comges13');
+            Route::get('/comges13corte1', 'Indicators\_2020\ComgesController@comges13corte1')->name('comges13corte1');
+
+            //COMGES 14
+            Route::get('/comges14', 'Indicators\_2020\ComgesController@comges14')->name('comges14');
+            Route::get('/comges14corte1', 'Indicators\_2020\ComgesController@comges14corte1')->name('comges14corte1');
+
+            //COMGES 15
+            Route::get('/comges15', 'Indicators\_2020\ComgesController@comges15')->name('comges15');
+            Route::get('/comges15corte1', 'Indicators\_2020\ComgesController@comges15corte1')->name('comges15corte1');
+
+            //COMGES 16
+            Route::get('/comges16', 'Indicators\_2020\ComgesController@comges16')->name('comges16');
+            Route::get('/comges16corte1', 'Indicators\_2020\ComgesController@comges16corte1')->name('comges16corte1');
+
+            //COMGES 17
+            Route::get('/comges17', 'Indicators\_2020\ComgesController@comges17')->name('comges17');
+            Route::get('/comges17corte1', 'Indicators\_2020\ComgesController@comges17corte1')->name('comges17corte1');
+
+            //COMGES 18
+            Route::get('/comges18', 'Indicators\_2020\ComgesController@comges18')->name('comges18');
+            Route::get('/comges18corte1', 'Indicators\_2020\ComgesController@comges18corte1')->name('comges18corte1');
+
+            //COMGES 19
+            Route::get('/comges19', 'Indicators\_2020\ComgesController@comges19')->name('comges19');
+            Route::get('/comges19corte1', 'Indicators\_2020\ComgesController@comges19corte1')->name('comges19corte1');
+
+            //COMGES 21
+            Route::get('/comges21', 'Indicators\_2020\ComgesController@comges21')->name('comges21');
+            Route::get('/comges21corte1', 'Indicators\_2020\ComgesController@comges21corte1')->name('comges21corte1');
+
+            //COMGES 22
+            Route::get('/comges22', 'Indicators\_2020\ComgesController@comges22')->name('comges22');
+            Route::get('/comges22corte1', 'Indicators\_2020\ComgesController@comges22corte1')->name('comges22corte1');
+
+            //COMGES 24
+            Route::get('/comges24', 'Indicators\_2020\ComgesController@comges24')->name('comges24');
+            Route::get('/comges24corte1', 'Indicators\_2020\ComgesController@comges24corte1')->name('comges24corte1');
+
+            //COMGES 25
+            Route::get('/comges25', 'Indicators\_2020\ComgesController@comges25')->name('comges25');
+            Route::get('/comges25corte1', 'Indicators\_2020\ComgesController@comges25corte1')->name('comges25corte1');
+
+            Route::get('/servicio', 'Indicators\_2018\Indicator19664Controller@servicio')->name('servicio');
+            Route::get('/hospital', 'Indicators\_2018\Indicator19664Controller@hospital')->name('hospital');
+            Route::get('/reyno', 'Indicators\_2018\Indicator19664Controller@reyno')->name('reyno');
         });
 
     });
