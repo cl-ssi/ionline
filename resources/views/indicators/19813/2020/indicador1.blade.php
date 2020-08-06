@@ -159,11 +159,6 @@
     }
 </style>
 
-<script src='{{asset('assets/amcharts/js/core.js')}}'></script>
-<script src='{{asset('assets/amcharts/js/charts.js')}}'></script>
-<script src='{{asset('assets/amcharts/js/material.js')}}'></script>
-<script src='{{asset('assets/amcharts/js/animated.js')}}'></script>
-
 <script>
     var mescarga = '<?php echo $ultimo_rem; ?>'
     var mes;
