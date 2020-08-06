@@ -57,6 +57,7 @@ Route::prefix('indicators')->as('indicators.')->group(function(){
     Route::get('/', function () { return view('indicators.index'); })->name('index');
     Route::get('single_parameter/comgescreate2020/{id}/{indicador}/{mes}/{nd}', 'Indicators\SingleParameterController@comges')->name('comgescreate2020')->middleware('auth');
 
+    Route::resource('single_parameter', 'Indicators\SingleParameterController')->middleware('auth');
     Route::prefix('comges')->as('comges.')->group(function(){
         Route::get('/', function () { return view('indicators.comges.index'); })->name('index');
 
