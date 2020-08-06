@@ -496,12 +496,3 @@
 </script>
 
 @endsection
-
-@section('custom_js_head')
-
-<script src='{{asset('assets/amcharts/js/core.js')}}'></script>
-<script src='{{asset('assets/amcharts/js/charts.js')}}'></script>
-<script src='{{asset('assets/amcharts/js/material.js')}}'></script>
-<script src='{{asset('assets/amcharts/js/animated.js')}}'></script>
-
-@endsection
