@@ -392,7 +392,14 @@ Route::prefix('indicators')->as('indicators.')->group(function(){
     });
 
     Route::prefix('rems')->as('rems.')->group(function(){
+        Route::get('/', 'Indicators\Rems\RemController@index')->name('index');
+
+        Route::get('2020', function () { return view('indicators.rem.2020.index'); })->name('2020.index');
+
         Route::get('/{year}/{serie}', 'Indicators\Rems\RemController@index_serie_year')->name('year.serie.index');
+
+        Route::get('/{year}/{serie}/{nserie}', 'Indicators\Rems\RemController@a01')->name('year.serie.nserie.index');
+        Route::post('/{year}/{serie}/{nserie}', 'Indicators\Rems\RemController@show')->name('year.serie.nserie.index');
 
     });
 
