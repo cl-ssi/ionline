@@ -393,7 +393,7 @@ Route::prefix('indicators')->as('indicators.')->group(function(){
 
     Route::prefix('rems')->as('rems.')->group(function(){
         Route::get('/', 'Indicators\Rems\RemController@index')->name('index');
-
+        Route::get('2019', function () { return view('indicators.rem.2019.index'); })->name('2019.index');
         Route::get('2020', function () { return view('indicators.rem.2020.index'); })->name('2020.index');
 
         Route::get('/{year}/{serie}', 'Indicators\Rems\RemController@index_serie_year')->name('year.serie.index');
