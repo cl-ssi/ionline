@@ -294,7 +294,85 @@ Route::prefix('indicators')->as('indicators.')->group(function(){
         Route::get('/', function () { return view('indicators.aps.index'); })->name('index');
         Route::prefix('2020')->as('2020.')->group(function() {
             Route::get('/', 'Indicators\_2020\IndicatorAPSController@index')->name('index');
+            Route::get('/pmasama', 'Indicators\_2020\IndicatorAPSController@pmasama')->name('pmasama');
 
+            Route::prefix('chcc')->as('chcc.')->group(function(){
+                Route::get('/', 'Indicators\_2020\IndicatorChccController@index')->name('index');
+
+                Route::get('/aps', 'Indicators\_2020\IndicatorChccController@aps')->name('aps');
+                Route::get('/reyno', 'Indicators\_2020\IndicatorChccController@reyno')->name('reyno');
+                Route::get('/hospital', 'Indicators\_2020\IndicatorChccController@hospital')->name('hospital');
+            });
+
+            Route::prefix('depsev')->as('depsev.')->group(function(){
+                Route::get('/', 'Indicators\_2020\IndicatorDepsevController@index')->name('index');
+
+                Route::get('/aps', 'Indicators\_2020\IndicatorDepsevController@aps')->name('aps');
+                Route::get('/reyno', 'Indicators\_2020\IndicatorDepsevController@reyno')->name('reyno');
+            });
+
+            Route::prefix('saserep')->as('saserep.')->group(function(){
+                Route::get('/', 'Indicators\_2020\IndicatorSaserepController@index')->name('index');
+
+                Route::get('/aps', 'Indicators\_2020\IndicatorSaserepController@aps')->name('aps');
+                Route::get('/reyno', 'Indicators\_2020\IndicatorSaserepController@reyno')->name('reyno');
+                Route::get('/hospital', 'Indicators\_2020\IndicatorSaserepController@hospital')->name('hospital');
+            });
+
+            Route::prefix('ges_odont')->as('ges_odont.')->group(function(){
+                Route::get('/', 'Indicators\_2020\IndicatorGesOdontController@index')->name('index');
+
+                Route::get('/aps', 'Indicators\_2020\IndicatorGesOdontController@aps')->name('aps');
+                Route::get('/reyno', 'Indicators\_2020\IndicatorGesOdontController@reyno')->name('reyno');
+            });
+
+            Route::prefix('sembrando_sonrisas')->as('sembrando_sonrisas.')->group(function(){
+                Route::get('/', 'Indicators\_2020\IndicatorSembrandoSonrisasController@index')->name('index');
+
+                Route::get('/aps', 'Indicators\_2020\IndicatorSembrandoSonrisasController@aps')->name('aps');
+                Route::get('/servicio', 'Indicators\_2020\IndicatorSembrandoSonrisasController@servicio')->name('servicio');
+            });
+
+            Route::prefix('mejoramiento_atencion_odontologica')->as('mejoramiento_atencion_odontologica.')->group(function(){
+                Route::get('/', 'Indicators\_2020\IndicatorMejorAtenOdontController@index')->name('index');
+
+                Route::get('/aps', 'Indicators\_2020\IndicatorMejorAtenOdontController@aps')->name('aps');
+            });
+
+            Route::prefix('odontologico_integral')->as('odontologico_integral.')->group(function(){
+                Route::get('/', 'Indicators\_2020\IndicatorOdontIntegralController@index')->name('index');
+
+                Route::get('/aps', 'Indicators\_2020\IndicatorOdontIntegralController@aps')->name('aps');
+                Route::get('/reyno', 'Indicators\_2020\IndicatorOdontIntegralController@reyno')->name('reyno');
+            });
+
+            Route::prefix('resolutividad')->as('resolutividad.')->group(function(){
+                Route::get('/', 'Indicators\_2020\IndicatorResolutividadController@index')->name('index');
+
+                Route::get('/aps', 'Indicators\_2020\IndicatorResolutividadController@aps')->name('aps');
+                Route::get('/reyno', 'Indicators\_2020\IndicatorResolutividadController@reyno')->name('reyno');
+            });
+
+            Route::prefix('pespi')->as('pespi.')->group(function(){
+                Route::get('/', 'Indicators\_2020\IndicatorPespiController@index')->name('index');
+
+                Route::get('/aps', 'Indicators\_2020\IndicatorPespiController@aps')->name('aps');
+                Route::get('/reyno', 'Indicators\_2020\IndicatorPespiController@reyno')->name('reyno');
+            });
+
+            Route::prefix('equidad_rural')->as('equidad_rural.')->group(function(){
+                Route::get('/', 'Indicators\_2020\IndicatorEquidadRuralController@index')->name('index');
+
+                Route::get('/aps', 'Indicators\_2020\IndicatorEquidadRuralController@aps')->name('aps');
+                // Route::get('/reyno', 'Indicators\_2020\IndicatorEquidadRuralController@reyno')->name('reyno');
+            });
+
+            Route::prefix('respiratorio')->as('respiratorio.')->group(function(){
+                Route::get('/', 'Indicators\_2020\IndicatorRespiratorioController@index')->name('index');
+
+                Route::get('/aps', 'Indicators\_2020\IndicatorRespiratorioController@aps')->name('aps');
+                Route::get('/reyno', 'Indicators\_2020\IndicatorRespiratorioController@reyno')->name('reyno');
+            });
         });
     });
 
@@ -314,7 +392,14 @@ Route::prefix('indicators')->as('indicators.')->group(function(){
     });
 
     Route::prefix('rems')->as('rems.')->group(function(){
+        Route::get('/', 'Indicators\Rems\RemController@index')->name('index');
+        Route::get('2019', function () { return view('indicators.rem.2019.index'); })->name('2019.index');
+        Route::get('2020', function () { return view('indicators.rem.2020.index'); })->name('2020.index');
+
         Route::get('/{year}/{serie}', 'Indicators\Rems\RemController@index_serie_year')->name('year.serie.index');
+
+        Route::get('/{year}/{serie}/{nserie}', 'Indicators\Rems\RemController@a01')->name('year.serie.nserie.index');
+        Route::post('/{year}/{serie}/{nserie}', 'Indicators\Rems\RemController@show')->name('year.serie.nserie.index');
 
     });
 
