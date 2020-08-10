@@ -18,7 +18,8 @@
         "laravel/vapor-cli": "^1.8",
         "laravel/vapor-core": "^2.8",
         "owen-it/laravel-auditing": "^10.0",
-        "spatie/laravel-permission": "^3.13"
+        "spatie/laravel-permission": "^3.13",
+        "watson/active": "^5.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

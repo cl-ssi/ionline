@@ -10,6 +10,31 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item dropdown {{ active('indicators*') }}">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-chart-line"></i> Estadísticas
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                        <a class="dropdown-item {{ active('indicators.index') }}"
+                           href="{{ route('indicators.index') }}">
+                            <i class="fas fa-desktop fa-fw"></i> Indicadores - REM
+                        </a>
+
+                        @auth
+                            @canany(['LE Extra Plan: Carga','LE Extra Plan: Monitoreo'])
+                                <a class="dropdown-item {{ active('le_extra_plans.index') }}"
+                                   href="{{ route('le_extra_plans.index') }}">
+                                    <i class="far fa-file-alt"></i> LE Plan Extraordinario
+                                </a>
+                            @endcan
+                        @endauth
+                    </div>
+                </li>
+
                 @canany(['Users: create', 'Users: edit','Users: delete',
                     'OrganizationalUnits: create',
                     'OrganizationalUnits: edit',
