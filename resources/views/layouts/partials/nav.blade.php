@@ -78,6 +78,14 @@
 
                 </li>
                 @endcan
+
+                @role('Drugs: admin|Drugs: receptionist|Drugs: basic')
+                <li class="nav-item {{ active('drugs*') }}">
+                    <a class="nav-link" href="{{ route('drugs.receptions.index') }}">
+                        <i class="fas fa-cannabis"></i> Drogas</a>
+                </li>
+                @endrole
+
             </ul>
 
             <!-- Right Side Of Navbar -->
