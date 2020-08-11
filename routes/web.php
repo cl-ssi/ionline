@@ -37,7 +37,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('{user}/switch','Rrhh\UserController@switch')->name('switch')->middleware('auth');
         // Route::get('{user}/roles', 'Rrhh\RoleController@index')->name('roles.index')->middleware('auth');
         // Route::post('{user}/roles','Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
-        Route::get('directory', 'Rrhh\UserController@directory')->name('users.directory');
+        Route::get('directory', 'Rrhh\UserController@directory')->name('directory');
         Route::get('/', 'Rrhh\UserController@index')->name('index')->middleware('auth');
         Route::get('/create', 'Rrhh\UserController@create')->name('create')->middleware('auth');
         Route::post('/', 'Rrhh\UserController@store')->name('store')->middleware('auth');

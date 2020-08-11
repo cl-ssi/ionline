@@ -43,6 +43,10 @@ class User extends Authenticatable
         return $this->belongsTo('\App\Rrhh\OrganizationalUnit');
     }
 
+    public function telephones() {
+        return $this->belongsToMany('\App\Resources\Telephone', 'res_telephone_user')->withTimestamps();
+    }
+
     public function scopeSearch($query, $name) {
         if($name != "") {
             return $query->where('name', 'LIKE', '%'.$name.'%')
@@ -54,7 +58,7 @@ class User extends Authenticatable
     public function runFormat() {
         return number_format($this->id, 0,'.','.') . '-' . $this->dv;
     }
-    
+
     public function getFullNameAttribute()
     {
         return "{$this->name} {$this->fathers_family} {$this->mothers_family}";

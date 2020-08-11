@@ -11,6 +11,12 @@
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
 
+                <li class="nav-item {{ active('rrhh.users.directory') }} ">
+                    <a class="nav-link" href="{{ route('rrhh.users.directory') }}">
+                        <i class="fas fa-address-book"></i> Telefonos
+                    </a>
+                </li>
+
                 <li class="nav-item dropdown {{ active('indicators*') }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
