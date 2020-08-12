@@ -404,5 +404,14 @@ Route::prefix('indicators')->as('indicators.')->group(function(){
 
     });
 
+});
 
+Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
+    Route::resource('courts','Drugs\CourtController');
+    Route::resource('police_units','Drugs\PoliceUnitController');
+    Route::resource('substances','Drugs\SubstanceController');
+
+    Route::get('receptions/report','Drugs\ReceptionController@report')->name('receptions.report');
+
+    Route::resource('receptions','Drugs\ReceptionController');
 });
