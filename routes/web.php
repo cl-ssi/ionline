@@ -413,5 +413,10 @@ Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
 
     Route::get('receptions/report','Drugs\ReceptionController@report')->name('receptions.report');
 
-    Route::resource('receptions','Drugs\ReceptionController');
+    Route::get('receptions/', 'Drugs\ReceptionController@index')->name('receptions.index');
+    Route::get('receptions/create', 'Drugs\ReceptionController@create')->name('receptions.create');
+    Route::get('receptions/show', 'Drugs\ReceptionController@show')->name('receptions.show');
+    Route::get('receptions/store', 'Drugs\ReceptionController@store')->name('receptions.store');
+
+//    Route::resource('receptions','Drugs\ReceptionController');
 });
