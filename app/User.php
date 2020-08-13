@@ -47,6 +47,10 @@ class User extends Authenticatable
         return $this->belongsTo('\App\Rrhh\OrganizationalUnit');
     }
 
+    public function telephones() {
+        return $this->belongsToMany('\App\Resources\Telephone', 'res_telephone_user')->withTimestamps();
+    }
+
     public function scopeSearch($query, $name) {
         if($name != "") {
             return $query->where('name', 'LIKE', '%'.$name.'%')

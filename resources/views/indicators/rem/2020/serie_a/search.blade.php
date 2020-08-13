@@ -1,4 +1,3 @@
-<link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
 <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">
 <!--    Exportar a Excel     -->
 <script type="text/javascript">
@@ -163,8 +162,6 @@
 
 @section('custom_js')
 
-<!--<link href="{{ asset('css/bootstrap-3.3.7.min.css') }}" rel="stylesheet" type="text/css"/>-->
-<script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ asset('js/show_hide_tab.js') }}"></script>
 
 @endsection
