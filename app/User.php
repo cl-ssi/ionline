@@ -39,10 +39,6 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function telephones(){
-      return $this.belongsToMany('App\Resources\Telephone','res_telephone_user')->withTimestamps();
-    }
-
     public function organizationalUnit() {
         return $this->belongsTo('\App\Rrhh\OrganizationalUnit');
     }
