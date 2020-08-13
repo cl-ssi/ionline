@@ -39,6 +39,10 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function telephones(){
+      return $this.belongsToMany('App\Resources\Telephone','res_telephone_user')->withTimestamps();
+    }
+
     public function organizationalUnit() {
         return $this->belongsTo('\App\Rrhh\OrganizationalUnit');
     }
@@ -54,7 +58,7 @@ class User extends Authenticatable
     public function runFormat() {
         return number_format($this->id, 0,'.','.') . '-' . $this->dv;
     }
-    
+
     public function getFullNameAttribute()
     {
         return "{$this->name} {$this->fathers_family} {$this->mothers_family}";
