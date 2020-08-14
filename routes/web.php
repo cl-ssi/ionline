@@ -412,11 +412,18 @@ Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
     Route::resource('substances','Drugs\SubstanceController');
 
     Route::get('receptions/report','Drugs\ReceptionController@report')->name('receptions.report');
+    Route::post('receptions/{reception}/item','Drugs\ReceptionController@storeItem')->name('receptions.storeitem');
+    Route::post('receptions/{reception}/sample_to_isp','Drugs\SampleToIspController@store')->name('receptions.sample_to_isp.store');
+    Route::post('receptions/{reception}/record_to_court','Drugs\RecordToCourtController@store')->name('receptions.record_to_court.store');
 
     Route::get('receptions/', 'Drugs\ReceptionController@index')->name('receptions.index');
     Route::get('receptions/create', 'Drugs\ReceptionController@create')->name('receptions.create');
-    Route::get('receptions/show', 'Drugs\ReceptionController@show')->name('receptions.show');
-    Route::get('receptions/store', 'Drugs\ReceptionController@store')->name('receptions.store');
+    Route::get('receptions/show/{reception}', 'Drugs\ReceptionController@show')->name('receptions.show');
+    Route::post('receptions/store', 'Drugs\ReceptionController@store')->name('receptions.store');
+    Route::get('receptions/edit', 'Drugs\ReceptionController@edit')->name('receptions.edit');
+    Route::get('receptions/update', 'Drugs\ReceptionController@update')->name('receptions.update');
+
+
 
 //    Route::resource('receptions','Drugs\ReceptionController');
 });

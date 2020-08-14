@@ -71,7 +71,7 @@
                 @endif
             </td>
             <td class="d-print-none">
-                <a href="{{ route('drugs.receptions.show', $reception->id) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-fw fa-edit"></i></a>
+                <a href="{{ route('drugs.receptions.show', ['reception' => $reception->id]) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-fw fa-edit"></i></a>
             </td>
         </tr>
         @endforeach
