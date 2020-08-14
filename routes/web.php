@@ -49,6 +49,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 });
 
 Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(function(){
+    Route::put('/{parameter}', 'Parameters\ParameterController@update')->name('update');
+    Route::get('drugs', 'Parameters\ParameterController@indexDrugs')->name('drugs')->middleware(['role:Drugs: admin']);
     Route::resource('permissions','Parameters\PermissionController');
     Route::resource('roles','Parameters\RoleController');
 
@@ -412,6 +414,7 @@ Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
     Route::resource('substances','Drugs\SubstanceController');
 
     Route::get('receptions/report','Drugs\ReceptionController@report')->name('receptions.report');
+    Route::get('receptions/{reception}/record','Drugs\ReceptionController@showRecord')->name('receptions.record');
     Route::post('receptions/{reception}/item','Drugs\ReceptionController@storeItem')->name('receptions.storeitem');
     Route::post('receptions/{reception}/sample_to_isp','Drugs\SampleToIspController@store')->name('receptions.sample_to_isp.store');
     Route::post('receptions/{reception}/record_to_court','Drugs\RecordToCourtController@store')->name('receptions.record_to_court.store');
