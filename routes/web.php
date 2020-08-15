@@ -415,6 +415,12 @@ Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
 
     Route::get('receptions/report','Drugs\ReceptionController@report')->name('receptions.report');
     Route::get('receptions/{reception}/record','Drugs\ReceptionController@showRecord')->name('receptions.record');
+
+    Route::get('receptions/{receptionitem}/edit_item','Drugs\ReceptionController@editItem')->name('receptions.edit_item');
+    Route::put('receptions/{receptionitem}/update_item','Drugs\ReceptionController@updateItem')->name('receptions.update_item');
+    Route::delete('receptions/{receptionitem}/destroy_item','Drugs\ReceptionController@destroyItem')->name('receptions.destroy_item');
+    Route::put('receptions/{receptionitem}/store_protocol','Drugs\ReceptionController@storeProtocol')->name('receptions.store_protocol');
+
     Route::post('receptions/{reception}/item','Drugs\ReceptionController@storeItem')->name('receptions.storeitem');
     Route::post('receptions/{reception}/sample_to_isp','Drugs\SampleToIspController@store')->name('receptions.sample_to_isp.store');
     Route::post('receptions/{reception}/record_to_court','Drugs\RecordToCourtController@store')->name('receptions.record_to_court.store');
@@ -423,8 +429,8 @@ Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
     Route::get('receptions/create', 'Drugs\ReceptionController@create')->name('receptions.create');
     Route::get('receptions/show/{reception}', 'Drugs\ReceptionController@show')->name('receptions.show');
     Route::post('receptions/store', 'Drugs\ReceptionController@store')->name('receptions.store');
-    Route::get('receptions/edit', 'Drugs\ReceptionController@edit')->name('receptions.edit');
-    Route::get('receptions/update', 'Drugs\ReceptionController@update')->name('receptions.update');
+    Route::get('receptions/edit/{reception}', 'Drugs\ReceptionController@edit')->name('receptions.edit');
+    Route::put('receptions/update/{reception}', 'Drugs\ReceptionController@update')->name('receptions.update');
 
 
 
