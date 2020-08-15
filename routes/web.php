@@ -409,6 +409,7 @@ Route::prefix('indicators')->as('indicators.')->group(function(){
 });
 
 Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
+    //fixme convertir a gets, put, delete
     Route::resource('courts','Drugs\CourtController');
     Route::resource('police_units','Drugs\PoliceUnitController');
     Route::resource('substances','Drugs\SubstanceController');
@@ -420,6 +421,10 @@ Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
     Route::put('receptions/{receptionitem}/update_item','Drugs\ReceptionController@updateItem')->name('receptions.update_item');
     Route::delete('receptions/{receptionitem}/destroy_item','Drugs\ReceptionController@destroyItem')->name('receptions.destroy_item');
     Route::put('receptions/{receptionitem}/store_protocol','Drugs\ReceptionController@storeProtocol')->name('receptions.store_protocol');
+
+    Route::get('receptions/{reception}/sample_to_isp','Drugs\SampleToIspController@show')->name('receptions.sample_to_isp.show');
+    Route::get('receptions/{reception}/record_to_court','Drugs\RecordToCourtController@show')->name('receptions.record_to_court.show');
+
 
     Route::post('receptions/{reception}/item','Drugs\ReceptionController@storeItem')->name('receptions.storeitem');
     Route::post('receptions/{reception}/sample_to_isp','Drugs\SampleToIspController@store')->name('receptions.sample_to_isp.store');
