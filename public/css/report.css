@@ -1,0 +1,106 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.8rem;
+}
+.content {
+    margin: 0 auto;
+    /*border: 1px solid #F2F2F2;*/
+    width: 724px;
+    /*height: 1100px;*/
+}
+.monospace {
+    font-family: "Lucida Console", Monaco, monospace;
+}
+.pie_pagina {
+    margin: 0 auto;
+    /*border: 1px solid #F2F2F2;*/
+    width: 724px;
+    height: 26px;
+    position: fixed;
+    bottom: 0;
+}
+.seis {
+    font-size: 0.6rem;
+}
+.siete {
+    font-size: 0.7rem;
+}
+.ocho {
+    font-size: 0.8rem;
+}
+.nueve {
+    font-size: 0.9rem;
+}
+.plomo {
+    background-color: F3F1F0;
+}
+.titulo {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 4px 0 6px;
+}
+.center {
+    text-align: center;
+}
+.left {
+    text-align: left;
+}
+.right {
+    text-align: right;
+}
+.justify {
+    text-align: justify;
+}
+
+.indent {
+    text-indent: 30px;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+#firmas {
+    margin-top: 100px;
+}
+
+#firmas > div {
+    display: inline-block;
+}
+
+.li_letras {
+    list-style-type: lower-alpha;
+}
+
+table {
+    border: 1px solid grey;
+    border-collapse: collapse;
+    padding: 0 4px 0 4px;
+    width: 100%;
+}
+th, td {
+    border: 1px solid grey;
+    border-collapse: collapse;
+    padding: 0 4px 0 4px;
+}
+
+.column {
+  float: left;
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+@media all {
+    .page-break { display: none; }
+}
+
+@media print {
+    .page-break { display: block; page-break-before: always; }
+}

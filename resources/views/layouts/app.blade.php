@@ -14,6 +14,7 @@
 
     <!-- Scripts -->
     <!-- <script src="{{ asset('js/app.js') }}" defer></script> -->
+    <script src="{{asset('js/custom.js')}}"></script>
     @yield('custom_js_head')
 
     <!-- Fonts -->
@@ -75,6 +76,17 @@
     <script src="https://cdn.amcharts.com/lib/version/4.9.34/charts.js"></script>
     <script src="https://cdn.amcharts.com/lib/version/4.9.34/themes/material.js"></script>
     <script src="https://cdn.amcharts.com/lib/version/4.9.34/themes/animated.js"></script>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/css/bootstrap-select.min.css"
+          integrity="sha512-ARJR74swou2y0Q2V9k0GbzQ/5vJ2RBSoCWokg4zkfM29Fb3vZEQyv0iWBMW/yvKgyHSR/7D64pFMmU8nYmbRkg=="
+          crossorigin="anonymous"/>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"
+            integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg=="
+            crossorigin="anonymous"></script>
+
+
     @yield('custom_js')
 </body>
 </html>

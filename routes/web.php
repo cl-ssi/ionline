@@ -23,6 +23,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
+    Route::get('{user}/roles', 'Rrhh\RoleController@index')->name('roles.index')->middleware('auth');
+    Route::post('{user}/roles','Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
+
     Route::prefix('organizational-units')->name('organizationalunits.')->group(function () {
         Route::get('/', 'Rrhh\OrganizationalUnitController@index')->name('index');
         Route::get('/create', 'Rrhh\OrganizationalUnitController@create')->name('create');
@@ -35,9 +38,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('autority/{ou_id?}','Rrhh\UserController@getAutorityFromOu')->name('get.autority.from.ou')->middleware('auth');
         Route::put('{user}/password', 'Rrhh\UserController@resetPassword')->name('password.reset')->middleware('auth');
         Route::get('{user}/switch','Rrhh\UserController@switch')->name('switch')->middleware('auth');
-        // Route::get('{user}/roles', 'Rrhh\RoleController@index')->name('roles.index')->middleware('auth');
-        // Route::post('{user}/roles','Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
-        Route::get('directory', 'Rrhh\UserController@directory')->name('users.directory');
+        Route::get('directory', 'Rrhh\UserController@directory')->name('directory');
         Route::get('/', 'Rrhh\UserController@index')->name('index')->middleware('auth');
         Route::get('/create', 'Rrhh\UserController@create')->name('create')->middleware('auth');
         Route::post('/', 'Rrhh\UserController@store')->name('store')->middleware('auth');
@@ -48,6 +49,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 });
 
 Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(function(){
+    Route::put('/{parameter}', 'Parameters\ParameterController@update')->name('update');
+    Route::get('drugs', 'Parameters\ParameterController@indexDrugs')->name('drugs')->middleware(['role:Drugs: admin']);
     Route::resource('permissions','Parameters\PermissionController');
     Route::resource('roles','Parameters\RoleController');
 
@@ -392,9 +395,49 @@ Route::prefix('indicators')->as('indicators.')->group(function(){
     });
 
     Route::prefix('rems')->as('rems.')->group(function(){
+        Route::get('/', 'Indicators\Rems\RemController@index')->name('index');
+        Route::get('2019', function () { return view('indicators.rem.2019.index'); })->name('2019.index');
+        Route::get('2020', function () { return view('indicators.rem.2020.index'); })->name('2020.index');
+
         Route::get('/{year}/{serie}', 'Indicators\Rems\RemController@index_serie_year')->name('year.serie.index');
+
+        Route::get('/{year}/{serie}/{nserie}', 'Indicators\Rems\RemController@a01')->name('year.serie.nserie.index');
+        Route::post('/{year}/{serie}/{nserie}', 'Indicators\Rems\RemController@show')->name('year.serie.nserie.index');
 
     });
 
+});
 
+Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
+    //fixme convertir a gets, put, delete
+    Route::resource('courts','Drugs\CourtController');
+    Route::resource('police_units','Drugs\PoliceUnitController');
+    Route::resource('substances','Drugs\SubstanceController');
+
+    Route::get('receptions/report','Drugs\ReceptionController@report')->name('receptions.report');
+    Route::get('receptions/{reception}/record','Drugs\ReceptionController@showRecord')->name('receptions.record');
+
+    Route::get('receptions/{receptionitem}/edit_item','Drugs\ReceptionController@editItem')->name('receptions.edit_item');
+    Route::put('receptions/{receptionitem}/update_item','Drugs\ReceptionController@updateItem')->name('receptions.update_item');
+    Route::delete('receptions/{receptionitem}/destroy_item','Drugs\ReceptionController@destroyItem')->name('receptions.destroy_item');
+    Route::put('receptions/{receptionitem}/store_protocol','Drugs\ReceptionController@storeProtocol')->name('receptions.store_protocol');
+
+    Route::get('receptions/{reception}/sample_to_isp','Drugs\SampleToIspController@show')->name('receptions.sample_to_isp.show');
+    Route::get('receptions/{reception}/record_to_court','Drugs\RecordToCourtController@show')->name('receptions.record_to_court.show');
+
+
+    Route::post('receptions/{reception}/item','Drugs\ReceptionController@storeItem')->name('receptions.storeitem');
+    Route::post('receptions/{reception}/sample_to_isp','Drugs\SampleToIspController@store')->name('receptions.sample_to_isp.store');
+    Route::post('receptions/{reception}/record_to_court','Drugs\RecordToCourtController@store')->name('receptions.record_to_court.store');
+
+    Route::get('receptions/', 'Drugs\ReceptionController@index')->name('receptions.index');
+    Route::get('receptions/create', 'Drugs\ReceptionController@create')->name('receptions.create');
+    Route::get('receptions/show/{reception}', 'Drugs\ReceptionController@show')->name('receptions.show');
+    Route::post('receptions/store', 'Drugs\ReceptionController@store')->name('receptions.store');
+    Route::get('receptions/edit/{reception}', 'Drugs\ReceptionController@edit')->name('receptions.edit');
+    Route::put('receptions/update/{reception}', 'Drugs\ReceptionController@update')->name('receptions.update');
+
+
+
+//    Route::resource('receptions','Drugs\ReceptionController');
 });
