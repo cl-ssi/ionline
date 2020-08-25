@@ -440,8 +440,36 @@ Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
     Route::post('receptions/store', 'Drugs\ReceptionController@store')->name('receptions.store');
     Route::get('receptions/edit/{reception}', 'Drugs\ReceptionController@edit')->name('receptions.edit');
     Route::put('receptions/update/{reception}', 'Drugs\ReceptionController@update')->name('receptions.update');
-
-
-
 //    Route::resource('receptions','Drugs\ReceptionController');
+});
+
+/* Bodega de Farmacia */
+Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(function(){
+    Route::get('/', 'Pharmacies\PharmacyController@index')->name('index');
+    Route::resource('establishments','Pharmacies\EstablishmentController');
+    Route::resource('programs','Pharmacies\ProgramController');
+    Route::resource('suppliers','Pharmacies\SupplierController');
+
+    Route::prefix('products')->as('products.')->middleware('auth')->group(function(){
+        Route::resource('receiving','Pharmacies\ReceivingController');
+        Route::resource('dispatch','Pharmacies\DispatchController');
+        Route::resource('purchase','Pharmacies\PurchaseController');
+        Route::resource('transfer','Pharmacies\TransferController');
+        Route::resource('deliver','Pharmacies\DeliverController');
+
+
+    });
+    Route::resource('products','Pharmacies\ProductController');
+
+    Route::prefix('reports')->as('reports.')->middleware('auth')->group(function(){
+        Route::get('bincard','Pharmacies\ProductController@repBincard')->name('bincard');
+        Route::get('purchase_report','Pharmacies\ProductController@repPurchases')->name('purchase_report');
+        Route::get('informe_movimientos','Pharmacies\ProductController@repInformeMovimientos')->name('informe_movimientos');
+        Route::get('product_last_prices','Pharmacies\ProductController@repProductLastPrices')->name('product_last_prices');
+        Route::get('consume_history','Pharmacies\ProductController@repConsumeHistory')->name('consume_history');
+
+        Route::get('products','Pharmacies\ProductController@repProduct')->name('products');
+    });
+
+
 });
