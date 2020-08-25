@@ -21,7 +21,7 @@ Auth::routes();
 
 Route::get('/claveunica','ClaveUnicaController@autenticar')->name('claveunica.autenticar');
 Route::get('/claveunica/callback','ClaveUnicaController@callback')->name('claveunica.callback');
-
+Route::get('/claveunica/login/{access_token}','ClaveUnicaController@login')->name('claveunica.login');
 
 Route::get('/home', 'HomeController@index')->name('home');
 

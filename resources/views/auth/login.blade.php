@@ -3,6 +3,11 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
+        <div class="col-md-8 mb-3 mt3">
+            <a href="{{ route('claveunica.autenticar') }}?redirect=L2NsYXZldW5pY2EvbG9naW4=" class="btn btn-lg btn-block btn-outline-primary">
+                Iniciar con <img src="{{ asset('images/btn_claveunica_119px.png') }}" alt="Logo Clave única">
+            </a>
+        </div>
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Iniciar sesión') }}</div>
