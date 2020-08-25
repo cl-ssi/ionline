@@ -19,6 +19,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/claveunica','ClaveUnicaController@autenticar')->name('claveunica.autenticar');
+Route::get('/claveunica/callback','ClaveUnicaController@callback')->name('claveunica.callback');
+
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 
