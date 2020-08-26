@@ -66,7 +66,7 @@
 			<br>
 			@endif
 
-			<small>{{ config('app.ss') }}</small><br>
+			<small>{{ env('APP_SS') }}</small><br>
 
 			@if($user->email)
 			<a href="mailto:{{ $user->email }}"><i class="fas fa-envelope"></i> {{ $user->email }}</a>

@@ -61,12 +61,14 @@
                         </a>
                         @endcan
 
+                        {{--
                         @canany(['OrganizationalUnits: create', 'OrganizationalUnits: edit', 'OrganizationalUnits: delete'])
                         <a class="dropdown-item @active('rrhh.organizationalUnits.*')"
                             href="{{ route('rrhh.organizationalUnits.index') }}">
                             <i class="fas fa-sitemap fa-fw"></i> Unidades organizacionales
                         </a>
                         @endcan
+                        --}}
 
                         {{--
                         @canany(['Authorities: manager', 'Authorities: view'])

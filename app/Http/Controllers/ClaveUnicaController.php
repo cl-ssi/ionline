@@ -53,31 +53,7 @@ class ClaveUnicaController extends Controller
 
         $url_redirect = env('APP_URL').$redirect.'/'.$access_token;
 
-        //die($url_redirect);
-
         return redirect()->to($url_redirect)->send();
-
-        // $redirect = substr(base64_decode($state), 40).'/'.json_decode($response)->access_token;
-        //
-        // return redirect()->to($redirect)->send();
-
-        // $url_base = "https://www.claveunica.gob.cl/openid/userinfo/";
-        // $response = Http::withToken(json_decode($response)->access_token)->post($url_base);
-        //
-        // $user_cu = json_decode($response);
-        //
-        // $user = new User();
-        // $user->id = $user_cu->RolUnico->numero;
-        // $user->dv = $user_cu->RolUnico->DV;
-        // $user->name = implode(' ', $user_cu->name->nombres);
-        // $user->fathers_family = $user_cu->name->apellidos[0];
-        // $user->mothers_family = $user_cu->name->apellidos[1];
-        // $user->email = $user_cu->email;
-        //
-        // echo '<pre>';
-        // print_r($user);
-        // echo '</pre>';
-
 
         /*
         [RolUnico] => stdClass Object
@@ -104,11 +80,8 @@ class ClaveUnicaController extends Controller
                     )
 
             )
-
         [email] => mcdla@mail.com
-
         */
-
     }
 
     public function login($access_token = null)
@@ -130,18 +103,31 @@ class ClaveUnicaController extends Controller
                 $user->email = $user_cu->email;
             } elseif (env('APP_ENV') == 'local') {
                 $user = new User();
-                $user->id = 16055586;
-                $user->dv = 6;
-                $user->name = "maria angela";
-                $user->fathers_family = "family";
-                $user->mothers_family = "mother";
+                $user->id = 12345678;
+                $user->dv = 9;
+                $user->name = "Administrador";
+                $user->fathers_family = "Ap1";
+                $user->mothers_family = "Ap2";
                 $user->email = "email@email.com";
             }
 
-            // dd($user);
-            Auth::loginUsingId($user->id, true);
-            //Auth::login($user);
-            return redirect()->route('home');
+            $u = User::find($user->id);
+            if($u) {
+                $u->name = $user->name;
+                $u->fathers_family = $user->fathers_family;
+                $u->mothers_family = $user->mothers_family;
+                $u->email_personal = $user->email;
+                $u->save();
+                Auth::login($u, true);
+                $route = 'home';
+            }
+            else {
+                session()->flash('danger', 'No existe el usuario registrado en el sistema');
+                $route = 'login';
+            }
+
+            return redirect()->route($route);
+            //Auth::loginUsingId($user->id, true);
         }
     }
 }
