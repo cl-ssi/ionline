@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->date('birthday')->nullable();
             $table->foreignId('organizational_unit_id')->nullable();
             $table->boolean('active')->default(true);
+            $table->boolean('external')->default(false);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

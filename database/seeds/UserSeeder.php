@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
-
+use Spatie\Permission\Models\Permission;
 
 class UserSeeder extends Seeder
 {
