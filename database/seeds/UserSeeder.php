@@ -65,7 +65,7 @@ class UserSeeder extends Seeder
         $user->assignRole('dev');
         $user->givePermissionTo(Permission::all());
 
-        $user = User::Create(['id'=>16351236, 'dv'=>k, 'name'=>'German', 'fathers_family'=>'Zuñiga', 'mothers_family' => 'Codocedo',
+        $user = User::Create(['id'=>16351236, 'dv'=>'k', 'name'=>'German', 'fathers_family'=>'Zuñiga', 'mothers_family' => 'Codocedo',
             'email'=>'german.zuniga@redsalud.gob.cl','password'=>bcrypt('admin'), 'position'=>'Profesional SIDRA', 'organizational_unit_id'=>$ouTIC->id]);
         $user->assignRole('god','dev');
         $user->givePermissionTo(Permission::all());
