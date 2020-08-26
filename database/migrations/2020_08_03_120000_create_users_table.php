@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('fathers_family');
             $table->string('mothers_family');
             $table->string('email')->unique();
+            $table->string('email_personal')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('position')->nullable();

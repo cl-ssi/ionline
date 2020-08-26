@@ -116,6 +116,7 @@ class ClaveUnicaController extends Controller
                 $u->name = $user->name;
                 $u->fathers_family = $user->fathers_family;
                 $u->mothers_family = $user->mothers_family;
+                $u->email_personal = $user->email;
                 $u->save();
                 Auth::login($u, true);
                 $route = 'home';
@@ -126,7 +127,6 @@ class ClaveUnicaController extends Controller
             }
 
             return redirect()->route($route);
-            // dd($user);
             //Auth::loginUsingId($user->id, true);
         }
     }
