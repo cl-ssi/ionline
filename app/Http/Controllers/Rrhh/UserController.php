@@ -3,10 +3,15 @@
 namespace App\Http\Controllers\Rrhh;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Rrhh\storeUser;
+use App\Http\Requests\Rrhh\updatePassword;
+use App\Rrhh\Authority;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -47,6 +52,7 @@ class UserController extends Controller
      */
     public function create()
     {
+
         $ouRoot = OrganizationalUnit::find(1);
         return view('rrhh.create')->withOuRoot($ouRoot);
     }
@@ -57,9 +63,36 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(storeUser $request)
     {
-        //
+        $user = new User($request->All());
+        $user->password = bcrypt($request->id);
+
+        if ($request->has('organizationalunit')) {
+            if ($request->filled('organizationalunit')) {
+                $user->organizationalunit()->associate($request->input('organizationalunit'));
+            }
+            else {
+                $user->organizationalunit()->dissociate();
+            }
+        }
+
+        $user->save();
+
+        if($request->hasFile('photo')){
+            $path = $request->file('photo')
+                ->storeAs('public',$user->id.'.'.$request->file('photo')->clientExtension());
+        }
+
+        $user->givePermissionTo('Users: must change password');
+        $user->givePermissionTo('Authorities: view');
+        $user->givePermissionTo('Calendar: view');
+        $user->givePermissionTo('Requirements: create');
+
+
+        session()->flash('info', 'El usuario '.$user->name.' ha sido creado.');
+
+        return redirect()->route('rrhh.users.index');
     }
 
     /**
@@ -132,6 +165,58 @@ class UserController extends Controller
         return redirect()->route('rrhh.users.index');
     }
 
+    /**
+     * Show the form for change password.
+     *
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function editPassword() {
+        return view('rrhh.edit_password');
+    }
+
+    /**
+     * Update the current loged user password
+     *
+     * @param  \Illuminate\Http\updatePassword  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updatePassword(updatePassword $request) {
+        if(Hash::check($request->password, Auth()->user()->password)) {
+            Auth()->user()->password = bcrypt($request->newpassword);
+            Auth()->user()->save();
+
+            session()->flash('success', 'Su clave ha sido cambiada con éxito.');
+
+            if( Auth()->user()->hasPermissionTo('Users: must change password') ) {
+                Auth()->user()->revokePermissionTo('Users: must change password');
+                Auth::login(Auth()->user());
+            }
+
+        }
+        else {
+            session()->flash('danger', 'La clave actual es erronea.');
+        }
+
+        return redirect()->route('home');
+    }
+
+    /**
+     * Reset user password.
+     *
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function resetPassword(User $user) {
+        $user->password = bcrypt($user->id);
+        $user->save();
+
+        session()->flash('success', 'La clave ha sido reseteada a: '.$user->id);
+
+        return redirect()->route('rrhh.users.edit', $user->id);
+    }
+
+
     public function switch(User $user) {
         if (session()->has('god')) {
             /* Clean session var */
@@ -145,4 +230,32 @@ class UserController extends Controller
         Auth::login($user);
         return back();
     }
+
+    /**
+     * Display a listing of users from an OrganizationalUnit.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getFromOu($ou_id)
+    {
+        $authority = null;
+        $current_authority = Authority::getAuthorityFromDate($ou_id,Carbon::now(),'manager');
+        if($current_authority) {
+            $authority = $current_authority->user;
+        }
+        $users = User::where('organizational_unit_id', $ou_id)->orderBy('name')->get();
+        if ($authority <> null) {
+            if(!$users->find($authority)) {
+                $users->push($authority);
+            }}
+        return $users;
+    }
+
+    public function getAutorityFromOu($ou_id)
+    {
+        $authority = Authority::getAuthorityFromDate($ou_id,Carbon::now(),'manager');
+        return $authority;
+    }
+
+
 }
