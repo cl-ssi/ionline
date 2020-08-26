@@ -5,10 +5,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8 mb-3 mt3">
             <a href="{{ route('claveunica.autenticar') }}?redirect=L2NsYXZldW5pY2EvbG9naW4=" class="btn btn-lg btn-block btn-outline-primary">
-                Iniciar con <img src="{{ asset('images/btn_claveunica_119px.png') }}" alt="Logo Clave única">
+                Iniciar sesión con <img src="{{ asset('images/btn_claveunica_119px.png') }}" alt="Logo Clave única">
             </a>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-8 d-none" id="local_login">
             <div class="card">
                 <div class="card-header">{{ __('Iniciar sesión') }}</div>
 
@@ -74,5 +74,14 @@
             </div>
         </div>
     </div>
+    <button type="button" class="btn btn-sm btn btn-outline-light float-right small mt-4" id="show_local_login">Inicio local</button>
 </div>
+@endsection
+
+@section('custom_js')
+<script type="text/javascript">
+$( "#show_local_login" ).click(function() {
+    $( "#local_login" ).toggleClass('d-none');
+});
+</script>
 @endsection

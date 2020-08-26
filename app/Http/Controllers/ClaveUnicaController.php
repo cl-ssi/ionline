@@ -115,33 +115,33 @@ class ClaveUnicaController extends Controller
     {
         if ($access_token) {
             // dd("");
-              if (env('APP_ENV') == 'production') {
-                  //$access_token = session()->get('access_token');
-                  $url_base = "https://www.claveunica.gob.cl/openid/userinfo/";
-                  $response = Http::withToken($access_token)->post($url_base);
-                  $user_cu = json_decode($response);
+            if (env('APP_ENV') == 'production') {
+                //$access_token = session()->get('access_token');
+                $url_base = "https://www.claveunica.gob.cl/openid/userinfo/";
+                $response = Http::withToken($access_token)->post($url_base);
+                $user_cu = json_decode($response);
 
-                  $user = new User();
-                  $user->id = $user_cu->RolUnico->numero;
-                  $user->dv = $user_cu->RolUnico->DV;
-                  $user->name = implode(' ', $user_cu->name->nombres);
-                  $user->fathers_family = $user_cu->name->apellidos[0];
-                  $user->mothers_family = $user_cu->name->apellidos[1];
-                  $user->email = $user_cu->email;
-              } elseif (env('APP_ENV') == 'local') {
-                  $user = new User();
-                  $user->id = 16055586;
-                  $user->dv = 6;
-                  $user->name = "maria angela";
-                  $user->fathers_family = "family";
-                  $user->mothers_family = "mother";
-                  $user->email = "email@email.com";
-              }
+                $user = new User();
+                $user->id = $user_cu->RolUnico->numero;
+                $user->dv = $user_cu->RolUnico->DV;
+                $user->name = implode(' ', $user_cu->name->nombres);
+                $user->fathers_family = $user_cu->name->apellidos[0];
+                $user->mothers_family = $user_cu->name->apellidos[1];
+                $user->email = $user_cu->email;
+            } elseif (env('APP_ENV') == 'local') {
+                $user = new User();
+                $user->id = 16055586;
+                $user->dv = 6;
+                $user->name = "maria angela";
+                $user->fathers_family = "family";
+                $user->mothers_family = "mother";
+                $user->email = "email@email.com";
+            }
 
-              // dd($user);
-
-                Auth::login($user);
-                return redirect()->route('home');
+            // dd($user);
+            Auth::loginUsingId($user->id, true);
+            //Auth::login($user);
+            return redirect()->route('home');
         }
     }
 }
