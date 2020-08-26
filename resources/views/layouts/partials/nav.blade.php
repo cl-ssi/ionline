@@ -68,12 +68,14 @@
                         </a>
                         @endcan
 
+                        {{--
                         @canany(['Authorities: manager', 'Authorities: view'])
                         <a class="dropdown-item @active('rrhh.authorities.*')"
                             href="{{ route('rrhh.authorities.index') }}">
                             <i class="fas fa-chess-king fa-fw"></i> Autoridades
                         </a>
                         @endcan
+                        --}}
                     </div>
 
                 </li>
