@@ -113,6 +113,10 @@ class ClaveUnicaController extends Controller
 
             $u = User::find($user->id);
             if($u) {
+                $u->name = $user->name;
+                $u->fathers_family = $user->fathers_family;
+                $u->mothers_family = $user->mothers_family;
+                $u->save();
                 Auth::login($u, true);
                 $route = 'home';
             }

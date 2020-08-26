@@ -43,7 +43,7 @@
             <a class="p-2 text-dark" href="http://www.saludiquique.cl">Web Servicio de Salud</a>
         </nav>
         <a class="btn btn-outline-primary mr-2" href="http://intranet.saludiquique.cl">Intranet</a>
-        <a class="btn btn-outline-primary" href="{{ route('login') }}">Login</a>
+        <a class="btn btn-outline-primary" href="{{ route('login') }}">iOnline</a>
     </div>
 
     <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center container">
