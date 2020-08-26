@@ -17,6 +17,7 @@
         "laravel/ui": "^2.1",
         "laravel/vapor-cli": "^1.8",
         "laravel/vapor-core": "^2.8",
+        "maatwebsite/excel": "^3.1",
         "owen-it/laravel-auditing": "^10.0",
         "spatie/laravel-permission": "^3.13",
         "watson/active": "^5.0"
