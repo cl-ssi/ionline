@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Pharmacies;
+
+use Illuminate\Database\Eloquent\Model;
+
+class PurchaseItem extends Model
+{
+  /**
+   * The attributes that are mass assignable.
+   *
+   * @var array
+   */
+  protected $fillable = [
+      'id', 'barcode', 'purchase_id', 'product_id', 'amount', 'unity', 'unit_cost', 'due_date',
+      'establishments_id',
+      //'serial_number' ,
+      'batch', 'created_at'
+  ];
+
+  protected $table = 'frm_purchases_items';
+
+  //relaciones
+  public function purchase()
+  {
+    return $this->belongsTo('App\Pharmacies\Purchase');
+  }
+
+  public function product()
+  {
+    return $this->belongsTo('App\Pharmacies\Product')->withTrashed();
+  }
+
+}

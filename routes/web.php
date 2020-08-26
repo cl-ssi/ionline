@@ -454,6 +454,10 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
         Route::resource('receiving','Pharmacies\ReceivingController');
         Route::resource('dispatch','Pharmacies\DispatchController');
         Route::resource('purchase','Pharmacies\PurchaseController');
+        Route::resource('purchase_item','Pharmacies\PurchaseItemController');
+        Route::get('purchase/record/{purchase}','Pharmacies\PurchaseController@record')->name('purchase.record');
+
+
         Route::resource('transfer','Pharmacies\TransferController');
         Route::resource('deliver','Pharmacies\DeliverController');
         Route::resource('transfer','Pharmacies\TransferController');
