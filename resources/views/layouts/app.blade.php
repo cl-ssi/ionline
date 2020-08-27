@@ -92,7 +92,7 @@
     $(function () {
         $(document).ready(function(){
             $('#cierreSesion').click(function (){
-                $.ajax({ url: 'https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout', dataType: 'script' }) .always(function() {
+                $.ajax({ type: "POST", url: 'https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout', data: { "_token": "{{ csrf_token() }}"}, dataType: 'script' }) .always(function() {
                     window.location.href = '/logout';
                 });
             });
