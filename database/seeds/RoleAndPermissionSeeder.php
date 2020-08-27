@@ -87,6 +87,11 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Pharmacy: reports']);
         Permission::create(['name' => 'Pharmacy: transfer']);
         Permission::create(['name' => 'Pharmacy: transfer view ortesis']);
+        Permission::create(['name' => 'Pharmacy: create suppliers']);
+        Permission::create(['name' => 'Pharmacy: create establishments']);
+        Permission::create(['name' => 'Pharmacy: create products']);
+        Permission::create(['name' => 'Pharmacy: create programs']);
+
 
         Permission::create(['name' => 'Health Plan']);
 
