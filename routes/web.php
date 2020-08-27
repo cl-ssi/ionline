@@ -17,7 +17,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['register' => false, 'logout' => false]);
+
+Route::get('logout','Auth\LoginController@logout')->name('logout');
 
 Route::get('/claveunica','ClaveUnicaController@autenticar')->name('claveunica.autenticar');
 Route::get('/claveunica/callback','ClaveUnicaController@callback')->name('claveunica.callback');
