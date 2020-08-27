@@ -3,13 +3,7 @@
 namespace App\Pharmacies;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Pharmacies\Product;
-use App\Pharmacies\Category;
-use App\Pharmacies\Program;
 use App\Pharmacies\Unit;
-use App\Pharmacies\ReceivingItem;
-use App\Pharmacies\DispatchItem;
-use App\Pharmacies\PurchaseItem;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model

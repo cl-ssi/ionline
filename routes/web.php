@@ -452,7 +452,20 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
 
     Route::prefix('products')->as('products.')->middleware('auth')->group(function(){
         Route::resource('receiving','Pharmacies\ReceivingController');
+        Route::resource('receiving_item','Pharmacies\ReceivingItemController');
+        Route::get('receiving/record/{receiving}','Pharmacies\ReceivingController@record')->name('receiving.record');
+        Route::get('dispatch/product/due_date/{product_id?}','Pharmacies\DispatchController@getFromProduct_due_date')->name('dispatch.product.due_date')->middleware('auth');
+        Route::get('dispatch/product/batch/{product_id?}/{due_date?}','Pharmacies\DispatchController@getFromProduct_batch')->name('dispatch.product.batch')->middleware('auth');
+        Route::get('dispatch/product/count/{product_id?}/{due_date?}/{batch?}','Pharmacies\DispatchController@getFromProduct_count')->name('dispatch.product.count')->middleware('auth');
+
+        Route::get('/exportExcel','Pharmacies\DispatchController@exportExcel')->name('exportExcel')->middleware('auth');
+
         Route::resource('dispatch','Pharmacies\DispatchController');
+        Route::resource('dispatch_item','Pharmacies\DispatchItemController');
+        Route::get('dispatch/record/{dispatch}','Pharmacies\DispatchController@record')->name('dispatch.record');
+        Route::post('dispatch/{dispatch}/file','Pharmacies\DispatchController@storeFile')->name('dispatch.storeFile');
+        Route::get('dispatch/{dispatch}/file','Pharmacies\DispatchController@openFile')->name('dispatch.openFile');
+
         Route::resource('purchase','Pharmacies\PurchaseController');
         Route::resource('purchase_item','Pharmacies\PurchaseItemController');
         Route::get('purchase/record/{purchase}','Pharmacies\PurchaseController@record')->name('purchase.record');
