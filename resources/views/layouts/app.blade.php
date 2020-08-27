@@ -98,7 +98,7 @@
     $(function () {
         $(document).ready(function(){
             $('#cierreSesion').click(function (){
-                $.get('https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout');
+                $.ajax({'url':'https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout',xhrFields: { withCredentials: true }});
             });
         });
     });
