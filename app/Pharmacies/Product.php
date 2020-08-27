@@ -416,12 +416,17 @@ class Product extends Model
       if ($matrix[0]  <> null) {
         foreach ($matrix as $key => $data) {
           $flag = 0;
-          foreach ($final as $key2 => $f) {
-            if ($f['product_id'] == $data->product_id && $f['due_date'] == $data->due_date && $f['batch'] == $data->batch) {
-              $flag = 1;
-              $f['cantidad'] = $f['cantidad'] + $data->amount;
-            }
+
+          //TODO se agrega validación if $final, comparar con bd final
+          if($final[0] <> null){
+              foreach ($final as $key2 => $f) {
+                  if ($f['product_id'] == $data->product_id && $f['due_date'] == $data->due_date && $f['batch'] == $data->batch) {
+                      $flag = 1;
+                      $f['cantidad'] = $f['cantidad'] + $data->amount;
+                  }
+              }
           }
+
           if ($flag == 0) {
             $final[$cont] = $data;
             $final[$cont]['cantidad'] = $final[$cont]['cantidad'] + $data->amount;
