@@ -36,7 +36,7 @@
 					<tr>
 						<td><a href="#" id="{{$product->id}}" class="ref-product">{{$product->name}}</a></td>
 						<td class="text-right">
-							@if($product->quantity != 0)
+							@if($product->quantity != 0) 
 								<a href="#" id="{{$product->id}}" rel="popover" class="popover-item">{{$product->quantity}}</a>
 								<div class="popover-list-content" style="display:none;">
 									<ul class="list-group list-group-flush">

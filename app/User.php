@@ -69,6 +69,25 @@ class User extends Authenticatable
         return "{$this->name[0]}{$this->fathers_family[0]}{$this->mothers_family[0]}";
     }
 
+    public function purchases() {
+        return $this->hasMany('App\Pharmacies\Purchase');
+    }
+
+    public function dispatches() {
+        return $this->hasMany('App\Pharmacies\Dipatch');
+    }
+
+    public function receivings() {
+        return $this->hasMany('App\Pharmacies\Receiving');
+    }
+
+    public function establishments() {
+        return $this->belongsToMany('\App\Pharmacies\Establishment', 'frm_establishments_users')
+                    ->withTimestamps();
+    }
+
+    use SoftDeletes;
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -83,5 +102,5 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $dates = ['birthday'];
+    protected $dates = ['deleted_at', 'birthday'];
 }
