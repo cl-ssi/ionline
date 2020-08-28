@@ -61,23 +61,20 @@
                         </a>
                         @endcan
 
-                        {{--
                         @canany(['OrganizationalUnits: create', 'OrganizationalUnits: edit', 'OrganizationalUnits: delete'])
-                        <a class="dropdown-item @active('rrhh.organizationalUnits.*')"
-                            href="{{ route('rrhh.organizationalUnits.index') }}">
-                            <i class="fas fa-sitemap fa-fw"></i> Unidades organizacionales
-                        </a>
+                            <a class="dropdown-item {{ active('rrhh.organizationalUnits.*') }}"
+                               href="{{ route('rrhh.organizational-units.index') }}">
+                                <i class="fas fa-sitemap fa-fw"></i> Unidades organizacionales
+                            </a>
                         @endcan
-                        --}}
 
-                        {{--
                         @canany(['Authorities: manager', 'Authorities: view'])
-                        <a class="dropdown-item @active('rrhh.authorities.*')"
-                            href="{{ route('rrhh.authorities.index') }}">
-                            <i class="fas fa-chess-king fa-fw"></i> Autoridades
-                        </a>
+                            <a class="dropdown-item {{ active('rrhh.authorities.*') }}"
+                               href="{{ route('rrhh.authorities.index') }}">
+                                <i class="fas fa-chess-king fa-fw"></i> Autoridades
+                            </a>
                         @endcan
-                        --}}
+
                     </div>
 
                 </li>

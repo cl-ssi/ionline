@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Rrhh;
 
-use App\Http\Controllers\Controller;
 use App\Rrhh\OrganizationalUnit;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class OrganizationalUnitController extends Controller
 {
@@ -15,11 +15,9 @@ class OrganizationalUnitController extends Controller
      */
     public function index()
     {
-
-        $organizationalunits = OrganizationalUnit::orderBy('name', 'asc')->get();
-        //dd($organizationalunits);
-        return view('rrhh.organizationalunit.index', compact('organizationalunits'));
-
+        $organizationalUnits = OrganizationalUnit::All();
+        return view('rrhh/organizationalunit/index')
+            ->with('organizationalUnits', $organizationalUnits);
     }
 
     /**
@@ -29,9 +27,8 @@ class OrganizationalUnitController extends Controller
      */
     public function create()
     {
-        //
-        $organizationalunit = OrganizationalUnit::findOrFail(1);
-        return view('rrhh.organizationalunit.create', compact('organizationalunit'));
+        $organizationalUnit = OrganizationalUnit::find(1);
+        return view('rrhh.organizationalunit.create',compact('organizationalUnit'));
     }
 
     /**
@@ -42,9 +39,13 @@ class OrganizationalUnitController extends Controller
      */
     public function store(Request $request)
     {
-        $organizationalunit = new OrganizationalUnit($request->All());
-        $organizationalunit->save();
-        return redirect()->route('rrhh.organizationalunits.index');
+        $organizationalUnit = new OrganizationalUnit($request->All());
+        $organizationalUnit->father()->associate($request->input('father'));
+        $organizationalUnit->save();
+
+        session()->flash('info', 'La unidad organzacional '.$organizationalUnit->name.' ha sido creada.');
+
+        return redirect()->route('rrhh.organizationalUnits.index');
     }
 
     /**
@@ -66,9 +67,10 @@ class OrganizationalUnitController extends Controller
      */
     public function edit(OrganizationalUnit $organizationalUnit)
     {
-
         $organizationalUnits = OrganizationalUnit::All();
-        return view('rrhh.organizationalunit.edit', compact('organizationalUnit','organizationalUnits'));
+        return view('rrhh/organizationalunit/edit')
+            ->withOrganizationalUnit($organizationalUnit)
+            ->withOrganizationalUnits($organizationalUnits);
     }
 
     /**
@@ -80,11 +82,13 @@ class OrganizationalUnitController extends Controller
      */
     public function update(Request $request, OrganizationalUnit $organizationalUnit)
     {
-        //
         $organizationalUnit->fill($request->all());
+        $organizationalUnit->father()->associate($request->input('father'));
         $organizationalUnit->save();
-        return redirect()->route('rrhh.organizationalunits.index');
 
+        session()->flash('info', 'La unidad organzacional '.$organizationalUnit->name.' ha sido actualizada.');
+
+        return redirect()->route('rrhh.organizationalUnits.index');
     }
 
     /**
@@ -95,6 +99,10 @@ class OrganizationalUnitController extends Controller
      */
     public function destroy(OrganizationalUnit $organizationalUnit)
     {
-        //
+        $organizationalUnit->delete();
+
+        session()->flash('success', 'La unidad organzacional '.$organizationalUnit->name.' ha sido eliminada.');
+
+        return redirect()->route('rrhh.organizationalUnits.index');
     }
 }

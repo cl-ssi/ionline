@@ -32,12 +32,15 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('{user}/roles', 'Rrhh\RoleController@index')->name('roles.index')->middleware('auth');
     Route::post('{user}/roles','Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
 
-    Route::prefix('organizational-units')->name('organizationalunits.')->group(function () {
+    Route::resource('authorities','Rrhh\AuthorityController')->middleware(['auth']);;
+
+    Route::prefix('organizational-units')->name('organizational-units.')->group(function () {
         Route::get('/', 'Rrhh\OrganizationalUnitController@index')->name('index');
         Route::get('/create', 'Rrhh\OrganizationalUnitController@create')->name('create');
         Route::post('/store', 'Rrhh\OrganizationalUnitController@store')->name('store');
         Route::get('{organizationalUnit}/edit', 'Rrhh\OrganizationalUnitController@edit')->name('edit');
         Route::put('{organizationalUnit}', 'Rrhh\OrganizationalUnitController@update')->name('update');
+        Route::get('{organizationalUnit}/destroy', 'Rrhh\OrganizationalUnitController@destroy')->name('destroy');
     });
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('ou/{ou_id?}','Rrhh\UserController@getFromOu')->name('get.from.ou')->middleware('auth');
