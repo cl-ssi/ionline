@@ -43,9 +43,9 @@ class OrganizationalUnitController extends Controller
         $organizationalUnit->father()->associate($request->input('father'));
         $organizationalUnit->save();
 
-        session()->flash('info', 'La unidad organzacional '.$organizationalUnit->name.' ha sido creada.');
+        session()->flash('info', 'La unidad organizacional '.$organizationalUnit->name.' ha sido creada.');
 
-        return redirect()->route('rrhh.organizationalUnits.index');
+        return redirect()->route('rrhh.organizational-units.index');
     }
 
     /**
@@ -86,9 +86,9 @@ class OrganizationalUnitController extends Controller
         $organizationalUnit->father()->associate($request->input('father'));
         $organizationalUnit->save();
 
-        session()->flash('info', 'La unidad organzacional '.$organizationalUnit->name.' ha sido actualizada.');
+        session()->flash('info', 'La unidad organizacional '.$organizationalUnit->name.' ha sido actualizada.');
 
-        return redirect()->route('rrhh.organizationalUnits.index');
+        return redirect()->route('rrhh.organizational-units.index');
     }
 
     /**
@@ -101,8 +101,8 @@ class OrganizationalUnitController extends Controller
     {
         $organizationalUnit->delete();
 
-        session()->flash('success', 'La unidad organzacional '.$organizationalUnit->name.' ha sido eliminada.');
+        session()->flash('success', 'La unidad organizacional '.$organizationalUnit->name.' ha sido eliminada.');
 
-        return redirect()->route('rrhh.organizationalUnits.index');
+        return redirect()->route('rrhh.organizational-units.index');
     }
 }
