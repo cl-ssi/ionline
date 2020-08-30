@@ -89,19 +89,27 @@
 
     @yield('custom_js')
     <script>
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
+    function logout(){
+        // llamada al endpoint de logout
+        window.location.href="https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout";
 
-    $(function () {
-        $(document).ready(function(){
-            $('#cierreSesion').click(function (){
-                $.ajax({'url':'https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout', dataType: 'json', xhrFields: { withCredentials: true }});
-            });
-        });
-    });
+        // redirección al cabo de 1 segundo a un handler de logout en la aplicación integradora
+        setTimeout(function(){ window.location.href= "/logout"; }, 1000);
+    }
+
+    // $.ajaxSetup({
+    //     headers: {
+    //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    //     }
+    // });
+    //
+    // $(function () {
+    //     $(document).ready(function(){
+    //         $('#cierreSesion').click(function (){
+    //             $.ajax({'url':'https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout', dataType: 'json', xhrFields: { withCredentials: true }});
+    //         });
+    //     });
+    // });
     </script>
 
 </body>
