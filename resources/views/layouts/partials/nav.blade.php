@@ -30,14 +30,14 @@
                             <i class="fas fa-desktop fa-fw"></i> Indicadores - REM
                         </a>
 
-                        @auth
+                        {{--@auth
                             @canany(['LE Extra Plan: Carga','LE Extra Plan: Monitoreo'])
                                 <a class="dropdown-item {{ active('le_extra_plans.index') }}"
                                    href="{{ route('le_extra_plans.index') }}">
                                     <i class="far fa-file-alt"></i> LE Plan Extraordinario
                                 </a>
                             @endcan
-                        @endauth
+                        @endauth--}}
                     </div>
                 </li>
 
@@ -62,18 +62,19 @@
                         @endcan
 
                         @canany(['OrganizationalUnits: create', 'OrganizationalUnits: edit', 'OrganizationalUnits: delete'])
-                        <a class="dropdown-item @active('rrhh.organizationalUnits.*')"
-                            href="{{ route('rrhh.organizationalUnits.index') }}">
-                            <i class="fas fa-sitemap fa-fw"></i> Unidades organizacionales
-                        </a>
+                            <a class="dropdown-item {{ active('rrhh.organizationalUnits.*') }}"
+                               href="{{ route('rrhh.organizational-units.index') }}">
+                                <i class="fas fa-sitemap fa-fw"></i> Unidades organizacionales
+                            </a>
                         @endcan
 
                         @canany(['Authorities: manager', 'Authorities: view'])
-                        <a class="dropdown-item @active('rrhh.authorities.*')"
-                            href="{{ route('rrhh.authorities.index') }}">
-                            <i class="fas fa-chess-king fa-fw"></i> Autoridades
-                        </a>
+                            <a class="dropdown-item {{ active('rrhh.authorities.*') }}"
+                               href="{{ route('rrhh.authorities.index') }}">
+                                <i class="fas fa-chess-king fa-fw"></i> Autoridades
+                            </a>
                         @endcan
+
                     </div>
 
                 </li>
@@ -86,6 +87,15 @@
                 </li>
                 @endrole
 
+                @canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)', 'Pharmacy: APS (id:3)'])
+                    <li class="nav-item {{ active('pharmacies.*') }}">
+                        <a class="nav-link" href="{{ route('pharmacies.index') }}">
+                            @canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)']) <i class="fas fa-prescription-bottle-alt"></i> Droguería @endcan
+                            @can('Pharmacy: APS (id:3)') <i class="fas fa-list-ul"></i> Bodega APS @endcan
+                        </a>
+                    </li>
+                @endcan
+
             </ul>
 
             <!-- Right Side Of Navbar -->
@@ -93,24 +103,31 @@
                 <!-- Authentication Links -->
                 @guest
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        <a class="nav-link" href="{{ route('login') }}">{{ __('Iniciar Sesión') }}</a>
                     </li>
-                    @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                    @endif
                 @else
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->name }} <span class="caret"></span>
+                            {{ Auth::user()->firstName }} <span class="caret"></span>
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                               onclick="event.preventDefault();
-                                             document.getElementById('logout-form').submit();">
-                                {{ __('Logout') }}
+
+                            @unless(Auth::user()->hasPermissionTo('Users: must change password'))
+
+                                @role('god')
+                                <a class="dropdown-item {{ active('parameters.*') }}"
+                                   href="{{ route('parameters.index') }}">
+                                    <i class="fas fa-cog fa-fw"></i> Mantenedores
+                                </a>
+                                @endrole
+
+                            @endunless
+
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item" role="button" onclick="logout()" id="cierreSesion">
+                                {{ __('Cerrar sesión') }}
                             </a>
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

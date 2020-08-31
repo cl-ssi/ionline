@@ -46,7 +46,7 @@
     <div id="app">
         @include('layouts.partials.nav')
 
-        <main class="container">
+        <main class="container pt-3">
             <div class="d-none d-print-block">
                 <strong>{{ config('app.ss') }}</strong><br>
                 Ministerio de Salud
@@ -88,5 +88,15 @@
 
 
     @yield('custom_js')
+    <script>
+    function logout(){
+        // llamada al endpoint de logout
+        window.location.href="https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout";
+
+        // redirección al cabo de 1 segundo a un handler de logout en la aplicación integradora
+        setTimeout(function(){ window.location.href= "/logout"; }, 1000);
+    }
+    </script>
+
 </body>
 </html>

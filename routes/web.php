@@ -17,7 +17,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['register' => false, 'logout' => false]);
+
+Route::get('logout','Auth\LoginController@logout')->name('logout');
+
+Route::get('/claveunica','ClaveUnicaController@autenticar')->name('claveunica.autenticar');
+Route::get('/claveunica/callback','ClaveUnicaController@callback')->name('claveunica.callback');
+Route::get('/claveunica/login/{access_token}','ClaveUnicaController@login')->name('claveunica.login');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -40,12 +46,15 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('{user}/roles', 'Rrhh\RoleController@index')->name('roles.index')->middleware('auth');
     Route::post('{user}/roles','Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
 
-    Route::prefix('organizational-units')->name('organizationalunits.')->group(function () {
+    Route::resource('authorities','Rrhh\AuthorityController')->middleware(['auth']);;
+
+    Route::prefix('organizational-units')->name('organizational-units.')->group(function () {
         Route::get('/', 'Rrhh\OrganizationalUnitController@index')->name('index');
         Route::get('/create', 'Rrhh\OrganizationalUnitController@create')->name('create');
         Route::post('/store', 'Rrhh\OrganizationalUnitController@store')->name('store');
         Route::get('{organizationalUnit}/edit', 'Rrhh\OrganizationalUnitController@edit')->name('edit');
         Route::put('{organizationalUnit}', 'Rrhh\OrganizationalUnitController@update')->name('update');
+        Route::get('{organizationalUnit}/destroy', 'Rrhh\OrganizationalUnitController@destroy')->name('destroy');
     });
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('ou/{ou_id?}','Rrhh\UserController@getFromOu')->name('get.from.ou')->middleware('auth');
@@ -63,10 +72,29 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 });
 
 Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(function(){
+    Route::get('/', 'Parameters\ParameterController@index')->name('index');
     Route::put('/{parameter}', 'Parameters\ParameterController@update')->name('update');
     Route::get('drugs', 'Parameters\ParameterController@indexDrugs')->name('drugs')->middleware(['role:Drugs: admin']);
     Route::resource('permissions','Parameters\PermissionController');
     Route::resource('roles','Parameters\RoleController');
+
+    Route::prefix('communes')->as('communes.')->group(function (){
+        Route::get('/', 'Parameters\CommuneController@index')->name('index');
+        Route::put('/{commune}', 'Parameters\CommuneController@update')->name('update');
+    });
+
+    Route::prefix('establishments')->as('establishments.')->group(function (){
+        Route::get('/', 'Parameters\EstablishmentController@index')->name('index');
+        Route::put('/{establishment}', 'Parameters\EstablishmentController@update')->name('update');
+    });
+
+//    Route::resource('establishments','Parameters\EstablishmentController');
+    Route::resource('holidays','Parameters\HolidayController');
+    Route::resource('locations','Parameters\LocationController');
+    Route::resource('places','Parameters\PlaceController');
+    Route::resource('phrases','Parameters\PhraseOfTheDayController');
+
+
 
 });
 
@@ -450,8 +478,52 @@ Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
     Route::post('receptions/store', 'Drugs\ReceptionController@store')->name('receptions.store');
     Route::get('receptions/edit/{reception}', 'Drugs\ReceptionController@edit')->name('receptions.edit');
     Route::put('receptions/update/{reception}', 'Drugs\ReceptionController@update')->name('receptions.update');
-
-
-
 //    Route::resource('receptions','Drugs\ReceptionController');
+});
+
+/* Bodega de Farmacia */
+Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(function(){
+    Route::get('/', 'Pharmacies\PharmacyController@index')->name('index');
+    Route::resource('establishments','Pharmacies\EstablishmentController');
+    Route::resource('programs','Pharmacies\ProgramController');
+    Route::resource('suppliers','Pharmacies\SupplierController');
+
+    Route::prefix('products')->as('products.')->middleware('auth')->group(function(){
+        Route::resource('receiving','Pharmacies\ReceivingController');
+        Route::resource('receiving_item','Pharmacies\ReceivingItemController');
+        Route::get('receiving/record/{receiving}','Pharmacies\ReceivingController@record')->name('receiving.record');
+        Route::get('dispatch/product/due_date/{product_id?}','Pharmacies\DispatchController@getFromProduct_due_date')->name('dispatch.product.due_date')->middleware('auth');
+        Route::get('dispatch/product/batch/{product_id?}/{due_date?}','Pharmacies\DispatchController@getFromProduct_batch')->name('dispatch.product.batch')->middleware('auth');
+        Route::get('dispatch/product/count/{product_id?}/{due_date?}/{batch?}','Pharmacies\DispatchController@getFromProduct_count')->name('dispatch.product.count')->middleware('auth');
+        Route::get('/exportExcel','Pharmacies\DispatchController@exportExcel')->name('exportExcel')->middleware('auth');
+
+        Route::resource('dispatch','Pharmacies\DispatchController');
+        Route::resource('dispatch_item','Pharmacies\DispatchItemController');
+        Route::get('dispatch/record/{dispatch}','Pharmacies\DispatchController@record')->name('dispatch.record');
+        Route::get('dispatch/sendC19/{dispatch}','Pharmacies\DispatchController@sendC19')->name('dispatch.sendC19');
+        Route::get('dispatch/deleteC19/{dispatch}','Pharmacies\DispatchController@deleteC19')->name('dispatch.deleteC19');
+        Route::post('dispatch/{dispatch}/file','Pharmacies\DispatchController@storeFile')->name('dispatch.storeFile');
+        Route::get('dispatch/{dispatch}/file','Pharmacies\DispatchController@openFile')->name('dispatch.openFile');
+        Route::resource('purchase','Pharmacies\PurchaseController');
+        Route::resource('purchase_item','Pharmacies\PurchaseItemController');
+        Route::get('purchase/record/{purchase}','Pharmacies\PurchaseController@record')->name('purchase.record');
+
+        Route::resource('transfer','Pharmacies\TransferController');
+        Route::get('transfer/{establishment}/auth', 'Pharmacies\TransferController@auth')->name('transfer.auth');
+        Route::resource('deliver','Pharmacies\DeliverController');
+        Route::put('deliver/{deliver}/confirm', 'Pharmacies\DeliverController@confirm')->name('deliver.confirm');
+    });
+    Route::resource('products','Pharmacies\ProductController');
+
+    Route::prefix('reports')->as('reports.')->middleware('auth')->group(function(){
+        Route::get('bincard','Pharmacies\ProductController@repBincard')->name('bincard');
+        Route::get('purchase_report','Pharmacies\ProductController@repPurchases')->name('purchase_report');
+        Route::get('informe_movimientos','Pharmacies\ProductController@repInformeMovimientos')->name('informe_movimientos');
+        Route::get('product_last_prices','Pharmacies\ProductController@repProductLastPrices')->name('product_last_prices');
+        Route::get('consume_history','Pharmacies\ProductController@repConsumeHistory')->name('consume_history');
+
+        Route::get('products','Pharmacies\ProductController@repProduct')->name('products');
+    });
+
+
 });

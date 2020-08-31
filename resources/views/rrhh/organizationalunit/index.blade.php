@@ -1,31 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+@section('title', 'Lista de Unidades Organizacionales')
 
-<body>
-    <table>
-        <thread>
-            <tr>
-                <th>Nombre</th>
-                <th>Editar</th>
-            </tr>
-        </thread>
-        <tbody>
-            @foreach($organizationalunits as $organizationalunit)
-            <tr>
-                <td>{{$organizationalunit->name}}</td>
-                <td><a href="{{ route('rrhh.organizationalunits.edit', $organizationalunit) }}" class="btn btn-outline-secondary btn-sm">
-					<span class="fas fa-edit" aria-hidden="true"></span> editar</a></td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+@section('content')
 
-</body>
+<h3 class="mb-3">Unidades organizacionales</h3>
 
-</html>
+<fieldset class="form-group">
+    <div class="input-group">
+        <div class="input-group-prepend">
+        	<span class="input-group-text" id="basic-addon"><i class="fas fa-search"></i></span>
+        </div>
+        <input type="text" class="form-control" id="forsearch" onkeyup="filter(1)" placeholder="Ingrese Nombre" name="search" required="">
+        <div class="input-group-append">
+            <a class="btn btn-primary" href="{{ route('rrhh.organizational-units.create') }}"><i class="fas fa-plus"></i> Agregar nuevo</a>
+        </div>
+    </div>
+</fieldset>
+
+<div class="table-responsive">
+	<table class="table table-striped table-sm" id="TableFilter">
+		<thead>
+			<tr>
+				<th scope="col"></th>
+				<th scope="col">Nombre</th>
+				<th scope="col">Accion</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach($organizationalUnits as $key => $organizationalUnit)
+			<tr>
+				<td scope="row">{{ ++$key }} </td>
+				<td>{{ $organizationalUnit->name }}</td>
+				<td>
+					<a href="{{ route('rrhh.organizational-units.edit', $organizationalUnit->id) }}" class="btn btn-outline-secondary btn-sm">
+					<span class="fas fa-edit" aria-hidden="true"></span></a>
+				</td>
+			</tr>
+			@endforeach
+		</tbody>
+	</table>
+</div>
+
+@endsection

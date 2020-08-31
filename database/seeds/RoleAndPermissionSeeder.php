@@ -76,6 +76,22 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Pharmacy: user']);
         Permission::create(['name' => 'Pharmacy: SSI (id:1)']);
         Permission::create(['name' => 'Pharmacy: REYNO (id:2)']);
+        Permission::create(['name' => 'Pharmacy: APS (id:3)']);
+        Permission::create(['name' => 'Pharmacy: create']);
+        Permission::create(['name' => 'Pharmacy: deliver']);
+        Permission::create(['name' => 'Pharmacy: dispatch']);
+        Permission::create(['name' => 'Pharmacy: edit_delete']);
+        Permission::create(['name' => 'Pharmacy: mantenedores']);
+        Permission::create(['name' => 'Pharmacy: purchase']);
+        Permission::create(['name' => 'Pharmacy: receiving']);
+        Permission::create(['name' => 'Pharmacy: reports']);
+        Permission::create(['name' => 'Pharmacy: transfer']);
+        Permission::create(['name' => 'Pharmacy: transfer view ortesis']);
+        Permission::create(['name' => 'Pharmacy: create suppliers']);
+        Permission::create(['name' => 'Pharmacy: create establishments']);
+        Permission::create(['name' => 'Pharmacy: create products']);
+        Permission::create(['name' => 'Pharmacy: create programs']);
+
 
         Permission::create(['name' => 'Health Plan']);
 

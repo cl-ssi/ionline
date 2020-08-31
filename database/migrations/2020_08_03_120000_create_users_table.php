@@ -20,12 +20,14 @@ class CreateUsersTable extends Migration
             $table->string('fathers_family');
             $table->string('mothers_family');
             $table->string('email')->unique();
+            $table->string('email_personal')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('position')->nullable();
             $table->date('birthday')->nullable();
             $table->foreignId('organizational_unit_id')->nullable();
             $table->boolean('active')->default(true);
+            $table->boolean('external')->default(false);
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
