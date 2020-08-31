@@ -12,18 +12,24 @@
 	<a class="btn btn-primary"
 		href="{{ route('pharmacies.products.deliver.create') }}">
 		<i class="fas fa-dolly"></i> Nueva entrega</a>
+	
+	<button type="button" class="btn btn-outline-success" href="" onclick="tableToExcel('tabla_stock', 'Listado de stock')">
+		Descargar <i class="fas fa-download"></i>
+	</button>
 	@endcan
+	
 </div>
 @cannot(['Pharmacy: transfer view ortesis'])
 <div class="row">
 	<div class="form-group col">
-		<h5 class="sub-header">Búsqueda por {{$products_by_establishment->first()->establishments->first()->name}}</h5>
+		<h5 class="sub-header">Búsqueda por {{$establishment->name}}</h5>
 		<div class="table-responsive">
-			<table class="table table-hover table-sm" id="tabla_dispatch">
+			<table class="table table-hover table-sm" id="tabla_stock">
 				<thead>
-					<th>Producto</th>
+					<th>Ayuda técnica</th>
 					<th class="text-right">Stock</th>
 					<th class="text-right">Mínimo</th>
+					<th class="text-right">Pendientes</th>
 				</thead>
 				<tbody>
 					@forelse($products_by_establishment as $product)
@@ -33,7 +39,10 @@
 							{{$product->quantity}}
 						</td>
 						<td class="text-right">
-							{{$product->establishments->first()->critic_stock != null ? $product->establishments->first()->critic_stock : 0}}
+						{{$product->establishments->first()->pivot->critic_stock != null ? $product->establishments->first()->pivot->critic_stock : 0}}
+						</td>
+						<td class="text-right">
+							{{isset($pendings_by_product[$product->id]) ? $pendings_by_product[$product->id] : 0}}
 						</td>
 					</tr>
 					@empty
