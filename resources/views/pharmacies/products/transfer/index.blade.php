@@ -225,7 +225,6 @@
 			})
 		});
 
-		// REF: <td><a href="#" id="{{$product->id}}" class="ref-product">{{$product->name}}</a></td>
 		$('a.ref-product').click(function(e){
 			e.preventDefault();
 			var productSelected = $(this).attr('id');
