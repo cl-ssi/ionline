@@ -25,6 +25,7 @@ class TransferController extends Controller
         $products_ortesis = null;
         $product_ortesis_list = null;
         $establishments = null;
+        $establishment = null;
         if(Auth::user()->can('Pharmacy: transfer view ortesis')){
             $products_ortesis = Product::whereHas('establishments', function($q) {
                 $q->where('establishment_id', '!=', 148); //SS BODEGA IQUIQUE
@@ -45,6 +46,7 @@ class TransferController extends Controller
                                             ->orderBy('name','ASC')->get();
 
             $filter = $request->get('filter') != null ? $request->get('filter') : $establishments->first()->id;
+            // return $filter;
             $filterEstablishment = function($query) use ($filter) {
                 $query->where('establishment_id', $filter);
             };
@@ -57,6 +59,7 @@ class TransferController extends Controller
             $transfers = Transfer::with('establishment_from:id,name', 'establishment_to:id,name', 'product:id,name', 'user:id,name,fathers_family')->orderBy('id','DESC')->paginate(10, ['*'], 'p3');
         } else {
             $filter = Auth::user()->establishments->first()->id;
+            $establishment = Establishment::find($filter);
             $filterEstablishment = function($query) use ($filter) {
                 $query->where('establishment_id', $filter);
             };
@@ -80,7 +83,7 @@ class TransferController extends Controller
         });
         $pendings_by_product->toArray();
 
-        return view('pharmacies.products.transfer.index', compact('products_ortesis', 'product_ortesis_list', 'establishments', 'products_by_establishment', 'transfers', 'filter', 'pendings_by_product'));
+        return view('pharmacies.products.transfer.index', compact('products_ortesis', 'product_ortesis_list', 'establishments', 'products_by_establishment', 'transfers', 'filter', 'pendings_by_product', 'establishment'));
     }
 
     /**

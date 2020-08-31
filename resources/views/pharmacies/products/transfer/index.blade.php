@@ -73,7 +73,7 @@
 		</form>
 		<a class="btn btn-outline-primary" href="{{route('pharmacies.products.transfer.auth', $filter)}}" role="button"><i class="fas fa-clipboard-check"></i> Autorizar</a>
 		@else
-			{{$products_by_establishment->first()->establishments->first()->name}}
+			{{$establishment->name}}
 		@endcan
 		</h5>
 		<div class="table-responsive">
