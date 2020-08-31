@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Lista de Comunas')
+@section('title', 'Lista de Establecimientos')
 
 @section('content')
 
@@ -12,20 +12,26 @@
     <thead>
         <tr>
             <th>Id</th>
+            <th>Tipo</th>
             <th>Nombre</th>
+            <th>DEIS</th>
+            <th>Comuna</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        @foreach($communes as $commune)
+        @foreach($establishments as $establishment)
             <tr>
-                <td>{{ $commune->id }}</td>
-                <td>{{ $commune->name }}</td>
+                <td>{{ $establishment->id }}</td>
+                <td>{{ $establishment->type }}</td>
+                <td>{{ $establishment->name }}</td>
+                <td>{{ $establishment->deis }}</td>
+                <td>{{ $establishment->commune->name }}</td>
                 <td>
                     <button class="btn btn-default" data-toggle="modal"
                         data-target="#editModal"
-                        data-name="{{ $commune->name }}"
-                        data-formaction="{{ route('parameters.communes.update', $commune->id)}}">
+                        data-name="{{ $establishment->name }}"
+                        data-formaction="{{ route('parameters.establishments.update', $establishment->id)}}">
                     <i class="fas fa-edit"></i></button>
                 </td>
             </tr>
@@ -33,7 +39,7 @@
     </tbody>
 </table>
 
-@include('parameters/communes/modal_edit')
+@include('parameters/establishments/modal_edit')
 
 @endsection
 
