@@ -74,8 +74,12 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::put('/{establishment}', 'Parameters\EstablishmentController@update')->name('update');
     });
 
-//    Route::resource('establishments','Parameters\EstablishmentController');
-    Route::resource('holidays','Parameters\HolidayController');
+    Route::prefix('holidays')->as('holidays.')->group(function (){
+        Route::get('/', 'Parameters\HolidayController@index')->name('index');
+        Route::put('/{holiday}', 'Parameters\HolidayController@update')->name('update');
+
+    });
+
     Route::resource('locations','Parameters\LocationController');
     Route::resource('places','Parameters\PlaceController');
     Route::resource('phrases','Parameters\PhraseOfTheDayController');
