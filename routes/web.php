@@ -22,6 +22,20 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
+//Route::get('foo/oscar', function () {return 'Hello World';})->name('lanterna');
+Route::prefix('resources')->name('resources.')->namespace('Resources')->middleware('auth')->group(function(){
+    //Route::get('report','ComputerController@report')->name('report');
+    Route::prefix('telephones')->name('telephone.')->group(function(){
+        Route::get('/', 'TelephoneController@index')->name('index');
+        Route::get('create', 'TelephoneController@create')->name('create');
+        //Route::get('telephones','TelephoneController@index')->name('telephone.index');
+        //Route::resource('computers','ComputerController');
+        //Route::resource('printers','PrinterController');
+        //Route::resource('wingles','WingleController');
+        //Route::resource('mobiles','MobileController');
+    });
+});
+
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('{user}/roles', 'Rrhh\RoleController@index')->name('roles.index')->middleware('auth');
     Route::post('{user}/roles','Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');

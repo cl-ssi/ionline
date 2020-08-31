@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resources;
 
-use App\Resources\Telephone;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use App\Resources\Telephone;
 class TelephoneController extends Controller
 {
     /**
@@ -12,9 +12,10 @@ class TelephoneController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $telephones = Telephone::Search($request->get('search'))->with('place')->paginate(100);
+        return view('resources.telephone.index', compact('telephones'));
     }
 
     /**
@@ -24,7 +25,9 @@ class TelephoneController extends Controller
      */
     public function create()
     {
-        //
+        $users = User::doesnthave('Telephones')->get();
+        $places = Place::All();
+        return view('resources.telephone.create', compact('users','places'));
     }
 
     /**
@@ -41,10 +44,10 @@ class TelephoneController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Resources\Telephone  $telephone
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Telephone $telephone)
+    public function show($id)
     {
         //
     }
@@ -52,10 +55,10 @@ class TelephoneController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Resources\Telephone  $telephone
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Telephone $telephone)
+    public function edit($id)
     {
         //
     }
@@ -64,10 +67,10 @@ class TelephoneController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Resources\Telephone  $telephone
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Telephone $telephone)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,10 +78,10 @@ class TelephoneController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Resources\Telephone  $telephone
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Telephone $telephone)
+    public function destroy($id)
     {
         //
     }
