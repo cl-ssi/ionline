@@ -58,10 +58,19 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 });
 
 Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(function(){
+    Route::get('/', 'Parameters\ParameterController@index')->name('index');
     Route::put('/{parameter}', 'Parameters\ParameterController@update')->name('update');
     Route::get('drugs', 'Parameters\ParameterController@indexDrugs')->name('drugs')->middleware(['role:Drugs: admin']);
     Route::resource('permissions','Parameters\PermissionController');
     Route::resource('roles','Parameters\RoleController');
+    Route::resource('communes','Parameters\CommuneController');
+    Route::resource('establishments','Parameters\EstablishmentController');
+    Route::resource('holidays','Parameters\HolidayController');
+    Route::resource('locations','Parameters\LocationController');
+    Route::resource('places','Parameters\PlaceController');
+    Route::resource('phrases','Parameters\PhraseOfTheDayController');
+
+
 
 });
 

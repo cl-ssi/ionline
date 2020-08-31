@@ -112,6 +112,20 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+
+                            @unless(Auth::user()->hasPermissionTo('Users: must change password'))
+
+                                @role('god')
+                                <a class="dropdown-item {{ active('parameters.*') }}"
+                                   href="{{ route('parameters.index') }}">
+                                    <i class="fas fa-cog fa-fw"></i> Mantenedores
+                                </a>
+                                @endrole
+
+                            @endunless
+
+                            <div class="dropdown-divider"></div>
+
                             <a class="dropdown-item" role="button" onclick="logout()" id="cierreSesion">
                                 {{ __('Cerrar sesión') }}
                             </a>
