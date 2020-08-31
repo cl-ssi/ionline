@@ -112,7 +112,7 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="" onclick="logout()" id="cierreSesion">
+                            <a class="dropdown-item" role="button" onclick="logout()" id="cierreSesion">
                                 {{ __('Cerrar sesión') }}
                             </a>
 

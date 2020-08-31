@@ -148,6 +148,13 @@
             </div>
         </footer>
     </div>
+    <div class="text-center">
+        Sistema de Mamografias
+        <a href="{{ route('claveunica.autenticar') }}?redirect=L3Npc21hbS9sb2dpbmN1">
+            <img src="{{ asset('images/btn_claveunica_119px.png') }}" alt="Logo Clave única">
+        </a>
+    </div>
+
 </body>
 
 </html>
