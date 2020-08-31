@@ -89,7 +89,7 @@
 					<tr>
 						<td>@canany(['Pharmacy: transfer view ortesis']) <a href="#" id="{{$product->id}}" class="ref-product">{{$product->name}}</a> @else {{$product->name}} @endcan</td>
 						<td class="text-right">
-							{{$product->establishments->first()->pivot->stock}}
+							{{$product->quantity}}
 						</td>
 						<td class="text-right">
 							{{$product->establishments->first()->pivot->critic_stock != null ? $product->establishments->first()->pivot->critic_stock : 0}}
