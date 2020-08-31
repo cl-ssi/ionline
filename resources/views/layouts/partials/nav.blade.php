@@ -11,7 +11,7 @@
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
 
-                <li class="nav-item @active('rrhh.users.directory') ">
+                <li class="nav-item {{ active('rrhh.users.directory') }} ">
                     <a class="nav-link" href="{{ route('rrhh.users.directory') }}">
                         <i class="fas fa-address-book"></i> Telefonos
                     </a>
