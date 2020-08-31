@@ -63,7 +63,13 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
     Route::get('drugs', 'Parameters\ParameterController@indexDrugs')->name('drugs')->middleware(['role:Drugs: admin']);
     Route::resource('permissions','Parameters\PermissionController');
     Route::resource('roles','Parameters\RoleController');
-    Route::resource('communes','Parameters\CommuneController');
+//    Route::resource('communes','Parameters\CommuneController');
+
+    Route::prefix('communes')->as('communes.')->group(function (){
+        Route::get('/', 'Parameters\CommuneController@index')->name('index');
+        Route::put('/{commune}', 'Parameters\CommuneController@update')->name('update');
+    });
+
     Route::resource('establishments','Parameters\EstablishmentController');
     Route::resource('holidays','Parameters\HolidayController');
     Route::resource('locations','Parameters\LocationController');
