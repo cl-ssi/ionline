@@ -30,14 +30,14 @@
                             <i class="fas fa-desktop fa-fw"></i> Indicadores - REM
                         </a>
 
-                        @auth
+                        {{--@auth
                             @canany(['LE Extra Plan: Carga','LE Extra Plan: Monitoreo'])
                                 <a class="dropdown-item {{ active('le_extra_plans.index') }}"
                                    href="{{ route('le_extra_plans.index') }}">
                                     <i class="far fa-file-alt"></i> LE Plan Extraordinario
                                 </a>
                             @endcan
-                        @endauth
+                        @endauth--}}
                     </div>
                 </li>
 
