@@ -94,7 +94,16 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
 
     });
 
-    Route::resource('locations','Parameters\LocationController');
+
+    Route::prefix('locations')->as('locations.')->group(function (){
+        Route::get('/', 'Parameters\LocationController@index')->name('index');
+        Route::get('/create', 'Parameters\LocationController@create')->name('create');
+        Route::get('/edit/{location}', 'Parameters\LocationController@edit')->name('edit');
+        Route::put('/update/{location}', 'Parameters\LocationController@update')->name('update');
+        Route::post('/store', 'Parameters\LocationController@store')->name('store');
+    });
+
+//    Route::resource('locations','Parameters\LocationController');
     Route::resource('places','Parameters\PlaceController');
     Route::resource('phrases','Parameters\PhraseOfTheDayController');
 
