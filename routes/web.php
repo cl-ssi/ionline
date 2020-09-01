@@ -94,7 +94,6 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
 
     });
 
-
     Route::prefix('locations')->as('locations.')->group(function (){
         Route::get('/', 'Parameters\LocationController@index')->name('index');
         Route::get('/create', 'Parameters\LocationController@create')->name('create');
@@ -103,11 +102,21 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::post('/store', 'Parameters\LocationController@store')->name('store');
     });
 
-//    Route::resource('locations','Parameters\LocationController');
-    Route::resource('places','Parameters\PlaceController');
-    Route::resource('phrases','Parameters\PhraseOfTheDayController');
+    Route::prefix('places')->as('places.')->group(function (){
+        Route::get('/', 'Parameters\PlaceController@index')->name('index');
+        Route::get('/create', 'Parameters\PlaceController@create')->name('create');
+        Route::get('/edit/{place}', 'Parameters\PlaceController@edit')->name('edit');
+        Route::put('/update/{place}', 'Parameters\PlaceController@update')->name('update');
+        Route::post('/store', 'Parameters\PlaceController@store')->name('store');
+    });
 
-
+    Route::prefix('phrases')->as('phrases.')->group(function(){
+        Route::get('/', 'Parameters\PhraseOfTheDayController@index')->name('index');
+        Route::get('/create', 'Parameters\PhraseOfTheDayController@create')->name('create');
+        Route::get('/edit/{phrase}', 'Parameters\PhraseOfTheDayController@edit')->name('edit');
+        Route::put('/update/{phrase}', 'Parameters\PhraseOfTheDayController@update')->name('update');
+        Route::post('/store', 'Parameters\PhraseOfTheDayController@store')->name('store');
+    });
 
 });
 
