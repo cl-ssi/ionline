@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Resources;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Resources\Telephone;
+use App\User;
+use App\Parameters\Place;
+
 class TelephoneController extends Controller
 {
     /**
@@ -38,7 +41,40 @@ class TelephoneController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $rules = [
+          'number' => 'required|unique:res_telephones,number',
+          'minsal' => 'required|unique:res_telephones,minsal',
+          'mac'    => 'unique:res_telephones,mac',
+      ];
+
+      $messages = [
+          'required' => 'Necesita completar número y anexo',
+          'number.unique' => 'El número de teléfono ya está ingresado.',
+          'minsal.unique' => 'El anexo minsal ya está ingresado.',
+          'mac.unique' => 'La dirección MAC ya está ingresada.',
+      ];
+
+      $request->validate($rules, $messages);
+
+
+      $telephone = new Telephone($request->All());
+
+      // if ($request->has('user')) {
+      //     if ($request->filled('user')) {
+      //         $telephone->user()->associate($request->input('user'));
+      //     }
+      //     else {
+      //         $telephone->user()->dissociate();
+      //     }
+      // }
+
+      $telephone->save();
+      $telephone->users()->sync($request->input('users'));
+
+      session()->flash('info', 'El telefono '.$telephone->number.' ha sido creado.');
+
+      return redirect()->route('resources.telephone.index');
+
     }
 
     /**

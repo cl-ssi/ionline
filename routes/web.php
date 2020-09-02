@@ -34,6 +34,9 @@ Route::prefix('resources')->name('resources.')->namespace('Resources')->middlewa
     Route::prefix('telephones')->name('telephone.')->group(function(){
         Route::get('/', 'TelephoneController@index')->name('index');
         Route::get('create', 'TelephoneController@create')->name('create');
+        Route::post('store', 'TelephoneController@store')->name('store');
+        Route::get('{id}/edit', 'TelephoneController@edit')->name('edit');
+        //Route::get('/edit/{location}', 'Parameters\LocationController@edit')->name('edit');
         //Route::get('telephones','TelephoneController@index')->name('telephone.index');
         //Route::resource('computers','ComputerController');
         //Route::resource('printers','PrinterController');
@@ -41,6 +44,8 @@ Route::prefix('resources')->name('resources.')->namespace('Resources')->middlewa
         //Route::resource('mobiles','MobileController');
     });
 });
+
+
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('{user}/roles', 'Rrhh\RoleController@index')->name('roles.index')->middleware('auth');

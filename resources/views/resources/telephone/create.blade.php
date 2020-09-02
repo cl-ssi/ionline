@@ -6,7 +6,7 @@
 
 <h3 class="mb-3">Crear nuevo Teléfono</h3>
 
-<form method="POST" class="form-horizontal" action="{{ route('resources.telephones.store') }}">
+<form method="POST" class="form-horizontal" action="{{ route('resources.telephone.store') }}">
 	@csrf
 
 	<fieldset class="form-group">
@@ -21,7 +21,7 @@
 
 	<fieldset class="form-group">
 		<label for="forMac">MAC</label>
-		<input type="integer" class="form-control" id="forMac" name="mac">
+		<input type="integer" class="form-control" id="forMac" name="mac" maxlength="17">
 	</fieldset>
 
 	<fieldset class="form-group">
@@ -47,7 +47,7 @@
 
     <button type="submit" class="btn btn-primary">Crear</button>
 
-    <a href="{{ route('resources.telephones.index') }}" class="btn btn-outline-dark">Cancelar</a>
+    <a href="{{ route('resources.telephone.index') }}" class="btn btn-outline-dark">Cancelar</a>
 
 </form>
 
