@@ -64,25 +64,25 @@
                     <tr class="text-center">
                         <td class="text-left">{{ $label['numerador'] }}</td>
                         <td rowspan="2" class="align-middle">{{ $comuna['meta'] }}</td>
-                        <td rowspan="2" class="align-middle">{{ $comuna['cumplimiento'] }} %</td>
-                        <td class="text-right">{{ $comuna['numerador'] }}</td>
+                        <td rowspan="2" class="align-middle">{{ number_format($comuna['cumplimiento'], 2, ',', '.') }} %</td>
+                        <td class="text-right">{{ number_format($comuna['numerador'], 0, ',', '.') }}</td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="text-right">{{ $comuna['numerador_6'] }}</td>
+                        <td class="text-right">{{ number_format($comuna['numerador_6'], 0, ',', '.') }}</td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="text-right">{{ $comuna['numerador_12'] }}</td>
+                        <td class="text-right">{{ number_format($comuna['numerador_12'], 0, ',', '.') }}</td>
                     </tr>
                     <tr class="text-center">
                         <td class="text-left">{{ $label['denominador'] }}</td>
-                        <td class="text-right">{{ $comuna['denominador'] }}</td>
-                        <td colspan="12" class="text-center"> {{ $comuna['denominador'] }}</td>
+                        <td class="text-right">{{ number_format($comuna['denominador'], 0, ',', '.') }}</td>
+                        <td colspan="12" class="text-center"> {{ number_format($comuna['denominador'], 0, ',', '.') }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -119,25 +119,25 @@
                         <tr class="text-center">
                             <td class="text-left">{{ $label['numerador'] }}</td>
                             <td rowspan="2" class="align-middle"></td>
-                            <td rowspan="2" class="align-middle">{{ $establecimiento['cumplimiento'] }} % </td>
-                            <td class="text-right">{{ $establecimiento['numerador'] }}</td>
+                            <td rowspan="2" class="align-middle">{{ number_format($establecimiento['cumplimiento'], 2, ',', '.') }} % </td>
+                            <td class="text-right">{{ number_format($establecimiento['numerador'], 0, ',', '.') }}</td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td class="text-right">{{ $establecimiento['numerador_6'] }}</td>
+                            <td class="text-right">{{ number_format($establecimiento['numerador_6'], 0, ',', '.') }}</td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td class="text-right">{{ $establecimiento['numerador_12'] }}</td>
+                            <td class="text-right">{{ number_format($establecimiento['numerador_12'], 0, ',', '.') }}</td>
                         </tr>
                         <tr class="text-center">
                             <td class="text-left">{{ $label['denominador'] }}</td>
-                            <td class="text-right">{{ $establecimiento['denominador'] }}</td>
-                            <td colspan="12" class="text-center"> {{ $establecimiento['denominador'] }}</td>
+                            <td class="text-right">{{ number_format($establecimiento['denominador'], 0, ',', '.') }}</td>
+                            <td colspan="12" class="text-center"> {{ number_format($establecimiento['denominador'], 0, ',', '.') }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -344,5 +344,14 @@
 
     }); // end am4core.ready()
 </script>
+
+@endsection
+
+@section('custom_js_head')
+
+<script src='{{asset('assets/amcharts/js/core.js')}}'></script>
+<script src='{{asset('assets/amcharts/js/charts.js')}}'></script>
+<script src='{{asset('assets/amcharts/js/material.js')}}'></script>
+<script src='{{asset('assets/amcharts/js/animated.js')}}'></script>
 
 @endsection

@@ -8,7 +8,7 @@ use App\Indicators\SingleParameter;
 
 $year = 2020;
 
-$sql_ultimo_rem = "SELECT MAX(Mes) as ultimo_rem FROM 2019rems;";
+$sql_ultimo_rem = "SELECT MAX(Mes) as ultimo_rem FROM 2020rems;";
 $ultimo_rem = DB::connection('mysql_rem')->select($sql_ultimo_rem)[0]->ultimo_rem;
 
 $label['meta'] = 'Porcentaje de personas mayores de 15 años y más con cobertura efectiva de hipertensión arterial.';
@@ -18,7 +18,7 @@ $label['denominador'] = 'Total de personas hipertensas de 15 y más años estima
 $data52020 = array();
 
 $sql_establecimientos = "SELECT comuna, alias_estab
-                         FROM 2019establecimientos
+                         FROM 2020establecimientos
                          WHERE meta_san = 1
                          ORDER BY comuna;";
 
@@ -51,10 +51,10 @@ $data52020['POZO ALMONTE']['meta'] = '34%';
 /* ===== Query numerador ===== */
 $sql_numerador =
 "SELECT e.Comuna, e.alias_estab, r.Mes, sum(ifnull(Col01,0)) as numerador
-    FROM ".$year."rems r
+    FROM {$year}rems r
     LEFT JOIN 2020establecimientos e ON r.IdEstablecimiento=e.Codigo
     WHERE
-    e.meta_san = 1 AND Ano = 2019 AND (Mes = 6 OR Mes = 12) AND
+    e.meta_san = 1 AND Ano = {$year} AND (Mes = 6 OR Mes = 12) AND
     CodigoPrestacion IN ('P4180200','P4200100')
     GROUP by e.Comuna, e.alias_estab, r.Mes
     ORDER BY e.Comuna, e.alias_estab, r.Mes";
