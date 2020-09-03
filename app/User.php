@@ -74,6 +74,34 @@ class User extends Authenticatable
         return "{$this->name[0]}{$this->fathers_family[0]}{$this->mothers_family[0]}";
     }
 
+    public function documentEvents() {
+        return $this->hasMany('\App\Documents\DocumentEvent');
+    }
+
+    public function documents() {
+        return $this->hasMany('App\Documents\Document');
+    }
+
+    public function reqCategories() {
+        return $this->hasMany('App\Requirements\Category');
+    }
+
+    public function requirementStatus() {
+        return $this->hasMany('App\Requirements\RequirementStatus');
+    }
+
+    public function requirements() {
+        return $this->hasMany('App\Requirements\Requirement');
+    }
+
+    public function requirementsEventsFrom() {
+        return $this->hasMany('App\Requirements\Event','from_user_id');
+    }
+
+    public function requirementsEventsTo() {
+        return $this->hasMany('App\Requirements\Event','to_user_id');
+    }
+
     public function purchases() {
         return $this->hasMany('App\Pharmacies\Purchase');
     }
@@ -90,8 +118,6 @@ class User extends Authenticatable
         return $this->belongsToMany('\App\Pharmacies\Establishment', 'frm_establishments_users')
                     ->withTimestamps();
     }
-
-    use SoftDeletes;
 
     /**
      * The attributes that should be cast to native types.

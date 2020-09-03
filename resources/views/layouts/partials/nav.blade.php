@@ -41,6 +41,14 @@
                     </div>
                 </li>
 
+                @can('Requirements: create')
+                <li class="nav-item {{ active('requirements.*') }}">
+                    <a class="nav-link" href="{{ route('requirements.outbox') }}">
+                    <i class="fas fa-rocket"></i> SGR
+                    <span class="badge badge-secondary">{{ App\Requirements\Requirement::getPendingRequirements() }}</span></a>
+                </li>
+                @endcan
+
                 @canany(['Users: create', 'Users: edit','Users: delete',
                     'OrganizationalUnits: create',
                     'OrganizationalUnits: edit',
