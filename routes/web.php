@@ -37,7 +37,7 @@ Route::prefix('resources')->name('resources.')->namespace('Resources')->middlewa
         Route::post('store', 'TelephoneController@store')->name('store');
         Route::get('{telephone}/edit', 'TelephoneController@edit')->name('edit');
         Route::put('{telephone}/update','TelephoneController@update')->name('update');
-        Route::get('{telephone}/destroy','TelephoneController@destroy')->name('destroy');
+        Route::delete('{telephone}/destroy','TelephoneController@destroy')->name('destroy');
 
         //Route::get('/edit/{location}', 'Parameters\LocationController@edit')->name('edit');
         //Route::put('telephones','TelephoneController@index')->name('telephone.index');

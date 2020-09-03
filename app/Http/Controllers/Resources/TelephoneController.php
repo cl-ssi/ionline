@@ -8,6 +8,7 @@ use App\Resources\Telephone;
 use App\User;
 use App\Parameters\Place;
 use App\Http\Requests\Resources\UpdateTelephoneRequest;
+use App\Http\Requests\Resources\StoreTelephoneRequest;
 
 class TelephoneController extends Controller
 {
@@ -40,42 +41,13 @@ class TelephoneController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTelephoneRequest $request)
     {
-      $rules = [
-          'number' => 'required|unique:res_telephones,number',
-          'minsal' => 'required|unique:res_telephones,minsal',
-          'mac'    => 'unique:res_telephones,mac',
-      ];
-
-      $messages = [
-          'required' => 'Necesita completar número y anexo',
-          'number.unique' => 'El número de teléfono ya está ingresado.',
-          'minsal.unique' => 'El anexo minsal ya está ingresado.',
-          'mac.unique' => 'La dirección MAC ya está ingresada.',
-      ];
-
-      $request->validate($rules, $messages);
-
-
       $telephone = new Telephone($request->All());
-
-      // if ($request->has('user')) {
-      //     if ($request->filled('user')) {
-      //         $telephone->user()->associate($request->input('user'));
-      //     }
-      //     else {
-      //         $telephone->user()->dissociate();
-      //     }
-      // }
-
       $telephone->save();
       $telephone->users()->sync($request->input('users'));
-
       session()->flash('info', 'El telefono '.$telephone->number.' ha sido creado.');
-
       return redirect()->route('resources.telephone.index');
-
     }
 
     /**
@@ -111,39 +83,11 @@ class TelephoneController extends Controller
      */
     public function update(UpdateTelephoneRequest $request, Telephone $telephone)
     {
-              //$rules = [
-              //'number' => 'required|unique:res_telephones,number,{$telephone->number}',
-              //'minsal' => 'required|unique:res_telephones,minsal,{$telephone->minsal}'
-              //'number' => ['required', Rule::unique('res_telephones','number')->ignore($this->Telephone)],
-              //'number' => ['required', Rule::unique('res_telephones','minsal')->ignore($this->Telephone)]
-              //];
-
-              //$messages = [
-              //'required' => 'Necesita completar número y anexo',
-              //'number.unique' => 'El número de teléfono ya está ingresado.',
-              //'minsal.unique' => 'El anexo minsal ya está ingresado.'
-              //];
-
-              //$request->validate($rules, $messages);
-
         $telephone->fill($request->all());
         $telephone->save();
         $telephone->users()->sync($request->input('users'));
-        // if ($request->has('user')) {
-        //     if ($request->filled('user')) {
-        //         $telephone->user()->associate($request->input('user'));
-        //     }
-        //     else {
-        //         $telephone->user()->dissociate();
-        //     }
-        // }
-        //
-        // $telephone->save();
-
         session()->flash('success', 'El telefono '.$telephone->number.' ha sido actualizado.');
-
         return redirect()->route('resources.telephone.index');
-
     }
 
     /**

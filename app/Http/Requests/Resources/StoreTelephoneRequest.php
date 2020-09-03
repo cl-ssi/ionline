@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use App\Resources\Telephone;
 use Illuminate\Validation\Rule;
 
-class UpdateTelephoneRequest extends FormRequest
+class StoreTelephoneRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,11 +25,11 @@ class UpdateTelephoneRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'number' => ['required', Rule::unique('res_telephones','number' )->ignore($this->telephone)],
-            'mac'    => Rule::unique('res_telephones','mac' )->ignore($this->telephone),
-            'minsal' => ['required', Rule::unique('res_telephones','minsal' )->ignore($this->telephone)]
-        ];
+      return [
+          'number' => ['required', Rule::unique('res_telephones','number' )->ignore($this->telephone)],
+          'mac'    => Rule::unique('res_telephones','mac' )->ignore($this->telephone),
+          'minsal' => ['required', Rule::unique('res_telephones','minsal' )->ignore($this->telephone)]
+      ];
     }
 
     public function messages()
