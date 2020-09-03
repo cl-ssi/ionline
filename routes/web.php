@@ -35,9 +35,12 @@ Route::prefix('resources')->name('resources.')->namespace('Resources')->middlewa
         Route::get('/', 'TelephoneController@index')->name('index');
         Route::get('create', 'TelephoneController@create')->name('create');
         Route::post('store', 'TelephoneController@store')->name('store');
-        Route::get('{id}/edit', 'TelephoneController@edit')->name('edit');
+        Route::get('{telephone}/edit', 'TelephoneController@edit')->name('edit');
+        Route::put('{telephone}/update','TelephoneController@update')->name('update');
+        Route::get('{telephone}/destroy','TelephoneController@destroy')->name('destroy');
+
         //Route::get('/edit/{location}', 'Parameters\LocationController@edit')->name('edit');
-        //Route::get('telephones','TelephoneController@index')->name('telephone.index');
+        //Route::put('telephones','TelephoneController@index')->name('telephone.index');
         //Route::resource('computers','ComputerController');
         //Route::resource('printers','PrinterController');
         //Route::resource('wingles','WingleController');

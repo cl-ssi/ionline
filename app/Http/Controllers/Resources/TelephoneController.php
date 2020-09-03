@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Resources\Telephone;
 use App\User;
 use App\Parameters\Place;
+use App\Http\Requests\Resources\UpdateTelephoneRequest;
 
 class TelephoneController extends Controller
 {
@@ -94,9 +95,11 @@ class TelephoneController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Telephone $telephone)
     {
-        //
+        $users = User::OrderBy('name')->get();
+        $places = Place::All();
+        return view('resources.telephone.edit', compact('telephone','users','places'));
     }
 
     /**
@@ -106,9 +109,41 @@ class TelephoneController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateTelephoneRequest $request, Telephone $telephone)
     {
+              //$rules = [
+              //'number' => 'required|unique:res_telephones,number,{$telephone->number}',
+              //'minsal' => 'required|unique:res_telephones,minsal,{$telephone->minsal}'
+              //'number' => ['required', Rule::unique('res_telephones','number')->ignore($this->Telephone)],
+              //'number' => ['required', Rule::unique('res_telephones','minsal')->ignore($this->Telephone)]
+              //];
+
+              //$messages = [
+              //'required' => 'Necesita completar número y anexo',
+              //'number.unique' => 'El número de teléfono ya está ingresado.',
+              //'minsal.unique' => 'El anexo minsal ya está ingresado.'
+              //];
+
+              //$request->validate($rules, $messages);
+
+        $telephone->fill($request->all());
+        $telephone->save();
+        $telephone->users()->sync($request->input('users'));
+        // if ($request->has('user')) {
+        //     if ($request->filled('user')) {
+        //         $telephone->user()->associate($request->input('user'));
+        //     }
+        //     else {
+        //         $telephone->user()->dissociate();
+        //     }
+        // }
         //
+        // $telephone->save();
+
+        session()->flash('success', 'El telefono '.$telephone->number.' ha sido actualizado.');
+
+        return redirect()->route('resources.telephone.index');
+
     }
 
     /**
@@ -117,8 +152,10 @@ class TelephoneController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Telephone $telephone)
     {
-        //
+      $telephone->delete();
+      session()->flash('success', 'El telefono '.$telephone->number.' ha sido eliminado');
+      return redirect()->route('resources.telephone.index');
     }
 }
