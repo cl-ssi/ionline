@@ -41,6 +41,47 @@
                     </div>
                 </li>
 
+                <li class="nav-item dropdown {{ active(['documents.*','quality_aps.*','health_plan.*']) }}">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-file-alt"></i> Documentos
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                    @canany(['Documents: create','Documents: edit','Documents: add number', 'Documents: dev'])
+                    <a class="dropdown-item {{ active(['documents.index','documents.create','documents.edit','documents.add_number','documents.report']) }}"
+                        href="{{ route('documents.index') }}">
+                        <i class="fas fa-pen"></i> Generador de documentos
+                    </a>
+                    @endcan
+
+                    @canany(['Partes: oficina','Partes: user','Partes: director'])
+                    <a class="dropdown-item {{ active('documents.partes.*') }}"
+                        href="{{ route('documents.partes.index') }}">
+                        <i class="fas fa-file-import"></i> Partes
+                    </a>
+                    @endcan
+
+                    {{--<div class="dropdown-divider"></div>
+
+                    <a class="dropdown-item {{ active('agreements.tracking.*') }}"
+                        href="{{ route('agreements.tracking.index') }}">
+                        <i class="fas fa-file"></i> Convenios
+                    </a>
+
+                    <a class="dropdown-item {{ active('quality_aps.*') }}"
+                        href="{{ route('quality_aps.index') }}">
+                        <i class="fas fa-file-alt"></i> Acreditación de Calidad
+                    </a>
+
+                    <a class="dropdown-item {{ active('health_plan.*') }}"
+                        href="{{ route('health_plan.index', ['iquique']) }}">
+                        <i class="fas fa-file-powerpoint"></i> Planes Comunales
+                    </a>
+                    </div>--}}
+                </li>
+
                 @can('Requirements: create')
                 <li class="nav-item {{ active('requirements.*') }}">
                     <a class="nav-link" href="{{ route('requirements.outbox') }}">
