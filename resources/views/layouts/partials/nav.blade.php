@@ -63,7 +63,7 @@
                     </a>
                     @endcan
 
-                    {{--<div class="dropdown-divider"></div>
+                    <div class="dropdown-divider"></div>
 
                     <a class="dropdown-item {{ active('agreements.tracking.*') }}"
                         href="{{ route('agreements.tracking.index') }}">
@@ -79,7 +79,7 @@
                         href="{{ route('health_plan.index', ['iquique']) }}">
                         <i class="fas fa-file-powerpoint"></i> Planes Comunales
                     </a>
-                    </div>--}}
+                    </div>
                 </li>
 
                 @can('Requirements: create')

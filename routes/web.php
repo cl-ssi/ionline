@@ -48,6 +48,40 @@ Route::prefix('resources')->name('resources.')->namespace('Resources')->middlewa
     });
 });
 
+Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(function(){
+    Route::get('/{agreement}/accountability/create','Agreements\AccountabilityController@create')->name('accountability.create');
+    Route::post('/{agreement}/accountability','Agreements\AccountabilityController@store')->name('accountability.store');
+    Route::get('/{agreement}/accountability','Agreements\AccountabilityController@index')->name('accountability.index');
+    Route::get('/{agreement}/accountability/{accountability}/create','Agreements\AccountabilityDetailController@create')->name('accountability.detail.create');
+    Route::post('/{agreement}/accountability/{accountability}','Agreements\AccountabilityDetailController@store')->name('accountability.detail.store');
+
+    Route::delete('/agreements','Agreements\AgreementController@destroy')->name('destroy');
+
+
+    Route::post('stage','Agreements\StageController@store')->name('stage.store');
+    Route::put('/stage/{agreement_stage}','Agreements\AgreementController@updateStage')->name('stage.update');
+    Route::get('/stage/download/{file}', 'Agreements\StageController@download')->name('stage.download');
+
+    Route::get('/download/{file}', 'Agreements\AgreementController@download')->name('download');
+    Route::get('/downloadAgree/{file}', 'Agreements\AgreementController@downloadAgree')->name('downloadAgree');
+    Route::get('/downloadRes/{file}', 'Agreements\AgreementController@downloadRes')->name('downloadRes');
+
+    Route::resource('addendums','Agreements\AddendumController');
+    Route::get('/addendum/{file}', 'Agreements\AddendumController@download')->name('addendum.download');
+    Route::resource('programs','Agreements\ProgramController');
+    Route::put('/amount/{agreement_amount}','Agreements\AgreementController@updateAmount')->name('amount.update');
+    Route::delete('/amount/{agreement_amount}','Agreements\AgreementController@destroyAmount')->name('amount.destroy');
+    Route::put('/quota/{agreement_quota}','Agreements\AgreementController@updateQuota')->name('quota.update');
+    Route::put('/quotaAutomatic/{agreement_quota}','Agreements\AgreementController@updateAutomaticQuota')->name('quotaAutomatic.update');
+
+    Route::get('tracking','Agreements\AgreementController@indexTracking')->name('tracking.index');
+    //Route::get('createWord','Agreements\WordTestController@createWordDocx')->name('createWord.index');
+    Route::get('/createWord/{agreement}','Agreements\WordTestController@createWordDocx')->name('createWord');
+    Route::get('/createWordRes/{agreement}','Agreements\WordTestController@createResWordDocx')->name('createWordRes');
+});
+
+Route::resource('agreements','Agreements\AgreementController')->middleware('auth');
+
 
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
@@ -459,6 +493,12 @@ Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
     Route::put('receptions/update/{reception}', 'Drugs\ReceptionController@update')->name('receptions.update');
 //    Route::resource('receptions','Drugs\ReceptionController');
 });
+
+Route::get('health_plan/{comuna}', 'HealthPlan\HealthPlanController@index')->name('health_plan.index');
+Route::get('health_plan/{comuna}/{file}',  'HealthPlan\HealthPlanController@download')->name('health_plan.download');
+
+Route::get('quality_aps', 'QualityAps\QualityApsController@index')->name('quality_aps.index');
+Route::get('quality_aps/{file}', 'QualityAps\QualityApsController@download')->name('quality_aps.download');
 
 /* Bodega de Farmacia */
 Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(function(){
