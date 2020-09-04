@@ -28,7 +28,7 @@
     <li class="nav-item">
         <a class="nav-link {{ active('pharmacies.products.transfer.*') }}"
             href="{{ route('pharmacies.products.transfer.index') }}">
-            <i class="fas fa-clipboard-list"></i> Stocks</a>
+            <i class="fas fa-clipboard-list"></i> Stocks Ortesis</a>
     </li>
     @endcan
 
@@ -36,7 +36,7 @@
     <li class="nav-item">
         <a class="nav-link {{ active('pharmacies.products.deliver.*') }}"
             href="{{ route('pharmacies.products.deliver.index') }}">
-            <i class="fas fa-dolly"></i> Entregas</a>
+            <i class="fas fa-dolly"></i> Entregas Ortesis</a>
     </li>
     @endcan
 

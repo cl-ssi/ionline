@@ -136,6 +136,8 @@
                 <option value=""></option>
                 <option value="<"><</option>
                 <option value="<=">&le;</option>
+                <option value=">">></option>
+                <option value=">=">&ge;</option>
             </select>
         </div>
         <div class="form-group col-md-1">

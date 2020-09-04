@@ -41,6 +41,40 @@ Route::prefix('resources')->name('resources.')->namespace('Resources')->middlewa
     });
 });
 
+Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(function(){
+    Route::get('/{agreement}/accountability/create','Agreements\AccountabilityController@create')->name('accountability.create');
+    Route::post('/{agreement}/accountability','Agreements\AccountabilityController@store')->name('accountability.store');
+    Route::get('/{agreement}/accountability','Agreements\AccountabilityController@index')->name('accountability.index');
+    Route::get('/{agreement}/accountability/{accountability}/create','Agreements\AccountabilityDetailController@create')->name('accountability.detail.create');
+    Route::post('/{agreement}/accountability/{accountability}','Agreements\AccountabilityDetailController@store')->name('accountability.detail.store');
+
+    Route::delete('/agreements','Agreements\AgreementController@destroy')->name('destroy');
+
+
+    Route::post('stage','Agreements\StageController@store')->name('stage.store');
+    Route::put('/stage/{agreement_stage}','Agreements\AgreementController@updateStage')->name('stage.update');
+    Route::get('/stage/download/{file}', 'Agreements\StageController@download')->name('stage.download');
+
+    Route::get('/download/{file}', 'Agreements\AgreementController@download')->name('download');
+    Route::get('/downloadAgree/{file}', 'Agreements\AgreementController@downloadAgree')->name('downloadAgree');
+    Route::get('/downloadRes/{file}', 'Agreements\AgreementController@downloadRes')->name('downloadRes');
+
+    Route::resource('addendums','Agreements\AddendumController');
+    Route::get('/addendum/{file}', 'Agreements\AddendumController@download')->name('addendum.download');
+    Route::resource('programs','Agreements\ProgramController');
+    Route::put('/amount/{agreement_amount}','Agreements\AgreementController@updateAmount')->name('amount.update');
+    Route::delete('/amount/{agreement_amount}','Agreements\AgreementController@destroyAmount')->name('amount.destroy');
+    Route::put('/quota/{agreement_quota}','Agreements\AgreementController@updateQuota')->name('quota.update');
+    Route::put('/quotaAutomatic/{agreement_quota}','Agreements\AgreementController@updateAutomaticQuota')->name('quotaAutomatic.update');
+
+    Route::get('tracking','Agreements\AgreementController@indexTracking')->name('tracking.index');
+    //Route::get('createWord','Agreements\WordTestController@createWordDocx')->name('createWord.index');
+    Route::get('/createWord/{agreement}','Agreements\WordTestController@createWordDocx')->name('createWord');
+    Route::get('/createWordRes/{agreement}','Agreements\WordTestController@createResWordDocx')->name('createWordRes');
+});
+
+Route::resource('agreements','Agreements\AgreementController')->middleware('auth');
+
 
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
@@ -120,6 +154,47 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
     });
 
 });
+
+Route::prefix('documents')->as('documents.')->middleware('auth')->group(function(){
+    Route::post('/create_from_previous', 'Documents\DocumentController@createFromPrevious')->name('createFromPrevious');
+    Route::get('/{document}/download', 'Documents\DocumentController@download')->name('download');
+    Route::put('/{document}/store_number', 'Documents\DocumentController@storeNumber')->name('store_number');
+    Route::delete('/{document}/delete_file', 'Documents\DocumentController@deleteFile')->name('delete_file');
+    Route::get('/add_number', 'Documents\DocumentController@addNumber')->name('add_number');
+    Route::post('/find', 'Documents\DocumentController@find')->name('find');
+    Route::get('/report', 'Documents\DocumentController@report')->name('report');
+
+    Route::prefix('partes')->as('partes.')->group(function(){
+        Route::get('outbox', 'Documents\ParteController@outbox')->name('outbox');
+        Route::get('/download/{file}',  'Documents\ParteController@download')->name('download');
+        Route::delete('/files/{file}', 'Documents\ParteFileController@destroy')->name('files.destroy');
+        Route::get('/admin','Documents\ParteController@admin')->name('admin');
+        Route::get('/download/{parte}','Documents\ParteController@download')->name('download');
+        Route::get('/view/{parte}','Documents\ParteController@view')->name('view');
+        Route::get('/inbox','Documents\ParteController@inbox')->name('inbox');
+
+    });
+    Route::resource('partes','Documents\ParteController');
+});
+Route::resource('documents','Documents\DocumentController')->middleware('auth');
+
+Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(function(){
+    //Route::get('/', 'Requirements\RequirementController@inbox')->name('index');
+    Route::get('download/{file}',  'Requirements\EventController@download')->name('download')->middleware('auth');
+    Route::get('inbox', 'Requirements\RequirementController@inbox')->name('inbox');
+    Route::get('outbox', 'Requirements\RequirementController@outbox')->name('outbox');
+    Route::get('archive_requirement/{requirement}', 'Requirements\RequirementController@archive_requirement')->name('archive_requirement');
+    Route::get('archive_requirement_delete/{requirement}', 'Requirements\RequirementController@archive_requirement_delete')->name('archive_requirement_delete');
+    Route::get('asocia_categorias', 'Requirements\RequirementController@asocia_categorias')->name('asocia_categorias');
+    Route::get('create_requirement/{parte}',  'Requirements\RequirementController@create_requirement')->name('create_requirement');
+    Route::get('create_requirement_sin_parte',  'Requirements\RequirementController@create_requirement_sin_parte')->name('create_requirement_sin_parte');
+    // Route::get('create_event/{req_id}',  'Requirements\EventController@create_event')->name('create_event');
+    Route::resource('categories','Requirements\CategoryController');
+    Route::resource('events','Requirements\EventController');
+    Route::get('report1', 'Requirements\RequirementController@report1')->name('report1');
+    // Route::get('report_reqs_by_org', 'Requirements\RequirementController@report_reqs_by_org')->name('report_reqs_by_org');
+});
+Route::resource('requirements','Requirements\RequirementController');
 
 Route::prefix('indicators')->as('indicators.')->group(function(){
     Route::get('/', function () { return view('indicators.index'); })->name('index');
@@ -411,6 +486,12 @@ Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
     Route::put('receptions/update/{reception}', 'Drugs\ReceptionController@update')->name('receptions.update');
 //    Route::resource('receptions','Drugs\ReceptionController');
 });
+
+Route::get('health_plan/{comuna}', 'HealthPlan\HealthPlanController@index')->name('health_plan.index');
+Route::get('health_plan/{comuna}/{file}',  'HealthPlan\HealthPlanController@download')->name('health_plan.download');
+
+Route::get('quality_aps', 'QualityAps\QualityApsController@index')->name('quality_aps.index');
+Route::get('quality_aps/{file}', 'QualityAps\QualityApsController@download')->name('quality_aps.download');
 
 /* Bodega de Farmacia */
 Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(function(){

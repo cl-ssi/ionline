@@ -137,6 +137,8 @@
                 <option value=""></option>
                 <option value="<" @isset($action->compliances[$i]) {{$action->compliances[$i]->left_result_operator == '<' ? 'selected' : ''}} @endisset><</option>
                 <option value="<=" @isset($action->compliances[$i]) {{$action->compliances[$i]->left_result_operator == '<=' ? 'selected' : ''}} @endisset>&le;</option>
+                <option value=">" @isset($action->compliances[$i]) {{$action->compliances[$i]->left_result_operator == '>' ? 'selected' : ''}} @endisset>></option>
+                <option value=">=" @isset($action->compliances[$i]) {{$action->compliances[$i]->left_result_operator == '>=' ? 'selected' : ''}} @endisset>&ge;</option>
             </select>
         </div>
         <div class="form-group col-md-1">
