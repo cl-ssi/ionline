@@ -38,13 +38,6 @@ Route::prefix('resources')->name('resources.')->namespace('Resources')->middlewa
         Route::get('{telephone}/edit', 'TelephoneController@edit')->name('edit');
         Route::put('{telephone}/update','TelephoneController@update')->name('update');
         Route::delete('{telephone}/destroy','TelephoneController@destroy')->name('destroy');
-
-        //Route::get('/edit/{location}', 'Parameters\LocationController@edit')->name('edit');
-        //Route::put('telephones','TelephoneController@index')->name('telephone.index');
-        //Route::resource('computers','ComputerController');
-        //Route::resource('printers','PrinterController');
-        //Route::resource('wingles','WingleController');
-        //Route::resource('mobiles','MobileController');
     });
 });
 
