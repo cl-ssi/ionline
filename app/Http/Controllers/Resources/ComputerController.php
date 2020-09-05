@@ -7,6 +7,8 @@ use App\User;
 use App\Parameters\Place;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Resources\StoreComputerRequest;
+use App\Http\Requests\Resources\UpdateComputerRequest;
 
 class ComputerController extends Controller
 {
@@ -40,7 +42,7 @@ class ComputerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreComputerRequest $request)
     {
       $computer = new computer($request->All());
       $computer->save();
@@ -81,7 +83,7 @@ class ComputerController extends Controller
      * @param  \App\Resources\Computer  $computer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Computer $computer)
+    public function update(UpdateComputerRequest $request, Computer $computer)
     {
       $computer->fill($request->all());
       $computer->save();
