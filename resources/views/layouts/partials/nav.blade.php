@@ -41,7 +41,7 @@
                     </div>
                 </li>
 
-                {{--<li class="nav-item dropdown {{ active(['documents.*','quality_aps.*','health_plan.*']) }}">
+                <li class="nav-item dropdown {{ active(['documents.*','quality_aps.*','health_plan.*']) }}">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-file-alt"></i> Documentos
@@ -88,7 +88,7 @@
                     <i class="fas fa-rocket"></i> SGR
                     <span class="badge badge-secondary">{{ App\Requirements\Requirement::getPendingRequirements() }}</span></a>
                 </li>
-                @endcan--}}
+                @endcan
 
                 @canany(['Users: create', 'Users: edit','Users: delete',
                     'OrganizationalUnits: create',
