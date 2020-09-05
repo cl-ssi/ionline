@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Resources;
 
 use App\Resources\Computer;
+use App\User;
+use App\Parameters\Place;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class ComputerController extends Controller
 {
@@ -12,9 +15,11 @@ class ComputerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+      $computers = Computer::Search($request->get('search'))->paginate(50);
+      //return view('resources/computer/index')->withComputers($computers);
+      return view('resources.computer.index', compact('computers'));
     }
 
     /**
@@ -24,7 +29,9 @@ class ComputerController extends Controller
      */
     public function create()
     {
-        //
+      $users = User::OrderBy('name')->get();
+      $places = Place::All();
+      return view('resources.computer.create', compact('users','places'));
     }
 
     /**
@@ -35,7 +42,11 @@ class ComputerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $computer = new computer($request->All());
+      $computer->save();
+      $computer->users()->sync($request->input('users'));
+      session()->flash('info', 'El computador '.$computer->brand.' ha sido creado.');
+      return redirect()->route('resources.computer.index');
     }
 
     /**
@@ -57,7 +68,10 @@ class ComputerController extends Controller
      */
     public function edit(Computer $computer)
     {
-        //
+      $users = User::OrderBy('name')->get();
+      $places = Place::All();
+      //$computer = new Computer;
+      return view('resources.computer.edit', compact('computer', 'users','places'));
     }
 
     /**
@@ -69,7 +83,11 @@ class ComputerController extends Controller
      */
     public function update(Request $request, Computer $computer)
     {
-        //
+      $computer->fill($request->all());
+      $computer->save();
+      $computer->users()->sync($request->input('users'));
+      session()->flash('success', 'El computador '.$computer->brand.' ha sido actualizado.');
+      return redirect()->route('resources.computer.index');
     }
 
     /**
@@ -80,6 +98,8 @@ class ComputerController extends Controller
      */
     public function destroy(Computer $computer)
     {
-        //
+      $computer->delete();
+      session()->flash('success', 'El computador '.$computer->brand.' ha sido eliminado');
+      return redirect()->route('resources.computer.index');
     }
 }
