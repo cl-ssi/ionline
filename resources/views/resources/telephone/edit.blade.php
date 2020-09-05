@@ -41,7 +41,7 @@
 		<label for="forUsers">Asignar a persona:</label>
 		<select size="9" multiple class="custom-select" id="forUsers" name="users[]">
 			@foreach($users as $user)
-				<option value="{{ $user->id }}" @if ($user->telephones->contains($telephone->id)) selected="selected" @endif>{{ $user->FullName }}</option>
+			  <option value="{{ $user->id }}" {{$user->telephones->contains($telephone->id)?'selected':''}}> {{$user->FullName}} </option>
 			@endforeach
 		</select>
 		<small class="form-text text-muted">

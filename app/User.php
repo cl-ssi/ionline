@@ -47,6 +47,10 @@ class User extends Authenticatable
         return $this->belongsToMany('\App\Resources\Telephone', 'res_telephone_user')->withTimestamps();
     }
 
+    public function computers() {
+        return $this->belongsToMany('\App\Resources\Computer', 'res_computer_user')->withTimestamps();
+    }    
+
     public function scopeSearch($query, $name) {
         if($name != "") {
             return $query->where('name', 'LIKE', '%'.$name.'%')
@@ -119,7 +123,7 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
-    /**
+    /**computers
      * The attributes that should be cast to native types.
      *
      * @var array

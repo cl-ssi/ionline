@@ -39,6 +39,15 @@ Route::prefix('resources')->name('resources.')->namespace('Resources')->middlewa
         Route::put('{telephone}/update','TelephoneController@update')->name('update');
         Route::delete('{telephone}/destroy','TelephoneController@destroy')->name('destroy');
     });
+    Route::prefix('computers')->name('computer.')->group(function(){
+        Route::get('/', 'ComputerController@index')->name('index');
+        Route::get('create', 'ComputerController@create')->name('create');
+        Route::post('store', 'ComputerController@store')->name('store');
+        Route::get('{computer}/edit', 'ComputerController@edit')->name('edit');
+        Route::put('{computer}/update','ComputerController@update')->name('update');
+        Route::delete('{computer}/destroy','ComputerController@destroy')->name('destroy');
+    });
+
 });
 
 Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(function(){
