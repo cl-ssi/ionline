@@ -164,7 +164,13 @@
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 
-                            @unless(Auth::user()->hasPermissionTo('Users: must change password'))
+                            @if(session()->has('god'))
+                                <a class="dropdown-item" href="{{ route('rrhh.users.switch', session('god')) }}">
+                                    <i class="fas fa-eye text-danger"></i> God Like
+                                </a>
+                            @endif
+
+                            
 
                                 @role('god')
                                 <a class="dropdown-item {{ active('parameters.*') }}"
@@ -173,7 +179,7 @@
                                 </a>
                                 @endrole
 
-                            @endunless
+                            
 
                             <div class="dropdown-divider"></div>
 
