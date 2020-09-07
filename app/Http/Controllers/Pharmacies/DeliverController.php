@@ -30,18 +30,9 @@ class DeliverController extends Controller
                                         ->where('remarks', 'NOT LIKE', 'PENDIENTE')
                                         ->orderBy('updated_at','DESC')->paginate(10, ['*'], 'p2');
 
-            // $establishments = Establishment::with(['products' => function($q) {
-            //                                                 $q->where('program_id', 46);
-            //                                             }])
-            //                                         ->whereHas('products', function($q) {
-            //                                                 $q->where('program_id', 46); //APS ORTESIS
-            //                                         })
-            //                                         ->where('pharmacy_id',session('pharmacy_id'))
-            //                                         ->where('id', '!=', 148) // SS BODEGA
-            //                                         ->orderBy('name','ASC')->get();
-
             $products_by_establishment = Product::where('pharmacy_id',session('pharmacy_id'))
                                             ->where('program_id', 46) //APS ORTESIS
+                                            ->whereNotIn('id', [1185, 1186, 1231])
                                             ->orderBy('name', 'ASC')->get();
         } else {
             $establishment = Auth::user()->establishments->first();
@@ -52,6 +43,7 @@ class DeliverController extends Controller
                                             ->with(['establishments' => $filterEstablishment])
                                             ->where('pharmacy_id',session('pharmacy_id'))
                                             ->where('program_id', 46) //APS ORTESIS
+                                            ->whereNotIn('id', [1185, 1186, 1231])
                                             ->orderBy('name', 'ASC')->paginate(10, ['*'], 'p3');
 
             $pending_deliveries = Deliver::with('establishment:id,name', 'product:id,name')
@@ -92,6 +84,7 @@ class DeliverController extends Controller
                             ->with(['establishments' => $filterEstablishment])
                             ->where('pharmacy_id',session('pharmacy_id'))
                             ->where('program_id', 46) //APS ORTESIS
+                            ->whereNotIn('id', [1185, 1186, 1231])
                             ->orderBy('name','ASC')->get();
 
         return view('pharmacies.products.deliver.create',compact('products_by_establishment'));
