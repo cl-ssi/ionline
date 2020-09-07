@@ -49,7 +49,12 @@ class User extends Authenticatable
 
     public function computers() {
         return $this->belongsToMany('\App\Resources\Computer', 'res_computer_user')->withTimestamps();
-    }    
+    }
+
+    public function printers() {
+        return $this->belongsToMany('\App\Resources\Printer', 'res_printer_user')->withTimestamps();
+    }
+
 
     public function scopeSearch($query, $name) {
         if($name != "") {
