@@ -213,14 +213,14 @@ Route::prefix('indicators')->as('indicators.')->group(function(){
         Route::get('/', 'Indicators\ComgesController@index')->name('index');
         Route::get('/{year}', 'Indicators\ComgesController@list')->name('list');
         Route::post('/{year}', 'Indicators\ComgesController@store')->name('store');
-        Route::get('/{year}/create', 'Indicators\ComgesController@create')->name('create');
-        Route::get('/{comges}/edit', 'Indicators\ComgesController@edit')->name('edit');
-        Route::put('/{comges}', 'Indicators\ComgesController@update')->name('update');
+        Route::get('/{year}/create', 'Indicators\ComgesController@create')->middleware('auth')->name('create');
+        Route::get('/{comges}/edit', 'Indicators\ComgesController@edit')->middleware('auth')->name('edit');
+        Route::put('/{comges}', 'Indicators\ComgesController@update')->middleware('auth')->name('update');
         Route::get('/{year}/{comges}/corte/{section}', 'Indicators\ComgesController@show')->name('show');
-        Route::get('/{year}/{comges}/corte/{section}/ind/{indicator}/create', 'Indicators\ComgesController@createAction')->name('action.create');
-        Route::get('/{year}/{comges}/corte/{section}/ind/{indicator}/action/{action}/edit', 'Indicators\ComgesController@editAction')->name('action.edit');
-        Route::put('/{year}/{comges}/corte/{section}/ind/{indicator}/action/{action}', 'Indicators\ComgesController@updateAction')->name('action.update');
-        Route::post('/{year}/{comges}/corte/{section}/ind/{indicator}', 'Indicators\ComgesController@storeAction')->name('action.store');
+        Route::get('/{year}/{comges}/corte/{section}/ind/{indicator}/create', 'Indicators\ComgesController@createAction')->middleware('auth')->name('action.create');
+        Route::get('/{year}/{comges}/corte/{section}/ind/{indicator}/action/{action}/edit', 'Indicators\ComgesController@editAction')->middleware('auth')->name('action.edit');
+        Route::put('/{year}/{comges}/corte/{section}/ind/{indicator}/action/{action}', 'Indicators\ComgesController@updateAction')->middleware('auth')->name('action.update');
+        Route::post('/{year}/{comges}/corte/{section}/ind/{indicator}', 'Indicators\ComgesController@storeAction')->middleware('auth')->name('action.store');
     });
 
     Route::prefix('19813')->as('19813.')->group(function(){
@@ -496,11 +496,11 @@ Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
 //    Route::resource('receptions','Drugs\ReceptionController');
 });
 
-Route::get('health_plan/{comuna}', 'HealthPlan\HealthPlanController@index')->name('health_plan.index');
-Route::get('health_plan/{comuna}/{file}',  'HealthPlan\HealthPlanController@download')->name('health_plan.download');
+Route::get('health_plan/{comuna}', 'HealthPlan\HealthPlanController@index')->middleware('auth')->name('health_plan.index');
+Route::get('health_plan/{comuna}/{file}',  'HealthPlan\HealthPlanController@download')->middleware('auth')->name('health_plan.download');
 
-Route::get('quality_aps', 'QualityAps\QualityApsController@index')->name('quality_aps.index');
-Route::get('quality_aps/{file}', 'QualityAps\QualityApsController@download')->name('quality_aps.download');
+Route::get('quality_aps', 'QualityAps\QualityApsController@index')->middleware('auth')->name('quality_aps.index');
+Route::get('quality_aps/{file}', 'QualityAps\QualityApsController@download')->middleware('auth')->name('quality_aps.download');
 
 /* Bodega de Farmacia */
 Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(function(){
