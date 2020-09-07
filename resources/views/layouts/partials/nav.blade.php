@@ -83,7 +83,7 @@
                     </div>
                 </li>
                 @endauth
-                
+
                 @can('Requirements: create')
                 <li class="nav-item {{ active('requirements.*') }}">
                     <a class="nav-link" href="{{ route('requirements.outbox') }}">
@@ -147,6 +147,26 @@
                     </li>
                 @endcan
 
+                @canany(['Resources: create', 'Resources: edit', 'Resources: delete'])
+                <li class="nav-item dropdown {{ active('resources.*') }}">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-clipboard-list"></i> Recursos
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                        <a class="dropdown-item {{ active('resources.computers.*') }}"
+                            href="{{ route('resources.computer.index') }}">
+                            <i class="fas fa-desktop fa-fw"></i> Computadores
+                        </a>
+
+                        <a class="dropdown-item {{ active('resources.telephones.*') }}"
+                            href="{{ route('resources.telephone.index') }}">
+                            <i class="fas fa-fax fa-fw"></i> Teléfonos Fijos
+                        </a>
+                    </div>
+                </li>
+                @endcan
             </ul>
 
             <!-- Right Side Of Navbar -->
@@ -170,7 +190,7 @@
                                 </a>
                             @endif
 
-                            
+
 
                                 @role('god')
                                 <a class="dropdown-item {{ active('parameters.*') }}"
@@ -179,7 +199,7 @@
                                 </a>
                                 @endrole
 
-                            
+
 
                             <div class="dropdown-divider"></div>
 
