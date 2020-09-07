@@ -21,6 +21,8 @@ Auth::routes(['register' => false, 'logout' => false]);
 
 Route::get('logout','Auth\LoginController@logout')->name('logout');
 
+Route::get('firma','FirmaDigitalController@signPdf')->name('signPdf');
+
 Route::get('/claveunica','ClaveUnicaController@autenticar')->name('claveunica.autenticar');
 Route::get('/claveunica/callback','ClaveUnicaController@callback')->name('claveunica.callback');
 Route::get('/claveunica/login/{access_token}','ClaveUnicaController@login')->name('claveunica.login');
