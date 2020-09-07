@@ -60,7 +60,7 @@ foreach($establecimientos as $establecimiento) {
         FROM {$year}rems r
         LEFT JOIN 2020establecimientos e ON r.IdEstablecimiento=e.Codigo
         WHERE
-        e.meta_san = 1 AND Ano = 2019 AND (Mes = 6 OR Mes = 12) AND
+        e.meta_san = 1 AND Ano = {$year} AND (Mes = 6 OR Mes = 12) AND
         CodigoPrestacion IN ('P4180300','P4200200')
         GROUP by e.Comuna, e.alias_estab, r.Mes
         ORDER BY e.Comuna, e.alias_estab, r.Mes";
@@ -155,16 +155,10 @@ foreach($establecimientos as $establecimiento) {
             $data4a2020[$nombre_comuna]['cumplimiento'] = 0;
         }
         else {
-            $data4a2020[$nombre_comuna]['cumplimiento'] = number_format(
+            $data4a2020[$nombre_comuna]['cumplimiento'] = 
                 $data4a2020[$nombre_comuna]['numerador'] /
-                $data4a2020[$nombre_comuna]['denominador'] * 100
-                , 2, ',', '.');
+                $data4a2020[$nombre_comuna]['denominador'] * 100;
         }
-        /* Formateo de tipo de número después de hacer calculos*/
-        $data4a2020[$nombre_comuna]['numerador'] = number_format($data4a2020[$nombre_comuna]['numerador'], 0, ',', '.');
-        $data4a2020[$nombre_comuna]['numerador_6'] = number_format($data4a2020[$nombre_comuna]['numerador_6'], 0, ',', '.');
-        $data4a2020[$nombre_comuna]['numerador_12'] = number_format($data4a2020[$nombre_comuna]['numerador_12'], 0, ',', '.');
-        $data4a2020[$nombre_comuna]['denominador'] = number_format($data4a2020[$nombre_comuna]['denominador'], 0, ',', '.');
 
         foreach($comuna['establecimientos'] as $nombre_establecimiento => $establecimiento) {
             /* Calculo de cumplimiento de cada establecimiento */
@@ -173,22 +167,10 @@ foreach($establecimientos as $establecimiento) {
                 $data4a2020[$nombre_comuna]['establecimientos'][$nombre_establecimiento]['cumplimiento'] = 0;
             }
             else {
-                $data4a2020[$nombre_comuna]['establecimientos'][$nombre_establecimiento]['cumplimiento'] = number_format(
+                $data4a2020[$nombre_comuna]['establecimientos'][$nombre_establecimiento]['cumplimiento'] = 
                     $data4a2020[$nombre_comuna]['establecimientos'][$nombre_establecimiento]['numerador'] /
-                    $data4a2020[$nombre_comuna]['establecimientos'][$nombre_establecimiento]['denominador'] * 100
-                    , 2, ',', '.');
+                    $data4a2020[$nombre_comuna]['establecimientos'][$nombre_establecimiento]['denominador'] * 100;
             }
-
-            /* Formateo de tipo de número después de hacer calculos*/
-            $data4a2020[$nombre_comuna]['establecimientos'][$nombre_establecimiento]['numerador'] =
-               number_format($data4a2020[$nombre_comuna]['establecimientos'][$nombre_establecimiento]['numerador'], 0, ',', '.');
-            $data4a2020[$nombre_comuna]['establecimientos'][$nombre_establecimiento]['numerador_6'] =
-                number_format($data4a2020[$nombre_comuna]['establecimientos'][$nombre_establecimiento]['numerador_6'], 0, ',', '.');
-            $data4a2020[$nombre_comuna]['establecimientos'][$nombre_establecimiento]['numerador_12'] =
-                number_format($data4a2020[$nombre_comuna]['establecimientos'][$nombre_establecimiento]['numerador_12'], 0, ',', '.');
-            $data4a2020[$nombre_comuna]['establecimientos'][$nombre_establecimiento]['denominador'] =
-                number_format($data4a2020[$nombre_comuna]['establecimientos'][$nombre_establecimiento]['denominador'], 0, ',', '.');
-
         }
     }
 // }

@@ -18,6 +18,9 @@ class DeliverController extends Controller
      */
     public function index()
     {
+        $establishment = null;
+        $pending_deliveries_list = null;
+        $pendings_by_product = null;
         if(Auth::user()->can('Pharmacy: transfer view ortesis')){
             $pending_deliveries = Deliver::with('establishment:id,name', 'product:id,name')
                                         ->where('remarks', 'PENDIENTE')
@@ -27,42 +30,43 @@ class DeliverController extends Controller
                                         ->where('remarks', 'NOT LIKE', 'PENDIENTE')
                                         ->orderBy('updated_at','DESC')->paginate(10, ['*'], 'p2');
 
-            // $establishments = Establishment::with(['products' => function($q) {
-            //                                                 $q->where('program_id', 46);
-            //                                             }])
-            //                                         ->whereHas('products', function($q) {
-            //                                                 $q->where('program_id', 46); //APS ORTESIS
-            //                                         })
-            //                                         ->where('pharmacy_id',session('pharmacy_id'))
-            //                                         ->where('id', '!=', 148) // SS BODEGA
-            //                                         ->orderBy('name','ASC')->get();
-
             $products_by_establishment = Product::where('pharmacy_id',session('pharmacy_id'))
                                             ->where('program_id', 46) //APS ORTESIS
+                                            ->whereNotIn('id', [1185, 1186, 1231])
                                             ->orderBy('name', 'ASC')->get();
         } else {
-            $establishment_id = Auth::user()->establishments->first()->id;
-            $filterEstablishment = function($query) use ($establishment_id) {
-                $query->where('establishment_id', $establishment_id);
+            $establishment = Auth::user()->establishments->first();
+            $filterEstablishment = function($query) use ($establishment) {
+                $query->where('establishment_id', $establishment->id);
             };
             $products_by_establishment = Product::whereHas('establishments', $filterEstablishment)
                                             ->with(['establishments' => $filterEstablishment])
                                             ->where('pharmacy_id',session('pharmacy_id'))
                                             ->where('program_id', 46) //APS ORTESIS
+                                            ->whereNotIn('id', [1185, 1186, 1231])
                                             ->orderBy('name', 'ASC')->paginate(10, ['*'], 'p3');
 
             $pending_deliveries = Deliver::with('establishment:id,name', 'product:id,name')
                                         ->where('remarks', 'PENDIENTE')
-                                        ->where('establishment_id', $establishment_id)
+                                        ->where('establishment_id', $establishment->id)
                                         ->orderBy('updated_at','ASC')->paginate(10, ['*'], 'p1');
 
             $confirmed_deliveries = Deliver::with('establishment:id,name', 'product:id,name')
                                         ->where('remarks', 'NOT LIKE', 'PENDIENTE')
-                                        ->where('establishment_id', $establishment_id)
+                                        ->where('establishment_id', $establishment->id)
                                         ->orderBy('updated_at','DESC')->paginate(10, ['*'], 'p2');
+
+            $pending_deliveries_list = Deliver::with('establishment:id,name', 'product:id,name')
+                                        ->where('remarks', 'PENDIENTE')
+                                        ->where('establishment_id', $establishment->id)->get();
+        
+            $pendings_by_product = $pending_deliveries_list->groupBy('product_id')->map(function($row){
+                    return $row->sum('quantity');
+            });
+            $pendings_by_product->toArray();
         }
 
-        return view('pharmacies.products.deliver.index', compact('pending_deliveries', 'confirmed_deliveries', 'products_by_establishment'));
+        return view('pharmacies.products.deliver.index', compact('pending_deliveries', 'confirmed_deliveries', 'products_by_establishment', 'establishment', 'pendings_by_product'));
     }
 
     /**
@@ -80,6 +84,7 @@ class DeliverController extends Controller
                             ->with(['establishments' => $filterEstablishment])
                             ->where('pharmacy_id',session('pharmacy_id'))
                             ->where('program_id', 46) //APS ORTESIS
+                            ->whereNotIn('id', [1185, 1186, 1231])
                             ->orderBy('name','ASC')->get();
 
         return view('pharmacies.products.deliver.create',compact('products_by_establishment'));

@@ -213,7 +213,7 @@
     /* ----------------------------------------------------------------------------- */
     /* ----------------------------------------------------------------------------- */
     var arrayJS3c=<?php echo json_encode($data3c2020);?>;
-
+    console.log(arrayJS3c);
     var denMeta3c = arrayJS3c['ALTO HOSPICIO']['denominador'] +
                     arrayJS3c['CAMIÑA']['denominador'] +
                     arrayJS3c['COLCHANE']['denominador'] +
@@ -238,7 +238,7 @@
     /* ----------------------------------------------------------------------------- */
     /* ----------------------------------------------------------------------------- */
     var arrayJS4a=<?php echo json_encode($data4a2020);?>;
-
+    // console.log(arrayJS4a);
     var denMeta4a = arrayJS4a['ALTO HOSPICIO']['denominador'] +
                    arrayJS4a['CAMIÑA']['denominador'] +
                    arrayJS4a['COLCHANE']['denominador'] +
@@ -246,7 +246,7 @@
                    arrayJS4a['IQUIQUE']['denominador'] +
                    arrayJS4a['PICA']['denominador'] +
                    arrayJS4a['POZO ALMONTE']['denominador'];
-
+    console.log(denMeta4a);
     var ahosInd4a = arrayJS4a['ALTO HOSPICIO']['numerador'] / denMeta4a * 100;
     var camInd4a = arrayJS4a['CAMIÑA']['numerador'] / denMeta4a * 100;
     var colInd4a = arrayJS4a['COLCHANE']['numerador'] / denMeta4a * 100;
@@ -494,5 +494,14 @@
 
     }); // end am4core.ready()
 </script>
+
+@endsection
+
+@section('custom_js_head')
+
+<script src='{{asset('assets/amcharts/js/core.js')}}'></script>
+<script src='{{asset('assets/amcharts/js/charts.js')}}'></script>
+<script src='{{asset('assets/amcharts/js/material.js')}}'></script>
+<script src='{{asset('assets/amcharts/js/animated.js')}}'></script>
 
 @endsection

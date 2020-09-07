@@ -1,0 +1,58 @@
+/* TAMAÑO DE FUENTE DE TABLA */
+.table.table-hover.table-bordered.table-sm {
+  font-size: 10px;
+}
+
+.table.table-striped.table-sm {
+  font-size: 10px;
+}
+
+.centrado {
+    text-align:center;
+    vertical-align:middle;
+}
+
+/*.table.table-condensed.table-hover.table-bordered
+.table.table-bordered.table-hover.table-sm thead tr {
+    font-size: 10px;
+    padding: 1px;
+}*/
+
+
+
+/*.rotar{
+    webkit-transform: rotateZ(-20deg);
+    moz-transform: rotateZ(-20deg);
+    o-transform: rotateZ(-20deg);
+}*/
+
+/*** PANEL DEFAULT **
+.with-nav-tabs.panel-default .nav-tabs > li > a,
+.with-nav-tabs.panel-default .nav-tabs > li > a:hover,
+.with-nav-tabs.panel-default .nav-tabs > li > a:focus {
+  color: #777;
+}
+.with-nav-tabs.panel-default .nav-tabs > .open > a,
+.with-nav-tabs.panel-default .nav-tabs > .open > a:hover,
+.with-nav-tabs.panel-default .nav-tabs > .open > a:focus,
+.with-nav-tabs.panel-default .nav-tabs > li > a:hover,
+.with-nav-tabs.panel-default .nav-tabs > li > a:focus {
+  color: #777;
+	background-color: rgb(233, 236, 239);
+	border-color: transparent;
+}
+.with-nav-tabs.panel-default .nav-tabs > li.active > a,
+.with-nav-tabs.panel-default .nav-tabs > li.active > a:hover,
+.with-nav-tabs.panel-default .nav-tabs > li.active > a:focus {
+	color: #777;
+	background-color: #fff;
+	border-color: #ddd;
+	border-bottom-color: transparent;
+}
+
+/********************************************************************/
+
+/*.amcharts-export-menu-top-right {
+  top: 10px;
+	right: 0;
+}*/

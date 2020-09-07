@@ -30,6 +30,64 @@ Route::get('/claveunica/login/{access_token}','ClaveUnicaController@login')->nam
 Route::get('/home', 'HomeController@index')->name('home');
 
 
+//Route::get('foo/oscar', function () {return 'Hello World';})->name('lanterna');
+Route::prefix('resources')->name('resources.')->namespace('Resources')->middleware('auth')->group(function(){
+    //Route::get('report','ComputerController@report')->name('report');
+    Route::prefix('telephones')->name('telephone.')->group(function(){
+        Route::get('/', 'TelephoneController@index')->name('index');
+        Route::get('create', 'TelephoneController@create')->name('create');
+        Route::post('store', 'TelephoneController@store')->name('store');
+        Route::get('{telephone}/edit', 'TelephoneController@edit')->name('edit');
+        Route::put('{telephone}/update','TelephoneController@update')->name('update');
+        Route::delete('{telephone}/destroy','TelephoneController@destroy')->name('destroy');
+    });
+    Route::prefix('computers')->name('computer.')->group(function(){
+        Route::get('/', 'ComputerController@index')->name('index');
+        Route::get('create', 'ComputerController@create')->name('create');
+        Route::post('store', 'ComputerController@store')->name('store');
+        Route::get('{computer}/edit', 'ComputerController@edit')->name('edit');
+        Route::put('{computer}/update','ComputerController@update')->name('update');
+        Route::delete('{computer}/destroy','ComputerController@destroy')->name('destroy');
+    });
+
+});
+
+Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(function(){
+    Route::get('/{agreement}/accountability/create','Agreements\AccountabilityController@create')->name('accountability.create');
+    Route::post('/{agreement}/accountability','Agreements\AccountabilityController@store')->name('accountability.store');
+    Route::get('/{agreement}/accountability','Agreements\AccountabilityController@index')->name('accountability.index');
+    Route::get('/{agreement}/accountability/{accountability}/create','Agreements\AccountabilityDetailController@create')->name('accountability.detail.create');
+    Route::post('/{agreement}/accountability/{accountability}','Agreements\AccountabilityDetailController@store')->name('accountability.detail.store');
+
+    Route::delete('/agreements','Agreements\AgreementController@destroy')->name('destroy');
+
+
+    Route::post('stage','Agreements\StageController@store')->name('stage.store');
+    Route::put('/stage/{agreement_stage}','Agreements\AgreementController@updateStage')->name('stage.update');
+    Route::get('/stage/download/{file}', 'Agreements\StageController@download')->name('stage.download');
+
+    Route::get('/download/{file}', 'Agreements\AgreementController@download')->name('download');
+    Route::get('/downloadAgree/{file}', 'Agreements\AgreementController@downloadAgree')->name('downloadAgree');
+    Route::get('/downloadRes/{file}', 'Agreements\AgreementController@downloadRes')->name('downloadRes');
+
+    Route::resource('addendums','Agreements\AddendumController');
+    Route::get('/addendum/{file}', 'Agreements\AddendumController@download')->name('addendum.download');
+    Route::resource('programs','Agreements\ProgramController');
+    Route::put('/amount/{agreement_amount}','Agreements\AgreementController@updateAmount')->name('amount.update');
+    Route::delete('/amount/{agreement_amount}','Agreements\AgreementController@destroyAmount')->name('amount.destroy');
+    Route::put('/quota/{agreement_quota}','Agreements\AgreementController@updateQuota')->name('quota.update');
+    Route::put('/quotaAutomatic/{agreement_quota}','Agreements\AgreementController@updateAutomaticQuota')->name('quotaAutomatic.update');
+
+    Route::get('tracking','Agreements\AgreementController@indexTracking')->name('tracking.index');
+    //Route::get('createWord','Agreements\WordTestController@createWordDocx')->name('createWord.index');
+    Route::get('/createWord/{agreement}','Agreements\WordTestController@createWordDocx')->name('createWord');
+    Route::get('/createWordRes/{agreement}','Agreements\WordTestController@createResWordDocx')->name('createWordRes');
+});
+
+Route::resource('agreements','Agreements\AgreementController')->middleware('auth');
+
+
+
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('{user}/roles', 'Rrhh\RoleController@index')->name('roles.index')->middleware('auth');
     Route::post('{user}/roles','Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
@@ -60,121 +118,111 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 });
 
 Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(function(){
+    Route::get('/', 'Parameters\ParameterController@index')->name('index');
     Route::put('/{parameter}', 'Parameters\ParameterController@update')->name('update');
     Route::get('drugs', 'Parameters\ParameterController@indexDrugs')->name('drugs')->middleware(['role:Drugs: admin']);
     Route::resource('permissions','Parameters\PermissionController');
     Route::resource('roles','Parameters\RoleController');
 
+    Route::prefix('communes')->as('communes.')->group(function (){
+        Route::get('/', 'Parameters\CommuneController@index')->name('index');
+        Route::put('/{commune}', 'Parameters\CommuneController@update')->name('update');
+    });
+
+    Route::prefix('establishments')->as('establishments.')->group(function (){
+        Route::get('/', 'Parameters\EstablishmentController@index')->name('index');
+        Route::put('/{establishment}', 'Parameters\EstablishmentController@update')->name('update');
+    });
+
+    Route::prefix('holidays')->as('holidays.')->group(function (){
+        Route::get('/', 'Parameters\HolidayController@index')->name('index');
+        Route::put('/{holiday}', 'Parameters\HolidayController@update')->name('update');
+
+    });
+
+    Route::prefix('locations')->as('locations.')->group(function (){
+        Route::get('/', 'Parameters\LocationController@index')->name('index');
+        Route::get('/create', 'Parameters\LocationController@create')->name('create');
+        Route::get('/edit/{location}', 'Parameters\LocationController@edit')->name('edit');
+        Route::put('/update/{location}', 'Parameters\LocationController@update')->name('update');
+        Route::post('/store', 'Parameters\LocationController@store')->name('store');
+    });
+
+    Route::prefix('places')->as('places.')->group(function (){
+        Route::get('/', 'Parameters\PlaceController@index')->name('index');
+        Route::get('/create', 'Parameters\PlaceController@create')->name('create');
+        Route::get('/edit/{place}', 'Parameters\PlaceController@edit')->name('edit');
+        Route::put('/update/{place}', 'Parameters\PlaceController@update')->name('update');
+        Route::post('/store', 'Parameters\PlaceController@store')->name('store');
+    });
+
+    Route::prefix('phrases')->as('phrases.')->group(function(){
+        Route::get('/', 'Parameters\PhraseOfTheDayController@index')->name('index');
+        Route::get('/create', 'Parameters\PhraseOfTheDayController@create')->name('create');
+        Route::get('/edit/{phrase}', 'Parameters\PhraseOfTheDayController@edit')->name('edit');
+        Route::put('/update/{phrase}', 'Parameters\PhraseOfTheDayController@update')->name('update');
+        Route::post('/store', 'Parameters\PhraseOfTheDayController@store')->name('store');
+    });
+
 });
+
+Route::prefix('documents')->as('documents.')->middleware('auth')->group(function(){
+    Route::post('/create_from_previous', 'Documents\DocumentController@createFromPrevious')->name('createFromPrevious');
+    Route::get('/{document}/download', 'Documents\DocumentController@download')->name('download');
+    Route::put('/{document}/store_number', 'Documents\DocumentController@storeNumber')->name('store_number');
+    Route::delete('/{document}/delete_file', 'Documents\DocumentController@deleteFile')->name('delete_file');
+    Route::get('/add_number', 'Documents\DocumentController@addNumber')->name('add_number');
+    Route::post('/find', 'Documents\DocumentController@find')->name('find');
+    Route::get('/report', 'Documents\DocumentController@report')->name('report');
+
+    Route::prefix('partes')->as('partes.')->group(function(){
+        Route::get('outbox', 'Documents\ParteController@outbox')->name('outbox');
+        Route::get('/download/{file}',  'Documents\ParteController@download')->name('download');
+        Route::delete('/files/{file}', 'Documents\ParteFileController@destroy')->name('files.destroy');
+        Route::get('/admin','Documents\ParteController@admin')->name('admin');
+        Route::get('/download/{parte}','Documents\ParteController@download')->name('download');
+        Route::get('/view/{parte}','Documents\ParteController@view')->name('view');
+        Route::get('/inbox','Documents\ParteController@inbox')->name('inbox');
+
+    });
+    Route::resource('partes','Documents\ParteController');
+});
+Route::resource('documents','Documents\DocumentController')->middleware('auth');
+
+Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(function(){
+    //Route::get('/', 'Requirements\RequirementController@inbox')->name('index');
+    Route::get('download/{file}',  'Requirements\EventController@download')->name('download')->middleware('auth');
+    Route::get('inbox', 'Requirements\RequirementController@inbox')->name('inbox');
+    Route::get('outbox', 'Requirements\RequirementController@outbox')->name('outbox');
+    Route::get('archive_requirement/{requirement}', 'Requirements\RequirementController@archive_requirement')->name('archive_requirement');
+    Route::get('archive_requirement_delete/{requirement}', 'Requirements\RequirementController@archive_requirement_delete')->name('archive_requirement_delete');
+    Route::get('asocia_categorias', 'Requirements\RequirementController@asocia_categorias')->name('asocia_categorias');
+    Route::get('create_requirement/{parte}',  'Requirements\RequirementController@create_requirement')->name('create_requirement');
+    Route::get('create_requirement_sin_parte',  'Requirements\RequirementController@create_requirement_sin_parte')->name('create_requirement_sin_parte');
+    // Route::get('create_event/{req_id}',  'Requirements\EventController@create_event')->name('create_event');
+    Route::resource('categories','Requirements\CategoryController');
+    Route::resource('events','Requirements\EventController');
+    Route::get('report1', 'Requirements\RequirementController@report1')->name('report1');
+    // Route::get('report_reqs_by_org', 'Requirements\RequirementController@report_reqs_by_org')->name('report_reqs_by_org');
+});
+Route::resource('requirements','Requirements\RequirementController');
 
 Route::prefix('indicators')->as('indicators.')->group(function(){
     Route::get('/', function () { return view('indicators.index'); })->name('index');
-    Route::get('single_parameter/comgescreate2020/{id}/{indicador}/{mes}/{nd}', 'Indicators\SingleParameterController@comges')->name('comgescreate2020')->middleware('auth');
-
     Route::resource('single_parameter', 'Indicators\SingleParameterController')->middleware('auth');
+
     Route::prefix('comges')->as('comges.')->group(function(){
-        Route::get('/', function () { return view('indicators.comges.index'); })->name('index');
-
-        Route::prefix('2020')->as('2020.')->group(function(){
-            Route::get('/', 'Indicators\_2020\ComgesController@index')->name('index');
-
-            //COMGES 1
-            Route::get('/comges1', 'Indicators\_2020\ComgesController@comges1')->name('comges1');
-            Route::get('/comges1corte1', 'Indicators\_2020\ComgesController@comges1corte1')->name('comges1corte1');
-
-            //COMGES 2
-            Route::get('/comges2', 'Indicators\_2020\ComgesController@comges2')->name('comges2');
-            Route::get('/comges2corte1', 'Indicators\_2020\ComgesController@comges2corte1')->name('comges2corte1');
-
-            //COMGES 3
-            Route::get('/comges3', 'Indicators\_2020\ComgesController@comges3')->name('comges3');
-            Route::get('/comges3corte1', 'Indicators\_2020\ComgesController@comges3corte1')->name('comges3corte1');
-
-            //COMGES 4
-            Route::get('/comges4', 'Indicators\_2020\ComgesController@comges4')->name('comges4');
-            Route::get('/comges4corte1', 'Indicators\_2020\ComgesController@comges4corte1')->name('comges4corte1');
-
-            //COMGES 5
-            Route::get('/comges5', 'Indicators\_2020\ComgesController@comges5')->name('comges5');
-            Route::get('/comges5corte1', 'Indicators\_2020\ComgesController@comges5corte1')->name('comges5corte1');
-
-            //COMGES 6
-            Route::get('/comges6', 'Indicators\_2020\ComgesController@comges6')->name('comges6');
-            Route::get('/comges6corte1', 'Indicators\_2020\ComgesController@comges6corte1')->name('comges6corte1');
-
-            //COMGES 7
-            Route::get('/comges7', 'Indicators\_2020\ComgesController@comges7')->name('comges7');
-            Route::get('/comges7corte1', 'Indicators\_2020\ComgesController@comges7corte1')->name('comges7corte1');
-
-            //COMGES 8
-            Route::get('/comges8', 'Indicators\_2020\ComgesController@comges8')->name('comges8');
-            Route::get('/comges8corte1', 'Indicators\_2020\ComgesController@comges8corte1')->name('comges8corte1');
-
-            //COMGES 9
-            Route::get('/comges9', 'Indicators\_2020\ComgesController@comges9')->name('comges9');
-            Route::get('/comges9corte1', 'Indicators\_2020\ComgesController@comges9corte1')->name('comges9corte1');
-
-            //COMGES 10
-            Route::get('/comges10', 'Indicators\_2020\ComgesController@comges10')->name('comges10');
-            Route::get('/comges10corte1', 'Indicators\_2020\ComgesController@comges10corte1')->name('comges10corte1');
-
-            //COMGES 11
-            Route::get('/comges11', 'Indicators\_2020\ComgesController@comges11')->name('comges11');
-            Route::get('/comges11corte1', 'Indicators\_2020\ComgesController@comges11corte1')->name('comges11corte1');
-
-            //COMGES 12
-            Route::get('/comges12', 'Indicators\_2020\ComgesController@comges12')->name('comges12');
-            Route::get('/comges12corte1', 'Indicators\_2020\ComgesController@comges12corte1')->name('comges12corte1');
-
-            //COMGES 13
-            Route::get('/comges13', 'Indicators\_2020\ComgesController@comges13')->name('comges13');
-            Route::get('/comges13corte1', 'Indicators\_2020\ComgesController@comges13corte1')->name('comges13corte1');
-
-            //COMGES 14
-            Route::get('/comges14', 'Indicators\_2020\ComgesController@comges14')->name('comges14');
-            Route::get('/comges14corte1', 'Indicators\_2020\ComgesController@comges14corte1')->name('comges14corte1');
-
-            //COMGES 15
-            Route::get('/comges15', 'Indicators\_2020\ComgesController@comges15')->name('comges15');
-            Route::get('/comges15corte1', 'Indicators\_2020\ComgesController@comges15corte1')->name('comges15corte1');
-
-            //COMGES 16
-            Route::get('/comges16', 'Indicators\_2020\ComgesController@comges16')->name('comges16');
-            Route::get('/comges16corte1', 'Indicators\_2020\ComgesController@comges16corte1')->name('comges16corte1');
-
-            //COMGES 17
-            Route::get('/comges17', 'Indicators\_2020\ComgesController@comges17')->name('comges17');
-            Route::get('/comges17corte1', 'Indicators\_2020\ComgesController@comges17corte1')->name('comges17corte1');
-
-            //COMGES 18
-            Route::get('/comges18', 'Indicators\_2020\ComgesController@comges18')->name('comges18');
-            Route::get('/comges18corte1', 'Indicators\_2020\ComgesController@comges18corte1')->name('comges18corte1');
-
-            //COMGES 19
-            Route::get('/comges19', 'Indicators\_2020\ComgesController@comges19')->name('comges19');
-            Route::get('/comges19corte1', 'Indicators\_2020\ComgesController@comges19corte1')->name('comges19corte1');
-
-            //COMGES 21
-            Route::get('/comges21', 'Indicators\_2020\ComgesController@comges21')->name('comges21');
-            Route::get('/comges21corte1', 'Indicators\_2020\ComgesController@comges21corte1')->name('comges21corte1');
-
-            //COMGES 22
-            Route::get('/comges22', 'Indicators\_2020\ComgesController@comges22')->name('comges22');
-            Route::get('/comges22corte1', 'Indicators\_2020\ComgesController@comges22corte1')->name('comges22corte1');
-
-            //COMGES 24
-            Route::get('/comges24', 'Indicators\_2020\ComgesController@comges24')->name('comges24');
-            Route::get('/comges24corte1', 'Indicators\_2020\ComgesController@comges24corte1')->name('comges24corte1');
-
-            //COMGES 25
-            Route::get('/comges25', 'Indicators\_2020\ComgesController@comges25')->name('comges25');
-            Route::get('/comges25corte1', 'Indicators\_2020\ComgesController@comges25corte1')->name('comges25corte1');
-
-            Route::get('/servicio', 'Indicators\_2018\Indicator19664Controller@servicio')->name('servicio');
-            Route::get('/hospital', 'Indicators\_2018\Indicator19664Controller@hospital')->name('hospital');
-            Route::get('/reyno', 'Indicators\_2018\Indicator19664Controller@reyno')->name('reyno');
-        });
-
+        Route::get('/', 'Indicators\ComgesController@index')->name('index');
+        Route::get('/{year}', 'Indicators\ComgesController@list')->name('list');
+        Route::post('/{year}', 'Indicators\ComgesController@store')->name('store');
+        Route::get('/{year}/create', 'Indicators\ComgesController@create')->middleware('auth')->name('create');
+        Route::get('/{comges}/edit', 'Indicators\ComgesController@edit')->middleware('auth')->name('edit');
+        Route::put('/{comges}', 'Indicators\ComgesController@update')->middleware('auth')->name('update');
+        Route::get('/{year}/{comges}/corte/{section}', 'Indicators\ComgesController@show')->name('show');
+        Route::get('/{year}/{comges}/corte/{section}/ind/{indicator}/create', 'Indicators\ComgesController@createAction')->middleware('auth')->name('action.create');
+        Route::get('/{year}/{comges}/corte/{section}/ind/{indicator}/action/{action}/edit', 'Indicators\ComgesController@editAction')->middleware('auth')->name('action.edit');
+        Route::put('/{year}/{comges}/corte/{section}/ind/{indicator}/action/{action}', 'Indicators\ComgesController@updateAction')->middleware('auth')->name('action.update');
+        Route::post('/{year}/{comges}/corte/{section}/ind/{indicator}', 'Indicators\ComgesController@storeAction')->middleware('auth')->name('action.store');
     });
 
     Route::prefix('19813')->as('19813.')->group(function(){
@@ -449,6 +497,12 @@ Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
     Route::put('receptions/update/{reception}', 'Drugs\ReceptionController@update')->name('receptions.update');
 //    Route::resource('receptions','Drugs\ReceptionController');
 });
+
+Route::get('health_plan/{comuna}', 'HealthPlan\HealthPlanController@index')->middleware('auth')->name('health_plan.index');
+Route::get('health_plan/{comuna}/{file}',  'HealthPlan\HealthPlanController@download')->middleware('auth')->name('health_plan.download');
+
+Route::get('quality_aps', 'QualityAps\QualityApsController@index')->middleware('auth')->name('quality_aps.index');
+Route::get('quality_aps/{file}', 'QualityAps\QualityApsController@download')->middleware('auth')->name('quality_aps.download');
 
 /* Bodega de Farmacia */
 Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(function(){

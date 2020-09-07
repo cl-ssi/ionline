@@ -47,6 +47,10 @@ class User extends Authenticatable
         return $this->belongsToMany('\App\Resources\Telephone', 'res_telephone_user')->withTimestamps();
     }
 
+    public function computers() {
+        return $this->belongsToMany('\App\Resources\Computer', 'res_computer_user')->withTimestamps();
+    }    
+
     public function scopeSearch($query, $name) {
         if($name != "") {
             return $query->where('name', 'LIKE', '%'.$name.'%')
@@ -74,6 +78,34 @@ class User extends Authenticatable
         return "{$this->name[0]}{$this->fathers_family[0]}{$this->mothers_family[0]}";
     }
 
+    public function documentEvents() {
+        return $this->hasMany('\App\Documents\DocumentEvent');
+    }
+
+    public function documents() {
+        return $this->hasMany('App\Documents\Document');
+    }
+
+    public function reqCategories() {
+        return $this->hasMany('App\Requirements\Category');
+    }
+
+    public function requirementStatus() {
+        return $this->hasMany('App\Requirements\RequirementStatus');
+    }
+
+    public function requirements() {
+        return $this->hasMany('App\Requirements\Requirement');
+    }
+
+    public function requirementsEventsFrom() {
+        return $this->hasMany('App\Requirements\Event','from_user_id');
+    }
+
+    public function requirementsEventsTo() {
+        return $this->hasMany('App\Requirements\Event','to_user_id');
+    }
+
     public function purchases() {
         return $this->hasMany('App\Pharmacies\Purchase');
     }
@@ -91,9 +123,7 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
-    use SoftDeletes;
-
-    /**
+    /**computers
      * The attributes that should be cast to native types.
      *
      * @var array

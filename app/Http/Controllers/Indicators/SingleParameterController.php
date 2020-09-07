@@ -43,17 +43,6 @@ class SingleParameterController extends Controller
         return view('indicators.single_parameter.create', compact('establishments'));
     }
 
-
-    public function comges($id, $indicador, $mes, $nd)
-    {
-        return view('indicators.single_parameter.comgescreate2020', compact('id', 'indicador', 'mes', 'nd'));
-    }
-
-    public function comgesmodal($id, $indicador, $mes, $nd)
-    {
-        return view('indicators.single_parameter.comgescreatemodal2020', compact('id', 'indicador', 'mes', 'nd'));
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -62,34 +51,13 @@ class SingleParameterController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->law <> 'Comges') {
-            $singleParameter = SingleParameter::create($request->all());
+        $singleParameter = SingleParameter::create($request->all());
 
-            session()->flash('info', 'El parametro ' . $singleParameter->indicator . '
-            del la ley ' . $singleParameter->law . ' año ' . $singleParameter->year . '
-            ha sido creado.');
+        session()->flash('info', 'El parametro ' . $singleParameter->indicator . '
+        del la ley ' . $singleParameter->law . ' año ' . $singleParameter->year . '
+        ha sido creado.');
 
-            return redirect()->route('indicators.single_parameter.index');
-        } else {
-            if ($request->id == 0) {
-                $singleParameter = new SingleParameter($request->all());
-                //todos los comges son de Iquique
-                $singleParameter->establishment_id = 8;
-                $singleParameter->description .= ' Digitado por: ' . auth()->user()->fullName;
-                $singleParameter->save();
-                session()->flash('success', $singleParameter->position . ' del Comges ' . $singleParameter->indicator . ' Creado Exitosamente');                
-                return redirect(session('links')[0]);
-                
-            } else {               
-                $singleParameter = SingleParameter::find($request->id); 
-                $singleParameter->fill($request->All());
-                $singleParameter->establishment_id = 8;
-                $singleParameter->description .= ' Actualizado por: ' . auth()->user()->fullName;
-                $singleParameter->save();
-                session()->flash('success', $singleParameter->position . ' del Comges ' . $singleParameter->indicator . ' Creado Exitosamente');                
-                return redirect(session('links')[0]);
-            }
-        }
+        return redirect()->route('indicators.single_parameter.index');
     }
 
     /**

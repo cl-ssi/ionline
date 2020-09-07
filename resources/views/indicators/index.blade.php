@@ -113,6 +113,16 @@
             </ul>
         </div>
     </div>
+    <div class="col-3">
+        <div class="card">
+            <div class="card-header">
+                <strong>Serie F</strong>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.nserie.index', [2020, 'serie_f', 'covid']) }}">2020</a></li>
+            </ul>
+        </div>
+    </div>
 </div>
 <br>
 <a class="btn btn-primary" href="http://intranet.saludiquique.cl/estadistica/index.html" role="button">Años anteriores</a>

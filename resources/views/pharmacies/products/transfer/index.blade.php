@@ -73,7 +73,7 @@
 		</form>
 		<a class="btn btn-outline-primary" href="{{route('pharmacies.products.transfer.auth', $filter)}}" role="button"><i class="fas fa-clipboard-check"></i> Autorizar</a>
 		@else
-			{{$products_by_establishment->first()->establishments->first()->name}}
+			{{$establishment->name}}
 		@endcan
 		</h5>
 		<div class="table-responsive">
@@ -89,7 +89,7 @@
 					<tr>
 						<td>@canany(['Pharmacy: transfer view ortesis']) <a href="#" id="{{$product->id}}" class="ref-product">{{$product->name}}</a> @else {{$product->name}} @endcan</td>
 						<td class="text-right">
-							{{$product->establishments->first()->pivot->stock}}
+							{{$product->quantity}}
 						</td>
 						<td class="text-right">
 							{{$product->establishments->first()->pivot->critic_stock != null ? $product->establishments->first()->pivot->critic_stock : 0}}
@@ -225,7 +225,6 @@
 			})
 		});
 
-		// REF: <td><a href="#" id="{{$product->id}}" class="ref-product">{{$product->name}}</a></td>
 		$('a.ref-product').click(function(e){
 			e.preventDefault();
 			var productSelected = $(this).attr('id');

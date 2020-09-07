@@ -64,10 +64,10 @@ $data4b2020['POZO ALMONTE']['meta'] = '90%';
 /* ===== Query numerador ===== */
 $sql_numerador =
 "SELECT e.Comuna, e.alias_estab, r.Mes, sum(ifnull(Col01,0)) as numerador
-    FROM ".$year."rems r
+    FROM {$year}rems r
     LEFT JOIN 2020establecimientos e ON r.IdEstablecimiento=e.Codigo
     WHERE
-    e.meta_san = 1 AND Ano = 2019 AND (Mes = 6 OR Mes = 12) AND
+    e.meta_san = 1 AND Ano = {$year} AND (Mes = 6 OR Mes = 12) AND
     CodigoPrestacion IN ('P4190809','P4170300','P4190500','P4190600')
     GROUP by e.Comuna, e.alias_estab, r.Mes
     ORDER BY e.Comuna, e.alias_estab, r.Mes";
@@ -91,10 +91,10 @@ foreach($numeradores as $registro) {
 /* ===== Query denominador ===== */
 $sql_denominador =
 "SELECT e.Comuna, e.alias_estab, r.Mes, sum(ifnull(Col01,0)) as denominador
-    FROM ".$year."rems r
+    FROM {$year}rems r
     LEFT JOIN 2020establecimientos e ON r.IdEstablecimiento=e.Codigo
     WHERE
-    e.meta_san = 1 AND Ano = 2019 AND (Mes = 6 OR Mes = 12) AND
+    e.meta_san = 1 AND Ano = {$year} AND (Mes = 6 OR Mes = 12) AND
     CodigoPrestacion IN ('P4150602')
     GROUP by e.Comuna, e.alias_estab, r.Mes
     ORDER BY e.Comuna, e.alias_estab, r.Mes";
