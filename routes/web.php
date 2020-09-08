@@ -49,6 +49,15 @@ Route::prefix('resources')->name('resources.')->namespace('Resources')->middlewa
         Route::put('{computer}/update','ComputerController@update')->name('update');
         Route::delete('{computer}/destroy','ComputerController@destroy')->name('destroy');
     });
+    Route::prefix('printers')->name('printer.')->group(function(){
+        Route::get('/', 'PrinterController@index')->name('index');
+        Route::get('create', 'PrinterController@create')->name('create');
+        Route::post('store', 'PrinterController@store')->name('store');
+        Route::get('{printer}/edit', 'PrinterController@edit')->name('edit');
+        Route::put('{printer}/update','PrinterController@update')->name('update');
+        Route::delete('{printer}/destroy','PrinterController@destroy')->name('destroy');
+    });
+
 
 });
 

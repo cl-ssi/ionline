@@ -160,6 +160,11 @@
                             <i class="fas fa-desktop fa-fw"></i> Computadores
                         </a>
 
+                        <a class="dropdown-item {{ active('resources.printer.*') }}"
+                            href="{{ route('resources.printer.index') }}">
+                            <i class="fas fa-print fa-fw"></i> Impresoras
+                        </a>
+
                         <a class="dropdown-item {{ active('resources.telephones.*') }}"
                             href="{{ route('resources.telephone.index') }}">
                             <i class="fas fa-fax fa-fw"></i> Teléfonos Fijos
