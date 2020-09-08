@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Resources\Printer;
 use App\User;
 use App\Parameters\Place;
+use App\Http\Requests\Resources\StorePrinterRequest;
+use App\Http\Requests\Resources\UpdatePrinterRequest;
 
 class PrinterController extends Controller
 {
@@ -39,7 +41,7 @@ class PrinterController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePrinterRequest $request)
     {
       $printer = new Printer($request->All());
       $printer->save();
@@ -65,9 +67,11 @@ class PrinterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Printer $printer)
     {
-        //
+      $users = User::OrderBy('name')->get();
+      $places = Place::All();
+      return view('resources.printer.edit', compact('printer', 'users','places'));
     }
 
     /**
@@ -77,9 +81,13 @@ class PrinterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePrinterRequest $request, Printer $printer)
     {
-        //
+      $printer->fill($request->all());
+      $printer->save();
+      $printer->users()->sync($request->input('users'));
+      session()->flash('success', 'La impresora '.$printer->brand.' ha sido actualizada.');
+      return redirect()->route('resources.printer.index');
     }
 
     /**
@@ -88,8 +96,10 @@ class PrinterController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Printer $printer)
     {
-        //
+      $printer->delete();
+      session()->flash('success', 'La Impresora '.$printer->brand.' ha sido eliminada');
+      return redirect()->route('resources.printer.index');
     }
 }

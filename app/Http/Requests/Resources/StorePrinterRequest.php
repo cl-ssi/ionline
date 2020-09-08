@@ -3,10 +3,9 @@
 namespace App\Http\Requests\Resources;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Resources\Computer;
 use Illuminate\Validation\Rule;
 
-class StoreComputerRequest extends FormRequest
+class StorePrinterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,7 +25,7 @@ class StoreComputerRequest extends FormRequest
     public function rules()
     {
       return [
-          'mac_address' => ['required', Rule::unique('res_computers','mac_address' )->ignore($this->computer)]
+          'mac_address' => ['required', Rule::unique('res_printers','mac_address' )->ignore($this->printer)]
       ];
     }
 
