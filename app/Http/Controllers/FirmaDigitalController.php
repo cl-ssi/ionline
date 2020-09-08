@@ -20,6 +20,10 @@ class FirmaDigitalController extends Controller
     {
         // echo '<pre>';
         //header("Content-Type: image/png; charset=UTF-8");
+
+        $font_light   = public_path('fonts/gobCL_Light.ttf');
+        $font_regular = public_path('fonts/gobCL_Regular.ttf');
+
         $im = @imagecreate(250, 100) or die("Cannot Initialize new GD image stream");
 
         $background_color = imagecolorallocate($im, 0, 0, 255);
@@ -28,20 +32,37 @@ class FirmaDigitalController extends Controller
         imagefilledrectangle($im,1,1,248, 98,$white);
 
         $text_color = imagecolorallocate($im, 0, 0, 0);
-        imagestring($im, 3, 5, 5,  "Alvaro Torres Fuchslocher", $text_color);
+        //imagettftext($im, 10, 0, 5, 13, $text_color, $font_light, "Firmado digitalmente por:");
 
-        $marginTop = 10;
+        $marginTop = 1;
         $xAxis = 5;
-        $yPading = 11;
-        $fontSize = 1;
+        $yPading = 13;
+        $fontSize = 8;
 
-        imagestring($im, $fontSize, $xAxis, $yPading * 1 + $marginTop, 'Firmado digitalmente por:', $text_color);
-        imagestring($im, $fontSize, $xAxis, $yPading * 2 + $marginTop, 'cn = Alvaro Raymundo Edgardo Torres Fuchslocher', $text_color);
-        imagestring($im, $fontSize, $xAxis, $yPading * 3 + $marginTop, 'email = alvaro.torres@redsalud.gob.cl', $text_color);
-        imagestring($im, $fontSize, $xAxis, $yPading * 4 + $marginTop, 'serialNumber = 15287582-7', $text_color);
-        imagestring($im, $fontSize, $xAxis, $yPading * 5 + $marginTop, 'title = Profesional Sidra', $text_color);
-        imagestring($im, $fontSize, $xAxis, $yPading * 6 + $marginTop, 'o = Ministerio de Salud', $text_color);
-        imagestring($im, $fontSize, $xAxis, $yPading * 7 + $marginTop, 'cn = Autoridad Certificadora del Estado de Chile', $text_color);
+        imagettftext($im, $fontSize, 0, $xAxis, $yPading * 1 + $marginTop, $text_color, $font_light, 'Firmado digitalmente por:');
+        imagettftext($im, $fontSize+1, 0, $xAxis, $yPading * 2 + $marginTop + 2, $text_color, $font_regular, 'Alvaro Raymundo Edgardo Torres Fuchslocher');
+        imagettftext($im, $fontSize, 0, $xAxis, $yPading * 3 + $marginTop + 3, $text_color, $font_regular, 'email = alvaro.torres@redsalud.gob.cl');
+        imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 3, $text_color, $font_light, 'serialNumber = 15287582-7');
+        imagettftext($im, $fontSize, 0, $xAxis, $yPading * 5 + $marginTop + 3, $text_color, $font_light, 'title = Profesional Sidra');
+        imagettftext($im, $fontSize, 0, $xAxis, $yPading * 6 + $marginTop + 3, $text_color, $font_light, 'o = Ministerio de Salud');
+        imagettftext($im, $fontSize, 0, $xAxis, $yPading * 7 + $marginTop + 3, $text_color, $font_light, 'cn = Autoridad Certificadora del Estado de Chile');
+
+
+        //imagestring ($im, 3, 5, 5,  "Alvaro Torres Fuchslocher", $text_color);
+        //
+        // $marginTop = 10;
+        // $xAxis = 5;
+        // $yPading = 11;
+        // $fontSize = 1;
+        //
+        // imagestring($im, $fontSize, $xAxis, $yPading * 1 + $marginTop, 'Firmado digitalmente por:', $text_color);
+        // imagestring($im, $fontSize, $xAxis, $yPading * 2 + $marginTop, 'cn = Alvaro Raymundo Edgardo Torres Fuchslocher', $text_color);
+        // imagestring($im, $fontSize, $xAxis, $yPading * 3 + $marginTop, 'email = alvaro.torres@redsalud.gob.cl', $text_color);
+        // imagestring($im, $fontSize, $xAxis, $yPading * 4 + $marginTop, 'serialNumber = 15287582-7', $text_color);
+        // imagestring($im, $fontSize, $xAxis, $yPading * 5 + $marginTop, 'title = Profesional Sidra', $text_color);
+        // imagestring($im, $fontSize, $xAxis, $yPading * 6 + $marginTop, 'o = Ministerio de Salud', $text_color);
+        // imagestring($im, $fontSize, $xAxis, $yPading * 7 + $marginTop, 'cn = Autoridad Certificadora del Estado de Chile', $text_color);
+
 
         /*
         email=alvaro.torres@redsalud.gob.cl
@@ -120,10 +141,10 @@ class FirmaDigitalController extends Controller
                                 <pdfPassword/>
                                 <Signature>
                                     <Visible active=\"true\" layer2=\"false\" label=\"true\" pos=\"1\">
-                                        <llx>400</llx>
-                                        <lly>0</lly>
-                                        <urx>600</urx>
-                                        <ury>100</ury>
+                                        <llx>350</llx>
+                                        <lly>50</lly>
+                                        <urx>500</urx>
+                                        <ury>150</ury>
                                         <page>LAST</page>
                                         <image>BASE64</image>
                                         <BASE64VALUE>$firma</BASE64VALUE>

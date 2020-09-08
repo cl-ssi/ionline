@@ -114,7 +114,7 @@
             <div class="firma center" style="padding-top: 68px; text-transform: uppercase; padding-bottom: 8px;">
                 <div style="padding-bottom: 4px;">___________________________________</div>
                 <div style="padding-bottom: 4px;">{!! $document->fromHtmlSign !!}</div>
-                <div>{{ config('app.ss') }}</div>
+                <div>{{ env('APP_SS') }}</div>
             </div>
 
 
