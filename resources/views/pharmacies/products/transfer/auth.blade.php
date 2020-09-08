@@ -78,9 +78,7 @@ PROGRAMA DE REHABILITACIÓN INTEGRAL </title>
             <div class="left seis" style="padding-bottom: 6px; color: #999">N° interno AATT: _________</div>
 
             <p class="right">Iquique, {{\Carbon\Carbon::now()->formatLocalized('%d de %B de %Y')}}.</p>
-            <p>Mediante el presente documento, en el marco a los problema de <b>salud 36, Piloto Ges y Decreto 22</b>.
-             Y a la evaluación de la información entregada por su establecimiento en Intranet, y dentro de los plazos establecidos según Ord N°_______ del ___ de ____________ 2020.
-              Se informa a usted que las siguientes Ayudas Técnicas se encuentran disponibles para su retiro: </p>
+            <p>Mediante el presente documento y en marco a los problemas de <b>salud 36, piloto GES y decreto 22</b>, y a la evaluación de información de solicitud y entrega de ayudas técnicas ingresada por su establecimiento en plataforma i.saludiquique.cl, mediante el presente se informa a usted que las siguientes ayudas técnicas de encuentran disponible para ser retiradas en bodega del servicio de salud iquique:</p>
             <p>Entrega para establecimiento <b>{{$establishment->name}}</b></p>
 			<table>
 				<thead>
@@ -122,14 +120,14 @@ PROGRAMA DE REHABILITACIÓN INTEGRAL </title>
             <div class="firma seis" style="padding-top: 6px; padding-bottom: 8px; display: inline-block; vertical-align:top; width: 49%;">
                 <div style="padding-bottom: 4px;"><strong>DISTRIBUCIÓN:</strong></div>
                 <div style="padding-bottom: 4px;">
-                <ul>
+                <!-- <ul>
                     <li>Saludcamina@gmail.com</li>
                     <li>cinthia.ga.chavez@gmail.com</li>
                     <li>Francis.henriquez@redsalud.gov.cl</li>
                     <li>bodega.ssi@redsalud.gob.cl</li>
                     <li>Aps.ssi@redsalud.gov.cl</li>
                     <li>Oficina de partes SSI</li>
-                </ul>
+                </ul> -->
             
                 </div>
             </div>
