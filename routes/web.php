@@ -57,8 +57,14 @@ Route::prefix('resources')->name('resources.')->namespace('Resources')->middlewa
         Route::put('{printer}/update','PrinterController@update')->name('update');
         Route::delete('{printer}/destroy','PrinterController@destroy')->name('destroy');
     });
-
-
+    Route::prefix('wingles')->name('wingle.')->group(function(){
+        Route::get('/', 'WingleController@index')->name('index');
+        Route::get('create', 'WingleController@create')->name('create');
+        Route::post('store', 'WingleController@store')->name('store');
+        Route::get('{wingle}/edit', 'WingleController@edit')->name('edit');
+        Route::put('{wingle}/update','WingleController@update')->name('update');
+        Route::delete('{wingle}/destroy','WingleController@destroy')->name('destroy');
+    });
 });
 
 Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(function(){

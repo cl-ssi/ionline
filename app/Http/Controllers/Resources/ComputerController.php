@@ -20,7 +20,6 @@ class ComputerController extends Controller
     public function index(Request $request)
     {
       $computers = Computer::Search($request->get('search'))->paginate(50);
-      //return view('resources/computer/index')->withComputers($computers);
       return view('resources.computer.index', compact('computers'));
     }
 

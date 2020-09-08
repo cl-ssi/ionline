@@ -169,6 +169,12 @@
                             href="{{ route('resources.telephone.index') }}">
                             <i class="fas fa-fax fa-fw"></i> Teléfonos Fijos
                         </a>
+
+                        <a class="dropdown-item {{ active('resources.wingle.*') }}"
+                            href="{{ route('resources.wingle.index') }}">
+                            <i class="fas fa-wifi fa-fw"></i> Banda Ancha Móvil
+                        </a>
+
                     </div>
                 </li>
                 @endcan
