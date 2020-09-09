@@ -65,6 +65,14 @@ Route::prefix('resources')->name('resources.')->namespace('Resources')->middlewa
         Route::put('{wingle}/update','WingleController@update')->name('update');
         Route::delete('{wingle}/destroy','WingleController@destroy')->name('destroy');
     });
+    Route::prefix('mobiles')->name('mobile.')->group(function(){
+        Route::get('/', 'MobileController@index')->name('index');
+        Route::get('create', 'MobileController@create')->name('create');
+        Route::post('store', 'MobileController@store')->name('store');
+        Route::get('{mobile}/edit', 'MobileController@edit')->name('edit');
+        Route::put('{mobile}/update','MobileController@update')->name('update');
+        Route::delete('{mobile}/destroy','MobileController@destroy')->name('destroy');
+    });    
 });
 
 Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(function(){
