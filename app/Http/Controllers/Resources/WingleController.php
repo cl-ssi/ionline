@@ -26,7 +26,7 @@ class WingleController extends Controller
      */
     public function create()
     {
-        //
+      return view('resources.wingle.create');
     }
 
     /**
@@ -37,7 +37,10 @@ class WingleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $wingle = new Wingle($request->All());
+      $wingle->save();
+      session()->flash('info', 'El Wingle '.$wingle->brand.' ha sido creado.');
+      return redirect()->route('resources.wingle.index');
     }
 
     /**
