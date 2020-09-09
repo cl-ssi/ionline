@@ -72,7 +72,7 @@ class MobileController extends Controller
      */
     public function edit(Mobile $mobile)
     {
-      $users = User::doesnthave('mobile')->OrderBy('name')->get();
+      $users = User::OrderBy('name')->get();
       return view('resources.mobile.edit', compact('mobile','users'));
     }
 
