@@ -4,7 +4,7 @@
     </div>
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
-            <a href="{{ route('indicators.program_aps.2020.index') }}">2020 <span class="badge badge-warning">En Desarrollo</span></a>
+            <a href="{{ route('indicators.program_aps.2020.index', 6) }}">2020 <span class="badge badge-warning">En Desarrollo</span></a>
         </li>
         <li class="list-group-item">
             <a href="{{ route('indicators.program_aps.2019.index') }}">2019</a>

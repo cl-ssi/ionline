@@ -12,7 +12,7 @@
                     @php $path[] = $segment; @endphp
 
                     @if(!$loop->last)
-                        <a href="{{ route(implode('.',$path).'.index') }}">
+                        <a href="{{ route(implode('.',$path).'.index', $id ?? '') }}">
                     @endif
 
 
@@ -23,6 +23,14 @@
                         @case('18834')      Ley 18.834      @break
                         @case('iaaps')      IAAPS           @break
                         @case('program_aps') Programación APS @break
+                        @case('1')  COLCHANE @break;
+                        @case('2')  HUARA @break;
+                        @case('3')  CAMIÑA @break;
+                        @case('4')  POZO ALMONTE @break;
+                        @case('5')  PICA @break;
+                        @case('6')  IQUIQUE @break;
+                        @case('7')  ALTO HOSPICIO @break;
+                        @case('8')  HECTOR REYNO @break;
                         @case('aps') Indicadores APS @break
                         @case('depsev') Dependencia Severa @break
                         @case('saserep') Salud Sexual y Reproductiva @break
