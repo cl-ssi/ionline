@@ -17,7 +17,7 @@ class ProgramApsValueController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($id)
     {
         $communes = Commune::All();
 
@@ -27,27 +27,47 @@ class ProgramApsValueController extends Controller
         $commune->name = "Hector Reyno";
         $communes->push($commune);
 
+        $comuna = $communes->find($id);
+        $comuna->name = mb_strtoupper($comuna->name);
+        // dd($comuna);
 
         $glosas   = ProgramApsGlosa::where('periodo', 2020)->orderBy('numero')->get();
 
         /* Inicializar valores */
-        foreach($communes as $commune) {
-            $commune->name = mb_strtoupper($commune->name);
-            foreach($glosas as $glosa) {
-                $data[$commune->name][$glosa->numero]['id'] = $glosa->id;
-                $data[$commune->name][$glosa->numero]['poblacion'] = '';
-                $data[$commune->name][$glosa->numero]['cobertura'] = '';
-                $data[$commune->name][$glosa->numero]['concentracion'] = null;
-                $data[$commune->name][$glosa->numero]['actividadesProgramadas'] = 0;
-                $data[$commune->name][$glosa->numero]['observadoAnterior'] = '';
-                $data[$commune->name][$glosa->numero]['rendimientoProfesional'] = '';
-                $data[$commune->name][$glosa->numero]['observaciones'] = '';
-                $data[$commune->name][$glosa->numero]['ct_marzo'] = '';
-                $data[$commune->name][$glosa->numero]['porc_marzo'] = '';
-            }
+        // foreach($communes as $commune) {
+        //     $commune->name = mb_strtoupper($commune->name);
+        //     foreach($glosas as $glosa) {
+        //         $data[$commune->name][$glosa->numero]['id'] = $glosa->id;
+        //         $data[$commune->name][$glosa->numero]['poblacion'] = '';
+        //         $data[$commune->name][$glosa->numero]['cobertura'] = '';
+        //         $data[$commune->name][$glosa->numero]['concentracion'] = null;
+        //         $data[$commune->name][$glosa->numero]['actividadesProgramadas'] = 0;
+        //         $data[$commune->name][$glosa->numero]['observadoAnterior'] = '';
+        //         $data[$commune->name][$glosa->numero]['rendimientoProfesional'] = '';
+        //         $data[$commune->name][$glosa->numero]['observaciones'] = '';
+        //         $data[$commune->name][$glosa->numero]['ct_marzo'] = '';
+        //         $data[$commune->name][$glosa->numero]['porc_marzo'] = '';
+        //     }
+        // }
+        foreach($glosas as $glosa) {
+            // cambiar por $commune->name
+            $data[$comuna->name][$glosa->numero]['id'] = $glosa->id;
+            $data[$comuna->name][$glosa->numero]['poblacion'] = '';
+            $data[$comuna->name][$glosa->numero]['cobertura'] = '';
+            $data[$comuna->name][$glosa->numero]['concentracion'] = null;
+            $data[$comuna->name][$glosa->numero]['actividadesProgramadas'] = 0;
+            $data[$comuna->name][$glosa->numero]['observadoAnterior'] = '';
+            $data[$comuna->name][$glosa->numero]['rendimientoProfesional'] = '';
+            $data[$comuna->name][$glosa->numero]['observaciones'] = '';
+            $data[$comuna->name][$glosa->numero]['ct_marzo'] = '';
+            $data[$comuna->name][$glosa->numero]['porc_marzo'] = '';
         }
 
-        $values = ProgramApsValue::with('glosa')->with('commune')->where(function ($query) { $query->where('periodo', 2020)->orderBy('numero');})->get();
+        // $values = ProgramApsValue::with('glosa')->with('commune')->where(function ($query) { $query->where('periodo', 2020)->orderBy('numero');})->get();
+        // cambiar el 6 por id comuna
+        $values = ProgramApsValue::with('glosa')->with('commune')
+                                 ->where(function ($query) { $query->where('periodo', 2020)->orderBy('numero');})
+                                 ->where('commune_id', $comuna->id)->get();
 
         foreach($values as $value) {
             $value->commune->name = mb_strtoupper($value->commune->name);
@@ -76,16 +96,19 @@ class ProgramApsValueController extends Controller
                 	COUNT(*) poblacion FROM percapita_pro p
                 LEFT JOIN 2020establecimientos e
                 ON p.COD_CENTRO = e.Codigo
-                WHERE p.AUTORIZADO = "X" AND p.EDAD BETWEEN 10 AND 19
+                WHERE p.AUTORIZADO = "X" AND p.EDAD BETWEEN 10 AND 19 '. ($comuna->id != 8 ? 'AND e.comuna LIKE "'.$comuna->name.'" AND e.Codigo != 102307' : 'AND e.Codigo = 102307') . ' 
                 GROUP BY NombreComuna, comuna ORDER BY comuna';
+        // dd($query);        
         $poblaciones_10a_a_19a = DB::connection('mysql_rem')->select($query);
+        // dd($poblaciones_10a_a_19a);
+       
 
         $query ='SELECT
                     IF(COD_CENTRO = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
                     COUNT(*) poblacion FROM percapita_pro p
                 LEFT JOIN 2020establecimientos e
                 ON p.COD_CENTRO = e.Codigo
-                WHERE p.AUTORIZADO = "X" AND p.EDAD BETWEEN 20 AND 64
+                WHERE p.AUTORIZADO = "X" AND p.EDAD BETWEEN 20 AND 64 '. ($comuna->id != 8 ? 'AND e.comuna LIKE "'.$comuna->name.'" AND e.Codigo != 102307' : 'AND e.Codigo = 102307') . ' 
                 GROUP BY NombreComuna, comuna ORDER BY comuna';
         $poblaciones_20a_a_64a = DB::connection('mysql_rem')->select($query);
 
@@ -94,7 +117,7 @@ class ProgramApsValueController extends Controller
                     COUNT(*) poblacion FROM percapita_pro p
                 LEFT JOIN 2020establecimientos e
                 ON p.COD_CENTRO = e.Codigo
-                WHERE p.AUTORIZADO = "X" AND p.EDAD > 64
+                WHERE p.AUTORIZADO = "X" AND p.EDAD > 64 '. ($comuna->id != 8 ? 'AND e.comuna LIKE "'.$comuna->name.'" AND e.Codigo != 102307' : 'AND e.Codigo = 102307') . ' 
                 GROUP BY NombreComuna, comuna ORDER BY comuna';
         $poblaciones_mayor_64a = DB::connection('mysql_rem')->select($query);
 
@@ -112,6 +135,7 @@ class ProgramApsValueController extends Controller
                 WHERE CodigoPrestacion IN (02010201)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
+                '. ($comuna->id != 8 ? 'AND e.comuna LIKE "'.$comuna->name.'" AND e.Codigo != 102307' : 'AND e.Codigo = 102307') . ' 
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
 
@@ -124,7 +148,7 @@ class ProgramApsValueController extends Controller
                     COUNT(*) poblacion FROM percapita_pro p
                 LEFT JOIN 2020establecimientos e
                 ON p.COD_CENTRO = e.Codigo
-                WHERE p.AUTORIZADO = "X" AND p.EDAD = 0
+                WHERE p.AUTORIZADO = "X" AND p.EDAD = 0 '. ($comuna->id != 8 ? 'AND e.comuna LIKE "'.$comuna->name.'" AND e.Codigo != 102307' : 'AND e.Codigo = 102307') . ' 
                 AND TIMESTAMPDIFF(MONTH, FECHA_NACIMIENTO, FECHA_CORTE) IN (2,4,6)
                 GROUP BY NombreComuna, comuna ORDER BY comuna';
         $poblaciones = DB::connection('mysql_rem')->select($query);
@@ -141,6 +165,7 @@ class ProgramApsValueController extends Controller
                 WHERE CodigoPrestacion IN (02010320, 05225303, 02010321, 02010322)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
+                '. ($comuna->id != 8 ? 'AND e.comuna LIKE "'.$comuna->name.'" AND e.Codigo != 102307' : 'AND e.Codigo = 102307') . ' 
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
 
@@ -153,7 +178,7 @@ class ProgramApsValueController extends Controller
                     COUNT(*) poblacion FROM percapita_pro p
                 LEFT JOIN 2020establecimientos e
                 ON p.COD_CENTRO = e.Codigo
-                WHERE p.AUTORIZADO = "X" AND p.EDAD = 0
+                WHERE p.AUTORIZADO = "X" AND p.EDAD = 0 '. ($comuna->id != 8 ? 'AND e.comuna LIKE "'.$comuna->name.'" AND e.Codigo != 102307' : 'AND e.Codigo = 102307') . ' 
                 AND TIMESTAMPDIFF(MONTH, FECHA_NACIMIENTO, FECHA_CORTE) = 8
                 GROUP BY NombreComuna, comuna ORDER BY comuna';
         $poblaciones = DB::connection('mysql_rem')->select($query);
@@ -1325,7 +1350,8 @@ class ProgramApsValueController extends Controller
         // print_r($data);
         // die();
 
-        return view('indicators.program_aps.2020.index', compact('data','glosas','communes'));
+        return view('indicators.program_aps.2020.index', compact('id','data','glosas','communes'));
+        // return redirect()->route('indicators.program_aps.2020.index', $id)->with(compact('data','glosas','communes'));
     }
 
     /**
