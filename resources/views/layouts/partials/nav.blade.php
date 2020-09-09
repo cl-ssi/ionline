@@ -170,6 +170,11 @@
                             <i class="fas fa-fax fa-fw"></i> Teléfonos Fijos
                         </a>
 
+                        <a class="dropdown-item {{ active('resources.mobile.*') }}"
+                            href="{{ route('resources.mobile.index') }}">
+                            <i class="fas fa-mobile-alt fa-fw"></i> Teléfonos Móviles
+                        </a>                        
+
                         <a class="dropdown-item {{ active('resources.wingle.*') }}"
                             href="{{ route('resources.wingle.index') }}">
                             <i class="fas fa-wifi fa-fw"></i> Banda Ancha Móvil
