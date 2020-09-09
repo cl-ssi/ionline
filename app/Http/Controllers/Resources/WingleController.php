@@ -60,9 +60,9 @@ class WingleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Wingle $wingle)
     {
-        //
+        return view('resources.wingle.edit', compact('wingle'));
     }
 
     /**
@@ -72,9 +72,12 @@ class WingleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Wingle $wingle)
     {
-        //
+      $wingle->fill($request->all());
+      $wingle->save();
+      session()->flash('success', 'El Wingle '.$wingle->brand.' ha sido actualizado.');
+      return redirect()->route('resources.wingle.index');
     }
 
     /**
@@ -83,8 +86,10 @@ class WingleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Wingle $wingle)
     {
-        //
+      $wingle->delete();
+      session()->flash('success', 'La Banda Ancha Móvil '.$wingle->brand.' ha sido eliminada.');
+      return redirect()->route('resources.wingle.index');
     }
 }
