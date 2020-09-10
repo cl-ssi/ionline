@@ -68,6 +68,7 @@ class ProgramApsValueController extends Controller
         $values = ProgramApsValue::with('glosa')->with('commune')
                                  ->where(function ($query) { $query->where('periodo', 2020)->orderBy('numero');})
                                  ->where('commune_id', $comuna->id)->get();
+        // dd($data);
 
         foreach($values as $value) {
             $value->commune->name = mb_strtoupper($value->commune->name);
@@ -1359,12 +1360,12 @@ class ProgramApsValueController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
         $glosas = ProgramApsGlosa::where('periodo', 2020)->orderBy('numero')->get();
         $establishments = Establishment::All();
         $communes = Commune::All();
-        return view('indicators.program_aps.2020.create', compact('glosas','establishments', 'communes'));
+        return view('indicators.program_aps.2020.create', compact('id', 'glosas','establishments', 'communes'));
     }
 
     /**
@@ -1419,7 +1420,7 @@ class ProgramApsValueController extends Controller
         $communes = Commune::All();
 
         return view('indicators.program_aps.2020.edit',
-            compact('programApsValue','glosas','establishments','communes'));
+            compact('programApsValue','glosas','establishments','communes', 'commune'));
     }
 
     /**

@@ -8,7 +8,7 @@
 
 <h3 class="mb-3">Programacion APS</h3>
 
-<a href="{{ route('indicators.program_aps.2020.create')}}" class="btn btn-primary">Agregar valor</a>
+<a href="{{ route('indicators.program_aps.2020.create', $id) }}" class="btn btn-primary">Agregar valor</a>
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs d-print-none">

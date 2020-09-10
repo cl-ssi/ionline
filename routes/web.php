@@ -368,7 +368,7 @@ Route::prefix('indicators')->as('indicators.')->group(function(){
         });
         Route::prefix('2020')->as('2020.')->group(function(){
             Route::get('/{commune}','Indicators\_2020\ProgramApsValueController@index')->name('index');
-            Route::get('/create','Indicators\_2020\ProgramApsValueController@create')->name('create')->middleware('auth');
+            Route::get('/{commune}/create','Indicators\_2020\ProgramApsValueController@create')->name('create')->middleware('auth');
             Route::post('/','Indicators\_2020\ProgramApsValueController@store')->name('store')->middleware('auth');
             Route::get('/{glosa}/{commune}/edit','Indicators\_2020\ProgramApsValueController@edit')->name('edit')->middleware('auth');
             Route::put('/{programApsValue}','Indicators\_2020\ProgramApsValueController@update')->name('update')->middleware('auth');
