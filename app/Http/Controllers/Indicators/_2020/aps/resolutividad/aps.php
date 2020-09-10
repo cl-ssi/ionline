@@ -522,8 +522,8 @@ $sql_numerador = "SELECT e.Comuna, e.alias_estab, r.Mes, sum(ifnull(Col01,0)) as
                    FROM {$year}rems r
                    LEFT JOIN {$year}establecimientos e
                    ON r.IdEstablecimiento=e.Codigo
-                   WHERE CodigoPrestacion in (29000003, 29000034, 29000035, 29000036, 29000037, 29000038,
-                                              29000039)
+                   WHERE CodigoPrestacion in (29000003, 29000034, 29000035, 29000036, 29000037,
+                                              29000039, 29000040, 29000042, 29000043, 29000053, 29000054, 29000055, 29000056)
                    AND Codigo in (102301, 102306, 102305)
                    GROUP BY e.Comuna, e.alias_estab, r.Mes
                    ORDER BY e.Comuna, e.alias_estab, r.Mes";
