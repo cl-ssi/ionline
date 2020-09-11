@@ -68,8 +68,7 @@ class ProgramApsValueController extends Controller
         $values = ProgramApsValue::with('glosa')->with('commune')
                                  ->where(function ($query) { $query->where('periodo', 2020)->orderBy('numero');})
                                  ->where('commune_id', $comuna->id)->get();
-        // dd($data);
-
+                                 
         foreach($values as $value) {
             $value->commune->name = mb_strtoupper($value->commune->name);
             //$data[$value->commune->name][$value->glosa->numero]['poblacion'] = $value->poblacion;
@@ -79,7 +78,7 @@ class ProgramApsValueController extends Controller
             $data[$value->commune->name][$value->glosa->numero]['observadoAnterior'] = $value->observadoAnterior;
             $data[$value->commune->name][$value->glosa->numero]['rendimientoProfesional'] = $value->rendimientoProfesional;
             $data[$value->commune->name][$value->glosa->numero]['observaciones'] = $value->observaciones;
-            if($value->commune->id == 7) {
+            if($value->commune->id == 8) {
                 //$data['HECTOR REYNO'][$value->glosa->numero]['poblacion'] = $value->poblacion;
                 $data['HECTOR REYNO'][$value->glosa->numero]['cobertura'] = $value->cobertura;
                 $data['HECTOR REYNO'][$value->glosa->numero]['concentracion'] = $value->concentracion;
@@ -101,8 +100,6 @@ class ProgramApsValueController extends Controller
                 GROUP BY NombreComuna, comuna ORDER BY comuna';
         // dd($query);        
         $poblaciones_10a_a_19a = DB::connection('mysql_rem')->select($query);
-        // dd($poblaciones_10a_a_19a);
-       
 
         $query ='SELECT
                     IF(COD_CENTRO = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
@@ -152,6 +149,7 @@ class ProgramApsValueController extends Controller
                 WHERE p.AUTORIZADO = "X" AND p.EDAD = 0 '. ($comuna->id != 8 ? 'AND e.comuna LIKE "'.$comuna->name.'" AND e.Codigo != 102307' : 'AND e.Codigo = 102307') . ' 
                 AND TIMESTAMPDIFF(MONTH, FECHA_NACIMIENTO, FECHA_CORTE) IN (2,4,6)
                 GROUP BY NombreComuna, comuna ORDER BY comuna';
+        
         $poblaciones = DB::connection('mysql_rem')->select($query);
 
         foreach($poblaciones as $poblacion) {
