@@ -1267,18 +1267,18 @@ class ProgramApsValueController extends Controller
             $data[$cantidad->NombreComuna][38]['ct_marzo'] = $cantidad->total;
         }
 
-        $query ='SELECT
-                    IF(COD_CENTRO = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
-                    COUNT(*) poblacion FROM percapita_pro p
-                LEFT JOIN 2020establecimientos e
-                ON p.COD_CENTRO = e.Codigo
-                WHERE p.AUTORIZADO = "X" AND p.EDAD > 20 '. $filter_commune_reyno . ' 
-                GROUP BY NombreComuna, comuna ORDER BY comuna';
-        $poblaciones = DB::connection('mysql_rem')->select($query);
+        // $query ='SELECT
+        //             IF(COD_CENTRO = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
+        //             COUNT(*) poblacion FROM percapita_pro p
+        //         LEFT JOIN 2020establecimientos e
+        //         ON p.COD_CENTRO = e.Codigo
+        //         WHERE p.AUTORIZADO = "X" AND p.EDAD > 20 '. $filter_commune_reyno . ' 
+        //         GROUP BY NombreComuna, comuna ORDER BY comuna';
+        // $poblaciones = DB::connection('mysql_rem')->select($query);
 
-        foreach($poblaciones as $poblacion) {
-            $data[$poblacion->NombreComuna][38]['poblacion'] = $poblacion->poblacion;
-        }
+        // foreach($poblaciones as $poblacion) {
+        //     $data[$poblacion->NombreComuna][38]['poblacion'] = $poblacion->poblacion;
+        // }
 
         /* 39 */
         $query ='SELECT
@@ -1331,18 +1331,18 @@ class ProgramApsValueController extends Controller
             $data[$cantidad->NombreComuna][40]['ct_marzo'] = $cantidad->total;
         }
 
-        // $query ='SELECT
-        //             IF(COD_CENTRO = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
-        //             COUNT(*) poblacion FROM percapita_pro p
-        //         LEFT JOIN 2020establecimientos e
-        //         ON p.COD_CENTRO = e.Codigo
-        //         WHERE p.AUTORIZADO = "X" AND p.EDAD = 65 '. $filter_commune_reyno . ' 
-        //         GROUP BY NombreComuna, comuna ORDER BY comuna';
-        // $poblaciones = DB::connection('mysql_rem')->select($query);
+        $query ='SELECT
+                    IF(COD_CENTRO = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
+                    COUNT(*) poblacion FROM percapita_pro p
+                LEFT JOIN 2020establecimientos e
+                ON p.COD_CENTRO = e.Codigo
+                WHERE p.AUTORIZADO = "X" AND p.EDAD = 65 '. $filter_commune_reyno . ' 
+                GROUP BY NombreComuna, comuna ORDER BY comuna';
+        $poblaciones = DB::connection('mysql_rem')->select($query);
 
-        // foreach($poblaciones as $poblacion) {
-        //     $data[$poblacion->NombreComuna][40]['poblacion'] = $poblacion->poblacion;
-        // }
+        foreach($poblaciones as $poblacion) {
+            $data[$poblacion->NombreComuna][40]['poblacion'] = $poblacion->poblacion;
+        }
 
         /* 41 */
         $query ='SELECT
