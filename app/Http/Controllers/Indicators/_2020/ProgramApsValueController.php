@@ -658,7 +658,7 @@ class ProgramApsValueController extends Controller
                     IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
                     SUM(COALESCE(Col08,0)) AS total FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
-                WHERE CodigoPrestacion IN (19140303, 19140402)
+                WHERE CodigoPrestacion IN (19140401,19180000,19140402,19140403)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
                 . $filter_commune_reyno . ' 
@@ -872,18 +872,18 @@ class ProgramApsValueController extends Controller
             $data[$cantidad->NombreComuna][24]['ct_marzo'] = $cantidad->total;
         }
 
-        $query ='SELECT
-                    IF(COD_CENTRO = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
-                    COUNT(*) poblacion FROM percapita_pro p
-                LEFT JOIN 2020establecimientos e
-                ON p.COD_CENTRO = e.Codigo
-                WHERE p.AUTORIZADO = "X" AND p.EDAD > 4 '. $filter_commune_reyno . ' 
-                GROUP BY NombreComuna, comuna ORDER BY comuna';
-        $poblaciones = DB::connection('mysql_rem')->select($query);
+        // $query ='SELECT
+        //             IF(COD_CENTRO = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
+        //             COUNT(*) poblacion FROM percapita_pro p
+        //         LEFT JOIN 2020establecimientos e
+        //         ON p.COD_CENTRO = e.Codigo
+        //         WHERE p.AUTORIZADO = "X" AND p.EDAD > 4 '. $filter_commune_reyno . ' 
+        //         GROUP BY NombreComuna, comuna ORDER BY comuna';
+        // $poblaciones = DB::connection('mysql_rem')->select($query);
 
-        foreach($poblaciones as $poblacion) {
-            $data[$poblacion->NombreComuna][24]['poblacion'] = $poblacion->poblacion;
-        }
+        // foreach($poblaciones as $poblacion) {
+        //     $data[$poblacion->NombreComuna][24]['poblacion'] = $poblacion->poblacion;
+        // }
 
         /* 25 */
         $query ='SELECT
@@ -910,10 +910,10 @@ class ProgramApsValueController extends Controller
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $poblaciones = DB::connection('mysql_rem')->select($query);
 
-        foreach($poblaciones as $poblacion) {
-            $data[$poblacion->NombreComuna][25]['poblacion'] = $poblacion->total;
-            $data[$poblacion->NombreComuna][26]['poblacion'] = $poblacion->total;
-        }
+        // foreach($poblaciones as $poblacion) {
+        //     $data[$poblacion->NombreComuna][25]['poblacion'] = $poblacion->total;
+        //     $data[$poblacion->NombreComuna][26]['poblacion'] = $poblacion->total;
+        // }
 
         /* 26 */
         $query ='SELECT
@@ -1032,7 +1032,7 @@ class ProgramApsValueController extends Controller
 						  COALESCE(Col01,0)
 						  ) AS total FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
-                WHERE CodigoPrestacion IN (03500362)
+                WHERE CodigoPrestacion IN (03500361, 03500362)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
                 . $filter_commune_reyno . ' 
@@ -1041,11 +1041,12 @@ class ProgramApsValueController extends Controller
 
         foreach($cantidades as $cantidad) {
             $data[$cantidad->NombreComuna][31]['ct_marzo'] = $cantidad->total;
+            // $data[$cantidad->NombreComuna][31]['poblacion'] = $cantidad->total;
         }
 
-        foreach($poblaciones_total as $poblacion) {
-            $data[$poblacion->NombreComuna][31]['poblacion'] = $poblacion->poblacion;
-        }
+        // foreach($poblaciones_total as $poblacion) {
+        //     $data[$poblacion->NombreComuna][31]['poblacion'] = $poblacion->poblacion;
+        // }
 
         /* 32 */
         $query ='SELECT
@@ -1297,22 +1298,22 @@ class ProgramApsValueController extends Controller
             $data[$cantidad->NombreComuna][39]['ct_marzo'] = 0;
         }
 
-        $query ='SELECT
-                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
-                    SUM(
-						  COALESCE(Col01,0)
-						  ) AS total FROM 2020rems r
-                JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
-                WHERE CodigoPrestacion IN (23080300, 23080400, 23080500)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
-                AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
-                . $filter_commune_reyno . ' 
-                GROUP BY NombreComuna ORDER BY NombreComuna';
-        $poblaciones = DB::connection('mysql_rem')->select($query);
+        // $query ='SELECT
+        //             IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
+        //             SUM(
+		// 				  COALESCE(Col01,0)
+		// 				  ) AS total FROM 2020rems r
+        //         JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
+        //         WHERE CodigoPrestacion IN (23080300, 23080400, 23080500)
+        //         AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+        //         AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
+        //         . $filter_commune_reyno . ' 
+        //         GROUP BY NombreComuna ORDER BY NombreComuna';
+        // $poblaciones = DB::connection('mysql_rem')->select($query);
 
-        foreach($poblaciones as $poblacion) {
-            $data[$poblacion->NombreComuna][39]['poblacion'] = $poblacion->total;
-        }
+        // foreach($poblaciones as $poblacion) {
+        //     $data[$poblacion->NombreComuna][39]['poblacion'] = $poblacion->total;
+        // }
 
         /* 40 */
         $query ='SELECT
@@ -1330,18 +1331,18 @@ class ProgramApsValueController extends Controller
             $data[$cantidad->NombreComuna][40]['ct_marzo'] = $cantidad->total;
         }
 
-        $query ='SELECT
-                    IF(COD_CENTRO = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
-                    COUNT(*) poblacion FROM percapita_pro p
-                LEFT JOIN 2020establecimientos e
-                ON p.COD_CENTRO = e.Codigo
-                WHERE p.AUTORIZADO = "X" AND p.EDAD = 65 '. $filter_commune_reyno . ' 
-                GROUP BY NombreComuna, comuna ORDER BY comuna';
-        $poblaciones = DB::connection('mysql_rem')->select($query);
+        // $query ='SELECT
+        //             IF(COD_CENTRO = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
+        //             COUNT(*) poblacion FROM percapita_pro p
+        //         LEFT JOIN 2020establecimientos e
+        //         ON p.COD_CENTRO = e.Codigo
+        //         WHERE p.AUTORIZADO = "X" AND p.EDAD = 65 '. $filter_commune_reyno . ' 
+        //         GROUP BY NombreComuna, comuna ORDER BY comuna';
+        // $poblaciones = DB::connection('mysql_rem')->select($query);
 
-        foreach($poblaciones as $poblacion) {
-            $data[$poblacion->NombreComuna][40]['poblacion'] = $poblacion->poblacion;
-        }
+        // foreach($poblaciones as $poblacion) {
+        //     $data[$poblacion->NombreComuna][40]['poblacion'] = $poblacion->poblacion;
+        // }
 
         /* 41 */
         $query ='SELECT
@@ -1448,17 +1449,10 @@ class ProgramApsValueController extends Controller
             $data[$cantidad->NombreComuna][45]['ct_marzo'] = $cantidad->total;
         }
 
-        $query ='SELECT
-               IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
-               SUM(COALESCE(Col01,0)) AS total FROM 2020rems r
-                JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
-                WHERE CodigoPrestacion IN ("P7010100", "P7010400") AND Ano = 2020 '. $filter_commune_reyno . ' 
-                GROUP BY NombreComuna ORDER BY NombreComuna';
-        $poblaciones = DB::connection('mysql_rem')->select($query);
-
-        foreach($poblaciones as $poblacion) {
-            $data[$poblacion->NombreComuna][45]['poblacion'] = $poblacion->total;
+        foreach($poblaciones_total as $poblacion) {
+            $data[$poblacion->NombreComuna][45]['poblacion'] = $poblacion->poblacion;
         }
+
 
         /* 46 */
         $query ='SELECT
@@ -1486,7 +1480,7 @@ class ProgramApsValueController extends Controller
 						  COALESCE(Col01,0)
 						  ) AS total FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
-                WHERE CodigoPrestacion IN (26274800, 28021624)
+                WHERE CodigoPrestacion IN (26274800)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
                 . $filter_commune_reyno . ' 
@@ -1519,16 +1513,8 @@ class ProgramApsValueController extends Controller
             $data[$cantidad->NombreComuna][47]['ct_marzo'] = $cantidad->total;
         }
 
-        $query ='SELECT
-               IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
-               SUM(COALESCE(Col01,0)) AS total FROM 2020rems r
-                JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
-                WHERE CodigoPrestacion IN ("P7200500") AND Ano = 2020 '. $filter_commune_reyno . ' 
-                GROUP BY NombreComuna ORDER BY NombreComuna';
-        $poblaciones = DB::connection('mysql_rem')->select($query);
-
-        foreach($poblaciones as $poblacion) {
-            $data[$poblacion->NombreComuna][47]['poblacion'] = $poblacion->total;
+        foreach($poblaciones_total as $poblacion) {
+            $data[$poblacion->NombreComuna][47]['poblacion'] = $poblacion->poblacion;
         }
 
         /* 48 */
@@ -1549,6 +1535,23 @@ class ProgramApsValueController extends Controller
             $data[$cantidad->NombreComuna][48]['ct_marzo'] = $cantidad->total;
         }
 
+        // $query ='SELECT
+        //             IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
+        //             SUM(
+		// 				  COALESCE(Col39,0)
+		// 				  ) AS total FROM 2020rems r
+        //         JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
+        //         WHERE CodigoPrestacion IN (06020201, 06020208, 06020202, 06020602, 06020206, 06200400, 06904900, 06200500, 06200501, 06905912)
+        //         AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+        //         AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
+        //         . $filter_commune_reyno . ' 
+        //         GROUP BY NombreComuna ORDER BY NombreComuna';
+        // $poblaciones = DB::connection('mysql_rem')->select($query);
+
+        // foreach($poblaciones as $poblacion) {
+        //     $data[$poblacion->NombreComuna][48]['poblacion'] = $poblacion->total;
+        // }
+
         /* 49 */
         $query ='SELECT
                     IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
@@ -1567,6 +1570,10 @@ class ProgramApsValueController extends Controller
             $data[$cantidad->NombreComuna][49]['ct_marzo'] = $cantidad->total;
         }
 
+        // foreach($poblaciones as $poblacion) {
+        //     $data[$poblacion->NombreComuna][49]['poblacion'] = $poblacion->total;
+        // }
+
         /* 50 */
         $query ='SELECT
                     IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
@@ -1584,6 +1591,10 @@ class ProgramApsValueController extends Controller
         foreach($cantidades as $cantidad) {
             $data[$cantidad->NombreComuna][50]['ct_marzo'] = $cantidad->total;
         }
+
+        // foreach($poblaciones as $poblacion) {
+        //     $data[$poblacion->NombreComuna][50]['poblacion'] = $poblacion->total;
+        // }
 
         // /* 51 */
         // //TODO: hacer las consultas para trazadora #51
