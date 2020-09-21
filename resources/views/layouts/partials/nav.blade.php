@@ -17,6 +17,13 @@
                     </a>
                 </li>
 
+                <li class="nav-item  ">
+                    <a class="nav-link" href="{{ route('programmings.index') }}">
+                        <i class="fas fa-address-book"></i> Programación APS
+                    </a>
+                </li>
+               
+
                 <li class="nav-item dropdown {{ active('indicators*') }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -183,6 +190,8 @@
                     </div>
                 </li>
                 @endcan
+
+                
             </ul>
 
             <!-- Right Side Of Navbar -->

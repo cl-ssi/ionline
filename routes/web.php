@@ -107,6 +107,10 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('/createWordRes/{agreement}','Agreements\WordTestController@createResWordDocx')->name('createWordRes');
 });
 
+Route::resource('programmings','Programmings\ProgrammingController')->middleware('auth');
+Route::resource('professionals','Programmings\ProfessionalController')->middleware('auth');
+
+
 Route::resource('agreements','Agreements\AgreementController')->middleware('auth');
 
 
@@ -558,6 +562,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
         Route::get('transfer/{establishment}/auth', 'Pharmacies\TransferController@auth')->name('transfer.auth');
         Route::resource('deliver','Pharmacies\DeliverController');
         Route::put('deliver/{deliver}/confirm', 'Pharmacies\DeliverController@confirm')->name('deliver.confirm');
+        Route::put('deliver/{deliver}/saveDocId', 'Pharmacies\DeliverController@saveDocId')->name('deliver.saveDocId');
     });
     Route::resource('products','Pharmacies\ProductController');
 
