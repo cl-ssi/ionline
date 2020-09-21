@@ -71,7 +71,7 @@
 				@endforeach
 			</select>
 		</form>
-		<a class="btn btn-outline-primary" href="{{route('pharmacies.products.transfer.auth', $filter)}}" role="button"><i class="fas fa-clipboard-check"></i> Autorizar</a>
+		@if(!$products_by_establishment->isEmpty())<a class="btn btn-outline-primary" href="{{route('pharmacies.products.transfer.auth', $filter)}}" role="button"><i class="fas fa-clipboard-check"></i> Autorizar</a>@endif
 		@else
 			{{$establishment->name}}
 		@endcan
