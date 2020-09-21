@@ -185,7 +185,7 @@
 	</table>
 </div>
 
-{{ $pending_deliveries->links() }}
+{{ $pending_deliveries->appends(Request::input())->links() }}
 
 <h3>Entregas confirmadas</h3>
 <p><button type="button" class="btn btn-outline-success" href="" onclick="tableToExcel('tabla_confirmed_deliveries', 'Entregas confirmadas')">
@@ -232,7 +232,7 @@
 	</table>
 </div>
 
-{{ $confirmed_deliveries->links() }}
+{{ $confirmed_deliveries->appends(Request::input())->links() }}
 
 @endsection
 
