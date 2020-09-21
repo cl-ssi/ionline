@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Pharmacies;
 
+use App\Documents\Document;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Pharmacies\Deliver;
@@ -153,14 +154,63 @@ class TransferController extends Controller
         
         $pending_deliveries = Deliver::with('establishment:id,name', 'product:id,name')
                                         ->where('remarks', 'PENDIENTE')
-                                        ->where('establishment_id', $establishment_id)->get();
+                                        ->where('establishment_id', $establishment_id)
+                                        ->doesntHave('document')->get();
         
         $pendings_by_product = $pending_deliveries->groupBy('product_id')->map(function($row){
             return $row->sum('quantity');
         });
-        $pendings_by_product->toArray();                                
+        $pendings_by_product->toArray();
+
+        $style = "border: 1px solid black; border-collapse: collapse; padding: 5px; font-family: Arial, Helvetica, sans-serif; font-size: 0.8rem;";
         
-        return view('pharmacies.products.transfer.auth', compact('establishment', 'pendings_by_product'));
+        $content = "<p style='font-family: Arial, Helvetica, sans-serif; font-size: 0.8rem;'>Mediante el presente documento y en marco a los problemas de <b>salud 36, piloto GES y decreto 22</b>, y a la evaluación de información de solicitud y entrega de ayudas técnicas ingresada por su establecimiento en plataforma i.saludiquique.cl, mediante el presente se informa a usted que las siguientes ayudas técnicas de encuentran disponible para ser retiradas en bodega del Servicio de Salud Iquique:</p>
+        <p style='font-family: Arial, Helvetica, sans-serif; font-size: 0.8rem;'>Entrega para establecimiento <b>{$establishment->name}</b></p>
+
+        <table style='{$style}' align='center'>
+            <thead>
+            <tr style='{$style}'>
+                <th style='{$style}' width='200'>Ayuda técnica</th>
+                <th style='{$style}' width='150'>Según stock disponible en establecimiento</th>
+                <th style='{$style}' width='150'>Para stock crítico en establecimiento</th>
+                <th style='{$style}' width='150'>Para pendientes de entrega</th>
+                <th style='{$style}' width='150'>Total a entregar</th>
+            </tr>
+            </thead>
+            <tbody>";
+
+        foreach($establishment->products as $product){
+            $pendientes = isset($pendings_by_product[$product->id]) ? $pendings_by_product[$product->id] : 0;
+            if($product->pivot->critic_stock + $pendientes > $product->pivot->stock){
+                $for_critic = $product->pivot->critic_stock - $product->pivot->stock;
+                $total_dlvr = $product->pivot->critic_stock + $pendientes - $product->pivot->stock;
+                $content = $content . "<tr>
+                                        <td style='{$style}'><b>{$product->name}</b></td>
+                                        <td style='{$style}' align='center'>{$product->pivot->stock}</td>
+                                        <td style='{$style}' align='center'>{$for_critic}</td>
+                                        <td style='{$style}' align='center'>{$pendientes}</td>
+                                        <td style='{$style}' align='center'><b>{$total_dlvr}</b></td>
+                                    </tr>";
+            }
+        }
+
+        $content = $content . "</tbody>
+        </table>
+        <ul style='font-family: Arial, Helvetica, sans-serif; font-size: 0.8rem;'>
+            <li>Lugar de Retiro:  Obispo Labbe #962</li>
+            <li>Horarios:  08:30 - 13:00 hrs. y 14:30 – 16:00 hrs. </li>
+        </ul>";
+
+        // return $content;
+        
+        // return view('pharmacies.products.transfer.auth', compact('establishment', 'pendings_by_product'));
+        $document = new Document();
+        $document->content = $content;
+        $document->type = 'Ordinario';
+        $document->for = 'SEGÚN DISTRIBUCIÓN';
+        $document->responsible = 'Referente Técnico de Rehabilitación';
+        $document->distribution = "APS.SSI@REDSALUD.GOV.CL\nOFICINA DE PARTES";
+        return view('documents.create', compact('document'));
     }
 
     /**
