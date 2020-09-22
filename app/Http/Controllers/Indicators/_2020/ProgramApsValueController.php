@@ -45,7 +45,7 @@ class ProgramApsValueController extends Controller
             $data[$comuna->name][$glosa->numero]['observadoAnterior'] = '';
             // $data[$comuna->name][$glosa->numero]['rendimientoProfesional'] = '';
             $data[$comuna->name][$glosa->numero]['observaciones'] = '';
-            for($mes = 1; $mes < 12; $mes++) $data[$comuna->name][$glosa->numero]['numeradores'][$mes] = '';
+            for($mes = 1; $mes < 12; $mes++) $data[$comuna->name][$glosa->numero]['numeradores'][$mes] = null;
             $data[$comuna->name][$glosa->numero]['ct_marzo'] = 0;
             $data[$comuna->name][$glosa->numero]['porc_marzo'] = '';
         }
