@@ -107,6 +107,10 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('/createWordRes/{agreement}','Agreements\WordTestController@createResWordDocx')->name('createWordRes');
 });
 
+Route::resource('programmings','Programmings\ProgrammingController')->middleware('auth');
+Route::resource('professionals','Programmings\ProfessionalController')->middleware('auth');
+
+
 Route::resource('agreements','Agreements\AgreementController')->middleware('auth');
 
 

@@ -29,14 +29,20 @@ class AgreementController extends Controller
         return view('agreements/agreements/index')->withAgreements($agreements);
     }
 
-    public function indexTracking()
+    public function indexTracking(Request $request)
     {
-        $agreements = Agreement::latest()->get();
+        if($request->commune){
+            $agreements = Agreement::where('commune_id',$request->commune)->latest()->get();
+        }
+        else {
+            $agreements = Agreement::latest()->get();
+        }
+        $communes = Commune::All()->SortBy('name');
         $stages = Stage::All();
 
         //$agreements =  Agreement::with('Stages')->get();
         //dd($agreements);
-        return view('agreements/agreements/trackingIndicator')->withAgreements($agreements)->withStages($stages);
+        return view('agreements/agreements/trackingIndicator')->withAgreements($agreements)->withStages($stages)->withCommunes($communes);
     }
 
     /**

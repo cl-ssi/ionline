@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ReceptionSeeder::class);
         $this->call(TelephoneSeeder::class);
         $this->call(PlaceSeeder::class);
+        $this->call(ProfessionalTableSeeder::class);
 
     }
 }
