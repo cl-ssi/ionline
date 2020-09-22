@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Listado de impresoras')
+@section('title', 'Lista de Impresoras')
 
 @section('content')
 
-<h3 class="mb-3">Listar Impresoras</h3>
+<h3 class="mb-3">Impresoras</h3>
 
 <form class="form d-print-none" method="GET" action="{{ route('resources.printer.index') }}">
 <fieldset class="form-group">

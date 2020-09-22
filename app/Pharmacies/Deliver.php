@@ -22,4 +22,9 @@ class Deliver extends Model
     {
         return $this->belongsTo('App\Pharmacies\Product');
     }
+
+    public function document()
+    {
+        return $this->belongsTo('App\Documents\Document');
+    }
 }

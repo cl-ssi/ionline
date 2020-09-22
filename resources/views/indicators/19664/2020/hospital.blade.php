@@ -200,12 +200,13 @@
             </td>
             <td rowspan="2" class="align-middle">{{ $data6_hosp['ponderacion'] }}%</td>
             <td rowspan="2" class="align-middle">
-              @if($data6_hosp['cumplimiento'] <= ($data6_hosp['meta_nacional']-5) AND $data6_hosp['cumplimiento'] != 0)
-                100%
-                <small><br>{{ $data6_hosp['cumplimiento'] }}%</small>
+              <!-- data6_hosp['cumplimiento'] <= data6_hosp['meta_nacional']-5) AND data6_hosp['cumplimiento'] != 0 -->
+              @if($data6_hosp['cumplimiento'] >= 5 AND $data6_hosp['cumplimiento'] != 0)
+                <p class="text-success">100%</p>
+                <small class="text-success"><br>{{ $data6_hosp['cumplimiento'] }}%</small>
               @else
-                0%
-                <small><br>{{ $data6_hosp['cumplimiento'] }}%</small>
+                <p class="text-danger">0%</p>
+                <small class="text-danger"><br>{{ $data6_hosp['cumplimiento'] }}%</small>
               @endif
             </td>
             <td class="text-rigth">{{ $data6_hosp['numerador_acumulado'] }}</td>

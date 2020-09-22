@@ -27,7 +27,7 @@ class UpdateTelephoneRequest extends FormRequest
     {
         return [
             'number' => ['required', Rule::unique('res_telephones','number' )->ignore($this->telephone)],
-            'mac'    => Rule::unique('res_telephones','mac' )->ignore($this->telephone),
+            //'mac'    => [Rule::unique('res_telephones','mac' )->ignore($this->telephone)],
             'minsal' => ['required', Rule::unique('res_telephones','minsal' )->ignore($this->telephone)]
         ];
     }
@@ -37,7 +37,7 @@ class UpdateTelephoneRequest extends FormRequest
         return [
             'number.required'               => 'Número de Teléfono requerido',
             'number.unique'                 => 'El número de Teléfono ya está ingresado.',
-            'mac.unique'                    => 'Dirección MAC ya está ingresada.',
+            //'mac.unique'                    => 'Dirección MAC ya está ingresada.',
             'minsal.required'               => 'Anexo Minsal requerido.',
             'minsal.unique'                 => 'Anexo Minsal ya está ingresado.'
         ];

@@ -8,14 +8,14 @@
 
 <h3 class="mb-3">Programacion APS</h3>
 
-<a href="{{ route('indicators.program_aps.2020.create')}}" class="btn btn-primary">Agregar valor</a>
+<a href="{{ route('indicators.program_aps.2020.create', $id) }}" class="btn btn-primary">Agregar valor</a>
 
 <!-- Nav tabs -->
-<ul class="nav nav-tabs d-print-none" id="myTab" role="tablist">
+<ul class="nav nav-tabs d-print-none">
     @foreach($communes as $commune)
     <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" role="tab" aria-selected="true"
-            href="#{{ str_replace(" ","_",mb_strtoupper($commune->name)) }}">{{ mb_strtoupper($commune->name) }}
+        <a class="nav-link @if($commune->id == $id) active @endif"
+            href="{{ route('indicators.program_aps.2020.index', $commune->id) }}">{{mb_strtoupper($commune->name)}}
         </a>
     </li>
     @endforeach
@@ -24,7 +24,8 @@
 <!-- Tab panes -->
 <div class="tab-content mt-3">
     @foreach($communes as $commune)
-        <div class="tab-pane" id="{{ str_replace(" ","_",mb_strtoupper($commune->name)) }}" role="tabpanel" >
+        @if($commune->id == $id)
+        
             <h4>
                 <button type="button" class="btn btn-outline-info btn-sm"
                     onclick="tableToExcel('tabla_{{ str_replace(" ","_",mb_strtoupper($commune->name)) }}', 'Hoja 1')">
@@ -87,8 +88,9 @@
             </table>
 
         </div>
+        @endif
     @endforeach
-</div>
+
 
 @endsection
 
@@ -107,8 +109,4 @@ var tableToExcel = (function() {
 })()
 </script>
 
-<script type="text/javascript">
-    $('#myTab a[href="#IQUIQUE"]').tab('show') // Select tab by name
-    $('[data-toggle="tooltip"]').tooltip()
-</script>
 @endsection

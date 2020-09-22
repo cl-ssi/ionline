@@ -122,7 +122,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Actualizar</button>
-    <a class="btn btn-outline-secondary ml-3" href="{{ route('indicators.program_aps.2020.index') }}">Cancelar</a>
+    <a class="btn btn-outline-secondary ml-3" href="{{ route('indicators.program_aps.2020.index', $programApsValue->commune_id) }}">Cancelar</a>
 
 
 </form>

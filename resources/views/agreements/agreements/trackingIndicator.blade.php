@@ -6,9 +6,29 @@
 
 @include('agreements/nav')
 
-<h3 class="mb-3">Seguimiento de Convenios</h3>
 
-    <table class="table table-striped  btn-table table-sm table-bordered table-condensed fixed_headers table-hover "><!-- table-responsive -->
+
+<form class="form-inline float-right small" method="GET" action="{{ route('agreements.tracking.index') }}">
+	<div class="input-group mb-6">
+  <select name="commune" id="formprogram" class="form-control">
+                    <option ></option>
+                @foreach($communes as $commune)
+                    <option value="{{ $commune->id }}">{{ $commune->name }}</option>
+                @endforeach
+            </select>
+		<div class="input-group-append">
+			<button class="btn btn-outline-secondary" type="submit">
+				<i class="fas fa-search" aria-hidden="true"></i>
+			</button>
+		</div>
+	</div>
+</form>
+
+<h3 class="mb-3">Seguimiento de Convenios</h3>
+<br>
+
+
+<table class="table table-striped  btn-table table-sm table-bordered table-condensed fixed_headers table-hover "><!-- table-responsive -->
     <thead>
             <tr class="small">
               <th class="text-center table-light" colspan="2"></th>

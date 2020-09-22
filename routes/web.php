@@ -57,8 +57,22 @@ Route::prefix('resources')->name('resources.')->namespace('Resources')->middlewa
         Route::put('{printer}/update','PrinterController@update')->name('update');
         Route::delete('{printer}/destroy','PrinterController@destroy')->name('destroy');
     });
-
-
+    Route::prefix('wingles')->name('wingle.')->group(function(){
+        Route::get('/', 'WingleController@index')->name('index');
+        Route::get('create', 'WingleController@create')->name('create');
+        Route::post('store', 'WingleController@store')->name('store');
+        Route::get('{wingle}/edit', 'WingleController@edit')->name('edit');
+        Route::put('{wingle}/update','WingleController@update')->name('update');
+        Route::delete('{wingle}/destroy','WingleController@destroy')->name('destroy');
+    });
+    Route::prefix('mobiles')->name('mobile.')->group(function(){
+        Route::get('/', 'MobileController@index')->name('index');
+        Route::get('create', 'MobileController@create')->name('create');
+        Route::post('store', 'MobileController@store')->name('store');
+        Route::get('{mobile}/edit', 'MobileController@edit')->name('edit');
+        Route::put('{mobile}/update','MobileController@update')->name('update');
+        Route::delete('{mobile}/destroy','MobileController@destroy')->name('destroy');
+    });    
 });
 
 Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(function(){
@@ -92,6 +106,10 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('/createWord/{agreement}','Agreements\WordTestController@createWordDocx')->name('createWord');
     Route::get('/createWordRes/{agreement}','Agreements\WordTestController@createResWordDocx')->name('createWordRes');
 });
+
+Route::resource('programmings','Programmings\ProgrammingController')->middleware('auth');
+Route::resource('professionals','Programmings\ProfessionalController')->middleware('auth');
+
 
 Route::resource('agreements','Agreements\AgreementController')->middleware('auth');
 
@@ -353,8 +371,8 @@ Route::prefix('indicators')->as('indicators.')->group(function(){
             Route::put('/{programApsValue}','Indicators\_2019\ProgramApsValueController@update')->name('update')->middleware('auth');
         });
         Route::prefix('2020')->as('2020.')->group(function(){
-            Route::get('/','Indicators\_2020\ProgramApsValueController@index')->name('index');
-            Route::get('/create','Indicators\_2020\ProgramApsValueController@create')->name('create')->middleware('auth');
+            Route::get('/{commune}','Indicators\_2020\ProgramApsValueController@index')->name('index');
+            Route::get('/{commune}/create','Indicators\_2020\ProgramApsValueController@create')->name('create')->middleware('auth');
             Route::post('/','Indicators\_2020\ProgramApsValueController@store')->name('store')->middleware('auth');
             Route::get('/{glosa}/{commune}/edit','Indicators\_2020\ProgramApsValueController@edit')->name('edit')->middleware('auth');
             Route::put('/{programApsValue}','Indicators\_2020\ProgramApsValueController@update')->name('update')->middleware('auth');
@@ -544,6 +562,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
         Route::get('transfer/{establishment}/auth', 'Pharmacies\TransferController@auth')->name('transfer.auth');
         Route::resource('deliver','Pharmacies\DeliverController');
         Route::put('deliver/{deliver}/confirm', 'Pharmacies\DeliverController@confirm')->name('deliver.confirm');
+        Route::put('deliver/{deliver}/saveDocId', 'Pharmacies\DeliverController@saveDocId')->name('deliver.saveDocId');
     });
     Route::resource('products','Pharmacies\ProductController');
 

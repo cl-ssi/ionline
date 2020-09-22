@@ -499,11 +499,12 @@
             </td>
             <td rowspan="2" class="align-middle">{{ $data6['ponderacion'] }}%</td>
             <td rowspan="2" class="align-middle">
-              @if($data6['cumplimiento'] <= ($data6['meta_nacional']-5) AND $data6['cumplimiento'] != 0)
-                100%
+              <!-- data6_hosp['cumplimiento'] <= data6_hosp['meta_nacional']-5) AND data6_hosp['cumplimiento'] != 0 -->
+              @if($data6['cumplimiento'] >= 5 AND $data6['cumplimiento'] != 0)
+                <p class="text-success">100%</p>
                 <small><br>{{ $data6['cumplimiento'] }}%</small>
               @else
-                0%
+                <p class="text-danger">0%</p>
                 <small><br>{{ $data6['cumplimiento'] }}%</small>
               @endif
             </td>

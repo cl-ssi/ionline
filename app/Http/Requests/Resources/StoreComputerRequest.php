@@ -34,7 +34,7 @@ class StoreComputerRequest extends FormRequest
     {
         return [
             'mac_address.unique'            => 'Dirección MAC ya está ingresada.',
-            'mac_address-required'          => 'Dirección MAC requerida.'
+            'mac_address.required'          => 'Dirección MAC requerida.'
         ];
     }
 

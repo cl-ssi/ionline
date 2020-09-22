@@ -17,6 +17,13 @@
                     </a>
                 </li>
 
+                <!--<li class="nav-item  ">
+                    <a class="nav-link" href="{{ route('programmings.index') }}">
+                        <i class="fas fa-address-book"></i> Programación APS
+                    </a>
+                </li>-->
+               
+
                 <li class="nav-item dropdown {{ active('indicators*') }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -169,9 +176,22 @@
                             href="{{ route('resources.telephone.index') }}">
                             <i class="fas fa-fax fa-fw"></i> Teléfonos Fijos
                         </a>
+
+                        <a class="dropdown-item {{ active('resources.mobile.*') }}"
+                            href="{{ route('resources.mobile.index') }}">
+                            <i class="fas fa-mobile-alt fa-fw"></i> Teléfonos Móviles
+                        </a>                        
+
+                        <a class="dropdown-item {{ active('resources.wingle.*') }}"
+                            href="{{ route('resources.wingle.index') }}">
+                            <i class="fas fa-wifi fa-fw"></i> Banda Ancha Móvil
+                        </a>
+
                     </div>
                 </li>
                 @endcan
+
+                
             </ul>
 
             <!-- Right Side Of Navbar -->

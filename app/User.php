@@ -55,6 +55,10 @@ class User extends Authenticatable
         return $this->belongsToMany('\App\Resources\Printer', 'res_printer_user')->withTimestamps();
     }
 
+    public function mobile() {
+        return $this->hasOne('\App\Resources\Mobile');
+    }
+
 
     public function scopeSearch($query, $name) {
         if($name != "") {

@@ -37,11 +37,11 @@
         <div class="form-group col-2">
             <label for="forType">Tipo*</label>
             <select name="type" id="formType" class="form-control" required>
-                <option value="Memo">Memo</option>
-                <option value="Ordinario">Ordinario</option>
-                <option value="Reservado">Reservado</option>
-                <option value="Circular">Circular</option>
-                <option value="Acta de recepción">Acta de recepción</option>
+                <option value="Memo" @if($document->type == 'Memo') selected @endif>Memo</option>
+                <option value="Ordinario" @if($document->type == 'Ordinario') selected @endif>Ordinario</option>
+                <option value="Reservado" @if($document->type == 'Reservado') selected @endif>Reservado</option>
+                <option value="Circular" @if($document->type == 'Circular') selected @endif>Circular</option>
+                <option value="Acta de recepción" @if($document->type == 'Acta de recepción') selected @endif>Acta de recepción</option>
             </select>
         </div>
         <div class="form-group col">
@@ -90,7 +90,7 @@
 
     <div class="form-group pt-1" style="width: 940px;">
         <label for="contenido">Contenido*</label>
-        <textarea class="form-control" id="contenido" rows="18" name="content">{{ $document->content }}</textarea>
+        <textarea class="form-control" id="contenido" rows="18" name="content">{!! $document->content !!}</textarea>
     </div>
 
     <div class="form-row">
