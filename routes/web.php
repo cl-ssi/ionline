@@ -107,6 +107,10 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('/createWordRes/{agreement}','Agreements\WordTestController@createResWordDocx')->name('createWordRes');
 });
 
+Route::resource('programmings','Programmings\ProgrammingController')->middleware('auth');
+Route::resource('professionals','Programmings\ProfessionalController')->middleware('auth');
+
+
 Route::resource('agreements','Agreements\AgreementController')->middleware('auth');
 
 
@@ -368,7 +372,7 @@ Route::prefix('indicators')->as('indicators.')->group(function(){
         });
         Route::prefix('2020')->as('2020.')->group(function(){
             Route::get('/{commune}','Indicators\_2020\ProgramApsValueController@index')->name('index');
-            Route::get('/create','Indicators\_2020\ProgramApsValueController@create')->name('create')->middleware('auth');
+            Route::get('/{commune}/create','Indicators\_2020\ProgramApsValueController@create')->name('create')->middleware('auth');
             Route::post('/','Indicators\_2020\ProgramApsValueController@store')->name('store')->middleware('auth');
             Route::get('/{glosa}/{commune}/edit','Indicators\_2020\ProgramApsValueController@edit')->name('edit')->middleware('auth');
             Route::put('/{programApsValue}','Indicators\_2020\ProgramApsValueController@update')->name('update')->middleware('auth');
@@ -558,6 +562,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
         Route::get('transfer/{establishment}/auth', 'Pharmacies\TransferController@auth')->name('transfer.auth');
         Route::resource('deliver','Pharmacies\DeliverController');
         Route::put('deliver/{deliver}/confirm', 'Pharmacies\DeliverController@confirm')->name('deliver.confirm');
+        Route::put('deliver/{deliver}/saveDocId', 'Pharmacies\DeliverController@saveDocId')->name('deliver.saveDocId');
     });
     Route::resource('products','Pharmacies\ProductController');
 

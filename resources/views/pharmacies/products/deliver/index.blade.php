@@ -6,7 +6,19 @@
 
 @include('pharmacies.nav')
 
-<h3>Listado de Entregas</h3>
+<h3>Listado de Entregas 
+	@canany(['Pharmacy: transfer view ortesis'])
+	por 
+	<form method="GET" action="{{route('pharmacies.products.deliver.index')}}" class="d-inline">
+	<select name="filter" onchange="this.form.submit()" class="selectpicker establishment" data-live-search="true" data-width="fit" data-style="btn btn-link">
+		<option value=" ">TODOS</option>
+		@foreach ($establishments as $establishment)
+		<option value="{{$establishment->id}}" {{$establishment->id == $filter ? 'selected' : ''}}>{{$establishment->name}}</option>
+		@endforeach
+	</select>
+	</form>
+	@endcan
+</h3>
 <div class="mb-3">
 	@cannot(['Pharmacy: transfer view ortesis'])
 	<a class="btn btn-primary"
@@ -22,7 +34,7 @@
 @cannot(['Pharmacy: transfer view ortesis'])
 <div class="row">
 	<div class="form-group col">
-		<h5 class="sub-header">Búsqueda por {{$establishment->name}}</h5>
+		<h5 class="sub-header">Búsqueda por {{$filter->name}}</h5>
 		<div class="table-responsive">
 			<table class="table table-hover table-sm" id="tabla_stock">
 				<thead>
@@ -76,7 +88,8 @@
 				<th scope="col" align="left">Médico</th>
 				<th scope="col" align="left">Folio</th>
 				<th scope="col" align="left">Observaciones</th>
-				<th scope="col" colspan="2" align="left">Acciones</th>
+				@canany(['Pharmacy: transfer view ortesis']) <th nowrap scope="col" width="100" align="left">N° interno</th> @endcan
+				<th scope="col" align="left">Acciones</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -109,10 +122,29 @@
 							<button type="button" class="btn btn-outline-danger btn-sm" aria-pressed="false" data-toggle="tooltip" data-placement="top" title="No hay stock para entrega"><i class="fas fa-times"></i></button>
 						@endif
 					@endforeach
+					@if($delivery->document != null)
+					<a href="{{ route('documents.show', $delivery->document->id) }}" class="btn btn-sm btn-outline-info" target="_blank" data-toggle="tooltip" data-placement="top" title="Memo de respaldo stock para esta entrega"><i class="fas fa-file"></i></a>
+					@endif
 				</td>
 				@endcan
 				@canany(['Pharmacy: transfer view ortesis'])
-				<td>
+				<td align="right">
+					@if($delivery->document != null)
+					<a href="{{ route('documents.show', $delivery->document->id) }}" class="btn btn-sm btn-outline-info" target="_blank"><i class="fas fa-file"></i></a>
+					@else
+				<form method="POST" action="{{ route('pharmacies.products.deliver.saveDocId', $delivery) }}" class="d-inline">
+					@csrf
+					@method('PUT')
+					<div class="input-group input-group-sm mb-5">
+						<input type="text" class="form-control" name="document_id" aria-describedby="button-addon2">
+						<div class="input-group-append">
+							<button class="btn btn-outline-info" type="submit" id="button-addon2"><i class="fas fa-save"></i></button>
+						</div>
+					</div>
+				</form>
+				@endif
+				</td>
+				<td nowrap>
 					<a href="#" class="btn btn-outline-info btn-sm popover-item" id="{{$delivery->id}}" rel="popover" class="popover-item"><i class="fas fa-eye"></i></a>
 					<div class="popover-list-content" style="display:none;">
 						<ul class="list-group list-group-flush">
@@ -136,6 +168,13 @@
 							@endforeach--}}
 						</ul>
 					</div>
+					<form method="POST" action="{{ route('pharmacies.products.deliver.destroy', $delivery) }}" class="d-inline">
+			            @csrf
+			            @method('DELETE')
+						<button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro de eliminar la información?');">
+							<span class="fas fa-trash-alt" aria-hidden="true"></span>
+						</button>
+					</form>
 				</td>
 				@endcan
 			</tr>
@@ -146,7 +185,7 @@
 	</table>
 </div>
 
-{{ $pending_deliveries->links() }}
+{{ $pending_deliveries->appends(Request::input())->links() }}
 
 <h3>Entregas confirmadas</h3>
 <p><button type="button" class="btn btn-outline-success" href="" onclick="tableToExcel('tabla_confirmed_deliveries', 'Entregas confirmadas')">
@@ -193,7 +232,7 @@
 	</table>
 </div>
 
-{{ $confirmed_deliveries->links() }}
+{{ $confirmed_deliveries->appends(Request::input())->links() }}
 
 @endsection
 

@@ -4,6 +4,7 @@
         {{-- No mostraré el breacrumb --}}
         {{-- FIXME: ver como mostrar el breadcrumb --}}
         @if(collect(request()->segments())->count() <= 5)
+            
 
 
             @foreach(collect(request()->segments()) as $segment)
@@ -11,8 +12,8 @@
                 <li class="breadcrumb-item" @if($loop->last) active @endif>
                     @php $path[] = $segment; @endphp
 
-                    @if(!$loop->last)
-                        <a href="{{ route(implode('.',$path).'.index', $id ?? '') }}">
+                    @if(!$loop->last && !in_array($segment, array(1,2,3,4,5,6,7,8)))
+                        <a href="{{ route(implode('.',$path).'.index', $id ?? '')}}">
                     @endif
 
 
