@@ -10,7 +10,7 @@ class ProfessionalController extends Controller
 {
     public function index()
     {
-        $professionals = Professional::All()->SortBy('name');
+        $professionals = Professional::All()->SortBy('id');
         return view('programmings/professionals/index')->withProfessionals($professionals);
     }
 }

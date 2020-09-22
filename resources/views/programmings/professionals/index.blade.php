@@ -11,9 +11,9 @@
 <table class="table table-sm table-hover">
     <thead>
         <tr class="small">
-            <th>Id</th>
-            <th>Nombre</th>
-            <th>Alias</th>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>ALIAS</th>
         </tr>
     </thead>
     <tbody>

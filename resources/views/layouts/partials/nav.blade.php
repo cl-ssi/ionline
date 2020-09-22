@@ -17,11 +17,11 @@
                     </a>
                 </li>
 
-                <li class="nav-item  ">
+                <!--<li class="nav-item  ">
                     <a class="nav-link" href="{{ route('programmings.index') }}">
                         <i class="fas fa-address-book"></i> Programación APS
                     </a>
-                </li>
+                </li>-->
                
 
                 <li class="nav-item dropdown {{ active('indicators*') }}">
