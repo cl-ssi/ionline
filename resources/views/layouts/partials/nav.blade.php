@@ -22,8 +22,8 @@
                         <i class="fas fa-address-book"></i> Programación APS
                     </a>
                 </li>-->
-               
 
+<!--
                 <li class="nav-item dropdown {{ active('indicators*') }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -47,7 +47,7 @@
                         @endauth--}}
                     </div>
                 </li>
-
+-->
                 @auth
                 <li class="nav-item dropdown {{ active(['documents.*','quality_aps.*','health_plan.*']) }}">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -180,7 +180,7 @@
                         <a class="dropdown-item {{ active('resources.mobile.*') }}"
                             href="{{ route('resources.mobile.index') }}">
                             <i class="fas fa-mobile-alt fa-fw"></i> Teléfonos Móviles
-                        </a>                        
+                        </a>
 
                         <a class="dropdown-item {{ active('resources.wingle.*') }}"
                             href="{{ route('resources.wingle.index') }}">
@@ -191,7 +191,7 @@
                 </li>
                 @endcan
 
-                
+
             </ul>
 
             <!-- Right Side Of Navbar -->
