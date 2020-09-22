@@ -45,7 +45,8 @@ class ProgramApsValueController extends Controller
             $data[$comuna->name][$glosa->numero]['observadoAnterior'] = '';
             // $data[$comuna->name][$glosa->numero]['rendimientoProfesional'] = '';
             $data[$comuna->name][$glosa->numero]['observaciones'] = '';
-            $data[$comuna->name][$glosa->numero]['ct_marzo'] = '';
+            for($mes = 1; $mes < 12; $mes++) $data[$comuna->name][$glosa->numero]['numeradores'][$mes] = '';
+            $data[$comuna->name][$glosa->numero]['ct_marzo'] = 0;
             $data[$comuna->name][$glosa->numero]['porc_marzo'] = '';
         }
 
@@ -132,18 +133,19 @@ class ProgramApsValueController extends Controller
         /* Obtener los valores por cada uno de los indicadores */
         /* 1 */
         $query ='SELECT
-	               IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
-                   SUM(COALESCE(Col06,0) + COALESCE(Col08,0) + COALESCE(Col10,0)) AS total FROM 2020rems r
+	               IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
+                   SUM(COALESCE(Col06,0) + COALESCE(Col08,0) + COALESCE(Col10,0)) AS numerador FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (02010201)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 '. $filter_commune_reyno . ' 
-                GROUP BY NombreComuna ORDER BY NombreComuna';
+                GROUP BY NombreComuna, mes ORDER BY NombreComuna, mes';
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][1]['ct_marzo'] = $cantidad->total;
+            $data[$cantidad->NombreComuna][1]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+            $data[$cantidad->NombreComuna][1]['ct_marzo'] += $cantidad->numerador;
         }
 
         // $query ='SELECT
@@ -168,18 +170,19 @@ class ProgramApsValueController extends Controller
 
         /* 2 */
         $query ='SELECT
-                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
-                    SUM(COALESCE(Col06,0) + COALESCE(Col07,0)) AS total FROM 2020rems r
+                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
+                    SUM(COALESCE(Col06,0) + COALESCE(Col07,0)) AS numerador FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (02010320, 05225303, 02010321, 02010322)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 '. $filter_commune_reyno . ' 
-                GROUP BY NombreComuna ORDER BY NombreComuna';
+                GROUP BY NombreComuna, mes ORDER BY NombreComuna, mes';
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][2]['ct_marzo'] = $cantidad->total;
+            $data[$cantidad->NombreComuna][2]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+            $data[$cantidad->NombreComuna][2]['ct_marzo'] += $cantidad->numerador;
         }
 
         // $query ='SELECT
@@ -203,18 +206,19 @@ class ProgramApsValueController extends Controller
 
         /* 3 */
         $query ='SELECT
-                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
-                    SUM(COALESCE(Col08,0) + COALESCE(Col09,0) + COALESCE(Col10,0) + COALESCE(Col11,0)) AS total FROM 2020rems r
+                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
+                    SUM(COALESCE(Col08,0) + COALESCE(Col09,0) + COALESCE(Col10,0) + COALESCE(Col11,0)) AS numerador FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (02010320, 05225303, 02010321, 02010322)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)'
                 . $filter_commune_reyno . ' 
-                GROUP BY NombreComuna ORDER BY NombreComuna';
+                GROUP BY NombreComuna, mes ORDER BY NombreComuna, mes';
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][3]['ct_marzo'] = $cantidad->total;
+            $data[$cantidad->NombreComuna][3]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+            $data[$cantidad->NombreComuna][3]['ct_marzo'] += $cantidad->numerador;
         }
 
         // $query ='SELECT
@@ -238,18 +242,19 @@ class ProgramApsValueController extends Controller
 
         /* 4 */
         $query ='SELECT
-                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
-                    SUM(COALESCE(Col12,0) + COALESCE(Col13,0)) AS total FROM 2020rems r
+                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
+                    SUM(COALESCE(Col12,0) + COALESCE(Col13,0)) AS numerador FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (02010320, 05225303, 02010321, 02010322)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
                 . $filter_commune_reyno . ' 
-                GROUP BY NombreComuna ORDER BY NombreComuna';
+                GROUP BY NombreComuna, mes ORDER BY NombreComuna, mes';
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][4]['ct_marzo'] = $cantidad->total;
+            $data[$cantidad->NombreComuna][4]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+            $data[$cantidad->NombreComuna][4]['ct_marzo'] += $cantidad->numerador;
         }
 
         // $query ='SELECT
@@ -273,7 +278,7 @@ class ProgramApsValueController extends Controller
         /* 5 */
         // REM A04
         $query ='SELECT
-                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
+                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
                     SUM(
                         COALESCE(Col04,0) +
                         COALESCE(Col05,0) +
@@ -281,7 +286,7 @@ class ProgramApsValueController extends Controller
                         COALESCE(Col07,0) +
                         COALESCE(Col08,0) +
                         COALESCE(Col09,0)
-                    ) AS total FROM 2020rems r
+                    ) AS numerador FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (
                     3020101,
@@ -301,38 +306,39 @@ class ProgramApsValueController extends Controller
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
                 . $filter_commune_reyno . ' 
-                GROUP BY NombreComuna ORDER BY NombreComuna';
+                GROUP BY NombreComuna, mes ORDER BY NombreComuna, mes';
         $cantidades = DB::connection('mysql_rem')->select($query);
         
-
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][5]['ct_marzo'] = $cantidad->total;
+            $data[$cantidad->NombreComuna][5]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+            $data[$cantidad->NombreComuna][5]['ct_marzo'] += $cantidad->numerador;
         }
 
         // REM A08
         $query ='SELECT
-                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
+                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
                     SUM(
                         COALESCE(Col04,0) +
                         COALESCE(Col05,0) +
                         COALESCE(Col06,0) +
                         COALESCE(Col07,0)
-                    ) AS total FROM 2020rems r
+                    ) AS numerador FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (08220001)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
                 . $filter_commune_reyno . ' 
-                GROUP BY NombreComuna ORDER BY NombreComuna';
+                GROUP BY NombreComuna, mes ORDER BY NombreComuna, mes';
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][5]['ct_marzo'] += $cantidad->total;
+            $data[$cantidad->NombreComuna][5]['numeradores'][$cantidad->mes] += $cantidad->numerador;
+            $data[$cantidad->NombreComuna][5]['ct_marzo'] += $cantidad->numerador;
         }
 
         // REM A23
         $query ='SELECT
-                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
+                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
                     SUM(
                         COALESCE(Col04,0) +
                         COALESCE(Col05,0) +
@@ -340,17 +346,18 @@ class ProgramApsValueController extends Controller
                         COALESCE(Col07,0) +
                         COALESCE(Col08,0) +
                         COALESCE(Col09,0)
-                    ) AS total FROM 2020rems r
+                    ) AS numerador FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (23080200)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
                 . $filter_commune_reyno . ' 
-                GROUP BY NombreComuna ORDER BY NombreComuna';
+                GROUP BY NombreComuna, mes ORDER BY NombreComuna, mes';
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][5]['ct_marzo'] += $cantidad->total;
+            $data[$cantidad->NombreComuna][5]['numeradores'][$cantidad->mes] += $cantidad->numerador;
+            $data[$cantidad->NombreComuna][5]['ct_marzo'] += $cantidad->numerador;
         }
 
         // $query ='SELECT
@@ -373,21 +380,22 @@ class ProgramApsValueController extends Controller
 
         /* 6 */
         $query ='SELECT
-                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
+                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
                     SUM(COALESCE(Col04,0) + COALESCE(Col05,0) + COALESCE(Col06,0) +
                         COALESCE(Col07,0) + COALESCE(Col08,0) + COALESCE(Col09,0) +
                         COALESCE(Col10,0) + COALESCE(Col11,0))
-                        AS total FROM 2020rems r
+                        AS numerador FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (05225304, 02010420, 05225305, 03500366, 05225306, 02010421, 02010422)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
                 . $filter_commune_reyno . ' 
-                GROUP BY NombreComuna ORDER BY NombreComuna';
+                GROUP BY NombreComuna, mes ORDER BY NombreComuna, mes';
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][6]['ct_marzo'] = $cantidad->total;
+            $data[$cantidad->NombreComuna][6]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+            $data[$cantidad->NombreComuna][6]['ct_marzo'] += $cantidad->numerador;
         }
 
         // $query ='SELECT
@@ -410,18 +418,19 @@ class ProgramApsValueController extends Controller
 
         /* 7 */
         $query ='SELECT
-                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
-                    SUM(COALESCE(Col12,0) + COALESCE(Col13,0)) AS total FROM 2020rems r
+                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
+                    SUM(COALESCE(Col12,0) + COALESCE(Col13,0)) AS numerador FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (05225304, 02010420, 05225305, 03500366,03500400, 03500401, 05225306, 02010421, 02010422)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
                 . $filter_commune_reyno . ' 
-                GROUP BY NombreComuna ORDER BY NombreComuna';
+                GROUP BY NombreComuna, mes ORDER BY NombreComuna, mes';
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][7]['ct_marzo'] = $cantidad->total;
+            $data[$cantidad->NombreComuna][7]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+            $data[$cantidad->NombreComuna][7]['ct_marzo'] += $cantidad->numerador;
         }
 
         // $query ='SELECT
@@ -444,21 +453,22 @@ class ProgramApsValueController extends Controller
 
         /* 8 */
         $query ='SELECT
-                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
+                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
                     SUM(COALESCE(Col04,0) + COALESCE(Col05,0) + COALESCE(Col06,0) +
                         COALESCE(Col07,0) + COALESCE(Col08,0) + COALESCE(Col09,0) +
                         COALESCE(Col10,0) + COALESCE(Col11,0) + COALESCE(Col12,0) +
-                        COALESCE(Col13,0)) AS total FROM 2020rems r
+                        COALESCE(Col13,0)) AS numerador FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (23080300, 23080400, 23080500)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
                 . $filter_commune_reyno . ' 
-                GROUP BY NombreComuna ORDER BY NombreComuna';
+                GROUP BY NombreComuna, mes ORDER BY NombreComuna, mes';
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][8]['ct_marzo'] = $cantidad->total;
+            $data[$cantidad->NombreComuna][8]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+            $data[$cantidad->NombreComuna][8]['ct_marzo'] += $cantidad->numerador;
         }
 
         // $query ='SELECT
@@ -481,21 +491,22 @@ class ProgramApsValueController extends Controller
 
         /* 9 */
         $query ='SELECT
-                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
+                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
                     SUM(COALESCE(Col04,0) + COALESCE(Col05,0) + COALESCE(Col06,0) +
                         COALESCE(Col07,0) + COALESCE(Col08,0) + COALESCE(Col09,0) +
                         COALESCE(Col10,0) + COALESCE(Col11,0) + COALESCE(Col12,0) +
-                        COALESCE(Col13,0)) AS total FROM 2020rems r
+                        COALESCE(Col13,0)) AS numerador FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (23030100, 23030300, 23030400, 23030500, 23042000, 23090410, "23042000A", 23042100, 23042200, 23042300, 23042400)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
                 . $filter_commune_reyno . ' 
-                GROUP BY NombreComuna ORDER BY NombreComuna';
+                GROUP BY NombreComuna, mes ORDER BY NombreComuna, mes';
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][9]['ct_marzo'] = $cantidad->total;
+            $data[$cantidad->NombreComuna][9]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+            $data[$cantidad->NombreComuna][9]['ct_marzo'] += $cantidad->numerador;
         }
 
         // $query ='SELECT
@@ -518,18 +529,19 @@ class ProgramApsValueController extends Controller
 
         /* 10 */
         $query ='SELECT
-                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
-                    SUM(COALESCE(Col01,0) + COALESCE(Col04,0)) AS total FROM 2020rems r
+                    IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
+                    SUM(COALESCE(Col01,0) + COALESCE(Col04,0)) AS numerador FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (01030500, 01030600, 01030700, 01030800)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
                 . $filter_commune_reyno . ' 
-                GROUP BY NombreComuna ORDER BY NombreComuna';
+                GROUP BY NombreComuna, mes ORDER BY NombreComuna, mes';
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][10]['ct_marzo'] = $cantidad->total;
+            $data[$cantidad->NombreComuna][10]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+            $data[$cantidad->NombreComuna][10]['ct_marzo'] += $cantidad->numerador;
         }
 
         // foreach($poblaciones_10a_a_19a as $poblacion) {
