@@ -31,6 +31,45 @@ class Printer extends Model
       }
   }
 
+  public function tipo(){
+        switch ($this->type) {
+          case 'printer':
+            $valor='Impresora';
+            break;
+          case 'scanner':
+            $valor='Escáner';
+            break;
+          case 'plotter':
+            $valor='Plóter';
+            break;
+          case 'other':
+            $valor='Otra Impresora';
+            break;
+          default:
+            $valor='';
+            break;
+        }
+        return $valor;
+      }
+
+      public function tipoActivo(){
+            switch ($this->active_type) {
+              case 'leased':
+                $valor='Arrendado';
+                break;
+              case 'own':
+                $valor='Propio';
+                break;
+              case 'user':
+                $valor='Usuario';
+                break;
+              default:
+                $valor='';
+                break;
+            }
+            return $valor;
+          }
+
   use SoftDeletes;
   /**
    * The attributes that should be mutated to dates.

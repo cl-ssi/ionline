@@ -32,7 +32,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 //Route::get('foo/oscar', function () {return 'Hello World';})->name('lanterna');
 Route::prefix('resources')->name('resources.')->namespace('Resources')->middleware('auth')->group(function(){
-    //Route::get('report','ComputerController@report')->name('report');
+    Route::get('report','ReportController@report')->name('report');
     Route::prefix('telephones')->name('telephone.')->group(function(){
         Route::get('/', 'TelephoneController@index')->name('index');
         Route::get('create', 'TelephoneController@create')->name('create');
@@ -72,7 +72,7 @@ Route::prefix('resources')->name('resources.')->namespace('Resources')->middlewa
         Route::get('{mobile}/edit', 'MobileController@edit')->name('edit');
         Route::put('{mobile}/update','MobileController@update')->name('update');
         Route::delete('{mobile}/destroy','MobileController@destroy')->name('destroy');
-    });    
+    });
 });
 
 Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(function(){

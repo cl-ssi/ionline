@@ -31,6 +31,45 @@ class Computer extends Model
         }
     }
 
+    public function tipo(){
+          switch ($this->type) {
+            case 'desktop':
+              $valor='PC Escritorio';
+              break;
+            case 'all-in-one':
+              $valor='PC all-in-one';
+              break;
+            case 'notebook':
+              $valor='PC Notebook';
+              break;
+            case 'other':
+              $valor='PC Otro';
+              break;
+            default:
+              $valor='';
+              break;
+          }
+          return $valor;
+        }
+
+        public function tipoActivo(){
+              switch ($this->active_type) {
+                case 'leased':
+                  $valor='Arrendado';
+                  break;
+                case 'own':
+                  $valor='Propio';
+                  break;
+                case 'user':
+                  $valor='Usuario';
+                  break;
+                default:
+                  $valor='';
+                  break;
+              }
+              return $valor;
+            }
+
     use SoftDeletes;
     /**
      * The attributes that should be mutated to dates.

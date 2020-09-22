@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Resources;
 
 use App\Resources\Computer;
+use App\Resources\Printer;
 use App\User;
 use App\Parameters\Place;
+use App\Parameters\Location;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Resources\StoreComputerRequest;
@@ -103,4 +105,5 @@ class ComputerController extends Controller
       session()->flash('success', 'El computador '.$computer->brand.' ha sido eliminado');
       return redirect()->route('resources.computer.index');
     }
+
 }
