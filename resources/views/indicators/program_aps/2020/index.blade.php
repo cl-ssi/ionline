@@ -8,7 +8,7 @@
 
 <h3 class="mb-3">Programacion APS</h3>
 
-<a href="{{ route('indicators.program_aps.2020.create', $id) }}" class="btn btn-primary">Agregar valor</a>
+{{--<a href="{{ route('indicators.program_aps.2020.create', $id) }}" class="btn btn-primary">Agregar valor</a>--}}
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs d-print-none">
@@ -42,12 +42,12 @@
                         <th>Nivel</th>
                         <th>Prestaciones</th>
                         <th>Población a atender</th>
-                        <th nowrap>N° Pobl.</th>
+                        <!-- <th nowrap>N° Pobl.</th>
                         <th nowrap>% Cob.</th>
-                        <th>Conc.</th>
-                        <th data-toggle="tooltip" data-placement="top" title="N° Poblacion * Concentración * Cobertura">Actividades Programadas</th>
-                        <th>Prof.</th>
-                        <th>Rend.</th>
+                        <th>Conc.</th> -->
+                        <th>Actividades Programadas</th>
+                        <!-- <th>Prof.</th>
+                        <th>Rend.</th> -->
                         <th>Verificación</th>
                         <th>Obs.</th>
                         <th nowrap>Ene-Nov</th>
@@ -60,24 +60,24 @@
                 @foreach($glosas as $index => $glosa)
                     <tr>
                         <td class="text-right">
-                            @auth
+                            {{--@auth
                             <a href="{{ route('indicators.program_aps.2020.edit', [$glosa->id,$commune->id]) }}">
-                            @endauth
+                            @endauth --}}
                             {{ $glosa->numero }}
-                            @auth
+                            {{--@auth
                             </a>
-                            @endauth
+                            @endauth--}}
                         </td>
                         <td>{{ $glosa->nivel }}</td>
                         <td>{{ $glosa->prestacion }}</td>
                         <td>{{ $glosa->poblacion }}</td>
-                        <td class="text-right">{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['poblacion'] }}</td>
+                        {{--<td class="text-right">{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['poblacion'] }}</td>
                         <td class="text-right">{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['cobertura'] }}%</td>
-                        <td class="text-right">{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['concentracion'] }}</td>
+                        <td class="text-right">{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['concentracion'] }}</td> --}}
                         <td class="text-right">{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['actividadesProgramadas'] }}</td>
-                        <td>{{ $glosa->profesional }}</td>
-                        <!--td class="text-right">{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['observadoAnterior'] }}</td-->
-                        <td class="text-right">{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['rendimientoProfesional'] }}</td>
+                        {{-- <td>{{ $glosa->profesional }}</td>
+                        <td class="text-right">{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['observadoAnterior'] }}</td>
+                        <td class="text-right">{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['rendimientoProfesional'] }}</td> --}}
                         <td>{{ $glosa->verificacion }}</td>
                         <td>{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['observaciones'] }}</td>
                         <td class="text-right">{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['ct_marzo'] }}</td>
