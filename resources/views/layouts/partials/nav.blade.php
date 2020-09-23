@@ -23,7 +23,7 @@
                     </a>
                 </li>-->
 
-<!--
+
                 <li class="nav-item dropdown {{ active('indicators*') }}">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -47,7 +47,7 @@
                         @endauth--}}
                     </div>
                 </li>
--->
+
                 @auth
                 <li class="nav-item dropdown {{ active(['documents.*','quality_aps.*','health_plan.*']) }}">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
