@@ -73,7 +73,7 @@
 		Descargar <i class="fas fa-download"></i>
 	</button></p>
 <div class="table-responsive">
-	<table class="table table-striped table-sm" id="tabla_pending_deliveries">
+	<table class="table table-striped table-sm @canany(['Pharmacy: transfer view ortesis']) small @endcan" id="tabla_pending_deliveries">
 		<thead>
 			<tr>
 				<th scope="col" align="left">Origen solicitud</th>
