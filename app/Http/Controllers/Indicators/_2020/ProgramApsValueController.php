@@ -1003,7 +1003,12 @@ class ProgramApsValueController extends Controller
         /* 24 */
         $query ='SELECT
                     IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
-                    SUM(COALESCE(Col01,0)) AS numerador FROM 2020rems r
+                    SUM(COALESCE(Col06,0) + COALESCE(Col07,0) + COALESCE(Col08,0) + COALESCE(Col09,0) + COALESCE(Col10,0) + COALESCE(Col11,0) +
+                        COALESCE(Col12,0) + COALESCE(Col13,0) + COALESCE(Col14,0) + COALESCE(Col15,0) + COALESCE(Col16,0) + COALESCE(Col17,0) + 
+                        COALESCE(Col18,0) + COALESCE(Col19,0) + COALESCE(Col20,0) + COALESCE(Col21,0) + COALESCE(Col22,0) + COALESCE(Col23,0) + 
+                        COALESCE(Col24,0) + COALESCE(Col25,0) + COALESCE(Col26,0) + COALESCE(Col27,0) + COALESCE(Col28,0) + COALESCE(Col29,0) + 
+                        COALESCE(Col30,0) + COALESCE(Col31,0) + COALESCE(Col32,0) + COALESCE(Col33,0) + COALESCE(Col34,0) + COALESCE(Col35,0) + 
+                        COALESCE(Col36,0) + COALESCE(Col37,0)) AS numerador FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (06902700)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
