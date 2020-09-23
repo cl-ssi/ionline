@@ -1935,15 +1935,16 @@ class ProgramApsValueController extends Controller
                     //         $data[$nombre_comuna][$glosa]['cobertura']/100;
                     // }
 
-                    if($data[$nombre_comuna][$glosa]['actividadesProgramadas'] AND
-                       $data[$nombre_comuna][$glosa]['ct_marzo'] ) {
+                    // if($data[$nombre_comuna][$glosa]['actividadesProgramadas'] AND
+                    //    $data[$nombre_comuna][$glosa]['ct_marzo'] ) {
+                    if($data[$nombre_comuna][$glosa]['actividadesProgramadas'] != 0)
 
                         $data[$nombre_comuna][$glosa]['porc_marzo'] =
                             number_format(
-                                $data[$nombre_comuna][$glosa]['ct_marzo'] /
-                                $data[$nombre_comuna][$glosa]['actividadesProgramadas']*100
+                                ($data[$nombre_comuna][$glosa]['ct_marzo'] /
+                                $data[$nombre_comuna][$glosa]['actividadesProgramadas'])*100
                             , 1, '.', '');
-		            }
+		            // }
                 // }
             }
         }
