@@ -1564,21 +1564,13 @@ class ProgramApsValueController extends Controller
         $data[$comuna->name][39]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 40 */
-        $query ='SELECT
-               IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
-               SUM(COALESCE(Col01,0)) AS numerador FROM 2020rems r
-                JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
-                WHERE CodigoPrestacion IN (03500361)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
-                AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
-                . $filter_commune_reyno . ' 
-                GROUP BY NombreComuna, mes ORDER BY NombreComuna, mes';
-        $cantidades = DB::connection('mysql_rem')->select($query);
+        $numeradores = ['IQUIQUE' => 2475, 'ALTO HOSPICIO' => 648, 'POZO ALMONTE' => 45, 'PICA' => 41, 
+                          'HUARA' => 113, 'CAMIÑA' => 24, 'COLCHANE' => 13, 'HECTOR REYNO' => 178];
+        
+        $data[$comuna->name][40]['ct_marzo'] = $numeradores[$comuna->name];
 
-        foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][40]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][40]['ct_marzo'] += $cantidad->numerador;
-        }
+        // mostrar nada en los meses
+        for($mes = 1; $mes <= $ultimo_rem; $mes++) $data[$comuna->name][40]['numeradores'][$mes] = null;
 
         // $query ='SELECT
         //             IF(COD_CENTRO = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
@@ -1914,6 +1906,8 @@ class ProgramApsValueController extends Controller
 
         // /* 51 */
         // //TODO: hacer las consultas para trazadora #51
+        // mostrar nada en los meses
+        for($mes = 1; $mes <= $ultimo_rem; $mes++) $data[$comuna->name][51]['numeradores'][$mes] = null;
 
         $denominadores = ['IQUIQUE' => 0, 'ALTO HOSPICIO' => 0, 'POZO ALMONTE' => 497, 'PICA' => 0, 
                           'HUARA' => 0, 'CAMIÑA' => 0, 'COLCHANE' => 62, 'HECTOR REYNO' => 0];
