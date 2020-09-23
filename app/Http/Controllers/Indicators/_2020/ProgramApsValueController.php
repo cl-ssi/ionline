@@ -619,7 +619,8 @@ class ProgramApsValueController extends Controller
                     IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
                     SUM(COALESCE(Col02,0) + COALESCE(Col03,0)) AS numerador FROM 2020rems r
                 JOIN 2020establecimientos e ON r.IdEstablecimiento = e.Codigo
-                WHERE CodigoPrestacion IN (01080011)
+                WHERE CodigoPrestacion IN (01080011, 05810443, 01080021, 01080022, 01080023, 01090060, 05970038, 05970039, 01080013, 01080014,
+                                           05970040, 05970041, "05050100A", 05970042, 05970043, 05970044, 05970045, 05970046, 05970047)
                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011) '
                 . $filter_commune_reyno . ' 
