@@ -19,6 +19,10 @@ class ProgramApsValueController extends Controller
      */
     public function index($id)
     {
+
+        $sql_ultimo_rem = "SELECT MAX(Mes) as ultimo_rem FROM 2020rems;";
+        $ultimo_rem = DB::connection('mysql_rem')->select($sql_ultimo_rem)[0]->ultimo_rem;
+
         $communes = Commune::All();
         $communes = $communes->each(function($item){
             $item->name = mb_strtoupper($item->name);
@@ -45,7 +49,7 @@ class ProgramApsValueController extends Controller
             $data[$comuna->name][$glosa->numero]['observadoAnterior'] = '';
             // $data[$comuna->name][$glosa->numero]['rendimientoProfesional'] = '';
             $data[$comuna->name][$glosa->numero]['observaciones'] = '';
-            for($mes = 1; $mes < 12; $mes++) $data[$comuna->name][$glosa->numero]['numeradores'][$mes] = null;
+            for($mes = 1; $mes < 12; $mes++) $data[$comuna->name][$glosa->numero]['numeradores'][$mes] = $mes <= $ultimo_rem ? 0 : null;
             $data[$comuna->name][$glosa->numero]['ct_marzo'] = null;
             $data[$comuna->name][$glosa->numero]['porc_marzo'] = '';
         }
@@ -1590,7 +1594,7 @@ class ProgramApsValueController extends Controller
         // }
 
         $denominadores = ['IQUIQUE' => 1959, 'ALTO HOSPICIO' => 655, 'POZO ALMONTE' => 129, 'PICA' => 71, 
-                          'HUARA' => 38, 'CAMIÑA' => 14, 'COLCHANE' => 21, 'HECTOR REYNO' => null];
+                          'HUARA' => 38, 'CAMIÑA' => 14, 'COLCHANE' => 21, 'HECTOR REYNO' => 155];
         
         $data[$comuna->name][40]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
