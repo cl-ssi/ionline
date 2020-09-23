@@ -89,7 +89,7 @@
                             <td class="text-right">{{$data[$commune->name][$glosa->numero]['numeradores'][$index]}}</td>
                         @endforeach
                         <td class="text-right">{{ $data[$commune->name][$glosa->numero]['ct_marzo'] }}</td>
-                        <td class="text-right">{{ $data[$commune->name][$glosa->numero]['porc_marzo'] }}%</td>
+                        <td class="text-right">{{ $data[$commune->name][$glosa->numero]['porc_marzo'] }}{{ $data[$commune->name][$glosa->numero]['porc_marzo'] ? '%' : '' }}</td>
                     </tr>
                 @endforeach
                 </tbody>
