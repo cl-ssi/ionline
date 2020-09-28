@@ -19,6 +19,7 @@ class ProgramApsValueController extends Controller
      */
     public function index($id)
     {
+        // return $id;
 
         $sql_ultimo_rem = "SELECT MAX(Mes) as ultimo_rem FROM 2020rems;";
         $ultimo_rem = DB::connection('mysql_rem')->select($sql_ultimo_rem)[0]->ultimo_rem;
@@ -39,19 +40,41 @@ class ProgramApsValueController extends Controller
         $glosas   = ProgramApsGlosa::where('periodo', 2020)->orderBy('numero')->get();
 
         /* Inicializar valores */
-        foreach($glosas as $glosa) {
-            // cambiar por $commune->name
-            $data[$comuna->name][$glosa->numero]['id'] = $glosa->id;
-            // $data[$comuna->name][$glosa->numero]['poblacion'] = '';
-            // $data[$comuna->name][$glosa->numero]['cobertura'] = '';
-            // $data[$comuna->name][$glosa->numero]['concentracion'] = null;
-            $data[$comuna->name][$glosa->numero]['actividadesProgramadas'] = null;
-            $data[$comuna->name][$glosa->numero]['observadoAnterior'] = '';
-            // $data[$comuna->name][$glosa->numero]['rendimientoProfesional'] = '';
-            $data[$comuna->name][$glosa->numero]['observaciones'] = '';
-            for($mes = 1; $mes < 12; $mes++) $data[$comuna->name][$glosa->numero]['numeradores'][$mes] = $mes <= $ultimo_rem ? 0 : null;
-            $data[$comuna->name][$glosa->numero]['ct_marzo'] = null;
-            $data[$comuna->name][$glosa->numero]['porc_marzo'] = '';
+        if($comuna == null){ //RESUMEN
+            foreach($glosas as $glosa) {
+                $data[$glosa->numero]['total_numerador'] = 0;
+                $data[$glosa->numero]['total_denominador'] = 0;
+                $data[$glosa->numero]['total_cobertura'] = null;
+            }
+
+            // foreach($communes as $commune)
+            //     foreach($glosas as $glosa) {
+            //         $data[$commune->name][$glosa->numero]['id'] = $glosa->id;
+            //         // $data[$commune->name][$glosa->numero]['poblacion'] = '';
+            //         // $data[$commune->name][$glosa->numero]['cobertura'] = '';
+            //         // $data[$commune->name][$glosa->numero]['concentracion'] = null;
+            //         $data[$commune->name][$glosa->numero]['actividadesProgramadas'] = null;
+            //         $data[$commune->name][$glosa->numero]['observadoAnterior'] = '';
+            //         // $data[$commune->name][$glosa->numero]['rendimientoProfesional'] = '';
+            //         $data[$commune->name][$glosa->numero]['observaciones'] = '';
+            //         for($mes = 1; $mes < 12; $mes++) $data[$commune->name][$glosa->numero]['numeradores'][$mes] = $mes <= $ultimo_rem ? 0 : null;
+            //         $data[$commune->name][$glosa->numero]['ct_marzo'] = null;
+            //         $data[$commune->name][$glosa->numero]['porc_marzo'] = '';
+            //     }
+        } else {
+            foreach($glosas as $glosa) {
+                $data[$comuna->name][$glosa->numero]['id'] = $glosa->id;
+                // $data[$comuna->name][$glosa->numero]['poblacion'] = '';
+                // $data[$comuna->name][$glosa->numero]['cobertura'] = '';
+                // $data[$comuna->name][$glosa->numero]['concentracion'] = null;
+                $data[$comuna->name][$glosa->numero]['actividadesProgramadas'] = null;
+                $data[$comuna->name][$glosa->numero]['observadoAnterior'] = '';
+                // $data[$comuna->name][$glosa->numero]['rendimientoProfesional'] = '';
+                $data[$comuna->name][$glosa->numero]['observaciones'] = '';
+                for($mes = 1; $mes < 12; $mes++) $data[$comuna->name][$glosa->numero]['numeradores'][$mes] = $mes <= $ultimo_rem ? 0 : null;
+                $data[$comuna->name][$glosa->numero]['ct_marzo'] = null;
+                $data[$comuna->name][$glosa->numero]['porc_marzo'] = '';
+            }
         }
 
         // $values = ProgramApsValue::with('glosa')->with('commune')->where(function ($query) { $query->where('periodo', 2020)->orderBy('numero');})->get();
@@ -80,7 +103,7 @@ class ProgramApsValueController extends Controller
         //     }
         // }
 
-        $filter_commune_reyno = ($comuna->id != 8 ? 'AND e.comuna LIKE "'.$comuna->name.'" AND e.Codigo != 102307' : 'AND e.Codigo = 102307');
+        $filter_commune_reyno = $comuna ? ($comuna->id != 8 ? 'AND e.comuna LIKE "'.$comuna->name.'" AND e.Codigo != 102307' : 'AND e.Codigo = 102307') : null;
 
         /* Poblaciones */
         // $query ='SELECT
@@ -148,8 +171,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][1]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][1]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[1]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][1]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][1]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -169,9 +196,12 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 1653, 'ALTO HOSPICIO' => 2125, 'POZO ALMONTE' => 397, 'PICA' => 150, 
                           'HUARA' => 168, 'CAMIÑA' => 246, 'COLCHANE' => 15, 'HECTOR REYNO' => 964];
+                          
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[1]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][1]['actividadesProgramadas'] = $denominadores[$comuna->name];
         
-        $data[$comuna->name][1]['actividadesProgramadas'] = $denominadores[$comuna->name];
-
         /* 2 */
         $query ='SELECT
                     IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
@@ -185,8 +215,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][2]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][2]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[2]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][2]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][2]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -206,8 +240,11 @@ class ProgramApsValueController extends Controller
         $denominadores = ['IQUIQUE' => 1653, 'ALTO HOSPICIO' => 787, 'POZO ALMONTE' => 132, 'PICA' => 51, 
                           'HUARA' => 18, 'CAMIÑA' => 60, 'COLCHANE' => 5, 'HECTOR REYNO' => 321];
         
-        $data[$comuna->name][2]['actividadesProgramadas'] = $denominadores[$comuna->name];
-
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[2]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][2]['actividadesProgramadas'] = $denominadores[$comuna->name];
+        
         /* 3 */
         $query ='SELECT
                     IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
@@ -221,8 +258,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][3]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][3]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[3]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][3]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][3]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -242,8 +283,11 @@ class ProgramApsValueController extends Controller
         $denominadores = ['IQUIQUE' => 1321, 'ALTO HOSPICIO' => 842, 'POZO ALMONTE' => 189, 'PICA' => 84, 
                           'HUARA' => 66, 'CAMIÑA' => 106, 'COLCHANE' => 5, 'HECTOR REYNO' => 251];
         
-        $data[$comuna->name][3]['actividadesProgramadas'] = $denominadores[$comuna->name];
-
+        if($comuna == null)
+        foreach($denominadores as $denominador) $data[3]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][3]['actividadesProgramadas'] = $denominadores[$comuna->name];
+            
         /* 4 */
         $query ='SELECT
                     IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
@@ -257,8 +301,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][4]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][4]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[4]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][4]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][4]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -277,7 +325,10 @@ class ProgramApsValueController extends Controller
         $denominadores = ['IQUIQUE' => 2251, 'ALTO HOSPICIO' => 765, 'POZO ALMONTE' => 198, 'PICA' => 84, 
                           'HUARA' => 48, 'CAMIÑA' => 72, 'COLCHANE' => 3, 'HECTOR REYNO' => 306];
         
-        $data[$comuna->name][4]['actividadesProgramadas'] = $denominadores[$comuna->name];
+        if($comuna == null)
+        foreach($denominadores as $denominador) $data[4]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][4]['actividadesProgramadas'] = $denominadores[$comuna->name];
         
         /* 5 */
         // REM A04
@@ -314,8 +365,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
         
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][5]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][5]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[5]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][5]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][5]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // REM A08
@@ -336,8 +391,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][5]['numeradores'][$cantidad->mes] += $cantidad->numerador;
-            $data[$cantidad->NombreComuna][5]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[5]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][5]['numeradores'][$cantidad->mes] += $cantidad->numerador;
+                $data[$cantidad->NombreComuna][5]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // REM A23
@@ -360,8 +419,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][5]['numeradores'][$cantidad->mes] += $cantidad->numerador;
-            $data[$cantidad->NombreComuna][5]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[5]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][5]['numeradores'][$cantidad->mes] += $cantidad->numerador;
+                $data[$cantidad->NombreComuna][5]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -380,8 +443,11 @@ class ProgramApsValueController extends Controller
         $denominadores = ['IQUIQUE' => 18982, 'ALTO HOSPICIO' => 12142, 'POZO ALMONTE' => 4800, 'PICA' => 6800, 
                           'HUARA' => 261, 'CAMIÑA' => 198, 'COLCHANE' => 104, 'HECTOR REYNO' => 2036];
         
-        $data[$comuna->name][5]['actividadesProgramadas'] = $denominadores[$comuna->name];
-
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[5]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][5]['actividadesProgramadas'] = $denominadores[$comuna->name];
+        
         /* 6 */
         $query ='SELECT
                     IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
@@ -398,8 +464,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][6]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][6]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[6]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][6]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][6]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -417,9 +487,12 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 146, 'ALTO HOSPICIO' => 204, 'POZO ALMONTE' => 78, 'PICA' => 20, 
                           'HUARA' => 96, 'CAMIÑA' => 3, 'COLCHANE' => 5, 'HECTOR REYNO' => 977];
-        
-        $data[$comuna->name][6]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[6]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][6]['actividadesProgramadas'] = $denominadores[$comuna->name];
+        
         /* 7 */
         $query ='SELECT
                     IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
@@ -433,8 +506,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][7]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][7]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[7]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][7]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][7]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -453,7 +530,10 @@ class ProgramApsValueController extends Controller
         $denominadores = ['IQUIQUE' => 249, 'ALTO HOSPICIO' => 109, 'POZO ALMONTE' => 14, 'PICA' => 50, 
                           'HUARA' => 140, 'CAMIÑA' => 1, 'COLCHANE' => 2, 'HECTOR REYNO' => 612];
         
-        $data[$comuna->name][7]['actividadesProgramadas'] = $denominadores[$comuna->name];
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[7]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][7]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 8 */
         $query ='SELECT
@@ -471,8 +551,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][8]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][8]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[8]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][8]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][8]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -490,9 +574,12 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 8, 'ALTO HOSPICIO' => 1240, 'POZO ALMONTE' => 994, 'PICA' => 49, 
                           'HUARA' => 390, 'CAMIÑA' => 16, 'COLCHANE' => 12, 'HECTOR REYNO' => 1168];
-        
-        $data[$comuna->name][8]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[8]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][8]['actividadesProgramadas'] = $denominadores[$comuna->name];
+        
         /* 9 */
         $query ='SELECT
                     IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
@@ -509,8 +596,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][9]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][9]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[9]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][9]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][9]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -528,8 +619,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 1, 'ALTO HOSPICIO' => 96, 'POZO ALMONTE' => 6, 'PICA' => 74, 
                           'HUARA' => 55, 'CAMIÑA' => 0, 'COLCHANE' => 10, 'HECTOR REYNO' => 423];
-        
-        $data[$comuna->name][9]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[9]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][9]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 10 */
         $query ='SELECT
@@ -544,8 +638,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][10]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][10]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[10]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][10]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][10]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_10a_a_19a as $poblacion) {
@@ -554,9 +652,12 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 4632, 'ALTO HOSPICIO' => 236, 'POZO ALMONTE' => 214, 'PICA' => 339, 
                           'HUARA' => 13, 'CAMIÑA' => 0, 'COLCHANE' => 47, 'HECTOR REYNO' => 50];
-        
-        $data[$comuna->name][10]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[10]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][10]['actividadesProgramadas'] = $denominadores[$comuna->name];
+        
         /* 11 */
         // REM A04
         $query ='SELECT
@@ -571,8 +672,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][11]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][11]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[11]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][11]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][11]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // REM A08
@@ -588,8 +693,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][11]['numeradores'][$cantidad->mes] += $cantidad->numerador;
-            $data[$cantidad->NombreComuna][11]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[11]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][11]['numeradores'][$cantidad->mes] += $cantidad->numerador;
+                $data[$cantidad->NombreComuna][11]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // REM A23
@@ -605,8 +714,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][11]['numeradores'][$cantidad->mes] += $cantidad->numerador;
-            $data[$cantidad->NombreComuna][11]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[11]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][11]['numeradores'][$cantidad->mes] += $cantidad->numerador;
+                $data[$cantidad->NombreComuna][11]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_10a_a_19a as $poblacion) {
@@ -615,8 +728,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 23158, 'ALTO HOSPICIO' => 1599, 'POZO ALMONTE' => 1938, 'PICA' => 299, 
                           'HUARA' => 366, 'CAMIÑA' => 11, 'COLCHANE' => 0, 'HECTOR REYNO' => 2521];
-        
-        $data[$comuna->name][11]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[11]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][11]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 12 */
         $query ='SELECT
@@ -632,8 +748,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][12]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][12]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[12]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][12]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][12]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_10a_a_19a as $poblacion) {
@@ -642,8 +762,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 0, 'ALTO HOSPICIO' => 160, 'POZO ALMONTE' => 621, 'PICA' => 134, 
                           'HUARA' => 25, 'CAMIÑA' => 55, 'COLCHANE' => 47, 'HECTOR REYNO' => 127];
-        
-        $data[$comuna->name][12]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[12]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][12]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 13 */
         $query ='SELECT
@@ -658,8 +781,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][13]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][13]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[13]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][13]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][13]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_10a_a_19a as $poblacion) {
@@ -668,9 +795,12 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 2316, 'ALTO HOSPICIO' => 1599, 'POZO ALMONTE' => 621, 'PICA' => 339, 
                           'HUARA' => 104, 'CAMIÑA' => 0, 'COLCHANE' => 47, 'HECTOR REYNO' => 127];
-        
-        $data[$comuna->name][13]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[13]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][13]['actividadesProgramadas'] = $denominadores[$comuna->name];
+        
         /* 14 */
         $query ='SELECT
                     IF(Codigo = 102307, "HECTOR REYNO", comuna) AS NombreComuna, mes,
@@ -684,8 +814,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][14]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][14]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[14]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][14]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][14]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_10a_a_19a as $poblacion) {
@@ -694,7 +828,10 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 2316, 'ALTO HOSPICIO' => 800, 'POZO ALMONTE' => 435, 'PICA' => 105, 
                           'HUARA' => 104, 'CAMIÑA' => 0, 'COLCHANE' => 47, 'HECTOR REYNO' => 76];
-        
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[14]['total_denominador'] += $denominador;
+        else
         $data[$comuna->name][14]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 15 */
@@ -710,8 +847,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][15]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][15]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[15]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][15]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][15]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_10a_a_19a as $poblacion) {
@@ -720,8 +861,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 2779, 'ALTO HOSPICIO' => 2393, 'POZO ALMONTE' => 1267, 'PICA' => 311, 
                           'HUARA' => 172, 'CAMIÑA' => 28, 'COLCHANE' => 45, 'HECTOR REYNO' => 3346];
-        
-        $data[$comuna->name][15]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[15]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][15]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 16 */
         $query ='SELECT
@@ -736,8 +880,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][16]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][16]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[16]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][16]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][16]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -756,8 +904,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 1653, 'ALTO HOSPICIO' => 891, 'POZO ALMONTE' => 132, 'PICA' => 55, 
                           'HUARA' => 32, 'CAMIÑA' => 13, 'COLCHANE' => 5, 'HECTOR REYNO' => 321];
-        
-        $data[$comuna->name][16]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[16]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][16]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 17 */
         $query ='SELECT
@@ -772,8 +923,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][17]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][17]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[17]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][17]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][17]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_20a_a_64a as $poblacion) {
@@ -782,8 +937,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 4512, 'ALTO HOSPICIO' => 30, 'POZO ALMONTE' => 32, 'PICA' => 4, 
                           'HUARA' => 0, 'CAMIÑA' => 2, 'COLCHANE' => 0, 'HECTOR REYNO' => 49];
-        
-        $data[$comuna->name][17]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[17]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][17]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 18 */
         $query ='SELECT
@@ -798,8 +956,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][18]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][18]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[18]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][18]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][18]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -817,8 +979,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 0, 'ALTO HOSPICIO' => 700, 'POZO ALMONTE' => 25, 'PICA' => 495, 
                           'HUARA' => 16, 'CAMIÑA' => 0, 'COLCHANE' => 0, 'HECTOR REYNO' => 431];
-        
-        $data[$comuna->name][18]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[18]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][18]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 19 */
         $query ='SELECT
@@ -836,8 +1001,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][19]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][19]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[19]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][19]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][19]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -855,8 +1024,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 346, 'ALTO HOSPICIO' => 728, 'POZO ALMONTE' => 80, 'PICA' => 4175, 
                           'HUARA' => 34, 'CAMIÑA' => 1, 'COLCHANE' => 0, 'HECTOR REYNO' => 339];
-        
-        $data[$comuna->name][19]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[19]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][19]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 20 */
         $query ='SELECT
@@ -873,8 +1045,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][20]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][20]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[20]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][20]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][20]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -892,8 +1068,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 6631, 'ALTO HOSPICIO' => 1233, 'POZO ALMONTE' => 237, 'PICA' => 675, 
                           'HUARA' => 266, 'CAMIÑA' => 79, 'COLCHANE' => 0, 'HECTOR REYNO' => 410];
-        
-        $data[$comuna->name][20]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[20]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][20]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 21 */
         $query ='SELECT
@@ -911,8 +1090,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][21]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][21]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[21]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][21]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][21]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -930,8 +1113,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 16190, 'ALTO HOSPICIO' => 3800, 'POZO ALMONTE' => 474, 'PICA' => 1713, 
                           'HUARA' => 140, 'CAMIÑA' => 128, 'COLCHANE' => 0, 'HECTOR REYNO' => 965];
-        
-        $data[$comuna->name][21]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[21]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][21]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
 
         /* 22 */
@@ -947,8 +1133,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][22]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][22]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[22]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][22]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][22]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -966,8 +1156,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 651, 'ALTO HOSPICIO' => 46, 'POZO ALMONTE' => 26, 'PICA' => 50, 
                           'HUARA' => 24, 'CAMIÑA' => 6, 'COLCHANE' => 0, 'HECTOR REYNO' => 15];
-        
-        $data[$comuna->name][22]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[22]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][22]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 23 */
         $query ='SELECT
@@ -982,8 +1175,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][23]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][23]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[23]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][23]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][23]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -1001,8 +1198,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 1592, 'ALTO HOSPICIO' => 3082, 'POZO ALMONTE' => 710, 'PICA' => 98, 
                           'HUARA' => 124, 'CAMIÑA' => 234, 'COLCHANE' => 0, 'HECTOR REYNO' => 107];
-        
-        $data[$comuna->name][23]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[23]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][23]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 24 */
         $query ='SELECT
@@ -1022,8 +1222,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][24]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][24]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[24]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][24]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][24]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -1041,8 +1245,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 119, 'ALTO HOSPICIO' => 5, 'POZO ALMONTE' => 40, 'PICA' => 0, 
                           'HUARA' => 3, 'CAMIÑA' => 0, 'COLCHANE' => 80, 'HECTOR REYNO' => 159];
-        
-        $data[$comuna->name][24]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[24]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][24]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 25 */
         $query ='SELECT
@@ -1057,8 +1264,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][25]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][25]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[25]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][25]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][25]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -1077,8 +1288,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 509, 'ALTO HOSPICIO' => 1915, 'POZO ALMONTE' => 245, 'PICA' => 260, 
                           'HUARA' => 24, 'CAMIÑA' => 0, 'COLCHANE' => 24, 'HECTOR REYNO' => 7939];
-        
-        $data[$comuna->name][25]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[25]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][25]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 26 */
         $query ='SELECT
@@ -1093,14 +1307,21 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][26]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][26]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[26]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][26]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][26]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         $denominadores = ['IQUIQUE' => 5604, 'ALTO HOSPICIO' => 10175, 'POZO ALMONTE' => 245, 'PICA' => 2108, 
                           'HUARA' => 48, 'CAMIÑA' => 0, 'COLCHANE' => 72, 'HECTOR REYNO' => 11182];
-        
-        $data[$comuna->name][26]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[26]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][26]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 27 */
         $query ='SELECT
@@ -1115,8 +1336,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][27]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][27]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[27]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][27]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][27]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_10a_a_19a as $poblacion) {
@@ -1125,8 +1350,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 0, 'ALTO HOSPICIO' => 800, 'POZO ALMONTE' => 249, 'PICA' => 2, 
                           'HUARA' => 312, 'CAMIÑA' => 0, 'COLCHANE' => 40, 'HECTOR REYNO' => 25];
-        
-        $data[$comuna->name][27]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[27]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][27]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 28 */
         $query ='SELECT
@@ -1143,8 +1371,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][28]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][28]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[28]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][28]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][28]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_10a_a_64a as $poblacion) {
@@ -1153,8 +1385,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 0, 'ALTO HOSPICIO' => 0, 'POZO ALMONTE' => 540, 'PICA' => 11, 
                           'HUARA' => 0, 'CAMIÑA' => 0, 'COLCHANE' => 258, 'HECTOR REYNO' => 0];
-        
-        $data[$comuna->name][28]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[28]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][28]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 29 */
         $query ='SELECT
@@ -1172,8 +1407,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][29]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][29]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[29]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][29]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][29]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_mayor_64a as $poblacion) {
@@ -1182,8 +1421,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 9101, 'ALTO HOSPICIO' => 404, 'POZO ALMONTE' => 701, 'PICA' => 14, 
                           'HUARA' => 26, 'CAMIÑA' => 17, 'COLCHANE' => 22, 'HECTOR REYNO' => 266];
-        
-        $data[$comuna->name][29]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[29]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][29]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 30 */
         $query ='SELECT
@@ -1198,8 +1440,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][30]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][30]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[30]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][30]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][30]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -1217,8 +1463,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 0, 'ALTO HOSPICIO' => 10011, 'POZO ALMONTE' => 3446, 'PICA' => 1944, 
                           'HUARA' => 143, 'CAMIÑA' => 1344, 'COLCHANE' => 2340, 'HECTOR REYNO' => 2498];
-        
-        $data[$comuna->name][30]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[30]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][30]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 31 */
         $query ='SELECT
@@ -1235,8 +1484,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][31]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][31]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[31]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][31]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][31]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_total as $poblacion) {
@@ -1245,8 +1498,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 0, 'ALTO HOSPICIO' => 93, 'POZO ALMONTE' => 80, 'PICA' => 14, 
                           'HUARA' => 16, 'CAMIÑA' => 5, 'COLCHANE' => 12, 'HECTOR REYNO' => 27];
-        
-        $data[$comuna->name][31]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[31]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][31]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 32 */
         $query ='SELECT
@@ -1263,8 +1519,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][32]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][32]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[32]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][32]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][32]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -1284,8 +1544,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 80, 'ALTO HOSPICIO' => 81, 'POZO ALMONTE' => 7, 'PICA' => 821, 
                           'HUARA' => 40, 'CAMIÑA' => 23, 'COLCHANE' => 1, 'HECTOR REYNO' => 1478];
-        
-        $data[$comuna->name][32]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[32]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][32]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 33 */
         $query ='SELECT
@@ -1301,8 +1564,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][33]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][33]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[33]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][33]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][33]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -1320,8 +1587,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 5267, 'ALTO HOSPICIO' => 1275, 'POZO ALMONTE' => 346, 'PICA' => 48, 
                           'HUARA' => 54, 'CAMIÑA' => 9, 'COLCHANE' => 8, 'HECTOR REYNO' => 244];
-        
-        $data[$comuna->name][33]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[33]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][33]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 34 */
         $query ='SELECT
@@ -1337,8 +1607,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][34]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][34]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[34]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][34]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][34]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -1356,8 +1630,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 8883, 'ALTO HOSPICIO' => 4098, 'POZO ALMONTE' => 2456, 'PICA' => 180, 
                           'HUARA' => 167, 'CAMIÑA' => 27, 'COLCHANE' => 0, 'HECTOR REYNO' => 586];
-        
-        $data[$comuna->name][34]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[34]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][34]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 35 */
         $query ='SELECT
@@ -1372,8 +1649,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][35]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][35]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[35]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][35]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][35]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_10a_a_19a as $poblacion) {
@@ -1382,8 +1663,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 3705, 'ALTO HOSPICIO' => 1120, 'POZO ALMONTE' => 124, 'PICA' => 53, 
                           'HUARA' => 312, 'CAMIÑA' => 0, 'COLCHANE' => 74, 'HECTOR REYNO' => 254];
-        
-        $data[$comuna->name][35]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[35]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][35]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 36 */
         $query ='SELECT
@@ -1417,8 +1701,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][36]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][36]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[36]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][36]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][36]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_20a_a_64a as $poblacion) {
@@ -1427,8 +1715,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 31294, 'ALTO HOSPICIO' => 4190, 'POZO ALMONTE' => 1664, 'PICA' => 187, 
                           'HUARA' => 131, 'CAMIÑA' => 91, 'COLCHANE' => 87, 'HECTOR REYNO' => 828];
-        
-        $data[$comuna->name][36]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[36]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][36]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 37 */
         $query ='SELECT
@@ -1452,8 +1743,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][37]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][37]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[37]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][37]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][37]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_mayor_64a as $poblacion) {
@@ -1462,7 +1757,10 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 14859, 'ALTO HOSPICIO' => 763, 'POZO ALMONTE' => 127, 'PICA' => 347, 
                           'HUARA' => 52, 'CAMIÑA' => 39, 'COLCHANE' => 67, 'HECTOR REYNO' => 24];
-        
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[37]['total_denominador'] += $denominador;
+        else
         $data[$comuna->name][37]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 38 */
@@ -1500,8 +1798,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][38]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][38]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[38]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][38]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][38]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -1519,8 +1821,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 8672, 'ALTO HOSPICIO' => 377, 'POZO ALMONTE' => 756, 'PICA' => 418, 
                           'HUARA' => 64, 'CAMIÑA' => 32, 'COLCHANE' => 12, 'HECTOR REYNO' => 640];
-        
-        $data[$comuna->name][38]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[38]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][38]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 39 */
         $query ='SELECT
@@ -1537,8 +1842,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][39]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][39]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[39]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][39]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][39]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -1560,18 +1869,23 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 4966, 'ALTO HOSPICIO' => 9, 'POZO ALMONTE' => 81, 'PICA' => 51, 
                           'HUARA' => 0, 'CAMIÑA' => 64, 'COLCHANE' => 348, 'HECTOR REYNO' => 72];
-        
-        $data[$comuna->name][39]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[39]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][39]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 40 */
         $numeradores = ['IQUIQUE' => 2475, 'ALTO HOSPICIO' => 648, 'POZO ALMONTE' => 45, 'PICA' => 41, 
                           'HUARA' => 113, 'CAMIÑA' => 24, 'COLCHANE' => 13, 'HECTOR REYNO' => 178];
-        
-        $data[$comuna->name][40]['ct_marzo'] = $numeradores[$comuna->name];
 
-        // mostrar nada en los meses
-        for($mes = 1; $mes <= $ultimo_rem; $mes++) $data[$comuna->name][40]['numeradores'][$mes] = null;
-
+        if($comuna == null){
+            foreach($numeradores as $numerador) $data[40]['total_numerador'] += $numerador;
+        } else {
+            $data[$comuna->name][40]['ct_marzo'] = $numeradores[$comuna->name];
+            // mostrar nada en los meses
+            for($mes = 1; $mes <= $ultimo_rem; $mes++) $data[$comuna->name][40]['numeradores'][$mes] = null;
+        }
         // $query ='SELECT
         //             IF(COD_CENTRO = 102307, "HECTOR REYNO", comuna) AS NombreComuna,
         //             COUNT(*) poblacion FROM percapita_pro p
@@ -1587,8 +1901,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 1959, 'ALTO HOSPICIO' => 655, 'POZO ALMONTE' => 129, 'PICA' => 71, 
                           'HUARA' => 38, 'CAMIÑA' => 14, 'COLCHANE' => 21, 'HECTOR REYNO' => 155];
-        
-        $data[$comuna->name][40]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[40]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][40]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 41 */
         $query ='SELECT
@@ -1603,8 +1920,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][41]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][41]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[41]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][41]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][41]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_total as $poblacion) {
@@ -1613,8 +1934,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 5368, 'ALTO HOSPICIO' => 653, 'POZO ALMONTE' => 497, 'PICA' => 287, 
                           'HUARA' => 69, 'CAMIÑA' => 715, 'COLCHANE' => 74, 'HECTOR REYNO' => 807];
-        
-        $data[$comuna->name][41]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[41]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][41]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 42 */
         $query ='SELECT
@@ -1629,8 +1953,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][42]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][42]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[42]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][42]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][42]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_mayor_64a as $poblacion) {
@@ -1639,8 +1967,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 0, 'ALTO HOSPICIO' => 795, 'POZO ALMONTE' => 64, 'PICA' => 150, 
                           'HUARA' => 281, 'CAMIÑA' => 6785, 'COLCHANE' => 222, 'HECTOR REYNO' => 958];
-        
-        $data[$comuna->name][42]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[42]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][42]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 43 */
         $query ='SELECT
@@ -1655,8 +1986,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][43]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][43]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[43]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][43]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][43]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_total as $poblacion) {
@@ -1665,8 +2000,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 0, 'ALTO HOSPICIO' => 5441, 'POZO ALMONTE' => 13, 'PICA' => 296, 
                           'HUARA' => 9, 'CAMIÑA' => 23, 'COLCHANE' => 0, 'HECTOR REYNO' => 0];
-        
-        $data[$comuna->name][43]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[43]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][43]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 44 */
         $query ='SELECT
@@ -1681,8 +2019,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][44]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][44]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[44]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][44]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][44]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -1700,8 +2042,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 900, 'ALTO HOSPICIO' => 2158, 'POZO ALMONTE' => 0, 'PICA' => 392, 
                           'HUARA' => 69, 'CAMIÑA' => 118, 'COLCHANE' => 0, 'HECTOR REYNO' => 0];
-        
-        $data[$comuna->name][44]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[44]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][44]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 45 */
         $query ='SELECT
@@ -1716,8 +2061,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][45]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][45]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[45]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][45]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][45]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_total as $poblacion) {
@@ -1726,8 +2075,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 80, 'ALTO HOSPICIO' => 20, 'POZO ALMONTE' => 48, 'PICA' => 29, 
                           'HUARA' => 18, 'CAMIÑA' => 0, 'COLCHANE' => 55, 'HECTOR REYNO' => 0];
-        
-        $data[$comuna->name][45]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[45]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][45]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 46 */
         //REM A26
@@ -1747,8 +2099,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][46]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][46]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[46]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][46]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][46]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         //REM A28
@@ -1766,8 +2122,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][46]['numeradores'][$cantidad->mes] += $cantidad->numerador;
-            $data[$cantidad->NombreComuna][46]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[46]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][46]['numeradores'][$cantidad->mes] += $cantidad->numerador;
+                $data[$cantidad->NombreComuna][46]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_total as $poblacion) {
@@ -1776,8 +2136,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 459, 'ALTO HOSPICIO' => 1915, 'POZO ALMONTE' => 7239, 'PICA' => 1050, 
                           'HUARA' => 32, 'CAMIÑA' => 0, 'COLCHANE' => 155, 'HECTOR REYNO' => 0];
-        
-        $data[$comuna->name][46]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[46]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][46]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 47 */
         $query ='SELECT
@@ -1794,8 +2157,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][47]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][47]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[47]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][47]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][47]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones_total as $poblacion) {
@@ -1804,8 +2171,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 69, 'ALTO HOSPICIO' => 132, 'POZO ALMONTE' => 2172, 'PICA' => 485, 
                           'HUARA' => 27, 'CAMIÑA' => 0, 'COLCHANE' => 52, 'HECTOR REYNO' => 0];
-        
-        $data[$comuna->name][47]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[47]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][47]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 48 */
         $query ='SELECT
@@ -1822,8 +2192,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][48]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][48]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[48]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][48]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][48]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // $query ='SELECT
@@ -1845,8 +2219,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 0, 'ALTO HOSPICIO' => 172, 'POZO ALMONTE' => 96, 'PICA' => 88, 
                           'HUARA' => 0, 'CAMIÑA' => 0, 'COLCHANE' => 5, 'HECTOR REYNO' => 296];
-        
-        $data[$comuna->name][48]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[48]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][48]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 49 */
         $query ='SELECT
@@ -1863,8 +2240,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][49]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][49]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[49]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][49]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][49]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones as $poblacion) {
@@ -1873,8 +2254,11 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 0, 'ALTO HOSPICIO' => 258, 'POZO ALMONTE' => 96, 'PICA' => 26, 
                           'HUARA' => 0, 'CAMIÑA' => 0, 'COLCHANE' => 5, 'HECTOR REYNO' => 296];
-        
-        $data[$comuna->name][49]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[49]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][49]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         /* 50 */
         $query ='SELECT
@@ -1891,8 +2275,12 @@ class ProgramApsValueController extends Controller
         $cantidades = DB::connection('mysql_rem')->select($query);
 
         foreach($cantidades as $cantidad) {
-            $data[$cantidad->NombreComuna][50]['numeradores'][$cantidad->mes] = $cantidad->numerador;
-            $data[$cantidad->NombreComuna][50]['ct_marzo'] += $cantidad->numerador;
+            if($comuna == null){
+                $data[50]['total_numerador'] += $cantidad->numerador;
+            } else {
+                $data[$cantidad->NombreComuna][50]['numeradores'][$cantidad->mes] = $cantidad->numerador;
+                $data[$cantidad->NombreComuna][50]['ct_marzo'] += $cantidad->numerador;
+            }
         }
 
         // foreach($poblaciones as $poblacion) {
@@ -1901,18 +2289,27 @@ class ProgramApsValueController extends Controller
 
         $denominadores = ['IQUIQUE' => 0, 'ALTO HOSPICIO' => 194, 'POZO ALMONTE' => 24, 'PICA' => 62, 
                           'HUARA' => 0, 'CAMIÑA' => 0, 'COLCHANE' => 5, 'HECTOR REYNO' => 296];
-        
-        $data[$comuna->name][50]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[50]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][50]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
         // /* 51 */
         // //TODO: hacer las consultas para trazadora #51
         // mostrar nada en los meses
-        for($mes = 1; $mes <= $ultimo_rem; $mes++) $data[$comuna->name][51]['numeradores'][$mes] = null;
+        if($comuna == null)
+            foreach($numeradores as $numerador) $data[51]['total_numerador'] = null;
+        else 
+            for($mes = 1; $mes <= $ultimo_rem; $mes++) $data[$comuna->name][51]['numeradores'][$mes] = null;
 
         $denominadores = ['IQUIQUE' => 0, 'ALTO HOSPICIO' => 0, 'POZO ALMONTE' => 497, 'PICA' => 0, 
                           'HUARA' => 0, 'CAMIÑA' => 0, 'COLCHANE' => 62, 'HECTOR REYNO' => 0];
-        
-        $data[$comuna->name][51]['actividadesProgramadas'] = $denominadores[$comuna->name];
+
+        if($comuna == null)
+            foreach($denominadores as $denominador) $data[51]['total_denominador'] += $denominador;
+        else
+            $data[$comuna->name][51]['actividadesProgramadas'] = $denominadores[$comuna->name];
 
 
         /* Calculos */
@@ -1925,36 +2322,42 @@ class ProgramApsValueController extends Controller
         // }
 
         // dd($data);
-        foreach($data as $nombre_comuna => $comuna) {
-            foreach($comuna as $glosa => $valor){
-                /* Calculo de actividadesProgramadas = poblacion * concentracion */
-                // if($data[$nombre_comuna][$glosa]['poblacion'] AND
-                //    $data[$nombre_comuna][$glosa]['concentracion'] AND
-                //    $data[$nombre_comuna][$glosa]['cobertura']) {
+        if($comuna == null){
+            foreach($glosas as $glosa) 
+                if($data[$glosa->numero]['total_denominador'] != 0)
+                    $data[$glosa->numero]['total_cobertura'] = number_format(
+                        ($data[$glosa->numero]['total_numerador'] /
+                        $data[$glosa->numero]['total_denominador'])*100
+                    , 1, '.', '');
+        } else {
+            foreach($data as $nombre_comuna => $comuna) {
+                foreach($comuna as $glosa => $valor){
+                    /* Calculo de actividadesProgramadas = poblacion * concentracion */
+                    // if($data[$nombre_comuna][$glosa]['poblacion'] AND
+                    //    $data[$nombre_comuna][$glosa]['concentracion'] AND
+                    //    $data[$nombre_comuna][$glosa]['cobertura']) {
 
-                    // if(!$data[$nombre_comuna][$glosa]['actividadesProgramadas']) {
-                    //     $data[$nombre_comuna][$glosa]['actividadesProgramadas'] =
-                    //         $data[$nombre_comuna][$glosa]['poblacion'] *
-                    //         $data[$nombre_comuna][$glosa]['concentracion'] *
-                    //         $data[$nombre_comuna][$glosa]['cobertura']/100;
+                        // if(!$data[$nombre_comuna][$glosa]['actividadesProgramadas']) {
+                        //     $data[$nombre_comuna][$glosa]['actividadesProgramadas'] =
+                        //         $data[$nombre_comuna][$glosa]['poblacion'] *
+                        //         $data[$nombre_comuna][$glosa]['concentracion'] *
+                        //         $data[$nombre_comuna][$glosa]['cobertura']/100;
+                        // }
+
+                        // if($data[$nombre_comuna][$glosa]['actividadesProgramadas'] AND
+                        //    $data[$nombre_comuna][$glosa]['ct_marzo'] ) {
+                        if($data[$nombre_comuna][$glosa]['actividadesProgramadas'] != 0)
+
+                            $data[$nombre_comuna][$glosa]['porc_marzo'] =
+                                number_format(
+                                    ($data[$nombre_comuna][$glosa]['ct_marzo'] /
+                                    $data[$nombre_comuna][$glosa]['actividadesProgramadas'])*100
+                                , 1, '.', '');
+                        // }
                     // }
-
-                    // if($data[$nombre_comuna][$glosa]['actividadesProgramadas'] AND
-                    //    $data[$nombre_comuna][$glosa]['ct_marzo'] ) {
-                    if($data[$nombre_comuna][$glosa]['actividadesProgramadas'] != 0)
-
-                        $data[$nombre_comuna][$glosa]['porc_marzo'] =
-                            number_format(
-                                ($data[$nombre_comuna][$glosa]['ct_marzo'] /
-                                $data[$nombre_comuna][$glosa]['actividadesProgramadas'])*100
-                            , 1, '.', '');
-		            // }
-                // }
+                }
             }
         }
-
-
-
 
         // echo '<pre>';
         // print_r($data);

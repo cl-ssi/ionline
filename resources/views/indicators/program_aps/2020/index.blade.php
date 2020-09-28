@@ -21,10 +21,16 @@
         </a>
     </li>
     @endforeach
+    <li class="nav-item">
+        <a class="nav-link @if($id == 0) active @endif"
+            href="{{ route('indicators.program_aps.2020.index', 0) }}"> RESUMEN
+        </a>
+    </li>
 </ul>
 
 <!-- Tab panes -->
 <div class="tab-content mt-3">
+@if($id != 0)
     @foreach($communes as $commune)
         @if($commune->id == $id)
         
@@ -98,7 +104,40 @@
         </div>
         @endif
     @endforeach
+@else
+    <h4>
+        <button type="button" class="btn btn-outline-info btn-sm"
+            onclick="tableToExcel('tabla_resumen', 'Hoja 1')">
+            <i class="fas fa-download"></i>
+        </button>
+        RESUMEN
+    </h4>
 
+    <table class="table table-bordered table-hover table-sm small" id="tabla_resumen" >
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>Nivel</th>
+                <th>Prestaciones</th>
+                <th>Numerador</th>
+                <th>Denominador</th>
+                <th>Cobertura</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($glosas as $glosa)
+            <tr>
+                <td>{{ $glosa->numero }}</td>
+                <td>{{ $glosa->nivel }}</td>
+                <td>{{ $glosa->prestacion }}</td>
+                <td class="text-right">{{ $data[$glosa->numero]['total_numerador'] }}</td>
+                <td class="text-right">{{ $data[$glosa->numero]['total_denominador'] }}</td>
+                <td class="text-right">{{ $data[$glosa->numero]['total_cobertura'] }}%</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+@endif 
 
 @endsection
 

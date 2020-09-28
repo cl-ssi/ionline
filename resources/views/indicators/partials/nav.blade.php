@@ -12,7 +12,7 @@
                 <li class="breadcrumb-item" @if($loop->last) active @endif>
                     @php $path[] = $segment; @endphp
 
-                    @if(!$loop->last && !in_array($segment, array(1,2,3,4,5,6,7,8)))
+                    @if(!$loop->last && !in_array($segment, array(0,1,2,3,4,5,6,7,8)))
                         <a href="{{ route(implode('.',$path).'.index', $id ?? '')}}">
                     @endif
 
@@ -24,6 +24,7 @@
                         @case('18834')      Ley 18.834      @break
                         @case('iaaps')      IAAPS           @break
                         @case('program_aps') Programación APS @break
+                        @case('0')  RESUMEN @break;
                         @case('1')  COLCHANE @break;
                         @case('2')  HUARA @break;
                         @case('3')  CAMIÑA @break;
