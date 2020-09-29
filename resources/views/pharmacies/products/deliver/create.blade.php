@@ -7,6 +7,9 @@
 @include('pharmacies.nav')
 
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- <link href="https://afarkas.github.io/webshim/js-webshim/minified/shims/styles/shim-ext.css" rel="stylesheet">
+<link href="https://afarkas.github.io/webshim/js-webshim/minified/shims/styles/shim-ext.css" rel="stylesheet"> -->
 
 <h3>Nueva entrega ayuda técnica</h3><br>
 
@@ -88,8 +91,14 @@
 
 <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
 <script src="{{ asset('js/show_hide_tab.js') }}"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <script>
 	$(document).ready(function() {
+
+		if ( $('[type="date"]').prop('type') != 'date' ) {
+			$('[type="date"]').datepicker({ dateFormat: 'yy-mm-dd' });
+		}
 
 		$('.popover-item').popover({
 			html: true,
