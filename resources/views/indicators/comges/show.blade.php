@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @php
     $months = array (1=>'Ene',2=>'Feb',3=>'Mar',4=>'Abr',5=>'May',6=>'Jun',7=>'Jul',8=>'Ago',9=>'Sep',10=>'Oct',11=>'Nov',12=>'Dec');
+    $fmonth = [1 => 3, 2 => 6, 3 => 9, 4 => 12];
     $months_by_section = array(1 => array(1,2,3), 2 => array(4,5,6), 3 => array(7,8,9), 4 => array(10,11,12));
     $romans = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV'];
     $title2 = $comges->name.' - '.$romans[isset($corte) ? $corte->number : $section].' Corte';
@@ -76,9 +77,12 @@
                         </tr>
                         <tr class="text-center">
                             <th class="label">Indicador</th>
-                            @foreach($months_by_section[$corte->number] as $index)
+                            {{--@foreach($months_by_section[$corte->number] as $index)
                                 <th>{{$months[$index]}}</th>
-                            @endforeach
+                            @endforeach--}}
+                            @for($i = 1; $i <= $fmonth[$corte->number]; $i++)
+                            <th>{{$months[$i]}}</th>
+                            @endfor
                             <th>Acum</th>
                             <th nowrap>% Cump. Obt</th>
                             <th nowrap>% Cump. Esp</th>
@@ -89,16 +93,21 @@
                         <tbody>
                         <tr class="text-center">
                             <td class="text-left glosa">{{$action->numerator}}</td>
-                            @if($action->numerator_source == null)
-                            @foreach($action->values as $value)
-                                @if($value->factor == "numerador")
-                                <td class="text-right">{{number_format($value->value, 0, ',', '.')}}</td>
-                                @endif
-                            @endforeach
+                            @if(!$action->values->isEmpty())
+                                @php($count = 1)
+                                @foreach($action->values as $value)
+                                    @if($value->factor == "numerador")
+                                    <td class="text-right">{{number_format($value->value, 0, ',', '.')}}</td>
+                                    @php($count++)
+                                    @endif
+                                @endforeach
+                                @for($i = $count; $i <= $fmonth[$corte->number]; $i++)
+                                    <td class="text-right"></td>
+                                @endfor
                             @else
-                            @foreach($months_by_section[1] as $month)
+                            @for($i = 1; $i <= $fmonth[$corte->number]; $i++)
                                 <td class="text-right">0</td>
-                            @endforeach
+                            @endfor
                             @endif
                             <td class="text-right"><strong>{{number_format($action->getValuesAcum('numerador'), 0, ',', '.')}}</strong></td>
                             <td rowspan="2" class="align-middle text-center">{{number_format($action->getCompliance(), 2, ',', '.')}}%</td>
@@ -110,16 +119,21 @@
                         </tr>
                         <tr class="text-center">
                             <td class="text-left glosa">{{$action->denominator}}</td>
-                            @if($action->denominator_source == null)
-                            @foreach($action->values as $value)
-                                @if($value->factor == "denominador")
-                                <td class="text-right">{{number_format($value->value, 0, ',', '.')}}</td>
-                                @endif
-                            @endforeach
+                            @if(!$action->values->isEmpty())
+                                @php($count = 1)
+                                @foreach($action->values as $value)
+                                    @if($value->factor == "denominador")
+                                    <td class="text-right">{{number_format($value->value, 0, ',', '.')}}</td>
+                                    @php($count++)
+                                    @endif
+                                @endforeach
+                                @for($i = $count; $i <= $fmonth[$corte->number]; $i++)
+                                    <td class="text-right"></td>
+                                @endfor
                             @else
-                            @foreach($months_by_section[1] as $month)
+                            @for($i = 1; $i <= $fmonth[$corte->number]; $i++)
                                 <td class="text-right">0</td>
-                            @endforeach
+                            @endfor
                             @endif
                             <td class="text-right"><strong>{{number_format($action->getValuesAcum('denominador'), 0, ',', '.')}}</strong></td>
                         </tr>

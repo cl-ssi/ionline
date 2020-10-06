@@ -8,6 +8,8 @@ use App\Indicators\Action;
 use App\Indicators\Comges;
 use App\User;
 use App\Indicators\Indicator;
+use App\Indicators\Value;
+use Illuminate\Support\Facades\DB;
 
 class ComgesController extends Controller
 {
@@ -35,6 +37,7 @@ class ComgesController extends Controller
             $q->where('ind_sections.number', $section)->with('values');
         }]);
         $corte = $comges->sections()->where('ind_sections.number', $section)->first();
+        $this->loadActionsWithRemSource($year, $comges->number, $section, $indicators);
         return view('indicators.comges.show', compact('comges', $corte !=null ? 'corte' : 'section', 'indicators'));
     }
 
@@ -232,5 +235,106 @@ class ComgesController extends Controller
         }
 
         return redirect()->route('indicators.comges.show', [$year, $comges->number, $section])->with('success', 'Registro actualizado satisfactoriamente');
+    }
+
+    private function loadActionsWithRemSource($year, $comges, $section, $indicators)
+    {
+        // Último mes según corte
+        $last_month_section = [1 => 3, 2 => 6, 3 => 9, 4 => 12];
+        // Se define un array con los códigos de prestación que pertenecen a una misma fuente independiente del factor
+        $same_source_rows = ['07020130', '07020230', '07020330', '07020331', '07020332', '07024219', '07020500', '07020501',
+                            '07020600', '07020601', '07020700', '07020800', '07020801', '07020900', '07020901', '07021000',
+                            '07021001', '07021100', '07021101', '07021230', '07021300', '07021301', '07022000', '07022001',
+                            '07021531', '07022132', '07022133', '07022134', '07021700', '07021800', '07021801', '07021900',
+                            '07022130', '07022142', '07022143', '07022144', '07022135', '07022136', '07022137', '07022700',
+                            '07022800', '07022900', '07021701', '07023100', '07023200', '07023201', '07023202', '07023203',
+                            '07023700', '07023701', '07023702', '07023703', '07024000', '07024001', '07024200', '07030500',
+                            '07024201', '07024202', '07030501', '07030502'];
+        $actions_rem = [
+            2020 => [ 
+                1 => [
+                    1 => [
+                        // 'action' => [1,2,3,4], 'section' => [1,2,3,4], 
+                        'numerator_source_col' => ['Col30', 'Col31'], 
+                        'numerator_source_row' => $same_source_rows,
+                        'denominator_source_col' => ['Col22', 'Col26'],
+                        'denominator_source_row' => $same_source_rows ],
+                    2 => [
+                        // 'action' => [1,2,3,4], 'section' => [1,2,3,4],
+                        'numerator_source_col' => ['Col37', 'Col38'],
+                        'numerator_source_row' => $same_source_rows,
+                        'denominator_source_col' => ['Col01'],
+                        'denominator_source_row' => $same_source_rows ],
+                ],
+                3 => [
+                    3 => [
+                        // 'action' => [1,2,3,4], 'section' => [1,2,3,4], 
+                        'numerator_source_col' => ['Col22', 'Col26'], 
+                        'numerator_source_row' => $same_source_rows,
+                        'denominator_source_col' => ['Col01'],
+                        'denominator_source_row' => $same_source_rows ],
+                    4 => [
+                        // 'action' => [1,2,3,4], 'section' => [1,2,3,4], 
+                        'numerator_source_col' => ['Col32', 'Col33'], 
+                        'numerator_source_row' => $same_source_rows,
+                        'denominator_source_col' => ['Col01', 'Col32', 'Col33'],
+                        'denominator_source_row' => $same_source_rows ],
+                ]
+            ],
+        ];
+
+        foreach($indicators as $indicator){
+            foreach($indicator->actions as $action){
+                if($action->values->isEmpty() && isset($actions_rem[$year][$comges][$indicator->number])){
+                    // generar consulta sql numerador
+                    $cols = $rows = null;
+                    foreach($actions_rem[$year][$comges][$indicator->number]['numerator_source_col'] as $col)
+                        $cols .= (next($actions_rem[$year][$comges][$indicator->number]['numerator_source_col'])) ? 'ifnull('.$col.', 0) + ' : 'ifnull('.$col.', 0)';
+                    
+                    $rows = implode(', ', $actions_rem[$year][$comges][$indicator->number]['numerator_source_row']);
+
+                    $sql = "SELECT e.Comuna, e.alias_estab, r.Mes, sum({$cols}) as numerador
+                            FROM {$year}rems r
+                            LEFT JOIN {$year}establecimientos e
+                            ON r.IdEstablecimiento=e.Codigo
+                            WHERE CodigoPrestacion in ({$rows}) AND e.Codigo = 102100 AND r.Mes <= $last_month_section[$section]
+                            GROUP BY e.Comuna, e.alias_estab, r.Mes
+                            ORDER BY e.Comuna, e.alias_estab, r.Mes";
+                    $valores = DB::connection('mysql_rem')->select($sql);
+
+                    $values = collect();
+                    foreach($valores as $valor)
+                        $values->add(new Value(['month' => $valor->Mes, 'factor' => 'numerador', 'value' => $valor->numerador]));
+                    $action->setRelation('values', $values);
+
+                    // generar consulta sql denominador
+                    $cols = $rows = null;
+                    foreach($actions_rem[$year][$comges][$indicator->number]['denominator_source_col'] as $col)
+                        $cols .= (next($actions_rem[$year][$comges][$indicator->number]['denominator_source_col'])) ? 'ifnull('.$col.', 0) + ' : 'ifnull('.$col.', 0)';
+                    
+                    $rows = implode(', ', $actions_rem[$year][$comges][$indicator->number]['denominator_source_row']);
+
+                    $sql = "SELECT e.Comuna, e.alias_estab, r.Mes, sum({$cols}) as denominador
+                            FROM {$year}rems r
+                            LEFT JOIN {$year}establecimientos e
+                            ON r.IdEstablecimiento=e.Codigo
+                            WHERE CodigoPrestacion in ({$rows}) AND e.Codigo = 102100 AND r.Mes <= $last_month_section[$section]
+                            GROUP BY e.Comuna, e.alias_estab, r.Mes
+                            ORDER BY e.Comuna, e.alias_estab, r.Mes";
+                    $valores = DB::connection('mysql_rem')->select($sql);
+
+                    foreach($valores as $valor)
+                        $values->add(new Value(['month' => $valor->Mes, 'factor' => 'denominador', 'value' => $valor->denominador]));
+                    $action->setRelation('values', $values);
+                }
+            }
+        }
+
+        // return $indicators;
+    }
+
+    private function loadActionsWithPreviousSections($year, $comges, $section, $indicators)
+    {
+
     }
 }
