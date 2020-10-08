@@ -212,7 +212,7 @@ $sql_denominador = "SELECT e.Comuna, e.alias_estab, r.Mes, sum(ifnull(Col01,0)) 
                     FROM {$year}rems r
                     LEFT JOIN {$year}establecimientos e
                     ON r.IdEstablecimiento=e.Codigo
-                    WHERE CodigoPrestacion in (05051304, 05051305, 05051306, 05051307) AND e.p_masama = 1
+                    WHERE CodigoPrestacion in (05051304) AND e.p_masama = 1
                     GROUP BY e.Comuna, e.alias_estab, r.Mes
                     ORDER BY e.Comuna, e.alias_estab, r.Mes";
 $denominadores = DB::connection('mysql_rem')->select($sql_denominador);
