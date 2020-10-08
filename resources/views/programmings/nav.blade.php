@@ -6,21 +6,18 @@
     </li>
     <li class="nav-item">
         <a class="nav-link {{ active('professionals.index') }}" href="{{ route('professionals.index') }}">
-        <i class="fas fa-file-invoice-dollar"></i> Profesionales</a>
+        <i class="fas fa-users"></i> Profesionales</a>
     </li>
-
     <li class="nav-item">
-        <a class="nav-link {{ active('agreements.create') }}" href="{{ route('agreements.create') }}">
-        <i class="fas fa-plus"></i> Nuevo convenio</a>
+        <a class="nav-link {{ active('actiontypes.index') }}" href="{{ route('actiontypes.index') }}">
+        <i class="fas fa-file"></i> Tipos de Acciones</a>
     </li>
-
     <li class="nav-item">
-        <a class="nav-link {{ active('agreements.programs.index') }}" href="{{ route('agreements.programs.index') }}">
-        <i class="fas fa-cog"></i> Parametros</a>
+        <a class="nav-link {{ active('ministerialprograms.index') }}" href="{{ route('ministerialprograms.index') }}">
+        <i class="fas fa-directions"></i> Programas Ministeriales</a>
     </li>
-
     <li class="nav-item">
-        <a class="nav-link {{ active('programmings.professionals.index') }}" href="{{ route('agreements.tracking.index') }}">
-        <i class="fas fa-paper-plane"></i> Profesionales</a>
+        <a class="nav-link {{ active('activityprograms.index') }}" href="{{ route('activityprograms.index') }}">
+        <i class="fas fa-box"></i> Prestaciones o Actividades</a>
     </li>
 </ul>

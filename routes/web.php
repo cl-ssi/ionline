@@ -107,8 +107,22 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('/createWordRes/{agreement}','Agreements\WordTestController@createResWordDocx')->name('createWordRes');
 });
 
+
 Route::resource('programmings','Programmings\ProgrammingController')->middleware('auth');
+Route::resource('programmingitems','Programmings\ProgrammingItemController')->middleware('auth');
+
+Route::resource('programmingdays','Programmings\ProgrammingDayController')->middleware('auth');
+
 Route::resource('professionals','Programmings\ProfessionalController')->middleware('auth');
+Route::resource('actiontypes','Programmings\ActionTypeController')->middleware('auth');
+Route::resource('ministerialprograms','Programmings\MinisterialProgramController')->middleware('auth');
+
+Route::resource('activityprograms','Programmings\ActivitiesProgramController')->middleware('auth');
+Route::resource('activityitems','Programmings\ActivitiesItemController')->middleware('auth');
+
+Route::resource('professionalhours','Programmings\ProfessionalHourController')->middleware('auth');
+
+
 
 
 Route::resource('agreements','Agreements\AgreementController')->middleware('auth');

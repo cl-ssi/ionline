@@ -6,7 +6,7 @@
 
 @include('parameters.nav')
 
-<h3 class="mb-3">Comunas</h3>
+<h3 class="mb-3">Lista de Feriados</h3>
 
 <table class="table">
     <thead>
