@@ -27,14 +27,20 @@
             <td>{{ $programming->establishment_id }}</td>
             <td>{{ $programming->description }}</td>
             <td class="text-right">
-                <a  class="btn btb-flat btn-sm btn-secondary" href="">
+
+                <a href="{{ route('professionalhours.show', $programming->id) }}" class="btn btb-flat btn-sm btn-secondary">
                     <i class="fas fa-user-tag small"></i>
                     <span class="small">Profesionales Hora</span> 
                 </a>
 
-                <a class="btn btb-flat btn-sm btn-info" href="">
-                    <i class="fas fa-users small"></i> 
-                    <span class="small">Población</span> 
+                <a href="{{ route('programmingdays.show', $programming->id) }}"  class="btn btb-flat btn-sm btn-secondary" >
+                    <i class="fas fa-calendar-alt small"></i> 
+                    <span class="small">Días a Programar</span> 
+                </a>
+
+                <a href="{{ route('programmingitems.index', $programming->id) }}" class="btn btb-flat btn-sm btn-info" >
+                    <i class="fas fa-tasks small"></i> 
+                    <span class="small">Actividades</span> 
                 </a>
             </td>
         </tr>

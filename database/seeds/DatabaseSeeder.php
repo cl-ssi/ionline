@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
         $this->call(TelephoneSeeder::class);
         $this->call(PlaceSeeder::class);
         $this->call(ProfessionalTableSeeder::class);
+        $this->call(MinisterialProgramTableSeeder::class);
+        $this->call(ActionTypeTableSeeder::class);
 
     }
 }

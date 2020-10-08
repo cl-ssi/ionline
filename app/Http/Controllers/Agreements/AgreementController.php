@@ -35,7 +35,7 @@ class AgreementController extends Controller
             $agreements = Agreement::where('commune_id',$request->commune)->latest()->get();
         }
         else {
-            $agreements = Agreement::latest()->get();
+            $agreements = Agreement::latest()->paginate(50);;
         }
         $communes = Commune::All()->SortBy('name');
         $stages = Stage::All();
