@@ -33,11 +33,18 @@
                 font-size: 3.5rem;
             }
         }
+
+        .bg-nav-gobierno {
+            @switch(env('APP_ENV'))
+                @case('local') background-color: rgb(73, 17, 82) !important; @break
+                @case('testing') background-color: rgb(2, 82, 0) !important; @break
+            @endswitch
+        }
     </style>
 </head>
 
 <body>
-    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm container">
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm container bg-nav-gobierno">
         <h5 class="my-0 mr-md-auto font-weight-normal"> <img src="{{ asset('images/gob-header.svg') }}" alt="Logo del gobierno de chile"> </h5>
         <nav class="my-2 my-md-0 mr-md-3">
             <a class="p-2 text-dark" href="http://www.saludiquique.cl">Web Servicio de Salud</a>
