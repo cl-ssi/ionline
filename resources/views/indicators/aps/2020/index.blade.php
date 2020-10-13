@@ -9,7 +9,7 @@
 <h3 class="mb-3">Indicadores</h3>
 
 <ol>
-    <li> <a href="{{ route('indicators.aps.2020.pmasama') }}">Más Adultos Mayores Autovalentes.</a> <span class="badge badge-warning"><i class="fas fa-check"></i></span></li>
+    <li> <a href="{{ route('indicators.aps.2020.pmasama') }}">Más Adultos Mayores Autovalentes.</a> <span class="badge badge-success"><i class="fas fa-check"></i></span></li>
     <li> <a href="{{ route('indicators.aps.2020.depsev.index') }}">Dependencia Severa.</a> <span class="badge badge-success"><i class="fas fa-check"></i></span></li>
     <li> <a href="{{ route('indicators.aps.2020.respiratorio.index') }}">Programa Respiratorio.</a> <span class="badge badge-warning"><i class="fas fa-exclamation"></i></span></li>
     <li> <a href="{{ route('indicators.aps.2020.resolutividad.index') }}">Programa Resolutividad en APS.</a> <span class="badge badge-warning"><i class="fas fa-exclamation"></i></span></li>
