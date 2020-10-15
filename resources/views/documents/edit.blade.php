@@ -120,7 +120,7 @@
 var typeVal = $('#formType').val(); 
 $('#formType').change(
     function() {
-        if(!confirm('El cambio de tipo de documento implica desechar el numero de documento actual y asignar uno nuevo según el tipo de documento que seleccionaste, ¿Está seguro/a de realizar esto al momento de guardar los cambios?')){
+        if(!confirm('Con este cambio se reemplazará el número actual que tiene asignado el documento por uno nuevo según el tipo de documento que seleccionaste, ¿Está seguro/a de realizar esto al momento de guardar los cambios?')){
             $(this).val(typeVal);
             return;
         }

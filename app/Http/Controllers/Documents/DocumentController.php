@@ -217,6 +217,7 @@ class DocumentController extends Controller
     public function createFromPrevious(Request $request)
     {
         $document = Document::findOrNew($request->document_id);
+        $document->type = null;
         if( $document->user_id != Auth::id() ) {
             $document = new Document();
         }
