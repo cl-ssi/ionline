@@ -19,7 +19,7 @@ class ProgrammingItemController extends Controller
     public function index(Request $request)
     {
         $programmingitems = ProgrammingItem::where('programming_id',$request->programming_id)->OrderBy('id')->get();
-        return view('programmings/programmingitems/index')->withProgrammingItems($programmingitems);
+        return view('programmings/programmingItems/index')->withProgrammingItems($programmingitems);
     }
 
     public function create(Request $request)
