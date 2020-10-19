@@ -56,7 +56,7 @@ class ProgrammingItemController extends Controller
         ->get();
 
 
-        return view('programmings/programmingitems/create')->withEstablishments($establishments)
+        return view('programmings/programmingItems/create')->withEstablishments($establishments)
                                                           ->withActivityItems($activityItems)
                                                           ->withProfessionalHours($professionalHours)
                                                           ->withMinisterialPrograms($ministerialPrograms)
@@ -88,7 +88,7 @@ class ProgrammingItemController extends Controller
         ->get();
 
 
-        return view('programmings/programmingitems/create')->withEstablishments($establishments)->withActivityItems($activityItems)->withProfessionalHours($professionalHours)->withMinisterialPrograms($ministerialPrograms)->withActionTypes($actionTypes);
+        return view('programmings/programmingItems/create')->withEstablishments($establishments)->withActivityItems($activityItems)->withProfessionalHours($professionalHours)->withMinisterialPrograms($ministerialPrograms)->withActionTypes($actionTypes);
     }
 
     public function store(Request $request)
