@@ -1,0 +1,122 @@
+@extends('layouts.app')
+
+@section('title', 'Lista de Profesionales')
+
+@section('content')
+
+@include('programmings/nav')
+<a href="{{ route('trainingitems.create',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
+<h4 class="mb-3"> Capacitaciones Municipales</h4>
+
+<button onclick="exportTableToExcel('tblData')" class="btn btn-success mb-4 float-left btn-sm">Excel</button>
+
+<table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover  ">
+    <thead>
+        <tr style="font-size:60%;">
+            <th class="text-center align-middle table-dark" colspan="18">PROGRAMA  ANUAL DE CAPACITACION  PERSONAL ESTATUTO ATENCIÓN PRIMARIA (LEY 19.378) SERVCIO DE SALUD IQUIQUE   </th>
+        </tr>
+        <tr style="font-size:60%;">
+            <th class="text-center align-middle" colspan="3"></th>
+            <th class="text-center align-middle" colspan="7">NUMERO DE PARTICIPANTES POR CATEGORIA</th>
+            <th class="text-center align-middle"></th>
+            <th class="text-center align-middle" colspan="4">CAPACITACION</th>
+            <th class="text-center align-middle"colspan="3"></th>
+        </tr>
+        <tr style="font-size:45%;">
+            <th class="text-center align-middle">LINEAMIENTOS ESTRATEGICOS</th>
+            <th class="text-center align-middle">ACTIVIDADES DE CAPACITACION (TEMAS)</th>
+            <th class="text-center align-middle">OBJETIVOS EDUCATIVOS</th>
+            <th class="text-center align-middle">A (Médicos, Odont, QF,etc.)</th>
+            <th class="text-center align-middle">B (Otros Profesio-nales)</th>
+            <th class="text-center align-middle">C (Técnicos Nivel Superior) </th>
+            <th class="text-center align-middle">D (Técnicos de Salud)</th>
+            <th class="text-center align-middle">E (Adminis-trativos Salud)</th>
+            <th class="text-center align-middle">F (Auxiliares servicios Salud)</th>
+            <th class="text-center align-middle">TOTAL</th>
+            <th class="text-center align-middle">NUMERO DE HORAS PEDAGOGICAS </th>
+            <th class="text-center align-middle">ITEM CAPACITACION</th>
+            <th class="text-center align-middle">FONDOS MUNICIPALES (SI-NO)</th>
+            <th class="text-center align-middle">OTROS FONDOS (ESPECIFICAR CUALES)</th>
+            <th class="text-center align-middle">TOTAL PRESUPUESTO ESTIMADO </th>
+            <th class="text-center align-middle">ORGANISMO EJECUTOR</th>
+            <th class="text-center align-middle">COORDINADOR</th>
+            <th class="text-center align-middle">FECHA DE EJECUCIÓN</th>
+        </tr>
+    </thead>
+    <tbody style="font-size:60%;">
+        @foreach($trainingItems as $trainingItem)
+        <tr class="small">
+            <td class="text-center align-middle"><strong>{{ $trainingItem->linieamiento_estrategico}}</strong></td>
+            <td class="text-center align-middle">{{ $trainingItem->temas }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->objetivos_educativos }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->med_odont_qf }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->otros_profesionales }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->tec_nivel_superior }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->tec_salud }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->administrativo_salud }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->auxiliares_salud }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->total }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->num_hr_pedagodicas }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->item_cap }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->fondo_muni }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->otro_fondo }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->total_presupuesto_est }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->org_ejecutor }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->coordinador }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->fecha_ejecucion }}</td>
+        </tr>
+        @endforeach
+    </tbody>
+    <tfoot>
+        <tr style="font-size:60%;">
+            <td class="text-center" colspan="3">TOTALES</td>
+            <td  class="text-center">{{ $trainingItems->sum('med_odont_qf') ? $trainingItems->sum('med_odont_qf') : '0' }}</td>
+            <td  class="text-center">{{ $trainingItems->sum('otros_profesionales') ? $trainingItems->sum('otros_profesionales') : '0'  }}</td>
+            <td  class="text-center">{{ $trainingItems->sum('tec_nivel_superior') ? $trainingItems->sum('tec_nivel_superior') : '0'  }}</td>
+            <td  class="text-center">{{ $trainingItems->sum('tec_salud') ? $trainingItems->sum('tec_salud') : '0'  }}</td>
+            <td  class="text-center">{{ $trainingItems->sum('administrativo_salud') ? $trainingItems->sum('administrativo_salud') : '0'  }}</td>
+            <td  class="text-center">{{ $trainingItems->sum('auxiliares_salud') ? $trainingItems->sum('auxiliares_salud') : '0'  }}</td>
+            <td  class="text-center">{{ $trainingItems->sum('total') ? $trainingItems->sum('total') : '0'  }}</td>
+            <td class="text-center" colspan="4"></td>
+            <td  class="text-center">{{ $trainingItems ? $trainingItems->sum('total_presupuesto_est') : '0'}}</td>
+            <td class="text-center" colspan="3"></td>
+        </tr>
+    </tfoot>
+</table>
+
+@endsection
+
+@section('custom_js')
+<script>
+    function exportTableToExcel(tableID, filename = ''){
+        var downloadLink;
+        var dataType = 'application/vnd.ms-excel';
+        var tableSelect = document.getElementById(tableID);
+        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+        
+        // Specify file name
+        filename = filename?filename+'.xls':'Capacitacion_excel.xls';
+        
+        // Create download link element
+        downloadLink = document.createElement("a");
+        
+        document.body.appendChild(downloadLink);
+        
+        if(navigator.msSaveOrOpenBlob){
+            var blob = new Blob(['\ufeff', tableHTML], {
+                type: dataType
+            });
+            navigator.msSaveOrOpenBlob( blob, filename);
+        }else{
+            // Create a link to the file
+            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+        
+            // Setting the file name
+            downloadLink.download = filename;
+            
+            //triggering the function
+            downloadLink.click();
+        }
+    }
+</script>
+@endsection

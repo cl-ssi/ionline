@@ -7,7 +7,7 @@
 @include('programmings/nav')
 
 <h4 class="mb-3">Parametrización de Actividades y Prestaciones del Año</h4> 
-<a href="{{ route('programmings.create') }}" class="btn btn-info mb-4">Nueva Parametrización</a>
+<a href="{{ route('activityprograms.create') }}" class="btn btn-info mb-4">Nueva Parametrización</a>
 
 <table class="table table-sm table-hover">
     <thead>
@@ -26,7 +26,7 @@
             <td>{{ $activityProgram->description }}</td>
             <td class="text-right">
 
-                <a href="{{ route('activityitems.index', $activityProgram->id) }}" class="btn btb-flat btn-sm btn-info" >
+                <a href="{{ route('activityitems.index', ['activityprogram_id' => $activityProgram->id]) }}" class="btn btb-flat btn-sm btn-info" >
                     <i class="fas fa-tasks small"></i> 
                     <span class="small">Actividades</span> 
                 </a>

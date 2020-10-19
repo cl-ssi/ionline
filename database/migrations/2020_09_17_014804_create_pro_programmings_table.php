@@ -20,6 +20,7 @@ class CreateProProgrammingsTable extends Migration
 
             $table->unsignedBigInteger('user_id');
             $table->unsignedInteger('establishment_id');
+            $table->json('access')->nullable();
             $table->timestamps();
 
             $table->foreign('establishment_id')->references('id')->on('establishments');

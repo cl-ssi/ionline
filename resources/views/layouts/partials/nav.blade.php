@@ -17,11 +17,13 @@
                     </a>
                 </li>
 
-                <!--<li class="nav-item  ">
+                @can('Programming: view')
+                <li class="nav-item  ">
                     <a class="nav-link" href="{{ route('programmings.index') }}">
-                        <i class="fas fa-address-book"></i> Programación APS
+                        <i class="fas fa-calculator"></i> Programación APS
                     </a>
-                </li>-->
+                </li>
+                @endcan
 
 
                 <li class="nav-item dropdown {{ active('indicators*') }}">

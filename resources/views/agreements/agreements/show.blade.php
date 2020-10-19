@@ -603,7 +603,7 @@
         $('select').selectpicker();
 
         jobs.forEach(function(row) {
-         // console.log(row);
+         //console.log(row);
             $("#establishment option").filter(function(){
                 return $.trim($(this).val()) ==  row
             }).prop('selected', true);

@@ -18,6 +18,7 @@ class CreateProProgrammingItemsTable extends Migration
             $table->string('cycle')->nullable();
             $table->string('action_type')->nullable();
             $table->string('ministerial_program')->nullable();
+            $table->integer('activity_id')->nullable();
             $table->string('activity_name')->nullable();
             $table->string('def_target_population')->nullable();
             $table->string('source_population')->nullable();
@@ -28,19 +29,22 @@ class CreateProProgrammingItemsTable extends Migration
             $table->integer('population_attend')->nullable(); // Población a atender
             $table->integer('concentration')->nullable(); // Cantidad de veces que debo darle control anual
             $table->integer('activity_total')->nullable();
+            $table->integer('activity_group')->nullable();
             $table->string('professional')->nullable();
             $table->integer('activity_performance')->nullable();
             $table->decimal('hours_required_year',5,1)->nullable();
             $table->decimal('hours_required_day',5,2)->nullable();
             $table->decimal('direct_work_year',5,2)->nullable(); // Jornadas Directas Año
-            $table->decimal('direct_work_hour',5,4)->nullable(); // Jornadas Horas Directas Diarias
+            $table->decimal('direct_work_hour',5,2)->nullable(); // Jornadas Horas Directas Diarias
             $table->string('information_source')->nullable();
             $table->string('prap_financed')->nullable();
             $table->string('observation')->nullable();
+            $table->unsignedBigInteger('user_id');
 
             $table->bigInteger('programming_id')->unsigned();
  
             $table->foreign('programming_id')->references('id')->on('pro_programmings');
+            $table->foreign('user_id')->references('id')->on('users');
             
             
             $table->timestamps();

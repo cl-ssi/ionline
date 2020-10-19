@@ -8,23 +8,25 @@
 
 <h3 class="mb-3"> Valor Profesionales Hora</h3>
 
+<small> * Puede asignar profesionales con valor hora 0</small>
+
 <div class="row">
 <div class="col-sm-6">
   
-    <table class="table  btn-table table-sm table-condensed fixed_headers table-hover ">
+    <table class="table  btn-table table-sm table-condensed fixed_headers  ">
         <thead class="small">
             <tr >
                 <th class="text-center align-middle table-dark" colspan="3">LISTADO DE PROFESIONALES</th>
             </tr>
         </thead>
-        <thead>
+        <thead style="font-size:80%;">
             <tr class="small">
                 <th>ID</th>
                 <th>PROFESIONAL</th>
                 <th class="text-center">ASIGNAR</th>
             </tr>
         </thead>
-        <tbody >
+        <tbody style="font-size:80%;">
             @foreach($professionals as $professional)
             <tr class="small">
                 <td>{{ $professional->id }}</td>
@@ -32,7 +34,7 @@
                 <td class="text-center">
                 <button class="btn btb-flat btn-sm btn-light" data-toggle="modal"
                         data-target="#addModal"
-                        data-programming="1"
+                        data-programming="{{ Request::get('programming_id') }}"
                         data-professional_id="{{ $professional->id }}"
                         data-name="{{ $professional->name }}"
                         data-formaction="{{ route('professionalhours.store')}}">
@@ -46,14 +48,14 @@
 
   </div>
   <div class="col-sm-6">
-
     <table class="table table-sm table-hover">
+    
     <thead>
             <tr class="small">
                 <th class="text-center align-middle table-info" colspan="5">SELECCIONADOS</th>
             </tr>
         </thead>
-        <thead>
+        <thead style="font-size:80%;">
             <tr class="small">
                 <th>ID</th>
                 <th>PROFESIONAL</th>
@@ -61,13 +63,17 @@
                 <th class="text-right"></th>
             </tr>
         </thead>
-        <tbody>
+        <tbody style="font-size:80%;">
             @foreach($professionalHours as $professionalHour)
             <tr class="small">
                 <td>{{ $professionalHour->id }}</td>
                 <td>{{ $professionalHour->name }}</td>
                 <td  class="text-right">{{ $professionalHour->value }}</td>
                 <td class="text-right">
+                    <!--<form method="POST" action="{{ route('professionalhours.destroy', $professionalHour->professionalHour_id) }}" class=" d-inline">
+                        {{ method_field('DELETE') }} {{ csrf_field() }}
+                        <button class="btn btb-flat btn-sm btn-light"><span class="fas fa-edit text-dark" aria-hidden="true"></span></button>
+                    </form>-->
                     <form method="POST" action="{{ route('professionalhours.destroy', $professionalHour->professionalHour_id) }}" class=" d-inline">
                         {{ method_field('DELETE') }} {{ csrf_field() }}
                         <button class="btn btb-flat btn-sm btn-light"><span class="fas fa-times-circle text-dark" aria-hidden="true"></span></button>

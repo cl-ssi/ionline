@@ -12,17 +12,18 @@ use App\Commune;
 
 class ActivitiesItemController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $activityitems = ActivityItem::All()->SortBy('name');
+        //dd($request->id);
+        $activityitems = ActivityItem::where('activity_id',$request->activityprogram_id)->OrderBy('id')->get();
         return view('programmings/activityItems/index')->withActivityItems($activityitems);
     }
 
-    public function create()
+    public function create(Request $request)
     {
         $establishments = Establishment::where('type','CESFAM')->OrderBy('name')->get();
         $communes = Commune::All()->SortBy('name');
-        return view('programmings/programmingitems/create')->withEstablishments($establishments)->withCommunes($communes);
+        return view('programmings/activityItems/create')->withEstablishments($establishments)->withCommunes($communes);
     }
 
     public function store(Request $request)
