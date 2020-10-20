@@ -73,12 +73,13 @@
                     </a>
                     @endcan
 
+                    @can('Agreement: view')
                     <div class="dropdown-divider"></div>
-
                     <a class="dropdown-item {{ active('agreements.tracking.*') }}"
                         href="{{ route('agreements.tracking.index') }}">
                         <i class="fas fa-file"></i> Convenios
                     </a>
+                    @endcan
 
                     <a class="dropdown-item {{ active('quality_aps.*') }}"
                         href="{{ route('quality_aps.index') }}">

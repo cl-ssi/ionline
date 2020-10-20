@@ -61,7 +61,7 @@ Nuevo Item Programación Operativa </h4>
         </div>
         <div class="form-group col-md-6">
             <label for="forprogram">Acción</label>
-            <input type="input" class="form-control" id="activity_name" name="activity_name" value="{{ $activityItemsSelect ? $activityItemsSelect->action_type : '' }}" required="">
+            <input type="input" class="form-control" id="action_type" name="action_type" value="{{ $activityItemsSelect ? $activityItemsSelect->action_type : '' }}" required="">
         </div>
         <!--<div class="form-group col-md-8">
             <label for="forprogram">Programa Ministerial</label>
@@ -82,8 +82,9 @@ Nuevo Item Programación Operativa </h4>
     
         <div class="form-group col-md-9">
             <label for="forprogram">Actividad o Prestación</label>
-            <input type="input" class="form-control" id="action_type" name="action_type" value="{{ $activityItemsSelect ? $activityItemsSelect->activity_name : '' }}" required="">
+            <input type="input" class="form-control" id="activity_name" name="activity_name" value="{{ $activityItemsSelect ? $activityItemsSelect->activity_name : '' }}" required="">
         </div>
+        <input type="hidden" class="form-control" id="activity_id" name="activity_id" value="{{ $activityItemsSelect ? $activityItemsSelect->id : '' }}" required="">
 
     </div>
 
@@ -105,27 +106,47 @@ Nuevo Item Programación Operativa </h4>
     
 
         <div class="form-group col-md-2">
-            <label for="forprogram">Nº Población Objetivo</label>
+            <label for="forprogram">Nº Población Objetivo</label> 
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Población Objetivo" 
+            data-content="Expresar numéricamente la cantidad de población Ej: 15000">
+            <i class="fas fa-info-circle"></i></a>
             <input type="number" class="form-control " id="cant_target_population" name="cant_target_population"  required="">
         </div>
         <div class="form-group col-md-2">
             <label for="forprogram">Prevalencia o Tasa (%)</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Prevalencia o Tasa (%)" 
+            data-content="Utilizar este dato cuando se desconoce el número de usuarios con el fin de estimar una población que podría percibir en el año a programar Ej: 50%">
+            <i class="fas fa-info-circle"></i></a>
             <input type="number" class="form-control" id="prevalence_rate" name="prevalence_rate" required="">
         </div>
 
         <div class="form-group col-md-4">
             <label for="forprogram">Fuente Prevalencia o Tasa</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Fuente Prevalencia o Tasa" 
+            data-content="En caso de utilizar prevalencia/tasa, se debe indicar la fuente del dato Ej: Minsal">
+            <i class="fas fa-info-circle"></i></a>
             <input type="input" class="form-control" id="forreferente" name="source_prevalence" >
             <small></small>
         </div>
 
         <div class="form-group col-md-2">
             <label for="forprogram">Cobertura (%)</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Cobertura (%)" 
+            data-content="Es el porcentaje de la población que se va a atender. Se expresa en porcentaje. Las prestaciones universales se deben consignar por sobre un 90% de cobertura Ej: 43%">
+            <i class="fas fa-info-circle"></i></a>
             <input type="number" class="form-control" id="coverture" name="coverture" required="">
         </div>
 
         <div class="form-group col-md-2">
             <label for="forprogram">Nº Población a Atender</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Población a Atender" 
+            data-content="Es el cálculo matemático de una actividad ponderada: multiplicación de la población por su incidencia/prevalencia y por la cobertura.">
+            <i class="fas fa-info-circle"></i></a>
             <input type="number" class="form-control" id="population_attend" name="population_attend" required="" readonly>
         </div>
         
@@ -135,6 +156,10 @@ Nuevo Item Programación Operativa </h4>
 
         <div class="form-group col-md-2">
             <label for="forprogram">Concentración</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Concentración" 
+            data-content="La cantidad de veces que debo darle el control anual">
+            <i class="fas fa-info-circle"></i></a>
             <input type="number" class="form-control" id="concentration" name="concentration" required="">
         </div>
 
@@ -148,7 +173,11 @@ Nuevo Item Programación Operativa </h4>
     <div class="form-row">
     
         <div class="form-group col-md-6">
-            <label for="forprogram">Profesional <span class="text-danger">{{ $activityItemsSelect ? '- Rec. '.$activityItemsSelect->professional : '' }}</span></label>
+            <label for="forprogram">Profesional/Funcionario <span class="text-danger">{{ $activityItemsSelect ? '- Rec. '.$activityItemsSelect->professional : '' }}</span></label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Profesional/Funcionario" 
+            data-content="Funcionario que otorga la prestación, Si es más de un funcionario para la actividad programada se debe repetir en otro registro">
+            <i class="fas fa-info-circle"></i></a>
             <select name="professional" id="formprogram" class="form-control">
                 @foreach($professionalHours as $professionalHour)
                     <option value="{{ $professionalHour->id }}">{{ $professionalHour->alias }}</option>
@@ -156,8 +185,14 @@ Nuevo Item Programación Operativa </h4>
             </select>
         </div>
 
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-3">
             <label for="forprogram">Rendimiento de la Actividad</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Rendimiento de la Actividad" 
+            data-content="Número de veces que se realiza un tipo de actividad durante una hora cronológica por parte de un funcionario 
+            (EJ: Rendimiento de 45 minutos es 60/45=1.3).
+             Cuando el rendimiento está normado debe utilizarse el estandar de la norma o uno menor según acuerdo local.">
+            <i class="fas fa-info-circle"></i></a>
             <input type="number" class="form-control" id="activity_performance" name="activity_performance" required="" >
         </div>
 
@@ -166,7 +201,7 @@ Nuevo Item Programación Operativa </h4>
             <input type="number" class="form-control" id="habil_days" value="{{ $programmingDays ? $programmingDays->days_programming : '' }}" name="habil_days" required="" readonly>
         </div>
 
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-1">
             <label for="forprogram">Hora Laboral</label>
             <input type="number" class="form-control" id="work_valid_hour_day" value="{{ $programmingDays ? $programmingDays->day_work_hours : '' }}" name="work_valid_hour_day" required="" readonly>
         </div>
@@ -177,21 +212,37 @@ Nuevo Item Programación Operativa </h4>
 
         <div class="form-group col-md-3">
             <label for="forprogram">Horas Años Requeridas</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Horas Años Requeridas" 
+            data-content="Calculo Automatico bajo fórmula que indica la cantidad de horas que se requieren en el año programado.">
+            <i class="fas fa-info-circle"></i></a>
             <input type="input" class="form-control" id="hours_required_year" name="hours_required_year" required="" readonly>
         </div>
 
         <div class="form-group col-md-3">
             <label for="forprogram">Horas días Requeridas</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Horas días Requeridas" 
+            data-content="Calculo Automatico bajo fórmula que indica la cantidad de horas que se requieren en un dia del año programado.">
+            <i class="fas fa-info-circle"></i></a>
             <input type="input" class="form-control" id="hours_required_day" name="hours_required_day" required="" readonly>
         </div>
     
         <div class="form-group col-md-s">
             <label for="forprogram">Jornadas Directas Año</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Jornadas Directas Año" 
+            data-content="Calculo Automatico bajo fórmula que indica la cantidad de jornadas laborales que se requieren en el año programado.">
+            <i class="fas fa-info-circle"></i></a>
             <input type="input" class="form-control" id="direct_work_year" name="direct_work_year" required="" readonly>
         </div>
 
         <div class="form-group col-md-3">
-            <label for="forprogram">Jornada Directa Año</label>
+            <label for="forprogram">Jornadas Horas Directas Diarias</label>
+            <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
+            title="Jornadas Horas Directas Diarias" 
+            data-content="Calculo Automatico bajo fórmula que indica la cantidad de jornadas laborales que se requieren en un día del año programado.">
+            <i class="fas fa-info-circle"></i></a>
             <input type="input" class="form-control" id="direct_work_hour" name="direct_work_hour" required="" readonly>
         </div>
     </div>
@@ -199,8 +250,8 @@ Nuevo Item Programación Operativa </h4>
     <div class="form-row">
 
         <div class="form-group col-md-6">
-            <label for="forprogram">Jornadas Horas Directas Diarias</label>
-            <input type="input" class="form-control" id="information_source" value="{{ $activityItemsSelect ? $activityItemsSelect->verification_rem : '' }}" name="information_source" required="">
+            <label for="forprogram">Fuente Información</label>
+            <input type="input" class="form-control" id="information_source" value="{{ $activityItemsSelect ? $activityItemsSelect->verification_rem : '' }}" name="information_source" >
         </div>
 
         <div class="form-group col-md-3">
@@ -239,6 +290,13 @@ Nuevo Item Programación Operativa </h4>
 <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
 
 <script>
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+    $('.popover-dismiss').popover({
+        trigger: 'focus'
+    }) 
+
     var select = document.getElementById('activity_search_id');
         select.onchange = function(){
             this.form.submit();
@@ -312,6 +370,7 @@ Nuevo Item Programación Operativa </h4>
         var habil_days = $('#habil_days').val();
         var work_valid_hour_day = $('#work_valid_hour_day').val();
         
+        
 
         if(activity_total == 0 || activity_performance == 0)
         {
@@ -325,8 +384,8 @@ Nuevo Item Programación Operativa </h4>
         {
             var hours_required_year = $('#activity_total').val() / activity_performance;
             var hours_required_day  = $('#activity_total').val() / activity_performance / habil_days;
-            var direct_work_year    = activity_performance/ hours_required_day ;
-            var direct_work_hour    = hours_required_year / direct_work_year;
+            var direct_work_year    = hours_required_day/ work_valid_hour_day ;
+            var direct_work_hour    =  direct_work_year/work_valid_hour_day;
             
             console.log("concentration > 0");
             
@@ -343,7 +402,7 @@ Nuevo Item Programación Operativa </h4>
         $('#hours_required_year').val(Math.round(hours_required_year));
         $('#hours_required_day').val(hours_required_day.toFixed(2));
         $('#direct_work_year').val(direct_work_year.toFixed(2));
-        $('#direct_work_hour').val(direct_work_hour.toFixed(4));
+        $('#direct_work_hour').val(direct_work_hour.toFixed(5));
         
     });
 

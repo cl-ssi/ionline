@@ -29,13 +29,18 @@ class CreateProProgrammingItemsTable extends Migration
             $table->integer('population_attend')->nullable(); // Población a atender
             $table->integer('concentration')->nullable(); // Cantidad de veces que debo darle control anual
             $table->integer('activity_total')->nullable();
+
             $table->integer('activity_group')->nullable();
+            $table->integer('workshop_number')->nullable();
+            $table->integer('workshop_session_number')->nullable();
+            $table->decimal('workshop_session_time',5,2)->nullable();
+
             $table->string('professional')->nullable();
             $table->integer('activity_performance')->nullable();
-            $table->decimal('hours_required_year',5,1)->nullable();
+            $table->decimal('hours_required_year',5,2)->nullable();
             $table->decimal('hours_required_day',5,2)->nullable();
             $table->decimal('direct_work_year',5,2)->nullable(); // Jornadas Directas Año
-            $table->decimal('direct_work_hour',5,2)->nullable(); // Jornadas Horas Directas Diarias
+            $table->double('direct_work_hour',15,8)->nullable(); // Jornadas Horas Directas Diarias double('column', 15, 8)
             $table->string('information_source')->nullable();
             $table->string('prap_financed')->nullable();
             $table->string('observation')->nullable();

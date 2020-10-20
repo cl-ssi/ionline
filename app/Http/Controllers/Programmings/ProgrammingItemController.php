@@ -11,6 +11,7 @@ use App\Programmings\MinisterialProgram;
 use App\Programmings\ProgrammingDay;
 use App\Programmings\ActivityItem;
 use App\Programmings\ActionType;
+use App\User;
 use App\Establishment;
 use App\Commune;
 
@@ -97,8 +98,8 @@ class ProgrammingItemController extends Controller
         $programmingItems = new ProgrammingItem($request->All());
         //$programming->year = date('Y', strtotime($request->date));
         //$programming->description = $request->description;
-        //$programming->establishment_id = $request->establishment;
-        $programmingItems->programming_id = 1;
+        $programmingItems->user_id = Auth()->user()->id;
+        $programmingItems->programming_id = $request->programming_id;
        
         $programmingItems->save();
 
