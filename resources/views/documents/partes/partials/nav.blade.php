@@ -1,7 +1,7 @@
 <ul class="nav nav-tabs mb-3">
     @can('Partes: oficina')
     <li class="nav-item">
-        <a class="nav-link {{ active('documents.partes.create') }}"
+        <a class="nav-link"
             href="{{ route('documents.partes.create') }}">
             <i class="fas fa-plus"></i> Nuevo Ingreso
         </a>
@@ -10,7 +10,7 @@
 
     @canany(['Partes: oficina', 'Partes: director'])
     <li class="nav-item">
-        <a class="nav-link {{ active('documents.partes.index') }}"
+        <a class="nav-link"
             href="{{ route('documents.partes.index') }}">
             <i class="fas fa-folder-open"></i> Bandeja de Entrada
         </a>
@@ -19,7 +19,7 @@
 
     <!-- @canany(['Partes: user'])
     <li class="nav-item">
-        <a class="nav-link {{ active('documents.partes.inbox') }}"
+        <a class="nav-link"
             href="{{ route('documents.partes.inbox') }}">
             <i class="fas fa-inbox"></i> Bandeja de Entrada
         </a>
@@ -28,7 +28,7 @@
 
     @canany(['Partes: oficina'])
     <li class="nav-item">
-        <a class="nav-link {{ active('documents.add_number') }}"
+        <a class="nav-link"
             href="{{ route('documents.add_number') }}">
             <i class="fas fa-certificate"></i> Nuevo Egreso
         </a>
@@ -37,7 +37,7 @@
 
     @canany(['Partes: oficina'])
     <li class="nav-item">
-        <a class="nav-link {{ active('documents.partes.outbox') }}"
+        <a class="nav-link"
             href="{{ route('documents.partes.outbox') }}">
             <i class="fas fa-inbox"></i> Bandeja de Salida
         </a>
@@ -46,7 +46,7 @@
 
     @can('be god')
     <li class="nav-item">
-        <a class="nav-link {{ active('documents.partes.admin') }}"
+        <a class="nav-link"
             href="{{ route('documents.partes.admin') }}">
             <i class="fas fa-cog"></i> Admin
         </a>

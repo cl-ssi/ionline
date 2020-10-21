@@ -11,7 +11,7 @@
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
 
-                <li class="nav-item {{ active('rrhh.users.directory') }} ">
+                <li class="nav-item">
                     <a class="nav-link" href="{{ route('rrhh.users.directory') }}">
                         <i class="fas fa-address-book"></i> Telefonos
                     </a>
@@ -26,7 +26,7 @@
                 @endcan
 
 
-                <li class="nav-item dropdown {{ active('indicators*') }}">
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-chart-line"></i> Estadísticas
@@ -34,14 +34,14 @@
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                        <a class="dropdown-item {{ active('indicators.index') }}"
+                        <a class="dropdown-item"
                            href="{{ route('indicators.index') }}">
                             <i class="fas fa-desktop fa-fw"></i> Indicadores - REM
                         </a>
 
                         {{--@auth
                             @canany(['LE Extra Plan: Carga','LE Extra Plan: Monitoreo'])
-                                <a class="dropdown-item {{ active('le_extra_plans.index') }}"
+                                <a class="dropdown-item"
                                    href="{{ route('le_extra_plans.index') }}">
                                     <i class="far fa-file-alt"></i> LE Plan Extraordinario
                                 </a>
@@ -51,7 +51,7 @@
                 </li>
 
                 @auth
-                <li class="nav-item dropdown {{ active(['documents.*','quality_aps.*','health_plan.*']) }}">
+                <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-file-alt"></i> Documentos
@@ -60,14 +60,14 @@
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
                     @canany(['Documents: create','Documents: edit','Documents: add number', 'Documents: dev'])
-                    <a class="dropdown-item {{ active(['documents.index','documents.create','documents.edit','documents.add_number','documents.report']) }}"
+                    <a class="dropdown-item"
                         href="{{ route('documents.index') }}">
                         <i class="fas fa-pen"></i> Generador de documentos
                     </a>
                     @endcan
 
                     @canany(['Partes: oficina','Partes: user','Partes: director'])
-                    <a class="dropdown-item {{ active('documents.partes.*') }}"
+                    <a class="dropdown-item"
                         href="{{ route('documents.partes.index') }}">
                         <i class="fas fa-file-import"></i> Partes
                     </a>
@@ -75,18 +75,18 @@
 
                     @can('Agreement: view')
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item {{ active('agreements.tracking.*') }}"
+                    <a class="dropdown-item"
                         href="{{ route('agreements.tracking.index') }}">
                         <i class="fas fa-file"></i> Convenios
                     </a>
                     @endcan
 
-                    <a class="dropdown-item {{ active('quality_aps.*') }}"
+                    <a class="dropdown-item"
                         href="{{ route('quality_aps.index') }}">
                         <i class="fas fa-file-alt"></i> Acreditación de Calidad
                     </a>
 
-                    <a class="dropdown-item {{ active('health_plan.*') }}"
+                    <a class="dropdown-item"
                         href="{{ route('health_plan.index', ['iquique']) }}">
                         <i class="fas fa-file-powerpoint"></i> Planes Comunales
                     </a>
@@ -95,7 +95,7 @@
                 @endauth
 
                 @can('Requirements: create')
-                <li class="nav-item {{ active('requirements.*') }}">
+                <li class="nav-item">
                     <a class="nav-link" href="{{ route('requirements.outbox') }}">
                     <i class="fas fa-rocket"></i> SGR
                     <span class="badge badge-secondary">{{ App\Requirements\Requirement::getPendingRequirements() }}</span></a>
@@ -123,14 +123,14 @@
                         @endcan
 
                         @canany(['OrganizationalUnits: create', 'OrganizationalUnits: edit', 'OrganizationalUnits: delete'])
-                            <a class="dropdown-item {{ active('rrhh.organizationalUnits.*') }}"
+                            <a class="dropdown-item"
                                href="{{ route('rrhh.organizational-units.index') }}">
                                 <i class="fas fa-sitemap fa-fw"></i> Unidades organizacionales
                             </a>
                         @endcan
 
                         @canany(['Authorities: manager', 'Authorities: view'])
-                            <a class="dropdown-item {{ active('rrhh.authorities.*') }}"
+                            <a class="dropdown-item"
                                href="{{ route('rrhh.authorities.index') }}">
                                 <i class="fas fa-chess-king fa-fw"></i> Autoridades
                             </a>
@@ -142,14 +142,14 @@
                 @endcan
 
                 @role('Drugs: admin|Drugs: receptionist|Drugs: basic')
-                <li class="nav-item {{ active('drugs*') }}">
+                <li class="nav-item">
                     <a class="nav-link" href="{{ route('drugs.receptions.index') }}">
                         <i class="fas fa-cannabis"></i> Drogas</a>
                 </li>
                 @endrole
 
                 @canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)', 'Pharmacy: APS (id:3)'])
-                    <li class="nav-item {{ active('pharmacies.*') }}">
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('pharmacies.index') }}">
                             @canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)']) <i class="fas fa-prescription-bottle-alt"></i> Droguería @endcan
                             @can('Pharmacy: APS (id:3)') <i class="fas fa-list-ul"></i> Bodega APS @endcan
@@ -158,34 +158,34 @@
                 @endcan
 
                 @canany(['Resources: create', 'Resources: edit', 'Resources: delete'])
-                <li class="nav-item dropdown {{ active('resources.*') }}">
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-clipboard-list"></i> Recursos
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                        <a class="dropdown-item {{ active('resources.computers.*') }}"
+                        <a class="dropdown-item"
                             href="{{ route('resources.computer.index') }}">
                             <i class="fas fa-desktop fa-fw"></i> Computadores
                         </a>
 
-                        <a class="dropdown-item {{ active('resources.printer.*') }}"
+                        <a class="dropdown-item"
                             href="{{ route('resources.printer.index') }}">
                             <i class="fas fa-print fa-fw"></i> Impresoras
                         </a>
 
-                        <a class="dropdown-item {{ active('resources.telephones.*') }}"
+                        <a class="dropdown-item"
                             href="{{ route('resources.telephone.index') }}">
                             <i class="fas fa-fax fa-fw"></i> Teléfonos Fijos
                         </a>
 
-                        <a class="dropdown-item {{ active('resources.mobile.*') }}"
+                        <a class="dropdown-item"
                             href="{{ route('resources.mobile.index') }}">
                             <i class="fas fa-mobile-alt fa-fw"></i> Teléfonos Móviles
                         </a>
 
-                        <a class="dropdown-item {{ active('resources.wingle.*') }}"
+                        <a class="dropdown-item"
                             href="{{ route('resources.wingle.index') }}">
                             <i class="fas fa-wifi fa-fw"></i> Banda Ancha Móvil
                         </a>
@@ -221,7 +221,7 @@
 
 
                                 @role('god')
-                                <a class="dropdown-item {{ active('parameters.*') }}"
+                                <a class="dropdown-item"
                                    href="{{ route('parameters.index') }}">
                                     <i class="fas fa-cog fa-fw"></i> Mantenedores
                                 </a>
