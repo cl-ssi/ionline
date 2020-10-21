@@ -14,7 +14,7 @@
     <thead>
         <tr class="small ">
             @can('Programming: edit')<th class="text-left align-middle table-dark" ></th>@endcan
-            <th class="text-left align-middle table-dark" >Id</th>
+            <th class="text-left align-middle table-dark" >Id</th> 
             <th class="text-left align-middle table-dark" >Comuna</th>
             <th class="text-left align-middle table-dark" >Establecimiento</th>
             <th class="text-left align-middle table-dark" >Año</th>

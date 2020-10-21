@@ -11,6 +11,7 @@
 <table class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:55%;">
+            @can('Programming: edit')<th class="text-left align-middle" ></th>@endcan
             <th class="text-center align-middle">CICLO</th>
             <th class="text-center align-middle">ACCIÓN</th>
             <!--<th class="text-center align-middle">PROGRAMA MINISTERIAL</th>-->
@@ -39,6 +40,9 @@
     <tbody style="font-size:65%;">
         @foreach($programmingItems as $programmingitem)
         <tr class="small">
+        @can('Programming: edit')
+            <td ><a href="{{ route('programmingitems.show', $programmingitem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
+        @endcan
             <td class="text-center align-middle">{{ $programmingitem->cycle }}</td>
             <td class="text-center align-middle">{{ $programmingitem->action_type }}</td>
             <!--<td class="text-center align-middle">{{ $programmingitem->ministerial_program }}</td>-->
