@@ -257,8 +257,8 @@ Nuevo Item Programación Operativa </h4>
         <div class="form-group col-md-3">
             <label for="forprogram">Financiada por Prap</label>
             <select name="prap_financed" id="prap_financed" class="form-control">
-                    <option value="SI">No</option>
-                    <option value="NO">SI</option>
+                    <option value="NO">No</option>
+                    <option value="SI">SI</option>
                
             </select>
         </div>
