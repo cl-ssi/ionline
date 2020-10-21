@@ -119,7 +119,7 @@ Nuevo Item Programación Operativa </h4>
             title="Prevalencia o Tasa (%)" 
             data-content="Utilizar este dato cuando se desconoce el número de usuarios con el fin de estimar una población que podría percibir en el año a programar Ej: 50%">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" class="form-control" id="prevalence_rate" name="prevalence_rate" required="">
+            <input type="number" step="any" class="form-control" id="prevalence_rate" name="prevalence_rate" required="">
         </div>
 
         <div class="form-group col-md-4">
@@ -138,7 +138,7 @@ Nuevo Item Programación Operativa </h4>
             title="Cobertura (%)" 
             data-content="Es el porcentaje de la población que se va a atender. Se expresa en porcentaje. Las prestaciones universales se deben consignar por sobre un 90% de cobertura Ej: 43%">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" class="form-control" id="coverture" name="coverture" required="">
+            <input type="number" step="any" class="form-control" id="coverture" name="coverture" required="">
         </div>
 
         <div class="form-group col-md-2">
