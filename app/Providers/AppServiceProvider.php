@@ -44,6 +44,6 @@ class AppServiceProvider extends ServiceProvider
             return "<?php echo number_format($numero, 0, '.', '.'); ?>";
         });
 
-        //Paginator::useBootstrap();
+        Paginator::useBootstrap();
     }
 }
