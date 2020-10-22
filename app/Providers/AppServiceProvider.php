@@ -43,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('numero', function ($numero) {
             return "<?php echo number_format($numero, 0, '.', '.'); ?>";
         });
-        
-        Paginator::useBootstrap();
+
+        //Paginator::useBootstrap();
     }
 }
