@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Commune;
+use App\Models\Commune;
 
 class CommuneSeeder extends Seeder
 {

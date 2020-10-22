@@ -13,7 +13,7 @@ use App\Programmings\ActivityItem;
 use App\Programmings\ActionType;
 use App\User;
 use App\Establishment;
-use App\Commune;
+use App\Models\Commune;
 
 class ProgrammingItemController extends Controller
 {

@@ -15,6 +15,6 @@ class Municipality extends Model
     ];
 
     public function commune() {
-            return $this->hasOne('\App\Commune');
+            return $this->hasOne('\App\Models\Commune');
     }
 }

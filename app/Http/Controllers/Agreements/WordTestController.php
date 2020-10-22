@@ -11,7 +11,7 @@ use App\Agreements\AgreementAmount;
 use App\Agreements\AgreementQuota;
 use App\Agreements\OpenTemplateProcessor;
 use App\Agreements\MyClass;
-use App\Commune;
+use App\Models\Commune;
 use App\Municipality;
 use App\Establishment;
 use Carbon\Carbon;

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Indicators\_2018;
 
 use App\Indicators\ProgramApsValue;
 use App\Indicators\ProgramApsGlosa;
-use App\Commune;
+use App\Models\Commune;
 use App\Establishment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

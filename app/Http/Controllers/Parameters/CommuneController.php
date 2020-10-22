@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Parameters;
 
-use App\Commune;
+use App\Models\Commune;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -43,7 +43,7 @@ class CommuneController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Commune  $commune
+     * @param  \App\Models\Commune  $commune
      * @return \Illuminate\Http\Response
      */
     public function show(Commune $commune)
@@ -54,7 +54,7 @@ class CommuneController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Commune  $commune
+     * @param  \App\Models\Commune  $commune
      * @return \Illuminate\Http\Response
      */
     public function edit(Commune $commune)
@@ -66,7 +66,7 @@ class CommuneController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Commune  $commune
+     * @param  \App\Models\Commune  $commune
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Commune $commune)
@@ -82,7 +82,7 @@ class CommuneController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Commune  $commune
+     * @param  \App\Models\Commune  $commune
      * @return \Illuminate\Http\Response
      */
     public function destroy(Commune $commune)

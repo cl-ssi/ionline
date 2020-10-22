@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Programmings\ActivityProgram;
 use App\Establishment;
-use App\Commune;
+use App\Models\Commune;
 
 class ActivitiesProgramController extends Controller
 {

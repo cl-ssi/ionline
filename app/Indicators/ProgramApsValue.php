@@ -19,7 +19,7 @@ class ProgramApsValue extends Model
     ];
 
     public function commune() {
-        return $this->belongsTo('App\Commune');
+        return $this->belongsTo('App\Models\Commune');
     }
 
     public function establishment() {

@@ -9,7 +9,7 @@ use App\Agreements\AgreementAmount;
 use App\Agreements\AgreementQuota;
 use App\Agreements\Addendum;
 use App\Establishment;
-use App\Commune;
+use App\Models\Commune;
 use App\Municipality;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
