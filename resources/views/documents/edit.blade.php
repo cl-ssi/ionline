@@ -32,12 +32,12 @@
         </div>
         <div class="form-group col-2">
             <label for="forType">Tipo*</label>
-            <select name="type" id="formType" class="form-control" disabled required>
-                <option {{ $document->type === 'Memo' ? 'selected' : '' }}>Memo</option>
-                <option {{ $document->type === 'Ordinario' ? 'selected' : '' }} >Ordinario</option>
-                <option {{ $document->type === 'Reservado' ? 'selected' : '' }}>Reservado</option>
-                <option {{ $document->type === 'Circular' ? 'selected' : '' }}>Circular</option>
-                <option {{ $document->type === 'Acta de recepción' ? 'selected' : '' }}>Acta de recepción</option>
+            <select name="type" id="formType" class="form-control" required>
+                <option value="Memo" {{ $document->type === 'Memo' ? 'selected' : '' }}>Memo</option>
+                <option value="Ordinario" {{ $document->type === 'Ordinario' ? 'selected' : '' }} >Ordinario</option>
+                <option value="Reservado" {{ $document->type === 'Reservado' ? 'selected' : '' }}>Reservado</option>
+                <option value="Circular" {{ $document->type === 'Circular' ? 'selected' : '' }}>Circular</option>
+                <option value="Acta de recepción" {{ $document->type === 'Acta de recepción' ? 'selected' : '' }}>Acta de recepción</option>
             </select>
         </div>
         <div class="form-group col">
@@ -117,23 +117,29 @@
 @section('custom_js')
 
 <script type="text/javascript">
-
+var typeVal = $('#formType').val(); 
 $('#formType').change(
     function() {
-        if("Memo" === this.value) {
-            $("#forNumber").prop('disabled', false);
+        if(!confirm('Con este cambio se reemplazará el número actual que tiene asignado el documento por uno nuevo según el tipo de documento que seleccionaste, ¿Está seguro/a de realizar esto al momento de guardar los cambios?')){
+            $(this).val(typeVal);
+            return;
         }
-        if("Ordinario" === this.value) {
-            $("#forNumber").prop('disabled', true);
-            $("#forNumber").val(null);
-        }
-        if("Reservado" === this.value) {
-            $("#forNumber").prop('disabled', true);
-            $("#forNumber").val(null);
-        }
-        if("Circular" === this.value) {
-            $("#forNumber").prop('disabled', false);
-        }
+        
+        $("#forNumber").val(null);
+        // if("Memo" === this.value) {
+        //     $("#forNumber").prop('disabled', false);
+        // }
+        // if("Ordinario" === this.value) {
+        //     $("#forNumber").prop('disabled', true);
+        //     $("#forNumber").val(null);
+        // }
+        // if("Reservado" === this.value) {
+        //     $("#forNumber").prop('disabled', true);
+        //     $("#forNumber").val(null);
+        // }
+        // if("Circular" === this.value) {
+        //     $("#forNumber").prop('disabled', false);
+        // }
     }
 );
 </script>

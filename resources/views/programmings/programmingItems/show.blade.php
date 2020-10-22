@@ -119,7 +119,7 @@ Nuevo Item Programación Operativa </h4>
             title="Prevalencia o Tasa (%)" 
             data-content="Utilizar este dato cuando se desconoce el número de usuarios con el fin de estimar una población que podría percibir en el año a programar Ej: 50%">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" step="any" class="form-control" id="prevalence_rate" name="prevalence_rate" required="">
+            <input type="number" class="form-control" id="prevalence_rate" name="prevalence_rate" required="">
         </div>
 
         <div class="form-group col-md-4">
@@ -138,7 +138,7 @@ Nuevo Item Programación Operativa </h4>
             title="Cobertura (%)" 
             data-content="Es el porcentaje de la población que se va a atender. Se expresa en porcentaje. Las prestaciones universales se deben consignar por sobre un 90% de cobertura Ej: 43%">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" step="any" class="form-control" id="coverture" name="coverture" required="">
+            <input type="number" class="form-control" id="coverture" name="coverture" required="">
         </div>
 
         <div class="form-group col-md-2">
@@ -193,7 +193,7 @@ Nuevo Item Programación Operativa </h4>
             (EJ: Rendimiento de 45 minutos es 60/45=1.3).
              Cuando el rendimiento está normado debe utilizarse el estandar de la norma o uno menor según acuerdo local.">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" step="any" class="form-control" id="activity_performance" name="activity_performance" required="" >
+            <input type="number" class="form-control" id="activity_performance" name="activity_performance" required="" >
         </div>
 
         <div class="form-group col-md-2">
@@ -257,8 +257,8 @@ Nuevo Item Programación Operativa </h4>
         <div class="form-group col-md-3">
             <label for="forprogram">Financiada por Prap</label>
             <select name="prap_financed" id="prap_financed" class="form-control">
-                    <option value="NO">No</option>
-                    <option value="SI">SI</option>
+                    <option value="SI">No</option>
+                    <option value="NO">SI</option>
                
             </select>
         </div>

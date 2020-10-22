@@ -11,4 +11,11 @@ class Programming extends Model
         'year', 'description'
     ];
 
+    public function establishment() {
+        return $this->belongsTo('App\Establishment');
+    }
+
+    protected $casts = [
+        'access' => 'array'
+    ];
 }

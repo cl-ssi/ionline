@@ -16,7 +16,7 @@
                     </div>
                     <div class="form-group">
                         <label for="name" class="col-form-label">Valor Hora:</label>
-                        <input type="text" class="form-control" name="value">
+                        <input type="number" class="form-control" name="value" required="">
                     </div>
                 </div>
                 <div class="modal-footer">

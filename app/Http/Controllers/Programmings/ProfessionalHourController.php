@@ -18,7 +18,7 @@ class ProfessionalHourController extends Controller
                                                 ,'T1.value'
                                                 ,'T1.programming_id')
                                         ->leftjoin('pro_professional_hours AS T1', 'pro_professionals.id', '=', 'T1.professional_id')
-                                        ->where('T1.programming_id',1)
+                                        ->where('T1.programming_id',$request->programming_id)
                                         ->get();
 
         $professionals = Professional::All()->SortBy('id');
@@ -28,6 +28,7 @@ class ProfessionalHourController extends Controller
 
     public function store(Request $request)
     {
+        //dd($request);
         $professionalValid = ProfessionalHour::where('professional_id', $request->professional_id)
                                   ->where('programming_id', $request->programming_id)
                                   ->first();

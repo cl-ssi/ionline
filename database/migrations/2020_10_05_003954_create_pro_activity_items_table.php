@@ -15,11 +15,13 @@ class CreateProActivityItemsTable extends Migration
     {
         Schema::create('pro_activity_items', function (Blueprint $table) {
             $table->id();
-            $table->enum('tracer',['Y','N'])->nullable()->default('N');
+            $table->string('int_code')->nullable();
+            $table->string('vital_cycle')->nullable();
+            $table->enum('tracer',['SI','NO'])->nullable()->default('NO');
             $table->string('action_type')->nullable();
             $table->string('activity_name')->nullable();
             $table->string('def_target_population')->nullable();
-            $table->string('verification')->nullable();
+            $table->string('verification_rem')->nullable();
             $table->string('professional')->nullable();
 
             $table->bigInteger('activity_id')->unsigned();

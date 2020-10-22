@@ -122,6 +122,8 @@ Route::resource('activityitems','Programmings\ActivitiesItemController')->middle
 
 Route::resource('professionalhours','Programmings\ProfessionalHourController')->middleware('auth');
 
+Route::resource('trainingitems','Programmings\TrainingsItemController')->middleware('auth');
+
 
 
 

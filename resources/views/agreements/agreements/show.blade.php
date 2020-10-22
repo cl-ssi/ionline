@@ -18,7 +18,7 @@
 
 <ol class="breadcrumb bg-light justify-content-end small">
     <li class="nav-item">
-        <a class="nav-link text-secondary {{ active('agreements.index') }}" href="{{ route('agreements.createWord', $agreement) }}"><i class="fas fa-eye"></i> Previsualizar Convenio</a>
+        <a class="nav-link text-secondary" href="{{ route('agreements.createWord', $agreement) }}"><i class="fas fa-eye"></i> Previsualizar Convenio</a>
     </li>
 </ol>
 <p>
@@ -603,7 +603,7 @@
         $('select').selectpicker();
 
         jobs.forEach(function(row) {
-         // console.log(row);
+         //console.log(row);
             $("#establishment option").filter(function(){
                 return $.trim($(this).val()) ==  row
             }).prop('selected', true);

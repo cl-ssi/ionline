@@ -26,10 +26,10 @@ class CreateProProgrammingDaysTable extends Migration
             $table->decimal('others',5,2)->nullable()->default('0'); // VACACIONES
             $table->decimal('days_year',5,2)->nullable()->default('0'); // TOTAL A RESTAR
             $table->decimal('days_programming',5,2)->nullable()->default('0'); // DÍAS DEL AÑO
+            $table->decimal('day_work_hours',5,2)->nullable()->default('0'); // DÍAS DEL AÑO
 
             $table->unsignedInteger('programming_id');
-            
-
+ 
             $table->timestamps();
         });
     }

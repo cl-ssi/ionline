@@ -21,21 +21,27 @@ class ActivitiesProgramController extends Controller
     {
         $establishments = Establishment::where('type','CESFAM')->OrderBy('name')->get();
         $communes = Commune::All()->SortBy('name');
-        return view('programmings/programmings/create')->withEstablishments($establishments)->withCommunes($communes);
+        return view('programmings/activities/create')->withEstablishments($establishments)->withCommunes($communes);
     }
 
     public function store(Request $request)
     {
         //dd($request->All());
-        $programming = new ActivityProgram($request->All());
-        $programming->year = date('Y', strtotime($request->date));
-        $programming->description = $request->description;
-        $programming->establishment_id = $request->establishment;
-        $programming->user_id = '16966444';
-       
-        $programming->save();
+        $activityProgramValid = ActivityProgram::where('year', date('Y', strtotime($request->date)))
+                                  ->first();
+        if($activityProgramValid){
+            session()->flash('warning', 'Ya se ha iniciado la parametrización para este año');
+        }
+        else {
+            $activityProgram = new ActivityProgram($request->All());
+            $activityProgram->year = date('Y', strtotime($request->date));
+            $activityProgram->description = $request->description;
+            $activityProgram->user_id = '16966444';
+        
+            $activityProgram->save();
 
-        session()->flash('info', 'Se ha iniciado una nueva Programación Operativa');
+            session()->flash('info', 'Se ha iniciado una nueva Parametrización de Actividades y Prestaciones');
+        }
 
         return redirect()->back();
     }

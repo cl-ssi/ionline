@@ -19,7 +19,7 @@
         <ul class="navbar-nav mr-auto">
 
             @role('dev')
-            <li class="nav-item {{ active('ehr*') }}">
+            <li class="nav-item">
                 <a class="nav-link" href="{{ route('ehr.patient.index') }}">
                 <i class="fas fa-heartbeat"></i> EHR</a>
             </li>
@@ -35,7 +35,7 @@
             <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Iniciar Sesión</a></li>
             @else
 
-            <li class="nav-item dropdown {{ active('password.edit') }}">
+            <li class="nav-item dropdown">
 
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -52,7 +52,7 @@
 
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 
-                    <a class="dropdown-item {{ active('password.edit') }}"
+                    <a class="dropdown-item"
                         href="{{ route('password.edit') }}"><i class="fas fa-key fa-fw"></i> Cambiar Clave</a>
 
                     @if(session()->has('god'))
