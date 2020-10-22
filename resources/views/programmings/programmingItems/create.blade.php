@@ -193,7 +193,7 @@ Nuevo Item Programación Operativa </h4>
             (EJ: Rendimiento de 45 minutos es 60/45=1.3).
              Cuando el rendimiento está normado debe utilizarse el estandar de la norma o uno menor según acuerdo local.">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" class="form-control" id="activity_performance" name="activity_performance" required="" >
+            <input type="number" step="any" class="form-control" id="activity_performance" name="activity_performance" required="" >
         </div>
 
         <div class="form-group col-md-2">

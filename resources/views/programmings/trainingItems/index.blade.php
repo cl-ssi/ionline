@@ -64,6 +64,16 @@
             <td class="text-center align-middle">{{ $trainingItem->org_ejecutor }}</td>
             <td class="text-center align-middle">{{ $trainingItem->coordinador }}</td>
             <td class="text-center align-middle">{{ $trainingItem->fecha_ejecucion }}</td>
+            @can('TrainingItem: delete')
+            <td class="text-center align-middle">
+                <form method="POST" action="{{ route('trainingitems.destroy', $trainingItem->id) }}" class="small d-inline">
+                    {{ method_field('DELETE') }} {{ csrf_field() }}
+                    <button class="btn btn-sm btn-outline-danger small" onclick="return confirm('¿Desea eliminar el registro realmente?')">
+                    <span class="fas fa-trash-alt " aria-hidden="true"></span>
+                    </button>
+                </form>
+            </td>
+            @endcan
         </tr>
         @endforeach
     </tbody>

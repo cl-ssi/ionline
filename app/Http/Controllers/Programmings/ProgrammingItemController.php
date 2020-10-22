@@ -63,18 +63,32 @@ class ProgrammingItemController extends Controller
                                                           ->withMinisterialPrograms($ministerialPrograms)
                                                           ->withActionTypes($actionTypes)
                                                           ->withProgrammingDays($programmingDay)
-                                                          ->with('activityItemsSelect', $activityItemsSelect);;
+                                                          ->with('activityItemsSelect', $activityItemsSelect);
     }
 
-    public function show(Request $request)
+    public function show(Request $request, ProgrammingItem $programmingItem)
     {
+        dd($programmingItem);
         
+        if($request->activity_search_id)
+        {
+           
+            $activityItemsSelect = ActivityItem::where('id',(int)$request->activity_search_id)->first();
+             //dd($activityItemsSelect);
+
+        }
+        else{
+            $activityItemsSelect = null;
+        }
         $establishments = Establishment::where('type','CESFAM')->OrderBy('name')->get();
         $communes = Commune::All()->SortBy('name');
         //$professionalHours = ProfessionalHour::where('programming_id',$request->programming_id)->OrderBy('id')->get();
         $ministerialPrograms = MinisterialProgram::All()->SortBy('name');
         $actionTypes = ActionType::All()->SortBy('name');
         $activityItems = ActivityItem::All()->SortBy('name');
+        $programmingDay = ProgrammingDay::where('programming_id',$request->programming_id)->first();
+        $programmingItem = ProgrammingItem::where('id',$request->id)->first();
+        dd($programmingItem);
 
 
         $professionalHours = ProfessionalHour::select(
@@ -85,12 +99,20 @@ class ProgrammingItemController extends Controller
                 ,'T1.alias')
         ->leftjoin('pro_professionals AS T1', 'pro_professional_hours.professional_id', '=', 'T1.id')
         ->Where('programming_id',$request->programming_id)
-        ->orderBy('id','ASC')
+        ->orderBy('T1.alias','ASC')
         ->get();
 
 
-        return view('programmings/programmingItems/create')->withEstablishments($establishments)->withActivityItems($activityItems)->withProfessionalHours($professionalHours)->withMinisterialPrograms($ministerialPrograms)->withActionTypes($actionTypes);
-    }
+        return view('programmings/programmingItems/create')->withProgrammingItem($programmingItem)
+                                                          ->withEstablishments($establishments)
+                                                          ->withActivityItems($activityItems)
+                                                          ->withProfessionalHours($professionalHours)
+                                                          ->withMinisterialPrograms($ministerialPrograms)
+                                                          ->withActionTypes($actionTypes)
+                                                          ->withProgrammingDays($programmingDay)
+                                                          ->with('activityItemsSelect', $activityItemsSelect);
+
+     }
 
     public function store(Request $request)
     {
@@ -107,6 +129,15 @@ class ProgrammingItemController extends Controller
 
         return redirect()->back();
         //return redirect()->route('programmingitems', ['programming_id' => 1]);
+    }
+
+    public function destroy($id)
+    {
+      $programmingItem = ProgrammingItem::where('id',$id)->first();
+      $programmingItem->delete();
+
+      session()->flash('success', 'El registro ha sido eliminado de este listado');
+       return redirect()->back();
     }
 
 }

@@ -38,4 +38,13 @@ class TrainingsItemController extends Controller
         return redirect()->back();
         //return redirect()->route('trainingItems', ['programming_id' => 1]);
     }
+
+    public function destroy($id)
+    {
+      $trainingItem = TrainingItem::where('id',$id)->first();
+      $trainingItem->delete();
+
+      session()->flash('success', 'El registro ha sido eliminado de este listado');
+       return redirect()->back();
+    }
 }
