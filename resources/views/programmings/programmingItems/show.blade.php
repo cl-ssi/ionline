@@ -9,47 +9,26 @@
 
 
 <h4 class="mb-3">
-    <a href="{{ route('programmingitems.index', ['programming_id' => Request::get('programming_id')]) }}" class="btn btb-flat btn-sm btn-dark" >
+    <a href="{{ route('programmingitems.index', ['programming_id' => $programmingItem->programming_id]) }}" class="btn btb-flat btn-sm btn-dark" >
                     <i class="fas fa-arrow-left small"></i> 
                     <span class="small">Volver</span> 
     </a>
-Nuevo Item Programación Operativa </h4>
+Editar Item Programación Operativa </h4>
 
 
 
 
-<form method="GET" class="form-horizontal small" action="{{ route('programmingitems.create') }}" enctype="multipart/form-data">
 
-    <input type="hidden" class="form-control" id="forreferente" name="programming_id" value="{{Request::get('programming_id')}}">
-
-    <div class="form-row">
-        <div class="form-group col-md-12">
-            <label for="forprogram">Buscar</label>
-            <select style="font-size:70%;" name="activity_search_id" id="activity_search_id" class="form-control selectpicker" data-live-search="true" data-style="btn-info" required>
-                     <option style="font-size:70%;">
-                    </option>
-                @foreach($activityItems as $activityItem)
-               
-                    <option style="font-size:70%;" value="{{ $activityItem->id}}">
-                        {{ $activityItem->tracer }} - 
-                        {{ $activityItem->activity_name }} - 
-                        {{ $activityItem->def_target_population }} - 
-                        {{ $activityItem->professional }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-
-</form>
 <hr>
-<form method="POST" class="form-horizontal small" action="{{ route('programmingitems.store') }}" enctype="multipart/form-data">
-@csrf   
+<form method="POST" class="form-horizontal small" action="{{ route('programmingitems.update',$programmingItem->id) }}" enctype="multipart/form-data">
+@csrf  
+@method('PUT') 
     <input type="hidden" class="form-control" id="programming_id" name="programming_id" value="{{Request::get('programming_id')}}">
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="forprogram">Ciclo Vital</label>
             <select name="cycle" id="formprogram" class="form-control">
+                    <option value="option_select" disabled selected>{{$programmingItem->cycle ?? '' }}</option>
                     <option value="INFANTIL">INFANTIL</option>
                     <option value="ADOLESCENTE">ADOLESCENTE</option>
                     <option value="ADULTO">ADULTO</option>
@@ -59,10 +38,7 @@ Nuevo Item Programación Operativa </h4>
                
             </select>
         </div>
-        <div class="form-group col-md-6">
-            <label for="forprogram">Acción</label>
-            <input type="input" class="form-control" id="action_type" name="action_type" value="{{ $activityItemsSelect ? $activityItemsSelect->action_type : '' }}" required="">
-        </div>
+        
         <!--<div class="form-group col-md-8">
             <label for="forprogram">Programa Ministerial</label>
             <select name="ministerial_program" id="formprogram" class="form-control selectpicker " data-live-search="true" required>
@@ -72,19 +48,18 @@ Nuevo Item Programación Operativa </h4>
             </select>
         </div>-->
     </div>
-
     <div class="form-row">
 
-        <div class="form-group col-md-3">
-            <label for="forprogram">Trazadora</label>
-            <input type="input" class="form-control" id="tracer" name="tracer" value="{{ $activityItemsSelect ? $activityItemsSelect->tracer : '' }}" required="">
+    <div class="form-group col-md-3">
+            <label for="forprogram">Acción</label>
+            <input type="input" class="form-control" id="action_type" name="action_type" value="{{$programmingItem->action_type ?? '' }}" required="" disabled>
         </div>
     
         <div class="form-group col-md-9">
             <label for="forprogram">Actividad o Prestación</label>
-            <input type="input" class="form-control" id="activity_name" name="activity_name" value="{{ $activityItemsSelect ? $activityItemsSelect->activity_name : '' }}" required="">
+            <input type="input" class="form-control" id="activity_name" name="activity_name" value="{{$programmingItem->activity_name ?? '' }}" required="" disabled>
         </div>
-        <input type="hidden" class="form-control" id="activity_id" name="activity_id" value="{{ $activityItemsSelect ? $activityItemsSelect->id : '' }}" required="">
+        <input type="hidden" class="form-control" id="activity_id" name="activity_id" value="{{$programmingItem->activity_id ?? '' }}" required="">
 
     </div>
 
@@ -92,12 +67,12 @@ Nuevo Item Programación Operativa </h4>
     
         <div class="form-group col-md-8">
             <label for="forprogram">Def. Población Objetivo</label>
-            <input type="input" class="form-control" id="forreferente" name="def_target_population" value="{{ $activityItemsSelect ? $activityItemsSelect->def_target_population : '' }}" required="">
+            <input type="input" class="form-control" id="forreferente" name="def_target_population" value="{{$programmingItem->def_target_population ?? '' }}" required="" disabled>
         </div>
 
         <div class="form-group col-md-4">
             <label for="forprogram">Fuente Población</label>
-            <input type="input" class="form-control " id="forreferente" name="source_population" value="" required="">
+            <input type="input" class="form-control " id="forreferente" name="source_population" value="{{$programmingItem->source_population ?? '' }}" required="" >
             <small>Ej. Fonasa - Tarjetero Electrónico</small>
         </div>
     </div>
@@ -111,7 +86,7 @@ Nuevo Item Programación Operativa </h4>
             title="Población Objetivo" 
             data-content="Expresar numéricamente la cantidad de población Ej: 15000">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" class="form-control " id="cant_target_population" name="cant_target_population"  required="">
+            <input type="number" class="form-control " id="cant_target_population" name="cant_target_population" value="{{$programmingItem->cant_target_population ?? '0' }}" required="">
         </div>
         <div class="form-group col-md-2">
             <label for="forprogram">Prevalencia o Tasa (%)</label>
@@ -119,7 +94,7 @@ Nuevo Item Programación Operativa </h4>
             title="Prevalencia o Tasa (%)" 
             data-content="Utilizar este dato cuando se desconoce el número de usuarios con el fin de estimar una población que podría percibir en el año a programar Ej: 50%">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" class="form-control" id="prevalence_rate" name="prevalence_rate" required="">
+            <input type="number" step="any" class="form-control" id="prevalence_rate" name="prevalence_rate" value="{{$programmingItem->prevalence_rate ?? '0' }}" required="">
         </div>
 
         <div class="form-group col-md-4">
@@ -128,7 +103,7 @@ Nuevo Item Programación Operativa </h4>
             title="Fuente Prevalencia o Tasa" 
             data-content="En caso de utilizar prevalencia/tasa, se debe indicar la fuente del dato Ej: Minsal">
             <i class="fas fa-info-circle"></i></a>
-            <input type="input" class="form-control" id="forreferente" name="source_prevalence" >
+            <input type="input" class="form-control" id="forreferente" name="source_prevalence" value="{{$programmingItem->source_prevalence ?? '' }}" >
             <small></small>
         </div>
 
@@ -138,7 +113,7 @@ Nuevo Item Programación Operativa </h4>
             title="Cobertura (%)" 
             data-content="Es el porcentaje de la población que se va a atender. Se expresa en porcentaje. Las prestaciones universales se deben consignar por sobre un 90% de cobertura Ej: 43%">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" class="form-control" id="coverture" name="coverture" required="">
+            <input type="number" step="any" class="form-control" id="coverture" name="coverture" value="{{$programmingItem->coverture ?? '0' }}" required="">
         </div>
 
         <div class="form-group col-md-2">
@@ -147,7 +122,7 @@ Nuevo Item Programación Operativa </h4>
             title="Población a Atender" 
             data-content="Es el cálculo matemático de una actividad ponderada: multiplicación de la población por su incidencia/prevalencia y por la cobertura.">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" class="form-control" id="population_attend" name="population_attend" required="" readonly>
+            <input type="number" class="form-control" id="population_attend" name="population_attend" value="{{$programmingItem->population_attend ?? '0' }}" required="" readonly>
         </div>
         
     </div>
@@ -160,12 +135,12 @@ Nuevo Item Programación Operativa </h4>
             title="Concentración" 
             data-content="La cantidad de veces que debo darle el control anual">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" class="form-control" id="concentration" name="concentration" required="">
+            <input type="number" class="form-control" id="concentration" name="concentration" value="{{$programmingItem->concentration ?? '0' }}" required="">
         </div>
 
         <div class="form-group col-md-2">
             <label for="forprogram">Total Actividad</label>
-            <input type="input" class="form-control" id="activity_total" name="activity_total" value="" required="" readonly>
+            <input type="input" class="form-control" id="activity_total" name="activity_total" value="{{$programmingItem->activity_total ?? '0' }}" required="" readonly>
         </div>
         
     </div>
@@ -179,6 +154,7 @@ Nuevo Item Programación Operativa </h4>
             data-content="Funcionario que otorga la prestación, Si es más de un funcionario para la actividad programada se debe repetir en otro registro">
             <i class="fas fa-info-circle"></i></a>
             <select name="professional" id="formprogram" class="form-control">
+            <option value="option_select" disabled selected>{{$professionalHoursSel->alias ?? '' }}</option>
                 @foreach($professionalHours as $professionalHour)
                     <option value="{{ $professionalHour->id }}">{{ $professionalHour->alias }}</option>
                 @endforeach
@@ -193,17 +169,17 @@ Nuevo Item Programación Operativa </h4>
             (EJ: Rendimiento de 45 minutos es 60/45=1.3).
              Cuando el rendimiento está normado debe utilizarse el estandar de la norma o uno menor según acuerdo local.">
             <i class="fas fa-info-circle"></i></a>
-            <input type="number" class="form-control" id="activity_performance" name="activity_performance" required="" >
+            <input type="number" step="any" class="form-control" id="activity_performance" name="activity_performance" value="{{$programmingItem->activity_performance ?? '0' }}" required="" >
         </div>
 
         <div class="form-group col-md-2">
             <label for="forprogram">Total Día Habiles</label>
-            <input type="number" class="form-control" id="habil_days" value="{{ $programmingDays ? $programmingDays->days_programming : '' }}" name="habil_days" required="" readonly>
+            <input type="number" class="form-control" id="habil_days" value="{{ $programmingDays ? $programmingDays->days_programming : '' }}" name="habil_days"  required="" readonly>
         </div>
 
         <div class="form-group col-md-1">
             <label for="forprogram">Hora Laboral</label>
-            <input type="number" class="form-control" id="work_valid_hour_day" value="{{ $programmingDays ? $programmingDays->day_work_hours : '' }}" name="work_valid_hour_day" required="" readonly>
+            <input type="number" class="form-control" id="work_valid_hour_day" value="{{ $programmingDays ? $programmingDays->day_work_hours : '' }}" name="work_valid_hour_day"  required="" readonly>
         </div>
         
     </div>
@@ -216,7 +192,7 @@ Nuevo Item Programación Operativa </h4>
             title="Horas Años Requeridas" 
             data-content="Calculo Automatico bajo fórmula que indica la cantidad de horas que se requieren en el año programado.">
             <i class="fas fa-info-circle"></i></a>
-            <input type="input" class="form-control" id="hours_required_year" name="hours_required_year" required="" readonly>
+            <input type="input" class="form-control" id="hours_required_year" name="hours_required_year" required="" value="{{$programmingItem->hours_required_year ?? '0' }}" readonly>
         </div>
 
         <div class="form-group col-md-3">
@@ -225,7 +201,7 @@ Nuevo Item Programación Operativa </h4>
             title="Horas días Requeridas" 
             data-content="Calculo Automatico bajo fórmula que indica la cantidad de horas que se requieren en un dia del año programado.">
             <i class="fas fa-info-circle"></i></a>
-            <input type="input" class="form-control" id="hours_required_day" name="hours_required_day" required="" readonly>
+            <input type="input" class="form-control" id="hours_required_day" name="hours_required_day" required="" value="{{$programmingItem->hours_required_day ?? '0' }}" readonly>
         </div>
     
         <div class="form-group col-md-s">
@@ -234,7 +210,7 @@ Nuevo Item Programación Operativa </h4>
             title="Jornadas Directas Año" 
             data-content="Calculo Automatico bajo fórmula que indica la cantidad de jornadas laborales que se requieren en el año programado.">
             <i class="fas fa-info-circle"></i></a>
-            <input type="input" class="form-control" id="direct_work_year" name="direct_work_year" required="" readonly>
+            <input type="input" class="form-control" id="direct_work_year" name="direct_work_year" required=""  value="{{$programmingItem->direct_work_year ?? '0' }}" readonly>
         </div>
 
         <div class="form-group col-md-3">
@@ -243,7 +219,7 @@ Nuevo Item Programación Operativa </h4>
             title="Jornadas Horas Directas Diarias" 
             data-content="Calculo Automatico bajo fórmula que indica la cantidad de jornadas laborales que se requieren en un día del año programado.">
             <i class="fas fa-info-circle"></i></a>
-            <input type="input" class="form-control" id="direct_work_hour" name="direct_work_hour" required="" readonly>
+            <input type="input" class="form-control" id="direct_work_hour" name="direct_work_hour" required=""  value="{{$programmingItem->direct_work_hour ?? '0' }}" readonly>
         </div>
     </div>
 
@@ -251,14 +227,15 @@ Nuevo Item Programación Operativa </h4>
 
         <div class="form-group col-md-6">
             <label for="forprogram">Fuente Información</label>
-            <input type="input" class="form-control" id="information_source" value="{{ $activityItemsSelect ? $activityItemsSelect->verification_rem : '' }}" name="information_source" >
+            <input type="input" class="form-control" id="information_source" name="information_source"  value="{{$programmingItem->information_source ?? '' }}" readonly>
         </div>
 
         <div class="form-group col-md-3">
             <label for="forprogram">Financiada por Prap</label>
             <select name="prap_financed" id="prap_financed" class="form-control">
-                    <option value="SI">No</option>
-                    <option value="NO">SI</option>
+                    <option value="option_select" disabled selected>{{$programmingItem->prap_financed ?? '' }}</option>
+                    <option value="NO">No</option>
+                    <option value="SI">SI</option>
                
             </select>
         </div>
@@ -273,13 +250,13 @@ Nuevo Item Programación Operativa </h4>
         
         <div class="form-group col-md-12">
             <label for="forprogram">Observación</label>
-            <input type="input" class="form-control" id="observation" name="observation" >
+            <input type="input" class="form-control" id="observation" name="observation" value="{{$programmingItem->observation ?? '' }}" >
         </div>
         
     </div>
 
     
-    <button type="submit" class="btn btn-info mb-4">Crear</button>
+    <button type="submit" class="btn btn-info mb-4">Actualizar</button>
 
 </form>
 
@@ -296,12 +273,6 @@ Nuevo Item Programación Operativa </h4>
     $('.popover-dismiss').popover({
         trigger: 'focus'
     }) 
-
-    var select = document.getElementById('activity_search_id');
-        select.onchange = function(){
-            this.form.submit();
-     };
-
 
     $('#prevalence_rate, #cant_target_population, #coverture').keyup(function() {
         
@@ -333,6 +304,72 @@ Nuevo Item Programación Operativa </h4>
         }
     
         $('#population_attend').val(Math.round(calc));
+
+
+        // SEGUNDO INPUT
+        var concentration       = $('#concentration').val();
+        var population_attend   = $('#population_attend').val();
+
+        if(concentration == 0)
+        {
+            var calc2 = $('#population_attend').val();
+            console.log("concentration == 0");
+        }
+        
+        else if(concentration > 0)
+        {
+            var calc2 = $('#population_attend').val() * concentration;
+            console.log("concentration > 0");
+            
+        }
+        else {
+            var calc2 = $('#population_attend').val() * concentration;
+            console.log("ELSE");
+            
+        }
+    
+        $('#activity_total').val(Math.round(calc2));
+
+        // TERCER INPUT
+
+        var activity_total = $('#activity_total').val();
+        var activity_performance = $('#activity_performance').val();
+        var habil_days = $('#habil_days').val();
+        var work_valid_hour_day = $('#work_valid_hour_day').val();
+        
+        
+
+        if(activity_total == 0 || activity_performance == 0)
+        {
+            var hours_required_year = '';
+            var hours_required_day = '';
+            var direct_work_year = '';
+            var direct_work_hour = '';
+        }
+        
+        else if(activity_total > 0)
+        {
+            var hours_required_year = $('#activity_total').val() / activity_performance;
+            var hours_required_day  = $('#activity_total').val() / activity_performance / habil_days;
+            var direct_work_year    = hours_required_day/ work_valid_hour_day ;
+            var direct_work_hour    =  direct_work_year/work_valid_hour_day;
+            
+            console.log("concentration > 0");
+            
+        }
+        else {
+            var hours_required_year = $('#activity_total').val() / activity_performance;
+            var hours_required_day  = $('#activity_total').val() / activity_performance;
+            var direct_work_year    = $('#activity_total').val() / activity_performance;
+            var direct_work_hour    = $('#activity_total').val() / activity_performance;
+            console.log("ELSE");
+            
+        }
+    
+        $('#hours_required_year').val(Math.round(hours_required_year));
+        $('#hours_required_day').val(hours_required_day.toFixed(2));
+        $('#direct_work_year').val(direct_work_year.toFixed(2));
+        $('#direct_work_hour').val(direct_work_hour.toFixed(5));
         
     });
 
@@ -360,6 +397,47 @@ Nuevo Item Programación Operativa </h4>
         }
     
         $('#activity_total').val(Math.round(calc2));
+
+        // TERCER INPUT
+
+        var activity_total = $('#activity_total').val();
+        var activity_performance = $('#activity_performance').val();
+        var habil_days = $('#habil_days').val();
+        var work_valid_hour_day = $('#work_valid_hour_day').val();
+        
+        
+
+        if(activity_total == 0 || activity_performance == 0)
+        {
+            var hours_required_year = '';
+            var hours_required_day = '';
+            var direct_work_year = '';
+            var direct_work_hour = '';
+        }
+        
+        else if(activity_total > 0)
+        {
+            var hours_required_year = $('#activity_total').val() / activity_performance;
+            var hours_required_day  = $('#activity_total').val() / activity_performance / habil_days;
+            var direct_work_year    = hours_required_day/ work_valid_hour_day ;
+            var direct_work_hour    =  direct_work_year/work_valid_hour_day;
+            
+            console.log("concentration > 0");
+            
+        }
+        else {
+            var hours_required_year = $('#activity_total').val() / activity_performance;
+            var hours_required_day  = $('#activity_total').val() / activity_performance;
+            var direct_work_year    = $('#activity_total').val() / activity_performance;
+            var direct_work_hour    = $('#activity_total').val() / activity_performance;
+            console.log("ELSE");
+            
+        }
+    
+        $('#hours_required_year').val(Math.round(hours_required_year));
+        $('#hours_required_day').val(hours_required_day.toFixed(2));
+        $('#direct_work_year').val(direct_work_year.toFixed(2));
+        $('#direct_work_hour').val(direct_work_hour.toFixed(5));
         
     });
 

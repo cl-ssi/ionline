@@ -66,9 +66,9 @@ class ProgrammingItemController extends Controller
                                                           ->with('activityItemsSelect', $activityItemsSelect);
     }
 
-    public function show(Request $request, ProgrammingItem $programmingItem)
+    public function show(Request $request, ProgrammingItem $programmingitem)
     {
-        dd($programmingItem);
+        //dd($programmingitem);
         
         if($request->activity_search_id)
         {
@@ -86,9 +86,23 @@ class ProgrammingItemController extends Controller
         $ministerialPrograms = MinisterialProgram::All()->SortBy('name');
         $actionTypes = ActionType::All()->SortBy('name');
         $activityItems = ActivityItem::All()->SortBy('name');
-        $programmingDay = ProgrammingDay::where('programming_id',$request->programming_id)->first();
+        $programmingDay = ProgrammingDay::where('programming_id',$programmingitem->programming_id)->first();
         $programmingItem = ProgrammingItem::where('id',$request->id)->first();
-        dd($programmingItem);
+        //dd($programmingitem);
+
+        $professionalHoursSel = ProfessionalHour::select(
+                'pro_professional_hours.id'
+                ,'pro_professional_hours.professional_id'
+                ,'pro_professional_hours.programming_id'
+                ,'pro_professional_hours.value'
+                ,'T1.alias')
+        ->leftjoin('pro_professionals AS T1', 'pro_professional_hours.professional_id', '=', 'T1.id')
+        ->Where('pro_professional_hours.id',$programmingitem->professional)
+        ->orderBy('T1.alias','ASC')
+        ->first();
+
+        //dd($professionalHoursSel);
+
 
 
         $professionalHours = ProfessionalHour::select(
@@ -98,19 +112,20 @@ class ProgrammingItemController extends Controller
                 ,'pro_professional_hours.value'
                 ,'T1.alias')
         ->leftjoin('pro_professionals AS T1', 'pro_professional_hours.professional_id', '=', 'T1.id')
-        ->Where('programming_id',$request->programming_id)
+        ->Where('programming_id',$programmingitem->programming_id)
         ->orderBy('T1.alias','ASC')
         ->get();
 
 
-        return view('programmings/programmingItems/create')->withProgrammingItem($programmingItem)
+        return view('programmings/programmingItems/show')->withProgrammingItem($programmingitem)
                                                           ->withEstablishments($establishments)
                                                           ->withActivityItems($activityItems)
                                                           ->withProfessionalHours($professionalHours)
                                                           ->withMinisterialPrograms($ministerialPrograms)
                                                           ->withActionTypes($actionTypes)
                                                           ->withProgrammingDays($programmingDay)
-                                                          ->with('activityItemsSelect', $activityItemsSelect);
+                                                          ->with('activityItemsSelect', $activityItemsSelect)
+                                                          ->with('professionalHoursSel', $professionalHoursSel);;
 
      }
 
@@ -138,6 +153,14 @@ class ProgrammingItemController extends Controller
 
       session()->flash('success', 'El registro ha sido eliminado de este listado');
        return redirect()->back();
+    }
+
+    public function update(Request $request, ProgrammingItem $programmingitem)
+    {
+      //dd($request);
+      $programmingitem->fill($request->all());
+      $programmingitem->save();
+      return redirect()->back();
     }
 
 }
