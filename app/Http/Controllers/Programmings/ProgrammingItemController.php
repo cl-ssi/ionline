@@ -20,9 +20,9 @@ class ProgrammingItemController extends Controller
     public function index(Request $request)
     {
         $year = '';
-        $programmingitems = ProgrammingItem::where('programming_id',$request->programming_id)->OrderBy('id')->get();
+        //$programmingitems = ProgrammingItem::where('programming_id',$request->programming_id)->OrderBy('id')->get();
 
-        /*$programmingitems = ProgrammingItem::select(
+        $programmingitems = ProgrammingItem::select(
                                  'T0.description'
                                 ,'T1.name AS establishment'
                                 ,'T2.name AS commune'
@@ -58,10 +58,11 @@ class ProgrammingItemController extends Controller
                         ->leftjoin('pro_professionals AS T4', 'T3.professional_id', '=', 'T4.id')
                         ->leftjoin('users AS T5', 'T0.user_id', '=', 'T5.id')
                         ->Where('T0.year','LIKE','%'.$year.'%')
+                        ->where('pro_programming_items.programming_id',$request->programming_id)
                         ->orderBy('pro_programming_items.cycle','ASC')
                         ->orderBy('pro_programming_items.action_type','ASC')
                         ->orderBy('pro_programming_items.activity_name','ASC')
-                        ->get();*/
+                        ->get();
 
         //dd($programmingitems);
 
