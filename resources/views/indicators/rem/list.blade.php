@@ -1,0 +1,22 @@
+@extends('layouts.app')
+
+@section('title', "Resumen Estadistico Mensual {$year} - Serie {$serie}")
+
+@section('content')
+
+@include('indicators.rem.partials.navbar')
+
+<h3 class="mb-3">Resumen Estadístico Mensual {{$year}}</h3>
+<h6 class="mb-3">Serie {{$serie}}</h6>
+
+<ul>
+    @foreach($prestaciones as $prestacion)
+        <li><a href="{{ route('indicators.rem.show', [$year, $serie, $prestacion->Nserie]) }}">REM-{{$prestacion->Nserie}} - {{$prestacion->descripcion}}</a></li>
+    @endforeach
+</ul>
+
+@endsection
+
+@section('custom_js')
+
+@endsection
