@@ -19,8 +19,54 @@ class ProgrammingItemController extends Controller
 {
     public function index(Request $request)
     {
-        $programmingitems = ProgrammingItem::where('programming_id',$request->programming_id)->OrderBy('id')->get();
+        $year = '';
+        //$programmingitems = ProgrammingItem::where('programming_id',$request->programming_id)->OrderBy('id')->get();
+
+        $programmingitems = ProgrammingItem::select(
+                                 'T0.description'
+                                ,'T1.name AS establishment'
+                                ,'T2.name AS commune'
+                                ,'pro_programming_items.id'
+                                ,'pro_programming_items.cycle'
+                                ,'pro_programming_items.action_type'
+                                ,'pro_programming_items.ministerial_program'
+                                ,'pro_programming_items.activity_id'
+                                ,'pro_programming_items.activity_name'
+                                ,'pro_programming_items.def_target_population'
+                                ,'pro_programming_items.source_population'
+                                ,'pro_programming_items.cant_target_population'
+                                ,'pro_programming_items.prevalence_rate'
+                                ,'pro_programming_items.source_prevalence'
+                                ,'pro_programming_items.coverture'
+                                ,'pro_programming_items.population_attend'
+                                ,'pro_programming_items.concentration'
+                                ,'pro_programming_items.activity_total'
+                                ,'pro_programming_items.activity_performance'
+                                ,'pro_programming_items.hours_required_year'
+                                ,'pro_programming_items.hours_required_day'
+                                ,'pro_programming_items.direct_work_year'
+                                ,'pro_programming_items.direct_work_hour'
+                                ,'pro_programming_items.information_source'
+                                ,'pro_programming_items.prap_financed'
+                                ,'pro_programming_items.observation'
+                                ,'T4.name AS professional'
+                                ,'T3.value AS professional_value')
+                        ->leftjoin('pro_programmings AS T0', 'T0.id', '=', 'pro_programming_items.programming_id')
+                        ->leftjoin('establishments AS T1', 'T0.establishment_id', '=', 'T1.id')
+                        ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
+                        ->leftjoin('pro_professional_hours AS T3','T3.id', '=', 'pro_programming_items.professional')
+                        ->leftjoin('pro_professionals AS T4', 'T3.professional_id', '=', 'T4.id')
+                        ->leftjoin('users AS T5', 'T0.user_id', '=', 'T5.id')
+                        ->Where('T0.year','LIKE','%'.$year.'%')
+                        ->orderBy('pro_programming_items.cycle','ASC')
+                        ->orderBy('pro_programming_items.action_type','ASC')
+                        ->orderBy('pro_programming_items.activity_name','ASC')
+                        ->get();
+
+        //dd($programmingitems);
+
         return view('programmings/programmingItems/index')->withProgrammingItems($programmingitems);
+
     }
 
     public function create(Request $request)
@@ -29,7 +75,6 @@ class ProgrammingItemController extends Controller
         {
            
             $activityItemsSelect = ActivityItem::where('id',(int)$request->activity_search_id)->first();
-             //dd($activityItemsSelect);
 
         }
         else{
