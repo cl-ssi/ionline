@@ -4,6 +4,7 @@ namespace App\Indicators;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Schema;
 
 class Prestacion extends Model
 {
@@ -49,5 +50,10 @@ class Prestacion extends Model
     public function getDescripcionAttribute($value)
     {
         return head(explode(' - ', trim($value)));
+    }
+
+    public static function exists($year)
+    {
+        return Schema::connection('mysql_rem')->hasTable($year.'prestaciones');
     }
 }

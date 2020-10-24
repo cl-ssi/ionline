@@ -68,7 +68,7 @@
                 @endif
             </div>
 
-            <div class="col-sm-12" >
+            <div class="col">
                 <input class="form-control btn btn-primary" type="submit" value="Consultar">
             </div>
         </div>

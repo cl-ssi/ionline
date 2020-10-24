@@ -7,6 +7,7 @@ use App\Indicators\Establecimiento;
 use App\Indicators\Prestacion;
 use App\Indicators\Rem;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 
 class RemController extends Controller
 {
@@ -17,6 +18,7 @@ class RemController extends Controller
      */
     public function index($year, $serie)
     {
+        if(!Prestacion::exists($year)) abort(404);
         $prestaciones = Prestacion::year($year)->select('descripcion', 'Nserie')->where('serie', $serie)->orderBy('Nserie')->get();
         $prestaciones = $prestaciones->unique('Nserie');
         
@@ -25,6 +27,7 @@ class RemController extends Controller
 
     public function list($year)
     {
+        if(!Prestacion::exists($year)) abort(404);
         $series = Prestacion::year($year)->select('serie')->distinct()->pluck('serie')->toArray();
         return view('indicators.rem.list_series', compact('year', 'series'));
     }
@@ -58,6 +61,7 @@ class RemController extends Controller
      */
     public function show(Request $request, $year, $serie, $nserie)
     {
+        if(!Prestacion::exists($year)) abort(404);
         $establecimientos = Establecimiento::year($year)->orderBy('comuna')->get();
         $prestacion = Prestacion::year($year)->where('serie', $serie)->where('Nserie', $nserie)->first();
         $establecimiento = $request->get('establecimiento');
