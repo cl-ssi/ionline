@@ -27,6 +27,7 @@
 		<b>+</b> <a href="{{ route('rrhh.users.directory') }}?ou={{$organizationalUnit->id}}">{{ $organizationalUnit->name }}</a>
 		<ul class="small">
 			@foreach($organizationalUnit->childs as $child_level_1)
+				@if($child_level_1->name != 'Externos')
 				<li><a href="{{ route('rrhh.users.directory') }}?ou={{$child_level_1->id}}"> {{$child_level_1->name}} </a></li>
 				<ul>
 					@foreach($child_level_1->childs as $child_level_2)
@@ -38,6 +39,7 @@
 							</ul>
 					@endforeach
 				</ul>
+				@endif
 			@endforeach
 		</ul>
 	</div>

@@ -26,6 +26,7 @@
             {{ $organizationalUnit->name }}
             </option>
             @foreach($organizationalUnit->childs as $child_level_1)
+            @if($child_level_1->name != 'Externos')
                 <option value="{{ $child_level_1->id }}">
                 &nbsp;&nbsp;&nbsp;
                 {{ $child_level_1->name }}
@@ -42,6 +43,7 @@
                         </option>
                     @endforeach
                 @endforeach
+                @endif
             @endforeach
             </select>
         </fieldset>
