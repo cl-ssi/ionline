@@ -125,12 +125,12 @@ Nuevo Item de Capacitación </h4>
 
         <div class="form-group col-md-3">
             <label for="forprogram">Otros Fondos (Especificar)</label>
-            <input type="input" class="form-control" id="otro_fondo" name="otro_fondo" required="">
+            <input type="input" class="form-control" id="otro_fondo" name="otro_fondo" >
         </div>
 
         <div class="form-group col-md-3">
             <label for="forprogram">Total Presupuesto Estimado</label>
-            <input type="input" class="form-control" id="total_presupuesto_est" name="total_presupuesto_est" >
+            <input type="number" class="form-control" id="total_presupuesto_est" name="total_presupuesto_est" >
         </div>
 
         
@@ -140,17 +140,17 @@ Nuevo Item de Capacitación </h4>
 
         <div class="form-group col-md-3">
             <label for="forprogram">Organismo Ejecutor</label>
-            <input type="input" class="form-control" id="org_ejecutor" name="org_ejecutor" required="">
+            <input type="input" class="form-control" id="org_ejecutor" name="org_ejecutor" >
         </div>
 
         <div class="form-group col-md-3">
             <label for="forprogram">COORDINADOR</label>
-            <input type="input" class="form-control" id="coordinador" name="coordinador" required="">
+            <input type="input" class="form-control" id="coordinador" name="coordinador" >
         </div>
 
         <div class="form-group col-md-3">
             <label for="forprogram">Fecha de Ejecución</label>
-            <input type="input" class="form-control" id="fecha_ejecucion" name="fecha_ejecucion" required="">
+            <input type="input" class="form-control" id="fecha_ejecucion" name="fecha_ejecucion" >
         </div>
 
 
