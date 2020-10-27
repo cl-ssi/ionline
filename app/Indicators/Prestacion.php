@@ -47,9 +47,26 @@ class Prestacion extends Model
         return new HasMany($instance->newQuery(), $this, 'CodigoPrestacion', 'codigo_prestacion');
     }
 
-    public function getDescripcionAttribute($value)
+    public function getNombreSerieAttribute()
     {
-        return head(explode(' - ', trim($value)));
+        return head(explode(' - ', trim($this->descripcion)));
+    }
+
+    public function getNombrePrestacionAttribute()
+    {
+        return last(explode(' - ', trim($this->descripcion)));
+    }
+
+    public function getNombreGrupoPrestacionAttribute()
+    {
+        $array = explode(' - ', trim($this->descripcion));
+        end($array);
+        return prev($array);
+    }
+
+    public function hasGroup()
+    {
+        return count(explode(' - ', trim($this->descripcion))) > 2;
     }
 
     public static function exists($year)

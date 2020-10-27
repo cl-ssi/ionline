@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Indicators\Establecimiento;
 use App\Indicators\Prestacion;
 use App\Indicators\Rem;
+use App\Indicators\Seccion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 
@@ -66,15 +67,22 @@ class RemController extends Controller
         $prestacion = Prestacion::year($year)->where('serie', $serie)->where('Nserie', $nserie)->first();
         $establecimiento = $request->get('establecimiento');
         $periodo = $request->get('periodo');
+        $secciones = null;
+        if ($request->has('submit')) {
+            $secciones = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie)->orderby('name')->get();
+            foreach($secciones as $seccion){
+                $seccion->cods = explode(',', $seccion->cods);
+                $seccion->cols = explode(',', $seccion->cols);
+                $seccion->prestaciones = Prestacion::year($year)->with(['rems' => function($q) use ($establecimiento, $periodo){
+                                                    $q->whereIn('IdEstablecimiento', $establecimiento)->whereIn('Mes', $periodo);
+                                            }])
+                                            ->whereIn('codigo_prestacion', $seccion->cods)->orderBy('codigo_prestacion')->get();
+            }
+        }
         
         // $filter = ['02010101', '02010201', '02010103', '02010105'];
         // $estabs = ['102300', '102301'];
         // $months = [1];
-
-        // $prestaciones = Prestacion::year(2018)->with(['rems' => function($q) use ($estabs, $months){
-        //                                     $q->whereIn('IdEstablecimiento', $estabs)->whereIn('Mes', $months);
-        //                              }])
-        //                              ->whereIn('codigo_prestacion', $filter)->get();
         
         // foreach($prestaciones as $prestacion){
         //     return $prestacion->rems->sum('Col01');
@@ -115,8 +123,7 @@ class RemController extends Controller
                           group by  a.codigo_prestacion,a.descripcion, a.id_prestacion
                           order by a.id_prestacion';
         */
-        $prestaciones = null;
-        return view('indicators.rem.show', compact('year', 'establecimientos', 'prestacion', 'establecimiento', 'periodo', 'prestaciones'));
+        return view('indicators.rem.show', compact('year', 'establecimientos', 'prestacion', 'establecimiento', 'periodo', 'secciones'));
     }
 
     /**

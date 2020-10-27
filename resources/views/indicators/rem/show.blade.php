@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 @include('indicators.rem.partials.navbar')
 
-<h3>REM-{{$prestacion->Nserie}}. {{$prestacion->descripcion}}.</h3>
+<h3>REM-{{$prestacion->Nserie}}. {{$prestacion->nombre_serie}}.</h3>
 
 <br>
 
@@ -23,6 +23,42 @@ use Illuminate\Support\Facades\DB;
     @include('indicators.rem.partials.legend')
 @else
     <link href="{{ asset('css/rem.css') }}" rel="stylesheet">
+    </main>
+    @foreach($secciones as $seccion)
+    <div id="contenedor">
+        <div class="col-sm tab table-responsive" id="{{$seccion->name}}">
+        <table class="table table-hover table-bordered table-sm">
+        {!!$seccion->thead!!}
+        <tbody>
+        @php($temp = null)
+        @foreach($seccion->prestaciones as $prestacion)
+        <tr>
+            @if($prestacion->hasGroup() AND $prestacion->nombre_grupo_prestacion != $temp)
+            <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_grupo_prestacion)}}' class="centrado">{{$prestacion->nombre_grupo_prestacion}}</td>
+            @php($temp = $prestacion->nombre_grupo_prestacion)
+            @endif
+            <td align='left' nowrap="nowrap">{{$prestacion->nombre_prestacion}}</td>
+            @foreach($seccion->cols as $col)
+            <td align='right'>{{number_format($prestacion->rems->sum($col),0,",",".")}}</td>
+            @endforeach
+        </tr>
+        @endforeach
+        @if($seccion->totals)
+        <tr>
+            <td align='left' @if($temp != null) colspan="2" @endif nowrap="nowrap"><b>TOTAL</b></td>
+            @foreach($seccion->cols as $col)
+            <td align='right'><b>{{number_format($seccion->total($col),0,",",".")}}</b></td>
+            @endforeach
+        </tr>
+        @endif
+        {!!$seccion->tfoot!!}
+        </tbody>
+        </table>
+        </div>
+    </div>
+    <br>
+    @endforeach
+
 @endif
 
 @endsection
