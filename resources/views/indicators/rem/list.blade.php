@@ -11,7 +11,7 @@
 
 <ul>
     @foreach($prestaciones as $prestacion)
-        <li><a href="{{ route('indicators.rem.show', [$year, $serie, $prestacion->Nserie]) }}">REM-{{$prestacion->Nserie}} - {{$prestacion->descripcion}}</a></li>
+        <li><a href="{{ route('indicators.rem.show', [$year, $serie, $prestacion->Nserie]) }}">REM-{{$prestacion->Nserie}} - {{$prestacion->nombre_serie}}</a></li>
     @endforeach
 </ul>
 
