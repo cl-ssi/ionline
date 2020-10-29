@@ -60,7 +60,7 @@ class ProgrammingReportController extends Controller
         }
 
         $programmingitems = ProgrammingItem::select(
-                                 't6.int_code'
+                                 'T6.int_code'
                                 ,'pro_programming_items.activity_name'
                                 ,'pro_programming_items.cycle'
                                 ,'pro_programming_items.action_type'
@@ -75,8 +75,8 @@ class ProgrammingReportController extends Controller
                         ->leftjoin('pro_activity_items AS T6', 'pro_programming_items.activity_id', '=', 'T6.id')
                         ->Where('T0.year','LIKE','%'.$year.'%')
                         ->whereIn('T0.establishment_id',$establishment)
-                        ->groupBy('t6.int_code','pro_programming_items.activity_name','pro_programming_items.cycle','pro_programming_items.action_type','pro_programming_items.def_target_population')
-                        ->orderByRaw("CAST(t6.int_code as UNSIGNED) ASC")
+                        ->groupBy('T6.int_code','pro_programming_items.activity_name','pro_programming_items.cycle','pro_programming_items.action_type','pro_programming_items.def_target_population')
+                        ->orderByRaw("CAST(T6.int_code as UNSIGNED) ASC")
                         ->orderBy('pro_programming_items.cycle','ASC')
                         ->orderBy('pro_programming_items.action_type','ASC')
                         ->orderBy('pro_programming_items.activity_name','ASC')
@@ -134,7 +134,7 @@ class ProgrammingReportController extends Controller
         }
 
         $programmingitems = ProgrammingItem::select(
-                                 't6.int_code'
+                                 'T6.int_code'
                                 ,'pro_programming_items.activity_name'
                                 ,'pro_programming_items.cycle'
                                 ,'pro_programming_items.action_type'
@@ -151,8 +151,8 @@ class ProgrammingReportController extends Controller
                         ->leftjoin('pro_activity_items AS T6', 'pro_programming_items.activity_id', '=', 'T6.id')
                         ->Where('T0.year','LIKE','%'.$year.'%')
                         ->whereIn('T0.establishment_id',$establishment)
-                        ->groupBy('t6.int_code','pro_programming_items.activity_name','pro_programming_items.cycle','pro_programming_items.action_type','pro_programming_items.def_target_population','T4.name')
-                        ->orderByRaw("CAST(t6.int_code as UNSIGNED) ASC")
+                        ->groupBy('T6.int_code','pro_programming_items.activity_name','pro_programming_items.cycle','pro_programming_items.action_type','pro_programming_items.def_target_population','T4.name')
+                        ->orderByRaw("CAST(T6.int_code as UNSIGNED) ASC")
                         ->orderBy('pro_programming_items.cycle','ASC')
                         ->orderBy('pro_programming_items.action_type','ASC')
                         ->orderBy('pro_programming_items.activity_name','ASC')
