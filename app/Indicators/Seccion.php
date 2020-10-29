@@ -42,6 +42,13 @@ class Seccion extends Model
         })->count();
     }
 
+    public function hasGroup()
+    {
+        foreach($this->prestaciones as $prestacion)
+            if($prestacion->hasGroup()) return true;
+        return false;
+    }
+
     public function total($col)
     {
         $total = 0;

@@ -30,6 +30,14 @@ use Illuminate\Support\Facades\DB;
         <table class="table table-hover table-bordered table-sm">
         {!!$seccion->thead!!}
         <tbody>
+        @if($seccion->totals AND $seccion->totals_first)
+        <tr>
+            <td align='left' @if($seccion->hasGroup()) colspan="2" @endif nowrap="nowrap"><b>TOTAL</b></td>
+            @foreach($seccion->cols as $col)
+            <td align='right'><b>{{number_format($seccion->total($col),0,",",".")}}</b></td>
+            @endforeach
+        </tr>
+        @endif
         @php($temp = null)
         @foreach($seccion->prestaciones as $prestacion)
         <tr>
@@ -43,9 +51,9 @@ use Illuminate\Support\Facades\DB;
             @endforeach
         </tr>
         @endforeach
-        @if($seccion->totals)
+        @if($seccion->totals AND !$seccion->totals_first)
         <tr>
-            <td align='left' @if($temp != null) colspan="2" @endif nowrap="nowrap"><b>TOTAL</b></td>
+            <td align='left' @if($seccion->hasGroup()) colspan="2" @endif nowrap="nowrap"><b>TOTAL</b></td>
             @foreach($seccion->cols as $col)
             <td align='right'><b>{{number_format($seccion->total($col),0,",",".")}}</b></td>
             @endforeach
