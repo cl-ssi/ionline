@@ -28,4 +28,17 @@
         <i class="fas fa-box"></i> Prestaciones o Actividades</a>
     </li>
     @endcan
+
+    @can('Programming: create')
+    <div class="dropdown show">
+        <a class="nav-link text-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-file-medical-alt"></i> Informes
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="{{ route('programming.reportConsolidated') }}">Reporte Consolidado</a>
+            <a class="dropdown-item" href="{{ route('programming.reportConsolidatedSep') }}">Reporte Consolidado Sep</a>
+        </div>
+    </div>
+    @endcan
 </ul>

@@ -10,6 +10,8 @@
 @can('Programming: create')
     <a href="{{ route('programmings.create') }}" class="btn btn-info mb-4">Comenzar Nueva Programación</a>
  @endcan
+
+
 <table class="table table-sm  ">
     <thead>
         <tr class="small ">

@@ -124,6 +124,10 @@ Route::resource('professionalhours', 'Programmings\ProfessionalHourController')-
 
 Route::resource('trainingitems', 'Programmings\TrainingsItemController')->middleware('auth');
 
+//Reportes de Programación Númerica APS
+Route::get('reportConsolidated', 'Programmings\ProgrammingReportController@reportConsolidated')->middleware('auth')->name('programming.reportConsolidated');
+Route::get('reportConsolidatedSep', 'Programmings\ProgrammingReportController@reportConsolidatedSep')->middleware('auth')->name('programming.reportConsolidatedSep');
+
 
 
 
