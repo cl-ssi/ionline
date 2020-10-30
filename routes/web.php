@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,6 +30,15 @@ Route::get('/claveunica/callback','ClaveUnicaController@callback')->name('claveu
 Route::get('/claveunica/login/{access_token}','ClaveUnicaController@login')->name('claveunica.login');
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+
+/* Nuevas rutas, Laravel 8.0 */
+Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
+    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index');
+    Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
+    Route::get('/request', [ReplacementStaffController::class, 'request'])->name('request');
+});
 
 
 //Route::get('foo/oscar', function () {return 'Hello World';})->name('lanterna');
