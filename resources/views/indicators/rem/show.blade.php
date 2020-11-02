@@ -24,8 +24,8 @@ use Illuminate\Support\Facades\DB;
 @else
     <link href="{{ asset('css/rem.css') }}" rel="stylesheet">
     </main>
-    @foreach($secciones as $seccion)
     <div id="contenedor">
+    @foreach($secciones as $seccion)
         <div class="col-sm tab table-responsive" id="{{$seccion->name}}">
         <table class="table table-hover table-bordered table-sm">
         {!!$seccion->thead!!}
@@ -63,10 +63,9 @@ use Illuminate\Support\Facades\DB;
         </tbody>
         </table>
         </div>
-    </div>
     <br>
     @endforeach
-
+    </div>
 @endif
 
 @endsection
