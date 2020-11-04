@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\DB;
         <tbody>
         @if($seccion->totals AND $seccion->totals_first)
         <tr>
-            <td align='left' @if($seccion->hasGroup()) colspan="2" @endif nowrap="nowrap"><b>TOTAL</b></td>
+            <td align='left' @if($seccion->hasGroup() AND !$seccion->discard_group) colspan="2" @endif nowrap="nowrap"><b>TOTAL</b></td>
             @foreach($seccion->cols as $col)
             <td align='right'><b>{{number_format($seccion->total($col),0,",",".")}}</b></td>
             @endforeach
@@ -41,7 +41,7 @@ use Illuminate\Support\Facades\DB;
         @php($temp = null)
         @foreach($seccion->prestaciones as $prestacion)
         <tr>
-            @if($prestacion->hasGroup() AND $prestacion->nombre_grupo_prestacion != $temp)
+            @if($prestacion->hasGroup() AND !$seccion->discard_group AND $prestacion->nombre_grupo_prestacion != $temp)
             <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_grupo_prestacion)}}' class="centrado">{{$prestacion->nombre_grupo_prestacion}}</td>
             @php($temp = $prestacion->nombre_grupo_prestacion)
             @endif
@@ -53,7 +53,7 @@ use Illuminate\Support\Facades\DB;
         @endforeach
         @if($seccion->totals AND !$seccion->totals_first)
         <tr>
-            <td align='left' @if($seccion->hasGroup()) colspan="2" @endif nowrap="nowrap"><b>TOTAL</b></td>
+            <td align='left' @if($seccion->hasGroup() AND !$seccion->discard_group) colspan="2" @endif nowrap="nowrap"><b>TOTAL</b></td>
             @foreach($seccion->cols as $col)
             <td align='right'><b>{{number_format($seccion->total($col),0,",",".")}}</b></td>
             @endforeach
