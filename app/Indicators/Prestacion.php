@@ -64,9 +64,14 @@ class Prestacion extends Model
         return prev($array);
     }
 
-    public function hasGroup()
+    public function hasGroup($maxLevel)
     {
-        return count(explode(' - ', trim($this->descripcion))) > 2;
+        return $this->countLevel() == $maxLevel;
+    }
+
+    public function countLevel()
+    {
+        return count(explode(' - ', trim($this->descripcion)));
     }
 
     public static function exists($year)

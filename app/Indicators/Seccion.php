@@ -44,9 +44,19 @@ class Seccion extends Model
 
     public function hasGroup()
     {
-        foreach($this->prestaciones as $prestacion)
-            if($prestacion->hasGroup()) return true;
-        return false;
+        // foreach($this->prestaciones as $prestacion)
+        //     if($prestacion->hasGroup()) return true;
+        // return false;
+        $levels = collect();
+        foreach($this->prestaciones as $prestacion) $levels->push($prestacion->countLevel());
+        return $levels->min() == $levels->max();
+    }
+
+    public function maxLevel()
+    {
+        $levels = collect();
+        foreach($this->prestaciones as $prestacion) $levels->push($prestacion->countLevel());
+        return $levels->max();
     }
 
     public function total($col)
