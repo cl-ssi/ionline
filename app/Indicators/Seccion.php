@@ -38,7 +38,7 @@ class Seccion extends Model
     public function getCountPrestacionBy($group)
     {
         return $this->prestaciones->filter(function ($prestacion) use ($group){
-            return Str::contains($prestacion->descripcion, $group);
+            return Str::contains($prestacion->descripcion, $group . ' -');
         })->count();
     }
 
