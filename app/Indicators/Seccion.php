@@ -49,7 +49,7 @@ class Seccion extends Model
         // return false;
         $levels = collect();
         foreach($this->prestaciones as $prestacion) $levels->push($prestacion->countLevel());
-        return $levels->min() != $levels->max();
+        return $levels->min() != $levels->max() OR $levels->min() >= 3;
     }
 
     public function maxLevel()
