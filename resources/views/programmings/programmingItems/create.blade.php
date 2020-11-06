@@ -175,17 +175,17 @@ Nuevo Item Programación Operativa </h4>
 
         <div class="form-group col-md-2" id="ifYes_activity_group" style="display: none;">
             <label for="forprogram">N° De Personas por Grupo</label>
-            <input type="number" class="form-control" id="activity_group" name="activity_group" required="">
+            <input type="number" class="form-control" id="activity_group" name="activity_group" >
         </div>
 
         <div class="form-group col-md-2" id="ifYes_workshop_number" style="display: none;">
             <label for="forprogram">N° De Talleres</label>
-            <input type="number" class="form-control" id="workshop_number" name="workshop_number" required="" readonly>
+            <input type="number" class="form-control" id="workshop_number" name="workshop_number"  readonly>
         </div>
 
         <div class="form-group col-md-2" id="ifYes_workshop_session_number" style="display: none;">
             <label for="forprogram">N° De Sesión por Talleres</label>
-            <input type="number" class="form-control" id="workshop_session_number" name="workshop_session_number" required=""> 
+            <input type="number" class="form-control" id="workshop_session_number" name="workshop_session_number" > 
         </div>
 
         <div class="form-group col-md-2">
@@ -329,11 +329,18 @@ Nuevo Item Programación Operativa </h4>
             document.getElementById("concentration").disabled = true;
             document.getElementById("prevalence_rate").disabled = true;
             document.getElementById("source_prevalence").disabled = true;
+            document.getElementById("workshop_session_number").required = true;
+            document.getElementById("workshop_number").required = true;
+            document.getElementById("activity_group").required = true;
             
         } else {
             document.getElementById("ifYes_activity_group").style.display = "none";
             document.getElementById("ifYes_workshop_number").style.display = "none";
             document.getElementById("ifYes_workshop_session_number").style.display = "none";
+            document.getElementById("workshop_session_number").required = false;
+            document.getElementById("workshop_number").required = false;
+            document.getElementById("activity_group").required = false;
+            
 
             document.getElementById("concentration").disabled = false;
         }
