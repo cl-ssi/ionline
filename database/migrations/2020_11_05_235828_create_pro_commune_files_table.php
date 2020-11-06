@@ -20,6 +20,8 @@ class CreateProCommuneFilesTable extends Migration
             $table->json('access')->nullable();
             $table->string('file_a')->nullable();
             $table->string('file_b')->nullable();
+            $table->string('file_c')->nullable();
+            $table->text('observation')->nullable();
 
             $table->unsignedBigInteger('user_id');
             $table->unsignedInteger('commune_id');
