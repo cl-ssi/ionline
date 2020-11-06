@@ -17,7 +17,7 @@ class CreateProTrainingItemsTable extends Migration
             $table->id();
             $table->string('linieamiento_estrategico')->nullable();
             $table->string('temas')->nullable();
-            $table->string('objetivos_educativos')->nullable();
+            $table->text('objetivos_educativos')->nullable();
             $table->integer('med_odont_qf')->nullable();
             $table->integer('otros_profesionales')->nullable();
             $table->integer('tec_nivel_superior')->nullable();
@@ -41,27 +41,6 @@ class CreateProTrainingItemsTable extends Migration
             $table->foreign('programming_id')->references('id')->on('pro_programmings');
             $table->timestamps();
         });
-
-        /*
-        LINEAMIENTOS ESTRATEGICOS
-        ACTIVIDADES DE CAPACITACION (TEMAS)
-        OBJETIVOS EDUCATIVOS
-        A    (Médicos, Odont, QF,etc.) 
-        B      (Otros Profesio-nales)
-        C (Técnicos Nivel Superior) 
-        D (Técnicos de Salud)
-        E (Adminis-trativos Salud)
-        F  (Auxiliares servicios Salud)
-        TOTAL
-        NUMERO DE HORAS PEDAGOGICAS 
-        ITEM CAPACITACION
-        FONDOS MUNICIPALES (SI-NO)
-        OTROS FONDOS (ESPECIFICAR CUALES)
-        TOTAL PRESUPUESTO ESTIMADO 
-        ORGANISMO EJECUTOR
-        COORDINADOR
-        FECHA DE EJECUCIÓN
-        */
     }
 
     /**

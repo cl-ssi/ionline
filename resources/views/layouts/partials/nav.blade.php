@@ -18,10 +18,23 @@
                 </li>
 
                 @can('Programming: view')
-                <li class="nav-item  ">
-                    <a class="nav-link" href="{{ route('programmings.index') }}">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-calculator"></i> Programación APS
                     </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                        <a class="dropdown-item"
+                           href="{{ route('programmings.index') }}">
+                            <i class="fas fa-calculator"></i> Programación Númerica
+                        </a>
+
+                        <a class="dropdown-item"
+                           href="{{ route('communefiles.index') }}">
+                            <i class="fas fa-file-alt"></i> Documentos Adjuntos
+                        </a>
+                    </div>
                 </li>
                 @endcan
 

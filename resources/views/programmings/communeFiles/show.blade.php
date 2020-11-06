@@ -3,26 +3,29 @@
 @section('title', 'Nuevo convenio')
 
 @section('content')
+<a href="{{ route('communefiles.index') }}" class="btn btb-flat btn-sm btn-dark" >
+                    <i class="fas fa-arrow-left small"></i> 
+                    <span class="small">Volver</span> 
+    </a>
 
-@include('programmings/nav')
+<h3 class="mb-3">Actualizar Permisos Documentos Adjuntos Communa {{ $communeFile->commune->name}} {{ $communeFile->year}} </h3>
 
-<h3 class="mb-3">Actualizar Programación Operativa {{ $programming->establishment->name}} {{ $programming->year}} </h3>
-
-<form method="POST" class="form-horizontal small" action="{{ route('programmings.update',$programming->id) }}" enctype="multipart/form-data">
+<form method="POST" class="form-horizontal small" action="{{ route('communefiles.update', $communeFile->id)}}" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="form-row ">
         <div class="form-group col-md-6">
-            <label for="forprogram">Establecimiento</label>
-            <select name="establishment" id="formprogram" class="form-control selectpicker " data-live-search="true" disabled>
-                  <option>{{ $programming->establishment->type}} - {{ $programming->establishment->name}}</option>
+            <label for="forprogram">Comuna</label>
+            <select name="commune" id="formprogram" class="form-control selectpicker " data-live-search="true" disabled>
+                  <option>{{ $communeFile->commune->name}}</option>
+                  
             </select>
         </div>
         
         <div class="form-group col-md-6">
             <label for="forprogram">Descripción</label>
-            <input type="input" class="form-control" id="forreferente" value="{{ $programming->description }}" name="description" required="">
-            <small>Ej. Programación 2021 - Cirujano Videla</small>
+            <input type="input" class="form-control" id="forreferente" value="{{ $communeFile->description }}" name="description" required="">
+            <small>Ej. Documentos Adjuntos 2021 - Alto Hospicio</small>
         </div>
     </div>
 
@@ -30,7 +33,7 @@
 
         <fieldset class="form-group col-2">
             <label for="fordate">Fecha</label>
-            <input type="text" class="form-control " id="datepicker" value="{{ $programming->year }}" name="date" required="">
+            <input type="text" class="form-control " id="datepicker" value="{{ $communeFile->year }}" name="date" required="">
         </fieldset>
 
         <div class="form-group col-md-6">
@@ -58,38 +61,7 @@
     <button type="submit" class="btn btn-info mb-4">Actualizar</button>
 
 </form>
-<div class="card mt-3 small">
-        <div class="card-body">
-            <h5>Evaluación General</h5>
 
-            <table class="table-sm table table-striped   table-hover ">
-                <thead  style="font-size:75%;">
-                    <tr>
-                        <th>N°</th>
-                        <th></th>
-                        <th>Aspectos Generales</th>
-                        <th class="text-right">SI  /  NO / REGULAR</th>
-                        <th class="text-center">Observaciones</th>
-                         @can('ProgrammingItem: delete')<th class="text-left align-middle" ></th>@endcan
-                    </tr>
-                </thead>
-                <tbody  style="font-size:75%;">
-                    @foreach($review as $key=>$review)
-                    <tr>
-                        <td class="text-center align-middle">{{++$key}}</td>
-                        <td class="text-left align-middle">{{ $review->revisor }}</td>
-                        <td class="text-left align-middle">{{ $review->general_features }}</td>
-                        <td class="text-center align-middle">{{ $review->answer }}</td>
-                        <td class="text-center align-middle">{{ $review->observation }}</td>
-                        @can('ProgrammingItem: edit')
-                            <td class="text-center align-middle" ><a href="{{ route('programmingitems.show', $review->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
-                        @endcan
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
 
 
 @endsection

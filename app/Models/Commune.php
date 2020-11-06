@@ -36,4 +36,8 @@ class Commune extends Model
             return $this->hasOne('\App\Municipality');
     }
 
+    public function communeFile() {
+        return $this->hasOne('\App\Programmings\CommuneFile');
+    }
+
 }

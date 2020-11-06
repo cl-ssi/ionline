@@ -62,9 +62,7 @@ class ProgrammingReportController extends Controller
         $programmingitems = ProgrammingItem::select(
                                  'T6.int_code'
                                 ,'pro_programming_items.activity_name'
-                                ,'pro_programming_items.cycle'
                                 ,'pro_programming_items.action_type'
-                                ,'pro_programming_items.def_target_population'
                                 , DB::raw('sum(pro_programming_items.activity_total) AS activity_total') )
                         ->leftjoin('pro_programmings AS T0', 'T0.id', '=', 'pro_programming_items.programming_id')
                         ->leftjoin('establishments AS T1', 'T0.establishment_id', '=', 'T1.id')
@@ -75,9 +73,8 @@ class ProgrammingReportController extends Controller
                         ->leftjoin('pro_activity_items AS T6', 'pro_programming_items.activity_id', '=', 'T6.id')
                         ->Where('T0.year','LIKE','%'.$year.'%')
                         ->whereIn('T0.establishment_id',$establishment)
-                        ->groupBy('T6.int_code','pro_programming_items.activity_name','pro_programming_items.cycle','pro_programming_items.action_type','pro_programming_items.def_target_population')
+                        ->groupBy('T6.int_code','pro_programming_items.activity_name','pro_programming_items.action_type')
                         ->orderByRaw("CAST(T6.int_code as UNSIGNED) ASC")
-                        ->orderBy('pro_programming_items.cycle','ASC')
                         ->orderBy('pro_programming_items.action_type','ASC')
                         ->orderBy('pro_programming_items.activity_name','ASC')
                         ->get();

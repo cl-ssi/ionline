@@ -18,4 +18,8 @@ class Programming extends Model
     protected $casts = [
         'access' => 'array'
     ];
+
+    public function programming_reviews() {
+        return $this->hasMany('App\Models\Programmings\Review');
+    }
 }

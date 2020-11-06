@@ -29,7 +29,7 @@
     </li>
     @endcan
 
-    @can('Programming: create')
+    @can('Programming: report')
     <div class="dropdown show">
         <a class="nav-link text-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-file-medical-alt"></i> Informes

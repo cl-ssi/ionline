@@ -46,19 +46,29 @@ Nuevo Item Programación Operativa </h4>
 <form method="POST" class="form-horizontal small" action="{{ route('programmingitems.store') }}" enctype="multipart/form-data">
 @csrf   
     <input type="hidden" class="form-control" id="programming_id" name="programming_id" value="{{Request::get('programming_id')}}">
+    <input type="hidden" class="form-control" id="activity_type" name="activity_type" value="Directa">
+    <input type="hidden" class="form-control" id="active" name="active" value="SI">
     <div class="form-row">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-2">
+            <label for="forprogram">Taller</label>
+            <select name="workshop" id="workshop" onchange="yesnoCheck(this);" class="form-control">
+                    <option value="NO">NO</option>
+                    <option value="SI">SI</option>
+                
+            </select>
+        </div>
+        <div class="form-group col-md-4">
             <label for="forprogram">Ciclo Vital</label>
-            <select name="cycle" id="formprogram" class="form-control">
+            <select name="cycle" id="formprogram"  class="form-control">
                     <option value="INFANTIL">INFANTIL</option>
                     <option value="ADOLESCENTE">ADOLESCENTE</option>
                     <option value="ADULTO">ADULTO</option>
                     <option value="ADULTO MAYOR">ADULTO MAYOR</option>
                     <option value="TRANSVERSAL">TRANSVERSAL</option>
-                    <option value="TALLER">TALLER</option>
                
             </select>
         </div>
+
         <div class="form-group col-md-6">
             <label for="forprogram">Acción</label>
             <input type="input" class="form-control" id="action_type" name="action_type" value="{{ $activityItemsSelect ? $activityItemsSelect->action_type : '' }}" required="">
@@ -128,7 +138,7 @@ Nuevo Item Programación Operativa </h4>
             title="Fuente Prevalencia o Tasa" 
             data-content="En caso de utilizar prevalencia/tasa, se debe indicar la fuente del dato Ej: Minsal">
             <i class="fas fa-info-circle"></i></a>
-            <input type="input" class="form-control" id="forreferente" name="source_prevalence" >
+            <input type="input" class="form-control" id="source_prevalence" name="source_prevalence" >
             <small></small>
         </div>
 
@@ -163,10 +173,28 @@ Nuevo Item Programación Operativa </h4>
             <input type="number" class="form-control" id="concentration" name="concentration" required="">
         </div>
 
+        <div class="form-group col-md-2" id="ifYes_activity_group" style="display: none;">
+            <label for="forprogram">N° De Personas por Grupo</label>
+            <input type="number" class="form-control" id="activity_group" name="activity_group" required="">
+        </div>
+
+        <div class="form-group col-md-2" id="ifYes_workshop_number" style="display: none;">
+            <label for="forprogram">N° De Talleres</label>
+            <input type="number" class="form-control" id="workshop_number" name="workshop_number" required="" readonly>
+        </div>
+
+        <div class="form-group col-md-2" id="ifYes_workshop_session_number" style="display: none;">
+            <label for="forprogram">N° De Sesión por Talleres</label>
+            <input type="number" class="form-control" id="workshop_session_number" name="workshop_session_number" required=""> 
+        </div>
+
         <div class="form-group col-md-2">
             <label for="forprogram">Total Actividad</label>
             <input type="input" class="form-control" id="activity_total" name="activity_total" value="" required="" readonly>
         </div>
+
+        
+
         
     </div>
 
@@ -290,6 +318,27 @@ Nuevo Item Programación Operativa </h4>
 <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
 
 <script>
+    function yesnoCheck(that) {
+        if (that.value == "SI") {
+   // alert("check");
+            document.getElementById("ifYes_activity_group").style.display = "block";
+            document.getElementById("ifYes_workshop_number").style.display = "block";
+            document.getElementById("ifYes_workshop_session_number").style.display = "block";
+
+            document.getElementById("ifYes_workshop_number").readonly = true;
+            document.getElementById("concentration").disabled = true;
+            document.getElementById("prevalence_rate").disabled = true;
+            document.getElementById("source_prevalence").disabled = true;
+            
+        } else {
+            document.getElementById("ifYes_activity_group").style.display = "none";
+            document.getElementById("ifYes_workshop_number").style.display = "none";
+            document.getElementById("ifYes_workshop_session_number").style.display = "none";
+
+            document.getElementById("concentration").disabled = false;
+        }
+    }
+
     $(function () {
         $('[data-toggle="popover"]').popover()
     })
@@ -333,6 +382,52 @@ Nuevo Item Programación Operativa </h4>
         }
     
         $('#population_attend').val(Math.round(calc));
+        
+    });
+
+    $('#activity_group').keyup(function() {
+        
+        var activity_group          = $('#activity_group').val();
+        var population_attend   = $('#population_attend').val();
+
+        if(activity_group == 0)
+        {
+            var workshop_number_res = activity_group;
+            console.log("concentration == 0");
+        }
+
+        else if(activity_group > 0)
+        {
+            var workshop_number_res = $('#population_attend').val()/activity_group;
+            console.log("concentration > 0");
+            
+        }
+
+        $('#workshop_number').val(Math.round(workshop_number_res));
+        
+    });
+
+    $('#workshop_session_number').keyup(function() {
+        
+        var workshop_number          = $('#workshop_number').val();
+        var activity_group   = $('#activity_group').val();
+        var workshop_session_number   = $('#workshop_session_number').val();
+        
+
+        if(workshop_session_number == 0)
+        {
+            var activity_total_res = workshop_number;
+            console.log("concentration == 0");
+        }
+
+        else if(workshop_session_number > 0)
+        {
+            var activity_total_res = workshop_number*workshop_session_number;
+            console.log("concentration > 0");
+            
+        }
+
+        $('#activity_total').val(Math.round(activity_total_res));
         
     });
 
@@ -405,6 +500,8 @@ Nuevo Item Programación Operativa </h4>
         $('#direct_work_hour').val(direct_work_hour.toFixed(5));
         
     });
+
+    
 
     
 </script>

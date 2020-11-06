@@ -107,9 +107,15 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('/createWordRes/{agreement}', 'Agreements\WordTestController@createResWordDocx')->name('createWordRes');
 });
 
-
+//Programación Númerica APS
 Route::resource('programmings', 'Programmings\ProgrammingController')->middleware('auth');
 Route::resource('programmingitems', 'Programmings\ProgrammingItemController')->middleware('auth');
+
+Route::resource('communefiles', 'Programmings\CommuneFileController')->middleware('auth');
+Route::get('/downloadFileA/{file}', 'Programmings\CommuneFileController@download')->name('programmingFile.download');
+Route::get('/downloadFileB/{file}', 'Programmings\CommuneFileController@downloadFileB')->name('programmingFile.downloadFileB');
+
+Route::resource('reviews', 'Programmings\ProgrammingReviewController')->middleware('auth');
 
 Route::resource('programmingdays', 'Programmings\ProgrammingDayController')->middleware('auth');
 
@@ -128,6 +134,7 @@ Route::resource('trainingitems', 'Programmings\TrainingsItemController')->middle
 Route::get('reportConsolidated', 'Programmings\ProgrammingReportController@reportConsolidated')->middleware('auth')->name('programming.reportConsolidated');
 Route::get('reportConsolidatedSep', 'Programmings\ProgrammingReportController@reportConsolidatedSep')->middleware('auth')->name('programming.reportConsolidatedSep');
 
+//End Programación Númerica APS
 
 
 
