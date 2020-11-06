@@ -58,7 +58,7 @@ class ProgrammingItemController extends Controller
                         ->leftjoin('pro_professional_hours AS T3','T3.id', '=', 'pro_programming_items.professional')
                         ->leftjoin('pro_professionals AS T4', 'T3.professional_id', '=', 'T4.id')
                         ->leftjoin('users AS T5', 'T0.user_id', '=', 'T5.id')
-                        ->leftjoin('pro_activity_items AS T7', 'pro_programming_items.activity_id', '=', 't7.id')
+                        ->leftjoin('pro_activity_items AS T7', 'pro_programming_items.activity_id', '=', 'T7.id')
                         ->Where('T0.year','LIKE','%'.$year.'%')
                         ->Where('pro_programming_items.cycle','!=','TALLER')
                         ->where('pro_programming_items.programming_id',$request->programming_id)
