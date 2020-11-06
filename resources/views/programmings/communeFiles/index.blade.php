@@ -7,7 +7,7 @@
 
 <h3 class="mb-3">Documentos Comunales - Programación Númerica</h3> 
  <!-- Permiso para crear nueva programación númerica -->
- @can('communefiles: create')
+ @can('Communefiles: create')
     <a href="{{ route('communefiles.create') }}" class="btn btn-info mb-4">Comenzar Documentos Comunales</a>
  @endcan
 
@@ -15,7 +15,7 @@
 <table class="table table-sm  ">
     <thead>
         <tr class="small ">
-            @can('communefiles: edit')<th class="text-left align-middle table-dark" ></th>@endcan
+            @can('Communefiles: edit')<th class="text-left align-middle table-dark" ></th>@endcan
             <th class="text-left align-middle table-dark" >Id</th> 
             <th class="text-left align-middle table-dark" >Año</th>
             <th class="text-left align-middle table-dark" >Comuna</th>
@@ -29,7 +29,7 @@
         @foreach($communeFiles as $communeFile)
         <tr class="small">
         <!-- Permiso para editar programación númerica -->
-        @can('communefiles: edit')
+        @can('Communefiles: edit')
             <td ><a href="{{ route('communefiles.show', $communeFile->id) }}" class="btn btb-flat btn-sm btn-light" >
                 <i class="fas fa-edit"></i></a>
             </td>
@@ -59,7 +59,7 @@
             <td class="text-right">
             <!-- Permiso para adjuntar documentos municipales programación númerica -->
 
-            @can('communefiles: upload')
+            @can('Communefiles: upload')
                 <button class="btn btb-flat btn-sm btn-light" data-toggle="modal"
                     data-target="#updateModal"
                     data-communefile_id="{{ $communeFile->id }}"
