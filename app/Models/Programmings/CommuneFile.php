@@ -12,7 +12,7 @@ class CommuneFile extends Model
     protected $table = 'pro_commune_files';
 
     protected $fillable = [
-        'id','year', 'description', 'access', 'file_a', 'file_b', 'user_id', 'commune_id'
+        'id','year', 'description', 'access', 'file_a', 'file_b','file_c','observation','status', 'user_id', 'commune_id'
     ];
 
     protected $casts = [

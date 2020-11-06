@@ -22,6 +22,7 @@
             <th class="text-left align-middle table-dark" >Descripción</th>
             <th class="text-left align-middle table-dark" >Diagnostico</th>
             <th class="text-left align-middle table-dark" >Matriz de Cuidado</th>
+            <th class="text-left align-middle table-dark" >Adjunto</th>
             <th class="text-right align-middle table-dark">Opciones</th>
         </tr>
     </thead>
@@ -51,6 +52,15 @@
                 <label for="for">
                     @if($communeFile->file_b != null)  
                         <a class="text-info" href="{{ route('programmingFile.downloadFileB', $communeFile->id) }}" target="_blank">
+                            <i class="fas fa-download"></i> Descargar
+                        </a>
+                    @endif
+                </label>
+            </td>
+            <td>
+                <label for="for">
+                    @if($communeFile->file_c != null)  
+                        <a class="text-info" href="{{ route('programmingFile.downloadFileC', $communeFile->id) }}" target="_blank">
                             <i class="fas fa-download"></i> Descargar
                         </a>
                     @endif

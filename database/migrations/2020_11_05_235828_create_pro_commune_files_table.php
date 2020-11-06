@@ -22,6 +22,7 @@ class CreateProCommuneFilesTable extends Migration
             $table->string('file_b')->nullable();
             $table->string('file_c')->nullable();
             $table->text('observation')->nullable();
+            $table->enum('status',['active','inactive']);
 
             $table->unsignedBigInteger('user_id');
             $table->unsignedInteger('commune_id');

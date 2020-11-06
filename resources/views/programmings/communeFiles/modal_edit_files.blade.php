@@ -19,7 +19,6 @@
                             <div class="custom-file">
                               <input type="file" class="custom-file-input" id="forfile" name="file_a">
                               <label class="custom-file-label" for="forfile">Seleccionar Archivo</label>
-                              <small class="form-text text-muted">* Adjuntar archivo correspondiente.</small>
                             </div>
                         </fieldset>
                     </div>
@@ -29,7 +28,16 @@
                             <div class="custom-file">
                               <input type="file" class="custom-file-input" id="forfile" name="file_b">
                               <label class="custom-file-label" for="forfile">Seleccionar Archivo</label>
-                              <small class="form-text text-muted">* Adjuntar archivo correspondiente.</small>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="form-row">
+                        <fieldset class="form-group col-12">
+                            <label for="for" class="col-form-label">Archivo</label>
+                            <div class="custom-file">
+                              <input type="file" class="custom-file-input" id="forfile" name="file_c">
+                              <label class="custom-file-label" for="forfile">Seleccionar Archivo</label>
                             </div>
                         </fieldset>
                     </div>

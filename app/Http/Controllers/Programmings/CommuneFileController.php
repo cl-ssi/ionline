@@ -30,6 +30,7 @@ class CommuneFileController extends Controller
                             ,'pro_commune_files.created_at'
                             ,'pro_commune_files.file_a'
                             ,'pro_commune_files.file_b'
+                            ,'pro_commune_files.file_c'
                             ,'T2.name AS commune'
                             ,'T3.name' 
                             ,'T3.fathers_family'
@@ -48,6 +49,7 @@ class CommuneFileController extends Controller
                         ,'pro_commune_files.created_at'
                         ,'pro_commune_files.file_a'
                         ,'pro_commune_files.file_b'
+                        ,'pro_commune_files.file_c'
                         ,'T2.name AS commune'
                         ,'T3.name' 
                         ,'T3.fathers_family'
@@ -134,6 +136,10 @@ class CommuneFileController extends Controller
             Storage::delete($communeFile->file_b);
             $communeFile->file_b = $request->file('file_b')->store('programmings');
         }
+        if($request->hasFile('file_c')){
+            Storage::delete($communeFile->file_c);
+            $communeFile->file_c = $request->file('file_c')->store('programmings');
+        }
         
         $communeFile->save();
 
@@ -147,6 +153,11 @@ class CommuneFileController extends Controller
     public function downloadFileB(CommuneFile $file)
     {
         return Storage::response($file->file_b, mb_convert_encoding($file->name,'ASCII'));
+    }
+
+    public function downloadFileC(CommuneFile $file)
+    {
+        return Storage::response($file->file_c, mb_convert_encoding($file->name,'ASCII'));
     }
 
 }

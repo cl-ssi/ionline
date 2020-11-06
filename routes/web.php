@@ -114,6 +114,7 @@ Route::resource('programmingitems', 'Programmings\ProgrammingItemController')->m
 Route::resource('communefiles', 'Programmings\CommuneFileController')->middleware('auth');
 Route::get('/downloadFileA/{file}', 'Programmings\CommuneFileController@download')->name('programmingFile.download');
 Route::get('/downloadFileB/{file}', 'Programmings\CommuneFileController@downloadFileB')->name('programmingFile.downloadFileB');
+Route::get('/downloadFileC/{file}', 'Programmings\CommuneFileController@downloadFileC')->name('programmingFile.downloadFileC');
 
 Route::resource('reviews', 'Programmings\ProgrammingReviewController')->middleware('auth');
 
