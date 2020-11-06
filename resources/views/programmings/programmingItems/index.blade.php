@@ -13,7 +13,7 @@
 <table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:50%;">
-            @can('ProgrammingItem: edit')<th class="text-left align-middle" ></th>@endcan
+            @can('ProgrammingItem: evaluate')<th class="text-left align-middle" ></th>@endcan
             @can('ProgrammingItem: edit')<th class="text-left align-middle" ></th>@endcan
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">CICLO</th>
@@ -45,7 +45,7 @@
     <tbody style="font-size:65%;">
         @foreach($programmingItems as $programmingitem)
         <tr class="small">
-        @can('ProgrammingItem: edit')
+        @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" ><a href="{{ route('programmingitems.show', $programmingitem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-clipboard-check"></i></a></td>
         @endcan
         @can('ProgrammingItem: edit')

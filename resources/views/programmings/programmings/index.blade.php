@@ -16,7 +16,7 @@
 <table class="table table-sm  ">
     <thead>
         <tr class="small ">
-            @can('Programming: edit')<th class="text-left align-middle table-dark" ></th>@endcan
+            @can('Programming: evaluate')<th class="text-left align-middle table-dark" ></th>@endcan
             @can('Programming: edit')<th class="text-left align-middle table-dark" ></th>@endcan
             <th class="text-left align-middle table-dark" >Id</th> 
             <th class="text-left align-middle table-dark" >Comuna</th>
@@ -29,7 +29,7 @@
         @foreach($programmings as $programming)
         <tr class="small">
         <!-- Permiso para editar programación númerica -->
-        @can('Programming: edit')
+        @can('Programming: evaluate')
             <td ><a href="{{ route('programmings.show', $programming->id) }}" class="btn btb-flat btn-sm btn-light" >
             <i class="fas fa-clipboard-check"></i></a>
             </td>
