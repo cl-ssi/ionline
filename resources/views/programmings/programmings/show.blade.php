@@ -58,38 +58,7 @@
     <button type="submit" class="btn btn-info mb-4">Actualizar</button>
 
 </form>
-<div class="card mt-3 small">
-        <div class="card-body">
-            <h5>Evaluación General</h5>
 
-            <table class="table-sm table table-striped   table-hover ">
-                <thead  style="font-size:75%;">
-                    <tr>
-                        <th>N°</th>
-                        <th></th>
-                        <th>Aspectos Generales</th>
-                        <th class="text-right">SI  /  NO / REGULAR</th>
-                        <th class="text-center">Observaciones</th>
-                         @can('ProgrammingItem: delete')<th class="text-left align-middle" ></th>@endcan
-                    </tr>
-                </thead>
-                <tbody  style="font-size:75%;">
-                    @foreach($review as $key=>$review)
-                    <tr>
-                        <td class="text-center align-middle">{{++$key}}</td>
-                        <td class="text-left align-middle">{{ $review->revisor }}</td>
-                        <td class="text-left align-middle">{{ $review->general_features }}</td>
-                        <td class="text-center align-middle">{{ $review->answer }}</td>
-                        <td class="text-center align-middle">{{ $review->observation }}</td>
-                        @can('ProgrammingItem: edit')
-                            <td class="text-center align-middle" ><a href="{{ route('programmingitems.show', $review->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
-                        @endcan
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
 
 
 @endsection
