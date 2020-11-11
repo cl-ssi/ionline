@@ -38,17 +38,35 @@ use Illuminate\Support\Facades\DB;
             @endforeach
         </tr>
         @endif
-        @php($temp = null)
+        @php($temp = $pass = null)
         @foreach($seccion->prestaciones as $prestacion)
         <tr>
             @if($prestacion->hasGroup($seccion->maxLevel()) AND !$seccion->discard_group AND $prestacion->nombre_grupo_prestacion != $temp)
-            <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_grupo_prestacion)}}' class="centrado">{{$prestacion->nombre_grupo_prestacion}}</td>
-            @php($temp = $prestacion->nombre_grupo_prestacion)
+                <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_grupo_prestacion)}}' class="centrado">{{$prestacion->nombre_grupo_prestacion}}</td>
+                @php($temp = $prestacion->nombre_grupo_prestacion)
+            @endif
+            @if($seccion->subtotals != null AND $seccion->subtotals_first AND $prestacion->nombre_grupo_prestacion != $pass AND $seccion->subtotalExists($prestacion->nombre_grupo_prestacion))
+            <tr>
+                <td align='left' colspan="1" nowrap="nowrap"><b>TOTAL</b></td>
+                @foreach($seccion->cols as $col)
+                <td align='right'><b>{{number_format($seccion->subtotal($col, $prestacion->nombre_grupo_prestacion),0,",",".")}}</b></td>
+                @endforeach
+                @php($pass = $prestacion->nombre_grupo_prestacion)
+            </tr>
             @endif
             <td align='left' colspan='{{($prestacion->hasGroup($seccion->maxLevel())) ? 1: 2}}' nowrap="nowrap">{{$prestacion->nombre_prestacion}}</td>
             @foreach($seccion->cols as $col)
             <td align='right'>{{number_format($prestacion->rems->sum($col),0,",",".")}}</td>
             @endforeach
+            @if($seccion->subtotals != null AND !$seccion->subtotals_first AND $prestacion->nombre_grupo_prestacion != $pass AND $seccion->subtotalExists($prestacion->nombre_grupo_prestacion) AND $seccion->isLastPrestacionByGroup($prestacion))
+            <tr>
+                <td align='left' colspan="1" nowrap="nowrap"><b>TOTAL</b></td>
+                @foreach($seccion->cols as $col)
+                <td align='right'><b>{{number_format($seccion->subtotal($col, $prestacion->nombre_grupo_prestacion),0,",",".")}}</b></td>
+                @endforeach
+                @php($pass = $prestacion->nombre_grupo_prestacion)
+            </tr>
+            @endif
         </tr>
         @endforeach
         @if($seccion->totals AND !$seccion->totals_first)

@@ -37,9 +37,10 @@ class Seccion extends Model
 
     public function getCountPrestacionBy($group)
     {
+        $result = $this->subtotals_first ? 2 : 1; //para efectos de mostrar bien las celdas en tabla
         return $this->prestaciones->filter(function ($prestacion) use ($group){
             return Str::contains($prestacion->descripcion, $group . ' -');
-        })->count();
+        })->count() + ($this->subtotalExists($group) ? $result : 0);
     }
 
     public function hasGroup()
@@ -50,6 +51,14 @@ class Seccion extends Model
         $levels = collect();
         foreach($this->prestaciones as $prestacion) $levels->push($prestacion->countLevel());
         return $levels->min() != $levels->max() OR $levels->min() >= 3;
+    }
+
+    public function isLastPrestacionByGroup($item)
+    {
+        $prestaciones = $this->prestaciones->filter(function ($prestacion) use ($item){
+            return Str::contains($prestacion->descripcion, $item->nombre_grupo_prestacion . ' -');
+        });
+        return $prestaciones->last() == $item;
     }
 
     public function maxLevel()
@@ -64,5 +73,25 @@ class Seccion extends Model
         $total = 0;
         foreach($this->prestaciones as $prestacion) $total += $prestacion->rems->sum($col);
         return $total;
+    }
+
+    public function subtotalExists($group)
+    {
+        return Str::contains($this->subtotals, $group);
+    }
+
+    public function subtotal($col, $group)
+    {
+        $subtotal = 0;
+        // foreach($this->subtotals_cods as $subtotal_cods)
+        //     if(Str::contains($subtotal_cods, $cod))
+        //         foreach($this->prestaciones as $prestacion)
+        //             if(Str::contains($subtotal_cods, $prestacion->codigo_prestacion)) 
+        //                 $subtotal += $prestacion->rems->sum($col);
+        $prestaciones = $this->prestaciones->filter(function ($prestacion) use ($group){
+            return Str::contains($prestacion->descripcion, $group . ' -');
+        });
+        foreach($prestaciones as $prestacion) $subtotal += $prestacion->rems->sum($col);
+        return $subtotal;
     }
 }

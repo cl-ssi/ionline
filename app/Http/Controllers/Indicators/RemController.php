@@ -73,6 +73,7 @@ class RemController extends Controller
             foreach($secciones as $seccion){
                 $seccion->cods = explode(',', $seccion->cods);
                 $seccion->cols = explode(',', $seccion->cols);
+                $seccion->subtotals_group = $seccion->subtotals != null ? explode(';', $seccion->subtotals) : null;
                 $seccion->prestaciones = Prestacion::year($year)->with(['rems' => function($q) use ($establecimiento, $periodo){
                                                     $q->whereIn('IdEstablecimiento', $establecimiento)->whereIn('Mes', $periodo);
                                             }])
