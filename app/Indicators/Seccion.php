@@ -39,7 +39,7 @@ class Seccion extends Model
     {
         $result = $this->subtotals_first ? 2 : 1; //para efectos de mostrar bien las celdas en tabla
         return $this->prestaciones->filter(function ($prestacion) use ($group){
-            return Str::contains($prestacion->descripcion, $group . ' -');
+            return Str::contains($prestacion->descripcion, '- '. $group . ' -');
         })->count() + ($this->subtotalExists($group) ? $result : 0);
     }
 
@@ -56,7 +56,7 @@ class Seccion extends Model
     public function isLastPrestacionByGroup($item)
     {
         $prestaciones = $this->prestaciones->filter(function ($prestacion) use ($item){
-            return Str::contains($prestacion->descripcion, $item->nombre_grupo_prestacion . ' -');
+            return Str::contains($prestacion->descripcion, '- '. $item->nombre_grupo_prestacion . ' -');
         });
         return $prestaciones->last() == $item;
     }
@@ -89,7 +89,7 @@ class Seccion extends Model
         //             if(Str::contains($subtotal_cods, $prestacion->codigo_prestacion)) 
         //                 $subtotal += $prestacion->rems->sum($col);
         $prestaciones = $this->prestaciones->filter(function ($prestacion) use ($group){
-            return Str::contains($prestacion->descripcion, $group . ' -');
+            return Str::contains($prestacion->descripcion, '- '. $group . ' -');
         });
         foreach($prestaciones as $prestacion) $subtotal += $prestacion->rems->sum($col);
         return $subtotal;
