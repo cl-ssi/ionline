@@ -45,9 +45,6 @@ class Seccion extends Model
 
     public function hasGroup()
     {
-        // foreach($this->prestaciones as $prestacion)
-        //     if($prestacion->hasGroup()) return true;
-        // return false;
         $levels = collect();
         foreach($this->prestaciones as $prestacion) $levels->push($prestacion->countLevel());
         return $levels->min() != $levels->max() OR $levels->min() >= 3;
@@ -80,14 +77,14 @@ class Seccion extends Model
         return Str::contains($this->subtotals, $group);
     }
 
+    public function supergroupExists($supergroup)
+    {
+        return Str::contains($this->supergroups, $supergroup);
+    }
+
     public function subtotal($col, $group)
     {
         $subtotal = 0;
-        // foreach($this->subtotals_cods as $subtotal_cods)
-        //     if(Str::contains($subtotal_cods, $cod))
-        //         foreach($this->prestaciones as $prestacion)
-        //             if(Str::contains($subtotal_cods, $prestacion->codigo_prestacion)) 
-        //                 $subtotal += $prestacion->rems->sum($col);
         $prestaciones = $this->prestaciones->filter(function ($prestacion) use ($group){
             return Str::contains($prestacion->descripcion, '- '. $group . ' -');
         });

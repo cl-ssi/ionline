@@ -64,6 +64,14 @@ class Prestacion extends Model
         return prev($array);
     }
 
+    public function getNombreSuperGrupoPrestacionAttribute()
+    {
+        $array = explode(' - ', trim($this->descripcion));
+        end($array);
+        prev($array);
+        return prev($array);
+    }
+
     public function hasGroup($maxLevel)
     {
         return $this->countLevel() == $maxLevel;

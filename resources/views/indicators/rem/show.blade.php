@@ -32,15 +32,19 @@ use Illuminate\Support\Facades\DB;
         <tbody>
         @if($seccion->totals AND $seccion->totals_first)
         <tr>
-            <td align='left' @if($seccion->hasGroup() AND !$seccion->discard_group) colspan="2" @endif nowrap="nowrap"><b>TOTAL</b></td>
+            <td align='left' @if($seccion->hasGroup() AND !$seccion->discard_group) colspan="{{$seccion->supergroups ? 3 : 2 }}" @endif nowrap="nowrap"><b>TOTAL</b></td>
             @foreach($seccion->cols as $col)
             <td align='right'><b>{{number_format($seccion->total($col),0,",",".")}}</b></td>
             @endforeach
         </tr>
         @endif
-        @php($temp = $pass = null)
+        @php($temp = $pass = $supergroup_temp = null)
         @foreach($seccion->prestaciones as $prestacion)
         <tr>
+            @if($seccion->supergroups != null AND !$seccion->discard_group AND $prestacion->nombre_supergrupo_prestacion != $supergroup_temp AND $seccion->supergroupExists($prestacion->nombre_supergrupo_prestacion))
+                <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_supergrupo_prestacion)}}' class="centrado">{{$prestacion->nombre_supergrupo_prestacion}}</td>
+                @php($supergroup_temp = $prestacion->nombre_supergrupo_prestacion)
+            @endif
             @if($prestacion->hasGroup($seccion->maxLevel()) AND !$seccion->discard_group AND $prestacion->nombre_grupo_prestacion != $temp)
                 <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_grupo_prestacion)}}' class="centrado">{{$prestacion->nombre_grupo_prestacion}}</td>
                 @php($temp = $prestacion->nombre_grupo_prestacion)
@@ -71,7 +75,7 @@ use Illuminate\Support\Facades\DB;
         @endforeach
         @if($seccion->totals AND !$seccion->totals_first)
         <tr>
-            <td align='left' @if($seccion->hasGroup() AND !$seccion->discard_group) colspan="2" @endif nowrap="nowrap"><b>TOTAL</b></td>
+            <td align='left' @if($seccion->hasGroup() AND !$seccion->discard_group) colspan="{{$seccion->supergroups ? 3 : 2 }}" @endif nowrap="nowrap"><b>TOTAL</b></td>
             @foreach($seccion->cols as $col)
             <td align='right'><b>{{number_format($seccion->total($col),0,",",".")}}</b></td>
             @endforeach
