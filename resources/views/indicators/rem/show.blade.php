@@ -73,6 +73,18 @@ use Illuminate\Support\Facades\DB;
             @endif
         </tr>
         @endforeach
+        @if($seccion->totals_by_prestacion != null)
+        <tr>
+            <td align='left' rowspan="{{count($seccion->getTotalsByPrestacion())}}" class="centrado"><b>TOTAL</b></td>
+            @foreach($seccion->getTotalsByPrestacion() as $nombre_prestacion)
+                <td align='left' colspan="1" nowrap="nowrap"><b>{{$nombre_prestacion}}</b></td>
+                @foreach($seccion->cols as $col)
+                <td align='right'><b>{{number_format($seccion->totalByPrestacion($col, $nombre_prestacion),0,",",".")}}</b></td>
+                @endforeach
+            </tr>
+            @endforeach
+        </tr>
+        @endif
         @if($seccion->totals AND !$seccion->totals_first)
         <tr>
             <td align='left' @if($seccion->hasGroup() AND !$seccion->discard_group) colspan="{{$seccion->supergroups ? 3 : 2 }}" @endif nowrap="nowrap"><b>TOTAL</b></td>

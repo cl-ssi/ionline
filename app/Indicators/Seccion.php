@@ -100,4 +100,24 @@ class Seccion extends Model
         foreach($prestaciones as $prestacion) $subtotal += $prestacion->rems->sum($col);
         return $subtotal;
     }
+
+    public function totalByPrestacion($col, $nombre_prestacion)
+    {
+        $total = 0;
+        $prestaciones = $this->prestaciones->filter(function ($prestacion) use ($nombre_prestacion){
+            return Str::contains($prestacion->descripcion, '- '. $nombre_prestacion);
+        });
+        foreach($prestaciones as $prestacion) $total += $prestacion->rems->sum($col);
+        return $total;
+    }
+
+    public function countTotalsByPrestacion()
+    {
+        return count($this->getTotalsByPrestacion());
+    }
+
+    public function getTotalsByPrestacion()
+    {
+        return explode(';', trim($this->totals_by_prestacion));
+    }
 }
