@@ -42,10 +42,10 @@ use Illuminate\Support\Facades\DB;
         @foreach($seccion->prestaciones as $prestacion)
         <tr>
             @if($seccion->supergroups != null AND !$seccion->discard_group AND $prestacion->nombre_supergrupo_prestacion != $supergroup_temp AND $seccion->supergroupExists($prestacion->nombre_supergrupo_prestacion))
-                <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_supergrupo_prestacion)}}' class="centrado">{{$prestacion->nombre_supergrupo_prestacion}}</td>
+                <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_supergrupo_prestacion) + ($seccion->isSupergroupWithSubtotals($prestacion->nombre_supergrupo_prestacion) ? 2 : 0)}}' class="centrado">{{$prestacion->nombre_supergrupo_prestacion}}</td>
                 @php($supergroup_temp = $prestacion->nombre_supergrupo_prestacion)
             @endif
-            @if($prestacion->hasGroup($seccion->maxLevel()) AND !$seccion->discard_group AND $prestacion->nombre_grupo_prestacion != $temp)
+            @if($prestacion->hasGroup($seccion->maxLevel()) AND !$seccion->discard_group AND $prestacion->nombre_grupo_prestacion != $temp AND strlen($prestacion->nombre_grupo_prestacion) != 1)
                 <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_grupo_prestacion)}}' class="centrado">{{$prestacion->nombre_grupo_prestacion}}</td>
                 @php($temp = $prestacion->nombre_grupo_prestacion)
             @endif
@@ -58,7 +58,7 @@ use Illuminate\Support\Facades\DB;
                 @php($pass = $prestacion->nombre_grupo_prestacion)
             </tr>
             @endif
-            <td align='left' colspan='{{($prestacion->hasGroup($seccion->maxLevel())) ? 1: 2}}' nowrap="nowrap">{{$prestacion->nombre_prestacion}}</td>
+            <td align='left' colspan='{{($prestacion->hasGroup($seccion->maxLevel()) AND strlen($prestacion->nombre_grupo_prestacion) != 1) ? 1: 2}}' nowrap="nowrap">{{$prestacion->nombre_prestacion}}</td>
             @foreach($seccion->cols as $col)
             <td align='right'>{{number_format($prestacion->rems->sum($col),0,",",".")}}</td>
             @endforeach
