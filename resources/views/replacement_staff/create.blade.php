@@ -65,6 +65,10 @@
             </select>
         </fieldset>
 
+        <fieldset class="form-group col">
+            <label for="for_profession">Adjuntar Título Profesional*</label>
+            <input type="file" class="form-control" name="direccion" id="for_direccion" required placeholder="">
+        </fieldset>
     </div>
 
 
@@ -88,15 +92,8 @@
         </fieldset>
 
         <fieldset class="form-group col">
-            <label for="for_etamento">Estamento * (revisar si va o no)</label>
-            <select name="etamento" id="for_etamento" class="form-control">
-                <option value=""></option>
-                <option value="">Médico</option>
-                <option value="">Profesional</option>
-                <option value="">Tecnico</option>
-                <option value="">Administrativo</option>
-                <option value="">Auxiliares</option>
-            </select>
+            <label for="for_profession">Certificado de Experiencia Laboral</label>
+            <input type="file" class="form-control" name="direccion" id="for_direccion" required placeholder="">
         </fieldset>
     </div>
 
@@ -111,6 +108,11 @@
         <fieldset class="form-group col">
             <label for="for_funciones_realizada">Número de horas</label>
             <input type="text" class="form-control" name="funciones_realizada" id="for_funciones_realizada" required placeholder="">
+        </fieldset>
+
+        <fieldset class="form-group col">
+            <label for="for_funciones_realizada">Certificado</label>
+            <input type="file" class="form-control"  placeholder="">
         </fieldset>
     </div>
     <hr>
