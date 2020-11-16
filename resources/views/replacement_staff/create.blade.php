@@ -69,6 +69,7 @@
 
 
 
+    <hr>
     <legend>EXPERIENCIA:<i class="fas fa-plus"></i></legend>
     <div class="form-row">
         <fieldset class="form-group col">
@@ -96,12 +97,10 @@
                 <option value="">Administrativo</option>
                 <option value="">Auxiliares</option>
             </select>
-
         </fieldset>
-
-
     </div>
 
+    <hr>
     <legend>PERFECCIONAMIENTO/CAPACITACIONES: <i class="fas fa-plus"></i></legend>
     <div class="form-row">
         <fieldset class="form-group col">
@@ -113,18 +112,26 @@
             <label for="for_funciones_realizada">Número de horas</label>
             <input type="text" class="form-control" name="funciones_realizada" id="for_funciones_realizada" required placeholder="">
         </fieldset>
+    </div>
+    <hr>
 
-
+    <div class="form-row">
         <fieldset class="form-group col">
-            <label for="for_funciones_realizada">Subir Certificación ( en caso que se posea)</label>
-            <input type="file">
-            <i class="fas fa-minus"></i>
+            <label for="for_experiencias_anteriores">Otra Observación</label>
+            <textarea class="form-control"></textarea>            
+        </fieldset>        
+    </div>
+
+    <fieldset class="form-group col">
+            <label for="for_etamento">Idioma</label>
+            <select name="etamento" id="for_etamento" class="form-control">
+                <option value=""></option>
+                <option value="">Inglés</option>
+                <option value="">Frances</option>
+                <option value="">Aleman</option>                
+            </select>
         </fieldset>
 
-
-
-
-    </div>
 
 
     <button type="submit" class="btn btn-primary">Guardar</button>
