@@ -3,6 +3,9 @@
 @section('title', 'Listado de STAFF')
 
 @section('content')
+
+@include('replacement_staff.nav')
+
 <h3 class="mb-3">Listado de Solicitudes</h3>
 
 

@@ -3,6 +3,9 @@
 @section('title', 'Listado de STAFF')
 
 @section('content')
+
+@include('replacement_staff.nav')
+
 <h3 class="mb-3">Listado de STAFF</h3>
 
 
@@ -26,7 +29,7 @@
               <form method="GET" id="form" class="form-horizontal" action="#">
                 <select name="filter" onchange="this.form.submit()">
                   <option value="0" >Todos</option>
-                  <option value="1" >Disponible</option>                  
+                  <option value="1" >Disponible</option>
                 </select>
               </form>
             </td>

@@ -3,6 +3,9 @@
 @section('title', 'Nuevo Staff')
 
 @section('content')
+
+@include('replacement_staff.nav')
+
 <h3 class="mb-3">Nuevo Staff</h3>
 
 
@@ -10,7 +13,7 @@
     @csrf
     @method('POST')
 
-    <div class="form-row">        
+    <div class="form-row">
             <legend>ANTECEDENTES PERSONALES:</legend>
             <fieldset class="form-group col">
                 <label for="for_name">RUT</label>
@@ -29,7 +32,7 @@
                 <label for="for_telephone">Teléfono</label>
                 <input type="text" class="form-control" name="telephone" id="for_telephone" required placeholder="">
             </fieldset>
-        
+
 
 
     </div>
@@ -37,7 +40,7 @@
         <fieldset class="form-group col">
             <label for="for_title">Título</label>
             <input type="text" class="form-control" name="title" id="for_title" required>
-        </fieldset>        
+        </fieldset>
 
         <fieldset class="form-group col">
             <label for="for_commune_id">Comuna</label>
@@ -64,7 +67,7 @@
 
     </div>
 
-    
+
 
     <legend>EXPERIENCIA:<i class="fas fa-plus"></i></legend>
     <div class="form-row">
@@ -93,9 +96,9 @@
                 <option value="">Administrativo</option>
                 <option value="">Auxiliares</option>
             </select>
-            
+
         </fieldset>
-        
+
 
     </div>
 
@@ -110,17 +113,17 @@
             <label for="for_funciones_realizada">Número de horas</label>
             <input type="text" class="form-control" name="funciones_realizada" id="for_funciones_realizada" required placeholder="">
         </fieldset>
-        
+
 
         <fieldset class="form-group col">
             <label for="for_funciones_realizada">Subir Certificación ( en caso que se posea)</label>
             <input type="file">
             <i class="fas fa-minus"></i>
         </fieldset>
-        
 
-        
-        
+
+
+
     </div>
 
 

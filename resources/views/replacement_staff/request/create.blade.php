@@ -3,6 +3,9 @@
 @section('title', 'Solicitud')
 
 @section('content')
+
+@include('replacement_staff.nav')
+
 <h3 class="mb-3">Formulario Solicitud Contratación de Personal</h3>
 
 <p>Por medio del presente solicita a usted autorizar el llamado a presentar
