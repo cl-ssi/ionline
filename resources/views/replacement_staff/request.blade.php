@@ -103,6 +103,27 @@ antecedentes al cargo de:</p>
 
     </div>
 
+    <p>El documento debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</p>
+
+    JEFATURA SOLICITANTE
+    DEL CARGO
+
+    V°B° DIRECCIÓN o SUBDIRECCION
+(Según corresponda)
+
+
+V°B° SUBDIRECCIÓN
+RRHH
+
+
+Correlativo:
+Nº
+Ítem Presupuestario:
+Disposición presupuestaria:
+SI   	 NO
+
+
+VºBº Unidad Gestión de Personal y Ciclo de Vida Laboral
 </form>
 
 @endsection
