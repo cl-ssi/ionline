@@ -12,9 +12,9 @@ class ReplacementStaffController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('replacement_staff.index');
+        return view('replacement_staff.index', compact('request'));
     }
 
     /**
@@ -46,7 +46,13 @@ class ReplacementStaffController extends Controller
      */
     public function request()
     {
-        return view('replacement_staff.request');
+        return view('replacement_staff.request.create');
+    }
+
+
+    public function requestindex()
+    {
+        return view('replacement_staff.request.index');
     }
 
     /**
