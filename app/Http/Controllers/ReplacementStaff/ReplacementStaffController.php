@@ -44,15 +44,25 @@ class ReplacementStaffController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function request()
+    public function requestCreate()
     {
         return view('replacement_staff.request.create');
     }
 
 
-    public function requestindex()
+    public function requestIndex()
     {
         return view('replacement_staff.request.index');
+    }
+
+    public function requestOwn()
+    {
+        return view('replacement_staff.request.own');
+    }
+
+    public function requestEdit()
+    {
+        return view('replacement_staff.request.edit');
     }
 
     /**
