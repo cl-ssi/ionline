@@ -37,7 +37,11 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
     Route::get('/', [ReplacementStaffController::class, 'index'])->name('index');
     Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
-    Route::get('/request', [ReplacementStaffController::class, 'request'])->name('request');
+    Route::prefix('request')->name('request.')->group(function(){
+        Route::get('/', [ReplacementStaffController::class, 'requestindex'])->name('requestindex');
+        Route::get('/create', [ReplacementStaffController::class, 'request'])->name('request');
+    });
+
 });
 
 

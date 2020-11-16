@@ -88,9 +88,10 @@ antecedentes al cargo de:</p>
             <select name="fundamento" id="for_fundamento" class="form-control">
                 <option value="">Reemplazo o suplencia</option>
                 <option value="">Renuncia</option>
-                <option value="">Permiso sin gose de sueldo</option>
+                <option value="">Permiso sin goce de sueldo</option>
                 <option value="">Regulación de cargos</option>
-                <option value="">Cargo Expanción</option>
+                <option value="">Cargo expansión</option>
+                <option value="">Feriado legal</option>
                 <option value="">Otros</option>
             </select>
         </fieldset>
@@ -102,6 +103,8 @@ antecedentes al cargo de:</p>
         </fieldset>
 
     </div>
+
+    <button type="submit" class="btn btn-primary">Crear</button>
 
 </form>
 
