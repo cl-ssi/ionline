@@ -69,7 +69,7 @@ class RemController extends Controller
         $periodo = $request->get('periodo');
         $secciones = null;
         if ($request->has('submit')) {
-            $secciones = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie)->orderby('name')->get();
+            $secciones = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie)->get();
             foreach($secciones as $seccion){
                 $seccion->cods = explode(',', $seccion->cods);
                 $seccion->cols = explode(',', $seccion->cols);
