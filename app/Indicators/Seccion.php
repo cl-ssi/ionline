@@ -4,6 +4,7 @@ namespace App\Indicators;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
 
 class Seccion extends Model
 {
@@ -119,5 +120,10 @@ class Seccion extends Model
     public function getTotalsByPrestacion()
     {
         return explode(';', trim($this->totals_by_prestacion));
+    }
+
+    public static function exists($year)
+    {
+        return Schema::connection('mysql_rem')->hasTable($year.'secciones');
     }
 }

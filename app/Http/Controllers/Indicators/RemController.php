@@ -19,8 +19,9 @@ class RemController extends Controller
      */
     public function index($year, $serie)
     {
-        if(!Prestacion::exists($year)) abort(404);
+        if(!Prestacion::exists($year) OR !Seccion::exists($year)) abort(404);
         $prestaciones = Prestacion::year($year)->select('descripcion', 'Nserie')->where('serie', $serie)->orderBy('Nserie')->get();
+        if($prestaciones->isEmpty()) abort(404);
         $prestaciones = $prestaciones->unique('Nserie');
         $series_not_available = [2018 => ['A29','A30','A31']];
         
@@ -29,7 +30,7 @@ class RemController extends Controller
 
     public function list($year)
     {
-        if(!Prestacion::exists($year)) abort(404);
+        if(!Prestacion::exists($year) OR !Seccion::exists($year)) abort(404);
         $series = Prestacion::year($year)->select('serie')->distinct()->pluck('serie')->toArray();
         return view('indicators.rem.list_series', compact('year', 'series'));
     }
@@ -63,9 +64,10 @@ class RemController extends Controller
      */
     public function show(Request $request, $year, $serie, $nserie)
     {
-        if(!Prestacion::exists($year)) abort(404);
+        if(!Prestacion::exists($year) OR !Seccion::exists($year)) abort(404);
         $establecimientos = Establecimiento::year($year)->orderBy('comuna')->get();
         $prestacion = Prestacion::year($year)->where('serie', $serie)->where('Nserie', $nserie)->first();
+        if($prestacion == null) return abort(404);
         $establecimiento = $request->get('establecimiento');
         $periodo = $request->get('periodo');
         $secciones = null;
