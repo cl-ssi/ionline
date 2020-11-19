@@ -11,7 +11,11 @@
 
 <ul>
     @foreach($prestaciones as $prestacion)
-        <li><a href="{{ route('indicators.rem.show', [$year, $serie, $prestacion->Nserie]) }}">REM-{{$prestacion->Nserie}} - {{$prestacion->nombre_serie}}</a></li>
+        @if(!in_array($prestacion->Nserie, $series_not_available[$year]))
+            <li><a href="{{ route('indicators.rem.show', [$year, $serie, $prestacion->Nserie]) }}">REM-{{$prestacion->Nserie}} - {{$prestacion->nombre_serie}}</a></li>
+        @else
+        <li>REM-{{$prestacion->Nserie}} - {{$prestacion->nombre_serie}} <span class="badge badge-secondary">No Disponible</span></li>
+        @endif
     @endforeach
 </ul>
 

@@ -22,8 +22,9 @@ class RemController extends Controller
         if(!Prestacion::exists($year)) abort(404);
         $prestaciones = Prestacion::year($year)->select('descripcion', 'Nserie')->where('serie', $serie)->orderBy('Nserie')->get();
         $prestaciones = $prestaciones->unique('Nserie');
+        $series_not_available = [2018 => ['A29','A30','A31']];
         
-        return view('indicators.rem.list', compact('prestaciones', 'year', 'serie'));
+        return view('indicators.rem.list', compact('prestaciones', 'year', 'serie','series_not_available'));
     }
 
     public function list($year)
