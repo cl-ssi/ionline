@@ -46,11 +46,11 @@
                 <label>* Periodo: </label>
             </div>
             <div class="col-sm-10">
-              <select class="form-control selectpicker" name="periodo[]" multiple="" title="Seleccione..." multiple data-actions-box="true" id="periodo" required>
+              <select class="form-control selectpicker" name="periodo[]" title="Seleccione..." @if($prestacion->serie != 'P') multiple @endif data-actions-box="true" id="periodo" required>
                   <optgroup label="{{$year}}">
                       @php($months = array (1=>'Enero',2=>'Febrero',3=>'Marzo',4=>'Abril',5=>'Mayo',6=>'Junio',7=>'Julio',8=>'Agosto',9=>'Septiembre',10=>'Octubre',11=>'Noviembre',12=>'Diciembre'))
                       @foreach($months as $index => $month)
-                      <option value="{{$index}}" @if (isset($periodo) && in_array($index, $periodo)) selected @endif>{{$month}}</option>
+                      <option value="{{$index}}" @if (isset($periodo) && in_array($index, $periodo)) selected @endif @if($prestacion->serie == 'P' AND !in_array($index, [6,12])) disabled @endif>{{$month}}</option>
                       @endforeach
                   </optgroup>
               </select>
