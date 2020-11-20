@@ -620,32 +620,32 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
 
         Route::get('products', 'Pharmacies\ProductController@repProduct')->name('products');
     });
+});
 
+/*formulario de requerimiento compra o servicio */
 
-    Route::get('request_forms/my_request_inbox', 'RequestForms\RequestFormController@myRequestInbox')->name('request_forms.my_request_inbox')->middleware('auth');
-    Route::get('request_forms/authorize_inbox', 'RequestForms\RequestFormController@authorizeInbox')->name('request_forms.authorize_inbox')->middleware('auth');
-    Route::get('request_forms/{requestForm}/record', 'RequestForms\RequestFormController@record')->name('request_forms.record')->middleware('auth');
-    Route::get('request_forms/finance_inbox', 'RequestForms\RequestFormController@financeInbox')->name('request_forms.finance_inbox')->middleware('auth');
-    Route::get('request_forms/director_inbox', 'RequestForms\RequestFormController@directorPassageInbox')->name('request_forms.director_inbox')->middleware('auth');
+Route::get('request_forms/my_request_inbox', 'RequestForms\RequestFormController@myRequestInbox')->name('request_forms.my_request_inbox')->middleware('auth');
+Route::get('request_forms/authorize_inbox', 'RequestForms\RequestFormController@authorizeInbox')->name('request_forms.authorize_inbox')->middleware('auth');
+Route::get('request_forms/{requestForm}/record', 'RequestForms\RequestFormController@record')->name('request_forms.record')->middleware('auth');
+Route::get('request_forms/finance_inbox', 'RequestForms\RequestFormController@financeInbox')->name('request_forms.finance_inbox')->middleware('auth');
+Route::get('request_forms/director_inbox', 'RequestForms\RequestFormController@directorPassageInbox')->name('request_forms.director_inbox')->middleware('auth');
 
-    Route::put('request_forms/store_approved_request/{request_form}', 'RequestForms\RequestFormController@storeApprovedRequest')->name('request_forms.store_approved_request')->middleware('auth');
-    Route::put('request_forms/store_approved_chief/{request_form}', 'RequestForms\RequestFormController@storeApprovedChief')->name('request_forms.store_approved_chief')->middleware('auth');
-    Route::put('request_forms/store_finance_data/{request_form}', 'RequestForms\RequestFormController@storeFinanceData')->name('request_forms.store_finance_data')->middleware('auth');
-    Route::put('request_forms/add_item_form/{request_form}', 'RequestForms\RequestFormController@addItemForm')->name('request_forms.add_item_form')->middleware('auth');
-    Route::put('request_forms/store_approved_finance/{request_form}', 'RequestForms\RequestFormController@storeApprovedFinance')->name('request_forms.store_approved_finance')->middleware('auth');
-    Route::put('request_forms/store_reject/{request_form}', 'RequestForms\RequestFormController@storeReject')->name('request_forms.store_reject')->middleware('auth');
+Route::put('request_forms/store_approved_request/{request_form}', 'RequestForms\RequestFormController@storeApprovedRequest')->name('request_forms.store_approved_request')->middleware('auth');
+Route::put('request_forms/store_approved_chief/{request_form}', 'RequestForms\RequestFormController@storeApprovedChief')->name('request_forms.store_approved_chief')->middleware('auth');
+Route::put('request_forms/store_finance_data/{request_form}', 'RequestForms\RequestFormController@storeFinanceData')->name('request_forms.store_finance_data')->middleware('auth');
+Route::put('request_forms/add_item_form/{request_form}', 'RequestForms\RequestFormController@addItemForm')->name('request_forms.add_item_form')->middleware('auth');
+Route::put('request_forms/store_approved_finance/{request_form}', 'RequestForms\RequestFormController@storeApprovedFinance')->name('request_forms.store_approved_finance')->middleware('auth');
+Route::put('request_forms/store_reject/{request_form}', 'RequestForms\RequestFormController@storeReject')->name('request_forms.store_reject')->middleware('auth');
 
-
-    Route::resource('request_forms', 'RequestForms\RequestFormController')->middleware('auth');
-    Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(function () {
-        Route::get('/items', 'RequestForms\ItemController@create')->name('items.create')->middleware('auth');
-        Route::post('/items/{requestForm}', 'RequestForms\ItemController@store')->name('items.store')->middleware('auth');
-        Route::delete('/items/{item}', 'RequestForms\ItemController@destroy')->name('items.destroy')->middleware('auth');
-        Route::get('/passages', 'RequestForms\PassageController@create')->name('passages.create')->middleware('auth');
-        Route::post('/passages/create_from_previous/{request_form}', 'RequestForms\PassageController@createFromPrevious')->name('passages.createFromPrevious')->middleware('auth');
-        Route::post('/passages/{requestForm}', 'RequestForms\PassageController@store')->name('passages.store')->middleware('auth');
-        Route::delete('/passages/{passage}', 'RequestForms\PassageController@destroy')->name('passages.destroy')->middleware('auth');
-        Route::get('/files', 'RequestForms\RequestFormFileController@create')->name('files.create')->middleware('auth');
-        Route::post('/files/{requestForm}', 'RequestForms\RequestFormFileController@store')->name('files.store')->middleware('auth');
-    });
+Route::resource('request_forms', 'RequestForms\RequestFormController')->middleware('auth');
+Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(function () {
+    Route::get('/items', 'RequestForms\ItemController@create')->name('items.create')->middleware('auth');
+    Route::post('/items/{requestForm}', 'RequestForms\ItemController@store')->name('items.store')->middleware('auth');
+    Route::delete('/items/{item}', 'RequestForms\ItemController@destroy')->name('items.destroy')->middleware('auth');
+    Route::get('/passages', 'RequestForms\PassageController@create')->name('passages.create')->middleware('auth');
+    Route::post('/passages/create_from_previous/{request_form}', 'RequestForms\PassageController@createFromPrevious')->name('passages.createFromPrevious')->middleware('auth');
+    Route::post('/passages/{requestForm}', 'RequestForms\PassageController@store')->name('passages.store')->middleware('auth');
+    Route::delete('/passages/{passage}', 'RequestForms\PassageController@destroy')->name('passages.destroy')->middleware('auth');
+    Route::get('/files', 'RequestForms\RequestFormFileController@create')->name('files.create')->middleware('auth');
+    Route::post('/files/{requestForm}', 'RequestForms\RequestFormFileController@store')->name('files.store')->middleware('auth');
 });
