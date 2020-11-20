@@ -93,6 +93,8 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Pharmacy: create programs']);
 
 
+        Permission::create(['name' => 'Request Forms: Finance add item code']);
+
         Permission::create(['name' => 'Health Plan']);
 
         Permission::create(['name' => 'Partes: user']);
