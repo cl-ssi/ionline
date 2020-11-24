@@ -18,10 +18,13 @@ class ProgrammingController extends Controller
 {
     public function index()
     {
-        
         $year = '';
-        if(Auth()->user()->id == '15683706' || Auth()->user()->id == '12345678' || Auth()->user()->id == '13641014' || Auth()->user()->id == '17011541' || Auth()->user()->id == '15287582')
-        {
+        //dd(Auth()->user()->hasAllRoles('Programming: Review'));
+       //$users =  User::whereHas("roles", function($q){ $q->where("name", "Programming: Review"); })->get();
+       // dd($users);
+       // if(Auth()->user()->id == '15683706' || Auth()->user()->id == '12345678' || Auth()->user()->id == '13641014' || Auth()->user()->id == '17011541' || Auth()->user()->id == '15287582')
+        if(Auth()->user()->hasAllRoles('Programming: Review') == True || Auth()->user()->hasAllRoles('Programming: Admin') == True )
+       {
         
         $programmings = Programming::select(
                              'pro_programmings.id'

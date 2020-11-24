@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\Programmings\ReviewItem;
+
 class ProgrammingReportController extends Controller
 {
     public function reportConsolidated(request $request) 
@@ -158,5 +160,35 @@ class ProgrammingReportController extends Controller
         //dd($programmingitems);
 
         return view('programmings/reports/reportConsolidatedSep')->withProgrammingItems($programmingitems);
+    }
+
+
+    public function reportObservation(request $request) 
+    {
+        
+    
+
+    // $reviewItems = ProgrammingItem::where('programming_id',5)->get();
+
+    $reviewItems = ReviewItem::select(
+                             'pro_review_items.id'
+                            ,'pro_review_items.review'
+                            ,'pro_review_items.observation'
+                            ,'pro_review_items.answer'
+                            ,'T1.activity_name'
+                            ,'T1.cycle'
+                            ,'T1.action_type'
+                            ,'T1.def_target_population'
+                            ,'T1.id AS id_programmingItems')
+                        ->leftjoin('pro_programming_items AS T1', 'pro_review_items.programming_item_id', '=', 'T1.id')
+                        ->Where('pro_review_items.rectified','NO')
+                        ->Where('pro_review_items.answer','NO')
+                        ->Where('T1.programming_id',$request->programming_id)
+                        ->get();
+
+
+        //dd($reviewItems);
+
+        return view('programmings/reports/reportObservation')->withReviewItems($reviewItems);
     }
 }

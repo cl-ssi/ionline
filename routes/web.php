@@ -117,6 +117,8 @@ Route::get('/downloadFileB/{file}', 'Programmings\CommuneFileController@download
 Route::get('/downloadFileC/{file}', 'Programmings\CommuneFileController@downloadFileC')->name('programmingFile.downloadFileC');
 
 Route::resource('reviews', 'Programmings\ProgrammingReviewController')->middleware('auth');
+Route::resource('reviewItems', 'Programmings\ReviewItemController')->middleware('auth');
+Route::put('reviewItemsRect/{id}', 'Programmings\ReviewItemController@updateRect')->middleware('auth')->name('reviewItemsRect.update');
 
 Route::resource('programmingdays', 'Programmings\ProgrammingDayController')->middleware('auth');
 
@@ -134,6 +136,9 @@ Route::resource('trainingitems', 'Programmings\TrainingsItemController')->middle
 //Reportes de Programación Númerica APS
 Route::get('reportConsolidated', 'Programmings\ProgrammingReportController@reportConsolidated')->middleware('auth')->name('programming.reportConsolidated');
 Route::get('reportConsolidatedSep', 'Programmings\ProgrammingReportController@reportConsolidatedSep')->middleware('auth')->name('programming.reportConsolidatedSep');
+
+//Reportes Observaciones de Programación Númerica APS
+Route::get('reportObservation', 'Programmings\ProgrammingReportController@reportObservation')->middleware('auth')->name('programming.reportObservation');
 
 //End Programación Númerica APS
 
