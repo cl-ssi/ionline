@@ -45,7 +45,7 @@ use Illuminate\Support\Facades\DB;
                 <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_supergrupo_prestacion) + ($seccion->isSupergroupWithSubtotals($prestacion->nombre_supergrupo_prestacion) ? 2 : 0)}}' class="centrado">{{$prestacion->nombre_supergrupo_prestacion}}</td>
                 @php($supergroup_temp = $prestacion->nombre_supergrupo_prestacion)
             @endif
-            @if($prestacion->hasGroup($seccion->maxLevel()) AND !$seccion->discard_group AND $prestacion->nombre_grupo_prestacion != $group_temp AND strlen($prestacion->nombre_grupo_prestacion) != 1)
+            @if($prestacion->hasGroup($seccion->maxLevel()) AND !$seccion->discard_group AND $prestacion->nombre_grupo_prestacion != $group_temp AND strlen($prestacion->nombre_grupo_prestacion) != 1 AND trim($prestacion->nombre_grupo_prestacion) != $group_temp)
                 <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_grupo_prestacion)}}' colspan="{{strlen($prestacion->nombre_supergrupo_prestacion) != 1 ? 1 : 2}}" class="centrado">{{$prestacion->nombre_grupo_prestacion}}</td>
                 @php($group_temp = $prestacion->nombre_grupo_prestacion)
             @endif

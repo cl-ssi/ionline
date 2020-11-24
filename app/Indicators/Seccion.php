@@ -40,8 +40,8 @@ class Seccion extends Model
     {
         $result = $this->subtotals_first ? 2 : 1; //para efectos de mostrar bien los subtotales en las celdas de la tabla
         return $this->prestaciones->filter(function ($prestacion) use ($group){
-            return Str::contains($prestacion->descripcion, '- '. $group . ' -');
-        })->count() + ($this->subtotalExists($group) ? $result : 0);
+            return Str::contains($prestacion->descripcion, '- '. $group . ' -') OR Str::contains($prestacion->descripcion, '- '. $group . '  -');
+        })->count() + ($this->subtotalExists($group) ? $result : 0) + ($this->subtotalExists($group . ' ') ? $result : 0);
     }
 
     public function hasGroup()
@@ -75,7 +75,7 @@ class Seccion extends Model
 
     public function subtotalExists($group)
     {
-        return Str::contains($this->subtotals, $group);
+        return Str::contains($this->subtotals, $group) OR Str::contains($this->subtotals, $group . ' ');
     }
 
     public function supergroupExists($supergroup)
