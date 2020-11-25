@@ -179,11 +179,15 @@ class ProgrammingReportController extends Controller
                             ,'T1.cycle'
                             ,'T1.action_type'
                             ,'T1.def_target_population'
-                            ,'T1.id AS id_programmingItems')
+                            ,'T1.id AS id_programmingItems'
+                            ,'T2.name AS name_rev'
+                            ,'T2.fathers_family AS fathers_family_rev'
+                            ,'T2.mothers_family AS mothers_family_rev')
                         ->leftjoin('pro_programming_items AS T1', 'pro_review_items.programming_item_id', '=', 'T1.id')
+                        ->leftjoin('users AS T2', 'pro_review_items.user_id', '=', 'T2.id')
                         ->Where('pro_review_items.rectified','NO')
                         ->Where('pro_review_items.answer','NO')
-                        ->Where('T1.programming_id',$request->programming_id)
+                        ->Where('T1.programming_id',$request->programming_id) 
                         ->get();
 
 

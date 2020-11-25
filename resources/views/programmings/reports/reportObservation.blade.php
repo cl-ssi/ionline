@@ -40,7 +40,7 @@
             <td class="text-center align-middle">{{ $reviewItem->review }}</td>
             <td class="text-center align-middle">{{ $reviewItem->answer }}</td>
             <td class="text-center align-middle">{{ $reviewItem->observation }}</td>
-            <td class="text-center align-middle">{{ $reviewItem->id_programmingItems }}</td>
+            <td class="text-center align-middle">{{ $reviewItem->name_rev }} {{ $reviewItem->fathers_family_rev }} {{ $reviewItem->mothers_family_rev }}</td>
             @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" ><a href="{{ route('reviewItems.index', ['programmingItem_id' => $reviewItem->id_programmingItems]) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-clipboard-check"></i></a></td>
         @endcan
