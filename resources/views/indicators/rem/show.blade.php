@@ -46,7 +46,7 @@ use Illuminate\Support\Facades\DB;
                 @php($supergroup_temp = $prestacion->nombre_supergrupo_prestacion)
             @endif
             @if($prestacion->hasGroup($seccion->maxLevel()) AND !$seccion->discard_group AND $prestacion->nombre_grupo_prestacion != $group_temp AND strlen($prestacion->nombre_grupo_prestacion) != 1 AND trim($prestacion->nombre_grupo_prestacion) != $group_temp)
-                <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_grupo_prestacion)}}' colspan="{{strlen($prestacion->nombre_supergrupo_prestacion) != 1 ? 1 : 2}}" class="centrado">{{$prestacion->nombre_grupo_prestacion}}</td>
+                <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_grupo_prestacion) + ($seccion->totalByGroupExists(trim($prestacion->nombre_grupo_prestacion)) ? 1 : 0)}}' colspan="{{strlen($prestacion->nombre_supergrupo_prestacion) != 1 ? 1 : 2}}" class="centrado">{{$prestacion->nombre_grupo_prestacion}}</td>
                 @php($group_temp = $prestacion->nombre_grupo_prestacion)
             @endif
             @if($seccion->subtotals != null AND $seccion->subtotals_first AND $prestacion->nombre_grupo_prestacion != $pass AND $seccion->subtotalExists($prestacion->nombre_grupo_prestacion))
@@ -69,6 +69,15 @@ use Illuminate\Support\Facades\DB;
                 <td align='right'><b>{{number_format($seccion->subtotal($col, $prestacion->nombre_grupo_prestacion),0,",",".")}}</b></td>
                 @endforeach
                 @php($pass = $prestacion->nombre_grupo_prestacion)
+            </tr>
+            @endif
+            @if($seccion->totals_by_group != null AND $seccion->totalByGroupExists(trim($prestacion->nombre_grupo_prestacion)) AND $seccion->isLastPrestacionByTotalGroup($prestacion))
+            <tr>
+                <td align='left' colspan="1" nowrap="nowrap"><b>TOTAL</b></td>
+                @foreach($seccion->cols as $col)
+                <td align='right'><b>{{number_format($seccion->totalByGroup($col, trim($prestacion->nombre_grupo_prestacion)),0,",",".")}}</b></td>
+                @endforeach
+                
             </tr>
             @endif
         </tr>
