@@ -81,13 +81,7 @@
                     <span class="small">Actividades</span> 
                 </a>
             @endcan
-            <!-- Permiso para gestionar las capacitaciones municipales en la programación númerica en proceso -->
-            @can('TrainingItem: view')
-                <a href="{{ route('trainingitems.index', ['programming_id' => $programming->id]) }}" class="btn btb-flat btn-sm btn-light" >
-                    <i class="fas fa-chalkboard-teacher small"></i> 
-                    <span class="small">Capacitaciones</span> 
-                </a>
-            @endcan   
+           
             </td> 
         </tr>
         @endforeach
