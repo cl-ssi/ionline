@@ -87,6 +87,14 @@
                     <span class="small">Evaluación Gral.</span> 
                 </a>
             @endcan
+
+            <!-- Permiso para gestionar las capacitaciones municipales en la programación númerica en proceso -->
+            @can('TrainingItem: view')
+                <a href="{{ route('trainingitems.index', ['commune_file_id' => $communeFile->id]) }}" class="btn btb-flat btn-sm btn-light" >
+                    <i class="fas fa-chalkboard-teacher small"></i> 
+                    <span class="small">Capacitaciones</span> 
+                </a>
+            @endcan   
             </td> 
         </tr>
         @endforeach
