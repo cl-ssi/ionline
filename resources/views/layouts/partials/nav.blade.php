@@ -32,7 +32,7 @@
 
                         <a class="dropdown-item"
                            href="{{ route('communefiles.index') }}">
-                            <i class="fas fa-file-alt"></i> Documentos Adjuntos
+                            <i class="fas fa-file-alt"></i> Documentos Comunales
                         </a>
                     </div>
                 </li>

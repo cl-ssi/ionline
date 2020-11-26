@@ -16,6 +16,7 @@ class AddColumnProProgrammingsTable extends Migration
         Schema::table('pro_programmings', function (Blueprint $table) {
             $table->string('file_a')->nullable()->after('access');
             $table->string('file_b')->nullable()->after('file_a');
+            $table->enum('status',['active','inactive','finished'])->nullable()->default('active')->after('file_b');
         });
     }
 
@@ -29,6 +30,7 @@ class AddColumnProProgrammingsTable extends Migration
         Schema::table('pro_programmings', function (Blueprint $table) {
             $table->dropColumn('file_a');
             $table->dropColumn('file_b');
+            $table->dropColumn('status');
         });
     }
 }

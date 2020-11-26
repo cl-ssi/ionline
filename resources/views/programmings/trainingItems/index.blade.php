@@ -5,7 +5,7 @@
 @section('content')
 
 @include('programmings/nav')
-<a href="{{ route('trainingitems.create',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
+<a href="{{ route('trainingitems.create',['commune_file_id' => Request::get('commune_file_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
 <h4 class="mb-3"> Capacitaciones Municipales</h4>
 
 <button onclick="exportTableToExcel('tblData')" class="btn btn-success mb-4 float-left btn-sm">Excel</button>

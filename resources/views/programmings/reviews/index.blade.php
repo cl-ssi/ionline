@@ -20,7 +20,7 @@
                         <th>Aspectos Generales</th>
                         <th class="text-right">SI  /  NO / REGULAR</th>
                         <th class="text-center">Observación y Solicitud</th>
-                         @can('reviews: edit')<th class="text-left align-middle" ></th>@endcan
+                         @can('Reviews: edit')<th class="text-left align-middle" ></th>@endcan
                     </tr>
                 </thead>
                 <tbody  style="font-size:75%;">
@@ -31,7 +31,7 @@
                         <td class="text-left align-middle">{{ $review->general_features }}</td>
                         <td class="text-center align-middle">{{ $review->answer }}</td>
                         <td class="text-center align-middle">{{ $review->observation }}</td>
-                        @can('reviews: edit')
+                        @can('Reviews: edit')
                         <td class="text-center align-middle" >
                         <button class="btn btb-flat btn-sm btn-light" data-toggle="modal"
                             data-target="#updateModal"

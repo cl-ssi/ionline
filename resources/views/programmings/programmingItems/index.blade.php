@@ -5,17 +5,53 @@
 @section('content')
 
 @include('programmings/nav')
+
+
+
 <a href="{{ route('programmingitems.create',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
 <h4 class="mb-3"> Programación - Horas Directas</h4>
 
-<button onclick="exportTableToExcel('tblData')" class="btn btn-success mb-4 float-left btn-sm">Exportar Excel</button>
+<form method="GET" class="form-horizontal small " action="{{ route('programmingitems.index') }}" enctype="multipart/form-data">
+
+    <div class="form-row">
+        <div class="form-group col-md-3">
+        <input type="hidden" class="form-control" id="tracer" name="programming_id" value="{{Request::get('programming_id')}}" placeholder="Nro. Trazadora" >
+        <input type="number" class="form-control" id="tracer" name="tracer_number" value="" placeholder="Nro. Trazadora" >
+        </div>
+        <button type="submit" class="btn btn-default mb-4">Filtrar</button>
+    </div>
+</form>
+
+<ul class="list-inline">
+    <li class="list-inline-item">
+        <button onclick="exportTableToExcel('tblData')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button>
+    </li>
+    <li class="list-inline-item">
+        <a href="{{ route('programming.reportObservation',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-dark mb-1 float-right btn-sm">
+        Observaciones 
+            @foreach($reviewIndicators as $reviewIndicator)
+            <span 
+                @if($reviewIndicator->indicator == 'Pendiente')
+                    class="badge badge-danger"
+                @elseif($reviewIndicator->indicator == 'Revisión')
+                    class="badge badge-warning"
+                @elseif($reviewIndicator->indicator == 'Aceptada')
+                    class="badge badge-success"
+                @endif>
+            
+            {{ $reviewIndicator->qty }}</span>  
+            @endforeach
+        </a>
+    </li>
+</ul>
 
 <table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:50%;">
-            @can('ProgrammingItem: evaluate')<th class="text-left align-middle" ></th>@endcan
-            @can('ProgrammingItem: edit')<th class="text-left align-middle" ></th>@endcan
+            @can('ProgrammingItem: evaluate')<th class="text-left align-middle" > Evaluación</th>@endcan
+            @can('ProgrammingItem: edit')<th class="text-left align-middle" >Editar</th>@endcan
             <th class="text-center align-middle">T</th>
+            <th class="text-center align-middle">Nº Trazadora</th>
             <th class="text-center align-middle">CICLO</th>
             <th class="text-center align-middle">ACCIÓN</th>
             <!--<th class="text-center align-middle">PROGRAMA MINISTERIAL</th>-->
@@ -46,12 +82,13 @@
         @foreach($programmingItems as $programmingitem)
         <tr class="small">
         @can('ProgrammingItem: evaluate')
-            <td class="text-center align-middle" ><a href="{{ route('programmingitems.show', $programmingitem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-clipboard-check"></i></a></td>
+            <td class="text-center align-middle" ><a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitem->id]) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-clipboard-check"></i></a></td>
         @endcan
         @can('ProgrammingItem: edit')
             <td class="text-center align-middle" ><a href="{{ route('programmingitems.show', $programmingitem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
         @endcan
             <td class="text-center align-middle">{{ $programmingitem->tracer }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->tracer_code }}</td>
             <td class="text-center align-middle">{{ $programmingitem->cycle }}</td>
             <td class="text-center align-middle">{{ $programmingitem->action_type }}</td>
             <!--<td class="text-center align-middle">{{ $programmingitem->ministerial_program }}</td>-->

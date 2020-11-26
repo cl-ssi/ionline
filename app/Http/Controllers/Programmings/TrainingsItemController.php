@@ -11,7 +11,7 @@ class TrainingsItemController extends Controller
 {
     public function index(Request $request)
     {
-        $trainingItems = TrainingItem::where('programming_id',$request->programming_id)->OrderBy('linieamiento_estrategico')->get();
+        $trainingItems = TrainingItem::where('programming_id',$request->commune_file_id)->OrderBy('linieamiento_estrategico')->get();
         return view('programmings/trainingItems/index')->withtrainingItems($trainingItems);
     }
 
@@ -29,7 +29,7 @@ class TrainingsItemController extends Controller
         //$programming->year = date('Y', strtotime($request->date));
         //$programming->description = $request->description;
         //$programming->establishment_id = $request->establishment;
-        $trainingItems->programming_id = $request->programming_id;
+        $trainingItems->programming_id = $request->commune_file_id;
        
         $trainingItems->save();
 

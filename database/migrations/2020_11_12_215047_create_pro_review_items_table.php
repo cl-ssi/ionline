@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProProgrammingReviewsTable extends Migration
+class CreateProReviewItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,22 +13,23 @@ class CreateProProgrammingReviewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('pro_programming_reviews', function (Blueprint $table) {
+        Schema::create('pro_review_items', function (Blueprint $table) {
             $table->id();
-            $table->string('revisor')->nullable();
-            $table->string('general_features')->nullable();
-            $table->enum('answer',['SI','NO','REGULAR'])->nullable();
+            $table->unsignedBigInteger('review_id');
+            $table->string('review')->nullable();
             $table->text('observation')->nullable();
+            $table->enum('answer',['SI','NO','REGULAR'])->nullable();
             $table->enum('active',['SI','NO'])->nullable();
 
             $table->unsignedBigInteger('user_id');
+            $table->enum('rectified',['SI','NO'])->default('NO')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->bigInteger('commune_file_id')->unsigned();
+            $table->bigInteger('programming_item_id')->unsigned();
             
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('commune_file_id')->references('id')->on('pro_commune_files');
+            $table->foreign('programming_item_id')->references('id')->on('pro_programming_items');
             $table->timestamps();
-           
+            
         });
     }
 
@@ -39,6 +40,6 @@ class CreateProProgrammingReviewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pro_programming_reviews');
+        Schema::dropIfExists('pro_review_items');
     }
 }

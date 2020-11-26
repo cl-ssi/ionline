@@ -37,13 +37,14 @@
 <table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover  ">
     <thead>
         <tr style="font-size:75%;">
-            <th class="text-center align-middle" colspan="4">INFORME CONSOLIDADO</th>
+            <th class="text-center align-middle" colspan="5">INFORME CONSOLIDADO</th>
         </tr>
         <tr class="small " style="font-size:60%;">
             <th class="text-center align-middle">Nº TRAZADORA</th>
             <th class="text-center align-middle">PRESTACION O ACTIVIDAD</th>
             <th class="text-center align-middle">ACCIÓN</th>
             <th class="text-center align-middle">TOTAL ACTIVIDADES</th>
+            <th class="text-center align-middle">ESTABLECIMIENTOS</th>
         </tr>
     </thead>
     <tbody style="font-size:70%;">
@@ -52,7 +53,8 @@
             <td class="text-center align-middle">{{ $programmingitem->int_code }}</td>
             <td class="text-center align-middle">{{ $programmingitem->activity_name }}</td>
             <td class="text-center align-middle">{{ $programmingitem->action_type }}</td>
-            <td class="text-center align-middle">{{ number_format($programmingitem->activity_total,0, ',', '.') }}</td>
+            <td class="text-center align-middle font-weight-bold">{{ number_format($programmingitem->activity_total,0, ',', '.') }}</td>
+            <td class="text-left align-middle">{{ $programmingitem->establishments }}</td>
         </tr>
         @endforeach
     </tbody>

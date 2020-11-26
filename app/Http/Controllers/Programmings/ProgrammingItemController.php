@@ -11,21 +11,64 @@ use App\Programmings\MinisterialProgram;
 use App\Programmings\ProgrammingDay;
 use App\Programmings\ActivityItem;
 use App\Programmings\ActionType;
+use App\Models\Programmings\ReviewItem;
 use App\User;
 use App\Establishment;
 use App\Models\Commune;
+
+use Illuminate\Support\Facades\DB;
 
 class ProgrammingItemController extends Controller
 {
     public function index(Request $request)
     {
         $year = '';
+        //dd($request->tracer_number);
         //$programmingitems = ProgrammingItem::where('programming_id',$request->programming_id)->OrderBy('id')->get();
+
+        $sql="SELECT 
+                        'Pendiente' AS indicator
+                        ,COUNT(*) AS qty
+                FROM pro_review_items T0
+                LEFT JOIN pro_programming_items T1 ON T0.programming_item_id = T1.id
+                WHERE T0.rectified = 'NO'
+                AND T0.answer = 'NO'
+                AND T1.programming_id = ".$request->programming_id." 
+                GROUP BY indicator
+                
+                UNION ALL
+                
+                SELECT 
+                        'Revisión' AS indicator
+                        ,COUNT(*) AS qty
+                FROM pro_review_items T0
+                LEFT JOIN pro_programming_items T1 ON T0.programming_item_id = T1.id
+                WHERE T0.rectified = 'SI'
+                AND T0.answer = 'NO'
+                AND T1.programming_id = ".$request->programming_id." 
+                GROUP BY indicator
+                
+                UNION ALL
+                
+                SELECT 
+                        'Aceptada' AS indicator
+                        ,COUNT(*) AS qty
+                FROM pro_review_items T0
+                LEFT JOIN pro_programming_items T1 ON T0.programming_item_id = T1.id
+                WHERE T0.rectified = 'SI'
+                AND T0.answer = 'SI'
+                AND T1.programming_id = ".$request->programming_id."
+                GROUP BY indicator";
+
+        $reviewIndicators = DB::select($sql,array(1));
+
+        //dd($reviewIndicator);
 
         $programmingitems = ProgrammingItem::select(
                                  'T0.description'
                                 ,'T1.name AS establishment'
                                 ,'T2.name AS commune'
+                                //,'T8.review'
                                 ,'pro_programming_items.id'
                                 ,'pro_programming_items.cycle'
                                 ,'pro_programming_items.action_type'
@@ -51,7 +94,8 @@ class ProgrammingItemController extends Controller
                                 ,'pro_programming_items.observation'
                                 ,'T4.name AS professional'
                                 ,'T3.value AS professional_value'
-                                ,'T7.tracer AS tracer')
+                                ,'T7.tracer AS tracer'
+                                ,'T7.int_code AS tracer_code')
                         ->leftjoin('pro_programmings AS T0', 'T0.id', '=', 'pro_programming_items.programming_id')
                         ->leftjoin('establishments AS T1', 'T0.establishment_id', '=', 'T1.id')
                         ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
@@ -59,13 +103,17 @@ class ProgrammingItemController extends Controller
                         ->leftjoin('pro_professionals AS T4', 'T3.professional_id', '=', 'T4.id')
                         ->leftjoin('users AS T5', 'T0.user_id', '=', 'T5.id')
                         ->leftjoin('pro_activity_items AS T7', 'pro_programming_items.activity_id', '=', 'T7.id')
+                        //->leftjoin('pro_review_items AS T8', 'pro_programming_items.id', '=', 'T8.programming_item_id')
                         ->Where('T0.year','LIKE','%'.$year.'%')
+                        ->Where('T7.int_code','LIKE',$request->tracer_number)
                         ->Where('pro_programming_items.cycle','!=','TALLER')
                         ->where('pro_programming_items.programming_id',$request->programming_id)
+                        ->orderByRaw("CAST(T7.int_code as UNSIGNED) ASC")
                         ->orderBy('pro_programming_items.cycle','ASC')
                         ->orderBy('pro_programming_items.action_type','ASC')
                         ->orderBy('pro_programming_items.activity_name','ASC')
                         ->get();
+    //dd($programmingitems);
             
     $programmingitems_workshop = ProgrammingItem::select(
                             'T0.description'
@@ -88,7 +136,6 @@ class ProgrammingItemController extends Controller
                            ,'pro_programming_items.workshop_number'
                            ,'pro_programming_items.workshop_session_number'
                            ,'pro_programming_items.workshop_session_time'
-                           
                            ,'pro_programming_items.concentration'
                            ,'pro_programming_items.activity_total'
                            ,'pro_programming_items.activity_performance'
@@ -117,7 +164,9 @@ class ProgrammingItemController extends Controller
 
         //dd($programmingitems);
 
-        return view('programmings/programmingItems/index')->withProgrammingItems($programmingitems)->withProgrammingItemworkshops($programmingitems_workshop);
+        return view('programmings/programmingItems/index')->withProgrammingItems($programmingitems)
+                                                          ->withProgrammingItemworkshops($programmingitems_workshop)
+                                                          ->with('reviewIndicators', collect($reviewIndicators));;
 
     }
 
