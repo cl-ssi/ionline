@@ -103,17 +103,14 @@ class ProgrammingController extends Controller
 
     public function show(Programming $programming)
     {
-        //dd($programming);
+
         $establishments = Establishment::whereIn('type',['CESFAM','CGR'])
                                        ->OrderBy('name')->get();
         
-        $reviews = Rev::where('programming_id',$programming->id)
-                                       ->OrderBy('id')->get();
-        //dd($reviews);
         $users = User::with('organizationalUnit')->where('position', 'Funcionario Programación')->OrderBy('name')->get(); // Sólo Funcionario Programación
         $access_list = unserialize($programming->access);
         $user = $programming->user;
-        return view('programmings/programmings/show')->withProgramming($programming)->withReview($reviews)->with('access_list', $access_list)->with('user', $user)->withEstablishments($establishments)->withUsers($users);
+        return view('programmings/programmings/show')->withProgramming($programming)->with('access_list', $access_list)->with('user', $user)->withEstablishments($establishments)->withUsers($users);
     }
 
     public function update(Request $request, Programming $programming)

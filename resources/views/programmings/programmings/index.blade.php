@@ -11,8 +11,11 @@
  @can('Programming: create')
     <a href="{{ route('programmings.create') }}" class="btn btn-info mb-4">Comenzar Nueva Programación</a>
  @endcan
+<div class="float-right text-center">
+<h5>Tiempo Restante</h5>
+<div id="timer"></div>
+</div>
 
- <div class="float-right text-center" id="timer"></div>
  
 <table class="table table-sm  ">
     <thead>
@@ -88,10 +91,10 @@
 <script type="text/javascript">
 
 // Set the date we're counting down to
-var countDownDate = new Date("Dec 1, 2020 00:00:01").getTime();
+var countDownDate = new Date("Dec 1, 2020 00:00:00").getTime();
 
 function timePart(val,text,color="black"){
-  return `<h6 class="timer" style="color:${color};">${val}<div>${text}</div></h6 >`
+  return `<h6 class="timer" style="color:${color};">${val}<div>${text}</div></h6>`
 }
 
 // Update the count down every 1 second
@@ -107,7 +110,7 @@ var x = setInterval(function() {
   var days = Math.floor(distance / (1000 * 60 * 60 * 24));
   var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
   var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
- var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
  // Display the result in the element with id="demo"
 
@@ -118,7 +121,7 @@ document.getElementById("timer").innerHTML = res
  if (distance < 0) {
     clearInterval(x);
 
-document.getElementById("timer").innerHTML = "EXPIRED";
+document.getElementById("timer").innerHTML = "Cerrado";
   }
 }, 1000);
 
