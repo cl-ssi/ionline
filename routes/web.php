@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Suitability\SuitabilityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -648,4 +649,13 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::delete('/passages/{passage}', 'RequestForms\PassageController@destroy')->name('passages.destroy')->middleware('auth');
     Route::get('/files', 'RequestForms\RequestFormFileController@create')->name('files.create')->middleware('auth');
     Route::post('/files/{requestForm}', 'RequestForms\RequestFormFileController@store')->name('files.store')->middleware('auth');
+});
+
+
+/* Nuevas rutas, Laravel 8.0. */
+Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
+    Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
+    Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');    
+    Route::get('/validaterequest', [SuitabilityController::class, 'validaterequest'])->name('validaterequest');
+    Route::get('/create', [SuitabilityController::class, 'create'])->name('create');
 });
