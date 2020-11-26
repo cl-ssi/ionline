@@ -43,7 +43,7 @@
                 <label for="for">
                     @if($communeFile->file_a != null)  
                         <a class="text-info" href="{{ route('programmingFile.download', $communeFile->id) }}" target="_blank">
-                            <i class="fas fa-download"></i> Descargar
+                            <i class="fas fa-download"></i> Ver
                         </a>
                     @endif
                 </label>
@@ -52,7 +52,7 @@
                 <label for="for">
                     @if($communeFile->file_b != null)  
                         <a class="text-info" href="{{ route('programmingFile.downloadFileB', $communeFile->id) }}" target="_blank">
-                            <i class="fas fa-download"></i> Descargar
+                            <i class="fas fa-download"></i> Ver
                         </a>
                     @endif
                 </label>
@@ -61,7 +61,7 @@
                 <label for="for">
                     @if($communeFile->file_c != null)  
                         <a class="text-info" href="{{ route('programmingFile.downloadFileC', $communeFile->id) }}" target="_blank">
-                            <i class="fas fa-download"></i> Descargar
+                            <i class="fas fa-download"></i> Ver
                         </a>
                     @endif
                 </label>
@@ -80,6 +80,14 @@
                 <i class="fas fa-paperclip small"></i> Adjuntar
                 </button>
                 @endcan
+            
+            <!-- Permiso para gestionar las capacitaciones municipales en la programación númerica en proceso -->
+            @can('TrainingItem: view')
+                <a href="{{ route('trainingitems.index', ['commune_file_id' => $communeFile->id]) }}" class="btn btb-flat btn-sm btn-light" >
+                    <i class="fas fa-chalkboard-teacher small"></i> 
+                    <span class="small">Capacitaciones</span> 
+                </a>
+            @endcan   
 
             @can('Reviews: view')
                 <a href="{{ route('reviews.index', ['commune_file_id' => $communeFile->id]) }}" class="btn btb-flat btn-sm btn-primary">
@@ -88,13 +96,7 @@
                 </a>
             @endcan
 
-            <!-- Permiso para gestionar las capacitaciones municipales en la programación númerica en proceso -->
-            @can('TrainingItem: view')
-                <a href="{{ route('trainingitems.index', ['commune_file_id' => $communeFile->id]) }}" class="btn btb-flat btn-sm btn-light" >
-                    <i class="fas fa-chalkboard-teacher small"></i> 
-                    <span class="small">Capacitaciones</span> 
-                </a>
-            @endcan   
+            
             </td> 
         </tr>
         @endforeach
