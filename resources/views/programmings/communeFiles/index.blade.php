@@ -26,7 +26,7 @@
             <th class="text-right align-middle table-dark">Opciones</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="small align-middle  ">
         @foreach($communeFiles as $communeFile)
         <tr class="small">
         <!-- Permiso para editar programación númerica -->
