@@ -37,7 +37,7 @@
 <table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover  ">
     <thead>
         <tr style="font-size:75%;">
-            <th class="text-center align-middle" colspan="7">INFORME CONSOLIDADO </th>
+            <th class="text-center align-middle" colspan="8">INFORME CONSOLIDADO </th>
         </tr>
         <tr class="small " style="font-size:60%;">
             <th class="text-center align-middle">Nº TRAZADORA</th>
@@ -47,6 +47,7 @@
             <th class="text-center align-middle">DEF. POB. OBJETIVO</th>
             <th class="text-center align-middle">PROFESIONAL</th>
             <th class="text-center align-middle">TOTAL ACTIVIDADES</th>
+            <th class="text-center align-middle">ESTABLECIMIENTOS</th>
         </tr>
     </thead>
     <tbody style="font-size:70%;">
@@ -58,13 +59,14 @@
             <td class="text-center align-middle">{{ $programmingitem->action_type }}</td>
             <td class="text-center align-middle">{{ $programmingitem->def_target_population }}</td>
             <td class="text-center align-middle">{{ $programmingitem->professional }}</td>
-            <td class="text-center align-middle">{{ number_format($programmingitem->activity_total,0, ',', '.') }}</td>
+            <td class="text-center align-middle font-weight-bold">{{ number_format($programmingitem->activity_total,0, ',', '.') }}</td>
+            <td class="text-left align-middle">{{ $programmingitem->establishments }}</td>
         </tr>
         @endforeach
     </tbody>
     <tfoot>
         <tr style="font-size:60%;">
-            <td class="text-center" colspan="6">TOTALES</td>
+            <td class="text-center" colspan="7">TOTALES</td>
             <td class="text-center">{{ $programmingItems ? number_format($programmingItems->sum('activity_total'),0, ',', '.') : '0'}}</td>
         </tr>
     </tfoot>

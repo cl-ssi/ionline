@@ -65,7 +65,8 @@ class ProgrammingReportController extends Controller
                                  'T6.int_code'
                                 ,'pro_programming_items.activity_name'
                                 ,'pro_programming_items.action_type'
-                                , DB::raw('sum(pro_programming_items.activity_total) AS activity_total') )
+                                , DB::raw('sum(pro_programming_items.activity_total) AS activity_total')
+                                , DB::raw('GROUP_CONCAT(DISTINCT T1.name) AS establishments'))
                         ->leftjoin('pro_programmings AS T0', 'T0.id', '=', 'pro_programming_items.programming_id')
                         ->leftjoin('establishments AS T1', 'T0.establishment_id', '=', 'T1.id')
                         ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
@@ -81,7 +82,7 @@ class ProgrammingReportController extends Controller
                         ->orderBy('pro_programming_items.activity_name','ASC')
                         ->get();
 
-        //dd($programmingitems);
+         //dd($programmingitems);
 
         return view('programmings/reports/reportConsolidated')->withProgrammingItems($programmingitems);
     }
@@ -140,7 +141,8 @@ class ProgrammingReportController extends Controller
                                 ,'pro_programming_items.def_target_population'
                                 ,'pro_programming_items.def_target_population'
                                 ,'T4.name AS professional'
-                                , DB::raw('sum(pro_programming_items.activity_total) AS activity_total') )
+                                , DB::raw('sum(pro_programming_items.activity_total) AS activity_total')
+                                , DB::raw('GROUP_CONCAT(DISTINCT T1.name) AS establishments') )
                         ->leftjoin('pro_programmings AS T0', 'T0.id', '=', 'pro_programming_items.programming_id')
                         ->leftjoin('establishments AS T1', 'T0.establishment_id', '=', 'T1.id')
                         ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
@@ -168,9 +170,9 @@ class ProgrammingReportController extends Controller
         
     
 
-    // $reviewItems = ProgrammingItem::where('programming_id',5)->get();
+        // $reviewItems = ProgrammingItem::where('programming_id',5)->get();
 
-    $reviewItems = ReviewItem::select(
+        $reviewItems = ReviewItem::select(
                              'pro_review_items.id'
                             ,'pro_review_items.review'
                             ,'pro_review_items.observation'
