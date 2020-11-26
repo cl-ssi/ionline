@@ -23,10 +23,10 @@ class CreateProProgrammingReviewsTable extends Migration
 
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->bigInteger('programming_id')->unsigned();
+            $table->bigInteger('commune_file_id')->unsigned();
             
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('programming_id')->references('id')->on('pro_programmings');
+            $table->foreign('commune_file_id')->references('id')->on('pro_commune_files');
             $table->timestamps();
            
         });

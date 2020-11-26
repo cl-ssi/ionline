@@ -11,7 +11,7 @@ class ProgrammingReviewController extends Controller
 {
     public function index(Programming $programming,Request $request)
     {
-        $reviews = Review::where('programming_id',$request->programming_id)
+        $reviews = Review::where('commune_file_id',$request->commune_file_id)
                                        ->OrderBy('id')->get();
 
         return view('programmings/reviews/index')->withProgramming($programming)->withReview($reviews);

@@ -19,7 +19,7 @@ class Programming extends Model
         'access' => 'array'
     ];
 
-    public function programming_reviews() {
-        return $this->hasMany('App\Models\Programmings\Review');
-    }
+    // public function programming_reviews() {
+    //     return $this->hasMany('App\Models\Programmings\Review');
+    // }
 }

@@ -22,7 +22,7 @@
             <th class="text-left align-middle table-dark" >Descripción</th>
             <th class="text-left align-middle table-dark" >Diagnostico</th>
             <th class="text-left align-middle table-dark" >Matriz de Cuidado</th>
-            <th class="text-left align-middle table-dark" >Adjunto</th>
+            <th class="text-left align-middle table-dark" >Documento Alcaldicio</th>
             <th class="text-right align-middle table-dark">Opciones</th>
         </tr>
     </thead>
@@ -80,6 +80,13 @@
                 <i class="fas fa-paperclip small"></i> Adjuntar
                 </button>
                 @endcan
+
+            @can('Reviews: view')
+                <a href="{{ route('reviews.index', ['commune_file_id' => $communeFile->id]) }}" class="btn btb-flat btn-sm btn-primary">
+                    <i class="fas fa-clipboard-check small"></i>
+                    <span class="small">Evaluación Gral.</span> 
+                </a>
+            @endcan
             </td> 
         </tr>
         @endforeach

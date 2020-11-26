@@ -16,7 +16,11 @@ class Review extends Model
     ];
 
 
-    public function programming() {
-        return $this->belongsTo('App\Programmings\Programming');
+    // public function programming() {
+    //     return $this->belongsTo('App\Programmings\Programming');
+    // }
+
+    public function communeFile() {
+        return $this->belongsTo('App\Models\Programmings\CommuneFile');
     }
 }

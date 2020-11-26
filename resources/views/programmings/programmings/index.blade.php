@@ -46,13 +46,6 @@
             <td>{{ $programming->year }}</td>
             <td class="text-right">
             <!-- Permiso para asignar profesionales a la programación númerica en proceso -->
-            @can('reviews: view')
-                <a href="{{ route('reviews.index', ['programming_id' => $programming->id]) }}" class="btn btb-flat btn-sm btn-primary">
-                    <i class="fas fa-clipboard-check small"></i>
-                    <span class="small">Evaluación Gral.</span> 
-                </a>
-            @endcan
-            <!-- Permiso para asignar profesionales a la programación númerica en proceso -->
             @can('ProfessionalHour: view')
                 <a href="{{ route('professionalhours.index', ['programming_id' => $programming->id]) }}" class="btn btb-flat btn-sm btn-secondary">
                     <i class="fas fa-user-tag small"></i>
