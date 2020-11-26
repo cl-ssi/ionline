@@ -32,6 +32,7 @@ class ProgrammingController extends Controller
                             ,'pro_programmings.user_id'
                             ,'pro_programmings.description'
                             ,'pro_programmings.created_at'
+                            ,'pro_programmings.status'
                             ,'T1.type AS establishment_type'
                             ,'T1.name AS establishment'
                             ,'T2.name AS commune'
@@ -51,6 +52,7 @@ class ProgrammingController extends Controller
                         ,'pro_programmings.user_id'
                         ,'pro_programmings.description'
                         ,'pro_programmings.created_at'
+                        ,'pro_programmings.status'
                         ,'T1.type AS establishment_type'
                         ,'T1.name AS establishment'
                         ,'T2.name AS commune'
@@ -115,13 +117,31 @@ class ProgrammingController extends Controller
 
     public function update(Request $request, Programming $programming)
     {
-      //dd($request);
       $programming->fill($request->all());
       $programming->year = $request->date;
       $programming->user_id  = $request->user;
       $programming->access   = serialize($request->access);
       $programming->save();
       return redirect()->back();
+    }
+
+
+
+    public function updateStatus(Request $request,$id)
+    {
+
+        $programming = Programming::find($id);
+
+
+       //DD($programming);
+
+        $programming->fill($request->all());
+        if($request->status){
+            $programming->status = $request->status;
+        }
+        $programming->save();
+
+        return redirect()->back();
     }
 
 }

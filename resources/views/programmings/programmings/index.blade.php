@@ -20,7 +20,7 @@
 <table class="table table-sm  ">
     <thead>
         <tr class="small ">
-            @can('Programming: evaluate')<th class="text-left align-middle table-dark" ></th>@endcan
+            @can('Programming: status')<th class="text-left align-middle table-dark" >Estado</th>@endcan
             @can('Programming: edit')<th class="text-left align-middle table-dark" ></th>@endcan
             <th class="text-left align-middle table-dark" >Id</th> 
             <th class="text-left align-middle table-dark" >Comuna</th>
@@ -32,12 +32,24 @@
     <tbody>
         @foreach($programmings as $programming)
         <tr class="small">
-        <!-- Permiso para editar programación númerica -->
-        @can('Programming: evaluate')
-            <td ><a href="{{ route('programmings.show', $programming->id) }}" class="btn btb-flat btn-sm btn-light" >
-            <i class="fas fa-clipboard-check"></i></a>
+        <!-- Permiso para Activar o Desactivar programación númerica -->
+        @can('Programming: status')
+            <td >
+                <button class="btn btb-flat  btn-light" data-toggle="modal"
+                    data-target="#updateModalRect"
+                    data-programming_id="{{ $programming->id }}"
+                    data-status="{{ $programming->status }}"
+                    data-formaction="{{ route('programmingStatus.update', $programming->id)}}">
+                    @if($programming->status == 'active')
+                        <i class="fas fa-circle text-success "></i>
+                    @elseif($programming->status == 'inactive')
+                        <i class="fas fa-circle text-danger "></i>
+                    @endif
+                
+                </button>
             </td>
         @endcan
+        <!-- Permiso para editar programación númerica -->
         @can('Programming: edit')
             <td ><a href="{{ route('programmings.show', $programming->id) }}" class="btn btb-flat btn-sm btn-light" >
                 <i class="fas fa-edit"></i></a>
@@ -82,13 +94,25 @@
     </tbody>
 </table>
 
-
+@include('programmings/programmings/modal_status_programming')
 @endsection
 
 @section('custom_js')
 
-
 <script type="text/javascript">
+
+$('#updateModalRect').on('show.bs.modal', function (event) {
+    console.log("en modal");
+    
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var modal  = $(this)
+
+    modal.find('input[name="programming_id"]').val(button.data('programming_id'))
+    modal.find('select[name="status"]').val(button.data('status'))
+
+    var formaction  = button.data('formaction')
+    modal.find("#form-edit").attr('action', formaction)
+})
 
 // Set the date we're counting down to
 var countDownDate = new Date("Dec 1, 2020 00:00:00").getTime();

@@ -109,6 +109,8 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
 
 //Programación Númerica APS
 Route::resource('programmings', 'Programmings\ProgrammingController')->middleware('auth');
+Route::put('programmingStatus/{id}', 'Programmings\ProgrammingController@updateStatus')->middleware('auth')->name('programmingStatus.update');
+
 Route::resource('programmingitems', 'Programmings\ProgrammingItemController')->middleware('auth');
 
 Route::resource('communefiles', 'Programmings\CommuneFileController')->middleware('auth');
