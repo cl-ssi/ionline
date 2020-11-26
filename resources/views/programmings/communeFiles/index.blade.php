@@ -5,7 +5,7 @@
 @section('content')
 
 
-<h3 class="mb-3">Documentos Comunales - Programación Númerica</h3> 
+<h3 class="mb-3">Documentos Comunales - Evaluación General</h3> 
  <!-- Permiso para crear nueva programación númerica -->
  @can('Communefiles: create')
     <a href="{{ route('communefiles.create') }}" class="btn btn-info mb-4">Comenzar Documentos Comunales</a>
