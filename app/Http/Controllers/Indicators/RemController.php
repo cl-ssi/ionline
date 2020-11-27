@@ -20,12 +20,11 @@ class RemController extends Controller
     public function index($year, $serie)
     {
         if(!Prestacion::exists($year) OR !Seccion::exists($year)) abort(404);
-        $prestaciones = Prestacion::year($year)->select('descripcion', 'Nserie')->where('serie', $serie)->orderBy('Nserie')->get();
-        if($prestaciones->isEmpty()) abort(404);
-        $prestaciones = $prestaciones->unique('Nserie');
-        $series_not_available = [2018 => ['A29','A30','A31','P07','P09','P11','P13']];
-        
-        return view('indicators.rem.list', compact('prestaciones', 'year', 'serie','series_not_available'));
+        $Nseries = Prestacion::year($year)->select('descripcion', 'Nserie')->where('serie', $serie)->orderBy('Nserie')->get();
+        if($Nseries->isEmpty()) abort(404);
+        $Nseries = $Nseries->unique('Nserie');
+        foreach($Nseries as $nserie) $nserie->active = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie->Nserie)->exists();
+        return view('indicators.rem.list', compact('Nseries', 'year', 'serie'));
     }
 
     public function list($year)
