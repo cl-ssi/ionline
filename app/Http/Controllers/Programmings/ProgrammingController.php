@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Programmings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Programmings\Programming;
+use App\Programmings\ProgrammingItem;
 use App\Establishment;
 use App\Models\Commune;
 use App\Models\Programmings\Review AS Rev;
@@ -12,6 +13,8 @@ use App\Programmings\Review;
 use App\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Support\Facades\DB;
 
 
 class ProgrammingController extends Controller
@@ -23,7 +26,20 @@ class ProgrammingController extends Controller
        //$users =  User::whereHas("roles", function($q){ $q->where("name", "Programming: Review"); })->get();
        // dd($users);
        // if(Auth()->user()->id == '15683706' || Auth()->user()->id == '12345678' || Auth()->user()->id == '13641014' || Auth()->user()->id == '17011541' || Auth()->user()->id == '15287582')
-        if(Auth()->user()->hasAllRoles('Programming: Review') == True || Auth()->user()->hasAllRoles('Programming: Admin') == True )
+
+
+        $indicatorCompletes = ProgrammingItem::select(
+                             'T1.id'
+                            , DB::raw('count(DISTINCT T2.int_code) AS qty'))
+                    ->leftjoin('pro_programmings AS T1', 'pro_programming_items.programming_id', '=', 'T1.id')
+                    ->leftjoin('pro_activity_items AS T2', 'pro_programming_items.activity_id', '=', 'T2.id')
+                    ->Where('T1.year','=',2021)
+                    ->groupBy('T1.id')
+                    ->orderBy('T1.id')->get();
+
+       // dd($indicatorCompletes);
+
+       if(Auth()->user()->hasAllRoles('Programming: Review') == True || Auth()->user()->hasAllRoles('Programming: Admin') == True )
        {
         
         $programmings = Programming::select(
@@ -66,6 +82,20 @@ class ProgrammingController extends Controller
             ->Where('pro_programmings.access','LIKE','%'.Auth()->user()->id.'%')
             ->orderBy('T2.name','ASC')->get();
         }
+
+        foreach ($programmings as $programming) {
+            foreach ($indicatorCompletes as $indicatorComplete) {
+
+            //dd($programming->id);
+                if($programming->id == $indicatorComplete->id) {
+                    //dd($programming->id);
+                    $programming['qty_traz'] = $indicatorComplete->qty;
+                }
+
+            }
+        }
+
+        //dd($programmings);
         
         return view('programmings/programmings/index')->withProgrammings($programmings);
     }

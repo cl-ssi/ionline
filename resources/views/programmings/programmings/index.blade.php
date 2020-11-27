@@ -22,6 +22,7 @@
             <tr class="small ">
                 @can('Programming: status')<th class="text-left align-middle table-dark" >Estado</th>@endcan
                 @can('Programming: edit')<th class="text-left align-middle table-dark" ></th>@endcan
+                <th class="text-left align-middle table-dark" >%</th> 
                 <th class="text-left align-middle table-dark" >Id</th> 
                 <th class="text-left align-middle table-dark" >Comuna</th>
                 <th class="text-left align-middle table-dark" >Establecimiento</th>
@@ -55,7 +56,9 @@
                     <i class="fas fa-edit"></i></a>
                 </td>
             @endcan
-                <td >{{ $programming->id }}</td>
+                <td > <span class="badge badge-info">{{ number_format(($programming->qty_traz/51) *100, 0, ',', ' ')}}%</span> </td>
+                <td >
+                {{ $programming->id }}</td>
                 <td>{{ $programming->commune }}</td>
                 <td>{{ $programming->establishment_type }} {{ $programming->establishment }}</td>
                 <td>{{ $programming->year }}</td>
