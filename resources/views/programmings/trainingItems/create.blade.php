@@ -118,8 +118,8 @@ Nuevo Item de Capacitación </h4>
         <div class="form-group col-md-3">
             <label for="forprogram">Fondos Municipales</label>
             <select name="fondo_muni" id="fondo_muni" class="form-control">
-                    <option value="SI">No</option>
-                    <option value="NO">SI</option>
+                    <option value="NO">No</option>
+                    <option value="SI">SI</option>
                
             </select>
         </div>
@@ -182,7 +182,7 @@ Nuevo Item de Capacitación </h4>
 
         if(med_odont_qf == 0 && otros_profesionales == 0 && tec_nivel_superior == 0  && tec_salud == 0 && administrativo_salud == 0 && auxiliares_salud == 0)
         {
-            var calc = $('#total').val();
+            var calc = 0;
             console.log("prevalence_rate == 0 && coverture == 0");
         }
         
