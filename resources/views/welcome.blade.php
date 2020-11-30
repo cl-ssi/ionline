@@ -49,6 +49,7 @@
         <nav class="my-2 my-md-0 mr-md-3">
             <a class="p-2 text-dark" href="http://www.saludiquique.cl">Web Servicio de Salud</a>
         </nav>
+        <a class="btn btn-outline-info mr-2" href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1">Siremx</a>
         <a class="btn btn-outline-primary mr-2" href="http://intranet.saludiquique.cl">Intranet</a>
         <a class="btn btn-outline-primary" href="{{ route('login') }}">iOnline</a>
     </div>
@@ -155,12 +156,12 @@
             </div>
         </footer>
     </div>
-    <div class="text-center">
+    <!-- <div class="text-center">
         Sistema de Mamografias
         <a href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1">
             <img src="{{ asset('images/btn_claveunica_119px.png') }}" alt="Logo Clave única">
         </a>
-    </div>
+    </div> -->
 
 </body>
 
