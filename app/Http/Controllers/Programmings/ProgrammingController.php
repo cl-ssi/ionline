@@ -41,8 +41,7 @@ class ProgrammingController extends Controller
 
        if(Auth()->user()->hasAllRoles('Programming: Review') == True || Auth()->user()->hasAllRoles('Programming: Admin') == True )
        {
-        
-        $programmings = Programming::select(
+            $programmings = Programming::select(
                              'pro_programmings.id'
                             ,'pro_programmings.year'
                             ,'pro_programmings.user_id'
@@ -79,6 +78,7 @@ class ProgrammingController extends Controller
             ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
             ->leftjoin('users AS T3', 'pro_programmings.user_id', '=', 'T3.id')
             ->Where('pro_programmings.year','LIKE','%'.$year.'%')
+            ->Where('pro_programmings.status','=','active')
             ->Where('pro_programmings.access','LIKE','%'.Auth()->user()->id.'%')
             ->orderBy('T2.name','ASC')->get();
         }
@@ -86,9 +86,7 @@ class ProgrammingController extends Controller
         foreach ($programmings as $programming) {
             foreach ($indicatorCompletes as $indicatorComplete) {
 
-            //dd($programming->id);
                 if($programming->id == $indicatorComplete->id) {
-                    //dd($programming->id);
                     $programming['qty_traz'] = $indicatorComplete->qty;
                 }
 
