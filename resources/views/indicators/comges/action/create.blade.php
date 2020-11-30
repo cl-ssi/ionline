@@ -1,7 +1,8 @@
 @extends('layouts.app')
 @php
     $months = array (1=>'Ene',2=>'Feb',3=>'Mar',4=>'Abr',5=>'May',6=>'Jun',7=>'Jul',8=>'Ago',9=>'Sep',10=>'Oct',11=>'Nov',12=>'Dec');
-    $months_by_section = array(1 => array(1,2,3), 2 => array(4,5,6), 3 => array(7,8,9), 4 => array(10,11,12));
+    //$months_by_section = array(1 => array(1,2,3), 2 => array(4,5,6), 3 => array(7,8,9), 4 => array(10,11,12));
+    $final_month_section = array(1 => 3, 2 => 6, 3 => 9, 4 => 12);
     $romans = [1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV'];
     $title2 = $comges->name.' - '.$romans[isset($corte) ? $corte->number : $section].' Corte';
 @endphp
@@ -71,32 +72,32 @@
         </div>
     </div>
     <div class="form-row">
-        <div class="form-group col-md-9">
+        <div class="form-group col-md{{(isset($corte) ? $corte->number : $section) > 2 ? '-12' : '' }}">
             <label for="numerator">Nombre numerador</label>
             <input type="text" class="form-control" id="numerator" name="numerator">
         </div>
-        @foreach($months_by_section[isset($corte) ? $corte->number : $section] as $index)
+        @for($i = 1; $i <= $final_month_section[isset($corte) ? $corte->number : $section]; $i++)
         <div class="form-group col-md-1 months">
-            <label for="month">{{$months[$index]}}</label>
+            <label for="month">{{$months[$i]}}</label>
             <input type="number" class="form-control" id="numerator_month" name="numerator_month[]" value="0">
         </div>
-        @endforeach
+        @endfor
         <div class="form-group col-md-3 source" style="display: none">
             <label for="numerator_source">Fuente datos</label>
             <input type="text" class="form-control" id="numerator_source" name="numerator_source" disabled>
         </div>
     </div>
     <div class="form-row">
-        <div class="form-group col-md-9">
+        <div class="form-group col-md{{(isset($corte) ? $corte->number : $section) > 2 ? '-12' : '' }}">
             <label for="denominator">Nombre denominador</label>
             <input type="text" class="form-control" id="denominator" name="denominator" value="">
         </div>
-        @foreach($months_by_section[isset($corte) ? $corte->number : $section] as $index)
+        @for($i = 1; $i <= $final_month_section[isset($corte) ? $corte->number : $section]; $i++)
         <div class="form-group col-md-1 months">
-            <label for="month">{{$months[$index]}}</label>
+            <label for="month">{{$months[$i]}}</label>
             <input type="number" class="form-control" id="denominator_month" name="denominator_month[]" value="0">
         </div>
-        @endforeach
+        @endfor
         <div class="form-group col-md-3 source" style="display: none">
             <label for="denominator_source">Fuente datos</label>
             <input type="text" class="form-control" id="denominator_source" name="denominator_source" disabled>
