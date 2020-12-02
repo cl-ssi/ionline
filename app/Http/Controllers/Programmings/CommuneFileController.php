@@ -20,7 +20,7 @@ class CommuneFileController extends Controller
     {
         
         $year = '';
-        if(Auth()->user()->id == '15683706' || Auth()->user()->id == '12345678' || Auth()->user()->id == '13641014' || Auth()->user()->id == '17011541' || Auth()->user()->id == '15287582')
+        if(Auth()->user()->hasAllRoles('Programming: Review') == True || Auth()->user()->hasAllRoles('Programming: Admin') == True )
         {
         
         $communeFiles = CommuneFile::select(

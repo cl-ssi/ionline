@@ -22,6 +22,10 @@ class ProgrammingReportController extends Controller
     {
         
         $year = $request->year;
+        if(!$year)
+        {
+            $year = date("Y");
+        }
         $option = $request->commune_filter;
         //dd($option);
         if($option == 'hospicio')

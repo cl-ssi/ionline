@@ -37,7 +37,7 @@
 <table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover  ">
     <thead>
         <tr style="font-size:75%;">
-            <th class="text-center align-middle" colspan="5">INFORME CONSOLIDADO</th>
+            <th class="text-center align-middle" colspan="5">INFORME CONSOLIDADO - {{strtoupper(Request::get('commune_filter')) ?? '' }}}</th>
         </tr>
         <tr class="small " style="font-size:60%;">
             <th class="text-center align-middle">Nº TRAZADORA</th>
@@ -62,6 +62,7 @@
         <tr style="font-size:60%;">
             <td class="text-center" colspan="3">TOTALES</td>
             <td class="text-center">{{ $programmingItems ? number_format($programmingItems->sum('activity_total'),0, ',', '.') : '0'}}</td>
+            <td></td>
         </tr>
     </tfoot>
 </table>
