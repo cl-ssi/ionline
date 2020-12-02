@@ -7,7 +7,7 @@
 @include('programmings/nav')
 
 
-<button onclick="exportTableToExcel('tblData')" class="btn btn-success float-right btn-sm">Exportar Excel</button>
+<button onclick="tableExcel('xlsx')" class="btn btn-success float-right btn-sm">Exportar Excel</button>
 
 <h4 class="mb-3"> Informe Consolidado</h4>
 <form method="GET" class="form-horizontal small" action="{{ route('programming.reportConsolidated') }}" enctype="multipart/form-data">
@@ -72,6 +72,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet"/>
 
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+
+
 <script type="text/javascript">
     $("#datepicker").datepicker({
         format: "yyyy",
@@ -112,5 +115,14 @@
             downloadLink.click();
         }
     }
+
+    function tableExcel(type, fn, dl) {
+          var elt = document.getElementById('tblData');
+          const filename = 'Informe_consolidado'
+          var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+          return dl ?
+            XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
+            XLSX.writeFile(wb, `${filename}.xlsx`)
+        }
 </script>
 @endsection
