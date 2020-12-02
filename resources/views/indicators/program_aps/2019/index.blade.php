@@ -49,7 +49,7 @@
                         <th>Rend.</th>
                         <th>Verificación</th>
                         <th>Obs.</th>
-                        <th nowrap>Ene-Nov</th>
+                        <th nowrap>Ene-Dic</th>
                         <th nowrap>% Avance</th>
 
 

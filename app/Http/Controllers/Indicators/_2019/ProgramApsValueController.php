@@ -110,7 +110,7 @@ class ProgramApsValueController extends Controller
                    SUM(COALESCE(Col06,0) + COALESCE(Col08,0) + COALESCE(Col10,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (02010201)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -139,7 +139,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col01,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (01110107, 01080040)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -173,7 +173,7 @@ class ProgramApsValueController extends Controller
                         AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (04040426)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -203,7 +203,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col06,0) + COALESCE(Col07,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (02010320, 05225303, 02010321, 02010322)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -232,7 +232,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col10,0) + COALESCE(Col11,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (02010320, 05225303, 02010321, 02010322)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -261,7 +261,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col12,0) + COALESCE(Col13,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (02010320, 05225303, 02010321, 02010322)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -296,7 +296,7 @@ class ProgramApsValueController extends Controller
                     ) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (04040417, 04040418)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -346,7 +346,7 @@ class ProgramApsValueController extends Controller
                     4025025,
                     4040427,
                     3020501)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -377,7 +377,7 @@ class ProgramApsValueController extends Controller
                         COALESCE(Col13,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (23080300, 23080400, 23080500)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -408,7 +408,7 @@ class ProgramApsValueController extends Controller
                         AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (05225304, 02010420, 05225305, 03500366, 05225306, 02010421, 02010422)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -436,7 +436,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col12,0) + COALESCE(Col13,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (05225304, 02010420, 05225305, 03500366, 05225306, 02010421, 02010422)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -464,7 +464,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col01,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (06902700)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -492,7 +492,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col01,0) + COALESCE(Col04,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (01030500, 01030600, 01030700, 01030800)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -511,7 +511,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col10,0) + COALESCE(Col11,0) + COALESCE(Col12,0) + COALESCE(Col13,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (03020101, 03020201, 03020301, 03020402, 03020403, 03020401, 03040210, 03040220, 04040100, 04025010, 04025020, 04025025, 04040427, 03020501)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -530,7 +530,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col02,0) + COALESCE(Col03,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (01080008)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -559,7 +559,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col03,0) + COALESCE(Col04,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (01010401, 01010403)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -578,7 +578,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col08,0) + COALESCE(Col09,0) + COALESCE(Col10,0) + COALESCE(Col11,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (19120601, 19120602,  19120603, 19120606, 19120608, 19120609, 19120611)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -598,7 +598,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col08,0) + COALESCE(Col09,0) + COALESCE(Col10,0) + COALESCE(Col11,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (06020201, 06020208, 06020202, 06020602, 06020206, 06200400, 06904900, 06200500, 06200501, 06905912)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -617,7 +617,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col10,0) + COALESCE(Col11,0) + COALESCE(Col12,0) + COALESCE(Col13,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (03020604)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -636,7 +636,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col07,0) + COALESCE(Col08,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (27300919,27300920)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -674,7 +674,7 @@ class ProgramApsValueController extends Controller
                     ) AS total FROM 2019rems r
                  JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                  WHERE CodigoPrestacion IN (03020101,03020201,03020301,03020402,03020403,03020401,03040210,03040220,04040100,04025010,04025020,04025025,04040427,03020501)
-                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                  AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                  GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -715,7 +715,7 @@ class ProgramApsValueController extends Controller
 						  COALESCE(Col35,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (23080300,23080400,23080500)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -745,7 +745,7 @@ class ProgramApsValueController extends Controller
                     ) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (27290100,27290200)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -774,7 +774,7 @@ class ProgramApsValueController extends Controller
 						  ) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (03030330,03030340,03030120,03030130)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -822,7 +822,7 @@ class ProgramApsValueController extends Controller
 						  ) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (03020604)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -841,7 +841,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col08,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (19140501,19140503)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -869,7 +869,7 @@ class ProgramApsValueController extends Controller
                     ) AS total FROM 2019rems r
                  JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                  WHERE CodigoPrestacion IN (03020101,03020201,03020301,03020402,03020403,03020401,03040210,03040220,04040100,04025010,04025020,04025025,04040427,03020501)
-                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                 AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                  AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                  GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -897,7 +897,7 @@ class ProgramApsValueController extends Controller
 						  ) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (03020604)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -919,7 +919,7 @@ class ProgramApsValueController extends Controller
                         AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (03020604)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -941,7 +941,7 @@ class ProgramApsValueController extends Controller
         //                 AS total FROM 2019rems r
         //         JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
         //         WHERE CodigoPrestacion IN ("01030100A", "01030200B")
-        //         AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+        //         AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
         //         AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
         //         GROUP BY NombreComuna ORDER BY NombreComuna';
         // $cantidades = DB::connection('mysql_rem')->select($query);
@@ -985,7 +985,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col26,0) + COALESCE(Col27,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (09400082)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1004,7 +1004,7 @@ class ProgramApsValueController extends Controller
                     SUM(COALESCE(Col01,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (09201713)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1022,7 +1022,7 @@ class ProgramApsValueController extends Controller
                         AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (01080008)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1055,7 +1055,7 @@ class ProgramApsValueController extends Controller
                         AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (01080011, 05810443, 01080021, 01080022, 01080023, 01090060, 01080024, 01080013, 01080014)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1087,7 +1087,7 @@ class ProgramApsValueController extends Controller
                     AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (19120601, 19120602, 19120603, 19120606, 19120608, 19120609, 19120611)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1109,7 +1109,7 @@ class ProgramApsValueController extends Controller
                     AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (01010601, 01010603)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1139,7 +1139,7 @@ class ProgramApsValueController extends Controller
                SUM(COALESCE(Col09,0) + COALESCE(Col10,0) + COALESCE(Col11,0) + COALESCE(Col12,0) + COALESCE(Col13,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (01010901, 01010903)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1169,7 +1169,7 @@ class ProgramApsValueController extends Controller
                SUM(COALESCE(Col01,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (19140700, 19140800, 19140900, 19150100, 19150200, 19150300, 19150400, 19150500, 19190100)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1201,7 +1201,7 @@ class ProgramApsValueController extends Controller
                 WHERE CodigoPrestacion IN (26261000,26260100,26273101,26274000,26291000,26291050,26291100,26273102,26274600,26262300,26273103,26273105,26274200,26280010,26262400,
 					 26291150,26291200,26291250,26291300,26280020,26273106,26274400,26261400,26273107,26274601,26300100,26300110,26260600,26261800,26261900,26273109,26275400,26275500,
 					 26275600,26273110,26262100,26300120,26300130)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1218,7 +1218,7 @@ class ProgramApsValueController extends Controller
 						  ) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (23046200)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1247,7 +1247,7 @@ class ProgramApsValueController extends Controller
                SUM(COALESCE(Col01,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (09230500)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1276,7 +1276,7 @@ class ProgramApsValueController extends Controller
                SUM(COALESCE(Col01,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (19120701, 19120702, 19120703, 19120706, 19120708, 19120709,  19120711)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1334,7 +1334,7 @@ class ProgramApsValueController extends Controller
                SUM(COALESCE(Col01,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (16100300, 16200220, 16100600, 16100700, 16100100)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1363,7 +1363,7 @@ class ProgramApsValueController extends Controller
                SUM(COALESCE(Col01,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (03500361)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1394,7 +1394,7 @@ class ProgramApsValueController extends Controller
 						  ) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (03500361,03500362)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1409,7 +1409,7 @@ class ProgramApsValueController extends Controller
                SUM(COALESCE(Col01,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (23090590)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1424,7 +1424,7 @@ class ProgramApsValueController extends Controller
                    SUM(COALESCE(Col01,0)) AS total FROM 2019rems r
                     JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                     WHERE CodigoPrestacion IN (19120301, 19120302, 19120303, 19120304, 19120306, 19120308, 19120310, 19170200, 19120311, 19120312, 19120305)
-                    AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                    AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                     AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                     GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1439,7 +1439,7 @@ class ProgramApsValueController extends Controller
                SUM(COALESCE(Col01,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (06020201)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1468,7 +1468,7 @@ class ProgramApsValueController extends Controller
                SUM(COALESCE(Col01,0)) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (06020208)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1485,7 +1485,7 @@ class ProgramApsValueController extends Controller
 						  ) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (06020206)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1502,7 +1502,7 @@ class ProgramApsValueController extends Controller
 						  ) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (02010201)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
@@ -1520,7 +1520,7 @@ class ProgramApsValueController extends Controller
 						  ) AS total FROM 2019rems r
                 JOIN 2019establecimientos e ON r.IdEstablecimiento = e.Codigo
                 WHERE CodigoPrestacion IN (02010103)
-                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11)
+                AND r.mes IN (1,2,3,4,5,6,7,8,9,10,11,12)
                 AND r.IdEstablecimiento NOT IN (102100,102600,102601,102602,102011)
                 GROUP BY NombreComuna ORDER BY NombreComuna';
         $cantidades = DB::connection('mysql_rem')->select($query);
