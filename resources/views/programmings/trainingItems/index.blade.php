@@ -64,6 +64,12 @@
             <td class="text-center align-middle">{{ $trainingItem->org_ejecutor }}</td>
             <td class="text-center align-middle">{{ $trainingItem->coordinador }}</td>
             <td class="text-center align-middle">{{ $trainingItem->fecha_ejecucion }}</td>
+
+            @can('Programming: edit')
+                <td class="text-center align-middle"><a href="{{ route('trainingitems.show', $trainingItem->id) }}" class="btn btb-flat btn-xs  btn-light" >
+                    <i class="fas fa-edit"></i></a>
+                </td>
+            @endcan
             @can('TrainingItem: delete')
             <td class="text-center align-middle">
                 <form method="POST" action="{{ route('trainingitems.destroy', $trainingItem->id) }}" class="small d-inline">

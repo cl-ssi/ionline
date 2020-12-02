@@ -97,7 +97,7 @@
         document.body.appendChild(downloadLink);
         
         if(navigator.msSaveOrOpenBlob){
-            var blob = new Blob(['\ufeff', tableHTML], {
+            var blob = new Blob(['\ufeff', $.base64.encode(tableHTML)], {
                 type: dataType
             });
             navigator.msSaveOrOpenBlob( blob, filename);

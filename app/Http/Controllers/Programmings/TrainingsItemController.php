@@ -37,6 +37,13 @@ class TrainingsItemController extends Controller
 
         return redirect()->back();
         //return redirect()->route('trainingItems', ['programming_id' => 1]);
+    } 
+
+    public function show(Request $request,$id)
+    {
+        $trainingItems = TrainingItem::where('id',$id)->first();
+        //dd($trainingItems);
+        return view('programmings/trainingItems/show')->withtrainingItems($trainingItems);
     }
 
     public function destroy($id)
