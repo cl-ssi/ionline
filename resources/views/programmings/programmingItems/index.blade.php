@@ -9,7 +9,7 @@
 
 
 <a href="{{ route('programmingitems.create',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
-<h4 class="mb-3"> Programación - Horas Directas</h4>
+<h4 class="mb-3"> Programación - Horas Directas - {{$programming->establishment ?? '' }} {{$programming->year ?? '' }} </h4>
 
 <form method="GET" class="form-horizontal small " action="{{ route('programmingitems.index') }}" enctype="multipart/form-data">
 
@@ -24,7 +24,7 @@
 
 <ul class="list-inline">
     <li class="list-inline-item">
-        <button onclick="exportTableToExcel('tblData')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button>
+        <button onclick="tableExcel('xlsx')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button>
     </li>
     <li class="list-inline-item">
         <a href="{{ route('programming.reportObservation',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-dark mb-1 float-right btn-sm">
@@ -82,7 +82,17 @@
         @foreach($programmingItems as $programmingitem)
         <tr class="small">
         @can('ProgrammingItem: evaluate')
-            <td class="text-center align-middle" ><a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitem->id]) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-clipboard-check"></i></a></td>
+            <td class="text-center align-middle" >
+                <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitem->id]) }}" class="btn btb-flat btn-sm btn-light">
+                    @if($programmingitem->qty_reviews > 0)
+                    <i class="fas fa-clipboard-check text-danger"></i>
+                    <span class="badge badge-danger ml-2 ">{{ $programmingitem->qty_reviews}}</span>
+                    @else
+                    <i class="fas fa-clipboard-check "></i>
+                    <span class="badge badge-secondary ml-2 ">0</span>
+                    @endif
+                </a>
+            </td>
         @endcan
         @can('ProgrammingItem: edit')
             <td class="text-center align-middle" ><a href="{{ route('programmingitems.show', $programmingitem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
@@ -130,9 +140,9 @@
 
 <h4 class="mb-3"> Programación Talleres - Horas Directas</h4>
 
-<button onclick="exportTableToExcel('tblData')" class="btn btn-success mb-4 float-left btn-sm">Exportar Excel</button>
+<button onclick="tableExcelTaller('xlsx')" class="btn btn-success mb-4 float-left btn-sm">Exportar Excel</button>
 
-<table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
+<table id="tblDataTaller" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:55%;">
             <th class="text-center align-middle">TIPO</th>
@@ -210,36 +220,28 @@
 @endsection
 
 @section('custom_js')
+
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>  
 <script>
-    function exportTableToExcel(tableID, filename = ''){
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
-        var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-        
-        // Specify file name
-        filename = filename?filename+'.xls':'Actividades.xls';
-        
-        // Create download link element
-        downloadLink = document.createElement("a");
-        
-        document.body.appendChild(downloadLink);
-        
-        if(navigator.msSaveOrOpenBlob){
-            var blob = new Blob(['\ufeff', tableHTML], {
-                type: dataType
-            });
-            navigator.msSaveOrOpenBlob( blob, filename);
-        }else{
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-        
-            // Setting the file name
-            downloadLink.download = filename;
-            
-            //triggering the function
-            downloadLink.click();
+
+
+
+    function tableExcel(type, fn, dl) {
+          var elt = document.getElementById('tblData');
+          const filename = 'Informe_consolidado'
+          var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+          return dl ?
+            XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
+            XLSX.writeFile(wb, `${filename}.xlsx`)
         }
-    }
+    
+    function tableExcelTaller(type, fn, dl) {
+          var elt = document.getElementById('tblData');
+          const filename = 'Informe_consolidado'
+          var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+          return dl ?
+            XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
+            XLSX.writeFile(wb, `${filename}.xlsx`)
+        }
 </script>
 @endsection

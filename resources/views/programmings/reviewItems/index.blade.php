@@ -8,6 +8,10 @@
 
 <h4 class="mb-3">Evaluación de Activividad</h4>
 <h6 class="mb-3">{{$programmingItems->description}}</h6>
+<a href="{{ route('programmingitems.index', ['programming_id' => $programmingItems->programming_id]) }}" class="btn btb-flat btn-sm btn-dark" >
+                    <i class="fas fa-arrow-left small"></i> 
+                    <span class="small">Volver</span> 
+    </a>
 @can('ProgrammingItem: edit')
 <a href="{{ route('programmingitems.show', $programmingItems->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i> Editar</a>
 @endcan

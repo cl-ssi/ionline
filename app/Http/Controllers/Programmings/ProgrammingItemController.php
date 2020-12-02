@@ -26,6 +26,7 @@ class ProgrammingItemController extends Controller
         //dd($request->tracer_number);
         //$programmingitems = ProgrammingItem::where('programming_id',$request->programming_id)->OrderBy('id')->get();
 
+        // INDICADOR TOTAL DE REVISIONES EN BOTON OBSERVACIONES
         $sql="SELECT 
                         'Pendiente' AS indicator
                         ,COUNT(*) AS qty
@@ -62,7 +63,17 @@ class ProgrammingItemController extends Controller
 
         $reviewIndicators = DB::select($sql,array(1));
 
-        //dd($reviewIndicator);
+
+        // CANTIDAD DE REVISIONES POR ID DE ACTIVIDADES
+        $indicatorReviewaByItems = ReviewItem::select(
+                                                    'T1.id'
+                                                , DB::raw('count(pro_review_items.id) AS qty'))
+                                        ->leftjoin('pro_programming_items AS T1', 'pro_review_items.programming_item_id', '=', 'T1.id')
+                                        ->Where('T1.programming_id',$request->programming_id)
+                                        ->groupBy('T1.id')
+                                        ->orderBy('T1.id')->get();
+
+        //dd($indicatorReviewaByItem);
 
         $programmingitems = ProgrammingItem::select(
                                  'T0.description'
@@ -113,8 +124,19 @@ class ProgrammingItemController extends Controller
                         ->orderBy('pro_programming_items.action_type','ASC')
                         ->orderBy('pro_programming_items.activity_name','ASC')
                         ->get();
+
+    foreach ($programmingitems as $programmingitem) {
+        foreach ($indicatorReviewaByItems as $indicatorReviewaByItem) {
+
+            if($programmingitem->id == $indicatorReviewaByItem->id) {
+                $programmingitem['qty_reviews'] = $indicatorReviewaByItem->qty;
+            }
+
+        }
+    }
+    
+
     //dd($programmingitems);
-            
     $programmingitems_workshop = ProgrammingItem::select(
                             'T0.description'
                            ,'T1.name AS establishment'
@@ -162,11 +184,32 @@ class ProgrammingItemController extends Controller
                    ->orderBy('pro_programming_items.activity_name','ASC')
                    ->get();
 
-        //dd($programmingitems);
+
+        $programming = Programming::select(
+            'pro_programmings.id'
+           ,'pro_programmings.year'
+           ,'pro_programmings.user_id'
+           ,'pro_programmings.description'
+           ,'pro_programmings.created_at'
+           ,'pro_programmings.status'
+           ,'T1.type AS establishment_type'
+           ,'T1.name AS establishment'
+           ,'T2.name AS commune'
+           ,'T3.name' 
+           ,'T3.fathers_family'
+           ,'T3.mothers_family')
+        ->leftjoin('establishments AS T1', 'pro_programmings.establishment_id', '=', 'T1.id')
+        ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
+        ->leftjoin('users AS T3', 'pro_programmings.user_id', '=', 'T3.id')
+        ->Where('pro_programmings.year','LIKE','%'.$year.'%')
+        ->Where('pro_programmings.id',$request->programming_id)
+        ->first();
+
 
         return view('programmings/programmingItems/index')->withProgrammingItems($programmingitems)
+                                                          ->withProgramming($programming)
                                                           ->withProgrammingItemworkshops($programmingitems_workshop)
-                                                          ->with('reviewIndicators', collect($reviewIndicators));;
+                                                          ->with('reviewIndicators', collect($reviewIndicators));
 
     }
 
