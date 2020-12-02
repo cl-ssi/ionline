@@ -97,13 +97,13 @@
         document.body.appendChild(downloadLink);
         
         if(navigator.msSaveOrOpenBlob){
-            var blob = new Blob(['\ufeff', $.base64.encode(tableHTML)], {
+            var blob = new Blob(['\ufeff', tableHTML], {
                 type: dataType
             });
             navigator.msSaveOrOpenBlob( blob, filename);
         }else{
             // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+            downloadLink.href = 'data:' + dataType + ', ' + escape(tableHTML);
         
             // Setting the file name
             downloadLink.download = filename;
