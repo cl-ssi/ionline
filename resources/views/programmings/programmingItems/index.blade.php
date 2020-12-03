@@ -248,7 +248,6 @@
         <tr class="small " style="font-size:55%;">
 
             @can('ProgrammingItem: evaluate')<th class="text-left align-middle" > Evaluación</th>@endcan
-            @can('ProgrammingItem: edit')<th class="text-left align-middle" >Editar</th>@endcan
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">Nº Trazadora</th>
             <th class="text-center align-middle">TIPO</th>
@@ -294,9 +293,6 @@
                     @endif
                 </a>
             </td>
-        @endcan
-        @can('ProgrammingItem: edit')
-            <td class="text-center align-middle" ><a href="{{ route('programmingitems.show', $programmingItemworkshop->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
         @endcan
             <td class="text-center align-middle">{{ $programmingItemworkshop->tracer }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->tracer_code }}</td>

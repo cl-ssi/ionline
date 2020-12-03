@@ -140,7 +140,7 @@
                         <th class="text-center align-middle table-dark">¿REC.?</th>
                         @can('Reviews: edit')<th class="text-left align-middle table-dark" ></th>@endcan
                         @can('Reviews: rectify')<th class="text-left align-middle table-dark" ></th>@endcan
-                        @can('ProgrammingItem: delete')<th class="text-left align-middle table-dark" ></th>@endcan
+                        @can('Reviews: delete')<th class="text-left align-middle table-dark" ></th>@endcan
                     </tr>
                 </thead>
                 <tbody style="font-size:75%;">
@@ -197,7 +197,7 @@
                         @endif
                         </td>
                         @endcan
-                        @can('ProgrammingItem: delete')
+                        @can('Reviews: delete')
                         <td class="text-center align-middle">
                             <form method="POST" action="{{ route('reviewItems.destroy', $review->id) }}" class="small d-inline">
                                 {{ method_field('DELETE') }} {{ csrf_field() }}
