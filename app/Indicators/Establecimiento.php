@@ -3,6 +3,7 @@
 namespace App\Indicators;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Establecimiento extends Model
 {
@@ -32,5 +33,16 @@ class Establecimiento extends Model
         $model = parent::newInstance($attributes, $exists);
         $model->setYear($this->year);
         return $model;
+    }
+
+    public function rems()
+    {
+        $instance = new Rem();
+        $instance->setYear($this->year);
+
+        // $foreignKey = $instance->getTable.'.'.$this->getForeignKey();
+        // $localKey = $this->getKeyName();
+
+        return new HasMany($instance->newQuery(), $this, 'IdEstablecimiento', 'Codigo');
     }
 }
