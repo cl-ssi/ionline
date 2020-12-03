@@ -25,6 +25,15 @@ Editar Item Programación Operativa </h4>
 @method('PUT') 
     <input type="hidden" class="form-control" id="programming_id" name="programming_id" value="{{Request::get('programming_id')}}">
     <div class="form-row">
+        <div class="form-group col-md-2">
+            <label for="forprogram">Tipo Actividad</label>
+            <select name="activity_type" id="activity_type"  class="form-control">
+                    <option value="option_select" disabled selected>{{$programmingItem->activity_type ?? '' }}</option>
+                    <option value="Directa">Directa</option>
+                    <option value="Indirecta">Indirecta</option>
+                
+            </select>
+        </div>
         <div class="form-group col-md-6">
             <label for="forprogram">Ciclo Vital</label>
             <select name="cycle" id="formprogram" class="form-control">
@@ -34,8 +43,6 @@ Editar Item Programación Operativa </h4>
                     <option value="ADULTO">ADULTO</option>
                     <option value="ADULTO MAYOR">ADULTO MAYOR</option>
                     <option value="TRANSVERSAL">TRANSVERSAL</option>
-                    <option value="TALLER">TALLER</option>
-               
             </select>
         </div>
         

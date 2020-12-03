@@ -139,4 +139,13 @@ class ReviewItemController extends Controller
 
         return redirect()->back();
     }
+
+    public function destroy($id)
+    {
+      $reviewItem = ReviewItem::where('id',$id)->first();
+      $reviewItem->delete();
+
+      session()->flash('success', 'El registro ha sido eliminado de este listado');
+       return redirect()->back();
+    }
 }

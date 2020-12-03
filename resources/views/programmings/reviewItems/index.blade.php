@@ -140,6 +140,7 @@
                         <th class="text-center align-middle table-dark">¿REC.?</th>
                         @can('Reviews: edit')<th class="text-left align-middle table-dark" ></th>@endcan
                         @can('Reviews: rectify')<th class="text-left align-middle table-dark" ></th>@endcan
+                        @can('ProgrammingItem: delete')<th class="text-left align-middle table-dark" ></th>@endcan
                     </tr>
                 </thead>
                 <tbody style="font-size:75%;">
@@ -195,7 +196,16 @@
                         </button>
                         @endif
                         </td>
-                        
+                        @endcan
+                        @can('ProgrammingItem: delete')
+                        <td class="text-center align-middle">
+                            <form method="POST" action="{{ route('reviewItems.destroy', $review->id) }}" class="small d-inline">
+                                {{ method_field('DELETE') }} {{ csrf_field() }}
+                                <button class="btn btn-sm btn-outline-danger small" onclick="return confirm('¿Desea eliminar el registro realmente?')">
+                                <span class="fas fa-trash-alt " aria-hidden="true"></span>
+                                </button>
+                            </form>
+                        </td>
                         @endcan
                     </tr>
                     @endforeach

@@ -54,7 +54,7 @@
             </select>
         </div>
 
-        </div>
+    </div>
     <button type="submit" class="btn btn-info mb-4">Actualizar</button>
 
 </form>
