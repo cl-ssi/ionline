@@ -51,7 +51,7 @@
                     <th class="text-center align-middle table-secondary">Nº POBLACIÓN</th>
                     <th class="text-center align-middle table-secondary">PREVALENCIA</th>
                     <th class="text-center align-middle table-secondary">FUENTE PREV.</th>
-                    <th class="text-center align-middle table-secondary">COVERTURA</th>
+                    <th class="text-center align-middle table-secondary">COBERTURA</th>
                     <th class="text-center align-middle table-secondary">Nº POB. A ATENDER</th>
                     <th class="text-center align-middle table-secondary">CONCENTRACIÓN</th>
                     <th class="text-center align-middle table-secondary">TOTAL ACTIVIDAD</th>
