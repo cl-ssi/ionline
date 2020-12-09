@@ -10,6 +10,7 @@ use App\Establishment;
 use App\Models\Commune;
 use App\Models\Programmings\Review AS Rev;
 use App\Programmings\Review;
+use App\Models\Programmings\ReviewItem;
 use App\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -23,21 +24,29 @@ class ProgrammingController extends Controller
     {
         $year = '';
         //dd(Auth()->user()->hasAllRoles('Programming: Review'));
-       //$users =  User::whereHas("roles", function($q){ $q->where("name", "Programming: Review"); })->get();
-       // dd($users);
-       // if(Auth()->user()->id == '15683706' || Auth()->user()->id == '12345678' || Auth()->user()->id == '13641014' || Auth()->user()->id == '17011541' || Auth()->user()->id == '15287582')
 
+        // INDICADOR TOTAL DE REVISIONES 
 
-        $indicatorCompletes = ProgrammingItem::select(
+            $reviewIndicators = ReviewItem::select(
+                        'T2.id'
+                    , DB::raw('count(*) AS qty'))
+                    ->leftjoin('pro_programming_items AS T1', 'pro_review_items.programming_item_id', '=', 'T1.id')
+                    ->leftjoin('pro_programmings AS T2', 'T1.programming_id', '=', 'T2.id')
+                    ->Where('pro_review_items.rectified','=','NO')
+                    ->Where('pro_review_items.answer','=','NO')
+                    ->Where('T2.year','=','%'.$year.'%')
+                    ->groupBy('T2.id')
+                    ->orderBy('T2.id')->get();
+        
+
+            $indicatorCompletes = ProgrammingItem::select(
                              'T1.id'
                             , DB::raw('count(DISTINCT T2.int_code) AS qty'))
                     ->leftjoin('pro_programmings AS T1', 'pro_programming_items.programming_id', '=', 'T1.id')
                     ->leftjoin('pro_activity_items AS T2', 'pro_programming_items.activity_id', '=', 'T2.id')
-                    ->Where('T1.year','=',2021)
+                    ->Where('T1.year','=','%'.$year.'%')
                     ->groupBy('T1.id')
                     ->orderBy('T1.id')->get();
-
-       // dd($indicatorCompletes);
 
        if(Auth()->user()->hasAllRoles('Programming: Review') == True || Auth()->user()->hasAllRoles('Programming: Admin') == True )
        {
@@ -88,6 +97,16 @@ class ProgrammingController extends Controller
 
                 if($programming->id == $indicatorComplete->id) {
                     $programming['qty_traz'] = $indicatorComplete->qty;
+                }
+
+            }
+        }
+
+        foreach ($programmings as $programming) {
+            foreach ($reviewIndicators as $reviewIndicator) {
+
+                if($programming->id == $reviewIndicator->id) {
+                    $programming['qty_reviews'] = $reviewIndicator->qty;
                 }
 
             }

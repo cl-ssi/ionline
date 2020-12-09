@@ -23,6 +23,7 @@
                 @can('Programming: status')<th class="text-left align-middle table-dark" >Estado</th>@endcan
                 @can('Programming: edit')<th class="text-left align-middle table-dark" ></th>@endcan
                 <th class="text-left align-middle table-dark" >%</th> 
+                <th class="text-left align-middle table-dark" >Obs.</th> 
                 <th class="text-left align-middle table-dark" >Id</th> 
                 <th class="text-left align-middle table-dark" >Comuna</th>
                 <th class="text-left align-middle table-dark" >Establecimiento</th>
@@ -57,6 +58,7 @@
                 </td>
             @endcan
                 <td > <span class="badge badge-info">{{ number_format(($programming->qty_traz/51) *100, 0, ',', ' ')}}%</span> </td>
+                <td > <span class="badge badge-danger">{{ number_format($programming->qty_reviews, 0, ',', ' ')}}</span> </td>
                 <td >
                 {{ $programming->id }}</td>
                 <td>{{ $programming->commune }}</td>
