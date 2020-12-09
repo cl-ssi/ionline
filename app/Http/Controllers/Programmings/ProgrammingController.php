@@ -29,12 +29,12 @@ class ProgrammingController extends Controller
 
             $reviewIndicators = ReviewItem::select(
                         'T2.id'
-                    , DB::raw('count(*) AS qty'))
+                    , DB::raw('count(pro_review_items.programming_item_id) AS qty'))
                     ->leftjoin('pro_programming_items AS T1', 'pro_review_items.programming_item_id', '=', 'T1.id')
                     ->leftjoin('pro_programmings AS T2', 'T1.programming_id', '=', 'T2.id')
                     ->Where('pro_review_items.rectified','=','NO')
                     ->Where('pro_review_items.answer','=','NO')
-                    ->Where('T2.year','=','%'.$year.'%')
+                    ->Where('T2.year','=',2021)
                     ->groupBy('T2.id')
                     ->orderBy('T2.id')->get();
         
@@ -44,7 +44,7 @@ class ProgrammingController extends Controller
                             , DB::raw('count(DISTINCT T2.int_code) AS qty'))
                     ->leftjoin('pro_programmings AS T1', 'pro_programming_items.programming_id', '=', 'T1.id')
                     ->leftjoin('pro_activity_items AS T2', 'pro_programming_items.activity_id', '=', 'T2.id')
-                    ->Where('T1.year','=','%'.$year.'%')
+                    ->Where('T1.year','=',2021)
                     ->groupBy('T1.id')
                     ->orderBy('T1.id')->get();
 
