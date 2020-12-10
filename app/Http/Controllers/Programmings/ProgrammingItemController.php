@@ -453,7 +453,7 @@ class ProgrammingItemController extends Controller
       $programmingItem->delete();
 
       session()->flash('success', 'El registro ha sido eliminado de este listado');
-       return redirect()->back();
+      return redirect('/programmingitems?programming_id='.$programmingItem->programming_id);
     }
 
     public function update(Request $request, ProgrammingItem $programmingitem)

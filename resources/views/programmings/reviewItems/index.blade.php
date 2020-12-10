@@ -15,6 +15,15 @@
 @can('ProgrammingItem: edit')
 <a href="{{ route('programmingitems.show', $programmingItems->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i> Editar</a>
 @endcan
+
+@can('ProgrammingItem: delete')
+    <form method="POST" action="{{ route('programmingitems.destroy', $programmingItems->id) }}" class="small d-inline">
+        {{ method_field('DELETE') }} {{ csrf_field() }}
+        <button class="btn btn-sm btn-outline-danger float-right " onclick="return confirm('¿Desea eliminar el registro realmente?')">
+        <span class="fas fa-trash-alt " aria-hidden="true"></span> Eliminar
+        </button>
+    </form>
+@endcan
 <!-- 
 {{$programmingItems }} -->
 <div class="card mt-3 small">

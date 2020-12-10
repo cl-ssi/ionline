@@ -75,9 +75,18 @@ class CommuneFileController extends Controller
 
     public function store(Request $request)
     {
-        $communeFileValid = CommuneFile::where('commune_id', $request->commune)
-                                       ->where('year', $request->date)
-                                       ->first();
+        // SI ES ALTO HOSPICIO, PERMITE MÁS REGISTROS PARA HECTOR REYNO
+        if($request->commune == 7)
+        {
+            $communeFileValid = null;
+        }
+        else {
+
+            $communeFileValid = CommuneFile::where('commune_id', $request->commune)
+            ->where('year', $request->date)
+            ->first();
+        }
+
         if($communeFileValid){
             session()->flash('warning', 'Ya se ha iniciado el registro adjunto para esta comuna el año ingresado');
         }
