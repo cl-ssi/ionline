@@ -27,6 +27,7 @@ class ReviewItemController extends Controller
                                        ,'pro_review_items.user_id'
                                        ,'pro_review_items.rectified'
                                        ,'pro_review_items.programming_item_id'
+                                       ,'pro_review_items.created_at'
                                        ,'T1.name'
                                        ,'T1.fathers_family'
                                        ,'T1.mothers_family'

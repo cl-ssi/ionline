@@ -55,8 +55,8 @@
 <table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:50%;">
-            @can('ProgrammingItem: evaluate')<th class="text-left align-middle" > Evaluación</th>@endcan
-            @can('ProgrammingItem: edit')<th class="text-left align-middle" >Editar</th>@endcan
+            @can('ProgrammingItem: evaluate')<th class="text-center align-middle" > Evaluación</th>@endcan
+            @can('ProgrammingItem: edit')<th class="text-center align-middle" >Editar</th>@endcan
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">Nº Trazadora</th>
             <th class="text-center align-middle">CICLO</th>
@@ -81,7 +81,7 @@
             <th class="text-center align-middle">Fuente Informacion </th>
             <th class="text-center align-middle">FINANCIADA POR PRAP</th>
             <th class="text-center align-middle">OBSERVACIONES</th>
-            @can('ProgrammingItem: delete')<th class="text-left align-middle" ></th>@endcan
+            @can('ProgrammingItem: delete')<th class="text-left align-middle" >ELIMINAR</th>@endcan
 
         </tr>
     </thead>
@@ -93,7 +93,11 @@
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitem->id]) }}" class="btn btb-flat btn-sm btn-light">
                     @if($programmingitem->qty_reviews > 0)
                     <i class="fas fa-clipboard-check text-danger"></i>
-                    <span class="badge badge-danger ml-2 ">{{ $programmingitem->qty_reviews}}</span>
+                    <span class="badge badge-danger opacity-1 ml-2 ">{{ $programmingitem->qty_reviews}}</span>
+
+                    <span class="badge badge-warning ml-2 ">{{ $programmingitem->qty_regular_reviews}}</span>
+
+                    <span class="badge badge-success ml-2 ">{{ $programmingitem->qty_accept_reviews}}</span>
                     @else
                     <i class="fas fa-clipboard-check "></i>
                     <span class="badge badge-secondary ml-2 ">0</span>
