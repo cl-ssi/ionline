@@ -46,7 +46,7 @@ class ProgrammingItemController extends Controller
                 FROM pro_review_items T0
                 LEFT JOIN pro_programming_items T1 ON T0.programming_item_id = T1.id
                 WHERE T0.rectified = 'SI'
-                AND T0.answer = 'NO'
+                AND T0.answer = 'REGULAR'
                 AND T1.programming_id = ".$request->programming_id." 
                 GROUP BY indicator
                 
@@ -73,17 +73,38 @@ class ProgrammingItemController extends Controller
                                     ->groupBy('pro_activity_items.int_code')
                                     ->orderByRaw("CAST(pro_activity_items.int_code as UNSIGNED) ASC")->get();
 
-                                    //dd($activityItems);
         // CANTIDAD DE REVISIONES POR ID DE ACTIVIDADES
         $indicatorReviewaByItems = ReviewItem::select(
                                                     'T1.id'
                                                 , DB::raw('count(pro_review_items.id) AS qty'))
                                         ->leftjoin('pro_programming_items AS T1', 'pro_review_items.programming_item_id', '=', 'T1.id')
                                         ->Where('T1.programming_id',$request->programming_id)
+                                        ->Where('pro_review_items.rectified','NO')
+                                        ->Where('pro_review_items.answer','NO')
+                                        ->groupBy('T1.id')
+                                        ->orderBy('T1.id')->get();
+        
+        $indicatorReviewaByItems_regular = ReviewItem::select(
+                                                    'T1.id'
+                                                , DB::raw('count(pro_review_items.id) AS qty'))
+                                        ->leftjoin('pro_programming_items AS T1', 'pro_review_items.programming_item_id', '=', 'T1.id')
+                                        ->Where('T1.programming_id',$request->programming_id)
+                                        ->Where('pro_review_items.rectified','SI')
+                                        ->Where('pro_review_items.answer','REGULAR')
                                         ->groupBy('T1.id')
                                         ->orderBy('T1.id')->get();
 
-        //dd($indicatorReviewaByItem);
+        $indicatorReviewaByItems_accept = ReviewItem::select(
+                                                    'T1.id'
+                                                , DB::raw('count(pro_review_items.id) AS qty'))
+                                        ->leftjoin('pro_programming_items AS T1', 'pro_review_items.programming_item_id', '=', 'T1.id')
+                                        ->Where('T1.programming_id',$request->programming_id)
+                                        ->Where('pro_review_items.rectified','SI')
+                                        ->Where('pro_review_items.answer','SI')
+                                        ->groupBy('T1.id')
+                                        ->orderBy('T1.id')->get();
+                                        
+        //dd($indicatorReviewaByItems_accept);
 
         $programmingitems = ProgrammingItem::select(
                                  'T0.description'
@@ -291,7 +312,18 @@ class ProgrammingItemController extends Controller
                 if($programmingitem->id == $indicatorReviewaByItem->id) {
                     $programmingitem['qty_reviews'] = $indicatorReviewaByItem->qty;
                 }
+            }
+            foreach ($indicatorReviewaByItems_regular as $indicatorReviewaByItem_regular) {
     
+                if($programmingitem->id == $indicatorReviewaByItem_regular->id) {
+                    $programmingitem['qty_regular_reviews'] = $indicatorReviewaByItem_regular->qty;
+                }
+            }
+            foreach ($indicatorReviewaByItems_accept as $indicatorReviewaByItem_accept) {
+    
+                if($programmingitem->id == $indicatorReviewaByItem_accept->id) {
+                    $programmingitem['qty_accept_reviews'] = $indicatorReviewaByItem_accept->qty;
+                }
             }
         }
 
@@ -314,6 +346,8 @@ class ProgrammingItemController extends Controller
 
             }
         }
+
+        //dd($programmingitems);
 
         return view('programmings/programmingItems/index')->withProgrammingItems($programmingitems)
                                                           ->withProgrammingItemIndirects($programmingitemsIndirects)

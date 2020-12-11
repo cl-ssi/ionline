@@ -147,9 +147,10 @@
                         <th class="text-center align-middle table-dark">EVALUADO POR</th>
                         <th class="text-center align-middle table-dark">RECTIFICADO POR</th>
                         <th class="text-center align-middle table-dark">¿REC.?</th>
-                        @can('Reviews: edit')<th class="text-left align-middle table-dark" ></th>@endcan
-                        @can('Reviews: rectify')<th class="text-left align-middle table-dark" ></th>@endcan
-                        @can('Reviews: delete')<th class="text-left align-middle table-dark" ></th>@endcan
+                        <th class="text-center align-middle table-dark">FECHA CREACIÓN</th>
+                        @can('Reviews: edit')<th class="text-center align-middle table-dark" >EDITAR</th>@endcan
+                        @can('Reviews: rectify')<th class="text-center align-middle table-dark" >¿RECTIFICO?</th>@endcan
+                        @can('Reviews: delete')<th class="text-center align-middle table-dark" >ELIMINAR</th>@endcan
                     </tr>
                 </thead>
                 <tbody style="font-size:75%;">
@@ -178,6 +179,7 @@
                             @endif>
                             {{ $review->rectified }}
                         </td>
+                        <td class="text-center align-middle">{{ $review->created_at->format('d/m/Y') }}</td>
                         @can('Reviews: edit')
                         <td class="text-center align-middle" >
                         <button class="btn btb-flat  btn-light" data-toggle="modal"
