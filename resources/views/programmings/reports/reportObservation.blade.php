@@ -7,7 +7,7 @@
 @include('programmings/nav')
 
 
-<button onclick="exportTableToExcel('tblData')" class="btn btn-success float-right btn-sm">Exportar Excel</button>
+<button onclick="tableExcel('xlsx')" class="btn btn-success float-right btn-sm">Exportar Excel</button>
 
 <h4 class="mb-3"> Informe de Observaciones en Programación Númerica</h4>
 
@@ -58,6 +58,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet"/>
 
+
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script> 
+
 <script type="text/javascript">
     $("#datepicker").datepicker({
         format: "yyyy",
@@ -68,35 +71,13 @@
 </script>
 
 <script>
-    function exportTableToExcel(tableID, filename = ''){
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
-        var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-        
-        // Specify file name
-        filename = filename?filename+'.xls':'Informe_consolidado.xls';
-        
-        // Create download link element
-        downloadLink = document.createElement("a");
-        
-        document.body.appendChild(downloadLink);
-        
-        if(navigator.msSaveOrOpenBlob){
-            var blob = new Blob(['\ufeff', tableHTML], {
-                type: dataType
-            });
-            navigator.msSaveOrOpenBlob( blob, filename);
-        }else{
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-        
-            // Setting the file name
-            downloadLink.download = filename;
-            
-            //triggering the function
-            downloadLink.click();
+    function tableExcel(type, fn, dl) {
+          var elt = document.getElementById('tblData');
+          const filename = 'Informe_observaciones'
+          var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+          return dl ?
+            XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
+            XLSX.writeFile(wb, `${filename}.xlsx`)
         }
-    }
 </script>
 @endsection
