@@ -115,7 +115,7 @@ $('#updateModalRect').on('show.bs.modal', function (event) {
 })
 
 // Set the date we're counting down to
-var countDownDate = new Date("Dec 1, 2020 00:00:00").getTime();
+var countDownDate = new Date("Dec 21, 2020 00:00:00").getTime();
 
 function timePart(val,text,color="black"){
   return `<h6 class="timer" style="color:${color};">${val}<div>${text}</div></h6>`
