@@ -13,7 +13,7 @@
                     <span class="small">Volver</span> 
     </a>
 @can('ProgrammingItem: edit')
-<a href="{{ route('programmingitems.show', $programmingItems->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i> Editar</a>
+<a target="_blank" href="{{ route('programmingitems.show', $programmingItems->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i> Editar</a>
 @endcan
 
 @can('ProgrammingItem: delete')
@@ -134,8 +134,9 @@
         <h5>Observaciones</h5>
         <ul class="list-inline">
             <li class="list-inline-item"><i class="fas fa-square text-danger "></i> No Aceptado</li>
+            <li class="list-inline-item"><i class="fas fa-square text-success "></i> Rectificado</li>
             <li class="list-inline-item"><i class="fas fa-square text-warning "></i> Regularmente Aceptado</li>
-            <li class="list-inline-item"><i class="fas fa-square text-success "></i> Aceptado</li>
+            <li class="list-inline-item"><i class="fas fa-square text-primary "></i> Aceptado</li>
         </ul>
             <table id="tblData"  class="table table-sm table-hover   table-bordered">
                 <thead style="font-size:75%;">
@@ -162,7 +163,7 @@
                             @elseif($review->answer == 'REGULAR')
                                 class="text-center align-middle table-warning"
                             @elseif($review->answer == 'SI')
-                                class="text-center align-middle table-success"
+                                class="text-center align-middle table-primary"
                             @endif>
                             {{ $review->id }}
                         </td>
@@ -196,7 +197,6 @@
                         @can('Reviews: rectify')
                        
                         <td class="text-center align-middle" >
-                        @if($review->rectified == 'NO')
                         <button class="btn btb-flat  btn-light" data-toggle="modal"
                             data-target="#updateModalRect"
                             data-review_id="{{ $review->id }}"
@@ -205,7 +205,6 @@
                             data-formaction="{{ route('reviewItemsRect.update', $review->id)}}">
                         <i class="far fa-check-square text-success "></i>
                         </button>
-                        @endif
                         </td>
                         @endcan
                         @can('Reviews: delete')

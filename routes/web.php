@@ -113,6 +113,7 @@ Route::resource('programmings', 'Programmings\ProgrammingController')->middlewar
 Route::put('programmingStatus/{id}', 'Programmings\ProgrammingController@updateStatus')->middleware('auth')->name('programmingStatus.update');
 
 Route::resource('programmingitems', 'Programmings\ProgrammingItemController')->middleware('auth');
+Route::post('/programmingitemsclone/{id}', 'Programmings\ProgrammingItemController@clone')->name('programmingitems.clone');
 
 Route::resource('communefiles', 'Programmings\CommuneFileController')->middleware('auth');
 Route::get('/downloadFileA/{file}', 'Programmings\CommuneFileController@download')->name('programmingFile.download');
