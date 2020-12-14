@@ -19,6 +19,7 @@
         </tr>
         <tr class="small " style="font-size:60%;">
             <th class="text-center align-middle">Nº REV.</th>
+            <th class="text-center align-middle">TRAZADORA</th>
             <th class="text-center align-middle">PRESTACION O ACTIVIDAD</th>
             <th class="text-center align-middle">CICLO</th>
             <th class="text-center align-middle">ACCIÓN</th>
@@ -27,12 +28,14 @@
             <th class="text-center align-middle table-dark">¿SE ACEPTA?</th>
             <th class="text-center align-middle table-dark">OBSERVACIÓN</th>
             <th class="text-center align-middle table-dark">EVALUADO POR</th>
+            <th class="text-center align-middle table-dark">REVISAR</th>
         </tr>
     </thead>
     <tbody style="font-size:70%;">
      @foreach($reviewItems as $reviewItem)
         <tr class="small">
             <td class="text-center align-middle">{{ $reviewItem->id }}</td>
+            <td class="text-center align-middle">{{ $reviewItem->int_code }}</td>
             <td class="text-center align-middle">{{ $reviewItem->activity_name }}</td>
             <td class="text-center align-middle">{{ $reviewItem->cycle }}</td>
             <td class="text-center align-middle">{{ $reviewItem->action_type }}</td>

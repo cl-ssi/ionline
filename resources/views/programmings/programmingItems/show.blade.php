@@ -9,7 +9,8 @@
 
 
 <h4 class="mb-3">
-    <a href="{{ route('programmingitems.index', ['programming_id' => $programmingItem->programming_id]) }}" class="btn btb-flat btn-sm btn-dark" >
+<!-- {{ route('programmingitems.index', ['programming_id' => $programmingItem->programming_id]) }} -->
+    <a href="{{ url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
                     <i class="fas fa-arrow-left small"></i> 
                     <span class="small">Volver</span> 
     </a>
@@ -234,7 +235,7 @@ Editar Item Programación Operativa </h4>
 
         <div class="form-group col-md-6">
             <label for="forprogram">Fuente Información</label>
-            <input type="input" class="form-control" id="information_source" name="information_source"  value="{{$programmingItem->information_source ?? '' }}" readonly>
+            <input type="input" class="form-control" id="information_source" name="information_source"  value="{{$programmingItem->information_source ?? '' }}" >
         </div>
 
         <div class="form-group col-md-3">
