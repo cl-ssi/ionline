@@ -18,8 +18,9 @@ Modificar Item de Capacitación </h4>
 
 
 
-<form method="POST" class="form-horizontal small" action="{{ route('trainingitems.store') }}" enctype="multipart/form-data">
+<form method="POST" class="form-horizontal small" action="{{ route('trainingitems.update',$trainingItems->id) }}" enctype="multipart/form-data">
     @csrf
+    @method('PUT')
     <input type="hidden" class="form-control" id="forreferente" name="commune_file_id" value="{{Request::get('commune_file_id')}}">
 
     <div class="form-row">
@@ -120,6 +121,7 @@ Modificar Item de Capacitación </h4>
         <div class="form-group col-md-3">
             <label for="forprogram">Fondos Municipales</label>
             <select name="fondo_muni" id="fondo_muni" class="form-control" value="{{$trainingItems->fondo_muni ?? '' }}">
+                    <option value="option_select" disabled selected>{{$trainingItems->fondo_muni ?? '' }}</option>
                     <option value="NO">No</option>
                     <option value="SI">SI</option>
                
@@ -160,7 +162,7 @@ Modificar Item de Capacitación </h4>
     </div>
 
     
-    <button type="submit" class="btn btn-info mb-4">Crear</button>
+    <button type="submit" class="btn btn-info mb-4">Actualizar</button>
 
 </form>
 
