@@ -42,7 +42,7 @@ use Illuminate\Support\Facades\DB;
         @foreach($seccion->prestaciones as $prestacion)
         <tr>
             @if($seccion->supergroups != null AND !$seccion->discard_group AND $prestacion->nombre_supergrupo_prestacion != $supergroup_temp AND $seccion->supergroupExists($prestacion->nombre_supergrupo_prestacion))
-                <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_supergrupo_prestacion) + ($seccion->isSupergroupWithSubtotals($prestacion->nombre_supergrupo_prestacion) ? 1 : 0)}}' class="centrado text-uppercase">{{$prestacion->nombre_supergrupo_prestacion}}</td>
+                <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_supergrupo_prestacion) + ($seccion->isSupergroupWithSubtotals($prestacion->nombre_supergrupo_prestacion) ? $seccion->subtotals_first ? 2 : 1 : 0)}}' class="centrado text-uppercase">{{$prestacion->nombre_supergrupo_prestacion}}</td>
                 @php($supergroup_temp = $prestacion->nombre_supergrupo_prestacion)
             @endif
             @if($prestacion->hasGroup($seccion->maxLevel()) AND !$seccion->discard_group AND $prestacion->nombre_grupo_prestacion != $group_temp AND strlen($prestacion->nombre_grupo_prestacion) != 1 AND trim($prestacion->nombre_grupo_prestacion) != $group_temp)
