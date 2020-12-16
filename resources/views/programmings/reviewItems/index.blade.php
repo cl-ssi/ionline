@@ -203,7 +203,7 @@
                         <button class="btn btb-flat  btn-light" data-toggle="modal"
                             data-target="#updateModalRect"
                             data-review_id="{{ $review->id }}"
-                            data-answer="{{ $review->answer }}"
+                            data-rectified="{{ $review->rectified }}"
                             data-rect_comments="{{ $review->rect_comments }}"
                             data-formaction="{{ route('reviewItemsRect.update', $review->id)}}">
                         <i class="far fa-check-square text-success "></i>
@@ -301,7 +301,7 @@
         var modal  = $(this)
 
         modal.find('input[name="review_id"]').val(button.data('review_id'))
-        modal.find('select[name="answer"]').val(button.data('answer'))
+        modal.find('select[name="rectified"]').val(button.data('rectified'))
         modal.find('textarea[name="rect_comments"]').val(button.data('rect_comments'))
 
         var formaction  = button.data('formaction')

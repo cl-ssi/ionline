@@ -132,9 +132,6 @@ class ReviewItemController extends Controller
         $reviewItem->fill($request->all());
         if($request->rectified){
             $reviewItem->rectified = $request->rectified;
-            $reviewItem->updated_by = Auth()->user()->id;
-        }
-        if($request->rect_comments){
             $reviewItem->rect_comments = $request->rect_comments;
             $reviewItem->updated_by = Auth()->user()->id;
         }
