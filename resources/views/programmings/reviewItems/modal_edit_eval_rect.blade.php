@@ -22,6 +22,11 @@
                             </select>
                         </fieldset>
                     </div>
+
+                    <div class="form-group">
+                        <label for="forprogram" class="col-form-label">Comentarios/Acuerdo:</label>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" name="rect_comments" rows="5"></textarea>
+                    </div>
                    
                 </div>
                 <div class="modal-footer">
