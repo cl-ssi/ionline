@@ -6,7 +6,7 @@
 
 @include('programmings/nav')
 
-<h3 class="mb-3">Programación Númerica</h3> 
+<h3 class="mb-3">Programación Numérica</h3> 
  <!-- Permiso para crear nueva programación númerica -->
  @can('Programming: create')
     <a href="{{ route('programmings.create') }}" class="btn btn-info mb-4">Comenzar Nueva Programación</a>
