@@ -26,6 +26,7 @@ class ReviewItemController extends Controller
                                        ,'pro_review_items.active'
                                        ,'pro_review_items.user_id'
                                        ,'pro_review_items.rectified'
+                                       ,'pro_review_items.rect_comments'
                                        ,'pro_review_items.programming_item_id'
                                        ,'pro_review_items.created_at'
                                        ,'T1.name'
@@ -126,13 +127,12 @@ class ReviewItemController extends Controller
 
     public function updateRect(Request $request,$id)
     {
-       // DD($request);
-
         $reviewItem = ReviewItem::find($id);
 
         $reviewItem->fill($request->all());
         if($request->rectified){
             $reviewItem->rectified = $request->rectified;
+            $reviewItem->rect_comments = $request->rect_comments;
             $reviewItem->updated_by = Auth()->user()->id;
         }
 

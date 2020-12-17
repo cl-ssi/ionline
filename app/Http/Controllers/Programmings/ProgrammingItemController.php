@@ -84,6 +84,18 @@ class ProgrammingItemController extends Controller
                                         ->groupBy('T1.id')
                                         ->orderBy('T1.id')->get();
         
+        // CANTIDAD DE REVISIONES POR ID RECTIFICADAS POR ESTABLECIMIENTO
+        $indicatorReviewaByItems_rect = ReviewItem::select(
+                                                    'T1.id'
+                                                , DB::raw('count(pro_review_items.id) AS qty'))
+                                        ->leftjoin('pro_programming_items AS T1', 'pro_review_items.programming_item_id', '=', 'T1.id')
+                                        ->Where('T1.programming_id',$request->programming_id)
+                                        ->Where('pro_review_items.rectified','SI')
+                                        ->Where('pro_review_items.answer','NO')
+                                        ->groupBy('T1.id')
+                                        ->orderBy('T1.id')->get();
+        //dd($indicatorReviewaByItems_rect);
+        
         $indicatorReviewaByItems_regular = ReviewItem::select(
                                                     'T1.id'
                                                 , DB::raw('count(pro_review_items.id) AS qty'))
@@ -169,14 +181,11 @@ class ProgrammingItemController extends Controller
             //     $programmingitems = $programmingitems->whereIn('T7.int_code', $request->tracer_number);
             // }
 
-
-
-    //dd($programmingitems);
     
 
-    // INDIRECTAS
+        // INDIRECTAS
 
-    $programmingitemsIndirects = ProgrammingItem::select(
+        $programmingitemsIndirects = ProgrammingItem::select(
                                                 'T0.description'
                                                 ,'T1.name AS establishment'
                                                 ,'T2.name AS commune'
@@ -230,10 +239,8 @@ class ProgrammingItemController extends Controller
                                             ->orderBy('pro_programming_items.activity_name','ASC')
                                             ->get();
         
-        
-    //dd($programmingitemsIndirects);
     
-    $programmingitems_workshops = ProgrammingItem::select(
+        $programmingitems_workshops = ProgrammingItem::select(
                             'T0.description'
                            ,'T1.name AS establishment'
                            ,'T2.name AS commune'
@@ -287,24 +294,24 @@ class ProgrammingItemController extends Controller
 
 
         $programming = Programming::select(
-            'pro_programmings.id'
-           ,'pro_programmings.year'
-           ,'pro_programmings.user_id'
-           ,'pro_programmings.description'
-           ,'pro_programmings.created_at'
-           ,'pro_programmings.status'
-           ,'T1.type AS establishment_type'
-           ,'T1.name AS establishment'
-           ,'T2.name AS commune'
-           ,'T3.name' 
-           ,'T3.fathers_family'
-           ,'T3.mothers_family')
-        ->leftjoin('establishments AS T1', 'pro_programmings.establishment_id', '=', 'T1.id')
-        ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
-        ->leftjoin('users AS T3', 'pro_programmings.user_id', '=', 'T3.id')
-        ->Where('pro_programmings.year','LIKE','%'.$year.'%')
-        ->Where('pro_programmings.id',$request->programming_id)
-        ->first();
+                                            'pro_programmings.id'
+                                        ,'pro_programmings.year'
+                                        ,'pro_programmings.user_id'
+                                        ,'pro_programmings.description'
+                                        ,'pro_programmings.created_at'
+                                        ,'pro_programmings.status'
+                                        ,'T1.type AS establishment_type'
+                                        ,'T1.name AS establishment'
+                                        ,'T2.name AS commune'
+                                        ,'T3.name' 
+                                        ,'T3.fathers_family'
+                                        ,'T3.mothers_family')
+                                ->leftjoin('establishments AS T1', 'pro_programmings.establishment_id', '=', 'T1.id')
+                                ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
+                                ->leftjoin('users AS T3', 'pro_programmings.user_id', '=', 'T3.id')
+                                ->Where('pro_programmings.year','LIKE','%'.$year.'%')
+                                ->Where('pro_programmings.id',$request->programming_id)
+                                ->first();
 
         foreach ($programmingitems as $programmingitem) {
             foreach ($indicatorReviewaByItems as $indicatorReviewaByItem) {
@@ -323,6 +330,12 @@ class ProgrammingItemController extends Controller
     
                 if($programmingitem->id == $indicatorReviewaByItem_accept->id) {
                     $programmingitem['qty_accept_reviews'] = $indicatorReviewaByItem_accept->qty;
+                }
+            }
+            foreach ($indicatorReviewaByItems_rect as $indicatorReviewaByItem_rect) {
+    
+                if($programmingitem->id == $indicatorReviewaByItem_rect->id) {
+                    $programmingitem['qty_rectify_reviews'] = $indicatorReviewaByItem_rect->qty;
                 }
             }
         }
@@ -372,7 +385,6 @@ class ProgrammingItemController extends Controller
         }
         $establishments = Establishment::where('type','CESFAM')->OrderBy('name')->get();
         $communes = Commune::All()->SortBy('name');
-        //$professionalHours = ProfessionalHour::where('programming_id',$request->programming_id)->OrderBy('id')->get();
         $ministerialPrograms = MinisterialProgram::All()->SortBy('name');
         $actionTypes = ActionType::All()->SortBy('name');
         $activityItems = ActivityItem::All()->SortBy('name');
@@ -403,26 +415,21 @@ class ProgrammingItemController extends Controller
 
     public function show(Request $request, ProgrammingItem $programmingitem)
     {
-        //dd($programmingitem);
         
         if($request->activity_search_id)
         {
-           
             $activityItemsSelect = ActivityItem::where('id',(int)$request->activity_search_id)->first();
-             //dd($activityItemsSelect);
-
         }
         else{
             $activityItemsSelect = null;
         }
-        $establishments = Establishment::where('type','CESFAM')->OrderBy('name')->get();
-        $communes = Commune::All()->SortBy('name');
-        //$professionalHours = ProfessionalHour::where('programming_id',$request->programming_id)->OrderBy('id')->get();
+        $establishments      = Establishment::where('type','CESFAM')->OrderBy('name')->get();
+        $communes            = Commune::All()->SortBy('name');
         $ministerialPrograms = MinisterialProgram::All()->SortBy('name');
-        $actionTypes = ActionType::All()->SortBy('name');
-        $activityItems = ActivityItem::All()->SortBy('name');
-        $programmingDay = ProgrammingDay::where('programming_id',$programmingitem->programming_id)->first();
-        $programmingItem = ProgrammingItem::where('id',$request->id)->first();
+        $actionTypes         = ActionType::All()->SortBy('name');
+        $activityItems       = ActivityItem::All()->SortBy('name');
+        $programmingDay      = ProgrammingDay::where('programming_id',$programmingitem->programming_id)->first();
+        $programmingItem     = ProgrammingItem::where('id',$request->id)->first();
         //dd($programmingitem);
 
         $professionalHoursSel = ProfessionalHour::select(
@@ -435,10 +442,6 @@ class ProgrammingItemController extends Controller
         ->Where('pro_professional_hours.id',$programmingitem->professional)
         ->orderBy('T1.alias','ASC')
         ->first();
-
-        //dd($professionalHoursSel);
-
-
 
         $professionalHours = ProfessionalHour::select(
                  'pro_professional_hours.id'
@@ -483,19 +486,32 @@ class ProgrammingItemController extends Controller
 
     public function destroy($id)
     {
-      $programmingItem = ProgrammingItem::where('id',$id)->first();
-      $programmingItem->delete();
+        // ELIMINA TODOS LAS OBSERVACIONES ANTES 
+        $reviewItem = ReviewItem::where('programming_item_id',$id);
+        $reviewItem->delete();
 
-      session()->flash('success', 'El registro ha sido eliminado de este listado');
-      return redirect('/programmingitems?programming_id='.$programmingItem->programming_id);
+        $programmingItem = ProgrammingItem::where('id',$id)->first();
+        $programmingItem->delete();
+
+        session()->flash('success', 'El registro ha sido eliminado de este listado');
+        return redirect('/programmingitems?programming_id='.$programmingItem->programming_id);
     }
 
     public function update(Request $request, ProgrammingItem $programmingitem)
     {
-      //dd($request);
-      $programmingitem->fill($request->all());
-      $programmingitem->save();
-      return redirect()->back();
+        $programmingitem->fill($request->all());
+        $programmingitem->save();
+        return redirect()->back();
+    }
+
+    public function clone($id)
+    {
+        $programmingItemOriginal = ProgrammingItem::where('id',$id)->first();
+        $programmingItemsClone = $programmingItemOriginal->replicate();
+        $programmingItemsClone->user_id = Auth()->user()->id;
+        $programmingItemsClone->save();
+        session()->flash('success', 'El registro se ha duplicado correctamente');
+        return redirect()->back();
     }
 
 }
