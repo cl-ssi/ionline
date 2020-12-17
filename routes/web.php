@@ -146,9 +146,11 @@ Route::get('reportObservation', 'Programmings\ProgrammingReportController@report
 //End Programación Númerica APS
 
 
-
 Route::resource('agreements', 'Agreements\AgreementController')->middleware('auth');
 
+//assigments
+Route::resource('assigment', 'AssigmentController')->middleware('auth');
+Route::post('assigment.import', 'AssigmentController@import')->name('assigment.import');
 
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
@@ -662,7 +664,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 /* Nuevas rutas, Laravel 8.0. */
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
-    Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');    
+    Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::get('/validaterequest', [SuitabilityController::class, 'validaterequest'])->name('validaterequest');
     Route::get('/create', [SuitabilityController::class, 'create'])->name('create');
 });
