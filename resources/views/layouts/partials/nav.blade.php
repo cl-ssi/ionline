@@ -27,7 +27,7 @@
 
                         <a class="dropdown-item"
                            href="{{ route('programmings.index') }}">
-                            <i class="fas fa-calculator"></i> Programación Númerica
+                            <i class="fas fa-calculator"></i> Programación Numérica
                         </a>
 
                         <a class="dropdown-item"

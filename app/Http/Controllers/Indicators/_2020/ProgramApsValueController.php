@@ -20,6 +20,7 @@ class ProgramApsValueController extends Controller
     public function index($id)
     {
         // return $id;
+        if(!in_array($id, range(0,8)) OR !preg_match('/^\d+$/', $id)) abort(404);
 
         $sql_ultimo_rem = "SELECT MAX(Mes) as ultimo_rem FROM 2020rems;";
         $ultimo_rem = DB::connection('mysql_rem')->select($sql_ultimo_rem)[0]->ultimo_rem;

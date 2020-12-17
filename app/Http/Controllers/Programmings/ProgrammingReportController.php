@@ -190,12 +190,15 @@ class ProgrammingReportController extends Controller
                             ,'T1.id AS id_programmingItems'
                             ,'T2.name AS name_rev'
                             ,'T2.fathers_family AS fathers_family_rev'
-                            ,'T2.mothers_family AS mothers_family_rev')
+                            ,'T2.mothers_family AS mothers_family_rev'
+                            ,'T6.int_code')
                         ->leftjoin('pro_programming_items AS T1', 'pro_review_items.programming_item_id', '=', 'T1.id')
                         ->leftjoin('users AS T2', 'pro_review_items.user_id', '=', 'T2.id')
+                        ->leftjoin('pro_activity_items AS T6', 'T1.activity_id', '=', 'T6.id')
                         ->Where('pro_review_items.rectified','NO')
                         ->Where('pro_review_items.answer','NO')
                         ->Where('T1.programming_id',$request->programming_id) 
+                        ->orderByRaw("CAST(T6.int_code as UNSIGNED) ASC")
                         ->get();
 
 
