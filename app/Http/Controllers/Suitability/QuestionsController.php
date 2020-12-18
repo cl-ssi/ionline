@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Suitability;
 
 use App\Models\Suitability\Question;
+use App\Models\Suitability\Category;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class QuestionController extends Controller
+class QuestionsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,6 +17,8 @@ class QuestionController extends Controller
     public function index()
     {
         //
+        $questions = Question::all();
+        return view('suitability.questions.index', compact('questions'));
     }
 
     /**
@@ -25,6 +29,8 @@ class QuestionController extends Controller
     public function create()
     {
         //
+        $categories = Category::all();
+        return view('suitability.questions.create', compact('categories'));
     }
 
     /**
@@ -36,6 +42,8 @@ class QuestionController extends Controller
     public function store(Request $request)
     {
         //
+        Question::create($request->all());
+        return redirect()->route('suitability.questions.index');
     }
 
     /**

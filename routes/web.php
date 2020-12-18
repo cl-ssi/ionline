@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Suitability\SuitabilityController;
+use App\Http\Controllers\Suitability\CategoriesController;
+use App\Http\Controllers\Suitability\QuestionsController;
+use App\Http\Controllers\Suitability\OptionsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -665,4 +668,29 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');    
     Route::get('/validaterequest', [SuitabilityController::class, 'validaterequest'])->name('validaterequest');
     Route::get('/create', [SuitabilityController::class, 'create'])->name('create');
+
+    Route::prefix('categories')->as('categories.')->middleware('auth')->group(function () {
+        Route::get('/', [CategoriesController::class, 'index'])->name('index');
+        Route::get('/create', [CategoriesController::class, 'create'])->name('create');
+        Route::post('/store', [CategoriesController::class, 'store'])->name('store');
+        
+    });
+
+    Route::prefix('questions')->as('questions.')->middleware('auth')->group(function () {
+        Route::get('/', [QuestionsController::class, 'index'])->name('index');
+        Route::get('/create', [QuestionsController::class, 'create'])->name('create');
+        Route::post('/store', [QuestionsController::class, 'store'])->name('store');
+        
+    });
+
+    Route::prefix('options')->as('options.')->middleware('auth')->group(function () {
+        Route::get('/', [OptionsController::class, 'index'])->name('index');
+        // Route::get('/create', [QuestionsController::class, 'create'])->name('create');
+        // Route::post('/store', [QuestionsController::class, 'store'])->name('store');
+        
+    });
+
+
+
+
 });
