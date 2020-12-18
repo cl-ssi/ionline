@@ -6,7 +6,7 @@
 
 @include('programmings/nav')
 
-<h3 class="mb-3">Evaluación General</h3>
+<h3 class="mb-3">Evaluación General - {{$communeFile->description ?? '' }}</h3>
 
 
 <div class="card mt-3 small">

@@ -2,7 +2,7 @@
 
     <li class="nav-item">
         <a class="nav-link text-info" href="{{ route('programmings.index') }}">
-        <i class="fas fa-file-invoice-dollar"></i> Programación Operativa</a>
+        <i class="fas fa-file-invoice-dollar"></i> Programación Numérica</a>
     </li>
     @can('Programming: create professional')
     <li class="nav-item">

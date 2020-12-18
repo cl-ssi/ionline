@@ -13,7 +13,16 @@
                     <span class="small">Volver</span> 
     </a>
 @can('ProgrammingItem: edit')
-<a href="{{ route('programmingitems.show', $programmingItems->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i> Editar</a>
+<a target="_blank" href="{{ route('programmingitems.show', $programmingItems->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i> Editar</a>
+@endcan
+
+@can('ProgrammingItem: delete')
+    <form method="POST" action="{{ route('programmingitems.destroy', $programmingItems->id) }}" class="small d-inline">
+        {{ method_field('DELETE') }} {{ csrf_field() }}
+        <button class="btn btn-sm btn-outline-danger float-right " onclick="return confirm('¿Desea eliminar el registro realmente?')">
+        <span class="fas fa-trash-alt " aria-hidden="true"></span> Eliminar
+        </button>
+    </form>
 @endcan
 <!-- 
 {{$programmingItems }} -->
@@ -125,22 +134,25 @@
         <h5>Observaciones</h5>
         <ul class="list-inline">
             <li class="list-inline-item"><i class="fas fa-square text-danger "></i> No Aceptado</li>
+            <li class="list-inline-item"><i class="fas fa-square text-success "></i> Rectificado</li>
             <li class="list-inline-item"><i class="fas fa-square text-warning "></i> Regularmente Aceptado</li>
-            <li class="list-inline-item"><i class="fas fa-square text-success "></i> Aceptado</li>
+            <li class="list-inline-item"><i class="fas fa-square text-primary "></i> Aceptado</li>
         </ul>
             <table id="tblData"  class="table table-sm table-hover   table-bordered">
                 <thead style="font-size:75%;">
                     <tr >
                         <th class="text-center align-middle table-dark">ID</th>
+                        <th class="text-center align-middle table-dark">FECHA CREACIÓN</th>
                         <th class="text-center align-middle table-dark">EVALUACIÓN</th>
                         <th class="text-center align-middle table-dark">¿SE ACEPTA?</th>
                         <th class="text-center align-middle table-dark">OBSERVACIÓN</th>
                         <th class="text-center align-middle table-dark">EVALUADO POR</th>
                         <th class="text-center align-middle table-dark">RECTIFICADO POR</th>
                         <th class="text-center align-middle table-dark">¿REC.?</th>
-                        @can('Reviews: edit')<th class="text-left align-middle table-dark" ></th>@endcan
-                        @can('Reviews: rectify')<th class="text-left align-middle table-dark" ></th>@endcan
-                        @can('Reviews: delete')<th class="text-left align-middle table-dark" ></th>@endcan
+                        <th class="text-center align-middle table-dark">COMENTARIO / ACUERDO</th>
+                        @can('Reviews: edit')<th class="text-center align-middle table-dark" >EDITAR</th>@endcan
+                        @can('Reviews: rectify')<th class="text-center align-middle table-dark" >RECTIFICAR</th>@endcan
+                        @can('Reviews: delete')<th class="text-center align-middle table-dark" >ELIMINAR</th>@endcan
                     </tr>
                 </thead>
                 <tbody style="font-size:75%;">
@@ -152,12 +164,14 @@
                             @elseif($review->answer == 'REGULAR')
                                 class="text-center align-middle table-warning"
                             @elseif($review->answer == 'SI')
-                                class="text-center align-middle table-success"
+                                class="text-center align-middle table-primary"
                             @endif>
                             {{ $review->id }}
                         </td>
+
+                        <td class="text-center align-middle">{{ $review->created_at->format('d/m/Y') }}</td>
                         <td>{{ $review->review }}</td>
-                        <td>{{ $review->answer }}</td>
+                        <td  class="text-center align-middle">{{ $review->answer }}</td>
                         <td>{{ $review->observation }}</td>
                         <td>{{ $review->name }} {{ $review->fathers_family }} {{ $review->mothers_family }}</td>
                         <td>{{ $review->name_rev }} {{ $review->fathers_family_rev }} {{ $review->mothers_family_rev }}</td>
@@ -169,6 +183,7 @@
                             @endif>
                             {{ $review->rectified }}
                         </td>
+                        <td>{{ $review->rect_comments }}</td>
                         @can('Reviews: edit')
                         <td class="text-center align-middle" >
                         <button class="btn btb-flat  btn-light" data-toggle="modal"
@@ -185,16 +200,14 @@
                         @can('Reviews: rectify')
                        
                         <td class="text-center align-middle" >
-                        @if($review->rectified == 'NO')
                         <button class="btn btb-flat  btn-light" data-toggle="modal"
                             data-target="#updateModalRect"
                             data-review_id="{{ $review->id }}"
-                            data-answer="{{ $review->answer }}"
-                            data-observation="{{ $review->observation }}"
+                            data-rectified="{{ $review->rectified }}"
+                            data-rect_comments="{{ $review->rect_comments }}"
                             data-formaction="{{ route('reviewItemsRect.update', $review->id)}}">
                         <i class="far fa-check-square text-success "></i>
                         </button>
-                        @endif
                         </td>
                         @endcan
                         @can('Reviews: delete')
@@ -288,7 +301,8 @@
         var modal  = $(this)
 
         modal.find('input[name="review_id"]').val(button.data('review_id'))
-        modal.find('select[name="answer"]').val(button.data('answer'))
+        modal.find('select[name="rectified"]').val(button.data('rectified'))
+        modal.find('textarea[name="rect_comments"]').val(button.data('rect_comments'))
 
         var formaction  = button.data('formaction')
         modal.find("#form-edit").attr('action', formaction)

@@ -54,4 +54,12 @@ class TrainingsItemController extends Controller
       session()->flash('success', 'El registro ha sido eliminado de este listado');
        return redirect()->back();
     }
+
+    public function update(Request $request, TrainingItem $trainingitem)
+    {
+        $trainingitem->fill($request->all());
+        $trainingitem->save();
+        session()->flash('success', 'El registro ha sido actualizado correctamente');
+        return redirect()->back();
+    }
 }
