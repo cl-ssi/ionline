@@ -41,6 +41,8 @@
             <th class="text-center align-middle">ORGANISMO EJECUTOR</th>
             <th class="text-center align-middle">COORDINADOR</th>
             <th class="text-center align-middle">FECHA DE EJECUCIÓN</th>
+            @can('TrainingItem: edit')<th class="text-center align-middle">EDITAR</th> @endcan
+            @can('TrainingItem: delete')<th class="text-center align-middle">ELIMINAR</th> @endcan
         </tr>
     </thead>
     <tbody style="font-size:60%;">
@@ -65,7 +67,7 @@
             <td class="text-center align-middle">{{ $trainingItem->coordinador }}</td>
             <td class="text-center align-middle">{{ $trainingItem->fecha_ejecucion }}</td>
 
-            @can('Programming: edit')
+            @can('TrainingItem: edit')
                 <td class="text-center align-middle"><a href="{{ route('trainingitems.show', $trainingItem->id) }}" class="btn btb-flat btn-xs  btn-light" >
                     <i class="fas fa-edit"></i></a>
                 </td>

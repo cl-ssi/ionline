@@ -43,7 +43,7 @@
                 @elseif($reviewIndicator->indicator == 'Revisión')
                     class="badge badge-warning"
                 @elseif($reviewIndicator->indicator == 'Aceptada')
-                    class="badge badge-success"
+                    class="badge badge-primary"
                 @endif>
             
             {{ $reviewIndicator->qty }}</span>  
@@ -51,12 +51,20 @@
         </a>
     </li>
 </ul>
+
+
+<ul class="list-inline">
+            <li class="list-inline-item"><i class="fas fa-square text-danger "></i> No Aceptado</li>
+            <li class="list-inline-item"><i class="fas fa-square text-success "></i> Rectificado</li>
+            <li class="list-inline-item"><i class="fas fa-square text-warning "></i> Regularmente Aceptado</li>
+            <li class="list-inline-item"><i class="fas fa-square text-primary "></i> Aceptado</li>
+        </ul>
 <!-- ACTIVIDADES DIRECTAS -->
 <table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
         <tr class="small " style="font-size:50%;">
-            @can('ProgrammingItem: evaluate')<th class="text-left align-middle" > Evaluación</th>@endcan
-            @can('ProgrammingItem: edit')<th class="text-left align-middle" >Editar</th>@endcan
+            @can('ProgrammingItem: evaluate')<th class="text-center align-middle" > Evaluación</th>@endcan
+            @can('ProgrammingItem: edit')<th class="text-center align-middle" >Editar</th>@endcan
             <th class="text-center align-middle">T</th>
             <th class="text-center align-middle">Nº Trazadora</th>
             <th class="text-center align-middle">CICLO</th>
@@ -80,8 +88,8 @@
             <th class="text-center align-middle">Jornadas Horas Directas Diarias</th>
             <th class="text-center align-middle">Fuente Informacion </th>
             <th class="text-center align-middle">FINANCIADA POR PRAP</th>
-            <th class="text-center align-middle">OBSERVACIONES</th>
-            @can('ProgrammingItem: delete')<th class="text-left align-middle" ></th>@endcan
+            @can('ProgrammingItem: duplicate')<th class="text-center align-middle">DUPLICAR</th>@endcan
+            @can('ProgrammingItem: delete')<th class="text-left align-middle" >ELIMINAR</th>@endcan
 
         </tr>
     </thead>
@@ -91,9 +99,15 @@
         @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" >
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitem->id]) }}" class="btn btb-flat btn-sm btn-light">
-                    @if($programmingitem->qty_reviews > 0)
-                    <i class="fas fa-clipboard-check text-danger"></i>
-                    <span class="badge badge-danger ml-2 ">{{ $programmingitem->qty_reviews}}</span>
+                    @if($programmingitem->qty_reviews || $programmingitem->qty_rectify_reviews || $programmingitem->qty_regular_reviews || $programmingitem->qty_accept_reviews)
+                    <i class="fas fa-clipboard-check text-secondary"></i>
+                    <span class="badge badge-danger opacity-1 ml-2 ">{{ $programmingitem->qty_reviews}}</span>
+
+                    <span class="badge badge-success ml-2 ">{{ $programmingitem->qty_rectify_reviews}}</span>
+
+                    <span class="badge badge-warning ml-2 ">{{ $programmingitem->qty_regular_reviews}}</span>
+
+                    <span class="badge badge-primary ml-2 ">{{ $programmingitem->qty_accept_reviews}}</span>
                     @else
                     <i class="fas fa-clipboard-check "></i>
                     <span class="badge badge-secondary ml-2 ">0</span>
@@ -127,7 +141,16 @@
             <td class="text-center align-middle">{{ $programmingitem->direct_work_hour }}</td>
             <td class="text-center align-middle">{{ $programmingitem->information_source }}</td>
             <td class="text-center align-middle">{{ $programmingitem->prap_financed }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->observation }}</td>
+            @can('ProgrammingItem: duplicate')
+            <td class="text-center align-middle">
+                <form method="POST" action="{{ route('programmingitems.clone', $programmingitem->id) }}" class="small d-inline">
+                    {{ method_field('POST') }} {{ csrf_field() }}
+                    <button class="btn btn-sm btn-outline-secondary small" onclick="return confirm('¿Desea duplicar el registro realmente?')">
+                    <span class="fas fa-copy " aria-hidden="true"></span>
+                    </button>
+                </form>
+            </td>
+            @endcan
             @can('ProgrammingItem: delete')
             <td class="text-center align-middle">
                 <form method="POST" action="{{ route('programmingitems.destroy', $programmingitem->id) }}" class="small d-inline">
@@ -176,8 +199,8 @@
             <th class="text-center align-middle">Jornadas Horas Directas Diarias</th>
             <th class="text-center align-middle">Fuente Informacion </th>
             <th class="text-center align-middle">FINANCIADA POR PRAP</th>
-            <th class="text-center align-middle">OBSERVACIONES</th>
-            @can('ProgrammingItem: delete')<th class="text-left align-middle" ></th>@endcan
+            @can('ProgrammingItem: duplicate')<th class="text-center align-middle">DUPLICAR</th>@endcan
+            @can('ProgrammingItem: delete')<th class="text-left align-middle" >ELIMINAR</th>@endcan
 
         </tr>
     </thead>
@@ -222,7 +245,16 @@
             <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_hour }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->information_source }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->prap_financed }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->observation }}</td>
+            @can('ProgrammingItem: duplicate')
+            <td class="text-center align-middle">
+                <form method="POST" action="{{ route('programmingitems.clone', $programmingitemsIndirect->id) }}" class="small d-inline">
+                    {{ method_field('POST') }} {{ csrf_field() }}
+                    <button class="btn btn-sm btn-outline-secondary small" onclick="return confirm('¿Desea duplicar el registro realmente?')">
+                    <span class="fas fa-copy " aria-hidden="true"></span>
+                    </button>
+                </form>
+            </td>
+            @endcan
             @can('ProgrammingItem: delete')
             <td class="text-center align-middle">
                 <form method="POST" action="{{ route('programmingitems.destroy', $programmingitemsIndirect->id) }}" class="small d-inline">
@@ -273,8 +305,8 @@
             <th class="text-center align-middle">Jornadas Horas Directas Diarias</th>
             <th class="text-center align-middle">Fuente Informacion </th>
             <th class="text-center align-middle">FINANCIADA POR PRAP</th>
-            <th class="text-center align-middle">OBSERVACIONES</th>
-            @can('ProgrammingItem: delete')<th class="text-left align-middle" ></th>@endcan
+            @can('ProgrammingItem: duplicate')<th class="text-center align-middle">DUPLICAR</th>@endcan
+            @can('ProgrammingItem: delete')<th class="text-left align-middle" >ELIMINAR</th>@endcan
 
         </tr>
     </thead>
@@ -320,7 +352,16 @@
             <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_hour }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->information_source }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->prap_financed }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->observation }}</td>
+            @can('ProgrammingItem: duplicate')
+            <td class="text-center align-middle">
+                <form method="POST" action="{{ route('programmingitems.clone', $programmingItemworkshop->id) }}" class="small d-inline">
+                    {{ method_field('POST') }} {{ csrf_field() }}
+                    <button class="btn btn-sm btn-outline-secondary small" onclick="return confirm('¿Desea duplicar el registro realmente?')">
+                    <span class="fas fa-copy " aria-hidden="true"></span>
+                    </button>
+                </form>
+            </td>
+            @endcan
             @can('ProgrammingItem: delete')
             <td>
                 <form method="POST" action="{{ route('programmingitems.destroy', $programmingItemworkshop->id) }}" class="small d-inline">

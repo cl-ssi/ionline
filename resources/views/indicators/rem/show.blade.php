@@ -42,11 +42,11 @@ use Illuminate\Support\Facades\DB;
         @foreach($seccion->prestaciones as $prestacion)
         <tr>
             @if($seccion->supergroups != null AND !$seccion->discard_group AND $prestacion->nombre_supergrupo_prestacion != $supergroup_temp AND $seccion->supergroupExists($prestacion->nombre_supergrupo_prestacion))
-                <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_supergrupo_prestacion) + ($seccion->isSupergroupWithSubtotals($prestacion->nombre_supergrupo_prestacion) ? 2 : 0)}}' class="centrado">{{$prestacion->nombre_supergrupo_prestacion}}</td>
+                <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_supergrupo_prestacion) + ($seccion->isSupergroupWithSubtotals($prestacion->nombre_supergrupo_prestacion) ? $seccion->subtotals_first ? 2 : 1 : 0)}}' class="centrado text-uppercase">{{$prestacion->nombre_supergrupo_prestacion}}</td>
                 @php($supergroup_temp = $prestacion->nombre_supergrupo_prestacion)
             @endif
             @if($prestacion->hasGroup($seccion->maxLevel()) AND !$seccion->discard_group AND $prestacion->nombre_grupo_prestacion != $group_temp AND strlen($prestacion->nombre_grupo_prestacion) != 1 AND trim($prestacion->nombre_grupo_prestacion) != $group_temp)
-                <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_grupo_prestacion) + ($seccion->totalByGroupExists(trim($prestacion->nombre_grupo_prestacion)) ? 1 : 0)}}' colspan="{{strlen($prestacion->nombre_supergrupo_prestacion) != 1 ? 1 : 2}}" class="centrado">{{$prestacion->nombre_grupo_prestacion}}</td>
+                <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_grupo_prestacion) + ($seccion->totalByGroupExists(trim($prestacion->nombre_grupo_prestacion)) ? 1 : 0)}}' colspan="{{strlen($prestacion->nombre_supergrupo_prestacion) != 1 ? 1 : 2}}" class="centrado text-uppercase">{{$prestacion->nombre_grupo_prestacion}}</td>
                 @php($group_temp = $prestacion->nombre_grupo_prestacion)
             @endif
             @if($seccion->subtotals != null AND $seccion->subtotals_first AND $prestacion->nombre_grupo_prestacion != $pass AND $seccion->subtotalExists($prestacion->nombre_grupo_prestacion))
@@ -58,7 +58,7 @@ use Illuminate\Support\Facades\DB;
                 @php($pass = $prestacion->nombre_grupo_prestacion)
             </tr>
             @endif
-            <td align='left' colspan='{{($prestacion->hasGroup($seccion->maxLevel()) AND strlen($prestacion->nombre_grupo_prestacion) != 1) ? 1: 2}}' nowrap="nowrap">{{$prestacion->nombre_prestacion}}</td>
+            <td align='left' colspan='{{($prestacion->hasGroup($seccion->maxLevel()) AND strlen($prestacion->nombre_grupo_prestacion) != 1) ? 1: 2}}' nowrap="nowrap" class="text-uppercase">{{$prestacion->nombre_prestacion}}</td>
             @foreach($seccion->cols as $col)
             <td align='right'>{{number_format($prestacion->rems->sum($col),0,",",".")}}</td>
             @endforeach

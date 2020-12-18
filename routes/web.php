@@ -21,7 +21,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes(['register' => false, 'logout' => false]);
+Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
@@ -116,6 +116,7 @@ Route::resource('programmings', 'Programmings\ProgrammingController')->middlewar
 Route::put('programmingStatus/{id}', 'Programmings\ProgrammingController@updateStatus')->middleware('auth')->name('programmingStatus.update');
 
 Route::resource('programmingitems', 'Programmings\ProgrammingItemController')->middleware('auth');
+Route::post('/programmingitemsclone/{id}', 'Programmings\ProgrammingItemController@clone')->name('programmingitems.clone');
 
 Route::resource('communefiles', 'Programmings\CommuneFileController')->middleware('auth');
 Route::get('/downloadFileA/{file}', 'Programmings\CommuneFileController@download')->name('programmingFile.download');
@@ -149,9 +150,11 @@ Route::get('reportObservation', 'Programmings\ProgrammingReportController@report
 //End Programación Númerica APS
 
 
-
 Route::resource('agreements', 'Agreements\AgreementController')->middleware('auth');
 
+//assigments
+Route::resource('assigment', 'AssigmentController')->middleware('auth');
+Route::post('assigment.import', 'AssigmentController@import')->name('assigment.import');
 
 
 Route::prefix('rrhh')->as('rrhh.')->group(function () {
@@ -403,10 +406,10 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         })->name('index');
         Route::prefix('2018')->as('2018.')->group(function () {
             Route::get('/', 'Indicators\_2018\ProgramApsValueController@index')->name('index');
-            Route::get('/create', 'Indicators\_2018\ProgramApsValueController@create')->name('create');
-            Route::post('/', 'Indicators\_2018\ProgramApsValueController@store')->name('store');
-            Route::get('/{glosa}/{commune}/edit', 'Indicators\_2018\ProgramApsValueController@edit')->name('edit');
-            Route::put('/{programApsValue}', 'Indicators\_2018\ProgramApsValueController@update')->name('update');
+            Route::get('/create', 'Indicators\_2018\ProgramApsValueController@create')->name('create')->middleware('auth');
+            Route::post('/', 'Indicators\_2018\ProgramApsValueController@store')->name('store')->middleware('auth');
+            Route::get('/{glosa}/{commune}/edit', 'Indicators\_2018\ProgramApsValueController@edit')->name('edit')->middleware('auth');
+            Route::put('/{programApsValue}', 'Indicators\_2018\ProgramApsValueController@update')->name('update')->middleware('auth');
         });
         Route::prefix('2019')->as('2019.')->group(function () {
             Route::get('/', 'Indicators\_2019\ProgramApsValueController@index')->name('index');
@@ -416,6 +419,9 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
             Route::put('/{programApsValue}', 'Indicators\_2019\ProgramApsValueController@update')->name('update')->middleware('auth');
         });
         Route::prefix('2020')->as('2020.')->group(function () {
+            Route::get('/', function () {
+                return redirect()->route('indicators.program_aps.2020.index', 6);
+            })->name('index');
             Route::get('/{commune}', 'Indicators\_2020\ProgramApsValueController@index')->name('index');
             Route::get('/{commune}/create', 'Indicators\_2020\ProgramApsValueController@create')->name('create')->middleware('auth');
             Route::post('/', 'Indicators\_2020\ProgramApsValueController@store')->name('store')->middleware('auth');
@@ -665,7 +671,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 /* Nuevas rutas, Laravel 8.0. */
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
-    Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');    
+    Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::get('/validaterequest', [SuitabilityController::class, 'validaterequest'])->name('validaterequest');
     Route::get('/create', [SuitabilityController::class, 'create'])->name('create');
 
