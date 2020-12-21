@@ -151,6 +151,7 @@
                         <th class="text-center align-middle table-dark">¿REC.?</th>
                         <th class="text-center align-middle table-dark">COMENTARIO / ACUERDO</th>
                         @can('Reviews: edit')<th class="text-center align-middle table-dark" >EDITAR</th>@endcan
+                        @can('Reviews: edit')<th class="text-center align-middle table-dark" >¿CONFIRMAR?</th>@endcan
                         @can('Reviews: rectify')<th class="text-center align-middle table-dark" >RECTIFICAR</th>@endcan
                         @can('Reviews: delete')<th class="text-center align-middle table-dark" >ELIMINAR</th>@endcan
                     </tr>
@@ -193,6 +194,19 @@
                             data-observation="{{ $review->observation }}"
                             data-formaction="{{ route('reviewItems.update', $review->id)}}">
                         <i class="fas fa-edit "></i>
+                        </button>
+                        </td>
+                        @endcan
+
+                        @can('Reviews: edit')
+                        <td class="text-center align-middle" >
+                        <button class="btn btb-flat  btn-light" data-toggle="modal"
+                            data-target="#updateModalConfirm"
+                            data-review_id="{{ $review->id }}"
+                            data-answer="{{ $review->answer }}"
+                            data-observation="{{ $review->observation }}"
+                            data-formaction="{{ route('reviewItems.update', $review->id)}}">
+                        <i class="fas fa-handshake "></i>
                         </button>
                         </td>
                         @endcan
@@ -274,6 +288,7 @@
 </div>
 
     @include('programmings/reviewItems/modal_edit_eval')
+    @include('programmings/reviewItems/modal_edit_confirm')
     @include('programmings/reviewItems/modal_edit_eval_rect')
 
 @endsection
@@ -281,6 +296,20 @@
 @section('custom_js')
 <script type="text/javascript">
     $('#updateModal').on('show.bs.modal', function (event) {
+        console.log("en modal");
+        
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var modal  = $(this)
+
+        modal.find('input[name="review_id"]').val(button.data('review_id'))
+        modal.find('select[name="answer"]').val(button.data('answer'))
+        modal.find('textarea[name="observation"]').val(button.data('observation'))
+
+        var formaction  = button.data('formaction')
+        modal.find("#form-edit").attr('action', formaction)
+    })
+
+    $('#updateModalConfirm').on('show.bs.modal', function (event) {
         console.log("en modal");
         
         var button = $(event.relatedTarget) // Button that triggered the modal
