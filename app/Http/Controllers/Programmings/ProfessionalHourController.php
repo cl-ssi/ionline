@@ -23,12 +23,12 @@ class ProfessionalHourController extends Controller
 
         $professionals = Professional::All()->SortBy('id');
         
-        return view('programmings/professionalHours/index')->withProfessionalHours($professionalHours)->withProfessionals($professionals);
+        return view('programmings/professionalHours/index')->withProfessionalHours($professionalHours)
+                                                           ->withProfessionals($professionals);
     }
 
     public function store(Request $request)
     {
-        //dd($request);
         $professionalValid = ProfessionalHour::where('professional_id', $request->professional_id)
                                   ->where('programming_id', $request->programming_id)
                                   ->first();

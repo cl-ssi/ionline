@@ -23,31 +23,30 @@ class ProgrammingController extends Controller
     public function index()
     {
         $year = '';
-        //dd(Auth()->user()->hasAllRoles('Programming: Review'));
 
-        // INDICADOR TOTAL DE REVISIONES 
+        // Indicador de revisiones
+        $reviewIndicators = ReviewItem::select(
+                    'T2.id'
+                , DB::raw('count(pro_review_items.programming_item_id) AS qty'))
+                ->leftjoin('pro_programming_items AS T1', 'pro_review_items.programming_item_id', '=', 'T1.id')
+                ->leftjoin('pro_programmings AS T2', 'T1.programming_id', '=', 'T2.id')
+                ->Where('pro_review_items.rectified','=','NO')
+                ->Where('pro_review_items.answer','=','NO')
+                ->Where('T2.year','=',2021)
+                ->groupBy('T2.id')
+                ->orderBy('T2.id')->get();
+    
 
-            $reviewIndicators = ReviewItem::select(
-                        'T2.id'
-                    , DB::raw('count(pro_review_items.programming_item_id) AS qty'))
-                    ->leftjoin('pro_programming_items AS T1', 'pro_review_items.programming_item_id', '=', 'T1.id')
-                    ->leftjoin('pro_programmings AS T2', 'T1.programming_id', '=', 'T2.id')
-                    ->Where('pro_review_items.rectified','=','NO')
-                    ->Where('pro_review_items.answer','=','NO')
-                    ->Where('T2.year','=',2021)
-                    ->groupBy('T2.id')
-                    ->orderBy('T2.id')->get();
-        
+        $indicatorCompletes = ProgrammingItem::select(
+                            'T1.id'
+                        , DB::raw('count(DISTINCT T2.int_code) AS qty'))
+                ->leftjoin('pro_programmings AS T1', 'pro_programming_items.programming_id', '=', 'T1.id')
+                ->leftjoin('pro_activity_items AS T2', 'pro_programming_items.activity_id', '=', 'T2.id')
+                ->Where('T1.year','=',2021)
+                ->groupBy('T1.id')
+                ->orderBy('T1.id')->get();
 
-            $indicatorCompletes = ProgrammingItem::select(
-                             'T1.id'
-                            , DB::raw('count(DISTINCT T2.int_code) AS qty'))
-                    ->leftjoin('pro_programmings AS T1', 'pro_programming_items.programming_id', '=', 'T1.id')
-                    ->leftjoin('pro_activity_items AS T2', 'pro_programming_items.activity_id', '=', 'T2.id')
-                    ->Where('T1.year','=',2021)
-                    ->groupBy('T1.id')
-                    ->orderBy('T1.id')->get();
-
+        // Solo si poseen perfil como administrador o revisor pueden ver todas las comunas del año.
        if(Auth()->user()->hasAllRoles('Programming: Review') == True || Auth()->user()->hasAllRoles('Programming: Admin') == True )
        {
             $programmings = Programming::select(
@@ -69,6 +68,7 @@ class ProgrammingController extends Controller
                 ->Where('pro_programmings.year','LIKE','%'.$year.'%')
                 ->orderBy('T2.name','ASC')->get();
         }
+        // Si no, sólo muestra el establecimiento asignado al usuario
         else {
             $programmings = Programming::select(
                         'pro_programmings.id'
@@ -111,18 +111,17 @@ class ProgrammingController extends Controller
 
             }
         }
-
-        //dd($programmings);
         
         return view('programmings/programmings/index')->withProgrammings($programmings);
     }
 
     public function create() 
     {   
-        $establishments = Establishment::whereIn('type',['CESFAM','CGR'])
-                                       ->OrderBy('name')->get(); // Filtrar CENTROS
-        $users = User::where('position', 'Funcionario Programación')->OrderBy('name')->get(); // Sólo Funcionario Programación
-        return view('programmings/programmings/create')->withEstablishments($establishments)->withUsers($users);
+        $establishments = Establishment::whereIn('type',['CESFAM','CGR']) // Solo centros de salud familiar
+                                       ->OrderBy('name')->get(); 
+        $users = User::where('position', 'Funcionario Programación')->OrderBy('name')->get(); // Sólo funcionario Programación
+        return view('programmings/programmings/create')->withEstablishments($establishments)
+                                                       ->withUsers($users);
     }
 
     public function store(Request $request)
@@ -152,35 +151,32 @@ class ProgrammingController extends Controller
 
     public function show(Programming $programming)
     {
-
         $establishments = Establishment::whereIn('type',['CESFAM','CGR'])
                                        ->OrderBy('name')->get();
         
         $users = User::with('organizationalUnit')->where('position', 'Funcionario Programación')->OrderBy('name')->get(); // Sólo Funcionario Programación
         $access_list = unserialize($programming->access);
         $user = $programming->user;
-        return view('programmings/programmings/show')->withProgramming($programming)->with('access_list', $access_list)->with('user', $user)->withEstablishments($establishments)->withUsers($users);
+        return view('programmings/programmings/show')->withProgramming($programming)
+                                                    ->with('access_list', $access_list)
+                                                    ->with('user', $user)
+                                                    ->withEstablishments($establishments)
+                                                    ->withUsers($users);
     }
 
     public function update(Request $request, Programming $programming)
     {
-      $programming->fill($request->all());
-      $programming->year = $request->date;
-      $programming->user_id  = $request->user;
-      $programming->access   = serialize($request->access);
-      $programming->save();
-      return redirect()->back();
+        $programming->fill($request->all());
+        $programming->year = $request->date;
+        $programming->user_id  = $request->user;
+        $programming->access   = serialize($request->access);
+        $programming->save();
+        return redirect()->back();
     }
-
-
 
     public function updateStatus(Request $request,$id)
     {
-
         $programming = Programming::find($id);
-
-
-       //DD($programming);
 
         $programming->fill($request->all());
         if($request->status){
