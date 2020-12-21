@@ -691,9 +691,8 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 
     Route::prefix('options')->as('options.')->middleware('auth')->group(function () {
         Route::get('/', [OptionsController::class, 'index'])->name('index');
-        // Route::get('/create', [QuestionsController::class, 'create'])->name('create');
-        // Route::post('/store', [QuestionsController::class, 'store'])->name('store');
-        
+        Route::get('/create', [OptionsController::class, 'create'])->name('create');
+        Route::post('/store', [OptionsController::class, 'store'])->name('store');        
     });
 
 
