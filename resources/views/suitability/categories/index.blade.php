@@ -3,6 +3,13 @@
 @section('content')
 
 @include('suitability.nav')
+<div style="margin-bottom: 10px;" class="row">
+    <div class="col-lg-12">
+        <a class="btn btn-success" href="{{ route('suitability.categories.create') }}">
+            Agregar Categoría
+        </a>
+    </div>
+</div>
 
 <h3 class="mb-3">Listado de Categorias para los Examenes</h3>
 

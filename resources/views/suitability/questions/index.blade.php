@@ -3,6 +3,13 @@
 @section('content')
 
 @include('suitability.nav')
+<div style="margin-bottom: 10px;" class="row">
+    <div class="col-lg-12">
+        <a class="btn btn-success" href="{{ route('suitability.questions.create') }}">
+            Agregar Pregunta
+        </a>
+    </div>
+</div>
 <h3 class="mb-3">Listado de Preguntas</h3>
 
 
@@ -16,7 +23,7 @@
         </tr>
     </thead>
     <tbody>
-    @foreach($questions as $question)
+        @foreach($questions as $question)
         <tr>
             <td>{{ $question->id ?? '' }}</td>
             <td>{{ $question->category->name ?? '' }}</td>
@@ -27,7 +34,7 @@
                 </button>
             </td>
         </tr>
-    @endforeach
+        @endforeach
     </tbody>
 
 </table>
