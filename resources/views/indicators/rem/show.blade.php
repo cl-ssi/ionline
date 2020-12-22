@@ -41,7 +41,13 @@ use Illuminate\Support\Facades\DB;
         @php($group_temp = $pass = $supergroup_temp = null)
         @foreach($seccion->prestaciones as $prestacion)
         <tr>
-            @if($seccion->supergroups != null AND !$seccion->discard_group AND $prestacion->nombre_supergrupo_prestacion != $supergroup_temp AND $seccion->supergroupExists($prestacion->nombre_supergrupo_prestacion))
+            @if($seccion->supergroups != null AND $seccion->supergroups_inline != null AND !$seccion->discard_group AND $prestacion->nombre_supergrupo_prestacion != $supergroup_temp AND $seccion->supergroupExists($prestacion->nombre_supergrupo_prestacion))
+            <tr>
+                <td width='10%' colspan="100%" nowrap="nowrap" class="text-uppercase"><b>{{$prestacion->nombre_supergrupo_prestacion}}<b/></td>
+                @php($supergroup_temp = $prestacion->nombre_supergrupo_prestacion)
+            </tr>
+            @endif
+            @if($seccion->supergroups != null AND $seccion->supergroups_inline == null AND !$seccion->discard_group AND $prestacion->nombre_supergrupo_prestacion != $supergroup_temp AND $seccion->supergroupExists($prestacion->nombre_supergrupo_prestacion))
                 <td width='10%' rowspan='{{$seccion->getCountPrestacionBy($prestacion->nombre_supergrupo_prestacion) + ($seccion->isSupergroupWithSubtotals($prestacion->nombre_supergrupo_prestacion) ? $seccion->subtotals_first ? 2 : 1 : 0)}}' class="centrado text-uppercase">{{$prestacion->nombre_supergrupo_prestacion}}</td>
                 @php($supergroup_temp = $prestacion->nombre_supergrupo_prestacion)
             @endif
