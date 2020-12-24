@@ -9,7 +9,8 @@
 
 
 <h4 class="mb-3">
-    <a href="{{ route('programmingitems.index', ['programming_id' => $programmingItem->programming_id]) }}" class="btn btb-flat btn-sm btn-dark" >
+<!-- {{ route('programmingitems.index', ['programming_id' => $programmingItem->programming_id]) }} -->
+    <a href="{{ url()->previous() }}" class="btn btb-flat btn-sm btn-dark" >
                     <i class="fas fa-arrow-left small"></i> 
                     <span class="small">Volver</span> 
     </a>
@@ -25,6 +26,15 @@ Editar Item Programación Operativa </h4>
 @method('PUT') 
     <input type="hidden" class="form-control" id="programming_id" name="programming_id" value="{{Request::get('programming_id')}}">
     <div class="form-row">
+        <div class="form-group col-md-2">
+            <label for="forprogram">Tipo Actividad</label>
+            <select name="activity_type" id="activity_type"  class="form-control">
+                    <option value="option_select" disabled selected>{{$programmingItem->activity_type ?? '' }}</option>
+                    <option value="Directa">Directa</option>
+                    <option value="Indirecta">Indirecta</option>
+                
+            </select>
+        </div>
         <div class="form-group col-md-6">
             <label for="forprogram">Ciclo Vital</label>
             <select name="cycle" id="formprogram" class="form-control">
@@ -34,8 +44,6 @@ Editar Item Programación Operativa </h4>
                     <option value="ADULTO">ADULTO</option>
                     <option value="ADULTO MAYOR">ADULTO MAYOR</option>
                     <option value="TRANSVERSAL">TRANSVERSAL</option>
-                    <option value="TALLER">TALLER</option>
-               
             </select>
         </div>
         
@@ -227,7 +235,7 @@ Editar Item Programación Operativa </h4>
 
         <div class="form-group col-md-6">
             <label for="forprogram">Fuente Información</label>
-            <input type="input" class="form-control" id="information_source" name="information_source"  value="{{$programmingItem->information_source ?? '' }}" readonly>
+            <input type="input" class="form-control" id="information_source" name="information_source"  value="{{$programmingItem->information_source ?? '' }}" >
         </div>
 
         <div class="form-group col-md-3">
@@ -257,6 +265,7 @@ Editar Item Programación Operativa </h4>
 
     
     <button type="submit" class="btn btn-info mb-4">Actualizar</button>
+
 
 </form>
 

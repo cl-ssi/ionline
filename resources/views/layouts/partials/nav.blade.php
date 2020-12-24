@@ -27,12 +27,12 @@
 
                         <a class="dropdown-item"
                            href="{{ route('programmings.index') }}">
-                            <i class="fas fa-calculator"></i> Programación Númerica
+                            <i class="fas fa-calculator"></i> Programación Numérica
                         </a>
 
                         <a class="dropdown-item"
                            href="{{ route('communefiles.index') }}">
-                            <i class="fas fa-file-alt"></i> Documentos Adjuntos
+                            <i class="fas fa-file-alt"></i> Documentos Comunales
                         </a>
                     </div>
                 </li>
@@ -160,6 +160,13 @@
                         <i class="fas fa-cannabis"></i> Drogas</a>
                 </li>
                 @endrole
+
+                @canany(['Asignacion Estimulos'])
+                  <li class="nav-item">
+                      <a class="nav-link" href="{{ route('assigment.index') }}">
+                          <i class="fas fa-wallet"></i> Asign. Estímulos</a>
+                  </li>
+                @endcan
 
                 @canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)', 'Pharmacy: APS (id:3)'])
                     <li class="nav-item">

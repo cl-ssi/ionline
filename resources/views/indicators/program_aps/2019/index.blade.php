@@ -7,9 +7,9 @@
 @include('indicators.partials.nav')
 
 <h3 class="mb-3">Programacion APS</h3>
-
+@auth
 <a href="{{ route('indicators.program_aps.2019.create')}}" class="btn btn-primary">Agregar valor</a>
-
+@endauth
 <!-- Nav tabs -->
 <ul class="nav nav-tabs d-print-none" id="myTab" role="tablist">
     @foreach($communes as $commune)
@@ -23,6 +23,8 @@
 
 <!-- Tab panes -->
 <div class="tab-content mt-3">
+    @php($estab_by_commune = ['IQUIQUE' => ['CECOSF Cerro Esmeralda', 'CESFAM Cirujano Aguirre', 'CESFAM Cirujano Guzmán', 'CESFAM Cirujano Videla', 'CESFAM Sur Iquique', 'Posta Rural Chanavayita', 'Posta Rural San Marcos'],
+                              'ALTO HOSPICIO' => ['CECOSF El Boro', 'CECOSF La Tortuga', 'CESFAM Dr. Yandry Añazco Montero', 'CESFAM Pedro Pulgar']])
     @foreach($communes as $commune)
         <div class="tab-pane" id="{{ str_replace(" ","_",mb_strtoupper($commune->name)) }}" role="tabpanel" >
             <h4>
@@ -49,7 +51,12 @@
                         <th>Rend.</th>
                         <th>Verificación</th>
                         <th>Obs.</th>
-                        <th nowrap>Ene-Nov</th>
+                        @if(isset($estab_by_commune[mb_strtoupper($commune->name)]))
+                            @foreach($estab_by_commune[mb_strtoupper($commune->name)] as $estab)
+                            <th style="min-width:60px">{{$estab}} Ene-Dic</th>
+                            @endforeach
+                        @endif
+                        <th style="min-width:60px">{{isset($estab_by_commune[mb_strtoupper($commune->name)]) ? 'Total Ene-Dic' : 'Ene-Dic'}}</th>
                         <th nowrap>% Avance</th>
 
 
@@ -79,6 +86,11 @@
                         <td class="text-right">{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['rendimientoProfesional'] }}</td>
                         <td>{{ $glosa->verificacion }}</td>
                         <td>{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['observaciones'] }}</td>
+                        @if(isset($estab_by_commune[mb_strtoupper($commune->name)]))
+                            @foreach($estab_by_commune[mb_strtoupper($commune->name)] as $estab)
+                            <td class="text-right">{{isset($data[mb_strtoupper($commune->name)][$glosa->numero][$estab]['ct_marzo']) ? $data[mb_strtoupper($commune->name)][$glosa->numero][$estab]['ct_marzo'] : ''}}</td>
+                            @endforeach
+                        @endif
                         <td class="text-right">{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['ct_marzo'] }}</td>
                         <td class="text-right">{{ $data[mb_strtoupper($commune->name)][$glosa->numero]['porc_marzo'] }}%</td>
                     </tr>

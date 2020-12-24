@@ -7,7 +7,7 @@
 @include('programmings/nav')
 
 
-<button onclick="exportTableToExcel('tblData')" class="btn btn-success float-right btn-sm">Exportar Excel</button>
+<button onclick="tableExcel('xlsx')" class="btn btn-success float-right btn-sm">Exportar Excel</button>
 
 <h4 class="mb-3"> Informe Consolidado Separado</h4>
 <form method="GET" class="form-horizontal small" action="{{ route('programming.reportConsolidatedSep') }}" enctype="multipart/form-data">
@@ -37,7 +37,7 @@
 <table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover  ">
     <thead>
         <tr style="font-size:75%;">
-            <th class="text-center align-middle" colspan="7">INFORME CONSOLIDADO </th>
+            <th class="text-center align-middle" colspan="8">INFORME CONSOLIDADO SEP. - {{strtoupper(Request::get('commune_filter')) ?? '' }} </th>
         </tr>
         <tr class="small " style="font-size:60%;">
             <th class="text-center align-middle">Nº TRAZADORA</th>
@@ -47,6 +47,7 @@
             <th class="text-center align-middle">DEF. POB. OBJETIVO</th>
             <th class="text-center align-middle">PROFESIONAL</th>
             <th class="text-center align-middle">TOTAL ACTIVIDADES</th>
+            <th class="text-center align-middle">ESTABLECIMIENTOS</th>
         </tr>
     </thead>
     <tbody style="font-size:70%;">
@@ -58,14 +59,16 @@
             <td class="text-center align-middle">{{ $programmingitem->action_type }}</td>
             <td class="text-center align-middle">{{ $programmingitem->def_target_population }}</td>
             <td class="text-center align-middle">{{ $programmingitem->professional }}</td>
-            <td class="text-center align-middle">{{ number_format($programmingitem->activity_total,0, ',', '.') }}</td>
+            <td class="text-center align-middle font-weight-bold">{{ number_format($programmingitem->activity_total,0, ',', '.') }}</td>
+            <td class="text-left align-middle">{{ $programmingitem->establishments }}</td>
         </tr>
         @endforeach
     </tbody>
     <tfoot>
         <tr style="font-size:60%;">
-            <td class="text-center" colspan="6">TOTALES</td>
+            <td class="text-center" colspan="7">TOTALES</td>
             <td class="text-center">{{ $programmingItems ? number_format($programmingItems->sum('activity_total'),0, ',', '.') : '0'}}</td>
+            <td></td>
         </tr>
     </tfoot>
 </table>
@@ -75,6 +78,9 @@
 @section('custom_js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet"/>
+
+
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script> 
 
 <script type="text/javascript">
     $("#datepicker").datepicker({
@@ -86,35 +92,13 @@
 </script>
 
 <script>
-    function exportTableToExcel(tableID, filename = ''){
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
-        var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-        
-        // Specify file name
-        filename = filename?filename+'.xls':'Informe_consolidado.xls';
-        
-        // Create download link element
-        downloadLink = document.createElement("a");
-        
-        document.body.appendChild(downloadLink);
-        
-        if(navigator.msSaveOrOpenBlob){
-            var blob = new Blob(['\ufeff', tableHTML], {
-                type: dataType
-            });
-            navigator.msSaveOrOpenBlob( blob, filename);
-        }else{
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-        
-            // Setting the file name
-            downloadLink.download = filename;
-            
-            //triggering the function
-            downloadLink.click();
+    function tableExcel(type, fn, dl) {
+          var elt = document.getElementById('tblData');
+          const filename = 'Informe_consolidado'
+          var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+          return dl ?
+            XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
+            XLSX.writeFile(wb, `${filename}.xlsx`)
         }
-    }
 </script>
 @endsection

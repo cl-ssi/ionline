@@ -7,9 +7,9 @@
 @include('indicators.partials.nav')
 
 <h3 class="mb-3">Programacion APS</h3>
-
+@auth
 <a href="{{ route('indicators.program_aps.2018.create')}}" class="btn btn-primary">Agregar valor</a>
-
+@endauth
 <!-- Nav tabs -->
 <ul class="nav nav-tabs d-print-none" id="myTab" role="tablist">
     @foreach($communes as $commune)
@@ -56,7 +56,13 @@
                     @foreach($glosas as $index => $glosa)
                         <tr>
                             <td class="text-right">
-                                <a href="{{ route('indicators.program_aps.2018.edit', [$glosa->id,$commune->id]) }}">{{ $glosa->id }}</a>
+                                @auth
+                                <a href="{{ route('indicators.program_aps.2018.edit', [$glosa->id,$commune->id]) }}">
+                                @endauth
+                                {{ $glosa->numero }}
+                                @auth
+                                </a>
+                                @endauth
                             </td>
                             <td>{{ $glosa->nivel }}</td>
                             <td>{{ $glosa->prestacion }}</td>

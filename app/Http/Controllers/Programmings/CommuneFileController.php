@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Programmings\Programming;
 use App\Models\Programmings\CommuneFile;
+use App\Programmings\Review;
 use App\Models\Commune;
 use App\Establishment;
 use App\User;
@@ -19,7 +20,7 @@ class CommuneFileController extends Controller
     {
         
         $year = '';
-        if(Auth()->user()->id == '15683706' || Auth()->user()->id == '12345678' || Auth()->user()->id == '13641014' || Auth()->user()->id == '17011541' || Auth()->user()->id == '15287582')
+        if(Auth()->user()->hasAllRoles('Programming: Review') == True || Auth()->user()->hasAllRoles('Programming: Admin') == True )
         {
         
         $communeFiles = CommuneFile::select(
@@ -74,9 +75,18 @@ class CommuneFileController extends Controller
 
     public function store(Request $request)
     {
-        $communeFileValid = CommuneFile::where('commune_id', $request->commune)
-                                       ->where('year', $request->date)
-                                       ->first();
+        // SI ES ALTO HOSPICIO, PERMITE MÁS REGISTROS PARA HECTOR REYNO
+        if($request->commune == 7)
+        {
+            $communeFileValid = null;
+        }
+        else {
+
+            $communeFileValid = CommuneFile::where('commune_id', $request->commune)
+            ->where('year', $request->date)
+            ->first();
+        }
+
         if($communeFileValid){
             session()->flash('warning', 'Ya se ha iniciado el registro adjunto para esta comuna el año ingresado');
         }
@@ -89,6 +99,48 @@ class CommuneFileController extends Controller
             $communeFile->access   = serialize($request->access);
         
             $communeFile->save();
+
+            //dd($communeFile->id);
+
+             //INSERT EVALUACION
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'RECEPCION DENTRO DEL PLAZO LEGAL','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'EL PLAN SE PRESENTA POR COMUNA','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'PRESENTA  DIAGNÓSTICO','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'DIAGNOSTICO PRESENTA estructura organizacional de los Centros de Salud de la comuna y de la unidad encargada de salud en la entidad administradora, sobre la base del plan de salud comunal y del modelo de atención definido por el Ministerio de Salud','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'DIAGNOSTICO PRESENTA DOTACIÓN DE PERSONAL (presentada por categorías y jornada laboral)','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'DIAGNOSTICO INCORPORA SITUACIÓN EPIDEMIOLÓGICA','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'PRESENTA APARTADO DE MATRIZ DE CUIDADOS','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'A LOS NODOS CRÍTICOS IDENTIFICADOS EN EL DIAGNÓSTICO SE LE  CREAN ESTRATEGIAS ABORDADAS  EN LA MATRIZ DE CUIDADOS ','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'PRESENTA APARTADO DE PROGRAMACIÓN NUMÉRICA','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'PROGRAMACIÓN NUMÉRICA EXISTE: PORGRAMACION DE HORAS DIRECTAS/ PROGRAMACION DE HORAS INDIRECTAS/PLA DE CAPACITACION ANUAL.','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REFERENTE DE GÉNERO','general_features'=> 'EL DIAGNOSTICO PRESENTA LAS CONSIDERACIONES DE GENÉRO ADECUADAS (Apoyo referente de temática)','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REFERENTE  PESPI e INTERCULTUALIDAD','general_features'=> 'EL DIAGNOSTICO PRESENTA ASPECTOS SUFICIENTES DE INTERCULTURALIDAD (Apoyo referente de temática)','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REFERENTE OIRS','general_features'=> 'EL DIAGNÓSTICO IDENTIFICA ANALISIS DE RECLAMOS DE LA COMUNIDAD ','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REVISION REFERENTE RURAL (cuando corresponda)','general_features'=> 'DIAGNOSTICO INCORPORA Y ANALIZA LAS PROBLEMATICAS DE LOS POBALDOS RURALES ','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REVISION REFERENTE RURAL (cuando corresponda)','general_features'=> 'MATRIZ DE CUIDADOS INTEGRA PROBLEMAS DIAGNOSTICADOS EN LOCALIDADES RURALES','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REVISION REFERENTE RURAL (cuando corresponda)','general_features'=> 'EN PROGRAMACIÓN NUMÉRICA SE CONSIDERA TIEMPOS DE VIAJE A RONDAS','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REVISION DE CAPACITACIÓN MUNICIPAL','general_features'=> 'EL DIAGNÓTICO PRESENTA LAS BRECHAS DE CAPACITACIÓN  Y SE ENCUENTRA SEPARADO Y PRIORIZADO POR LOS EJES ESTRATÉGICOS DE LA ENS','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+             $communeFile->programming_reviews()
+             ->create(['revisor' => 'REVISION DE CAPACITACIÓN MUNICIPAL','general_features'=> 'LA PROGRAMACION NUMÉRICA SE ENCUENTRA COMPLETAMENTE LLENA DE ACUERDO A LAS ORIENTACIONES PARA PROGRAMACIÓN EN RED','active'=> 'SI','user_id'=>  Auth()->user()->id,'commune_file_id'=>$communeFile->id]);
+ 
+             
            
             session()->flash('info', 'Se ha iniciado una nueva registro adjunto');
         }

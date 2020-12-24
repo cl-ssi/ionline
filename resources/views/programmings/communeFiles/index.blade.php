@@ -5,7 +5,7 @@
 @section('content')
 
 
-<h3 class="mb-3">Documentos Comunales - Programación Númerica</h3> 
+<h3 class="mb-3">Documentos Comunales - Evaluación General</h3> 
  <!-- Permiso para crear nueva programación númerica -->
  @can('Communefiles: create')
     <a href="{{ route('communefiles.create') }}" class="btn btn-info mb-4">Comenzar Documentos Comunales</a>
@@ -22,11 +22,11 @@
             <th class="text-left align-middle table-dark" >Descripción</th>
             <th class="text-left align-middle table-dark" >Diagnostico</th>
             <th class="text-left align-middle table-dark" >Matriz de Cuidado</th>
-            <th class="text-left align-middle table-dark" >Adjunto</th>
+            <th class="text-left align-middle table-dark" >Documento Alcaldicio</th>
             <th class="text-right align-middle table-dark">Opciones</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="small align-middle  ">
         @foreach($communeFiles as $communeFile)
         <tr class="small">
         <!-- Permiso para editar programación númerica -->
@@ -43,7 +43,7 @@
                 <label for="for">
                     @if($communeFile->file_a != null)  
                         <a class="text-info" href="{{ route('programmingFile.download', $communeFile->id) }}" target="_blank">
-                            <i class="fas fa-download"></i> Descargar
+                            <i class="fas fa-download"></i> Ver
                         </a>
                     @endif
                 </label>
@@ -52,7 +52,7 @@
                 <label for="for">
                     @if($communeFile->file_b != null)  
                         <a class="text-info" href="{{ route('programmingFile.downloadFileB', $communeFile->id) }}" target="_blank">
-                            <i class="fas fa-download"></i> Descargar
+                            <i class="fas fa-download"></i> Ver
                         </a>
                     @endif
                 </label>
@@ -61,7 +61,7 @@
                 <label for="for">
                     @if($communeFile->file_c != null)  
                         <a class="text-info" href="{{ route('programmingFile.downloadFileC', $communeFile->id) }}" target="_blank">
-                            <i class="fas fa-download"></i> Descargar
+                            <i class="fas fa-download"></i> Ver
                         </a>
                     @endif
                 </label>
@@ -80,6 +80,23 @@
                 <i class="fas fa-paperclip small"></i> Adjuntar
                 </button>
                 @endcan
+            
+            <!-- Permiso para gestionar las capacitaciones municipales en la programación númerica en proceso -->
+            @can('TrainingItem: view')
+                <a href="{{ route('trainingitems.index', ['commune_file_id' => $communeFile->id]) }}" class="btn btb-flat btn-sm btn-light" >
+                    <i class="fas fa-chalkboard-teacher small"></i> 
+                    <span class="small">Capacitaciones</span> 
+                </a>
+            @endcan   
+
+            @can('Reviews: view')
+                <a href="{{ route('reviews.index', ['commune_file_id' => $communeFile->id]) }}" class="btn btb-flat btn-sm btn-primary">
+                    <i class="fas fa-clipboard-check small"></i>
+                    <span class="small">Evaluación Gral.</span> 
+                </a>
+            @endcan
+
+            
             </td> 
         </tr>
         @endforeach
