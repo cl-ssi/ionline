@@ -112,7 +112,7 @@ class RequestFormController extends Controller
         return view('request_form.edit', compact('requestForm', 'users', 'item_codes', 'flag_finance'));
         }
         else {
-          return view('request_form.edit', compact('requestForm', 'users', 'item_codes'));
+          return view('request_form.edit', compact('requestForm', 'users', 'item_codes', 'flag_finance'));
         }
     }
 

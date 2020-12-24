@@ -677,29 +677,23 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     //Route::get('/validaterequest', [RequestFormController::class, 'validaterequest'])->name('validaterequest');
     Route::get('/create', [RequestFormController::class, 'create'])->name('create');
 });
-/*
-Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
-    Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
-    Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');
-    Route::get('/validaterequest', [SuitabilityController::class, 'validaterequest'])->name('validaterequest');
-    Route::get('/create', [SuitabilityController::class, 'create'])->name('create');
-});
-*/
+
 Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(function () {
     //Route::get('{requestForm}/edit', 'RequestFormController@edit')->name('edit');
-    Route::get('{requestForm}/edit', [ItemController::class, 'edit'])->name('edit');
+    //Route::get('{requestForm}/edit', [ItemController::class, 'edit'])->name('edit');
     Route::get('/items', 'RequestForms\ItemController@create')->name('items.create')->middleware('auth');
     //Route::post('/items/{requestForm}', 'RequestForms\ItemController@store')->name('items.store')->middleware('auth');
-
     Route::post('items/{requestForm}', [ItemController::class, 'store'])->name('items.store');
 
-    //Route::delete('/items/{item}', 'RequestForms\ItemController@destroy')->name('items.destroy')->middleware('auth');
-    //Route::get('/passages', 'RequestForms\PassageController@create')->name('passages.create')->middleware('auth');
-    //Route::post('/passages/create_from_previous/{request_form}', 'RequestForms\PassageController@createFromPrevious')->name('passages.createFromPrevious')->middleware('auth');
-    //Route::post('/passages/{requestForm}', 'RequestForms\PassageController@store')->name('passages.store')->middleware('auth');
-    //Route::delete('/passages/{passage}', 'RequestForms\PassageController@destroy')->name('passages.destroy')->middleware('auth');
-    //Route::get('/files', 'RequestForms\RequestFormFileController@create')->name('files.create')->middleware('auth');
-    //Route::post('/files/{requestForm}', 'RequestForms\RequestFormFileController@store')->name('files.store')->middleware('auth');
+/************** COMENTAR ****************/
+    Route::delete('/items/{item}', 'RequestForms\ItemController@destroy')->name('items.destroy')->middleware('auth');
+    Route::get('/passages', 'RequestForms\PassageController@create')->name('passages.create')->middleware('auth');
+    Route::post('/passages/create_from_previous/{request_form}', 'RequestForms\PassageController@createFromPrevious')->name('passages.createFromPrevious')->middleware('auth');
+    Route::post('/passages/{requestForm}', 'RequestForms\PassageController@store')->name('passages.store')->middleware('auth');
+    Route::delete('/passages/{passage}', 'RequestForms\PassageController@destroy')->name('passages.destroy')->middleware('auth');
+    Route::get('/files', 'RequestForms\RequestFormFileController@create')->name('files.create')->middleware('auth');
+    Route::post('/files/{requestForm}', 'RequestForms\RequestFormFileController@store')->name('files.store')->middleware('auth');
+/************** COMENTAR ****************/
 });
 
 
@@ -730,7 +724,12 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::post('/store', [OptionsController::class, 'store'])->name('store');
     });
 
-
-
-
+    /*
+    Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
+        Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
+        Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');
+        Route::get('/validaterequest', [SuitabilityController::class, 'validaterequest'])->name('validaterequest');
+        Route::get('/create', [SuitabilityController::class, 'create'])->name('create');
+    });
+    */
 });
