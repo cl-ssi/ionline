@@ -41,9 +41,8 @@ class ItemController extends Controller
         //ASOCIAR ID FOLIO.
         $item->request_form()->associate($requestForm->id);
         $item->save();
-        $requestform_id = $requestForm->id;
         session()->flash('info', 'Su articulo fue ingresado con exito');
-        return redirect()->route('request_forms.edit', compact('requestform_id'));
+        return redirect()->route('request_forms.edit', compact('requestForm'));
     }
 
     /**
