@@ -14,4 +14,10 @@ class ProgrammingItem extends Model
                            'activity_group','workshop_number', 'workshop_session_number', 'workshop_session_time',
                            'activity_total', 'professional', 'activity_performance','hours_required_year', 'hours_required_day', 'direct_work_year',
                            'direct_work_hour', 'information_source', 'prap_financed','observation','workshop','active'];
+
+    
+    public function reviewItems()
+    {
+        return $this->hasMany('App\Models\Programming\ReviewItem');
+    }
 }

@@ -11,7 +11,7 @@ class TrainingsItemController extends Controller
 {
     public function index(Request $request)
     {
-        $trainingItems = TrainingItem::where('programming_id',$request->programming_id)->OrderBy('linieamiento_estrategico')->get();
+        $trainingItems = TrainingItem::where('programming_id',$request->commune_file_id)->OrderBy('linieamiento_estrategico')->get();
         return view('programmings/trainingItems/index')->withtrainingItems($trainingItems);
     }
 
@@ -29,7 +29,7 @@ class TrainingsItemController extends Controller
         //$programming->year = date('Y', strtotime($request->date));
         //$programming->description = $request->description;
         //$programming->establishment_id = $request->establishment;
-        $trainingItems->programming_id = $request->programming_id;
+        $trainingItems->programming_id = $request->commune_file_id;
        
         $trainingItems->save();
 
@@ -37,6 +37,13 @@ class TrainingsItemController extends Controller
 
         return redirect()->back();
         //return redirect()->route('trainingItems', ['programming_id' => 1]);
+    } 
+
+    public function show(Request $request,$id)
+    {
+        $trainingItems = TrainingItem::where('id',$id)->first();
+        //dd($trainingItems);
+        return view('programmings/trainingItems/show')->withtrainingItems($trainingItems);
     }
 
     public function destroy($id)
@@ -46,5 +53,13 @@ class TrainingsItemController extends Controller
 
       session()->flash('success', 'El registro ha sido eliminado de este listado');
        return redirect()->back();
+    }
+
+    public function update(Request $request, TrainingItem $trainingitem)
+    {
+        $trainingitem->fill($request->all());
+        $trainingitem->save();
+        session()->flash('success', 'El registro ha sido actualizado correctamente');
+        return redirect()->back();
     }
 }

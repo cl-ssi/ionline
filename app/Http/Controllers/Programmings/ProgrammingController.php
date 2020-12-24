@@ -5,30 +5,57 @@ namespace App\Http\Controllers\Programmings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Programmings\Programming;
+use App\Programmings\ProgrammingItem;
 use App\Establishment;
 use App\Models\Commune;
 use App\Models\Programmings\Review AS Rev;
 use App\Programmings\Review;
+use App\Models\Programmings\ReviewItem;
 use App\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+
+use Illuminate\Support\Facades\DB;
 
 
 class ProgrammingController extends Controller
 {
     public function index()
     {
-        
         $year = '';
-        if(Auth()->user()->id == '15683706' || Auth()->user()->id == '12345678' || Auth()->user()->id == '13641014' || Auth()->user()->id == '17011541' || Auth()->user()->id == '15287582')
-        {
-        
-        $programmings = Programming::select(
+
+        // Indicador de revisiones
+        $reviewIndicators = ReviewItem::select(
+                    'T2.id'
+                , DB::raw('count(pro_review_items.programming_item_id) AS qty'))
+                ->leftjoin('pro_programming_items AS T1', 'pro_review_items.programming_item_id', '=', 'T1.id')
+                ->leftjoin('pro_programmings AS T2', 'T1.programming_id', '=', 'T2.id')
+                ->Where('pro_review_items.rectified','=','NO')
+                ->Where('pro_review_items.answer','=','NO')
+                ->Where('T2.year','=',2021)
+                ->groupBy('T2.id')
+                ->orderBy('T2.id')->get();
+    
+
+        $indicatorCompletes = ProgrammingItem::select(
+                            'T1.id'
+                        , DB::raw('count(DISTINCT T2.int_code) AS qty'))
+                ->leftjoin('pro_programmings AS T1', 'pro_programming_items.programming_id', '=', 'T1.id')
+                ->leftjoin('pro_activity_items AS T2', 'pro_programming_items.activity_id', '=', 'T2.id')
+                ->Where('T1.year','=',2021)
+                ->groupBy('T1.id')
+                ->orderBy('T1.id')->get();
+
+        // Solo si poseen perfil como administrador o revisor pueden ver todas las comunas del año.
+       if(Auth()->user()->hasAllRoles('Programming: Review') == True || Auth()->user()->hasAllRoles('Programming: Admin') == True )
+       {
+            $programmings = Programming::select(
                              'pro_programmings.id'
                             ,'pro_programmings.year'
                             ,'pro_programmings.user_id'
                             ,'pro_programmings.description'
                             ,'pro_programmings.created_at'
+                            ,'pro_programmings.status'
                             ,'T1.type AS establishment_type'
                             ,'T1.name AS establishment'
                             ,'T2.name AS commune'
@@ -41,6 +68,7 @@ class ProgrammingController extends Controller
                 ->Where('pro_programmings.year','LIKE','%'.$year.'%')
                 ->orderBy('T2.name','ASC')->get();
         }
+        // Si no, sólo muestra el establecimiento asignado al usuario
         else {
             $programmings = Programming::select(
                         'pro_programmings.id'
@@ -48,6 +76,7 @@ class ProgrammingController extends Controller
                         ,'pro_programmings.user_id'
                         ,'pro_programmings.description'
                         ,'pro_programmings.created_at'
+                        ,'pro_programmings.status'
                         ,'T1.type AS establishment_type'
                         ,'T1.name AS establishment'
                         ,'T2.name AS commune'
@@ -58,8 +87,29 @@ class ProgrammingController extends Controller
             ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
             ->leftjoin('users AS T3', 'pro_programmings.user_id', '=', 'T3.id')
             ->Where('pro_programmings.year','LIKE','%'.$year.'%')
+            ->Where('pro_programmings.status','=','active')
             ->Where('pro_programmings.access','LIKE','%'.Auth()->user()->id.'%')
             ->orderBy('T2.name','ASC')->get();
+        }
+
+        foreach ($programmings as $programming) {
+            foreach ($indicatorCompletes as $indicatorComplete) {
+
+                if($programming->id == $indicatorComplete->id) {
+                    $programming['qty_traz'] = $indicatorComplete->qty;
+                }
+
+            }
+        }
+
+        foreach ($programmings as $programming) {
+            foreach ($reviewIndicators as $reviewIndicator) {
+
+                if($programming->id == $reviewIndicator->id) {
+                    $programming['qty_reviews'] = $reviewIndicator->qty;
+                }
+
+            }
         }
         
         return view('programmings/programmings/index')->withProgrammings($programmings);
@@ -67,10 +117,11 @@ class ProgrammingController extends Controller
 
     public function create() 
     {   
-        $establishments = Establishment::whereIn('type',['CESFAM','CGR'])
-                                       ->OrderBy('name')->get(); // Filtrar CENTROS
-        $users = User::where('position', 'Funcionario Programación')->OrderBy('name')->get(); // Sólo Funcionario Programación
-        return view('programmings/programmings/create')->withEstablishments($establishments)->withUsers($users);
+        $establishments = Establishment::whereIn('type',['CESFAM','CGR']) // Solo centros de salud familiar
+                                       ->OrderBy('name')->get(); 
+        $users = User::where('position', 'Funcionario Programación')->OrderBy('name')->get(); // Sólo funcionario Programación
+        return view('programmings/programmings/create')->withEstablishments($establishments)
+                                                       ->withUsers($users);
     }
 
     public function store(Request $request)
@@ -91,45 +142,6 @@ class ProgrammingController extends Controller
         
             $programming->save();
            
-            //INSERT EVALUACION
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'RECEPCION DENTRO DEL PLAZO LEGAL','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'EL PLAN SE PRESENTA POR COMUNA','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'PRESENTA  DIAGNÓSTICO','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'DIAGNOSTICO PRESENTA estructura organizacional de los Centros de Salud de la comuna y de la unidad encargada de salud en la entidad administradora, sobre la base del plan de salud comunal y del modelo de atención definido por el Ministerio de Salud','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'DIAGNOSTICO PRESENTA DOTACIÓN DE PERSONAL (presentada por categorías y jornada laboral)','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'DIAGNOSTICO INCORPORA SITUACIÓN EPIDEMIOLÓGICA','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'PRESENTA APARTADO DE MATRIZ DE CUIDADOS','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'A LOS NODOS CRÍTICOS IDENTIFICADOS EN EL DIAGNÓSTICO SE LE  CREAN ESTRATEGIAS ABORDADAS  EN LA MATRIZ DE CUIDADOS ','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'PRESENTA APARTADO DE PROGRAMACIÓN NUMÉRICA','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES','general_features'=> 'PROGRAMACIÓN NUMÉRICA EXISTE: PORGRAMACION DE HORAS DIRECTAS/ PROGRAMACION DE HORAS INDIRECTAS/PLA DE CAPACITACION ANUAL.','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REFERENTE DE GÉNERO','general_features'=> 'EL DIAGNOSTICO PRESENTA LAS CONSIDERACIONES DE GENÉRO ADECUADAS (Apoyo referente de temática)','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REFERENTE  PESPI e INTERCULTUALIDAD','general_features'=> 'EL DIAGNOSTICO PRESENTA ASPECTOS SUFICIENTES DE INTERCULTURALIDAD (Apoyo referente de temática)','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REFERENTE OIRS','general_features'=> 'EL DIAGNÓSTICO IDENTIFICA ANALISIS DE RECLAMOS DE LA COMUNIDAD ','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REVISION REFERENTE RURAL (cuando corresponda)','general_features'=> 'DIAGNOSTICO INCORPORA Y ANALIZA LAS PROBLEMATICAS DE LOS POBALDOS RURALES ','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REVISION REFERENTE RURAL (cuando corresponda)','general_features'=> 'MATRIZ DE CUIDADOS INTEGRA PROBLEMAS DIAGNOSTICADOS EN LOCALIDADES RURALES','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REVISION REFERENTE RURAL (cuando corresponda)','general_features'=> 'EN PROGRAMACIÓN NUMÉRICA SE CONSIDERA TIEMPOS DE VIAJE A RONDAS','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REVISION DE CAPACITACIÓN MUNICIPAL','general_features'=> 'EL DIAGNÓTICO PRESENTA LAS BRECHAS DE CAPACITACIÓN  Y SE ENCUENTRA SEPARADO Y PRIORIZADO POR LOS EJES ESTRATÉGICOS DE LA ENS','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-            $programming->programming_reviews()
-            ->create(['revisor' => 'REVISION DE CAPACITACIÓN MUNICIPAL','general_features'=> 'LA PROGRAMACION NUMÉRICA SE ENCUENTRA COMPLETAMENTE LLENA DE ACUERDO A LAS ORIENTACIONES PARA PROGRAMACIÓN EN RED','active'=> 'SI','user_id'=>  Auth()->user()->id,'programming_id'=>$programming->id]);
-
-            
 
             session()->flash('info', 'Se ha iniciado una nueva Programación Operativa');
         }
@@ -139,28 +151,40 @@ class ProgrammingController extends Controller
 
     public function show(Programming $programming)
     {
-        //dd($programming);
         $establishments = Establishment::whereIn('type',['CESFAM','CGR'])
                                        ->OrderBy('name')->get();
         
-        $reviews = Rev::where('programming_id',$programming->id)
-                                       ->OrderBy('id')->get();
-        //dd($reviews);
         $users = User::with('organizationalUnit')->where('position', 'Funcionario Programación')->OrderBy('name')->get(); // Sólo Funcionario Programación
         $access_list = unserialize($programming->access);
         $user = $programming->user;
-        return view('programmings/programmings/show')->withProgramming($programming)->withReview($reviews)->with('access_list', $access_list)->with('user', $user)->withEstablishments($establishments)->withUsers($users);
+        return view('programmings/programmings/show')->withProgramming($programming)
+                                                    ->with('access_list', $access_list)
+                                                    ->with('user', $user)
+                                                    ->withEstablishments($establishments)
+                                                    ->withUsers($users);
     }
 
     public function update(Request $request, Programming $programming)
     {
-      //dd($request);
-      $programming->fill($request->all());
-      $programming->year = $request->date;
-      $programming->user_id  = $request->user;
-      $programming->access   = serialize($request->access);
-      $programming->save();
-      return redirect()->back();
+        $programming->fill($request->all());
+        $programming->year = $request->date;
+        $programming->user_id  = $request->user;
+        $programming->access   = serialize($request->access);
+        $programming->save();
+        return redirect()->back();
+    }
+
+    public function updateStatus(Request $request,$id)
+    {
+        $programming = Programming::find($id);
+
+        $programming->fill($request->all());
+        if($request->status){
+            $programming->status = $request->status;
+        }
+        $programming->save();
+
+        return redirect()->back();
     }
 
 }

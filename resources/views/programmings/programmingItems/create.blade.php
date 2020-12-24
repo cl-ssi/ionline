@@ -50,6 +50,14 @@ Nuevo Item Programación Operativa </h4>
     <input type="hidden" class="form-control" id="active" name="active" value="SI">
     <div class="form-row">
         <div class="form-group col-md-2">
+            <label for="forprogram">Tipo Actividad</label>
+            <select name="activity_type" id="activity_type"  class="form-control">
+                    <option value="Directa">Directa</option>
+                    <option value="Indirecta">Indirecta</option>
+                
+            </select>
+        </div>
+        <div class="form-group col-md-1">
             <label for="forprogram">Taller</label>
             <select name="workshop" id="workshop" onchange="yesnoCheck(this);" class="form-control">
                     <option value="NO">NO</option>
@@ -69,7 +77,7 @@ Nuevo Item Programación Operativa </h4>
             </select>
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-5">
             <label for="forprogram">Acción</label>
             <input type="input" class="form-control" id="action_type" name="action_type" value="{{ $activityItemsSelect ? $activityItemsSelect->action_type : '' }}" required="">
         </div>

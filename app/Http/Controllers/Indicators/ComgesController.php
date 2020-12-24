@@ -123,12 +123,13 @@ class ComgesController extends Controller
             'section_id' => $corte->id
         ]);
 
-        $months_by_section = array(1 => array(1,2,3), 2 => array(4,5,6), 3 => array(7,8,9), 4 => array(10,11,12));
+        //$months_by_section = array(1 => array(1,2,3), 2 => array(4,5,6), 3 => array(7,8,9), 4 => array(10,11,12));
 
         if($request->has('numerator_month')){
             foreach($request->get('numerator_month') as $index => $value)
                 $new_action->values()->create([
-                    'month' => $months_by_section[$section][$index],
+                    // 'month' => $months_by_section[$section][$index],
+                    'month' => $index + 1,
                     'factor' => 'numerador',
                     'value' => $value
                 ]);
@@ -137,7 +138,8 @@ class ComgesController extends Controller
         if($request->has('denominator_month')){
             foreach($request->get('denominator_month') as $index => $value)
                 $new_action->values()->create([
-                    'month' => $months_by_section[$section][$index],
+                    // 'month' => $months_by_section[$section][$index],
+                    'month' => $index + 1,
                     'factor' => 'denominador',
                     'value' => $value
                 ]);
@@ -202,12 +204,13 @@ class ComgesController extends Controller
         $action->denominator_source = $request->has('denominator_source') ? $request->get('denominator_source') : null;
         $action->save();
 
-        $months_by_section = array(1 => array(1,2,3), 2 => array(4,5,6), 3 => array(7,8,9), 4 => array(10,11,12));
+        // $months_by_section = array(1 => array(1,2,3), 2 => array(4,5,6), 3 => array(7,8,9), 4 => array(10,11,12));
 
         if($request->has('numerator_month')){
             foreach($request->get('numerator_month') as $index => $value)
                 $action->values()->updateOrCreate(
-                    ['factor' => 'numerador', 'month' => $months_by_section[$section][$index]], 
+                    // ['factor' => 'numerador', 'month' => $months_by_section[$section][$index]], 
+                    ['factor' => 'numerador', 'month' => $index + 1], 
                     ['value' => $value]
                 );
         }
@@ -215,7 +218,8 @@ class ComgesController extends Controller
         if($request->has('denominator_month')){
             foreach($request->get('denominator_month') as $index => $value)
                 $action->values()->updateOrCreate(
-                    ['factor' => 'denominador', 'month' => $months_by_section[$section][$index]], 
+                    // ['factor' => 'denominador', 'month' => $months_by_section[$section][$index]], 
+                    ['factor' => 'denominador', 'month' => $index + 1], 
                     ['value' => $value]
                 );
         }

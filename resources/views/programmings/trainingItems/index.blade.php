@@ -5,10 +5,10 @@
 @section('content')
 
 @include('programmings/nav')
-<a href="{{ route('trainingitems.create',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
+<a href="{{ route('trainingitems.create',['commune_file_id' => Request::get('commune_file_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
 <h4 class="mb-3"> Capacitaciones Municipales</h4>
 
-<button onclick="exportTableToExcel('tblData')" class="btn btn-success mb-4 float-left btn-sm">Excel</button>
+<button onclick="tableExcel('xlsx')" class="btn btn-success mb-4 float-left btn-sm">Excel</button>
 
 <table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover  ">
     <thead>
@@ -41,6 +41,8 @@
             <th class="text-center align-middle">ORGANISMO EJECUTOR</th>
             <th class="text-center align-middle">COORDINADOR</th>
             <th class="text-center align-middle">FECHA DE EJECUCIÓN</th>
+            @can('TrainingItem: edit')<th class="text-center align-middle">EDITAR</th> @endcan
+            @can('TrainingItem: delete')<th class="text-center align-middle">ELIMINAR</th> @endcan
         </tr>
     </thead>
     <tbody style="font-size:60%;">
@@ -64,6 +66,12 @@
             <td class="text-center align-middle">{{ $trainingItem->org_ejecutor }}</td>
             <td class="text-center align-middle">{{ $trainingItem->coordinador }}</td>
             <td class="text-center align-middle">{{ $trainingItem->fecha_ejecucion }}</td>
+
+            @can('TrainingItem: edit')
+                <td class="text-center align-middle"><a href="{{ route('trainingitems.show', $trainingItem->id) }}" class="btn btb-flat btn-xs  btn-light" >
+                    <i class="fas fa-edit"></i></a>
+                </td>
+            @endcan
             @can('TrainingItem: delete')
             <td class="text-center align-middle">
                 <form method="POST" action="{{ route('trainingitems.destroy', $trainingItem->id) }}" class="small d-inline">
@@ -97,36 +105,21 @@
 @endsection
 
 @section('custom_js')
+
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>  
 <script>
-    function exportTableToExcel(tableID, filename = ''){
-        var downloadLink;
-        var dataType = 'application/vnd.ms-excel';
-        var tableSelect = document.getElementById(tableID);
-        var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
-        
-        // Specify file name
-        filename = filename?filename+'.xls':'Capacitacion_excel.xls';
-        
-        // Create download link element
-        downloadLink = document.createElement("a");
-        
-        document.body.appendChild(downloadLink);
-        
-        if(navigator.msSaveOrOpenBlob){
-            var blob = new Blob(['\ufeff', tableHTML], {
-                type: dataType
-            });
-            navigator.msSaveOrOpenBlob( blob, filename);
-        }else{
-            // Create a link to the file
-            downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
-        
-            // Setting the file name
-            downloadLink.download = filename;
-            
-            //triggering the function
-            downloadLink.click();
+
+
+
+
+
+      function tableExcel(type, fn, dl) {
+          var elt = document.getElementById('tblData');
+          const filename = 'Informe_capacitación'
+          var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+          return dl ?
+            XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
+            XLSX.writeFile(wb, `${filename}.xlsx`)
         }
-    }
 </script>
 @endsection

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Nuevo convenio')
+@section('title', 'Actualizar Programación Númerica')
 
 @section('content')
 
@@ -54,7 +54,7 @@
             </select>
         </div>
 
-        </div>
+    </div>
     <button type="submit" class="btn btn-info mb-4">Actualizar</button>
 
 </form>

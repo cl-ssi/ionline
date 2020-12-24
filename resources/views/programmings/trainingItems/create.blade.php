@@ -9,7 +9,7 @@
 
 
 <h4 class="mb-3">
-<a href="{{ route('trainingitems.index', ['programming_id' => Request::get('programming_id')]) }}" class="btn btb-flat btn-sm btn-dark" >
+<a href="{{ route('trainingitems.index', ['commune_file_id' => Request::get('commune_file_id')]) }}" class="btn btb-flat btn-sm btn-dark" >
                     <i class="fas fa-arrow-left small"></i> 
                     <span class="small">Volver</span> 
     </a>
@@ -20,12 +20,13 @@ Nuevo Item de Capacitación </h4>
 
 <form method="POST" class="form-horizontal small" action="{{ route('trainingitems.store') }}" enctype="multipart/form-data">
     @csrf
-    <input type="hidden" class="form-control" id="forreferente" name="programming_id" value="{{Request::get('programming_id')}}">
+    <input type="hidden" class="form-control" id="forreferente" name="commune_file_id" value="{{Request::get('commune_file_id')}}">
 
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="forprogram">Lineamientos Estrategicos</label>
             <select name="linieamiento_estrategico" id="linieamiento_estrategico" class="form-control">
+                    <option value="EJE ESTRATEGICO 1: Enfermedades Transminisibles">EJE ESTRATEGICO 1: Enfermedades Transminisibles</option>
                     <option value="EJE ESTRATEGICO 2: Enfermedades crónicas, violencia y discapacidad">EJE ESTRATEGICO 2: Enfermedades crónicas, violencia y discapacidad</option>
                     <option value="EJE ESTRATEGICO 3: Hábitos de vida">EJE ESTRATEGICO 3: Hábitos de vida</option>
                     <option value="EJE ESTRATEGICO 4: Curso de vida">EJE ESTRATEGICO 4: Curso de vida</option>
@@ -117,8 +118,8 @@ Nuevo Item de Capacitación </h4>
         <div class="form-group col-md-3">
             <label for="forprogram">Fondos Municipales</label>
             <select name="fondo_muni" id="fondo_muni" class="form-control">
-                    <option value="SI">No</option>
-                    <option value="NO">SI</option>
+                    <option value="NO">No</option>
+                    <option value="SI">SI</option>
                
             </select>
         </div>
@@ -181,7 +182,7 @@ Nuevo Item de Capacitación </h4>
 
         if(med_odont_qf == 0 && otros_profesionales == 0 && tec_nivel_superior == 0  && tec_salud == 0 && administrativo_salud == 0 && auxiliares_salud == 0)
         {
-            var calc = $('#total').val();
+            var calc = 0;
             console.log("prevalence_rate == 0 && coverture == 0");
         }
         

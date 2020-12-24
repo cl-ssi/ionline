@@ -6,15 +6,19 @@ use App\Programmings\Programming;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Programmings\Review;
+use App\Models\Programmings\CommuneFile;
 
 class ProgrammingReviewController extends Controller
 {
     public function index(Programming $programming,Request $request)
     {
-        $reviews = Review::where('programming_id',$request->programming_id)
+        $reviews = Review::where('commune_file_id',$request->commune_file_id)
                                        ->OrderBy('id')->get();
+        
+        $communeFile = CommuneFile::where('id',$request->commune_file_id)->first();
 
-        return view('programmings/reviews/index')->withProgramming($programming)->withReview($reviews);
+
+        return view('programmings/reviews/index')->withProgramming($programming)->withReview($reviews)->with('communeFile', $communeFile);
     }
 
     public function update(Request $request,$id)

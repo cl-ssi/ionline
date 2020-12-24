@@ -40,8 +40,8 @@ class Seccion extends Model
     {
         $result = $this->subtotals_first ? 2 : 1; //para efectos de mostrar bien los subtotales en las celdas de la tabla
         return $this->prestaciones->filter(function ($prestacion) use ($group){
-            return Str::contains($prestacion->descripcion, '- '. $group . ' -');
-        })->count() + ($this->subtotalExists($group) ? $result : 0);
+            return Str::contains($prestacion->descripcion, '- '. $group . ' -') OR Str::contains($prestacion->descripcion, '- '. $group . '  -') OR Str::contains($prestacion->descripcion, '- '. $group . '   -');
+        })->count() + ($this->subtotalExists($group) ? $result : 0) + ($this->subtotalExists($group . ' ') ? $result : 0) + ($this->subtotalExists($group . '  ') ? $result : 0);
     }
 
     public function hasGroup()
@@ -55,6 +55,14 @@ class Seccion extends Model
     {
         $prestaciones = $this->prestaciones->filter(function ($prestacion) use ($item){
             return Str::contains($prestacion->descripcion, '- '. $item->nombre_grupo_prestacion . ' -');
+        });
+        return $prestaciones->last() == $item;
+    }
+
+    public function isLastPrestacionByTotalGroup($item)
+    {
+        $prestaciones = $this->prestaciones->filter(function ($prestacion) use ($item){
+            return Str::contains($prestacion->descripcion, '- '. $item->nombre_grupo_prestacion . ' -') OR Str::contains($prestacion->descripcion, '- '. $item->nombre_grupo_prestacion . '  -') OR Str::contains($prestacion->descripcion, '- '. $item->nombre_grupo_prestacion . '   -');
         });
         return $prestaciones->last() == $item;
     }
@@ -76,6 +84,11 @@ class Seccion extends Model
     public function subtotalExists($group)
     {
         return Str::contains($this->subtotals, $group);
+    }
+
+    public function totalByGroupExists($group)
+    {
+        return Str::contains($this->totals_by_group, $group);
     }
 
     public function supergroupExists($supergroup)
@@ -100,6 +113,16 @@ class Seccion extends Model
         });
         foreach($prestaciones as $prestacion) $subtotal += $prestacion->rems->sum($col);
         return $subtotal;
+    }
+
+    public function totalByGroup($col, $group)
+    {
+        $total = 0;
+        $prestaciones = $this->prestaciones->filter(function ($prestacion) use ($group){
+            return Str::contains($prestacion->descripcion, '- '. $group . ' -') OR Str::contains($prestacion->descripcion, '- '. $group . '  -') OR Str::contains($prestacion->descripcion, '- '. $group . '   -');
+        });
+        foreach($prestaciones as $prestacion) $total += $prestacion->rems->sum($col);
+        return $total;
     }
 
     public function totalByPrestacion($col, $nombre_prestacion)

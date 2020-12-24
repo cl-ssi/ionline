@@ -31,7 +31,7 @@ class TelephoneSeeder extends Seeder
         /**
          * Create 10 random telephones.
          */
-        factory(App\Resources\Telephone::class, 10)->create();
+        //factory(App\Resources\Telephone::class, 10)->create();
 
     }
 }
