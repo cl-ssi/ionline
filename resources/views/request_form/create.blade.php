@@ -11,7 +11,8 @@
 @include('request_form.nav')
 
 <!-- FORM DE INGRESO DE TICKET -->
-<form method="POST" class="form-horizontal" action="{{ route('request_forms.store') }}" enctype="multipart/form-data">
+<!--<form method="POST" class="form-horizontal" action="{{ route('request_forms.store') }}" enctype="multipart/form-data">-->
+  <form method="POST" class="form-horizontal" action="{{ route('request_forms.store') }}" enctype="multipart/form-data">
     @csrf <!-- input hidden contra ataques CSRF -->
     <div class="form-row">
         <div class="form-group col">
