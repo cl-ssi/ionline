@@ -9,8 +9,8 @@
         {{-- <h1 class="display-4">Intranet Online</h1>
         <p class="lead">{{ env('APP_SS') }}</p> --}}
         <div class="row">
-            <div class="col-6"><img src="{{ asset('images\tree.jpg') }}" alt="Árbol de Navidad" width="350"></div>
-            <div class="col-6">
+            <div class="col-4"><img src="{{ asset('images\tree.jpg') }}" alt="Árbol de Navidad" width="220"></div>
+            <div class="col-8">
                 <p class="h4 text-justify" style="color:#165290">
                 Hola {{ strtok(auth()->user()->name, " ") }}.<br><br>
                 El glorioso departamento TIC del Servicio de Salud,
