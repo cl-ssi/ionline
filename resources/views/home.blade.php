@@ -15,7 +15,7 @@
                 Hola {{ strtok(auth()->user()->name, " ") }}.<br><br>
                 El glorioso departamento TIC del Servicio de Salud,
                 desea de todo corazón que hayas tenido una Feliz Navidad y desea también,
-                que tengas un próspero Año Nuevo, lleno de salud, felicidad y lo tú estés buscando.
+                que tengas un próspero Año Nuevo, lleno de salud, felicidad y lo que tú estés buscando.
                 </p>
             </div>
         </div>
