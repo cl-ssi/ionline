@@ -55,12 +55,12 @@ class RequestFormController extends Controller
      */
     public function store(Request $request)
     {
-        $request_form = new RequestForm($request->All());
+        $requestForm = new RequestForm($request->All());
         //ASOCIAR ID USUARIO que crea.
-        $request_form->user()->associate(Auth::user());
+        $requestForm->user()->associate(Auth::user());
         //ASOCIAR ID USUARIO admin de contrato.
-        $request_form->admin()->associate($request->admin_id);
-        $request_form->save();
+        $requestForm->admin()->associate($request->admin_id);
+        $requestForm->save();
 
         //AGREGAR EVENTO DE INGRESA QUIEN SOLICITA.
         $event = new RequestFormEvent();
@@ -68,13 +68,13 @@ class RequestFormController extends Controller
                            Su requerimiento ha sido correctamente creado por el usuario que registra.';
         $event->type = 'message';
         $event->status = 'create';
-        $event->request_form()->associate($request_form->id);
+        $event->request_form()->associate($requestForm->id);
         $event->user()->associate(Auth::user());
         $event->save();
 
-        $id = $request_form->id;
+        $id = $requestForm->id;
         session()->flash('info', 'Su formulario de requrimiento fue ingresado con exito, N°: '.$id);
-        return redirect()->route('request_forms.edit', compact('id'));
+        return redirect()->route('request_forms.edit', compact('requestForm'));
     }
 
     /**
@@ -98,6 +98,7 @@ class RequestFormController extends Controller
     {
         $users = User::all()->sortBy('fathers_family');
         $item_codes = RequestFormItemCode::all();
+        $flag_finance = 0;
 
         if($requestForm->type_form == 'item'){
           foreach($requestForm->requestformevents as $key => $event){
@@ -111,7 +112,7 @@ class RequestFormController extends Controller
         return view('request_form.edit', compact('requestForm', 'users', 'item_codes', 'flag_finance'));
         }
         else {
-          return view('request_form.edit', compact('requestForm', 'users', 'item_codes'));
+          return view('request_form.edit', compact('requestForm', 'users', 'item_codes', 'flag_finance'));
         }
     }
 
