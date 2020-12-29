@@ -5,6 +5,7 @@ use App\Http\Controllers\Suitability\SuitabilityController;
 use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\QuestionsController;
 use App\Http\Controllers\Suitability\OptionsController;
+use App\Http\Controllers\Suitability\ResultsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -696,6 +697,11 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     });
 
 
+    Route::prefix('results')->as('results.')->middleware('auth')->group(function () {
+        Route::get('/', [ResultsController::class, 'index'])->name('index');
+        // Route::get('/create', [OptionsController::class, 'create'])->name('create');
+        // Route::post('/store', [OptionsController::class, 'store'])->name('store');        
+    });
 
 
 });

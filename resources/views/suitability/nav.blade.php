@@ -31,7 +31,7 @@
             <a class="dropdown-item" href="{{ route('suitability.categories.index') }}"><i class="fas fa-list"></i>  Categorías</a>
             <a class="dropdown-item" href="{{ route('suitability.questions.index') }}"><i class="fas fa-question"></i>  Preguntas</a>
             <a class="dropdown-item" href="{{ route('suitability.options.index') }}"><i class="fas fa-check"></i>  Opciones</a>
-            <a class="dropdown-item" href="#"><i class="fas fa-check"></i>  Resultados</a>
+            <a class="dropdown-item" href="{{ route('suitability.results.index') }}"><i class="fas fa-check"></i>  Resultados</a>
         </div>
     </div>
     
