@@ -13,7 +13,7 @@
 		<fieldset class="form-group col-4">
 			<label for="forEstablishment">Id Establecimiento</label>
 			<input type="text" class="form-control" id="forEstablishment"
-				name="establishment_id" required="required" value="10">
+				name="establishment_id" required="required" value="1">
 		</fieldset>
 	</div>
 
@@ -37,7 +37,7 @@
 		<fieldset class="form-group col-3">
 			<label for="forLevel">Nivel</label>
 			<input type="number" class="form-control" id="forLevel"
-				name="level" required="required">
+				name="level" required="required" value="{{ $ou->nivel }}">
 		</fieldset>
 	</div>
 
