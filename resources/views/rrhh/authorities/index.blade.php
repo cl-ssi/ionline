@@ -3,17 +3,20 @@
 @section('title', 'Autoridades')
 
 @section('content')
-<h3 class="mb-3">Autoridades</h3>
+@foreach($ouTopLevels as $ouTopLevel)
+<h3 class="mb-3">Autoridades del {{($ouTopLevel->establishment->name)}}</h3>
 
 @can('Authorities: manager')
 <a href="{{ route('rrhh.authorities.create') }}" class="btn btn-primary">Crear</a>
 @endcan
+
 
 <div class="row">
 
     <div class="col-md-5 small">
         <b>+</b> <a href="{{ route('rrhh.authorities.index') }}?ou={{$ouTopLevel->id}}">{{ $ouTopLevel->name }}</a>
         <ul>
+        
             @foreach($ouTopLevel->childs as $child_level_1)
                 <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_1->id}}"> {{$child_level_1->name}} </a></li>
                 <ul>
@@ -27,6 +30,7 @@
                     @endforeach
                 </ul>
             @endforeach
+        
         </ul>
     </div>
 
@@ -123,6 +127,8 @@
 
     </div>
 </div>
+
+@endforeach
 @endsection
 
 @section('custom_js')
