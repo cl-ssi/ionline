@@ -24,6 +24,8 @@
 			<tr>
 				<th scope="col"></th>
 				<th scope="col">Nombre</th>
+                <th scope="col">Nivel</th>
+                <th scope="col">Id Establecimiento</th>
 				<th scope="col">Accion</th>
 			</tr>
 		</thead>
@@ -32,6 +34,8 @@
 			<tr>
 				<td scope="row">{{ ++$key }} </td>
 				<td>{{ $organizationalUnit->name }}</td>
+                <td>{{ $organizationalUnit->level }}</td>
+                <td>{{ $organizationalUnit->establishment_id }}</td>
 				<td>
 					<a href="{{ route('rrhh.organizational-units.edit', $organizationalUnit->id) }}" class="btn btn-outline-secondary btn-sm">
 					<span class="fas fa-edit" aria-hidden="true"></span></a>
