@@ -37,7 +37,7 @@
 		<fieldset class="form-group col-3">
 			<label for="forLevel">Nivel</label>
 			<input type="number" class="form-control" id="forLevel"
-				name="level" required="required" value="{{ $ou->nivel }}">
+				name="level" required="required" value="{{ $organizationalUnit->level }}">
 		</fieldset>
 	</div>
 
