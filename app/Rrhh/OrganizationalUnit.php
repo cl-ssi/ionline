@@ -15,7 +15,7 @@ class OrganizationalUnit extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'organizational_unit_id'
+        'name','root', 'organizational_unit_id','establishment_id'
     ];
 
     public function users() {
@@ -36,6 +36,10 @@ class OrganizationalUnit extends Model
 
     public function documentEvents() {
         return $this->hasMany('\App\Documents\DocumentEvent');
+    }
+
+    public function establishment() {
+        return $this->belongsTo('\App\Establishment', 'establishment_id');
     }
 
     /**
