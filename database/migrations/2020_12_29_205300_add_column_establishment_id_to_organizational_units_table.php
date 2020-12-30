@@ -15,7 +15,7 @@ class AddColumnEstablishmentIdToOrganizationalUnitsTable extends Migration
     {
         Schema::table('organizational_units', function (Blueprint $table) {
             //
-            $table->boolean('root')->nullable()->after('name');;
+            $table->tinyInteger('level')->nullable()->after('name');;
             $table->unsignedInteger('establishment_id')->nullable()->after('organizational_unit_id');;
             $table->foreign('establishment_id')->references('id')->on('establishments');
         });
@@ -32,7 +32,7 @@ class AddColumnEstablishmentIdToOrganizationalUnitsTable extends Migration
             //
             $table->dropForeign(['establishment_id']);
             $table->dropColumn('establishment_id');
-            $table->dropColumn('root');
+            $table->dropColumn('level');
         });
     }
 }
