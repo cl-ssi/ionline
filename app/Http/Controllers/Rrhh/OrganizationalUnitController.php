@@ -15,9 +15,8 @@ class OrganizationalUnitController extends Controller
      */
     public function index()
     {
-        $organizationalUnits = OrganizationalUnit::where('establishment_id', 1)->get();
-        return view('rrhh/organizationalunit/index')
-            ->with('organizationalUnits', $organizationalUnits);
+        $organizationalUnits = OrganizationalUnit::where('level', 1)->get();
+        return view('rrhh.organizationalunit.index', compact('organizationalUnits'));
     }
 
     /**
