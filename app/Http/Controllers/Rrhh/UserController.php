@@ -115,10 +115,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $ouRoot = OrganizationalUnit::find(1);
+        //$ouRoot = OrganizationalUnit::find(1);
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
         return view('rrhh.edit')
             ->withUser($user)
-            ->withOuRoot($ouRoot);
+            ->withouRoots($ouRoots);
     }
 
     /**
