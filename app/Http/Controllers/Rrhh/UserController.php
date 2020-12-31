@@ -53,8 +53,9 @@ class UserController extends Controller
     public function create()
     {
 
-        $ouRoot = OrganizationalUnit::find(1);
-        return view('rrhh.create')->withOuRoot($ouRoot);
+        //$ouRoot = OrganizationalUnit::find(1);
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        return view('rrhh.create')->withOuRoots($ouRoots);
     }
 
     /**

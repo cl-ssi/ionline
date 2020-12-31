@@ -25,6 +25,11 @@
                             <ul>
                                 @foreach($child_level_2->childs as $child_level_3)
                                     <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_3->id}}">{{ $child_level_3->name }}</a></li>
+                                    @foreach($child_level_3->childs as $child_level_4)
+                                    <ul>
+                                    <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_4->id}}">{{ $child_level_4->name }}</a></li>                                    
+                                    </ul>
+                                    @endforeach
                                 @endforeach
                             </ul>
                     @endforeach
