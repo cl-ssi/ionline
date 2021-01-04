@@ -161,7 +161,9 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('{user}/roles', 'Rrhh\RoleController@index')->name('roles.index')->middleware('auth');
     Route::post('{user}/roles', 'Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
 
-    Route::resource('authorities', 'Rrhh\AuthorityController')->middleware(['auth']);;
+    Route::resource('service_requests', 'ServiceRequests\ServiceRequestController')->middleware('auth');
+    // Route::resource('scs_service_requests_signature_flow', 'ServiceRequests\ServiceRequestSignatureFlowController')->middleware('auth');
+    Route::resource('authorities', 'Rrhh\AuthorityController')->middleware(['auth']);
 
     Route::prefix('organizational-units')->name('organizational-units.')->group(function () {
         Route::get('/', 'Rrhh\OrganizationalUnitController@index')->name('index');
@@ -679,20 +681,20 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/', [CategoriesController::class, 'index'])->name('index');
         Route::get('/create', [CategoriesController::class, 'create'])->name('create');
         Route::post('/store', [CategoriesController::class, 'store'])->name('store');
-        
+
     });
 
     Route::prefix('questions')->as('questions.')->middleware('auth')->group(function () {
         Route::get('/', [QuestionsController::class, 'index'])->name('index');
         Route::get('/create', [QuestionsController::class, 'create'])->name('create');
         Route::post('/store', [QuestionsController::class, 'store'])->name('store');
-        
+
     });
 
     Route::prefix('options')->as('options.')->middleware('auth')->group(function () {
         Route::get('/', [OptionsController::class, 'index'])->name('index');
         Route::get('/create', [OptionsController::class, 'create'])->name('create');
-        Route::post('/store', [OptionsController::class, 'store'])->name('store');        
+        Route::post('/store', [OptionsController::class, 'store'])->name('store');
     });
 
 
