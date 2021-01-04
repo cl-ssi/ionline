@@ -5,6 +5,7 @@ use App\Http\Controllers\Suitability\SuitabilityController;
 use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\QuestionsController;
 use App\Http\Controllers\Suitability\OptionsController;
+use App\Http\Controllers\Suitability\ResultsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -656,10 +657,36 @@ Route::put('request_forms/add_item_form/{request_form}', 'RequestForms\RequestFo
 Route::put('request_forms/store_approved_finance/{request_form}', 'RequestForms\RequestFormController@storeApprovedFinance')->name('request_forms.store_approved_finance')->middleware('auth');
 Route::put('request_forms/store_reject/{request_form}', 'RequestForms\RequestFormController@storeReject')->name('request_forms.store_reject')->middleware('auth');
 
-Route::resource('request_forms', 'RequestForms\RequestFormController')->middleware('auth');
+//Route::resource('request_forms', 'RequestForms\RequestFormController')->middleware('auth');
+/*
+Route::prefix('request_forms')->name('request_forms.')->group(function () {
+    Route::get('/', 'RequestForms\RequestFormController@index')->name('index');
+    Route::get('create', 'RequestForms\RequestFormController@create')->name('create');
+    Route::post('store', 'RequestForms\RequestFormController@store')->name('store');
+    Route::get('{request_form}/edit', 'RequestForms\RequestFormController@edit')->name('edit');
+    Route::put('{request_form}/update', 'RequestForms\RequestFormController@update')->name('update');
+    Route::delete('{request_form}/destroy', 'RequestForms\RequestFormController@destroy')->name('destroy');
+});
+*/
+
 Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(function () {
+    Route::get('/', [RequestFormController::class, 'index'])->name('index');
+    Route::get('/{requestForm}/edit', [RequestFormController::class, 'edit'])->name('edit');
+    Route::post('/store', [RequestFormController::class, 'store'])->name('store');
+    Route::put('/update', [RequestFormController::class, 'update'])->name('update');
+    //Route::get('/own', [RequestFormController::class, 'indexOwn'])->name('own');
+    //Route::get('/validaterequest', [RequestFormController::class, 'validaterequest'])->name('validaterequest');
+    Route::get('/create', [RequestFormController::class, 'create'])->name('create');
+});
+
+Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(function () {
+    //Route::get('{requestForm}/edit', 'RequestFormController@edit')->name('edit');
+    //Route::get('{requestForm}/edit', [ItemController::class, 'edit'])->name('edit');
     Route::get('/items', 'RequestForms\ItemController@create')->name('items.create')->middleware('auth');
-    Route::post('/items/{requestForm}', 'RequestForms\ItemController@store')->name('items.store')->middleware('auth');
+    //Route::post('/items/{requestForm}', 'RequestForms\ItemController@store')->name('items.store')->middleware('auth');
+    Route::post('items/{requestForm}', [ItemController::class, 'store'])->name('items.store');
+
+/************** COMENTAR ****************/
     Route::delete('/items/{item}', 'RequestForms\ItemController@destroy')->name('items.destroy')->middleware('auth');
     Route::get('/passages', 'RequestForms\PassageController@create')->name('passages.create')->middleware('auth');
     Route::post('/passages/create_from_previous/{request_form}', 'RequestForms\PassageController@createFromPrevious')->name('passages.createFromPrevious')->middleware('auth');
@@ -667,6 +694,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::delete('/passages/{passage}', 'RequestForms\PassageController@destroy')->name('passages.destroy')->middleware('auth');
     Route::get('/files', 'RequestForms\RequestFormFileController@create')->name('files.create')->middleware('auth');
     Route::post('/files/{requestForm}', 'RequestForms\RequestFormFileController@store')->name('files.store')->middleware('auth');
+/************** COMENTAR ****************/
 });
 
 
@@ -698,6 +726,11 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     });
 
 
+    Route::prefix('results')->as('results.')->middleware('auth')->group(function () {
+        Route::get('/', [ResultsController::class, 'index'])->name('index');
+        // Route::get('/create', [OptionsController::class, 'create'])->name('create');
+        // Route::post('/store', [OptionsController::class, 'store'])->name('store');        
+    });
 
 
 });

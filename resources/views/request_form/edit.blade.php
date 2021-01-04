@@ -46,6 +46,8 @@
       <li class=""><em>Paso 5</em><span>Aprob. Abastecimiento</span></li>
       <li class=""><em>Paso 6</em><span>Generación OC</span></li>
       <li class=""><em>Paso 6</em><span>Solicitud Cerrada</span></li>
+      <li class=""><em>valor del Flag: </em><span>{{$flag_finance}}</span></li>
+      <li class=""><em>Tipo Form Request: </em><span>{{$requestForm->type_form}}</span></li>
   </ul>
 </div>
 <!-- *********************************************************************** -->

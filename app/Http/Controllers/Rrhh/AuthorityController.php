@@ -18,7 +18,7 @@ class AuthorityController extends Controller
      */
     public function index(Request $request)
     {
-        $ouTopLevel = OrganizationalUnit::Find(1);
+        $ouTopLevels = OrganizationalUnit::where('level', 1)->get();
         if($request->date) {
             $today = new \DateTime($request->date);
         }
@@ -73,7 +73,7 @@ class AuthorityController extends Controller
         //$todayDate = date("Y-m-d");
         //$calendar[$todayDate] = Authority::getAuthorityFromDate($todayDate,'manager');
         //die($ou);
-        return view('rrhh.authorities.index',compact('authorities','ouTopLevel','calendar','today','ou'));
+        return view('rrhh.authorities.index',compact('authorities','ouTopLevels','calendar','today','ou'));
     }
 
     /**
