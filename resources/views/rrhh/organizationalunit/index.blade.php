@@ -18,28 +18,101 @@
     </div>
 </fieldset>
 
+@foreach($organizationalUnits as $root)
+
 <div class="table-responsive">
 	<table class="table table-striped table-sm" id="TableFilter">
 		<thead>
 			<tr>
 				<th scope="col"></th>
 				<th scope="col">Nombre</th>
+                <th scope="col">Nivel</th>
+                <th scope="col">Id Establecimiento</th>
 				<th scope="col">Accion</th>
 			</tr>
 		</thead>
 		<tbody>
-			@foreach($organizationalUnits as $key => $organizationalUnit)
-			<tr>
-				<td scope="row">{{ ++$key }} </td>
-				<td>{{ $organizationalUnit->name }}</td>
-				<td>
-					<a href="{{ route('rrhh.organizational-units.edit', $organizationalUnit->id) }}" class="btn btn-outline-secondary btn-sm">
-					<span class="fas fa-edit" aria-hidden="true"></span></a>
-				</td>
-			</tr>
+            <tr>
+                <td scope="row">{{ $root->id }}</td>
+                <td>&nbsp;&nbsp;-&nbsp;{{ $root->name }}</td>
+                <td>{{ $root->level }}</td>
+                <td>{{ $root->establishment_id }}</td>
+                <td>
+                    <a href="{{ route('rrhh.organizational-units.edit', $root->id) }}" class="btn btn-outline-secondary btn-sm">
+                    <span class="fas fa-edit" aria-hidden="true"></span></a>
+                </td>
+            </tr>
+
+            @foreach($root->childs as $child_level_1)
+                <tr>
+                    <td scope="row">{{ $child_level_1->id }}</td>
+                    <td>&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;-&nbsp;{{ $child_level_1->name }}</td>
+                    <td>{{ $child_level_1->level }}</td>
+                    <td>{{ $child_level_1->establishment_id }}</td>
+                    <td>
+                        <a href="{{ route('rrhh.organizational-units.edit', $child_level_1->id) }}" class="btn btn-outline-secondary btn-sm">
+                        <span class="fas fa-edit" aria-hidden="true"></span></a>
+                    </td>
+                </tr>
+                @foreach($child_level_1->childs as $child_level_2)
+                    <tr>
+                        <td scope="row">{{ $child_level_2->id }}</td>
+                        <td>&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;-&nbsp;{{ $child_level_2->name }}</td>
+                        <td>{{ $child_level_2->level }}</td>
+                        <td>{{ $child_level_2->establishment_id }}</td>
+                        <td>
+                            <a href="{{ route('rrhh.organizational-units.edit', $child_level_2->id) }}" class="btn btn-outline-secondary btn-sm">
+                            <span class="fas fa-edit" aria-hidden="true"></span></a>
+                        </td>
+                    </tr>
+                    @foreach($child_level_2->childs as $child_level_3)
+                        <tr>
+                            <td scope="row">{{ $child_level_3->id }}</td>
+                            <td>&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;-&nbsp;
+                            {{ $child_level_3->name }}</td>
+                            <td>{{ $child_level_3->level }}</td>
+                            <td>{{ $child_level_3->establishment_id }}</td>
+                            <td>
+                                <a href="{{ route('rrhh.organizational-units.edit', $child_level_3->id) }}" class="btn btn-outline-secondary btn-sm">
+                                <span class="fas fa-edit" aria-hidden="true"></span></a>
+                            </td>
+                        </tr>
+
+                        @foreach($child_level_3->childs as $child_level_4)
+                            <tr>
+                                <td scope="row">{{ $child_level_4->id }}</td>
+                                <td>&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;-&nbsp;
+                                {{ $child_level_4->name }}</td>
+                                <td>{{ $child_level_4->level }}</td>
+                                <td>{{ $child_level_4->establishment_id }}</td>
+                                <td>
+                                    <a href="{{ route('rrhh.organizational-units.edit', $child_level_4->id) }}" class="btn btn-outline-secondary btn-sm">
+                                    <span class="fas fa-edit" aria-hidden="true"></span></a>
+                                </td>
+                            </tr>
+                            @foreach($child_level_4->childs as $child_level_5)
+                                <tr>
+                                    <td scope="row">{{ $child_level_5->id }}</td>
+                                    <td>&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;-&nbsp;
+                                    {{ $child_level_5->name }}</td>
+                                    <td>{{ $child_level_5->level }}</td>
+                                    <td>{{ $child_level_5->establishment_id }}</td>
+                                    <td>
+                                        <a href="{{ route('rrhh.organizational-units.edit', $child_level_5->id) }}" class="btn btn-outline-secondary btn-sm">
+                                        <span class="fas fa-edit" aria-hidden="true"></span></a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endforeach
+
+                    @endforeach
+
+                @endforeach
+
 			@endforeach
 		</tbody>
 	</table>
 </div>
+@endforeach
 
 @endsection
