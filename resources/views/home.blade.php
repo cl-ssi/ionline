@@ -15,7 +15,7 @@
             <div class="col-md-6 col-12">
                 <p class="h4 text-justify" style="color:#165290">
                 Feliz año nuevo {{ strtok(auth()->user()->name, " ") }}.<br><br>
-                Que este año 2020 venga lleno de alegría, amor y salud para tí y todos quienes te rodean.
+                Que este año 2021 venga lleno de alegría, amor y salud para tí y todos quienes te rodean.
                 <br><br>
                 ¡Que se cumplan todos tus sueños! Son los sinceros deseos del glorioso equipo TIC.
                 </p>
