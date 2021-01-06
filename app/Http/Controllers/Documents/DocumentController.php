@@ -36,15 +36,17 @@ class DocumentController extends Controller
         $ownDocuments = Document::Search($request)->latest()
                     ->where('user_id', Auth()->user()->id)
                     //->whereIn('organizational_unit_id',$childs)
+                    ->withTrashed()
                     ->paginate(100);
 
         $otherDocuments = Document::Search($request)->latest()
                     ->where('user_id', '<>', Auth()->user()->id)
                     ->where('type','<>','Reservado')
                     ->whereIn('organizational_unit_id',$childs)
+                    ->withTrashed()
                     ->paginate(100);
 
-        $users = User::orderBy('name')->orderBy('fathers_family')->get();
+        $users = User::orderBy('name')->orderBy('fathers_family')->withTrashed()->get();
         return view('documents.index', compact('ownDocuments','otherDocuments','users'));
     }
 
