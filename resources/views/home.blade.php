@@ -9,15 +9,15 @@
         {{-- <h1 class="display-4">Intranet Online</h1>
         <p class="lead">{{ env('APP_SS') }}</p> --}}
         <div class="row">
-            <div class="col-md-4 col-12">
-                <img src="{{ asset('images\tree.jpg') }}" alt="Árbol de Navidad" width="220" class="img-thumbnail">
+            <div class="col-md-6 col-12">
+                <img src="{{ asset('images\new_year.jpg') }}" alt="Árbol de Navidad" width="400" class="img-thumbnail">
             </div>
-            <div class="col-md-8 col-12">
+            <div class="col-md-6 col-12">
                 <p class="h4 text-justify" style="color:#165290">
-                Hola {{ strtok(auth()->user()->name, " ") }}.<br><br>
-                El glorioso departamento TIC del Servicio de Salud,
-                desea de todo corazón que hayas tenido una Feliz Navidad y desea también,
-                que tengas un próspero Año Nuevo, lleno de salud, felicidad y lo que tú estés buscando.
+                Feliz año nuevo {{ strtok(auth()->user()->name, " ") }}.<br><br>
+                Que este año 2021 venga lleno de alegría, amor y salud para tí y todos quienes te rodean.
+                <br><br>
+                ¡Que se cumplan todos tus sueños! Son los sinceros deseos del glorioso equipo TIC.
                 </p>
             </div>
         </div>
