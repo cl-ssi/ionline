@@ -6,6 +6,13 @@ use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\QuestionsController;
 use App\Http\Controllers\Suitability\OptionsController;
 use App\Http\Controllers\Suitability\ResultsController;
+use App\Http\Controllers\RequestForms\ItemController;
+use App\Http\Controllers\RequestForms\PassageController;
+use App\Http\Controllers\RequestForms\RequestFormController;
+use App\Http\Controllers\RequestForms\RequestFormEventController;
+use App\Http\Controllers\RequestForms\RequestFormFileController;
+use App\Http\Controllers\RequestForms\RequestFormCodeController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -692,6 +699,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::post('/passages/create_from_previous/{request_form}', 'RequestForms\PassageController@createFromPrevious')->name('passages.createFromPrevious')->middleware('auth');
     Route::post('/passages/{requestForm}', 'RequestForms\PassageController@store')->name('passages.store')->middleware('auth');
     Route::delete('/passages/{passage}', 'RequestForms\PassageController@destroy')->name('passages.destroy')->middleware('auth');
+    //** F I L E S **//
     Route::get('/files', 'RequestForms\RequestFormFileController@create')->name('files.create')->middleware('auth');
     Route::post('/files/{requestForm}', 'RequestForms\RequestFormFileController@store')->name('files.store')->middleware('auth');
 /************** COMENTAR ****************/
@@ -729,7 +737,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::prefix('results')->as('results.')->middleware('auth')->group(function () {
         Route::get('/', [ResultsController::class, 'index'])->name('index');
         // Route::get('/create', [OptionsController::class, 'create'])->name('create');
-        // Route::post('/store', [OptionsController::class, 'store'])->name('store');        
+        // Route::post('/store', [OptionsController::class, 'store'])->name('store');
     });
 
 
