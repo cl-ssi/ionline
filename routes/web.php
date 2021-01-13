@@ -14,6 +14,8 @@ use App\Http\Controllers\RequestForms\RequestFormFileController;
 use App\Http\Controllers\RequestForms\RequestFormCodeController;
 
 
+use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,6 +42,21 @@ Route::get('/claveunica/callback', 'ClaveUnicaController@callback')->name('clave
 Route::get('/claveunica/login/{access_token}', 'ClaveUnicaController@login')->name('claveunica.login');
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+
+/* Nuevas rutas, Laravel 8.0 */
+Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
+    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index');
+    Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
+    Route::prefix('request')->name('request.')->group(function(){
+        Route::get('/', [ReplacementStaffController::class, 'requestIndex'])->name('index');
+        Route::get('/create', [ReplacementStaffController::class, 'requestCreate'])->name('create');
+        Route::get('/own', [ReplacementStaffController::class, 'requestOwn'])->name('own');
+        Route::get('/edit', [ReplacementStaffController::class, 'requestEdit'])->name('edit');
+    });
+
+});
 
 
 //Route::get('foo/oscar', function () {return 'Hello World';})->name('lanterna');
