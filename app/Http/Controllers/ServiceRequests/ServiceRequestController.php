@@ -106,6 +106,27 @@ class ServiceRequestController extends Controller
       $SignatureFlow->status = 1;
       $SignatureFlow->save();
 
+      //Jefe de finanzas
+      $SignatureFlow = new SignatureFlow($request->All());
+      $SignatureFlow->user_id = 9994426;
+      $SignatureFlow->ou_id = 111;
+      $SignatureFlow->service_request_id = $serviceRequest->id;
+      $SignatureFlow->type = "visador";
+      $SignatureFlow->employee = "Profesional";
+      $SignatureFlow->status = null;
+      $SignatureFlow->save();
+
+      //Subdirector gestión de las personas
+      $SignatureFlow = new SignatureFlow($request->All());
+      $SignatureFlow->user_id = 15685508;
+      $SignatureFlow->ou_id = 44;
+      $SignatureFlow->service_request_id = $serviceRequest->id;
+      $SignatureFlow->type = "visador";
+      $SignatureFlow->employee = "Subdirector  de Gestión y Desarrollo de las Personas (S)";
+      $SignatureFlow->status = null;
+      $SignatureFlow->save();
+
+      //firmas seleccionadas en la vista
       if($request->users <> null){
         foreach ($request->users as $key => $user) {
 
@@ -260,6 +281,15 @@ class ServiceRequestController extends Controller
   public function consolidated_data()
   {
     $serviceRequests = ServiceRequest::orderBy('id','asc')->get();
+    foreach ($serviceRequests as $key => $serviceRequest) {
+      foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
+        $start_date = Carbon::parse($shiftControl->start_date);
+        $end_date = Carbon::parse($shiftControl->end_date);
+        $dateDiff=$start_date->diffInHours($end_date);
+        $serviceRequest->ControlHrs += $dateDiff;
+      }
+    }
+    // dd($serviceRequests);
     return view('service_requests.requests.consolidated_data',compact('serviceRequests'));
   }
 }

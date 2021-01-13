@@ -56,7 +56,11 @@
           <td nowrap>{{$serviceRequest->programm_name}}</td>
           <td nowrap>{{$serviceRequest->digera_strategy}}</td>
           <td nowrap>{{$serviceRequest->rrhh_team}}</td>
-          <td nowrap>{{$serviceRequest->daily_hours + $serviceRequest->nightly_hours}}</td>
+          @if($serviceRequest->program_contract_type == "Horas")
+            <td nowrap>{{$serviceRequest->ControlHrs}}</td>
+          @else
+            <td nowrap>{{$serviceRequest->daily_hours + $serviceRequest->nightly_hours}}</td>
+          @endif
           <td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
           <td nowrap>{{$serviceRequest->estate}}</td>
           <td nowrap>{{$serviceRequest->service_description}}</td>
