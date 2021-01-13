@@ -103,6 +103,21 @@
                         href="{{ route('health_plan.index', ['iquique']) }}">
                         <i class="fas fa-file-powerpoint"></i> Planes Comunales
                     </a>
+
+                    @canany(['Service Request'])
+                      <a class="dropdown-item"
+                          href="{{ route('rrhh.service_requests.index') }}">
+                          <i class="fas fa-wallet"></i> Contratación de Servicios
+                      </a>
+                    @endcan
+
+                    @canany(['Resolutions'])
+                      <a class="dropdown-item"
+                          href="{{ route('rrhh.resolutions.index') }}">
+                          <i class="fas fa-wallet"></i> Solicitud de Firmas
+                      </a>
+                    @endcan
+
                     </div>
                 </li>
                 @endauth
@@ -120,7 +135,8 @@
                     'OrganizationalUnits: edit',
                     'OrganizationalUnits: delete',
                     'Authorities: manager',
-                    'Authorities: view'])
+                    'Authorities: view',
+                    'Users: service requests'])
                 <li class="nav-item dropdown @active(['rrhh.users.*','rrhh.organizationalUnits.*']">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -147,6 +163,13 @@
                                href="{{ route('rrhh.authorities.index') }}">
                                 <i class="fas fa-chess-king fa-fw"></i> Autoridades
                             </a>
+                        @endcan
+
+                        @canany(['Users: service requests'])
+                        <a class="dropdown-item @active('rrhh.users.service_requests.index')"
+                            href="{{ route('rrhh.users.service_requests.index') }}">
+                            <i class="fas fa-user fa-fw"></i> Usuarios - Contrat. de Servicios
+                        </a>
                         @endcan
 
                     </div>

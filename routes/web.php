@@ -162,8 +162,11 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('{user}/roles', 'Rrhh\RoleController@index')->name('roles.index')->middleware('auth');
     Route::post('{user}/roles', 'Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
 
+    Route::resource('shift_control', 'ServiceRequests\ShiftControlController')->middleware('auth');
+    Route::get('service_requests.consolidated_data','ServiceRequests\ServiceRequestController@consolidated_data')->name('service_requests.consolidated_data')->middleware('auth');
     Route::resource('service_requests', 'ServiceRequests\ServiceRequestController')->middleware('auth');
-    // Route::resource('scs_service_requests_signature_flow', 'ServiceRequests\ServiceRequestSignatureFlowController')->middleware('auth');
+    Route::resource('resolutions', 'Documents\ResolutionController')->middleware('auth');
+    // Route::resource('scs_service_requests_signature_flow', 'ServiceRequests\SignatureFlowController')->middleware('auth');
     Route::resource('authorities', 'Rrhh\AuthorityController')->middleware(['auth']);
 
     Route::prefix('organizational-units')->name('organizational-units.')->group(function () {
@@ -186,6 +189,15 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/{user}/edit', 'Rrhh\UserController@edit')->name('edit')->middleware('auth');
         Route::put('/{user}', 'Rrhh\UserController@update')->name('update')->middleware('auth');
         Route::delete('/{user}', 'Rrhh\UserController@destroy')->name('destroy')->middleware('auth');
+
+        Route::prefix('service_requests')->name('service_requests.')->group(function () {
+            Route::get('/', 'Rrhh\UserController@index_sr')->name('index')->middleware('auth');
+            Route::get('/create', 'Rrhh\UserController@create_sr')->name('create')->middleware('auth');
+            Route::post('/', 'Rrhh\UserController@store_sr')->name('store')->middleware('auth');
+            Route::get('/{user}/edit', 'Rrhh\UserController@edit_sr')->name('edit')->middleware('auth');
+            Route::put('/{user}', 'Rrhh\UserController@update_sr')->name('update')->middleware('auth');
+            Route::delete('/{user}', 'Rrhh\UserController@destroy_sr')->name('destroy')->middleware('auth');
+        });
     });
 });
 
@@ -729,7 +741,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::prefix('results')->as('results.')->middleware('auth')->group(function () {
         Route::get('/', [ResultsController::class, 'index'])->name('index');
         // Route::get('/create', [OptionsController::class, 'create'])->name('create');
-        // Route::post('/store', [OptionsController::class, 'store'])->name('store');        
+        // Route::post('/store', [OptionsController::class, 'store'])->name('store');
     });
 
 
