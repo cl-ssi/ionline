@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Models\Documents;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Resolution extends Model
+{
+    use HasFactory;
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'id', 'ou_id', 'responsable_id', 'request_date', 'document_type', 'resolution_matter','description','endorse_type','document_recipients','document_distribution', 'user_id'
+    ];
+
+    public function SignatureFlows() {
+    		return $this->hasMany('\App\Models\ServiceRequests\SignatureFlow');
+    }
+
+    public function user(){
+      return $this->belongsTo('App\User');
+    }
+
+    public function responsable(){
+      return $this->belongsTo('App\User','responsable_id');
+    }
+
+    public function organizationalUnit(){
+      return $this->belongsTo('App\Rrhh\organizationalUnit','ou_id');
+    }
+
+    protected $table = 'doc_resolutions';
+}

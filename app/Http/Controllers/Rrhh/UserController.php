@@ -259,4 +259,165 @@ class UserController extends Controller
     }
 
 
+
+
+
+
+
+
+    //funciones users service_requests
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index_sr(Request $request)
+    {
+        $users = User::Search($request->get('name'))->permission('Users: service requests')->orderBy('name','Asc')->paginate(500);
+        return view('rrhh.users_service_requests.index', compact('users'));
+    }
+
+    // /**
+    //  * Display a listing of the resource.
+    //  *
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function directory_sr(Request $request)
+    // {
+    //     if ($request->get('ou')) {
+    //         $users = User::has('telephones')->where('organizational_unit_id',$request->get('ou'))->orderBy('name')->paginate(20);
+    //     }
+    //     else {
+    //         $users = User::has('telephones')->Search($request->get('name'))->orderBy('name','Asc')->paginate(20);
+    //     }
+    //
+    //     /* Devuelve sólo Dirección, ya que de él dependen todas las unidades organizacionales hacia abajo */
+    //     $organizationalUnit = OrganizationalUnit::Find(1);
+    //     return view('rrhh.users_service_requests.directory')->withUsers($users)->withOrganizationalUnit($organizationalUnit);
+    // }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create_sr()
+    {
+
+        //$ouRoot = OrganizationalUnit::find(1);
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        return view('rrhh.users_service_requests.create')->withOuRoots($ouRoots);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store_sr(storeUser $request)
+    {
+        $user = new User($request->All());
+        $user->password = bcrypt($request->id);
+
+        if ($request->has('organizationalunit')) {
+            if ($request->filled('organizationalunit')) {
+                $user->organizationalunit()->associate($request->input('organizationalunit'));
+            }
+            else {
+                $user->organizationalunit()->dissociate();
+            }
+        }
+
+        $user->save();
+
+        if($request->hasFile('photo')){
+            $path = $request->file('photo')
+                ->storeAs('public',$user->id.'.'.$request->file('photo')->clientExtension());
+        }
+
+        $user->givePermissionTo('Users: must change password');
+        $user->givePermissionTo('Authorities: view');
+        $user->givePermissionTo('Calendar: view');
+        $user->givePermissionTo('Requirements: create');
+        $user->givePermissionTo('Users: service requests');
+
+
+        session()->flash('info', 'El usuario '.$user->name.' ha sido creado.');
+
+        return redirect()->route('rrhh.users.service_requests.index');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function show_sr(User $user)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function edit_sr(User $user)
+    {
+        $ouRoot = OrganizationalUnit::find(1);
+        return view('rrhh.users_service_requests.edit')
+            ->withUser($user)
+            ->withOuRoot($ouRoot);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function update_sr(Request $request, User $user)
+    {
+        $user->fill($request->all());
+
+        if ($request->has('organizationalunit')) {
+            if ($request->filled('organizationalunit')) {
+                $user->organizationalunit()->associate($request->input('organizationalunit'));
+            }
+            else {
+                $user->organizationalunit()->dissociate();
+            }
+        }
+
+        $user->save();
+
+        session()->flash('success', 'El usuario '.$user->name.' ha sido actualizado.');
+
+        return redirect()->route('rrhh.users.service_requests.index');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\User  $user
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy_sr(User $user)
+    {
+        /* Primero Limpiamos todos los roles */
+        $user->roles()->detach();
+
+        $user->delete();
+
+        session()->flash('success', 'El usuario '.$user->name.' ha sido eliminado');
+
+        return redirect()->route('rrhh.users.service_requests.index');
+    }
+
+
 }

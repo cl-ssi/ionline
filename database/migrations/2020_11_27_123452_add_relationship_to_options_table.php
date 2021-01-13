@@ -29,7 +29,7 @@ class AddRelationshipToOptionsTable extends Migration
     {
         Schema::table('options', function (Blueprint $table) {
             //
-            $table->dropForeign(['question_id']);
+            $table->dropForeign('question_id');
             $table->dropColumn('question_id');
         });
     }
