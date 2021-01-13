@@ -39,18 +39,12 @@ class PassageController extends Controller
      */
     public function store(Request $request, RequestForm $requestForm)
     {
-        //dd($request);
         $item = new Passage($request->All());
         //ASOCIAR ID FOLIO.
         $item->request_form()->associate($requestForm->id);
-        $passage_codes = RequestFormItemCode::where('item_code', '2208007')->get();
-        foreach ($passage_codes as $key => $passage_code) {
-          $item->request_form_item_codes_id = $passage_code->id;
-        }
         $item->save();
-        $requestform_id = $requestForm->id;
         session()->flash('info', 'El pasajero fue ingresado con exito');
-        return redirect()->route('request_forms.edit', compact('requestform_id'));
+        return redirect()->route('request_forms.edit', compact('requestForm'));
     }
 
     /**

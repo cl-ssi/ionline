@@ -6,6 +6,15 @@ use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\QuestionsController;
 use App\Http\Controllers\Suitability\OptionsController;
 use App\Http\Controllers\Suitability\ResultsController;
+use App\Http\Controllers\RequestForms\ItemController;
+use App\Http\Controllers\RequestForms\PassageController;
+use App\Http\Controllers\RequestForms\RequestFormController;
+use App\Http\Controllers\RequestForms\RequestFormEventController;
+use App\Http\Controllers\RequestForms\RequestFormFileController;
+use App\Http\Controllers\RequestForms\RequestFormCodeController;
+
+
+use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,6 +42,21 @@ Route::get('/claveunica/callback', 'ClaveUnicaController@callback')->name('clave
 Route::get('/claveunica/login/{access_token}', 'ClaveUnicaController@login')->name('claveunica.login');
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+
+
+/* Nuevas rutas, Laravel 8.0 */
+Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
+    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index');
+    Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
+    Route::prefix('request')->name('request.')->group(function(){
+        Route::get('/', [ReplacementStaffController::class, 'requestIndex'])->name('index');
+        Route::get('/create', [ReplacementStaffController::class, 'requestCreate'])->name('create');
+        Route::get('/own', [ReplacementStaffController::class, 'requestOwn'])->name('own');
+        Route::get('/edit', [ReplacementStaffController::class, 'requestEdit'])->name('edit');
+    });
+
+});
 
 
 //Route::get('foo/oscar', function () {return 'Hello World';})->name('lanterna');
@@ -704,6 +728,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::post('/passages/create_from_previous/{request_form}', 'RequestForms\PassageController@createFromPrevious')->name('passages.createFromPrevious')->middleware('auth');
     Route::post('/passages/{requestForm}', 'RequestForms\PassageController@store')->name('passages.store')->middleware('auth');
     Route::delete('/passages/{passage}', 'RequestForms\PassageController@destroy')->name('passages.destroy')->middleware('auth');
+    //** F I L E S **//
     Route::get('/files', 'RequestForms\RequestFormFileController@create')->name('files.create')->middleware('auth');
     Route::post('/files/{requestForm}', 'RequestForms\RequestFormFileController@store')->name('files.store')->middleware('auth');
 /************** COMENTAR ****************/
