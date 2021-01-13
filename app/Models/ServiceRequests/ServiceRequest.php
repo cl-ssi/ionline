@@ -4,9 +4,12 @@ namespace App\Models\ServiceRequests;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class ServiceRequest extends Model
+class ServiceRequest extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     use HasFactory;
     /**
      * The attributes that are mass assignable.
@@ -76,6 +79,17 @@ class ServiceRequest extends Model
 
     public function shiftControls() {
     		return $this->hasMany('\App\Models\ServiceRequests\ShiftControl');
+    }
+
+    public static function getPendingRequests()
+    {
+      $serviceRequestsPendingsCount = ServiceRequest::whereHas("SignatureFlows", function($subQuery) {
+                                                   $subQuery->where('user_id',Auth::user()->id)->whereNull('status');
+                                                 })
+                                                 ->where('user_id','!=',Auth::user()->id)
+                                                 ->orderBy('id','asc')
+                                                 ->count();
+      return $serviceRequestsPendingsCount;
     }
 
 

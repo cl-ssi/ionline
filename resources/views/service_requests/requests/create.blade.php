@@ -41,7 +41,7 @@
 	<div class="row">
 
     <fieldset class="form-group col">
-		    <label for="for_name">Tipo</label>
+		    <label for="for_type">Tipo</label>
 		    <select name="type" class="form-control" required>
           <option value="Genérico">Honorarios - Genérico</option>
           <option value="Covid">Honorarios - Covid</option>
@@ -67,7 +67,7 @@
 		</fieldset>
 
 		<fieldset class="form-group col">
-				<label for="for_name">Firmantes</label>
+				<label for="for_users">Firmantes</label>
 				<select name="users[]" id="users" class="form-control selectpicker" multiple>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
@@ -79,18 +79,29 @@
 
   <div class="row">
 
-    <fieldset class="form-group col">
-		    <label for="for_rut">Rut</label>
-		    <input type="text" class="form-control" id="for_rut" placeholder="" name="rut" required="required">
-		</fieldset>
+		<fieldset class="form-group col-8 col-md-2">
+        <label for="for_run">Run SIN DIGITO VERIF.</label>
+        <!-- <input type="hidden" class="form-control" id="for_id" name="id"> -->
+        <input type="number" max="50000000" class="form-control" id="for_run" name="run">
+    </fieldset>
+
+    <fieldset class="form-group col-4 col-md-1">
+        <label for="for_dv">Digito</label>
+        <input type="text" class="form-control" id="for_dv" name="dv" readonly>
+    </fieldset>
+
+		<fieldset class="form-group col-1 col-md-1">
+        <label for="">&nbsp;</label>
+        <button type="button" id="btn_fonasa" class="btn btn-outline-success">Fonasa&nbsp;</button>
+    </fieldset>
 
     <fieldset class="form-group col">
 		    <label for="for_name">Nombre</label>
-		    <input type="text" class="form-control" id="for_name" placeholder="" name="name" required="required">
+		    <input type="text" class="form-control" id="name" placeholder="" name="name" required="required">
 		</fieldset>
 
 		<fieldset class="form-group col">
-		    <label for="for_name">Tipo de Contrato</label>
+		    <label for="for_contract_type">Tipo de Contrato</label>
 		    <select name="contract_type" class="form-control" required>
           <option value="NUEVO">Nuevo</option>
           <option value="ANTIGUO">Antiguo</option>
@@ -164,7 +175,7 @@
 		</fieldset>
 
     <fieldset class="form-group col">
-		    <label for="for_name">Otro</label>
+		    <label for="for_other">Otro</label>
 		    <select name="other" class="form-control" required>
           <option value="Brecha">Brecha</option>
           <option value="LM:LICENCIAS MEDICAS">LM:LICENCIAS MEDICAS</option>
@@ -315,6 +326,7 @@
 @endsection
 
 @section('custom_js')
+<script src='{{asset("js/jquery.rut.chileno.js")}}'></script>
 <script type="text/javascript">
 
 	$( document ).ready(function() {
@@ -332,7 +344,54 @@
 				$('#for_nightly_hours').attr('readonly', false);
 				$("#control_turnos").hide();
 			}
-		})
+		});
+
+		//obtiene digito verificador
+    $('input[name=run]').keyup(function(e) {
+        var str = $("#for_run").val();
+        $('#for_dv').val($.rut.dv(str));
+    });
+	});
+
+	$('#btn_fonasa').click(function() {
+	    var btn = $(this);
+	    btn.prop('disabled',true);
+
+	    var run = $("#for_run").val();
+	    var dv  = $("#for_dv").val();
+	    var url = '{{route('webservices.fonasa')}}/?run='+run+'&dv='+dv;
+
+	    $.getJSON(url, function(data) {
+	        if(data){
+	            document.getElementById("name").value = data.name + " " + data.fathers_family + " " + data.mothers_family;
+	            // document.getElementById("for_fathers_family").value = ;
+	            // document.getElementById("for_mothers_family").value = ;
+	            // document.getElementById("for_birthday").value = data.birthday;
+
+	            // //CALCULO DE FECHA EN CACHO QUE EXISTA EL DATO DE FECHA DE NACIMIENTO
+	            // var birthDate =data.birthday;
+	            // var d = new Date(birthDate);
+	            // var mdate = birthDate.toString();
+	            // var yearThen = parseInt(mdate.substring(0,4), 10);
+	            // var monthThen = parseInt(mdate.substring(5,7), 10);
+	            // var dayThen = parseInt(mdate.substring(8,10), 10);
+	            // var today = new Date();
+	            // var birthday = new Date(yearThen, monthThen-1, dayThen);
+	            // var differenceInMilisecond = today.valueOf() - birthday.valueOf();
+	            // var year_age = Math.floor(differenceInMilisecond / 31536000000);
+	            // $("#for_age").val(year_age);
+	            // //FIN DE CALCULO DE EDAD
+
+	        } else {
+	            document.getElementById("name").value = "";
+	            // document.getElementById("for_fathers_family").value = "";
+	            // document.getElementById("for_mothers_family").value = "";
+	            // // document.getElementById("for_gender").value = "";
+	            // document.getElementById("for_birthday").value = "";
+	        }
+	}).done(function() {
+	        btn.prop('disabled',false);
+	    });
 	});
 
 
@@ -343,11 +402,6 @@
 			var observation = $("#observation").val();
       var markup = "<tr><td><input type='checkbox' name='record'></td><td> <input type='hidden' class='form-control' name='shift_date[]' id='shift_date' value='"+ shift_date +"'>"+ shift_date +"</td><td> <input type='hidden' class='form-control' name='shift_start_hour[]' id='start_hour' value='"+ start_hour +"'>" + start_hour + "</td><td> <input type='hidden' class='form-control' name='shift_end_hour[]' id='end_hour' value='"+ end_hour +"'>" + end_hour + "</td><td> <input type='hidden' class='form-control' name='shift_observation[]' id='observation' value='"+ observation +"'>" + observation + "</td></tr>";
       $("table tbody").append(markup);
-
-			// $("#shift_date").val("");
-      // $("#start_hour").val("");
-			// $("#end_hour").val("");
-			// $("#observation").val("");
   });
 
 	// Find and remove selected table rows

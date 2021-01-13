@@ -166,7 +166,7 @@
 
     <fieldset class="form-group col">
 		    <label for="for_rut">Rut</label>
-		    <input type="text" class="form-control" id="for_rut" placeholder="" name="rut" required="required" value="{{ $serviceRequest->rut }}">
+		    <input type="text" class="form-control" id="for_rut" placeholder="" name="rut" required="required" value="{{ $serviceRequest->rut }}" disabled>
 		</fieldset>
 
     <fieldset class="form-group col">

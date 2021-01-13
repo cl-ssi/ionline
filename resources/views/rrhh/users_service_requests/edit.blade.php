@@ -102,12 +102,12 @@
 		</form>
 		@endcan
 
-		@role('god')
+		<!-- @role('god')
 		<form method="GET" action="{{ route('rrhh.users.switch', $user->id) }}" class="d-inline float-right">
 			{{ csrf_field() }}
 			<button class="btn btn-sm btn-outline-warning"><span class="fas fa-redo" aria-hidden="true"></span> Switch</button>
 		</form>
-		@endrole
+		@endrole -->
 
 	</div>
 

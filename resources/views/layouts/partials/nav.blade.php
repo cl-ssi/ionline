@@ -108,6 +108,7 @@
                       <a class="dropdown-item"
                           href="{{ route('rrhh.service_requests.index') }}">
                           <i class="fas fa-wallet"></i> Contratación de Servicios
+                          <span class="badge badge-secondary">{{ App\Models\ServiceRequests\ServiceRequest::getPendingRequests() }}</span>
                       </a>
                     @endcan
 
@@ -125,8 +126,9 @@
                 @can('Requirements: create')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('requirements.outbox') }}">
-                    <i class="fas fa-rocket"></i> SGR
-                    <span class="badge badge-secondary">{{ App\Requirements\Requirement::getPendingRequirements() }}</span></a>
+                      <i class="fas fa-rocket"></i> SGR
+                      <span class="badge badge-secondary">{{ App\Requirements\Requirement::getPendingRequirements() }}</span>
+                    </a>
                 </li>
                 @endcan
 
