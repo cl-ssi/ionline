@@ -69,6 +69,7 @@ class ServiceRequestController extends Controller
   public function store(Request $request)
   {
       $serviceRequest = new ServiceRequest($request->All());
+      $serviceRequest->rut = $request->run ."-". $request->dv;
       $serviceRequest->user_id = Auth::id();
       $serviceRequest->save();
 
@@ -188,6 +189,7 @@ class ServiceRequestController extends Controller
   {
       //se guarda información de la solicitud
       $serviceRequest->fill($request->all());
+      $serviceRequest->rut = $request->run ."-". $request->dv;
       $serviceRequest->save();
 
       //si seleccionó una opción, se agrega visto bueno.

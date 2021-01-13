@@ -53,7 +53,7 @@
 	</tbody>
 </table>
 
-<h4>Otras solicitudes</h4>
+<h4>Resoluciones respondidas</h4>
 
 <table class="table table-striped table-sm table-bordered">
 	<thead>

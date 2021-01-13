@@ -31,6 +31,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::prefix('webservices')->name('webservices.')->group(function () {
+    Route::get('fonasa', 'WebserviceController@fonasa')->middleware('auth')->name('fonasa');
+});
+
 Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');

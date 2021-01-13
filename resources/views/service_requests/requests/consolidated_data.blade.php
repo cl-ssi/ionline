@@ -49,7 +49,7 @@
           <td nowrap>Dato fijo</td>
           <td nowrap>Dato fijo</td>
           <td nowrap>{{$serviceRequest->establishment_id}} falta cod.sirh</td>
-          <td nowrap>{{$serviceRequest->establishment->name}}</td>
+          <td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
           <td nowrap>{{$serviceRequest->rut}}</td>
           <td nowrap>{{$serviceRequest->name}}</td>
           <td nowrap>{{$serviceRequest->nationality}}</td>

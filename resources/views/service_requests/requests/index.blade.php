@@ -65,7 +65,7 @@
 	</tbody>
 </table>
 
-<h4>Otras Resoluciones</h4>
+<h4>Solicitudes respondidas</h4>
 
 <table class="table table-striped table-sm table-bordered">
 	<thead>

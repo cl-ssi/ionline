@@ -4,9 +4,11 @@ namespace App\Models\Documents;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Resolution extends Model
+class Resolution extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     use HasFactory;
     /**
      * The attributes that are mass assignable.
