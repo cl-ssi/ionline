@@ -63,7 +63,7 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item"><a href="{{ route('indicators.rems.year.serie.index', [2020, 'serie_a']) }}">2020</a></li>
                 <li class="list-group-item"><a href="{{ route('indicators.rems.year.serie.index', [2019, 'serie_a']) }}">2019</a></li>
-                <li class="list-group-item"><a href="{{ route('indicators.rems.index') }}">Años anteriores</a> <span class="badge badge-warning">En Desarrollo</span></li>
+                <!-- <li class="list-group-item"><a href="{{ route('indicators.rems.index') }}">Años anteriores</a> <span class="badge badge-warning">En Desarrollo</span></li> -->
             </ul>
         </div>
     </div>
@@ -114,7 +114,7 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.index', [2020, 'serie_p']) }}">2020</a> </li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.index', [2019, 'serie_p']) }}">2019</a> </li>
-                <li class="list-group-item"><a href="{{ route('indicators.rems.index') }}">Años anteriores</a> <span class="badge badge-warning">En Desarrollo</span></li>
+                <!-- <li class="list-group-item"><a href="{{ route('indicators.rems.index') }}">Años anteriores</a> <span class="badge badge-warning">En Desarrollo</span></li> -->
             </ul>
         </div>
     </div>
@@ -130,7 +130,8 @@
     </div>
 </div>
 <br>
-<a class="btn btn-primary" href="http://intranet.saludiquique.cl/estadistica/index.html" role="button">Años anteriores</a>
+<a class="btn btn-outline-primary" href="{{ route('indicators.rems.index') }}" role="button">Años anteriores</a>
+<a class="btn btn-outline-primary" href="http://intranet.saludiquique.cl/estadistica/index.html" role="button">Años anteriores (Intranet)</a>
 <br>
 <br>
 <br>

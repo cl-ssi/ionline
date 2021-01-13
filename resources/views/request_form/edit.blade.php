@@ -229,7 +229,7 @@
           <div class="card-body scroll">
               @foreach($requestForm->requestformfiles as $key => $file)
                   <p class="card-text">
-                      <a href="{{ route('tickets.download', $file->id) }}"><i class="fas fa-paperclip"></i> {{ $file->name }} </a>
+                      <a href="{{ route('request_forms.files.store', $file->id) }}"><i class="fas fa-paperclip"></i> {{ $file->name }} </a>
                       por: <i class="fas fa-user"></i> {{ $file->user->FullName }} <i class="fas fa-calendar"></i> {{ $file->CreationDate }}
                   </p>
               @endforeach

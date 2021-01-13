@@ -53,7 +53,7 @@ class RequestFormFileController extends Controller
         }
 
         session()->flash('info', 'Se adjunto archivo/s con exito');
-        return redirect()->route('request_forms.edit', compact('request_form_id'));
+        return redirect()->route('request_forms.edit', compact('requestForm'));
     }
 
     /**
