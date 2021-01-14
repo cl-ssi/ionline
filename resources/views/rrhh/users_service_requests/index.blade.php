@@ -4,11 +4,9 @@
 
 @section('content')
 
-@can('Users: create')
 <h3 class="inline mt-3">Usuarios
 	<a href="{{ route('rrhh.users.service_requests.create') }}" class="btn btn-primary">Crear</a>
 </h3>
-@endcan
 
 <br>
 
