@@ -55,8 +55,8 @@ class ServiceRequestController extends Controller
     $users = User::orderBy('name','ASC')->get();
     // $subdirections = Subdirection::orderBy('name', 'ASC')->get();
     // $responsabilityCenters = ResponsabilityCenter::orderBy('name', 'ASC')->get();
-    $subdirections = organizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
-    $responsabilityCenters = organizationalUnit::where('name','LIKE','%centro de resp%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
+    $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
+    $responsabilityCenters = OrganizationalUnit::where('name','LIKE','%centro de resp%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
     return view('service_requests.requests.create', compact('subdirections','responsabilityCenters','users'));
   }
 
