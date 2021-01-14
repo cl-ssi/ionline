@@ -275,7 +275,7 @@ class UserController extends Controller
      */
     public function index_sr(Request $request)
     {
-        $users = User::Search($request->get('name'))->permission('Users: service requests')->orderBy('name','Asc')->paginate(500);
+        $users = User::Search($request->get('name'))->permission('Service Request')->orderBy('name','Asc')->paginate(500);
         return view('rrhh.users_service_requests.index', compact('users'));
     }
 
