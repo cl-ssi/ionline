@@ -10,7 +10,7 @@ use App\Models\ServiceRequests\Subdirection;
 use App\Models\ServiceRequests\ResponsabilityCenter;
 use App\Models\ServiceRequests\SignatureFlow;
 use App\Models\ServiceRequests\ShiftControl;
-use App\Rrhh\organizationalUnit;
+use App\Rrhh\OrganizationalUnit;
 use App\Establishment;
 use App\User;
 
