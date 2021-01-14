@@ -12,12 +12,15 @@
 		<i class="far fa-file"></i> Nueva Solicitud
 	</a>
 
-	<a type="button"
-	   class="btn btn-success"
-		 href="{{ route('rrhh.service_requests.consolidated_data') }}">
-		 Consolidado
-		 <i class="far fa-file-excel"></i>
-	 </a>
+	@can('Service Request: consolidated data')
+		<a type="button"
+			 class="btn btn-success"
+			 href="{{ route('rrhh.service_requests.consolidated_data') }}">
+			 Consolidado
+			 <i class="far fa-file-excel"></i>
+		 </a>
+	@endcan
+
 </div>
 
 <!-- <br> -->
