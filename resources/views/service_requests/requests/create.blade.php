@@ -43,8 +43,8 @@
     <fieldset class="form-group col">
 		    <label for="for_type">Tipo</label>
 		    <select name="type" class="form-control" required>
+					<option value="Covid">Honorarios - Covid</option>
           <option value="Genérico">Honorarios - Genérico</option>
-          <option value="Covid">Honorarios - Covid</option>
         </select>
 		</fieldset>
 
@@ -68,9 +68,10 @@
 
 		<fieldset class="form-group col">
 				<label for="for_users">Firmantes</label>
-				<select name="users[]" id="users" class="form-control selectpicker" multiple>
+				<!-- <select name="users[]" id="users" class="form-control selectpicker" multiple> -->
+				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" multiple>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == "9994426" || $user->id == 15685508) selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
 		</fieldset>

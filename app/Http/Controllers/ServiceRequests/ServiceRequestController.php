@@ -101,30 +101,30 @@ class ServiceRequestController extends Controller
       $SignatureFlow->user_id = Auth::id();
       $SignatureFlow->ou_id = $ou_id;
       $SignatureFlow->service_request_id = $serviceRequest->id;
-      $SignatureFlow->type = "visador";
+      $SignatureFlow->type = "creador";
       $SignatureFlow->employee = $employee;
       $SignatureFlow->status = 1;
       $SignatureFlow->save();
 
-      //Jefe de finanzas
-      $SignatureFlow = new SignatureFlow($request->All());
-      $SignatureFlow->user_id = 9994426;
-      $SignatureFlow->ou_id = 111;
-      $SignatureFlow->service_request_id = $serviceRequest->id;
-      $SignatureFlow->type = "visador";
-      $SignatureFlow->employee = "Profesional";
-      $SignatureFlow->status = null;
-      $SignatureFlow->save();
-
-      //Subdirector gestión de las personas
-      $SignatureFlow = new SignatureFlow($request->All());
-      $SignatureFlow->user_id = 15685508;
-      $SignatureFlow->ou_id = 44;
-      $SignatureFlow->service_request_id = $serviceRequest->id;
-      $SignatureFlow->type = "visador";
-      $SignatureFlow->employee = "Subdirector  de Gestión y Desarrollo de las Personas (S)";
-      $SignatureFlow->status = null;
-      $SignatureFlow->save();
+      // //Jefe de finanzas
+      // $SignatureFlow = new SignatureFlow($request->All());
+      // $SignatureFlow->user_id = 9994426;
+      // $SignatureFlow->ou_id = 111;
+      // $SignatureFlow->service_request_id = $serviceRequest->id;
+      // $SignatureFlow->type = "visador";
+      // $SignatureFlow->employee = "Profesional";
+      // $SignatureFlow->status = null;
+      // $SignatureFlow->save();
+      //
+      // //Subdirector gestión de las personas
+      // $SignatureFlow = new SignatureFlow($request->All());
+      // $SignatureFlow->user_id = 15685508;
+      // $SignatureFlow->ou_id = 44;
+      // $SignatureFlow->service_request_id = $serviceRequest->id;
+      // $SignatureFlow->type = "visador";
+      // $SignatureFlow->employee = "Subdirector  de Gestión y Desarrollo de las Personas (S)";
+      // $SignatureFlow->status = null;
+      // $SignatureFlow->save();
 
       //firmas seleccionadas en la vista
       if($request->users <> null){

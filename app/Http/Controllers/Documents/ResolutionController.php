@@ -46,8 +46,8 @@ class ResolutionController extends Controller
           }
         }
 
-        $myResolutions = Resolution::whereHas("SignatureFlows", function($subQuery) use($user_id){
-                                       $subQuery->where('user_id',$user_id)->whereNotNull('status');
+        $myResolutions = Resolution::whereHas("SignatureFlows", function($subQuery) {
+                                       $subQuery->where('user_id',Auth::user()->id)->whereNotNull('status');
                                      })->orderBy('id','asc')->get();
 
         return view('documents.resolutions.index', compact('resolutionsPending','myResolutions'));
@@ -92,7 +92,7 @@ class ResolutionController extends Controller
          $SignatureFlow->user_id = Auth::id();
          $SignatureFlow->ou_id = $ou_id;
          $SignatureFlow->resolution_id = $resolution->id;
-         $SignatureFlow->type = "visador";
+         $SignatureFlow->type = "creador";
          $SignatureFlow->employee = $employee;
          $SignatureFlow->status = 1;
          $SignatureFlow->save();
