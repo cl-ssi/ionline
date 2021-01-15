@@ -42,7 +42,7 @@
             @elseif($SignatureFlow->status === 1)
               <tr>
             @endif
-               <td>{{ $SignatureFlow->created_at}}</td>
+               <td>{{ $SignatureFlow->signature_date}}</td>
                <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
                <td>{{ $SignatureFlow->employee }}</td>
                <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
@@ -123,6 +123,13 @@
 
   <br>
 
+  <!-- si existe una firma, no se deja modificar solicitud -->
+  @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+    <div class="alert alert-warning" role="alert">
+      La solicitud no se puede modificar, puesto que ya existen aprobaciones en el flujo de firmas.
+    </div>
+  @endif
+
 	<div class="row">
 
     <fieldset class="form-group col">
@@ -151,13 +158,58 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <!-- <fieldset class="form-group col">
 				<label for="for_name">Firmantes</label>
 				<select name="users[]" id="users" class="form-control selectpicker" multiple disabled>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
+		</fieldset> -->
+
+	</div>
+
+  <div class="row">
+		<fieldset class="form-group col">
+				<label for="for_users">Jefe Directo</label>
+				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+					@foreach($users as $key => $user)
+						<option value="{{$user->id}}" @if($serviceRequest->SignatureFlows->where('user_id',$user->id)
+                                                             ->whereNotIn('user_id',[9882506,9994426,15685508,Auth::user()->id])->count() > 0) selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+					@endforeach
+				</select>
+		</fieldset>
+
+		<fieldset class="form-group col">
+				<label for="for_users">Subdirector Médico</label>
+				<select name="users[]" id="subdirector_medico" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+					@foreach($users as $key => $user)
+						<option value="{{$user->id}}" @if($user->id == "9882506") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+					@endforeach
+					<!-- <option value="12345678">Pedro Iriondo</option> -->
+				</select>
+				<!-- modificar rut por el que corresponda -->
+				<input type="hidden" name="users[]" value="9882506" />
+		</fieldset>
+
+		<fieldset class="form-group col">
+				<label for="for_users">Jefe Finanzas</label>
+				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+					@foreach($users as $key => $user)
+						<option value="{{$user->id}}" @if($user->id == "9994426") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+					@endforeach
+				</select>
+				<input type="hidden" name="users[]" value="9994426" />
+		</fieldset>
+
+		<fieldset class="form-group col">
+				<label for="for_users">Director S.G.D.P</label>
+				<select name="users[]" id="director_sgdp" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+					@foreach($users as $key => $user)
+						<option value="{{$user->id}}" @if($user->id == 15685508) selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+					@endforeach
+				</select>
+				<input type="hidden" name="users[]" value="15685508" />
 		</fieldset>
 
 	</div>
@@ -285,6 +337,16 @@
 		</fieldset>
 
     <fieldset class="form-group col">
+        <label for="for_establishment_id">Establecimiento</label>
+        <select name="establishment_id" class="form-control" required>
+          <option value=""></option>
+          @foreach($establishments as $key => $establishment)
+            <option value="{{$establishment->id}}" @if($serviceRequest->establishment_id == $establishment->id) selected @endif>{{$establishment->name}}</option>
+          @endforeach
+        </select>
+    </fieldset>
+
+    <fieldset class="form-group col">
 		    <label for="for_daily_hours">Horas Diurnas</label>
 		    <input type="number" class="form-control" id="for_daily_hours" placeholder="" name="daily_hours" value="{{ $serviceRequest->daily_hours }}">
 		</fieldset>
@@ -322,10 +384,16 @@
           </fieldset>
           <fieldset class="form-group col-2">
               <label for="for_estate"><br/></label>
-              @if($serviceRequest->SignatureFlows->where('user_id',Auth::user()->id)->whereNotNull('status')->count()>0)
-            	  <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
+              <!-- solo tiene acceso la persona que crea la solicitud -->
+              @if($serviceRequest->where('user_id', Auth::user()->id)->count() > 0)
+                <!-- si existe una firma, no se deja modificar solicitud -->
+                @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+                  <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
+                @else
+                  <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
+                @endif
               @else
-                <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
+                <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
               @endif
           </fieldset>
         </div>
@@ -352,10 +420,16 @@
               @endforeach
             </tbody>
         </table>
-        @if($serviceRequest->SignatureFlows->where('user_id',Auth::user()->id)->whereNotNull('status')->count()>0)
-      	  <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
+        <!-- solo tiene acceso la persona que crea la solicitud -->
+        @if($serviceRequest->where('user_id', Auth::user()->id)->count() > 0)
+          <!-- si existe una firma, no se deja modificar solicitud -->
+          @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+            <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
+          @else
+            <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+          @endif
         @else
-          <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+          <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
         @endif
       </li>
     </ul>
@@ -430,16 +504,6 @@
                 <option value="10" @if($serviceRequest->month_of_payment == 10) selected @endif>Octubre</option>
                 <option value="11" @if($serviceRequest->month_of_payment == 11) selected @endif>Noviembre</option>
                 <option value="12" @if($serviceRequest->month_of_payment == 12) selected @endif>Diciembre</option>
-              </select>
-          </fieldset>
-
-          <fieldset class="form-group col">
-              <label for="for_establishment_id">Establecimiento</label>
-              <select name="establishment_id" class="form-control" required>
-                <option value=""></option>
-                @foreach($establishments as $key => $establishment)
-                  <option value="{{$establishment->id}}" @if($serviceRequest->establishment_id == $establishment->id) selected @endif>{{$establishment->name}}</option>
-                @endforeach
               </select>
           </fieldset>
 
@@ -547,10 +611,16 @@
   </div>
 
   <br>
-  @if($serviceRequest->SignatureFlows->where('user_id',Auth::user()->id)->whereNotNull('status')->count()>0)
-	  <button type="submit" class="btn btn-primary" disabled>Guardar</button>
-  @else
+  <!-- solo el creador de la solicitud puede editar  -->
+  @if($serviceRequest->where('user_id', Auth::user()->id)->count() > 0)
     <button type="submit" class="btn btn-primary">Guardar</button>
+  @else
+    <!-- si existe una firma, no se deja modificar solicitud -->
+    @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+      <button type="submit" class="btn btn-primary" disabled>Guardar</button>
+    @else
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    @endif
   @endif
 
 </form>

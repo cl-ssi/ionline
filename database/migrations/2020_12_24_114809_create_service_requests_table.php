@@ -128,6 +128,7 @@ class CreateServiceRequestsTable extends Migration
             $table->string('type', 100)->nullable(); //visador, firmante
             $table->string('employee', 100)->nullable();
             $table->longText('observation')->nullable();
+            $table->datetime('signature_date')->nullable();
             $table->boolean('status')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users');

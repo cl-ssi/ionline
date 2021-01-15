@@ -94,6 +94,7 @@ class ResolutionController extends Controller
          $SignatureFlow->resolution_id = $resolution->id;
          $SignatureFlow->type = "creador";
          $SignatureFlow->employee = $employee;
+         $SignatureFlow->signature_date = Carbon::now();
          $SignatureFlow->status = 1;
          $SignatureFlow->save();
 
@@ -189,6 +190,7 @@ class ResolutionController extends Controller
                                            ->first();
              $SignatureFlow->user_id = Auth::id();
              $SignatureFlow->employee = $request->employee;
+             $SignatureFlow->signature_date = Carbon::now();
              $SignatureFlow->status = $request->status;
              $SignatureFlow->save();
           }
