@@ -36,7 +36,7 @@
             @elseif($SignatureFlow->status === 1)
               <tr>
             @endif
-               <td>{{ $SignatureFlow->created_at}}</td>
+               <td>{{ $SignatureFlow->signature_date}}</td>
                <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
                <td>{{ $SignatureFlow->employee }}</td>
                <td>@if($SignatureFlow->user) {{ $SignatureFlow->user->getFullNameAttribute() }} @endif</td>

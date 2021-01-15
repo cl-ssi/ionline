@@ -35,6 +35,9 @@ class ServiceRequestController extends Controller
       $serviceRequestsPendings = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                                    $subQuery->where('user_id',$user_id)->whereNull('status');
                                                  })->orderBy('id','asc')
+                                                 ->whereDoesntHave("SignatureFlows", function($subQuery) use($user_id){
+                                                   $subQuery->where('status',0)->whereNull('status'); //que no haya un rechazado
+                                                 })
                                                  ->where('user_id','!=',Auth::user()->id)
                                                  ->get();
 
@@ -68,6 +71,7 @@ class ServiceRequestController extends Controller
    */
   public function store(Request $request)
   {
+    // dd($request->users);
       $serviceRequest = new ServiceRequest($request->All());
       $serviceRequest->rut = $request->run ."-". $request->dv;
       $serviceRequest->user_id = Auth::id();
@@ -103,6 +107,7 @@ class ServiceRequestController extends Controller
       $SignatureFlow->service_request_id = $serviceRequest->id;
       $SignatureFlow->type = "creador";
       $SignatureFlow->employee = $employee;
+      $SignatureFlow->signature_date = Carbon::now();
       $SignatureFlow->status = 1;
       $SignatureFlow->save();
 
@@ -243,6 +248,7 @@ class ServiceRequestController extends Controller
                                         // dd($SignatureFlow);
           $SignatureFlow->user_id = Auth::id();
           $SignatureFlow->employee = $request->employee;
+          $SignatureFlow->signature_date = Carbon::now();
           $SignatureFlow->status = $request->status;
           $SignatureFlow->save();
        }
