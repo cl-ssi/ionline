@@ -14,6 +14,15 @@ $meses = array(1,2,3,4,5,6,7,8,9,10,11,12);
 $sql_ultimo_rem = "SELECT MAX(Mes) as ultimo_rem FROM 2020rems;";
 $ultimo_rem = DB::connection('mysql_rem')->select($sql_ultimo_rem)[0]->ultimo_rem;
 
+function lastParameter (int $ind){
+  $last_parameter = SingleParameter::select('month')
+      ->where('indicator', $ind)
+      ->get()
+      ->last();
+
+  return $last_parameter;
+}
+
 /* INDICADOR 1. */
 $data1['label']['meta'] = '1. Pacientes diabéticos compensados en
     el grupo de 15 años y más.';
@@ -499,7 +508,9 @@ $data6['ponderacion'] = '17';
 
 $base_where = array(['law','19664'],['year',$year],['indicator',6],['establishment_id',9]);
 
-for($i = 1; $i <= 12; $i++) {
+$last_parameter = lastParameter(6);
+
+for($i = 1; $i <= $last_parameter->month; $i++) {
     $where = array_merge($base_where,array(['month',$i],['position','numerador']));
     $value = SingleParameter::where($where)->first();
     if($value) $data6['numeradores'][$i] = $value->value;
@@ -694,7 +705,9 @@ $data11['ponderacion'] = '6.5';
 
 $base_where = array(['law','19664'],['year',$year],['indicator',11],['establishment_id',9]);
 
-for($i = 1; $i <= $ultimo_rem; $i++) {
+$last_parameter = lastParameter(11);
+
+for($i = 1; $i <= $last_parameter->month; $i++) {
     $where = array_merge($base_where,array(['month',$i],['position','numerador']));
     $value = SingleParameter::where($where)->first();
     if($value) $data11['numeradores'][$i] = $value->value;
@@ -744,7 +757,9 @@ $data12['ponderacion'] = '15%';
 
 $base_where = array(['law','19664'],['year',$year],['indicator',12],['establishment_id',9]);
 
-for($i = 1; $i <= $ultimo_rem; $i++) {
+$last_parameter = lastParameter(12);
+
+for($i = 1; $i <= $last_parameter->month; $i++) {
     $where = array_merge($base_where,array(['month',$i],['position','numerador']));
     $value = SingleParameter::where($where)->first();
     if($value) $data12['numeradores'][$i] = $value->value;
