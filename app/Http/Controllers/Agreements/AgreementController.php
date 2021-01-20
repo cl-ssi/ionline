@@ -23,19 +23,25 @@ class AgreementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $agreements = Agreement::latest()->get();
+        if($request->period){
+            $agreements = Agreement::where('period', $request->period)->latest()->get();
+        } else {
+            $agreements = Agreement::where('period', date('Y'))->latest()->paginate(50);
+        }
+
         return view('agreements/agreements/index')->withAgreements($agreements);
     }
 
     public function indexTracking(Request $request)
     {
         if($request->commune){
-            $agreements = Agreement::where('commune_id',$request->commune)->latest()->get();
-        }
-        else {
-            $agreements = Agreement::latest()->paginate(50);;
+            $agreements = Agreement::where('commune_id',$request->commune)->where('period', $request->period)->latest()->get();
+        }elseif($request->period){
+            $agreements = Agreement::where('period', $request->period)->latest()->get();
+        } else {
+            $agreements = Agreement::where('period', date('Y'))->latest()->paginate(50);
         }
         $communes = Commune::All()->SortBy('name');
         $stages = Stage::All();
