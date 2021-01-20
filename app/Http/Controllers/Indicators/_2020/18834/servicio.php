@@ -281,7 +281,8 @@ else {
 /* ==== Inicializar en 0 el arreglo de datos $data ==== */
 $data12 = array();
 $data12['label']['meta'] = '1.2. Evaluación anual de los pies en
-    personas de 15 años y más con diabetes bajo control.';
+    personas de 15 años y más con evaluación vigente del pie 
+    según pauta de estimación del riesgo de ulceración en personas con diabetes.';
 $data12['label']['numerador'] = 'N° de personas con DM2 bajo control de
     15 y más años con evaluación de pie vigente en el año t.';
 $data12['label']['denominador'] = 'N° total de pacientes diabéticos de
