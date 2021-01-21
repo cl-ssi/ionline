@@ -11,7 +11,7 @@
 <form class="form-inline float-right small" method="GET" action="{{ route('agreements.tracking.index') }}">
 	<div class="input-group mb-6">  
   <select name="commune" id="formprogram" class="form-control">
-                    <option value="">Comuna</option>
+                    <option value="">Todas</option>
                 @foreach($communes as $commune)
                     <option value="{{ $commune->id }}" {{ request()->commune == $commune->id ? 'selected' : '' }}>{{ $commune->name }}</option>
                 @endforeach
