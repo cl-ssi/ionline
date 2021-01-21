@@ -6,8 +6,15 @@
 
 @include('agreements/nav')
 
-<h3 class="mb-3">Listado de Convenios</h3>
-
+<h3 class="mb-3">Listado de Convenios 
+<form class="form-inline float-right small" method="GET" action="{{ route('agreements.index') }}">
+    <select name="period" class="form-control" onchange="this.form.submit()">
+                    @foreach(range(date('Y'), 2020) as $period)
+                        <option value="{{ $period }}" {{ request()->period == $period ? 'selected' : '' }}>{{ $period }}</option>
+                    @endforeach
+    </select>
+</form>
+</h3>
 <table class="table">
     <thead>
         <tr class="small">

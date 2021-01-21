@@ -87,13 +87,13 @@ class ClaveUnicaController extends Controller
     public function login($access_token = null)
     {
         if ($access_token) {
-            // dd("");
+            //dd($access_token);
             if (env('APP_ENV') == 'production') {
                 //$access_token = session()->get('access_token');
-                $url_base = "https://www.claveunica.gob.cl/openid/userinfo/";
-                $response = Http::withToken($access_token)->post($url_base);
-                $user_cu = json_decode($response);
+                $url_base = "https://www.claveunica.gob.cl/openid/userinfo";
+                $response = Http::withToken($access_token)->get($url_base);
 
+                $user_cu = json_decode($response);
                 $user = new User();
                 $user->id = $user_cu->RolUnico->numero;
                 $user->dv = $user_cu->RolUnico->DV;

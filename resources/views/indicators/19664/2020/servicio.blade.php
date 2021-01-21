@@ -142,7 +142,7 @@
             <td></td>
             <td class="text-right">
               @if($data1['denominador_12'] != NULL)
-                {{ number_format($data1['denominador_12'], 2, ',', '.') }}%
+                {{ number_format($data1['denominador_12'], 0, ',', '.') }}
               @else
                 {{ number_format(0, 0, ',', '.') }}
               @endif

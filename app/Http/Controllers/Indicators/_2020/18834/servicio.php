@@ -281,7 +281,8 @@ else {
 /* ==== Inicializar en 0 el arreglo de datos $data ==== */
 $data12 = array();
 $data12['label']['meta'] = '1.2. Evaluación anual de los pies en
-    personas de 15 años y más con diabetes bajo control.';
+    personas de 15 años y más con evaluación vigente del pie 
+    según pauta de estimación del riesgo de ulceración en personas con diabetes.';
 $data12['label']['numerador'] = 'N° de personas con DM2 bajo control de
     15 y más años con evaluación de pie vigente en el año t.';
 $data12['label']['denominador'] = 'N° total de pacientes diabéticos de
@@ -341,17 +342,17 @@ foreach($denominadores as $denominador) {
 /* -------------------------------------------------------------------------- */
 /* AÑO T */
 
-$sql_numerador = "SELECT r.Mes AS mes, sum(ifnull(Col01,0)) as valor
+$sql_numerador = "SELECT r.Mes, sum(ifnull(Col01,0)) as valor
                     FROM {$year}rems r
-                    WHERE (Mes = 6 OR Mes = 12)
-                    AND CodigoPrestacion IN ('P4190809','P4170300','P4190500','P4190600')
+                    WHERE r.Mes in (6, 12)
+                    AND CodigoPrestacion IN ('P4190809','P4170300','P4190500','P4190600') AND IdEstablecimiento NOT IN (102100)
                     GROUP BY r.Mes
                     ORDER BY r.Mes";
 $numeradores = DB::connection('mysql_rem')->select($sql_numerador);
 
 
 foreach($numeradores as $numerador) {
-    switch($numerador->mes) {
+    switch($numerador->Mes) {
         case 6:  $data12['numerador_6'] = $numerador->valor; break;
         case 12: $data12['numerador_12'] = $numerador->valor; break;
     }
