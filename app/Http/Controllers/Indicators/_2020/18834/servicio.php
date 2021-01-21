@@ -344,10 +344,8 @@ foreach($denominadores as $denominador) {
 
 $sql_numerador = "SELECT r.Mes, sum(ifnull(Col01,0)) as valor
                     FROM {$year}rems r
-                    LEFT JOIN {$year}establecimientos e
-                    ON r.IdEstablecimiento=e.Codigo
                     WHERE r.Mes in (6, 12)
-                    AND CodigoPrestacion IN ('P4190809','P4170300','P4190500','P4190600') AND e.Codigo != 102100
+                    AND CodigoPrestacion IN ('P4190809','P4170300','P4190500','P4190600') AND IdEstablecimiento NOT IN (102100)
                     GROUP BY r.Mes
                     ORDER BY r.Mes";
 $numeradores = DB::connection('mysql_rem')->select($sql_numerador);
