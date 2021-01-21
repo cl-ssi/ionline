@@ -337,7 +337,7 @@
               @if($data12['numerador_6'] == NULL)
                 {{ number_format(0, 0, ',', '.') }}</td>
               @else
-                {{ number_format($data12['numerador'], 0, ',', '.') }}</td>
+                {{ number_format($data12['numerador_6'], 0, ',', '.') }}</td>
               @endif
             </td>
             <td></td>
