@@ -9,13 +9,18 @@
 
 
 <form class="form-inline float-right small" method="GET" action="{{ route('agreements.tracking.index') }}">
-	<div class="input-group mb-6">
+	<div class="input-group mb-6">  
   <select name="commune" id="formprogram" class="form-control">
-                    <option ></option>
+                    <option value="">Todas</option>
                 @foreach($communes as $commune)
-                    <option value="{{ $commune->id }}">{{ $commune->name }}</option>
+                    <option value="{{ $commune->id }}" {{ request()->commune == $commune->id ? 'selected' : '' }}>{{ $commune->name }}</option>
                 @endforeach
-            </select>
+    </select>
+    <select name="period" class="form-control">
+                @foreach(range(date('Y'), 2020) as $period)
+                    <option value="{{ $period }}" {{ request()->period == $period ? 'selected' : '' }}>{{ $period }}</option>
+                @endforeach
+    </select>
 		<div class="input-group-append">
 			<button class="btn btn-outline-secondary" type="submit">
 				<i class="fas fa-search" aria-hidden="true"></i>

@@ -12,6 +12,16 @@ $meses = array(1,2,3,4,5,6,7,8,9,10,11,12);
 $sql_ultimo_rem = "SELECT MAX(Mes) as ultimo_rem FROM 2020rems;";
 $ultimo_rem = DB::connection('mysql_rem')->select($sql_ultimo_rem)[0]->ultimo_rem;
 
+
+function lastParameter (int $ind){
+  $last_parameter = SingleParameter::select('month')
+      ->where('indicator', $ind)
+      ->get()
+      ->last();
+
+  return $last_parameter;
+}
+
 /**** INDICADOR 4 ****/
 $data4_hosp['label']['meta'] = '4. Porcentaje de Intervenciones Quirúrgicas
     Suspendidas.';
@@ -84,7 +94,9 @@ $data5_hosp['ponderacion'] = '8';
 
 $base_where = array(['law','19664'],['year',$year],['indicator',5],['establishment_id',1]);
 
-for($i = 1; $i <= $ultimo_rem; $i++) {
+$last_parameter = lastParameter(5);
+
+for($i = 1; $i <= $last_parameter->month; $i++) {
     $where = array_merge($base_where,array(['month',$i],['position','numerador']));
     $value = SingleParameter::where($where)->first();
     if($value) $data5_hosp['numeradores'][$i] = $value->value;
@@ -111,6 +123,8 @@ else{
     $data5_hosp['aporte'] = 0;
 }
 
+//dd($data5_hosp);
+
 /**** INDICADOR 6. ****/
 $data6_hosp['label']['meta'] = '6. Variación porcentual del número de días
     promedio de espera para intervenciones quirúrgicas, según línea base.';
@@ -130,7 +144,9 @@ $data6_hosp['ponderacion'] = '8';
 
 $base_where = array(['law','19664'],['year',$year],['indicator',6],['establishment_id',1]);
 
-for($i = 1; $i <= 12; $i++) {
+$last_parameter = lastParameter(6);
+
+for($i = 1; $i <= $last_parameter->month; $i++) {
     $where = array_merge($base_where,array(['month',$i],['position','numerador']));
     $value = SingleParameter::where($where)->first();
     if($value) $data6_hosp['numeradores'][$i] = $value->value;
@@ -482,7 +498,9 @@ $data11_hosp['ponderacion'] = '8';
 
 $base_where = array(['law','19664'],['year',$year],['indicator',11],['establishment_id',1]);
 
-for($i = 1; $i <= $ultimo_rem; $i++) {
+$last_parameter = lastParameter(11);
+
+for($i = 1; $i <= $last_parameter->month; $i++) {
     $where = array_merge($base_where,array(['month',$i],['position','numerador']));
     $value = SingleParameter::where($where)->first();
     if($value) $data11_hosp['numeradores'][$i] = $value->value;
@@ -532,7 +550,9 @@ $data12_hosp['ponderacion'] = '10%';
 
 $base_where = array(['law','19664'],['year',$year],['indicator',12],['establishment_id',1]);
 
-for($i = 1; $i <= $ultimo_rem; $i++) {
+$last_parameter = lastParameter(12);
+
+for($i = 1; $i <= $last_parameter->month; $i++) {
     $where = array_merge($base_where,array(['month',$i],['position','numerador']));
     $value = SingleParameter::where($where)->first();
     if($value) $data12_hosp['numeradores'][$i] = $value->value;
