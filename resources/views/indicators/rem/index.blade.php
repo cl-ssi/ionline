@@ -15,6 +15,7 @@
                 <strong>Serie A</strong>
             </div>
             <ul class="list-group list-group-flush">
+                <li class="list-group-item text-muted">{{--<a href="{{ route('indicators.rem.index', [2021, 'A']) }}">2021</a>--}} 2021</li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.index', [2020, 'serie_a']) }}">2020</a> </li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.index', [2019, 'serie_a']) }}">2019</a> </li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2018, 'A']) }}">2018</a></li>
@@ -31,6 +32,7 @@
                 <strong>Serie BM</strong>
             </div>
             <ul class="list-group list-group-flush">
+                <li class="list-group-item text-muted">{{--<a href="{{ route('indicators.rem.index', [2021, 'BM']) }}">2021</a>--}} 2021</li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.index', [2020, 'serie_bm']) }}">2020</a></li>
                 <li class="list-group-item text-muted"><a>2019</a> </li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2018, 'BM']) }}">2018</a></li>
@@ -46,7 +48,8 @@
                 <strong>Serie BS</strong>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item text-muted"><a>2020</a> <span class="badge badge-secondary">No Disponible</span></li>
+                <li class="list-group-item text-muted">{{--<a href="{{ route('indicators.rem.index', [2021, 'BS']) }}">2021</a>--}} 2021</li>
+                <li class="list-group-item text-muted"><a>2020</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.index', [2019, 'serie_bs']) }}">2019</a> </li>
                 <li class="list-group-item text-muted">2018 </li>
                 <!-- <li class="list-group-item text-muted"><a href="">2017</a> </li>
@@ -61,6 +64,7 @@
                 <strong>Serie D</strong>
             </div>
             <ul class="list-group list-group-flush">
+                <li class="list-group-item text-muted">{{--<a href="{{ route('indicators.rem.index', [2021, 'D']) }}">2021</a>--}} 2021</li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.index', [2020, 'serie_d']) }}">2020</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.index', [2019, 'serie_d']) }}">2019</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2018, 'D']) }}">2018</a></li>
@@ -79,9 +83,10 @@
                 <strong>Serie P</strong>
             </div>
             <ul class="list-group list-group-flush">
+                <li class="list-group-item text-muted">{{--<a href="{{ route('indicators.rem.index', [2021, 'P']) }}">2021</a>--}} 2021</li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.index', [2020, 'serie_p']) }}">2020</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.index', [2019, 'serie_p']) }}">2019</a></li>
-                <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2018, 'P']) }}">2018</a> <span class="badge badge-warning">En Desarrollo</span></li>
+                <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2018, 'P']) }}">2018</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2017, 'P']) }}">2017</a></li>
                 <!-- <li class="list-group-item text-muted"><a href="">2017</a> </li>
                 <li class="list-group-item text-muted"><a href="">2016</a> </li>
@@ -95,6 +100,7 @@
                 <strong>Serie F</strong>
             </div>
             <ul class="list-group list-group-flush">
+                <li class="list-group-item text-muted">{{--<a href="{{ route('indicators.rem.index', [2021, 'F']) }}">2021</a>--}} 2021</li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.nserie.index', [2020, 'serie_f', 'covid']) }}">2020</a></li>
             </ul>
         </div>
