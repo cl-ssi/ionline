@@ -683,12 +683,12 @@ if($data10['numerador_acumulado'] AND $data10['denominador'] != 0) {
 else $data10['cumplimiento'] = 0;
 
 if( $data10['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data10['meta'])) {
-    $data10['aporte'] = preg_replace("/[^0-9]/", '', $data10['ponderacion']);
+    $data10['aporte'] = $data10['ponderacion'];
 }
 else{
     $data10['aporte'] = 0;
 }
-
+// dd($data10);
 /**** INDICADOR 11 ****/
 $data11['label']['meta'] = '11. Promedio de días de estada de pacientes
     derivados vía UGCC a prestadores privados fuera de convenio.';
