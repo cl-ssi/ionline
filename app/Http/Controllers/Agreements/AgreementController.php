@@ -161,6 +161,7 @@ class AgreementController extends Controller
         $stages = Stage::where('agreement_id', $id)->first();
         //dd($stage->isEmpty());
         $Agreement->date                = $request->date;
+        $Agreement->period              = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y');
         $Agreement->resolution_date     = $request->resolution_date;
         $Agreement->number              = $request->number;
         $Agreement->res_exempt_number    = $request->res_exempt_number;
