@@ -73,6 +73,27 @@ class ServiceRequestController extends Controller
    */
   public function store(Request $request)
   {
+      //valida que usuario tenga ou
+      if($request->users <> null){
+        foreach ($request->users as $key => $user) {
+
+          //saber la organizationalUnit que tengo a cargo
+          $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', User::find($user)->id);
+          $employee = User::find($user)->position;
+          if ($authorities!=null) {
+            $employee = $authorities[0]->position . " - " . $authorities[0]->organizationalUnit->name;
+            $ou_id = $authorities[0]->organizational_unit_id;
+          }else{
+            $ou_id = User::find($user)->organizational_unit_id;
+          }
+
+          if ($ou_id == null) {
+            session()->flash('info', User::find($user)->getFullNameAttribute().' no posee unidad organizacional asignada.');
+            return redirect()->back();
+          }
+        }
+      }
+
     // dd($request->users);
       $serviceRequest = new ServiceRequest($request->All());
       $serviceRequest->rut = $request->run ."-". $request->dv;
