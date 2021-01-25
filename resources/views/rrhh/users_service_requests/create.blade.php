@@ -6,7 +6,6 @@
 
 <h3>Nuevo usuario</h3>
 
-<!-- @can('Users: create') -->
 <form method="POST" action="{{ route('rrhh.users.service_requests.store') }}" enctype="multipart/form-data">
 	@csrf
 
@@ -113,6 +112,5 @@
 	<button type="submit" class="btn btn-primary">Crear</button>
 
 </form>
-<!-- @endcan -->
 
 @endsection
