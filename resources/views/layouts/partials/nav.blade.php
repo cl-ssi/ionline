@@ -112,10 +112,10 @@
                       </a>
                     @endcan
 
-                    @canany(['Resolutions'])
+                    @canany(['Documents: signatures and distribution'])
                       <a class="dropdown-item"
-                          href="{{ route('rrhh.resolutions.index') }}">
-                          <i class="fas fa-wallet"></i> Solicitud de Firmas
+                          href="{{ route('documents.signatures.index') }}">
+                          <i class="fas fa-signature"></i> Solicitud de firmas
                       </a>
                     @endcan
 
