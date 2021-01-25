@@ -72,12 +72,10 @@ class AgreementController extends Controller
     public function store(Request $request)
     {
         $agreement = new Agreement($request->All());
-        $agreement->period = 2020;
+        $agreement->period = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y');
         if($request->hasFile('file'))
             $agreement->file = $request->file('file')->store('resolutions');
         $agreement->save();
-
-        
 
         foreach($agreement->program->components as $component) {
             $agreement->agreement_amounts()->create(['subtitle' => null, 'amount'=>0, 'program_component_id'=>$component->id]);
