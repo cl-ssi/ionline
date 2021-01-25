@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Documents\Resolution;
 use App\Models\ServiceRequests\SignatureFlow;
-use App\Rrhh\organizationalUnit;
+use App\Rrhh\OrganizationalUnit;
 use App\User;
 
 use Illuminate\Support\Facades\Auth;
@@ -50,7 +50,7 @@ class ResolutionController extends Controller
                                        $subQuery->where('user_id',Auth::user()->id)->whereNotNull('status');
                                      })->orderBy('id','asc')->get();
 
-        return view('documents.resolutions.index', compact('resolutionsPending','myResolutions'));
+        return view('documents.signatures.index', compact('resolutionsPending','myResolutions'));
     }
 
     /**
@@ -61,8 +61,8 @@ class ResolutionController extends Controller
      public function create()
      {
        $users = User::orderBy('name','ASC')->get();
-       $organizationalUnits = organizationalUnit::orderBy('id','asc')->get();
-       return view('documents.resolutions.create', compact('users','organizationalUnits'));
+       $organizationalUnits = OrganizationalUnit::orderBy('id','asc')->get();
+       return view('documents.signatures.create', compact('users','organizationalUnits'));
      }
 
      /**
@@ -158,7 +158,7 @@ class ResolutionController extends Controller
          }
 
          // dd($SignatureFlow);
-         return view('documents.resolutions.edit', compact('resolution', 'users', 'organizationalUnits','employee'));
+         return view('documents.signatures.edit', compact('resolution', 'users', 'organizationalUnits','employee'));
      }
 
      /**
