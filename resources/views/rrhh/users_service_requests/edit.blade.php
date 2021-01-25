@@ -6,7 +6,7 @@
 
 @include('rrhh.users_service_requests.submenu')
 
-@can('Users: edit')
+<!-- @can('Users: edit') -->
 <form method="POST" class="form-horizontal" action="{{ route('rrhh.users.service_requests.update',$user->id) }}">
 	@csrf
     @method('PUT')
@@ -95,12 +95,12 @@
 			<button class="btn btn-sm btn-outline-secondary"><span class="fas fa-redo" aria-hidden="true"></span> Restaurar clave</button>
 		</form>
 
-		@can('Users: delete')
+		<!-- @can('Users: delete') -->
 		<form method="POST" action="{{ route('rrhh.users.destroy', $user->id) }}" class="d-inline">
 			{{ method_field('DELETE') }} {{ csrf_field() }}
 			<button class="btn btn-sm btn-danger"><span class="fas fa-trash" aria-hidden="true"></span> Eliminar</button>
 		</form>
-		@endcan
+		<!-- @endcan -->
 
 		<!-- @role('god')
 		<form method="GET" action="{{ route('rrhh.users.switch', $user->id) }}" class="d-inline float-right">
@@ -111,6 +111,6 @@
 
 	</div>
 
-@endcan
+<!-- @endcan -->
 
 @endsection
