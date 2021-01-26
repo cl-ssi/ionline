@@ -742,9 +742,11 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 /* Nuevas rutas, Laravel 8.0. */
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
+    Route::post('/', [SuitabilityController::class, 'store'])->name('store');    
     Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::get('/validaterequest', [SuitabilityController::class, 'validaterequest'])->name('validaterequest');
-    Route::get('/create', [SuitabilityController::class, 'create'])->name('create');
+    Route::post('/validaterun', [SuitabilityController::class, 'validaterun'])->name('validaterun');
+    Route::get('/create/{run?}', [SuitabilityController::class, 'create'])->name('create');    
 
     Route::prefix('categories')->as('categories.')->middleware('auth')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])->name('index');

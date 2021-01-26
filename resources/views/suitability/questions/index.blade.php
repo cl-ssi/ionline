@@ -17,7 +17,7 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th>Categoría</th>
+            <th>Examen</th>
             <th>Texto de Pregunta</th>
             <th>Editar</th>
         </tr>

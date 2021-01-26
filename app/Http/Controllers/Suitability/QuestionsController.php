@@ -43,6 +43,7 @@ class QuestionsController extends Controller
     {
         //
         Question::create($request->all());
+        session()->flash('success', 'Se ha añadido la pregunta correctamente.');
         return redirect()->route('suitability.questions.index');
     }
 
