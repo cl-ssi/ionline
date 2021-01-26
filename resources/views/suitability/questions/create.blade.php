@@ -4,16 +4,16 @@
 
 @include('suitability.nav')
 
-<h3 class="mb-3">Nueva Pregunta </h3>
+<h3 class="mb-3">Nueva Pregunta</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('suitability.questions.store') }}">
     @csrf
     @method('POST')
     <div class="form-row align-items-end">
         <fieldset class="form-group col-6 col-sm-6 col-md-6 col-lg-6">
-            <label for="for_run">Categoría*</label>
+            <label for="for_run">Examenes*</label>
             <select class="form-control" name="category_id" id="category_id" required>
-            <option value="">Seleccionar Categoría</option>
+            <option value="">Seleccionar Examen</option>
             @foreach($categories as $category)
             <option value="{{ $category->id }}">{{ $category->name }}</option>
             @endforeach
