@@ -157,7 +157,8 @@ elseif( $data13['cumplimiento'] == NULL) {
     $data13['aporte'] = 0;
 }
 else {
-    $data13['aporte'] = $data13['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data13['ponderacion']) / 100;
+    // $data13['aporte'] = $data13['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data13['ponderacion']) / 100;
+    $data13['aporte'] = $data13['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data13['ponderacion']) / $data13['meta'];
 }
 
 /***********  META 1.5. ************/
@@ -270,7 +271,8 @@ if( $data18['cumplimiento'] >= $data18['meta']) {
     $data18['aporte'] = preg_replace("/[^0-9]/", '', $data18['ponderacion']);
 }
 else {
-    $data18['aporte'] = 0;
+    // $data18['aporte'] = 0;
+    $data18['aporte'] = $data18['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data18['ponderacion']) / $data18['meta'];
 }
 
 /********** META 1.2. **********/
@@ -413,7 +415,7 @@ elseif( $data12['cumplimiento'] == NULL) {
     $data12['aporte'] = 0;
 }
 else {
-    $data12['aporte'] = $data12['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data12['ponderacion']) / 100;
+    $data12['aporte'] = $data12['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data12['ponderacion']) / $data12['meta'];
 }
 
 /********** META 3.1 **********/
@@ -460,7 +462,7 @@ if( $data31['cumplimiento'] >= $data31['meta']) {
     $data31['aporte'] = preg_replace("/[^0-9]/", '', $data31['ponderacion']);
 }
 else {
-    $data31['aporte'] = $data31['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data31['ponderacion']) / 100;
+    $data31['aporte'] = $data31['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data31['ponderacion']) / $data31['meta'];
 }
 
 ?>
