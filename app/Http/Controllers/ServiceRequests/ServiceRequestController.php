@@ -28,21 +28,20 @@ class ServiceRequestController extends Controller
    */
   public function index()
   {
-
       $user_id = Auth::user()->id;
       $resolutionsPending = [];
 
       $serviceRequestsPendings = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
-                                                   $subQuery->where('user_id',$user_id)->whereNull('status');
+                                                   $subQuery->where('responsable_id',$user_id)->whereNull('status');
                                                  })->orderBy('id','asc')
-                                                 ->whereDoesntHave("SignatureFlows", function($subQuery) use($user_id){
+                                                 ->whereDoesntHave("SignatureFlows", function($subQuery) {
                                                    $subQuery->where('status',0)->whereNull('status'); //que no haya un rechazado
                                                  })
-                                                 ->where('user_id','!=',Auth::user()->id)
+                                                 ->where('responsable_id','!=',Auth::user()->id)
                                                  ->get();
 
       $myServiceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
-                                             $subQuery->where('user_id',$user_id)->whereNotNull('status');
+                                             $subQuery->where('user_id',$user_id)->orWhere('responsable_id',$user_id)->whereNotNull('status');
                                            })->orderBy('id','asc')->get();
 
       return view('service_requests.requests.index', compact('serviceRequestsPendings','myServiceRequests'));
@@ -61,7 +60,7 @@ class ServiceRequestController extends Controller
     // $subdirections = Subdirection::orderBy('name', 'ASC')->get();
     // $responsabilityCenters = ResponsabilityCenter::orderBy('name', 'ASC')->get();
     $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
-    $responsabilityCenters = OrganizationalUnit::where('name','LIKE','%centro de resp%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
+    $responsabilityCenters = OrganizationalUnit::where('name','LIKE','%unidad%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
     return view('service_requests.requests.create', compact('subdirections','responsabilityCenters','users','establishments'));
   }
 
@@ -170,7 +169,8 @@ class ServiceRequestController extends Controller
 
           $SignatureFlow = new SignatureFlow($request->All());
           $SignatureFlow->ou_id = $ou_id;
-          $SignatureFlow->user_id = User::find($user)->id;
+          $SignatureFlow->responsable_id = User::find($user)->id;
+          $SignatureFlow->user_id = Auth::id();//User::find($user)->id;
           $SignatureFlow->service_request_id = $serviceRequest->id;
           $SignatureFlow->type = "visador";
           $SignatureFlow->employee = $employee;
@@ -207,7 +207,7 @@ class ServiceRequestController extends Controller
       $establishments = Establishment::orderBy('name', 'ASC')->get();
       // $organizationalUnits = organizationalUnit::where('establishment_id',1)->orderBy('name', 'ASC')->get();
       $subdirections = organizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
-      $responsabilityCenters = organizationalUnit::where('name','LIKE','%centro de resp%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
+      $responsabilityCenters = organizationalUnit::where('name','LIKE','%unidad%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
       $SignatureFlow = $serviceRequest->SignatureFlows->where('employee','Supervisor de servicio')->first();
       // $my_level = null;
       // $position = null;
@@ -238,7 +238,7 @@ class ServiceRequestController extends Controller
   {
       //se guarda información de la solicitud
       $serviceRequest->fill($request->all());
-      $serviceRequest->rut = $request->run ."-". $request->dv;
+      // $serviceRequest->rut = $request->run ."-". $request->dv;
       $serviceRequest->save();
 
       //si seleccionó una opción, se agrega visto bueno.
@@ -265,11 +265,12 @@ class ServiceRequestController extends Controller
         //si seleccionó una opción, se agrega visto bueno.
         if ($request->status != null) {
 
-          $SignatureFlow = SignatureFlow::where('user_id',Auth::user()->id)
+          $SignatureFlow = SignatureFlow::where('responsable_id',Auth::user()->id)
                                         ->where('service_request_id',$serviceRequest->id)
                                         ->first();
                                         // dd($SignatureFlow);
-          $SignatureFlow->user_id = Auth::id();
+          // $SignatureFlow->responsable_id = Auth::id();
+          // $SignatureFlow->user_id = Auth::id();
           $SignatureFlow->employee = $request->employee;
           $SignatureFlow->signature_date = Carbon::now();
           $SignatureFlow->status = $request->status;

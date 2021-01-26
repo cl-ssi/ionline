@@ -38,7 +38,7 @@
 			<th scope="col">F. Inicio</th>
 			<th scope="col">F. Término</th>
 			<th scope="col">Estado Solicitud</th>
-			<th scope="col">Creador</th>
+			<!-- <th scope="col">Creador</th> -->
 			<th scope="col"></th>
 		</tr>
 	</thead>
@@ -56,7 +56,7 @@
 					@else Finalizada @endif</td>
 			<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
 			<!-- <td>{{$serviceRequest->SignatureFlows->last()->employee}}</td> -->
-			<td>{{$serviceRequest->user->getFullNameAttribute()}}</td>
+			<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
 			<td>
 				<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
 					class="btn btn-sm btn-outline-secondary">
@@ -81,7 +81,7 @@
 			<th scope="col">F. Inicio</th>
 			<th scope="col">F. Término</th>
 			<th scope="col">Estado Solicitud</th>
-			<th scope="col">Creador</th>
+			<!-- <th scope="col">Creador</th> -->
 			<th scope="col"></th>
 		</tr>
 	</thead>
@@ -98,7 +98,7 @@
 			<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
 					@else Finalizada @endif</td>
 			<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
-			<td>{{$serviceRequest->user->getFullNameAttribute()}}</td>
+			<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
 			<td>
 				<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
 					class="btn btn-sm btn-outline-secondary">
