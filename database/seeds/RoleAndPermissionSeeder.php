@@ -34,6 +34,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Documents: create']);
         Permission::create(['name' => 'Documents: edit']);
         Permission::create(['name' => 'Documents: add number']);
+        Permission::create(['name' => 'Documents: signatures and distribution']);
 
         Permission::create(['name' => 'Resources: create']);
         Permission::create(['name' => 'Resources: edit']);
