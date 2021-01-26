@@ -73,7 +73,7 @@
                 <span class="{{ ($data13['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data13['meta'])) ? 'text-success':'text-danger' }}">
                 {{ number_format($data13['cumplimiento'], 2, ',', '.') }}%
                 </span>
-                <small><br>Aporte: @numero($data13['aporte'])%</small>
+                <small><br>Aporte: {{ number_format($data13['aporte'], 2, ',', '.') }}%</small>
             </td>
             <td class="text-right">{{ number_format($data13['numerador_12a'], 0, ',', '.') }}</td></td>
             <td class="text-right">
@@ -255,7 +255,7 @@
                 <span class="{{ ($data18['cumplimiento'] >= $data18['meta']) ? 'text-success':'text-danger' }}">
                 {{ number_format($data18['cumplimiento'], 2, ',', '.') }}%
                 </span>
-                <small><br>Aporte: @numero($data18['aporte'])%</small>
+                <small><br>Aporte: {{ number_format($data18['aporte'], 2, ',', '.') }}%</small>
             </td>
             <td class="text-right">{{ number_format($data18['numerador_acumulado'],0, ',', '.') }}</td>
             @foreach($data18['numeradores'] as $numerador)
@@ -318,7 +318,7 @@
                 <span class="{{ ($data12['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data12['meta'])) ? 'text-success':'text-danger' }}">
                     {{ number_format($data12['cumplimiento'], 2, ',', '.') }}%
                 </span>
-                <small><br>Aporte: @numero($data12['aporte'])%</small>
+                <small><br>Aporte: {{ number_format($data12['aporte'], 2, ',', '.') }}%</small>
             </td>
             <td class="text-right">{{ number_format($data12['numerador_12a'], 0, ',', '.') }}</td>
             <td class="text-right">

@@ -247,7 +247,8 @@ if( $data18_hosp['cumplimiento'] >= $data18_hosp['meta']) {
     $data18_hosp['aporte'] = preg_replace("/[^0-9]/", '', $data18_hosp['ponderacion']);
 }
 else {
-    $data18_hosp['aporte'] = 0;
+    // $data18_hosp['aporte'] = 0;
+    $data18_hosp['aporte'] = $data18_hosp['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data18_hosp['ponderacion']) / $data18_hosp['meta'];
 }
 
 /********** META 1.9. **********/
