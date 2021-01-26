@@ -6,25 +6,12 @@
 <div class="jumbotron mt-5">
     <div class="row">
     <div class="col-9">
-        {{-- <h1 class="display-4">Intranet Online</h1>
-        <p class="lead">{{ env('APP_SS') }}</p> --}}
-        <div class="row">
-            <div class="col-md-6 col-12">
-                <img src="{{ asset('images\new_year.jpg') }}" alt="Árbol de Navidad" width="400" class="img-thumbnail">
-            </div>
-            <div class="col-md-6 col-12">
-                <p class="h4 text-justify" style="color:#165290">
-                Feliz año nuevo {{ strtok(auth()->user()->name, " ") }}.<br><br>
-                Que este año 2021 venga lleno de alegría, amor y salud para tí y todos quienes te rodean.
-                <br><br>
-                ¡Que se cumplan todos tus sueños! Son los sinceros deseos del glorioso equipo TIC.
-                </p>
-            </div>
-        </div>
-        {{-- <hr class="my-5">
+        <h1 class="display-4">Intranet Online</h1>
+        <p class="lead">{{ env('APP_SS') }}</p>
+        <hr class="my-5">
         <p>Contacto:
             <a href="mailto:{{ env('APP_SS_EMAIL') }}">{{ env('APP_SS_EMAIL') }}</a>
-        </p> --}}
+        </p>
 
     </div>
     <div class="col-md-3 col-12">
@@ -44,4 +31,17 @@
 
     <pre></pre>
 </div>
+@endsection
+
+@section('custom_js')
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $("body").keydown(function(event){
+    	/* 65=a, 74=j*/
+    	if(event.which == 65 || event.which ==74) $("#developers").toggle("slow");
+    });
+});
+</script>
+
 @endsection

@@ -6,10 +6,13 @@
 
 <h3>Solicitud de Contratación de Servicios</h3>
 
-  @if($serviceRequest->SignatureFlows->where('user_id',Auth::user()->id)->whereNotNull('status')->count()>0)
+  @if($serviceRequest->SignatureFlows->where('responsable_id',Auth::user()->id)->whereNotNull('status')->count() > 0)
     <form>
   @else
-    <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+    <!-- tienen acceso los firmantes y el creador de la solicitud -->
+    @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
+      <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+    @endif
   @endif
 
 
@@ -170,12 +173,22 @@
 	</div>
 
   <div class="row">
+
+    <fieldset class="form-group col">
+				<label for="for_users">Responsable</label>
+				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+					@foreach($users as $key => $user)
+						<option value="{{$user->id}}" @if($user->id == $serviceRequest->where('responsable_id',$user->id)->count() > 0) selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+					@endforeach
+				</select>
+		</fieldset>
+
 		<fieldset class="form-group col">
 				<label for="for_users">Jefe Directo</label>
 				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($serviceRequest->SignatureFlows->where('user_id',$user->id)
-                                                             ->whereNotIn('user_id',[9882506,9994426,15685508,Auth::user()->id])->count() > 0) selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($serviceRequest->SignatureFlows->where('responsable_id',$user->id)->where('type','visador')
+                                                             ->whereNotIn('responsable_id',[9882506,9994426,15685508,Auth::user()->id])->count() > 0) selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
 		</fieldset>
@@ -190,6 +203,16 @@
 				</select>
 				<!-- modificar rut por el que corresponda -->
 				<input type="hidden" name="users[]" value="9882506" />
+		</fieldset>
+
+    <fieldset class="form-group col">
+				<label for="for_users">Director</label>
+				<select name="users[]" id="director" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+					@foreach($users as $key => $user)
+						<option value="{{$user->id}}" @if($user->id == "14101085") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+					@endforeach
+				</select>
+				<input type="hidden" name="users[]" value="14101085" />
 		</fieldset>
 
 		<fieldset class="form-group col">
@@ -300,14 +323,14 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <!-- <fieldset class="form-group col">
 		    <label for="for_name">Otro</label>
 		    <select name="other" class="form-control" required>
           <option value="Brecha" @if($serviceRequest->other == 'Brecha') selected @endif >Brecha</option>
           <option value="LM:LICENCIAS MEDICAS" @if($serviceRequest->other == 'LM:LICENCIAS MEDICAS') selected @endif >LM:LICENCIAS MEDICAS</option>
           <option value="HE:HORAS EXTRAS" @if($serviceRequest->other == 'HE:HORAS EXTRAS') selected @endif >HE:HORAS EXTRAS</option>
         </select>
-		</fieldset>
+		</fieldset> -->
 
     <fieldset class="form-group col">
 		    <label for="for_normal_hour_payment">Pago Hora Normal</label>
@@ -385,7 +408,7 @@
           <fieldset class="form-group col-2">
               <label for="for_estate"><br/></label>
               <!-- solo tiene acceso la persona que crea la solicitud -->
-              @if($serviceRequest->where('user_id', Auth::user()->id)->count() > 0)
+              @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
                 <!-- si existe una firma, no se deja modificar solicitud -->
                 @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
                   <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
@@ -421,7 +444,7 @@
             </tbody>
         </table>
         <!-- solo tiene acceso la persona que crea la solicitud -->
-        @if($serviceRequest->where('user_id', Auth::user()->id)->count() > 0)
+        @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
           <!-- si existe una firma, no se deja modificar solicitud -->
           @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
             <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
@@ -564,7 +587,7 @@
           </fieldset>
 
           <fieldset class="form-group col">
-					    <label for="for_gross_amount">Monto Neto</label>
+					    <label for="for_gross_amount">Monto Bruto</label>
               <input type="text" class="form-control" name="gross_amount" value="{{$serviceRequest->gross_amount}}">
 					</fieldset>
 
@@ -612,7 +635,7 @@
 
   <br>
   <!-- solo el creador de la solicitud puede editar  -->
-  @if($serviceRequest->where('user_id', Auth::user()->id)->count() > 0)
+  @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
     <button type="submit" class="btn btn-primary">Guardar</button>
   @else
     <!-- si existe una firma, no se deja modificar solicitud -->

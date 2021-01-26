@@ -71,6 +71,15 @@
 	<div class="row">
 
 		<fieldset class="form-group col">
+				<label for="for_users">Responsable</label>
+				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required="" data-size="5">
+					@foreach($users as $key => $user)
+						<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
+					@endforeach
+				</select>
+		</fieldset>
+
+		<fieldset class="form-group col">
 				<label for="for_users">Jefe Directo</label>
 				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5">
 					@foreach($users as $key => $user)
@@ -89,6 +98,16 @@
 				</select>
 				<!-- modificar rut por el que corresponda -->
 				<input type="hidden" name="users[]" value="9882506" />
+		</fieldset>
+
+		<fieldset class="form-group col">
+				<label for="for_users">Director</label>
+				<select name="users[]" id="director" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+					@foreach($users as $key => $user)
+						<option value="{{$user->id}}" @if($user->id == "14101085") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+					@endforeach
+				</select>
+				<input type="hidden" name="users[]" value="14101085" />
 		</fieldset>
 
 		<fieldset class="form-group col">
@@ -210,14 +229,14 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <!-- <fieldset class="form-group col">
 		    <label for="for_other">Otro</label>
 		    <select name="other" class="form-control" required>
           <option value="Brecha">Brecha</option>
           <option value="LM:LICENCIAS MEDICAS">LM:LICENCIAS MEDICAS</option>
           <option value="HE:HORAS EXTRAS">HE:HORAS EXTRAS</option>
         </select>
-		</fieldset>
+		</fieldset> -->
 
     <fieldset class="form-group col">
 		    <label for="for_normal_hour_payment">Pago Hora Normal</label>

@@ -26,7 +26,7 @@ $data11_reyno['label']['denominador'] = 'Total de pacientes diabéticos de 15 a�
 $data11_reyno['label']['fuente']['numerador'] = 'REM';
 $data11_reyno['label']['fuente']['denominador'] = 'REM';
 
-$data11_reyno['meta'] = '≥45%';
+$data11_reyno['meta'] = '45';
 $data11_reyno['ponderacion'] = '20%';
 
 /* ==== Inicializar en 0 el arreglo de datos $data ==== */
@@ -154,7 +154,7 @@ elseif( $data11_reyno['cumplimiento'] == NULL) {
     $data11_reyno['aporte'] = 0;
 }
 else {
-    $data11_reyno['aporte'] = $data11_reyno['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data11_reyno['ponderacion']) / 100;
+    $data11_reyno['aporte'] = $data11_reyno['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data11_reyno['ponderacion']) / $data11_reyno['meta'];
 }
 
 /********** META 1.2. **********/
@@ -171,7 +171,7 @@ $data12_reyno['label']['denominador'] = 'N° total de pacientes diabéticos de
 $data12_reyno['label']['fuente']['numerador'] = 'REM';
 $data12_reyno['label']['fuente']['denominador'] = 'REM';
 
-$data12_reyno['meta'] = '≥90%';
+$data12_reyno['meta'] = '90';
 $data12_reyno['ponderacion'] = '10%';
 
 $data12_reyno['numerador_12a'] = '';
@@ -298,7 +298,7 @@ elseif( $data12_reyno['cumplimiento'] == NULL) {
     $data12_reyno['aporte'] = 0;
 }
 else {
-    $data12_reyno['aporte'] = $data12_reyno['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data12_reyno['ponderacion']) / 100;
+    $data12_reyno['aporte'] = $data12_reyno['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data12_reyno['ponderacion']) / $data12_reyno['meta'];
 }
 
 /********** META 1.3. **********/
@@ -316,7 +316,7 @@ $data13_reyno['label']['denominador'] = 'N° total de pacientes hipertensos de
 $data13_reyno['label']['fuente']['numerador'] = 'REM';
 $data13_reyno['label']['fuente']['denominador'] = 'REM';
 
-$data13_reyno['meta'] = '≥68%';
+$data13_reyno['meta'] = '68';
 $data13_reyno['ponderacion'] = '10%';
 
 /* ==== Inicializar el arreglo de datos $data ==== */
@@ -442,7 +442,7 @@ elseif( $data13_reyno['cumplimiento'] == null) {
     $data13_reyno['aporte'] = 0;
 }
 else {
-    $data13_reyno['aporte'] = $data13_reyno['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data13_reyno['ponderacion']) / 100;
+    $data13_reyno['aporte'] = $data13_reyno['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data13_reyno['ponderacion']) / $data13_reyno['meta'];
 }
 
 /***********  META 1.8. ************/
@@ -459,7 +459,7 @@ $data18_reyno['label']['denominador'] = '(Garantías Cumplidas + Garantías Exce
 $data18_reyno['label']['fuente']['numerador'] = 'Datamart';
 $data18_reyno['label']['fuente']['denominador'] = 'Datamart';
 
-$data18_reyno['meta'] = '100%';
+$data18_reyno['meta'] = '100';
 $data18_reyno['ponderacion'] = '30%';
 
 $base_where = array(['law','18834'],['year',$year],['indicator',18],['establishment_id',12]);
@@ -490,7 +490,7 @@ if( $data18_reyno['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data18_reyno[
     $data18_reyno['aporte'] = preg_replace("/[^0-9]/", '', $data18_reyno['ponderacion']);
 }
 else {
-    $data18_reyno['aporte'] = $data18_reyno['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data18_reyno['ponderacion']) / 100;
+    $data18_reyno['aporte'] = $data18_reyno['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data18_reyno['ponderacion']) / $data18_reyno['meta'];
 }
 
 /********** META 3.1 **********/
@@ -507,7 +507,7 @@ $data31_reyno['label']['denominador'] = 'N° total de funcionarios de la dotaci�
 $data31_reyno['label']['fuente']['numerador'] = 'Reporte RRHH';
 $data31_reyno['label']['fuente']['denominador'] = 'Reporte RRHH';
 
-$data31_reyno['meta'] = '≥50%';
+$data31_reyno['meta'] = '50';
 $data31_reyno['ponderacion'] = '30%';
 
 $base_where = array(['law','18834'],['year',$year],['indicator',31],['establishment_id',12],['position','numerador']);
@@ -537,6 +537,6 @@ if( $data31_reyno['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data31_reyno[
     $data31_reyno['aporte'] = preg_replace("/[^0-9]/", '', $data31_reyno['ponderacion']);
 }
 else {
-    $data31_reyno['aporte'] = $data31_reyno['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data31_reyno['ponderacion']) / 100;
+    $data31_reyno['aporte'] = $data31_reyno['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data31_reyno['ponderacion']) / $data31_reyno['meta'];
 }
 ?>

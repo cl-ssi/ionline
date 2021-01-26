@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Editar Solicitud de Firma')
+@section('title', 'Editar solicitud de firma y distribución')
 
 @section('content')
 
 <h3>Edición Solicitud de Firma</h3>
 
-  <form method="POST" action="{{ route('rrhh.resolutions.update', $resolution) }}" enctype="multipart/form-data">
+  <form method="POST" action="{{ route('documents.signatures.update', $resolution) }}" enctype="multipart/form-data">
   @csrf
   @method('PUT')
 

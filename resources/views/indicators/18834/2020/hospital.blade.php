@@ -270,7 +270,7 @@
                 <span class="{{ ($data18_hosp['cumplimiento'] >= $data18_hosp['meta']) ? 'text-success':'text-danger' }}">
                 {{ number_format($data18_hosp['cumplimiento'], 2, ',', '.') }}%
                 </span>
-                <small><br>Aporte: @numero($data18_hosp['aporte'])%</small>
+                <small><br>Aporte: {{ number_format($data18_hosp['aporte'], 2, ',', '.') }}%</small>
             </td>
             <td class="text-right">{{ number_format($data18_hosp['numerador_acumulado'],0, ',', '.') }}</td>
             @foreach($data18_hosp['numeradores'] as $numerador)
