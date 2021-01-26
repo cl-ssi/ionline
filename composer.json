@@ -17,11 +17,13 @@
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
+        "luecano/numero-a-letras": "^2.2",
         "maatwebsite/excel": "^3.1",
         "owen-it/laravel-auditing": "^10.0",
+        "phpoffice/phpword": "^0.17.0",
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.3",
-        "spatie/laravel-permission": "^3.13"        
+        "spatie/laravel-permission": "^3.13"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",
