@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Suitability;
 
 use App\Models\Suitability\Option;
+use App\Models\Suitability\Question;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -29,6 +30,8 @@ class OptionsController extends Controller
     public function create()
     {
         //
+        $questions = Question::all();
+        return view('suitability.options.create', compact('questions'));
     }
 
     /**
@@ -40,6 +43,9 @@ class OptionsController extends Controller
     public function store(Request $request)
     {
         //
+        Option::create($request->all());
+        session()->flash('success', 'Se ha añadido la opción correctamente.');
+        return redirect()->route('suitability.options.index');
     }
 
     /**

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Suitability;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\User;
 
 class SuitabilityController extends Controller
 {
@@ -27,10 +28,41 @@ class SuitabilityController extends Controller
         return view('suitability.validaterequest');
     }
 
-
-    public function create()
+    public function validateRun(Request $request)
     {
-        return view('suitability.create');
+        $user = User::find($request->run);
+        if(!$user)
+        {
+            return redirect()->route('suitability.create',$request->run);
+            
+            
+        }
+        else
+        {
+            dd("Si existe");
+        }
+    }
+    
+
+
+    public function create($run)
+    {
+        
+        return view('suitability.create',compact('run'));
+        
+    }
+
+    public function store(Request $request)
+    {
+        $user = new User($request->All());
+        $user->email_personal = $request->email;
+        $user->external = 1;
+        $user->save();
+        session()->flash('success', 'Solicitud Creada Exitosamente');
+
+        return redirect()->route('suitability.own');
+
+
     }
 
 
