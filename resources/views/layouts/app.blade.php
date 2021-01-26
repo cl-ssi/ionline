@@ -41,6 +41,7 @@
     <!-- Place your kit's code here -->
     <script src="https://kit.fontawesome.com/7c4f606aba.js" SameSite="None"
         crossorigin="anonymous"></script>
+    @livewireStyles
 </head>
 <body>
     <div id="app">
@@ -100,6 +101,6 @@
         setTimeout(function(){ window.location.href= "/logout"; }, 1000);
     }
     </script>
-
+    @livewireScripts
 </body>
 </html>
