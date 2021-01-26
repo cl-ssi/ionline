@@ -6,12 +6,12 @@
 <div style="margin-bottom: 10px;" class="row">
     <div class="col-lg-12">
         <a class="btn btn-success" href="{{ route('suitability.categories.create') }}">
-            Agregar Categoría
+            Agregar Examen
         </a>
     </div>
 </div>
 
-<h3 class="mb-3">Listado de Categorias para los Examenes</h3>
+<h3 class="mb-3">Listado de Tipos de Examenes</h3>
 
 <table class="table">
     <thead>

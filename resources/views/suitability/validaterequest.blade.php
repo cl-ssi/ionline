@@ -8,7 +8,7 @@
 
 <h3 class="mb-3">Validar RUT de Solicitud</h3>
 
-<form method="POST" class="form-horizontal" action="">
+<form method="POST" class="form-horizontal" action="{{ route('suitability.validaterun') }}">
     @csrf
     @method('POST')
 

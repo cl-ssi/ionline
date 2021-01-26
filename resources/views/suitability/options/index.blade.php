@@ -5,7 +5,7 @@
 @include('suitability.nav')
     <div style="margin-bottom: 10px;" class="row">
         <div class="col-lg-12">
-            <a class="btn btn-success" href="#">
+            <a class="btn btn-success" href="{{ route('suitability.options.create') }}">
                 Agregar Opción a Pregunta
             </a>
         </div>
@@ -24,7 +24,7 @@
     <tbody>
     @foreach($options as $option)
         <tr>
-            <td>{{ $option->question->name ?? '' }}</td>
+            <td>{{ $option->question->question_text ?? '' }}</td>
             <td>{{ $option->option_text ?? '' }}</td>
             <td>{{ $option->points ?? '' }}</td>
             <td>

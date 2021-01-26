@@ -3,7 +3,7 @@
 @section('content')
 
 @include('suitability.nav')
-<h3 class="mb-3">Crear Categoría</h3>
+<h3 class="mb-3">Crear Examen</h3>
 <form method="POST" class="form-horizontal" action="{{ route('suitability.categories.store') }}">
     @csrf
     @method('POST')
