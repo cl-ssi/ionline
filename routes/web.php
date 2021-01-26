@@ -13,7 +13,6 @@ use App\Http\Controllers\RequestForms\RequestFormEventController;
 use App\Http\Controllers\RequestForms\RequestFormFileController;
 use App\Http\Controllers\RequestForms\RequestFormCodeController;
 
-
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
 
 /*
@@ -193,7 +192,6 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::resource('shift_control', 'ServiceRequests\ShiftControlController')->middleware('auth');
     Route::get('service_requests.consolidated_data','ServiceRequests\ServiceRequestController@consolidated_data')->name('service_requests.consolidated_data')->middleware('auth');
     Route::resource('service_requests', 'ServiceRequests\ServiceRequestController')->middleware('auth');
-    Route::resource('resolutions', 'Documents\ResolutionController')->middleware('auth');
     // Route::resource('scs_service_requests_signature_flow', 'ServiceRequests\SignatureFlowController')->middleware('auth');
     Route::resource('authorities', 'Rrhh\AuthorityController')->middleware(['auth']);
 
@@ -295,6 +293,8 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
         Route::get('/inbox', 'Documents\ParteController@inbox')->name('inbox');
     });
     Route::resource('partes', 'Documents\ParteController');
+
+    Route::resource('signatures', 'Documents\SignatureController')->middleware('auth');
 });
 Route::resource('documents', 'Documents\DocumentController')->middleware('auth');
 

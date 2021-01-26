@@ -157,7 +157,8 @@ elseif( $data13['cumplimiento'] == NULL) {
     $data13['aporte'] = 0;
 }
 else {
-    $data13['aporte'] = $data13['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data13['ponderacion']) / 100;
+    // $data13['aporte'] = $data13['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data13['ponderacion']) / 100;
+    $data13['aporte'] = $data13['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data13['ponderacion']) / $data13['meta'];
 }
 
 /***********  META 1.5. ************/
@@ -190,11 +191,7 @@ $sql_numerador = "SELECT e.alias_estab, r.Mes, sum(ifnull(Col01,0)) AS numerador
     LEFT JOIN {$year}establecimientos e
     ON r.IdEstablecimiento=e.Codigo
     WHERE e.meta_san_18834_hosp = 1
-    AND CodigoPrestacion IN (07024900, 07024915, 07024925, 07024935, 07024920, 07024816, 07024607, 07024817, 07024809, 07024705, 07024506,
-                              07024930, 07024940, 070251200, 070251300, 070251400, '07030100A', 07030200, 07030300, 07030400, 07024950, 07024960,
-                              28021230, 28021240, 28021250, 28021260, 28021270,
-                              28021280, 28021290, 28021300, 28021310,
-                              28021320, 28021330, 28021340, 28021350)
+    AND CodigoPrestacion IN (07024900, 07024915, 07024925, 07024935, 07024920, 07024816, 07024607, 07024705, 07024506)
     GROUP by e.Comuna, e.alias_estab, r.Mes
     ORDER BY e.Comuna, e.alias_estab, r.Mes";
 $numeradores = DB::connection('mysql_rem')->select($sql_numerador);
@@ -274,7 +271,8 @@ if( $data18['cumplimiento'] >= $data18['meta']) {
     $data18['aporte'] = preg_replace("/[^0-9]/", '', $data18['ponderacion']);
 }
 else {
-    $data18['aporte'] = 0;
+    // $data18['aporte'] = 0;
+    $data18['aporte'] = $data18['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data18['ponderacion']) / $data18['meta'];
 }
 
 /********** META 1.2. **********/
@@ -417,7 +415,7 @@ elseif( $data12['cumplimiento'] == NULL) {
     $data12['aporte'] = 0;
 }
 else {
-    $data12['aporte'] = $data12['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data12['ponderacion']) / 100;
+    $data12['aporte'] = $data12['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data12['ponderacion']) / $data12['meta'];
 }
 
 /********** META 3.1 **********/
@@ -464,7 +462,7 @@ if( $data31['cumplimiento'] >= $data31['meta']) {
     $data31['aporte'] = preg_replace("/[^0-9]/", '', $data31['ponderacion']);
 }
 else {
-    $data31['aporte'] = $data31['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data31['ponderacion']) / 100;
+    $data31['aporte'] = $data31['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data31['ponderacion']) / $data31['meta'];
 }
 
 ?>

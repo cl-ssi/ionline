@@ -34,6 +34,7 @@ class CreateServiceRequestsTable extends Migration
             $table->string('type', 100); //honorarios, covid19, etc.
             $table->unsignedBigInteger('subdirection_ou_id');
             $table->unsignedBigInteger('responsability_center_ou_id');
+            $table->unsignedBigInteger('responsable_id');
             $table->string('rut', 100);
             $table->string('name', 100);
             $table->string('address', 100)->nullable();
@@ -76,6 +77,7 @@ class CreateServiceRequestsTable extends Migration
             $table->datetime('payment_date')->nullable();
 
             //fk
+            $table->foreign('responsable_id')->references('id')->on('users');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('subdirection_ou_id')->references('id')->on('organizational_units');
             $table->foreign('responsability_center_ou_id')->references('id')->on('organizational_units');
@@ -121,7 +123,7 @@ class CreateServiceRequestsTable extends Migration
             $table->id();
 
             $table->unsignedBigInteger('ou_id');
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('responsable_id')->nullable();
             $table->unsignedBigInteger('service_request_id')->nullable();
             $table->unsignedBigInteger('resolution_id')->nullable();
             // $table->enum('employee', ['Supervisor de servicio', 'Jefatura de servicio', 'Subdirector', 'Jefe de finanzas', 'Director', 'Jefe Depto. Gestión de las Personas', 'Subdirector RR.HH']);
@@ -130,7 +132,9 @@ class CreateServiceRequestsTable extends Migration
             $table->longText('observation')->nullable();
             $table->datetime('signature_date')->nullable();
             $table->boolean('status')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
 
+            $table->foreign('responsable_id')->references('id')->on('users');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('service_request_id')->references('id')->on('doc_service_requests');
             $table->foreign('resolution_id')->references('id')->on('doc_resolutions');

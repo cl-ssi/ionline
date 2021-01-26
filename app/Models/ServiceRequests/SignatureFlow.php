@@ -16,11 +16,11 @@ class SignatureFlow extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'id', 'ou_id', 'user_id','service_request_id','resolution_id', 'type', 'employee', 'observation', 'signature_date', 'status'
+        'id', 'ou_id', 'responsable_id','user_id','service_request_id','resolution_id', 'type', 'employee', 'observation', 'signature_date', 'status'
     ];
 
     public function user(){
-      return $this->belongsTo('App\User');
+      return $this->belongsTo('App\User','responsable_id');
     }
 
     public function serviceRequest(){
@@ -28,7 +28,7 @@ class SignatureFlow extends Model implements Auditable
     }
 
     public function resolution(){
-      return $this->belongsTo('App\Documents\Resolution');
+      return $this->belongsTo('App\Documents\Signature');
     }
 
     public function organizationalUnit(){
