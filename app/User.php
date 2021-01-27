@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Suitability\Result;
 
 class User extends Authenticatable
 {
@@ -26,7 +27,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'dv', 'name', 'fathers_family','mothers_family', 'email',
+        'id', 'dv', 'name', 'fathers_family','mothers_family','gender', 'email',
         'password','birthday','position','active','external'
     ];
 
@@ -130,6 +131,12 @@ class User extends Authenticatable
     public function establishments() {
         return $this->belongsToMany('\App\Pharmacies\Establishment', 'frm_establishments_users')
                     ->withTimestamps();
+    }
+
+    public function userResults()
+    {
+        return $this->hasMany(Result::class, 'user_id', 'id');
+        //return $this->hasMany('App\Models\Result', 'user_id', 'id');
     }
 
     /**computers

@@ -25,10 +25,10 @@
 
         <fieldset class="form-group col-4">
             <label>Sexo*</label>
-            <select class="form-control">
+            <select class="form-control" name="gender">
             <option value="">Seleccionar Sexo</option>
-            <option value="Masculino">Masculino</option>
-            <option value="Femenino">Femenino</option>
+            <option value="male">Masculino</option>
+            <option value="female">Femenino</option>
             </select>
         </fieldset>
 
@@ -64,7 +64,7 @@
 
         <fieldset class="form-group col-6">
             <label for="for_critic_stock">Fecha de Ingreso*</label>
-            <input type="date" class="form-control" id="for_critic_stock" placeholder="" name="critic_stock" required="">
+            <input type="date" class="form-control" id="for_critic_stock" placeholder="" name="start_date" required="">
         </fieldset>
     </div>
 
@@ -76,14 +76,14 @@
     </div>
 
 
-    <label for="forBrand">Presenta Discapacidad</label>
+    <label for="forBrand">Presenta Discapacidad*</label>
     <fieldset class="form-group">
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="type" id="RadioType1" value="desktop" required>
+            <input class="form-check-input" type="radio" name="disability" id="RadioType1" value="1" required>
             <label class="form-check-label" for="inlineRadio1">Sí</label>
         </div>
         <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio" name="type" id="RadioType2" value="all-in-one" required>
+            <input class="form-check-input" type="radio" name="disability" id="RadioType2" value="0" required>
             <label class="form-check-label" for="inlineRadio2">No</label>
         </div>
     </fieldset>

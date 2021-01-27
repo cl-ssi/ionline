@@ -5,12 +5,11 @@ namespace App\Models\Suitability;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
-class Category extends Model
+class PsiRequest extends Model
 {
     use HasFactory;
 
-    public $table = 'psi_categories';
+    public $table = 'psi_requests';
 
     protected $dates = [
         'created_at',
@@ -19,15 +18,13 @@ class Category extends Model
     ];
 
     protected $fillable = [
-        'name',
-        'created_at',
-        'updated_at',
-        'deleted_at',
+        'start_date',
+        'disability',
     ];
 
-    public function categoryQuestions()
-    {
-        return $this->hasMany(Question::class, 'category_id', 'id');
-    }
+    public function user(){
+        return $this->belongsTo('App\User','user_id');
+      }
+
 
 }

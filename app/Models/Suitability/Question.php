@@ -24,6 +24,11 @@ class Question extends Model
     ];
 
 
+    public function questionOptions()
+    {
+        return $this->hasMany(Option::class, 'question_id', 'id');
+    }
+
 
     public function category()
     {

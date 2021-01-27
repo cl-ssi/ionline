@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Suitability\SuitabilityController;
 use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\QuestionsController;
@@ -747,6 +748,9 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::get('/validaterequest', [SuitabilityController::class, 'validaterequest'])->name('validaterequest');
     Route::post('/validaterun', [SuitabilityController::class, 'validaterun'])->name('validaterun');
     Route::get('/create/{run?}', [SuitabilityController::class, 'create'])->name('create');    
+    Route::get('/welcome', [TestsController::class, 'welcome'])->name('welcome');
+    Route::get('/test', [TestsController::class, 'index'])->name('test');
+    Route::post('/test', [TestsController::class, 'store'])->name('test.store');
 
     Route::prefix('categories')->as('categories.')->middleware('auth')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])->name('index');
