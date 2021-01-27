@@ -42,6 +42,8 @@ class SignatureController extends Controller
      */
     public function store(Request $request)
     {
+
+        dd($request);
         $signature = new Signature($request->All());
         $signature->user_id = Auth::id();
         $signature->save();

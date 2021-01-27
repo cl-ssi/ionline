@@ -87,17 +87,10 @@
         	</select>
 		</fieldset>
 
-		<fieldset class="form-group col">
-		    <label for="for_visators">Visadores</label>
-			<select name="visators[]" id="visators_id" class="form-control selectpicker" multiple="multiple" size='8'>
-				@foreach($organizationalUnits as $key => $organizationalUnit)
-				<option value="{{$organizationalUnit->id}}">{{$organizationalUnit->name}}</option>
-				@endforeach
-			</select>
-		</fieldset>
 
 
-		<div class="col-4">
+
+		{{-- <div class="col-4">
 			<div id="inputFormRow">
 				<div class="input-group mb-3">
 					<input type="text" name="title[]" class="form-control m-input" placeholder="Enter title" autocomplete="off">
@@ -108,10 +101,13 @@
 			</div>
 
 		<div id="newRow"></div>
-		<button id="addRow" type="button" class="btn btn-info">Add Row</button>
+		<button id="addRow" type="button" class="btn btn-info">Add Row</button> --}}
 	</div>
 
-	</div>
+
+	@livewire('add-signature')
+
+
 
 	<div class="form-row">
 
