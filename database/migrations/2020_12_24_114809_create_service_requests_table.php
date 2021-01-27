@@ -76,6 +76,8 @@ class CreateServiceRequestsTable extends Migration
             $table->double('total_paid', 8, 2)->nullable();
             $table->datetime('payment_date')->nullable();
 
+            $table->string('verification_code', 100)->nullable();
+
             //fk
             $table->foreign('responsable_id')->references('id')->on('users');
             $table->foreign('user_id')->references('id')->on('users');
@@ -127,6 +129,7 @@ class CreateServiceRequestsTable extends Migration
             $table->unsignedBigInteger('service_request_id')->nullable();
             $table->unsignedBigInteger('resolution_id')->nullable();
             // $table->enum('employee', ['Supervisor de servicio', 'Jefatura de servicio', 'Subdirector', 'Jefe de finanzas', 'Director', 'Jefe Depto. Gestión de las Personas', 'Subdirector RR.HH']);
+            $table->integer('sign_position')->nullable();
             $table->string('type', 100)->nullable(); //visador, firmante
             $table->string('employee', 100)->nullable();
             $table->longText('observation')->nullable();
