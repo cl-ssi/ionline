@@ -114,24 +114,24 @@
             <hr class="mt-2 mb-3"/>
             <div class="form-row">
                 <fieldset class="form-group col-3">
-                    <label for="fornumber">Número Resolución del Convenio</label>
+                    <label for="fornumber">Número Resolución del Programa Ministerial</label>
                     <input type="integer" name="number" class="form-control" id="fornumber" value="{{ $agreement->number }}" >
                     <small class="form-text text-muted">* Nro. Resolución, se puede agregar al final.</small>
                 </fieldset>
 
                 <fieldset class="form-group col-3">
-                    <label for="fordate">Fecha Resolución del Convenio</label>
+                    <label for="fordate">Fecha Resolución del Programa Ministerial</label>
                     <input type="date" name="resolution_date" class="form-control" id="fordate" value="{{ $agreement->resolution_date }}" >
                 </fieldset>
 
                 <fieldset class="form-group col-3">
-                    <label for="fornumber">Número Resolución Excenta</label>
+                    <label for="fornumber">Número Resolución Exenta del Convenio</label>
                     <input type="integer" name="res_exempt_number" class="form-control" id="fornumber" value="{{ $agreement->res_exempt_number }}" >
-                    <small class="form-text text-muted">* Nro. Resolución Excenta, se puede agregar al final.</small>
+                    <small class="form-text text-muted">* Nro. Resolución Exenta, se puede agregar al final.</small>
                 </fieldset>
 
                 <fieldset class="form-group col-3">
-                    <label for="fordate">Fecha Resolución Excenta</label>
+                    <label for="fordate">Fecha Resolución Exenta del Convenio</label>
                     <input type="date" name="res_exempt_date" class="form-control" id="fordate" value="{{ $agreement->res_exempt_date }}" >
                 </fieldset>
             </div>
