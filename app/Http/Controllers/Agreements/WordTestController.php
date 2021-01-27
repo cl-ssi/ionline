@@ -211,7 +211,7 @@ class WordTestController extends Controller
         $fechaConvenio = date('j', strtotime($fechaConvenio)).' de '.$meses[date('n', strtotime($fechaConvenio))-1].' '.date('Y', strtotime($fechaConvenio));
         $numResolucion = $agreements->number;
         $fechaResolucion = $agreements->resolution_date;
-        $fechaResolucion = date('j', strtotime($fechaResolucion)).' de '.$meses[date('n', strtotime($fechaResolucion))-1].' '.date('Y', strtotime($fechaResolucion));
+        $fechaResolucion = $fechaResolucion ? date('j', strtotime($fechaResolucion)).' de '.$meses[date('n', strtotime($fechaResolucion))-1].' '.date('Y', strtotime($fechaResolucion)) : '';
         $referente = $agreements->referente;
         $alcaldeApelativo = $municipality->appellative_representative;
         $alcalde = $municipality->name_representative;
