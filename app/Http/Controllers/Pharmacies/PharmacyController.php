@@ -24,6 +24,9 @@ class PharmacyController extends Controller
         if(Auth::user()->can('Pharmacy: APS (id:3)')){
             session(['pharmacy_id' => 3]);
         }
+        if(Auth::user()->can('Pharmacy: Servicios generales (id:4)')){
+            session(['pharmacy_id' => 4]);
+        }
 
         return view('pharmacies.index');
     }

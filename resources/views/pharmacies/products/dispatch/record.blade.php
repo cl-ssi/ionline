@@ -39,6 +39,24 @@
         </div>
     </div>
 @endcan
+@can('Pharmacy: Servicios generales (id:4)')
+    <div>
+        <div style="width: 49%; display: inline-block;">
+            <div class="siete" style="padding-top: 3px;">
+                Bodega Servicios Generales - {{ config('app.ss') }}
+            </div>
+            <div class="siete" style="padding-top: 3px;">
+                <i>bodega.ssi@redsalud.gov.cl</i>
+            </div>
+            <div class="siete" style="padding-top: 3px;">
+                <i>N* minsal 576975 teléfono 572406975</i>
+            </div>
+        </div>
+        <div class="right" style="width: 49%; display: inline-block;">
+            Iquique {{ $dispatch->date->formatLocalized('%d de %B del %Y') }}<br>
+        </div>
+    </div>
+@endcan
 
 
 <div class="titulo">ACTA DE DESPACHO N° {{ $dispatch->id }}</div>
