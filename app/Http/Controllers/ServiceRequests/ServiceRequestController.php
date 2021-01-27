@@ -60,7 +60,11 @@ class ServiceRequestController extends Controller
     // $subdirections = Subdirection::orderBy('name', 'ASC')->get();
     // $responsabilityCenters = ResponsabilityCenter::orderBy('name', 'ASC')->get();
     $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
-    $responsabilityCenters = OrganizationalUnit::where('name','LIKE','%unidad%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
+    $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
+                                               ->where('name','LIKE','%unidad%')
+                                               ->orwhere('name','LIKE','%servicio%')
+                                               ->orderBy('name', 'ASC')->get();
+    // dd($responsabilityCenters);
     return view('service_requests.requests.create', compact('subdirections','responsabilityCenters','users','establishments'));
   }
 
