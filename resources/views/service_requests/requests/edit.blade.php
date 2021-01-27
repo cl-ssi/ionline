@@ -315,7 +315,8 @@
     <fieldset class="form-group col">
 		    <label for="for_programm_name">Nombre del programa</label>
 		    <!-- <input type="text" class="form-control" id="for_programm_name" placeholder="" name="programm_name" value="{{ $serviceRequest->programm_name }}"> -->
-        <select name="programm_name" class="form-control" required>
+        <select name="programm_name" class="form-control">
+          <option value=""></option>
           <option value="Covid19-APS No Médicos">Covid19-APS No Médicos</option>
           <option value="Covid19-APS Médicos">Covid19-APS Médicos</option>
           <option value="Covid19 No Médicos">Covid19 No Médicos</option>
@@ -351,7 +352,7 @@
 
     <fieldset class="form-group col">
 		    <label for="for_program_contract_type">Tipo de Contratación</label>
-		    <select name="program_contract_type" class="form-control" required>
+		    <select name="program_contract_type" id="program_contract_type" class="form-control" required>
           <option value="Semanal" @if($serviceRequest->program_contract_type == 'Semanal') selected @endif >Semanal</option>
           <option value="Mensual" @if($serviceRequest->program_contract_type == 'Mensual') selected @endif >Mensual</option>
           <option value="Horas" @if($serviceRequest->program_contract_type == 'Horas') selected @endif >Horas</option>
@@ -382,7 +383,7 @@
   </div>
 
   <br>
-  <div class="card" id="card">
+  <div class="card" id="control_turnos">
     <div class="card-header">
       Control de Turnos
     </div>
@@ -654,6 +655,21 @@
 <script type="text/javascript">
 
 	$( document ).ready(function() {
+
+    $("#control_turnos").hide();
+		$('#program_contract_type').on('change', function() {
+			if (this.value == "Horas") {
+				$('#for_daily_hours').val("");
+				$('#for_nightly_hours').val("");
+				$('#for_daily_hours').attr('readonly', true);
+				$('#for_nightly_hours').attr('readonly', true);
+				$("#control_turnos").show();
+			}else{
+				$('#for_daily_hours').attr('readonly', false);
+				$('#for_nightly_hours').attr('readonly', false);
+				$("#control_turnos").hide();
+			}
+		});
 
   	$(".add-row").click(function(){
         var shift_date = $("#shift_date").val();
