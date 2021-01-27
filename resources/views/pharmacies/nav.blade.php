@@ -1,4 +1,4 @@
-@canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)', 'Pharmacy: APS (id:3)'])
+@canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)', 'Pharmacy: APS (id:3)', 'Pharmacy: Servicios generales (id:4)'])
 <ul class="nav nav-tabs mb-3">
     @canany(['Pharmacy: purchase'])
         <li class="nav-item">

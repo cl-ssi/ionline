@@ -193,11 +193,12 @@
                   </li>
                 @endcan
 
-                @canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)', 'Pharmacy: APS (id:3)'])
+                @canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)', 'Pharmacy: APS (id:3)', 'Pharmacy: Servicios generales (id:4)'])
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('pharmacies.index') }}">
                             @canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)']) <i class="fas fa-prescription-bottle-alt"></i> Droguería @endcan
                             @can('Pharmacy: APS (id:3)') <i class="fas fa-list-ul"></i> Bodega APS @endcan
+                            @can('Pharmacy: Servicios generales (id:4)') <i class="fas fa-list-ul"></i> Bodega Servicios Generales @endcan
                         </a>
                     </li>
                 @endcan
