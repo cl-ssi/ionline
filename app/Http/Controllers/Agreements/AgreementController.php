@@ -311,10 +311,10 @@ class AgreementController extends Controller
     }
     public function downloadAgree(Agreement $file)
     {
-        return Storage::response($file->fileResEnd, mb_convert_encoding($file->name,'ASCII'));
+        return Storage::response($file->fileAgreeEnd, mb_convert_encoding($file->name,'ASCII'));
     }
     public function downloadRes(Agreement $file)
     {
-        return Storage::response($file->fileAgreeEnd, mb_convert_encoding($file->name,'ASCII'));
+        return Storage::response($file->fileResEnd, mb_convert_encoding($file->name,'ASCII'));
     }
 }
