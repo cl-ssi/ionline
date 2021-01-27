@@ -67,6 +67,7 @@
           <td nowrap>{{$serviceRequest->gross_amount}}</td>
           <td nowrap>@if($serviceRequest->sirh_contract_registration==1) Sí @else No @endif</td>
           <td nowrap>{{$serviceRequest->resolution_number}}</td>
+          <td nowrap></td>
           <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}</td>
           <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}</td>
           <td nowrap>{{$serviceRequest->bill_number}}</td>
