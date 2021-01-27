@@ -40,7 +40,7 @@ class AddSignature extends Component
      */
     public function render()
     {
-        $this->organizationalUnits = OrganizationalUnit::orderBy('id','asc')->get();
+        $this->organizationalUnits = OrganizationalUnit::where('establishment_id',38)->orderBy('id','asc')->get();
         return view('livewire.add-signature');
     }
 }
