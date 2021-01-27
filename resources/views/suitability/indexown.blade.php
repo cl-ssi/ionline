@@ -11,39 +11,23 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Nombre Completo</th>
             <th>Run</th>
+            <th>Nombre Completo</th>
             <th>Cargo</th>
-            <th>Número contacto</th>
             <th>Estado</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
+    @foreach($psirequests as $psirequest)
         <tr>
-            <td>Nombre ApellidoP ApellidM</td>
-            <td>12346578-9</td>
-            <td>Fonoaudiologo</td>
-            <td>Teléfono</td>
-            <td>Por Aprobar Director</td>
-            <td>
-                <button type="submit" class="btn btn-sm btn-outline-secondary">
-                    <i class="fas fa-edit"></i>
-                </button>
-            </td>
+            <td>{{$psirequest->user_id}}</td>
+            <td>{{$psirequest->user->fullName}}</td>
+            <td>{{$psirequest->user->position}}</td>
+            <td>{{$psirequest->status}}</td>
         </tr>
-        <tr>
-            <td>Nombre ApellidoP ApellidM</td>
-            <td>16055586-6</td>
-            <td>Informático</td>
-            <td>Teléfono</td>
-            <td>Pendiente de Videollamada</td>
-            <td>
-                <button type="submit" class="btn btn-sm btn-outline-secondary">
-                    <i class="fas fa-edit"></i>
-                </button>
-            </td>
-        </tr>
+    @endforeach
+        
     </tbody>
 
 </table>

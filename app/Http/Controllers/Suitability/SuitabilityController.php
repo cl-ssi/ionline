@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Suitability;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
+use App\Models\Suitability\PsiRequest;
+use Illuminate\Support\Facades\Auth;
 
 class SuitabilityController extends Controller
 {
@@ -17,8 +19,9 @@ class SuitabilityController extends Controller
 
     public function indexOwn()
     {
-        
-        return view('suitability.indexown');
+
+        $psirequests = PsiRequest::where('user_creator_id',Auth::id())->get();
+        return view('suitability.indexown', compact('psirequests'));
 
     }
 
@@ -58,6 +61,16 @@ class SuitabilityController extends Controller
         $user->email_personal = $request->email;
         $user->external = 1;
         $user->save();
+        $psirequest = new PsiRequest();
+        $psirequest->start_date = $request->input('start_date');
+        $psirequest->disability = $request->input('disability');        
+        $psirequest->status = "Esperando Firma de Director SSI";
+        $psirequest->user_id = $request->input('id');
+        $psirequest->user_creator_id = Auth::id();
+        $psirequest->save();
+
+
+
         session()->flash('success', 'Solicitud Creada Exitosamente');
 
         return redirect()->route('suitability.own');

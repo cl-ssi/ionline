@@ -15,8 +15,8 @@ class AddRelationshipToResultsTable extends Migration
     {
         Schema::table('psi_results', function (Blueprint $table) {
             //
-            $table->foreignId('users_id');
-            $table->foreign('users_id')->references('id')->on('users');
+            $table->foreignId('user_id');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -29,8 +29,8 @@ class AddRelationshipToResultsTable extends Migration
     {
         Schema::table('psi_results', function (Blueprint $table) {
             //
-            $table->dropForeign(['users_id']);
-            $table->dropColumn('users_id');
+            $table->dropForeign(['user_id']);
+            $table->dropColumn('user_id');
         });
     }
 }
