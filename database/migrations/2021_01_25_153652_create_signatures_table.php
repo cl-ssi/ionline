@@ -65,7 +65,6 @@ class CreateSignaturesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('doc_signatures_flow');
-        Schema::dropIfExists('signature');
         Schema::dropIfExists('doc_signatures');
     }
 }
