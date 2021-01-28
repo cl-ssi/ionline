@@ -22,6 +22,8 @@
 
                     <form method="POST" action="{{ route('suitability.test.store') }}">
                         @csrf
+                        <input type="text" id="for_psi_request_id" name="psi_request_id" value="{{$psi_request_id}}">
+
                         @foreach($categories as $category)
                             <div class="card mb-3">
                                 <div class="card-header">{{ $category->name }}</div>

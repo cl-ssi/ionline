@@ -20,16 +20,23 @@ class Result extends Model
     ];
 
     protected $fillable = [
+        'id',
         'user_id',
         'created_at',
         'updated_at',
         'deleted_at',
         'total_points',
+        'request_id',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo('App\User', 'user_id');
+    }
+
+    public function psirequest()
+    {
+        return $this->belongsTo('App\Models\Suitability\PsiRequest', 'request_id');
     }
 
     public function questions()

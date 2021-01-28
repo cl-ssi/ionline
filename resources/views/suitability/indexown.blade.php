@@ -11,9 +11,11 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Solicitud N°</th>
             <th>Run</th>
             <th>Nombre Completo</th>
             <th>Cargo</th>
+            <th>Correo</th>
             <th>Estado</th>
             <th></th>
         </tr>
@@ -21,9 +23,11 @@
     <tbody>
     @foreach($psirequests as $psirequest)
         <tr>
+            <td>{{$psirequest->id}}</td>
             <td>{{$psirequest->user_id}}</td>
-            <td>{{$psirequest->user->fullName}}</td>
-            <td>{{$psirequest->user->position}}</td>
+            <td>{{$psirequest->user->fullName}}</td>            
+            <td>{{$psirequest->job}}</td>
+            <td>{{$psirequest->user->email}}</td>
             <td>{{$psirequest->status}}</td>
         </tr>
     @endforeach
