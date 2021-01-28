@@ -76,12 +76,10 @@
 Observaciones: <br><br><br><br><br><br>
 </div>
 
-<div id="firmas">
-    <div class="left" style="width: 50%;">
+<br><br><br><br><br>
+<div style="float: right;">FUNCIONARIO QUE RECIBE</div><br>
 
-    </div>
-    <div class="right" style="width: 49%">
-        <span class="uppercase">Funcionario que recibe</span>
-    </div>
-</div>
+<br><br><br><br><br>
+<div style="float: right;">REFERENTE TÉCNICO Y/O ADMINISTRADOR DE CONTRATO</div><br>
+
 @endsection
