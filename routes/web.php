@@ -749,7 +749,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::post('/validaterun', [SuitabilityController::class, 'validaterun'])->name('validaterun');
     Route::get('/create/{run?}', [SuitabilityController::class, 'create'])->name('create');    
     Route::get('/welcome', [TestsController::class, 'welcome'])->name('welcome');
-    Route::get('/test', [TestsController::class, 'index'])->name('test');
+    Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
     Route::post('/test', [TestsController::class, 'store'])->name('test.store');
 
     Route::prefix('categories')->as('categories.')->middleware('auth')->group(function () {
@@ -775,6 +775,8 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 
     Route::prefix('results')->as('results.')->middleware('auth')->group(function () {
         Route::get('/', [ResultsController::class, 'index'])->name('index');
+        Route::get('/{id}', [ResultsController::class, 'show'])->name('show');
+        //Route::get('results/{result_id}', 'ResultsController@show')->name('results.show');
         // Route::get('/create', [OptionsController::class, 'create'])->name('create');
         // Route::post('/store', [OptionsController::class, 'store'])->name('store');
     });
