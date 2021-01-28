@@ -18,6 +18,8 @@ class PsiRequest extends Model
     ];
 
     protected $fillable = [
+        'job',
+        'country',
         'start_date',
         'disability',
     ];

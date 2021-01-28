@@ -11,11 +11,25 @@
             <!-- Left Side Of Navbar -->
             <ul class="navbar-nav mr-auto">
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('suitability.test') }}">
-                        <i class="fas fa-book-reader"></i> Iniciar Test
+            <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-book-reader"></i> Ver Test de Idoneidad Pendientes
                     </a>
+                    @php
+                    $psirequests = App\Models\Suitability\PsiRequest::where('user_id',Auth::id())->where('status','Esperando Test')->get();
+                    @endphp
+                    @foreach($psirequests as $psirequest)
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item"
+                           href="{{ route('suitability.test',$psirequest->id) }}">
+                            <i class="fas fa-desktop fa-fw"></i> Solicitud N° {{$psirequest->id}} para el cargo de {{$psirequest->job}}
+                        </a>
+                        </div>
+                    @endforeach
+                    
                 </li>
+                
             </ul>
 
             <!-- Right Side Of Navbar -->

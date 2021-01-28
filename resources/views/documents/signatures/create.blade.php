@@ -12,7 +12,7 @@
 	<div class="form-row">
 
     	<fieldset class="form-group col-3">
-		    <label for="for_request_date">Fecha Solicitud</label>
+		    <label for="for_request_date">Fecha Documento</label>
 			<input type="date" class="form-control" id="for_request_date" name="request_date" required>
 		</fieldset>
 
@@ -78,7 +78,7 @@
 
   <div class="form-row">
 
-		<fieldset class="form-group col">
+		<fieldset class="form-group col-4">
 		    <label for="for_endorse_type">Tipo de visación</label>
 		    <select class="form-control selectpicker" data-live-search="true" name="endorse_type" required="" data-size="5">
           		<option value="No requiere visación">No requiere visación</option>
@@ -88,7 +88,7 @@
 		</fieldset>
 
 
-
+		{{-- @livewire('add-signature') --}}
 
 		{{-- <div class="col-4">
 			<div id="inputFormRow">
@@ -104,27 +104,10 @@
 		<button id="addRow" type="button" class="btn btn-info">Add Row</button> --}}
 	</div>
 
-
-	@livewire('add-signature')
-
-
-
-	<div class="form-row">
-
-		<fieldset class="form-group col-6">
-
-		</fieldset>
-
-		<fieldset class="form-group col">
-		    <label for="for_signers">Firmantes</label>
-			<select name="signers[]" id="signers_id" class="form-control selectpicker" multiple required>
-				@foreach($organizationalUnits as $key => $organizationalUnit)
-					<option value="{{$organizationalUnit->id}}">{{$organizationalUnit->name}}</option>
-				@endforeach
-			</select>
-		</fieldset>
-
-	</div>
+	<hr>
+	@livewire('signatures.visators')
+	<hr>
+	@livewire('signatures.signer')
 
 	<div class="form-row">
 
@@ -147,24 +130,5 @@
 @endsection
 
 @section('custom_js')
-	<script type="text/javascript">
-	    // add row
-	    $("#addRow").click(function () {
-	        var html = '';
-	        html += '<div id="inputFormRow">';
-	        html += '<div class="input-group mb-3">';
-	        html += '<input type="text" name="title[]" class="form-control m-input" placeholder="Enter title" autocomplete="off">';
-	        html += '<div class="input-group-append">';
-	        html += '<button id="removeRow" type="button" class="btn btn-danger">Remove</button>';
-	        html += '</div>';
-	        html += '</div>';
 
-	        $('#newRow').append(html);
-	    });
-
-	    // remove row
-	    $(document).on('click', '#removeRow', function () {
-	        $(this).closest('#inputFormRow').remove();
-	    });
-	</script>
 @endsection

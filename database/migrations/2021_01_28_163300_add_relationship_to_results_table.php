@@ -17,6 +17,8 @@ class AddRelationshipToResultsTable extends Migration
             //
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreignId('request_id');
+            $table->foreign('request_id')->references('id')->on('psi_requests');
         });
     }
 
@@ -31,6 +33,8 @@ class AddRelationshipToResultsTable extends Migration
             //
             $table->dropForeign(['user_id']);
             $table->dropColumn('user_id');
+            $table->dropForeign(['request_id']);
+            $table->dropColumn('request_id');
         });
     }
 }

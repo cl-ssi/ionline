@@ -37,41 +37,41 @@
     <div class="row">
         <fieldset class="form-group col-6">
             <label for="for_name">Nombres*</label>
-            <input type="text" class="form-control" id="for_name" placeholder="" name="name" required="" autocomplete="off">
+            <input type="text" class="form-control" id="for_name" placeholder="" name="name" required="" autocomplete="off" value="{{$user->name}}" >
         </fieldset>
 
         <fieldset class="form-group col-6">
             <label for="for_fathers_family">Apellido Paterno*</label>
-            <input type="text" class="form-control" id="for_fathers_family" placeholder="" name="fathers_family" required="" autocomplete="off">
+            <input type="text" class="form-control" id="for_fathers_family" placeholder="" name="fathers_family" required="" autocomplete="off" value="{{$user->fathers_family}}">
         </fieldset>
 
         <fieldset class="form-group col-6">
             <label for="for_mothers_family">Apellido Materno*</label>
-            <input type="text" class="form-control" id="for_mothers_family" placeholder="" name="mothers_family" required="" autocomplete="off">
+            <input type="text" class="form-control" id="for_mothers_family" placeholder="" name="mothers_family" required="" autocomplete="off" value="{{$user->mothers_family}}">
         </fieldset>
 
         <fieldset class="form-group col-6">
             <label for="for_critic_stock">Correo Electrónico*</label>
-            <input type="email" class="form-control" id="" placeholder="" name="email" required="" autocomplete="off">
+            <input type="email" class="form-control" id="" placeholder="" name="email" required="" autocomplete="off" value="{{$user->email}}">
         </fieldset>
     </div>
 
     <div class="row">
         <fieldset class="form-group col-6">
-            <label for="for_position">Cargo Desempeñado*</label>
-            <input type="text" class="form-control" id="for_position" placeholder="" name="position" required="">
+            <label for="for_job">Cargo Desempeñado*</label>
+            <input type="text" class="form-control" id="for_job" placeholder="" name="job" required="">
         </fieldset>
 
         <fieldset class="form-group col-6">
-            <label for="for_critic_stock">Fecha de Ingreso*</label>
-            <input type="date" class="form-control" id="for_critic_stock" placeholder="" name="start_date" required="">
+            <label for="for_start_date">Fecha de Ingreso*</label>
+            <input type="date" class="form-control" id="for_start_date" placeholder="" name="start_date" required="">
         </fieldset>
     </div>
 
     <div class="row">
         <fieldset class="form-group col-6">
-            <label for="for_critic_stock">Nacionalidad*</label>
-            <input type="text" class="form-control" id="for_critic_stock" placeholder="" name="critic_stock" required="">
+            <label for="for_country">Nacionalidad*</label>
+            <input type="text" class="form-control" id="for_country" placeholder="" name="country" required="">
         </fieldset>
     </div>
 

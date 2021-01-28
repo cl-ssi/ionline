@@ -6,7 +6,7 @@ use App\Models\Suitability\Result;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class ResultsContoller extends Controller
+class ResultsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -50,6 +50,11 @@ class ResultsContoller extends Controller
     public function show($id)
     {
         //
+
+        $result = Result::find($id);
+        
+
+        return view('suitability.results.show', compact('result'));
     }
 
     /**
