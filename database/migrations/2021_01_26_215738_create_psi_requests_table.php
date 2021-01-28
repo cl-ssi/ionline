@@ -14,7 +14,9 @@ class CreatePsiRequestsTable extends Migration
     public function up()
     {
         Schema::create('psi_requests', function (Blueprint $table) {
-            $table->id();            
+            $table->id();
+            $table->string('country');
+            $table->string('job');
             $table->date('start_date');
             $table->string('status');
             $table->boolean('disability');

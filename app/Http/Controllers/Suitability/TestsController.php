@@ -7,6 +7,7 @@ use App\Models\Suitability\Option;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreTestRequest;
+use App\Models\Suitability\PsiRequest;
 
 class TestsController extends Controller
 {
@@ -23,7 +24,7 @@ class TestsController extends Controller
     }
 
 
-    public function index()
+    public function index($psi_request_id)
     {
         //
         $categories = Category::with(['categoryQuestions' => function ($query) {
@@ -35,7 +36,7 @@ class TestsController extends Controller
         ->whereHas('categoryQuestions')
         ->get();
 
-    return view('suitability.test', compact('categories'));
+    return view('suitability.test', compact('categories','psi_request_id'));
     }
 
     /**
@@ -60,7 +61,8 @@ class TestsController extends Controller
         $options = Option::find(array_values($request->input('questions')));
 
         $result = auth()->user()->userResults()->create([
-            'total_points' => $options->sum('points')
+            'total_points' => $options->sum('points'),
+            'request_id' => $request->input('psi_request_id')
         ]);
 
         $questions = $options->mapWithKeys(function ($option) {
@@ -72,6 +74,13 @@ class TestsController extends Controller
             })->toArray();
 
         $result->questions()->sync($questions);
+
+
+        $psirequests = PsiRequest::find($request->input('psi_request_id'));
+        $psirequests->status = "Test Finalizado";
+        $psirequests->update();
+
+
         session()->flash('success', 'Finalizó el Test Exitosamente');
         return redirect()->route('suitability.welcome');
 
