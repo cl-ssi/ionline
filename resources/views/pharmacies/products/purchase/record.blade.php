@@ -65,7 +65,22 @@
         <strong>Destino:</strong> {{ $purchase->destination }}<br>
         <strong>Con fondos:</strong> {{ $purchase->from }}<br>
     </div>
-    <div class="center" style="width: 49%">
+    <!-- <div class="center" style="width: 49%">
+        <span class="uppercase">Funcionario que recibe</span>
+    </div> -->
+</div>
+
+<br>
+
+<div style="width: 100%;border:1px solid black;">
+Observaciones: <br><br><br><br><br><br>
+</div>
+
+<div id="firmas">
+    <div class="left" style="width: 50%;">
+
+    </div>
+    <div class="right" style="width: 49%">
         <span class="uppercase">Funcionario que recibe</span>
     </div>
 </div>
