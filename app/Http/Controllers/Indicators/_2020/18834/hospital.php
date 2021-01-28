@@ -292,12 +292,13 @@ foreach($numeradores as $registro) {
 }
 
 /* ===== Query denominador ===== */
+
 $sql_denominador =
    "SELECT e.alias_estab, r.Mes, sum(ifnull(Col01,0)) as denominador
     FROM {$year}rems r
     LEFT JOIN {$year}establecimientos e
     ON r.IdEstablecimiento=e.Codigo
-    WHERE CodigoPrestacion IN (08222640, 08222650, 08222660, 08222680, '08230500A')
+    WHERE CodigoPrestacion IN (08222640, 08222650, 08222660, 08221600, 08222670,08222680, '08230500A')
     AND e.meta_san_18834_hosp = 1
     GROUP BY e.Comuna, e.alias_estab, r.Mes
     ORDER BY e.Comuna, e.alias_estab, r.Mes";
