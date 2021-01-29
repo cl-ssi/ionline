@@ -271,6 +271,7 @@ class ServiceRequestController extends Controller
 
           $SignatureFlow = SignatureFlow::where('responsable_id',Auth::user()->id)
                                         ->where('service_request_id',$serviceRequest->id)
+                                        ->whereNull('status')
                                         ->first();
                                         // dd($SignatureFlow);
           // $SignatureFlow->responsable_id = Auth::id();
