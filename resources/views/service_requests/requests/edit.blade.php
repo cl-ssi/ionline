@@ -6,11 +6,21 @@
 
 <h3>Solicitud de Contratación de Servicios</h3>
 
-  @if($serviceRequest->SignatureFlows->where('responsable_id',Auth::user()->id)->whereNotNull('status')->count() > 0)
+  <!-- @if($serviceRequest->SignatureFlows->where('responsable_id',Auth::user()->id)->whereNotNull('status')->count() > 0)
     <form>
   @else
-    <!-- tienen acceso los firmantes y el creador de la solicitud -->
     @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
+      <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+    @endif
+  @endif -->
+
+  @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
+    <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+  @else
+    <!-- si existe una firma, no se deja modificar solicitud -->
+    @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+      <form>
+    @else
       <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
     @endif
   @endif
@@ -125,13 +135,6 @@
   </div>
 
   <br>
-
-  <!-- si existe una firma, no se deja modificar solicitud -->
-  @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-    <div class="alert alert-warning" role="alert">
-      La solicitud no se puede modificar, puesto que ya existen aprobaciones en el flujo de firmas.
-    </div>
-  @endif
 
 	<div class="row">
 
@@ -648,6 +651,10 @@
     <!-- si existe una firma, no se deja modificar solicitud -->
     @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
       <button type="submit" class="btn btn-primary" disabled>Guardar</button>
+      <br><br>
+      <div class="alert alert-warning" role="alert">
+        No se puede modificar hoja de ruta ya que existen visaciones realizadas.
+      </div>
     @else
       <button type="submit" class="btn btn-primary">Guardar</button>
     @endif
