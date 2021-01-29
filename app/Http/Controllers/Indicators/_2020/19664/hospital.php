@@ -253,11 +253,11 @@ else {
     $data7_hosp['cumplimiento'] = 0;
 }
 
-if( $data7_hosp['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data7_hosp['meta'])) {
+if( $data7_hosp['cumplimiento'] >= $data7_hosp['meta']) {
     $data7_hosp['aporte'] = $data7_hosp['ponderacion'];
 }
 else {
-    $data7_hosp['aporte'] = 0;
+    $data7_hosp['aporte'] = $data7_hosp['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data7_hosp['ponderacion']) / $data7_hosp['meta'];
 }
 
 /**** INDICADOR 8 ****/
@@ -271,7 +271,7 @@ $data8_hosp['label']['denominador'] = 'N° total de consultas de especialistas
 $data8_hosp['label']['fuente']['numerador'] = 'REM';
 $data8_hosp['label']['fuente']['denominador'] = 'Programacion Anual';
 
-$data8_hosp['meta'] = '≥95%';
+$data8_hosp['meta'] = '95';
 $data8_hosp['ponderacion'] = '8%';
 
 $data8_hosp['numerador_acumulado'] = 0;
@@ -324,7 +324,7 @@ if( $data8_hosp['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data8_hosp['met
     $data8_hosp['aporte'] = preg_replace("/[^0-9]/", '', $data8_hosp['ponderacion']);
 }
 else {
-    $data8_hosp['aporte'] = 0;
+    $data8_hosp['aporte'] = $data8_hosp['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data8_hosp['ponderacion']) / $data8_hosp['meta'];
 }
 
 
@@ -545,7 +545,7 @@ $data12_hosp['label']['denominador'] = '(Garantías Cumplidas + Garantías Excep
 $data12_hosp['label']['fuente']['numerador'] = 'Datamart';
 $data12_hosp['label']['fuente']['denominador'] = 'Datamart';
 
-$data12_hosp['meta'] = '100%';
+$data12_hosp['meta'] = '100';
 $data12_hosp['ponderacion'] = '10%';
 
 $base_where = array(['law','19664'],['year',$year],['indicator',12],['establishment_id',1]);
@@ -576,7 +576,7 @@ if( $data12_hosp['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data12_hosp['m
     $data12_hosp['aporte'] = preg_replace("/[^0-9]/", '', $data12_hosp['ponderacion']);
 }
 else {
-    $data12_hosp['aporte'] = 0;
+    $data12_hosp['aporte'] = $data12_hosp['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data12_hosp['ponderacion']) / $data12_hosp['meta'];
 }
 
 ?>
