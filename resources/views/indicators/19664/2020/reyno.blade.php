@@ -6,7 +6,7 @@
 
 @include('indicators.partials.nav')
 
-<h3 class="mb-3">SERVICIO DE SALUD IQUIQUE
+<h3 class="mb-3">CGU Dr. Hector Reyno
     <small>
         - Cumplimiento : {{ number_format($data1_reyno['aporte'] +
                                   $data2_reyno['aporte'] +
@@ -56,7 +56,7 @@
                     {{ $data1_reyno['label']['fuente']['numerador'] }}
                 </span>
             </td>
-            <td rowspan="2" class="align-middle text-center">{{ $data1_reyno['meta'] }}</td>
+            <td rowspan="2" class="align-middle text-center">≥{{ $data1_reyno['meta'] }}%</td>
             <td rowspan="2" class="align-middle text-center">
                 {{ $data1_reyno['ponderacion'] }}
             </td>
@@ -137,7 +137,7 @@
             <td></td>
             <td class="text-right">
               @if($data1_reyno['denominador_12'] != NULL)
-                {{ number_format($data1_reyno['denominador_12'], 2, ',', '.') }}%
+                {{ number_format($data1_reyno['denominador_12'], 0, ',', '.') }}
               @else
                 {{ number_format(0, 0, ',', '.') }}
               @endif
@@ -179,7 +179,7 @@
                   {{ $data2_reyno['label']['fuente']['numerador'] }}
                 </span>
             </td>
-            <td rowspan="2" class="align-middle text-center">{{ $data2_reyno['meta'] }}</td>
+            <td rowspan="2" class="align-middle text-center">≥{{ $data2_reyno['meta'] }}%</td>
             <td rowspan="2" class="align-middle text-center">
                 {{ $data2_reyno['ponderacion'] }}
             </td>
@@ -302,7 +302,7 @@
                   {{ $data3_reyno['label']['fuente']['numerador'] }}
                 </span>
             </td>
-            <td rowspan="2" class="align-middle text-center">{{ $data3_reyno['meta'] }}</td>
+            <td rowspan="2" class="align-middle text-center">≥{{ $data3_reyno['meta'] }}%</td>
             <td rowspan="2" class="align-middle text-center">
                 {{ $data3_reyno['ponderacion'] }}%
             </td>
@@ -427,7 +427,7 @@
                     {{ $data12_reyno['label']['fuente']['numerador'] }}
                 </span>
             </td>
-            <td rowspan="2" class="align-middle text-center">{{ $data12_reyno['meta'] }}</td>
+            <td rowspan="2" class="align-middle text-center">{{ $data12_reyno['meta'] }}%</td>
             <td rowspan="2" class="align-middle text-center">
                 {{ $data12_reyno['ponderacion'] }}
             </td>
@@ -435,7 +435,7 @@
                 <span class="{{ ($data12_reyno['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data12_reyno['meta'])) ? 'text-success':'text-danger' }}">
                 {{ number_format($data12_reyno['cumplimiento'], 2, ',', '.') }}%
                 </span>
-                <small><br>Aporte: @numero($data12_reyno['aporte'])%</small>
+                <small><br>Aporte: {{ number_format($data12_reyno['aporte'], 2, ',', '.') }}%</small>
             </td>
             <td class="text-right">{{ number_format($data12_reyno['numerador_acumulado'],0, ',', '.') }}</td>
             @foreach($data12_reyno['numeradores'] as $numerador)

@@ -28,7 +28,7 @@ $data1_reyno['label']['denominador'] = 'Total de pacientes diabéticos de 15
 $data1_reyno['label']['fuente']['numerador'] = 'REM';
 $data1_reyno['label']['fuente']['denominador'] = 'REM';
 
-$data1_reyno['meta'] = '≥45%';
+$data1_reyno['meta'] = '45';
 $data1_reyno['ponderacion'] = '25%';
 
 /* ==== Inicializar el arreglo de datos $data ==== */
@@ -161,7 +161,7 @@ if( $data1_reyno['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data1_reyno['m
     $data1_reyno['aporte'] = preg_replace("/[^0-9]/", '', $data1_reyno['ponderacion']);
 }
 else {
-    $data1_reyno['aporte'] = 0;
+    $data1_reyno['aporte'] = $data1_reyno['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data1_reyno['ponderacion']) / $data1_reyno['meta'];
 }
 
 /**** INDICADOR 2. ****/
@@ -172,7 +172,7 @@ $data2_reyno['label']['numerador'] = 'N° de personas con DM2 bajo control de
 $data2_reyno['label']['denominador'] = 'N° total de pacientes diabéticos de
     15 años y más bajo controlen nivel primario. * 100.';
 
-$data2_reyno['meta'] = '≥90%';
+$data2_reyno['meta'] = '90';
 $data2_reyno['ponderacion'] = '15%';
 
 $data2_reyno['label']['fuente']['numerador'] = 'REM';
@@ -306,7 +306,7 @@ if( $data2_reyno['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data2_reyno['m
     $data2_reyno['aporte'] = preg_replace("/[^0-9]/", '', $data2_reyno['ponderacion']);
 }
 else{
-    $data2_reyno['aporte'] = 0;
+    $data2_reyno['aporte'] = $data2_reyno['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data2_reyno['ponderacion']) / $data2_reyno['meta'];
 }
 
 /**** INDICADOR 3. ****/
@@ -323,7 +323,7 @@ $data3_reyno['label']['denominador'] = 'N° total de pacientes hipertensos de
 $data3_reyno['label']['fuente']['numerador'] = 'REM';
 $data3_reyno['label']['fuente']['denominador'] = 'REM';
 
-$data3_reyno['meta'] = '≥68%';
+$data3_reyno['meta'] = '68';
 $data3_reyno['ponderacion'] = '10';
 
 /* ==== Inicializar el arreglo de datos $data ==== */
@@ -449,7 +449,7 @@ if( $data3_reyno['cumplimiento'] >= $data3_reyno['meta']) {
     $data3_reyno['aporte'] = $data3_reyno['ponderacion'];
 }
 else{
-    $data3_reyno['aporte'] = 0;
+    $data3_reyno['aporte'] = $data3_reyno['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data3_reyno['ponderacion']) / $data3_reyno['meta'];
 }
 
 /* INDICADOR 12 */
@@ -464,7 +464,7 @@ $data12_reyno['label']['denominador'] = '(Garantías Cumplidas + Garantías Exce
 $data12_reyno['label']['fuente']['numerador'] = 'Datamart';
 $data12_reyno['label']['fuente']['denominador'] = 'Datamart';
 
-$data12_reyno['meta'] = '100%';
+$data12_reyno['meta'] = '100';
 $data12_reyno['ponderacion'] = '50%';
 
 $base_where = array(['law','19664'],['year',$year],['indicator',12],['establishment_id',12]);
@@ -493,7 +493,7 @@ if( $data12_reyno['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data12_reyno[
     $data12_reyno['aporte'] = preg_replace("/[^0-9]/", '', $data12_reyno['ponderacion']);
 }
 else {
-    $data12_reyno['aporte'] = 0;
+    $data12_reyno['aporte'] = $data12_reyno['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data12_reyno['ponderacion']) / $data12_reyno['meta'];
 }
 
 ?>
