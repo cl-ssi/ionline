@@ -179,7 +179,7 @@ if($data6_hosp['denominador_acumulado'] != 0) {
 }
 else $data6_hosp['cumplimiento'] = 0;
 
-if( $data6_hosp['cumplimiento'] <= ($data6_hosp['meta_nacional'] - 5) && $data6_hosp['cumplimiento'] != 0) {
+if( $data6_hosp['cumplimiento'] >= ($data6_hosp['meta_nacional'] - 5) && $data6_hosp['cumplimiento'] != 0) {
     $data6_hosp['aporte'] = $data6_hosp['ponderacion'];
 }
 else {
