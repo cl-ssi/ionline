@@ -237,7 +237,10 @@
 
 	</div>
 
-  <div class="row">
+  <br>
+
+  <div class="border border-info rounded">
+  <div class="row ml-1 mr-1">
 
     <fieldset class="form-group col">
 		    <label for="for_rut">Rut</label>
@@ -245,7 +248,7 @@
 		</fieldset>
 
     <fieldset class="form-group col">
-		    <label for="for_name">Nombre</label>
+		    <label for="for_name">Nombre completo</label>
 		    <input type="text" class="form-control" id="for_name" placeholder="" name="name" required="required" value="{{ $serviceRequest->name }}">
 		</fieldset>
 
@@ -254,14 +257,14 @@
 		    <select name="contract_type" class="form-control" required>
           <option value="NUEVO" @if($serviceRequest->contract_type == 'NUEVO') selected @endif >Nuevo</option>
           <option value="ANTIGUO" @if($serviceRequest->contract_type == 'ANTIGUO') selected @endif>Antiguo</option>
-          <option value="CONTRATO PERM" @if($serviceRequest->contract_type == 'CONTRATO PERM') selected @endif>Contrato Perm.</option>
+          <option value="CONTRATO PERM" @if($serviceRequest->contract_type == 'CONTRATO PERM') selected @endif>Permanente</option>
           <option value="PRESTACION" @if($serviceRequest->contract_type == 'PRESTACION') selected @endif>Prestación</option>
         </select>
 		</fieldset>
 
   </div>
 
-  <div class="row">
+	<div class="row ml-1 mr-1">
 
     <fieldset class="form-group col">
 		    <label for="for_address">Dirección</label>
@@ -279,6 +282,9 @@
 		</fieldset>
 
   </div>
+  </div>
+
+  <br>
 
   <div class="row">
 
