@@ -50,7 +50,8 @@
 
     <fieldset class="form-group col">
 		    <label for="for_subdirection_ou_id">Subdirección</label>
-				<select class="form-control selectpicker" data-live-search="true" name="subdirection_ou_id" required="" data-size="5">
+				<select class="form-control selectpicker" data-live-search="true" name="subdirection_ou_id" required data-size="5">
+					<option value=""></option>
           @foreach($subdirections as $key => $subdirection)
             <option value="{{$subdirection->id}}">{{$subdirection->name}}</option>
           @endforeach
@@ -59,7 +60,8 @@
 
     <fieldset class="form-group col">
 		    <label for="for_responsability_center_ou_id">Centro de Responsabilidad</label>
-				<select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" required="" data-size="5">
+				<select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" required data-size="5">
+					<option value=""></option>
           @foreach($responsabilityCenters as $key => $responsabilityCenter)
             <option value="{{$responsabilityCenter->id}}">{{$responsabilityCenter->name}}</option>
           @endforeach
@@ -72,7 +74,8 @@
 
 		<fieldset class="form-group col">
 				<label for="for_users">Responsable</label>
-				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required="" data-size="5">
+				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required data-size="5">
+					<option value=""></option>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
 					@endforeach
@@ -81,7 +84,8 @@
 
 		<fieldset class="form-group col">
 				<label for="for_users">Jefe Directo</label>
-				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5">
+				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required data-size="5">
+					<option value=""></option>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
 					@endforeach
@@ -132,75 +136,81 @@
 
 	</div>
 
-  <div class="row">
+	<br>
 
-		<fieldset class="form-group col-8 col-md-2">
-        <label for="for_run">Run SIN DIGITO VERIF.</label>
-        <!-- <input type="hidden" class="form-control" id="for_id" name="id"> -->
-        <input type="number" max="50000000" class="form-control" id="for_run" name="run" required>
+	<div class="border border-info rounded">
+  <div class="row ml-1 mr-1">
+
+		<fieldset class="form-group col">
+        <label for="for_run">Run (sin DV)</label>
+        <input type="number" min="1" max="50000000" class="form-control" id="for_run" name="run" required>
     </fieldset>
 
-    <fieldset class="form-group col-4 col-md-1">
+    <fieldset class="form-group col">
         <label for="for_dv">Digito</label>
         <input type="text" class="form-control" id="for_dv" name="dv" readonly>
     </fieldset>
 
-		<fieldset class="form-group col-1 col-md-1">
+		<fieldset class="form-group col-1">
         <label for="">&nbsp;</label>
         <button type="button" id="btn_fonasa" class="btn btn-outline-success">Fonasa&nbsp;</button>
     </fieldset>
 
     <fieldset class="form-group col">
-		    <label for="for_name">Nombre</label>
+		    <label for="for_name">Nombre completo</label>
 		    <input type="text" class="form-control" id="name" placeholder="" name="name" required="required">
 		</fieldset>
 
 		<fieldset class="form-group col">
 		    <label for="for_contract_type">Tipo de Contrato</label>
 		    <select name="contract_type" class="form-control" required>
+					<option value=""></option>
           <option value="NUEVO">Nuevo</option>
           <option value="ANTIGUO">Antiguo</option>
-          <option value="CONTRATO PERM.">Contrato Perm.</option>
+          <option value="CONTRATO PERM.">Permanente</option>
           <option value="PRESTACION">Prestación</option>
         </select>
 		</fieldset>
 
   </div>
 
-	<div class="row">
+	<div class="row ml-1 mr-1">
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-4">
 		    <label for="for_address">Dirección</label>
 		    <input type="text" class="form-control" id="foraddress" placeholder="" name="address">
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-4">
 		    <label for="for_phone_number">Número telefónico</label>
 		    <input type="text" class="form-control" id="for_phone_number" placeholder="" name="phone_number">
 		</fieldset>
 
-		<fieldset class="form-group col">
+		<fieldset class="form-group col-4">
 		    <label for="for_email">Correo electrónico</label>
 		    <input type="text" class="form-control" id="for_email" placeholder="" name="email">
 		</fieldset>
 
-  </div>
+	</div>
+	</div>
+	<br>
+
 
   <div class="row">
 
 		<fieldset class="form-group col">
 		    <label for="for_request_date">Fecha Solicitud</label>
-		    <input type="date" class="form-control" id="for_request_date" name="request_date" required>
+		    <input type="date" class="form-control" id="for_request_date" name="request_date" max="2030-12-31" required>
 		</fieldset>
 
     <fieldset class="form-group col">
 		    <label for="for_start_date">Fecha de Inicio</label>
-		    <input type="date" class="form-control" id="for_start_date" name="start_date" required>
+		    <input type="date" class="form-control" id="for_start_date" name="start_date" max="2030-12-31" required>
 		</fieldset>
 
     <fieldset class="form-group col">
 		    <label for="for_end_date">Fecha de Término</label>
-		    <input type="date" class="form-control" id="for_end_date" name="end_date" required>
+		    <input type="date" class="form-control" id="for_end_date" name="end_date" max="2030-12-31" required>
 		</fieldset>
 
   </div>
@@ -259,6 +269,7 @@
     <fieldset class="form-group col">
 		    <label for="for_program_contract_type">Tipo de Contratación</label>
 		    <select name="program_contract_type" class="form-control" id="program_contract_type" required>
+					<option value=""></option>
           <option value="Semanal">Semanal</option>
           <option value="Mensual">Mensual</option>
 					<option value="Horas">Horas</option>
@@ -351,6 +362,7 @@
     <fieldset class="form-group col">
 		    <label for="for_estate">Estamento al que corresponde CS</label>
 		    <select name="estate" class="form-control" required>
+					<option value=""></option>
           <option value="Profesional Médico">Profesional Médico</option>
           <option value="Profesional">Profesional</option>
           <option value="Técnico">Técnico</option>
@@ -371,6 +383,7 @@
     <fieldset class="form-group col">
 		    <label for="for_working_day_type">Jornada de Trabajo</label>
 		    <select name="working_day_type" class="form-control" required>
+					<option value=""></option>
           <option value="08:00 a 16:48 hrs (L-M-M-J-V)">08:00 a 16:48 hrs (L-M-M-J-V)</option>
           <option value="TERCER TURNO">TERCER TURNO</option>
           <option value="CUARTO TURNO">CUARTO TURNO</option>
