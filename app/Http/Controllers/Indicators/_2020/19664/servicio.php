@@ -543,7 +543,7 @@ if($data6['denominador_acumulado'] != 0) {
 }
 else $data6['cumplimiento'] = 0;
 
-if( $data6['cumplimiento'] <= ($data6['meta_nacional'] - 5) && $data6['cumplimiento'] != 0) {
+if( $data6['cumplimiento'] >= ($data6['meta_nacional'] - 5) && $data6['cumplimiento'] != 0) {
     $data6['aporte'] = $data6['ponderacion'];
 }
 else {

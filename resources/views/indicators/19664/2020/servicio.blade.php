@@ -504,8 +504,8 @@
                 <p class="text-success">100%</p>
                 <small><br>{{ $data6['cumplimiento'] }}%</small>
               @else
-                <p class="text-danger">0%</p>
-                <small><br>{{ $data6['cumplimiento'] }}%</small>
+                <p class="text-danger">{{ $data6['cumplimiento'] }}%</p>
+                <small><br>Aporte: {{ number_format($data6['aporte'], 2, ',', '.') }}%</small>
               @endif
             </td>
             <td class="text-rigth">{{ $data6['numerador_acumulado'] }}</td>

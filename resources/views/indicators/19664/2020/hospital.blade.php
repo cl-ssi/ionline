@@ -205,8 +205,8 @@
                 <p class="text-success">100%</p>
                 <small class="text-success"><br>{{ $data6_hosp['cumplimiento'] }}%</small>
               @else
-                <p class="text-danger">0%</p>
-                <small class="text-danger"><br>{{ $data6_hosp['cumplimiento'] }}%</small>
+                <p class="text-danger">{{ $data6_hosp['cumplimiento'] }}%</p>
+                <small>Aporte: {{ number_format($data6_hosp['aporte'], 2, ',', '.') }}%</small>
               @endif
             </td>
             <td class="text-rigth">{{ $data6_hosp['numerador_acumulado'] }}</td>
