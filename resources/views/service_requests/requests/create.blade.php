@@ -74,7 +74,8 @@
 
 		<fieldset class="form-group col">
 				<label for="for_users">Responsable</label>
-				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required="" data-size="5">
+				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required data-size="5">
+					<option value=""></option>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
 					@endforeach
@@ -83,7 +84,8 @@
 
 		<fieldset class="form-group col">
 				<label for="for_users">Jefe Directo</label>
-				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5">
+				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required data-size="5">
+					<option value=""></option>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
 					@endforeach
