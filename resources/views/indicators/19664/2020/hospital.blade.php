@@ -262,7 +262,7 @@
             <td rowspan="2" class="align-middle">{{ $data7_hosp['meta'] }}%</td>
             <td rowspan="2" class="align-middle">{{ $data7_hosp['ponderacion'] }}%</td>
             <td rowspan="2" class="align-middle">
-              <span class="{{ ($data7_hosp['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data7_hosp['meta'])) ? 'text-success':'text-danger' }}">
+              <span class="{{ ($data7_hosp['cumplimiento'] >= $data7_hosp['meta']) ? 'text-success':'text-danger' }}">
                   {{ number_format($data7_hosp['cumplimiento'], 2, ',', '.') }}%
               </span>
               <small><br>Aporte: {{ number_format($data7_hosp['aporte'], 2, ',', '.') }}%</small>
@@ -329,7 +329,7 @@
                   {{ $data8_hosp['label']['fuente']['numerador'] }}
               </span>
             </td>
-            <td rowspan="2" class="align-middle">{{ $data8_hosp['meta'] }}</td>
+            <td rowspan="2" class="align-middle">{{ $data8_hosp['meta'] }}%</td>
             <td rowspan="2" class="align-middle">{{ $data8_hosp['ponderacion'] }}</td>
             <td rowspan="2" class="align-middle">
               <span class="{{ ($data8_hosp['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data8_hosp['meta'])) ? 'text-success':'text-danger' }}">
@@ -594,7 +594,7 @@
                     {{ $data12_hosp['label']['fuente']['numerador'] }}
                 </span>
             </td>
-            <td rowspan="2" class="align-middle text-center">{{ $data12_hosp['meta'] }}</td>
+            <td rowspan="2" class="align-middle text-center">{{ $data12_hosp['meta'] }}%</td>
             <td rowspan="2" class="align-middle text-center">
                 {{ $data12_hosp['ponderacion'] }}
             </td>
@@ -602,7 +602,7 @@
                 <span class="{{ ($data12_hosp['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data12_hosp['meta'])) ? 'text-success':'text-danger' }}">
                 {{ number_format($data12_hosp['cumplimiento'], 2, ',', '.') }}%
                 </span>
-                <small><br>Aporte: @numero($data12_hosp['aporte'])%</small>
+                <small><br>Aporte: {{ number_format($data12_hosp['aporte'],2, ',', '.') }}%</small>
             </td>
             <td class="text-right">{{ number_format($data12_hosp['numerador_acumulado'],0, ',', '.') }}</td>
             @foreach($data12_hosp['numeradores'] as $numerador)
