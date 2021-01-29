@@ -88,7 +88,7 @@ class ServiceRequest extends Model implements Auditable
                                                             ->orwhere('responsable_id',Auth::user()->id);
                                                    $subQuery->whereNull('status');
                                                  })
-                                                 // ->where('user_id','!=',Auth::user()->id)
+                                                 ->where('user_id','!=',Auth::user()->id)
                                                  ->orderBy('id','asc')
                                                  ->count();
       return $serviceRequestsPendingsCount;
