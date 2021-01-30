@@ -169,7 +169,7 @@ $data2['label']['numerador'] = 'N° de personas con DM2 bajo control de
 $data2['label']['denominador'] = 'N° total de pacientes diabéticos de
     15 años y más bajo controlen nivel primario. * 100.';
 
-$data2['meta'] = '90%';
+$data2['meta'] = '90';
 $data2['ponderacion'] = '17%';
 
 $data2['label']['fuente']['numerador'] = 'REM';
@@ -293,7 +293,7 @@ if( $data2['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data2['meta'])) {
     $data2['aporte'] = preg_replace("/[^0-9]/", '', $data2['ponderacion']);
 }
 else {
-    $data2['aporte'] = 0;
+    $data2['aporte'] = $data2['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data2['ponderacion']) / $data2['meta'];
 }
 
 /**** INDICADOR 3. ****/
@@ -310,7 +310,7 @@ $data3['label']['denominador'] = 'N° total de pacientes hipertensos de
 $data3['label']['fuente']['numerador'] = 'REM';
 $data3['label']['fuente']['denominador'] = 'REM';
 
-$data3['meta'] = '≥68%';
+$data3['meta'] = '68';
 $data3['ponderacion'] = '6.5';
 
 /* ==== Inicializar el arreglo de datos $data ==== */
@@ -404,7 +404,7 @@ switch($ultimo_rem){
     case 9:
     case 10:
     case 11:
-        if($data3['denominador_6'] AND $data3['denominador_6'] != 0) {
+        if($data3['numerador_6'] AND $data3['denominador_6'] != 0) {
             $data3['cumplimiento'] = $data3['numerador_6'] / $data3['denominador_6'] * 100;
         }
         else {
@@ -414,7 +414,7 @@ switch($ultimo_rem){
         $data3['denominador'] = $data3['denominador_6'] = $data3['denominador_6'];
         break;
     case 12:
-        if($data3['denominador_12'] AND $data3['denominador_12'] != 0) {
+        if($data3['numerador_12'] AND $data3['denominador_12'] != 0) {
             $data3['cumplimiento'] = $data3['numerador_12'] / $data3['denominador_12'] * 100;
         }
         else {
@@ -429,7 +429,7 @@ if( $data3['cumplimiento'] >= $data3['meta']) {
     $data3['aporte'] = $data3['ponderacion'];
 }
 else {
-    $data3['aporte'] = 0;
+    $data3['aporte'] = $data3['cumplimiento'] *  $data3['ponderacion'] / $data3['meta'];
 }
 
 /**** INDICADOR 4 ****/
@@ -543,7 +543,7 @@ if($data6['denominador_acumulado'] != 0) {
 }
 else $data6['cumplimiento'] = 0;
 
-if( $data6['cumplimiento'] <= ($data6['meta_nacional'] - 5) && $data6['cumplimiento'] != 0) {
+if( $data6['cumplimiento'] >= ($data6['meta_nacional'] - 5) && $data6['cumplimiento'] != 0) {
     $data6['aporte'] = $data6['ponderacion'];
 }
 else {
@@ -561,7 +561,7 @@ $data8['label']['denominador'] = 'N° total de consultas de especialistas
 $data8['label']['fuente']['numerador'] = 'REM';
 $data8['label']['fuente']['denominador'] = 'Programacion Anual';
 
-$data8['meta'] = '≥95%';
+$data8['meta'] = '95';
 $data8['ponderacion'] = '7%';
 
 $data8['numerador_acumulado'] = 0;
@@ -614,7 +614,7 @@ if( $data8['cumplimiento'] >= preg_replace("/[^0-9]/", '', $data8['meta'])) {
     $data8['aporte'] = preg_replace("/[^0-9]/", '', $data8['ponderacion']);
 }
 else{
-    $data8['aporte'] = 0;
+    $data8['aporte'] = $data8['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data8['ponderacion']) / $data8['meta'];
 }
 
 /**** INDICADOR 10 ****/
@@ -783,7 +783,7 @@ if( $data12['cumplimiento'] >= $data12['meta']) {
     $data12['aporte'] = preg_replace("/[^0-9]/", '', $data12['ponderacion']);
 }
 else {
-    $data12['aporte'] = 0;
+    $data12['aporte'] = $data12['cumplimiento'] *  preg_replace("/[^0-9]/", '', $data12['ponderacion']) / $data12['meta'];
 }
 
 
