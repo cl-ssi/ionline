@@ -65,8 +65,21 @@
         <strong>Destino:</strong> {{ $purchase->destination }}<br>
         <strong>Con fondos:</strong> {{ $purchase->from }}<br>
     </div>
-    <div class="center" style="width: 49%">
+    <!-- <div class="center" style="width: 49%">
         <span class="uppercase">Funcionario que recibe</span>
-    </div>
+    </div> -->
 </div>
+
+<br>
+
+<div style="width: 100%;border:1px solid black;">
+Observaciones: <br><br><br><br><br><br>
+</div>
+
+<br><br><br><br><br>
+<div style="float: right;">FUNCIONARIO QUE RECIBE</div><br>
+
+<br><br><br><br><br>
+<div style="float: right;">REFERENTE TÉCNICO Y/O ADMINISTRADOR DE CONTRATO</div><br>
+
 @endsection
