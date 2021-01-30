@@ -76,34 +76,6 @@
 		</fieldset>
 	</div>
 
-  <div class="form-row">
-
-		<fieldset class="form-group col-4">
-		    <label for="for_endorse_type">Tipo de visación</label>
-		    <select class="form-control selectpicker" data-live-search="true" name="endorse_type" required="" data-size="5">
-          		<option value="No requiere visación">No requiere visación</option>
-				<option value="Visación opcional">Visación opcional</option>
-				<option value="Visación en cadena de responsabilidad">Visación en cadena de responsabilidad</option>
-        	</select>
-		</fieldset>
-
-
-		{{-- @livewire('add-signature') --}}
-
-		{{-- <div class="col-4">
-			<div id="inputFormRow">
-				<div class="input-group mb-3">
-					<input type="text" name="title[]" class="form-control m-input" placeholder="Enter title" autocomplete="off">
-					<div class="input-group-append">
-						<button id="removeRow" type="button" class="btn btn-danger">Remove</button>
-					</div>
-				</div>
-			</div>
-
-		<div id="newRow"></div>
-		<button id="addRow" type="button" class="btn btn-info">Add Row</button> --}}
-	</div>
-
 	<hr>
 	@livewire('signatures.visators')
 	<hr>
