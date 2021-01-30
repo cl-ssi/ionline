@@ -193,7 +193,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::resource('shift_control', 'ServiceRequests\ShiftControlController')->middleware('auth');
     Route::get('service_requests.consolidated_data','ServiceRequests\ServiceRequestController@consolidated_data')->name('service_requests.consolidated_data')->middleware('auth');
     Route::resource('service_requests', 'ServiceRequests\ServiceRequestController')->middleware('auth');
-    // Route::resource('scs_service_requests_signature_flow', 'ServiceRequests\SignatureFlowController')->middleware('auth');
+    Route::get('service_requests/resolution/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolution')->middleware('auth');
     Route::resource('authorities', 'Rrhh\AuthorityController')->middleware(['auth']);
 
     Route::prefix('organizational-units')->name('organizational-units.')->group(function () {
@@ -743,11 +743,11 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 /* Nuevas rutas, Laravel 8.0. */
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
-    Route::post('/', [SuitabilityController::class, 'store'])->name('store');    
+    Route::post('/', [SuitabilityController::class, 'store'])->name('store');
     Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::get('/validaterequest', [SuitabilityController::class, 'validaterequest'])->name('validaterequest');
     Route::post('/validaterun', [SuitabilityController::class, 'validaterun'])->name('validaterun');
-    Route::get('/create/{run?}', [SuitabilityController::class, 'create'])->name('create');    
+    Route::get('/create/{run?}', [SuitabilityController::class, 'create'])->name('create');
     Route::get('/welcome', [TestsController::class, 'welcome'])->name('welcome');
     Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
     Route::post('/test', [TestsController::class, 'store'])->name('test.store');

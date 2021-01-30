@@ -327,4 +327,8 @@ class ServiceRequestController extends Controller
     // dd($serviceRequests);
     return view('service_requests.requests.consolidated_data',compact('serviceRequests'));
   }
+    public function resolution(ServiceRequest $serviceRequest)
+    {
+        return view('service_requests.report_resolution', compact('serviceRequest'));
+    }
 }
