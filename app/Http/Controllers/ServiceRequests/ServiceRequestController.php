@@ -332,10 +332,11 @@ class ServiceRequestController extends Controller
         return view('service_requests.report_resolution', compact('serviceRequest'));
     }
 
-    public function resolutionPDF(ServiceRequest $serviceRequest)
+    public function resolutionPDF(ServiceRequest $ServiceRequest)
     {
+      //dd($ServiceRequest);
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('service_requests.report_resolution');
+        $pdf->loadView('service_requests.report_resolution',compact('ServiceRequest'));
 
         return $pdf->stream('mi-archivo.pdf');
         // return view('service_requests.report_resolution', compact('serviceRequest'));
