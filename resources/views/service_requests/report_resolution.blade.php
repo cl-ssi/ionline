@@ -1,8 +1,126 @@
-@extends('layouts.report')
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>Resolucion</title>
+        <meta name="description" content="">
+        <meta name="author" content="Servicio de Salud Iquique">
+        <style media="screen">
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 0.8rem;
+        }
+        .content {
+            margin: 0 auto;
+            /*border: 1px solid #F2F2F2;*/
+            width: 724px;
+            /*height: 1100px;*/
+        }
+        .monospace {
+            font-family: "Lucida Console", Monaco, monospace;
+        }
+        .pie_pagina {
+            margin: 0 auto;
+            /*border: 1px solid #F2F2F2;*/
+            width: 724px;
+            height: 26px;
+            position: fixed;
+            bottom: 0;
+        }
+        .seis {
+            font-size: 0.6rem;
+        }
+        .siete {
+            font-size: 0.7rem;
+        }
+        .ocho {
+            font-size: 0.8rem;
+        }
+        .nueve {
+            font-size: 0.9rem;
+        }
+        .plomo {
+            background-color: F3F1F0;
+        }
+        .titulo {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 4px 0 6px;
+        }
+        .center {
+            text-align: center;
+        }
+        .left {
+            text-align: left;
+        }
+        .right {
+            text-align: right;
+        }
+        .justify {
+            text-align: justify;
+        }
 
-@section('title', 'Resolucion')
+        .indent {
+            text-indent: 30px;
+        }
 
-@section('content')
+        .uppercase {
+            text-transform: uppercase;
+        }
+
+        #firmas {
+            margin-top: 100px;
+        }
+
+        #firmas > div {
+            display: inline-block;
+        }
+
+        .li_letras {
+            list-style-type: lower-alpha;
+        }
+
+        table {
+            border: 1px solid grey;
+            border-collapse: collapse;
+            padding: 0 4px 0 4px;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid grey;
+            border-collapse: collapse;
+            padding: 0 4px 0 4px;
+        }
+
+        .column {
+          float: left;
+          width: 50%;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
+        @media all {
+            .page-break { display: none; }
+        }
+
+        @media print {
+            .page-break { display: block; page-break-before: always; }
+        }
+
+        </style>
+    </head>
+    <body>
+        <div class="content">
+
+                <div class="content">
+                    <img style="padding-bottom: 4px;" src="images/logo_pluma.jpg"
+                        width="120" alt="Logo Servicio de Salud"><br>
+
 
 <div class="siete" style="padding-top: 3px;">
     HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
@@ -26,18 +144,18 @@
 </div>
 
 
-<div style="clear: both; padding-bottom: 10px"></div>
+<div style="clear: both; padding-bottom: 10px">&nbsp;</div>
 
 
 <p class="justify">
-<strong>VISTOS:</strong><br><br>
+<strong>VISTOS:</strong><br>
 
 Dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud; Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020  del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.196, de 2019 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2020; Resoluciones  N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
 
 </p>
 
 <p class="justify">
-<strong>CONSIDERANDO:</strong><br><br>
+<strong>CONSIDERANDO:</strong><br>
 Que, mediante Decreto N°1 de fecha 07 de enero de 2021 prorroga vigencia del Decreto N° 4 de fecha 05 de enero de 2020, del Ministerio de Salud, se decreta alerta sanitaria por el período que se señala y otorga facultades extraordinarias que indica por emergencia de salud pública de importancia internacional (ESPII) por brote del nuevo coronavirus (2019-ncov).
 Que, el Hospital “Dr. Ernesto Torres Galdames” de Iquique debido a la contingencia ha debido implementar diversas estrategias asociadas a la complejización e incremento de camas básicas a medias y de alta complejidad a modo de satisfacer y dar cobertura a las necesidades de la población, producto de la pandemia sanitaria.
 Que, el Hospital “Dr. Ernesto Torres Galdames” de Iquique, producto de esta contingencia ha debido mantener los servicios de personal para reforzar los equipos de salud, quienes apoyaran la implementación de estrategias definidas por el nivel central en las líneas de detección y tratamiento de la enfermedad, además de reforzar las unidades de apoyo que deben ponerse a disposición para enfrentar la pandemia.
@@ -51,7 +169,7 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
 
 </p>
 
-<table class="ocho">
+<table class="siete">
     <tr>
         <th>Nombre</th>
         <th>Run</th>
@@ -74,7 +192,7 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
     </tr>
 </table>
 
-<p class="justify indent">
+<p class="justify">
     En Iquique, a catorce días del mes de enero de dos mil veintiuno, entre D. HECTOR ALARCON ALARCON RUN: 14.101.085-9,  en su calidad de Director  del Hospital “Dr. Ernesto Torres Galdames” de Iquique, con domicilio en Av. Héroes de la Concepción N° 502 de Iquique, en adelante "el Director  del Hospital “Dr. Ernesto Torres Galdames", y por la otra D. NELSON CAMPILLAY QUEVEDO, RUN: 17.094.897-1, domiciliado en Salvador Allende N° 448, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
 </p>
 
@@ -174,4 +292,7 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
     Oficina de partes<br>
 </div>
 
-@endsection
+
+</div>
+</body>
+</html>
