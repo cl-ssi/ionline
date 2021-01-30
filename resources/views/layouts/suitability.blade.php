@@ -44,7 +44,7 @@
 </head>
 <body>
     <div id="app">
-        @include('layouts.partials.nav_suitability')
+        @include('layouts.partials.app')
 
         <main class="container pt-3">
             <div class="d-none d-print-block">

@@ -776,6 +776,8 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::prefix('results')->as('results.')->middleware('auth')->group(function () {
         Route::get('/', [ResultsController::class, 'index'])->name('index');
         Route::get('/{id}', [ResultsController::class, 'show'])->name('show');
+        Route::get('/certificate/{id}', [ResultsController::class, 'certificate'])->name('certificate');
+        Route::get('/certificatepdf/{id}', [ResultsController::class, 'certificatepdf'])->name('certificatepdf');
         //Route::get('results/{result_id}', 'ResultsController@show')->name('results.show');
         // Route::get('/create', [OptionsController::class, 'create'])->name('create');
         // Route::post('/store', [OptionsController::class, 'store'])->name('store');
