@@ -194,7 +194,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('service_requests.consolidated_data','ServiceRequests\ServiceRequestController@consolidated_data')->name('service_requests.consolidated_data')->middleware('auth');
     Route::resource('service_requests', 'ServiceRequests\ServiceRequestController')->middleware('auth');
     Route::get('service_requests/resolution/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolution')->middleware('auth');
-    Route::get('service_requests/resolution-pdf/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolutionPDF')->middleware('auth');
+    Route::get('service_requests/resolution-pdf/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolutionPDF')->name('service_requests.resolution-pdf')->middleware('auth');
     Route::resource('authorities', 'Rrhh\AuthorityController')->middleware(['auth']);
 
     Route::prefix('organizational-units')->name('organizational-units.')->group(function () {
