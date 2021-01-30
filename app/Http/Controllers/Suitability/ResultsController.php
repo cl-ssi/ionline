@@ -50,10 +50,7 @@ class ResultsController extends Controller
     public function show($id)
     {
         //
-
         $result = Result::find($id);
-        
-
         return view('suitability.results.show', compact('result'));
     }
 
@@ -89,5 +86,21 @@ class ResultsController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function certificate($id)
+    {
+        //
+        $result = Result::find($id);
+        return view('suitability.results.certificate', compact('result'));
+    }
+
+    public function certificatepdf($id)
+    {
+        //
+        $result = Result::find($id);
+        $pdf = \PDF::loadView('suitability.results.certificate', compact('result'));
+        return $pdf->download('Certificado de Idoneidad '.$result->user->fullName.'.pdf');
     }
 }
