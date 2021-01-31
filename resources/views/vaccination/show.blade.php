@@ -5,6 +5,7 @@
 @section('content')
 <h5 class="mb-3">Horario Vacunación</h5>
 
+@if($vaccination)
 <p>Hola {{ $vaccination->fullName() }} la primera dósis de la
     <strong>VACUNA CORONAVAC LABORATORIO SINOVAC LIFE SCIENCE®</strong> contra
     <strong>CONTRA SARS-COV-2</strong> te toca el día
@@ -19,7 +20,9 @@
     <li>Si el día y hora asignado te traen dificultades toma contacto con tu
         jefatura o supervisor/a de servicio</li>
 </ul>
-
+@else
+    <h2>No está registrado en la nómina de vacunación, por favor contactar a su jefe directo.</h2>
+@endif
 <hr>
 
 <h4>I. CARACTERÍSTICAS DE LA VACUNA:</h4>

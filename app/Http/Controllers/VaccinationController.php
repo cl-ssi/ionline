@@ -30,13 +30,18 @@ class VaccinationController extends Controller
                 $user_cu = json_decode($response);
 
                 $vaccination = Vaccination::where('run',$user_cu->RolUnico->numero)->first();
-                $vaccination->run = $user_cu->RolUnico->numero;
-                $vaccination->dv = $user_cu->RolUnico->DV;
-                $vaccination->name = implode(' ', $user_cu->name->nombres);
-                $vaccination->fathers_family = $user_cu->name->apellidos[0];
-                $vaccination->mothers_family = $user_cu->name->apellidos[1];
-                $vaccination->personal_email = $user_cu->email;
-                $vaccination->save();
+                if($vaccination) {
+                    $vaccination->run = $user_cu->RolUnico->numero;
+                    $vaccination->dv = $user_cu->RolUnico->DV;
+                    $vaccination->name = implode(' ', $user_cu->name->nombres);
+                    $vaccination->fathers_family = $user_cu->name->apellidos[0];
+                    $vaccination->mothers_family = $user_cu->name->apellidos[1];
+                    $vaccination->personal_email = $user_cu->email;
+                    $vaccination->save();
+                }
+                else {
+                    $vaccination = new Vaccination();
+                }
             } elseif (env('APP_ENV') == 'local') {
                 $vaccination = Vaccination::where('run',15287582)->first();
                 $vaccination->dv = 7;
