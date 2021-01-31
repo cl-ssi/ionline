@@ -744,12 +744,12 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::get('/welcome',[VaccinationController::class,'welcome'])->name('welcome');
     Route::get('/login/{access_token}',[VaccinationController::class,'login'])->name('login');
-    Route::get('/',[VaccinationController::class,'index'])->name('index');
-    Route::get('/create',[VaccinationController::class,'create'])->name('create');
-    Route::post('/',[VaccinationController::class,'store'])->name('store');
+    Route::get('/',[VaccinationController::class,'index'])->name('index')->middleware('auth');
+    Route::get('/create',[VaccinationController::class,'create'])->name('create')->middleware('auth');
+    Route::post('/',[VaccinationController::class,'store'])->name('store')->middleware('auth');
     Route::post('/show',[VaccinationController::class,'show'])->name('show');
-    Route::get('/{vaccination}/edit',[VaccinationController::class,'edit'])->name('edit');
-    Route::put('/{vaccination}',[VaccinationController::class,'update'])->name('update');
+    Route::get('/{vaccination}/edit',[VaccinationController::class,'edit'])->name('edit')->middleware('auth');
+    Route::put('/{vaccination}',[VaccinationController::class,'update'])->name('update')->middleware('auth');
 });
 
 /* Nuevas rutas, Laravel 8.0. */
