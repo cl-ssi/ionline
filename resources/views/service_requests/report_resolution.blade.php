@@ -136,7 +136,7 @@
 
 <div class="right" style="float: right; width: 280px;">
     <div class="left" style="padding-bottom: 6px;">
-        <strong>RESOLUCIÓN EXENTA N°:</strong>
+        <strong>RESOLUCIÓN EXENTA N°: {{$ServiceRequest->resolution_number}}</strong>
     </div>
     <div class="left" style="padding-bottom: 2px;">
         <strong>IQUIQUE,</strong>
@@ -181,12 +181,12 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
         <th>Monto Total</th>
     </tr>
     <tr>
-        <td>Nelson Campillay Quevedo</td>
-        <td>17.123.456-7</td>
-        <td>Profesional (Enfermero)</td>
+        <td>{{$ServiceRequest->name}}</td>
+        <td>{{$ServiceRequest->rut}}</td>
+        <td>{{$ServiceRequest->estate}}</td>
         <td>44</td>
-        <td>01/01/2021</td>
-        <td>31/12/2021</td>
+        <td>{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
+        <td>{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
         <td>Emergencia</td>
         <td>$1.731.482</td>
     </tr>

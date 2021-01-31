@@ -98,4 +98,11 @@ class ServiceRequest extends Model implements Auditable
 
 
     protected $table = 'doc_service_requests';
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['request_date', 'start_date', 'end_date', 'budget_date', 'payment_date'];
 }
