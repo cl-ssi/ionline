@@ -5,7 +5,7 @@
 @section('content')
 <h5 class="mb-3">Horario Vacunación</h5>
 
-@if(empty($vaccination))
+@if(empty($vaccination->run))
 
 <h2>No está registrado en la nómina de vacunación, por favor contactar a su jefe directo.</h2>
 
