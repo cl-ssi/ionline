@@ -22,7 +22,7 @@ class CreateVaccinationsTable extends Migration
             $table->string('mothers_family');
             $table->string('email')->nullable();
             $table->string('personal_email')->nullable();
-            $table->foreignId('establishment_id');
+            $table->unsignedInteger('establishment_id');
             $table->foreignId('organizational_unit_id')->nullable();
             $table->string('organizationalUnit')->nullable();
 
