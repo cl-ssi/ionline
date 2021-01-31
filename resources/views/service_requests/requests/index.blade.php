@@ -104,6 +104,15 @@
 					class="btn btn-sm btn-outline-secondary">
 					<span class="fas fa-edit" aria-hidden="true"></span>
 				</a>
+				@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
+					<a onclick="alert('No es posible generar la resolución por que el flujo de firmas no está completo.')"
+						class="btn btn-outline-secondary btn-sm" target="_blank">
+					<i class="fas fa-file" style="color:#B9B9B9"></i></a>
+				@else
+					<a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+						class="btn btn-outline-secondary btn-sm" target="_blank">
+					<span class="fas fa-file" aria-hidden="true"></span></a>
+				@endif
 			</td>
 		</tr>
 	@endforeach
