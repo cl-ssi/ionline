@@ -43,12 +43,17 @@ class VaccinationController extends Controller
                     $vaccination = new Vaccination();
                 }
             } elseif (env('APP_ENV') == 'local') {
-                $vaccination = Vaccination::where('run',15287582)->first();
-                $vaccination->dv = 7;
-                $vaccination->name = "Alvaro";
-                $vaccination->fathers_family = "Torres";
-                $vaccination->mothers_family = "Fuschslocher";
-                $vaccination->personal_email = "email@email.com";
+                $vaccination = Vaccination::where('run',15)->first();
+                if($vaccination) {
+                    $vaccination->dv = 7;
+                    $vaccination->name = "Alvaro";
+                    $vaccination->fathers_family = "Torres";
+                    $vaccination->mothers_family = "Fuschslocher";
+                    $vaccination->personal_email = "email@email.com";
+                }
+                else {
+                    $vaccination = new Vaccination();
+                }
             }
             return $this->show($vaccination);
         }

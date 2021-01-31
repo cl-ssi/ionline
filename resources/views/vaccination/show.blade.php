@@ -6,8 +6,24 @@
 
 @if(empty($vaccination->run))
 
-    <h2>No está registrado en la nómina de vacunación, por favor contactar a su jefe directo.</h2>
+    <div class="alert alert-danger">
+        <h4 class="alert-heading">No está registrado en la nómina de vacunación,
+            por favor contácte a su jefe directo.</h4>
 
+    </div>
+
+    <div class="alert alert-info mt-3" role="alert">
+      NOTA: Si trabajas en HETG, DSSI o Red de Salud Mental y no alcanzaste a
+      inscribirte indicado tu voluntad de vacunación o cambiaste de opinión y
+      ahora si quieres vacunarte, debes indicarselo a tu jefatura.
+      ¡ Tenemos pensado un día para los arrepentidos ¡
+    </div>
+
+    <div class="alert alert-info mt-3" role="alert">
+        HETG: Supervisoras de Servicio, Subdirección de Gestión del Cuidado, Coordinador de Vacunas.<br>
+        DSSI: Deben ser comunicados a Vanessa Sepúlveda<br>
+        Red de SM: Balena Corrales del Departamento de Salud Mental
+    </div>
 @else
     <h5 class="mb-3">Horario Vacunación</h5>
 
@@ -20,9 +36,14 @@
 
 
 <ul>
-    <li>EL lugar de vacunación es el domo en el estacionamiento atrás del HETG</li>
-    <li>Debes considerar que posterior a la vacunación debes quedarte 30 minutos en el lugar para observación post vacunación.</li>
-    <li>De presentar  una reacción post vacunación leve a moderada, preséntate en el lugar de vacunación con el Enfermera de Salud del trabajador para tu notificación al ISP y seguimiento por parte de la unidad de salud del trabajador.  Si es algo importante dirigente a un sistema de urgencia.</li>
+    <li>EL lugar de vacunación es el domo en el estacionamiento atrás del HETG.</li>
+    <li>Debes considerar que posterior a la vacunación debes quedarte
+        30 minutos en el lugar para observación post vacunación.</li>
+    <li>De presentar  una reacción post vacunación leve a moderada,
+        preséntate en el lugar de vacunación con el Enfermera de Salud del
+        trabajador para tu notificación al ISP y seguimiento por parte de la
+        unidad de salud del trabajador.
+        Si es algo importante dirigente a un sistema de urgencia.</li>
     <li>Si el día y hora asignado te traen dificultades toma contacto con tu
         jefatura o supervisor/a de servicio</li>
 </ul>
