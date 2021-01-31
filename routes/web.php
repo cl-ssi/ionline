@@ -15,6 +15,7 @@ use App\Http\Controllers\RequestForms\RequestFormFileController;
 use App\Http\Controllers\RequestForms\RequestFormCodeController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
+use App\Http\Controllers\VaccinationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -740,6 +741,11 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 /************** COMENTAR ****************/
 });
 
+Route::prefix('vaccination')->as('vaccination.')->group(function () {
+    Route::get('/',[VaccinationController::class,'index'])->name('index');
+    Route::get('/create',[VaccinationController::class,'create'])->name('create');
+    Route::post('/',[VaccinationController::class,'store'])->name('store');
+});
 
 /* Nuevas rutas, Laravel 8.0. */
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
