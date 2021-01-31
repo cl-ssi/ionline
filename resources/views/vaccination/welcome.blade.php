@@ -32,9 +32,14 @@
         donde de igual manera deben reportar el evento.</li>
 </ul>
 
-<a href="{{ route('claveunica.autenticar') }}?redirect=L3ZhY2NpbmF0aW9uL2xvZ2lu" class="btn btn-lg btn-outline-primary">
-    Consultar fecha y hora de vacunación <img src="{{ asset('images/btn_claveunica_119px.png') }}" alt="Logo Clave única">
-</a>
+<div class="alert alert-secondary mt-3 text-center" role="alert">
+    <h4 class="alert-heading">Consultar fecha de vacunación </h4>
+    <a href="{{ route('claveunica.autenticar') }}?redirect=L3ZhY2NpbmF0aW9uL2xvZ2lu" class="btn btn-lg btn-outline-primary">
+        <img src="{{ asset('images/btn_claveunica_119px.png') }}" alt="Logo Clave única">
+    </a>
+</div>
+
+
 
 <div class="alert alert-info mt-3" role="alert">
   Si no tienes clave única, contáctate con OIRS de tu establecimeinto y
