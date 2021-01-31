@@ -3,18 +3,20 @@
 @section('title', 'Horario de vacuna')
 
 @section('content')
-<h5 class="mb-3">Horario Vacunación</h5>
 
 @if(empty($vaccination->run))
 
-<h2>No está registrado en la nómina de vacunación, por favor contactar a su jefe directo.</h2>
+    <h2>No está registrado en la nómina de vacunación, por favor contactar a su jefe directo.</h2>
 
 @else
-    <p>Hola {{ $vaccination->fullName() }} la primera dósis de la
-    <strong>VACUNA CORONAVAC LABORATORIO SINOVAC LIFE SCIENCE®</strong> contra
-    <strong>CONTRA SARS-COV-2</strong> te toca el día
-    <strong>{{ $vaccination->first_dose }}</strong>
-</p>
+    <h5 class="mb-3">Horario Vacunación</h5>
+
+    <p>
+        Hola {{ $vaccination->fullName() }} la primera dósis de la
+        <strong>VACUNA CORONAVAC LABORATORIO SINOVAC LIFE SCIENCE®</strong> contra
+        <strong>CONTRA SARS-COV-2</strong> te toca el día
+        <strong>{{ $vaccination->first_dose }}</strong>
+    </p>
 
 
 <ul>
@@ -26,7 +28,7 @@
 </ul>
 
 
-@endif
+
 <hr>
 
 <h4>I. CARACTERÍSTICAS DE LA VACUNA:</h4>
@@ -226,6 +228,7 @@ de la segunda dosis 2.
     Infect. Dis. https://doi.org/10.1016/S1473-3099(20)30843-4 (2020).</li>
 </ol>
 
+@endif
 
 @endsection
 
