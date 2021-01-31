@@ -9,31 +9,6 @@
     @csrf
     @method('POST')
 
-    <div class="form-row">
-        <fieldset class="form-group col-2">
-            <label for="for_establishment">Establecimiento*</label>
-            <select name="establishment_id" id="for_establishment" class="form-control">
-                <option value=""></option>
-                <option value="1">HETG</option>
-                <option value="38">DSSI</option>
-            </select>
-        </fieldset>
-
-        <fieldset class="form-group col-3">
-            <label for="for_organizational_unit_id">Unidad Organizacional</label>
-            <select name="organizational_unit_id" id="for_organizational_unit_id" class="form-control">
-                <option value=""></option>
-            </select>
-        </fieldset>
-
-        <fieldset class="form-group col-3">
-            <label for="for_ortanizationalUnit">Unidad Organizacional</label>
-            <input type="text" class="form-control" name="ortanizationalUnit"
-                id="for_ortanizationalUnit" placeholder="unidad/depto">
-        </fieldset>
-
-    </div>
-
     <div class="row">
         <fieldset class="form-group col-2">
             <label for="for_name">Nombre*</label>
@@ -65,44 +40,74 @@
                 id="for_dv" required>
         </fieldset>
 
+    </div>
+
+    <div class="form-row">
+        <fieldset class="form-group col-2">
+            <label for="for_establishment">Establecimiento*</label>
+            <select name="establishment_id" id="for_establishment" class="form-control">
+                <option value=""></option>
+                <option value="1">HETG</option>
+                <option value="38">DSSI</option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-3">
+            <label for="for_organizational_unit_id">Unidad Organizacional</label>
+            <select name="organizational_unit_id" id="for_organizational_unit_id" class="form-control">
+                <option value=""></option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-3">
+            <label for="for_ortanizationalUnit">Unidad Organizacional</label>
+            <input type="text" class="form-control" name="ortanizationalUnit"
+                id="for_ortanizationalUnit" placeholder="unidad/depto">
+        </fieldset>
 
     </div>
 
     <div class="row">
-        <fieldset class="form-group col-2">
-            <label for="for_first_dose">Primera dósis</label>
+        <fieldset class="form-group col-3">
+            <label for="for_first_dose">Agenda Primera dósis</label>
             <input type="datetime-local" class="form-control" name="first_dose"
                 id="for_first_dose">
         </fieldset>
 
-        <fieldset class="form-group col-2">
-            <label for="for_second_dose">Segunda dósis</label>
+        <fieldset class="form-group col-3">
+            <label for="for_second_dose">Agenda Segunda dósis</label>
             <input type="datetime-local" class="form-control" name="second_dose"
                 id="for_second_dose" >
         </fieldset>
 
     </div>
 
+    <hr>
+
     <div class="row">
-        <fieldset class="form-group col-2">
+        <fieldset class="form-group col-3">
             <label for="for_first_dose_at">Primera dosis</label>
             <input type="datetime-local" class="form-control" name="first_dose_at"
                 id="for_first_dose_at">
         </fieldset>
 
-        <fieldset class="form-group col-4">
+        <fieldset class="form-group col-9">
             <label for="for_fd_observation">Observación</label>
             <input type="text" class="form-control" name="fd_observation"
                 id="for_fd_observation">
         </fieldset>
 
-        <fieldset class="form-group col-2">
+    </div>
+
+    <div class="row">
+
+        <fieldset class="form-group col-3">
             <label for="for_second_dose_at">Segunda dosis</label>
             <input type="datetime-local" class="form-control" name="second_dose_at"
                 id="for_second_dose_at">
         </fieldset>
 
-        <fieldset class="form-group col-4">
+        <fieldset class="form-group col-9">
             <label for="for_sd_observation">Observacion</label>
             <input type="text" class="form-control" name="sd_observation"
                 id="for_sd_observation">

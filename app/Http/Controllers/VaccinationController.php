@@ -4,9 +4,52 @@ namespace App\Http\Controllers;
 
 use App\Models\Vaccination;
 use Illuminate\Http\Request;
+//use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class VaccinationController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function welcome()
+    {
+        return view('vaccination.welcome');
+    }
+
+    public function login($access_token)
+    {
+        if ($access_token) {
+            // dd("");
+            if (env('APP_ENV') == 'production') {
+                // $access_token = session()->get('access_token');
+                $url_base = "https://www.claveunica.gob.cl/openid/userinfo/";
+                $response = Http::withToken($access_token)->post($url_base);
+                $user_cu = json_decode($response);
+
+                $vaccination = Vaccination::where('run',$user_cu->RolUnico->numero)->first();
+                $vaccination->run = $user_cu->RolUnico->numero;
+                $vaccination->dv = $user_cu->RolUnico->DV;
+                $vaccination->name = implode(' ', $user_cu->name->nombres);
+                $vaccination->fathers_family = $user_cu->name->apellidos[0];
+                $vaccination->mothers_family = $user_cu->name->apellidos[1];
+                $vaccination->personal_email = $user_cu->email;
+                $vaccination->save();
+            } elseif (env('APP_ENV') == 'local') {
+                $vaccination = new Vaccination();
+                $vaccination->run = 15287582;
+                $vaccination->dv = 7;
+                $vaccination->name = "Alvaro";
+                $vaccination->fathers_family = "Torres";
+                $vaccination->mothers_family = "Fuschslocher";
+                $vaccination->personal_email = "email@email.com";
+            }
+            return redirect()->route('vaccination.show')->with('vaccination', $vaccination);
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
