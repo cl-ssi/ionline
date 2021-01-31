@@ -742,7 +742,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 });
 
 Route::prefix('vaccination')->as('vaccination.')->group(function () {
-    Route::get('/welcome',[VaccinationController::class,'login'])->name('welcome');
+    Route::get('/welcome',[VaccinationController::class,'welcome'])->name('welcome');
     Route::get('/login/{access_token}',[VaccinationController::class,'login'])->name('login');
     Route::get('/',[VaccinationController::class,'index'])->name('index');
     Route::get('/create',[VaccinationController::class,'create'])->name('create');
