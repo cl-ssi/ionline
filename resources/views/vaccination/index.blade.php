@@ -15,6 +15,7 @@
             <th>Run</th>
             <th>Primera dósis</th>
             <th>Segunda dósis</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -27,6 +28,7 @@
                 <td>{{ $vaccination->run }} - {{ $vaccination->dv }}</td>
                 <td>{{ $vaccination->first_dose->format('H:i') ?? '' }}</td>
                 <td>{{ $vaccination->first_dose->format('Y-m-d') ?? '' }}</td>
+                <td> <a href="{{ route('vaccination.edit', $vaccination) }}"> <i class="fas fa-edit"></i> </a> </td>
             </tr>
         @endforeach
     </tbody>
