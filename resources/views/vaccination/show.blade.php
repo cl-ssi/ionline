@@ -3,7 +3,7 @@
 @section('title', 'Horario de vacuna')
 
 @section('content')
-<h5 class="mb-3">Horario de vacuna</h5>
+<h5 class="mb-3">Horario Vacunación</h5>
 
 <p>Hola {{ $vaccination->fullName() }} la primera dósis de la
     <strong>VACUNA CORONAVAC LABORATORIO SINOVAC LIFE SCIENCE®</strong> contra

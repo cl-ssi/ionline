@@ -747,7 +747,7 @@ Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::get('/',[VaccinationController::class,'index'])->name('index');
     Route::get('/create',[VaccinationController::class,'create'])->name('create');
     Route::post('/',[VaccinationController::class,'store'])->name('store');
-    Route::get('/{vaccination}',[VaccinationController::class,'show'])->name('show');
+    Route::post('/show',[VaccinationController::class,'show'])->name('show');
     Route::get('/{vaccination}/edit',[VaccinationController::class,'edit'])->name('edit');
     Route::put('/{vaccination}',[VaccinationController::class,'update'])->name('update');
 });

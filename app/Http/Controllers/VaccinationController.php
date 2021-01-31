@@ -38,15 +38,14 @@ class VaccinationController extends Controller
                 $vaccination->personal_email = $user_cu->email;
                 $vaccination->save();
             } elseif (env('APP_ENV') == 'local') {
-                $vaccination = new Vaccination();
-                $vaccination->run = 15287582;
+                $vaccination = Vaccination::where('run',15287582)->first();
                 $vaccination->dv = 7;
                 $vaccination->name = "Alvaro";
                 $vaccination->fathers_family = "Torres";
                 $vaccination->mothers_family = "Fuschslocher";
                 $vaccination->personal_email = "email@email.com";
             }
-            return redirect()->route('vaccination.show')->with('vaccination', $vaccination);
+            return $this->show($vaccination);
         }
     }
 
