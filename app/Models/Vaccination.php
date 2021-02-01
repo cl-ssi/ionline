@@ -16,12 +16,12 @@ class Vaccination extends Model
     protected $fillable = [
         'establishment_id','organizational_unit_id','organizationalUnit',
         'name','fathers_family','mothers_family','email','personal_email',
-        'run','dv','first_dose','first_dose_at','second_doce','second_doce_at',
+        'run','dv','first_dose','first_dose_at','second_dose','second_dose_at',
         'fd_observation','sd_observation',
     ];
 
     protected $dates = [
-        'first_dose','second_doce','first_dose_at','second_doce_at'
+        'first_dose','second_dose','first_dose_at','second_dose_at'
     ];
 
     public function establishment() {
