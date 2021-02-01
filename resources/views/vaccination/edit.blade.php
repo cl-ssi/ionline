@@ -131,6 +131,10 @@
 
 </form>
 
+@can('be god')
+    @include('partials.audit', ['audits' => $vaccination->audits] )
+@endcan
+
 @endsection
 
 @section('custom_js')
