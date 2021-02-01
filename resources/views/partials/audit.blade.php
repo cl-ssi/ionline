@@ -1,4 +1,4 @@
-<h4 class="mt-3 mt-4">Historial de cambios seguimiento</h4>
+<h4 class="mt-3 mt-4">Historial de cambios</h4>
 <div class="table-responsive-md">
 <table class="table table-sm small text-muted mt-3">
     <thead>
@@ -12,7 +12,7 @@
         @foreach($audits->sortByDesc('updated_at') as $audit)
         <tr>
             <td nowrap>{{ $audit->created_at }}</td>
-            <td nowrap>{{ $audit->user->fullName }}</td>
+            <td nowrap>{{ optional($audit->user)->fullName }}</td>
             <td>
             @foreach($audit->getModified() as $attribute => $modified)
                 @if(isset($modified['old']) OR isset($modified['new']))
