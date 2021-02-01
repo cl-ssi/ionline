@@ -73,6 +73,7 @@ class SignatureFlowController extends Controller
           $SignatureFlow->employee = $request->employee;
           $SignatureFlow->signature_date = Carbon::now();
           $SignatureFlow->status = $request->status;
+          $SignatureFlow->observation = $request->observation;
           $SignatureFlow->save();
        }
       }
