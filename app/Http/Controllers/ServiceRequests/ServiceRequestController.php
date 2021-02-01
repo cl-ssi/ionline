@@ -135,29 +135,11 @@ class ServiceRequestController extends Controller
       $SignatureFlow->employee = $employee;
       $SignatureFlow->signature_date = Carbon::now();
       $SignatureFlow->status = 1;
+      $SignatureFlow->sign_position = 1;
       $SignatureFlow->save();
 
-      // //Jefe de finanzas
-      // $SignatureFlow = new SignatureFlow($request->All());
-      // $SignatureFlow->user_id = 9994426;
-      // $SignatureFlow->ou_id = 111;
-      // $SignatureFlow->service_request_id = $serviceRequest->id;
-      // $SignatureFlow->type = "visador";
-      // $SignatureFlow->employee = "Profesional";
-      // $SignatureFlow->status = null;
-      // $SignatureFlow->save();
-      //
-      // //Subdirector gestión de las personas
-      // $SignatureFlow = new SignatureFlow($request->All());
-      // $SignatureFlow->user_id = 15685508;
-      // $SignatureFlow->ou_id = 44;
-      // $SignatureFlow->service_request_id = $serviceRequest->id;
-      // $SignatureFlow->type = "visador";
-      // $SignatureFlow->employee = "Subdirector  de Gestión y Desarrollo de las Personas (S)";
-      // $SignatureFlow->status = null;
-      // $SignatureFlow->save();
-
       //firmas seleccionadas en la vista
+      $sign_position = 2;
       if($request->users <> null){
         foreach ($request->users as $key => $user) {
 
@@ -178,7 +160,10 @@ class ServiceRequestController extends Controller
           $SignatureFlow->service_request_id = $serviceRequest->id;
           $SignatureFlow->type = "visador";
           $SignatureFlow->employee = $employee;
+          $SignatureFlow->sign_position = $sign_position;
           $SignatureFlow->save();
+
+          $sign_position = $sign_position + 1;
         }
       }
 
@@ -240,48 +225,46 @@ class ServiceRequestController extends Controller
    */
   public function update(Request $request, ServiceRequest $serviceRequest)
   {
+    dd($serviceRequest->SignatureFlows->whereNull('status'));
       //se guarda información de la solicitud
       $serviceRequest->fill($request->all());
-      // $serviceRequest->rut = $request->run ."-". $request->dv;
       $serviceRequest->save();
 
-      //si seleccionó una opción, se agrega visto bueno.
-      if ($request->status != null) {
-
-        //saber la organizationalUnit que tengo a cargo
-        $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
-        $employee = Auth::user()->position;
-        if ($authorities!=null) {
-          $employee = $authorities[0]->position;// . " - " . $authorities[0]->organizationalUnit->name;
-          $ou_id = $authorities[0]->organizational_unit_id;
-        }else{
-          $ou_id = Auth::user()->organizational_unit_id;
-        }
-
-        // $SignatureFlow = new SignatureFlow($request->All());
-        // $SignatureFlow->user_id = Auth::id();
-        // $SignatureFlow->ou_id = $ou_id;
-        // $SignatureFlow->service_request_id = $serviceRequest->id;
-        // $SignatureFlow->type = "visador";
-        // $SignatureFlow->employee = $employee;
-        // $SignatureFlow->save();
-
-        //si seleccionó una opción, se agrega visto bueno.
-        if ($request->status != null) {
-
-          $SignatureFlow = SignatureFlow::where('responsable_id',Auth::user()->id)
-                                        ->where('service_request_id',$serviceRequest->id)
-                                        ->whereNull('status')
-                                        ->first();
-                                        // dd($SignatureFlow);
-          // $SignatureFlow->responsable_id = Auth::id();
-          // $SignatureFlow->user_id = Auth::id();
-          $SignatureFlow->employee = $request->employee;
-          $SignatureFlow->signature_date = Carbon::now();
-          $SignatureFlow->status = $request->status;
-          $SignatureFlow->save();
-       }
-      }
+      // //si seleccionó una opción, se agrega visto bueno.
+      // if ($request->status != null) {
+      //
+      //   //saber la organizationalUnit que tengo a cargo
+      //   $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
+      //   $employee = Auth::user()->position;
+      //   if ($authorities!=null) {
+      //     $employee = $authorities[0]->position;// . " - " . $authorities[0]->organizationalUnit->name;
+      //     $ou_id = $authorities[0]->organizational_unit_id;
+      //   }else{
+      //     $ou_id = Auth::user()->organizational_unit_id;
+      //   }
+      //
+      //   // $SignatureFlow = new SignatureFlow($request->All());
+      //   // $SignatureFlow->user_id = Auth::id();
+      //   // $SignatureFlow->ou_id = $ou_id;
+      //   // $SignatureFlow->service_request_id = $serviceRequest->id;
+      //   // $SignatureFlow->type = "visador";
+      //   // $SignatureFlow->employee = $employee;
+      //   // $SignatureFlow->save();
+      //
+      //   //si seleccionó una opción, se agrega visto bueno.
+      //   if ($request->status != null) {
+      //
+      //     $SignatureFlow = SignatureFlow::where('responsable_id',Auth::user()->id)
+      //                                   ->where('service_request_id',$serviceRequest->id)
+      //                                   ->whereNull('status')
+      //                                   ->first();
+      //
+      //     $SignatureFlow->employee = $request->employee;
+      //     $SignatureFlow->signature_date = Carbon::now();
+      //     $SignatureFlow->status = $request->status;
+      //     $SignatureFlow->save();
+      //  }
+      // }
 
       //guarda control de turnos
       if ($request->shift_date!=null) {
