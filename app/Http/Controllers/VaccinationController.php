@@ -37,6 +37,7 @@ class VaccinationController extends Controller
                     $vaccination->fathers_family = $user_cu->name->apellidos[0];
                     $vaccination->mothers_family = $user_cu->name->apellidos[1];
                     $vaccination->personal_email = $user_cu->email;
+                    $vaccination->inform_method = 0;
                     $vaccination->save();
                 }
                 else {
