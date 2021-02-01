@@ -41,7 +41,7 @@
             <tr>
                 <td class="small">{{ $vaccination->id }}</td>
                 <td>{{ $vaccination->aliasEstab }}</td>
-                <td class="d-none d-md-table-cell" style="width: 100px;">{{ $vaccination->organizationalUnit }}</td>
+                <td class="d-none d-md-table-cell" style="width: 200px;">{{ $vaccination->organizationalUnit }}</td>
                 <td>
                     @switch($vaccination->inform_method)
                         @case(1)
@@ -71,8 +71,9 @@
         @endforeach
     </tbody>
 </table>
-</div>
 {{ $vaccinations->appends(request()->query())->links() }}
+</div>
+
 
 @endsection
 
