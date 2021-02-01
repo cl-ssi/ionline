@@ -104,11 +104,40 @@
 					class="btn btn-sm btn-outline-secondary">
 					<span class="fas fa-edit" aria-hidden="true"></span>
 				</a>
+				@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
+					<a data-toggle="modal" data-target="#GSCCModal"
+						class="btn btn-outline-secondary btn-sm" target="_blank">
+					<i class="fas fa-file" style="color:#B9B9B9"></i></a>
+				@else
+					<a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+						class="btn btn-outline-secondary btn-sm" target="_blank">
+					<span class="fas fa-file" aria-hidden="true"></span></a>
+				@endif
 			</td>
 		</tr>
 	@endforeach
 	</tbody>
 </table>
+
+<div class="modal" tabindex="-1" role="dialog" id="GSCCModal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Información</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>No es posible generar la resolución por que el flujo de firmas no está completo.</p>
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 @endsection

@@ -74,7 +74,8 @@
 
 		<fieldset class="form-group col-md-8">
 			<label for="forOrganizationalUnit">Unidad Organizacional</label>
-			<select class="custom-select" id="forOrganizationalUnit" name="organizationalunit">
+			<!-- <select class="custom-select" id="forOrganizationalUnit" name="organizationalunit"> -->
+				<select class="form-control selectpicker" data-live-search="true" id="forOrganizationalUnit" name="organizationalunit" required data-size="5">
 				<option></option>
 				@foreach($ouRoots as $ouRoot)
 				<option value="{{ $ouRoot->id }}">
@@ -100,7 +101,7 @@
 	                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	                            {{ $child_level_4->name }} ({{ $child_level_4->establishment->name }})
 	                        </option>
-							@endforeach								
+							@endforeach
 	                    @endforeach
 	                @endforeach
 	            @endforeach

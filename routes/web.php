@@ -15,6 +15,7 @@ use App\Http\Controllers\RequestForms\RequestFormFileController;
 use App\Http\Controllers\RequestForms\RequestFormCodeController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
+use App\Http\Controllers\VaccinationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -195,7 +196,9 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::resource('shift_control', 'ServiceRequests\ShiftControlController')->middleware('auth');
     Route::get('service_requests.consolidated_data','ServiceRequests\ServiceRequestController@consolidated_data')->name('service_requests.consolidated_data')->middleware('auth');
     Route::resource('service_requests', 'ServiceRequests\ServiceRequestController')->middleware('auth');
-    // Route::resource('scs_service_requests_signature_flow', 'ServiceRequests\SignatureFlowController')->middleware('auth');
+    Route::get('service_requests/resolution/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolution')->middleware('auth');
+    Route::get('service_requests/resolution-pdf/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolutionPDF')->name('service_requests.resolution-pdf')->middleware('auth');
+    Route::resource('signature_flow', 'ServiceRequests\SignatureFlowController')->middleware('auth');
     Route::resource('authorities', 'Rrhh\AuthorityController')->middleware(['auth']);
 
     Route::prefix('organizational-units')->name('organizational-units.')->group(function () {
@@ -741,6 +744,17 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 /************** COMENTAR ****************/
 });
 
+Route::prefix('vaccination')->as('vaccination.')->group(function () {
+    Route::get('/welcome',[VaccinationController::class,'welcome'])->name('welcome');
+    Route::get('/login/{access_token}',[VaccinationController::class,'login'])->name('login');
+    Route::get('/',[VaccinationController::class,'index'])->name('index')->middleware('auth');
+    Route::get('/create',[VaccinationController::class,'create'])->name('create')->middleware('auth');
+    Route::post('/',[VaccinationController::class,'store'])->name('store')->middleware('auth');
+    Route::post('/show',[VaccinationController::class,'show'])->name('show');
+    Route::get('/{vaccination}/edit',[VaccinationController::class,'edit'])->name('edit')->middleware('auth');
+    Route::put('/{vaccination}',[VaccinationController::class,'update'])->name('update')->middleware('auth');
+    Route::get('/report',[VaccinationController::class,'report'])->name('report')->middleware('auth');
+});
 
 /* Nuevas rutas, Laravel 8.0. */
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
@@ -778,6 +792,8 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::prefix('results')->as('results.')->middleware('auth')->group(function () {
         Route::get('/', [ResultsController::class, 'index'])->name('index');
         Route::get('/{id}', [ResultsController::class, 'show'])->name('show');
+        Route::get('/certificate/{id}', [ResultsController::class, 'certificate'])->name('certificate');
+        Route::get('/certificatepdf/{id}', [ResultsController::class, 'certificatepdf'])->name('certificatepdf');
         //Route::get('results/{result_id}', 'ResultsController@show')->name('results.show');
         // Route::get('/create', [OptionsController::class, 'create'])->name('create');
         // Route::post('/store', [OptionsController::class, 'store'])->name('store');

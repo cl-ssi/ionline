@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ServiceRequest extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     use HasFactory;
+    use SoftDeletes;
     /**
      * The attributes that are mass assignable.
      *
@@ -84,7 +86,9 @@ class ServiceRequest extends Model implements Auditable
     public static function getPendingRequests()
     {
       $serviceRequestsPendingsCount = ServiceRequest::whereHas("SignatureFlows", function($subQuery) {
-                                                   $subQuery->where('user_id',Auth::user()->id)->whereNull('status');
+                                                   $subQuery->where('user_id',Auth::user()->id)
+                                                            ->orwhere('responsable_id',Auth::user()->id);
+                                                   $subQuery->whereNull('status');
                                                  })
                                                  ->where('user_id','!=',Auth::user()->id)
                                                  ->orderBy('id','asc')
@@ -94,4 +98,11 @@ class ServiceRequest extends Model implements Auditable
 
 
     protected $table = 'doc_service_requests';
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['request_date', 'start_date', 'end_date', 'budget_date', 'payment_date'];
 }
