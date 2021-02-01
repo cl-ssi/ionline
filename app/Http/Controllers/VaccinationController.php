@@ -142,4 +142,31 @@ class VaccinationController extends Controller
     {
         //
     }
+
+    public function report()
+    {
+        /* Total de funcionarios */
+        $report['total'] = Vaccination::all()->count();
+
+        /* No han visto la información */
+        $report['informed'] = Vaccination::whereNotNull('personal_email')->count();
+        $report['informed_per'] = number_format($report['informed'] / $report['total'] * 100, 1) . ' %';
+
+        /* No han visto la información */
+        $report['not_informed'] = $report['total'] - $report['informed'];
+        $report['not_informed_per'] = number_format($report['not_informed'] / $report['total'] * 100, 1) . ' %';
+
+        /* Cantidad de vacunados con primera dosis */
+        $report['fd_vaccined'] = Vaccination::whereNotNull('first_dose_at')->count();
+        $report['fd_vaccined_per'] = number_format($report['fd_vaccined'] / $report['total'] * 100, 1) . ' %';
+
+        /* Cantidad pendiente de vacunar con primera dosis */
+        $report['fd_not_vaccined'] = $report['total'] - $report['fd_vaccined'];
+        $report['fd_not_vaccined_per'] = number_format($report['fd_not_vaccined'] / $report['total'] * 100, 1) . ' %';
+
+
+        //dd($report);
+
+        return view('vaccination.report', compact('report'));
+    }
 }
