@@ -40,7 +40,7 @@
         <fieldset class="form-group col-md-1 col-3">
             <label for="for_dv">Digito*</label>
             <input type="text" class="form-control" name="dv"
-                id="for_dv" required>
+                id="for_dv" required readonly>
         </fieldset>
 
     </div>
@@ -48,7 +48,7 @@
     <div class="form-row">
         <fieldset class="form-group col-md-3 col-12">
             <label for="for_establishment">Establecimiento*</label>
-            <select name="establishment_id" id="for_establishment" class="form-control">
+            <select name="establishment_id" id="for_establishment" class="form-control" required>
                 <option value=""></option>
                 <option value="1">HETG</option>
                 <option value="38">DSSI</option>
@@ -134,5 +134,59 @@
 @endsection
 
 @section('custom_js')
+<script type="text/javascript">
+
+    var Fn = {
+        // Valida el run con su cadena completa "XXXXXXXX-X"
+        validaRun: function(runCompleto) {
+            if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(runCompleto))
+                return false;
+            var tmp = runCompleto.split('-');
+            var digv = tmp[1];
+            var run = tmp[0];
+            if (digv == 'K') digv = 'k';
+            return (Fn.dv(run) == digv);
+        },
+
+        // Calcula el dígito verificador
+        dv: function(T) {
+            var M = 0,
+                S = 1;
+            for (; T; T = Math.floor(T / 10))
+                S = (S + T % 10 * (9 - M++ % 6)) % 11;
+            return S ? S - 1 : 'k';
+        },
+
+        // Valida que el número sea un entero
+        validaEntero: function(value) {
+            var RegExPattern = /[0-9]+$/;
+            return RegExPattern.test(value);
+        },
+
+    }
+
+
+    // Implementación de la funcionalidad a la vista
+    function imprime_dv() {
+
+        // Traspasa el valor a número entero
+        var numero = $("#for_run").val();
+        numero = numero.split(".").join("");
+
+        // Valida que sea realmente entero
+        if (Fn.validaEntero(numero)) {
+            $("#for_dv").val(Fn.dv(numero));
+        } else {
+            $("#for_dv").val("");
+        }
+
+        // Formatea el valor del run con sus puntos
+        $("#for_run").val(numero);
+    }
+
+    // Adiciona la ejecución de la acción al dejar de tipear en el campo
+    $("#for_run").keyup(imprime_dv);
+</script>
+
 
 @endsection

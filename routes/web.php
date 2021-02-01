@@ -54,6 +54,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
     Route::get('/', [ReplacementStaffController::class, 'index'])->name('index');
     Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
+    Route::post('/store', [ReplacementStaffController::class, 'store'])->name('store');
+    Route::get('/{replacement_staff}/edit', [ReplacementStaffController::class, 'edit'])->name('edit');
     Route::prefix('request')->name('request.')->group(function(){
         Route::get('/', [ReplacementStaffController::class, 'requestIndex'])->name('index');
         Route::get('/create', [ReplacementStaffController::class, 'requestCreate'])->name('create');
