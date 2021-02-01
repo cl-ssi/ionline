@@ -14,6 +14,7 @@
             <th>Nombre</th>
             <th>Run</th>
             <th>1° dósis</th>
+            <th></th>
             <th>2° dósis</th>
             <th></th>
         </tr>
@@ -29,6 +30,7 @@
                 <td style="width: 110px;">
                     {{ $vaccination->first_dose->format('d-m-Y') ?? '' }} {{ $vaccination->first_dose->format('H:i') ?? '' }}
                 </td>
+                <td><i class="fas fa-eye" {!! ($vaccination->personal_email)? 'style="color:#007bff;"' : 'style="color:#cccccc;"' !!}></i></td>
                 <td style="width: 110px;"></td>
                 <td> <a href="{{ route('vaccination.edit', $vaccination) }}"> <i class="fas fa-edit"></i> </a> </td>
             </tr>

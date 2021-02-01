@@ -76,7 +76,7 @@
         <fieldset class="form-group col-3">
             <label for="for_second_dose">Agenda Segunda dósis</label>
             <input type="datetime-local" class="form-control" name="second_dose"
-                id="for_second_dose" >
+                id="for_second_dose">
         </fieldset>
 
     </div>
