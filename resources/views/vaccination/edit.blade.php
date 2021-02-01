@@ -65,8 +65,8 @@
             <label for="for_inform_method">Informado a través</label>
             <select name="inform_method" id="for_inform_method" class="form-control">
                 <option value=""></option>
-                <option value="1" {{ ($vaccination->inform_method == 1)? 'selected':'' }}>Teléfono</option>
-                <option value="0" {{ ($vaccination->inform_method == 0)? 'selected':'' }}>Clave Única</option>
+                <option value="1" {{ ($vaccination->inform_method == 1)? 'selected':'' }}>Clave Única</option>
+                <option value="2" {{ ($vaccination->inform_method == 2)? 'selected':'' }}>Teléfono</option>
             </select>
         </fieldset>
 
