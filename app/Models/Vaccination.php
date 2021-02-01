@@ -57,4 +57,16 @@ class Vaccination extends Model implements Auditable
               }
           //dd($query->get()->toArray);
     }
+
+    public function getAliasEstabAttribute(){
+        switch ($this->establishment_id) {
+            case 1:
+                return 'HETG';
+                break;
+
+            case 38:
+                return 'DSSI';
+                break;
+        }
+    }
 }
