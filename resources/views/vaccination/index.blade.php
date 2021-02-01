@@ -21,12 +21,13 @@
     </div>
 </div>
 
+<div class="table-responsive">
 <table class="table table-sm table-bordered small">
     <thead>
         <tr>
             <th>Id</th>
             <th>Estab</th>
-            <th>Unidad Organ.</th>
+            <th class="d-none d-md-table-cell">Unidad Organ.</th>
             <th></th>
             <th>Nombre</th>
             <th>Run</th>
@@ -40,7 +41,7 @@
             <tr>
                 <td class="small">{{ $vaccination->id }}</td>
                 <td>{{ $vaccination->aliasEstab }}</td>
-                <td style="width: 100px;">{{ $vaccination->organizationalUnit }}</td>
+                <td class="d-none d-md-table-cell" style="width: 100px;">{{ $vaccination->organizationalUnit }}</td>
                 <td>
                     @switch($vaccination->inform_method)
                         @case(1)
@@ -57,16 +58,16 @@
                 </td>
                 <td nowrap>{{ $vaccination->fullName() }}</td>
                 <td nowrap class="text-right">{{ $vaccination->run }}-{{ $vaccination->dv }}</td>
-                <td style="width: 110px;">
+                <td nowrap>
                     {{ $vaccination->first_dose->format('d-m-Y') ?? '' }} {{ $vaccination->first_dose->format('H:i') ?? '' }}
                 </td>
-                <td style="width: 110px;"></td>
+                <td nowrap></td>
                 <td> <a href="{{ route('vaccination.edit', $vaccination) }}"> <i class="fas fa-edit"></i> </a> </td>
             </tr>
         @endforeach
     </tbody>
 </table>
-
+</div>
 {{ $vaccinations->appends(request()->query())->links() }}
 
 @endsection
