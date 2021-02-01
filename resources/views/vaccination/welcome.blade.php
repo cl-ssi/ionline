@@ -12,7 +12,7 @@
         Directores de Establecimiento.</li>
     <li>El lugar de vacunación es el domo en el estacionamiento atrás del HETG.</li>
     <li>Todos deben presentar su credencial al momento de su vacunación.</li>
-    <li>Si no apareces registrado y quieres vacunarte:
+    <li>Si no te registrasste y quieres vacunarte, tienes plazo hasta el 08-02-2021:
         <ul>
             <li>Funcionarios del HETG deben tomar contacto con su jefatura o
                 supervisor/a de servicio y/o el Encargado de Vacunas del HETG
@@ -23,6 +23,8 @@
                 <a href="mailto:vanessa.sepulvedam@redsalud.gov.cl">vanessa.sepulvedam@redsalud.gov.cl</a></li>
         </ul>
     </li>
+    <li>Si te registraste y no apareces, entonces ponte en contacto con OIRS
+        (los datos aparecen al final) para corroborar tu inscripción.</li>
     <li>Si tienes dificultades respecto al día y hora asignado, toma contacto con tu
         jefatura o supervisor/a de servicio, si eres de la DSSI con Calidad de Vida.</li>
     <li>Debes considerar que posterior a la vacunación debes quedarte

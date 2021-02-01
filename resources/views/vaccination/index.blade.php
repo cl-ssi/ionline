@@ -47,7 +47,18 @@
                     {{ $vaccination->first_dose->format('d-m-Y') ?? '' }} {{ $vaccination->first_dose->format('H:i') ?? '' }}
                 </td>
                 <td>
-                    <i class="fas fa-eye" {!! ($vaccination->personal_email or $vaccination->inform_method)? 'style="color:#007bff;"' : 'style="color:#cccccc;"' !!}></i>
+                    @switch($vaccination->inform_method)
+                        @case(1)
+                            <i class="fas fa-eye" style="color:#007bff;"></i>
+                            @break
+
+                        @case(2)
+                            <i class="fas fa-phone" style="color:#007bff;"></i>
+                            @break
+
+                        @default
+                            <i class="fas fa-eye" style="color:#cccccc;"></i>
+                    @endswitch
                 </td>
                 <td style="width: 110px;"></td>
                 <td> <a href="{{ route('vaccination.edit', $vaccination) }}"> <i class="fas fa-edit"></i> </a> </td>
