@@ -14,10 +14,11 @@ class Vaccination extends Model
      * @var array
      */
     protected $fillable = [
+        'run','dv','name','fathers_family','mothers_family','email','personal_email',
         'establishment_id','organizational_unit_id','organizationalUnit',
-        'name','fathers_family','mothers_family','email','personal_email',
-        'run','dv','first_dose','first_dose_at','second_dose','second_dose_at',
-        'fd_observation','sd_observation',
+        'inform_method',
+        'first_dose','first_dose_at','second_dose','second_dose_at',
+        'fd_observation','sd_observation'
     ];
 
     protected $dates = [

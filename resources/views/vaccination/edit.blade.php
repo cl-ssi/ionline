@@ -61,6 +61,14 @@
                 id="for_ortanizationalUnit" placeholder="unidad/depto" value="{{ $vaccination->organizationalUnit }}">
         </fieldset>
 
+        <fieldset class="form-group col-md-3 col-12">
+            <label for="for_inform_method">Informado a través</label>
+            <select name="inform_method" id="for_inform_method" class="form-control">
+                <option value=""></option>
+                <option value="1" {{ ($vaccination->inform_method == 1)? 'selected':'' }}>Teléfono</option>
+            </select>
+        </fieldset>
+
         {{-- <fieldset class="form-group col-3">
             <label for="for_organizational_unit_id">Unidad Organizacional</label>
             <select name="organizational_unit_id" id="for_organizational_unit_id" class="form-control">

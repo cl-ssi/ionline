@@ -25,6 +25,7 @@ class CreateVaccinationsTable extends Migration
             $table->unsignedInteger('establishment_id');
             $table->foreignId('organizational_unit_id')->nullable();
             $table->string('organizationalUnit')->nullable();
+            $table->boolean('inform_method')->nullable();
 
             $table->datetime('first_dose')->nullable();
             $table->datetime('first_dose_at')->nullable();
