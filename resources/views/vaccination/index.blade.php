@@ -19,7 +19,7 @@
             </div>
         </form>
     </div>
-</div>
+</div
 
 <div class="table-responsive">
 <table class="table table-sm table-bordered small">
@@ -57,7 +57,9 @@
                     @endswitch
                 </td>
                 <td nowrap>{{ $vaccination->fullName() }}</td>
-                <td nowrap class="text-right">{{ $vaccination->run }}-{{ $vaccination->dv }}</td>
+                <td nowrap class="text-right" {!! Helper::validaRut($vaccination->run.'-'.$vaccination->dv) ? '' : 'style="color:red;"' !!}>
+                    {{ $vaccination->run }}-{{ $vaccination->dv }}
+                </td>
                 <td nowrap>
                     {{ $vaccination->first_dose->format('d-m-Y') ?? '' }} {{ $vaccination->first_dose->format('H:i') ?? '' }}
                 </td>
