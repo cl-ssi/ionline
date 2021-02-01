@@ -6,7 +6,10 @@
 <h3 class="mb-3">Información sobre vacunación para funcionarios</h3>
 
 <ul>
-    <li>Esta dirigida solo a funcionarios del HETG y de la DSSI (no red de salud mental extrahospitalaria).</li>
+    <li>Esta dirigida solo a funcionarios del HETG y de la DSSI.</li>
+    <li>Los funcionarios de la red de salud mental extrahospitalaria tendrán
+        otros puntos de vacunación los que serán informados por sus
+        Directores de Establecimiento.</li>
     <li>El lugar de vacunación es el domo en el estacionamiento atrás del HETG.</li>
     <li>Todos deben presentar su credencial al momento de su vacunación.</li>
     <li>Si no apareces registrado y quieres vacunarte:
@@ -42,7 +45,9 @@
 
 
 <div class="alert alert-info mt-3" role="alert">
-  Si no tienes clave única, contáctate con OIRS de tu establecimeinto y
+  Si no tienes clave única, contáctate con OIRS al correo
+  <a href="mailto:mireyasoto.f@redsalud.gob.cl">mireyasoto.f@redsalud.gob.cl</a>
+  o llamando a los anexos 579501 / 579532 y
   solicita información sobre tu fecha y hora de vacunación.
 </div>
 
