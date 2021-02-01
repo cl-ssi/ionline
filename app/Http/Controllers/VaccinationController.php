@@ -64,10 +64,12 @@ class VaccinationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $vaccinations = Vaccination::all();
-        return view('vaccination.index', compact('vaccinations'));
+
+        //$vaccinations = Vaccination::all();
+        $vaccinations = Vaccination::search($request->input('search'))->paginate(2500);
+        return view('vaccination.index', compact('vaccinations', 'request'));
     }
 
     /**
