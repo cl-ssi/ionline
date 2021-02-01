@@ -352,7 +352,6 @@
       </li>
     </ul>
   </div>
-  <br>
 
   <div class="row">
 
@@ -393,6 +392,29 @@
 
   </div>
 
+  <!-- solo el creador de la solicitud puede editar  -->
+  @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  @else
+    <!-- si existe una firma, no se deja modificar solicitud -->
+    @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+      <div class="alert alert-warning" role="alert">
+        No se puede modificar hoja de ruta ya que existen visaciones realizadas.
+      </div>
+      <button type="submit" class="btn btn-primary" disabled>Guardar</button>
+    @else
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    @endif
+  @endif
+
+  <br><br>
+
+  </form>
+
+  @canany(['Service Request: additional data'])
+  <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+  @csrf
+  @method('PUT')
 
   <div class="card">
     <div class="card-header">
@@ -525,29 +547,28 @@
 
         </div>
 
+        <!-- solo el creador de la solicitud puede editar  -->
+        @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        @else
+          <!-- si existe una firma, no se deja modificar solicitud -->
+          @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+            <div class="alert alert-warning" role="alert">
+              No se puede modificar hoja de ruta ya que existen visaciones realizadas.
+            </div>
+            <button type="submit" class="btn btn-primary" disabled>Guardar</button>
+          @else
+            <button type="submit" class="btn btn-primary">Guardar</button>
+          @endif
+        @endif
+
       </div>
+
   </div>
 
   <br>
-  <!-- solo el creador de la solicitud puede editar  -->
-  @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-    <button type="submit" class="btn btn-primary">Guardar</button>
-  @else
-    <!-- si existe una firma, no se deja modificar solicitud -->
-    @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-      <div class="alert alert-warning" role="alert">
-        No se puede modificar hoja de ruta ya que existen visaciones realizadas.
-      </div>
-      <button type="submit" class="btn btn-primary" disabled>Guardar</button>
-    @else
-      <button type="submit" class="btn btn-primary">Guardar</button>
-    @endif
-  @endif
-
-  <br><br>
-
-</form>
-
+  </form>
+  @endcan
 
 
 <form method="POST" action="{{ route('rrhh.signature_flow.store') }}" enctype="multipart/form-data">
@@ -592,14 +613,12 @@
 
 
       <div class="row">
-        <fieldset class="form-group col-4">
+        <fieldset class="form-group col-3">
             <label for="for_name">Tipo</label>
-
             <input type="text" class="form-control" name="employee" value="{{$employee}}" readonly="readonly">
             <input type="hidden" class="form-control" name="service_request_id" value="{{$serviceRequest->id}}">
-
         </fieldset>
-        <fieldset class="form-group col-4">
+        <fieldset class="form-group col-3">
             <label for="for_name">Estado Solicitud</label>
             <select name="status" class="form-control">
               <option value="">Seleccionar una opción</option>
@@ -607,14 +626,17 @@
               <option value="0">Rechazada</option>
             </select>
         </fieldset>
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-4">
             <label for="for_observation">Observación</label>
             <input type="text" class="form-control" id="for_observation" placeholder="" name="observation">
         </fieldset>
-
+        <fieldset class="form-group col">
+            <label for="for_button"><br></label>
+            <button type="submit" id="for_button" class="form-control btn btn-primary">Guardar</button>
+        </fieldset>
       </div>
 
-      <button type="submit" class="btn btn-primary">Guardar</button>
+
 
     </div>
 </div>
