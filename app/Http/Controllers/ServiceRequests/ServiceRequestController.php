@@ -225,46 +225,9 @@ class ServiceRequestController extends Controller
    */
   public function update(Request $request, ServiceRequest $serviceRequest)
   {
-    dd($serviceRequest->SignatureFlows->whereNull('status'));
       //se guarda información de la solicitud
       $serviceRequest->fill($request->all());
       $serviceRequest->save();
-
-      // //si seleccionó una opción, se agrega visto bueno.
-      // if ($request->status != null) {
-      //
-      //   //saber la organizationalUnit que tengo a cargo
-      //   $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
-      //   $employee = Auth::user()->position;
-      //   if ($authorities!=null) {
-      //     $employee = $authorities[0]->position;// . " - " . $authorities[0]->organizationalUnit->name;
-      //     $ou_id = $authorities[0]->organizational_unit_id;
-      //   }else{
-      //     $ou_id = Auth::user()->organizational_unit_id;
-      //   }
-      //
-      //   // $SignatureFlow = new SignatureFlow($request->All());
-      //   // $SignatureFlow->user_id = Auth::id();
-      //   // $SignatureFlow->ou_id = $ou_id;
-      //   // $SignatureFlow->service_request_id = $serviceRequest->id;
-      //   // $SignatureFlow->type = "visador";
-      //   // $SignatureFlow->employee = $employee;
-      //   // $SignatureFlow->save();
-      //
-      //   //si seleccionó una opción, se agrega visto bueno.
-      //   if ($request->status != null) {
-      //
-      //     $SignatureFlow = SignatureFlow::where('responsable_id',Auth::user()->id)
-      //                                   ->where('service_request_id',$serviceRequest->id)
-      //                                   ->whereNull('status')
-      //                                   ->first();
-      //
-      //     $SignatureFlow->employee = $request->employee;
-      //     $SignatureFlow->signature_date = Carbon::now();
-      //     $SignatureFlow->status = $request->status;
-      //     $SignatureFlow->save();
-      //  }
-      // }
 
       //guarda control de turnos
       if ($request->shift_date!=null) {
