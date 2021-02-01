@@ -53,6 +53,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
     Route::get('/', [ReplacementStaffController::class, 'index'])->name('index');
     Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
+    Route::post('/store', [ReplacementStaffController::class, 'store'])->name('store');
+    Route::get('/{replacement_staff}/edit', [ReplacementStaffController::class, 'edit'])->name('edit');
     Route::prefix('request')->name('request.')->group(function(){
         Route::get('/', [ReplacementStaffController::class, 'requestIndex'])->name('index');
         Route::get('/create', [ReplacementStaffController::class, 'requestCreate'])->name('create');
@@ -743,11 +745,11 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 /* Nuevas rutas, Laravel 8.0. */
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
-    Route::post('/', [SuitabilityController::class, 'store'])->name('store');    
+    Route::post('/', [SuitabilityController::class, 'store'])->name('store');
     Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::get('/validaterequest', [SuitabilityController::class, 'validaterequest'])->name('validaterequest');
     Route::post('/validaterun', [SuitabilityController::class, 'validaterun'])->name('validaterun');
-    Route::get('/create/{run?}', [SuitabilityController::class, 'create'])->name('create');    
+    Route::get('/create/{run?}', [SuitabilityController::class, 'create'])->name('create');
     Route::get('/welcome', [TestsController::class, 'welcome'])->name('welcome');
     Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
     Route::post('/test', [TestsController::class, 'store'])->name('test.store');
