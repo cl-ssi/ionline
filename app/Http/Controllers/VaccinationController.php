@@ -68,7 +68,7 @@ class VaccinationController extends Controller
     {
 
         //$vaccinations = Vaccination::all();
-        $vaccinations = Vaccination::search($request->input('search'))->paginate(2500);
+        $vaccinations = Vaccination::search($request->input('search'))->paginate(1000);
         return view('vaccination.index', compact('vaccinations', 'request'));
     }
 
