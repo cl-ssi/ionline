@@ -65,8 +65,8 @@
     <fieldset class="form-group col">
 				<label for="for_users">Responsable</label>
 				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == $serviceRequest->where('responsable_id',$user->id)->count() > 0) selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+          @foreach($users as $key => $user)
+						<option value="{{$user->id}}" @if($user->id == $serviceRequest->responsable_id) selected @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
 		</fieldset>
@@ -76,7 +76,7 @@
 				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}" @if($serviceRequest->SignatureFlows->where('responsable_id',$user->id)->where('type','visador')
-                                                             ->whereNotIn('responsable_id',[9882506,13866194,15685508,Auth::user()->id])->count() > 0) selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+                                                             ->whereNotIn('responsable_id',[9882506,13866194,15685508,Auth::user()->id])->count() > 0) selected @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
 		</fieldset>
@@ -85,7 +85,7 @@
 				<label for="for_users">Jefe Finanzas</label>
 				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "13866194") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == "13866194") selected  @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
 				<input type="hidden" name="users[]" value="13866194" />
@@ -95,7 +95,7 @@
 				<label for="for_users">Subdirector Médico</label>
 				<select name="users[]" id="subdirector_medico" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "9882506") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == "9882506") selected  @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 					<!-- <option value="12345678">Pedro Iriondo</option> -->
 				</select>
@@ -107,7 +107,7 @@
 				<label for="for_users">Director</label>
 				<select name="users[]" id="director" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "14101085") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == "14101085") selected  @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
 				<input type="hidden" name="users[]" value="14101085" />
