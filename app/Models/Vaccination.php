@@ -43,19 +43,17 @@ class Vaccination extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
-          if ($search) {
-                $array_search = explode(' ', $search);
-                foreach($array_search as $word){
-                    $query->where(function($query) use($word){
-                          $query->where('name', 'LIKE', '%'.$word.'%')
-                          ->orwhere('fathers_family','LIKE', '%'.$word.'%')
-                          ->orwhere('mothers_family','LIKE', '%'.$word.'%')
-                          ->orwhere('run','LIKE', '%'.$word.'%');
-                          //->orwhere('other_identification','LIKE', '%'.$word.'%');
-                    });
-                }
-              }
-          //dd($query->get()->toArray);
+        if ($search) {
+            $array_search = explode(' ', $search);
+            foreach($array_search as $word){
+                $query->where(function($query) use($word){
+                    $query->where('name', 'LIKE', '%'.$word.'%')
+                        ->orwhere('fathers_family','LIKE', '%'.$word.'%')
+                        ->orwhere('mothers_family','LIKE', '%'.$word.'%')
+                        ->orwhere('run','LIKE', '%'.$word.'%');
+                });
+            }
+        }
     }
 
     public function getAliasEstabAttribute(){
