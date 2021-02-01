@@ -34,15 +34,15 @@
     <h5 class="mb-3">Horario Vacunación</h5>
 
     <p>
-        Hola {{ $vaccination->fullName() }} la primera dósis de la
-        <strong>VACUNA CORONAVAC LABORATORIO SINOVAC LIFE SCIENCE®</strong> contra
+        Hola <strong>{{ $vaccination->fullName() }}</strong> la primera dósis de la
+        <strong>VACUNA CORONAVAC del LABORATORIO SINOVAC LIFE SCIENCE®</strong> contra
         <strong>CONTRA SARS-COV-2</strong> te toca el día
-        <strong>{{ $vaccination->first_dose->format('d-m-Y \a \l\a\s H:i') }}.</strong>
+        <strong>{{ $vaccination->first_dose->format('d-m-Y \a \l\a\s H:i') }} horas.</strong>
     </p>
 
 
 <ul>
-    <li>EL lugar de vacunación es el domo en el estacionamiento atrás del HETG.</li>
+    <li>El lugar de vacunación es el domo en el estacionamiento atrás del HETG.</li>
     <li>Todos deben presentar su credencial al momento de su vacunación.</li>
     <li>Si tienes dificultades respecto al día y hora asignado, toma contacto con tu
         jefatura o supervisor/a de servicio, si eres de la DSSI con Calidad de Vida.</li>
