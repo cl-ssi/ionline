@@ -255,6 +255,18 @@
 		</fieldset>
 
     <fieldset class="form-group col">
+		    <label for="for_weekly_hours">Hrs.Semanales</label>
+		    <select name="weekly_hours" class="form-control" id="for_weekly_hours" required>
+					<option value=""></option>
+          <option value="44" @if($serviceRequest->weekly_hours == 44) selected @endif>44</option>
+          <option value="33" @if($serviceRequest->weekly_hours == 33) selected @endif>33</option>
+					<option value="28" @if($serviceRequest->weekly_hours == 28) selected @endif>28</option>
+					<option value="22" @if($serviceRequest->weekly_hours == 22) selected @endif>22</option>
+          <option value="11" @if($serviceRequest->weekly_hours == 11) selected @endif>11</option>
+        </select>
+		</fieldset>
+
+    <fieldset class="form-group col">
         <label for="for_establishment_id">Establecimiento</label>
         <select name="establishment_id" class="form-control" required>
           <option value=""></option>
@@ -502,6 +514,11 @@
                 <option value="Fonoaudiologo" @if($serviceRequest->rrhh_team == "Fonoaudiologo") selected @endif>Fonoaudiologo</option>
               </select>
           </fieldset>
+
+          <fieldset class="form-group col">
+					    <label for="for_net_amount">Monto Neto</label>
+              <input type="text" class="form-control" name="net_amount" value="{{$serviceRequest->net_amount}}">
+					</fieldset>
 
           <fieldset class="form-group col">
 					    <label for="for_gross_amount">Monto Bruto</label>

@@ -278,6 +278,18 @@
 		</fieldset>
 
 		<fieldset class="form-group col">
+		    <label for="for_weekly_hours">Hrs.Semanales</label>
+		    <select name="weekly_hours" class="form-control" id="for_weekly_hours" required>
+					<option value=""></option>
+          <option value="44">44</option>
+          <option value="33">33</option>
+					<option value="28">28</option>
+					<option value="22">22</option>
+          <option value="11">11</option>
+        </select>
+		</fieldset>
+
+		<fieldset class="form-group col">
         <label for="for_establishment_id">Establecimiento</label>
         <select name="establishment_id" class="form-control" required>
           <option value=""></option>
