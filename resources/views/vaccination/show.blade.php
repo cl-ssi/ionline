@@ -6,25 +6,54 @@
 
 @if(empty($vaccination->run))
 
-    <h2>No está registrado en la nómina de vacunación, por favor contactar a su jefe directo.</h2>
+    <div class="alert alert-danger">
+        <h4 class="alert-heading">No está registrado en la nómina de vacunación,
+            por favor contácte a su jefe directo.</h4>
 
+    </div>
+
+    <div class="alert alert-info mt-3" role="alert">
+      NOTA: Si trabajas en HETG o DSSI y no alcanzaste a
+      inscribirte indicado tu voluntad de vacunación o cambiaste de opinión y
+      ahora si quieres vacunarte, debes indicarselo a tu jefatura.
+      ¡ Tenemos pensado un día para los arrepentidos ¡
+    </div>
+
+    <div class="alert alert-info mt-3" role="alert">
+        <ul>
+            <li>Funcionarios del HETG deben tomar contacto con su jefatura o
+                supervisor/a de servicio y/o el Encargado de Vacunas del HETG
+                <a href="mailto:coordinacionvacunashetg@gmail.com">coordinacionvacunashetg@gmail.com</a></li>
+            <li>Funcionarios de la DSSI deben tomar contacto con la jefatura
+                de Calidad de Vida del SSI, Vanessa Sepúlveda, anexo
+                576443 - desde teléfonos externos al 572406443
+                <a href="mailto:vanessa.sepulvedam@redsalud.gov.cl">vanessa.sepulvedam@redsalud.gov.cl</a></li>
+        </ul>
+    </div>
 @else
     <h5 class="mb-3">Horario Vacunación</h5>
 
     <p>
-        Hola {{ $vaccination->fullName() }} la primera dósis de la
-        <strong>VACUNA CORONAVAC LABORATORIO SINOVAC LIFE SCIENCE®</strong> contra
+        Hola <strong>{{ $vaccination->fullName() }}</strong> la primera dósis de la
+        <strong>VACUNA CORONAVAC del LABORATORIO SINOVAC LIFE SCIENCE®</strong> contra
         <strong>CONTRA SARS-COV-2</strong> te toca el día
-        <strong>{{ $vaccination->first_dose }}</strong>
+        <strong>{{ $vaccination->first_dose->format('d-m-Y \a \l\a\s H:i') }} horas.</strong>
     </p>
 
 
 <ul>
-    <li>EL lugar de vacunación es el domo en el estacionamiento atrás del HETG</li>
-    <li>Debes considerar que posterior a la vacunación debes quedarte 30 minutos en el lugar para observación post vacunación.</li>
-    <li>De presentar  una reacción post vacunación leve a moderada, preséntate en el lugar de vacunación con el Enfermera de Salud del trabajador para tu notificación al ISP y seguimiento por parte de la unidad de salud del trabajador.  Si es algo importante dirigente a un sistema de urgencia.</li>
-    <li>Si el día y hora asignado te traen dificultades toma contacto con tu
-        jefatura o supervisor/a de servicio</li>
+    <li>El lugar de vacunación es el domo en el estacionamiento atrás del HETG.</li>
+    <li>Todos deben presentar su credencial al momento de su vacunación.</li>
+    <li>Si tienes dificultades respecto al día y hora asignado, toma contacto con tu
+        jefatura o supervisor/a de servicio, si eres de la DSSI con Calidad de Vida.</li>
+    <li>Debes considerar que posterior a la vacunación debes quedarte
+        30 minutos en el lugar para observación post vacunación.</li>
+    <li>De presentar una reacción post vacunación leve a moderada,
+        preséntate en el lugar de vacunación con el Enfermera de Salud del Trabajador
+        (María Edith Vílchez) para tu notificación al ISP y seguimiento
+        por parte de la unidad de salud.
+        Si es algo importante dirigente a un sistema de urgencia,
+        donde de igual manera deben reportar el evento.</li>
 </ul>
 
 
