@@ -539,12 +539,12 @@
         No se puede modificar hoja de ruta ya que existen visaciones realizadas.
       </div>
       <button type="submit" class="btn btn-primary" disabled>Guardar</button>
-      <br><br>
-
     @else
       <button type="submit" class="btn btn-primary">Guardar</button>
     @endif
   @endif
+
+  <br><br>
 
 </form>
 
