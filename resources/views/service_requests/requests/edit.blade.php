@@ -6,13 +6,6 @@
 
 <h3>Solicitud de Contratación de Servicios</h3>
 
-  <!-- @if($serviceRequest->SignatureFlows->where('responsable_id',Auth::user()->id)->whereNotNull('status')->count() > 0)
-    <form>
-  @else
-    @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-      <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
-    @endif
-  @endif -->
 
   @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
     <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
@@ -25,116 +18,8 @@
     @endif
   @endif
 
-
   @csrf
   @method('PUT')
-
-  <div class="card">
-    <div class="card-header">
-      Aprobaciones de Solicitud
-    </div>
-      <div class="card-body">
-
-        <table class="table table-sm table-bordered" style='font-size:65%' >
-        	<thead>
-        		<tr>
-        			<th scope="col">Fecha</th>
-              <th scope="col">U.Organizacional</th>
-              <th scope="col">Cargo</th>
-              <th scope="col">Usuario</th>
-              <th scope="col">Tipo</th>
-              <th scope="col">Estado</th>
-        		</tr>
-        	</thead>
-        	<tbody>
-            @foreach($serviceRequest->SignatureFlows as $key => $SignatureFlow)
-            @if($SignatureFlow->status === null)
-              <tr class="bg-light">
-            @elseif($SignatureFlow->status === 0)
-              <tr class="bg-danger">
-            @elseif($SignatureFlow->status === 1)
-              <tr>
-            @endif
-               <td>{{ $SignatureFlow->signature_date}}</td>
-               <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
-               <td>{{ $SignatureFlow->employee }}</td>
-               <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
-               <td>{{ $SignatureFlow->type }}</td>
-               <td>@if($SignatureFlow->status === null)  @elseif($SignatureFlow->status === 1) Aceptada @elseif($SignatureFlow->status === 0) Rechazada @endif</td>
-             </tr>
-           @endforeach
-        	</tbody>
-        </table>
-
-
-        <div class="row">
-          <fieldset class="form-group col-4">
-					    <label for="for_name">Tipo</label>
-
-              <!-- @if($serviceRequest->SignatureFlows->count() == 0)
-                <input type="text" class="form-control" name="employee" value="Supervisor de servicio" readonly="readonly">
-              @elseif($serviceRequest->SignatureFlows->count() == 1)
-                <input type="text" class="form-control" name="employee" value="Jefatura de servicio" readonly="readonly">
-              @elseif($serviceRequest->SignatureFlows->count() == 2)
-                <input type="text" class="form-control" name="employee" value="Subdirector" readonly="readonly">
-              @elseif($serviceRequest->SignatureFlows->count() == 3)
-                <input type="text" class="form-control" name="employee" value="Jefe de finanzas" readonly="readonly">
-              @elseif($serviceRequest->SignatureFlows->count() == 4)
-                <input type="text" class="form-control" name="employee" value="Director" readonly="readonly">
-              @elseif($serviceRequest->SignatureFlows->count() == 5)
-                <input type="text" class="form-control" name="employee" value="Jefe Depto. Gestión de las Personas" readonly="readonly">
-              @elseif($serviceRequest->SignatureFlows->count() == 6)
-                <input type="text" class="form-control" name="employee" value="Subdirector RR.HH" readonly="readonly">
-              @endif -->
-
-              <input type="text" class="form-control" name="employee" value="{{$employee}}" readonly="readonly">
-
-					</fieldset>
-          <fieldset class="form-group col-4">
-              <label for="for_name">Estado Solicitud</label>
-              <select name="status" class="form-control">
-                <option value="">Seleccionar una opción</option>
-                <option value="1">Aceptada</option>
-                <option value="0">Rechazada</option>
-              </select>
-          </fieldset>
-          <fieldset class="form-group col">
-              <label for="for_observation">Observación</label>
-              <input type="text" class="form-control" id="for_observation" placeholder="" name="observation">
-          </fieldset>
-
-        </div>
-
-        <!-- @if($serviceRequest->SignatureFlows->count() == 3)
-          <div class="row">
-
-            <fieldset class="form-group col">
-                <label for="for_budget_cdp_number">N°CDP</label>
-                <input type="text" class="form-control" id="for_budget_cdp_number" placeholder="" name="budget_cdp_number">
-            </fieldset>
-
-            <fieldset class="form-group col">
-                <label for="for_budget_item">Item Presupuestario</label>
-                <input type="text" class="form-control" id="for_budget_item" placeholder="" name="budget_item">
-            </fieldset>
-
-            <fieldset class="form-group col">
-                <label for="for_budget_amount">Monto ($)</label>
-                <input type="number" class="form-control" id="for_budget_amount" placeholder="" name="budget_amount">
-            </fieldset>
-
-            <fieldset class="form-group col">
-                <label for="for_budget_date">Fecha</label>
-                <input type="date" class="form-control" id="for_budget_date" placeholder="" name="budget_date">
-            </fieldset>
-
-          </div>
-        @endif -->
-
-      </div>
-  </div>
-
-  <br>
 
 	<div class="row">
 
@@ -191,9 +76,19 @@
 				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}" @if($serviceRequest->SignatureFlows->where('responsable_id',$user->id)->where('type','visador')
-                                                             ->whereNotIn('responsable_id',[9882506,9994426,15685508,Auth::user()->id])->count() > 0) selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+                                                             ->whereNotIn('responsable_id',[9882506,13866194,15685508,Auth::user()->id])->count() > 0) selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
+		</fieldset>
+
+    <fieldset class="form-group col">
+				<label for="for_users">Jefe Finanzas</label>
+				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+					@foreach($users as $key => $user)
+						<option value="{{$user->id}}" @if($user->id == "13866194") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+					@endforeach
+				</select>
+				<input type="hidden" name="users[]" value="13866194" />
 		</fieldset>
 
 		<fieldset class="form-group col">
@@ -216,16 +111,6 @@
 					@endforeach
 				</select>
 				<input type="hidden" name="users[]" value="14101085" />
-		</fieldset>
-
-		<fieldset class="form-group col">
-				<label for="for_users">Jefe Finanzas</label>
-				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "9994426") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-				</select>
-				<input type="hidden" name="users[]" value="9994426" />
 		</fieldset>
 
 		<fieldset class="form-group col">
@@ -650,15 +535,89 @@
   @else
     <!-- si existe una firma, no se deja modificar solicitud -->
     @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-      <button type="submit" class="btn btn-primary" disabled>Guardar</button>
-      <br><br>
       <div class="alert alert-warning" role="alert">
         No se puede modificar hoja de ruta ya que existen visaciones realizadas.
       </div>
+      <button type="submit" class="btn btn-primary" disabled>Guardar</button>
+      <br><br>
+
     @else
       <button type="submit" class="btn btn-primary">Guardar</button>
     @endif
   @endif
+
+</form>
+
+
+
+<form method="POST" action="{{ route('rrhh.signature_flow.store') }}" enctype="multipart/form-data">
+@csrf
+
+<div class="card">
+  <div class="card-header">
+    Aprobaciones de Solicitud
+  </div>
+    <div class="card-body">
+
+      <table class="table table-sm table-bordered" style='font-size:65%' >
+        <thead>
+          <tr>
+            <th scope="col">Fecha</th>
+            <th scope="col">U.Organizacional</th>
+            <th scope="col">Cargo</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
+          @if($SignatureFlow->status === null)
+            <tr class="bg-light">
+          @elseif($SignatureFlow->status === 0)
+            <tr class="bg-danger">
+          @elseif($SignatureFlow->status === 1)
+            <tr>
+          @endif
+             <td>{{ $SignatureFlow->signature_date}}</td>
+             <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
+             <td>{{ $SignatureFlow->employee }}</td>
+             <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
+             <td>{{ $SignatureFlow->type }}</td>
+             <td>@if($SignatureFlow->status === null)  @elseif($SignatureFlow->status === 1) Aceptada @elseif($SignatureFlow->status === 0) Rechazada @endif</td>
+           </tr>
+         @endforeach
+        </tbody>
+      </table>
+
+
+      <div class="row">
+        <fieldset class="form-group col-4">
+            <label for="for_name">Tipo</label>
+
+            <input type="text" class="form-control" name="employee" value="{{$employee}}" readonly="readonly">
+            <input type="hidden" class="form-control" name="service_request_id" value="{{$serviceRequest->id}}">
+
+        </fieldset>
+        <fieldset class="form-group col-4">
+            <label for="for_name">Estado Solicitud</label>
+            <select name="status" class="form-control">
+              <option value="">Seleccionar una opción</option>
+              <option value="1">Aceptada</option>
+              <option value="0">Rechazada</option>
+            </select>
+        </fieldset>
+        <fieldset class="form-group col">
+            <label for="for_observation">Observación</label>
+            <input type="text" class="form-control" id="for_observation" placeholder="" name="observation">
+        </fieldset>
+
+      </div>
+
+      <button type="submit" class="btn btn-primary">Guardar</button>
+
+    </div>
+</div>
 
 </form>
 
