@@ -3,13 +3,16 @@
 @section('title', 'Reporte de vacunados')
 
 @section('content')
+
+@include('vaccination.partials.nav')
+
 <h3 class="mb-3">Reporte de vacunados</h3>
 
 <table class="table table-sm table-bordered">
     <tr>
         <th>Total de funcionarios a vacunar</th>
         <td class="text-right">{{ $report['total'] }}</td>
-        <td class="text-right">100%</td>
+        <td class="text-right"></td>
     </tr>
     <tr>
         <th>Informados a través de clave única</th>
