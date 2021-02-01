@@ -183,4 +183,51 @@ class VaccinationController extends Controller
 
         return view('vaccination.report', compact('report'));
     }
+
+    public function export(){
+
+        $headers = array(
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=listado_vacuna_sarscov2.csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        );
+
+        $filas = Vaccination::all();
+
+        $columnas = array(
+            'ID',
+            'Establecimiento',
+            'Unidad Organizacional',
+            'Nombre',
+            'A.Paterno',
+            'A.Materno',
+            'RUN',
+            '1° Dosis',
+            '2° Dosis',
+        );
+
+        $callback = function() use ($filas, $columnas)
+        {
+            $file = fopen('php://output', 'w');
+            fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+            fputcsv($file, $columnas,';');
+            foreach($filas as $fila) {
+                fputcsv($file, array(
+                    $fila->id,
+                    $fila->aliasEstab,
+                    $fila->organizationalUnit,
+                    $fila->name,
+                    $fila->fathers_family,
+                    $fila->mothers_family,
+                    $fila->runFormat,
+                    $fila->first_dose,
+                    $fila->second_dose,
+                ),';');
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
+    }
 }

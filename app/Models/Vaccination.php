@@ -67,4 +67,8 @@ class Vaccination extends Model implements Auditable
                 break;
         }
     }
+
+    public function getRunFormatAttribute() {
+        return $this->run.'-'.$this->dv;
+    }
 }
