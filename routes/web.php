@@ -754,6 +754,7 @@ Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::get('/{vaccination}/edit',[VaccinationController::class,'edit'])->name('edit')->middleware('auth');
     Route::put('/{vaccination}',[VaccinationController::class,'update'])->name('update')->middleware('auth');
     Route::get('/report',[VaccinationController::class,'report'])->name('report')->middleware('auth');
+    Route::get('/export',[VaccinationController::class,'export'])->name('export')->middleware('auth');
 });
 
 /* Nuevas rutas, Laravel 8.0. */

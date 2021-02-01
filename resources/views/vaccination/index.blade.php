@@ -51,14 +51,16 @@
                         @case(2)
                             <i class="fas fa-phone" style="color:#007bff;"></i>
                             @break
-
+                        @case(3)
+                            <i class="fas fa-envelope" style="color:#007bff;"></i>
+                            @break
                         @default
                             <i class="fas fa-eye" style="color:#cccccc;"></i>
                     @endswitch
                 </td>
                 <td nowrap>{{ $vaccination->fullName() }}</td>
-                <td nowrap class="text-right" {!! Helper::validaRut($vaccination->run.'-'.$vaccination->dv) ? '' : 'style="color:red;"' !!}>
-                    {{ $vaccination->run }}-{{ $vaccination->dv }}
+                <td nowrap class="text-right" {!! Helper::validaRut($vaccination->runFormat) ? '' : 'style="color:red;"' !!}>
+                    {{ $vaccination->runFormat }}
                 </td>
                 <td nowrap>
                     {{ $vaccination->first_dose->format('d-m-Y') ?? '' }} {{ $vaccination->first_dose->format('H:i') ?? '' }}
