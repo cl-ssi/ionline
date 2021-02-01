@@ -14,6 +14,9 @@
             <th>Total de Puntos</th>
             <th>Hora de Termino de Test</th>
             <th>Ver Test</th>
+            <th>Ver Certificado</th>
+            <th>Descargar PDF</th>
+            <th>Enviar por Mail </th>
         </tr>
     </thead>
     <tbody>
@@ -25,8 +28,19 @@
             <td>{{ $result->total_points ?? '' }}</td>
             <td>{{ $result->created_at ?? '' }}</td>
             <td>
-            <a href="{{ route('suitability.results.show', $result->id) }}" class="btn btn-outline-primary">
-				<span class="fas fa-edit" aria-hidden="true"></span></a>
+                <a href="{{ route('suitability.results.show', $result->id) }}" class="btn btn-outline-primary">
+                    <span class="fas fa-edit" aria-hidden="true"></span></a>
+            </td>
+            <td>
+                <a href="{{ route('suitability.results.certificate', $result->id) }}" class="btn btn-outline-primary">
+                    <span class="fas fa-stamp" aria-hidden="true"></span></a>
+            </td>
+            <td>
+                <a href="{{ route('suitability.results.certificatepdf', $result->id) }}" class="btn btn-outline-primary">
+                    <span class="fas fa-file-pdf" aria-hidden="true"></span></a>
+            </td>
+            <td>
+                
             </td>
         </tr>
         @endforeach

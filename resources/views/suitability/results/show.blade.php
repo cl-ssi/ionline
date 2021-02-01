@@ -3,8 +3,8 @@
 @section('content')
 
 @include('suitability.nav')
-<h3 class="mb-3">Resultado Test de  N° {{ $result->id }}  </h3>
-<h3 class="mb-3">Realizado por {{ $result->user->fullName }}  </h3>
+<h3 class="mb-3">Resultado Test de  N° {{ $result->id }}</h3>
+<h3 class="mb-3">Realizado por {{ $result->user->fullName }} </h3>
 
 
 <p class="mt-5">Total de Puntos: {{ $result->total_points }} Puntos</p>

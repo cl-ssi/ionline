@@ -4,7 +4,12 @@ namespace App\Http\Controllers\ServiceRequests;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\SignatureFlow;
+
+use Illuminate\Support\Facades\Auth;
+use App\Rrhh\Authority;
+use Carbon\Carbon;
 
 class SignatureFlowController extends Controller
 {
@@ -39,11 +44,42 @@ class SignatureFlowController extends Controller
    */
   public function store(Request $request)
   {
-      // $serviceRequest = new ServiceRequest($request->All());
-      // $serviceRequest->save();
-      //
-      // session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido creada.');
-      // return redirect()->route('rrhh.service_requests.index');
+      if ($request->status != null) {
+        //verifica que el proximo usuario corresponde a proximo firmante
+        $serviceRequest = ServiceRequest::find($request->service_request_id);
+        if ($serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->responsable_id != Auth::user()->id) {
+          session()->flash('danger', "Existe otra persona que debe visar este documento antes que usted.");
+          return redirect()->back();
+        }
+
+        //saber la organizationalUnit que tengo a cargo
+        $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
+        $employee = Auth::user()->position;
+        if ($authorities!=null) {
+          $employee = $authorities[0]->position;// . " - " . $authorities[0]->organizationalUnit->name;
+          $ou_id = $authorities[0]->organizational_unit_id;
+        }else{
+          $ou_id = Auth::user()->organizational_unit_id;
+        }
+
+        //si seleccionó una opción, se agrega visto bueno.
+        if ($request->status != null) {
+
+          $SignatureFlow = SignatureFlow::where('responsable_id',Auth::user()->id)
+                                        ->where('service_request_id',$request->service_request_id)
+                                        ->whereNull('status')
+                                        ->first();
+
+          $SignatureFlow->employee = $request->employee;
+          $SignatureFlow->signature_date = Carbon::now();
+          $SignatureFlow->status = $request->status;
+          $SignatureFlow->observation = $request->observation;
+          $SignatureFlow->save();
+       }
+      }
+
+      session()->flash('success', 'Se ha registrado la visación.');
+      return redirect()->route('rrhh.service_requests.index');
   }
 
   /**

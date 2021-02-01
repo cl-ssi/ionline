@@ -80,7 +80,7 @@ class WordTestController extends Controller
         foreach ($quotas as $key => $quota) {
                 $cuotaConvenioLetras = $formatter->toMoney($quota->amount,0, 'pesos','');
                 $arrayQuota[] = array('index' => ($this->ordinal($key+1))
-                                      ,'cuotaDescripcion' => $quota->description
+                                      ,'cuotaDescripcion' => $quota->description . ($key+1 == 1 ? ' del total de los recursos del convenio una vez aprobada la resolución exenta que aprueba el presente instrumento y recibidos los recursos del Ministerio de Salud.' : ' restante del total de recursos y se enviará en el mes de octubre, según resultados obtenidos en la primera evaluación definida en la cláusula anterior. Así también, dependerá de la recepción de dichos recursos desde Ministerio de Salud y existencia de rendición financiera según lo establece la resolución N°30/2015 que fija normas sobre procedimiento de rendición de cuentas de la Contraloría General de la Republica, por parte de la “MUNICIPALIDAD”.')
                                       ,'cuotaMonto' => number_format($quota->amount,0,",",".")
                                       ,'cuotaLetra' => $cuotaConvenioLetras);
              } 

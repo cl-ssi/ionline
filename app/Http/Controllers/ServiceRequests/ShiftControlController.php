@@ -36,10 +36,10 @@ class ShiftControlController extends Controller
      */
     public function store(Request $request)
     {
-        $request->shift_date
-        $request->start_hour
-        $request->end_hour
-        $request->observation
+        // $request->shift_date
+        // $request->start_hour
+        // $request->end_hour
+        // $request->observation
     }
 
     /**

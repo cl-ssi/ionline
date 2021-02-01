@@ -45,8 +45,16 @@
 </head>
 <body>
     <div id="app">
-        @include('layouts.partials.nav')
-
+    <!-- TODO ¿QUÉ PASA SI UN INTERNO QUIERE SER PARTE DE STAFF? -->
+        @guest
+            @include('layouts.partials.nav')
+        @else
+            @if(Auth::user()->external )
+                @include('layouts.partials.nav_external')
+            @else 
+                @include('layouts.partials.nav')
+            @endif
+        @endGuest 
         <main class="container pt-3">
             <div class="d-none d-print-block">
                 <strong>{{ config('app.ss') }}</strong><br>

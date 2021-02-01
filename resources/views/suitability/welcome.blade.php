@@ -1,4 +1,4 @@
-@extends('layouts.suitability')
+@extends('layouts.app')
 
 @section('title', 'Test de Idoneidad')
 
