@@ -164,6 +164,13 @@ class VaccinationController extends Controller
         $report['fd_not_vaccined'] = $report['total'] - $report['fd_vaccined'];
         $report['fd_not_vaccined_per'] = number_format($report['fd_not_vaccined'] / $report['total'] * 100, 1) . ' %';
 
+        /* Cantidad de vacunados con segunda dosis */
+        $report['sd_vaccined'] = Vaccination::whereNotNull('second_dose_at')->count();
+        $report['sd_vaccined_per'] = number_format($report['sd_vaccined'] / $report['total'] * 100, 1) . ' %';
+
+        /* Cantidad pendiente de vacunar con segunda dosis */
+        $report['sd_not_vaccined'] = $report['total'] - $report['sd_vaccined'];
+        $report['sd_not_vaccined_per'] = number_format($report['sd_not_vaccined'] / $report['total'] * 100, 1) . ' %';
 
         //dd($report);
 

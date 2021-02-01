@@ -5,31 +5,41 @@
 @section('content')
 <h3 class="mb-3">Reporte de vacunados</h3>
 
-<table class="table table-sm">
+<table class="table table-sm table-bordered">
     <tr>
-        <th>Total de funcionarios registrados</th>
-        <td>{{ $report['total'] }}</td>
-        <td>100%</td>
+        <th>Total de funcionarios a vacunar</th>
+        <td class="text-right">{{ $report['total'] }}</td>
+        <td class="text-right">100%</td>
     </tr>
     <tr>
-        <th>Informado a través de clave única</th>
-        <td>{{ $report['informed'] }}</td>
-        <td>{{ $report['informed_per'] }}</td>
+        <th>Informados a través de clave única</th>
+        <td class="text-right">{{ $report['informed'] }}</td>
+        <td class="text-right">{{ $report['informed_per'] }}</td>
     </tr>
     <tr>
-        <th>No informado a través de clave única</th>
-        <td>{{ $report['not_informed'] }}</td>
-        <td>{{ $report['not_informed_per'] }}</td>
+        <th>No informados a través de clave única</th>
+        <td class="text-right">{{ $report['not_informed'] }}</td>
+        <td class="text-right">{{ $report['not_informed_per'] }}</td>
     </tr>
     <tr>
         <th>Vacunados Primera Dósis</th>
-        <td>{{ $report['fd_vaccined'] }}</td>
-        <td>{{ $report['fd_vaccined_per'] }}</td>
+        <td class="text-right">{{ $report['fd_vaccined'] }}</td>
+        <td class="text-right">{{ $report['fd_vaccined_per'] }}</td>
     </tr>
     <tr>
         <th>No Vacunados Primera Dósis</th>
-        <td>{{ $report['fd_not_vaccined'] }}</td>
-        <td>{{ $report['fd_not_vaccined_per'] }}</td>
+        <td class="text-right">{{ $report['fd_not_vaccined'] }}</td>
+        <td class="text-right">{{ $report['fd_not_vaccined_per'] }}</td>
+    </tr>
+    <tr>
+        <th>Vacunados Segunda Dósis</th>
+        <td class="text-right">{{ $report['sd_vaccined'] }}</td>
+        <td class="text-right">{{ $report['sd_vaccined_per'] }}</td>
+    </tr>
+    <tr>
+        <th>No Vacunados Segunda Dósis</th>
+        <td class="text-right">{{ $report['sd_not_vaccined'] }}</td>
+        <td class="text-right">{{ $report['sd_not_vaccined_per'] }}</td>
     </tr>
 </table>
 
