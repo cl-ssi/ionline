@@ -86,7 +86,7 @@ class WordTestController extends Controller
              } 
 
              //dd($arrayQuota);
-    	
+        $totalQuotas = strtolower($formatter->toMoney(count($quotas),0));
 
     	$templateProcesor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/convenio2021.docx'));
 
@@ -115,6 +115,7 @@ class WordTestController extends Controller
 		$templateProcesor->setValue('numResolucion',$numResolucion);
 		$templateProcesor->setValue('totalConvenio',number_format($totalConvenio,0,",","."));
 		$templateProcesor->setValue('totalConvenioLetras',$totalConvenioLetras);
+		$templateProcesor->setValue('totalQuotas',$totalQuotas);
 		$templateProcesor->setValue('fechaResolucion',$fechaResolucion);
 		$templateProcesor->setValue('comuna',$comuna);
 		$templateProcesor->setValue('comunaRut',$comunaRut);
@@ -126,6 +127,7 @@ class WordTestController extends Controller
         $templateProcesor->setValue('alcaldeDecreto',$alcaldeDecreto);
 
         // CLONE BLOCK PARA LISTAR COMPONENTES
+        if(env('APP_ENV') == 'local') ini_set("pcre.backtrack_limit", -1);
         $templateProcesor->cloneBlock('componentesListado', 0, true, false,$arrayComponent);
         // CLONE BLOCK PARA LISTAR CUOTAS
         $templateProcesor->cloneBlock('cuotasListado', 0, true, false,$arrayQuota);
