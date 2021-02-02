@@ -146,6 +146,19 @@ class VaccinationController extends Controller
         //
     }
 
+    public function vaccinate(Vaccination $vaccination)
+    {
+        $vaccination->first_dose_at = date("Y-m-d H:i:s");
+        $vaccination->save();
+
+        return redirect()->back();
+    }
+
+    public function card(Vaccination $vaccination)
+    {
+        return view('vaccination.card', compact('vaccination'));
+    }
+
     public function report()
     {
         /* Total de funcionarios */
