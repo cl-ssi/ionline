@@ -26,6 +26,7 @@
     <thead>
         <tr>
             <th>Id</th>
+            <th></th>
             <th>Estab</th>
             <th class="d-none d-md-table-cell">Unidad Organ.</th>
             <th></th>
@@ -40,6 +41,17 @@
         @foreach ($vaccinations as $key => $vaccination)
             <tr>
                 <td class="small">{{ $vaccination->id }}</td>
+                <td>
+                    @if($vaccination->first_dose_at)
+                        <div class="btn btn-sm" style="color:#007bff;"><i class="fas fa-syringe"></i></div>
+                    @else
+                    <form method="POST" class="form-horizontal" action="{{ route('vaccination.vaccinate',$vaccination) }}">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="btn btn-sm" onclick="return clicked('{{$vaccination->fullName()}}');"><i class="fas fa-syringe"></i></button>
+                    </form>
+                    @endif
+                </td>
                 <td>{{ $vaccination->aliasEstab }}</td>
                 <td class="d-none d-md-table-cell" style="width: 200px;">{{ $vaccination->organizationalUnit }}</td>
                 <td>
@@ -78,5 +90,9 @@
 @endsection
 
 @section('custom_js')
-
+<script type="text/javascript">
+    function clicked(user) {
+        return confirm('Desea registrar que se ha vacunado '+user+'?');
+    }
+</script>
 @endsection

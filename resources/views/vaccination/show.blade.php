@@ -31,7 +31,7 @@
         </ul>
     </div>
 @else
-    <h5 class="mb-3">Horario Vacunación</h5>
+    <h5 class="mb-3">Información sobre vacunación.</h5>
 
     <p>
         Hola <strong>{{ $vaccination->fullName() }}</strong> la primera dósis de la
