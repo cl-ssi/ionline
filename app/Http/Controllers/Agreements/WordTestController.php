@@ -21,6 +21,7 @@ use PhpOffice\PhpWord\Settings;
 use PhpOffice;
 use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 
 class WordTestController extends Controller
@@ -101,6 +102,7 @@ class WordTestController extends Controller
         $alcalde = $municipality->name_representative;
         $alcaldeDecreto = $municipality->decree_representative;
     	$municipalidad = $municipality->name_municipality;
+    	$ilustre = !Str::contains($municipality->name_municipality, 'ALTO HOSPICIO') ? 'ILUSTRE': null;
         //dd($municipalidad);
     	$municipalidadDirec = $municipality->adress_municipality;
     	$comunaRut = $municipality->rut_municipality;
@@ -109,7 +111,11 @@ class WordTestController extends Controller
     	$comuna = $agreements->Commune->name; 
         $programa = $agreements->Program->name;
 
+        $totalEjemplares = Str::contains($municipality->name_municipality, 'IQUIQUE') ? 'cuatro': 'tres';
+        $addEjemplar = Str::contains($municipality->name_municipality, 'IQUIQUE') ? '“CORMUDESI”': null;
+
 		$templateProcesor->setValue('programa',$programa);
+		$templateProcesor->setValue('programaTitulo',mb_strtoupper($programa));
 		$templateProcesor->setValue('periodoConvenio',$periodoConvenio);
 		$templateProcesor->setValue('fechaConvenio',$fechaConvenio); // Cambiar formato d de m y
 		$templateProcesor->setValue('numResolucion',$numResolucion);
@@ -118,13 +124,17 @@ class WordTestController extends Controller
 		$templateProcesor->setValue('totalQuotas',$totalQuotas);
 		$templateProcesor->setValue('fechaResolucion',$fechaResolucion);
 		$templateProcesor->setValue('comuna',$comuna);
-		$templateProcesor->setValue('comunaRut',$comunaRut);
+        $templateProcesor->setValue('comunaRut',$comunaRut);
+        $templateProcesor->setValue('ilustre',ucfirst(mb_strtolower($ilustre)));
+        $templateProcesor->setValue('ilustreTitulo',$ilustre);
 		$templateProcesor->setValue('municipalidad',$municipalidad);
 		$templateProcesor->setValue('municipalidadDirec',$municipalidadDirec);
 		$templateProcesor->setValue('alcaldeApelativo',$alcaldeApelativo);
-        $templateProcesor->setValue('alcalde',$alcalde);
+        $templateProcesor->setValue('alcalde',mb_strtoupper($alcalde));
 		$templateProcesor->setValue('alcaldeRut',$alcaldeRut);
         $templateProcesor->setValue('alcaldeDecreto',$alcaldeDecreto);
+        $templateProcesor->setValue('totalEjemplares',$totalEjemplares);
+        $templateProcesor->setValue('addEjemplar',$addEjemplar);
 
         // CLONE BLOCK PARA LISTAR COMPONENTES
         if(env('APP_ENV') == 'local') ini_set("pcre.backtrack_limit", -1);
