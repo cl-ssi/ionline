@@ -148,7 +148,7 @@
                     <input type="date" name="res_resource_date" class="form-control" id="fordate" value="{{ $agreement->res_resource_date }}" >
                 </fieldset>
 
-                <fieldset class="form-group col-3">
+                <!-- <fieldset class="form-group col-3">
                     <label for="for">Archivo Convenio PDF
                         @if($agreement->fileAgreeEnd != null)  
                             <a class="text-info" href="{{ route('agreements.downloadAgree', $agreement->id) }}" target="_blank">
@@ -161,7 +161,7 @@
                       <label class="custom-file-label" for="forfile">Seleccionar Archivo </label>
                      <small class="form-text text-muted">* Adjuntar versión final de Covenio</small>
                     </div>
-                </fieldset>
+                </fieldset> -->
                 <fieldset class="form-group col-3">
                     <label for="for">Archivo Resolución PDF
                          @if($agreement->fileResEnd != null)  

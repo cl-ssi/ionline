@@ -179,10 +179,10 @@ class AgreementController extends Controller
             Storage::delete($Agreement->file);
             $Agreement->file = $request->file('file')->store('resolutions');
         }
-        if($request->hasFile('fileAgreeEnd')){
-            Storage::delete($Agreement->fileAgreeEnd);
-            $Agreement->fileAgreeEnd = $request->file('fileAgreeEnd')->store('resolutions');
-        }
+        // if($request->hasFile('fileAgreeEnd')){
+        //     Storage::delete($Agreement->fileAgreeEnd);
+        //     $Agreement->fileAgreeEnd = $request->file('fileAgreeEnd')->store('resolutions');
+        // }
         if($request->hasFile('fileResEnd')){
             Storage::delete($Agreement->fileResEnd);
             $Agreement->fileResEnd = $request->file('fileResEnd')->store('resolutions');
