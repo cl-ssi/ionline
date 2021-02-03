@@ -30,6 +30,11 @@
         <td class="text-right">{{ $report['informed_tp_per'] }}</td>
     </tr>
     <tr>
+        <th>Informados a través de email (OIRS)</th>
+        <td class="text-right">{{ $report['informed_em'] }}</td>
+        <td class="text-right">{{ $report['informed_em_per'] }}</td>
+    </tr>
+    <tr>
         <th>No se han informado por niguno de los anteriores</th>
         <td class="text-right">{{ $report['not_informed'] }}</td>
         <td class="text-right">{{ $report['not_informed_per'] }}</td>

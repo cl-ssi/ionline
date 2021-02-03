@@ -172,6 +172,10 @@ class VaccinationController extends Controller
         $report['informed_tp'] = Vaccination::where('inform_method',2)->count();
         $report['informed_tp_per'] = number_format($report['informed_tp'] / $report['total'] * 100, 1).'%';
 
+        /* Han sido informados por email */
+        $report['informed_em'] = Vaccination::where('inform_method',3)->count();
+        $report['informed_em_per'] = number_format($report['informed_em'] / $report['total'] * 100, 1).'%';
+
         /* No han visto la información */
         $report['not_informed'] = $report['total'] - $report['informed_cu'] - $report['informed_tp'];
         $report['not_informed_per'] = number_format($report['not_informed'] / $report['total'] * 100, 1).'%';
@@ -213,6 +217,7 @@ class VaccinationController extends Controller
             'ID',
             'Establecimiento',
             'Unidad Organizacional',
+            'Informado a través',
             'Nombre',
             'A.Paterno',
             'A.Materno',
@@ -231,6 +236,7 @@ class VaccinationController extends Controller
                     $fila->id,
                     $fila->aliasEstab,
                     $fila->organizationalUnit,
+                    $fila->aliasInformMethod,
                     $fila->name,
                     $fila->fathers_family,
                     $fila->mothers_family,

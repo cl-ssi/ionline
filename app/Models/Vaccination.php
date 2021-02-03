@@ -70,6 +70,23 @@ class Vaccination extends Model implements Auditable
                 break;
         }
     }
+    public function getAliasInformMethodAttribute(){
+        switch ($this->inform_method) {
+            case 1:
+                return 'Clave Única';
+                break;
+
+            case 2:
+                return 'Teléfono';
+                break;
+            case 3:
+                return 'Correo';
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
 
     public function getRunFormatAttribute() {
         return $this->run.'-'.$this->dv;
