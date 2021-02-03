@@ -112,7 +112,7 @@ class WordTestController extends Controller
         $programa = $agreements->Program->name;
 
         $totalEjemplares = Str::contains($municipality->name_municipality, 'IQUIQUE') ? 'cuatro': 'tres';
-        $addEjemplar = Str::contains($municipality->name_municipality, 'IQUIQUE') ? '“CORMUDESI”': null;
+        $addEjemplar = Str::contains($municipality->name_municipality, 'IQUIQUE') ? 'un ejemplar para CORMUDESI': null;
 
 		$templateProcesor->setValue('programa',$programa);
 		$templateProcesor->setValue('programaTitulo',mb_strtoupper($programa));
