@@ -587,20 +587,7 @@
 
         </div>
 
-        <!-- solo el creador de la solicitud puede editar  -->
-        @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-          <button type="submit" class="btn btn-primary">Guardar</button>
-        @else
-          <!-- si existe una firma, no se deja modificar solicitud -->
-          @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-            <div class="alert alert-warning" role="alert">
-              No se puede modificar hoja de ruta ya que existen visaciones realizadas.
-            </div>
-            <button type="submit" class="btn btn-primary" disabled>Guardar</button>
-          @else
-            <button type="submit" class="btn btn-primary">Guardar</button>
-          @endif
-        @endif
+        <button type="submit" class="btn btn-primary">Guardar</button>
 
       </div>
 
