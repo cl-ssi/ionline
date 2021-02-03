@@ -65,7 +65,8 @@
             <label for="for_inform_method">Informado a través</label>
             <select name="inform_method" id="for_inform_method" class="form-control">
                 <option value=""></option>
-                <option value="1">Teléfono</option>
+                <option value="2">Teléfono</option>
+                <option value="3">Correo electrónico</option>
             </select>
         </fieldset>
 

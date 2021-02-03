@@ -19,13 +19,14 @@
             </div>
         </form>
     </div>
-</div>
+</div
 
 <div class="table-responsive">
 <table class="table table-sm table-bordered small">
     <thead>
         <tr>
             <th>Id</th>
+            <th></th>
             <th>Estab</th>
             <th class="d-none d-md-table-cell">Unidad Organ.</th>
             <th></th>
@@ -40,8 +41,19 @@
         @foreach ($vaccinations as $key => $vaccination)
             <tr>
                 <td class="small">{{ $vaccination->id }}</td>
+                <td>
+                    @if($vaccination->first_dose_at)
+                        <div class="btn btn-sm" style="color:#007bff;"><i class="fas fa-syringe"></i></div>
+                    @else
+                    <form method="POST" class="form-horizontal" action="{{ route('vaccination.vaccinate',$vaccination) }}">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="btn btn-sm" onclick="return clicked('{{$vaccination->fullName()}}');"><i class="fas fa-syringe"></i></button>
+                    </form>
+                    @endif
+                </td>
                 <td>{{ $vaccination->aliasEstab }}</td>
-                <td class="d-none d-md-table-cell" style="width: 100px;">{{ $vaccination->organizationalUnit }}</td>
+                <td class="d-none d-md-table-cell" style="width: 200px;">{{ $vaccination->organizationalUnit }}</td>
                 <td>
                     @switch($vaccination->inform_method)
                         @case(1)
@@ -51,13 +63,17 @@
                         @case(2)
                             <i class="fas fa-phone" style="color:#007bff;"></i>
                             @break
-
+                        @case(3)
+                            <i class="fas fa-envelope" style="color:#007bff;"></i>
+                            @break
                         @default
                             <i class="fas fa-eye" style="color:#cccccc;"></i>
                     @endswitch
                 </td>
                 <td nowrap>{{ $vaccination->fullName() }}</td>
-                <td nowrap class="text-right">{{ $vaccination->run }}-{{ $vaccination->dv }}</td>
+                <td nowrap class="text-right" {!! Helper::validaRut($vaccination->runFormat) ? '' : 'style="color:red;"' !!}>
+                    {{ $vaccination->runFormat }}
+                </td>
                 <td nowrap>
                     {{ $vaccination->first_dose->format('d-m-Y') ?? '' }} {{ $vaccination->first_dose->format('H:i') ?? '' }}
                 </td>
@@ -67,11 +83,16 @@
         @endforeach
     </tbody>
 </table>
-</div>
 {{ $vaccinations->appends(request()->query())->links() }}
+</div>
+
 
 @endsection
 
 @section('custom_js')
-
+<script type="text/javascript">
+    function clicked(user) {
+        return confirm('Desea registrar que se ha vacunado '+user+'?');
+    }
+</script>
 @endsection

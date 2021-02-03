@@ -69,7 +69,7 @@ class VaccinationController extends Controller
     {
 
         //$vaccinations = Vaccination::all();
-        $vaccinations = Vaccination::search($request->input('search'))->paginate(1000);
+        $vaccinations = Vaccination::search($request->input('search'))->paginate(500);
         return view('vaccination.index', compact('vaccinations', 'request'));
     }
 
@@ -146,6 +146,19 @@ class VaccinationController extends Controller
         //
     }
 
+    public function vaccinate(Vaccination $vaccination)
+    {
+        $vaccination->first_dose_at = date("Y-m-d H:i:s");
+        $vaccination->save();
+
+        return redirect()->back();
+    }
+
+    public function card(Vaccination $vaccination)
+    {
+        return view('vaccination.card', compact('vaccination'));
+    }
+
     public function report()
     {
         /* Total de funcionarios */
@@ -158,6 +171,10 @@ class VaccinationController extends Controller
         /* Han sido informados por teléfono */
         $report['informed_tp'] = Vaccination::where('inform_method',2)->count();
         $report['informed_tp_per'] = number_format($report['informed_tp'] / $report['total'] * 100, 1).'%';
+
+        /* Han sido informados por email */
+        $report['informed_em'] = Vaccination::where('inform_method',3)->count();
+        $report['informed_em_per'] = number_format($report['informed_em'] / $report['total'] * 100, 1).'%';
 
         /* No han visto la información */
         $report['not_informed'] = $report['total'] - $report['informed_cu'] - $report['informed_tp'];
@@ -182,5 +199,54 @@ class VaccinationController extends Controller
         //dd($report);
 
         return view('vaccination.report', compact('report'));
+    }
+
+    public function export(){
+
+        $headers = array(
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=listado_vacuna_sarscov2.csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        );
+
+        $filas = Vaccination::all();
+
+        $columnas = array(
+            'ID',
+            'Establecimiento',
+            'Unidad Organizacional',
+            'Informado a través',
+            'Nombre',
+            'A.Paterno',
+            'A.Materno',
+            'RUN',
+            '1° Dosis',
+            '2° Dosis',
+        );
+
+        $callback = function() use ($filas, $columnas)
+        {
+            $file = fopen('php://output', 'w');
+            fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+            fputcsv($file, $columnas,';');
+            foreach($filas as $fila) {
+                fputcsv($file, array(
+                    $fila->id,
+                    $fila->aliasEstab,
+                    $fila->organizationalUnit,
+                    $fila->aliasInformMethod,
+                    $fila->name,
+                    $fila->fathers_family,
+                    $fila->mothers_family,
+                    $fila->runFormat,
+                    $fila->first_dose,
+                    $fila->second_dose,
+                ),';');
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
     }
 }
