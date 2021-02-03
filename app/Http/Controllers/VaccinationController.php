@@ -100,8 +100,7 @@ class VaccinationController extends Controller
         $vaccination = new Vaccination($request->All());
         $vaccination->save();
 
-        session()->flash('El funcionario ha sido agregado');
-        return redirect()->route('vaccination.create');
+        return redirect()->route('vaccination.create')->with('success', 'El funcionario ha sido agregado');
     }
 
     /**
