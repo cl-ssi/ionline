@@ -46,7 +46,7 @@
 
         <fieldset class="form-group col-md-3 col-12">
             <label for="for_name">Nombres*</label>
-            <input type="text" class="form-control" name="name"
+            <input type="text" class="form-control" name="name" autofocus 
                 id="for_name" required>
         </fieldset>
 
