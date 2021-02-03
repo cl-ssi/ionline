@@ -81,16 +81,6 @@
 				</select>
 		</fieldset>
 
-    <fieldset class="form-group col">
-				<label for="for_users">Jefe Finanzas</label>
-				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "13866194") selected  @endif >{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-				</select>
-				<input type="hidden" name="users[]" value="13866194" />
-		</fieldset>
-
 		<fieldset class="form-group col">
 				<label for="for_users">Subdirector Médico</label>
 				<select name="users[]" id="subdirector_medico" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
@@ -104,16 +94,39 @@
 		</fieldset>
 
     <fieldset class="form-group col">
-				<label for="for_users">Director</label>
-				<select name="users[]" id="director" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+				<label for="for_users">S.D.G.A SSI</label>
+				<select name="users[]" id="sdga_servicio" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "14101085") selected  @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == "14104369") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<input type="hidden" name="users[]" value="14101085" />
+				<input type="hidden" name="users[]" value="14104369" />
 		</fieldset>
 
-		<fieldset class="form-group col">
+	</div>
+	<div class="row">
+
+    <fieldset class="form-group col">
+				<label for="for_users">S.G.D.P Hospital</label>
+				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+					@foreach($users as $key => $user)
+						<option value="{{$user->id}}" @if($user->id == "9018101") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+					@endforeach
+				</select>
+				<input type="hidden" name="users[]" value="9018101" />
+		</fieldset>
+
+    <fieldset class="form-group col">
+				<label for="for_users">Jefe Finanzas</label>
+				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+					@foreach($users as $key => $user)
+						<option value="{{$user->id}}" @if($user->id == "13866194") selected  @endif >{{$user->getFullNameAttribute()}}</option>
+					@endforeach
+				</select>
+				<input type="hidden" name="users[]" value="13866194" />
+		</fieldset>
+
+    <fieldset class="form-group col">
 				<label for="for_users">Director S.G.D.P</label>
 				<select name="users[]" id="director_sgdp" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
@@ -121,6 +134,16 @@
 					@endforeach
 				</select>
 				<input type="hidden" name="users[]" value="15685508" />
+		</fieldset>
+
+    <fieldset class="form-group col">
+				<label for="for_users">Director</label>
+				<select name="users[]" id="director" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+					@foreach($users as $key => $user)
+						<option value="{{$user->id}}" @if($user->id == "14101085") selected  @endif >{{$user->getFullNameAttribute()}}</option>
+					@endforeach
+				</select>
+				<input type="hidden" name="users[]" value="14101085" />
 		</fieldset>
 
 	</div>

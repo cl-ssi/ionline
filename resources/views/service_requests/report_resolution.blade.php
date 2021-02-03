@@ -132,6 +132,9 @@
     VMM/
     dmo
 </div>
+<div class="seis" style="padding-top: 4px;">
+    N.I. {{$ServiceRequest->id}} - {{\Carbon\Carbon::now()->format('d/m/Y')}}
+</div>
 
 
 <div class="right" style="float: right; width: 280px;">
@@ -181,29 +184,29 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
         <th>Monto Total</th>
     </tr>
     <tr>
-        <td>{{$ServiceRequest->name}}</td>
-        <td>{{$ServiceRequest->rut}}</td>
-        <td>{{$ServiceRequest->estate}}</td>
-        <td>44</td>
-        <td>{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
-        <td>{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
-        <td>Emergencia</td>
-        <td>$1.731.482</td>
+        <td style="text-align:center">{{$ServiceRequest->name}}</td>
+        <td style="text-align:center">{{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</td>
+        <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
+        <td style="text-align:center">{{$ServiceRequest->weekly_hours}}</td>
+        <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
+        <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
+        <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
+        <td style="text-align:center">$1.731.482</td>
     </tr>
 </table>
 
 <p class="justify">
-    En Iquique, a catorce días del mes de enero de dos mil veintiuno, entre D. HECTOR ALARCON ALARCON RUN: 14.101.085-9,  en su calidad de Director  del Hospital “Dr. Ernesto Torres Galdames” de Iquique, con domicilio en Av. Héroes de la Concepción N° 502 de Iquique, en adelante "el Director  del Hospital “Dr. Ernesto Torres Galdames", y por la otra D. NELSON CAMPILLAY QUEVEDO, RUN: 17.094.897-1, domiciliado en Salvador Allende N° 448, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
+    En Iquique, a catorce días del mes de enero de dos mil veintiuno, entre D. HECTOR ALARCON ALARCON RUN: 14.101.085-9,  en su calidad de Director  del Hospital “Dr. Ernesto Torres Galdames” de Iquique, con domicilio en Av. Héroes de la Concepción N° 502 de Iquique, en adelante "el Director  del Hospital “Dr. Ernesto Torres Galdames", y por la otra {{$ServiceRequest->name}}, RUN: {{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
 </p>
 
 <p class="justify">
-    <strong>PRIMERO:</strong> Don HECTOR ALARCON ALARCON, en su calidad de Director del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a D. NELSON CAMPILLAY QUEVEDO, (Enfermero), para que preste servicios en el Servicio de Emergencia del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
+    <strong>PRIMERO:</strong> Don HECTOR ALARCON ALARCON, en su calidad de Director del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a {{$ServiceRequest->name}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el Servicio de Emergencia del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
 </p>
 
 <p class="justify">
     <strong>SEGUNDO:</strong> En cumplimiento del presente convenio La Profesional deberá llevar a cabo las siguientes prestaciones:
     <ul>
-        <li>Servicios de enfermería para la atención de pacientes en el CR. Emergencia en las distintas áreas que la componen, Urgencia adulto, pediatría, categorización y observación, para reforzar la Unidad por contingencia COVID-19.</li>
+        <li>{{$ServiceRequest->service_description}}</li>
     </ul>
 </p>
 
@@ -215,8 +218,9 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
     <strong>CUARTO:</strong> El prestador de Servicios contratante a través de la declaración jurada señaló no estar afecto a ninguna de las inhabilidades establecidas en los arts. 54, 55 y 56 de la Ley Nº 18.575, Orgánica Constitucional de las Bases Generales de la Administración del Estado. Dichas disposiciones relativas a inhabilidades e incompatibilidades administrativas serán aplicables al prestador, con quién se suscribe el presente contrato a Honorarios a Suma Alzada.
 </p>
 
+{{Carbon\Carbon::setLocale('es')}}
 <p class="justify">
-    <strong>QUINTO:</strong> El presente convenio empezará a regir, a contar del 01 al 31 de diciembre de 2020, de acuerdo al artículo 52 de la Ley 19.880, sobre Bases de Procedimientos Administrativos.
+    <strong>QUINTO:</strong> El presente convenio empezará a regir, a contar del {{$ServiceRequest->start_date->format('l j F Y H:i:s')}} de {{$ServiceRequest->start_date->format('M')}} al 31 de diciembre de 2020, de acuerdo al artículo 52 de la Ley 19.880, sobre Bases de Procedimientos Administrativos.
 </p>
 
 <p class="justify">
