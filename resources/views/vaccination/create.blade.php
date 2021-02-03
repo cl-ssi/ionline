@@ -40,7 +40,7 @@
 
         <fieldset class="form-group col-md-1 col-4">
             <label for="for_dv">Digito*</label>
-            <input type="text" class="form-control" name="dv" value="{{request()->get('dv')}}
+            <input type="text" class="form-control" name="dv" value="{{request()->get('dv')}}"
                 id="for_dv" required readonly>
         </fieldset>
 
