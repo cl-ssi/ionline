@@ -16,4 +16,9 @@
             href="{{ route('vaccination.report') }}">
             <i class="fas fa-chart-line"></i> Reporte</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('vaccination.export') }}">
+            <i class="fas fa-file-csv"></i> Exportar</a>
+    </li>
 </ul>

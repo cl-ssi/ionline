@@ -5,11 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Vaccination extends Model implements Auditable
 {
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
+    use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -66,5 +69,26 @@ class Vaccination extends Model implements Auditable
                 return 'DSSI';
                 break;
         }
+    }
+    public function getAliasInformMethodAttribute(){
+        switch ($this->inform_method) {
+            case 1:
+                return 'Clave Única';
+                break;
+
+            case 2:
+                return 'Teléfono';
+                break;
+            case 3:
+                return 'Correo';
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
+
+    public function getRunFormatAttribute() {
+        return $this->run.'-'.$this->dv;
     }
 }

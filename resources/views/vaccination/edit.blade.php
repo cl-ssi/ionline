@@ -67,6 +67,7 @@
                 <option value=""></option>
                 <option value="1" {{ ($vaccination->inform_method == 1)? 'selected':'' }}>Clave Única</option>
                 <option value="2" {{ ($vaccination->inform_method == 2)? 'selected':'' }}>Teléfono</option>
+                <option value="3" {{ ($vaccination->inform_method == 3)? 'selected':'' }}>Correo Electrónico</option>
             </select>
         </fieldset>
 
@@ -130,6 +131,10 @@
 
 
 </form>
+
+@can('be god')
+    @include('partials.audit', ['audits' => $vaccination->audits] )
+@endcan
 
 @endsection
 
