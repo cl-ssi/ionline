@@ -280,7 +280,11 @@ class ServiceRequestController extends Controller
 
     public function resolutionPDF(ServiceRequest $ServiceRequest)
     {
-      //dd($ServiceRequest);
+
+        $rut = explode("-", $ServiceRequest->rut);
+        $ServiceRequest->run_s_dv = number_format($rut[0],0, ",", ".");
+        $ServiceRequest->dv = $rut[1];
+
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('service_requests.report_resolution',compact('ServiceRequest'));
 
