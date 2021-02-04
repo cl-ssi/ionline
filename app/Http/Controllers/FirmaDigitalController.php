@@ -31,10 +31,10 @@ class FirmaDigitalController extends Controller
         $testing        = true; /* Si es true se usará un run o otp de prueba */
         $run            = 15287582;
         $otp            = '040133';
-        $tipo           = 'vb'; /* 'vb', 'principal' */
+        $tipo           = 'principal'; /* 'vb', 'principal' */
         $ct_firmas      = 4; /* Sólo para tipo "vb" */
         $pocision_firma = 1; /* Sólo para tipo "vb" */
-        $pdf            = 'samples/original.pdf';
+        $pdf            = 'samples/sample_firmante.pdf';
         /* Fin seteo de variable */
 
         $pdfbase64      = base64_encode(file_get_contents(public_path($pdf)));
