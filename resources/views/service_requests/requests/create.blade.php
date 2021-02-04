@@ -168,7 +168,7 @@
         <input type="number" min="1" max="50000000" class="form-control" id="for_run" name="run" required>
     </fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-1">
         <label for="for_dv">Digito</label>
         <input type="text" class="form-control" id="for_dv" name="dv" readonly>
     </fieldset>
@@ -253,7 +253,7 @@
     <fieldset class="form-group col">
 		    <label for="for_programm_name">Nombre del programa</label>
 		    <!-- <input type="text" class="form-control" id="for_programm_name" placeholder="" name="programm_name"> -->
-        <select name="programm_name" class="form-control">
+        <select name="programm_name" class="form-control" required>
 					<option value=""></option>
           <option value="Covid19-APS No Médicos">Covid19-APS No Médicos</option>
           <option value="Covid19-APS Médicos">Covid19-APS Médicos</option>
@@ -271,7 +271,7 @@
         </select>
 		</fieldset> -->
 
-    <fieldset class="form-group col">
+    <!-- <fieldset class="form-group col">
 		    <label for="for_normal_hour_payment">Pago Hora Normal</label>
 		    <select name="normal_hour_payment" class="form-control">
           <option value=""></option>
@@ -282,7 +282,7 @@
     <fieldset class="form-group col">
 		    <label for="for_amount">Valor $</label>
 		    <input type="number" class="form-control" id="for_amount" placeholder="" name="amount">
-		</fieldset>
+		</fieldset> -->
 
   </div>
 
@@ -301,7 +301,7 @@
 
 		<fieldset class="form-group col">
 		    <label for="for_weekly_hours">Hrs.Semanales</label>
-		    <select name="weekly_hours" class="form-control" id="for_weekly_hours" required>
+		    <select name="weekly_hours" class="form-control" id="for_weekly_hours">
 					<option value=""></option>
           <option value="44">44</option>
           <option value="33">33</option>
@@ -316,12 +316,12 @@
         <select name="establishment_id" class="form-control" required>
           <option value=""></option>
           @foreach($establishments as $key => $establishment)
-            <option value="{{$establishment->id}}">{{$establishment->name}}</option>
+            <option value="{{$establishment->id}}" @if($establishment->id == 1) selected @endif>{{$establishment->name}}</option>
           @endforeach
         </select>
     </fieldset>
 
-    <fieldset class="form-group col">
+    <!-- <fieldset class="form-group col">
 		    <label for="for_daily_hours">Horas Diurnas</label>
 		    <input type="number" class="form-control" id="for_daily_hours" placeholder="" name="daily_hours">
 		</fieldset>
@@ -329,7 +329,7 @@
     <fieldset class="form-group col">
 		    <label for="for_nightly_hours">Horas Nocturnas</label>
 		    <input type="number" class="form-control" id="for_nightly_hours" placeholder="" name="nightly_hours">
-		</fieldset>
+		</fieldset> -->
 
   </div>
 
@@ -345,14 +345,18 @@
 					<div class="row">
 						<fieldset class="form-group col">
 								<label for="for_estate">Entrada</label>
-								<input type="date" class="form-control" name="shift_date" id="shift_date">
+								<input type="date" class="form-control" name="shift_start_date" id="shift_start_date">
 						</fieldset>
 						<fieldset class="form-group col">
-								<label for="for_estate">H.Inicio</label>
+								<label for="for_estate">Hora</label>
 								<input type="time" class="form-control" name="start_hour" id="start_hour">
 						</fieldset>
 						<fieldset class="form-group col">
-								<label for="for_estate">H.Término</label>
+								<label for="for_estate">Salida</label>
+								<input type="date" class="form-control" name="shift_end_date" id="shift_end_date">
+						</fieldset>
+						<fieldset class="form-group col">
+								<label for="for_estate">Hora</label>
 								<input type="time" class="form-control" name="end_hour" id="end_hour">
 						</fieldset>
 						<fieldset class="form-group col">
@@ -371,8 +375,9 @@
 			            <tr>
 			                <th>Select</th>
 			                <th>Entrada</th>
-			                <th>H.Inicio</th>
-											<th>H.Término</th>
+			                <th>Hora</th>
+											<th>Salida</th>
+											<th>Hora</th>
 											<th>Observación</th>
 			            </tr>
 			        </thead>
@@ -418,9 +423,12 @@
 		    <label for="for_working_day_type">Jornada de Trabajo</label>
 		    <select name="working_day_type" class="form-control" required>
 					<option value=""></option>
-          <option value="08:00 a 16:48 hrs (L-M-M-J-V)">08:00 a 16:48 hrs (L-M-M-J-V)</option>
+          <option value="DIURNO">DIURNO</option>
           <option value="TERCER TURNO">TERCER TURNO</option>
+					<option value="TERCER TURNO">TERCER TURNO - MODIFICADO</option>
           <option value="CUARTO TURNO">CUARTO TURNO</option>
+					<option value="CUARTO TURNO">CUARTO TURNO - MODIFICADO</option>
+					<option value="OTRO">OTRO</option>
         </select>
 
 		</fieldset>
@@ -451,10 +459,12 @@
 				$('#for_nightly_hours').val("");
 				$('#for_daily_hours').attr('readonly', true);
 				$('#for_nightly_hours').attr('readonly', true);
+				$('#for_weekly_hours').attr('disabled', 'disabled');
 				$("#control_turnos").show();
 			}else{
 				$('#for_daily_hours').attr('readonly', false);
 				$('#for_nightly_hours').attr('readonly', false);
+				$('#for_weekly_hours').removeAttr('disabled');
 				$("#control_turnos").hide();
 			}
 		});
@@ -509,11 +519,12 @@
 
 
 	$(".add-row").click(function(){
-      var shift_date = $("#shift_date").val();
+      var shift_start_date = $("#shift_start_date").val();
       var start_hour = $("#start_hour").val();
+			var shift_end_date = $("#shift_end_date").val();
 			var end_hour = $("#end_hour").val();
 			var observation = $("#observation").val();
-      var markup = "<tr><td><input type='checkbox' name='record'></td><td> <input type='hidden' class='form-control' name='shift_date[]' id='shift_date' value='"+ shift_date +"'>"+ shift_date +"</td><td> <input type='hidden' class='form-control' name='shift_start_hour[]' id='start_hour' value='"+ start_hour +"'>" + start_hour + "</td><td> <input type='hidden' class='form-control' name='shift_end_hour[]' id='end_hour' value='"+ end_hour +"'>" + end_hour + "</td><td> <input type='hidden' class='form-control' name='shift_observation[]' id='observation' value='"+ observation +"'>" + observation + "</td></tr>";
+      var markup = "<tr><td><input type='checkbox' name='record'></td><td> <input type='hidden' class='form-control' name='shift_start_date[]' id='shift_start_date' value='"+ shift_start_date +"'>"+ shift_start_date +"</td><td> <input type='hidden' class='form-control' name='shift_start_hour[]' id='start_hour' value='"+ start_hour +"'>" + start_hour + "</td><td> <input type='hidden' class='form-control' name='shift_end_date[]' id='shift_end_date' value='"+ shift_end_date +"'>"+ shift_end_date +"</td><td> <input type='hidden' class='form-control' name='shift_end_hour[]' id='end_hour' value='"+ end_hour +"'>" + end_hour + "</td><td> <input type='hidden' class='form-control' name='shift_observation[]' id='observation' value='"+ observation +"'>" + observation + "</td></tr>";
       $("table tbody").append(markup);
   });
 

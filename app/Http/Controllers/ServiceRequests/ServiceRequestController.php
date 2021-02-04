@@ -104,13 +104,12 @@ class ServiceRequestController extends Controller
       $serviceRequest->save();
 
       //guarda control de turnos
-      if ($request->shift_date!=null) {
-        foreach ($request->shift_date as $key => $shift_date) {
-          // print_r($shift_date . " " .$request->start_hour[$key]);
+      if ($request->shift_start_date!=null) {
+        foreach ($request->shift_start_date as $key => $shift_start_date) {
           $shiftControl = new ShiftControl($request->All());
           $shiftControl->service_request_id = $serviceRequest->id;
-          $shiftControl->start_date = $shift_date . " " .$request->shift_start_hour[$key];
-          $shiftControl->end_date = $shift_date . " " .$request->shift_end_hour[$key];
+          $shiftControl->start_date = $shift_start_date . " " .$request->shift_start_hour[$key];
+          $shiftControl->end_date = $request->shift_end_date[$key] . " " .$request->shift_end_hour[$key];
           $shiftControl->observation = $request->shift_observation[$key];
           $shiftControl->save();
         }
@@ -230,15 +229,17 @@ class ServiceRequestController extends Controller
       $serviceRequest->save();
 
       //guarda control de turnos
-      if ($request->shift_date!=null) {
+      if ($request->shift_start_date!=null) {
         //se elimina historico
         ShiftControl::where('service_request_id',$serviceRequest->id)->delete();
         //ingreso info.
-        foreach ($request->shift_date as $key => $shift_date) {
+        foreach ($request->shift_start_date as $key => $shift_start_date) {
           $shiftControl = new ShiftControl($request->All());
           $shiftControl->service_request_id = $serviceRequest->id;
-          $shiftControl->start_date = Carbon::createFromFormat('d/m/Y H:i', $shift_date . " " .$request->shift_start_hour[$key]); //d/m/Y
-          $shiftControl->end_date = Carbon::createFromFormat('d/m/Y H:i', $shift_date . " " .$request->shift_end_hour[$key]); //d/m/Y
+          // $shiftControl->start_date = Carbon::createFromFormat('d/m/Y H:i', $shift_start_date . " " .$request->shift_start_hour[$key]); //d/m/Y
+          // $shiftControl->end_date = Carbon::createFromFormat('d/m/Y H:i', $request->shift_end_date[$key] . " " .$request->shift_end_hour[$key]); //d/m/Y
+          $shiftControl->start_date = Carbon::parse($shift_start_date . " " .$request->shift_start_hour[$key]);
+          $shiftControl->end_date = Carbon::parse($request->shift_end_date[$key] . " " .$request->shift_end_hour[$key]);
           $shiftControl->observation = $request->shift_observation[$key];
           $shiftControl->save();
         }
