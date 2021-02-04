@@ -28,6 +28,7 @@
 		<tr>
 			<th scope="col">RUN</th>
 			<th scope="col">Nombre</th>
+			<th scope="col">Tipo</th>
 			<th scope="col">Unidad Organizacional</th>
 			<th scope="col">Cargo/Funcion</th>
 			<th scope="col">Accion</th>
@@ -39,6 +40,7 @@
 				<tr>
 					<th scope="row" nowrap>{{ $user->runFormat() }}</td>
 					<td nowrap>{{ $user->name }} {{ $user->fathers_family }} {{ $user->mothers_family }}</td>
+					<td class="small">{{ @$user->organizationalunit->establishment->name ?: ''}}</td>
 					<td class="small">{{ @$user->organizationalunit->name ?: ''}}</td>
 					<td class="small">{{ $user->position }}</td>
 					<td nowrap>
