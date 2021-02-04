@@ -82,10 +82,10 @@
 		</fieldset>
 
 		<fieldset class="form-group col">
-				<label for="for_users">Subdirector Médico</label>
+				<label for="for_users">Subdirector(a)</label>
 				<select name="users[]" id="subdirector_medico" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "9882506") selected  @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',3)->first()->responsable_id) selected  @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 					<!-- <option value="12345678">Pedro Iriondo</option> -->
 				</select>

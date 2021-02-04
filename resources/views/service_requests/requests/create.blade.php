@@ -50,7 +50,7 @@
 
     <fieldset class="form-group col">
 		    <label for="for_subdirection_ou_id">Subdirección</label>
-				<select class="form-control selectpicker" data-live-search="true" name="subdirection_ou_id" required data-size="5">
+				<select class="form-control selectpicker" data-live-search="true" id="subdirection_ou_id" name="subdirection_ou_id" required data-size="5">
 					<option value=""></option>
           @foreach($subdirections as $key => $subdirection)
             <option value="{{$subdirection->id}}">{{$subdirection->name}}</option>
@@ -93,8 +93,8 @@
 		</fieldset>
 
 		<fieldset class="form-group col">
-				<label for="for_users">Subdirector Médico</label>
-				<select name="users[]" id="subdirector_medico" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+				<label for="for_users">Subdirector(a)</label>
+				<select name="users[]" id="subdirector_medico" class="form-control " data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}" @if($user->id == "9882506") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
@@ -102,6 +102,15 @@
 				<!-- modificar rut por el que corresponda -->
 				<input type="hidden" name="users[]" value="9882506" />
 		</fieldset>
+
+		<!-- <fieldset class="form-group col">
+				<label for="for_users">Subdirector Médico</label>
+				<select name="users[]" id="prueba" class="form-control" >
+					@foreach($users as $key => $user)
+						<option value="{{$user->id}}" @if($user->id == "9882506") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+					@endforeach
+				</select>
+		</fieldset> -->
 
 		<fieldset class="form-group col">
 				<label for="for_users">S.D.G.A SSI</label>
@@ -474,6 +483,23 @@
         var str = $("#for_run").val();
         $('#for_dv').val($.rut.dv(str));
     });
+	});
+
+	$('#subdirection_ou_id').on('change', function() {
+		var value = this.value;
+		//subdirección gestión del cuidado al paciente
+		if (value == 85) {
+			// $('#subdirector_medico').removeAttr('disabled');
+			$('#subdirector_medico option[value=13835321]').attr('selected', 'selected');
+			$('#subdirector_medico option[value=13835321]').prop('selected', 'selected');
+			// $('#subdirector_medico').attr('disabled', 'disabled');
+		}
+		if (value != 85) {
+			// $('#subdirector_medico').removeAttr('disabled');
+			$('#subdirector_medico option[value=9882506]').attr('selected', 'selected');
+			$('#subdirector_medico option[value=9882506]').prop('selected', 'selected');
+			// $('#subdirector_medico').attr('disabled', 'disabled');
+		}
 	});
 
 	$('#btn_fonasa').click(function() {
