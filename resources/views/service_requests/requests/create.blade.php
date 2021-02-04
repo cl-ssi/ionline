@@ -6,7 +6,7 @@
 
 <h3>Solicitud de Contratación de Servicios</h3>
 
-<form method="POST" enctype="multipart/form-data" action="{{ route('rrhh.service_requests.store') }}">
+<form method="POST" enctype="multipart/form-data" id="form" action="{{ route('rrhh.service_requests.store') }}">
 	@csrf
 
 	<!-- <div class="card">
@@ -100,7 +100,7 @@
 					@endforeach
 				</select>
 				<!-- modificar rut por el que corresponda -->
-				<input type="hidden" name="users[]" value="9882506" />
+				<!-- <input type="hidden" name="users[]" value="9882506" /> -->
 		</fieldset>
 
 		<!-- <fieldset class="form-group col">
@@ -119,7 +119,7 @@
 						<option value="{{$user->id}}" @if($user->id == "14104369") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<input type="hidden" name="users[]" value="14104369" />
+				<!-- <input type="hidden" name="users[]" value="14104369" /> -->
 		</fieldset>
 
 	</div>
@@ -132,7 +132,7 @@
 						<option value="{{$user->id}}" @if($user->id == "9018101") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<input type="hidden" name="users[]" value="9018101" />
+				<!-- <input type="hidden" name="users[]" value="9018101" /> -->
 		</fieldset>
 
 		<fieldset class="form-group col">
@@ -142,7 +142,7 @@
 						<option value="{{$user->id}}" @if($user->id == "13866194") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<input type="hidden" name="users[]" value="13866194" />
+				<!-- <input type="hidden" name="users[]" value="13866194" /> -->
 		</fieldset>
 
 		<fieldset class="form-group col">
@@ -152,7 +152,7 @@
 						<option value="{{$user->id}}" @if($user->id == "15685508") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<input type="hidden" name="users[]" value="15685508" />
+				<!-- <input type="hidden" name="users[]" value="15685508" /> -->
 		</fieldset>
 
 		<fieldset class="form-group col">
@@ -162,7 +162,7 @@
 						<option value="{{$user->id}}" @if($user->id == "14101085") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<input type="hidden" name="users[]" value="14101085" />
+				<!-- <input type="hidden" name="users[]" value="14101085" /> -->
 		</fieldset>
 
 	</div>
@@ -500,12 +500,14 @@
 			// $('#subdirector_medico').removeAttr('disabled');
 			$('#subdirector_medico option[value=13835321]').attr('selected', 'selected');
 			$('#subdirector_medico option[value=13835321]').prop('selected', 'selected');
+			// $('#form').append('<input type="hidden" name="users[2]" value="13835321" />');
 			// $('#subdirector_medico').attr('disabled', 'disabled');
 		}
 		if (value != 85) {
 			// $('#subdirector_medico').removeAttr('disabled');
 			$('#subdirector_medico option[value=9882506]').attr('selected', 'selected');
 			$('#subdirector_medico option[value=9882506]').prop('selected', 'selected');
+			// $('#form').append('<input type="hidden" name="users[2]" value="9882506" />');
 			// $('#subdirector_medico').attr('disabled', 'disabled');
 		}
 	});
