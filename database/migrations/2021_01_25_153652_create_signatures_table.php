@@ -26,7 +26,7 @@ class CreateSignaturesTable extends Migration
             $table->string('recipients', 255)->nullable(); //destinatarios
             $table->string('distribution', 255)->nullable(); //distribución
             $table->unsignedBigInteger('user_id');
-            $table->string('verification_code')->nullable();
+            $table->string('verification_code')->nullable(); /* ej: afo2f42o2f */
 
             //fk
             $table->foreign('user_id')->references('id')->on('users');
@@ -36,18 +36,17 @@ class CreateSignaturesTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('doc_signatures_flow', function (Blueprint $table) {
+        Schema::create('doc_signature_flow', function (Blueprint $table) {
             $table->id();
             $table->foreignId('signature_id');
-            $table->foreignId('ou_id');
             $table->enum('type', ['visador','firmante'])->nullable();
+            $table->foreignId('ou_id');
+            $table->foreignId('user_id')->nullable();
             $table->tinyInteger('sign_position')->nullable(); //sólo para type Visador
 
-            $table->foreignId('user_id')->nullable();
+            $table->boolean('status')->nullable(); // Signed 1 Unsigned 0
             $table->datetime('signature_date')->nullable();
             $table->longText('observation')->nullable();
-
-            $table->boolean('status')->nullable();
 
             $table->foreign('signature_id')->references('id')->on('doc_signatures');
             $table->foreign('ou_id')->references('id')->on('organizational_units');
@@ -55,6 +54,9 @@ class CreateSignaturesTable extends Migration
 
             $table->timestamps();
         });
+
+        /* Schema doc_signatures_files */
+        /* doc_signature_flow_id, file, file_type [documento o anexo], signed_file */
     }
 
     /**
