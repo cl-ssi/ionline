@@ -54,7 +54,8 @@ class CreateServiceRequestsTable extends Migration
             $table->double('nightly_hours', 8, 2)->nullable();
             $table->enum('estate', ['Profesional Médico', 'Profesional', 'Técnico', 'Administrativo', 'Farmaceutico', 'Odontólogo', 'Bioquímico', 'Auxiliar', 'Otro (justificar)'])->nullable();
             $table->string('estate_other', 100)->nullable();
-            $table->enum('working_day_type', ['08:00 a 16:48 hrs (L-M-M-J-V)', 'TERCER TURNO', 'CUARTO TURNO', 'Otro (justificar)'])->nullable();
+            // $table->enum('working_day_type', ['08:00 a 16:48 hrs (L-M-M-J-V)', 'TERCER TURNO', 'CUARTO TURNO', 'Otro (justificar)'])->nullable();
+            $table->string('working_day_type',100)->nullable();
             $table->string('working_day_type_other', 100)->nullable();
             $table->string('budget_cdp_number', 100)->nullable();
             $table->string('budget_item', 100)->nullable();

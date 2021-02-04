@@ -250,7 +250,7 @@
         </select>
 		</fieldset> -->
 
-    <fieldset class="form-group col">
+    <!-- <fieldset class="form-group col">
 		    <label for="for_normal_hour_payment">Pago Hora Normal</label>
 		    <select name="normal_hour_payment" class="form-control">
           <option value="" @if($serviceRequest->normal_hour_payment == '') selected @endif ></option>
@@ -261,7 +261,7 @@
     <fieldset class="form-group col">
 		    <label for="for_amount">Valor $</label>
 		    <input type="number" class="form-control" id="for_amount" placeholder="" name="amount" value="{{ $serviceRequest->amount }}">
-		</fieldset>
+		</fieldset> -->
 
   </div>
 
@@ -299,7 +299,7 @@
         </select>
     </fieldset>
 
-    <fieldset class="form-group col">
+    <!-- <fieldset class="form-group col">
 		    <label for="for_daily_hours">Horas Diurnas</label>
 		    <input type="number" class="form-control" id="for_daily_hours" placeholder="" name="daily_hours" value="{{ $serviceRequest->daily_hours }}">
 		</fieldset>
@@ -307,11 +307,12 @@
     <fieldset class="form-group col">
 		    <label for="for_nightly_hours">Horas Nocturnas</label>
 		    <input type="number" class="form-control" id="for_nightly_hours" placeholder="" name="nightly_hours" value="{{ $serviceRequest->nightly_hours }}">
-		</fieldset>
+		</fieldset> -->
+
+    <br>
 
   </div>
 
-  <br>
   <div class="card" id="control_turnos">
     <div class="card-header">
       Control de Turnos
@@ -321,14 +322,18 @@
         <div class="row">
           <fieldset class="form-group col">
               <label for="for_estate">Entrada</label>
-              <input type="date" class="form-control" name="shift_date" id="shift_date">
+              <input type="date" class="form-control" name="shift_start_date" id="shift_start_date">
           </fieldset>
           <fieldset class="form-group col">
-              <label for="for_estate">H.Inicio</label>
+              <label for="for_estate">Hora</label>
               <input type="time" class="form-control" name="start_hour" id="start_hour">
           </fieldset>
           <fieldset class="form-group col">
-              <label for="for_estate">H.Término</label>
+              <label for="for_estate">Salida</label>
+              <input type="date" class="form-control" name="shift_end_date" id="shift_end_date">
+          </fieldset>
+          <fieldset class="form-group col">
+              <label for="for_estate">Hora</label>
               <input type="time" class="form-control" name="end_hour" id="end_hour">
           </fieldset>
           <fieldset class="form-group col">
@@ -365,8 +370,9 @@
               @foreach($serviceRequest->shiftControls as $key => $shiftControl)
                 <tr>
                   <td><input type='checkbox' name='record'></td>
-                  <td><input type="hidden" class="form-control" name="shift_date[]" value="{{Carbon\Carbon::parse($shiftControl->start_date)->format('d/m/Y')}}">{{Carbon\Carbon::parse($shiftControl->start_date)->format('d/m/Y')}}</td>
+                  <td><input type="hidden" class="form-control" name="shift_start_date[]" value="{{Carbon\Carbon::parse($shiftControl->start_date)->format('Y-m-d')}}">{{Carbon\Carbon::parse($shiftControl->start_date)->format('Y-m-d')}}</td>
                   <td><input type="hidden" class="form-control" name="shift_start_hour[]" value="{{Carbon\Carbon::parse($shiftControl->start_date)->format('H:i')}}">{{Carbon\Carbon::parse($shiftControl->start_date)->format('H:i')}}</td>
+                  <td><input type="hidden" class="form-control" name="shift_end_date[]" value="{{Carbon\Carbon::parse($shiftControl->end_date)->format('Y-m-d')}}">{{Carbon\Carbon::parse($shiftControl->end_date)->format('Y-m-d')}}</td>
                   <td><input type="hidden" class="form-control" name="shift_end_hour[]" value="{{Carbon\Carbon::parse($shiftControl->end_date)->format('H:i')}}">{{Carbon\Carbon::parse($shiftControl->end_date)->format('H:i')}}</td>
                   <td><input type="hidden" class="form-control" name="shift_observation[]" value="{{$shiftControl->observation}}">{{$shiftControl->observation}}</td>
                 </tr>
@@ -387,6 +393,8 @@
       </li>
     </ul>
   </div>
+
+  <br>
 
   <div class="row">
 
@@ -413,9 +421,12 @@
     <fieldset class="form-group col">
 		    <label for="for_working_day_type">Jornada de Trabajo</label>
 		    <select name="working_day_type" class="form-control" required>
-          <option value="08:00 a 16:48 hrs (L-M-M-J-V)" @if($serviceRequest->working_day_type == '08:00 a 16:48 hrs (L-M-M-J-V)') selected @endif >08:00 a 16:48 hrs (L-M-M-J-V)</option>
+          <!-- <option value="08:00 a 16:48 hrs (L-M-M-J-V)" @if($serviceRequest->working_day_type == '08:00 a 16:48 hrs (L-M-M-J-V)') selected @endif >08:00 a 16:48 hrs (L-M-M-J-V)</option> -->
+          <option value="DIURNO" @if($serviceRequest->working_day_type == 'DIURNO') selected @endif >DIURNO</option>
           <option value="TERCER TURNO" @if($serviceRequest->working_day_type == 'TERCER TURNO') selected @endif >TERCER TURNO</option>
+          <option value="TERCER TURNO - MODIFICADO" @if($serviceRequest->working_day_type == 'TERCER TURNO - MODIFICADO') selected @endif >TERCER TURNO - MODIFICADO</option>
           <option value="CUARTO TURNO" @if($serviceRequest->working_day_type == 'CUARTO TURNO') selected @endif >CUARTO TURNO</option>
+          <option value="CUARTO TURNO - MODIFICADO" @if($serviceRequest->working_day_type == 'CUARTO TURNO - MODIFICADO') selected @endif >CUARTO TURNO - MODIFICADO</option>
         </select>
 
 		</fieldset>
@@ -677,27 +688,38 @@
 
 	$( document ).ready(function() {
 
-    $("#control_turnos").hide();
+    if ($('#program_contract_type').val() == "Horas") {
+      $("#control_turnos").show();
+      $('#for_weekly_hours').attr('disabled', 'disabled');
+    }else{
+      $("#control_turnos").hide();
+      $('#for_weekly_hours').removeAttr('disabled');
+    }
+
+
 		$('#program_contract_type').on('change', function() {
 			if (this.value == "Horas") {
 				$('#for_daily_hours').val("");
 				$('#for_nightly_hours').val("");
 				$('#for_daily_hours').attr('readonly', true);
 				$('#for_nightly_hours').attr('readonly', true);
+        $('#for_weekly_hours').attr('disabled', 'disabled');
 				$("#control_turnos").show();
 			}else{
 				$('#for_daily_hours').attr('readonly', false);
 				$('#for_nightly_hours').attr('readonly', false);
+        $('#for_weekly_hours').removeAttr('disabled');
 				$("#control_turnos").hide();
 			}
 		});
 
   	$(".add-row").click(function(){
-        var shift_date = $("#shift_date").val();
+        var shift_start_date = $("#shift_start_date").val();
         var start_hour = $("#start_hour").val();
-  			var end_hour = $("#end_hour").val();
+        var shift_end_date = $("#shift_end_date").val();
+        var end_hour = $("#end_hour").val();
   			var observation = $("#observation").val();
-        var markup = "<tr><td><input type='checkbox' name='record'></td><td> <input type='hidden' class='form-control' name='shift_date[]' id='shift_date' value='"+ shift_date +"'>"+ shift_date +"</td><td> <input type='hidden' class='form-control' name='shift_start_hour[]' id='start_hour' value='"+ start_hour +"'>" + start_hour + "</td><td> <input type='hidden' class='form-control' name='shift_end_hour[]' id='end_hour' value='"+ end_hour +"'>" + end_hour + "</td><td> <input type='hidden' class='form-control' name='shift_observation[]' id='observation' value='"+ observation +"'>" + observation + "</td></tr>";
+        var markup = "<tr><td><input type='checkbox' name='record'></td><td> <input type='hidden' class='form-control' name='shift_start_date[]' id='shift_start_date' value='"+ shift_start_date +"'>"+ shift_start_date +"</td><td> <input type='hidden' class='form-control' name='shift_start_hour[]' id='start_hour' value='"+ start_hour +"'>" + start_hour + "</td><td> <input type='hidden' class='form-control' name='shift_end_date[]' id='shift_end_date' value='"+ shift_end_date +"'>"+ shift_end_date +"</td><td> <input type='hidden' class='form-control' name='shift_end_hour[]' id='end_hour' value='"+ end_hour +"'>" + end_hour + "</td><td> <input type='hidden' class='form-control' name='shift_observation[]' id='observation' value='"+ observation +"'>" + observation + "</td></tr>";
         $("table tbody").append(markup);
 
   			// $("#shift_date").val("");
