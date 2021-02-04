@@ -255,13 +255,11 @@
         <label for="for_service_description">Descripción Servicio</label>
         <textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50"></textarea>
 
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_tecnico_paramedico">Técnico Paramédico</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_administrativo">Administrativo</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_auxiliar">Auxiliar</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_enfermeria">Enfermería</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_contingencia_covid">Contigencia covid</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_atencion_paciente">Atención paciente</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_servicio_kine">Kinesiología</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_enfermeros">Enfermeras/os</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_kinesiologos">Kinesiólogos/as</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_paramedicos">Técnicos paraméricos</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_auxiliares">Auxiliares de servicio</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_administrativos">Administrativos/as</button>
     </fieldset>
 
   </div>
@@ -572,28 +570,21 @@
       });
   });
 
-	$("#alias_tecnico_paramedico").click(function(){
-		$('#service_description').val("Servicio de Técnico Paramédico de CR Emergencia para realizar las funciones descritas en el manual de organización del CR Emergencia, para la atención de pacientes de urgencia P.A.M.E");
+	$("#alias_enfermeros").click(function(){
+		$('#service_description').val("Prestará servicios de enfermería realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_administrativo").click(function(){
-		$('#service_description').val("Servicios administrativos, como funcionario de admisión de urgencia, para reforzar la unidad por contingencia COVID19.");
+	$("#alias_kinesiologos").click(function(){
+		$('#service_description').val("Prestará servicios de kinesiología realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_auxiliar").click(function(){
-		$('#service_description').val("Servicio de Auxiliar, para realizar las funciones descritas en el manual de organización del CR Emergencia para reforzar la unidad por contingencia COVID19.");
+	$("#alias_paramedicos").click(function(){
+		$('#service_description').val("Prestará servicios como técnico paramédico realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_enfermeria").click(function(){
-		$('#service_description').val("Servicios de Enfermería para la atención de pacientes en el CR Emergencia en las distintas areas que la componen, urgencia adulto pediatría, categorización y observación, para reforzar la unidad por contingencia COVID19.");
+	$("#alias_auxiliares").click(function(){
+		$('#service_description').val("Prestará servicios como auxiliar de servicio realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_contingencia_covid").click(function(){
-		$('#service_description').val("1.- Revisión diaria de cada uno de los RAU (Registro de atencion de urgencia)\n2.- Codificar cada uno de ellos, son sus respectivos diagnosticos\n3.- Registro de todas las prestaciones por pacientes otorgadas por atención a pacientes.\n4.- Atención al público en general de fonasa (Previsión C y D), Particulares, Isapres y convencionales.\n*Para reforzar la uinidad por contingencia Covid-19");
+	$("#alias_administrativos").click(function(){
+		$('#service_description').val("Prestará servicios en el área administrativa realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_atencion_paciente").click(function(){
-		$('#service_description').val("Atención de paciente en CR emergencia , en calidad de medico en box adulto.\npor renovación Covid\nturno completo");
-	});
-	$("#alias_servicio_kine").click(function(){
-		$('#service_description').val("Servicios de Kinesiología, entregando una atención integral de las enfermedades respiratorias del adulto mayor y niños en la unidad de emergencia durante el periodo de campaña de invierno y contingencia COVID19");
-	});
-
 
 </script>
 @endsection
