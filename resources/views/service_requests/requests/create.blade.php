@@ -74,7 +74,7 @@
 
 		<fieldset class="form-group col">
 				<label for="for_users">Responsable</label>
-				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required data-size="5">
+				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" data-size="5" required>
 					<option value=""></option>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
@@ -84,7 +84,7 @@
 
 		<fieldset class="form-group col">
 				<label for="for_users">Jefe Directo</label>
-				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required data-size="5">
+				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" data-size="5" required>
 					<option value=""></option>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
@@ -94,13 +94,14 @@
 
 		<fieldset class="form-group col">
 				<label for="for_users">Subdirector(a)</label>
-				<select name="users[]" id="subdirector_medico" class="form-control " data-live-search="true" required="" data-size="5" disabled>
+				<select name="users[]" id="subdirector_medico" class="form-control selectpicker" data-live-search="true" data-size="5">
+					<option value=""></option>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "9882506") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id != "9882506" && $user->id != "13835321") disabled @endif>{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
 				<!-- modificar rut por el que corresponda -->
-				<input type="hidden" name="users[]" value="9882506" />
+				<!-- <input type="hidden" name="users[]" value="9882506" /> -->
 		</fieldset>
 
 		<!-- <fieldset class="form-group col">
@@ -114,12 +115,12 @@
 
 		<fieldset class="form-group col">
 				<label for="for_users">S.D.G.A SSI</label>
-				<select name="users[]" id="sdga_servicio" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+				<select name="users[]" id="sdga_servicio" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "14104369") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == "14104369") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<input type="hidden" name="users[]" value="14104369" />
+				<!-- <input type="hidden" name="users[]" value="14104369" /> -->
 		</fieldset>
 
 	</div>
@@ -127,42 +128,42 @@
 
 		<fieldset class="form-group col">
 				<label for="for_users">S.G.D.P Hospital</label>
-				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "9018101") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == "9018101") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<input type="hidden" name="users[]" value="9018101" />
+				<!-- <input type="hidden" name="users[]" value="9018101" /> -->
 		</fieldset>
 
 		<fieldset class="form-group col">
 				<label for="for_users">Jefe Finanzas</label>
-				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "13866194") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == "13866194") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<input type="hidden" name="users[]" value="13866194" />
+				<!-- <input type="hidden" name="users[]" value="13866194" /> -->
 		</fieldset>
 
 		<fieldset class="form-group col">
 				<label for="for_users">S.G.D.P Hospital</label>
-				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "15685508") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == "15685508") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<input type="hidden" name="users[]" value="15685508" />
+				<!-- <input type="hidden" name="users[]" value="15685508" /> -->
 		</fieldset>
 
 		<fieldset class="form-group col">
 				<label for="for_users">Director</label>
-				<select name="users[]" id="director" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+				<select name="users[]" id="director" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "14101085") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == "14101085") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<input type="hidden" name="users[]" value="14101085" />
+				<!-- <input type="hidden" name="users[]" value="14101085" /> -->
 		</fieldset>
 
 	</div>
@@ -497,16 +498,16 @@
 		var value = this.value;
 		//subdirección gestión del cuidado al paciente
 		if (value == 85) {
-			// $('#subdirector_medico').removeAttr('disabled');
-			$('#subdirector_medico option[value=13835321]').attr('selected', 'selected');
-			$('#subdirector_medico option[value=13835321]').prop('selected', 'selected');
-			// $('#subdirector_medico').attr('disabled', 'disabled');
+			// $('#subdirector_medico option[value=13835321]').attr('selected', 'selected');
+			// $('#subdirector_medico option[value=13835321]').prop('selected', 'selected');
+			$('select[id=subdirector_medico]').val(13835321);
+			$('#subdirector_medico').selectpicker('refresh');
 		}
 		if (value != 85) {
-			// $('#subdirector_medico').removeAttr('disabled');
-			$('#subdirector_medico option[value=9882506]').attr('selected', 'selected');
-			$('#subdirector_medico option[value=9882506]').prop('selected', 'selected');
-			// $('#subdirector_medico').attr('disabled', 'disabled');
+			// $('#subdirector_medico option[value=9882506]').attr('selected', 'selected');
+			// $('#subdirector_medico option[value=9882506]').prop('selected', 'selected');
+			$('select[id=subdirector_medico]').val(9882506);
+			$('#subdirector_medico').selectpicker('refresh')
 		}
 	});
 
