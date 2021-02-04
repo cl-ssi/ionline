@@ -648,6 +648,13 @@ class RequirementController extends Controller
      */
     public function destroy(Requirement $requirement)
     {
-        //
+      $id = $requirement->id;
+      $requirement->events()->delete();
+      $requirement->requirementStatus()->delete();
+      $requirement->delete();
+
+      session()->flash('success', 'El requerimiento '.$id.' ha sido eliminado');
+
+      return redirect()->route('requirements.outbox');
     }
 }

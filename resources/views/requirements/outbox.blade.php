@@ -124,13 +124,24 @@
         </td>
 				<!-- <td>{{$created->status}}</td> -->
 				<td nowrap>
-					<a href="{{ route('requirements.show',$created->id) }}">
-						<i class="fas fa-edit"></i>
+        <div class="btn-group" role="group" aria-label="Basic example">
+					<a href="{{ route('requirements.show',$created->id) }}" class="btn btn-sm btn-link">
+          <span class="fas fa-edit" aria-hidden="true"></span>
 					</a>
-                    &nbsp;
-					<a href="{{ route('requirements.archive_requirement',$created) }}">
-						<i class="fas fa-arrow-down"></i>
+                  
+					<a href="{{ route('requirements.archive_requirement',$created) }}" class="btn btn-sm btn-link">
+						<span class="fas fa-arrow-down"></span>
 					</a>
+          @can('Requirements: delete')
+          @if($created->status == 'creado')
+          <form method="POST" action="{{ route('requirements.destroy', $created) }}" class="d-inline">
+              @csrf
+			        @method('DELETE')
+              <button type="submit" class="btn btn-sm btn-link" onclick="return confirm('¿Desea eliminar este requerimiento?')"><span style="color: red;"><i class="fas fa-trash-alt"></i><span></button></button>
+          </form>
+          @endif
+          @endcan
+        </div>
 				</td>
 				<td nowrap>
 
