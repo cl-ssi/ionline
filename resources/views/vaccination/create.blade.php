@@ -8,45 +8,63 @@
 
 <h3 class="mb-3">Crear nuevo funcionario</h3>
 
+@if(!request()->get('run'))
+<form method="GET" class="form-horizontal" action="{{ route('vaccination.create') }}">
+    <div class="form-row">
+        <fieldset class="form-group col-md-2 col-8">
+            <label for="for_run">Run*</label>
+            <input type="number" class="form-control" name="run" on
+                id="for_run" required placeholder="sin digito">
+        </fieldset>
+
+        <fieldset class="form-group col-md-1 col-4">
+            <label for="for_dv">Digito*</label>
+            <input type="text" class="form-control" name="dv"
+                id="for_dv" required readonly>
+        </fieldset>
+    </div>
+    <button type="submit" class="btn btn-primary">Consultar</button>
+</form>
+@else
+@if(!$result)
 <form method="POST" class="form-horizontal" action="{{ route('vaccination.store') }}">
     @csrf
     @method('POST')
 
     <div class="form-row">
+        <fieldset class="form-group col-md-2 col-8">
+            <label for="for_run">Run*</label>
+            <input type="number" class="form-control" name="run" on
+                id="for_run" required placeholder="sin digito" value="{{request()->get('run')}}">
+        </fieldset>
+
+        <fieldset class="form-group col-md-1 col-4">
+            <label for="for_dv">Digito*</label>
+            <input type="text" class="form-control" name="dv" value="{{request()->get('dv')}}"
+                id="for_dv" required readonly>
+        </fieldset>
+
         <fieldset class="form-group col-md-3 col-12">
-            <label for="for_name">Nombre*</label>
-            <input type="text" class="form-control" name="name"
+            <label for="for_name">Nombres*</label>
+            <input type="text" class="form-control" name="name" autofocus 
                 id="for_name" required>
         </fieldset>
 
-        <fieldset class="form-group col-md-2 col-12">
+        <fieldset class="form-group col-md-3 col-12">
             <label for="for_fathers_family">Apellido Paterno*</label>
             <input type="text" class="form-control" name="fathers_family"
                 id="for_fathers_family" required>
         </fieldset>
 
-        <fieldset class="form-group col-md-2 col-12">
+        <fieldset class="form-group col-md-3 col-12">
             <label for="for_mothers_family">Apellido Materno*</label>
             <input type="text" class="form-control" name="mothers_family"
                 id="for_mothers_family" required>
         </fieldset>
-
-        <fieldset class="form-group col-md-2 col-9">
-            <label for="for_run">Run*</label>
-            <input type="text" class="form-control" name="run"
-                id="for_run" required placeholder="sin digito">
-        </fieldset>
-
-        <fieldset class="form-group col-md-1 col-3">
-            <label for="for_dv">Digito*</label>
-            <input type="text" class="form-control" name="dv"
-                id="for_dv" required readonly>
-        </fieldset>
-
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-md-3 col-12">
+        <fieldset class="form-group col-md-4 col-12">
             <label for="for_establishment">Establecimiento*</label>
             <select name="establishment_id" id="for_establishment" class="form-control" required>
                 <option value=""></option>
@@ -61,7 +79,7 @@
                 id="for_ortanizationalUnit" placeholder="unidad/depto">
         </fieldset>
 
-        <fieldset class="form-group col-md-3 col-12">
+        <fieldset class="form-group col-md-4 col-12">
             <label for="for_inform_method">Informado a través</label>
             <select name="inform_method" id="for_inform_method" class="form-control">
                 <option value=""></option>
@@ -79,7 +97,7 @@
         </fieldset> --}}
     </div>
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-md-3 col-12">
             <label for="for_first_dose">Agenda Primera dósis</label>
             <input type="datetime-local" class="form-control" name="first_dose"
@@ -96,7 +114,7 @@
 
     <hr>
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-md-3 col-12">
             <label for="for_first_dose_at">Primera dosis</label>
             <input type="datetime-local" class="form-control" name="first_dose_at"
@@ -111,7 +129,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="form-row">
 
         <fieldset class="form-group col-md-3 col-12">
             <label for="for_second_dose_at">Segunda dosis</label>
@@ -129,8 +147,11 @@
 
     <button type="submit" class="btn btn-primary form-control">Crear</button>
 
-
 </form>
+@else
+ Funcionario con run {{request()->get('run')}}-{{request()->dv}} ya existe.
+@endif
+@endif
 
 @endsection
 

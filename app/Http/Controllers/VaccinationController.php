@@ -78,9 +78,11 @@ class VaccinationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('vaccination.create');
+        $result = false;
+        if($request->get('run')) $result = Vaccination::where('run',$request->run)->exists();
+        return view('vaccination.create', compact('result'));
     }
 
     /**
@@ -91,11 +93,14 @@ class VaccinationController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'run' => 'required|unique:vaccinations'
+        ]);
+
         $vaccination = new Vaccination($request->All());
         $vaccination->save();
 
-        session()->flash('El funcionario ha sido agreagdo');
-        return redirect()->route('vaccination.create');
+        return redirect()->route('vaccination.create')->with('success', 'El funcionario ha sido agregado');
     }
 
     /**
