@@ -23,7 +23,7 @@
 
 	<div class="row">
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-3">
 		    <label for="for_name">Tipo</label>
 		    <select name="type" class="form-control" required>
           <option value="Covid" @if($serviceRequest->type == 'Covid') selected @endif>Honorarios - Covid</option>
@@ -31,7 +31,7 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-5">
 		    <label for="for_subdirection_ou_id">Subdirección</label>
 				<select class="form-control selectpicker" data-live-search="true" name="subdirection_ou_id" required="" data-size="5">
           @foreach($subdirections as $key => $subdirection)
@@ -39,7 +39,7 @@
           @endforeach
         </select>
 		</fieldset>
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-4">
 		    <label for="for_responsability_center_ou_id">Centro de Responsabilidad</label>
 				<select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" required="" data-size="5">
           @foreach($responsabilityCenters as $key => $responsabilityCenter)
@@ -61,7 +61,7 @@
 
   <div class="row">
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-3">
 				<label for="for_users">Responsable</label>
 				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
           @foreach($users as $key => $user)
@@ -70,7 +70,7 @@
 				</select>
 		</fieldset>
 
-		<fieldset class="form-group col">
+		<fieldset class="form-group col-12 col-md-3">
 				<label for="for_users">Jefe Directo</label>
 				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
@@ -79,7 +79,7 @@
 				</select>
 		</fieldset>
 
-		<fieldset class="form-group col">
+		<fieldset class="form-group col-12 col-md-3">
 				<label for="for_users">Subdirector(a)</label>
 				<select name="users[]" id="subdirector_medico" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
@@ -91,7 +91,7 @@
 				<!-- <input type="hidden" name="users[]" value="9882506" /> -->
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-3">
 				<label for="for_users">S.D.G.A SSI</label>
 				<select name="users[]" id="sdga_servicio" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
@@ -104,7 +104,7 @@
 	</div>
 	<div class="row">
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-3">
 				<label for="for_users">S.G.D.P Hospital</label>
 				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
@@ -114,7 +114,7 @@
 				<!-- <input type="hidden" name="users[]" value="9018101" /> -->
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-3">
 				<label for="for_users">Jefe Finanzas</label>
 				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
@@ -124,7 +124,7 @@
 				<!-- <input type="hidden" name="users[]" value="13866194" /> -->
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-3">
 				<label for="for_users">Director S.G.D.P</label>
 				<select name="users[]" id="director_sgdp" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
@@ -134,7 +134,7 @@
 				<!-- <input type="hidden" name="users[]" value="15685508" /> -->
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-3">
 				<label for="for_users">Director</label>
 				<select name="users[]" id="director" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
@@ -151,17 +151,17 @@
   <div class="border border-info rounded">
   <div class="row ml-1 mr-1">
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-8 col-md-3">
 		    <label for="for_rut">Rut</label>
 		    <input type="text" class="form-control" id="for_rut" placeholder="" name="rut" required="required" value="{{ $serviceRequest->rut }}" disabled>
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-5">
 		    <label for="for_name">Nombre completo</label>
 		    <input type="text" class="form-control" id="for_name" placeholder="" name="name" required="required" value="{{ $serviceRequest->name }}">
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-4">
 		    <label for="for_name">Tipo de Contrato</label>
 		    <select name="contract_type" class="form-control" required>
           <option value="NUEVO" @if($serviceRequest->contract_type == 'NUEVO') selected @endif >Nuevo</option>
@@ -175,17 +175,17 @@
 
 	<div class="row ml-1 mr-1">
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-5">
 		    <label for="for_address">Dirección</label>
 		    <input type="text" class="form-control" id="foraddress" placeholder="" name="address" value="{{$serviceRequest->address}}">
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-3">
 		    <label for="for_phone_number">Número telefónico</label>
 		    <input type="text" class="form-control" id="for_phone_number" placeholder="" name="phone_number" value="{{$serviceRequest->phone_number}}">
 		</fieldset>
 
-		<fieldset class="form-group col">
+		<fieldset class="form-group col-12 col-md-4">
 		    <label for="for_email">Correo electrónico</label>
 		    <input type="text" class="form-control" id="for_email" placeholder="" name="email" value="{{$serviceRequest->email}}">
 		</fieldset>
@@ -197,17 +197,17 @@
 
   <div class="row">
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-4">
 		    <label for="for_request_date">Fecha Solicitud</label>
 		    <input type="date" class="form-control" id="for_request_date" name="request_date" required value="{{\Carbon\Carbon::parse($serviceRequest->request_date)->format('Y-m-d')}}">
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-4">
 		    <label for="for_start_date">Fecha de Inicio</label>
 		    <input type="date" class="form-control" id="for_start_date" name="start_date" required value="{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}">
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-4">
 		    <label for="for_end_date">Fecha de Término</label>
 		    <input type="date" class="form-control" id="for_end_date" name="end_date" required value="{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}">
 		</fieldset>
@@ -220,7 +220,7 @@
 
     <fieldset class="form-group col">
         <label for="for_service_description">Descripción Servicio</label>
-        <textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50">{{ $serviceRequest->service_description }}</textarea>
+        <textarea id="service_description" name="service_description" class="form-control" rows="5">{{ $serviceRequest->service_description }}</textarea>
     </fieldset>
 
   </div>
@@ -265,7 +265,7 @@
 
   <div class="row">
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-8 col-md-4">
 		    <label for="for_program_contract_type">Tipo de Contratación</label>
 		    <select name="program_contract_type" id="program_contract_type" class="form-control" required>
           <option value="Semanal" @if($serviceRequest->program_contract_type == 'Semanal') selected @endif >Semanal</option>
@@ -275,7 +275,7 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-4 col-md-3">
 		    <label for="for_weekly_hours">Hrs.Semanales</label>
 		    <select name="weekly_hours" class="form-control" id="for_weekly_hours" required>
 					<option value=""></option>
@@ -287,7 +287,7 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-4">
         <label for="for_establishment_id">Establecimiento</label>
         <select name="establishment_id" class="form-control" required>
           <option value=""></option>
@@ -396,7 +396,7 @@
 
   <div class="row">
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-3">
 		    <label for="for_estate">Estamento al que corresponde CS</label>
 		    <select name="estate" class="form-control" required>
           <option value="Profesional Médico" @if($serviceRequest->estate == 'Profesional Médico') selected @endif >Profesional Médico</option>
@@ -411,12 +411,12 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md-3">
 		    <label for="for_estate_other">Otro</label>
 		    <input type="text" class="form-control" id="for_estate_other" placeholder="" name="estate_other" value="{{ $serviceRequest->estate_other }}">
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-6 col-md-3">
 		    <label for="for_working_day_type">Jornada de Trabajo</label>
 		    <select name="working_day_type" class="form-control" required>
           <!-- <option value="08:00 a 16:48 hrs (L-M-M-J-V)" @if($serviceRequest->working_day_type == '08:00 a 16:48 hrs (L-M-M-J-V)') selected @endif >08:00 a 16:48 hrs (L-M-M-J-V)</option> -->
@@ -429,7 +429,7 @@
 
 		</fieldset>
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-6 col-md-3">
 		    <label for="for_working_day_type_other">Otro</label>
 		    <input type="text" class="form-control" id="for_working_day_type_other" placeholder="" name="working_day_type_other" value="{{ $serviceRequest->working_day_type_other }}">
 		</fieldset>
@@ -610,72 +610,66 @@
 <form method="POST" action="{{ route('rrhh.signature_flow.store') }}" enctype="multipart/form-data">
 @csrf
 
-<div class="card">
+<div class="card tabel-responsive">
   <div class="card-header">
     Aprobaciones de Solicitud
   </div>
-    <div class="card-body">
-
-      <table class="table table-sm table-bordered" style='font-size:65%' >
-        <thead>
+  <div class="table-responsive">
+  <table class="card-table table table-sm table-bordered small">
+      <thead>
+        <tr>
+          <th scope="col">Fecha</th>
+          <th scope="col">U.Organizacional</th>
+          <th scope="col">Cargo</th>
+          <th scope="col">Usuario</th>
+          <th scope="col">Tipo</th>
+          <th scope="col">Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
+        @if($SignatureFlow->status === null)
+          <tr class="bg-light">
+        @elseif($SignatureFlow->status === 0)
+          <tr class="bg-danger">
+        @elseif($SignatureFlow->status === 1)
           <tr>
-            <th scope="col">Fecha</th>
-            <th scope="col">U.Organizacional</th>
-            <th scope="col">Cargo</th>
-            <th scope="col">Usuario</th>
-            <th scope="col">Tipo</th>
-            <th scope="col">Estado</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
-          @if($SignatureFlow->status === null)
-            <tr class="bg-light">
-          @elseif($SignatureFlow->status === 0)
-            <tr class="bg-danger">
-          @elseif($SignatureFlow->status === 1)
-            <tr>
-          @endif
-             <td>{{ $SignatureFlow->signature_date}}</td>
-             <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
-             <td>{{ $SignatureFlow->employee }}</td>
-             <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
-             <td>{{ $SignatureFlow->type }}</td>
-             <td>@if($SignatureFlow->status === null)  @elseif($SignatureFlow->status === 1) Aceptada @elseif($SignatureFlow->status === 0) Rechazada @endif</td>
-           </tr>
-         @endforeach
-        </tbody>
-      </table>
-
-
-      <div class="row">
-        <fieldset class="form-group col-3">
-            <label for="for_name">Tipo</label>
-            <input type="text" class="form-control" name="employee" value="{{$employee}}" readonly="readonly">
-            <input type="hidden" class="form-control" name="service_request_id" value="{{$serviceRequest->id}}">
-        </fieldset>
-        <fieldset class="form-group col-3">
-            <label for="for_name">Estado Solicitud</label>
-            <select name="status" class="form-control">
-              <option value="">Seleccionar una opción</option>
-              <option value="1">Aceptada</option>
-              <option value="0">Rechazada</option>
-            </select>
-        </fieldset>
-        <fieldset class="form-group col-4">
-            <label for="for_observation">Observación</label>
-            <input type="text" class="form-control" id="for_observation" placeholder="" name="observation">
-        </fieldset>
-        <fieldset class="form-group col">
-            <label for="for_button"><br></label>
-            <button type="submit" id="for_button" class="form-control btn btn-primary">Guardar</button>
-        </fieldset>
-      </div>
-
-
-
-    </div>
+        @endif
+           <td>{{ $SignatureFlow->signature_date}}</td>
+           <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
+           <td>{{ $SignatureFlow->employee }}</td>
+           <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
+           <td>{{ $SignatureFlow->type }}</td>
+           <td>@if($SignatureFlow->status === null)  @elseif($SignatureFlow->status === 1) Aceptada @elseif($SignatureFlow->status === 0) Rechazada @endif</td>
+         </tr>
+       @endforeach
+      </tbody>
+  </table>
+  </div>
+  <div class="form-row">
+    <fieldset class="form-group col-12 col-md-3">
+        <label for="for_name">Tipo</label>
+        <input type="text" class="form-control" name="employee" value="{{$employee}}" readonly="readonly">
+        <input type="hidden" class="form-control" name="service_request_id" value="{{$serviceRequest->id}}">
+    </fieldset>
+    <fieldset class="form-group col-12 col-md-3">
+        <label for="for_name">Estado Solicitud</label>
+        <select name="status" class="form-control">
+          <option value="">Seleccionar una opción</option>
+          <option value="1">Aceptada</option>
+          <option value="0">Rechazada</option>
+        </select>
+    </fieldset>
+    <fieldset class="form-group col-12 col-md-5">
+        <label for="for_observation">Observación</label>
+        <input type="text" class="form-control" id="for_observation" placeholder="" name="observation">
+    </fieldset>
+    <fieldset class="form-group col-12 col-md-1">
+        <label for="for_button"><br></label>
+        <button type="submit" id="for_button" class="form-control btn btn-primary">Guardar</button>
+    </fieldset>
 </div>
+
 
 </form>
 

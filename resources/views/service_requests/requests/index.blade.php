@@ -27,6 +27,7 @@
 
 <h4>Pendientes</h4>
 
+<div class="table-responsive">
 <table class="table table-striped table-sm table-bordered">
 	<thead>
 		<tr>
@@ -47,17 +48,17 @@
 		<tr>
 			<td>{{ $serviceRequest->id }}</td>
 			<td>{{ $serviceRequest->type }}</td>
-			<td>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
-			<td>{{ $serviceRequest->rut }}</td>
-			<td>{{ $serviceRequest->name }}</td>
-			<td>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
-			<td>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
+			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
+			<td nowrap>{{ $serviceRequest->rut }}</td>
+			<td nowrap>{{ $serviceRequest->name }}</td>
+			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
+			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 			<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
 					@else Finalizada @endif</td>
 			<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
 			<!-- <td>{{$serviceRequest->SignatureFlows->last()->employee}}</td> -->
 			<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
-			<td>
+			<td nowrap>
 				<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
 					class="btn btn-sm btn-outline-secondary">
 					<span class="fas fa-edit" aria-hidden="true"></span>
@@ -67,9 +68,11 @@
 	@endforeach
 	</tbody>
 </table>
+</div>
 
 <h4>Solicitudes respondidas</h4>
 
+<div class="table-responsive">
 <table class="table table-striped table-sm table-bordered">
 	<thead>
 		<tr>
@@ -90,16 +93,16 @@
 		<tr>
 			<td>{{ $serviceRequest->id }}</td>
 			<td>{{ $serviceRequest->type }}</td>
-			<td>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
-			<td>{{ $serviceRequest->rut }}</td>
-			<td>{{ $serviceRequest->name }}</td>
-			<td>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
-			<td>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
+			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
+			<td nowrap>{{ $serviceRequest->rut }}</td>
+			<td nowrap>{{ $serviceRequest->name }}</td>
+			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
+			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 			<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
 					@else Finalizada @endif</td>
 			<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
 			<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
-			<td>
+			<td nowrap>
 				<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
 					class="btn btn-sm btn-outline-secondary">
 					<span class="fas fa-edit" aria-hidden="true"></span>
@@ -118,6 +121,7 @@
 	@endforeach
 	</tbody>
 </table>
+</div>
 
 <div class="modal" tabindex="-1" role="dialog" id="GSCCModal">
   <div class="modal-dialog" role="document">
