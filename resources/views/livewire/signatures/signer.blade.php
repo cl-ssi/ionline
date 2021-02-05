@@ -1,7 +1,7 @@
 <div class="form-row">
     <fieldset class="form-group col-6">
         <label>Firmante - Unidad Organizacional</label>
-        <select name="organizationalUnit" wire:model="organizationalUnit" class="form-control">
+        <select name="ou_id" for="for_ou_id" wire:model="organizationalUnit" class="form-control" required>
             <option value=''></option>
             @foreach($organizationalUnits as $ou)
                 <option value={{ $ou->id }}>{{ $ou->name }}</option>
