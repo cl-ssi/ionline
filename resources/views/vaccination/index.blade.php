@@ -75,7 +75,7 @@
                     {{ $vaccination->runFormat }}
                 </td>
                 <td nowrap>
-                    {{ $vaccination->first_dose->format('d-m-Y') ?? '' }} {{ $vaccination->first_dose->format('H:i') ?? '' }}
+                    {{ optional($vaccination->first_dose)->format('d-m-Y H:i') }}
                 </td>
                 <td nowrap></td>
                 <td> <a href="{{ route('vaccination.edit', $vaccination) }}"> <i class="fas fa-edit"></i> </a> </td>
