@@ -194,8 +194,13 @@ class ServiceRequestController extends Controller
       $users = User::orderBy('name','ASC')->get();
       $establishments = Establishment::orderBy('name', 'ASC')->get();
       // $organizationalUnits = organizationalUnit::where('establishment_id',1)->orderBy('name', 'ASC')->get();
-      $subdirections = organizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
-      $responsabilityCenters = organizationalUnit::where('name','LIKE','%unidad%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
+      // $subdirections = organizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
+      // $responsabilityCenters = organizationalUnit::where('name','LIKE','%unidad%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
+      $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
+      $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
+                                                 ->where('name','LIKE','%unidad%')
+                                                 ->orwhere('name','LIKE','%servicio%')
+                                                 ->orderBy('name', 'ASC')->get();
       $SignatureFlow = $serviceRequest->SignatureFlows->where('employee','Supervisor de servicio')->first();
       // $my_level = null;
       // $position = null;
