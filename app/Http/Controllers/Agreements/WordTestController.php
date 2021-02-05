@@ -60,7 +60,7 @@ class WordTestController extends Controller
                 $arrayEstablishment[] = array('index' => $key+1
                                              ,'establecimientoTipo' => $establishment->type
                                              ,'establecimientoNombre' => $establishment->name
-                                             ,'establecimiento' => ucwords(strtolower($establishment->type))." ".$establishment->name
+                                             ,'establecimiento' => ucwords(mb_strtolower($establishment->type))." ".$establishment->name
                                          );
             }
                 $arrayEstablishmentConcat = implode(", ",array_column($arrayEstablishment, 'establecimiento',));
@@ -76,7 +76,7 @@ class WordTestController extends Controller
         $formatter = new NumeroALetras;
         $formatter->apocope = true;
         $totalConvenio = $agreements->agreement_amounts->sum('amount');
-        $totalConvenioLetras = ucwords(strtolower($formatter->toMoney($totalConvenio,0, 'pesos','')));
+        $totalConvenioLetras = ucwords(mb_strtolower($formatter->toMoney($totalConvenio,0, 'pesos','')));
  
         // ARRAY PARA OBTENER LAS CUOTAS ASOCIADAS AL TOTAL DEL CONVENIO
         foreach ($quotas as $key => $quota) {
@@ -84,11 +84,11 @@ class WordTestController extends Controller
                 $arrayQuota[] = array('index' => ($this->ordinal($key+1))
                                       ,'cuotaDescripcion' => $quota->description . ($key+1 == 1 ? ' del total de los recursos del convenio una vez aprobada la resolución exenta que aprueba el presente instrumento y recibidos los recursos del Ministerio de Salud.' : ' restante del total de recursos y se enviará en el mes de octubre, según resultados obtenidos en la primera evaluación definida en la cláusula anterior. Así también, dependerá de la recepción de dichos recursos desde Ministerio de Salud y existencia de rendición financiera según lo establece la resolución N°30/2015 que fija normas sobre procedimiento de rendición de cuentas de la Contraloría General de la Republica, por parte de la “MUNICIPALIDAD”.')
                                       ,'cuotaMonto' => number_format($quota->amount,0,",",".")
-                                      ,'cuotaLetra' => ucwords(strtolower($cuotaConvenioLetras)));
+                                      ,'cuotaLetra' => ucwords(mb_strtolower($cuotaConvenioLetras)));
              } 
 
              //dd($arrayQuota);
-        $totalQuotas = strtolower($formatter->toMoney(count($quotas),0));
+        $totalQuotas = mb_strtolower($formatter->toMoney(count($quotas),0));
 
     	$templateProcesor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/convenio2021.docx'));
 
@@ -179,7 +179,7 @@ class WordTestController extends Controller
                 $arrayEstablishment[] = array('index' => $key+1
                                              ,'establecimientoTipo' => $establishment->type
                                              ,'establecimientoNombre' => $establishment->name
-                                             ,'establecimiento' => ucwords(strtolower($establishment->type))." ".$establishment->name
+                                             ,'establecimiento' => ucwords(mb_strtolower($establishment->type))." ".$establishment->name
                                          );
             }
                 $arrayEstablishmentConcat = implode(", ",array_column($arrayEstablishment, 'establecimiento',));
