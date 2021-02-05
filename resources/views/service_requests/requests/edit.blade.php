@@ -21,7 +21,7 @@
   @csrf
   @method('PUT')
 
-	<div class="row">
+	<div class="form-row">
 
     <fieldset class="form-group col-12 col-md-3">
 		    <label for="for_name">Tipo</label>
@@ -59,7 +59,7 @@
 
 	</div>
 
-  <div class="row">
+  <div class="form-row">
 
     <fieldset class="form-group col-12 col-md-3">
 				<label for="for_users">Responsable</label>
@@ -102,7 +102,7 @@
 		</fieldset>
 
 	</div>
-	<div class="row">
+	<div class="form-row">
 
     <fieldset class="form-group col-12 col-md-3">
 				<label for="for_users">S.G.D.P Hospital</label>
@@ -195,7 +195,7 @@
 
   <br>
 
-  <div class="row">
+  <div class="form-row">
 
     <fieldset class="form-group col-12 col-md-4">
 		    <label for="for_request_date">Fecha Solicitud</label>
@@ -216,7 +216,7 @@
 
   <hr>
 
-  <div class="row">
+  <div class="form-row">
 
     <fieldset class="form-group col">
         <label for="for_service_description">Descripción Servicio</label>
@@ -225,7 +225,7 @@
 
   </div>
 
-  <div class="row">
+  <div class="form-row">
 
     <fieldset class="form-group col">
 		    <label for="for_programm_name">Nombre del programa</label>
@@ -263,7 +263,7 @@
 
   </div>
 
-  <div class="row">
+  <div class="form-row">
 
     <fieldset class="form-group col-8 col-md-4">
 		    <label for="for_program_contract_type">Tipo de Contratación</label>
@@ -317,7 +317,7 @@
     </div>
     <ul class="list-group list-group-flush">
       <li class="list-group-item">
-        <div class="row">
+        <div class="form-row">
           <fieldset class="form-group col-3">
               <label for="for_estate">Entrada</label>
               <input type="date" class="form-control" name="shift_start_date" id="shift_start_date">
@@ -394,7 +394,7 @@
 
   <br>
 
-  <div class="row">
+  <div class="form-row">
 
     <fieldset class="form-group col-12 col-md-3">
 		    <label for="for_estate">Estamento al que corresponde CS</label>
@@ -466,14 +466,14 @@
     </div>
       <div class="card-body">
 
-        <div class="row">
-          <fieldset class="form-group col">
-					    <label for="for_name">N° Contrato</label>
+        <div class="form-row">
+          <fieldset class="form-group col-6 col-md-1">
+					    <label for="for_name">N°Contrato</label>
               <input type="text" class="form-control" name="contract_number" value="{{$serviceRequest->contract_number}}">
 					</fieldset>
 
-          <fieldset class="form-group col">
-              <label for="for_name">Mes de pago</label>
+          <fieldset class="form-group col-6 col-md-2">
+              <label for="for_name">Mes pago</label>
               <select name="month_of_payment" class="form-control">
                 <option value=""></option>
                 <option value="1" @if($serviceRequest->month_of_payment == 1) selected @endif>Enero</option>
@@ -491,7 +491,7 @@
               </select>
           </fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-6 col-md-2">
               <label for="for_nationality">País de Funcionario</label>
               <select name="nationality" class="form-control">
                 <option value=""></option>
@@ -503,11 +503,7 @@
               </select>
           </fieldset>
 
-        </div>
-
-        <div class="row">
-
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-12 col-md-3">
               <label for="for_digera_strategy">Estrategia Digera Covid</label>
               <select name="digera_strategy" class="form-control">
                 <option value=""></option>
@@ -525,7 +521,7 @@
               </select>
           </fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-12 col-md-2">
               <label for="for_rrhh_team">Equipo RRHH</label>
               <select name="rrhh_team" class="form-control">
                 <option value=""></option>
@@ -547,49 +543,49 @@
               </select>
           </fieldset>
 
-          <fieldset class="form-group col">
+
+          <fieldset class="form-group col-6 col-md-2">
 					    <label for="for_net_amount">Monto Neto</label>
               <input type="text" class="form-control" name="net_amount" value="{{$serviceRequest->net_amount}}">
 					</fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-6 col-md-2">
 					    <label for="for_gross_amount">Monto Bruto</label>
               <input type="text" class="form-control" name="gross_amount" value="{{$serviceRequest->gross_amount}}">
 					</fieldset>
 
-          <fieldset class="form-group col">
-              <label for="for_sirh_contract_registration">Contrato registrado en Sirh</label>
+          <fieldset class="form-group col-6 col-md-2">
+              <label for="for_sirh_contract_registration">Registrado en SIRH</label>
               <select name="sirh_contract_registration" class="form-control">
                 <option value=""></option>
                 <option value="1"  @if($serviceRequest->sirh_contract_registration == 1) selected @endif>Sí</option>
                 <option value="0"  @if($serviceRequest->sirh_contract_registration == 0) selected @endif>No</option>
               </select>
           </fieldset>
-        </div>
 
-        <div class="row">
-
-          <fieldset class="form-group col">
-					    <label for="for_resolution_number">N° Resolución</label>
+          <fieldset class="form-group col-6 col-md-1">
+					    <label for="for_resolution_number">N° Resolu.</label>
               <input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
 					</fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-5 col-md-1">
 					    <label for="for_bill_number">N° Boleta</label>
               <input type="text" class="form-control" name="bill_number" value="{{$serviceRequest->bill_number}}">
 					</fieldset>
 
-          <fieldset class="form-group col">
-					    <label for="for_total_hours_paid">Total hrs pagadas período</label>
+
+
+          <fieldset class="form-group col-7 col-md-2">
+					    <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
               <input type="text" class="form-control" name="total_hours_paid" value="{{$serviceRequest->total_hours_paid}}">
 					</fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-5 col-md-2">
 					    <label for="for_total_paid">Total pagado</label>
               <input type="text" class="form-control" name="total_paid" value="{{$serviceRequest->total_paid}}">
 					</fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-7 col-md-2">
       		    <label for="for_payment_date">Fecha pago</label>
       		    <input type="date" class="form-control" id="for_payment_date" name="payment_date" required value="{{\Carbon\Carbon::parse($serviceRequest->payment_date)->format('Y-m-d')}}">
       		</fieldset>
