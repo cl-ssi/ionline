@@ -359,7 +359,7 @@
 		  <ul class="list-group list-group-flush">
 		    <li class="list-group-item">
 					<div class="row">
-						<fieldset class="form-group col">
+						<fieldset class="form-group col-3">
 								<label for="for_estate">Entrada</label>
 								<input type="date" class="form-control" name="shift_start_date" id="shift_start_date">
 						</fieldset>
@@ -367,7 +367,7 @@
 								<label for="for_estate">Hora</label>
 								<input type="time" class="form-control" name="start_hour" id="start_hour">
 						</fieldset>
-						<fieldset class="form-group col">
+						<fieldset class="form-group col-3">
 								<label for="for_estate">Salida</label>
 								<input type="date" class="form-control" name="shift_end_date" id="shift_end_date">
 						</fieldset>
@@ -379,7 +379,7 @@
 								<label for="for_estate">Observación</label>
 								<input type="text" class="form-control" name="observation" id="observation">
 						</fieldset>
-						<fieldset class="form-group col-2">
+						<fieldset class="form-group col">
 								<label for="for_estate"><br/></label>
 								<button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
 								<!-- formnovalidate="formnovalidate" formaction="{{ route('rrhh.shift_control.store') }}" -->
