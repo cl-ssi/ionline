@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Documents;
 
 use App\Http\Controllers\Controller;
+use App\Models\Documents\SignaturesFile;
+use App\Models\Documents\SignaturesFlow;
 use Illuminate\Http\Request;
 use App\Models\Documents\Signature;
 use App\User;
@@ -42,11 +44,19 @@ class SignatureController extends Controller
      */
     public function store(Request $request)
     {
-
-        dd($request);
+//        dd($request);
         $signature = new Signature($request->All());
         $signature->user_id = Auth::id();
+        $signature->ou_id = Auth::user()->organizationalUnit->id;
+        $signature->responsable_id = Auth::id();
         $signature->save();
+
+        $signaturesFlow = new SignaturesFlow($request->all());
+        $signaturesFlow->signature_id = $signature->id;
+        $signaturesFlow->save();
+
+        $signaturesFile = new SignaturesFile($request->all());
+        $signaturesFile->save();
 
         session()->flash('info', 'La solicitud de firma '.$signature->id.' ha sido creada.');
         return redirect()->route('documents.signatures.index');
