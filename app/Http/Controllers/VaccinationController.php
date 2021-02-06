@@ -228,7 +228,7 @@ class VaccinationController extends Controller
             'A.Materno',
             'RUN',
             '1° Dosis Cita',
-            '1° Suministrada'
+            '1° Suministrada',
             '2° Dosis Cita',
             '2° Suministrada'
         );
