@@ -227,8 +227,10 @@ class VaccinationController extends Controller
             'A.Paterno',
             'A.Materno',
             'RUN',
-            '1° Dosis',
-            '2° Dosis',
+            '1° Dosis Cita',
+            '1° Suministrada'
+            '2° Dosis Cita',
+            '2° Suministrada'
         );
 
         $callback = function() use ($filas, $columnas)
@@ -247,7 +249,9 @@ class VaccinationController extends Controller
                     $fila->mothers_family,
                     $fila->runFormat,
                     $fila->first_dose,
+                    $fila->first_dose_at,
                     $fila->second_dose,
+                    $fila->second_dose_at,
                 ),';');
             }
             fclose($file);
