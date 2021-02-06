@@ -78,7 +78,7 @@
                     {{ optional($vaccination->first_dose)->format('d-m-Y H:i') }}
                 </td>
                 <td nowrap>
-                    {{ optional($vaccination->first_dose_at)->format('d-m-Y H:i') }}
+                    {{ optional($vaccination->first_dose_at)->format('d-m-Y') }}
                 </td>
                 <td nowrap></td>
                 <td> <a href="{{ route('vaccination.edit', $vaccination) }}"> <i class="fas fa-edit"></i> </a> </td>
