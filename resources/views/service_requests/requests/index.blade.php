@@ -108,13 +108,17 @@
 					<span class="fas fa-edit" aria-hidden="true"></span>
 				</a>
 				@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
-					<a data-toggle="modal" data-target="#GSCCModal"
-						class="btn btn-outline-secondary btn-sm" target="_blank">
+					<a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
 					<i class="fas fa-file" style="color:#B9B9B9"></i></a>
 				@else
-					<a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
-						class="btn btn-outline-secondary btn-sm" target="_blank">
-					<span class="fas fa-file" aria-hidden="true"></span></a>
+					@if($serviceRequest->SignatureFlows->where('status',0)->count() > 0)
+						<a data-toggle="modal" 	class="btn btn-outline-secondary btn-sm" id="a_modal_flow_rejected">
+						<i class="fas fa-file" style="color:#B9B9B9"></i></a>
+					@else
+						<a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+							class="btn btn-outline-secondary btn-sm" target="_blank">
+						<span class="fas fa-file" aria-hidden="true"></span></a>
+					@endif
 				@endif
 			</td>
 		</tr>
@@ -123,7 +127,7 @@
 </table>
 </div>
 
-<div class="modal" tabindex="-1" role="dialog" id="GSCCModal">
+<div class="modal" tabindex="-1" role="dialog" id="modal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -133,19 +137,31 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>No es posible generar la resolución por que el flujo de firmas no está completo.</p>
+        <p><label id="modal_label"></label></p>
       </div>
       <div class="modal-footer">
-        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
 </div>
 
-
 @endsection
 
 @section('custom_js')
+
+<script>
+
+$('#a_modal_flow_incomplete').click(function(){
+		$('#modal_label').text("No es posible generar la resolución por que el flujo de firmas no está completo.");
+    $('#modal').modal("show");
+});
+
+$('#a_modal_flow_rejected').click(function(){
+		$('#modal_label').text("No es posible generar la resolución por que el flujo de firmas fue rechazado.");
+    $('#modal').modal("show");
+});
+
+</script>
 
 @endsection
