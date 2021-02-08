@@ -25,7 +25,7 @@
 @foreach($inputs as $key => $value)
 <div class="form-row">
     <fieldset class="form-group col-5">
-        <select name="organizationalUnit" wire:model="organizationalUnit.{{ $value }}" class="form-control">
+        <select name="ou_id_visator[]" wire:model="organizationalUnit.{{ $value }}" class="form-control">
             <option value=''></option>
             @foreach($organizationalUnits as $ou)
                 <option value={{ $ou->id }}>{{ $ou->name }}</option>
@@ -34,7 +34,7 @@
     </fieldset>
     <fieldset class="form-group col-5">
         @if(array_key_exists($value,$users))
-            <select name="user[]" wire:model="user" class="form-control">
+            <select name="user_visator[]" wire:model="user" class="form-control">
                 <option value=''></option>
                 @foreach($users[$value] as $user)
                     <option value={{ $user->id }}>{{ $user->fullName }}</option>
