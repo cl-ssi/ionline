@@ -177,17 +177,17 @@
 
     <fieldset class="form-group col-12 col-md-5">
 		    <label for="for_address">Dirección</label>
-		    <input type="text" class="form-control" id="foraddress" placeholder="" name="address" value="{{$serviceRequest->address}}">
+		    <input type="text" class="form-control" id="foraddress" name="address" value="{{$serviceRequest->address}}">
 		</fieldset>
 
     <fieldset class="form-group col-12 col-md-3">
 		    <label for="for_phone_number">Número telefónico</label>
-		    <input type="text" class="form-control" id="for_phone_number" placeholder="" name="phone_number" value="{{$serviceRequest->phone_number}}">
+		    <input type="text" class="form-control" id="for_phone_number" name="phone_number" value="{{$serviceRequest->phone_number}}">
 		</fieldset>
 
 		<fieldset class="form-group col-12 col-md-4">
 		    <label for="for_email">Correo electrónico</label>
-		    <input type="text" class="form-control" id="for_email" placeholder="" name="email" value="{{$serviceRequest->email}}">
+		    <input type="text" class="form-control" id="for_email" name="email" value="{{$serviceRequest->email}}">
 		</fieldset>
 
   </div>

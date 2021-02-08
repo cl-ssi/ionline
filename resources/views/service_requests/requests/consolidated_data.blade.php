@@ -46,9 +46,9 @@
           <td nowrap>{{$serviceRequest->id}}</td>
           <td nowrap>{{$serviceRequest->contract_number}}</td>
           <td nowrap>{{$serviceRequest->MonthOfPayment()}}</td>
-          <td nowrap>Dato fijo</td>
-          <td nowrap>Dato fijo</td>
-          <td nowrap>{{$serviceRequest->establishment_id}} falta cod.sirh</td>
+          <td nowrap>12</td>
+          <td nowrap>SERVICIO DE SALUD DE IQUIQUE</td>
+          <td nowrap>130</td>
           <td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
           <td nowrap>{{$serviceRequest->rut}}</td>
           <td nowrap>{{$serviceRequest->name}}</td>
@@ -56,24 +56,40 @@
           <td nowrap>{{$serviceRequest->programm_name}}</td>
           <td nowrap>{{$serviceRequest->digera_strategy}}</td>
           <td nowrap>{{$serviceRequest->rrhh_team}}</td>
-          @if($serviceRequest->program_contract_type == "Horas")
+          <!-- @if($serviceRequest->program_contract_type == "Horas")
             <td nowrap>{{$serviceRequest->ControlHrs}}</td>
           @else
             <td nowrap>{{$serviceRequest->daily_hours + $serviceRequest->nightly_hours}}</td>
-          @endif
+          @endif -->
+          <td nowrap>{{$serviceRequest->weekly_hours}}</td>
           <td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
           <td nowrap>{{$serviceRequest->estate}}</td>
-          <td nowrap>{{$serviceRequest->service_description}}</td>
+          <td nowrap>@if($serviceRequest->estate == "Administrativo")
+                      Apoyo Administrativo
+                    @else
+                      Apoyo Clínico
+                    @endif</td>
           <td nowrap>{{$serviceRequest->gross_amount}}</td>
-          <td nowrap>@if($serviceRequest->sirh_contract_registration==1) Sí @else No @endif</td>
-          <td nowrap>{{$serviceRequest->resolution_number}}</td>
+          <td nowrap>@if($serviceRequest->sirh_contract_registration === 1) Sí
+                     @elseif($serviceRequest->sirh_contract_registration === 0) No @endif</td>
+          <td nowrap>
+            @if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
+              No
+            @else
+              @if($serviceRequest->SignatureFlows->where('status',0)->count() > 0)
+                No
+              @else
+                Sí
+              @endif
+            @endif
+          </td>
           <td nowrap></td>
           <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}</td>
           <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}</td>
           <td nowrap>{{$serviceRequest->bill_number}}</td>
           <td nowrap>{{$serviceRequest->total_hours_paid}}</td>
           <td nowrap>{{$serviceRequest->total_paid}}</td>
-          <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->payment_date)->format('Y-m-d')}}</td>
+          <td nowrap>@if($serviceRequest->payment_date){{$serviceRequest->payment_date->format('Y-m-d')}}@endif</td>
         </tr>
       @endforeach
     </tbody>

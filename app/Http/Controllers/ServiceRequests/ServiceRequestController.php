@@ -97,7 +97,7 @@ class ServiceRequestController extends Controller
         }
       }
 
-    // dd($request->users);
+      // dd($request->users);
       $serviceRequest = new ServiceRequest($request->All());
       $serviceRequest->rut = $request->run ."-". $request->dv;
       $serviceRequest->user_id = Auth::id();
@@ -229,6 +229,7 @@ class ServiceRequestController extends Controller
    */
   public function update(Request $request, ServiceRequest $serviceRequest)
   {
+
       //se guarda información de la solicitud
       $serviceRequest->fill($request->all());
       $serviceRequest->save();
@@ -267,7 +268,7 @@ class ServiceRequestController extends Controller
 
   public function consolidated_data()
   {
-    $serviceRequests = ServiceRequest::orderBy('id','asc')->get();
+    $serviceRequests = ServiceRequest::orderBy('request_date','asc')->get();
     foreach ($serviceRequests as $key => $serviceRequest) {
       foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
         $start_date = Carbon::parse($shiftControl->start_date);

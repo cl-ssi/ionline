@@ -1,3 +1,4 @@
+<?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
 <html lang="es">
     <head>
         <meta charset="utf-8">
@@ -191,7 +192,7 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
         <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
         <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
         <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
-        <td style="text-align:center">$1.731.482</td>
+        <td style="text-align:center">{{$ServiceRequest->gross_amount}}</td>
     </tr>
 </table>
 
@@ -218,9 +219,9 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
     <strong>CUARTO:</strong> El prestador de Servicios contratante a través de la declaración jurada señaló no estar afecto a ninguna de las inhabilidades establecidas en los arts. 54, 55 y 56 de la Ley Nº 18.575, Orgánica Constitucional de las Bases Generales de la Administración del Estado. Dichas disposiciones relativas a inhabilidades e incompatibilidades administrativas serán aplicables al prestador, con quién se suscribe el presente contrato a Honorarios a Suma Alzada.
 </p>
 
-{{Carbon\Carbon::setLocale('es')}}
+<?php setlocale(LC_ALL, 'es'); ?>
 <p class="justify">
-    <strong>QUINTO:</strong> El presente convenio empezará a regir, a contar del {{$ServiceRequest->start_date->format('l j F Y H:i:s')}} de {{$ServiceRequest->start_date->format('M')}} al 31 de diciembre de 2020, de acuerdo al artículo 52 de la Ley 19.880, sobre Bases de Procedimientos Administrativos.
+    <strong>QUINTO:</strong> El presente convenio empezará a regir, a contar del {{\Carbon\Carbon::parse($ServiceRequest->start_date)->formatLocalized('%d de %B de %Y')}} al {{\Carbon\Carbon::parse($ServiceRequest->end_date)->formatLocalized('%d de %B de %Y')}}, de acuerdo al artículo 52 de la Ley 19.880, sobre Bases de Procedimientos Administrativos.
 </p>
 
 <p class="justify">
@@ -232,7 +233,7 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
 </p>
 
 <p class="justify">
-    <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de $1.731.482.- (Un Millón setecientos treinta y un mil cuatrocientos ochenta y dos  pesos), impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de $1.731.482 por el mes de diciembre del  2020; se deberá acreditar contra presentación de certificado extendido por el Jefe del Servicio de Urgencias, dependiente del Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
+    <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de {{$ServiceRequest->gross_amount}}.- (Un Millón setecientos treinta y un mil cuatrocientos ochenta y dos  pesos), impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de $1.731.482 por el mes de diciembre del  2020; se deberá acreditar contra presentación de certificado extendido por el Jefe del Servicio de Urgencias, dependiente del Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
 	<br>
 	Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
 </p>
@@ -242,7 +243,7 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
 </p>
 
 <p class="justify">
-    <strong>DÉCIMO:</strong> El prestador cumplirá con una jornada de 44 horas semanales, en cuarto turno, un largo de 08:00 a 20:00 hrs., una noche de 20:00 a 08:00 hrs. y dos días libres. Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador, se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R., los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente, como también los días de inasistencia, los cuales deberán quedar informados en el respectivo informe de prestaciones mensual. Los reiterados atrasos e inasistencias deberán ser amonestados.
+    <strong>DÉCIMO:</strong> El prestador cumplirá con una jornada de {{$ServiceRequest->weekly_hours}} horas semanales, en {{$ServiceRequest->working_day_type}}, {{$ServiceRequest->working_day_type_description()}}. Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador, se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R., los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente, como también los días de inasistencia, los cuales deberán quedar informados en el respectivo informe de prestaciones mensual. Los reiterados atrasos e inasistencias deberán ser amonestados.
 </p>
 
 <p class="justify">
