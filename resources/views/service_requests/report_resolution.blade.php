@@ -220,7 +220,7 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
 </p>
 
 <p class="justify">
-    <strong>QUINTO:</strong> El presente convenio empezará a regir, a contar del {{\Carbon\Carbon::now()->formatLocalized('%d de %B de %Y')}} al {{\Carbon\Carbon::now()->formatLocalized('%d de %B de %Y')}}, de acuerdo al artículo 52 de la Ley 19.880, sobre Bases de Procedimientos Administrativos.
+    <strong>QUINTO:</strong> El presente convenio empezará a regir, a contar del {{\Carbon\Carbon::parse($ServiceRequest->start_date)->formatLocalized('%d de %B de %Y')}} al {{\Carbon\Carbon::parse($ServiceRequest->end_date)->formatLocalized('%d de %B de %Y')}}, de acuerdo al artículo 52 de la Ley 19.880, sobre Bases de Procedimientos Administrativos.
 </p>
 
 <p class="justify">
