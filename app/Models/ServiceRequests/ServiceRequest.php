@@ -55,6 +55,18 @@ class ServiceRequest extends Model implements Auditable
        }
     }
 
+    public function working_day_type_description(){
+      if ($this->working_day_type == "DIURNO") {
+        return "un largo de 08:00 a 20:00 hrs., una noche de 20:00 a 08:00 hrs. y dos días libres";
+      }
+      if ($this->working_day_type == "TERCER TURNO") {
+        return "dos largos de 08:00 a 20:00 hrs., dos una noches de 20:00 a 08:00 hrs. y dos días libres";
+      }
+      if ($this->working_day_type == "CUARTO TURNO") {
+        return "horario diruno";
+      }
+    }
+
     public function user(){
       return $this->belongsTo('App\User','responsable_id');
     }
