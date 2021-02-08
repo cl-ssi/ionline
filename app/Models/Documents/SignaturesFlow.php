@@ -17,10 +17,10 @@ class SignaturesFlow extends Model Implements Auditable
      * @var array
      */
     protected $fillable = [
-        'id', 'signature_id', 'type', 'ou_id', 'user_id', 'sign_position', 'status', 'signature_date', 'observation',
+        'id', 'signatures_file_id', 'type', 'ou_id', 'user_id', 'sign_position', 'status', 'signature_date', 'observation',
     ];
 
-    protected $table = 'doc_signatures_flow';
+    protected $table = 'doc_signatures_flows';
 
     protected $dates = ['signature_date'];
 }

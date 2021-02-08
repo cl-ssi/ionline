@@ -36,9 +36,21 @@ class CreateSignaturesTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('doc_signatures_flow', function (Blueprint $table) {
+        Schema::create('doc_signatures_files', function (Blueprint $table) {
             $table->id();
             $table->foreignId('signature_id');
+            $table->binary('file');
+            $table->enum('file_type', ['documento', 'anexo']);
+            $table->binary('signed_file')->nullable();
+
+            $table->foreign('signature_id')->references('id')->on('doc_signatures');
+
+            $table->timestamps();
+        });
+
+        Schema::create('doc_signatures_flows', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('signatures_file_id');
             $table->enum('type', ['visador', 'firmante'])->nullable();
             $table->foreignId('ou_id');
             $table->foreignId('user_id')->nullable();
@@ -48,24 +60,13 @@ class CreateSignaturesTable extends Migration
             $table->datetime('signature_date')->nullable();
             $table->longText('observation')->nullable();
 
-            $table->foreign('signature_id')->references('id')->on('doc_signatures');
+            $table->foreign('signatures_file_id')->references('id')->on('doc_signatures_files');
             $table->foreign('ou_id')->references('id')->on('organizational_units');
             $table->foreign('user_id')->references('id')->on('users');
 
             $table->timestamps();
         });
 
-        Schema::create('doc_signatures_files', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('doc_signatures_flow_id ');
-            $table->binary('file');
-            $table->enum('file_type', ['documento', 'anexo']);
-            $table->binary('signed_file')->nullable();
-
-            $table->foreign('doc_signatures_flow_id')->references('id')->on('doc_signatures_flow');
-
-            $table->timestamps();
-        });
 
     }
 
