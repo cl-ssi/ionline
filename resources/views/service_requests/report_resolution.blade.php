@@ -1,3 +1,4 @@
+<?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
 <html lang="es">
     <head>
         <meta charset="utf-8">
@@ -191,7 +192,7 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
         <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
         <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
         <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
-        <td style="text-align:center">$1.731.482</td>
+        <td style="text-align:center">{{$ServiceRequest->gross_amount}}</td>
     </tr>
 </table>
 
@@ -218,9 +219,8 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
     <strong>CUARTO:</strong> El prestador de Servicios contratante a través de la declaración jurada señaló no estar afecto a ninguna de las inhabilidades establecidas en los arts. 54, 55 y 56 de la Ley Nº 18.575, Orgánica Constitucional de las Bases Generales de la Administración del Estado. Dichas disposiciones relativas a inhabilidades e incompatibilidades administrativas serán aplicables al prestador, con quién se suscribe el presente contrato a Honorarios a Suma Alzada.
 </p>
 
-{{Carbon\Carbon::setLocale('es')}}
 <p class="justify">
-    <strong>QUINTO:</strong> El presente convenio empezará a regir, a contar del {{$ServiceRequest->start_date->format('l j F Y H:i:s')}} de {{$ServiceRequest->start_date->format('M')}} al 31 de diciembre de 2020, de acuerdo al artículo 52 de la Ley 19.880, sobre Bases de Procedimientos Administrativos.
+    <strong>QUINTO:</strong> El presente convenio empezará a regir, a contar del {{\Carbon\Carbon::now()->formatLocalized('%d de %B de %Y')}} al {{\Carbon\Carbon::now()->formatLocalized('%d de %B de %Y')}}, de acuerdo al artículo 52 de la Ley 19.880, sobre Bases de Procedimientos Administrativos.
 </p>
 
 <p class="justify">
