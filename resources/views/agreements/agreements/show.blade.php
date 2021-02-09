@@ -163,7 +163,7 @@
                     </div>
                 </fieldset> -->
                 <fieldset class="form-group col-3">
-                    <label for="for">Archivo Resolución PDF
+                    <label for="for">Archivo Resolución Final PDF SSI
                          @if($agreement->fileResEnd != null)  
                             <a class="text-info" href="{{ route('agreements.downloadRes', $agreement->id) }}" target="_blank">
                                 <i class="fas fa-paperclip"></i> adjunto
@@ -173,7 +173,7 @@
                     <div class="custom-file">
                       <input type="file" class="custom-file-input" id="forfile" name="fileResEnd">
                       <label class="custom-file-label" for="forfile">Seleccionar Archivo </label>
-                     <small class="form-text text-muted">* Adjuntar versión final de Resolución</small>
+                     <small class="form-text text-muted">* Adjuntar versión final de Resolución Función Exclusiva Encargado de Convenio</small>
                     </div>
                 </fieldset>
             </div>
