@@ -176,6 +176,69 @@
 </table>
 </div>
 
+@if(count($serviceRequestsCreated) > 0)
+<hr>
+
+<h4>Solicitudes creadas</h4>
+
+<div class="table-responsive">
+<table class="table table-striped table-sm table-bordered">
+	<thead>
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Tipo</th>
+			<th scope="col">F. Solicitud</th>
+			<th scope="col">Rut</th>
+			<th scope="col">Funcionario</th>
+			<th scope="col">F. Inicio</th>
+			<th scope="col">F. Término</th>
+			<th scope="col">Estado Solicitud</th>
+			<!-- <th scope="col">Creador</th> -->
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+	@foreach($serviceRequestsCreated as $serviceRequest)
+		<tr>
+			<td>{{ $serviceRequest->id }}</td>
+			<td>{{ $serviceRequest->type }}</td>
+			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
+			<td nowrap>{{ $serviceRequest->rut }}</td>
+			<td nowrap>{{ $serviceRequest->name }}</td>
+			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
+			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
+			<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
+					@else Finalizada @endif</td>
+			<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
+			<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
+			<td nowrap>
+				<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
+					class="btn btn-sm btn-outline-secondary">
+					<span class="fas fa-edit" aria-hidden="true"></span>
+				</a>
+				@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
+					<a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
+					<i class="fas fa-file" style="color:#B9B9B9"></i></a>
+				@else
+					@if($serviceRequest->SignatureFlows->where('status',0)->count() > 0)
+						<a data-toggle="modal" 	class="btn btn-outline-secondary btn-sm" id="a_modal_flow_rejected">
+						<i class="fas fa-file" style="color:#B9B9B9"></i></a>
+					@else
+						<a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+							class="btn btn-outline-secondary btn-sm" target="_blank">
+						<span class="fas fa-file" aria-hidden="true"></span></a>
+					@endif
+				@endif
+			</td>
+		</tr>
+	@endforeach
+	</tbody>
+</table>
+</div>
+
+@endif
+
+<!-- modal -->
 <div class="modal" tabindex="-1" role="dialog" id="modal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
