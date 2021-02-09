@@ -25,7 +25,7 @@
 
 <!-- <br> -->
 
-<h4>Pendientes</h4>
+<h4>Disponibles para visar</h4>
 
 <div class="table-responsive">
 <table class="table table-striped table-sm table-bordered">
@@ -44,7 +44,7 @@
 		</tr>
 	</thead>
 	<tbody>
-	@foreach($serviceRequestsPendings as $serviceRequest)
+	@foreach($serviceRequestsMyPendings as $serviceRequest)
 		<tr>
 			<td>{{ $serviceRequest->id }}</td>
 			<td>{{ $serviceRequest->type }}</td>
@@ -70,7 +70,9 @@
 </table>
 </div>
 
-<h4>Solicitudes respondidas</h4>
+<hr>
+
+<h4>No disponibles para visar</h4>
 
 <div class="table-responsive">
 <table class="table table-striped table-sm table-bordered">
@@ -89,7 +91,54 @@
 		</tr>
 	</thead>
 	<tbody>
-	@foreach($myServiceRequests as $serviceRequest)
+	@foreach($serviceRequestsOthersPendings as $serviceRequest)
+		<tr>
+			<td>{{ $serviceRequest->id }}</td>
+			<td>{{ $serviceRequest->type }}</td>
+			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
+			<td nowrap>{{ $serviceRequest->rut }}</td>
+			<td nowrap>{{ $serviceRequest->name }}</td>
+			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
+			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
+			<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
+					@else Finalizada @endif</td>
+			<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
+			<!-- <td>{{$serviceRequest->SignatureFlows->last()->employee}}</td> -->
+			<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
+			<td nowrap>
+				<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
+					class="btn btn-sm btn-outline-secondary">
+					<span class="fas fa-edit" aria-hidden="true"></span>
+				</a>
+			</td>
+		</tr>
+	@endforeach
+	</tbody>
+</table>
+</div>
+
+<hr>
+
+<h4>Visados</h4>
+
+<div class="table-responsive">
+<table class="table table-striped table-sm table-bordered">
+	<thead>
+		<tr>
+			<th scope="col">Id</th>
+			<th scope="col">Tipo</th>
+			<th scope="col">F. Solicitud</th>
+			<th scope="col">Rut</th>
+			<th scope="col">Funcionario</th>
+			<th scope="col">F. Inicio</th>
+			<th scope="col">F. Término</th>
+			<th scope="col">Estado Solicitud</th>
+			<!-- <th scope="col">Creador</th> -->
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+	@foreach($serviceRequestsAnswered as $serviceRequest)
 		<tr>
 			<td>{{ $serviceRequest->id }}</td>
 			<td>{{ $serviceRequest->type }}</td>
