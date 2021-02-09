@@ -59,13 +59,15 @@ class SignatureController extends Controller
         $signaturesFile->save();
         $signaturesFileDocumentId = $signaturesFile->id;
 
-        foreach ($request->annexed as $key => $annexed) {
-            $signaturesFile = new SignaturesFile();
-            $signaturesFile->signature_id = $signature->id;
-            $documentFile = $annexed;
-            $signaturesFile->file = base64_encode($annexed->openFile()->fread($documentFile->getSize()));
-            $signaturesFile->file_type = 'anexo';
-            $signaturesFile->save();
+        if ($request->annexed) {
+            foreach ($request->annexed as $key => $annexed) {
+                $signaturesFile = new SignaturesFile();
+                $signaturesFile->signature_id = $signature->id;
+                $documentFile = $annexed;
+                $signaturesFile->file = base64_encode($annexed->openFile()->fread($documentFile->getSize()));
+                $signaturesFile->file_type = 'anexo';
+                $signaturesFile->save();
+            }
         }
 
         $signaturesFlow = new SignaturesFlow();
