@@ -86,6 +86,9 @@
                     <a href="{{ route('claveunica.autenticar') }}?redirect=L21vbml0b3IvbGFiL2xvZ2lu" class="btn btn-lg btn-block btn-outline-primary">
                         Resultado exámenes <img src="{{ asset('images/btn_claveunica_119px.png') }}" alt="Logo Clave única">
                     </a>
+                    <br>
+                    <hr class="">
+                    <a href="{{ route('vaccination.welcome')}}">Vacunación funcionarios de salud</a>
                 </div>
             </div>
 
