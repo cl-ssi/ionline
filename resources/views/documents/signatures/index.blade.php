@@ -39,7 +39,8 @@
 			<th scope="col">Estado Solicitud</th>
 			<th scope="col">Ultimo Usuario</th>
 			<th scope="col">Materia de Resolución</th>
-			<th scope="col"></th>
+			<th scope="col">Edit</th>
+            <th scope="col">Firmar</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -62,6 +63,12 @@
 					<span class="fas fa-edit" aria-hidden="true"></span>
 				</a>
 			</td>
+            <td>
+                <a href="{{ route('signPdf', $signature->signaturesFiles->where('file_type', 'documento')->first()->id) }}"
+                   class="btn btn-sm btn-outline-primary">
+                    <span class="fas fa-edit" aria-hidden="true"></span>
+                </a>
+            </td>
 		</tr>
 	@endforeach
 	</tbody>
