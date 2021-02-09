@@ -34,6 +34,7 @@ class ServiceRequestController extends Controller
       $serviceRequestsMyPendings = [];
       $serviceRequestsAnswered = [];
       $serviceRequestsCreated = [];
+      $serviceRequestsRejected = [];
 
       // $serviceRequestsPendings = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
       //                                              $subQuery->where('responsable_id',$user_id)->whereNull('status');
@@ -56,24 +57,32 @@ class ServiceRequestController extends Controller
                                          ->get();
 
       foreach ($serviceRequests as $key => $serviceRequest) {
-        foreach ($serviceRequest->SignatureFlows as $key => $signatureFlow) {
-          if ($user_id == $signatureFlow->responsable_id) {
-            if ($signatureFlow->status == NULL) {
-              //verification if i have to sign or other person
-              if ($key > 0) {
-                if ($serviceRequest->SignatureFlows[$key-1]->status == NULL) {
-                  $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
-                }else{
-                  $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
+        //not rejected
+        if ($serviceRequest->SignatureFlows->where('status','0')->count() == 0) {
+          foreach ($serviceRequest->SignatureFlows as $key => $signatureFlow) {
+            if ($user_id == $signatureFlow->responsable_id) {
+              if ($signatureFlow->status == NULL) {
+                //verification if i have to sign or other person
+                if ($key > 0) {
+                  if ($serviceRequest->SignatureFlows[$key-1]->status == NULL) {
+                    $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
+                  }
+                  else{
+                    $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
+                  }
                 }
+              }else{
+                $serviceRequestsAnswered[$serviceRequest->id] = $serviceRequest;
               }
-
-            }else{
-              $serviceRequestsAnswered[$serviceRequest->id] = $serviceRequest;
             }
           }
         }
+        else{
+          $serviceRequestsRejected[$serviceRequest->id] = $serviceRequest;
+        }
       }
+
+      // dd($serviceRequestsMyPendings, $serviceRequestsRejected);
 
       foreach ($serviceRequests as $key => $serviceRequest) {
         if (!array_key_exists($serviceRequest->id,$serviceRequestsOthersPendings)) {
@@ -88,7 +97,7 @@ class ServiceRequestController extends Controller
       // dd($serviceRequestsCreated);
       // dd($serviceRequestsOthersPendings, $serviceRequestsMyPendings, $serviceRequestsAnswered);
 
-      return view('service_requests.requests.index', compact('serviceRequestsMyPendings','serviceRequestsOthersPendings','serviceRequestsAnswered','serviceRequestsCreated'));
+      return view('service_requests.requests.index', compact('serviceRequestsMyPendings','serviceRequestsOthersPendings','serviceRequestsRejected','serviceRequestsAnswered','serviceRequestsCreated'));
   }
 
   /**
