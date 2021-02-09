@@ -50,11 +50,11 @@
 			<td>{{ $signature->organizationalUnit->name }}</td>
 			<td>{{ $signature->responsable->getFullNameAttribute() }}</td>
 			<td>
-				@if($signature->SignatureFlows->whereNotNull('user_id')->last()->status === 1) Aceptada
-				@elseif($signature->SignatureFlows->whereNotNull('user_id')->last()->status === 0) Rechazada
+				@if($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->last()->status === 1) Aceptada
+				@elseif($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->last()->status === 0) Rechazada
 				@else Pendiente @endif
 			</td>
-			<td>{{ $signature->SignatureFlows->whereNotNull('user_id')->last()->employee }}</td>
+			<td>{{ $signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->last()->employee }}</td>
 			<td>{{ $signature->signature_matter }}</td>
 			<td>
 				<a href="{{ route('documents.signatures.edit', $signature) }}"
@@ -89,8 +89,8 @@
 			<td>{{ Carbon\Carbon::parse($signature->request_date)->format('Y-m-d') }}</td>
 			<td>{{ $signature->organizationalUnit->name }}</td>
 			<td>{{ $signature->responsable->getFullNameAttribute() }}</td>
-			<td>@if($signature->SignatureFlows->whereNotNull('user_id')->last()->status == 1) Aceptada @else Rechazada @endif</td>
-			<td>{{$signature->SignatureFlows->whereNotNull('user_id')->last()->employee}}</td>
+			<td>@if($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->last()->status == 1) Aceptada @else Rechazada @endif</td>
+			<td>{{$signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->last()->employee}}</td>
 			<td>{{ $signature->signature_matter }}</td>
 			<td>
 				<a href="{{ route('documents.signatures.edit', $signature) }}"

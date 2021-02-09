@@ -72,7 +72,7 @@
 
 		<fieldset class="form-group col">
 		    <label for="for_annexed">Anexos</label>
-			<input type="file" class="form-control" id="for_annexed" name="annexed">
+			<input type="file" class="form-control" id="for_annexed" name="annexed[]" multiple>
 		</fieldset>
 	</div>
 
