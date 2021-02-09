@@ -10,6 +10,7 @@ use App\Models\ServiceRequests\Subdirection;
 use App\Models\ServiceRequests\ResponsabilityCenter;
 use App\Models\ServiceRequests\SignatureFlow;
 use App\Models\ServiceRequests\ShiftControl;
+use Luecano\NumeroALetras\NumeroALetras;
 use App\Rrhh\OrganizationalUnit;
 use App\Establishment;
 use App\User;
@@ -29,22 +30,65 @@ class ServiceRequestController extends Controller
   public function index()
   {
       $user_id = Auth::user()->id;
-      $resolutionsPending = [];
+      $serviceRequestsOthersPendings = [];
+      $serviceRequestsMyPendings = [];
+      $serviceRequestsAnswered = [];
+      $serviceRequestsCreated = [];
 
-      $serviceRequestsPendings = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
-                                                   $subQuery->where('responsable_id',$user_id)->whereNull('status');
-                                                 })->orderBy('id','asc')
-                                                 ->whereDoesntHave("SignatureFlows", function($subQuery) {
-                                                   $subQuery->where('status',0)->whereNull('status'); //que no haya un rechazado
-                                                 })
-                                                 ->where('responsable_id','!=',Auth::user()->id)
-                                                 ->get();
+      // $serviceRequestsPendings = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
+      //                                              $subQuery->where('responsable_id',$user_id)->whereNull('status');
+      //                                            })->orderBy('id','asc')
+      //                                            ->whereDoesntHave("SignatureFlows", function($subQuery) {
+      //                                              $subQuery->where('status',0)->whereNull('status'); //que no haya un rechazado
+      //                                            })
+      //                                            ->where('responsable_id','!=',Auth::user()->id)
+      //                                            ->get();
+      //
+      // $myServiceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
+      //                                        $subQuery->where('user_id',$user_id)->orWhere('responsable_id',$user_id)->whereNotNull('status');
+      //                                      })->orderBy('id','asc')->get();
 
-      $myServiceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
-                                             $subQuery->where('user_id',$user_id)->orWhere('responsable_id',$user_id)->whereNotNull('status');
-                                           })->orderBy('id','asc')->get();
+      $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
+                                           $subQuery->where('responsable_id',$user_id);
+                                           $subQuery->orwhere('user_id',$user_id);
+                                         })
+                                         ->orderBy('id','asc')
+                                         ->get();
 
-      return view('service_requests.requests.index', compact('serviceRequestsPendings','myServiceRequests'));
+      foreach ($serviceRequests as $key => $serviceRequest) {
+        foreach ($serviceRequest->SignatureFlows as $key => $signatureFlow) {
+          if ($user_id == $signatureFlow->responsable_id) {
+            if ($signatureFlow->status == NULL) {
+              //verification if i have to sign or other person
+              if ($key > 0) {
+                if ($serviceRequest->SignatureFlows[$key-1]->status == NULL) {
+                  $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
+                }else{
+                  $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
+                }
+              }
+
+            }else{
+              $serviceRequestsAnswered[$serviceRequest->id] = $serviceRequest;
+            }
+          }
+        }
+      }
+
+      foreach ($serviceRequests as $key => $serviceRequest) {
+        if (!array_key_exists($serviceRequest->id,$serviceRequestsOthersPendings)) {
+          if (!array_key_exists($serviceRequest->id,$serviceRequestsMyPendings)) {
+            if (!array_key_exists($serviceRequest->id,$serviceRequestsAnswered)) {
+              $serviceRequestsCreated[$serviceRequest->id] = $serviceRequest;
+            }
+          }
+        }
+      }
+
+      // dd($serviceRequestsCreated);
+      // dd($serviceRequestsOthersPendings, $serviceRequestsMyPendings, $serviceRequestsAnswered);
+
+      return view('service_requests.requests.index', compact('serviceRequestsMyPendings','serviceRequestsOthersPendings','serviceRequestsAnswered','serviceRequestsCreated'));
   }
 
   /**
@@ -189,6 +233,13 @@ class ServiceRequestController extends Controller
    */
   public function edit(ServiceRequest $serviceRequest)
   {
+      $user_id = Auth::user()->id;
+      if ($serviceRequest->signatureFlows->where('responsable_id',$user_id)->count() == 0 &&
+          $serviceRequest->signatureFlows->where('user_id',$user_id)->count() == 0) {
+        session()->flash('danger','No tiene acceso a esta solicitud');
+        return redirect()->back();
+      }
+
       // $subdirections = Subdirection::orderBy('name', 'ASC')->get();
       // $responsabilityCenters = ResponsabilityCenter::orderBy('name', 'ASC')->get();
       $users = User::orderBy('name','ASC')->get();
@@ -287,10 +338,12 @@ class ServiceRequestController extends Controller
 
     public function resolutionPDF(ServiceRequest $ServiceRequest)
     {
-
         $rut = explode("-", $ServiceRequest->rut);
         $ServiceRequest->run_s_dv = number_format($rut[0],0, ",", ".");
         $ServiceRequest->dv = $rut[1];
+
+        $formatter = new NumeroALetras();
+        $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
 
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('service_requests.report_resolution',compact('ServiceRequest'));
