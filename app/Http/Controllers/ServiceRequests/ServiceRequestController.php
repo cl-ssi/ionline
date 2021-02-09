@@ -11,6 +11,8 @@ use App\Models\ServiceRequests\ResponsabilityCenter;
 use App\Models\ServiceRequests\SignatureFlow;
 use App\Models\ServiceRequests\ShiftControl;
 use Luecano\NumeroALetras\NumeroALetras;
+use App\Mail\ServiceRequestNotification;
+use Illuminate\Support\Facades\Mail;
 use App\Rrhh\OrganizationalUnit;
 use App\Establishment;
 use App\User;
@@ -242,11 +244,13 @@ class ServiceRequestController extends Controller
    */
   public function edit(ServiceRequest $serviceRequest)
   {
+      // Mail::to('sick_iqq@hotmail.com')->send(new ServiceRequestNotification($serviceRequest));
       $user_id = Auth::user()->id;
       if ($serviceRequest->signatureFlows->where('responsable_id',$user_id)->count() == 0 &&
           $serviceRequest->signatureFlows->where('user_id',$user_id)->count() == 0) {
         session()->flash('danger','No tiene acceso a esta solicitud');
-        return redirect()->back();
+        // return redirect()->back();
+        return redirect()->route('rrhh.service_requests.index');
       }
 
       // $subdirections = Subdirection::orderBy('name', 'ASC')->get();
