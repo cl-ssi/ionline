@@ -221,6 +221,11 @@ class ServiceRequestController extends Controller
         }
       }
 
+      //send emails
+      foreach ($serviceRequest->SignatureFlows as $key => $SignatureFlow) {
+        Mail::to($SignatureFlow->user->email)->send(new ServiceRequestNotification($serviceRequest));
+      }
+
       session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido creada.');
       return redirect()->route('rrhh.service_requests.index');
   }
@@ -244,7 +249,6 @@ class ServiceRequestController extends Controller
    */
   public function edit(ServiceRequest $serviceRequest)
   {
-      // Mail::to('sick_iqq@hotmail.com')->send(new ServiceRequestNotification($serviceRequest));
       $user_id = Auth::user()->id;
       if ($serviceRequest->signatureFlows->where('responsable_id',$user_id)->count() == 0 &&
           $serviceRequest->signatureFlows->where('user_id',$user_id)->count() == 0) {

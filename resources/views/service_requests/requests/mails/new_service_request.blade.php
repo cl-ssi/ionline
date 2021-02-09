@@ -3,6 +3,7 @@
 @section('content')
 
 <div style="text-align: justify;">
+  <b> MAIL DE PRUEBA </b>
   <p>Junto con saludar cordialmente.</p>
   <p>Se informa la creación de la solicitud de contratación de honorarios nro <b>{{$serviceRequest->id}}</b>.</p>
   <p> <strong>Tipo:</strong> {{ $serviceRequest->type }}</p>
@@ -12,7 +13,7 @@
   <p> <strong>Fecha inicio:</strong> {{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</p>
   <p> <strong>Fecha término:</strong> {{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</p>
   <br>
-  Para acceder a la solicitud, haga click <a href="https://i.saludiquique.cl/rrhh/service_requests/{{$serviceRequest->id}}/edit"><i class="far fa-hand-point-right"></i> Aquí</a>
+  Para acceder y visar la solicitud, haga click <a href="https://i.saludiquique.cl/rrhh/service_requests/{{$serviceRequest->id}}/edit"><i class="far fa-hand-point-right"></i> Aquí</a>
   <br>
   <br>
   Saludos cordiales.
