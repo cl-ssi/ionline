@@ -13,6 +13,7 @@ class Visators extends Component
     public $ouUsers;
     public $inputs = [];
     public $i = 0;
+    public $user;
 
     public function add($i)
     {
@@ -35,6 +36,6 @@ class Visators extends Component
         }
 
         return view('livewire.signatures.visators')
-            ->withOrganizationalUnits(OrganizationalUnit::where('establishment_id',38)->orderBy('id','asc')->get());
+        ->withOuRoots(OrganizationalUnit::where('level', 1)->where('establishment_id', 38)->get());
     }
 }

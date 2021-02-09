@@ -18,6 +18,6 @@ class Signer extends Component
             $this->users = OrganizationalUnit::find($this->organizationalUnit)->users;
         }
         return view('livewire.signatures.signer')
-            ->withOrganizationalUnits(OrganizationalUnit::where('establishment_id',38)->orderBy('id','asc')->get());
+            ->withOuRoots(OrganizationalUnit::where('level', 1)->where('establishment_id', 38)->get());
     }
 }
