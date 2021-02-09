@@ -234,10 +234,11 @@ class ServiceRequestController extends Controller
   public function edit(ServiceRequest $serviceRequest)
   {
       $user_id = Auth::user()->id;
-      // if ($serviceRequest->signatureFlows->where('responsable_id',$user_id)->orWhere('user_id',$user_id)->count() == 0) {
-      //   session()->flash('danger','No tiene acceso a esta solicitud');
-      //   return redirect()->back();
-      // }
+      if ($serviceRequest->signatureFlows->where('responsable_id',$user_id)->count() == 0 &&
+          $serviceRequest->signatureFlows->where('user_id',$user_id)->count() == 0) {
+        session()->flash('danger','No tiene acceso a esta solicitud');
+        return redirect()->back();
+      }
 
       // $subdirections = Subdirection::orderBy('name', 'ASC')->get();
       // $responsabilityCenters = ResponsabilityCenter::orderBy('name', 'ASC')->get();

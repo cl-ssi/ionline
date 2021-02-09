@@ -97,15 +97,42 @@ class ServiceRequest extends Model implements Auditable
 
     public static function getPendingRequests()
     {
-      $serviceRequestsPendingsCount = ServiceRequest::whereHas("SignatureFlows", function($subQuery) {
-                                                   $subQuery->where('user_id',Auth::user()->id)
-                                                            ->orwhere('responsable_id',Auth::user()->id);
-                                                   $subQuery->whereNull('status');
-                                                 })
-                                                 ->where('user_id','!=',Auth::user()->id)
-                                                 ->orderBy('id','asc')
-                                                 ->count();
-      return $serviceRequestsPendingsCount;
+      // $serviceRequestsPendingsCount = ServiceRequest::whereHas("SignatureFlows", function($subQuery) {
+      //                                              $subQuery->where('user_id',Auth::user()->id)
+      //                                                       ->orwhere('responsable_id',Auth::user()->id);
+      //                                              $subQuery->whereNull('status');
+      //                                            })
+      //                                            ->where('user_id','!=',Auth::user()->id)
+      //                                            ->orderBy('id','asc')
+      //                                            ->count();
+
+      $user_id = Auth::user()->id;
+      $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id) {
+                                           $subQuery->where('responsable_id',$user_id);
+                                           $subQuery->orwhere('user_id',$user_id);
+                                         })
+                                         ->orderBy('id','asc')
+                                         ->get();
+
+      $cont = 0;
+      foreach ($serviceRequests as $key => $serviceRequest) {
+       foreach ($serviceRequest->SignatureFlows as $key => $signatureFlow) {
+         if ($user_id == $signatureFlow->responsable_id) {
+           if ($signatureFlow->status == NULL) {
+             if ($key > 0) {
+               if ($serviceRequest->SignatureFlows[$key-1]->status == NULL) {
+                 $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
+               }else{
+                 // $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
+                 $cont += 1;
+               }
+             }
+           }
+         }
+       }
+      }
+
+      return $cont;
     }
 
 
