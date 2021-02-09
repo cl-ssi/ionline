@@ -30,7 +30,10 @@ class ServiceRequestController extends Controller
   public function index()
   {
       $user_id = Auth::user()->id;
-      $resolutionsPending = [];
+      $serviceRequestsOthersPendings = [];
+      $serviceRequestsMyPendings = [];
+      $serviceRequestsAnswered = [];
+      $serviceRequestsCreated = [];
 
       // $serviceRequestsPendings = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
       //                                              $subQuery->where('responsable_id',$user_id)->whereNull('status');
@@ -47,13 +50,14 @@ class ServiceRequestController extends Controller
 
       $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                            $subQuery->where('responsable_id',$user_id);
+                                           $subQuery->orwhere('user_id',$user_id);
                                          })
                                          ->orderBy('id','asc')
                                          ->get();
 
       foreach ($serviceRequests as $key => $serviceRequest) {
         foreach ($serviceRequest->SignatureFlows as $key => $signatureFlow) {
-          if ($user_id == $signatureFlow->responsable_id || $user_id == $signatureFlow->user_id) {
+          if ($user_id == $signatureFlow->responsable_id) {
             if ($signatureFlow->status == NULL) {
               //verification if i have to sign or other person
               if ($key > 0) {
@@ -71,9 +75,20 @@ class ServiceRequestController extends Controller
         }
       }
 
+      foreach ($serviceRequests as $key => $serviceRequest) {
+        if (!array_key_exists($serviceRequest->id,$serviceRequestsOthersPendings)) {
+          if (!array_key_exists($serviceRequest->id,$serviceRequestsMyPendings)) {
+            if (!array_key_exists($serviceRequest->id,$serviceRequestsAnswered)) {
+              $serviceRequestsCreated[$serviceRequest->id] = $serviceRequest;
+            }
+          }
+        }
+      }
+
+      // dd($serviceRequestsCreated);
       // dd($serviceRequestsOthersPendings, $serviceRequestsMyPendings, $serviceRequestsAnswered);
 
-      return view('service_requests.requests.index', compact('serviceRequestsMyPendings','serviceRequestsOthersPendings','serviceRequestsAnswered'));
+      return view('service_requests.requests.index', compact('serviceRequestsMyPendings','serviceRequestsOthersPendings','serviceRequestsAnswered','serviceRequestsCreated'));
   }
 
   /**
@@ -218,6 +233,12 @@ class ServiceRequestController extends Controller
    */
   public function edit(ServiceRequest $serviceRequest)
   {
+      $user_id = Auth::user()->id;
+      // if ($serviceRequest->signatureFlows->where('responsable_id',$user_id)->orWhere('user_id',$user_id)->count() == 0) {
+      //   session()->flash('danger','No tiene acceso a esta solicitud');
+      //   return redirect()->back();
+      // }
+
       // $subdirections = Subdirection::orderBy('name', 'ASC')->get();
       // $responsabilityCenters = ResponsabilityCenter::orderBy('name', 'ASC')->get();
       $users = User::orderBy('name','ASC')->get();
