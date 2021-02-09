@@ -33,6 +33,11 @@ class Signature extends Model implements Auditable
         return $this->belongsTo('App\Rrhh\organizationalUnit','ou_id');
     }
 
+    public function signaturesFiles(){
+        return $this->hasMany('App\Models\Documents\SignaturesFile', 'signature_id');
+    }
+
+
     protected $table = 'doc_signatures';
 
     protected $dates = ['request_date'];
