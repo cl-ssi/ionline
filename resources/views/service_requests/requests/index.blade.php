@@ -23,217 +23,267 @@
 
 </div>
 
-<!-- <br> -->
+<div class="accordion" id="accordionExample">
 
-<h4>Disponibles para visar <b>({{count($serviceRequestsMyPendings)}})</b></h4>
+	<div class="card">
+    <div class="card-header" id="headingOne">
+      <h5 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Disponibles para visar <b>({{count($serviceRequestsMyPendings)}})</b>
+        </button>
+      </h5>
+    </div>
 
-<div class="table-responsive">
-<table class="table table-striped table-sm table-bordered">
-	<thead>
-		<tr>
-			<th scope="col">Id</th>
-			<th scope="col">Tipo</th>
-			<th scope="col">F. Solicitud</th>
-			<th scope="col">Rut</th>
-			<th scope="col">Funcionario</th>
-			<th scope="col">F. Inicio</th>
-			<th scope="col">F. Término</th>
-			<th scope="col">Estado Solicitud</th>
-			<!-- <th scope="col">Creador</th> -->
-			<th scope="col"></th>
-		</tr>
-	</thead>
-	<tbody>
-	@foreach($serviceRequestsMyPendings as $serviceRequest)
-		<tr>
-			<td>{{ $serviceRequest->id }}</td>
-			<td>{{ $serviceRequest->type }}</td>
-			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
-			<td nowrap>{{ $serviceRequest->rut }}</td>
-			<td nowrap>{{ $serviceRequest->name }}</td>
-			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
-			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
-			<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-					@else Finalizada @endif</td>
-			<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
-			<!-- <td>{{$serviceRequest->SignatureFlows->last()->employee}}</td> -->
-			<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
-			<td nowrap>
-				<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
-					class="btn btn-sm btn-outline-secondary">
-					<span class="fas fa-edit" aria-hidden="true"></span>
-				</a>
-			</td>
-		</tr>
-	@endforeach
-	</tbody>
-</table>
+    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+
+				<div class="table-responsive">
+				<table class="table table-striped table-sm table-bordered">
+					<thead>
+						<tr>
+							<th scope="col">Id</th>
+							<th scope="col">Tipo</th>
+							<th scope="col">F. Solicitud</th>
+							<th scope="col">Rut</th>
+							<th scope="col">Funcionario</th>
+							<th scope="col">F. Inicio</th>
+							<th scope="col">F. Término</th>
+							<th scope="col">Estado Solicitud</th>
+							<!-- <th scope="col">Creador</th> -->
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody>
+					@foreach($serviceRequestsMyPendings as $serviceRequest)
+						<tr>
+							<td>{{ $serviceRequest->id }}</td>
+							<td>{{ $serviceRequest->type }}</td>
+							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
+							<td nowrap>{{ $serviceRequest->rut }}</td>
+							<td nowrap>{{ $serviceRequest->name }}</td>
+							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
+							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
+							<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
+									@else Finalizada @endif</td>
+							<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
+							<!-- <td>{{$serviceRequest->SignatureFlows->last()->employee}}</td> -->
+							<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
+							<td nowrap>
+								<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
+									class="btn btn-sm btn-outline-secondary">
+									<span class="fas fa-edit" aria-hidden="true"></span>
+								</a>
+							</td>
+						</tr>
+					@endforeach
+					</tbody>
+				</table>
+				</div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" id="headingTwo">
+      <h5 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+					No disponibles para visar <b>({{count($serviceRequestsOthersPendings)}})</b>
+        </button>
+      </h5>
+    </div>
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+      <div class="card-body">
+
+				<div class="table-responsive">
+				<table class="table table-striped table-sm table-bordered">
+					<thead>
+						<tr>
+							<th scope="col">Id</th>
+							<th scope="col">Tipo</th>
+							<th scope="col">F. Solicitud</th>
+							<th scope="col">Rut</th>
+							<th scope="col">Funcionario</th>
+							<th scope="col">F. Inicio</th>
+							<th scope="col">F. Término</th>
+							<th scope="col">Estado Solicitud</th>
+							<!-- <th scope="col">Creador</th> -->
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody>
+					@foreach($serviceRequestsOthersPendings as $serviceRequest)
+						<tr>
+							<td>{{ $serviceRequest->id }}</td>
+							<td>{{ $serviceRequest->type }}</td>
+							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
+							<td nowrap>{{ $serviceRequest->rut }}</td>
+							<td nowrap>{{ $serviceRequest->name }}</td>
+							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
+							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
+							<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
+									@else Finalizada @endif</td>
+							<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
+							<!-- <td>{{$serviceRequest->SignatureFlows->last()->employee}}</td> -->
+							<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
+							<td nowrap>
+								<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
+									class="btn btn-sm btn-outline-secondary">
+									<span class="fas fa-edit" aria-hidden="true"></span>
+								</a>
+							</td>
+						</tr>
+					@endforeach
+					</tbody>
+				</table>
+				</div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" id="headingThree">
+      <h5 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+					Visados <b>({{count($serviceRequestsAnswered)}})</b>
+        </button>
+      </h5>
+    </div>
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+      <div class="card-body">
+
+				<div class="table-responsive">
+				<table class="table table-striped table-sm table-bordered">
+					<thead>
+						<tr>
+							<th scope="col">Id</th>
+							<th scope="col">Tipo</th>
+							<th scope="col">F. Solicitud</th>
+							<th scope="col">Rut</th>
+							<th scope="col">Funcionario</th>
+							<th scope="col">F. Inicio</th>
+							<th scope="col">F. Término</th>
+							<th scope="col">Estado Solicitud</th>
+							<!-- <th scope="col">Creador</th> -->
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody>
+					@foreach($serviceRequestsAnswered as $serviceRequest)
+						<tr>
+							<td>{{ $serviceRequest->id }}</td>
+							<td>{{ $serviceRequest->type }}</td>
+							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
+							<td nowrap>{{ $serviceRequest->rut }}</td>
+							<td nowrap>{{ $serviceRequest->name }}</td>
+							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
+							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
+							<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
+									@else Finalizada @endif</td>
+							<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
+							<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
+							<td nowrap>
+								<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
+									class="btn btn-sm btn-outline-secondary">
+									<span class="fas fa-edit" aria-hidden="true"></span>
+								</a>
+								@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
+									<a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
+									<i class="fas fa-file" style="color:#B9B9B9"></i></a>
+								@else
+									@if($serviceRequest->SignatureFlows->where('status',0)->count() > 0)
+										<a data-toggle="modal" 	class="btn btn-outline-secondary btn-sm" id="a_modal_flow_rejected">
+										<i class="fas fa-file" style="color:#B9B9B9"></i></a>
+									@else
+										<a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+											class="btn btn-outline-secondary btn-sm" target="_blank">
+										<span class="fas fa-file" aria-hidden="true"></span></a>
+									@endif
+								@endif
+							</td>
+						</tr>
+					@endforeach
+					</tbody>
+				</table>
+				</div>
+
+      </div>
+    </div>
+  </div>
+
+	<div class="card">
+    <div class="card-header" id="headingFour">
+      <h5 class="mb-0">
+        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+					Rechazados <b>({{count($serviceRequestsRejected)}})</b>
+        </button>
+      </h5>
+    </div>
+    <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+      <div class="card-body">
+
+				<div class="table-responsive">
+				<table class="table table-striped table-sm table-bordered">
+					<thead>
+						<tr>
+							<th scope="col">Id</th>
+							<th scope="col">Tipo</th>
+							<th scope="col">F. Solicitud</th>
+							<th scope="col">Rut</th>
+							<th scope="col">Funcionario</th>
+							<th scope="col">F. Inicio</th>
+							<th scope="col">F. Término</th>
+							<th scope="col">Estado Solicitud</th>
+							<!-- <th scope="col">Creador</th> -->
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody>
+					@foreach($serviceRequestsRejected as $serviceRequest)
+						<tr>
+							<td>{{ $serviceRequest->id }}</td>
+							<td>{{ $serviceRequest->type }}</td>
+							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
+							<td nowrap>{{ $serviceRequest->rut }}</td>
+							<td nowrap>{{ $serviceRequest->name }}</td>
+							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
+							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
+							<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
+									@else Finalizada @endif</td>
+							<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
+							<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
+							<td nowrap>
+								<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
+									class="btn btn-sm btn-outline-secondary">
+									<span class="fas fa-edit" aria-hidden="true"></span>
+								</a>
+								@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
+									<a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
+									<i class="fas fa-file" style="color:#B9B9B9"></i></a>
+								@else
+									@if($serviceRequest->SignatureFlows->where('status',0)->count() > 0)
+										<a data-toggle="modal" 	class="btn btn-outline-secondary btn-sm" id="a_modal_flow_rejected">
+										<i class="fas fa-file" style="color:#B9B9B9"></i></a>
+									@else
+										<a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+											class="btn btn-outline-secondary btn-sm" target="_blank">
+										<span class="fas fa-file" aria-hidden="true"></span></a>
+									@endif
+								@endif
+							</td>
+						</tr>
+					@endforeach
+					</tbody>
+				</table>
+				</div>
+
+      </div>
+    </div>
+  </div>
+	
 </div>
 
-<hr>
-
-<h4>No disponibles para visar <b>({{count($serviceRequestsOthersPendings)}})</b></h4>
-
-<div class="table-responsive">
-<table class="table table-striped table-sm table-bordered">
-	<thead>
-		<tr>
-			<th scope="col">Id</th>
-			<th scope="col">Tipo</th>
-			<th scope="col">F. Solicitud</th>
-			<th scope="col">Rut</th>
-			<th scope="col">Funcionario</th>
-			<th scope="col">F. Inicio</th>
-			<th scope="col">F. Término</th>
-			<th scope="col">Estado Solicitud</th>
-			<!-- <th scope="col">Creador</th> -->
-			<th scope="col"></th>
-		</tr>
-	</thead>
-	<tbody>
-	@foreach($serviceRequestsOthersPendings as $serviceRequest)
-		<tr>
-			<td>{{ $serviceRequest->id }}</td>
-			<td>{{ $serviceRequest->type }}</td>
-			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
-			<td nowrap>{{ $serviceRequest->rut }}</td>
-			<td nowrap>{{ $serviceRequest->name }}</td>
-			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
-			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
-			<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-					@else Finalizada @endif</td>
-			<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
-			<!-- <td>{{$serviceRequest->SignatureFlows->last()->employee}}</td> -->
-			<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
-			<td nowrap>
-				<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
-					class="btn btn-sm btn-outline-secondary">
-					<span class="fas fa-edit" aria-hidden="true"></span>
-				</a>
-			</td>
-		</tr>
-	@endforeach
-	</tbody>
-</table>
-</div>
-
-<hr>
-
-<h4>Visados <b>({{count($serviceRequestsAnswered)}})</b></h4>
-
-<div class="table-responsive">
-<table class="table table-striped table-sm table-bordered">
-	<thead>
-		<tr>
-			<th scope="col">Id</th>
-			<th scope="col">Tipo</th>
-			<th scope="col">F. Solicitud</th>
-			<th scope="col">Rut</th>
-			<th scope="col">Funcionario</th>
-			<th scope="col">F. Inicio</th>
-			<th scope="col">F. Término</th>
-			<th scope="col">Estado Solicitud</th>
-			<!-- <th scope="col">Creador</th> -->
-			<th scope="col"></th>
-		</tr>
-	</thead>
-	<tbody>
-	@foreach($serviceRequestsAnswered as $serviceRequest)
-		<tr>
-			<td>{{ $serviceRequest->id }}</td>
-			<td>{{ $serviceRequest->type }}</td>
-			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
-			<td nowrap>{{ $serviceRequest->rut }}</td>
-			<td nowrap>{{ $serviceRequest->name }}</td>
-			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
-			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
-			<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-					@else Finalizada @endif</td>
-			<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
-			<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
-			<td nowrap>
-				<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
-					class="btn btn-sm btn-outline-secondary">
-					<span class="fas fa-edit" aria-hidden="true"></span>
-				</a>
-				@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
-					<a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
-					<i class="fas fa-file" style="color:#B9B9B9"></i></a>
-				@else
-					@if($serviceRequest->SignatureFlows->where('status',0)->count() > 0)
-						<a data-toggle="modal" 	class="btn btn-outline-secondary btn-sm" id="a_modal_flow_rejected">
-						<i class="fas fa-file" style="color:#B9B9B9"></i></a>
-					@else
-						<a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
-							class="btn btn-outline-secondary btn-sm" target="_blank">
-						<span class="fas fa-file" aria-hidden="true"></span></a>
-					@endif
-				@endif
-			</td>
-		</tr>
-	@endforeach
-	</tbody>
-</table>
-</div>
-
-<hr>
-
-<h4><red>Rechazados <b>({{count($serviceRequestsRejected)}})</b></red></h4>
-
-<div class="table-responsive">
-<table class="table table-striped table-sm table-bordered">
-	<thead>
-		<tr>
-			<th scope="col">Id</th>
-			<th scope="col">Tipo</th>
-			<th scope="col">F. Solicitud</th>
-			<th scope="col">Rut</th>
-			<th scope="col">Funcionario</th>
-			<th scope="col">F. Inicio</th>
-			<th scope="col">F. Término</th>
-			<th scope="col">Estado Solicitud</th>
-			<!-- <th scope="col">Creador</th> -->
-			<th scope="col"></th>
-		</tr>
-	</thead>
-	<tbody>
-	@foreach($serviceRequestsRejected as $serviceRequest)
-		<tr>
-			<td>{{ $serviceRequest->id }}</td>
-			<td>{{ $serviceRequest->type }}</td>
-			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
-			<td nowrap>{{ $serviceRequest->rut }}</td>
-			<td nowrap>{{ $serviceRequest->name }}</td>
-			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
-			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
-			<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-					@else Finalizada @endif</td>
-			<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
-			<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
-			<td nowrap>
-				<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
-					class="btn btn-sm btn-outline-secondary">
-					<span class="fas fa-edit" aria-hidden="true"></span>
-				</a>
-				@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
-					<a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
-					<i class="fas fa-file" style="color:#B9B9B9"></i></a>
-				@else
-					@if($serviceRequest->SignatureFlows->where('status',0)->count() > 0)
-						<a data-toggle="modal" 	class="btn btn-outline-secondary btn-sm" id="a_modal_flow_rejected">
-						<i class="fas fa-file" style="color:#B9B9B9"></i></a>
-					@else
-						<a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
-							class="btn btn-outline-secondary btn-sm" target="_blank">
-						<span class="fas fa-file" aria-hidden="true"></span></a>
-					@endif
-				@endif
-			</td>
-		</tr>
-	@endforeach
-	</tbody>
-</table>
-</div>
 
 <!-- @if(count($serviceRequestsCreated) > 0)
 <hr>
