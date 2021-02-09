@@ -40,7 +40,7 @@ Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::get('firma', 'FirmaDigitalController@signPdf')->name('signPdf');
+Route::get('/{signaturesFile}/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
 
 Route::get('/claveunica', 'ClaveUnicaController@autenticar')->name('claveunica.autenticar');
 Route::get('/claveunica/callback', 'ClaveUnicaController@callback')->name('claveunica.callback');

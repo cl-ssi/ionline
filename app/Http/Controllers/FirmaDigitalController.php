@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Documents\SignaturesFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Firebase\JWT\JWT;
@@ -20,10 +21,12 @@ class FirmaDigitalController extends Controller
     /**
      * Create a new controller instance.
      *
+     * @param SignaturesFile $file
      * @return pdf
      */
-    public function signPdf()
+    public function signPdf(SignaturesFile $signaturesFile)
     {
+//        dd($signaturesFile);
         // echo '<pre>'; /* Debug Para mostrar la imágen de la firma */
         //header("Content-Type: image/png; charset=UTF-8");
 
