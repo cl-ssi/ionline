@@ -6,7 +6,7 @@
 
 <h3>Edición Solicitud de Firma</h3>
 
-  <form method="POST" action="{{ route('documents.signatures.update', $resolution) }}" enctype="multipart/form-data">
+  <form method="POST" action="{{ route('documents.signatures.update', $signature) }}" enctype="multipart/form-data">
   @csrf
   @method('PUT')
 
