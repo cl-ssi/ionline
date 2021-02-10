@@ -1,16 +1,28 @@
 @extends('layouts.app')
 
 @section('content')
+
+<link href="{{ asset('css/cu.min.css') }}" rel="stylesheet">
+
 <div class="container">
+    <div class="text-center">
+        <h4>iOnline del {{ env('APP_SS') }}</h4>
+    </div>
     <div class="row justify-content-center">
-        <div class="col-md-8 mb-3 mt3">
-            <a href="{{ route('claveunica.autenticar') }}?redirect=L2NsYXZldW5pY2EvbG9naW4=" class="btn btn-lg btn-block btn-outline-primary">
-                Iniciar sesión con <img src="{{ asset('images/btn_claveunica_119px.png') }}" alt="Logo Clave única">
+        <div class="mt-4">
+            <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
+            <a class="btn-cu btn-m btn-color-estandar" href="{{ route('claveunica.autenticar') }}?redirect=L2NsYXZldW5pY2EvbG9naW4="
+                title="Este es el botón Iniciar sesión de ClaveÚnica">
+                <span class="cl-claveunica"></span>
+                <span class="texto">Iniciar sesión</span>
             </a>
+            <!--./ fin botón-->
         </div>
+    </div>
+    <div class="row justify-content-center mt-4">
         <div class="col-md-8 d-none" id="local_login">
             <div class="card">
-                <div class="card-header">{{ __('Iniciar sesión') }}</div>
+                <div class="card-header">{{ __('Iniciar sesión local') }}</div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
@@ -74,7 +86,9 @@
             </div>
         </div>
     </div>
-    <button type="button" class="btn btn-sm btn btn-outline-light float-right small mt-4" id="show_local_login">Inicio local</button>
+    <div class="row justify-content-center mt-4">
+        <button type="button" class="btn btn-sm btn btn-outline-light float-right small" style="margin-top: 200px;" id="show_local_login">Inicio local</button>
+    </div>
 </div>
 @endsection
 
