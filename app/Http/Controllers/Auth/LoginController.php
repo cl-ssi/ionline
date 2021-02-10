@@ -63,8 +63,15 @@ class LoginController extends Controller
 		if(Auth::check())
 		{
 			Auth::logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+
+            $url_logout = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
+            $url_redirect = "https://i.saludiquique.cl/logout";
+            $url = $url_logout.urlencode($url_redirect);
+            return redirect()->to($url)->send();
 		}
-		//Session::flush();
+
 		return redirect('/');
 	}
 

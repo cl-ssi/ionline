@@ -265,25 +265,20 @@
                             @endif
 
 
-
-                                @role('god')
-                                <a class="dropdown-item"
-                                   href="{{ route('parameters.index') }}">
-                                    <i class="fas fa-cog fa-fw"></i> Mantenedores
-                                </a>
-                                @endrole
-
+                            @role('god')
+                            <a class="dropdown-item"
+                               href="{{ route('parameters.index') }}">
+                                <i class="fas fa-cog fa-fw"></i> Mantenedores
+                            </a>
+                            @endrole
 
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item" role="button" onclick="logout()" id="cierreSesion">
-                                {{ __('Cerrar sesión') }}
+                            <a class="dropdown-item" href="{{ route('logout') }}">
+                                <i class="fas fa-sign-out-alt fa-fw"></i> {{ __('Cerrar sesión') }}
                             </a>
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
                         </div>
                     </li>
                 @endguest
