@@ -48,7 +48,7 @@
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm container bg-nav-gobierno">
         <h5 class="my-0 mr-md-auto font-weight-normal"> <img src="{{ asset('images/gob-header.svg') }}" alt="Logo del gobierno de chile"> </h5>
         <nav class="my-2 my-md-0 mr-md-3">
-            <a class="p-2" href="http://www.saludiquique.cl">Web Servicio de Salud</a>
+            <a class="p-2" href="http://www.saludiquique.cl">Servicio de Salud</a>
             <a class="p-2 btn btn-sm btn-outline-primary" href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1">Siremx</a>
             <a class="p-2 btn btn-sm btn-outline-primary" href="http://intranet.saludiquique.cl">Intranet</a>
             <a class="p-2 btn btn-sm btn-outline-primary" href="{{ route('login') }}">iOnline</a>
@@ -73,7 +73,7 @@
     <div class="container">
         <div class="card-deck mb-3 text-center">
 
-            <div class="card mb-4 shadow-sm">
+            <div class="card shadow-sm">
                 <div class="card-header">
                     <h4 class="my-0 font-weight-normal">Coronavirus</h4>
                 </div>
@@ -103,7 +103,7 @@
                 </div>
             </div>
 
-            <div class="card mb-4 shadow-sm">
+            <div class="card shadow-sm">
                 <div class="card-header">
                     <h4 class="my-0 font-weight-normal">Estado de Urgencias</h4>
                 </div>
@@ -129,7 +129,7 @@
 
             </div>
 
-            <div class="card mb-4 shadow-sm">
+            <div class="card shadow-sm">
                 <img class="card-img" src="{{ asset('images/prevencion-contagio.png') }}" alt="Prevención COVID19">
             </div>
 
@@ -140,7 +140,6 @@
             <div class="row">
                 <div class="col-12 col-md">
                     <img class="mb-2" src="{{ asset('images/logo_ssi_100px.png') }}" alt="Logo Servicio de Salud Iquique">
-                    <small class="d-block mb-3 text-muted">&copy; 2021</small>
                 </div>
                 <div class="col-6 col-md">
                     <h5>Portales del estado</h5>
@@ -160,10 +159,11 @@
                     </ul>
                 </div>
                 <div class="col-6 col-md">
-                    <h5>Acerca</h5>
+                    <h5>Desarrollado por</h5>
                     <ul class="list-unstyled text-small">
-                        <li>Desarrollado por la Unidad TIC.</li>
+                        <li>Departamento TIC SSI</li>
                         <li><a class="text-muted" href="mailto:sistemas.ssi@redsalud.gobc.">sistemas.ssi@redsalud.gob.cl</a></li>
+                        <small class="d-block mb-3 text-muted">&copy; 2021</small>
                     </ul>
                 </div>
             </div>
