@@ -39,6 +39,6 @@ class ServiceRequestNotification extends Mailable
      */
     public function build()
     {
-      return $this->view('service_requests/requests/mails/new_service_request')->subject("Se ha creado una nueva solicitud de contratación de honorarios");
+      return $this->view('service_requests/requests/mails/new_service_request')->subject("Se ha creado la solicitud de contratación de honorarios nro. ".$serviceRequest->id);
     }
 }

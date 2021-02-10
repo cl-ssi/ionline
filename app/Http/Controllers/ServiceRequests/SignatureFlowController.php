@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\SignatureFlow;
+use App\Mail\ServiceRequestNotification;
+use Illuminate\Support\Facades\Mail;
 
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
@@ -75,6 +77,10 @@ class SignatureFlowController extends Controller
           $SignatureFlow->status = $request->status;
           $SignatureFlow->observation = $request->observation;
           $SignatureFlow->save();
+
+          //send emails (next flow position)
+          $email = $serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user->email;
+          Mail::to($email)->send(new ServiceRequestNotification($serviceRequest));
        }
       }
 
