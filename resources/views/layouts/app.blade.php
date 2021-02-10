@@ -51,10 +51,10 @@
         @else
             @if(Auth::user()->external )
                 @include('layouts.partials.nav_external')
-            @else 
+            @else
                 @include('layouts.partials.nav')
             @endif
-        @endGuest 
+        @endGuest
         <main class="container pt-3">
             <div class="d-none d-print-block">
                 <strong>{{ config('app.ss') }}</strong><br>
@@ -100,15 +100,6 @@
 
 
     @yield('custom_js')
-    <script>
-    function logout(){
-        // llamada al endpoint de logout
-        window.location.href="https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout";
-
-        // redirección al cabo de 1 segundo a un handler de logout en la aplicación integradora
-        setTimeout(function(){ window.location.href= "/logout"; }, 1000);
-    }
-    </script>
     @livewireScripts
 </body>
 </html>
