@@ -28,31 +28,34 @@ class ServiceRequest extends Model implements Auditable
     ];
 
     public function MonthOfPayment() {
-    	 if ($this->month_of_payment == 1) {
-         return "Enero";
-       }elseif ($this->month_of_payment == 2) {
-         return "Febrero";
-       }elseif ($this->month_of_payment == 3) {
-         return "Marzo";
-       }elseif ($this->month_of_payment == 4) {
-         return "Abril";
-       }elseif ($this->month_of_payment == 5) {
-         return "Mayo";
-       }elseif ($this->month_of_payment == 6) {
-         return "Junio";
-       }elseif ($this->month_of_payment == 7) {
-         return "Julio";
-       }elseif ($this->month_of_payment == 8) {
-         return "Agosto";
-       }elseif ($this->month_of_payment == 9) {
-         return "Septiembre";
-       }elseif ($this->month_of_payment == 10) {
-         return "Octubre";
-       }elseif ($this->month_of_payment == 11) {
-         return "Noviembre";
-       }elseif ($this->month_of_payment == 12) {
-         return "Diciembre";
-       }
+      if ($this->payment_date) {
+        if ($this->payment_date->format('m') == 1) {
+          return "Enero";
+        }elseif ($this->payment_date->format('m') == 2) {
+          return "Febrero";
+        }elseif ($this->payment_date->format('m') == 3) {
+          return "Marzo";
+        }elseif ($this->payment_date->format('m') == 4) {
+          return "Abril";
+        }elseif ($this->payment_date->format('m') == 5) {
+          return "Mayo";
+        }elseif ($this->payment_date->format('m') == 6) {
+          return "Junio";
+        }elseif ($this->payment_date->format('m') == 7) {
+          return "Julio";
+        }elseif ($this->payment_date->format('m') == 8) {
+          return "Agosto";
+        }elseif ($this->payment_date->format('m') == 9) {
+          return "Septiembre";
+        }elseif ($this->payment_date->format('m') == 10) {
+          return "Octubre";
+        }elseif ($this->payment_date->format('m') == 11) {
+          return "Noviembre";
+        }elseif ($this->payment_date->format('m') == 12) {
+          return "Diciembre";
+        }
+      }
+
     }
 
     public function working_day_type_description(){
