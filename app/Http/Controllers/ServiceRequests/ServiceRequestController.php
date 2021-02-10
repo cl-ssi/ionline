@@ -221,10 +221,9 @@ class ServiceRequestController extends Controller
         }
       }
 
-      //send emails
-      foreach ($serviceRequest->SignatureFlows as $key => $SignatureFlow) {
-        Mail::to($SignatureFlow->user->email)->send(new ServiceRequestNotification($serviceRequest));
-      }
+      //send emails (2 flow position)
+      $email = $serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->email;
+      Mail::to($email)->send(new ServiceRequestNotification($serviceRequest));
 
       session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido creada.');
       return redirect()->route('rrhh.service_requests.index');
