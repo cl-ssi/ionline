@@ -260,6 +260,7 @@
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_paramedicos">Técnicos paraméricos</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_auxiliares">Auxiliares de servicio</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_administrativos">Administrativos/as</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_matronas">Matronas</button>
     </fieldset>
 
   </div>
@@ -584,6 +585,9 @@
 	});
 	$("#alias_administrativos").click(function(){
 		$('#service_description').val("Prestará servicios en el área administrativa realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
+	});
+	$("#alias_matronas").click(function(){
+		$('#service_description').val("Prestará servicios de matronería realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
 
 </script>

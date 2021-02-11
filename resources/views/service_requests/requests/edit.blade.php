@@ -65,7 +65,7 @@
 				<label for="for_users">Responsable</label>
 				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
           @foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == $serviceRequest->responsable_id) selected @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',1)->first()->responsable_id) selected @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
 		</fieldset>
@@ -74,7 +74,7 @@
 				<label for="for_users">Jefe Directo</label>
 				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',1)->first()->responsable_id) selected @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',2)->first()->responsable_id) selected @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
 		</fieldset>
