@@ -40,8 +40,10 @@ class CreateSignaturesTable extends Migration
             $table->id();
             $table->foreignId('signature_id');
             $table->binary('file');
+            $table->string('md5_file')->nullable();
             $table->enum('file_type', ['documento', 'anexo']);
             $table->binary('signed_file')->nullable();
+            $table->string('md5_signed_file')->nullable();
 
             $table->foreign('signature_id')->references('id')->on('doc_signatures');
 
@@ -77,8 +79,8 @@ class CreateSignaturesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('doc_signatures_flow');
-        Schema::dropIfExists('doc_signatures');
+        Schema::dropIfExists('doc_signatures_flows');
         Schema::dropIfExists('doc_signatures_files');
+        Schema::dropIfExists('doc_signatures');
     }
 }

@@ -37,11 +37,11 @@ class FirmaDigitalController extends Controller
         $tipo           = 'principal'; /* 'vb', 'principal' */
         $ct_firmas      = 4; /* Sólo para tipo "vb" */
         $pocision_firma = 1; /* Sólo para tipo "vb" */
-        $pdf            = 'samples/sample_firmante.pdf';
+//        $pdf            = 'samples/sample.pdf';
         /* Fin seteo de variable */
 
-        $pdfbase64      = base64_encode(file_get_contents(public_path($pdf)));
-        $checksum_pdf   = md5_file(public_path($pdf));
+        $pdfbase64      = $signaturesFile->file;
+        $checksum_pdf   = $signaturesFile->md5_file;
 
         /* Confección del cuadro imagen de la firma */
         $font_light   = public_path('fonts/verdana-italic.ttf');
@@ -71,12 +71,19 @@ class FirmaDigitalController extends Controller
          * cn=Autoridad Certificadora del Estado de Chile
          */
 
+//        imagettftext($im, $fontSize,   0, $xAxis, $yPading * 1 + $marginTop,
+//            $text_color, $font_light,  'Firmado digitalmente el 2020-12-21 16:21 por:');
+//        imagettftext($im, $fontSize+1, 0, $xAxis, $yPading * 2 + $marginTop + 2,
+//            $text_color, $font_bold,   'Jorge Patricio Galleguillos Möller');
+//        imagettftext($im, $fontSize,   0, $xAxis, $yPading * 3 + $marginTop + 3,
+//            $text_color, $font_regular,'email = director.ssi@redsalud.gob.cl');
+
         imagettftext($im, $fontSize,   0, $xAxis, $yPading * 1 + $marginTop,
             $text_color, $font_light,  'Firmado digitalmente el 2020-12-21 16:21 por:');
         imagettftext($im, $fontSize+1, 0, $xAxis, $yPading * 2 + $marginTop + 2,
-            $text_color, $font_bold,   'Jorge Patricio Galleguillos Möller');
+            $text_color, $font_bold,   'Germán Andrés Zúñiga Codocedo');
         imagettftext($im, $fontSize,   0, $xAxis, $yPading * 3 + $marginTop + 3,
-            $text_color, $font_regular,'email = director.ssi@redsalud.gob.cl');
+            $text_color, $font_regular,'email = german.zuniga@gmail.com');
         /*
         imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 3,
             $text_color, $font_light, 'serialNumber = 15287582-7');
@@ -204,9 +211,21 @@ class FirmaDigitalController extends Controller
 
         //print_r($json);
 
-        $data = base64_decode($json['files'][0]['content']);
-        header('Content-Type: application/pdf');
-        echo $data;
+//        $data = base64_decode($json['files'][0]['content']);
+        $data = $json['files'][0]['content'];
+//        header('Content-Type: application/pdf');
+//        echo $data;
+
+        $signaturesFlow = $signaturesFile->signaturesFlows->where('type', 'firmante')->first();
+        $signaturesFlow->status = 1;
+        $signaturesFlow->signature_date = now();
+        $signaturesFlow->save();
+
+        $signaturesFile->signed_file = $data;
+        $signaturesFile->save();
+
+        session()->flash('info', 'El documento se ha firmado correctamente.');
+        return redirect()->route('documents.signatures.index');
     }
 
     /*

@@ -21,8 +21,10 @@ class SignaturesFile extends Model implements Auditable
     ];
 
     public function signaturesFlows(){
-    return $this->hasMany('App\Models\Documents\SignaturesFlow', 'signatures_file_id');
-}
+        return $this->hasMany('App\Models\Documents\SignaturesFlow', 'signatures_file_id');
+    }
+
+
 
     protected $table = 'doc_signatures_files';
 }

@@ -41,6 +41,7 @@
 			<th scope="col">Materia de Resolución</th>
 			<th scope="col">Edit</th>
             <th scope="col">Firmar</th>
+            <th scope="col">Doc</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -51,8 +52,8 @@
 			<td>{{ $signature->organizationalUnit->name }}</td>
 			<td>{{ $signature->responsable->getFullNameAttribute() }}</td>
 			<td>
-				@if($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->last()->status === 1) Aceptada
-				@elseif($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->last()->status === 0) Rechazada
+				@if($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->first()->status === 1) Aceptada
+				@elseif($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->first()->status === 0) Rechazada
 				@else Pendiente @endif
 			</td>
 			<td>{{ $signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->last()->employee }}</td>
@@ -67,6 +68,13 @@
                 <a href="{{ route('signPdf', $signature->signaturesFiles->where('file_type', 'documento')->first()->id) }}"
                    class="btn btn-sm btn-outline-primary">
                     <span class="fas fa-edit" aria-hidden="true"></span>
+                </a>
+            </td>
+
+            <td>
+                <a href="{{ route('documents.showPdf', $signature) }}"
+                   class="btn btn-sm btn-outline-secondary">
+                    <span class="fas fa-file" aria-hidden="true"></span>
                 </a>
             </td>
 		</tr>
@@ -96,8 +104,8 @@
 			<td>{{ Carbon\Carbon::parse($signature->request_date)->format('Y-m-d') }}</td>
 			<td>{{ $signature->organizationalUnit->name }}</td>
 			<td>{{ $signature->responsable->getFullNameAttribute() }}</td>
-			<td>@if($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->last()->status == 1) Aceptada @else Rechazada @endif</td>
-			<td>{{$signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->last()->employee}}</td>
+			<td>@if($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->first()->status == 1) Aceptada @else Rechazada @endif</td>
+			<td>{{$signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->first()->employee}}</td>
 			<td>{{ $signature->signature_matter }}</td>
 			<td>
 				<a href="{{ route('documents.signatures.edit', $signature) }}"
