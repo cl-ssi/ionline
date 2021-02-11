@@ -301,6 +301,8 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::resource('partes', 'Documents\ParteController');
 
     Route::resource('signatures', 'Documents\SignatureController')->middleware('auth');
+    Route::get('/showPdf/{signature}', 'Documents\SignatureController@showPdf')->name('showPdf');
+
 });
 Route::resource('documents', 'Documents\DocumentController')->middleware('auth');
 

@@ -31,20 +31,21 @@ class SignatureController extends Controller
      */
     public function create()
     {
-        $users = User::orderBy('name','ASC')->get();
-        $organizationalUnits = OrganizationalUnit::orderBy('id','asc')->get();
-        return view('documents.signatures.create', compact('users','organizationalUnits'));
+        $users = User::orderBy('name', 'ASC')->get();
+        $organizationalUnits = OrganizationalUnit::orderBy('id', 'asc')->get();
+        return view('documents.signatures.create', compact('users', 'organizationalUnits'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-//        dd($request);
+//        dd(md5_file($request->file('document')));
+
         $signature = new Signature($request->All());
         $signature->user_id = Auth::id();
         $signature->ou_id = Auth::user()->organizationalUnit->id;
@@ -56,6 +57,7 @@ class SignatureController extends Controller
         $documentFile = $request->file('document');
         $signaturesFile->file = base64_encode($documentFile->openFile()->fread($documentFile->getSize()));
         $signaturesFile->file_type = 'documento';
+        $signaturesFile->md5_file = md5_file($request->file('document'));
         $signaturesFile->save();
         $signaturesFileDocumentId = $signaturesFile->id;
 
@@ -94,14 +96,14 @@ class SignatureController extends Controller
 //        header('Content-Type: application/pdf');
 //        echo base64_decode($signaturesFile->file);
 
-        session()->flash('info', 'La solicitud de firma '.$signature->id.' ha sido creada.');
+        session()->flash('info', 'La solicitud de firma ' . $signature->id . ' ha sido creada.');
         return redirect()->route('documents.signatures.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Documents\Signature  $signature
+     * @param \App\Models\Documents\Signature $signature
      * @return \Illuminate\Http\Response
      */
     public function show(Signature $signature)
@@ -112,7 +114,7 @@ class SignatureController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Documents\Signature  $signature
+     * @param \App\Models\Documents\Signature $signature
      * @return \Illuminate\Http\Response
      */
     public function edit(Signature $signature)
@@ -123,8 +125,8 @@ class SignatureController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Documents\Signature  $signature
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Documents\Signature $signature
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Signature $signature)
@@ -135,11 +137,18 @@ class SignatureController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Documents\Signature  $signature
+     * @param \App\Models\Documents\Signature $signature
      * @return \Illuminate\Http\Response
      */
     public function destroy(Signature $signature)
     {
         //
+    }
+
+    public function showPdf(Signature $signature)
+    {
+//        dd($signature);
+        header('Content-Type: application/pdf');
+        echo base64_decode($signature->signaturesFiles->where('file_type', 'documento')->first()->signed_file);
     }
 }
