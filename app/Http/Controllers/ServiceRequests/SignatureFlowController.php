@@ -78,7 +78,7 @@ class SignatureFlowController extends Controller
           $SignatureFlow->observation = $request->observation;
           $SignatureFlow->save();
 
-          //send emails (next flow position)
+          // send emails (next flow position)
           $email = $serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user->email;
           Mail::to($email)->send(new ServiceRequestNotification($serviceRequest));
        }
