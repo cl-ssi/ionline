@@ -32,6 +32,14 @@ class ServiceRequestController extends Controller
   public function index()
   {
       $user_id = Auth::user()->id;
+
+      // $establishment = Auth::user()->organizationalUnit->establishment;
+      // if ($establishment == 38) {
+      //   // code...
+      // }
+      // // $a = Authority::getAuthorityFromDate(Auth::user()->organizational_unit_id,Carbon::now(),'manager');
+
+
       $serviceRequestsOthersPendings = [];
       $serviceRequestsMyPendings = [];
       $serviceRequestsAnswered = [];
@@ -57,6 +65,8 @@ class ServiceRequestController extends Controller
                                          })
                                          ->orderBy('id','asc')
                                          ->get();
+
+      // dd($serviceRequests);
 
       foreach ($serviceRequests as $key => $serviceRequest) {
         //not rejected
