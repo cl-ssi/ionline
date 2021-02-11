@@ -39,7 +39,6 @@ class ServiceRequestController extends Controller
       // }
       // // $a = Authority::getAuthorityFromDate(Auth::user()->organizational_unit_id,Carbon::now(),'manager');
 
-
       $serviceRequestsOthersPendings = [];
       $serviceRequestsMyPendings = [];
       $serviceRequestsAnswered = [];
@@ -141,6 +140,18 @@ class ServiceRequestController extends Controller
    */
   public function store(Request $request)
   {
+    //validation existence
+    $serviceRequest = ServiceRequest::where('rut',$request->run."-".$request->dv)
+                                    ->where('program_contract_type',$request->program_contract_type)
+                                    ->where('start_date',$request->start_date)
+                                    ->where('end_date',$request->end_date)->get();
+
+    if ($serviceRequest->count() > 0) {
+      session()->flash('info', 'Ya existe una solicitud ingresada para este funcionario (Solicitud nro <b>'.$serviceRequest->first()->id.'</b> )');
+      return redirect()->back();
+    }
+
+
       //valida que usuario tenga ou
       if($request->users <> null){
         foreach ($request->users as $key => $user) {
