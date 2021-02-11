@@ -15,25 +15,6 @@
 		    <label for="for_request_date">Fecha Documento</label>
 			<input type="date" class="form-control" id="for_request_date" name="request_date" required>
 		</fieldset>
-
-{{--		<fieldset class="form-group col">--}}
-{{--			<label for="for_responsability_center_id">Unidad Organizacional</label>--}}
-{{--		    <select class="form-control selectpicker" data-live-search="true" name="ou_id" required="" data-size="5">--}}
-{{--        		@foreach($organizationalUnits as $key => $organizationalUnit)--}}
-{{--            	<option value="{{$organizationalUnit->id}}">{{$organizationalUnit->name}}</option>--}}
-{{--          		@endforeach--}}
-{{--        	</select>--}}
-{{--		</fieldset>--}}
-
-{{--    	<fieldset class="form-group col">--}}
-{{--			<label for="for_responsable_id">Responsable</label>--}}
-{{--		    <!-- <select name="responsable_id" class="form-control" required> -->--}}
-{{--        	<select class="form-control selectpicker" data-live-search="true" name="responsable_id" required="" data-size="5">--}}
-{{--        		@foreach($users as $key => $user)--}}
-{{--            	<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>--}}
-{{--          		@endforeach--}}
-{{--        	</select>--}}
-{{--		</fieldset>--}}
 	</div>
 
 	<div class="form-row">

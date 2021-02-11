@@ -17,23 +17,24 @@ use GuzzleHttp\Exception\ConnectException;
 
 class FirmaDigitalController extends Controller
 {
-
     /**
      * Create a new controller instance.
      *
-     * @param SignaturesFile $file
+     * @param Request $request
+     * @param SignaturesFile $signaturesFile
      * @return pdf
      */
-    public function signPdf(SignaturesFile $signaturesFile)
+    public function signPdf(Request $request, SignaturesFile $signaturesFile)
     {
-//        dd($signaturesFile);
+//        dd($request->otp);
         // echo '<pre>'; /* Debug Para mostrar la imágen de la firma */
         //header("Content-Type: image/png; charset=UTF-8");
 
         /* Setear Variables */
         $testing        = true; /* Si es true se usará un run o otp de prueba */
         $run            = 15287582;
-        $otp            = '040133';
+        $otp            = $request->otp;
+//        $otp            = '040133';
         $tipo           = 'principal'; /* 'vb', 'principal' */
         $ct_firmas      = 4; /* Sólo para tipo "vb" */
         $pocision_firma = 1; /* Sólo para tipo "vb" */

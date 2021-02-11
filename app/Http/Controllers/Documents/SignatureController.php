@@ -119,7 +119,8 @@ class SignatureController extends Controller
      */
     public function edit(Signature $signature)
     {
-        return view('documents.signatures.edit', compact('signature'));
+        $signaturesFlowSigner = $signature->signaturesFlowSigner;
+        return view('documents.signatures.edit', compact('signature', 'signaturesFlowSigner'));
     }
 
     /**
