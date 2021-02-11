@@ -171,13 +171,23 @@ class ServiceRequestController extends Controller
       }
 
       //saber la organizationalUnit que tengo a cargo
-      $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
-      $employee = Auth::user()->position;
+      // $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
+      // $employee = Auth::user()->position;
+      // if ($authorities!=null) {
+      //   $employee = $authorities[0]->position;// . " - " . $authorities[0]->organizationalUnit->name;
+      //   $ou_id = $authorities[0]->organizational_unit_id;
+      // }else{
+      //   $ou_id = Auth::user()->organizational_unit_id;
+      // }
+
+      //get responsable_id organization in charge
+      $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', $request->responsable_id);
+      $employee = User::find($request->responsable_id)->position;
       if ($authorities!=null) {
         $employee = $authorities[0]->position;// . " - " . $authorities[0]->organizationalUnit->name;
         $ou_id = $authorities[0]->organizational_unit_id;
       }else{
-        $ou_id = Auth::user()->organizational_unit_id;
+        $ou_id = User::find($request->responsable_id)->organizational_unit_id;
       }
 
       //se crea la primera firma
