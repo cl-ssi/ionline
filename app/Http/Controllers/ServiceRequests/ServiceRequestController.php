@@ -486,8 +486,8 @@ class ServiceRequestController extends Controller
                                          ->get();
 
       foreach ($serviceRequests as $key => $serviceRequest) {
-        $serviceRequest->responsable_id = $request->derive_user_id;
-        $serviceRequest->save();
+        // $serviceRequest->responsable_id = $request->derive_user_id;
+        // $serviceRequest->save();
         foreach ($serviceRequest->SignatureFlows->where('responsable_id',$user_id)->whereNull('status') as $key2 => $signatureFlow) {
           $signatureFlow->responsable_id = $request->derive_user_id;
           $signatureFlow->derive_date = Carbon::now();
