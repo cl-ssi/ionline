@@ -112,6 +112,15 @@
                       </a>
                     @endcan
 
+                    @canany(['Service Request: additional data'])
+                      <a class="dropdown-item"
+                          href="{{ route('rrhh.service_requests.aditional_data_list') }}">
+                          <i class="fas fa-wallet"></i> Contratación de Servicios - Información adicional
+                      </a>
+                    @endcan
+
+
+
                     @canany(['Documents: signatures and distribution'])
                       <a class="dropdown-item"
                           href="{{ route('documents.signatures.index') }}">

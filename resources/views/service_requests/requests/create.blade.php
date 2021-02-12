@@ -92,7 +92,7 @@
 				</select>
 		</fieldset>
 
-		<fieldset class="form-group col">
+		<!-- <fieldset class="form-group col">
 				<label for="for_users">Subdirector(a)</label>
 				<select name="users[]" id="subdirector_medico" class="form-control selectpicker" data-live-search="true" data-size="5">
 					<option value=""></option>
@@ -100,18 +100,7 @@
 						<option value="{{$user->id}}" @if($user->id != "9882506" && $user->id != "13835321") disabled @endif>{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<!-- modificar rut por el que corresponda -->
-				<!-- <input type="hidden" name="users[]" value="9882506" /> -->
 		</fieldset>
-
-		<!-- <fieldset class="form-group col">
-				<label for="for_users">Subdirector Médico</label>
-				<select name="users[]" id="prueba" class="form-control" >
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "9882506") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-				</select>
-		</fieldset> -->
 
 		<fieldset class="form-group col">
 				<label for="for_users">S.D.G.A SSI</label>
@@ -120,11 +109,11 @@
 						<option value="{{$user->id}}" @if($user->id == "14104369") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<!-- <input type="hidden" name="users[]" value="14104369" /> -->
-		</fieldset>
+		</fieldset> -->
 
 	</div>
-	<div class="row">
+
+	<!-- <div class="row">
 
 		<fieldset class="form-group col">
 				<label for="for_users">S.G.D.P Hospital</label>
@@ -133,7 +122,6 @@
 						<option value="{{$user->id}}" @if($user->id == "9018101") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<!-- <input type="hidden" name="users[]" value="9018101" /> -->
 		</fieldset>
 
 		<fieldset class="form-group col">
@@ -143,29 +131,39 @@
 						<option value="{{$user->id}}" @if($user->id == "13866194") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<!-- <input type="hidden" name="users[]" value="13866194" /> -->
 		</fieldset>
 
 		<fieldset class="form-group col">
-				<label for="for_users">S.G.D.P Hospital</label>
+				<label for="for_users">S.G.D.P SSI</label>
 				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}" @if($user->id == "15685508") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<!-- <input type="hidden" name="users[]" value="15685508" /> -->
 		</fieldset>
 
 		<fieldset class="form-group col">
-				<label for="for_users">Director</label>
+				<label for="for_users">Director Hospital</label>
 				<select name="users[]" id="director" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}" @if($user->id == "14101085") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<!-- <input type="hidden" name="users[]" value="14101085" /> -->
 		</fieldset>
 
+	</div> -->
+
+	<div class="row">
+	  @foreach($signatureFlows as $key => $signatureFlow)
+			<fieldset class="form-group col-sm-4">
+					<label for="for_users">{{$key}}</label>
+					<select name="users[]" class="form-control selectpicker" id="{{$key}}" data-live-search="true" required="" data-size="5" readonly>
+						@foreach($users as $key => $user)
+							<option value="{{$user->id}}" @if($user->id == $signatureFlow) selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						@endforeach
+					</select>
+			</fieldset>
+		@endforeach
 	</div>
 
 	<br>
@@ -497,16 +495,17 @@
 		var value = this.value;
 		//subdirección gestión del cuidado al paciente
 		if (value == 85) {
-			// $('#subdirector_medico option[value=13835321]').attr('selected', 'selected');
-			// $('#subdirector_medico option[value=13835321]').prop('selected', 'selected');
-			$('select[id=subdirector_medico]').val(13835321);
-			$('#subdirector_medico').selectpicker('refresh');
+			// $('select[id=subdirector_medico]').val(13835321);
+			// $('#subdirector_medico').selectpicker('refresh');
+			$('select[id=Subdirector]').val(13835321);
+			$('#Subdirector').selectpicker('refresh');
+
 		}
 		if (value != 85) {
-			// $('#subdirector_medico option[value=9882506]').attr('selected', 'selected');
-			// $('#subdirector_medico option[value=9882506]').prop('selected', 'selected');
-			$('select[id=subdirector_medico]').val(9882506);
-			$('#subdirector_medico').selectpicker('refresh')
+			// $('select[id=subdirector_medico]').val(9882506);
+			// $('#subdirector_medico').selectpicker('refresh')
+			$('select[id=Subdirector]').val(9882506);
+			$('#Subdirector').selectpicker('refresh')
 		}
 	});
 

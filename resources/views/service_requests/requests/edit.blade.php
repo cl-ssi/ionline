@@ -61,7 +61,7 @@
 
   <div class="form-row">
 
-    <fieldset class="form-group col-12 col-md-3">
+    <fieldset class="form-group col">
 				<label for="for_users">Responsable</label>
 				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
           @foreach($users as $key => $user)
@@ -70,7 +70,7 @@
 				</select>
 		</fieldset>
 
-		<fieldset class="form-group col-12 col-md-3">
+		<fieldset class="form-group col">
 				<label for="for_users">Jefe Directo</label>
 				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
@@ -79,72 +79,24 @@
 				</select>
 		</fieldset>
 
-		<fieldset class="form-group col-12 col-md-3">
-				<label for="for_users">Subdirector(a)</label>
-				<select name="users[]" id="subdirector_medico" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',3)->first()->responsable_id) selected  @endif >{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-					<!-- <option value="12345678">Pedro Iriondo</option> -->
-				</select>
-				<!-- modificar rut por el que corresponda -->
-				<!-- <input type="hidden" name="users[]" value="9882506" /> -->
-		</fieldset>
-
-    <fieldset class="form-group col-12 col-md-3">
-				<label for="for_users">S.D.G.A SSI</label>
-				<select name="users[]" id="sdga_servicio" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',4)->first()->responsable_id) selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-				</select>
-				<!-- <input type="hidden" name="users[]" value="14104369" /> -->
-		</fieldset>
-
 	</div>
-	<div class="form-row">
 
-    <fieldset class="form-group col-12 col-md-3">
-				<label for="for_users">S.G.D.P Hospital</label>
-				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',5)->first()->responsable_id) selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-				</select>
-				<!-- <input type="hidden" name="users[]" value="9018101" /> -->
-		</fieldset>
+  <div class="form-row">
 
-    <fieldset class="form-group col-12 col-md-3">
-				<label for="for_users">Jefe Finanzas</label>
-				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',6)->first()->responsable_id) selected  @endif >{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-				</select>
-				<!-- <input type="hidden" name="users[]" value="13866194" /> -->
-		</fieldset>
+    @foreach($serviceRequest->SignatureFlows->where('sign_position','>',2) as $key => $signatureFlows)
 
-    <fieldset class="form-group col-12 col-md-3">
-				<label for="for_users">Director S.G.D.P</label>
-				<select name="users[]" id="director_sgdp" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',7)->first()->responsable_id) selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-				</select>
-				<!-- <input type="hidden" name="users[]" value="15685508" /> -->
-		</fieldset>
+      <fieldset class="form-group col-sm-4">
+  				<label for="for_users">{{$signatureFlows->employee}}</label>
+  				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+  					@foreach($users as $key => $user)
+  						<option value="{{$user->id}}" @if($user->id == $signatureFlows->responsable_id) selected @endif >{{$user->getFullNameAttribute()}}</option>
+  					@endforeach
+  				</select>
+  		</fieldset>
 
-    <fieldset class="form-group col-12 col-md-3">
-				<label for="for_users">Director</label>
-				<select name="users[]" id="director" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',8)->first()->responsable_id) selected  @endif >{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-				</select>
-				<!-- <input type="hidden" name="users[]" value="14101085" /> -->
-		</fieldset>
+    @endforeach
 
-	</div>
+  </div>
 
   <br>
 
@@ -438,8 +390,6 @@
 
   <!-- solo el creador de la solicitud puede editar  -->
   @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-    <button type="submit" class="btn btn-primary">Guardar</button>
-  @else
     <!-- si existe una firma, no se deja modificar solicitud -->
     @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
       <div class="alert alert-warning" role="alert">
@@ -449,6 +399,8 @@
     @else
       <button type="submit" class="btn btn-primary">Guardar</button>
     @endif
+  @else
+    <button type="submit" class="btn btn-primary" disabled>Guardar</button>
   @endif
 
   <br><br>

@@ -26,7 +26,7 @@ class AgreementController extends Controller
     public function index(Request $request)
     {
         if($request->period){
-            $agreements = Agreement::where('period', $request->period)->latest()->get();
+            $agreements = Agreement::where('period', $request->period)->latest()->paginate(50);
         } else {
             $agreements = Agreement::where('period', date('Y'))->latest()->paginate(50);
         }
@@ -37,9 +37,9 @@ class AgreementController extends Controller
     public function indexTracking(Request $request)
     {
         if($request->commune){
-            $agreements = Agreement::where('commune_id',$request->commune)->where('period', $request->period)->latest()->get();
+            $agreements = Agreement::where('commune_id',$request->commune)->where('period', $request->period)->latest()->paginate(50);
         }elseif($request->period){
-            $agreements = Agreement::where('period', $request->period)->latest()->get();
+            $agreements = Agreement::where('period', $request->period)->latest()->paginate(50);
         } else {
             $agreements = Agreement::where('period', date('Y'))->latest()->paginate(50);
         }

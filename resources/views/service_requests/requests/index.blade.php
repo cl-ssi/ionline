@@ -349,7 +349,6 @@
 		</div>
 </div>
 
-
 @endif
 
 <!-- modal -->
