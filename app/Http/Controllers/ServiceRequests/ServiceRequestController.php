@@ -124,6 +124,8 @@ class ServiceRequestController extends Controller
     $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
                                                ->where('name','LIKE','%unidad%')
                                                ->orwhere('name','LIKE','%servicio%')
+                                               ->orwhere('name','LIKE','%estadio%')
+                                               ->orwhere('name','LIKE','%covid%')
                                                ->orderBy('name', 'ASC')->get();
 
     //  //signature flow
@@ -363,6 +365,8 @@ class ServiceRequestController extends Controller
       $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
                                                  ->where('name','LIKE','%unidad%')
                                                  ->orwhere('name','LIKE','%servicio%')
+                                                 ->orwhere('name','LIKE','%estadio%')
+                                                 ->orwhere('name','LIKE','%covid%')
                                                  ->orderBy('name', 'ASC')->get();
       $SignatureFlow = $serviceRequest->SignatureFlows->where('employee','Supervisor de servicio')->first();
       // $my_level = null;
