@@ -157,7 +157,7 @@
 	  @foreach($signatureFlows as $key => $signatureFlow)
 			<fieldset class="form-group col-sm-4">
 					<label for="for_users">{{$key}}</label>
-					<select name="users[]" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
+					<select name="users[]" class="form-control selectpicker" id="{{$key}}" data-live-search="true" required="" data-size="5" readonly>
 						@foreach($users as $key => $user)
 							<option value="{{$user->id}}" @if($user->id == $signatureFlow) selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 						@endforeach
@@ -495,16 +495,17 @@
 		var value = this.value;
 		//subdirección gestión del cuidado al paciente
 		if (value == 85) {
-			// $('#subdirector_medico option[value=13835321]').attr('selected', 'selected');
-			// $('#subdirector_medico option[value=13835321]').prop('selected', 'selected');
-			$('select[id=subdirector_medico]').val(13835321);
-			$('#subdirector_medico').selectpicker('refresh');
+			// $('select[id=subdirector_medico]').val(13835321);
+			// $('#subdirector_medico').selectpicker('refresh');
+			$('select[id=Subdirector]').val(13835321);
+			$('#Subdirector').selectpicker('refresh');
+
 		}
 		if (value != 85) {
-			// $('#subdirector_medico option[value=9882506]').attr('selected', 'selected');
-			// $('#subdirector_medico option[value=9882506]').prop('selected', 'selected');
-			$('select[id=subdirector_medico]').val(9882506);
-			$('#subdirector_medico').selectpicker('refresh')
+			// $('select[id=subdirector_medico]').val(9882506);
+			// $('#subdirector_medico').selectpicker('refresh')
+			$('select[id=Subdirector]').val(9882506);
+			$('#Subdirector').selectpicker('refresh')
 		}
 	});
 

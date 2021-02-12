@@ -181,7 +181,7 @@ class ServiceRequestController extends Controller
     //    return redirect()->back();
     //  }
 
-    $signatureFlows['Subdirector(a)'] = 9882506; // 88 - Subdirección Médica
+    $signatureFlows['Subdirector'] = 9882506; // 88 - Subdirección Médica
     $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
     $signatureFlows['S.G.D.P Hospital'] = 9018101; // 86 - Subdirección de Gestión de Desarrollo de las Personas
     $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
