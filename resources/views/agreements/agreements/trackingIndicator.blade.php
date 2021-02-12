@@ -735,7 +735,7 @@
                         data-formaction="{{ route('agreements.stage.store', $agreement->id )}}"><i class="fas fa-ellipsis-h"></i></button>
                 @endif</td>
               <td>
-                {{ $agreement->number }}
+                {{ $agreement->res_exempt_number }}
                 @if (!$agreement->addendums->isEmpty())
                   <hr class="mt-0 mb-1"/>
                   @foreach($agreement->addendums as $addendum)
