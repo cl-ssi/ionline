@@ -747,7 +747,7 @@
             @endforeach
         </tbody>
     </table>
-
+{{ $agreements->withQueryString()->links() }}
 @include('agreements/agreements/modal_edit_date_stage')
 @include('agreements/agreements/modal_add_date_stage')
 @include('agreements/agreements/modal_edit_date_addendum_stage')
