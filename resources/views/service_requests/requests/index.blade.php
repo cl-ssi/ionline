@@ -285,7 +285,7 @@
 </div>
 
 
-@if(count($serviceRequestsCreated) > 0)
+<!-- @if(count($serviceRequestsCreated) > 0)
 <hr>
 
 <div class="card border-danger mb-3">
@@ -349,8 +349,7 @@
 		</div>
 </div>
 
-
-@endif
+@endif-->
 
 <!-- modal -->
 <div class="modal" tabindex="-1" role="dialog" id="modal">
