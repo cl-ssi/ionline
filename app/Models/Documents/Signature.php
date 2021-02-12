@@ -37,6 +37,11 @@ class Signature extends Model implements Auditable
         return $this->hasMany('App\Models\Documents\SignaturesFile', 'signature_id');
     }
 
+    public function getSignaturesFlowSignerAttribute(){
+        return $this->signaturesFiles->where('file_type', 'documento')->first()
+            ->signaturesFlows->where('type', 'firmante')->first();
+    }
+
 
     protected $table = 'doc_signatures';
 
