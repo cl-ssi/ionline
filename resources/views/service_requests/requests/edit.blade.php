@@ -7,7 +7,7 @@
 <h3>Solicitud de Contratación de Servicios</h3>
 
 
-  @if($serviceRequest->where('user_id', Auth::user()->id)->where('responsable_id',Auth::user()->id)->count() > 0)
+  @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
     <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
   @else
     <!-- si existe una firma, no se deja modificar solicitud -->
@@ -293,7 +293,7 @@
           <fieldset class="form-group col">
               <label for="for_estate"><br/></label>
               <!-- solo tiene acceso la persona que crea la solicitud -->
-              @if($serviceRequest->where('user_id', Auth::user()->id)->where('responsable_id',Auth::user()->id)->count() > 0)
+              @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
                 <!-- si existe una firma, no se deja modificar solicitud -->
                 @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
                   <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
@@ -389,7 +389,7 @@
   </div>
 
   <!-- solo el creador de la solicitud puede editar  -->
-  @if($serviceRequest->where('user_id', Auth::user()->id)->where('responsable_id',Auth::user()->id)->count() > 0)
+  @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
     <!-- si existe una firma, no se deja modificar solicitud -->
     @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
       <div class="alert alert-warning" role="alert">
