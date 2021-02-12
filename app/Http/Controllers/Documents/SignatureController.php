@@ -55,7 +55,8 @@ class SignatureController extends Controller
         $signaturesFile = new SignaturesFile();
         $signaturesFile->signature_id = $signature->id;
         $documentFile = $request->file('document');
-        $signaturesFile->file = base64_encode($documentFile->openFile()->fread($documentFile->getSize()));
+        $signaturesFile->file = base64_encode(file_get_contents($documentFile->getRealPath()));
+//        $signaturesFile->file = base64_encode($documentFile->openFile()->fread($documentFile->getSize()));
         $signaturesFile->file_type = 'documento';
         $signaturesFile->md5_file = md5_file($request->file('document'));
         $signaturesFile->save();
@@ -66,6 +67,7 @@ class SignatureController extends Controller
                 $signaturesFile = new SignaturesFile();
                 $signaturesFile->signature_id = $signature->id;
                 $documentFile = $annexed;
+
                 $signaturesFile->file = base64_encode($annexed->openFile()->fread($documentFile->getSize()));
                 $signaturesFile->file_type = 'anexo';
                 $signaturesFile->save();
@@ -119,8 +121,7 @@ class SignatureController extends Controller
      */
     public function edit(Signature $signature)
     {
-        $signaturesFlowSigner = $signature->signaturesFlowSigner;
-        return view('documents.signatures.edit', compact('signature', 'signaturesFlowSigner'));
+        return view('documents.signatures.edit', compact('signature'));
     }
 
     /**
@@ -150,6 +151,12 @@ class SignatureController extends Controller
     {
 //        dd($signature);
         header('Content-Type: application/pdf');
-        echo base64_decode($signature->signaturesFiles->where('file_type', 'documento')->first()->signed_file);
+        if ($signature->signaturesFiles->where('file_type', 'documento')->first()->signed_file) {
+            echo base64_decode($signature->signaturesFiles->where('file_type', 'documento')->first()->signed_file);
+        }
+        else {
+            echo base64_decode($signature->signaturesFiles->where('file_type', 'documento')->first()->file);
+        }
+
     }
 }
