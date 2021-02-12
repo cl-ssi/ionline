@@ -440,9 +440,9 @@
 					<option value=""></option>
           <option value="DIURNO">DIURNO</option>
           <option value="TERCER TURNO">TERCER TURNO</option>
-					<option value="TERCER TURNO">TERCER TURNO - MODIFICADO</option>
+					<option value="TERCER TURNO - MODIFICADO">TERCER TURNO - MODIFICADO</option>
           <option value="CUARTO TURNO">CUARTO TURNO</option>
-					<option value="CUARTO TURNO">CUARTO TURNO - MODIFICADO</option>
+					<option value="CUARTO TURNO - MODIFICADO">CUARTO TURNO - MODIFICADO</option>
 					<option value="OTRO">OTRO</option>
         </select>
 
