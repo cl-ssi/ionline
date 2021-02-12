@@ -6,26 +6,26 @@
             <option value=''></option>
 
             @foreach($ouRoots as $ouRoot)
-                <option value="{{ $ouRoot->id }}" >
+                <option value="{{ $ouRoot->id }}" {{($signaturesFlowSigner->ou_id == $ouRoot->id) ? 'selected' : ''}}>
                     {{ $ouRoot->name }}
                 </option>
                 @foreach($ouRoot->childs as $child_level_1)
-                    <option value="{{ $child_level_1->id }}" >
+                    <option value="{{ $child_level_1->id }}" {{($signaturesFlowSigner->ou_id == $child_level_1->id) ? 'selected' : ''}}>
                         &nbsp;&nbsp;&nbsp;
                         {{ $child_level_1->name }}
                     </option>
                     @foreach($child_level_1->childs as $child_level_2)
-                        <option value="{{ $child_level_2->id }}" >
+                        <option value="{{ $child_level_2->id }}" {{($signaturesFlowSigner->ou_id == $child_level_2->id) ? 'selected' : ''}}>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             {{ $child_level_2->name }}
                         </option>
                         @foreach($child_level_2->childs as $child_level_3)
-                            <option value="{{ $child_level_3->id }}" >
+                            <option value="{{ $child_level_3->id }}" {{($signaturesFlowSigner->ou_id == $child_level_3->id) ? 'selected' : ''}}>
                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 {{ $child_level_3->name }}
                             </option>
                             @foreach($child_level_3->childs as $child_level_4)
-                                <option value="{{ $child_level_4->id }}" >
+                                <option value="{{ $child_level_4->id }}" {{($signaturesFlowSigner->ou_id == $child_level_4->id) ? 'selected' : ''}}>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     {{ $child_level_4->name }}
                                 </option>

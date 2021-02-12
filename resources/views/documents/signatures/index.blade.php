@@ -69,6 +69,12 @@
                    class="btn btn-sm btn-outline-primary">
                     <span class="fas fa-edit" aria-hidden="true"></span>
                 </a>
+
+
+                <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                    <i class="fas fa-edit"></i>
+                </button>
+
             </td>
 
             <td>
@@ -79,18 +85,52 @@
             </td>
 		</tr>
 	@endforeach
-	</tbody>
+
+
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Nro. OTP</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="POST" class="form-horizontal" action="{{route('signPdf', $signature->signaturesFiles->where('file_type', 'documento')->first()->id)}}" enctype="multipart/form-data">
+                    <div class="modal-body">
+                    @csrf <!-- input hidden contra ataques CSRF -->
+                        @method('POST')
+                        <div class="form-row">
+                            <div class="form-group col-12">
+                                <label for="forotp">Ingrese número OTP.</label>
+                                <input type="text" class="form-control form-control-sm" id="forotp" name="otp" maxlength="6" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fas fa-edit"></i> Firmar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    </tbody>
 </table>
 
 <h4>Resoluciones respondidas</h4>
 
 <table class="table table-striped table-sm table-bordered">
-	<thead>
-		<tr>
-			<th scope="col">Id</th>
-			<th scope="col">Fecha de Solicitud</th>
-			<th scope="col">U.Organizacional</th>
-			<th scope="col">Responsable</th>
+    <thead>
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Fecha de Solicitud</th>
+        <th scope="col">U.Organizacional</th>
+        <th scope="col">Responsable</th>
 			<th scope="col">Estado Solicitud</th>
 			<th scope="col">Ultimo Usuario</th>
 			<th scope="col">Materia de Resolución</th>
