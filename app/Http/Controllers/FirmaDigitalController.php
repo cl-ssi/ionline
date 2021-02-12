@@ -118,7 +118,7 @@ class FirmaDigitalController extends Controller
             $secret = 'abcd';
 
             $run = 22222222;  // $run = 22222222;
-            $otp = 227083;
+            $otp = 269734;
 
             $purpose = 'Desatendido'; // $purpose = 'Propósito General';
             $entity = 'Subsecretaría General de La Presidencia';
