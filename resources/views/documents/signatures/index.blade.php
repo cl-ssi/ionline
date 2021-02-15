@@ -78,7 +78,7 @@
             </td>
 
             <td>
-                <a href="{{ route('documents.showPdf', $signature) }}"
+                <a href="{{ route('documents.showPdfDocumento', $signature) }}"
                    class="btn btn-sm btn-outline-secondary">
                     <span class="fas fa-file" aria-hidden="true"></span>
                 </a>

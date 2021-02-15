@@ -33,8 +33,8 @@ class FirmaDigitalController extends Controller
         /* Setear Variables */
         $testing        = true; /* Si es true se usará un run o otp de prueba */
         $run            = 15287582;
-        $otp            = $request->otp;
-//        $otp            = '040133';
+//        $otp            = $request->otp;
+        $otp            = '040133';
         $tipo           = 'principal'; /* 'vb', 'principal' */
         $ct_firmas      = 4; /* Sólo para tipo "vb" */
         $pocision_firma = 1; /* Sólo para tipo "vb" */
@@ -118,7 +118,7 @@ class FirmaDigitalController extends Controller
             $secret = 'abcd';
 
             $run = 22222222;  // $run = 22222222;
-            $otp = 269734;
+            $otp = 227083;
 
             $purpose = 'Desatendido'; // $purpose = 'Propósito General';
             $entity = 'Subsecretaría General de La Presidencia';
@@ -210,7 +210,10 @@ class FirmaDigitalController extends Controller
         }
         $json = $response->json();
 
-        //print_r($json);
+//        print_r($data);
+//        print_r($json);
+//        dd(json_encode($data, JSON_PRETTY_PRINT));
+//        dd(json_encode($json, JSON_PRETTY_PRINT));
 
 //        $data = base64_decode($json['files'][0]['content']);
         $data = $json['files'][0]['content'];
