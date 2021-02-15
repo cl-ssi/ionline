@@ -498,4 +498,50 @@ class ServiceRequestController extends Controller
       session()->flash('info', 'Las solicitudes fueron derivadas.');
       return redirect()->route('rrhh.service_requests.index');
     }
+
+
+    public function corrige_firmas(){
+      $serviceRequests = ServiceRequest::whereIn('id',[
+      383,385,390,396,398,399,400,404,405,406,407,410,411,412,414,427,428,430,431,432,433,434,435,436,437,438,439,440,441,442,443,446,447,450,451,452,453,
+      458,459,464,473,484,489,493,494,502,504,505,506,507,508,510,511,512,513,514,517,519,520,521,522,523,524,557,565,566,567,568,569,571,573,574,577,578,
+      579,580,582,583,584,585,586,588,589,592,597,598,599,601,602,603,604,605,606,607,608,609,610,611,612,613,614,615,616,617,618,619,622,623,627,629,630])
+      ->get();
+
+      foreach ($serviceRequests as $key => $serviceRequest) {
+
+        foreach ($serviceRequest->SignatureFlows as $key => $SignatureFlow) {
+          if($SignatureFlow->sign_position > 2){
+            $SignatureFlow->sign_position += 1;
+            $SignatureFlow->save();
+          }
+        }
+
+        if ($serviceRequest->subdirection_ou_id == 85) {
+
+          $SignatureFlow = new SignatureFlow();
+          $SignatureFlow->ou_id = $serviceRequest->subdirection_ou_id;
+          $SignatureFlow->responsable_id = 13835321;
+          $SignatureFlow->user_id = 13835321;
+          $SignatureFlow->service_request_id = $serviceRequest->id;
+          $SignatureFlow->type = "visador";
+          $SignatureFlow->employee = "Subdirector SGCP";
+          $SignatureFlow->sign_position = 3;
+          $SignatureFlow->save();
+
+        }else{
+
+          $SignatureFlow = new SignatureFlow();
+          $SignatureFlow->ou_id = $serviceRequest->subdirection_ou_id;
+          $SignatureFlow->responsable_id = 9882506;
+          $SignatureFlow->user_id = 9882506;
+          $SignatureFlow->service_request_id = $serviceRequest->id;
+          $SignatureFlow->type = "visador";
+          $SignatureFlow->employee = "Subdirector Médico";
+          $SignatureFlow->sign_position = 3;
+          $SignatureFlow->save();
+
+        }
+      }
+      dd("terminó");
+    }
 }
