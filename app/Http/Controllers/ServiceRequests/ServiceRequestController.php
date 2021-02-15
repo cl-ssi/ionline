@@ -32,6 +32,7 @@ class ServiceRequestController extends Controller
   public function index()
   {
       $user_id = Auth::user()->id;
+      $users = User::orderBy('name','ASC')->get();
 
       $serviceRequestsOthersPendings = [];
       $serviceRequestsMyPendings = [];
@@ -59,12 +60,12 @@ class ServiceRequestController extends Controller
                                          ->orderBy('id','asc')
                                          ->get();
 
-      // dd($serviceRequests);
-
       foreach ($serviceRequests as $key => $serviceRequest) {
         //not rejected
         if ($serviceRequest->SignatureFlows->where('status','0')->count() == 0) {
           foreach ($serviceRequest->SignatureFlows as $key => $signatureFlow) {
+
+            //with responsable_id
             if ($user_id == $signatureFlow->responsable_id) {
               if ($signatureFlow->status == NULL) {
                 //verification if i have to sign or other person
@@ -79,6 +80,11 @@ class ServiceRequestController extends Controller
               }else{
                 $serviceRequestsAnswered[$serviceRequest->id] = $serviceRequest;
               }
+            }
+
+            //with organizational unit authority
+            if ($user_id == $signatureFlow->ou_id) {
+
             }
           }
         }
@@ -102,7 +108,7 @@ class ServiceRequestController extends Controller
       // dd($serviceRequestsCreated);
       // dd($serviceRequestsOthersPendings, $serviceRequestsMyPendings, $serviceRequestsAnswered);
 
-      return view('service_requests.requests.index', compact('serviceRequestsMyPendings','serviceRequestsOthersPendings','serviceRequestsRejected','serviceRequestsAnswered','serviceRequestsCreated'));
+      return view('service_requests.requests.index', compact('serviceRequestsMyPendings','serviceRequestsOthersPendings','serviceRequestsRejected','serviceRequestsAnswered','serviceRequestsCreated','users'));
   }
 
   public function aditional_data_list(){
@@ -468,5 +474,28 @@ class ServiceRequestController extends Controller
         // return view('service_requests.report_resolution', compact('serviceRequest'));
         // $pdf = \PDF::loadView('service_requests.report_resolution');
         // return $pdf->stream();
+    }
+
+    public function derive(Request $request){
+      $user_id = Auth::user()->id;
+      $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
+                                           $subQuery->whereNull('status');
+                                           $subQuery->where('responsable_id',$user_id);
+                                         })
+                                         ->orderBy('id','asc')
+                                         ->get();
+
+      foreach ($serviceRequests as $key => $serviceRequest) {
+        // $serviceRequest->responsable_id = $request->derive_user_id;
+        // $serviceRequest->save();
+        foreach ($serviceRequest->SignatureFlows->where('responsable_id',$user_id)->whereNull('status') as $key2 => $signatureFlow) {
+          $signatureFlow->responsable_id = $request->derive_user_id;
+          $signatureFlow->derive_date = Carbon::now();
+          $signatureFlow->save();
+        }
+      }
+
+      session()->flash('info', 'Las solicitudes fueron derivadas.');
+      return redirect()->route('rrhh.service_requests.index');
     }
 }
