@@ -32,6 +32,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('corrige_firmas','ServiceRequests\ServiceRequestController@corrige_firmas')->middleware('auth');
+
 Route::prefix('webservices')->name('webservices.')->group(function () {
     Route::get('fonasa', 'WebserviceController@fonasa')->middleware('auth')->name('fonasa');
 });

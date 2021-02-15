@@ -55,7 +55,13 @@ class ServiceRequest extends Model implements Auditable
           return "Diciembre";
         }
       }
+    }
 
+    public function programm_name_id(){
+      dd($this->programm_name);
+      if (str_contains($this->programm_name,'No médico')) {
+        dd("no médico");
+      }
     }
 
     public function working_day_type_description(){
