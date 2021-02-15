@@ -60,7 +60,7 @@
                 <input type="file" class="form-control" id="for_document" name="document" required>
 
                 {{--                <a href="{{ route('lab.suspect_cases.download', $suspectCase->id) }}"--}}
-                <a href="{{route('documents.showPdf', $signature)}}"
+                <a href="{{route('documents.showPdfDocumento', $signature)}}"
                    target="_blank" data-toggle="tooltip" data-placement="top"
                    data-original-title="">Documento <i
                         {{--                        data-original-title="{{ $suspectCase->id . 'pdf' }}">Resultado <i--}}
@@ -74,9 +74,9 @@
                 <input type="file" class="form-control" id="for_annexed" name="annexed[]" multiple>
 
                 @foreach($signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
-                    <a href="{{route('documents.showPdf', $signature)}}"
+                    <a href="{{route('documents.showPdfAnexo', $anexo)}}"
                        target="_blank" data-toggle="tooltip" data-placement="top"
-                       data-original-title="">Documento <i
+                       data-original-title="">Anexo <i
                             {{--                        data-original-title="{{ $suspectCase->id . 'pdf' }}">Resultado <i--}}
                             class="fas fa-paperclip"></i>&nbsp
                     </a>
