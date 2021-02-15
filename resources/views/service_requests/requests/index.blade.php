@@ -12,6 +12,11 @@
 		<i class="far fa-file"></i> Nueva Solicitud
 	</a>
 
+	<a class="btn btn-warning"
+		href="#modal_derive" data-toggle="modal">
+		<i class="fas fa-sign-in-alt" ></i> Derivar mis solicitudes
+	</a>
+
 	@can('Service Request: consolidated data')
 		<a type="button"
 			 class="btn btn-success"
@@ -371,6 +376,60 @@
   </div>
 </div>
 
+<!-- modal reenviar -->
+<div class="modal" tabindex="-1" role="dialog" id="modal_derive">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Derivar solicitudes</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+				<div class="row">
+					<form method="POST" enctype="multipart/form-data" id="derive" action="{{ route('rrhh.service_requests.derive') }}">
+						@csrf
+
+			    <fieldset class="form-group col">
+					    <label for="for_type">Destinatario</label>
+							<select name="derive_user_id" id="derive_user_id" class="form-control selectpicker" data-live-search="true" data-size="5" required>
+								<option value=""></option>
+								@foreach($users as $key => $user)
+									<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
+								@endforeach
+							</select>
+					</fieldset>
+
+					</form>
+
+				</div>
+
+				<table class="table">
+					<tr>
+						<td>Disponibles para visar:</td>
+						<td><b>{{count($serviceRequestsMyPendings)}}</b></td>
+					</tr>
+					<tr>
+						<td>No disponibles para visar:</td>
+						<td><b>{{count($serviceRequestsOthersPendings)}}</b></td>
+					</tr>
+				</table>
+
+				<br>
+
+				<i>Está a punto de derivar las sgtes solicitudes a otro trabajador.</i>
+
+      </div>
+      <div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="button_derive" style="display:none" >Derivar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @endsection
 
 @section('custom_js')
@@ -385,6 +444,19 @@ $('#a_modal_flow_incomplete').click(function(){
 $('#a_modal_flow_rejected').click(function(){
 		$('#modal_label').text("No es posible generar la resolución por que el flujo de firmas fue rechazado.");
     $('#modal').modal("show");
+});
+
+$( "#derive_user_id" ).change(function() {
+  $('#button_derive').show();
+});
+
+$('#button_derive').click(function(){
+	var user_id = $('#derive_user_id').val();
+	var result = confirm("¿Está seguro de continuar con la derivación?");
+	if (result) {
+		$('#derive').submit();
+		 // window.location.href = '{{route("rrhh.service_requests.derive",1)}}';
+	}
 });
 
 </script>

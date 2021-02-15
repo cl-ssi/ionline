@@ -440,9 +440,9 @@
 					<option value=""></option>
           <option value="DIURNO">DIURNO</option>
           <option value="TERCER TURNO">TERCER TURNO</option>
-					<option value="TERCER TURNO">TERCER TURNO - MODIFICADO</option>
+					<option value="TERCER TURNO - MODIFICADO">TERCER TURNO - MODIFICADO</option>
           <option value="CUARTO TURNO">CUARTO TURNO</option>
-					<option value="CUARTO TURNO">CUARTO TURNO - MODIFICADO</option>
+					<option value="CUARTO TURNO - MODIFICADO">CUARTO TURNO - MODIFICADO</option>
 					<option value="OTRO">OTRO</option>
         </select>
 
@@ -495,17 +495,13 @@
 		var value = this.value;
 		//subdirección gestión del cuidado al paciente
 		if (value == 85) {
-			// $('select[id=subdirector_medico]').val(13835321);
-			// $('#subdirector_medico').selectpicker('refresh');
-			$('select[id=Subdirector]').val(13835321);
+			$("#Subdirector option[value=13835321]").removeAttr('disabled');
+			$('#Subdirector').val(13835321);
 			$('#Subdirector').selectpicker('refresh');
-
 		}
 		if (value != 85) {
-			// $('select[id=subdirector_medico]').val(9882506);
-			// $('#subdirector_medico').selectpicker('refresh')
-			$('select[id=Subdirector]').val(9882506);
-			$('#Subdirector').selectpicker('refresh')
+			$('#Subdirector').val(9882506);
+			$('#Subdirector').selectpicker('refresh');
 		}
 	});
 
