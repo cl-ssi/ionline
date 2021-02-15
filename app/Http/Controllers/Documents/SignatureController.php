@@ -147,16 +147,20 @@ class SignatureController extends Controller
         //
     }
 
-    public function showPdf(Signature $signature)
+    public function showPdfDocumento(Signature $signature)
     {
-//        dd($signature);
         header('Content-Type: application/pdf');
         if ($signature->signaturesFiles->where('file_type', 'documento')->first()->signed_file) {
             echo base64_decode($signature->signaturesFiles->where('file_type', 'documento')->first()->signed_file);
-        }
-        else {
+        } else {
             echo base64_decode($signature->signaturesFiles->where('file_type', 'documento')->first()->file);
         }
 
+    }
+
+    public function showPdfAnexo(SignaturesFile $anexo)
+    {
+        header('Content-Type: application/pdf');
+        echo base64_decode($anexo->file);
     }
 }
