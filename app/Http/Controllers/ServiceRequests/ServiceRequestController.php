@@ -402,7 +402,6 @@ class ServiceRequestController extends Controller
    */
   public function update(Request $request, ServiceRequest $serviceRequest)
   {
-
       //se guarda información de la solicitud
       $serviceRequest->fill($request->all());
       $serviceRequest->save();
@@ -415,8 +414,6 @@ class ServiceRequestController extends Controller
         foreach ($request->shift_start_date as $key => $shift_start_date) {
           $shiftControl = new ShiftControl($request->All());
           $shiftControl->service_request_id = $serviceRequest->id;
-          // $shiftControl->start_date = Carbon::createFromFormat('d/m/Y H:i', $shift_start_date . " " .$request->shift_start_hour[$key]); //d/m/Y
-          // $shiftControl->end_date = Carbon::createFromFormat('d/m/Y H:i', $request->shift_end_date[$key] . " " .$request->shift_end_hour[$key]); //d/m/Y
           $shiftControl->start_date = Carbon::parse($shift_start_date . " " .$request->shift_start_hour[$key]);
           $shiftControl->end_date = Carbon::parse($request->shift_end_date[$key] . " " .$request->shift_end_hour[$key]);
           $shiftControl->observation = $request->shift_observation[$key];
@@ -426,6 +423,16 @@ class ServiceRequestController extends Controller
 
       session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido modificada.');
       return redirect()->route('rrhh.service_requests.index');
+  }
+
+  public function update_aditional_data(Request $request, ServiceRequest $serviceRequest)
+  {
+      //se guarda información de la solicitud
+      $serviceRequest->fill($request->all());
+      $serviceRequest->save();
+
+      session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido modificada.');
+      return redirect()->route('rrhh.service_requests.aditional_data_list');
   }
 
   /**
