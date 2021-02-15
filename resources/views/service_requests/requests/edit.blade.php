@@ -407,14 +407,14 @@
 
   </form>
 
-  @canany(['Service Request: additional data'])
-  <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+  @canany(['Service Request: additional data rrhh'])
+  <form method="POST" action="{{ route('rrhh.service_requests.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
   @csrf
   @method('PUT')
 
   <div class="card border-danger mb-3">
     <div class="card-header bg-danger text-white">
-      Datos adicionales - Resolución
+      Datos adicionales - RRHH
     </div>
       <div class="card-body">
 
@@ -424,25 +424,6 @@
 					    <label for="for_name">N°Contrato</label>
               <input type="text" class="form-control" name="contract_number" value="{{$serviceRequest->contract_number}}">
 					</fieldset>
-
-          <!-- <fieldset class="form-group col-6 col-md-2">
-              <label for="for_name">Mes pago</label>
-              <select name="month_of_payment" class="form-control">
-                <option value=""></option>
-                <option value="1" @if($serviceRequest->month_of_payment == 1) selected @endif>Enero</option>
-                <option value="2" @if($serviceRequest->month_of_payment == 2) selected @endif>Febrero</option>
-                <option value="3" @if($serviceRequest->month_of_payment == 3) selected @endif>Marzo</option>
-                <option value="4" @if($serviceRequest->month_of_payment == 4) selected @endif>Abril</option>
-                <option value="5" @if($serviceRequest->month_of_payment == 5) selected @endif>Mayo</option>
-                <option value="6" @if($serviceRequest->month_of_payment == 6) selected @endif>Junio</option>
-                <option value="7" @if($serviceRequest->month_of_payment == 7) selected @endif>Julio</option>
-                <option value="8" @if($serviceRequest->month_of_payment == 8) selected @endif>Agosto</option>
-                <option value="9" @if($serviceRequest->month_of_payment == 9) selected @endif>Septiembre</option>
-                <option value="10" @if($serviceRequest->month_of_payment == 10) selected @endif>Octubre</option>
-                <option value="11" @if($serviceRequest->month_of_payment == 11) selected @endif>Noviembre</option>
-                <option value="12" @if($serviceRequest->month_of_payment == 12) selected @endif>Diciembre</option>
-              </select>
-          </fieldset> -->
 
           <fieldset class="form-group col">
               <label for="for_nationality">País de Funcionario</label>
@@ -518,8 +499,13 @@
               </select>
           </fieldset>
 
+          <fieldset class="form-group col">
+					    <label for="for_resolution_number">N° Resolución</label>
+              <input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
+					</fieldset>
+
         </div>
-        <div class="form-row">
+        <!-- <div class="form-row">
 
           <fieldset class="form-group col">
 					    <label for="for_resolution_number">N° Resolución</label>
@@ -548,9 +534,55 @@
       		    <input type="date" class="form-control" id="for_payment_date" name="payment_date" required value="{{\Carbon\Carbon::parse($serviceRequest->payment_date)->format('Y-m-d')}}">
       		</fieldset>
 
-        </div>
+        </div> -->
 
         <button type="submit" class="btn btn-danger">Guardar</button>
+
+      </div>
+
+  </div>
+
+  <br>
+  </form>
+  @endcan
+
+
+  @canany(['Service Request: additional data finanzas'])
+  <form method="POST" action="{{ route('rrhh.service_requests.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
+  @csrf
+  @method('PUT')
+
+  <div class="card border-info mb-3">
+    <div class="card-header bg-info text-white">
+      Datos adicionales - Finanzas
+    </div>
+      <div class="card-body">
+
+        <div class="form-row">
+
+          <fieldset class="form-group col">
+              <label for="for_bill_number">N° Boleta</label>
+              <input type="text" class="form-control" name="bill_number" value="{{$serviceRequest->bill_number}}">
+          </fieldset>
+
+          <fieldset class="form-group col">
+              <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
+              <input type="text" class="form-control" name="total_hours_paid" value="{{$serviceRequest->total_hours_paid}}">
+          </fieldset>
+
+          <fieldset class="form-group col">
+              <label for="for_total_paid">Total pagado</label>
+              <input type="text" class="form-control" name="total_paid" value="{{$serviceRequest->total_paid}}">
+          </fieldset>
+
+          <fieldset class="form-group col">
+              <label for="for_payment_date">Fecha pago</label>
+              <input type="date" class="form-control" id="for_payment_date" name="payment_date" required value="{{\Carbon\Carbon::parse($serviceRequest->payment_date)->format('Y-m-d')}}">
+          </fieldset>
+
+        </div>
+
+        <button type="submit" class="btn btn-info">Guardar</button>
 
       </div>
 
