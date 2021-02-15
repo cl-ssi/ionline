@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class SignaturesFile extends Model implements Auditable
+class SignaturesFile extends Model
 {
     use HasFactory;
-    use \OwenIt\Auditing\Auditable;
+//    use \OwenIt\Auditing\Auditable;
 
     /**
      * The attributes that are mass assignable.

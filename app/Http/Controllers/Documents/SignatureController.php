@@ -10,6 +10,7 @@ use App\Models\Documents\Signature;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SignatureController extends Controller
 {
@@ -41,62 +42,68 @@ class SignatureController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
+     * @throws \Throwable
      */
     public function store(Request $request)
     {
-//        dd(md5_file($request->file('document')));
+        DB::beginTransaction();
 
-        $signature = new Signature($request->All());
-        $signature->user_id = Auth::id();
-        $signature->ou_id = Auth::user()->organizationalUnit->id;
-        $signature->responsable_id = Auth::id();
-        $signature->save();
+        try {
+            $signature = new Signature($request->All());
+            $signature->user_id = Auth::id();
+            $signature->ou_id = Auth::user()->organizationalUnit->id;
+            $signature->responsable_id = Auth::id();
+            $signature->save();
 
-        $signaturesFile = new SignaturesFile();
-        $signaturesFile->signature_id = $signature->id;
-        $documentFile = $request->file('document');
-        $signaturesFile->file = base64_encode(file_get_contents($documentFile->getRealPath()));
+            $signaturesFile = new SignaturesFile();
+            $signaturesFile->signature_id = $signature->id;
+            $documentFile = $request->file('document');
+            $signaturesFile->file = base64_encode(file_get_contents($documentFile->getRealPath()));
 //        $signaturesFile->file = base64_encode($documentFile->openFile()->fread($documentFile->getSize()));
-        $signaturesFile->file_type = 'documento';
-        $signaturesFile->md5_file = md5_file($request->file('document'));
-        $signaturesFile->save();
-        $signaturesFileDocumentId = $signaturesFile->id;
+            $signaturesFile->file_type = 'documento';
+            $signaturesFile->md5_file = md5_file($request->file('document'));
+            $signaturesFile->save();
+            $signaturesFileDocumentId = $signaturesFile->id;
 
-        if ($request->annexed) {
-            foreach ($request->annexed as $key => $annexed) {
-                $signaturesFile = new SignaturesFile();
-                $signaturesFile->signature_id = $signature->id;
-                $documentFile = $annexed;
+            if ($request->annexed) {
+                foreach ($request->annexed as $key => $annexed) {
+                    $signaturesFile = new SignaturesFile();
+                    $signaturesFile->signature_id = $signature->id;
+                    $documentFile = $annexed;
 
-                $signaturesFile->file = base64_encode($annexed->openFile()->fread($documentFile->getSize()));
-                $signaturesFile->file_type = 'anexo';
-                $signaturesFile->save();
+                    $signaturesFile->file = base64_encode($annexed->openFile()->fread($documentFile->getSize()));
+                    $signaturesFile->file_type = 'anexo';
+                    $signaturesFile->save();
+                }
             }
-        }
 
-        $signaturesFlow = new SignaturesFlow();
-        $signaturesFlow->signatures_file_id = $signaturesFileDocumentId;
-        $signaturesFlow->type = 'firmante';
-        $signaturesFlow->ou_id = $request->ou_id_signer;
-        $signaturesFlow->user_id = $request->user_signer;
-        $signaturesFlow->status = false;
-        $signaturesFlow->save();
+            $signaturesFlow = new SignaturesFlow();
+            $signaturesFlow->signatures_file_id = $signaturesFileDocumentId;
+            $signaturesFlow->type = 'firmante';
+            $signaturesFlow->ou_id = $request->ou_id_signer;
+            $signaturesFlow->user_id = $request->user_signer;
+            $signaturesFlow->status = false;
+            $signaturesFlow->save();
 
-        if ($request->has('ou_id_visator')) {
-            foreach ($request->ou_id_visator as $key => $ou_id_visator) {
-                $signaturesFlow = new SignaturesFlow();
-                $signaturesFlow->signatures_file_id = $signaturesFileDocumentId;
-                $signaturesFlow->type = 'visador';
-                $signaturesFlow->ou_id = $ou_id_visator;
-                $signaturesFlow->user_id = $request->user_visator[$key];
-                $signaturesFlow->sign_position = $key + 1;
-                $signaturesFlow->status = false;
-                $signaturesFlow->save();
+            if ($request->has('ou_id_visator')) {
+                foreach ($request->ou_id_visator as $key => $ou_id_visator) {
+                    $signaturesFlow = new SignaturesFlow();
+                    $signaturesFlow->signatures_file_id = $signaturesFileDocumentId;
+                    $signaturesFlow->type = 'visador';
+                    $signaturesFlow->ou_id = $ou_id_visator;
+                    $signaturesFlow->user_id = $request->user_visator[$key];
+                    $signaturesFlow->sign_position = $key + 1;
+                    $signaturesFlow->status = false;
+                    $signaturesFlow->save();
+                }
             }
-        }
 
-//        header('Content-Type: application/pdf');
-//        echo base64_decode($signaturesFile->file);
+            DB::commit();
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
 
         session()->flash('info', 'La solicitud de firma ' . $signature->id . ' ha sido creada.');
         return redirect()->route('documents.signatures.index');
