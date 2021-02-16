@@ -442,6 +442,17 @@
   @endcan
 
 
+  @can('Service Request: delete request')
+
+    <form method="POST" action="{{ route('rrhh.service_requests.destroy', $serviceRequest) }}" enctype="multipart/form-data" class="d-inline">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger">Eliminar solicitud</button>
+    </form>
+
+  @endcan
+
+
 
   <br><br>
 
