@@ -586,6 +586,18 @@
     </div>
       <div class="card-body">
 
+        <div class="row">
+          <fieldset class="form-group col">
+					    <label for="for_resolution_number">N° Resolución</label>
+              <input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
+					</fieldset>
+
+          <fieldset class="form-group col">
+              <label for="for_resolution_date">Fecha Resolución</label>
+              <input type="date" class="form-control" id="for_resolution_date" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+          </fieldset>
+        </div>
+
         <div class="form-row">
 
           <fieldset class="form-group col">
