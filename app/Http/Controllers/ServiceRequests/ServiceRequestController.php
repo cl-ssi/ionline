@@ -460,6 +460,124 @@ class ServiceRequestController extends Controller
     // dd($serviceRequests);
     return view('service_requests.requests.consolidated_data',compact('serviceRequests'));
   }
+
+
+  public function export_sirh() {
+
+    // foreach ($serviceRequests as $key => $serviceRequest) {
+    //   foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
+    //     $start_date = Carbon::parse($shiftControl->start_date);
+    //     $end_date = Carbon::parse($shiftControl->end_date);
+    //     $dateDiff=$start_date->diffInHours($end_date);
+    //     $serviceRequest->ControlHrs += $dateDiff;
+    //   }
+    // }
+    // dd($serviceRequests);
+    //return view('service_requests.requests.consolidated_data',compact('serviceRequests'));
+
+    $headers = array(
+        "Content-type" => "plain/txt",
+        "Content-Disposition" => "attachment; filename=export_sirh.csv",
+        "Pragma" => "no-cache",
+        "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+        "Expires" => "0"
+    );
+
+    $filas = ServiceRequest::orderBy('request_date','asc')->get();
+
+    $columnas = array(
+        'RUN',
+        'DV',
+        'N° cargo',
+        'Fecha inicio contrato',
+        'Fecha fin contrato',
+        'Establecimiento',
+        'Tipo de decreto',
+        'Contrato por prestación',
+        'Monto bruto',
+        'Número de cuotas',
+        'Impuesto',
+        'Día de proceso',
+        'Honorario suma alzada',
+        'Financiado proyecto',
+        'Centro de costo',
+        'Unidad',
+        'Tipo de pago',
+        'Código de banco',
+        'Cuenta bancaria',
+        'Programa',
+        'Glosa',
+        'Profesión',
+        'Planta',
+        'Resolución',
+        'N° resolución',
+        'Fecha resolución',
+        'Observación',
+        'Función',
+        'Descripción de la función que cumple',
+        'Estado tramitación del contrato',
+        'Tipo de jornada',
+        'Agente público',
+        'Horas de contrato',
+        'Código por objetivo',
+        'Función dotación',
+        'Tipo de función',
+        'Afecto a sistema de turno'
+    );
+
+    $callback = function() use ($filas, $columnas)
+    {
+        $file = fopen('php://output', 'w');
+        fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+        fputcsv($file, $columnas,';');
+        foreach($filas as $fila) {
+          list($run,$dv) = explode('-',$fila->rut);
+            fputcsv($file, array(
+                $run,
+                $dv,
+                $fila->id, // N° cargo
+                $fila->start_date->format('d-m-Y'),
+                $fila->end_date->format('d-m-Y'),
+                'Establecimiento [130=hospital, ssi=12]',
+                'Tipo de decreto [S,N]',
+                'Contrato por prestación [S,N]',
+                $fila->gross_amount,
+                'Número de cuotas [0-12]',
+                'Impuesto',
+                'Día de proceso',
+                'Honorario suma alzada [S,N]',
+                'Financiado proyecto [S,N]',
+                'Centro de costo [código sirh]',
+                'Unidad [código sirh]',
+                'Tipo de pago [0=efectivo,1=cheque,2=D.cta.corriente...]',
+                'Código de banco [código sirh]',
+                'Cuenta bancaria',
+                'Programa [código sirh]',
+                'Glosa [gódigo sirh asosciado al programa]',
+                'Profesión [código sirh]',
+                'Planta [0=médicos,1=odontólogos,...]',
+                'Resolución[0=exenta,1=toma razon,2=registro,3=proyecto,4=decreto]',
+                $fila->resolution_number,
+                '$fila->resolution_date',
+                'Observacón',
+                'Función [código sirh]',
+                $fila->service_description,
+                'Estado tramitación del contrato [A=Autorizado,T=Tramitado,V=Visado]',
+                'Tipo de jornada [C=Completa,P=Parcial,V=Visado]',
+                'Agente público [S,N]',
+                'Horas de contrato [0,44]',
+                'Código por objetivo [Código sirh]',
+                'Función dotación [S,N]',
+                'Tipo de función [S,N]',
+                'Afecto a sistema de turno [S,N]'
+            ),';');
+        }
+        fclose($file);
+    };
+    return response()->stream($callback, 200, $headers);
+    
+  }
+
     public function resolution(ServiceRequest $serviceRequest)
     {
         return view('service_requests.report_resolution', compact('serviceRequest'));
