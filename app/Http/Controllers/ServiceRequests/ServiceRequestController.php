@@ -462,6 +462,8 @@ class ServiceRequestController extends Controller
 
   public function consolidated_data()
   {
+
+    //solicitudes activas
     $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function($subQuery) {
                                          $subQuery->where('status',0);
                                        })
@@ -476,7 +478,22 @@ class ServiceRequestController extends Controller
       }
     }
 
-    return view('service_requests.requests.consolidated_data',compact('serviceRequests'));
+    //solicitudes Rechazadas
+    $serviceRequestsRejected = ServiceRequest::whereHas("SignatureFlows", function($subQuery) {
+                                         $subQuery->where('status',0);
+                                       })
+                                       ->orderBy('request_date','asc')->get();
+
+    foreach ($serviceRequestsRejected as $key => $serviceRequest) {
+      foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
+        $start_date = Carbon::parse($shiftControl->start_date);
+        $end_date = Carbon::parse($shiftControl->end_date);
+        $dateDiff=$start_date->diffInHours($end_date);
+        $serviceRequest->ControlHrs += $dateDiff;
+      }
+    }
+
+    return view('service_requests.requests.consolidated_data',compact('serviceRequests','serviceRequestsRejected'));
   }
 
 
