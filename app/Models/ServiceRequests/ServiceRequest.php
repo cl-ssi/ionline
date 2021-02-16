@@ -152,5 +152,5 @@ class ServiceRequest extends Model implements Auditable
      *
      * @var array
      */
-    protected $dates = ['request_date', 'start_date', 'end_date', 'budget_date', 'payment_date'];
+    protected $dates = ['request_date', 'start_date', 'end_date', 'budget_date', 'payment_date', 'resolution_date'];
 }
