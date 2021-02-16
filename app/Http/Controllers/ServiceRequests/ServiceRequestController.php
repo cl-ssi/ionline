@@ -462,7 +462,11 @@ class ServiceRequestController extends Controller
 
   public function consolidated_data()
   {
-    $serviceRequests = ServiceRequest::orderBy('request_date','asc')->get();
+    $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function($subQuery) {
+                                         $subQuery->where('status',0);
+                                       })
+                                       ->orderBy('request_date','asc')->get();
+
     foreach ($serviceRequests as $key => $serviceRequest) {
       foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
         $start_date = Carbon::parse($shiftControl->start_date);
@@ -471,7 +475,7 @@ class ServiceRequestController extends Controller
         $serviceRequest->ControlHrs += $dateDiff;
       }
     }
-    // dd($serviceRequests);
+
     return view('service_requests.requests.consolidated_data',compact('serviceRequests'));
   }
 
@@ -497,7 +501,10 @@ class ServiceRequestController extends Controller
         "Expires" => "0"
     );
 
-    $filas = ServiceRequest::orderBy('request_date','asc')->get();
+    $filas = ServiceRequest::whereDoesntHave("SignatureFlows", function($subQuery) {
+                               $subQuery->where('status',0);
+                             })
+                             ->orderBy('request_date','asc')->get();
 
     $columnas = array(
         'RUN',
@@ -589,7 +596,7 @@ class ServiceRequestController extends Controller
         fclose($file);
     };
     return response()->stream($callback, 200, $headers);
-    
+
   }
 
     public function resolution(ServiceRequest $serviceRequest)
