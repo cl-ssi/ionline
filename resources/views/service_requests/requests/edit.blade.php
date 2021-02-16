@@ -6,17 +6,26 @@
 
 <h3>Solicitud de Contratación de Servicios</h3>
 
+  @can('Service Request: additional data rrhh')
 
-  @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
     <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+
   @else
-    <!-- si existe una firma, no se deja modificar solicitud -->
-    @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-      <form>
-    @else
+
+    @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
       <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+    @else
+      <!-- si existe una firma, no se deja modificar solicitud -->
+      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+        <form>
+      @else
+        <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+      @endif
     @endif
-  @endif
+
+  @endcan
+
+
 
   @csrf
   @method('PUT')
@@ -292,17 +301,27 @@
           </fieldset>
           <fieldset class="form-group col">
               <label for="for_estate"><br/></label>
-              <!-- solo tiene acceso la persona que crea la solicitud -->
-              @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-                <!-- si existe una firma, no se deja modificar solicitud -->
-                @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-                  <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
-                @else
-                  <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
-                @endif
+
+              @can('Service Request: additional data rrhh')
+
+                <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+
               @else
-                <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
-              @endif
+
+                <!-- solo tiene acceso la persona que crea la solicitud -->
+                @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
+                  <!-- si existe una firma, no se deja modificar solicitud -->
+                  @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+                    <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
+                  @else
+                    <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
+                  @endif
+                @else
+                  <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
+                @endif
+
+              @endcan
+
           </fieldset>
         </div>
 
@@ -329,17 +348,27 @@
               @endforeach
             </tbody>
         </table>
-        <!-- solo tiene acceso la persona que crea la solicitud -->
-        @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-          <!-- si existe una firma, no se deja modificar solicitud -->
-          @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-            <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
-          @else
-            <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
-          @endif
+
+        @can('Service Request: additional data rrhh')
+
+          <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+
         @else
-          <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
-        @endif
+
+          <!-- solo tiene acceso la persona que crea la solicitud -->
+          @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
+            <!-- si existe una firma, no se deja modificar solicitud -->
+            @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+              <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
+            @else
+              <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+            @endif
+          @else
+            <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
+          @endif
+
+        @endcan
+
       </li>
     </ul>
   </div>
@@ -388,20 +417,31 @@
 
   </div>
 
-  <!-- solo el creador de la solicitud puede editar  -->
-  @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-    <!-- si existe una firma, no se deja modificar solicitud -->
-    @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-      <div class="alert alert-warning" role="alert">
-        No se puede modificar hoja de ruta ya que existen visaciones realizadas.
-      </div>
-      <button type="submit" class="btn btn-primary" disabled>Guardar</button>
-    @else
-      <button type="submit" class="btn btn-primary">Guardar</button>
-    @endif
+
+  @can('Service Request: additional data rrhh')
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+
   @else
-    <button type="submit" class="btn btn-primary" disabled>Guardar</button>
-  @endif
+
+    <!-- solo el creador de la solicitud puede editar  -->
+    @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
+      <!-- si existe una firma, no se deja modificar solicitud -->
+      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+        <div class="alert alert-warning" role="alert">
+          No se puede modificar hoja de ruta ya que existen visaciones realizadas.
+        </div>
+        <button type="submit" class="btn btn-primary" disabled>Guardar</button>
+      @else
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      @endif
+    @else
+      <button type="submit" class="btn btn-primary" disabled>Guardar</button>
+    @endif
+
+  @endcan
+
+
 
   <br><br>
 
@@ -458,6 +498,7 @@
           <fieldset class="form-group col">
               <label for="for_rrhh_team">Equipo RRHH</label>
               <select name="rrhh_team" class="form-control">
+
                 <option value=""></option>
                 <option value="Residencia Médica" @if($serviceRequest->rrhh_team == "Residencia Médica") selected @endif>Residencia Médica</option>
                 <option value="Médico Diurno" @if($serviceRequest->rrhh_team == "Médico Diurno") selected @endif>Médico Diurno</option>
@@ -474,6 +515,18 @@
                 <option value="Químico Farmacéutico" @if($serviceRequest->rrhh_team == "Químico Farmacéutico") selected @endif>Químico Farmacéutico</option>
                 <option value="Bioquímico" @if($serviceRequest->rrhh_team == "Bioquímico") selected @endif>Bioquímico</option>
                 <option value="Fonoaudiologo" @if($serviceRequest->rrhh_team == "Fonoaudiologo") selected @endif>Fonoaudiologo</option>
+
+                <option value="Administrativo Diurno" @if($serviceRequest->rrhh_team == "Administrativo Diurno") selected @endif>Administrativo Diurno</option>
+                <option value="Administrativo Turno" @if($serviceRequest->rrhh_team == "Administrativo Turno") selected @endif>Administrativo Turno</option>
+                <option value="Biotecnólogo Turno" @if($serviceRequest->rrhh_team == "Biotecnólogo Turno") selected @endif>Biotecnólogo Turno</option>
+                <option value="Matrona Turno" @if($serviceRequest->rrhh_team == "Matrona Turno") selected @endif>Matrona Turno</option>
+                <option value="Matrona Diurno" @if($serviceRequest->rrhh_team == "Matrona Diurno") selected @endif>Matrona Diurno</option>
+                <option value="Otros técnicos" @if($serviceRequest->rrhh_team == "Otros técnicos") selected @endif>Otros técnicos</option>
+                <option value="Psicólogo" @if($serviceRequest->rrhh_team == "Psicólogo") selected @endif>Psicólogo</option>
+                <option value="Tecn. Médico Diurno" @if($serviceRequest->rrhh_team == "Tecn. Médico Diurno") selected @endif>Tecn. Médico Diurno</option>
+                <option value="Tecn. Médico Turno" @if($serviceRequest->rrhh_team == "Tecn. Médico Turno") selected @endif>Tecn. Médico Turno</option>
+                <option value="Trabajador Social" @if($serviceRequest->rrhh_team == "Trabajador Social") selected @endif>Trabajador Social</option>
+
               </select>
           </fieldset>
 
