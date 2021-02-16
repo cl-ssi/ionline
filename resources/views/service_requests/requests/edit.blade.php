@@ -557,6 +557,11 @@
               <input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
 					</fieldset>
 
+          <fieldset class="form-group col">
+              <label for="for_resolution_date">Fecha Resolución</label>
+              <input type="date" class="form-control" id="for_resolution_date" name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+          </fieldset>
+
         </div>
         <!-- <div class="form-row">
 
