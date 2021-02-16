@@ -126,75 +126,87 @@ class ServiceRequestController extends Controller
   {
     $users = User::orderBy('name','ASC')->get();
     $establishments = Establishment::orderBy('name', 'ASC')->get();
-    $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
-    $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
-                                               ->where('name','LIKE','%unidad%')
-                                               ->orwhere('name','LIKE','%servicio%')
-                                               ->orwhere('name','LIKE','%estadio%')
-                                               ->orwhere('name','LIKE','%covid%')
-                                               ->orderBy('name', 'ASC')->get();
 
-    //  //signature flow
-    //  dd(Auth::user()->organizationalUnit->establishment_id);
-    //  $signatureFlows = [];
-    //  if (Auth::user()->organizationalUnit->establishment_id == 38) {
-    //    //Hector Reyno (CGU)
-    //    if (Auth::user()->organizationalUnit->id == 24) {
-    //      // 24 - Consultorio General Urbano Dr. Hector Reyno
-    //      if(Authority::getAuthorityFromDate(24,Carbon::now(),'manager')==null) {$user=14745638;}
-    //      else{$user=Authority::getAuthorityFromDate(24,Carbon::now(),'manager')->user->id;}
-    //      $signatureFlows['Directora CGU'] = $user;
-    //      // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-    //      if(Authority::getAuthorityFromDate(2,Carbon::now(),'manager')==null) {$user=14104369;}
-    //      else{$user=Authority::getAuthorityFromDate(2,Carbon::now(),'manager')->user->id;}
-    //      $signatureFlows['S.D.G.A SSI'] = $user;
-    //      // 59 - Planificación y Control de Gestión de Recursos Humanos
-    //      if(Authority::getAuthorityFromDate(59,Carbon::now(),'manager')==null) {$user=14112543;}
-    //      else{$user=Authority::getAuthorityFromDate(59,Carbon::now(),'manager')->user->id;}
-    //      $signatureFlows['Planificación CG RRHH'] = $user;
-    //      // 44 - Subdirección de Gestión y Desarrollo de las Personas
-    //      if(Authority::getAuthorityFromDate(44,Carbon::now(),'manager')==null) {$user=15685508;}
-    //      else{$user=Authority::getAuthorityFromDate(44,Carbon::now(),'manager')->user->id;}
-    //      $signatureFlows['S.G.D.P SSI'] = $user;
-    //      // 31 - Subdirección de Recursos Físicos y Financieros
-    //      if(Authority::getAuthorityFromDate(31,Carbon::now(),'manager')==null) {$user=11612834;}
-    //      else{$user=Authority::getAuthorityFromDate(31,Carbon::now(),'manager')->user->id;}
-    //      $signatureFlows['S.D.A SSI'] = $user;
-    //      // 1 - Dirección
-    //      if(Authority::getAuthorityFromDate(1,Carbon::now(),'manager')==null) {$user=9381231;}
-    //      else{$user=Authority::getAuthorityFromDate(1,Carbon::now(),'manager')->user->id;}
-    //      $signatureFlows['Director SSI'] = $user;
-    //    }
-    //    //servicio de salud iqq
-    //    else{
-    //      $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-    //      $signatureFlows['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
-    //      $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-    //      $signatureFlows['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
-    //      $signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
-    //    }
-    //  }
-    //  //hospital
-    //  elseif(Auth::user()->organizationalUnit->establishment_id == 1){
-    //    $signatureFlows['Subdirector(a)'] = 9882506; // 88 - Subdirección Médica
-    //    $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-    //    $signatureFlows['S.G.D.P Hospital'] = 9018101; // 86 - Subdirección de Gestión de Desarrollo de las Personas
-    //    $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
-    //    $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-    //    $signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
-    //  }
-    // //another
-    //  else{
-    //    session()->flash('info', 'Usted no posee una unidad organizacional válida para ingresar hojas de ruta.');
-    //    return redirect()->back();
-    //  }
+     //signature flow
+     // dd(Auth::user()->organizationalUnit->establishment_id);
+     $signatureFlows = [];
+     if (Auth::user()->organizationalUnit->establishment_id == 38) {
 
-    $signatureFlows['Subdirector'] = 9882506; // 88 - Subdirección Médica
-    $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-    $signatureFlows['S.G.D.P Hospital'] = 9018101; // 86 - Subdirección de Gestión de Desarrollo de las Personas
-    $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
-    $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-    $signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
+       $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',38)->orderBy('name', 'ASC')->get();
+       $responsabilityCenters = OrganizationalUnit::where('establishment_id',38)->orderBy('name', 'ASC')->get();
+
+       //Hector Reyno (CGU)
+       if (Auth::user()->organizationalUnit->id == 24) {
+         // // 24 - Consultorio General Urbano Dr. Hector Reyno
+         // if(Authority::getAuthorityFromDate(24,Carbon::now(),'manager')==null) {$user=14745638;}
+         // else{$user=Authority::getAuthorityFromDate(24,Carbon::now(),'manager')->user->id;}
+         // $signatureFlows['Directora CGU'] = $user;
+         // // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+         // if(Authority::getAuthorityFromDate(2,Carbon::now(),'manager')==null) {$user=14104369;}
+         // else{$user=Authority::getAuthorityFromDate(2,Carbon::now(),'manager')->user->id;}
+         // $signatureFlows['S.D.G.A SSI'] = $user;
+         // // 59 - Planificación y Control de Gestión de Recursos Humanos
+         // if(Authority::getAuthorityFromDate(59,Carbon::now(),'manager')==null) {$user=14112543;}
+         // else{$user=Authority::getAuthorityFromDate(59,Carbon::now(),'manager')->user->id;}
+         // $signatureFlows['Planificación CG RRHH'] = $user;
+         // // 44 - Subdirección de Gestión y Desarrollo de las Personas
+         // if(Authority::getAuthorityFromDate(44,Carbon::now(),'manager')==null) {$user=15685508;}
+         // else{$user=Authority::getAuthorityFromDate(44,Carbon::now(),'manager')->user->id;}
+         // $signatureFlows['S.G.D.P SSI'] = $user;
+         // // 31 - Subdirección de Recursos Físicos y Financieros
+         // if(Authority::getAuthorityFromDate(31,Carbon::now(),'manager')==null) {$user=11612834;}
+         // else{$user=Authority::getAuthorityFromDate(31,Carbon::now(),'manager')->user->id;}
+         // $signatureFlows['S.D.A SSI'] = $user;
+         // // 1 - Dirección
+         // if(Authority::getAuthorityFromDate(1,Carbon::now(),'manager')==null) {$user=9381231;}
+         // else{$user=Authority::getAuthorityFromDate(1,Carbon::now(),'manager')->user->id;}
+         // $signatureFlows['Director SSI'] = $user;
+
+         $signatureFlows['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
+         $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+         $signatureFlows['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
+         $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+         $signatureFlows['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
+         $signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
+       }
+       //servicio de salud iqq
+       else{
+         $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+         $signatureFlows['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
+         $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+         $signatureFlows['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
+         $signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
+       }
+     }
+     //hospital
+     elseif(Auth::user()->organizationalUnit->establishment_id == 1){
+       $signatureFlows['Subdirector'] = 9882506; // 88 - Subdirección Médica
+       $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+       $signatureFlows['S.G.D.P Hospital'] = 9018101; // 86 - Subdirección de Gestión de Desarrollo de las Personas
+       $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
+       $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+       $signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
+
+       $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
+       $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
+                                                  ->where('name','LIKE','%unidad%')
+                                                  ->orwhere('name','LIKE','%servicio%')
+                                                  ->orwhere('name','LIKE','%estadio%')
+                                                  ->orwhere('name','LIKE','%covid%')
+                                                  ->orderBy('name', 'ASC')->get();
+     }
+    //another
+     else{
+       session()->flash('info', 'Usted no posee una unidad organizacional válida para ingresar hojas de ruta.');
+       return redirect()->back();
+     }
+
+    // $signatureFlows['Subdirector'] = 9882506; // 88 - Subdirección Médica
+    // $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+    // $signatureFlows['S.G.D.P Hospital'] = 9018101; // 86 - Subdirección de Gestión de Desarrollo de las Personas
+    // $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
+    // $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+    // $signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
 
      // dd($signatureFlows);
 
@@ -360,27 +372,29 @@ class ServiceRequestController extends Controller
         }
       }
 
-      // $subdirections = Subdirection::orderBy('name', 'ASC')->get();
-      // $responsabilityCenters = ResponsabilityCenter::orderBy('name', 'ASC')->get();
       $users = User::orderBy('name','ASC')->get();
       $establishments = Establishment::orderBy('name', 'ASC')->get();
-      // $organizationalUnits = organizationalUnit::where('establishment_id',1)->orderBy('name', 'ASC')->get();
-      // $subdirections = organizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
-      // $responsabilityCenters = organizationalUnit::where('name','LIKE','%unidad%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
-      $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
-      $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
-                                                 ->where('name','LIKE','%unidad%')
-                                                 ->orwhere('name','LIKE','%servicio%')
-                                                 ->orwhere('name','LIKE','%estadio%')
-                                                 ->orwhere('name','LIKE','%covid%')
-                                                 ->orderBy('name', 'ASC')->get();
-      $SignatureFlow = $serviceRequest->SignatureFlows->where('employee','Supervisor de servicio')->first();
-      // $my_level = null;
-      // $position = null;
-      // if (Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id) != null) {
-      //   $my_level = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id)[0]->organizationalUnit->level;
-      //   $position = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id)->position;
+
+      // if (Auth::user()->organizationalUnit->establishment_id == 38) {
+      //
+      //   $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',38)->orderBy('name', 'ASC')->get();
+      //   $responsabilityCenters = OrganizationalUnit::where('establishment_id',38)->get();
+      //
+      // }else{
+      //
+      //   $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
+      //   $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
+      //                                              ->where('name','LIKE','%unidad%')
+      //                                              ->orwhere('name','LIKE','%servicio%')
+      //                                              ->orwhere('name','LIKE','%estadio%')
+      //                                              ->orwhere('name','LIKE','%covid%')
+      //                                              ->orderBy('name', 'ASC')->get();
       // }
+
+        $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->orderBy('name', 'ASC')->get();
+        $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
+
+      $SignatureFlow = $serviceRequest->SignatureFlows->where('employee','Supervisor de servicio')->first();
 
       //saber la organizationalUnit que tengo a cargo
       $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
