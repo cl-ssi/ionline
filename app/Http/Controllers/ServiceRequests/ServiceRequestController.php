@@ -126,75 +126,87 @@ class ServiceRequestController extends Controller
   {
     $users = User::orderBy('name','ASC')->get();
     $establishments = Establishment::orderBy('name', 'ASC')->get();
-    $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
-    $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
-                                               ->where('name','LIKE','%unidad%')
-                                               ->orwhere('name','LIKE','%servicio%')
-                                               ->orwhere('name','LIKE','%estadio%')
-                                               ->orwhere('name','LIKE','%covid%')
-                                               ->orderBy('name', 'ASC')->get();
 
-    //  //signature flow
-    //  dd(Auth::user()->organizationalUnit->establishment_id);
-    //  $signatureFlows = [];
-    //  if (Auth::user()->organizationalUnit->establishment_id == 38) {
-    //    //Hector Reyno (CGU)
-    //    if (Auth::user()->organizationalUnit->id == 24) {
-    //      // 24 - Consultorio General Urbano Dr. Hector Reyno
-    //      if(Authority::getAuthorityFromDate(24,Carbon::now(),'manager')==null) {$user=14745638;}
-    //      else{$user=Authority::getAuthorityFromDate(24,Carbon::now(),'manager')->user->id;}
-    //      $signatureFlows['Directora CGU'] = $user;
-    //      // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-    //      if(Authority::getAuthorityFromDate(2,Carbon::now(),'manager')==null) {$user=14104369;}
-    //      else{$user=Authority::getAuthorityFromDate(2,Carbon::now(),'manager')->user->id;}
-    //      $signatureFlows['S.D.G.A SSI'] = $user;
-    //      // 59 - Planificación y Control de Gestión de Recursos Humanos
-    //      if(Authority::getAuthorityFromDate(59,Carbon::now(),'manager')==null) {$user=14112543;}
-    //      else{$user=Authority::getAuthorityFromDate(59,Carbon::now(),'manager')->user->id;}
-    //      $signatureFlows['Planificación CG RRHH'] = $user;
-    //      // 44 - Subdirección de Gestión y Desarrollo de las Personas
-    //      if(Authority::getAuthorityFromDate(44,Carbon::now(),'manager')==null) {$user=15685508;}
-    //      else{$user=Authority::getAuthorityFromDate(44,Carbon::now(),'manager')->user->id;}
-    //      $signatureFlows['S.G.D.P SSI'] = $user;
-    //      // 31 - Subdirección de Recursos Físicos y Financieros
-    //      if(Authority::getAuthorityFromDate(31,Carbon::now(),'manager')==null) {$user=11612834;}
-    //      else{$user=Authority::getAuthorityFromDate(31,Carbon::now(),'manager')->user->id;}
-    //      $signatureFlows['S.D.A SSI'] = $user;
-    //      // 1 - Dirección
-    //      if(Authority::getAuthorityFromDate(1,Carbon::now(),'manager')==null) {$user=9381231;}
-    //      else{$user=Authority::getAuthorityFromDate(1,Carbon::now(),'manager')->user->id;}
-    //      $signatureFlows['Director SSI'] = $user;
-    //    }
-    //    //servicio de salud iqq
-    //    else{
-    //      $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-    //      $signatureFlows['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
-    //      $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-    //      $signatureFlows['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
-    //      $signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
-    //    }
-    //  }
-    //  //hospital
-    //  elseif(Auth::user()->organizationalUnit->establishment_id == 1){
-    //    $signatureFlows['Subdirector(a)'] = 9882506; // 88 - Subdirección Médica
-    //    $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-    //    $signatureFlows['S.G.D.P Hospital'] = 9018101; // 86 - Subdirección de Gestión de Desarrollo de las Personas
-    //    $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
-    //    $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-    //    $signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
-    //  }
-    // //another
-    //  else{
-    //    session()->flash('info', 'Usted no posee una unidad organizacional válida para ingresar hojas de ruta.');
-    //    return redirect()->back();
-    //  }
+     //signature flow
+     // dd(Auth::user()->organizationalUnit->establishment_id);
+     $signatureFlows = [];
+     if (Auth::user()->organizationalUnit->establishment_id == 38) {
 
-    $signatureFlows['Subdirector'] = 9882506; // 88 - Subdirección Médica
-    $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-    $signatureFlows['S.G.D.P Hospital'] = 9018101; // 86 - Subdirección de Gestión de Desarrollo de las Personas
-    $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
-    $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-    $signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
+       $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',38)->orderBy('name', 'ASC')->get();
+       $responsabilityCenters = OrganizationalUnit::where('establishment_id',38)->orderBy('name', 'ASC')->get();
+
+       //Hector Reyno (CGU)
+       if (Auth::user()->organizationalUnit->id == 24) {
+         // // 24 - Consultorio General Urbano Dr. Hector Reyno
+         // if(Authority::getAuthorityFromDate(24,Carbon::now(),'manager')==null) {$user=14745638;}
+         // else{$user=Authority::getAuthorityFromDate(24,Carbon::now(),'manager')->user->id;}
+         // $signatureFlows['Directora CGU'] = $user;
+         // // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+         // if(Authority::getAuthorityFromDate(2,Carbon::now(),'manager')==null) {$user=14104369;}
+         // else{$user=Authority::getAuthorityFromDate(2,Carbon::now(),'manager')->user->id;}
+         // $signatureFlows['S.D.G.A SSI'] = $user;
+         // // 59 - Planificación y Control de Gestión de Recursos Humanos
+         // if(Authority::getAuthorityFromDate(59,Carbon::now(),'manager')==null) {$user=14112543;}
+         // else{$user=Authority::getAuthorityFromDate(59,Carbon::now(),'manager')->user->id;}
+         // $signatureFlows['Planificación CG RRHH'] = $user;
+         // // 44 - Subdirección de Gestión y Desarrollo de las Personas
+         // if(Authority::getAuthorityFromDate(44,Carbon::now(),'manager')==null) {$user=15685508;}
+         // else{$user=Authority::getAuthorityFromDate(44,Carbon::now(),'manager')->user->id;}
+         // $signatureFlows['S.G.D.P SSI'] = $user;
+         // // 31 - Subdirección de Recursos Físicos y Financieros
+         // if(Authority::getAuthorityFromDate(31,Carbon::now(),'manager')==null) {$user=11612834;}
+         // else{$user=Authority::getAuthorityFromDate(31,Carbon::now(),'manager')->user->id;}
+         // $signatureFlows['S.D.A SSI'] = $user;
+         // // 1 - Dirección
+         // if(Authority::getAuthorityFromDate(1,Carbon::now(),'manager')==null) {$user=9381231;}
+         // else{$user=Authority::getAuthorityFromDate(1,Carbon::now(),'manager')->user->id;}
+         // $signatureFlows['Director SSI'] = $user;
+
+         $signatureFlows['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
+         $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+         $signatureFlows['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
+         $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+         $signatureFlows['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
+         $signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
+       }
+       //servicio de salud iqq
+       else{
+         $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+         $signatureFlows['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
+         $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+         $signatureFlows['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
+         $signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
+       }
+     }
+     //hospital
+     elseif(Auth::user()->organizationalUnit->establishment_id == 1){
+       $signatureFlows['Subdirector'] = 9882506; // 88 - Subdirección Médica
+       $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+       $signatureFlows['S.G.D.P Hospital'] = 9018101; // 86 - Subdirección de Gestión de Desarrollo de las Personas
+       $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
+       $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+       $signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
+
+       $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
+       $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
+                                                  ->where('name','LIKE','%unidad%')
+                                                  ->orwhere('name','LIKE','%servicio%')
+                                                  ->orwhere('name','LIKE','%estadio%')
+                                                  ->orwhere('name','LIKE','%covid%')
+                                                  ->orderBy('name', 'ASC')->get();
+     }
+    //another
+     else{
+       session()->flash('info', 'Usted no posee una unidad organizacional válida para ingresar hojas de ruta.');
+       return redirect()->back();
+     }
+
+    // $signatureFlows['Subdirector'] = 9882506; // 88 - Subdirección Médica
+    // $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+    // $signatureFlows['S.G.D.P Hospital'] = 9018101; // 86 - Subdirección de Gestión de Desarrollo de las Personas
+    // $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
+    // $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+    // $signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
 
      // dd($signatureFlows);
 
@@ -360,27 +372,29 @@ class ServiceRequestController extends Controller
         }
       }
 
-      // $subdirections = Subdirection::orderBy('name', 'ASC')->get();
-      // $responsabilityCenters = ResponsabilityCenter::orderBy('name', 'ASC')->get();
       $users = User::orderBy('name','ASC')->get();
       $establishments = Establishment::orderBy('name', 'ASC')->get();
-      // $organizationalUnits = organizationalUnit::where('establishment_id',1)->orderBy('name', 'ASC')->get();
-      // $subdirections = organizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
-      // $responsabilityCenters = organizationalUnit::where('name','LIKE','%unidad%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
-      $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
-      $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
-                                                 ->where('name','LIKE','%unidad%')
-                                                 ->orwhere('name','LIKE','%servicio%')
-                                                 ->orwhere('name','LIKE','%estadio%')
-                                                 ->orwhere('name','LIKE','%covid%')
-                                                 ->orderBy('name', 'ASC')->get();
-      $SignatureFlow = $serviceRequest->SignatureFlows->where('employee','Supervisor de servicio')->first();
-      // $my_level = null;
-      // $position = null;
-      // if (Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id) != null) {
-      //   $my_level = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id)[0]->organizationalUnit->level;
-      //   $position = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id)->position;
+
+      // if (Auth::user()->organizationalUnit->establishment_id == 38) {
+      //
+      //   $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',38)->orderBy('name', 'ASC')->get();
+      //   $responsabilityCenters = OrganizationalUnit::where('establishment_id',38)->get();
+      //
+      // }else{
+      //
+      //   $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
+      //   $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
+      //                                              ->where('name','LIKE','%unidad%')
+      //                                              ->orwhere('name','LIKE','%servicio%')
+      //                                              ->orwhere('name','LIKE','%estadio%')
+      //                                              ->orwhere('name','LIKE','%covid%')
+      //                                              ->orderBy('name', 'ASC')->get();
       // }
+
+        $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->orderBy('name', 'ASC')->get();
+        $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
+
+      $SignatureFlow = $serviceRequest->SignatureFlows->where('employee','Supervisor de servicio')->first();
 
       //saber la organizationalUnit que tengo a cargo
       $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
@@ -402,7 +416,6 @@ class ServiceRequestController extends Controller
    */
   public function update(Request $request, ServiceRequest $serviceRequest)
   {
-
       //se guarda información de la solicitud
       $serviceRequest->fill($request->all());
       $serviceRequest->save();
@@ -415,8 +428,6 @@ class ServiceRequestController extends Controller
         foreach ($request->shift_start_date as $key => $shift_start_date) {
           $shiftControl = new ShiftControl($request->All());
           $shiftControl->service_request_id = $serviceRequest->id;
-          // $shiftControl->start_date = Carbon::createFromFormat('d/m/Y H:i', $shift_start_date . " " .$request->shift_start_hour[$key]); //d/m/Y
-          // $shiftControl->end_date = Carbon::createFromFormat('d/m/Y H:i', $request->shift_end_date[$key] . " " .$request->shift_end_hour[$key]); //d/m/Y
           $shiftControl->start_date = Carbon::parse($shift_start_date . " " .$request->shift_start_hour[$key]);
           $shiftControl->end_date = Carbon::parse($request->shift_end_date[$key] . " " .$request->shift_end_hour[$key]);
           $shiftControl->observation = $request->shift_observation[$key];
@@ -428,6 +439,16 @@ class ServiceRequestController extends Controller
       return redirect()->route('rrhh.service_requests.index');
   }
 
+  public function update_aditional_data(Request $request, ServiceRequest $serviceRequest)
+  {
+      //se guarda información de la solicitud
+      $serviceRequest->fill($request->all());
+      $serviceRequest->save();
+
+      session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido modificada.');
+      return redirect()->route('rrhh.service_requests.aditional_data_list');
+  }
+
   /**
    * Remove the specified resource from storage.
    *
@@ -436,12 +457,21 @@ class ServiceRequestController extends Controller
    */
   public function destroy(ServiceRequest $serviceRequest)
   {
-      //
+      $serviceRequest->delete();
+      session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido eliminada.');
+      return redirect()->route('rrhh.service_requests.index');
+
   }
 
   public function consolidated_data()
   {
-    $serviceRequests = ServiceRequest::orderBy('request_date','asc')->get();
+
+    //solicitudes activas
+    $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function($subQuery) {
+                                         $subQuery->where('status',0);
+                                       })
+                                       ->orderBy('request_date','asc')->get();
+
     foreach ($serviceRequests as $key => $serviceRequest) {
       foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
         $start_date = Carbon::parse($shiftControl->start_date);
@@ -450,9 +480,145 @@ class ServiceRequestController extends Controller
         $serviceRequest->ControlHrs += $dateDiff;
       }
     }
-    // dd($serviceRequests);
-    return view('service_requests.requests.consolidated_data',compact('serviceRequests'));
+
+    //solicitudes Rechazadas
+    $serviceRequestsRejected = ServiceRequest::whereHas("SignatureFlows", function($subQuery) {
+                                         $subQuery->where('status',0);
+                                       })
+                                       ->orderBy('request_date','asc')->get();
+
+    foreach ($serviceRequestsRejected as $key => $serviceRequest) {
+      foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
+        $start_date = Carbon::parse($shiftControl->start_date);
+        $end_date = Carbon::parse($shiftControl->end_date);
+        $dateDiff=$start_date->diffInHours($end_date);
+        $serviceRequest->ControlHrs += $dateDiff;
+      }
+    }
+
+    return view('service_requests.requests.consolidated_data',compact('serviceRequests','serviceRequestsRejected'));
   }
+
+
+  public function export_sirh() {
+
+    // foreach ($serviceRequests as $key => $serviceRequest) {
+    //   foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
+    //     $start_date = Carbon::parse($shiftControl->start_date);
+    //     $end_date = Carbon::parse($shiftControl->end_date);
+    //     $dateDiff=$start_date->diffInHours($end_date);
+    //     $serviceRequest->ControlHrs += $dateDiff;
+    //   }
+    // }
+    // dd($serviceRequests);
+    //return view('service_requests.requests.consolidated_data',compact('serviceRequests'));
+
+    $headers = array(
+        "Content-type" => "plain/txt",
+        "Content-Disposition" => "attachment; filename=export_sirh.csv",
+        "Pragma" => "no-cache",
+        "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+        "Expires" => "0"
+    );
+
+    $filas = ServiceRequest::whereDoesntHave("SignatureFlows", function($subQuery) {
+                               $subQuery->where('status',0);
+                             })
+                             ->orderBy('request_date','asc')->get();
+
+    $columnas = array(
+        'RUN',
+        'DV',
+        'N° cargo',
+        'Fecha inicio contrato',
+        'Fecha fin contrato',
+        'Establecimiento',
+        'Tipo de decreto',
+        'Contrato por prestación',
+        'Monto bruto',
+        'Número de cuotas',
+        'Impuesto',
+        'Día de proceso',
+        'Honorario suma alzada',
+        'Financiado proyecto',
+        'Centro de costo',
+        'Unidad',
+        'Tipo de pago',
+        'Código de banco',
+        'Cuenta bancaria',
+        'Programa',
+        'Glosa',
+        'Profesión',
+        'Planta',
+        'Resolución',
+        'N° resolución',
+        'Fecha resolución',
+        'Observación',
+        'Función',
+        'Descripción de la función que cumple',
+        'Estado tramitación del contrato',
+        'Tipo de jornada',
+        'Agente público',
+        'Horas de contrato',
+        'Código por objetivo',
+        'Función dotación',
+        'Tipo de función',
+        'Afecto a sistema de turno'
+    );
+
+    $callback = function() use ($filas, $columnas)
+    {
+        $file = fopen('php://output', 'w');
+        fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+        fputcsv($file, $columnas,';');
+        foreach($filas as $fila) {
+          list($run,$dv) = explode('-',$fila->rut);
+            fputcsv($file, array(
+                $run,
+                $dv,
+                $fila->id, // N° cargo
+                $fila->start_date->format('d-m-Y'),
+                $fila->end_date->format('d-m-Y'),
+                'Establecimiento [130=hospital, ssi=12]',
+                'Tipo de decreto [S,N]',
+                'Contrato por prestación [S,N]',
+                $fila->gross_amount,
+                'Número de cuotas [0-12]',
+                'Impuesto',
+                'Día de proceso',
+                'Honorario suma alzada [S,N]',
+                'Financiado proyecto [S,N]',
+                'Centro de costo [código sirh]',
+                'Unidad [código sirh]',
+                'Tipo de pago [0=efectivo,1=cheque,2=D.cta.corriente...]',
+                'Código de banco [código sirh]',
+                'Cuenta bancaria',
+                'Programa [código sirh]',
+                'Glosa [gódigo sirh asosciado al programa]',
+                'Profesión [código sirh]',
+                'Planta [0=médicos,1=odontólogos,...]',
+                'Resolución[0=exenta,1=toma razon,2=registro,3=proyecto,4=decreto]',
+                $fila->resolution_number,
+                '$fila->resolution_date',
+                'Observacón',
+                'Función [código sirh]',
+                $fila->service_description,
+                'Estado tramitación del contrato [A=Autorizado,T=Tramitado,V=Visado]',
+                'Tipo de jornada [C=Completa,P=Parcial,V=Visado]',
+                'Agente público [S,N]',
+                'Horas de contrato [0,44]',
+                'Código por objetivo [Código sirh]',
+                'Función dotación [S,N]',
+                'Tipo de función [S,N]',
+                'Afecto a sistema de turno [S,N]'
+            ),';');
+        }
+        fclose($file);
+    };
+    return response()->stream($callback, 200, $headers);
+
+  }
+
     public function resolution(ServiceRequest $serviceRequest)
     {
         return view('service_requests.report_resolution', compact('serviceRequest'));

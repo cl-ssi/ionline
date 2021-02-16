@@ -6,17 +6,26 @@
 
 <h3>Solicitud de Contratación de Servicios</h3>
 
+  @can('Service Request: additional data rrhh')
 
-  @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
     <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+
   @else
-    <!-- si existe una firma, no se deja modificar solicitud -->
-    @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-      <form>
-    @else
+
+    @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
       <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+    @else
+      <!-- si existe una firma, no se deja modificar solicitud -->
+      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+        <form>
+      @else
+        <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+      @endif
     @endif
-  @endif
+
+  @endcan
+
+
 
   @csrf
   @method('PUT')
@@ -83,7 +92,7 @@
 
   <div class="form-row">
 
-    @foreach($serviceRequest->SignatureFlows->where('sign_position','>',2) as $key => $signatureFlows)
+    @foreach($serviceRequest->SignatureFlows->where('sign_position','>',2)->sortBy('sign_position') as $key => $signatureFlows)
 
       <fieldset class="form-group col-sm-4">
   				<label for="for_users">{{$signatureFlows->employee}}</label>
@@ -292,17 +301,27 @@
           </fieldset>
           <fieldset class="form-group col">
               <label for="for_estate"><br/></label>
-              <!-- solo tiene acceso la persona que crea la solicitud -->
-              @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-                <!-- si existe una firma, no se deja modificar solicitud -->
-                @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-                  <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
-                @else
-                  <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
-                @endif
+
+              @can('Service Request: additional data rrhh')
+
+                <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+
               @else
-                <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
-              @endif
+
+                <!-- solo tiene acceso la persona que crea la solicitud -->
+                @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
+                  <!-- si existe una firma, no se deja modificar solicitud -->
+                  @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+                    <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
+                  @else
+                    <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
+                  @endif
+                @else
+                  <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
+                @endif
+
+              @endcan
+
           </fieldset>
         </div>
 
@@ -329,17 +348,27 @@
               @endforeach
             </tbody>
         </table>
-        <!-- solo tiene acceso la persona que crea la solicitud -->
-        @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-          <!-- si existe una firma, no se deja modificar solicitud -->
-          @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-            <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
-          @else
-            <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
-          @endif
+
+        @can('Service Request: additional data rrhh')
+
+          <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+
         @else
-          <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
-        @endif
+
+          <!-- solo tiene acceso la persona que crea la solicitud -->
+          @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
+            <!-- si existe una firma, no se deja modificar solicitud -->
+            @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+              <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
+            @else
+              <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+            @endif
+          @else
+            <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
+          @endif
+
+        @endcan
+
       </li>
     </ul>
   </div>
@@ -388,33 +417,55 @@
 
   </div>
 
-  <!-- solo el creador de la solicitud puede editar  -->
-  @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-    <!-- si existe una firma, no se deja modificar solicitud -->
-    @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-      <div class="alert alert-warning" role="alert">
-        No se puede modificar hoja de ruta ya que existen visaciones realizadas.
-      </div>
-      <button type="submit" class="btn btn-primary" disabled>Guardar</button>
-    @else
-      <button type="submit" class="btn btn-primary">Guardar</button>
-    @endif
+
+  @can('Service Request: additional data rrhh')
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+
   @else
-    <button type="submit" class="btn btn-primary" disabled>Guardar</button>
-  @endif
+
+    <!-- solo el creador de la solicitud puede editar  -->
+    @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
+      <!-- si existe una firma, no se deja modificar solicitud -->
+      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+        <div class="alert alert-warning" role="alert">
+          No se puede modificar hoja de ruta ya que existen visaciones realizadas.
+        </div>
+        <button type="submit" class="btn btn-primary" disabled>Guardar</button>
+      @else
+        <button type="submit" class="btn btn-primary">Guardar</button>
+      @endif
+    @else
+      <button type="submit" class="btn btn-primary" disabled>Guardar</button>
+    @endif
+
+  @endcan
+
+
+  @can('Service Request: delete request')
+
+    <form method="POST" action="{{ route('rrhh.service_requests.destroy', $serviceRequest) }}" enctype="multipart/form-data" class="d-inline">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger">Eliminar solicitud</button>
+    </form>
+
+  @endcan
+
+
 
   <br><br>
 
   </form>
 
-  @canany(['Service Request: additional data'])
-  <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+  @canany(['Service Request: additional data rrhh'])
+  <form method="POST" action="{{ route('rrhh.service_requests.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
   @csrf
   @method('PUT')
 
   <div class="card border-danger mb-3">
     <div class="card-header bg-danger text-white">
-      Datos adicionales - Resolución
+      Datos adicionales - RRHH
     </div>
       <div class="card-body">
 
@@ -424,25 +475,6 @@
 					    <label for="for_name">N°Contrato</label>
               <input type="text" class="form-control" name="contract_number" value="{{$serviceRequest->contract_number}}">
 					</fieldset>
-
-          <!-- <fieldset class="form-group col-6 col-md-2">
-              <label for="for_name">Mes pago</label>
-              <select name="month_of_payment" class="form-control">
-                <option value=""></option>
-                <option value="1" @if($serviceRequest->month_of_payment == 1) selected @endif>Enero</option>
-                <option value="2" @if($serviceRequest->month_of_payment == 2) selected @endif>Febrero</option>
-                <option value="3" @if($serviceRequest->month_of_payment == 3) selected @endif>Marzo</option>
-                <option value="4" @if($serviceRequest->month_of_payment == 4) selected @endif>Abril</option>
-                <option value="5" @if($serviceRequest->month_of_payment == 5) selected @endif>Mayo</option>
-                <option value="6" @if($serviceRequest->month_of_payment == 6) selected @endif>Junio</option>
-                <option value="7" @if($serviceRequest->month_of_payment == 7) selected @endif>Julio</option>
-                <option value="8" @if($serviceRequest->month_of_payment == 8) selected @endif>Agosto</option>
-                <option value="9" @if($serviceRequest->month_of_payment == 9) selected @endif>Septiembre</option>
-                <option value="10" @if($serviceRequest->month_of_payment == 10) selected @endif>Octubre</option>
-                <option value="11" @if($serviceRequest->month_of_payment == 11) selected @endif>Noviembre</option>
-                <option value="12" @if($serviceRequest->month_of_payment == 12) selected @endif>Diciembre</option>
-              </select>
-          </fieldset> -->
 
           <fieldset class="form-group col">
               <label for="for_nationality">País de Funcionario</label>
@@ -477,6 +509,7 @@
           <fieldset class="form-group col">
               <label for="for_rrhh_team">Equipo RRHH</label>
               <select name="rrhh_team" class="form-control">
+
                 <option value=""></option>
                 <option value="Residencia Médica" @if($serviceRequest->rrhh_team == "Residencia Médica") selected @endif>Residencia Médica</option>
                 <option value="Médico Diurno" @if($serviceRequest->rrhh_team == "Médico Diurno") selected @endif>Médico Diurno</option>
@@ -493,6 +526,18 @@
                 <option value="Químico Farmacéutico" @if($serviceRequest->rrhh_team == "Químico Farmacéutico") selected @endif>Químico Farmacéutico</option>
                 <option value="Bioquímico" @if($serviceRequest->rrhh_team == "Bioquímico") selected @endif>Bioquímico</option>
                 <option value="Fonoaudiologo" @if($serviceRequest->rrhh_team == "Fonoaudiologo") selected @endif>Fonoaudiologo</option>
+
+                <option value="Administrativo Diurno" @if($serviceRequest->rrhh_team == "Administrativo Diurno") selected @endif>Administrativo Diurno</option>
+                <option value="Administrativo Turno" @if($serviceRequest->rrhh_team == "Administrativo Turno") selected @endif>Administrativo Turno</option>
+                <option value="Biotecnólogo Turno" @if($serviceRequest->rrhh_team == "Biotecnólogo Turno") selected @endif>Biotecnólogo Turno</option>
+                <option value="Matrona Turno" @if($serviceRequest->rrhh_team == "Matrona Turno") selected @endif>Matrona Turno</option>
+                <option value="Matrona Diurno" @if($serviceRequest->rrhh_team == "Matrona Diurno") selected @endif>Matrona Diurno</option>
+                <option value="Otros técnicos" @if($serviceRequest->rrhh_team == "Otros técnicos") selected @endif>Otros técnicos</option>
+                <option value="Psicólogo" @if($serviceRequest->rrhh_team == "Psicólogo") selected @endif>Psicólogo</option>
+                <option value="Tecn. Médico Diurno" @if($serviceRequest->rrhh_team == "Tecn. Médico Diurno") selected @endif>Tecn. Médico Diurno</option>
+                <option value="Tecn. Médico Turno" @if($serviceRequest->rrhh_team == "Tecn. Médico Turno") selected @endif>Tecn. Médico Turno</option>
+                <option value="Trabajador Social" @if($serviceRequest->rrhh_team == "Trabajador Social") selected @endif>Trabajador Social</option>
+
               </select>
           </fieldset>
 
@@ -518,7 +563,99 @@
               </select>
           </fieldset>
 
+          <fieldset class="form-group col">
+					    <label for="for_resolution_number">N° Resolución</label>
+              <input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
+					</fieldset>
+
+          <fieldset class="form-group col">
+              <label for="for_resolution_date">Fecha Resolución</label>
+              <input type="date" class="form-control" id="for_resolution_date" name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+          </fieldset>
+
         </div>
+
+        <button type="submit" class="btn btn-danger">Guardar</button>
+
+      </div>
+
+  </div>
+
+  <br>
+  </form>
+  @endcan
+
+
+  @canany(['Service Request: additional data finanzas'])
+  <form method="POST" action="{{ route('rrhh.service_requests.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
+  @csrf
+  @method('PUT')
+
+  <div class="card border-info mb-3">
+    <div class="card-header bg-info text-white">
+      Datos adicionales - Finanzas
+    </div>
+      <div class="card-body">
+
+        <div class="row">
+          <fieldset class="form-group col">
+					    <label for="for_resolution_number">N° Resolución</label>
+              <input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
+					</fieldset>
+
+          <fieldset class="form-group col">
+              <label for="for_resolution_date">Fecha Resolución</label>
+              <input type="date" class="form-control" id="for_resolution_date" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+          </fieldset>
+        </div>
+
+        <div class="form-row">
+
+          <fieldset class="form-group col">
+              <label for="for_bill_number">N° Boleta</label>
+              <input type="text" class="form-control" name="bill_number" value="{{$serviceRequest->bill_number}}">
+          </fieldset>
+
+          <fieldset class="form-group col">
+              <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
+              <input type="text" class="form-control" name="total_hours_paid" value="{{$serviceRequest->total_hours_paid}}">
+          </fieldset>
+
+          <fieldset class="form-group col">
+              <label for="for_total_paid">Total pagado</label>
+              <input type="text" class="form-control" name="total_paid" value="{{$serviceRequest->total_paid}}">
+          </fieldset>
+
+          <fieldset class="form-group col">
+              <label for="for_payment_date">Fecha pago</label>
+              <input type="date" class="form-control" id="for_payment_date" name="payment_date" required @if($serviceRequest->payment_date) value="{{$serviceRequest->payment_date->format('Y-m-d')}}" @endif>
+          </fieldset>
+
+        </div>
+
+        <button type="submit" class="btn btn-info">Guardar</button>
+
+      </div>
+
+  </div>
+
+  <br>
+  </form>
+  @endcan
+
+
+
+  @canany(['Service Request: additional data oficina partes'])
+  <form method="POST" action="{{ route('rrhh.service_requests.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
+  @csrf
+  @method('PUT')
+
+  <div class="card border-success mb-3">
+    <div class="card-header bg-success text-white">
+      Datos adicionales - Oficina de Partes
+    </div>
+      <div class="card-body">
+
         <div class="form-row">
 
           <fieldset class="form-group col">
@@ -527,30 +664,13 @@
 					</fieldset>
 
           <fieldset class="form-group col">
-					    <label for="for_bill_number">N° Boleta</label>
-              <input type="text" class="form-control" name="bill_number" value="{{$serviceRequest->bill_number}}">
-					</fieldset>
-
-
-
-          <fieldset class="form-group col">
-					    <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
-              <input type="text" class="form-control" name="total_hours_paid" value="{{$serviceRequest->total_hours_paid}}">
-					</fieldset>
-
-          <fieldset class="form-group col">
-					    <label for="for_total_paid">Total pagado</label>
-              <input type="text" class="form-control" name="total_paid" value="{{$serviceRequest->total_paid}}">
-					</fieldset>
-
-          <fieldset class="form-group col">
-      		    <label for="for_payment_date">Fecha pago</label>
-      		    <input type="date" class="form-control" id="for_payment_date" name="payment_date" required value="{{\Carbon\Carbon::parse($serviceRequest->payment_date)->format('Y-m-d')}}">
-      		</fieldset>
+              <label for="for_resolution_date">Fecha Resolución</label>
+              <input type="date" class="form-control" id="for_resolution_date" name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+          </fieldset>
 
         </div>
 
-        <button type="submit" class="btn btn-danger">Guardar</button>
+        <button type="submit" class="btn btn-success">Guardar</button>
 
       </div>
 
