@@ -563,36 +563,6 @@
           </fieldset>
 
         </div>
-        <!-- <div class="form-row">
-
-          <fieldset class="form-group col">
-					    <label for="for_resolution_number">N° Resolución</label>
-              <input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
-					</fieldset>
-
-          <fieldset class="form-group col">
-					    <label for="for_bill_number">N° Boleta</label>
-              <input type="text" class="form-control" name="bill_number" value="{{$serviceRequest->bill_number}}">
-					</fieldset>
-
-
-
-          <fieldset class="form-group col">
-					    <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
-              <input type="text" class="form-control" name="total_hours_paid" value="{{$serviceRequest->total_hours_paid}}">
-					</fieldset>
-
-          <fieldset class="form-group col">
-					    <label for="for_total_paid">Total pagado</label>
-              <input type="text" class="form-control" name="total_paid" value="{{$serviceRequest->total_paid}}">
-					</fieldset>
-
-          <fieldset class="form-group col">
-      		    <label for="for_payment_date">Fecha pago</label>
-      		    <input type="date" class="form-control" id="for_payment_date" name="payment_date" required value="{{\Carbon\Carbon::parse($serviceRequest->payment_date)->format('Y-m-d')}}">
-      		</fieldset>
-
-        </div> -->
 
         <button type="submit" class="btn btn-danger">Guardar</button>
 
@@ -641,6 +611,43 @@
         </div>
 
         <button type="submit" class="btn btn-info">Guardar</button>
+
+      </div>
+
+  </div>
+
+  <br>
+  </form>
+  @endcan
+
+
+
+  @canany(['Service Request: additional data oficina partes'])
+  <form method="POST" action="{{ route('rrhh.service_requests.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
+  @csrf
+  @method('PUT')
+
+  <div class="card border-success mb-3">
+    <div class="card-header bg-success text-white">
+      Datos adicionales - Oficina de Partes
+    </div>
+      <div class="card-body">
+
+        <div class="form-row">
+
+          <fieldset class="form-group col">
+					    <label for="for_resolution_number">N° Resolución</label>
+              <input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
+					</fieldset>
+
+          <fieldset class="form-group col">
+              <label for="for_resolution_date">Fecha Resolución</label>
+              <input type="date" class="form-control" id="for_resolution_date" name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+          </fieldset>
+
+        </div>
+
+        <button type="submit" class="btn btn-success">Guardar</button>
 
       </div>
 
