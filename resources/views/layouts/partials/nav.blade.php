@@ -123,7 +123,7 @@
 
                     @canany(['Documents: signatures and distribution'])
                       <a class="dropdown-item"
-                          href="{{ route('documents.signatures.index') }}">
+                          href="{{ route('documents.signatures.index', ['pendientes']) }}">
                           <i class="fas fa-signature"></i> Solicitud de firmas
                       </a>
                     @endcan

@@ -305,7 +305,8 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     });
     Route::resource('partes', 'Documents\ParteController');
 
-    Route::resource('signatures', 'Documents\SignatureController')->middleware('auth');
+    Route::get('signatures/index/{tab}', 'Documents\SignatureController@index')->name('signatures.index');
+    Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
     Route::get('/showPdfDocumento/{signature}', 'Documents\SignatureController@showPdfDocumento')->name('showPdfDocumento');
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('showPdfAnexo');
 
