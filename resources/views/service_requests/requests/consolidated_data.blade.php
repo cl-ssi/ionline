@@ -83,7 +83,7 @@
               @endif
             @endif
           </td>
-          <td nowrap></td>
+          <td nowrap>{{$serviceRequest->resolution_number}}</td>
           <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}</td>
           <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}</td>
           <td nowrap>{{$serviceRequest->bill_number}}</td>
