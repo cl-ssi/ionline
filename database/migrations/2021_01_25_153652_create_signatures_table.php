@@ -39,6 +39,7 @@ class CreateSignaturesTable extends Migration
         Schema::create('doc_signatures_files', function (Blueprint $table) {
             $table->id();
             $table->foreignId('signature_id');
+            //TODO agregar mediumblob en vez de binary(blob)
             $table->binary('file');
             $table->string('md5_file')->nullable();
             $table->enum('file_type', ['documento', 'anexo']);

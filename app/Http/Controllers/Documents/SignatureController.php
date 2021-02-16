@@ -5,30 +5,60 @@ namespace App\Http\Controllers\Documents;
 use App\Http\Controllers\Controller;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\Documents\Signature;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class SignatureController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param $tab
+     * @return Application|Factory|View|Response
      */
-    public function index()
+    public function index(string $tab)
     {
-        $signatures = Signature::all();
-        return view('documents.signatures.index', compact('signatures'));
+        $mySignatures = null;
+        $pendingSignatures = null;
+        $signedSignatures = null;
+
+        if ($tab == 'mis_documentos') {
+            $mySignatures = Signature::where('responsable_id', Auth::id())->get();
+        }
+
+        if ($tab == 'pendientes') {
+            $pendingSignatures = Signature::wherehas('signaturesFiles', function ($q) {
+                $q->whereHas('signaturesFlows', function ($q) {
+                    $q->where('user_id', Auth::id())
+                        ->where('status', 0);
+                });
+            })->get();
+
+            $signedSignatures = Signature::wherehas('signaturesFiles', function ($q) {
+                $q->whereHas('signaturesFlows', function ($q) {
+                    $q->where('user_id', Auth::id())
+                        ->where('status', 1);
+                });
+            })->get();
+        }
+
+        return view('documents.signatures.index', compact('mySignatures', 'pendingSignatures', 'signedSignatures', 'tab'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View|Response
      */
     public function create()
     {
@@ -40,11 +70,11 @@ class SignatureController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     * @throws \Throwable
+     * @param Request $request
+     * @return RedirectResponse
+     * @throws Throwable
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         DB::beginTransaction();
 
@@ -100,7 +130,7 @@ class SignatureController extends Controller
 
             DB::commit();
 
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
@@ -112,8 +142,8 @@ class SignatureController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Documents\Signature $signature
-     * @return \Illuminate\Http\Response
+     * @param Signature $signature
+     * @return Response
      */
     public function show(Signature $signature)
     {
@@ -123,8 +153,8 @@ class SignatureController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\Documents\Signature $signature
-     * @return \Illuminate\Http\Response
+     * @param Signature $signature
+     * @return Application|Factory|View|Response
      */
     public function edit(Signature $signature)
     {
@@ -134,22 +164,51 @@ class SignatureController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Documents\Signature $signature
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Signature $signature
+     * @return RedirectResponse
      */
-    public function update(Request $request, Signature $signature)
+    public function update(Request $request, Signature $signature): RedirectResponse
     {
-        //
+        $signature->fill($request->all());
+        $signature->save();
+
+        if ($request->hasFile('document')) {
+            $signatureFileDocumento = $signature->signaturesFiles->where('file_type', 'documento')->first();
+            $signatureFileDocumento->file = base64_encode(file_get_contents($request->file('document')->getRealPath()));
+            $signatureFileDocumento->save();
+        }
+
+        if ($request->annexed) {
+            if ($signature->signaturesFiles->where('file_type', 'anexo')->count() > 0) {
+                foreach ($signature->signaturesFiles->where('file_type', 'anexo') as $anexo) {
+                    $anexo->delete();
+                }
+            }
+
+            foreach ($request->annexed as $key => $annexed) {
+                $signaturesFile = new SignaturesFile();
+                $signaturesFile->signature_id = $signature->id;
+                $documentFile = $annexed;
+
+                $signaturesFile->file = base64_encode($annexed->openFile()->fread($documentFile->getSize()));
+                $signaturesFile->file_type = 'anexo';
+                $signaturesFile->save();
+            }
+        }
+
+        session()->flash('info', "Los datos de la firma $signature->id han sido actualizados.");
+
+        return redirect()->route('documents.signatures.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Documents\Signature $signature
-     * @return \Illuminate\Http\Response
+     * @param Signature $signature
+     * @return Response
      */
-    public function destroy(Signature $signature)
+    public function destroy(Signature $signature): Response
     {
         //
     }
