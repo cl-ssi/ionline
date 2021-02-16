@@ -92,7 +92,7 @@
 
   <div class="form-row">
 
-    @foreach($serviceRequest->SignatureFlows->where('sign_position','>',2) as $key => $signatureFlows)
+    @foreach($serviceRequest->SignatureFlows->where('sign_position','>',2)->sortBy('sign_position') as $key => $signatureFlows)
 
       <fieldset class="form-group col-sm-4">
   				<label for="for_users">{{$signatureFlows->employee}}</label>
