@@ -19,11 +19,20 @@
 
 	@can('Service Request: consolidated data')
 		<a type="button"
-			 class="btn btn-success"
+			 class="btn btn-outline-success"
 			 href="{{ route('rrhh.service_requests.consolidated_data') }}">
 			 Consolidado
 			 <i class="far fa-file-excel"></i>
 		 </a>
+	@endcan
+
+	@can('Service Request: consolidated data')
+	<a type="button"
+		 class="btn btn-outline-success"
+		 href="{{ route('rrhh.service_requests.export_sirh') }}">
+		 Formato SIRH
+		 <i class="far fa-file-excel"></i>
+	 </a>
 	@endcan
 
 </div>
