@@ -577,7 +577,7 @@
 
           <fieldset class="form-group col">
               <label for="for_payment_date">Fecha pago</label>
-              <input type="date" class="form-control" id="for_payment_date" name="payment_date" required value="{{\Carbon\Carbon::parse($serviceRequest->payment_date)->format('Y-m-d')}}">
+              <input type="date" class="form-control" id="for_payment_date" name="payment_date" required @if($serviceRequest->payment_date) value="{{$serviceRequest->payment_date->format('Y-m-d')}}" @endif>
           </fieldset>
 
         </div>
