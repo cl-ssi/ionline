@@ -50,7 +50,7 @@
           <td nowrap>{{$serviceRequest->MonthOfPayment()}}</td>
           <td nowrap>12</td>
           <td nowrap>SERVICIO DE SALUD DE IQUIQUE</td>
-          <td nowrap>130</td>
+          <td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->sirh_code}}@endif</td>
           <td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
           <td nowrap>{{$serviceRequest->rut}}</td>
           <td nowrap>{{$serviceRequest->name}}</td>

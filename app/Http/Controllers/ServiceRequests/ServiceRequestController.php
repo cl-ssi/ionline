@@ -710,4 +710,59 @@ class ServiceRequestController extends Controller
       }
       dd("terminó");
     }
+
+    public function pending_requests()
+    {
+
+      //solicitudes activas
+      $serviceRequests = ServiceRequest::orderBy('id','asc')->get();
+
+      $array = [];
+      foreach ($serviceRequests as $key => $serviceRequest) {
+        $total = 0;
+        $cant_aprobados = 0;
+        $cant_rechazados = 0;
+        $falta_aprobar = "";
+        foreach ($serviceRequest->SignatureFlows as $key => $SignatureFlow) {
+          $total += 1;
+          if ($SignatureFlow->status == 1) {
+            $cant_aprobados += 1;
+          }
+          if ($SignatureFlow->status === 0) {
+            $cant_rechazados += 1;
+          }
+          if (!($cant_rechazados > 0)) {
+            if ($total != $cant_aprobados) {
+              $falta_aprobar = $serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user->getFullNameAttribute();
+            }
+          }
+
+        }
+        $array[$serviceRequest->id]['objeto'] = $serviceRequest;
+        $array[$serviceRequest->id]['total'] = $total;
+        $array[$serviceRequest->id]['aprobados'] = $cant_aprobados;
+        $array[$serviceRequest->id]['rechazados'] = $cant_rechazados;
+        $array[$serviceRequest->id]['falta_aprobar'] = $falta_aprobar;
+      }
+
+      $group_array = [];
+      foreach ($array as $key => $data) {
+        $group_array[$data['falta_aprobar']] = 0;
+        // $group_array['rechazados'] = 0;
+      }
+      foreach ($array as $key => $data) {
+        if ($data['rechazados'] == 0) {
+          $group_array[$data['falta_aprobar']] += 1;
+        }
+        // elseif ($data['rechazados'] != 0) {
+        //   $group_array['rechazados'] += 1;
+        // }
+      }
+
+      // dd($group_array);
+
+      // dd($array);
+
+      return view('service_requests.requests.pending_requests',compact('array','group_array'));
+    }
 }
