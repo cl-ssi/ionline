@@ -164,7 +164,7 @@
         </button>
       </h5>
     </div>
-    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+    <div id="collapseThree" class="collapse show" aria-labelledby="headingThree" data-parent="#accordionExample">
       <div class="card-body">
 
 				<div class="table-responsive">
@@ -210,6 +210,10 @@
 										<a data-toggle="modal" 	class="btn btn-outline-secondary btn-sm" id="a_modal_flow_rejected">
 										<i class="fas fa-file" style="color:#B9B9B9"></i></a>
 									@else
+										<a href="#"
+											class="btn btn-outline-secondary btn-sm" target="_blank">
+										<span class="fas fa-plus" aria-hidden="true"></span></a>
+
 										<a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
 											class="btn btn-outline-secondary btn-sm" target="_blank">
 										<span class="fas fa-file" aria-hidden="true"></span></a>
