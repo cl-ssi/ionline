@@ -6,7 +6,7 @@
 
 @include('parameters/nav')
 
-<h3 class="mb-3">Comunas</h3>
+<h3 class="mb-3">Establecimientos</h3>
 
 <table class="table">
     <thead>
@@ -15,6 +15,7 @@
             <th>Tipo</th>
             <th>Nombre</th>
             <th>DEIS</th>
+            <th>CÓD. SIRH</th>
             <th>Comuna</th>
             <th></th>
         </tr>
@@ -26,11 +27,13 @@
                 <td>{{ $establishment->type }}</td>
                 <td>{{ $establishment->name }}</td>
                 <td>{{ $establishment->deis }}</td>
+                <td>{{ $establishment->sirh_code }}</td>
                 <td>{{ $establishment->commune->name }}</td>
                 <td>
                     <button class="btn btn-default" data-toggle="modal"
                         data-target="#editModal"
                         data-name="{{ $establishment->name }}"
+                        data-sirh="{{ $establishment->sirh_code }}"
                         data-formaction="{{ route('parameters.establishments.update', $establishment->id)}}">
                     <i class="fas fa-edit"></i></button>
                 </td>
@@ -50,8 +53,10 @@
         var modal = $(this)
 
         var name = button.data('name')
+        var sirh = button.data('sirh')
         modal.find('.modal-title').text('Editando ' + name)
         modal.find('input[name="name"]').val(name)
+        modal.find('input[name="sirh"]').val(sirh)
 
         var formaction  = button.data('formaction')
         modal.find("#form-edit").attr('action', formaction)
