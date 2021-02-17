@@ -105,43 +105,18 @@
                     </a>
 
                     @canany(['Service Request'])
+                      <a class="dropdown-item"
+                          href="{{ route('rrhh.service_requests.index') }}">
+                          <i class="fas fa-wallet"></i> Contratación de Servicios
+                          <span class="badge badge-secondary">{{ App\Models\ServiceRequests\ServiceRequest::getPendingRequests() }}</span>
+                      </a>
+                    @endcan
 
-                    <!-- <li class="dropdown-submenu"> -->
-                        <!-- <a href="#" class="dropdown-toggle"
-                              data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="nav-label">Service C</span><span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Service C1</a></li>
-                            <li><a href="#">Service C2</a></li>
-                            <li><a href="#">Service C3</a></li>
-                            <li><a href="#">Service C4</a></li>
-                            <li><a href="#">Service C5</a></li>
-                        </ul> -->
-                    <!-- </li> -->
-
-                      <li class="dropdown-submenu">
-                        <a href="#" class="dropdown-toggle" id="navbarDropdown" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-file-alt"></i> Contratación Honorarios
-                        </a>
-
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-                          <a class="dropdown-item"
-                              href="{{ route('rrhh.service_requests.index') }}">
-                              <i class="fas fa-wallet"></i> Contratación de Servicios
-                              <span class="badge badge-secondary">{{ App\Models\ServiceRequests\ServiceRequest::getPendingRequests() }}</span>
-                          </a>
-
-                          @canany(['Service Request: additional data'])
-                            <a class="dropdown-item"
-                                href="{{ route('rrhh.service_requests.aditional_data_list') }}">
-                                <i class="fas fa-wallet"></i> Contratación de Servicios - Información adicional
-                            </a>
-                          @endcan
-
-                        </div>
-                      </li>
-
+                    @canany(['Service Request: additional data'])
+                      <a class="dropdown-item"
+                          href="{{ route('rrhh.service_requests.aditional_data_list') }}">
+                          <i class="fas fa-wallet"></i> Contratación de Servicios - Información adicional
+                      </a>
                     @endcan
 
 
