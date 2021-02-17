@@ -732,6 +732,7 @@
         <button type="submit" id="for_button" class="form-control btn btn-primary">Guardar</button>
     </fieldset>
 </div>
+</div>
 
 
 </form>
