@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\RequestForms;
 
+use App\Http\Controllers\Controller;
 use App\RequestForms\RequestFormEvent;
 use Illuminate\Http\Request;
 

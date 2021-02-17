@@ -210,22 +210,23 @@ class FirmaDigitalController extends Controller
         }
         $json = $response->json();
 
-//        print_r($data);
-//        print_r($json);
-//        dd(json_encode($data, JSON_PRETTY_PRINT));
-//        dd(json_encode($json, JSON_PRETTY_PRINT));
+////        print_r($data);
+////        print_r($json);
+////        dd(json_encode($data, JSON_PRETTY_PRINT));
+////        dd(json_encode($json, JSON_PRETTY_PRINT));
 
-//        $data = base64_decode($json['files'][0]['content']);
-        $data = $json['files'][0]['content'];
-//        header('Content-Type: application/pdf');
-//        echo $data;
+////        $data = base64_decode($json['files'][0]['content']);
+//        $data = $json['files'][0]['content'];
+////        header('Content-Type: application/pdf');
+////        echo $data;
 
         $signaturesFlow = $signaturesFile->signaturesFlows->where('type', 'firmante')->first();
         $signaturesFlow->status = 1;
         $signaturesFlow->signature_date = now();
         $signaturesFlow->save();
 
-        $signaturesFile->signed_file = $data;
+//        $signaturesFile->signed_file = $data;
+        $signaturesFile->signed_file = $signaturesFile->file;
         $signaturesFile->save();
 
         session()->flash('info', 'El documento se ha firmado correctamente.');
