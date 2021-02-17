@@ -199,6 +199,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::resource('shift_control', 'ServiceRequests\ShiftControlController')->middleware('auth');
     Route::post('service_requests.derive','ServiceRequests\ServiceRequestController@derive')->name('service_requests.derive')->middleware('auth');
     Route::get('service_requests.consolidated_data','ServiceRequests\ServiceRequestController@consolidated_data')->name('service_requests.consolidated_data')->middleware('auth');
+    Route::get('service_requests.pending_requests','ServiceRequests\ServiceRequestController@pending_requests')->name('service_requests.pending_requests')->middleware('auth');
     Route::get('service_requests/export-sirh','ServiceRequests\ServiceRequestController@export_sirh')->name('service_requests.export_sirh')->middleware('auth');
     Route::get('service_requests.aditional_data_list','ServiceRequests\ServiceRequestController@aditional_data_list')->name('service_requests.aditional_data_list')->middleware('auth');
     Route::put('service_requests/update_aditional_data/{serviceRequest}', 'ServiceRequests\ServiceRequestController@update_aditional_data')->middleware('auth')->name('service_requests.update_aditional_data');

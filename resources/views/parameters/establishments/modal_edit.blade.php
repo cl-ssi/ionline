@@ -12,6 +12,11 @@
                         <label for="name" class="col-form-label">Nombre:</label>
                         <input type="text" class="form-control" name="name">
                     </div>
+
+                    <div class="form-group">
+                        <label for="sirh" class="col-form-label">Código SIRH:</label>
+                        <input type="text" class="form-control" name="sirh_code">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Guardar</button>
