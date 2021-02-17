@@ -37,7 +37,7 @@
         <li class="nav-item">
             <a class="nav-link {{($tab == 'mis_documentos') ? 'active' : ''}}"
                href="{{route('documents.signatures.index', ['mis_documentos'])}}">
-                Mis documentos creados
+                Mis solicitudes creadas
             </a>
         </li>
     </ul>
@@ -55,35 +55,29 @@
                 <th scope="col">Estado Solicitud</th>
                 <th scope="col">Ultimo Usuario</th>
                 <th scope="col">Materia de Resolución</th>
-                <th scope="col">Edit</th>
                 <th scope="col">Firmar</th>
                 <th scope="col">Doc</th>
             </tr>
             </thead>
             <tbody>
-            @foreach($pendingSignatures as $signature)
+            {{--            @foreach($pendingSignatures as $signature)--}}
+            @foreach($pendingSignaturesFlows as $pendingSignaturesFlow)
                 <tr>
-                    <td>{{ $signature->id }}</td>
-                    <td>{{ $signature->request_date->format('Y-m-d') }}</td>
-                    <td>{{ $signature->organizationalUnit->name }}</td>
-                    <td>{{ $signature->responsable->getFullNameAttribute() }}</td>
+                    <td>{{ $pendingSignaturesFlow->signature->id}}</td>
+                    <td>{{ $pendingSignaturesFlow->signature->request_date->format('Y-m-d') }}</td>
+                    <td>{{ $pendingSignaturesFlow->signature->organizationalUnit->name }}</td>
+                    <td>{{ $pendingSignaturesFlow->signature->responsable->getFullNameAttribute() }}</td>
                     <td>
-                        @if($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->first()->status === 1)
+                        @if($pendingSignaturesFlow->status === 1)
                             Aceptada
-                        @elseif($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->first()->status === 0)
+                        @elseif($pendingSignaturesFlow->status === 0)
                             Rechazada
                         @else Pendiente @endif
                     </td>
-                    <td>{{ $signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->last()->employee }}</td>
-                    <td>{{ $signature->signature_matter }}</td>
+                    <td>{{ $pendingSignaturesFlow->employee }}</td>
+                    <td>{{ $pendingSignaturesFlow->signature->subject }}</td>
                     <td>
-                        <a href="{{ route('documents.signatures.edit', $signature) }}"
-                           class="btn btn-sm btn-outline-secondary">
-                            <span class="fas fa-edit" aria-hidden="true"></span>
-                        </a>
-                    </td>
-                    <td>
-                        <a href="{{ route('signPdf', $signature->signaturesFiles->where('file_type', 'documento')->first()->id) }}"
+                        <a href="{{ route('signPdf', $pendingSignaturesFlow->signaturesFile->id) }}"
                            class="btn btn-sm btn-outline-primary">
                             <span class="fas fa-edit" aria-hidden="true"></span>
                         </a>
@@ -97,7 +91,7 @@
                     </td>
 
                     <td>
-                        <a href="{{ route('documents.showPdfDocumento', $signature) }}"
+                        <a href="{{ route('documents.showPdfDocumento', $pendingSignaturesFlow->signature) }}"
                            class="btn btn-sm btn-outline-secondary">
                             <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
@@ -105,7 +99,7 @@
                 </tr>
             @endforeach
 
-            @if($pendingSignatures->count() > 0)
+            @if($pendingSignaturesFlows->count() > 0)
                 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
                      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -117,7 +111,7 @@
                                 </button>
                             </div>
                             <form method="POST" class="form-horizontal"
-                                  action="{{route('signPdf', $signature->signaturesFiles->where('file_type', 'documento')->first()->id)}}"
+                                  action="{{route('signPdf', $pendingSignaturesFlow->signaturesFile->id)}}"
                                   enctype="multipart/form-data">
                                 <div class="modal-body">
                                 @csrf <!-- input hidden contra ataques CSRF -->
@@ -169,14 +163,19 @@
                     <td>{{ Carbon\Carbon::parse($signature->request_date)->format('Y-m-d') }}</td>
                     <td>{{ $signature->organizationalUnit->name }}</td>
                     <td>{{ $signature->responsable->getFullNameAttribute() }}</td>
-                    <td>@if($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->first()->status == 1)
-                            Aceptada @else Rechazada @endif</td>
-                    <td>{{$signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->first()->employee}}</td>
-                    <td>{{ $signature->signature_matter }}</td>
                     <td>
-                        <a href="{{ route('documents.signatures.edit', $signature) }}"
+                        @if($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->first()->status === 1)
+                            Aceptada
+                        @elseif($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->first()->status === 0)
+                            Rechazada
+                        @else Pendiente @endif
+                    </td>
+                    <td>{{$signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->first()->employee}}</td>
+                    <td>{{ $signature->subject }}</td>
+                    <td>
+                        <a href="{{ route('documents.showPdfDocumento', $signature) }}"
                            class="btn btn-sm btn-outline-secondary">
-                            <span class="fas fa-edit" aria-hidden="true"></span>
+                            <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
                     </td>
                 </tr>
@@ -187,7 +186,7 @@
     @endif
 
     @if($tab == 'mis_documentos')
-        <h4>Mis Documentos</h4>
+        <h4>Mis Solicitudes</h4>
         <table class="table table-striped table-sm table-bordered">
             <thead>
             <tr>
@@ -207,11 +206,15 @@
                     <td>{{ $signature->id }}</td>
                     <td>{{ Carbon\Carbon::parse($signature->request_date)->format('Y-m-d') }}</td>
                     <td>{{ $signature->organizationalUnit->name }}</td>
-                    <td>{{ $signature->responsable->getFullNameAttribute() }}</td>
-                    <td>@if($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->first()->status == 1)
-                            Aceptada @else Rechazada @endif</td>
+                    <td>
+                        @if($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->first()->status === 1)
+                            Aceptada
+                        @elseif($signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->first()->status === 0)
+                            Rechazada
+                        @else Pendiente @endif
+                    </td>
                     <td>{{$signature->signaturesFiles->first()->signaturesFlows->whereNotNull('user_id')->first()->employee}}</td>
-                    <td>{{ $signature->signature_matter }}</td>
+                    <td>{{ $signature->subject }}</td>
                     <td>
                         <a href="{{ route('documents.signatures.edit', $signature) }}"
                            class="btn btn-sm btn-outline-secondary">
