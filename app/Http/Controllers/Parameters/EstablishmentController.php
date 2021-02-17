@@ -71,7 +71,11 @@ class EstablishmentController extends Controller
      */
     public function update(Request $request, Establishment $establishment)
     {
-        //
+      $establishment->fill($request->all());
+      $establishment->save();
+
+      session()->flash('info', 'El establecimiento '.$establishment->name.' ha sido editado.');
+      return redirect()->route('parameters.establishments.index');
     }
 
     /**
