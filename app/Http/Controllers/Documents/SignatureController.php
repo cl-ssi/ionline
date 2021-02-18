@@ -29,30 +29,40 @@ class SignatureController extends Controller
     public function index(string $tab)
     {
         $mySignatures = null;
-        $pendingSignatures = null;
+        $pendingSignaturesFlows = null;
         $signedSignatures = null;
 
         if ($tab == 'mis_documentos') {
-            $mySignatures = Signature::where('responsable_id', Auth::id())->get();
+            $mySignatures = Signature::where('responsable_id', Auth::id())
+                ->orderByDesc('id')
+                ->get();
         }
 
         if ($tab == 'pendientes') {
-            $pendingSignatures = Signature::wherehas('signaturesFiles', function ($q) {
-                $q->whereHas('signaturesFlows', function ($q) {
-                    $q->where('user_id', Auth::id())
-                        ->where('status', 0);
-                });
-            })->get();
+
+            $pendingSignaturesFlows = SignaturesFlow::where('user_id', Auth::id())
+                ->where('status', null)
+                ->get();
+
+//            dd($pendingSignaturesFlows);
+
+//            $pendingSignatures = Signature::wherehas('signaturesFiles', function ($q) {
+//                $q->whereHas('signaturesFlows', function ($q) {
+//                    $q->where('user_id', Auth::id())
+//                        ->where('status', null);
+//                });
+//            })->get();
 
             $signedSignatures = Signature::wherehas('signaturesFiles', function ($q) {
                 $q->whereHas('signaturesFlows', function ($q) {
                     $q->where('user_id', Auth::id())
                         ->where('status', 1);
                 });
-            })->get();
+            })->orderByDesc('id')
+                ->get();
         }
 
-        return view('documents.signatures.index', compact('mySignatures', 'pendingSignatures', 'signedSignatures', 'tab'));
+        return view('documents.signatures.index', compact('mySignatures', 'pendingSignaturesFlows', 'signedSignatures', 'tab'));
     }
 
     /**
@@ -89,7 +99,6 @@ class SignatureController extends Controller
             $signaturesFile->signature_id = $signature->id;
             $documentFile = $request->file('document');
             $signaturesFile->file = base64_encode(file_get_contents($documentFile->getRealPath()));
-//        $signaturesFile->file = base64_encode($documentFile->openFile()->fread($documentFile->getSize()));
             $signaturesFile->file_type = 'documento';
             $signaturesFile->md5_file = md5_file($request->file('document'));
             $signaturesFile->save();
@@ -112,7 +121,7 @@ class SignatureController extends Controller
             $signaturesFlow->type = 'firmante';
             $signaturesFlow->ou_id = $request->ou_id_signer;
             $signaturesFlow->user_id = $request->user_signer;
-            $signaturesFlow->status = false;
+//            $signaturesFlow->status = false;
             $signaturesFlow->save();
 
             if ($request->has('ou_id_visator')) {
@@ -123,7 +132,7 @@ class SignatureController extends Controller
                     $signaturesFlow->ou_id = $ou_id_visator;
                     $signaturesFlow->user_id = $request->user_visator[$key];
                     $signaturesFlow->sign_position = $key + 1;
-                    $signaturesFlow->status = false;
+//                    $signaturesFlow->status = false;
                     $signaturesFlow->save();
                 }
             }
@@ -136,7 +145,7 @@ class SignatureController extends Controller
         }
 
         session()->flash('info', 'La solicitud de firma ' . $signature->id . ' ha sido creada.');
-        return redirect()->route('documents.signatures.index');
+        return redirect()->route('documents.signatures.index', ['mis_documentos']);
     }
 
     /**
