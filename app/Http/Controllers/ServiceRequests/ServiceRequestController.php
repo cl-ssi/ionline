@@ -501,7 +501,7 @@ class ServiceRequestController extends Controller
 
     $headers = array(
         "Content-type" => "plain/txt",
-        "Content-Disposition" => "attachment; filename=export_sirh.csv",
+        "Content-Disposition" => "attachment; filename=export_sirh.txt",
         "Pragma" => "no-cache",
         "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
         "Expires" => "0"
@@ -558,10 +558,14 @@ class ServiceRequestController extends Controller
     {
         $file = fopen('php://output', 'w');
         fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
-        fputcsv($file, $columnas,';');
+        fputcsv($file, $columnas,'|');
         foreach($filas as $fila) {
           list($run,$dv) = explode('-',$fila->rut);
 
+          switch($fila->program_contract_type) {
+            case 'Horas': $por_prestacion = 'S'; break;
+            default: $por_prestacion = 'N'; break;
+          }
           switch($fila->establishment->id) {
             case 1:  $sirh_estab_code=130; break;
             case 12: $sirh_estab_code=127; break;
@@ -685,7 +689,7 @@ class ServiceRequestController extends Controller
             $fila->end_date->format('d/m/Y'),
             $sirh_estab_code,
             'S',
-            'S', // Casi seguro que es S (ou yes)
+            $por_prestacion, // Casi seguro que es S (ou yes)
             $fila->gross_amount,
             $cuotas, // calculado entre fecha de contratos
             'S',
@@ -704,9 +708,9 @@ class ServiceRequestController extends Controller
             '0', // Todas son excentas = 0
             $fila->resolution_number,
             optional($fila->resolution_date)->format('d/m/Y'),
-            $fila->service_description,
-            $function,
             $fila->digera_strategy,
+            $function,
+            $fila->service_description,
             'A',
             $type_of_day, // calcular en base a las horas semanales y tipo de contratacion
             'N',
@@ -717,7 +721,7 @@ class ServiceRequestController extends Controller
             $turno_afecto // working_day_type Diurno = S, el resto N
           );
           //print_r($data);
-          fputcsv($file, $data,';');
+          fputcsv($file, $data,'|');
         }
         fclose($file);
     };
