@@ -514,6 +514,7 @@ class ServiceRequestController extends Controller
                              ->orderBy('request_date','asc')->get();
 
     $columnas = array(
+        '',
         'RUN',
         'DV',
         'N° cargo',
@@ -550,7 +551,8 @@ class ServiceRequestController extends Controller
         'Código por objetivo',
         'Función dotación',
         'Tipo de función',
-        'Afecto a sistema de turno'
+        'Afecto a sistema de turno',
+        ''
     );
 
 
@@ -684,6 +686,7 @@ class ServiceRequestController extends Controller
 
 
           $data = array(
+            '',
             $run,
             $dv,
             '5', // N° cargo siempre es 5 honorario
@@ -720,7 +723,8 @@ class ServiceRequestController extends Controller
             '2103001', // único para honorarios
             'N',
             $function_type, // Apoyo asistenciasl S o N
-            $turno_afecto // working_day_type Diurno = S, el resto N
+            $turno_afecto, // working_day_type Diurno = S, el resto N
+            ''
           );
           //print_r($data);
           fputcsv($file, $data,'|');
