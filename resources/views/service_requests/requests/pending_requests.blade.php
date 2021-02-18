@@ -7,6 +7,7 @@
 <h3 class="mb-3">Reporte estado de solicitudes</h3>
 
 <h4>Subtotales</h4>
+<hr>
 <table class="table table-sm table-bordered table-responsive small" >
     <thead>
         <tr class="text-center">
@@ -26,9 +27,8 @@
     </tbody>
 </table>
 
-<hr>
-
 <h4>Detalle</h4>
+<hr>
 <table class="table table-sm table-bordered table-responsive small" >
     <thead>
         <tr class="text-center">
@@ -46,7 +46,7 @@
           <td nowrap>{{$data['rechazados']}}</td>
           <td nowrap>{{$data['falta_aprobar']}}</td>
         </tr>
-      @endforeach->
+      @endforeach
     </tbody>
 </table>
 
