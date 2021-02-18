@@ -489,7 +489,6 @@ class ServiceRequestController extends Controller
 
 
   public function export_sirh() {
-
     // foreach ($serviceRequests as $key => $serviceRequest) {
     //   foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
     //     $start_date = Carbon::parse($shiftControl->start_date);
@@ -503,7 +502,7 @@ class ServiceRequestController extends Controller
 
     $headers = array(
         "Content-type" => "plain/txt",
-        "Content-Disposition" => "attachment; filename=export_sirh.csv",
+        "Content-Disposition" => "attachment; filename=export_sirh.txt",
         "Pragma" => "no-cache",
         "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
         "Expires" => "0"
@@ -554,53 +553,176 @@ class ServiceRequestController extends Controller
         'Afecto a sistema de turno'
     );
 
+
+    // echo '<pre>';
     $callback = function() use ($filas, $columnas)
     {
         $file = fopen('php://output', 'w');
         fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
-        fputcsv($file, $columnas,';');
+        fputcsv($file, $columnas,'|');
         foreach($filas as $fila) {
           list($run,$dv) = explode('-',$fila->rut);
-            fputcsv($file, array(
-                $run,
-                $dv,
-                '5', // N° cargo siempre es 5 honorario
-                $fila->start_date->format('d-m-Y'),
-                $fila->end_date->format('d-m-Y'),
-                $serviceRequest->establishment->name.
-                '[130=hospital, ssi=125, 127=CGU]',
-                'S',
-                'S', // Casi seguro que es S (ou yes)
-                $fila->gross_amount,
-                'Número de cuotas [0-12]', // calcular entre fecha de contratos
-                'S',
-                '5',
-                'S',
-                'S',
-                '18',
-                'Unidad [código sirh]',
-                '1', //cheque
-                '0', // tipo de banco si el anterior es 0 o 1
-                '0', // cuenta 0
-                $fila->programm_name, // 3903 (no medico) 3904 (medico)
-                '24', // Glosa todos son 24
-                'Profesión [código sirh]',
-                $fila->estate.' [0=médicos,1=odontólogos,...]',
-                '0', // Todas son excentas = 0
-                $fila->resolution_number,
-                $fila->resolution_date,
-                $fila->service_description,
-                ($serviceRequest->estate == "Administrativo")? 'Apoyo Administrativo' : 'Apoyo Clínico',
-                $fila->digera_strategy,
-                'A',
-                'Tipo de jornada [C=Completa,P=Parcial,V=Visado]', // calcular en base a las horas semanales y tipo de contratacion
-                'N',
-                $fila->weekly_hours,
-                '2103001', // único para honorarios
-                'N',
-                'Tipo de función [S,N]', // En base a linea 598
-                'S' // working_day_type Diurno = S, el resto N
-            ),';');
+
+          switch($fila->program_contract_type) {
+            case 'Horas': $por_prestacion = 'S'; break;
+            default: $por_prestacion = 'N'; break;
+          }
+          switch($fila->establishment->id) {
+            case 1:  $sirh_estab_code=130; break;
+            case 12: $sirh_estab_code=127; break;
+            case 38: $sirh_estab_code=125; break;
+            default: $sirh_estab_code=0; break;
+          }
+          $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
+          switch($fila->programm_name){
+            case 'Covid19 Médicos': $sirh_program_code = 3904; break;
+            case 'Covid19 No Médicos': $sirh_program_code = 3903; break;
+            case 'Covid19-APS Médicos': $sirh_program_code = 3904; break;
+            case 'Covid19-APS No Médicos': $sirh_program_code = 3903; break;
+          }
+          switch($fila->weekly_hours) {
+            case 44: $type_of_day = 'C'; break;
+            default: $type_of_day = 'P'; break;
+          }
+          switch($fila->estate) {
+            case 'Administrativo':
+              $function = 'Apoyo Administrativo';
+              $function_type = 'N';
+              break;
+            default:
+              $function = 'Apoyo Clínico';
+              $function_type = 'S';
+              break;
+          }
+
+          switch($fila->working_day_type){
+            case 'DIURNO': $turno_afecto = 'S'; break;
+            default: $turno_afecto = 'N'; break;
+          }
+
+          switch($fila->responsabilityCenter->id) {
+            case 	12	:	$sirh_ou_id = 1253000	; break;
+            case 	55	:	$sirh_ou_id = 1305102	; break;
+            case 	18	:	$sirh_ou_id = 1301400	; break;
+            case 	224	:	$sirh_ou_id = 1253000	; break;
+            case 	225	:	$sirh_ou_id = 1252000	; break;
+            case 	43	:	$sirh_ou_id = 1304407	; break;
+            case 	116	:	$sirh_ou_id = 1301620	; break;
+            case 	138	:	$sirh_ou_id = 1301401	; break;
+            case 	130	:	$sirh_ou_id = 1301650	; break;
+            case 	141	:	$sirh_ou_id = 1301310	; break;
+            case 	142	:	$sirh_ou_id = 1301320	; break;
+            case 	136	:	$sirh_ou_id = 1301420	; break;
+            case 	133	:	$sirh_ou_id = 1301410	; break;
+            case 	140	:	$sirh_ou_id = 1301650	; break;
+            case 	2	:	  $sirh_ou_id = 1253000	; break;
+            case 	125	:	$sirh_ou_id = 1301509	; break;
+            case 	194	:	$sirh_ou_id = 1301905	; break;
+            case 	177	:	$sirh_ou_id = 1301650	; break;
+            case 	192	:	$sirh_ou_id = 1301904	; break;
+            case 	162	:	$sirh_ou_id = 1301523	; break;
+            case 	122	:	$sirh_ou_id = 1304105	; break;
+            case 	99	:	$sirh_ou_id = 1305102	; break;
+            case 	147	:	$sirh_ou_id = 1301203	; break;
+            case 	126	:	$sirh_ou_id = 1302108	; break;
+            case 	149	:	$sirh_ou_id = 1301202	; break;
+            case  24  : $sirh_ou_id = 1301400 ; break;
+            default   : $sirh_ou_id = 'NO EXISTE'; break;
+          }
+
+          switch($fila->estate) {
+            case "Profesional Médico":  $planta = 0; break;
+            case "Profesional":         $planta = 4; break;
+            case "Técnico":             $planta = 5; break;
+            case "Administrativo":      $planta = 6; break;
+            case "Farmaceutico":        $planta = 3; break;
+            case "Odontólogo":          $planta = 1; break;
+            case "Bioquímico":          $planta = ''; break;
+            case "Auxiliar":            $planta = 7; break;
+            default:                    $planta = ''; break;
+            // - 0 = Médicos
+            // - 1 = Odontologos
+            // - 2 = Bioquimicos
+            // - 3 = Quimicos Farmaceuticos
+            // - 4 = Profesional
+            // - 5 = Técnicos
+            // - 6 = Administrativos
+            // - 7 = Auxiliares
+          }
+
+          switch($fila->rrhh_team) {
+            case "Residencia Médica": $sirh_profession_id=1000 ; break;
+            case "Médico Diurno": $sirh_profession_id=1000 ; break;
+            case "Enfermera Supervisora": $sirh_profession_id=1058 ; break;
+            case "Enfermera Diurna": $sirh_profession_id=1058 ; break;
+            case "Enfermera Turno": $sirh_profession_id=1058 ; break;
+            case "Kinesiólogo Diurno": $sirh_profession_id=1057 ; break;
+            case "Kinesiólogo Turno": $sirh_profession_id=1057 ; break;
+            case "Téc.Paramédicos Diurno": $sirh_profession_id=1027 ; break;
+            case "Téc.Paramédicos Turno": $sirh_profession_id=1027 ; break;
+            case "Auxiliar Diurno": $sirh_profession_id=111 ; break;
+            case "Auxiliar Turno": $sirh_profession_id=111 ; break;
+            case "Terapeuta Ocupacional": $sirh_profession_id=1055 ; break;
+            case "Químico Farmacéutico": $sirh_profession_id=320 ; break;
+            case "Bioquímico": $sirh_profession_id=1003 ; break;
+            case "Fonoaudiologo": $sirh_profession_id=1319 ; break;
+            case "Administrativo Diurno": $sirh_profession_id=119 ; break;
+            case "Administrativo Turno": $sirh_profession_id=119 ; break;
+            case "Biotecnólogo Turno": $sirh_profession_id=513 ; break;
+            case "Matrona Turno": $sirh_profession_id=1060 ; break;
+            case "Matrona Diurno": $sirh_profession_id=1060 ; break;
+            case "Otros técnicos": $sirh_profession_id=530 ; break;
+            case "Psicólogo": $sirh_profession_id=1160 ; break;
+            case "Tecn. Médico Diurno": $sirh_profession_id=1316 ; break;
+            case "Tecn. Médico Turno": $sirh_profession_id=1316 ; break;
+            case "Trabajador Social": $sirh_profession_id=1020 ; break;
+          }
+
+
+
+
+
+          $data = array(
+            $run,
+            $dv,
+            '5', // N° cargo siempre es 5 honorario
+            $fila->start_date->format('d/m/Y'),
+            $fila->end_date->format('d/m/Y'),
+            $sirh_estab_code,
+            'S',
+            $por_prestacion, // Casi seguro que es S (ou yes)
+            $fila->gross_amount,
+            $cuotas, // calculado entre fecha de contratos
+            'S',
+            '5',
+            'S',
+            'S',
+            '18',
+            $sirh_ou_id,
+            '1', // cheque
+            '0', // tipo de banco 0 o 1
+            '0', // cuenta 0
+            $sirh_program_code, // 3903 (no medico) 3904 (medico)
+            '24', // Glosa todos son 24
+            $sirh_profession_id,
+            $planta,
+            '0', // Todas son excentas = 0
+            $fila->resolution_number,
+            optional($fila->resolution_date)->format('d/m/Y'),
+            $fila->digera_strategy,
+            $function,
+            $fila->service_description,
+            'A',
+            $type_of_day, // calcular en base a las horas semanales y tipo de contratacion
+            'N',
+            $fila->weekly_hours,
+            '2103001', // único para honorarios
+            'N',
+            $function_type, // Apoyo asistenciasl S o N
+            $turno_afecto // working_day_type Diurno = S, el resto N
+          );
+          //print_r($data);
+          fputcsv($file, $data,'|');
         }
         fclose($file);
     };

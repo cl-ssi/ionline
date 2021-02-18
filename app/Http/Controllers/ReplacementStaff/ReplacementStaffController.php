@@ -4,6 +4,9 @@ namespace App\Http\Controllers\ReplacementStaff;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ReplacementStaff\ReplacementStaff;
+use App\Models\ReplacementStaff\Profile;
+use Illuminate\Support\Facades\DB;
 
 class ReplacementStaffController extends Controller
 {
@@ -14,7 +17,8 @@ class ReplacementStaffController extends Controller
      */
     public function index(Request $request)
     {
-        return view('replacement_staff.index', compact('request'));
+        $replacementStaff = ReplacementStaff::paginate(15);
+        return view('replacement_staff.index', compact('replacementStaff'));
     }
 
     /**
@@ -35,65 +39,27 @@ class ReplacementStaffController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $replacementStaff = new ReplacementStaff($request->All());
+        $replacementStaff->save();
+
+        session()->flash('success', 'Se ha creado el postulante exitosamente');
+        //return redirect()->back();
+        return redirect()->route('replacement_staff.edit', $replacementStaff);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function requestCreate()
+    public function edit(ReplacementStaff $replacementStaff)
     {
-        return view('replacement_staff.request.create');
+        // $profiles = Profile::where('replacement_staff_id', $replacementStaff->id)
+        //     ->get();
+
+        return view('replacement_staff.edit', compact('replacementStaff'));
     }
 
-
-    public function requestIndex()
-    {
-        return view('replacement_staff.request.index');
-    }
-
-    public function requestOwn()
-    {
-        return view('replacement_staff.request.own');
-    }
-
-    public function requestEdit()
-    {
-        return view('replacement_staff.request.edit');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         //
