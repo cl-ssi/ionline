@@ -561,6 +561,7 @@ class ServiceRequestController extends Controller
         fputcsv($file, $columnas,';');
         foreach($filas as $fila) {
           list($run,$dv) = explode('-',$fila->rut);
+
           switch($fila->establishment->id) {
             case 1:  $sirh_estab_code=130; break;
             case 12: $sirh_estab_code=127; break;
@@ -594,13 +595,94 @@ class ServiceRequestController extends Controller
             default: $turno_afecto = 'N'; break;
           }
 
+          switch($fila->responsabilityCenter->id) {
+            case 	12	:	$sirh_ou_id = 1253000	; break;
+            case 	55	:	$sirh_ou_id = 1305102	; break;
+            case 	18	:	$sirh_ou_id = 1301400	; break;
+            case 	224	:	$sirh_ou_id = 1253000	; break;
+            case 	225	:	$sirh_ou_id = 1252000	; break;
+            case 	43	:	$sirh_ou_id = 1304407	; break;
+            case 	116	:	$sirh_ou_id = 1301620	; break;
+            case 	138	:	$sirh_ou_id = 1301401	; break;
+            case 	130	:	$sirh_ou_id = 1301650	; break;
+            case 	141	:	$sirh_ou_id = 1301310	; break;
+            case 	142	:	$sirh_ou_id = 1301320	; break;
+            case 	136	:	$sirh_ou_id = 1301420	; break;
+            case 	133	:	$sirh_ou_id = 1301410	; break;
+            case 	140	:	$sirh_ou_id = 1301650	; break;
+            case 	2	:	  $sirh_ou_id = 1253000	; break;
+            case 	125	:	$sirh_ou_id = 1301509	; break;
+            case 	194	:	$sirh_ou_id = 1301905	; break;
+            case 	177	:	$sirh_ou_id = 1301650	; break;
+            case 	192	:	$sirh_ou_id = 1301904	; break;
+            case 	162	:	$sirh_ou_id = 1301523	; break;
+            case 	122	:	$sirh_ou_id = 1304105	; break;
+            case 	99	:	$sirh_ou_id = 1305102	; break;
+            case 	147	:	$sirh_ou_id = 1301203	; break;
+            case 	126	:	$sirh_ou_id = 1302108	; break;
+            case 	149	:	$sirh_ou_id = 1301202	; break;
+            case  24  : $sirh_ou_id = 1301400 ; break;
+            default   : $sirh_ou_id = 'NO EXISTE'; break;
+          }
+
+          switch($fila->estate) {
+            case "Profesional Médico":  $planta = 0; break;
+            case "Profesional":         $planta = 4; break;
+            case "Técnico":             $planta = 5; break;
+            case "Administrativo":      $planta = 6; break;
+            case "Farmaceutico":        $planta = 3; break;
+            case "Odontólogo":          $planta = 1; break;
+            case "Bioquímico":          $planta = ''; break;
+            case "Auxiliar":            $planta = 7; break;
+            default:                    $planta = ''; break;
+            // - 0 = Médicos
+            // - 1 = Odontologos
+            // - 2 = Bioquimicos
+            // - 3 = Quimicos Farmaceuticos
+            // - 4 = Profesional
+            // - 5 = Técnicos
+            // - 6 = Administrativos
+            // - 7 = Auxiliares
+          }
+
+          switch($fila->rrhh_team) {
+            case "Residencia Médica": $sirh_profession_id=1000 ; break;
+            case "Médico Diurno": $sirh_profession_id=1000 ; break;
+            case "Enfermera Supervisora": $sirh_profession_id=1058 ; break;
+            case "Enfermera Diurna": $sirh_profession_id=1058 ; break;
+            case "Enfermera Turno": $sirh_profession_id=1058 ; break;
+            case "Kinesiólogo Diurno": $sirh_profession_id=1057 ; break;
+            case "Kinesiólogo Turno": $sirh_profession_id=1057 ; break;
+            case "Téc.Paramédicos Diurno": $sirh_profession_id=1027 ; break;
+            case "Téc.Paramédicos Turno": $sirh_profession_id=1027 ; break;
+            case "Auxiliar Diurno": $sirh_profession_id=111 ; break;
+            case "Auxiliar Turno": $sirh_profession_id=111 ; break;
+            case "Terapeuta Ocupacional": $sirh_profession_id=1055 ; break;
+            case "Químico Farmacéutico": $sirh_profession_id=320 ; break;
+            case "Bioquímico": $sirh_profession_id=1003 ; break;
+            case "Fonoaudiologo": $sirh_profession_id=1319 ; break;
+            case "Administrativo Diurno": $sirh_profession_id=119 ; break;
+            case "Administrativo Turno": $sirh_profession_id=119 ; break;
+            case "Biotecnólogo Turno": $sirh_profession_id=513 ; break;
+            case "Matrona Turno": $sirh_profession_id=1060 ; break;
+            case "Matrona Diurno": $sirh_profession_id=1060 ; break;
+            case "Otros técnicos": $sirh_profession_id=1027 ; break;
+            case "Psicólogo": $sirh_profession_id=1160 ; break;
+            case "Tecn. Médico Diurno": $sirh_profession_id=513 ; break; // pendiente
+            case "Tecn. Médico Turno": $sirh_profession_id=513 ; break;  // pendiente
+            case "Trabajador Social": $sirh_profession_id=1020 ; break;
+          }
+
+          
+
+
+
           $data = array(
             $run,
             $dv,
             '5', // N° cargo siempre es 5 honorario
             $fila->start_date->format('d/m/Y'),
             $fila->end_date->format('d/m/Y'),
-            $fila->establishment->id.
             $sirh_estab_code,
             'S',
             'S', // Casi seguro que es S (ou yes)
@@ -611,14 +693,14 @@ class ServiceRequestController extends Controller
             'S',
             'S',
             '18',
-            'Unidad [código sirh]',
+            $sirh_ou_id,
             '1', // cheque
             '0', // tipo de banco 0 o 1
             '0', // cuenta 0 
             $sirh_program_code, // 3903 (no medico) 3904 (medico)                
             '24', // Glosa todos son 24
-            'Profesión [código sirh]',
-            $fila->estate.' [0=médicos,1=odontólogos,...]',
+            $sirh_profession_id,
+            $planta,
             '0', // Todas son excentas = 0
             $fila->resolution_number,
             optional($fila->resolution_date)->format('d/m/Y'),
