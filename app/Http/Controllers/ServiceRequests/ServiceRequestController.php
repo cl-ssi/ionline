@@ -562,28 +562,32 @@ class ServiceRequestController extends Controller
         fputcsv($file, $columnas,'|');
         foreach($filas as $fila) {
           list($run,$dv) = explode('-',$fila->rut);
+          $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
 
           switch($fila->program_contract_type) {
             case 'Horas': $por_prestacion = 'S'; break;
             default: $por_prestacion = 'N'; break;
           }
+
           switch($fila->establishment->id) {
             case 1:  $sirh_estab_code=130; break;
             case 12: $sirh_estab_code=127; break;
             case 38: $sirh_estab_code=125; break;
             default: $sirh_estab_code=0; break;
           }
-          $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
+
           switch($fila->programm_name){
             case 'Covid19 Médicos': $sirh_program_code = 3904; break;
             case 'Covid19 No Médicos': $sirh_program_code = 3903; break;
             case 'Covid19-APS Médicos': $sirh_program_code = 3904; break;
             case 'Covid19-APS No Médicos': $sirh_program_code = 3903; break;
           }
+
           switch($fila->weekly_hours) {
             case 44: $type_of_day = 'C'; break;
             default: $type_of_day = 'P'; break;
           }
+
           switch($fila->estate) {
             case 'Administrativo':
               $function = 'Apoyo Administrativo';
@@ -637,7 +641,7 @@ class ServiceRequestController extends Controller
             case "Administrativo":      $planta = 6; break;
             case "Farmaceutico":        $planta = 3; break;
             case "Odontólogo":          $planta = 1; break;
-            case "Bioquímico":          $planta = ''; break;
+            case "Bioquímico":          $planta = 2; break;
             case "Auxiliar":            $planta = 7; break;
             default:                    $planta = ''; break;
             // - 0 = Médicos
@@ -677,9 +681,6 @@ class ServiceRequestController extends Controller
             case "Tecn. Médico Turno": $sirh_profession_id=1316 ; break;
             case "Trabajador Social": $sirh_profession_id=1020 ; break;
           }
-
-
-
 
 
           $data = array(
