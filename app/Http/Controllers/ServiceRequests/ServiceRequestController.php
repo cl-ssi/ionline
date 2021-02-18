@@ -40,19 +40,6 @@ class ServiceRequestController extends Controller
       $serviceRequestsCreated = [];
       $serviceRequestsRejected = [];
 
-      // $serviceRequestsPendings = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
-      //                                              $subQuery->where('responsable_id',$user_id)->whereNull('status');
-      //                                            })->orderBy('id','asc')
-      //                                            ->whereDoesntHave("SignatureFlows", function($subQuery) {
-      //                                              $subQuery->where('status',0)->whereNull('status'); //que no haya un rechazado
-      //                                            })
-      //                                            ->where('responsable_id','!=',Auth::user()->id)
-      //                                            ->get();
-      //
-      // $myServiceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
-      //                                        $subQuery->where('user_id',$user_id)->orWhere('responsable_id',$user_id)->whereNotNull('status');
-      //                                      })->orderBy('id','asc')->get();
-
       $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                            $subQuery->where('responsable_id',$user_id);
                                            $subQuery->orwhere('user_id',$user_id);
@@ -62,21 +49,27 @@ class ServiceRequestController extends Controller
 
       foreach ($serviceRequests as $key => $serviceRequest) {
         //not rejected
-        if ($serviceRequest->SignatureFlows->where('status','0')->count() == 0) {
-          foreach ($serviceRequest->SignatureFlows as $key => $signatureFlow) {
-
+        if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0) {
+          foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
+            // echo $signatureFlow->sign_position . " " . $key2 . " <br>";
             //with responsable_id
             if ($user_id == $signatureFlow->responsable_id) {
               if ($signatureFlow->status == NULL) {
                 //verification if i have to sign or other person
-                if ($key > 0) {
-                  if ($serviceRequest->SignatureFlows[$key-1]->status == NULL) {
-                    $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
-                  }
-                  else{
-                    $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
-                  }
+                // if ($key2 > 0) {
+                //   if ($serviceRequest->SignatureFlows[$key2-1]->status == NULL) {
+                //     $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
+                //   }
+                //   else{
+                //     $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
+                //   }
+                // }
+                if ($serviceRequest->SignatureFlows->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL) {
+                  $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
+                }else{
+                  $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
                 }
+
               }else{
                 $serviceRequestsAnswered[$serviceRequest->id] = $serviceRequest;
               }
@@ -92,6 +85,7 @@ class ServiceRequestController extends Controller
           $serviceRequestsRejected[$serviceRequest->id] = $serviceRequest;
         }
       }
+
 
       // dd($serviceRequestsMyPendings, $serviceRequestsRejected);
 
@@ -646,17 +640,23 @@ class ServiceRequestController extends Controller
                                          ->get();
 
       $cont = 0;
+      $cant_rechazados = 0;
       foreach ($serviceRequests as $key => $serviceRequest) {
-        // $serviceRequest->responsable_id = $request->derive_user_id;
-        // $serviceRequest->save();
-        foreach ($serviceRequest->SignatureFlows->where('responsable_id',$user_id)->whereNull('status') as $key2 => $signatureFlow) {
-          $signatureFlow->responsable_id = $request->derive_user_id;
-          $signatureFlow->derive_date = Carbon::now();
-          $signatureFlow->employee = $signatureFlow->employee . " (Derivado)";
-          $signatureFlow->save();
-          $cont += 1;
+        if ($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) {
+          $cant_rechazados += 1;
+        }
+        else{
+          foreach ($serviceRequest->SignatureFlows->where('responsable_id',$user_id)->whereNull('status') as $key2 => $signatureFlow) {
+            $signatureFlow->responsable_id = $request->derive_user_id;
+            $signatureFlow->derive_date = Carbon::now();
+            $signatureFlow->employee = $signatureFlow->employee . " (Derivado)";
+            $signatureFlow->save();
+            $cont += 1;
+          }
         }
       }
+
+      // dd($cant_rechazados);
 
       session()->flash('info', $cont . ' solicitudes fueron derivadas.');
       return redirect()->route('rrhh.service_requests.index');
