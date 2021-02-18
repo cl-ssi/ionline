@@ -651,17 +651,20 @@ class ServiceRequestController extends Controller
                                          ->orderBy('id','asc')
                                          ->get();
 
+      $cont = 0;
       foreach ($serviceRequests as $key => $serviceRequest) {
         // $serviceRequest->responsable_id = $request->derive_user_id;
         // $serviceRequest->save();
         foreach ($serviceRequest->SignatureFlows->where('responsable_id',$user_id)->whereNull('status') as $key2 => $signatureFlow) {
           $signatureFlow->responsable_id = $request->derive_user_id;
           $signatureFlow->derive_date = Carbon::now();
+          $signatureFlow->employee = $signatureFlow->employee . " (Derivado)";
           $signatureFlow->save();
+          $cont += 1;
         }
       }
 
-      session()->flash('info', 'Las solicitudes fueron derivadas.');
+      session()->flash('info', $cont . ' solicitudes fueron derivadas.');
       return redirect()->route('rrhh.service_requests.index');
     }
 
