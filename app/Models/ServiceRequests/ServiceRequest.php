@@ -20,11 +20,11 @@ class ServiceRequest extends Model implements Auditable
      */
     protected $fillable = [
         'id', 'responsable_id','user_id','subdirection_ou_id', 'responsability_center_ou_id',
-        'type', 'rut', 'name', 'request_date', 'start_date', 'end_date', 'contract_type', 
-        'service_description', 'programm_name', 'other', 'normal_hour_payment', 'amount', 
-        'program_contract_type', 'weekly_hours', 'daily_hours', 'nightly_hours', 'estate', 
-        'estate_other', 'working_day_type', 'working_day_type_other', 'subdirection_id', 
-        'responsability_center_id','budget_cdp_number', 'budget_item', 'budget_amount', 
+        'type', 'rut', 'name', 'request_date', 'start_date', 'end_date', 'contract_type',
+        'service_description', 'programm_name', 'other', 'normal_hour_payment', 'amount',
+        'program_contract_type', 'weekly_hours', 'daily_hours', 'nightly_hours', 'estate',
+        'estate_other', 'working_day_type', 'working_day_type_other', 'subdirection_id',
+        'responsability_center_id','budget_cdp_number', 'budget_item', 'budget_amount',
         'budget_date', 'contract_number','month_of_payment','establishment_id','nationality',
         'digera_strategy','rrhh_team','gross_amount', 'net_amount','sirh_contract_registration',
         'resolution_number','resolution_date','bill_number','total_hours_paid','total_paid',
@@ -121,29 +121,28 @@ class ServiceRequest extends Model implements Auditable
       //                                            ->count();
 
       $user_id = Auth::user()->id;
-      $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id) {
+      $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                            $subQuery->where('responsable_id',$user_id);
                                            $subQuery->orwhere('user_id',$user_id);
                                          })
                                          ->orderBy('id','asc')
                                          ->get();
-
       $cont = 0;
       foreach ($serviceRequests as $key => $serviceRequest) {
-       foreach ($serviceRequest->SignatureFlows as $key => $signatureFlow) {
-         if ($user_id == $signatureFlow->responsable_id) {
-           if ($signatureFlow->status == NULL) {
-             if ($key > 0) {
-               if ($serviceRequest->SignatureFlows[$key-1]->status == NULL) {
-                 $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
-               }else{
-                 // $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
-                 $cont += 1;
-               }
-             }
-           }
-         }
-       }
+        if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0) {
+          foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
+            if ($user_id == $signatureFlow->responsable_id) {
+              if ($signatureFlow->status == NULL) {
+                if ($serviceRequest->SignatureFlows->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL) {
+                }else{
+                  $cont += 1;
+                }
+
+              }else{
+              }
+            }
+          }
+        }
       }
 
       return $cont;
