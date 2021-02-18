@@ -563,41 +563,42 @@ class ServiceRequestController extends Controller
             fputcsv($file, array(
                 $run,
                 $dv,
-                '5', // N° cargo
+                '5', // N° cargo siempre es 5 honorario
                 $fila->start_date->format('d-m-Y'),
                 $fila->end_date->format('d-m-Y'),
-                'Establecimiento [130=hospital, ssi=12]',
+                $serviceRequest->establishment->name.
+                '[130=hospital, ssi=125, 127=CGU]',
                 'S',
-                'Contrato por prestación [S,N]',
+                'S', // Casi seguro que es S (ou yes)
                 $fila->gross_amount,
-                'Número de cuotas [0-12]',
+                'Número de cuotas [0-12]', // calcular entre fecha de contratos
                 'S',
                 '5',
                 'S',
                 'S',
                 '18',
                 'Unidad [código sirh]',
-                '0',
-                '0',
-                '0',
-                $fila->programm_name,
-                '24',
+                '1', //cheque
+                '0', // tipo de banco si el anterior es 0 o 1
+                '0', // cuenta 0 
+                $fila->programm_name, // 3903 (no medico) 3904 (medico)                
+                '24', // Glosa todos son 24
                 'Profesión [código sirh]',
-                'Planta [0=médicos,1=odontólogos,...]',
-                '0',
+                $fila->estate.' [0=médicos,1=odontólogos,...]',
+                '0', // Todas son excentas = 0
                 $fila->resolution_number,
-                '$fila->resolution_date',
-                'Observacón',
-                'Función [código sirh]',
+                $fila->resolution_date,
                 $fila->service_description,
-                'Estado tramitación del contrato [A=Autorizado,T=Tramitado,V=Visado]',
-                'Tipo de jornada [C=Completa,P=Parcial,V=Visado]',
+                ($serviceRequest->estate == "Administrativo")? 'Apoyo Administrativo' : 'Apoyo Clínico',
+                $fila->digera_strategy,
+                'A',
+                'Tipo de jornada [C=Completa,P=Parcial,V=Visado]', // calcular en base a las horas semanales y tipo de contratacion
                 'N',
                 $fila->weekly_hours,
-                '2103001',
+                '2103001', // único para honorarios
                 'N',
-                'Tipo de función [S,N]',
-                'S'
+                'Tipo de función [S,N]', // En base a linea 598
+                'S' // working_day_type Diurno = S, el resto N
             ),';');
         }
         fclose($file);
