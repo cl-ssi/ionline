@@ -764,7 +764,6 @@ class ServiceRequestController extends Controller
       $sender_name = Auth::user()->getFullNameAttribute();
       $receiver_name = User::find($request->derive_user_id)->getFullNameAttribute();
       $receiver_email = User::find($request->derive_user_id)->email;
-      echo $receiver_email;
 
       $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                            $subQuery->whereNull('status');
