@@ -74,7 +74,7 @@
 
 		<fieldset class="form-group col">
 				<label for="for_users">Responsable</label>
-				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required data-size="5">
+				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" data-size="5" required>
 					<option value=""></option>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
@@ -84,7 +84,7 @@
 
 		<fieldset class="form-group col">
 				<label for="for_users">Jefe Directo</label>
-				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required data-size="5">
+				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" data-size="5" required>
 					<option value=""></option>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
@@ -92,79 +92,78 @@
 				</select>
 		</fieldset>
 
-		<fieldset class="form-group col">
+		<!-- <fieldset class="form-group col">
 				<label for="for_users">Subdirector(a)</label>
-				<select name="users[]" id="subdirector_medico" class="form-control " data-live-search="true" required="" data-size="5" disabled>
+				<select name="users[]" id="subdirector_medico" class="form-control selectpicker" data-live-search="true" data-size="5">
+					<option value=""></option>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "9882506") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id != "9882506" && $user->id != "13835321") disabled @endif>{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<!-- modificar rut por el que corresponda -->
-				<input type="hidden" name="users[]" value="9882506" />
 		</fieldset>
 
-		<!-- <fieldset class="form-group col">
-				<label for="for_users">Subdirector Médico</label>
-				<select name="users[]" id="prueba" class="form-control" >
+		<fieldset class="form-group col">
+				<label for="for_users">S.D.G.A SSI</label>
+				<select name="users[]" id="sdga_servicio" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "9882506") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == "14104369") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
 		</fieldset> -->
 
-		<fieldset class="form-group col">
-				<label for="for_users">S.D.G.A SSI</label>
-				<select name="users[]" id="sdga_servicio" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "14104369") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-				</select>
-				<input type="hidden" name="users[]" value="14104369" />
-		</fieldset>
-
 	</div>
-	<div class="row">
+
+	<!-- <div class="row">
 
 		<fieldset class="form-group col">
 				<label for="for_users">S.G.D.P Hospital</label>
-				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "9018101") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == "9018101") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<input type="hidden" name="users[]" value="9018101" />
 		</fieldset>
 
 		<fieldset class="form-group col">
 				<label for="for_users">Jefe Finanzas</label>
-				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "13866194") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == "13866194") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<input type="hidden" name="users[]" value="13866194" />
 		</fieldset>
 
 		<fieldset class="form-group col">
-				<label for="for_users">S.G.D.P Hospital</label>
-				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+				<label for="for_users">S.G.D.P SSI</label>
+				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "15685508") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == "15685508") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<input type="hidden" name="users[]" value="15685508" />
 		</fieldset>
 
 		<fieldset class="form-group col">
-				<label for="for_users">Director</label>
-				<select name="users[]" id="director" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
+				<label for="for_users">Director Hospital</label>
+				<select name="users[]" id="director" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
 					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "14101085") selected disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						<option value="{{$user->id}}" @if($user->id == "14101085") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 					@endforeach
 				</select>
-				<input type="hidden" name="users[]" value="14101085" />
 		</fieldset>
 
+	</div> -->
+
+	<div class="row">
+	  @foreach($signatureFlows as $key => $signatureFlow)
+			<fieldset class="form-group col-sm-4">
+					<label for="for_users">{{$key}}</label>
+					<select name="users[]" class="form-control selectpicker" id="{{$key}}" data-live-search="true" required="" data-size="5" readonly>
+						@foreach($users as $key => $user)
+							<option value="{{$user->id}}" @if($user->id == $signatureFlow) selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						@endforeach
+					</select>
+			</fieldset>
+		@endforeach
 	</div>
 
 	<br>
@@ -254,13 +253,12 @@
         <label for="for_service_description">Descripción Servicio</label>
         <textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50"></textarea>
 
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_tecnico_paramedico">Técnico Paramédico</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_administrativo">Administrativo</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_auxiliar">Auxiliar</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_enfermeria">Enfermería</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_contingencia_covid">Contigencia covid</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_atencion_paciente">Atención paciente</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_servicio_kine">Kinesiología</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_enfermeros">Enfermeras/os</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_kinesiologos">Kinesiólogos/as</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_paramedicos">Técnicos paraméricos</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_auxiliares">Auxiliares de servicio</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_administrativos">Administrativos/as</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_matronas">Matronas</button>
     </fieldset>
 
   </div>
@@ -360,7 +358,7 @@
 		  <ul class="list-group list-group-flush">
 		    <li class="list-group-item">
 					<div class="row">
-						<fieldset class="form-group col">
+						<fieldset class="form-group col-3">
 								<label for="for_estate">Entrada</label>
 								<input type="date" class="form-control" name="shift_start_date" id="shift_start_date">
 						</fieldset>
@@ -368,7 +366,7 @@
 								<label for="for_estate">Hora</label>
 								<input type="time" class="form-control" name="start_hour" id="start_hour">
 						</fieldset>
-						<fieldset class="form-group col">
+						<fieldset class="form-group col-3">
 								<label for="for_estate">Salida</label>
 								<input type="date" class="form-control" name="shift_end_date" id="shift_end_date">
 						</fieldset>
@@ -380,7 +378,7 @@
 								<label for="for_estate">Observación</label>
 								<input type="text" class="form-control" name="observation" id="observation">
 						</fieldset>
-						<fieldset class="form-group col-2">
+						<fieldset class="form-group col">
 								<label for="for_estate"><br/></label>
 								<button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
 								<!-- formnovalidate="formnovalidate" formaction="{{ route('rrhh.shift_control.store') }}" -->
@@ -442,9 +440,9 @@
 					<option value=""></option>
           <option value="DIURNO">DIURNO</option>
           <option value="TERCER TURNO">TERCER TURNO</option>
-					<option value="TERCER TURNO">TERCER TURNO - MODIFICADO</option>
+					<option value="TERCER TURNO - MODIFICADO">TERCER TURNO - MODIFICADO</option>
           <option value="CUARTO TURNO">CUARTO TURNO</option>
-					<option value="CUARTO TURNO">CUARTO TURNO - MODIFICADO</option>
+					<option value="CUARTO TURNO - MODIFICADO">CUARTO TURNO - MODIFICADO</option>
 					<option value="OTRO">OTRO</option>
         </select>
 
@@ -497,16 +495,13 @@
 		var value = this.value;
 		//subdirección gestión del cuidado al paciente
 		if (value == 85) {
-			// $('#subdirector_medico').removeAttr('disabled');
-			$('#subdirector_medico option[value=13835321]').attr('selected', 'selected');
-			$('#subdirector_medico option[value=13835321]').prop('selected', 'selected');
-			// $('#subdirector_medico').attr('disabled', 'disabled');
+			$("#Subdirector option[value=13835321]").removeAttr('disabled');
+			$('#Subdirector').val(13835321);
+			$('#Subdirector').selectpicker('refresh');
 		}
 		if (value != 85) {
-			// $('#subdirector_medico').removeAttr('disabled');
-			$('#subdirector_medico option[value=9882506]').attr('selected', 'selected');
-			$('#subdirector_medico option[value=9882506]').prop('selected', 'selected');
-			// $('#subdirector_medico').attr('disabled', 'disabled');
+			$('#Subdirector').val(9882506);
+			$('#Subdirector').selectpicker('refresh');
 		}
 	});
 
@@ -571,28 +566,24 @@
       });
   });
 
-	$("#alias_tecnico_paramedico").click(function(){
-		$('#service_description').val("Servicio de Técnico Paramédico de CR Emergencia para realizar las funciones descritas en el manual de organización del CR Emergencia, para la atención de pacientes de urgencia P.A.M.E");
+	$("#alias_enfermeros").click(function(){
+		$('#service_description').val("Prestará servicios de enfermería realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_administrativo").click(function(){
-		$('#service_description').val("Servicios administrativos, como funcionario de admisión de urgencia, para reforzar la unidad por contingencia COVID19.");
+	$("#alias_kinesiologos").click(function(){
+		$('#service_description').val("Prestará servicios de kinesiología realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_auxiliar").click(function(){
-		$('#service_description').val("Servicio de Auxiliar, para realizar las funciones descritas en el manual de organización del CR Emergencia para reforzar la unidad por contingencia COVID19.");
+	$("#alias_paramedicos").click(function(){
+		$('#service_description').val("Prestará servicios como técnico paramédico realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_enfermeria").click(function(){
-		$('#service_description').val("Servicios de Enfermería para la atención de pacientes en el CR Emergencia en las distintas areas que la componen, urgencia adulto pediatría, categorización y observación, para reforzar la unidad por contingencia COVID19.");
+	$("#alias_auxiliares").click(function(){
+		$('#service_description').val("Prestará servicios como auxiliar de servicio realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_contingencia_covid").click(function(){
-		$('#service_description').val("1.- Revisión diaria de cada uno de los RAU (Registro de atencion de urgencia)\n2.- Codificar cada uno de ellos, son sus respectivos diagnosticos\n3.- Registro de todas las prestaciones por pacientes otorgadas por atención a pacientes.\n4.- Atención al público en general de fonasa (Previsión C y D), Particulares, Isapres y convencionales.\n*Para reforzar la uinidad por contingencia Covid-19");
+	$("#alias_administrativos").click(function(){
+		$('#service_description').val("Prestará servicios en el área administrativa realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_atencion_paciente").click(function(){
-		$('#service_description').val("Atención de paciente en CR emergencia , en calidad de medico en box adulto.\npor renovación Covid\nturno completo");
+	$("#alias_matronas").click(function(){
+		$('#service_description').val("Prestará servicios de matronería realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-	$("#alias_servicio_kine").click(function(){
-		$('#service_description').val("Servicios de Kinesiología, entregando una atención integral de las enfermedades respiratorias del adulto mayor y niños en la unidad de emergencia durante el periodo de campaña de invierno y contingencia COVID19");
-	});
-
 
 </script>
 @endsection

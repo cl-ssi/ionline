@@ -105,16 +105,43 @@
                     </a>
 
                     @canany(['Service Request'])
+
+                    <!-- <a class="dropdown-item"> -->
+
+                    <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-file-alt"></i> Contratación Honorarios
+                    </a>
+
+                    <div class="dropdown-menu">
+
                       <a class="dropdown-item"
                           href="{{ route('rrhh.service_requests.index') }}">
                           <i class="fas fa-wallet"></i> Contratación de Servicios
                           <span class="badge badge-secondary">{{ App\Models\ServiceRequests\ServiceRequest::getPendingRequests() }}</span>
                       </a>
+
+                      @canany(['Service Request: additional data'])
+                        <a class="dropdown-item"
+                            href="{{ route('rrhh.service_requests.aditional_data_list') }}">
+                            <i class="fas fa-wallet"></i> Información adicional
+                        </a>
+                      @endcan
+
+                      @canany(['Service Request: pending requests'])
+                        <a class="dropdown-item"
+                            href="{{ route('rrhh.service_requests.pending_requests') }}">
+                            <i class="fas fa-bomb"></i> Estado solicitudes
+                        </a>
+                      @endcan
+                    </div>
+
                     @endcan
+
 
                     @canany(['Documents: signatures and distribution'])
                       <a class="dropdown-item"
-                          href="{{ route('documents.signatures.index') }}">
+                          href="{{ route('documents.signatures.index', ['pendientes']) }}">
                           <i class="fas fa-signature"></i> Solicitud de firmas
                       </a>
                     @endcan
@@ -265,25 +292,20 @@
                             @endif
 
 
-
-                                @role('god')
-                                <a class="dropdown-item"
-                                   href="{{ route('parameters.index') }}">
-                                    <i class="fas fa-cog fa-fw"></i> Mantenedores
-                                </a>
-                                @endrole
-
+                            @role('god')
+                            <a class="dropdown-item"
+                               href="{{ route('parameters.index') }}">
+                                <i class="fas fa-cog fa-fw"></i> Mantenedores
+                            </a>
+                            @endrole
 
 
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item" role="button" onclick="logout()" id="cierreSesion">
-                                {{ __('Cerrar sesión') }}
+                            <a class="dropdown-item" href="{{ route('logout') }}">
+                                <i class="fas fa-sign-out-alt fa-fw"></i> {{ __('Cerrar sesión') }}
                             </a>
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
                         </div>
                     </li>
                 @endguest

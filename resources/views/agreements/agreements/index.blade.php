@@ -55,7 +55,7 @@
         </tbody>
 
 </table>
-
+{{ $agreements->withQueryString()->links() }}
 
 @endsection
 

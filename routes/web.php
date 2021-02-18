@@ -36,6 +36,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('corrige_firmas','ServiceRequests\ServiceRequestController@corrige_firmas')->middleware('auth');
+
 Route::prefix('webservices')->name('webservices.')->group(function () {
     Route::get('fonasa', 'WebserviceController@fonasa')->middleware('auth')->name('fonasa');
 });
@@ -44,7 +46,8 @@ Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::get('firma', 'FirmaDigitalController@signPdf')->name('signPdf');
+Route::get('/{signaturesFile}/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
+Route::post('/{signaturesFile}/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
 
 Route::get('/claveunica', 'ClaveUnicaController@autenticar')->name('claveunica.autenticar');
 Route::get('/claveunica/callback', 'ClaveUnicaController@callback')->name('claveunica.callback');
@@ -213,7 +216,12 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::post('{user}/roles', 'Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
 
     Route::resource('shift_control', 'ServiceRequests\ShiftControlController')->middleware('auth');
+    Route::post('service_requests.derive','ServiceRequests\ServiceRequestController@derive')->name('service_requests.derive')->middleware('auth');
     Route::get('service_requests.consolidated_data','ServiceRequests\ServiceRequestController@consolidated_data')->name('service_requests.consolidated_data')->middleware('auth');
+    Route::get('service_requests.pending_requests','ServiceRequests\ServiceRequestController@pending_requests')->name('service_requests.pending_requests')->middleware('auth');
+    Route::get('service_requests/export-sirh','ServiceRequests\ServiceRequestController@export_sirh')->name('service_requests.export_sirh')->middleware('auth');
+    Route::get('service_requests.aditional_data_list','ServiceRequests\ServiceRequestController@aditional_data_list')->name('service_requests.aditional_data_list')->middleware('auth');
+    Route::put('service_requests/update_aditional_data/{serviceRequest}', 'ServiceRequests\ServiceRequestController@update_aditional_data')->middleware('auth')->name('service_requests.update_aditional_data');
     Route::resource('service_requests', 'ServiceRequests\ServiceRequestController')->middleware('auth');
     Route::get('service_requests/resolution/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolution')->middleware('auth');
     Route::get('service_requests/resolution-pdf/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolutionPDF')->name('service_requests.resolution-pdf')->middleware('auth');
@@ -319,7 +327,11 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     });
     Route::resource('partes', 'Documents\ParteController');
 
-    Route::resource('signatures', 'Documents\SignatureController')->middleware('auth');
+    Route::get('signatures/index/{tab}', 'Documents\SignatureController@index')->name('signatures.index');
+    Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
+    Route::get('/showPdfDocumento/{signature}', 'Documents\SignatureController@showPdfDocumento')->name('showPdfDocumento');
+    Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('showPdfAnexo');
+
 });
 Route::resource('documents', 'Documents\DocumentController')->middleware('auth');
 
