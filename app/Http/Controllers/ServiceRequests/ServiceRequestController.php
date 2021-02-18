@@ -677,10 +677,6 @@ class ServiceRequestController extends Controller
             case "Trabajador Social": $sirh_profession_id=1020 ; break;
           }
 
-          
-
-
-
           $data = array(
             $run,
             $dv,
@@ -710,7 +706,7 @@ class ServiceRequestController extends Controller
             optional($fila->resolution_date)->format('d/m/Y'),
             $fila->digera_strategy,
             $function,
-            $fila->service_description,
+            preg_replace( "/\r|\n/", " ", $fila->service_description ),
             'A',
             $type_of_day, // calcular en base a las horas semanales y tipo de contratacion
             'N',
