@@ -182,7 +182,7 @@ class ServiceRequestController extends Controller
      elseif(Auth::user()->organizationalUnit->establishment_id == 1){
        $signatureFlows['Subdirector'] = 9882506; // 88 - Subdirección Médica
        $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-       $signatureFlows['S.G.D.P Hospital'] = 9018101; // 86 - Subdirección de Gestión de Desarrollo de las Personas
+       $signatureFlows['S.G.D.P Hospital'] = 13866127; // 86 - Subdirección de Gestión de Desarrollo de las Personas
        $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
        $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
        $signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
@@ -200,13 +200,6 @@ class ServiceRequestController extends Controller
        session()->flash('info', 'Usted no posee una unidad organizacional válida para ingresar hojas de ruta.');
        return redirect()->back();
      }
-
-    // $signatureFlows['Subdirector'] = 9882506; // 88 - Subdirección Médica
-    // $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-    // $signatureFlows['S.G.D.P Hospital'] = 9018101; // 86 - Subdirección de Gestión de Desarrollo de las Personas
-    // $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
-    // $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-    // $signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
 
      // dd($signatureFlows);
 
