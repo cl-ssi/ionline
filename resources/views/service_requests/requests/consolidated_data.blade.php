@@ -58,11 +58,6 @@
           <td nowrap>{{$serviceRequest->programm_name}}</td>
           <td nowrap>{{$serviceRequest->digera_strategy}}</td>
           <td nowrap>{{$serviceRequest->rrhh_team}}</td>
-          <!-- @if($serviceRequest->program_contract_type == "Horas")
-            <td nowrap>{{$serviceRequest->ControlHrs}}</td>
-          @else
-            <td nowrap>{{$serviceRequest->daily_hours + $serviceRequest->nightly_hours}}</td>
-          @endif -->
           <td nowrap>{{$serviceRequest->weekly_hours}}</td>
           <td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
           <td nowrap>{{$serviceRequest->estate}}</td>
@@ -85,12 +80,12 @@
               @endif
             @endif
           </td>
-          <td nowrap>{{$serviceRequest->resolution_number}}</td>
+          <td nowrap>@if($serviceRequest->resolution_number){{$serviceRequest->resolution_number}}@else En trámite @endif</td>
           <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}</td>
           <td nowrap>{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}</td>
           <td nowrap>{{$serviceRequest->bill_number}}</td>
           <td nowrap>{{$serviceRequest->total_hours_paid}}</td>
-          <td nowrap>{{$serviceRequest->total_paid}}</td>
+          <td nowrap>@if($serviceRequest->total_paid){{$serviceRequest->total_paid}}@else En proceso de pago @endif</td>
           <td nowrap>@if($serviceRequest->payment_date){{$serviceRequest->payment_date->format('Y-m-d')}}@endif</td>
         </tr>
       @endforeach
