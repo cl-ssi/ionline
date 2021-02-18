@@ -331,6 +331,7 @@
                     <th>Select</th>
                     <th>Entrada</th>
                     <th>H.Inicio</th>
+                    <th>Salida</th>
                     <th>H.Término</th>
                     <th>Observación</th>
                 </tr>
