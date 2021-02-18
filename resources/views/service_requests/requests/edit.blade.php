@@ -469,11 +469,11 @@
               <label for="for_nationality">País de Funcionario</label>
               <select name="nationality" class="form-control">
                 <option value=""></option>
-                <option value="Chile" @if($serviceRequest->nationality == "Chile") selected @endif>Chile</option>
-                <option value="Argentina" @if($serviceRequest->nationality == "Argentina") selected @endif>Argentina</option>
-                <option value="Venezuela" @if($serviceRequest->nationality == "Venezuela") selected @endif>Venezuela</option>
-                <option value="Perú" @if($serviceRequest->nationality == "Perú") selected @endif>Perú</option>
-                <option value="Bolivia" @if($serviceRequest->nationality == "Bolivia") selected @endif>Bolivia</option>
+                <option value="CHILENA" @if($serviceRequest->nationality == "CHILENA") selected @endif>Chile</option>
+                <option value="ARGENTINA" @if($serviceRequest->nationality == "ARGENTINA") selected @endif>Argentina</option>
+                <option value="VENEZOLANA" @if($serviceRequest->nationality == "VENEZOLANA") selected @endif>Venezuela</option>
+                <option value="PERUANA" @if($serviceRequest->nationality == "PERUANA") selected @endif>Perú</option>
+                <option value="BOLIVIANA" @if($serviceRequest->nationality == "BOLIVIANA") selected @endif>Bolivia</option>
               </select>
           </fieldset>
 

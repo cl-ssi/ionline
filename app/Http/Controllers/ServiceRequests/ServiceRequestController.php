@@ -745,6 +745,7 @@ class ServiceRequestController extends Controller
         $array[$serviceRequest->id]['falta_aprobar'] = $falta_aprobar;
       }
 
+      //obtener subtotales
       $group_array = [];
       foreach ($array as $key => $data) {
         $group_array[$data['falta_aprobar']] = 0;
@@ -759,10 +760,12 @@ class ServiceRequestController extends Controller
         // }
       }
 
+      // usort($group_array, 'sort_by_orden');
+      // sort($group_array);
       // dd($group_array);
-
       // dd($array);
 
       return view('service_requests.requests.pending_requests',compact('array','group_array'));
     }
+
 }
