@@ -40,19 +40,6 @@ class ServiceRequestController extends Controller
       $serviceRequestsCreated = [];
       $serviceRequestsRejected = [];
 
-      // $serviceRequestsPendings = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
-      //                                              $subQuery->where('responsable_id',$user_id)->whereNull('status');
-      //                                            })->orderBy('id','asc')
-      //                                            ->whereDoesntHave("SignatureFlows", function($subQuery) {
-      //                                              $subQuery->where('status',0)->whereNull('status'); //que no haya un rechazado
-      //                                            })
-      //                                            ->where('responsable_id','!=',Auth::user()->id)
-      //                                            ->get();
-      //
-      // $myServiceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
-      //                                        $subQuery->where('user_id',$user_id)->orWhere('responsable_id',$user_id)->whereNotNull('status');
-      //                                      })->orderBy('id','asc')->get();
-
       $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                            $subQuery->where('responsable_id',$user_id);
                                            $subQuery->orwhere('user_id',$user_id);
@@ -62,21 +49,27 @@ class ServiceRequestController extends Controller
 
       foreach ($serviceRequests as $key => $serviceRequest) {
         //not rejected
-        if ($serviceRequest->SignatureFlows->where('status','0')->count() == 0) {
-          foreach ($serviceRequest->SignatureFlows as $key => $signatureFlow) {
-
+        if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0) {
+          foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
+            // echo $signatureFlow->sign_position . " " . $key2 . " <br>";
             //with responsable_id
             if ($user_id == $signatureFlow->responsable_id) {
               if ($signatureFlow->status == NULL) {
                 //verification if i have to sign or other person
-                if ($key > 0) {
-                  if ($serviceRequest->SignatureFlows[$key-1]->status == NULL) {
-                    $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
-                  }
-                  else{
-                    $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
-                  }
+                // if ($key2 > 0) {
+                //   if ($serviceRequest->SignatureFlows[$key2-1]->status == NULL) {
+                //     $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
+                //   }
+                //   else{
+                //     $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
+                //   }
+                // }
+                if ($serviceRequest->SignatureFlows->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL) {
+                  $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
+                }else{
+                  $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
                 }
+
               }else{
                 $serviceRequestsAnswered[$serviceRequest->id] = $serviceRequest;
               }
@@ -92,6 +85,7 @@ class ServiceRequestController extends Controller
           $serviceRequestsRejected[$serviceRequest->id] = $serviceRequest;
         }
       }
+
 
       // dd($serviceRequestsMyPendings, $serviceRequestsRejected);
 
@@ -494,7 +488,6 @@ class ServiceRequestController extends Controller
 
 
   public function export_sirh() {
-
     // foreach ($serviceRequests as $key => $serviceRequest) {
     //   foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
     //     $start_date = Carbon::parse($shiftControl->start_date);
@@ -518,7 +511,7 @@ class ServiceRequestController extends Controller
                                $subQuery->where('status',0);
                              })
                              ->orderBy('request_date','asc')->get();
-
+                             
     $columnas = array(
         'RUN',
         'DV',
@@ -559,6 +552,8 @@ class ServiceRequestController extends Controller
         'Afecto a sistema de turno'
     );
 
+    
+    // echo '<pre>';
     $callback = function() use ($filas, $columnas)
     {
         $file = fopen('php://output', 'w');
@@ -566,45 +561,163 @@ class ServiceRequestController extends Controller
         fputcsv($file, $columnas,';');
         foreach($filas as $fila) {
           list($run,$dv) = explode('-',$fila->rut);
-            fputcsv($file, array(
-                $run,
-                $dv,
-                '5', // N° cargo
-                $fila->start_date->format('d-m-Y'),
-                $fila->end_date->format('d-m-Y'),
-                'Establecimiento [130=hospital, ssi=12]',
-                'S',
-                'Contrato por prestación [S,N]',
-                $fila->gross_amount,
-                'Número de cuotas [0-12]',
-                'S',
-                '5',
-                'S',
-                'S',
-                '18',
-                'Unidad [código sirh]',
-                '0',
-                '0',
-                '0',
-                $fila->programm_name,
-                '24',
-                'Profesión [código sirh]',
-                'Planta [0=médicos,1=odontólogos,...]',
-                '0',
-                $fila->resolution_number,
-                '$fila->resolution_date',
-                'Observacón',
-                'Función [código sirh]',
-                $fila->service_description,
-                'Estado tramitación del contrato [A=Autorizado,T=Tramitado,V=Visado]',
-                'Tipo de jornada [C=Completa,P=Parcial,V=Visado]',
-                'N',
-                $fila->weekly_hours,
-                '2103001',
-                'N',
-                'Tipo de función [S,N]',
-                'S'
-            ),';');
+
+          switch($fila->establishment->id) {
+            case 1:  $sirh_estab_code=130; break;
+            case 12: $sirh_estab_code=127; break;
+            case 38: $sirh_estab_code=125; break;
+            default: $sirh_estab_code=0; break;
+          }
+          $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
+          switch($fila->programm_name){
+            case 'Covid19 Médicos': $sirh_program_code = 3904; break;
+            case 'Covid19 No Médicos': $sirh_program_code = 3903; break;
+            case 'Covid19-APS Médicos': $sirh_program_code = 3904; break;
+            case 'Covid19-APS No Médicos': $sirh_program_code = 3903; break;
+          }
+          switch($fila->weekly_hours) {
+            case 44: $type_of_day = 'C'; break;
+            default: $type_of_day = 'P'; break;
+          }
+          switch($fila->estate) {
+            case 'Administrativo': 
+              $function = 'Apoyo Administrativo';
+              $function_type = 'N';
+              break;
+            default: 
+              $function = 'Apoyo Clínico';
+              $function_type = 'S';
+              break;
+          }
+
+          switch($fila->working_day_type){
+            case 'DIURNO': $turno_afecto = 'S'; break;
+            default: $turno_afecto = 'N'; break;
+          }
+
+          switch($fila->responsabilityCenter->id) {
+            case 	12	:	$sirh_ou_id = 1253000	; break;
+            case 	55	:	$sirh_ou_id = 1305102	; break;
+            case 	18	:	$sirh_ou_id = 1301400	; break;
+            case 	224	:	$sirh_ou_id = 1253000	; break;
+            case 	225	:	$sirh_ou_id = 1252000	; break;
+            case 	43	:	$sirh_ou_id = 1304407	; break;
+            case 	116	:	$sirh_ou_id = 1301620	; break;
+            case 	138	:	$sirh_ou_id = 1301401	; break;
+            case 	130	:	$sirh_ou_id = 1301650	; break;
+            case 	141	:	$sirh_ou_id = 1301310	; break;
+            case 	142	:	$sirh_ou_id = 1301320	; break;
+            case 	136	:	$sirh_ou_id = 1301420	; break;
+            case 	133	:	$sirh_ou_id = 1301410	; break;
+            case 	140	:	$sirh_ou_id = 1301650	; break;
+            case 	2	:	  $sirh_ou_id = 1253000	; break;
+            case 	125	:	$sirh_ou_id = 1301509	; break;
+            case 	194	:	$sirh_ou_id = 1301905	; break;
+            case 	177	:	$sirh_ou_id = 1301650	; break;
+            case 	192	:	$sirh_ou_id = 1301904	; break;
+            case 	162	:	$sirh_ou_id = 1301523	; break;
+            case 	122	:	$sirh_ou_id = 1304105	; break;
+            case 	99	:	$sirh_ou_id = 1305102	; break;
+            case 	147	:	$sirh_ou_id = 1301203	; break;
+            case 	126	:	$sirh_ou_id = 1302108	; break;
+            case 	149	:	$sirh_ou_id = 1301202	; break;
+            case  24  : $sirh_ou_id = 1301400 ; break;
+            default   : $sirh_ou_id = 'NO EXISTE'; break;
+          }
+
+          switch($fila->estate) {
+            case "Profesional Médico":  $planta = 0; break;
+            case "Profesional":         $planta = 4; break;
+            case "Técnico":             $planta = 5; break;
+            case "Administrativo":      $planta = 6; break;
+            case "Farmaceutico":        $planta = 3; break;
+            case "Odontólogo":          $planta = 1; break;
+            case "Bioquímico":          $planta = ''; break;
+            case "Auxiliar":            $planta = 7; break;
+            default:                    $planta = ''; break;
+            // - 0 = Médicos
+            // - 1 = Odontologos
+            // - 2 = Bioquimicos
+            // - 3 = Quimicos Farmaceuticos
+            // - 4 = Profesional
+            // - 5 = Técnicos
+            // - 6 = Administrativos
+            // - 7 = Auxiliares
+          }
+
+          switch($fila->rrhh_team) {
+            case "Residencia Médica": $sirh_profession_id=1000 ; break;
+            case "Médico Diurno": $sirh_profession_id=1000 ; break;
+            case "Enfermera Supervisora": $sirh_profession_id=1058 ; break;
+            case "Enfermera Diurna": $sirh_profession_id=1058 ; break;
+            case "Enfermera Turno": $sirh_profession_id=1058 ; break;
+            case "Kinesiólogo Diurno": $sirh_profession_id=1057 ; break;
+            case "Kinesiólogo Turno": $sirh_profession_id=1057 ; break;
+            case "Téc.Paramédicos Diurno": $sirh_profession_id=1027 ; break;
+            case "Téc.Paramédicos Turno": $sirh_profession_id=1027 ; break;
+            case "Auxiliar Diurno": $sirh_profession_id=111 ; break;
+            case "Auxiliar Turno": $sirh_profession_id=111 ; break;
+            case "Terapeuta Ocupacional": $sirh_profession_id=1055 ; break;
+            case "Químico Farmacéutico": $sirh_profession_id=320 ; break;
+            case "Bioquímico": $sirh_profession_id=1003 ; break;
+            case "Fonoaudiologo": $sirh_profession_id=1319 ; break;
+            case "Administrativo Diurno": $sirh_profession_id=119 ; break;
+            case "Administrativo Turno": $sirh_profession_id=119 ; break;
+            case "Biotecnólogo Turno": $sirh_profession_id=513 ; break;
+            case "Matrona Turno": $sirh_profession_id=1060 ; break;
+            case "Matrona Diurno": $sirh_profession_id=1060 ; break;
+            case "Otros técnicos": $sirh_profession_id=530 ; break;
+            case "Psicólogo": $sirh_profession_id=1160 ; break;
+            case "Tecn. Médico Diurno": $sirh_profession_id=1316 ; break;
+            case "Tecn. Médico Turno": $sirh_profession_id=1316 ; break;
+            case "Trabajador Social": $sirh_profession_id=1020 ; break;
+          }
+
+          
+
+
+
+          $data = array(
+            $run,
+            $dv,
+            '5', // N° cargo siempre es 5 honorario
+            $fila->start_date->format('d/m/Y'),
+            $fila->end_date->format('d/m/Y'),
+            $sirh_estab_code,
+            'S',
+            'S', // Casi seguro que es S (ou yes)
+            $fila->gross_amount,
+            $cuotas, // calculado entre fecha de contratos
+            'S',
+            '5',
+            'S',
+            'S',
+            '18',
+            $sirh_ou_id,
+            '1', // cheque
+            '0', // tipo de banco 0 o 1
+            '0', // cuenta 0 
+            $sirh_program_code, // 3903 (no medico) 3904 (medico)                
+            '24', // Glosa todos son 24
+            $sirh_profession_id,
+            $planta,
+            '0', // Todas son excentas = 0
+            $fila->resolution_number,
+            optional($fila->resolution_date)->format('d/m/Y'),
+            $fila->service_description,
+            $function,
+            $fila->digera_strategy,
+            'A',
+            $type_of_day, // calcular en base a las horas semanales y tipo de contratacion
+            'N',
+            $fila->weekly_hours,
+            '2103001', // único para honorarios
+            'N',
+            $function_type, // Apoyo asistenciasl S o N
+            $turno_afecto // working_day_type Diurno = S, el resto N
+          );
+          //print_r($data);
+          fputcsv($file, $data,';');
         }
         fclose($file);
     };
@@ -645,17 +758,23 @@ class ServiceRequestController extends Controller
                                          ->get();
 
       $cont = 0;
+      $cant_rechazados = 0;
       foreach ($serviceRequests as $key => $serviceRequest) {
-        // $serviceRequest->responsable_id = $request->derive_user_id;
-        // $serviceRequest->save();
-        foreach ($serviceRequest->SignatureFlows->where('responsable_id',$user_id)->whereNull('status') as $key2 => $signatureFlow) {
-          $signatureFlow->responsable_id = $request->derive_user_id;
-          $signatureFlow->derive_date = Carbon::now();
-          $signatureFlow->employee = $signatureFlow->employee . " (Derivado)";
-          $signatureFlow->save();
-          $cont += 1;
+        if ($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) {
+          $cant_rechazados += 1;
+        }
+        else{
+          foreach ($serviceRequest->SignatureFlows->where('responsable_id',$user_id)->whereNull('status') as $key2 => $signatureFlow) {
+            $signatureFlow->responsable_id = $request->derive_user_id;
+            $signatureFlow->derive_date = Carbon::now();
+            $signatureFlow->employee = $signatureFlow->employee . " (Derivado)";
+            $signatureFlow->save();
+            $cont += 1;
+          }
         }
       }
+
+      // dd($cant_rechazados);
 
       session()->flash('info', $cont . ' solicitudes fueron derivadas.');
       return redirect()->route('rrhh.service_requests.index');
