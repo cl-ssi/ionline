@@ -307,7 +307,9 @@ class UserController extends Controller
     {
 
         //$ouRoot = OrganizationalUnit::find(1);
-        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        $ouRoots = OrganizationalUnit::where('establishment_id', 1)->get();
+        // $ouRoots = OrganizationalUnit::find(84);
+        // dd($ouRoots);
         return view('rrhh.users_service_requests.create')->withOuRoots($ouRoots);
     }
 

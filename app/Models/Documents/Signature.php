@@ -33,6 +33,27 @@ class Signature extends Model implements Auditable
         return $this->belongsTo('App\Rrhh\organizationalUnit','ou_id');
     }
 
+    public function signaturesFiles(){
+        return $this->hasMany('App\Models\Documents\SignaturesFile', 'signature_id');
+    }
+
+    /**
+     * @return mixed Retorna model
+     */
+    public function getSignaturesFlowSignerAttribute(){
+        return $this->signaturesFiles->where('file_type', 'documento')->first()
+            ->signaturesFlows->where('type', 'firmante')->first();
+    }
+
+    /**
+     * @return mixed Retorna collection
+     */
+    public function getSignaturesFlowVisatorAttribute(){
+        return $this->signaturesFiles->where('file_type', 'documento')->first()
+            ->signaturesFlows->where('type', 'visador');
+    }
+
+
     protected $table = 'doc_signatures';
 
     protected $dates = ['request_date'];

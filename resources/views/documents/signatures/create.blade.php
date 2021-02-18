@@ -15,25 +15,6 @@
 		    <label for="for_request_date">Fecha Documento</label>
 			<input type="date" class="form-control" id="for_request_date" name="request_date" required>
 		</fieldset>
-
-		<fieldset class="form-group col">
-			<label for="for_responsability_center_id">Unidad Organizacional</label>
-		    <select class="form-control selectpicker" data-live-search="true" name="ou_id" required="" data-size="5">
-        		@foreach($organizationalUnits as $key => $organizationalUnit)
-            	<option value="{{$organizationalUnit->id}}">{{$organizationalUnit->name}}</option>
-          		@endforeach
-        	</select>
-		</fieldset>
-
-    	<fieldset class="form-group col">
-			<label for="for_responsable_id">Responsable</label>
-		    <!-- <select name="responsable_id" class="form-control" required> -->
-        	<select class="form-control selectpicker" data-live-search="true" name="responsable_id" required="" data-size="5">
-        		@foreach($users as $key => $user)
-            	<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
-          		@endforeach
-        	</select>
-		</fieldset>
 	</div>
 
 	<div class="form-row">
@@ -51,8 +32,8 @@
 		</fieldset>
 
 		<fieldset class="form-group col">
-		    <label for="for_resolution_matter">Materia o tema del documento</label>
-			<input type="text" class="form-control" id="for_resolution_matter" name="resolution_matter" required>
+		    <label for="for_subject">Materia o tema del documento</label>
+			<input type="text" class="form-control" id="for_subject" name="subject" required>
 		</fieldset>
 
 	</div>
@@ -67,12 +48,12 @@
 	<div class="form-row">
 		<fieldset class="form-group col">
 		    <label for="for_document">Documento a distribuir</label>
-			<input type="file" class="form-control" id="for_document" name="document">
+			<input type="file" class="form-control" id="for_document" name="document" required>
 		</fieldset>
 
 		<fieldset class="form-group col">
 		    <label for="for_annexed">Anexos</label>
-			<input type="file" class="form-control" id="for_annexed" name="annexed">
+			<input type="file" class="form-control" id="for_annexed" name="annexed[]" multiple>
 		</fieldset>
 	</div>
 
