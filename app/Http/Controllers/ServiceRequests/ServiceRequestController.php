@@ -12,6 +12,7 @@ use App\Models\ServiceRequests\SignatureFlow;
 use App\Models\ServiceRequests\ShiftControl;
 use Luecano\NumeroALetras\NumeroALetras;
 use App\Mail\ServiceRequestNotification;
+use App\Mail\DerivationNotification;
 use Illuminate\Support\Facades\Mail;
 use App\Rrhh\OrganizationalUnit;
 use App\Establishment;
@@ -580,8 +581,8 @@ class ServiceRequestController extends Controller
                 'Unidad [código sirh]',
                 '1', //cheque
                 '0', // tipo de banco si el anterior es 0 o 1
-                '0', // cuenta 0 
-                $fila->programm_name, // 3903 (no medico) 3904 (medico)                
+                '0', // cuenta 0
+                $fila->programm_name, // 3903 (no medico) 3904 (medico)
                 '24', // Glosa todos son 24
                 'Profesión [código sirh]',
                 $fila->estate.' [0=médicos,1=odontólogos,...]',
@@ -631,7 +632,13 @@ class ServiceRequestController extends Controller
     }
 
     public function derive(Request $request){
+
       $user_id = Auth::user()->id;
+      $sender_name = Auth::user()->getFullNameAttribute();
+      $receiver_name = User::find($request->derive_user_id)->getFullNameAttribute();
+      $receiver_email = User::find($request->derive_user_id)->email;
+      echo $receiver_email;
+
       $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                            $subQuery->whereNull('status');
                                            $subQuery->where('responsable_id',$user_id);
@@ -656,7 +663,12 @@ class ServiceRequestController extends Controller
         }
       }
 
-      // dd($cant_rechazados);
+      //send emails
+      if ($cont > 0) {
+        if (env('APP_ENV') == 'production') {
+          Mail::to($receiver_email)->send(new DerivationNotification($cont,$sender_name,$receiver_name));
+        }
+      }
 
       session()->flash('info', $cont . ' solicitudes fueron derivadas.');
       return redirect()->route('rrhh.service_requests.index');
