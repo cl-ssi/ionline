@@ -666,10 +666,10 @@ class ServiceRequestController extends Controller
             case "Biotecnólogo Turno": $sirh_profession_id=513 ; break;
             case "Matrona Turno": $sirh_profession_id=1060 ; break;
             case "Matrona Diurno": $sirh_profession_id=1060 ; break;
-            case "Otros técnicos": $sirh_profession_id=1027 ; break;
+            case "Otros técnicos": $sirh_profession_id=530 ; break;
             case "Psicólogo": $sirh_profession_id=1160 ; break;
-            case "Tecn. Médico Diurno": $sirh_profession_id=513 ; break; // pendiente
-            case "Tecn. Médico Turno": $sirh_profession_id=513 ; break;  // pendiente
+            case "Tecn. Médico Diurno": $sirh_profession_id=1316 ; break;
+            case "Tecn. Médico Turno": $sirh_profession_id=1316 ; break;
             case "Trabajador Social": $sirh_profession_id=1020 ; break;
           }
 
