@@ -12,6 +12,7 @@ use App\Models\ServiceRequests\SignatureFlow;
 use App\Models\ServiceRequests\ShiftControl;
 use Luecano\NumeroALetras\NumeroALetras;
 use App\Mail\ServiceRequestNotification;
+use App\Mail\DerivationNotification;
 use Illuminate\Support\Facades\Mail;
 use App\Rrhh\OrganizationalUnit;
 use App\Establishment;
@@ -511,7 +512,7 @@ class ServiceRequestController extends Controller
                                $subQuery->where('status',0);
                              })
                              ->orderBy('request_date','asc')->get();
-                             
+
     $columnas = array(
         'RUN',
         'DV',
@@ -552,7 +553,7 @@ class ServiceRequestController extends Controller
         'Afecto a sistema de turno'
     );
 
-    
+
     // echo '<pre>';
     $callback = function() use ($filas, $columnas)
     {
@@ -584,11 +585,11 @@ class ServiceRequestController extends Controller
             default: $type_of_day = 'P'; break;
           }
           switch($fila->estate) {
-            case 'Administrativo': 
+            case 'Administrativo':
               $function = 'Apoyo Administrativo';
               $function_type = 'N';
               break;
-            default: 
+            default:
               $function = 'Apoyo Clínico';
               $function_type = 'S';
               break;
@@ -677,6 +678,10 @@ class ServiceRequestController extends Controller
             case "Trabajador Social": $sirh_profession_id=1020 ; break;
           }
 
+
+
+
+
           $data = array(
             $run,
             $dv,
@@ -685,7 +690,7 @@ class ServiceRequestController extends Controller
             $fila->end_date->format('d/m/Y'),
             $sirh_estab_code,
             'S',
-            $por_prestacion, // Casi seguro que es S (ou yes)
+            $por_prestacion,
             $fila->gross_amount,
             $cuotas, // calculado entre fecha de contratos
             'S',
@@ -696,8 +701,8 @@ class ServiceRequestController extends Controller
             $sirh_ou_id,
             '1', // cheque
             '0', // tipo de banco 0 o 1
-            '0', // cuenta 0 
-            $sirh_program_code, // 3903 (no medico) 3904 (medico)                
+            '0', // cuenta 0
+            $sirh_program_code, // 3903 (no medico) 3904 (medico)
             '24', // Glosa todos son 24
             $sirh_profession_id,
             $planta,
@@ -749,7 +754,13 @@ class ServiceRequestController extends Controller
     }
 
     public function derive(Request $request){
+
       $user_id = Auth::user()->id;
+      $sender_name = Auth::user()->getFullNameAttribute();
+      $receiver_name = User::find($request->derive_user_id)->getFullNameAttribute();
+      $receiver_email = User::find($request->derive_user_id)->email;
+      echo $receiver_email;
+
       $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                            $subQuery->whereNull('status');
                                            $subQuery->where('responsable_id',$user_id);
@@ -774,7 +785,12 @@ class ServiceRequestController extends Controller
         }
       }
 
-      // dd($cant_rechazados);
+      //send emails
+      if ($cont > 0) {
+        if (env('APP_ENV') == 'production') {
+          Mail::to($receiver_email)->send(new DerivationNotification($cont,$sender_name,$receiver_name));
+        }
+      }
 
       session()->flash('info', $cont . ' solicitudes fueron derivadas.');
       return redirect()->route('rrhh.service_requests.index');
