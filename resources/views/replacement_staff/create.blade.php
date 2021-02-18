@@ -6,94 +6,136 @@
 
 @include('replacement_staff.nav')
 
-<h3 class="mb-3">Nuevo Staff</h3>
+<h5>Ingreso de nuevo staff</h5>
 
+<br>
 
-<form method="POST" class="form-horizontal" action="">
+<form method="POST" class="form-horizontal" action="{{ route('replacement_staff.store') }}">
     @csrf
     @method('POST')
-
     <div class="form-row">
-            <legend>ANTECEDENTES PERSONALES:</legend>
-            <fieldset class="form-group col">
-                <label for="for_name">RUT</label>
-                <input type="text" class="form-control" name="name" id="for_name" readonly value="desde clave única">
-            </fieldset>
-
-            <fieldset class="form-group col">
-                <label for="for_name">Nombre Completo</label>
-                <input type="text" class="form-control" name="name" id="for_name" readonly value="desde clave única">
-            </fieldset>
-            <fieldset class="form-group col">
-                <label for="for_email">Correo Electrónico</label>
-                <input type="text" class="form-control" name="email" id="for_email" required value="desde clave única">
-            </fieldset>
-            <fieldset class="form-group col">
-                <label for="for_telephone">Teléfono</label>
-                <input type="text" class="form-control" name="telephone" id="for_telephone" required placeholder="">
-            </fieldset>
-
-
-
-    </div>
-    <div class="form-row">
-        <fieldset class="form-group col">
-            <label for="for_title">Título</label>
-            <input type="text" class="form-control" name="title" id="for_title" required>
+        <fieldset class="form-group col-sm-2">
+            <label for="for_run">RUT</label>
+            <input type="text" class="form-control" name="run" id="for_run">
+        </fieldset>
+        <fieldset class="form-group col-sm-1">
+            <label for="for_dv">DV</label>
+            <input type="text" class="form-control" name="dv" id="for_dv">
         </fieldset>
 
+        <fieldset class="form-group col-sm-3">
+            <label for="for_birthday">Fecha Nacimiento</label>
+            <input type="date" class="form-control" id="for_birthday" min="1900-01-01" max="{{Carbon\Carbon::now()->toDateString()}}"
+                name="birthday" required>
+        </fieldset>
+    </div>
+
+    <div class="form-row">
+        <fieldset class="form-group col-3">
+            <label for="for_name">Nombres</label>
+            <input type="text" class="form-control" name="name" id="for_name">
+        </fieldset>
+        <fieldset class="form-group col-3">
+            <label for="for_name">Apellido Paterno</label>
+            <input type="text" class="form-control" name="fathers_family" id="for_fathers_family">
+        </fieldset>
+        <fieldset class="form-group col-3">
+            <label for="for_name">Apellido Materno</label>
+            <input type="text" class="form-control" name="mothers_family" id="for_mothers_family">
+        </fieldset>
+        <fieldset class="form-group col-3">
+            <label for="for_gender" >Género</label>
+            <select name="gender" id="for_gender" class="form-control selectpicker" title="Seleccione...">
+                <option value="male">Masculino</option>
+                <option value="female">Femenino</option>
+                <option value="other">Otro</option>
+                <option value="unknown">Desconocido</option>
+            </select>
+        </fieldset>
+    </div>
+
+    <div class="form-row">
+        <fieldset class="form-group col-6">
+            <label for="for_email">Correo Electrónico</label>
+            <input type="text" class="form-control" name="email" id="for_email">
+        </fieldset>
+        <fieldset class="form-group col-3">
+            <label for="for_telephone">Teléfono Movil</label>
+            <input type="text" class="form-control" name="telephone" id="for_telephone"  placeholder="+569xxxxxxxx">
+        </fieldset>
+        <fieldset class="form-group col-3">
+            <label for="for_telephone2">Teléfono Fijo</label>
+            <input type="text" class="form-control" name="telephone2" id="for_telephone2"  placeholder="572xxxxxx">
+        </fieldset>
+    </div>
+
+    <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_commune_id">Comuna</label>
-            <select name="commune_id" id="for_commune_id" class="form-control">
-                <option value="">Iquique</option>
-                <option value="">Colchane</option>
+            <select name="commune" id="for_commune" class="form-control selectpicker" title="Seleccione...">
+                <option value="camina">Camiña</option>
+                <option value="colchane">Colchane</option>
+                <option value="huara">Huara</option>
+                <option value="iquique">Iquique</option>
+                <option value="pica">Pica</option>
+                <option value="pozo almonte">Pozo Almonte</option>
             </select>
         </fieldset>
 
         <fieldset class="form-group col">
-            <label for="for_reference">Dirección</label>
-            <input type="text" class="form-control" name="direccion" id="for_direccion" required placeholder="">
+            <label for="for_address">Dirección</label>
+            <input type="text" class="form-control" name="address" id="for_address"  placeholder="">
         </fieldset>
     </div>
 
-    <div class="form-row">
-        <fieldset class="form-group col">
+    <button type="submit" class="btn btn-primary float-right">Guardar</button>
+
+</form>
+
+
+    <!-- <div class="form-row">
+        <div class="form-group col mt">
             <label for="for_profession">Profesión</label>
-            <select name="profession" id="for_profession" class="form-control">
+            <select name="profession" id="for_profession" class="form-control selectpicker">
                 <option value="Enfermera">Enfermera</option>
-                <option value="">Informática</option>
+                <option value="Informatica">Informática</option>
             </select>
-        </fieldset>
+        </div>
 
-        <fieldset class="form-group col">
-            <label for="for_profession">Adjuntar Título Profesional*</label>
-            <input type="file" class="form-control" name="direccion" id="for_direccion" required placeholder="">
-        </fieldset>
-    </div>
+        <div class="form-group col mt">
+            <label for="for_profession"><br></label>
+            <div class="form-group custom-file col mt">
+                <input type="file" class="custom-file-input"  name="file" required>
+                <label class="custom-file-label" for="customFile">Seleccione el archivo</label>
+            </div>
+        </div>
+    </div> -->
 
+    <!-- <hr>
 
+    <h5>Experiencia </h5>
 
-    <hr>
-    <legend>EXPERIENCIA:<i class="fas fa-plus"></i></legend>
+    <br>
+
     <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_experiencias_anteriores">Experiencias Anteriores (2*)</label>
-            <input type="text" class="form-control" name="experiencias_anteriores" id="for_experiencias_anteriores" required placeholder="">
+            <input type="text" class="form-control" name="experiencias_anteriores" id="for_experiencias_anteriores" placeholder="">
         </fieldset>
 
         <fieldset class="form-group col">
             <label for="for_funciones_realizada">Funciones Realizadas</label>
-            <input type="text" class="form-control" name="funciones_realizada" id="for_funciones_realizada" required placeholder="">
+            <input type="text" class="form-control" name="funciones_realizada" id="for_funciones_realizada" placeholder="">
         </fieldset>
 
         <fieldset class="form-group col">
             <label for="for_funciones_realizada">Referencia</label>
-            <input type="text" class="form-control" name="referencia" id="for_funciones_realizada" required placeholder="">
+            <input type="text" class="form-control" name="referencia" id="for_funciones_realizada" placeholder="">
         </fieldset>
 
         <fieldset class="form-group col">
             <label for="for_profession">Certificado de Experiencia Laboral</label>
-            <input type="file" class="form-control" name="direccion" id="for_direccion" required placeholder="">
+            <input type="file" class="form-control" name="direccion" id="for_direccion" placeholder="">
         </fieldset>
     </div>
 
@@ -102,12 +144,12 @@
     <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_experiencias_anteriores">Nombre Capacitación</label>
-            <input type="text" class="form-control" name="experiencias_anteriores" id="for_experiencias_anteriores" required placeholder="">
+            <input type="text" class="form-control" name="experiencias_anteriores" id="for_experiencias_anteriores" placeholder="">
         </fieldset>
 
         <fieldset class="form-group col">
             <label for="for_funciones_realizada">Número de horas</label>
-            <input type="text" class="form-control" name="funciones_realizada" id="for_funciones_realizada" required placeholder="">
+            <input type="text" class="form-control" name="funciones_realizada" id="for_funciones_realizada" placeholder="">
         </fieldset>
 
         <fieldset class="form-group col">
@@ -120,8 +162,8 @@
     <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_experiencias_anteriores">Otra Observación</label>
-            <textarea class="form-control"></textarea>            
-        </fieldset>        
+            <textarea class="form-control"></textarea>
+        </fieldset>
     </div>
 
     <fieldset class="form-group col">
@@ -130,18 +172,24 @@
                 <option value=""></option>
                 <option value="">Inglés</option>
                 <option value="">Frances</option>
-                <option value="">Aleman</option>                
+                <option value="">Aleman</option>
             </select>
-        </fieldset>
-
-
-
-    <button type="submit" class="btn btn-primary">Guardar</button>
-
-</form>
+        </fieldset> -->
 
 @endsection
 
 @section('custom_js')
+
+<link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap-select.min.css') }}">
+
+<script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
+
+<script>
+  // Add the following code if you want the name of the file appear on select
+  $(".custom-file-input").on("change", function() {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  });
+</script>
 
 @endsection

@@ -6,10 +6,12 @@
 
 @include('replacement_staff.nav')
 
-<h3 class="mb-3">Listado de STAFF</h3>
+<h5>Staff</h5>
+
+<br>
 
 
-<table class="table table-sm table-bordered small text-uppercase" style="width:50%;">
+<!-- <table class="table table-sm table-bordered small text-uppercase" style="width:50%;">
     <tbody>
         <tr>
             <td>Filtro Profesiones:</td>
@@ -35,10 +37,10 @@
             </td>
         </tr>
     </tbody>
-</table>
+</table> -->
 
 
-<table class="table">
+<table class="table small">
     <thead>
         <tr>
             <th>Nombre Completo</th>
@@ -50,36 +52,24 @@
         </tr>
     </thead>
     <tbody>
+        @foreach($replacementStaff as $staff)
         <tr>
-            <td>Nombre ApellidoP ApellidM</td>
-            <td>12346578-9</td>
-            <td>Enfermera</td>
-            <td>Teléfono</td>
-            <td>Disponible</td>
+            <td>{{ $staff->FullName }}</td>
+            <td>{{ $staff->Identifier }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td>
-                <button type="submit" class="btn btn-sm btn-outline-secondary">
-                    <i class="fas fa-edit"></i>
-                </button>
+                <a href="{{ route('replacement_staff.edit', $staff) }}" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i></a>
             </td>
         </tr>
-        <tr>
-            <td>Nombre ApellidoP ApellidM</td>
-            <td>12346578-9</td>
-            <td>Informático</td>
-            <td>Teléfono</td>
-            <td>Trabajando</td>
-            <td>
-                <button type="submit" class="btn btn-sm btn-outline-secondary">
-                    <i class="fas fa-edit"></i>
-                </button>
-            </td>
-        </tr>
+        @endforeach
     </tbody>
 
 </table>
 
+{{ $replacementStaff->links() }}
 
-    paginar ->
 @endsection
 
 @section('custom_js')
