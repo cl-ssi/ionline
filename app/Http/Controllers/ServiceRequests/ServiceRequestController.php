@@ -514,7 +514,6 @@ class ServiceRequestController extends Controller
                              ->orderBy('request_date','asc')->get();
 
     $columnas = array(
-        '',
         'RUN',
         'DV',
         'N° cargo',
@@ -551,8 +550,7 @@ class ServiceRequestController extends Controller
         'Código por objetivo',
         'Función dotación',
         'Tipo de función',
-        'Afecto a sistema de turno',
-        ''
+        'Afecto a sistema de turno'
     );
 
 
@@ -560,8 +558,8 @@ class ServiceRequestController extends Controller
     $callback = function() use ($filas, $columnas)
     {
         $file = fopen('php://output', 'w');
-        fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
-        fputcsv($file, $columnas,'|');
+        fwrite($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+        fputcsv($file, $columnas,'|', ' ');
         foreach($filas as $fila) {
           list($run,$dv) = explode('-',$fila->rut);
           $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
@@ -686,7 +684,6 @@ class ServiceRequestController extends Controller
 
 
           $data = array(
-            '',
             $run,
             $dv,
             '5', // N° cargo siempre es 5 honorario
@@ -713,9 +710,9 @@ class ServiceRequestController extends Controller
             '0', // Todas son excentas = 0
             $fila->resolution_number,
             optional($fila->resolution_date)->format('d/m/Y'),
-            $fila->digera_strategy,
+            substr($fila->digera_strategy,0,99), // maximo 100 
             $function,
-            preg_replace( "/\r|\n/", " ", $fila->service_description ),
+            preg_replace( "/\r|\n/", " ", substr($fila->service_description,0,254)), // max 255
             'A',
             $type_of_day, // calcular en base a las horas semanales y tipo de contratacion
             'N',
@@ -723,11 +720,10 @@ class ServiceRequestController extends Controller
             '2103001', // único para honorarios
             'N',
             $function_type, // Apoyo asistenciasl S o N
-            $turno_afecto, // working_day_type Diurno = S, el resto N
-            ''
+            $turno_afecto // working_day_type Diurno = S, el resto N
           );
           //print_r($data);
-          fputcsv($file, $data,'|');
+          fputs($file, implode('|',$data)."\n");
         }
         fclose($file);
     };
