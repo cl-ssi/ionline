@@ -521,6 +521,9 @@ class ServiceRequestController extends Controller
         fwrite($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
         fputcsv($file, $columnas,'|', ' ');
         foreach($filas as $fila) {
+          if(!$fila->resolution_number or !$fila->resolution_date) {
+
+
           list($run,$dv) = explode('-',$fila->rut);
           $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
 
@@ -749,8 +752,8 @@ class ServiceRequestController extends Controller
             $sirh_profession_id,
             $planta,
             '0', // Todas son excentas = 0
-            $fila->resolution_number,
-            optional($fila->resolution_date)->format('d/m/Y'),
+            ($fila->resolution_number) ? $fila->resolution_number : 1,
+            ($fila->resolution_date) ? $fila->resolution_date->format('d/m/Y') : '15/02/2021',
             substr($fila->digera_strategy,0,99), // maximo 100 
             $sirh_function_id,
             preg_replace( "/\r|\n/", " ", substr($fila->service_description,0,254)), // max 255
@@ -765,6 +768,9 @@ class ServiceRequestController extends Controller
           );
           //print_r($data);
           fputs($file, implode('|',$data)."\n");
+
+
+          } // if de sólo sin numero de resolucion
         }
         fclose($file);
     };
