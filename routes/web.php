@@ -15,6 +15,10 @@ use App\Http\Controllers\RequestForms\RequestFormFileController;
 use App\Http\Controllers\RequestForms\RequestFormCodeController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
+use App\Http\Controllers\ReplacementStaff\ProfileController;
+use App\Http\Controllers\ReplacementStaff\ExperienceController;
+use App\Http\Controllers\ReplacementStaff\TrainingController;
+use App\Http\Controllers\ReplacementStaff\LanguageController;
 use App\Http\Controllers\VaccinationController;
 
 /*
@@ -59,13 +63,28 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
     Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
     Route::post('/store', [ReplacementStaffController::class, 'store'])->name('store');
     Route::get('/{replacement_staff}/edit', [ReplacementStaffController::class, 'edit'])->name('edit');
+    Route::prefix('profile')->name('profile.')->group(function(){
+        Route::post('/{replacementStaff}/store', [ProfileController::class, 'store'])->name('store');
+        // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
+    });
+    Route::prefix('experience')->name('experience.')->group(function(){
+        Route::post('/{replacementStaff}/store', [ExperienceController::class, 'store'])->name('store');
+        // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
+    });
+    Route::prefix('training')->name('training.')->group(function(){
+        Route::post('/{replacementStaff}/store', [TrainingController::class, 'store'])->name('store');
+        // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
+    });
+    Route::prefix('language')->name('language.')->group(function(){
+        Route::post('/{replacementStaff}/store', [languageController::class, 'store'])->name('store');
+        // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
+    });
     Route::prefix('request')->name('request.')->group(function(){
         Route::get('/', [ReplacementStaffController::class, 'requestIndex'])->name('index');
         Route::get('/create', [ReplacementStaffController::class, 'requestCreate'])->name('create');
         Route::get('/own', [ReplacementStaffController::class, 'requestOwn'])->name('own');
         Route::get('/edit', [ReplacementStaffController::class, 'requestEdit'])->name('edit');
     });
-
 });
 
 
