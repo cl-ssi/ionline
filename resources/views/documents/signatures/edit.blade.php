@@ -57,7 +57,7 @@
         <div class="form-row">
             <fieldset class="form-group col">
                 <label for="for_document">Documento a distribuir</label>
-                <input type="file" class="form-control" id="for_document" name="document" >
+                <input type="file" class="form-control" id="for_document" name="document">
 
                 {{--                <a href="{{ route('lab.suspect_cases.download', $suspectCase->id) }}"--}}
                 <a href="{{route('documents.showPdfDocumento', $signature)}}"
@@ -106,10 +106,15 @@
 
         </div>
 
-        <button type="submit" class="btn btn-primary">Guardar</button>
+        <button type="submit" class="btn btn-primary" @if($signature->signaturesFlows->where('status', 1)->count() > 0) disabled @endif >Guardar</button>
+        <button type="submit" class="btn btn-danger float-right" form="delete_form">Eliminar</button>
 
     </form>
 
+    <form method="POST" id="delete_form" action="{{route('documents.signatures.destroy', $signature)}}" enctype="multipart/form-data">
+        @csrf
+        @method('DELETE')
+    </form>
 @endsection
 
 @section('custom_js')
