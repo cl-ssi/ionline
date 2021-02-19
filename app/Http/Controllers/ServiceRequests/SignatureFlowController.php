@@ -79,9 +79,14 @@ class SignatureFlowController extends Controller
           $SignatureFlow->save();
 
           // send emails (next flow position)
-          if (env('APP_ENV') == 'production') {
-            $email = $serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user->email;
-            Mail::to($email)->send(new ServiceRequestNotification($serviceRequest));
+          try {
+            if (env('APP_ENV') == 'production') {
+              $email = $serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user->email;
+              Mail::to($email)->send(new ServiceRequestNotification($serviceRequest));
+            }
+          } catch (\Exception $e) {
+            session()->flash('success', 'Se ha registrado la visación (No se envió correo electrónico: ' . $e->getMessage() .').');
+            return redirect()->route('rrhh.service_requests.index');
           }
        }
       }
