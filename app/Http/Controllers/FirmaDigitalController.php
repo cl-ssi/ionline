@@ -19,6 +19,10 @@ use GuzzleHttp\Exception\ConnectException;
 
 class FirmaDigitalController extends Controller
 {
+    const modoDesatendidoTest = 0;
+    const modoAtendidoTest = 1;
+    const modoAtendidoProduccion = 2;
+
     /**
      * Create a new controller instance.
      *
@@ -34,14 +38,11 @@ class FirmaDigitalController extends Controller
         //header("Content-Type: image/png; charset=UTF-8");
 
         /* Setear Variables */
-        $testing        = true; /* Si es true se usará un run o otp de prueba */
-        $run            = 15287582;
-//        $otp            = $request->otp;
-        $otp            = '040133';
+        $modo           = self::modoAtendidoTest; /* Si es test se usará un run o otp de prueba */
+        $otp            = '';
         $tipo           = 'principal'; /* 'vb', 'principal' */
         $ct_firmas      = 4; /* Sólo para tipo "vb" */
         $pocision_firma = 1; /* Sólo para tipo "vb" */
-//        $pdf            = 'samples/sample.pdf';
         /* Fin seteo de variable */
 
         $pdfbase64      = $signaturesFlow->signaturesFile->file;
@@ -75,13 +76,6 @@ class FirmaDigitalController extends Controller
          * cn=Autoridad Certificadora del Estado de Chile
          */
 
-//        imagettftext($im, $fontSize,   0, $xAxis, $yPading * 1 + $marginTop,
-//            $text_color, $font_light,  'Firmado digitalmente el 2020-12-21 16:21 por:');
-//        imagettftext($im, $fontSize+1, 0, $xAxis, $yPading * 2 + $marginTop + 2,
-//            $text_color, $font_bold,   'Jorge Patricio Galleguillos Möller');
-//        imagettftext($im, $fontSize,   0, $xAxis, $yPading * 3 + $marginTop + 3,
-//            $text_color, $font_regular,'email = director.ssi@redsalud.gob.cl');
-
         imagettftext($im, $fontSize,   0, $xAxis, $yPading * 1 + $marginTop,
             $text_color, $font_light,  'Firmado digitalmente el 2020-12-21 16:21 por:');
         imagettftext($im, $fontSize+1, 0, $xAxis, $yPading * 2 + $marginTop + 2,
@@ -112,31 +106,40 @@ class FirmaDigitalController extends Controller
 
         /* Fin cuadro de firma */
 
-
-
-
-        if($testing) {
+        if($modo = self::modoDesatendidoTest) {
             $url = 'https://api.firma.test.digital.gob.cl/firma/v2/files/tickets';
             $api_token = 'sandbox';
             $secret = 'abcd';
 
             $run = 22222222;  // $run = 22222222;
-            $otp = 227083;
+//            $otp = 227083;
 
             $purpose = 'Desatendido'; // $purpose = 'Propósito General';
             $entity = 'Subsecretaría General de La Presidencia';
 
             /* $pdfbase64 = base64_encode(file_get_contents(public_path('samples/sample3.pdf'))); */
         }
-        else {
+        elseif ($modo = self::modoAtendidoTest) {
+            $url = 'https://api.firma.test.digital.gob.cl/firma/v2/files/tickets';
+            $api_token = 'sandbox';
+            $secret = 'abcd';
+            $run = 11111111;
+            $otp  = $request->otp;
+
+            $purpose = 'Propósito General';
+            $entity = 'Subsecretaría General de La Presidencia';
+        } elseif ($modo = self::modoAtendidoProduccion) {
             $url = 'https://api.firma.digital.gob.cl/firma/v2/files/tickets';
             $api_token = env('FIRMA_API_TOKEN');
             $secret = env('FIRMA_SECRET');
+            $otp  = $request->otp;
 
             $purpose = 'Propósito General';
             $entity = 'Servicio de Salud Iquique';
+        }else{
+            session()->flash('warning', 'Modo de firma no seleccionado');
+            return redirect()->route('documents.signatures.index', ['pendientes']);
         }
-
 
         /* Confección firma en JWT */
         $payload = [
@@ -201,7 +204,11 @@ class FirmaDigitalController extends Controller
         // <ury> Coordenada y de la esquina superior derecha de la imagen.
 
         try {
-            $response = Http::withHeaders(['otp' => $otp ])->post($url, $data);
+            if ($modo = self::modoAtendidoTest or $modo = self::modoAtendidoProduccion) {
+                $response = Http::withHeaders(['otp' => $otp])->post($url, $data);
+            }else{
+                $response = Http::post($url, $data);
+            }
         } catch (\GuzzleHttp\Exception\ConnectException $e) {
             var_dump($e);exit();
         }
@@ -213,35 +220,32 @@ class FirmaDigitalController extends Controller
         }
         $json = $response->json();
 
-////        print_r($data);
+        if (array_key_exists('error', $json)) {
+            session()->flash('warning', $json['error']);
+            return redirect()->route('documents.signatures.index', ['pendientes']);
+        }
+
+        if (!array_key_exists('content', $json['files'][0])) {
+            session()->flash('warning', $json['files'][0]['status']);
+            return redirect()->route('documents.signatures.index', ['pendientes']);
+        }
+
 ////        print_r($json);
 ////        dd(json_encode($data, JSON_PRETTY_PRINT));
-////        dd(json_encode($json, JSON_PRETTY_PRINT));
 
 ////        $data = base64_decode($json['files'][0]['content']);
-//        $data = $json['files'][0]['content'];
-////        header('Content-Type: application/pdf');
-////        echo $data;
+        $data = $json['files'][0]['content'];
 
         $signaturesFlow->status = 1;
         $signaturesFlow->signature_date = now();
         $signaturesFlow->save();
 
-//        $signaturesFlow->signaturesFile->signed_file = $data;
-        $signaturesFlow->signaturesFile->signed_file = $signaturesFlow->signaturesFile->file;
+        $signaturesFlow->signaturesFile->signed_file = $data;
+//        $signaturesFlow->signaturesFile->signed_file = $signaturesFlow->signaturesFile->file;
         $signaturesFlow->signaturesFile->save();
 
-        session()->flash('info', 'El documento se ha firmado correctamente.');
+        session()->flash('info', "El documento $signaturesFlow->signature->id se ha firmado correctamente.");
         return redirect()->route('documents.signatures.index', ['pendientes']);
     }
 
-    /*
-    $pdfbase64 = 'JVBERi0xLjMNCiXi48/TDQoNCjEgMCBvYmoNCjw8DQovVHlwZSAvQ2F0YWxvZw0KL091dGxpbmVzIDIgMCBSDQovUGFnZXMgMyAwIFINCj4+DQplbmRvYmoNCg0KMiAwIG9iag0KPDwNCi9UeXBlIC9PdXRsaW5lcw0KL0NvdW50IDANCj4+DQplbmRvYmoNCg0KMyAwIG9iag0KPDwNCi9UeXBlIC9QYWdlcw0KL0NvdW50IDINCi9LaWRzIFsgNCAwIFIgNiAwIFIgXSANCj4+DQplbmRvYmoNCg0KNCAwIG9iag0KPDwNCi9UeXBlIC9QYWdlDQovUGFyZW50IDMgMCBSDQovUmVzb3VyY2VzIDw8DQovRm9udCA8PA0KL0YxIDkgMCBSIA0KPj4NCi9Qcm9jU2V0IDggMCBSDQo+Pg0KL01lZGlhQm94IFswIDAgNjEyLjAwMDAgNzkyLjAwMDBdDQovQ29udGVudHMgNSAwIFINCj4+DQplbmRvYmoNCg0KNSAwIG9iag0KPDwgL0xlbmd0aCAxMDc0ID4+DQpzdHJlYW0NCjIgSg0KQlQNCjAgMCAwIHJnDQovRjEgMDAyNyBUZg0KNTcuMzc1MCA3MjIuMjgwMCBUZA0KKCBBIFNpbXBsZSBQREYgRmlsZSApIFRqDQpFVA0KQlQNCi9GMSAwMDEwIFRmDQo2OS4yNTAwIDY4OC42MDgwIFRkDQooIFRoaXMgaXMgYSBzbWFsbCBkZW1vbnN0cmF0aW9uIC5wZGYgZmlsZSAtICkgVGoNCkVUDQpCVA0KL0YxIDAwMTAgVGYNCjY5LjI1MDAgNjY0LjcwNDAgVGQNCigganVzdCBmb3IgdXNlIGluIHRoZSBWaXJ0dWFsIE1lY2hhbmljcyB0dXRvcmlhbHMuIE1vcmUgdGV4dC4gQW5kIG1vcmUgKSBUag0KRVQNCkJUDQovRjEgMDAxMCBUZg0KNjkuMjUwMCA2NTIuNzUyMCBUZA0KKCB0ZXh0LiBBbmQgbW9yZSB0ZXh0LiBBbmQgbW9yZSB0ZXh0LiBBbmQgbW9yZSB0ZXh0LiApIFRqDQpFVA0KQlQNCi9GMSAwMDEwIFRmDQo2OS4yNTAwIDYyOC44NDgwIFRkDQooIEFuZCBtb3JlIHRleHQuIEFuZCBtb3JlIHRleHQuIEFuZCBtb3JlIHRleHQuIEFuZCBtb3JlIHRleHQuIEFuZCBtb3JlICkgVGoNCkVUDQpCVA0KL0YxIDAwMTAgVGYNCjY5LjI1MDAgNjE2Ljg5NjAgVGQNCiggdGV4dC4gQW5kIG1vcmUgdGV4dC4gQm9yaW5nLCB6enp6ei4gQW5kIG1vcmUgdGV4dC4gQW5kIG1vcmUgdGV4dC4gQW5kICkgVGoNCkVUDQpCVA0KL0YxIDAwMTAgVGYNCjY5LjI1MDAgNjA0Ljk0NDAgVGQNCiggbW9yZSB0ZXh0LiBBbmQgbW9yZSB0ZXh0LiBBbmQgbW9yZSB0ZXh0LiBBbmQgbW9yZSB0ZXh0LiBBbmQgbW9yZSB0ZXh0LiApIFRqDQpFVA0KQlQNCi9GMSAwMDEwIFRmDQo2OS4yNTAwIDU5Mi45OTIwIFRkDQooIEFuZCBtb3JlIHRleHQuIEFuZCBtb3JlIHRleHQuICkgVGoNCkVUDQpCVA0KL0YxIDAwMTAgVGYNCjY5LjI1MDAgNTY5LjA4ODAgVGQNCiggQW5kIG1vcmUgdGV4dC4gQW5kIG1vcmUgdGV4dC4gQW5kIG1vcmUgdGV4dC4gQW5kIG1vcmUgdGV4dC4gQW5kIG1vcmUgKSBUag0KRVQNCkJUDQovRjEgMDAxMCBUZg0KNjkuMjUwMCA1NTcuMTM2MCBUZA0KKCB0ZXh0LiBBbmQgbW9yZSB0ZXh0LiBBbmQgbW9yZSB0ZXh0LiBFdmVuIG1vcmUuIENvbnRpbnVlZCBvbiBwYWdlIDIgLi4uKSBUag0KRVQNCmVuZHN0cmVhbQ0KZW5kb2JqDQoNCjYgMCBvYmoNCjw8DQovVHlwZSAvUGFnZQ0KL1BhcmVudCAzIDAgUg0KL1Jlc291cmNlcyA8PA0KL0ZvbnQgPDwNCi9GMSA5IDAgUiANCj4+DQovUHJvY1NldCA4IDAgUg0KPj4NCi9NZWRpYUJveCBbMCAwIDYxMi4wMDAwIDc5Mi4wMDAwXQ0KL0NvbnRlbnRzIDcgMCBSDQo+Pg0KZW5kb2JqDQoNCjcgMCBvYmoNCjw8IC9MZW5ndGggNjc2ID4+DQpzdHJlYW0NCjIgSg0KQlQNCjAgMCAwIHJnDQovRjEgMDAyNyBUZg0KNTcuMzc1MCA3MjIuMjgwMCBUZA0KKCBTaW1wbGUgUERGIEZpbGUgMiApIFRqDQpFVA0KQlQNCi9GMSAwMDEwIFRmDQo2OS4yNTAwIDY4OC42MDgwIFRkDQooIC4uLmNvbnRpbnVlZCBmcm9tIHBhZ2UgMS4gWWV0IG1vcmUgdGV4dC4gQW5kIG1vcmUgdGV4dC4gQW5kIG1vcmUgdGV4dC4gKSBUag0KRVQNCkJUDQovRjEgMDAxMCBUZg0KNjkuMjUwMCA2NzYuNjU2MCBUZA0KKCBBbmQgbW9yZSB0ZXh0LiBBbmQgbW9yZSB0ZXh0LiBBbmQgbW9yZSB0ZXh0LiBBbmQgbW9yZSB0ZXh0LiBBbmQgbW9yZSApIFRqDQpFVA0KQlQNCi9GMSAwMDEwIFRmDQo2OS4yNTAwIDY2NC43MDQwIFRkDQooIHRleHQuIE9oLCBob3cgYm9yaW5nIHR5cGluZyB0aGlzIHN0dWZmLiBCdXQgbm90IGFzIGJvcmluZyBhcyB3YXRjaGluZyApIFRqDQpFVA0KQlQNCi9GMSAwMDEwIFRmDQo2OS4yNTAwIDY1Mi43NTIwIFRkDQooIHBhaW50IGRyeS4gQW5kIG1vcmUgdGV4dC4gQW5kIG1vcmUgdGV4dC4gQW5kIG1vcmUgdGV4dC4gQW5kIG1vcmUgdGV4dC4gKSBUag0KRVQNCkJUDQovRjEgMDAxMCBUZg0KNjkuMjUwMCA2NDAuODAwMCBUZA0KKCBCb3JpbmcuICBNb3JlLCBhIGxpdHRsZSBtb3JlIHRleHQuIFRoZSBlbmQsIGFuZCBqdXN0IGFzIHdlbGwuICkgVGoNCkVUDQplbmRzdHJlYW0NCmVuZG9iag0KDQo4IDAgb2JqDQpbL1BERiAvVGV4dF0NCmVuZG9iag0KDQo5IDAgb2JqDQo8PA0KL1R5cGUgL0ZvbnQNCi9TdWJ0eXBlIC9UeXBlMQ0KL05hbWUgL0YxDQovQmFzZUZvbnQgL0hlbHZldGljYQ0KL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcNCj4+DQplbmRvYmoNCg0KMTAgMCBvYmoNCjw8DQovQ3JlYXRvciAoUmF2ZSBcKGh0dHA6Ly93d3cubmV2cm9uYS5jb20vcmF2ZVwpKQ0KL1Byb2R1Y2VyIChOZXZyb25hIERlc2lnbnMpDQovQ3JlYXRpb25EYXRlIChEOjIwMDYwMzAxMDcyODI2KQ0KPj4NCmVuZG9iag0KDQp4cmVmDQowIDExDQowMDAwMDAwMDAwIDY1NTM1IGYNCjAwMDAwMDAwMTkgMDAwMDAgbg0KMDAwMDAwMDA5MyAwMDAwMCBuDQowMDAwMDAwMTQ3IDAwMDAwIG4NCjAwMDAwMDAyMjIgMDAwMDAgbg0KMDAwMDAwMDM5MCAwMDAwMCBuDQowMDAwMDAxNTIyIDAwMDAwIG4NCjAwMDAwMDE2OTAgMDAwMDAgbg0KMDAwMDAwMjQyMyAwMDAwMCBuDQowMDAwMDAyNDU2IDAwMDAwIG4NCjAwMDAwMDI1NzQgMDAwMDAgbg0KDQp0cmFpbGVyDQo8PA0KL1NpemUgMTENCi9Sb290IDEgMCBSDQovSW5mbyAxMCAwIFINCj4+DQoNCnN0YXJ0eHJlZg0KMjcxNA0KJSVFT0YNCg==';
-    */
-
-    //$firma = base64_encode($image);
-
-    /*
-    $firma = 'iVBORw0KGgoAAAANSUhEUgAAAK8AAACvCAYAAACLko51AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsSAAALEgHS3X78AAADw0lEQVR42u3dW64bIRAFQCfK/rec/EaWI5GeBvrcW/XvMYyPEJjX6wUAAAAAAAAAAAAAAAAM96P5eb9vV+gfdaqWa+VZq99Xfde7n3VaW+Z+3q4JVAkvsYSXWMJLrF8HvqN7UPi3GwOQlfp01rk6AF0tQ+zvo+UllvASS3iJdaLP++5JP6irf7baj1yZIFidRKg+6/S7mVCGJVpeYgkvsYSXWMJLrBsDtgmeDLKqn9u9Qm3lWV+KlpdYwkss4SWW8BLruwzYqoOXlc+tzkjtXgH35Qdo77S8xBJeYgkvsYSXWDcGbDcGFtXZp85B1u4ZvJXPVcs5kpaXWMJLLOEl1ok+74Tzsarl7FwJdrpcT54fQctLLOEllvASS3iJFfOHdLMnBzbv3LrzWvwcLy0vwYSXWMJLLOEl1o3bgHav6OqsU+fheNUtRbsHeqdnDN0GBMJLLOEl1o0LVTr7iJ+c3v3Q2Yd/0h/s2qbfeePmVlpeYgkvsYSXWMJLrBMd8Z2TDbsHF6e3yDwp+8SB5NbfR8tLLOEllvASS3iJNeHcsCnlrc78dQ5Kbrybzm1NXZ9bouUllvASS3iJJbzESr8NaPfVprsPtFspx+5tOZ3v4egfAFpeYgkvsYSXWJMnKU4f7Dx1YmHCJIg+L3QSXmIJL7GEl1hp24Am/Dk/4T2sPH/CWQtWlcEnwkss4SWW8BJrygzb7nJMOIx592xgtY62AcFpwkss4SWW8BJr8m1A1e/bfZp5ym1A1TKslqvz+SVaXmIJL7GEl1gTVh69Xvv7rivf98np24BWdd380/l9x2l5iSW8xBJeYgkvsb7LJEVX2bslX21brY9VZSC8xBJeYgkvsdIOl544u7V7W1N1W87IlWCdtLzEEl5iCS+xhJdYk89tOL3V5Un5q/WpDv6mHjh4dIZVy0ss4SWW8BIr9g/q/3T6PK6qJ7/HhC1SR2l5iSW8xBJeYgkvsW5sA5pQpykHXFdXglXfw+6JEtuAYIXwEkt4iSW8xDqxDWjnQGh1gNM5ENo5W7db56zb9dVuWl5iCS+xhJdYN7a+P+kXne43np5YWK3zynemTBiVaXmJJbzEEl5iCS+x0s4qq6oOHE7fBvTkj/+u1WGrZbCqDKqEl1jCSyzhJdZ3GbBVnZ7JunFmws7B7FZaXmIJL7GEl1jCS6wbA7YpB1pXy7VzFqlzu0115m/CdqUlWl5iCS+xhJdYJ/q8E7ajvHuyXb1an87Dq1fKNeG92wYEnwgvsYSXWMILAAAAAAAAAAAAAAAAwC5/APY6riajMRrIAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIwLTA5LTAxVDAxOjUxOjIyKzEwOjAw125LowAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMC0wOS0wMVQwMTo1MToyMisxMDowMKYz8x8AAAAASUVORK5CYII=';
-    */
 }

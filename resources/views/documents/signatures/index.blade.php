@@ -92,7 +92,7 @@
 
                     <td>
                         <a href="{{ route('documents.showPdfDocumento', $pendingSignaturesFlow->id) }}"
-                           class="btn btn-sm btn-outline-secondary">
+                           class="btn btn-sm btn-outline-secondary" target="_blank">
                             <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
                     </td>
@@ -174,7 +174,7 @@
                     <td>{{ $signature->subject }}</td>
                     <td>
                         <a href="{{ route('documents.showPdfDocumento', $signature) }}"
-                           class="btn btn-sm btn-outline-secondary">
+                           class="btn btn-sm btn-outline-secondary" target="_blank">
                             <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
                     </td>
