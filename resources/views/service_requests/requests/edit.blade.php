@@ -753,6 +753,13 @@
 
 @endcan
 
+    @canany(['Service Request: audit'])
+    <br /><hr />
+    <div style="height: 300px; overflow-y: scroll;">
+        @include('partials.audit', ['audits' => $serviceRequest->audits] )
+    </div>
+    @endcanany
+
 @endsection
 
 @section('custom_js')
