@@ -106,7 +106,7 @@
 
         </div>
 
-        <button type="submit" class="btn btn-primary" @if($signature->signaturesFlows->where('status', 1)->count() > 0) disabled @endif >Guardar</button>
+        <button type="submit" class="btn btn-primary" @if($signature->signaturesFlows->where('status', 1)->count() > 0 or $signature->responsable_id != Auth::id()) disabled @endif >Guardar</button>
         <button type="submit" class="btn btn-danger float-right" form="delete_form">Eliminar</button>
 
     </form>
