@@ -508,10 +508,12 @@ class ServiceRequestController extends Controller
         "Expires" => "0"
     );
 
-    $filas = ServiceRequest::whereDoesntHave("SignatureFlows", function($subQuery) {
-                               $subQuery->where('status',0);
-                             })
-                             ->orderBy('request_date','asc')->get();
+    $filas = ServiceRequest::where('establishment_id',1)
+              ->whereDoesntHave("SignatureFlows", function($subQuery) {
+                $subQuery->where('status',0);
+              })
+              ->orderBy('request_date','asc')
+              ->get();
 
     $columnas = array(
         'RUN',
@@ -565,8 +567,14 @@ class ServiceRequestController extends Controller
           $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
 
           switch($fila->program_contract_type) {
-            case 'Horas': $por_prestacion = 'S'; break;
-            default: $por_prestacion = 'N'; break;
+            case 'Horas': 
+              $por_prestacion = 'S';
+              $sirh_n_cargo = 6; 
+              break;
+            default: 
+              $por_prestacion = 'N';
+              $sirh_n_cargo = 5; 
+              break;
           }
 
           switch($fila->establishment->id) {
@@ -655,38 +663,113 @@ class ServiceRequestController extends Controller
           }
 
           switch($fila->rrhh_team) {
-            case "Residencia Médica": $sirh_profession_id=1000 ; break;
-            case "Médico Diurno": $sirh_profession_id=1000 ; break;
-            case "Enfermera Supervisora": $sirh_profession_id=1058 ; break;
-            case "Enfermera Diurna": $sirh_profession_id=1058 ; break;
-            case "Enfermera Turno": $sirh_profession_id=1058 ; break;
-            case "Kinesiólogo Diurno": $sirh_profession_id=1057 ; break;
-            case "Kinesiólogo Turno": $sirh_profession_id=1057 ; break;
-            case "Téc.Paramédicos Diurno": $sirh_profession_id=1027 ; break;
-            case "Téc.Paramédicos Turno": $sirh_profession_id=1027 ; break;
-            case "Auxiliar Diurno": $sirh_profession_id=111 ; break;
-            case "Auxiliar Turno": $sirh_profession_id=111 ; break;
-            case "Terapeuta Ocupacional": $sirh_profession_id=1055 ; break;
-            case "Químico Farmacéutico": $sirh_profession_id=320 ; break;
-            case "Bioquímico": $sirh_profession_id=1003 ; break;
-            case "Fonoaudiologo": $sirh_profession_id=1319 ; break;
-            case "Administrativo Diurno": $sirh_profession_id=119 ; break;
-            case "Administrativo Turno": $sirh_profession_id=119 ; break;
-            case "Biotecnólogo Turno": $sirh_profession_id=513 ; break;
-            case "Matrona Turno": $sirh_profession_id=1060 ; break;
-            case "Matrona Diurno": $sirh_profession_id=1060 ; break;
-            case "Otros técnicos": $sirh_profession_id=530 ; break;
-            case "Psicólogo": $sirh_profession_id=1160 ; break;
-            case "Tecn. Médico Diurno": $sirh_profession_id=1316 ; break;
-            case "Tecn. Médico Turno": $sirh_profession_id=1316 ; break;
-            case "Trabajador Social": $sirh_profession_id=1020 ; break;
+            case "Residencia Médica": 
+              $sirh_profession_id=1000;
+              $sirh_function_id=9082; // Antención clínica
+              break;
+            case "Médico Diurno": 
+              $sirh_profession_id=1000;
+              $sirh_function_id=9082; // Atención clínica
+              break;
+            case "Enfermera Supervisora":
+              $sirh_profession_id=1058;
+              $sirh_function_id=9082; // Atención clínica
+              break;
+            case "Enfermera Diurna": 
+              $sirh_profession_id=1058;
+              $sirh_function_id=9082; // Atención clínica
+              break;
+            case "Enfermera Turno": 
+              $sirh_profession_id=1058;
+              $sirh_function_id=9082; // Atención clínica
+              break;
+            case "Kinesiólogo Diurno": 
+              $sirh_profession_id=1057; 
+              $sirh_function_id=9082; // Atención clínica 
+              break;
+            case "Kinesiólogo Turno": 
+              $sirh_profession_id=1057;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Téc.Paramédicos Diurno": 
+              $sirh_profession_id=1027;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Téc.Paramédicos Turno": 
+              $sirh_profession_id=1027;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Auxiliar Diurno": 
+              $sirh_profession_id=111;
+              $sirh_function_id=9083; // Apoyo Administrativo 
+              break;
+            case "Auxiliar Turno": 
+              $sirh_profession_id=111;
+              $sirh_function_id=9083; // Apoyo Administrativo
+              break;
+            case "Terapeuta Ocupacional": 
+              $sirh_profession_id=1055;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Químico Farmacéutico": 
+              $sirh_profession_id=320;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Bioquímico": 
+              $sirh_profession_id=1003;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Fonoaudiologo": 
+              $sirh_profession_id=1319;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Administrativo Diurno": 
+              $sirh_profession_id=119;
+              $sirh_function_id=9083; // Apoyo Administrativo
+              break;
+            case "Administrativo Turno": 
+              $sirh_profession_id=119;
+              $sirh_function_id=9083; // Apoyo Administrativo
+              break;
+            case "Biotecnólogo Turno": 
+              $sirh_profession_id=513;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Matrona Turno": 
+              $sirh_profession_id=1060;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Matrona Diurno": 
+              $sirh_profession_id=1060;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Otros técnicos": 
+              $sirh_profession_id=530;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Psicólogo": 
+              $sirh_profession_id=1160;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Tecn. Médico Diurno": 
+              $sirh_profession_id=1316;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Tecn. Médico Turno": 
+              $sirh_profession_id=1316;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Trabajador Social": 
+              $sirh_profession_id=1020;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
           }
 
 
           $data = array(
             $run,
             $dv,
-            '5', // N° cargo siempre es 5 honorario
+            $sirh_n_cargo, // contrato 5, prestaión u hora extra es 6
             $fila->start_date->format('d/m/Y'),
             $fila->end_date->format('d/m/Y'),
             $sirh_estab_code,
@@ -711,7 +794,7 @@ class ServiceRequestController extends Controller
             $fila->resolution_number,
             optional($fila->resolution_date)->format('d/m/Y'),
             substr($fila->digera_strategy,0,99), // maximo 100 
-            $function,
+            $sirh_function_id,
             preg_replace( "/\r|\n/", " ", substr($fila->service_description,0,254)), // max 255
             'A',
             $type_of_day, // calcular en base a las horas semanales y tipo de contratacion
