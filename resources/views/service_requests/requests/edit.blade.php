@@ -475,6 +475,7 @@
                 <option value="CHILENA" @if($serviceRequest->nationality == "CHILENA") selected @endif>CHILENA</option>
                 <option value="ARGENTINA" @if($serviceRequest->nationality == "ARGENTINA") selected @endif>ARGENTINA</option>
                 <option value="VENEZOLANA" @if($serviceRequest->nationality == "VENEZOLANA") selected @endif>VENEZOLANA</option>
+                <option value="COLOMBIANA" @if($serviceRequest->nationality == "COLOMBIANA") selected @endif>COLOMBIANA</option>
                 <option value="PERUANA" @if($serviceRequest->nationality == "PERUANA") selected @endif>PERUANA</option>
                 <option value="BOLIVIANA" @if($serviceRequest->nationality == "BOLIVIANA") selected @endif>BOLIVIANA</option>
                 <option value="CUBANA" @if($serviceRequest->nationality == "CUBANA") selected @endif>CUBANA</option>
