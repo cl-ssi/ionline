@@ -52,30 +52,18 @@ class ServiceRequestController extends Controller
         //not rejected
         if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0) {
           foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
-            // echo $signatureFlow->sign_position . " " . $key2 . " <br>";
             //with responsable_id
             if ($user_id == $signatureFlow->responsable_id) {
               if ($signatureFlow->status == NULL) {
-                //verification if i have to sign or other person
-                // if ($key2 > 0) {
-                //   if ($serviceRequest->SignatureFlows[$key2-1]->status == NULL) {
-                //     $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
-                //   }
-                //   else{
-                //     $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
-                //   }
-                // }
                 if ($serviceRequest->SignatureFlows->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL) {
                   $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
                 }else{
                   $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
                 }
-
               }else{
                 $serviceRequestsAnswered[$serviceRequest->id] = $serviceRequest;
               }
             }
-
             //with organizational unit authority
             if ($user_id == $signatureFlow->ou_id) {
 
@@ -88,8 +76,6 @@ class ServiceRequestController extends Controller
       }
 
 
-      // dd($serviceRequestsMyPendings, $serviceRequestsRejected);
-
       foreach ($serviceRequests as $key => $serviceRequest) {
         if (!array_key_exists($serviceRequest->id,$serviceRequestsOthersPendings)) {
           if (!array_key_exists($serviceRequest->id,$serviceRequestsMyPendings)) {
@@ -99,9 +85,6 @@ class ServiceRequestController extends Controller
           }
         }
       }
-
-      // dd($serviceRequestsCreated);
-      // dd($serviceRequestsOthersPendings, $serviceRequestsMyPendings, $serviceRequestsAnswered);
 
       return view('service_requests.requests.index', compact('serviceRequestsMyPendings','serviceRequestsOthersPendings','serviceRequestsRejected','serviceRequestsAnswered','serviceRequestsCreated','users'));
   }
@@ -260,16 +243,6 @@ class ServiceRequestController extends Controller
         }
       }
 
-      //saber la organizationalUnit que tengo a cargo
-      // $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
-      // $employee = Auth::user()->position;
-      // if ($authorities!=null) {
-      //   $employee = $authorities[0]->position;// . " - " . $authorities[0]->organizationalUnit->name;
-      //   $ou_id = $authorities[0]->organizational_unit_id;
-      // }else{
-      //   $ou_id = Auth::user()->organizational_unit_id;
-      // }
-
       //get responsable_id organization in charge
       $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', $request->responsable_id);
       $employee = User::find($request->responsable_id)->position;
@@ -363,24 +336,8 @@ class ServiceRequestController extends Controller
       $users = User::orderBy('name','ASC')->get();
       $establishments = Establishment::orderBy('name', 'ASC')->get();
 
-      // if (Auth::user()->organizationalUnit->establishment_id == 38) {
-      //
-      //   $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',38)->orderBy('name', 'ASC')->get();
-      //   $responsabilityCenters = OrganizationalUnit::where('establishment_id',38)->get();
-      //
-      // }else{
-      //
-      //   $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
-      //   $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
-      //                                              ->where('name','LIKE','%unidad%')
-      //                                              ->orwhere('name','LIKE','%servicio%')
-      //                                              ->orwhere('name','LIKE','%estadio%')
-      //                                              ->orwhere('name','LIKE','%covid%')
-      //                                              ->orderBy('name', 'ASC')->get();
-      // }
-
-        $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->orderBy('name', 'ASC')->get();
-        $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
+      $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->orderBy('name', 'ASC')->get();
+      $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
 
       $SignatureFlow = $serviceRequest->SignatureFlows->where('employee','Supervisor de servicio')->first();
 
@@ -391,7 +348,6 @@ class ServiceRequestController extends Controller
         $employee = $authorities[0]->position . " - " . $authorities[0]->organizationalUnit->name;
       }
 
-      // dd($SignatureFlow);
       return view('service_requests.requests.edit', compact('serviceRequest', 'users', 'establishments', 'subdirections', 'responsabilityCenters', 'SignatureFlow','employee'));
   }
 
@@ -885,19 +841,12 @@ class ServiceRequestController extends Controller
         // $group_array['rechazados'] = 0;
       }
       foreach ($array as $key => $data) {
-        if ($data['rechazados'] == 0) {
+        if ($data['rechazados'] == 0 && $data['falta_aprobar'] != "") {
           $group_array[$data['falta_aprobar']] += 1;
           $falta_aprobar+=1;
         }
-        // elseif ($data['rechazados'] != 0) {
-        //   $group_array['rechazados'] += 1;
-        // }
       }
-
-      // usort($group_array, 'sort_by_orden');
-      // sort($group_array);
-      // dd($group_array);
-      // dd($array);
+      // dd($falta_aprobar);
 
       return view('service_requests.requests.pending_requests',compact('array','group_array','falta_aprobar'));
     }
