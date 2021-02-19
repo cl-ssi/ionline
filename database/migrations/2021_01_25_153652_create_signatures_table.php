@@ -34,12 +34,12 @@ class CreateSignaturesTable extends Migration
             $table->foreign('ou_id')->references('id')->on('organizational_units');
 
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('doc_signatures_files', function (Blueprint $table) {
             $table->id();
             $table->foreignId('signature_id');
-            //TODO agregar mediumblob en vez de binary(blob)
             $table->binary('file');
             $table->string('md5_file')->nullable();
             $table->enum('file_type', ['documento', 'anexo']);
@@ -49,7 +49,11 @@ class CreateSignaturesTable extends Migration
             $table->foreign('signature_id')->references('id')->on('doc_signatures');
 
             $table->timestamps();
+            $table->softDeletes();
         });
+
+        DB::statement("ALTER TABLE doc_signatures_files MODIFY COLUMN file MEDIUMBLOB");
+        DB::statement("ALTER TABLE doc_signatures_files MODIFY COLUMN signed_file MEDIUMBLOB");
 
         Schema::create('doc_signatures_flows', function (Blueprint $table) {
             $table->id();
@@ -68,6 +72,7 @@ class CreateSignaturesTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
 
             $table->timestamps();
+            $table->softDeletes();
         });
 
 
