@@ -451,13 +451,14 @@ class ServiceRequestController extends Controller
 
   }
 
-  public function consolidated_data()
+  public function consolidated_data(Request $request)
   {
 
     //solicitudes activas
     $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function($subQuery) {
                                          $subQuery->where('status',0);
                                        })
+                                       ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
                                        ->orderBy('request_date','asc')->get();
 
     foreach ($serviceRequests as $key => $serviceRequest) {
@@ -473,6 +474,7 @@ class ServiceRequestController extends Controller
     $serviceRequestsRejected = ServiceRequest::whereHas("SignatureFlows", function($subQuery) {
                                          $subQuery->where('status',0);
                                        })
+                                       ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
                                        ->orderBy('request_date','asc')->get();
 
     foreach ($serviceRequestsRejected as $key => $serviceRequest) {
@@ -925,11 +927,10 @@ class ServiceRequestController extends Controller
       dd("terminó");
     }
 
-    public function pending_requests()
+    public function pending_requests(Request $request)
     {
-
       //solicitudes activas
-      $serviceRequests = ServiceRequest::orderBy('id','asc')->get();
+      $serviceRequests = ServiceRequest::orderBy('id','asc')->whereBetween('start_date',[$request->dateFrom,$request->dateTo])->get();
 
       $array = [];
       foreach ($serviceRequests as $key => $serviceRequest) {
@@ -961,6 +962,7 @@ class ServiceRequestController extends Controller
 
       //obtener subtotales
       $group_array = [];
+      $falta_aprobar = 0;
       foreach ($array as $key => $data) {
         $group_array[$data['falta_aprobar']] = 0;
         // $group_array['rechazados'] = 0;
@@ -968,6 +970,7 @@ class ServiceRequestController extends Controller
       foreach ($array as $key => $data) {
         if ($data['rechazados'] == 0) {
           $group_array[$data['falta_aprobar']] += 1;
+          $falta_aprobar+=1;
         }
         // elseif ($data['rechazados'] != 0) {
         //   $group_array['rechazados'] += 1;
@@ -979,7 +982,7 @@ class ServiceRequestController extends Controller
       // dd($group_array);
       // dd($array);
 
-      return view('service_requests.requests.pending_requests',compact('array','group_array'));
+      return view('service_requests.requests.pending_requests',compact('array','group_array','falta_aprobar'));
     }
 
 }

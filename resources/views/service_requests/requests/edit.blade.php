@@ -407,6 +407,8 @@
           <option value="TERCER TURNO - MODIFICADO" @if($serviceRequest->working_day_type == 'TERCER TURNO - MODIFICADO') selected @endif >TERCER TURNO - MODIFICADO</option>
           <option value="CUARTO TURNO" @if($serviceRequest->working_day_type == 'CUARTO TURNO') selected @endif >CUARTO TURNO</option>
           <option value="CUARTO TURNO - MODIFICADO" @if($serviceRequest->working_day_type == 'CUARTO TURNO - MODIFICADO') selected @endif >CUARTO TURNO - MODIFICADO</option>
+          <option value="HORA MÉDICA" @if($serviceRequest->working_day_type == 'HORA MÉDICA') selected @endif >HORA MÉDICA</option>
+          <option value="OTRO" @if($serviceRequest->working_day_type == 'OTRO') selected @endif >OTRO</option>
         </select>
 
 		</fieldset>
@@ -473,8 +475,10 @@
                 <option value="CHILENA" @if($serviceRequest->nationality == "CHILENA") selected @endif>CHILENA</option>
                 <option value="ARGENTINA" @if($serviceRequest->nationality == "ARGENTINA") selected @endif>ARGENTINA</option>
                 <option value="VENEZOLANA" @if($serviceRequest->nationality == "VENEZOLANA") selected @endif>VENEZOLANA</option>
+                <option value="COLOMBIANA" @if($serviceRequest->nationality == "COLOMBIANA") selected @endif>COLOMBIANA</option>
                 <option value="PERUANA" @if($serviceRequest->nationality == "PERUANA") selected @endif>PERUANA</option>
                 <option value="BOLIVIANA" @if($serviceRequest->nationality == "BOLIVIANA") selected @endif>BOLIVIANA</option>
+                <option value="CUBANA" @if($serviceRequest->nationality == "CUBANA") selected @endif>CUBANA</option>
               </select>
           </fieldset>
 
@@ -748,6 +752,13 @@
   </form>
 
 @endcan
+
+    @canany(['Service Request: audit'])
+    <br /><hr />
+    <div style="height: 300px; overflow-y: scroll;">
+        @include('partials.audit', ['audits' => $serviceRequest->audits] )
+    </div>
+    @endcanany
 
 @endsection
 
