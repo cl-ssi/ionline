@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Documents;
 use App\Http\Controllers\Controller;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -207,19 +208,28 @@ class SignatureController extends Controller
         }
 
         session()->flash('info', "Los datos de la firma $signature->id han sido actualizados.");
-
-        return redirect()->route('documents.signatures.index');
+        return redirect()->route('documents.signatures.index', ['mis_documentos']);
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param Signature $signature
-     * @return Response
+     * @return RedirectResponse
+     * @throws Exception
      */
-    public function destroy(Signature $signature): Response
+    public function destroy(Signature $signature): RedirectResponse
     {
-        //
+        foreach ($signature->signaturesFiles as $signaturesFile) {
+            foreach ($signaturesFile->signaturesFlows as $signaturesFlow) {
+                $signaturesFlow->delete();
+            }
+            $signaturesFile->delete();
+        }
+        $signature->delete();
+
+        session()->flash('info', "La solicitud de firma $signature->id ha sido eliminada.");
+        return redirect()->route('documents.signatures.index', ['mis_documentos']);
     }
 
     public function showPdfDocumento(Signature $signature)

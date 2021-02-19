@@ -77,7 +77,7 @@
                     <td>{{ $pendingSignaturesFlow->employee }}</td>
                     <td>{{ $pendingSignaturesFlow->signature->subject }}</td>
                     <td>
-                        <a href="{{ route('signPdf', $pendingSignaturesFlow->signaturesFile->id) }}"
+                        <a href="{{ route('signPdf', $pendingSignaturesFlow->id) }}"
                            class="btn btn-sm btn-outline-primary">
                             <span class="fas fa-edit" aria-hidden="true"></span>
                         </a>
@@ -91,7 +91,7 @@
                     </td>
 
                     <td>
-                        <a href="{{ route('documents.showPdfDocumento', $pendingSignaturesFlow->signature) }}"
+                        <a href="{{ route('documents.showPdfDocumento', $pendingSignaturesFlow->id) }}"
                            class="btn btn-sm btn-outline-secondary">
                             <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
@@ -193,7 +193,6 @@
                 <th scope="col">Id</th>
                 <th scope="col">Fecha de Solicitud</th>
                 <th scope="col">U.Organizacional</th>
-                <th scope="col">Responsable</th>
                 <th scope="col">Estado Solicitud</th>
                 <th scope="col">Ultimo Usuario</th>
                 <th scope="col">Materia de Resolución</th>

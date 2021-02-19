@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Documents\SignaturesFile;
+use App\Models\Documents\SignaturesFlow;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Firebase\JWT\JWT;
@@ -21,12 +23,13 @@ class FirmaDigitalController extends Controller
      * Create a new controller instance.
      *
      * @param Request $request
-     * @param SignaturesFile $signaturesFile
-     * @return pdf
+     * @param SignaturesFlow $signaturesFlow
+     * @return RedirectResponse
      */
-    public function signPdf(Request $request, SignaturesFile $signaturesFile)
+    public function signPdf(Request $request, SignaturesFlow $signaturesFlow)
     {
 //        dd($request->otp);
+//        dd($signaturesFlow);
         // echo '<pre>'; /* Debug Para mostrar la imágen de la firma */
         //header("Content-Type: image/png; charset=UTF-8");
 
@@ -41,8 +44,8 @@ class FirmaDigitalController extends Controller
 //        $pdf            = 'samples/sample.pdf';
         /* Fin seteo de variable */
 
-        $pdfbase64      = $signaturesFile->file;
-        $checksum_pdf   = $signaturesFile->md5_file;
+        $pdfbase64      = $signaturesFlow->signaturesFile->file;
+        $checksum_pdf   = $signaturesFlow->signaturesFile->md5_file;
 
         /* Confección del cuadro imagen de la firma */
         $font_light   = public_path('fonts/verdana-italic.ttf');
@@ -220,17 +223,16 @@ class FirmaDigitalController extends Controller
 ////        header('Content-Type: application/pdf');
 ////        echo $data;
 
-        $signaturesFlow = $signaturesFile->signaturesFlows->where('type', 'firmante')->first();
         $signaturesFlow->status = 1;
         $signaturesFlow->signature_date = now();
         $signaturesFlow->save();
 
-//        $signaturesFile->signed_file = $data;
-        $signaturesFile->signed_file = $signaturesFile->file;
-        $signaturesFile->save();
+//        $signaturesFlow->signaturesFile->signed_file = $data;
+        $signaturesFlow->signaturesFile->signed_file = $signaturesFlow->signaturesFile->file;
+        $signaturesFlow->signaturesFile->save();
 
         session()->flash('info', 'El documento se ha firmado correctamente.');
-        return redirect()->route('documents.signatures.index');
+        return redirect()->route('documents.signatures.index', ['pendientes']);
     }
 
     /*
