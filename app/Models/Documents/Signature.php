@@ -4,12 +4,14 @@ namespace App\Models\Documents;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class Signature extends Model implements Auditable
 {
     use HasFactory;
     use \OwenIt\Auditing\Auditable;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -53,6 +55,10 @@ class Signature extends Model implements Auditable
             ->signaturesFlows->where('type', 'visador');
     }
 
+    public function getSignaturesFlowsAttribute(){
+        return $this->signaturesFiles->where('file_type', 'documento')->first()
+            ->signaturesFlows;
+    }
 
     protected $table = 'doc_signatures';
 
