@@ -23,9 +23,9 @@
 
 <h4>Subtotales</h4>
 <hr>
-<table class="table table-sm table-bordered table-responsive small" >
+<table class="table table-sm small" >
     <thead>
-        <tr class="text-center">
+        <tr>
             <th>FUNCIONARIO</th>
             <th>CANTIDAD</th>
         </tr>
@@ -39,22 +39,22 @@
         </tr>
       @endif
       @endforeach
-      <!-- <tr>
-        <td nowrap></td>
+      <tr>
+        <td nowrap>Total</td>
         <td nowrap><b>{{$falta_aprobar}}</b></td>
-      </tr> -->
+      </tr>
     </tbody>
 </table>
 
 <h4>Detalle</h4>
 <hr>
-<table class="table table-sm table-bordered table-responsive small" >
+<table class="table table-sm small" >
     <thead>
-        <tr class="text-center">
-            <th>ID</th>
-            <th>APROBADAS</th>
-            <th>RECHAZADAS</th>
-            <th>VISADOR PENDIENTE</th>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">APROBADAS</th>
+            <th scope="col">RECHAZADAS</th>
+            <th scope="col">VISADOR PENDIENTE</th>
         </tr>
     </thead>
     <tbody>
