@@ -206,17 +206,31 @@
 
 	<div class="row ml-1 mr-1">
 
-    <fieldset class="form-group col-4">
+		<fieldset class="form-group col-3">
+			<label for="for_nationality">País de Funcionario</label>
+			<select name="nationality" class="form-control" required>
+				<option value=""></option>
+				<option value="CHILENA" >CHILENA</option>
+				<option value="ARGENTINA" >ARGENTINA</option>
+				<option value="VENEZOLANA" >VENEZOLANA</option>
+				<option value="COLOMBIANA" >COLOMBIANA</option>
+				<option value="PERUANA" >PERUANA</option>
+				<option value="BOLIVIANA" >BOLIVIANA</option>
+				<option value="CUBANA" >CUBANA</option>
+			</select>
+		</fieldset>
+
+    <fieldset class="form-group col-3">
 		    <label for="for_address">Dirección</label>
 		    <input type="text" class="form-control" id="foraddress" placeholder="" name="address">
 		</fieldset>
 
-    <fieldset class="form-group col-4">
+    <fieldset class="form-group col-3">
 		    <label for="for_phone_number">Número telefónico</label>
 		    <input type="text" class="form-control" id="for_phone_number" placeholder="" name="phone_number">
 		</fieldset>
 
-		<fieldset class="form-group col-4">
+		<fieldset class="form-group col-3">
 		    <label for="for_email">Correo electrónico</label>
 		    <input type="text" class="form-control" id="for_email" placeholder="" name="email">
 		</fieldset>
