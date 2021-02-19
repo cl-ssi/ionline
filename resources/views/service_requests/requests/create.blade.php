@@ -443,6 +443,7 @@
 					<option value="TERCER TURNO - MODIFICADO">TERCER TURNO - MODIFICADO</option>
           <option value="CUARTO TURNO">CUARTO TURNO</option>
 					<option value="CUARTO TURNO - MODIFICADO">CUARTO TURNO - MODIFICADO</option>
+					<option value="HORA MÉDICA">HORA MÉDICA</option>
 					<option value="OTRO">OTRO</option>
         </select>
 
