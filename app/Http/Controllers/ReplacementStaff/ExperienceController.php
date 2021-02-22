@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\ReplacementStaff;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ReplacementStaff\Experience;
+use App\Http\Controllers\Controller;
 use App\Models\ReplacementStaff\ReplacementStaff;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -110,18 +110,19 @@ class ExperienceController extends Controller
     public function destroy(Experience $experience)
     {
         $experience->delete();
+        Storage::delete($experience->file);
 
         session()->flash('danger', 'Su Experiencia Profesional ha sido eliminada.');
         return redirect()->back();
     }
 
-    public function download(Profile $profile)
+    public function download(Experience $experience)
     {
-        return Storage::download($profile->file);
+        return Storage::download($experience->file);
     }
 
-    public function show_file(Profile $profile)
+    public function show_file(Experience $experience)
     {
-        return Storage::response($profile->file);
+        return Storage::response($experience->file);
     }
 }

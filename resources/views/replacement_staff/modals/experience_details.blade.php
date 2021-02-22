@@ -15,7 +15,14 @@
               <h5>Funciones Realizadas:</h5>
               <p>{{ $modal_experience->performed_functions }}</p>
               <h5>Certificado de Experiencia:</h5>
-              <p>{{ $modal_experience->file }}</p>
+              <a href="{{ route('replacement_staff.experience.show_file', $experience) }}"
+                  class="btn btn-outline-secondary btn-sm"
+                  title="Ir"
+                  target="_blank"> <i class="far fa-eye"></i></a>
+              <a class="btn btn-outline-secondary btn-sm"
+                  href="{{ route('replacement_staff.experience.download', $experience) }}"
+                  target="_blank"><i class="fas fa-download"></i>
+              </a>
               <h5>Nombre Contacto:</h5> {{ $modal_experience->contact_name }} - {{ $modal_experience->contact_telephone }}
 
 
