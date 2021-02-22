@@ -104,10 +104,11 @@
         <table class="table small table-striped ">
             <thead>
                 <tr>
-                    <th>#</th>
+                    <th>Fecha de Carga</th>
                     <th>Título</th>
                     <th>Archivo</th>
-                    <th style="width: 12%"></th>
+                    <th style="width: 10%"></th>
+                    <th style="width: 2%"></th>
                 </tr>
             </thead>
             <tbody>
@@ -115,11 +116,30 @@
                 <tr>
                     <td>{{ $profile->updated_at->format('d-m-Y H:i:s') }}</td>
                     <td>{{ $profile->profession }}</td>
-                    <td>{{ $profile->file }}</td>
                     <td>
-                        <button href="" class="btn btn-outline-secondary btn-sm" title="Ir" disabled> <i class="far fa-eye"></i></button>
-                        <button href="" class="btn btn-outline-secondary btn-sm" title="Ir"> <i class="fas fa-paperclip"></i></button>
-                        <button href="" class="btn btn-danger btn-sm" title="Ir"> <i class="fas fa-trash"></i></button>
+                      @if(pathinfo($profile->file, PATHINFO_EXTENSION) == 'pdf')
+                          <i class="fas fa-file-pdf fa-2x"></i>
+                      @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('replacement_staff.profile.show_file', $profile) }}"
+                            class="btn btn-outline-secondary btn-sm"
+                            title="Ir"
+                            target="_blank"> <i class="far fa-eye"></i></a>
+                        <a class="btn btn-outline-secondary btn-sm"
+                            href="{{ route('replacement_staff.profile.download', $profile) }}"
+                            target="_blank"><i class="fas fa-download"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.profile.destroy', $profile) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-outline-danger btn-sm"
+                                    onclick="return confirm('¿Está seguro que desea eliminar su perfil : {{$profile->profession}}? ' )">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach
@@ -160,8 +180,17 @@
                     <td>{{ $experience->contact_name }}<br>{{ $experience->contact_telephone }}</td>
                     <td>
                         <button href="" class="btn btn-outline-secondary btn-sm exp-modal" title="Ir" data-toggle="modal" data-target="#exampleModal-exp-{{ $experience->id }}"> <i class="far fa-eye"></i></button>
-                        <button href="" class="btn btn-outline-secondary btn-sm" title="Ir"> <i class="fas fa-paperclip"></i></button>
-                        <button href="" class="btn btn-danger btn-sm" title="Ir"> <i class="fas fa-trash"></i></button>
+                        <!--<button href="" class="btn btn-outline-secondary btn-sm" title="Ir"> <i class="fas fa-paperclip"></i></button>-->
+                    </td>
+                    <td>
+                        <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.experience.destroy', $experience) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-outline-danger btn-sm"
+                                    onclick="return confirm('¿Está seguro que desea eliminar su Experiencia Laboral? ' )">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 @include('replacement_staff.modals.experience_details')
