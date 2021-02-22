@@ -31,16 +31,13 @@
         </ul>
     </div>
 @else
-    <h5 class="mb-3">Información sobre vacunación.</h5>
+    <h5 class="mb-3">Información sobre <strong>VACUNA CORONAVAC</strong> del <strong>LABORATORIO SINOVAC LIFE SCIENCE®</strong> contra
+        <strong>CONTRA SARS-COV-2</strong>.</h5>
+    <p>Hola <strong>{{ $vaccination->fullName() }}</strong>.</p>
 
-    <p>
-        Hola <strong>{{ $vaccination->fullName() }}</strong> la primera dósis de la
-        <strong>VACUNA CORONAVAC del LABORATORIO SINOVAC LIFE SCIENCE®</strong> contra
-        <strong>CONTRA SARS-COV-2</strong> te toca el día
-        <strong>{{ $vaccination->first_dose->format('d-m-Y \a \l\a\s H:i') }} horas.</strong>
-    </p>
+    @livewire('vaccination.book',['vaccination' => $vaccination])
 
-
+    <hr>
 <ul>
     <li>El lugar de vacunación es el domo en el estacionamiento atrás del HETG.</li>
     <li>Todos deben presentar su credencial al momento de su vacunación.</li>
