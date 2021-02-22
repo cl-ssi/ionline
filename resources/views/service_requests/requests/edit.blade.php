@@ -193,10 +193,10 @@
 		    <!-- <input type="text" class="form-control" id="for_programm_name" placeholder="" name="programm_name" value="{{ $serviceRequest->programm_name }}"> -->
         <select name="programm_name" class="form-control">
           <option value=""></option>
-          <option value="Covid19-APS No Médicos">Covid19-APS No Médicos</option>
-          <option value="Covid19-APS Médicos">Covid19-APS Médicos</option>
-          <option value="Covid19 No Médicos">Covid19 No Médicos</option>
-          <option value="Covid19 Médicos">Covid19 Médicos</option>
+          <option value="Covid19-APS No Médicos" @if($serviceRequest->programm_name == 'Covid19-APS No Médicos') selected @endif >Covid19-APS No Médicos</option>
+          <option value="Covid19-APS Médicos" @if($serviceRequest->programm_name == 'Covid19-APS Médicos') selected @endif>Covid19-APS Médicos</option>
+          <option value="Covid19 No Médicos" @if($serviceRequest->programm_name == 'Covid19 No Médicos') selected @endif>Covid19 No Médicos</option>
+          <option value="Covid19 Médicos" @if($serviceRequest->programm_name == 'Covid19 Médicos') selected @endif>Covid19 Médicos</option>
         </select>
 		</fieldset>
 
