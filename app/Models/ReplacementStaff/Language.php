@@ -19,6 +19,40 @@ class Language extends Model
         return $this->belongsTo('App\Models\ReplacementStaff\ReplacementStaff');
     }
 
+    public function getLanguageValueAttribute(){
+        switch ($this->language) {
+            case 'english':
+              return 'Inglés';
+              break;
+            case 'french':
+              return 'Francés';
+              break;
+            case 'german':
+              return 'Alemán';
+              break;
+            default:
+              return '';
+              break;
+        }
+    }
+
+    public function getLevelValueAttribute(){
+        switch ($this->level) {
+            case 'basic':
+              return 'Básico';
+              break;
+            case 'intermediate':
+              return 'Intermedio';
+              break;
+            case 'advanced':
+              return 'Avanzado';
+              break;
+            default:
+              return '';
+              break;
+        }
+    }
+
     protected $hidden = [
         'created_at', 'updated_at'
     ];
