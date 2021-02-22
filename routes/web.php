@@ -65,10 +65,16 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
     Route::get('/{replacement_staff}/edit', [ReplacementStaffController::class, 'edit'])->name('edit');
     Route::prefix('profile')->name('profile.')->group(function(){
         Route::post('/{replacementStaff}/store', [ProfileController::class, 'store'])->name('store');
+        Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
+        Route::get('/show_file/{profile}', [ProfileController::class, 'show_file'])->name('show_file');
+        Route::delete('{profile}/destroy', [ProfileController::class, 'destroy'])->name('destroy');
         // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
     });
     Route::prefix('experience')->name('experience.')->group(function(){
         Route::post('/{replacementStaff}/store', [ExperienceController::class, 'store'])->name('store');
+        Route::get('/download/{experience}', [ProfileController::class, 'download'])->name('download');
+        Route::get('/show_file/{experience}', [ProfileController::class, 'show_file'])->name('show_file');
+        Route::delete('{experience}/destroy', [ProfileController::class, 'destroy'])->name('destroy');
         // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
     });
     Route::prefix('training')->name('training.')->group(function(){

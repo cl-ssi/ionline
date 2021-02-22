@@ -7,7 +7,7 @@
     </div>
 
 
-    <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.experience.store', $replacementStaff) }}">
+    <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.experience.store', $replacementStaff) }}" enctype="multipart/form-data">
         @csrf
         @method('POST')
         @foreach($inputs as $key => $value)
