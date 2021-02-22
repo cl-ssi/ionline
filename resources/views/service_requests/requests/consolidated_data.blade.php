@@ -6,6 +6,21 @@
 
 <h3 class="mb-3">Reporte consolidado</h3>
 
+<form method="GET" class="form-horizontal" action="{{ route('rrhh.service_requests.consolidated_data') }}">
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<span class="input-group-text">Rango de fechas (Inicio de contrato)</span>
+		</div>
+		<input type="date" class="form-control" id="for_dateFrom" name="dateFrom" value="2021-01-01" required >
+		<input type="date" class="form-control" id="for_dateTo" name="dateTo" value="2021-01-31" required>
+    <div class="input-group-append">
+        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+    </div>
+	</div>
+</form>
+
+<hr>
+
 </main><main class="py-4">
 
 <h4>Solicitudes Activas <b>({{count($serviceRequests)}})</b></h4>

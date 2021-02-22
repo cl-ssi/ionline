@@ -52,30 +52,18 @@ class ServiceRequestController extends Controller
         //not rejected
         if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0) {
           foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
-            // echo $signatureFlow->sign_position . " " . $key2 . " <br>";
             //with responsable_id
             if ($user_id == $signatureFlow->responsable_id) {
               if ($signatureFlow->status == NULL) {
-                //verification if i have to sign or other person
-                // if ($key2 > 0) {
-                //   if ($serviceRequest->SignatureFlows[$key2-1]->status == NULL) {
-                //     $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
-                //   }
-                //   else{
-                //     $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
-                //   }
-                // }
                 if ($serviceRequest->SignatureFlows->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL) {
                   $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
                 }else{
                   $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
                 }
-
               }else{
                 $serviceRequestsAnswered[$serviceRequest->id] = $serviceRequest;
               }
             }
-
             //with organizational unit authority
             if ($user_id == $signatureFlow->ou_id) {
 
@@ -88,8 +76,6 @@ class ServiceRequestController extends Controller
       }
 
 
-      // dd($serviceRequestsMyPendings, $serviceRequestsRejected);
-
       foreach ($serviceRequests as $key => $serviceRequest) {
         if (!array_key_exists($serviceRequest->id,$serviceRequestsOthersPendings)) {
           if (!array_key_exists($serviceRequest->id,$serviceRequestsMyPendings)) {
@@ -99,9 +85,6 @@ class ServiceRequestController extends Controller
           }
         }
       }
-
-      // dd($serviceRequestsCreated);
-      // dd($serviceRequestsOthersPendings, $serviceRequestsMyPendings, $serviceRequestsAnswered);
 
       return view('service_requests.requests.index', compact('serviceRequestsMyPendings','serviceRequestsOthersPendings','serviceRequestsRejected','serviceRequestsAnswered','serviceRequestsCreated','users'));
   }
@@ -260,16 +243,6 @@ class ServiceRequestController extends Controller
         }
       }
 
-      //saber la organizationalUnit que tengo a cargo
-      // $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', Auth::user()->id);
-      // $employee = Auth::user()->position;
-      // if ($authorities!=null) {
-      //   $employee = $authorities[0]->position;// . " - " . $authorities[0]->organizationalUnit->name;
-      //   $ou_id = $authorities[0]->organizational_unit_id;
-      // }else{
-      //   $ou_id = Auth::user()->organizational_unit_id;
-      // }
-
       //get responsable_id organization in charge
       $authorities = Authority::getAmIAuthorityFromOu(Carbon::today(), 'manager', $request->responsable_id);
       $employee = User::find($request->responsable_id)->position;
@@ -363,24 +336,8 @@ class ServiceRequestController extends Controller
       $users = User::orderBy('name','ASC')->get();
       $establishments = Establishment::orderBy('name', 'ASC')->get();
 
-      // if (Auth::user()->organizationalUnit->establishment_id == 38) {
-      //
-      //   $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',38)->orderBy('name', 'ASC')->get();
-      //   $responsabilityCenters = OrganizationalUnit::where('establishment_id',38)->get();
-      //
-      // }else{
-      //
-      //   $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
-      //   $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
-      //                                              ->where('name','LIKE','%unidad%')
-      //                                              ->orwhere('name','LIKE','%servicio%')
-      //                                              ->orwhere('name','LIKE','%estadio%')
-      //                                              ->orwhere('name','LIKE','%covid%')
-      //                                              ->orderBy('name', 'ASC')->get();
-      // }
-
-        $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->orderBy('name', 'ASC')->get();
-        $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
+      $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->orderBy('name', 'ASC')->get();
+      $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
 
       $SignatureFlow = $serviceRequest->SignatureFlows->where('employee','Supervisor de servicio')->first();
 
@@ -391,7 +348,6 @@ class ServiceRequestController extends Controller
         $employee = $authorities[0]->position . " - " . $authorities[0]->organizationalUnit->name;
       }
 
-      // dd($SignatureFlow);
       return view('service_requests.requests.edit', compact('serviceRequest', 'users', 'establishments', 'subdirections', 'responsabilityCenters', 'SignatureFlow','employee'));
   }
 
@@ -451,13 +407,14 @@ class ServiceRequestController extends Controller
 
   }
 
-  public function consolidated_data()
+  public function consolidated_data(Request $request)
   {
 
     //solicitudes activas
     $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function($subQuery) {
                                          $subQuery->where('status',0);
                                        })
+                                       ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
                                        ->orderBy('request_date','asc')->get();
 
     foreach ($serviceRequests as $key => $serviceRequest) {
@@ -473,6 +430,7 @@ class ServiceRequestController extends Controller
     $serviceRequestsRejected = ServiceRequest::whereHas("SignatureFlows", function($subQuery) {
                                          $subQuery->where('status',0);
                                        })
+                                       ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
                                        ->orderBy('request_date','asc')->get();
 
     foreach ($serviceRequestsRejected as $key => $serviceRequest) {
@@ -508,10 +466,12 @@ class ServiceRequestController extends Controller
         "Expires" => "0"
     );
 
-    $filas = ServiceRequest::whereDoesntHave("SignatureFlows", function($subQuery) {
-                               $subQuery->where('status',0);
-                             })
-                             ->orderBy('request_date','asc')->get();
+    $filas = ServiceRequest::where('establishment_id',1)
+              ->whereDoesntHave("SignatureFlows", function($subQuery) {
+                $subQuery->where('status',0);
+              })
+              ->orderBy('request_date','asc')
+              ->get();
 
     $columnas = array(
         'RUN',
@@ -561,12 +521,21 @@ class ServiceRequestController extends Controller
         fwrite($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
         fputcsv($file, $columnas,'|', ' ');
         foreach($filas as $fila) {
+          if(!$fila->resolution_number or !$fila->resolution_date) {
+
+
           list($run,$dv) = explode('-',$fila->rut);
           $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
 
           switch($fila->program_contract_type) {
-            case 'Horas': $por_prestacion = 'S'; break;
-            default: $por_prestacion = 'N'; break;
+            case 'Horas': 
+              $por_prestacion = 'S';
+              $sirh_n_cargo = 6; 
+              break;
+            default: 
+              $por_prestacion = 'N';
+              $sirh_n_cargo = 5; 
+              break;
           }
 
           switch($fila->establishment->id) {
@@ -655,38 +624,113 @@ class ServiceRequestController extends Controller
           }
 
           switch($fila->rrhh_team) {
-            case "Residencia Médica": $sirh_profession_id=1000 ; break;
-            case "Médico Diurno": $sirh_profession_id=1000 ; break;
-            case "Enfermera Supervisora": $sirh_profession_id=1058 ; break;
-            case "Enfermera Diurna": $sirh_profession_id=1058 ; break;
-            case "Enfermera Turno": $sirh_profession_id=1058 ; break;
-            case "Kinesiólogo Diurno": $sirh_profession_id=1057 ; break;
-            case "Kinesiólogo Turno": $sirh_profession_id=1057 ; break;
-            case "Téc.Paramédicos Diurno": $sirh_profession_id=1027 ; break;
-            case "Téc.Paramédicos Turno": $sirh_profession_id=1027 ; break;
-            case "Auxiliar Diurno": $sirh_profession_id=111 ; break;
-            case "Auxiliar Turno": $sirh_profession_id=111 ; break;
-            case "Terapeuta Ocupacional": $sirh_profession_id=1055 ; break;
-            case "Químico Farmacéutico": $sirh_profession_id=320 ; break;
-            case "Bioquímico": $sirh_profession_id=1003 ; break;
-            case "Fonoaudiologo": $sirh_profession_id=1319 ; break;
-            case "Administrativo Diurno": $sirh_profession_id=119 ; break;
-            case "Administrativo Turno": $sirh_profession_id=119 ; break;
-            case "Biotecnólogo Turno": $sirh_profession_id=513 ; break;
-            case "Matrona Turno": $sirh_profession_id=1060 ; break;
-            case "Matrona Diurno": $sirh_profession_id=1060 ; break;
-            case "Otros técnicos": $sirh_profession_id=530 ; break;
-            case "Psicólogo": $sirh_profession_id=1160 ; break;
-            case "Tecn. Médico Diurno": $sirh_profession_id=1316 ; break;
-            case "Tecn. Médico Turno": $sirh_profession_id=1316 ; break;
-            case "Trabajador Social": $sirh_profession_id=1020 ; break;
+            case "Residencia Médica": 
+              $sirh_profession_id=1000;
+              $sirh_function_id=9082; // Antención clínica
+              break;
+            case "Médico Diurno": 
+              $sirh_profession_id=1000;
+              $sirh_function_id=9082; // Atención clínica
+              break;
+            case "Enfermera Supervisora":
+              $sirh_profession_id=1058;
+              $sirh_function_id=9082; // Atención clínica
+              break;
+            case "Enfermera Diurna": 
+              $sirh_profession_id=1058;
+              $sirh_function_id=9082; // Atención clínica
+              break;
+            case "Enfermera Turno": 
+              $sirh_profession_id=1058;
+              $sirh_function_id=9082; // Atención clínica
+              break;
+            case "Kinesiólogo Diurno": 
+              $sirh_profession_id=1057; 
+              $sirh_function_id=9082; // Atención clínica 
+              break;
+            case "Kinesiólogo Turno": 
+              $sirh_profession_id=1057;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Téc.Paramédicos Diurno": 
+              $sirh_profession_id=1027;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Téc.Paramédicos Turno": 
+              $sirh_profession_id=1027;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Auxiliar Diurno": 
+              $sirh_profession_id=111;
+              $sirh_function_id=9083; // Apoyo Administrativo 
+              break;
+            case "Auxiliar Turno": 
+              $sirh_profession_id=111;
+              $sirh_function_id=9083; // Apoyo Administrativo
+              break;
+            case "Terapeuta Ocupacional": 
+              $sirh_profession_id=1055;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Químico Farmacéutico": 
+              $sirh_profession_id=320;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Bioquímico": 
+              $sirh_profession_id=1003;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Fonoaudiologo": 
+              $sirh_profession_id=1319;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Administrativo Diurno": 
+              $sirh_profession_id=119;
+              $sirh_function_id=9083; // Apoyo Administrativo
+              break;
+            case "Administrativo Turno": 
+              $sirh_profession_id=119;
+              $sirh_function_id=9083; // Apoyo Administrativo
+              break;
+            case "Biotecnólogo Turno": 
+              $sirh_profession_id=513;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Matrona Turno": 
+              $sirh_profession_id=1060;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Matrona Diurno": 
+              $sirh_profession_id=1060;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Otros técnicos": 
+              $sirh_profession_id=530;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Psicólogo": 
+              $sirh_profession_id=1160;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Tecn. Médico Diurno": 
+              $sirh_profession_id=1316;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Tecn. Médico Turno": 
+              $sirh_profession_id=1316;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
+            case "Trabajador Social": 
+              $sirh_profession_id=1020;
+              $sirh_function_id=9082; // Atención Clínica 
+              break;
           }
 
 
           $data = array(
             $run,
             $dv,
-            '5', // N° cargo siempre es 5 honorario
+            $sirh_n_cargo, // contrato 5, prestaión u hora extra es 6
             $fila->start_date->format('d/m/Y'),
             $fila->end_date->format('d/m/Y'),
             $sirh_estab_code,
@@ -708,10 +752,10 @@ class ServiceRequestController extends Controller
             $sirh_profession_id,
             $planta,
             '0', // Todas son excentas = 0
-            $fila->resolution_number,
-            optional($fila->resolution_date)->format('d/m/Y'),
+            ($fila->resolution_number) ? $fila->resolution_number : 1,
+            ($fila->resolution_date) ? $fila->resolution_date->format('d/m/Y') : '15/02/2021',
             substr($fila->digera_strategy,0,99), // maximo 100 
-            $function,
+            $sirh_function_id,
             preg_replace( "/\r|\n/", " ", substr($fila->service_description,0,254)), // max 255
             'A',
             $type_of_day, // calcular en base a las horas semanales y tipo de contratacion
@@ -724,6 +768,9 @@ class ServiceRequestController extends Controller
           );
           //print_r($data);
           fputs($file, implode('|',$data)."\n");
+
+
+          } // if de sólo sin numero de resolucion
         }
         fclose($file);
     };
@@ -842,11 +889,10 @@ class ServiceRequestController extends Controller
       dd("terminó");
     }
 
-    public function pending_requests()
+    public function pending_requests(Request $request)
     {
-
       //solicitudes activas
-      $serviceRequests = ServiceRequest::orderBy('id','asc')->get();
+      $serviceRequests = ServiceRequest::orderBy('id','asc')->whereBetween('start_date',[$request->dateFrom,$request->dateTo])->get();
 
       $array = [];
       foreach ($serviceRequests as $key => $serviceRequest) {
@@ -878,25 +924,20 @@ class ServiceRequestController extends Controller
 
       //obtener subtotales
       $group_array = [];
+      $falta_aprobar = 0;
       foreach ($array as $key => $data) {
         $group_array[$data['falta_aprobar']] = 0;
         // $group_array['rechazados'] = 0;
       }
       foreach ($array as $key => $data) {
-        if ($data['rechazados'] == 0) {
+        if ($data['rechazados'] == 0 && $data['falta_aprobar'] != "") {
           $group_array[$data['falta_aprobar']] += 1;
+          $falta_aprobar+=1;
         }
-        // elseif ($data['rechazados'] != 0) {
-        //   $group_array['rechazados'] += 1;
-        // }
       }
+      // dd($falta_aprobar);
 
-      // usort($group_array, 'sort_by_orden');
-      // sort($group_array);
-      // dd($group_array);
-      // dd($array);
-
-      return view('service_requests.requests.pending_requests',compact('array','group_array'));
+      return view('service_requests.requests.pending_requests',compact('array','group_array','falta_aprobar'));
     }
 
 }
