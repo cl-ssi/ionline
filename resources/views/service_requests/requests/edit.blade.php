@@ -407,6 +407,8 @@
           <option value="TERCER TURNO - MODIFICADO" @if($serviceRequest->working_day_type == 'TERCER TURNO - MODIFICADO') selected @endif >TERCER TURNO - MODIFICADO</option>
           <option value="CUARTO TURNO" @if($serviceRequest->working_day_type == 'CUARTO TURNO') selected @endif >CUARTO TURNO</option>
           <option value="CUARTO TURNO - MODIFICADO" @if($serviceRequest->working_day_type == 'CUARTO TURNO - MODIFICADO') selected @endif >CUARTO TURNO - MODIFICADO</option>
+          <option value="HORA MÉDICA" @if($serviceRequest->working_day_type == 'HORA MÉDICA') selected @endif >HORA MÉDICA</option>
+          <option value="OTRO" @if($serviceRequest->working_day_type == 'OTRO') selected @endif >OTRO</option>
         </select>
 
 		</fieldset>
@@ -461,24 +463,26 @@
 
         <div class="form-row">
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-5 col-md-2">
 					    <label for="for_name">N°Contrato</label>
               <input type="text" class="form-control" name="contract_number" value="{{$serviceRequest->contract_number}}">
 					</fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-7 col-md-2">
               <label for="for_nationality">País de Funcionario</label>
               <select name="nationality" class="form-control">
                 <option value=""></option>
                 <option value="CHILENA" @if($serviceRequest->nationality == "CHILENA") selected @endif>CHILENA</option>
                 <option value="ARGENTINA" @if($serviceRequest->nationality == "ARGENTINA") selected @endif>ARGENTINA</option>
                 <option value="VENEZOLANA" @if($serviceRequest->nationality == "VENEZOLANA") selected @endif>VENEZOLANA</option>
+                <option value="COLOMBIANA" @if($serviceRequest->nationality == "COLOMBIANA") selected @endif>COLOMBIANA</option>
                 <option value="PERUANA" @if($serviceRequest->nationality == "PERUANA") selected @endif>PERUANA</option>
                 <option value="BOLIVIANA" @if($serviceRequest->nationality == "BOLIVIANA") selected @endif>BOLIVIANA</option>
+                <option value="CUBANA" @if($serviceRequest->nationality == "CUBANA") selected @endif>CUBANA</option>
               </select>
           </fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-12 col-md-4">
               <label for="for_digera_strategy">Estrategia Digera Covid</label>
               <select name="digera_strategy" class="form-control">
                 <option value=""></option>
@@ -496,7 +500,7 @@
               </select>
           </fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-12 col-md-4">
               <label for="for_rrhh_team">Equipo RRHH</label>
               <select name="rrhh_team" class="form-control">
 
@@ -534,17 +538,17 @@
         </div>
         <div class="form-row">
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-6 col-md-2">
 					    <label for="for_net_amount">Monto Neto</label>
               <input type="text" class="form-control" name="net_amount" value="{{$serviceRequest->net_amount}}">
 					</fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-6 col-md-2">
 					    <label for="for_gross_amount">Monto Bruto</label>
               <input type="text" class="form-control" name="gross_amount" value="{{$serviceRequest->gross_amount}}">
 					</fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-6 col-md-2">
               <label for="for_sirh_contract_registration">Registrado en SIRH</label>
               <select name="sirh_contract_registration" class="form-control">
                 <option value=""></option>
@@ -553,12 +557,12 @@
               </select>
           </fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-6 col-md-2">
 					    <label for="for_resolution_number">N° Resolución</label>
               <input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
 					</fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-12 col-md-3">
               <label for="for_resolution_date">Fecha Resolución</label>
               <input type="date" class="form-control" id="for_resolution_date" name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
           </fieldset>
@@ -588,12 +592,12 @@
       <div class="card-body">
 
         <div class="row">
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-5 col-md-2">
 					    <label for="for_resolution_number">N° Resolución</label>
               <input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
 					</fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-7 col-md-3">
               <label for="for_resolution_date">Fecha Resolución</label>
               <input type="date" class="form-control" id="for_resolution_date" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
           </fieldset>
@@ -601,22 +605,22 @@
 
         <div class="form-row">
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-6 col-md-2">
               <label for="for_bill_number">N° Boleta</label>
               <input type="text" class="form-control" name="bill_number" value="{{$serviceRequest->bill_number}}">
           </fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-6 col-md-2">
               <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
               <input type="text" class="form-control" name="total_hours_paid" value="{{$serviceRequest->total_hours_paid}}">
           </fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-6 col-md-2">
               <label for="for_total_paid">Total pagado</label>
               <input type="text" class="form-control" name="total_paid" value="{{$serviceRequest->total_paid}}">
           </fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-6 col-md-3">
               <label for="for_payment_date">Fecha pago</label>
               <input type="date" class="form-control" id="for_payment_date" name="payment_date" required @if($serviceRequest->payment_date) value="{{$serviceRequest->payment_date->format('Y-m-d')}}" @endif>
           </fieldset>
@@ -648,12 +652,12 @@
 
         <div class="form-row">
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-5 col-md-2">
 					    <label for="for_resolution_number">N° Resolución</label>
               <input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
 					</fieldset>
 
-          <fieldset class="form-group col">
+          <fieldset class="form-group col-7 col-md-3">
               <label for="for_resolution_date">Fecha Resolución</label>
               <input type="date" class="form-control" id="for_resolution_date" name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
           </fieldset>
@@ -748,6 +752,13 @@
   </form>
 
 @endcan
+
+    @canany(['Service Request: audit'])
+    <br /><hr />
+    <div style="height: 300px; overflow-y: scroll;">
+        @include('partials.audit', ['audits' => $serviceRequest->audits] )
+    </div>
+    @endcanany
 
 @endsection
 
