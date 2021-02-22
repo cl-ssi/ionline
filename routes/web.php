@@ -781,6 +781,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 /************** COMENTAR ****************/
 });
 
+Route::get('/yomevacuno',[VaccinationController::class,'welcome'])->name('welcome');
+
 Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::get('/welcome',[VaccinationController::class,'welcome'])->name('welcome');
     Route::get('/login/{access_token}',[VaccinationController::class,'login'])->name('login');
