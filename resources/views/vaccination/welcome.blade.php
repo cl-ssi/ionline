@@ -54,8 +54,8 @@
 
 <div class="alert alert-info mt-3" role="alert">
     Si no tienes clave única, contáctate con OIRS al correo
-    <a href="mailto:mireyasoto.f@redsalud.gob.cl">mireyasoto.f@redsalud.gob.cl</a>
-    o llamando a los anexos 579501 / 579532 y
+    <a href="mailto:teresa.stuardo@redsalud.gob.cl">teresa.stuardo@redsalud.gob.cl</a>
+    o llamando a los anexos 579501 / 579516/ 579532 y
     solicita información sobre tu fecha y hora de vacunación.
 </div>
 
