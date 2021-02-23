@@ -34,6 +34,8 @@
             <th>Run</th>
             <th>Cita 1° dósis</th>
             <th>Inoc. 1°</th>
+            <th>Cita 2° dósis</th>
+            <th>Inoc. 2°</th>
             <th></th>
         </tr>
     </thead>
@@ -79,6 +81,12 @@
                 </td>
                 <td nowrap>
                     {{ optional($vaccination->first_dose_at)->format('d-m-Y') }}
+                </td>
+                <td nowrap>
+                    {{ optional($vaccination->second_dose)->format('d-m-Y H:i') }}
+                </td>
+                <td nowrap>
+                    {{ optional($vaccination->second_dose_at)->format('d-m-Y') }}
                 </td>
                 <td> <a href="{{ route('vaccination.edit', $vaccination) }}"> <i class="fas fa-edit"></i> </a> </td>
             </tr>
