@@ -40,6 +40,7 @@ class ReplacementStaffController extends Controller
     public function store(Request $request)
     {
         $replacementStaff = new ReplacementStaff($request->All());
+        $replacementStaff->status = 'available';
         $replacementStaff->save();
 
         session()->flash('success', 'Se ha creado el postulante exitosamente');

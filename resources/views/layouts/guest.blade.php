@@ -27,6 +27,7 @@
         crossorigin="anonymous">
     <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
     <link href="{{ asset('css/intranet.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/cu.min.css') }}" rel="stylesheet">
 
     <style media="screen">
         .bg-nav-gobierno {

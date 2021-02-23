@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\ReplacementStaff;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ReplacementStaff\Experience;
+use App\Http\Controllers\Controller;
+use App\Models\ReplacementStaff\ReplacementStaff;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class ExperienceController extends Controller
 {
@@ -34,18 +37,31 @@ class ExperienceController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $replacementStaff)
+    public function store(Request $request, ReplacementStaff $replacementStaff)
     {
-        foreach ($request->previous_experience as $key => $req) {
-            $experience = new Experience();
-            $experience->previous_experience = $request->input('previous_experience.'.$key.'');
-            $experience->performed_functions = $request->input('performed_functions.'.$key.'');
-            $experience->file = $request->input('file.'.$key.'');
-            $experience->contact_name = $request->input('contact_name.'.$key.'');
-            $experience->contact_telephone = $request->input('contact_telephone.'.$key.'');
-            $experience->replacement_staff()->associate($replacementStaff);
-            $experience->save();
+        $files = $request->file('file');
+
+        if($request->hasFile('file'))
+        {
+            $i = 1;
+            foreach ($files as $key_file => $file) {
+                $experience = new Experience();
+                $now = Carbon::now()->format('Y_m_d_H_i_s');
+                $file_name = $now.'_'.$i.'_'.$replacementStaff->run;
+                $experience->file = $file->storeAs('replacement_staff/experience_docs', $file_name.'.'.$file->extension());
+                $i++;
+                foreach ($request->previous_experience as $req) {
+                    $experience->previous_experience = $request->input('previous_experience.'.$key_file.'');
+                    $experience->performed_functions = $request->input('performed_functions.'.$key_file.'');
+                    $experience->contact_name = $request->input('contact_name.'.$key_file.'');
+                    $experience->contact_telephone = $request->input('contact_telephone.'.$key_file.'');
+                    $experience->replacement_staff()->associate($replacementStaff);
+                    //$profile->replacement_staff()->associate(Auth::user());
+                    $experience->save();
+                }
+            }
         }
+
         session()->flash('success', 'Su perfil Experiencia Profesional ha sido
         correctamente ingresada.');
         return redirect()->back();
@@ -93,6 +109,20 @@ class ExperienceController extends Controller
      */
     public function destroy(Experience $experience)
     {
-        //
+        $experience->delete();
+        Storage::delete($experience->file);
+
+        session()->flash('danger', 'Su Experiencia Profesional ha sido eliminada.');
+        return redirect()->back();
+    }
+
+    public function download(Experience $experience)
+    {
+        return Storage::download($experience->file);
+    }
+
+    public function show_file(Experience $experience)
+    {
+        return Storage::response($experience->file);
     }
 }
