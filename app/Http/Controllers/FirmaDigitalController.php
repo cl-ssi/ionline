@@ -40,9 +40,9 @@ class FirmaDigitalController extends Controller
         /* Setear Variables */
         $modo           = self::modoAtendidoTest; /* Si es test se usará un run o otp de prueba */
         $otp            = '';
-        $tipo           = 'principal'; /* 'vb', 'principal' */
-        $ct_firmas      = 4; /* Sólo para tipo "vb" */
-        $pocision_firma = 1; /* Sólo para tipo "vb" */
+//        $pocision_firma = 1; /* Sólo para tipo "vb" */
+//        $ct_firmas      = 4; /* Sólo para tipo "vb" */
+
         /* Fin seteo de variable */
 
         $pdfbase64      = $signaturesFlow->signaturesFile->file;
@@ -76,12 +76,16 @@ class FirmaDigitalController extends Controller
          * cn=Autoridad Certificadora del Estado de Chile
          */
 
+        $actualDate = now();
+        $fullName = \Auth::user()->full_name;
+        $email = \Auth::user()->email;
+
         imagettftext($im, $fontSize,   0, $xAxis, $yPading * 1 + $marginTop,
-            $text_color, $font_light,  'Firmado digitalmente el 2020-12-21 16:21 por:');
+            $text_color, $font_light,  "Firmado digitalmente el $actualDate por:");
         imagettftext($im, $fontSize+1, 0, $xAxis, $yPading * 2 + $marginTop + 2,
-            $text_color, $font_bold,   'Germán Andrés Zúñiga Codocedo');
+            $text_color, $font_bold, $fullName);
         imagettftext($im, $fontSize,   0, $xAxis, $yPading * 3 + $marginTop + 3,
-            $text_color, $font_regular,'email = german.zuniga@gmail.com');
+            $text_color, $font_regular,"email = $email");
         /*
         imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 3,
             $text_color, $font_light, 'serialNumber = 15287582-7');
@@ -153,14 +157,17 @@ class FirmaDigitalController extends Controller
         // die($jwt);
 
 
-        if($tipo == 'vb') {
+        if($signaturesFlow->type == 'visador') {
+            $ct_firmas = $signaturesFlow->signature->signaturesFlows->where('type', 'visador')->count();
+            $pocision_firma = $signaturesFlow->sign_position;
+
             $padding        = 25;
             $coordenada_x   = 65;
             $coordenada_y   = 50 + $padding * $ct_firmas - ($pocision_firma * $padding);
             $ancho          = 170 * 0.9;
             $alto           = 30  * 0.9;
         }
-        else if($tipo == 'principal'){
+        else if($signaturesFlow->type == 'firmante'){
             $coordenada_x   = 310;
             $coordenada_y   = 49;
             $ancho          = 170 * 1.4;
