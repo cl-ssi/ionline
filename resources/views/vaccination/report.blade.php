@@ -45,6 +45,11 @@
     </tr>
 
     <tr>
+        <th>Auto Agendados Primera Dósis (>22-02-2021)</th>
+        <td class="text-right">{{ $report['fd_booking'] }}</td>
+        <td class="text-right">{{ $report['fd_booking_per'] }}</td>
+    </tr>
+    <tr>
         <th>Vacunados Primera Dósis</th>
         <td class="text-right">{{ $report['fd_vaccined'] }}</td>
         <td class="text-right">{{ $report['fd_vaccined_per'] }}</td>
@@ -56,6 +61,11 @@
     </tr>
     <tr>
         <td colspan="2">&nbsp;</td>
+    </tr>
+    <tr>
+        <th>Auto Agendados Segunda Dósis</th>
+        <td class="text-right">{{ $report['sd_booking'] }}</td>
+        <td class="text-right">{{ $report['sd_booking_per'] }}</td>
     </tr>
     <tr>
         <th>Vacunados Segunda Dósis</th>

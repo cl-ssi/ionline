@@ -18,7 +18,6 @@ class CreateRstProfilesTable extends Migration
 
             $table->string('profession');
             $table->string('file');
-            $table->string('file_name');
 
             $table->foreignId('replacement_staff_id');
 

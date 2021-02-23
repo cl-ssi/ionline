@@ -7,7 +7,7 @@
     </div>
 
 
-    <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.experience.store', $replacementStaff) }}">
+    <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.experience.store', $replacementStaff) }}" enctype="multipart/form-data">
         @csrf
         @method('POST')
         @foreach($inputs as $key => $value)
@@ -15,7 +15,7 @@
                 <div class="col">
                     <fieldset class="form-group col">
                         <label for="for_previous_experience">Experiencia Laboral</label>
-                        <textarea class="form-control" name="previous_experience[]" rows="5"></textarea>
+                        <textarea class="form-control" name="previous_experience[]" rows="4"></textarea>
                     </fieldset>
 
                     <fieldset class="form-group col">
@@ -24,21 +24,13 @@
                     </fieldset>
                 </div>
                 <div class="col">
-                    <fieldset class="form-group col">
-                        <label for="for_file">Certificado de Experiencia</label>
-                        <div class="form-group custom-file col mt">
-                            <input type="file" class="custom-file-input"  name="file[]" required>
-                            <label class="custom-file-label" for="customFile">Seleccione el archivo</label>
+
+                    <fieldset class="form-group col mt">
+                        <div class="mb-3">
+                          <label for="forFile" class="form-label">Certificado de Experiencia</label>
+                          <input class="form-control" type="file" name="file[]" accept="application/pdf" required>
                         </div>
                     </fieldset>
-
-                    <script>
-                        // Add the following code if you want the name of the file appear on select
-                        $(".custom-file-input").on("change", function() {
-                          var fileName = $(this).val().split("\\").pop();
-                          $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-                        });
-                    </script>
 
                     <fieldset class="form-group col">
                         <label for="for_contact_name">Nombre Contacto</label>
