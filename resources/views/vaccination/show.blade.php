@@ -39,10 +39,10 @@
 
     <hr>
 <ul>
+    <li>Si tienes dificultades respecto al día asignado, tome contacto con OIRS del SSI llamando al anexo minsal 579516 
+        o al correo electrónico <a href="mailto:teresa.stuardo@redsalud.gob.cl">teresa.stuardo@redsalud.gob.cl</a> para agendar en un día distinto.</li>
     <li>El lugar de vacunación es el domo en el estacionamiento atrás del HETG.</li>
     <li>Todos deben presentar su credencial al momento de su vacunación.</li>
-    <li>Si tienes dificultades respecto al día y hora asignado, toma contacto con tu
-        jefatura o supervisor/a de servicio, si eres de la DSSI con Calidad de Vida.</li>
     <li>Debes considerar que posterior a la vacunación debes quedarte
         30 minutos en el lugar para observación post vacunación.</li>
     <li>De presentar una reacción post vacunación leve a moderada,

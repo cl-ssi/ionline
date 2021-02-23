@@ -186,6 +186,10 @@ class VaccinationController extends Controller
         $report['not_informed'] = $report['total'] - $report['informed_cu'] - $report['informed_tp'];
         $report['not_informed_per'] = number_format($report['not_informed'] / $report['total'] * 100, 1).'%';
 
+        /* Cantidad de agendados con primera dosis */
+        $report['fd_booking'] = Vaccination::whereDate('first_dose','>=','2021-02-23')->count();
+        $report['fd_booking_per'] = number_format($report['fd_booking'] / $report['total'] * 100, 1).'%';
+
         /* Cantidad de vacunados con primera dosis */
         $report['fd_vaccined'] = Vaccination::whereNotNull('first_dose_at')->count();
         $report['fd_vaccined_per'] = number_format($report['fd_vaccined'] / $report['total'] * 100, 1).'%';
@@ -193,6 +197,10 @@ class VaccinationController extends Controller
         /* Cantidad pendiente de vacunar con primera dosis */
         $report['fd_not_vaccined'] = $report['total'] - $report['fd_vaccined'];
         $report['fd_not_vaccined_per'] = number_format($report['fd_not_vaccined'] / $report['total'] * 100, 1).'%';
+
+        /* Cantidad de agendados con segunda dosis */
+        $report['sd_booking'] = Vaccination::whereNotNull('second_dose')->count();
+        $report['sd_booking_per'] = number_format($report['sd_booking'] / $report['total'] * 100, 1).'%';
 
         /* Cantidad de vacunados con segunda dosis */
         $report['sd_vaccined'] = Vaccination::whereNotNull('second_dose_at')->count();
