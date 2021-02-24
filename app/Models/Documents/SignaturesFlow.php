@@ -2,6 +2,7 @@
 
 namespace App\Models\Documents;
 
+use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,6 +29,11 @@ class SignaturesFlow extends Model Implements Auditable
 
     public function signature(){
         return $this->signaturesFile->signature();
+    }
+
+    public function getSignerNameAttribute()
+    {
+        return User::find($this->user_id)->fullName;
     }
 
     protected $table = 'doc_signatures_flows';
