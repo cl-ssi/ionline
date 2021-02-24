@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Indicators\_2020;
 
+use App\Indicators\Rem;
 use Illuminate\Support\Facades\DB;
 use App\Indicators\SingleParameter;
 
@@ -56,6 +57,9 @@ $sql_numerador = "SELECT r.Mes AS mes, SUM(COALESCE(Col01,0)) AS valor
                 ORDER BY r.Mes";
 $numeradores = DB::connection('mysql_rem')->select($sql_numerador);
 
+// $numeradores = Rem::year(2019)->with('establecimiento')->whereIn('Mes', [12])->whereIn('CodigoPrestacion', ['P4180200','P4200100'])->sum('Col01');
+// dd($numeradores);
+
 foreach($numeradores as $numerador) {
     switch($numerador->mes) {
         case 12: $data13['numerador_12a'] = $numerador->valor; break;
@@ -70,6 +74,9 @@ $sql_denominador = "SELECT r.Mes AS mes, SUM(COALESCE(Col01,0)) AS valor
                     GROUP BY r.Mes
                     ORDER BY r.Mes";
 $denominadores = DB::connection('mysql_rem')->select($sql_denominador);
+
+// $denominadores = Rem::year(2019)->with('establecimiento')->whereIn('Mes', [12])->whereIn('CodigoPrestacion', ['P4150601'])->sum('Col01');
+// dd($denominadores);
 
 foreach($denominadores as $denominador) {
     switch($denominador->mes) {
@@ -87,6 +94,9 @@ $sql_numerador = "SELECT r.Mes AS mes, SUM(COALESCE(Col01,0)) AS valor
                 GROUP BY r.Mes
                 ORDER BY r.Mes";
 $numeradores = DB::connection('mysql_rem')->select($sql_numerador);
+
+// $numeradores = Rem::year(2020)->with('establecimiento')->selectRaw('SUM(COALESCE(Col01,0)) AS valor, Mes')->whereIn('Mes', [6,12])->whereIn('CodigoPrestacion', ['P4180200','P4200100'])->groupBy('Mes')->orderBy('Mes')->get();
+// dd($numeradores);
 
 foreach($numeradores as $numerador) {
     switch($numerador->mes) {
