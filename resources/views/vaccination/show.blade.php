@@ -39,7 +39,7 @@
 
     <hr>
 <ul>
-    <li>Si tienes dificultades respecto al día asignado, tome contacto con OIRS del SSI llamando al anexo minsal 579516 
+    <li>Si tienes dificultades respecto al día asignado, contáctese con OIRS del SSI llamando al anexo minsal 579516 
         o al correo electrónico <a href="mailto:teresa.stuardo@redsalud.gob.cl">teresa.stuardo@redsalud.gob.cl</a> para agendar en un día distinto.</li>
     <li>El lugar de vacunación es el domo en el estacionamiento atrás del HETG.</li>
     <li>Todos deben presentar su credencial al momento de su vacunación.</li>

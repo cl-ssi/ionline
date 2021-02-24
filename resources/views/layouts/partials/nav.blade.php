@@ -121,6 +121,12 @@
                           <span class="badge badge-secondary">{{ App\Models\ServiceRequests\ServiceRequest::getPendingRequests() }}</span>
                       </a>
 
+                      <a class="dropdown-item"
+                          href="{{ route('rrhh.fulfillments.index') }}">
+                          <i class="fas fa-wallet"></i> Cumplimiento de Solicitudes
+                          <!-- <span class="badge badge-secondary"></span> -->
+                      </a>
+
                       @canany(['Service Request: additional data'])
                         <a class="dropdown-item"
                             href="{{ route('rrhh.service_requests.aditional_data_list') }}">
