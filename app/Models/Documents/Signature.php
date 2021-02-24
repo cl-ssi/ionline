@@ -55,10 +55,15 @@ class Signature extends Model implements Auditable
             ->signaturesFlows->where('type', 'visador');
     }
 
+    /**
+     * @return mixed
+     */
     public function getSignaturesFlowsAttribute(){
         return $this->signaturesFiles->where('file_type', 'documento')->first()
             ->signaturesFlows;
     }
+
+
 
     protected $table = 'doc_signatures';
 
