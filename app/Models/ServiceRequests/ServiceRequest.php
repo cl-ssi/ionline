@@ -109,6 +109,10 @@ class ServiceRequest extends Model implements Auditable
     		return $this->hasMany('\App\Models\ServiceRequests\ShiftControl');
     }
 
+    public function Fulfillments() {
+    		return $this->hasMany('\App\Models\ServiceRequests\Fulfillment');
+    }
+
     public static function getPendingRequests()
     {
       // $serviceRequestsPendingsCount = ServiceRequest::whereHas("SignatureFlows", function($subQuery) {
