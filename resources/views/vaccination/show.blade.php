@@ -31,21 +31,18 @@
         </ul>
     </div>
 @else
-    <h5 class="mb-3">Información sobre vacunación.</h5>
+    <h5 class="mb-3">Información sobre <strong>VACUNA CORONAVAC</strong> del <strong>LABORATORIO SINOVAC LIFE SCIENCE®</strong> contra
+        <strong>CONTRA SARS-COV-2</strong>.</h5>
+    <p>Hola <strong>{{ $vaccination->fullName() }}</strong>.</p>
 
-    <p>
-        Hola <strong>{{ $vaccination->fullName() }}</strong> la primera dósis de la
-        <strong>VACUNA CORONAVAC del LABORATORIO SINOVAC LIFE SCIENCE®</strong> contra
-        <strong>CONTRA SARS-COV-2</strong> te toca el día
-        <strong>{{ $vaccination->first_dose->format('d-m-Y \a \l\a\s H:i') }} horas.</strong>
-    </p>
+    @livewire('vaccination.book',['vaccination' => $vaccination])
 
-
+    <hr>
 <ul>
+    <li>Si tienes dificultades respecto al día asignado, contáctese con OIRS del SSI llamando al anexo minsal 579516 
+        o al correo electrónico <a href="mailto:teresa.stuardo@redsalud.gob.cl">teresa.stuardo@redsalud.gob.cl</a> para agendar en un día distinto.</li>
     <li>El lugar de vacunación es el domo en el estacionamiento atrás del HETG.</li>
     <li>Todos deben presentar su credencial al momento de su vacunación.</li>
-    <li>Si tienes dificultades respecto al día y hora asignado, toma contacto con tu
-        jefatura o supervisor/a de servicio, si eres de la DSSI con Calidad de Vida.</li>
     <li>Debes considerar que posterior a la vacunación debes quedarte
         30 minutos en el lugar para observación post vacunación.</li>
     <li>De presentar una reacción post vacunación leve a moderada,

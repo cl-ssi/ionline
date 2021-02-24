@@ -104,7 +104,7 @@
         <table class="table small table-striped ">
             <thead>
                 <tr>
-                    <th>Fecha de Carga</th>
+                    <th style="width: 11%">Fecha Registro</th>
                     <th>Título</th>
                     <th>Archivo</th>
                     <th style="width: 10%"></th>
@@ -168,19 +168,19 @@
                     <th>Experiencia</th>
                     <th>Funciones Realizadas</th>
                     <th style="width: 15%">Contacto</th>
-                    <th style="width: 12%"></th>
+                    <th style="width: 5%"></th>
+                    <th style="width: 2%"></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($replacementStaff->experiences as $experience)
                 <tr>
-                    <td>{{ $experience->updated_at->format('d-m-Y') }}</td>
-                    <td>{{ substr($experience->previous_experience, 0, 100) }}</td>
-                    <td>{{ substr($experience->performed_functions, 0, 100) }}</td>
+                    <td>{{ $experience->updated_at->format('d-m-Y H:i:s') }}</td>
+                    <td>{{ substr($experience->previous_experience, 0, 150) }}</td>
+                    <td>{{ substr($experience->performed_functions, 0, 150) }}</td>
                     <td>{{ $experience->contact_name }}<br>{{ $experience->contact_telephone }}</td>
                     <td>
                         <button href="" class="btn btn-outline-secondary btn-sm exp-modal" title="Ir" data-toggle="modal" data-target="#exampleModal-exp-{{ $experience->id }}"> <i class="far fa-eye"></i></button>
-                        <!--<button href="" class="btn btn-outline-secondary btn-sm" title="Ir"> <i class="fas fa-paperclip"></i></button>-->
                     </td>
                     <td>
                         <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.experience.destroy', $experience) }}">
@@ -214,24 +214,44 @@
             <table class="table small table-striped ">
                 <thead>
                     <tr>
-                        <td>#</td>
+                        <td style="width: 11%">Fecha Registro</td>
                         <th>Nombre de Capacitación</th>
                         <th>N° de Horas Realizadas</th>
-                        <th>Certificado</th>
-                        <th style="width: 12%"></th>
+                        <th>Archivo</th>
+                        <th style="width: 10%"></th>
+                        <th style="width: 2%"></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($replacementStaff->trainings as $training)
                     <tr>
-                        <td>{{ $profile->updated_at->format('d-m-Y H:i:s') }}</td>
+                        <td>{{ $training->updated_at->format('d-m-Y H:i:s') }}</td>
                         <td>{{ $training->training_name }}</td>
                         <td>{{ $training->hours_training }}</td>
-                        <td>{{ $training->file }}</td>
                         <td>
-                            <button href="" class="btn btn-outline-secondary btn-sm" title="Ir" disabled> <i class="far fa-eye"></i></button>
-                            <button href="" class="btn btn-outline-secondary btn-sm" title="Ir"> <i class="fas fa-paperclip"></i></button>
-                            <button href="" class="btn btn-danger btn-sm" title="Ir"> <i class="fas fa-trash"></i></button>
+                            @if(pathinfo($training->file, PATHINFO_EXTENSION) == 'pdf')
+                                <i class="fas fa-file-pdf fa-2x"></i>
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{ route('replacement_staff.training.show_file', $training) }}"
+                                class="btn btn-outline-secondary btn-sm"
+                                title="Ir"
+                                target="_blank"> <i class="far fa-eye"></i></a>
+                            <a class="btn btn-outline-secondary btn-sm"
+                                href="{{ route('replacement_staff.training.download', $training) }}"
+                                target="_blank"><i class="fas fa-download"></i>
+                            </a>
+                        </td>
+                        <td>
+                          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.training.destroy', $training) }}">
+                              @csrf
+                              @method('DELETE')
+                              <button type="submit" class="btn btn-outline-danger btn-sm"
+                                  onclick="return confirm('¿Está seguro que desea eliminar su Capacitación?')">
+                                  <i class="fas fa-trash"></i>
+                              </button>
+                          </form>
                         </td>
                     </tr>
                     @endforeach
@@ -253,24 +273,44 @@
                 <table class="table small table-striped ">
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th style="width: 11%">Fecha Registro</th>
                             <th>Idioma</th>
                             <th>Nivel</th>
-                            <th>Certificado (Si dispone)</th>
-                            <th style="width: 12%"></th>
+                            <th>Archivo</th>
+                            <th style="width: 10%"></th>
+                            <th style="width: 2%"></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($replacementStaff->languages as $language)
                         <tr>
                             <td>{{ $profile->updated_at->format('d-m-Y H:i:s') }}</td>
-                            <td>{{ $language->language }}</td>
-                            <td>{{ $language->level }}</td>
-                            <td>{{ $language->file }}</td>
+                            <td>{{ $language->LanguageValue }}</td>
+                            <td>{{ $language->LevelValue }}</td>
                             <td>
-                                <button href="" class="btn btn-outline-secondary btn-sm" title="Ir" disabled> <i class="far fa-eye"></i></button>
-                                <button href="" class="btn btn-outline-secondary btn-sm" title="Ir"> <i class="fas fa-paperclip"></i></button>
-                                <button href="" class="btn btn-danger btn-sm" title="Ir"> <i class="fas fa-trash"></i></button>
+                                @if(pathinfo($language->file, PATHINFO_EXTENSION) == 'pdf')
+                                    <i class="fas fa-file-pdf fa-2x"></i>
+                                @endif
+                            </td>
+                            <td>
+                                <a href="{{ route('replacement_staff.language.show_file', $language) }}"
+                                    class="btn btn-outline-secondary btn-sm"
+                                    title="Ir"
+                                    target="_blank"> <i class="far fa-eye"></i></a>
+                                <a class="btn btn-outline-secondary btn-sm"
+                                    href="{{ route('replacement_staff.language.download', $language) }}"
+                                    target="_blank"><i class="fas fa-download"></i>
+                                </a>
+                            </td>
+                            <td>
+                              <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.language.destroy', $language) }}">
+                                  @csrf
+                                  @method('DELETE')
+                                  <button type="submit" class="btn btn-outline-danger btn-sm"
+                                      onclick="return confirm('¿Está seguro que desea eliminar su idioma: {{$language->LanguageValue}}?')">
+                                      <i class="fas fa-trash"></i>
+                                  </button>
+                              </form>
                             </td>
                         </tr>
                         @endforeach
@@ -289,14 +329,5 @@
 
 <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap-select.min.css') }}">
 <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
-
-<script>
-    $(document).ready(function(){
-       $(".exp-modal").click(function(){ // Click to only happen on announce links
-         $("#cafeId").val($(this).data('id'));
-         $('#createFormId').modal('show');
-       });
-    });
-</script>
 
 @endsection

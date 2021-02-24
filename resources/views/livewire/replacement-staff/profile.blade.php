@@ -20,21 +20,12 @@
               </fieldset>
 
               <fieldset class="form-group col mt">
-                  <label for="for_file"><br></label>
-                  <div class="form-group custom-file col mt">
-                      <input type="file" class="custom-file-input"  name="file[]" required>
-                      <label class="custom-file-label" for="customFile">Seleccione el archivo</label>
+                  <div class="mb-3">
+                    <label for="forFile" class="form-label"><br></label>
+                    <input class="form-control" type="file" name="file[]" accept="application/pdf" required>
                   </div>
               </fieldset>
-
-              <script>
-                  // Add the following code if you want the name of the file appear on select
-                  $(".custom-file-input").on("change", function() {
-                    var fileName = $(this).val().split("\\").pop();
-                    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-                  });
-              </script>
-
+              
               <fieldset class="form-group col-md-2">
                   <label for="for_button"><br></label>
                   <button class="btn btn-danger btn-block" wire:click.prevent="remove({{$key}})">Remover</button>

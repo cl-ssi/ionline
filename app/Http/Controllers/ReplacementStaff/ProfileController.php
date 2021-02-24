@@ -51,6 +51,7 @@ class ProfileController extends Controller
     public function destroy(Profile $profile)
     {
         $profile->delete();
+        Storage::delete($profile->file);
 
         session()->flash('danger', 'Su perfil profesional ha sido eliminado.');
         return redirect()->back();

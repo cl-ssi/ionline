@@ -12,7 +12,7 @@
         Directores de Establecimiento.</li>
     <li>El lugar de vacunación es el domo en el estacionamiento atrás del HETG.</li>
     <li>Todos deben presentar su credencial al momento de su vacunación.</li>
-    <li>Si no te registrasste y quieres vacunarte, tienes plazo hasta el 08-02-2021:
+    <li>Si no te registraste y quieres vacunarte, tienes plazo hasta el 01-03-2021:
         <ul>
             <li>Funcionarios del HETG deben tomar contacto con su jefatura o
                 supervisor/a de servicio y/o el Encargado de Vacunas del HETG
@@ -39,18 +39,24 @@
 
 <div class="alert alert-secondary mt-3 text-center" role="alert">
     <h4 class="alert-heading">Consultar fecha de vacunación </h4>
-    <a href="{{ route('claveunica.autenticar') }}?redirect=L3ZhY2NpbmF0aW9uL2xvZ2lu" class="btn btn-lg btn-outline-primary">
-        <img src="{{ asset('images/btn_claveunica_119px.png') }}" alt="Logo Clave única">
-    </a>
+    <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
+    <div class="row justify-content-center">
+        <a class="btn-cu btn-m btn-color-estandar" title="Este es el botón Iniciar sesión de ClaveÚnica"
+            href="{{ route('claveunica.autenticar') }}?redirect=L3ZhY2NpbmF0aW9uL2xvZ2lu">
+            <span class="cl-claveunica"></span>
+            <span class="texto">Iniciar sesión</span>
+        </a>
+    <!--./ fin botón-->
+    </div>
 </div>
 
 
 
 <div class="alert alert-info mt-3" role="alert">
-  Si no tienes clave única, contáctate con OIRS al correo
-  <a href="mailto:mireyasoto.f@redsalud.gob.cl">mireyasoto.f@redsalud.gob.cl</a>
-  o llamando a los anexos 579501 / 579532 y
-  solicita información sobre tu fecha y hora de vacunación.
+    Si no tienes clave única, contáctate con OIRS al correo
+    <a href="mailto:teresa.stuardo@redsalud.gob.cl">teresa.stuardo@redsalud.gob.cl</a>
+    o llamando a los anexos 579501 / 579516/ 579532 y
+    solicita información sobre tu fecha y hora de vacunación.
 </div>
 
 @endsection
