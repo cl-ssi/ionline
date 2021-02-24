@@ -80,17 +80,8 @@
     </div>
 
     <div class="row">
-        <fieldset class="form-group col-md-3 col-12">
-            <label for="for_first_dose">Agenda Primera dósis</label>
-            <input type="datetime-local" class="form-control" name="first_dose"
-                id="for_first_dose" required value="{{ optional($vaccination->first_dose)->format('Y-m-d\TH:i:s') }}">
-        </fieldset>
 
-        <fieldset class="form-group col-md-3 col-12">
-            <label for="for_second_dose">Agenda Segunda dósis</label>
-            <input type="datetime-local" class="form-control" name="second_dose"
-                id="for_second_dose" value="{{ optional($vaccination->second_dose)->format('Y-m-d\TH:i:s') }}">
-        </fieldset>
+    @livewire('vaccination.admin-book',['vaccination' => $vaccination])
 
     </div>
 
