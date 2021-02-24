@@ -38,14 +38,19 @@ class FirmaDigitalController extends Controller
         //header("Content-Type: image/png; charset=UTF-8");
 
         /* Setear Variables */
-        $modo           = self::modoAtendidoTest; /* Si es test se usará un run o otp de prueba */
+        $modo           = self::modoAtendidoProduccion; /* Si es test se usará un run o otp de prueba */
         $otp            = '';
 //        $pocision_firma = 1; /* Sólo para tipo "vb" */
 //        $ct_firmas      = 4; /* Sólo para tipo "vb" */
 
         /* Fin seteo de variable */
 
-        $pdfbase64      = $signaturesFlow->signaturesFile->file;
+        if ($signaturesFlow->signaturesFile->signed_file) {
+            $pdfbase64      = $signaturesFlow->signaturesFile->signed_file;
+        }else{
+            $pdfbase64 = $signaturesFlow->signaturesFile->file;
+        }
+
         $checksum_pdf   = $signaturesFlow->signaturesFile->md5_file;
 
         /* Confección del cuadro imagen de la firma */
@@ -110,7 +115,7 @@ class FirmaDigitalController extends Controller
 
         /* Fin cuadro de firma */
 
-        if($modo = self::modoDesatendidoTest) {
+        if($modo == self::modoDesatendidoTest) {
             $url = 'https://api.firma.test.digital.gob.cl/firma/v2/files/tickets';
             $api_token = 'sandbox';
             $secret = 'abcd';
@@ -123,7 +128,7 @@ class FirmaDigitalController extends Controller
 
             /* $pdfbase64 = base64_encode(file_get_contents(public_path('samples/sample3.pdf'))); */
         }
-        elseif ($modo = self::modoAtendidoTest) {
+        elseif ($modo == self::modoAtendidoTest) {
             $url = 'https://api.firma.test.digital.gob.cl/firma/v2/files/tickets';
             $api_token = 'sandbox';
             $secret = 'abcd';
@@ -132,11 +137,12 @@ class FirmaDigitalController extends Controller
 
             $purpose = 'Propósito General';
             $entity = 'Subsecretaría General de La Presidencia';
-        } elseif ($modo = self::modoAtendidoProduccion) {
-            $url = 'https://api.firma.digital.gob.cl/firma/v2/files/tickets';
+        } elseif ($modo == self::modoAtendidoProduccion) {
+            $url = env('FIRMA_URL');
             $api_token = env('FIRMA_API_TOKEN');
             $secret = env('FIRMA_SECRET');
             $otp  = $request->otp;
+            $run = \Auth::id();
 
             $purpose = 'Propósito General';
             $entity = 'Servicio de Salud Iquique';
@@ -205,6 +211,8 @@ class FirmaDigitalController extends Controller
             ]
         ];
 
+//        dd(json_encode($data, JSON_PRETTY_PRINT));
+
         // <llx> Coordenada x de la esquina inferior izquierda de la imagen.
         // <lly> Coordenada y de la esquina inferior izquierda de la imagen.
         // <urx> Coordenada x de la esquina superior derecha de la imagen.
@@ -216,16 +224,12 @@ class FirmaDigitalController extends Controller
             }else{
                 $response = Http::post($url, $data);
             }
-        } catch (\GuzzleHttp\Exception\ConnectException $e) {
-            var_dump($e);exit();
-        }
-        catch (RequestException $e) {
-            var_dump($e);exit();
-        }
-        catch (Exception $e){
+        } catch (\GuzzleHttp\Exception\ConnectException | RequestException | Exception $e) {
             var_dump($e);exit();
         }
         $json = $response->json();
+
+//        dd($json);
 
         if (array_key_exists('error', $json)) {
             session()->flash('warning', $json['error']);
@@ -237,8 +241,6 @@ class FirmaDigitalController extends Controller
             return redirect()->route('documents.signatures.index', ['pendientes']);
         }
 
-////        print_r($json);
-////        dd(json_encode($data, JSON_PRETTY_PRINT));
 
 ////        $data = base64_decode($json['files'][0]['content']);
         $data = $json['files'][0]['content'];
@@ -251,7 +253,7 @@ class FirmaDigitalController extends Controller
 //        $signaturesFlow->signaturesFile->signed_file = $signaturesFlow->signaturesFile->file;
         $signaturesFlow->signaturesFile->save();
 
-        session()->flash('info', "El documento $signaturesFlow->signature->id se ha firmado correctamente.");
+        session()->flash('info', "El documento {$signaturesFlow->signature->id} se ha firmado correctamente.");
         return redirect()->route('documents.signatures.index', ['pendientes']);
     }
 
