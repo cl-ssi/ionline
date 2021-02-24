@@ -88,16 +88,9 @@
             </select>
         </fieldset>
 
-
-        {{-- <fieldset class="form-group col-md-3 col-12">
-            <label for="for_organizational_unit_id">Unidad Organizacional</label>
-            <select name="organizational_unit_id" id="for_organizational_unit_id" class="form-control">
-                <option value=""></option>
-            </select>
-        </fieldset> --}}
     </div>
 
-    <div class="form-row">
+    <!-- <div class="form-row">
         <fieldset class="form-group col-md-3 col-12">
             <label for="for_first_dose">Agenda Primera dósis</label>
             <input type="datetime-local" class="form-control" name="first_dose"
@@ -143,7 +136,7 @@
                 id="for_sd_observation">
         </fieldset>
 
-    </div>
+    </div> -->
 
     <button type="submit" class="btn btn-primary form-control">Crear</button>
 
