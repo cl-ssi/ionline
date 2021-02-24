@@ -72,17 +72,23 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
     });
     Route::prefix('experience')->name('experience.')->group(function(){
         Route::post('/{replacementStaff}/store', [ExperienceController::class, 'store'])->name('store');
-        Route::get('/download/{experience}', [ProfileController::class, 'download'])->name('download');
-        Route::get('/show_file/{experience}', [ProfileController::class, 'show_file'])->name('show_file');
-        Route::delete('{experience}/destroy', [ProfileController::class, 'destroy'])->name('destroy');
+        Route::get('/download/{experience}', [ExperienceController::class, 'download'])->name('download');
+        Route::get('/show_file/{experience}', [ExperienceController::class, 'show_file'])->name('show_file');
+        Route::delete('{experience}/destroy', [ExperienceController::class, 'destroy'])->name('destroy');
         // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
     });
     Route::prefix('training')->name('training.')->group(function(){
         Route::post('/{replacementStaff}/store', [TrainingController::class, 'store'])->name('store');
+        Route::get('/download/{training}', [TrainingController::class, 'download'])->name('download');
+        Route::get('/show_file/{training}', [TrainingController::class, 'show_file'])->name('show_file');
+        Route::delete('{training}/destroy', [TrainingController::class, 'destroy'])->name('destroy');
         // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
     });
     Route::prefix('language')->name('language.')->group(function(){
         Route::post('/{replacementStaff}/store', [languageController::class, 'store'])->name('store');
+        Route::get('/download/{language}', [languageController::class, 'download'])->name('download');
+        Route::get('/show_file/{language}', [languageController::class, 'show_file'])->name('show_file');
+        Route::delete('{language}/destroy', [languageController::class, 'destroy'])->name('destroy');
         // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
     });
     Route::prefix('request')->name('request.')->group(function(){
@@ -785,6 +791,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::post('/files/{requestForm}', 'RequestForms\RequestFormFileController@store')->name('files.store')->middleware('auth');
 /************** COMENTAR ****************/
 });
+
+Route::get('/yomevacuno',[VaccinationController::class,'welcome'])->name('welcome');
 
 Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::get('/welcome',[VaccinationController::class,'welcome'])->name('welcome');
