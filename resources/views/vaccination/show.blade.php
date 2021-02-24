@@ -21,13 +21,11 @@
 
     <div class="alert alert-info mt-3" role="alert">
         <ul>
-            <li>Funcionarios del HETG deben tomar contacto con su jefatura o
-                supervisor/a de servicio y/o el Encargado de Vacunas del HETG
-                <a href="mailto:coordinacionvacunashetg@gmail.com">coordinacionvacunashetg@gmail.com</a></li>
-            <li>Funcionarios de la DSSI deben tomar contacto con la jefatura
-                de Calidad de Vida del SSI, Vanessa Sepúlveda, anexo
-                576443 - desde teléfonos externos al 572406443
-                <a href="mailto:vanessa.sepulvedam@redsalud.gov.cl">vanessa.sepulvedam@redsalud.gov.cl</a></li>
+            <li>Funcionario que ingresa a registro por su primera dosis, 
+                y no puede acceder debe tomar contacto con OIRS del Servicio de Salud</li>
+            <li>Funcionarios que tengan que inmunizarse con segunda dosis, sólo deben 
+            agendar hora, ya que el día está fijado dentro de su carnet de vacunación 
+            (28 días posterior a su primera dosis).</li>
         </ul>
     </div>
 @else
@@ -43,14 +41,14 @@
         o al correo electrónico <a href="mailto:teresa.stuardo@redsalud.gob.cl">teresa.stuardo@redsalud.gob.cl</a> para agendar en un día distinto.</li>
     <li>El lugar de vacunación es el domo en el estacionamiento atrás del HETG.</li>
     <li>Todos deben presentar su credencial al momento de su vacunación.</li>
-    <li>Debes considerar que posterior a la vacunación debes quedarte
-        30 minutos en el lugar para observación post vacunación.</li>
-    <li>De presentar una reacción post vacunación leve a moderada,
-        preséntate en el lugar de vacunación con el Enfermera de Salud del Trabajador
-        (María Edith Vílchez) para tu notificación al ISP y seguimiento
-        por parte de la unidad de salud.
-        Si es algo importante dirigente a un sistema de urgencia,
-        donde de igual manera deben reportar el evento.</li>
+    <li>Debes considerar que posterior a la vacunación debes quedarte 30 
+        minutos en el lugar para observación post vacunación.</li>
+    <li>De presentar una reacción post vacunación leve a moderada, 
+        preséntate en el lugar de vacunación con el Enfermera de Salud del 
+        Trabajador (María Edith Vílches) para tu notificación al ISP y 
+        seguimiento por parte de la unidad de salud. Si es algo importante 
+        dirigente a un sistema de urgencia, donde de igual manera deben 
+        reportar el evento.</li>
 </ul>
 
 
