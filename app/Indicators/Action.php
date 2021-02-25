@@ -17,7 +17,7 @@ class Action extends Model
 
     public function values()
     {
-        return $this->hasMany('App\Indicators\Value')->orderBy('month');
+        return $this->morphMany('App\Indicators\Value', 'valueable')->orderBy('month');
     }
 
     public function compliances()

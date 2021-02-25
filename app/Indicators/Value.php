@@ -24,8 +24,8 @@ class Value extends Model
         });
     }
 
-    public function action(){
-        return $this->belongsTo('App\Indicators\Action');
+    public function valueable(){
+        return $this->morphTo();
     }
 
     public function creator(){
