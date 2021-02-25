@@ -60,7 +60,7 @@
                 <input type="file" class="form-control" id="for_document" name="document">
 
                 {{--                <a href="{{ route('lab.suspect_cases.download', $suspectCase->id) }}"--}}
-                <a href="{{route('documents.showPdfDocumento', $signature)}}"
+                <a href="{{route('documents.showPdf', $signature->signaturesFlowSigner->signaturesFile)}}"
                    target="_blank" data-toggle="tooltip" data-placement="top"
                    data-original-title="">Documento <i
                         {{--                        data-original-title="{{ $suspectCase->id . 'pdf' }}">Resultado <i--}}

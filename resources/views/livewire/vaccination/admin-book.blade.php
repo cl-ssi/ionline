@@ -64,7 +64,9 @@
                         @foreach($day->slots as $slot)
                             <li class="list-group-item text-center">
                             {{ $slot->start_at->format('H:i') }} <br> 
-                            <button class="btn btn-sm btn-primary ml-3" wire:click="bookingSecond({{ $slot->id }})" onclick="return false;">Reservar</button> 
+                            @if($slot->available > $slot->used)
+                            <button class="btn btn-sm btn-primary ml-3" wire:click="bookingSecond({{ $slot->id }})" onclick="return false;">Reservar</button>
+                            @endif
                             <br>
                             ({{ $slot->available - $slot->used }} cupos)
                             </li>
