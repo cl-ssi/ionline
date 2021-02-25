@@ -3,6 +3,7 @@
 namespace App\Indicators;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 class Comges extends Model
 {
@@ -19,12 +20,12 @@ class Comges extends Model
 
     public function indicators()
     {
-        return $this->hasMany('App\Indicators\Indicator')->orderBy('number');
+        return $this->morphMany('App\Indicators\Indicator', 'indicatorable')->orderBy('number');
     }
 
     public function sections()
     {
-        return $this->hasManyThrough('App\Indicators\Section', 'App\Indicators\Indicator');
+        return $this->hasManyThrough('App\Indicators\Section', 'App\Indicators\Indicator', 'indicatorable_id')->where('indicatorable_type', array_search(static::class, Relation::morphMap()) ?: static::class);
     }
 
     public function getReferrer($number)
