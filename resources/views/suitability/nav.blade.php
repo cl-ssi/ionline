@@ -34,9 +34,13 @@
         <i class="fas fa-file-medical-alt"></i> Configuración Examen
         </a>        
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <a class="dropdown-item" href="{{ route('suitability.schools.index') }}"><i class="fas fa-school"></i>  Colegios</a>
+            <a class="dropdown-item" href="{{ route('suitability.schools.index') }}"><i class="fas fa-user"></i>  Usuarios</a>
+            <hr>
             <a class="dropdown-item" href="{{ route('suitability.categories.index') }}"><i class="fas fa-list"></i>  Examen</a>
             <a class="dropdown-item" href="{{ route('suitability.questions.index') }}"><i class="fas fa-question"></i>  Preguntas</a>
-            <a class="dropdown-item" href="{{ route('suitability.options.index') }}"><i class="fas fa-check"></i>  Opciones</a>            
+            <a class="dropdown-item" href="{{ route('suitability.options.index') }}"><i class="fas fa-check"></i>  Opciones</a>
+            
         </div>
     </div>
     

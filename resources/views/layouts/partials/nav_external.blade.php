@@ -51,7 +51,7 @@
 
                             
 
-                            <a class="dropdown-item" role="button" onclick="logout()" id="cierreSesion">
+                            <a class="dropdown-item" role="button" onclick="logout()" id="cierreSesion" href="{{ route('logout') }}">
                                 {{ __('Cerrar sesión') }}
                             </a>
 

@@ -7,6 +7,8 @@ use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\QuestionsController;
 use App\Http\Controllers\Suitability\OptionsController;
 use App\Http\Controllers\Suitability\ResultsController;
+use App\Http\Controllers\Suitability\SchoolsController;
+
 use App\Http\Controllers\RequestForms\ItemController;
 use App\Http\Controllers\RequestForms\PassageController;
 use App\Http\Controllers\RequestForms\RequestFormController;
@@ -839,6 +841,12 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/', [OptionsController::class, 'index'])->name('index');
         Route::get('/create', [OptionsController::class, 'create'])->name('create');
         Route::post('/store', [OptionsController::class, 'store'])->name('store');
+    });
+
+    Route::prefix('schools')->as('schools.')->middleware('auth')->group(function () {
+        Route::get('/', [SchoolsController::class, 'index'])->name('index');
+        Route::get('/create', [SchoolsController::class, 'create'])->name('create');
+        Route::post('/store', [SchoolsController::class, 'store'])->name('store');
     });
 
 
