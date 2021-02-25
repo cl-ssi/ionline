@@ -13,10 +13,12 @@
 		<i class="far fa-file"></i> Nueva Solicitud
 	</a>
 
+	@can('Service Request: derive requests')
 	<a class="btn btn-warning"
 		href="#modal_derive" data-toggle="modal">
 		<i class="fas fa-sign-in-alt" ></i> Derivar mis solicitudes
 	</a>
+	@endcan
 
 	@can('Service Request: consolidated data')
 		<a type="button"
