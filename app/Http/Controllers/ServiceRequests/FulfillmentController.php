@@ -63,8 +63,8 @@ class FulfillmentController extends Controller
     public function store(Request $request)
     {
       $fulfillment = new Fulfillment($request->All());
-      $fulfillment->responsable_approbation = 1;
-      $fulfillment->responsable_approver_id = Auth::user()->id;
+      // $fulfillment->responsable_approbation = 1;
+      // $fulfillment->responsable_approver_id = Auth::user()->id;
       $fulfillment->save();
 
       //turnos
@@ -173,4 +173,31 @@ class FulfillmentController extends Controller
 
         return $pdf->stream('mi-archivo.pdf');
     }
+
+    public function confirmFulfillment(Fulfillment $fulfillment)
+    {
+        // dd($fulfillment);
+        if ($fulfillment->responsable_approver_id == NULL) {
+          $fulfillment->responsable_approbation = 1;
+          $fulfillment->responsable_approbation_date = Carbon::now();
+          $fulfillment->responsable_approver_id = Auth::user()->id;
+          $fulfillment->save();
+        }
+        // if ($fulfillment->responsable_approver_id != NULL && $fulfillment->rrhh_approver_id == NULL) {
+        //   $fulfillment->rrhh_approbation = 1;
+        //   $fulfillment->rrhh_approver_id = Auth::user()->id;
+        //   $fulfillment->save();
+        // }
+        // if ($fulfillment->rrhh_approver_id != NULL && $fulfillment->finances_approver_id == NULL) {
+        //   $fulfillment->finances_approbation = 1;
+        //   $fulfillment->finances_approver_id = Auth::user()->id;
+        //   $fulfillment->save();
+        // }
+
+
+        session()->flash('success', 'Se ha confirmado la información del período.');
+        return redirect()->back();
+    }
+
+
 }

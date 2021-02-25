@@ -50,7 +50,7 @@
 
 @foreach($periods as $key => $period)
 
-<div class="card">
+<div class="card border-dark">
   <div class="card-header">
     Período <b>{{$period->format("m-Y")}}</b>
   </div>
@@ -140,10 +140,17 @@
             <input type="text" class="form-control" name="observation" value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->observation}}">
         </fieldset>
 
-        <fieldset class="form-group col">
-            <label for="for_estate"><br/></label>
-            <button type="submit" class="btn btn-primary form-control">Guardar</button>
-        </fieldset>
+        @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approbation == NULL)
+          <fieldset class="form-group col">
+              <label for="for_estate"><br/></label>
+              <button type="submit" class="btn btn-primary form-control">Guardar</button>
+          </fieldset>
+        @else
+          <fieldset class="form-group col">
+              <label for="for_estate"><br/></label>
+              <button type="submit" class="btn btn-primary form-control" disabled>Guardar</button>
+          </fieldset>
+        @endif
       </div>
 
       </form>
@@ -194,10 +201,17 @@
               <input type="time" class="form-control" name="end_hour" required>
           </fieldset>
 
-          <fieldset class="form-group col">
-              <label for="for_estate"><br/></label>
-              <button type="submit" class="btn btn-primary form-control">Guardar</button>
-          </fieldset>
+          @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approbation == NULL)
+            <fieldset class="form-group col">
+                <label for="for_estate"><br/></label>
+                <button type="submit" class="btn btn-primary form-control">Guardar</button>
+            </fieldset>
+          @else
+            <fieldset class="form-group col">
+                <label for="for_estate"><br/></label>
+                <button type="submit" class="btn btn-primary form-control" disabled>Guardar</button>
+            </fieldset>
+          @endif
         </div>
 
       </form>
@@ -216,6 +230,7 @@
             @foreach($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->FulfillmentItems as $key => $FulfillmentItem)
               <tr>
                   <td>
+                    @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approbation == NULL)
                     <form method="POST" action="{{ route('rrhh.fulfillmentItem.destroy', $FulfillmentItem) }}" class="d-inline">
           						@csrf
           						@method('DELETE')
@@ -223,6 +238,7 @@
           							<span class="fas fa-trash-alt" aria-hidden="true"></span>
           						</button>
           					</form>
+                    @endif
                   </td>
                   <td>{{$FulfillmentItem->type}}</td>
                   <td>{{$FulfillmentItem->start_date->format('Y-m-d H:i')}}</td>
@@ -233,12 +249,75 @@
           </tbody>
       </table>
 
-      <a type="button"
-    		 class="btn btn-outline-success float-right"
-    		 href="{{ route('rrhh.fulfillments.certificate-pdf',$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()) }}" target="_blank">
-    		 Generar certificado
-    		 <i class="fas fa-file"></i>
-    	</a>
+      <div class="row">
+        <fieldset class="form-group col-6">
+
+        </fieldset>
+        <fieldset class="form-group col">
+            <label for="for_estate"><br/></label>
+
+            @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approbation != NULL)
+              <a type="button"
+                 class="btn btn-outline-success form-control"
+                 href="{{ route('rrhh.fulfillments.certificate-pdf',$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()) }}" target="_blank">
+                 Generar certificado
+                 <i class="fas fa-file"></i>
+              </a>
+            @endif
+        </fieldset>
+        <fieldset class="form-group col">
+            <label for="for_estate"><br/></label>
+            <form>
+              @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approbation == NULL)
+                <a type="button"
+                   class="btn btn-success form-control"
+                   onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');"
+                   href="{{ route('rrhh.fulfillments.confirmFulfillment',$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()) }}" >
+                   Confirmar
+                </a>
+              @else
+                <button type="submit" class="btn btn-success form-control" disabled>Confirmar</button>
+              @endif
+            </form>
+        </fieldset>
+      </div>
+
+      @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approver_id != NULL)
+      <h5>Aprobaciones</h5>
+      <table class="table table-sm small">
+          <thead>
+              <tr>
+                  <th>Unidad</th>
+                  <th>Fecha</th>
+                  <th>Usuario</th>
+              </tr>
+          </thead>
+          <tbody>
+              @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approver_id != NULL)
+              <tr>
+                  <td>Responsable</td>
+                  <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approbation_date}}</td>
+                  <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsableUser->getFullNameAttribute()}}</td>
+              </tr>
+              @endif
+              @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->rrhh_approver_id != NULL)
+              <tr>
+                  <td>RRHH</td>
+                  <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->rrhh_approbation_date}}</td>
+                  <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->rrhhUser->getFullNameAttribute()}}</td>
+              </tr>
+              @endif
+              @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->finances_approver_id != NULL)
+              <tr>
+                  <td>Finanzas</td>
+                  <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->finances_approbation_date}}</td>
+                  <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->financesUser->getFullNameAttribute()}}</td>
+              </tr>
+              @endif
+          </tbody>
+      </table>
+      @endif
+
 
     @endif
 
@@ -300,13 +379,19 @@
 
       <table class="table table-sm">
           <thead>
+              <!-- <tr>
+                  <th colspan="3"></th>
+                  <th >Autoriza</th>
+                  <th >Autoriza</th>
+                  <th >Autoriza</th>
+              </tr> -->
               <tr>
                   <th>Entrada</th>
                   <th>Salida</th>
                   <th>Observación</th>
-                  <th>Responsable</th>
+                  <!-- <th>Responsable</th>
                   <th>RRHH</th>
-                  <th>Finanzas</th>
+                  <th>Finanzas</th> -->
               </tr>
           </thead>
           <tbody>
@@ -315,9 +400,9 @@
                 <td>{{Carbon\Carbon::parse($FulfillmentItem->start_date)->format('d-m-Y H:i')}}</td>
                 <td>{{Carbon\Carbon::parse($FulfillmentItem->end_date)->format('d-m-Y H:i')}}</td>
                 <td>{{$FulfillmentItem->observation}}</td>
-                <td><input type='checkbox' name='record[]' @if($FulfillmentItem->responsable_approbation == 1) checked @endif></td>
+                <!-- <td><input type='checkbox' name='record[]' @if($FulfillmentItem->responsable_approbation == 1) checked @endif></td>
                 <td><input type='checkbox' name='record[]' @if($FulfillmentItem->rrhh_approbation == 1) checked @endif></td>
-                <td><input type='checkbox' name='record[]' @if($FulfillmentItem->finances_approbation == 1) checked @endif></td>
+                <td><input type='checkbox' name='record[]' @if($FulfillmentItem->finances_approbation == 1) checked @endif></td> -->
               </tr>
             @endforeach
           </tbody>
@@ -326,12 +411,44 @@
     @endif
 
     @if($serviceRequest->Fulfillments->count() > 0)
-    <a type="button"
+    <!-- <a type="button"
        class="btn btn-outline-success float-right"
        href="{{ route('rrhh.fulfillments.certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank">
        Generar certificado
        <i class="fas fa-file"></i>
-    </a>
+    </a> -->
+    <div class="row">
+      <fieldset class="form-group col-6">
+
+      </fieldset>
+      <fieldset class="form-group col">
+          <label for="for_estate"><br/></label>
+
+          @if($serviceRequest->Fulfillments->first()->responsable_approbation != NULL)
+            <a type="button"
+               class="btn btn-outline-success form-control"
+               href="{{ route('rrhh.fulfillments.certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank">
+               Generar certificado
+               <i class="fas fa-file"></i>
+            </a>
+          @endif
+      </fieldset>
+      <fieldset class="form-group col">
+          <label for="for_estate"><br/></label>
+          <form>
+            @if($serviceRequest->Fulfillments->first()->responsable_approbation == NULL)
+              <a type="button"
+                 class="btn btn-success form-control"
+                 onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');"
+                 href="{{ route('rrhh.fulfillments.confirmFulfillment',$serviceRequest->Fulfillments->first()) }}" >
+                 Confirmar
+              </a>
+            @else
+              <button type="submit" class="btn btn-success form-control" disabled>Confirmar</button>
+            @endif
+          </form>
+      </fieldset>
+    </div>
     @endif
 
   </div>
