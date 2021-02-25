@@ -7,6 +7,9 @@ use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\QuestionsController;
 use App\Http\Controllers\Suitability\OptionsController;
 use App\Http\Controllers\Suitability\ResultsController;
+use App\Http\Controllers\Suitability\SchoolsController;
+use App\Http\Controllers\Suitability\SchoolUserController;
+
 use App\Http\Controllers\RequestForms\ItemController;
 use App\Http\Controllers\RequestForms\PassageController;
 use App\Http\Controllers\RequestForms\RequestFormController;
@@ -346,7 +349,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
 
     Route::get('signatures/index/{tab}', 'Documents\SignatureController@index')->name('signatures.index');
     Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
-    Route::get('/showPdfDocumento/{signature}', 'Documents\SignatureController@showPdfDocumento')->name('showPdfDocumento');
+    Route::get('/showPdf/{signaturesFile}', 'Documents\SignatureController@showPdf')->name('showPdf');
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('showPdfAnexo');
 
 });
@@ -832,13 +835,24 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/', [QuestionsController::class, 'index'])->name('index');
         Route::get('/create', [QuestionsController::class, 'create'])->name('create');
         Route::post('/store', [QuestionsController::class, 'store'])->name('store');
-
     });
 
     Route::prefix('options')->as('options.')->middleware('auth')->group(function () {
         Route::get('/', [OptionsController::class, 'index'])->name('index');
         Route::get('/create', [OptionsController::class, 'create'])->name('create');
         Route::post('/store', [OptionsController::class, 'store'])->name('store');
+    });
+
+    Route::prefix('schools')->as('schools.')->middleware('auth')->group(function () {
+        Route::get('/', [SchoolsController::class, 'index'])->name('index');
+        Route::get('/create', [SchoolsController::class, 'create'])->name('create');
+        Route::post('/store', [SchoolsController::class, 'store'])->name('store');
+    });
+
+    Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
+        Route::get('/', [SchoolUserController::class, 'index'])->name('index');
+        Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
+        Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
     });
 
 

@@ -31,7 +31,7 @@ class SignatureController extends Controller
     {
         $mySignatures = null;
         $pendingSignaturesFlows = null;
-        $signedSignatures = null;
+        $signedSignaturesFlows = null;
 
         if ($tab == 'mis_documentos') {
             $mySignatures = Signature::where('responsable_id', Auth::id())
@@ -45,25 +45,21 @@ class SignatureController extends Controller
                 ->where('status', null)
                 ->get();
 
-//            dd($pendingSignaturesFlows);
+            $signedSignaturesFlows = SignaturesFlow::where('user_id', Auth::id())
+                ->where('status', 1)
+                ->orderByDesc('id')
+                ->get();
 
-//            $pendingSignatures = Signature::wherehas('signaturesFiles', function ($q) {
+//            $signedSignatures = Signature::wherehas('signaturesFiles', function ($q) {
 //                $q->whereHas('signaturesFlows', function ($q) {
 //                    $q->where('user_id', Auth::id())
-//                        ->where('status', null);
+//                        ->where('status', 1);
 //                });
-//            })->get();
-
-            $signedSignatures = Signature::wherehas('signaturesFiles', function ($q) {
-                $q->whereHas('signaturesFlows', function ($q) {
-                    $q->where('user_id', Auth::id())
-                        ->where('status', 1);
-                });
-            })->orderByDesc('id')
-                ->get();
+//            })->orderByDesc('id')
+//                ->get();
         }
 
-        return view('documents.signatures.index', compact('mySignatures', 'pendingSignaturesFlows', 'signedSignatures', 'tab'));
+        return view('documents.signatures.index', compact('mySignatures', 'pendingSignaturesFlows', 'signedSignaturesFlows', 'tab'));
     }
 
     /**
@@ -232,14 +228,19 @@ class SignatureController extends Controller
         return redirect()->route('documents.signatures.index', ['mis_documentos']);
     }
 
-    public function showPdfDocumento(Signature $signature)
+    public function showPdf(SignaturesFile $signaturesFile)
     {
         header('Content-Type: application/pdf');
-        if ($signature->signaturesFiles->where('file_type', 'documento')->first()->signed_file) {
-            echo base64_decode($signature->signaturesFiles->where('file_type', 'documento')->first()->signed_file);
+        if ($signaturesFile->file_type == 'documento') {
+            if ($signaturesFile->signed_file) {
+                echo base64_decode($signaturesFile->signed_file);
+            } else {
+                echo base64_decode($signaturesFile->file);
+            }
         } else {
-            echo base64_decode($signature->signaturesFiles->where('file_type', 'documento')->first()->file);
+            echo base64_decode($signaturesFile->file);
         }
+
 
     }
 
