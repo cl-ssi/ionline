@@ -5,6 +5,7 @@
 @section('content')
 
 <h3>Listado de Solicitudes de Contratación de Servicio</h3>
+<br><hr>
 
 <div class="mb-3">
 	<a class="btn btn-primary"

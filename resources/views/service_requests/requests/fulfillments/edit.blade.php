@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Programa Farmacia')
+@section('title', 'Cumplimiento de solicitud')
 
 @section('content')
 
@@ -39,16 +39,16 @@
 
   <fieldset class="form-group col-12 col-md-4">
       <label for="for_end_date">Tipo de contrato</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->contract_type}}" disabled>
+      <input type="text" class="form-control" value="{{$serviceRequest->program_contract_type}}" disabled>
   </fieldset>
 
 </div>
 
 <hr>
 
+@if($serviceRequest->program_contract_type == "Mensual")
+
 @foreach($periods as $key => $period)
-
-
 
 <div class="card">
   <div class="card-header">
@@ -78,10 +78,17 @@
             </select>
     		</fieldset>
 
-        <fieldset class="form-group col-3">
-            <label for="for_estate">Inicio</label>
-            <input type="date" class="form-control" name="start_date" required>
-        </fieldset>
+        @if($key == 0)
+          <fieldset class="form-group col-3">
+              <label for="for_estate">Inicio</label>
+              <input type="date" class="form-control" name="start_date" value="{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}" required>
+          </fieldset>
+        @else
+          <fieldset class="form-group col-3">
+              <label for="for_estate">Inicio</label>
+              <input type="date" class="form-control" name="start_date" required>
+          </fieldset>
+        @endif
 
         <fieldset class="form-group col-3">
             <label for="for_estate">Término</label>
@@ -145,7 +152,7 @@
 
       <h4>Inasistencias</h4>
 
-      <form method="POST" action="{{ route('rrhh.fulfillmentAbsence.store') }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ route('rrhh.fulfillmentItem.store') }}" enctype="multipart/form-data">
       @csrf
 
       <div class="row">
@@ -206,10 +213,10 @@
               </tr>
           </thead>
           <tbody>
-            @foreach($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->FulfillmentAbsences as $key => $FulfillmentAbsence)
+            @foreach($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->FulfillmentItems as $key => $FulfillmentItem)
               <tr>
                   <td>
-                    <form method="POST" action="{{ route('rrhh.fulfillmentAbsence.destroy', $FulfillmentAbsence) }}" class="d-inline">
+                    <form method="POST" action="{{ route('rrhh.fulfillmentItem.destroy', $FulfillmentItem) }}" class="d-inline">
           						@csrf
           						@method('DELETE')
           						<button type="submit" class="btn btn-outline-secondary btn-sm" onclick="return confirm('¿Está seguro de eliminar la información?');">
@@ -217,10 +224,10 @@
           						</button>
           					</form>
                   </td>
-                  <td>{{$FulfillmentAbsence->type}}</td>
-                  <td>{{$FulfillmentAbsence->start_date->format('d-m-Y H:i')}}</td>
-                  <td>{{$FulfillmentAbsence->end_date->format('d-m-Y H:i')}}</td>
-                  <td>{{$FulfillmentAbsence->observation}}</td>
+                  <td>{{$FulfillmentItem->type}}</td>
+                  <td>{{$FulfillmentItem->start_date->format('Y-m-d H:i')}}</td>
+                  <td>{{$FulfillmentItem->end_date->format('Y-m-d H:i')}}</td>
+                  <td>{{$FulfillmentItem->observation}}</td>
               </tr>
             @endforeach
           </tbody>
@@ -241,6 +248,100 @@
 <br>
 
 @endforeach
+
+@else
+
+<div class="card">
+  <div class="card-header">
+    Información de la solicitud
+  </div>
+  <div class="card-body">
+
+    @if($serviceRequest->Fulfillments->count() == 0)
+
+      <form method="POST" action="{{ route('rrhh.fulfillments.store') }}" enctype="multipart/form-data">
+      @csrf
+
+        <input type="hidden" name="service_request_id" value="{{$serviceRequest->id}}">
+        <input type="hidden" name="type" value="Turnos">
+        <input type="hidden" name="start_date" value="{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}">
+        <input type="hidden" name="end_date" value="{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}">
+
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>Entrada</th>
+                    <th>H.Inicio</th>
+                    <th>Salida</th>
+                    <th>H.Término</th>
+                    <th>Observación</th>
+                </tr>
+            </thead>
+            <tbody>
+              @foreach($serviceRequest->shiftControls as $key => $shiftControl)
+                <tr>
+                  <td><input type='checkbox' name='record[]' value="{{$shiftControl}}"></td>
+                  <td>{{Carbon\Carbon::parse($shiftControl->start_date)->format('Y-m-d')}}</td>
+                  <td>{{Carbon\Carbon::parse($shiftControl->start_date)->format('H:i')}}</td>
+                  <td>{{Carbon\Carbon::parse($shiftControl->end_date)->format('Y-m-d')}}</td>
+                  <td>{{Carbon\Carbon::parse($shiftControl->end_date)->format('H:i')}}</td>
+                  <td>{{$shiftControl->observation}}</td>
+                </tr>
+              @endforeach
+            </tbody>
+        </table>
+
+        <button type="submit" class="btn btn-primary float-right">Guardar</button>
+
+      </form>
+
+    @else
+
+      <table class="table table-sm">
+          <thead>
+              <tr>
+                  <th>Entrada</th>
+                  <th>Salida</th>
+                  <th>Observación</th>
+                  <th>Responsable</th>
+                  <th>RRHH</th>
+                  <th>Finanzas</th>
+              </tr>
+          </thead>
+          <tbody>
+            @foreach($serviceRequest->Fulfillments->first()->FulfillmentItems as $key => $FulfillmentItem)
+              <tr>
+                <td>{{Carbon\Carbon::parse($FulfillmentItem->start_date)->format('d-m-Y H:i')}}</td>
+                <td>{{Carbon\Carbon::parse($FulfillmentItem->end_date)->format('d-m-Y H:i')}}</td>
+                <td>{{$FulfillmentItem->observation}}</td>
+                <td><input type='checkbox' name='record[]' @if($FulfillmentItem->responsable_approbation == 1) checked @endif></td>
+                <td><input type='checkbox' name='record[]' @if($FulfillmentItem->rrhh_approbation == 1) checked @endif></td>
+                <td><input type='checkbox' name='record[]' @if($FulfillmentItem->finances_approbation == 1) checked @endif></td>
+              </tr>
+            @endforeach
+          </tbody>
+      </table>
+
+    @endif
+
+    @if($serviceRequest->Fulfillments->count() > 0)
+    <a type="button"
+       class="btn btn-outline-success float-right"
+       href="{{ route('rrhh.fulfillments.certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank">
+       Generar certificado
+       <i class="fas fa-file"></i>
+    </a>
+    @endif
+
+  </div>
+</div>
+
+@endif
+
+<br>
+
+
 
 @endsection
 
