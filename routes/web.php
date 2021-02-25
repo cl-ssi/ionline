@@ -8,6 +8,7 @@ use App\Http\Controllers\Suitability\QuestionsController;
 use App\Http\Controllers\Suitability\OptionsController;
 use App\Http\Controllers\Suitability\ResultsController;
 use App\Http\Controllers\Suitability\SchoolsController;
+use App\Http\Controllers\Suitability\SchoolUserController;
 
 use App\Http\Controllers\RequestForms\ItemController;
 use App\Http\Controllers\RequestForms\PassageController;
@@ -834,7 +835,6 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/', [QuestionsController::class, 'index'])->name('index');
         Route::get('/create', [QuestionsController::class, 'create'])->name('create');
         Route::post('/store', [QuestionsController::class, 'store'])->name('store');
-
     });
 
     Route::prefix('options')->as('options.')->middleware('auth')->group(function () {
@@ -847,6 +847,12 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/', [SchoolsController::class, 'index'])->name('index');
         Route::get('/create', [SchoolsController::class, 'create'])->name('create');
         Route::post('/store', [SchoolsController::class, 'store'])->name('store');
+    });
+
+    Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
+        Route::get('/', [SchoolUserController::class, 'index'])->name('index');
+        Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
+        Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
     });
 
 
