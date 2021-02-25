@@ -6,14 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\ServiceRequests\ServiceRequest;
-use App\Models\ServiceRequests\FulfillmentAbsence;;
+use App\Models\ServiceRequests\FulfillmentItem;
 
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
 use Carbon\Carbon;
 
 
-class FulfillmentAbsenceController extends Controller
+class FulfillmentItemController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -43,10 +43,12 @@ class FulfillmentAbsenceController extends Controller
      */
     public function store(Request $request)
     {
-      $fulfillmentAbsence = new FulfillmentAbsence($request->All());
-      $fulfillmentAbsence->start_date = $request->start_date . " " .$request->start_hour;
-      $fulfillmentAbsence->end_date = $request->end_date . " " .$request->end_hour;
-      $fulfillmentAbsence->save();
+      $fulfillmentItem = new FulfillmentItem($request->All());
+      $fulfillmentItem->start_date = $request->start_date . " " .$request->start_hour;
+      $fulfillmentItem->end_date = $request->end_date . " " .$request->end_hour;
+      $fulfillmentItem->responsable_approbation = 1;
+      $fulfillmentItem->responsable_approver_id = Auth::user()->id;
+      $fulfillmentItem->save();
 
       session()->flash('success', 'Se ha registrado la inasistencia del período.');
       return redirect()->back();
@@ -92,9 +94,9 @@ class FulfillmentAbsenceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FulfillmentAbsence $fulfillmentAbsence)
+    public function destroy(FulfillmentItem $fulfillmentItem)
     {
-        $fulfillmentAbsence->delete();
+        $fulfillmentItem->delete();
         session()->flash('success', 'La inasistencia se ha eliminado');
         return redirect()->back();
     }
