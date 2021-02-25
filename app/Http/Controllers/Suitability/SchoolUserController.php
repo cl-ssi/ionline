@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Suitability;
 
+use App\Models\Suitability\SchoolUser;
 use App\Models\Suitability\School;
-use App\Models\Commune;
-use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class SchoolsController extends Controller
+class SchoolUserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +17,11 @@ class SchoolsController extends Controller
      */
     public function index()
     {
-        //
+        //        
+        $schoolusers = SchoolUser::all();
+        $users = User::where('external',1)->orderBy('name')->get();
         $schools = School::all();
-        return view('suitability.schools.index', compact('schools'));
+        return view('suitability.users.index', compact('schoolusers','users', 'schools'));
     }
 
     /**
@@ -29,10 +32,6 @@ class SchoolsController extends Controller
     public function create()
     {
         //
-        $communes = Commune::All()->SortBy('name');
-        return view('suitability.schools.create', compact('communes'));
-
-
     }
 
     /**
@@ -44,19 +43,20 @@ class SchoolsController extends Controller
     public function store(Request $request)
     {
         //
-        $school = new School($request->All());
-        $school->save();
-        session()->flash('success', 'Colegio Creado Exitosamente');
-        return redirect()->route('suitability.schools.index');
+        $school_user = new SchoolUser($request->All());
+        $school_user->save();
+
+        session()->flash('success', 'Se Asigno al Usuario al colegio');
+        return redirect()->back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\SchoolUser  $schoolUser
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(SchoolUser $schoolUser)
     {
         //
     }
@@ -64,10 +64,10 @@ class SchoolsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\SchoolUser  $schoolUser
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(SchoolUser $schoolUser)
     {
         //
     }
@@ -76,10 +76,10 @@ class SchoolsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\SchoolUser  $schoolUser
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, SchoolUser $schoolUser)
     {
         //
     }
@@ -87,10 +87,10 @@ class SchoolsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\SchoolUser  $schoolUser
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(SchoolUser $schoolUser)
     {
         //
     }
