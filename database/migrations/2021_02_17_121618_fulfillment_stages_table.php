@@ -24,10 +24,15 @@ class FulfillmentStagesTable extends Migration
           $table->string('observation', 100)->nullable();
 
           $table->boolean('responsable_approbation')->default(0);
-          $table->unsignedBigInteger('responsable_approver_id');
+          $table->datetime('responsable_approbation_date')->nullable();
+          $table->unsignedBigInteger('responsable_approver_id')->nullable();
+
           $table->boolean('rrhh_approbation')->default(0);
+          $table->datetime('rrhh_approbation_date')->nullable();
           $table->unsignedBigInteger('rrhh_approver_id')->nullable();
+
           $table->boolean('finances_approbation')->default(0);
+          $table->datetime('finances_approbation_date')->nullable();
           $table->unsignedBigInteger('finances_approver_id')->nullable();
 
           $table->foreign('service_request_id')->references('id')->on('doc_service_requests');
@@ -47,10 +52,15 @@ class FulfillmentStagesTable extends Migration
           $table->string('observation', 100)->nullable();
 
           $table->boolean('responsable_approbation')->default(0);
-          $table->unsignedBigInteger('responsable_approver_id');
+          $table->datetime('responsable_approbation_date')->nullable();
+          $table->unsignedBigInteger('responsable_approver_id')->nullable();
+
           $table->boolean('rrhh_approbation')->default(0);
+          $table->datetime('rrhh_approbation_date')->nullable();
           $table->unsignedBigInteger('rrhh_approver_id')->nullable();
+
           $table->boolean('finances_approbation')->default(0);
+          $table->datetime('finances_approbation_date')->nullable();
           $table->unsignedBigInteger('finances_approver_id')->nullable();
 
           $table->foreign('fulfillment_id')->references('id')->on('doc_fulfillments');
