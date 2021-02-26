@@ -267,5 +267,14 @@ class VaccinationController extends Controller
         };
         return response()->stream($callback, 200, $headers);
     }
+
+    public function removeBooking(Vaccination $vaccination) {
+        $slot = Slot::where('start_at',$vaccination->second_dose)->first();
+
+        $slot->update(['used' => $slot->used - 1]);
+        $vaccination->update(['second_dose' => null]);
+
+        return redirect()->back();
+    }
     
 }
