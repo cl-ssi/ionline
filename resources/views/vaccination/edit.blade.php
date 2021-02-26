@@ -85,10 +85,11 @@
 
     </div>
 
+    @if($vaccination->second_dose)
     <div>
     <a class="btn btn-sm btn-danger" href="{{ route('vaccination.removeBooking', $vaccination) }}">Eliminar segunda cita</a>
-
     </div>
+    @endif
 
     <hr>
     <h3>Inoculación</h3>
