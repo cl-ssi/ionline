@@ -18,7 +18,7 @@ class SchoolUserController extends Controller
     public function index()
     {
         //        
-        $schoolusers = SchoolUser::all();
+        $schoolusers = SchoolUser::where('admin',1)->get();
         $users = User::where('external',1)->orderBy('name')->get();
         $schools = School::all();
         return view('suitability.users.index', compact('schoolusers','users', 'schools'));
@@ -32,6 +32,7 @@ class SchoolUserController extends Controller
     public function create()
     {
         //
+        return view('suitability.users.create');
     }
 
     /**
@@ -44,10 +45,23 @@ class SchoolUserController extends Controller
     {
         //
         $school_user = new SchoolUser($request->All());
+        $school_user->admin = 1;
         $school_user->save();
 
         session()->flash('success', 'Se Asigno al Usuario al colegio');
         return redirect()->back();
+    }
+
+    public function storeuser(Request $request)
+    {
+        //
+        $user = new User($request->All());
+        $user->email_personal = $request->email;
+        $user->external = 1;
+        $user->givePermissionTo('Suitability: admin');
+        $user->save();
+        session()->flash('success', 'Se Asigno al Usuario al colegio');        
+        return redirect()->route('suitability.users.index');
     }
 
     /**

@@ -1,4 +1,5 @@
 <ul class="nav nav-tabs mb-3 d-print-none">
+
     <li class="nav-item">
         <a class="nav-link"
                       href="{{ route('suitability.own') }}">
@@ -12,19 +13,35 @@
             <i class="fas fa-file"></i> Nueva Solicitud de Idoneidad
         </a>
     </li>
-    
 
+
+    
+    @can('Suitability: ssi')
     <li class="nav-item">
         <a class="nav-link"
                       href="#">
-            <i class="fas fa-clone"></i> Solicitudes (admin)
+            <i class="fas fa-clone"></i> Solicitudes
         </a>
     </li>
+    
+
+    <div class="dropdown show">
+        <a class="nav-link  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" >
+        <i class="fas fa-gavel"></i> Idoneidad
+        </a>        
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">            
+            <a class="dropdown-item" href="{{ route('suitability.pending') }}"><i class="fas fa-list"></i>  Aceptar/Rechazar</a>
+            <hr>            
+            <a class="dropdown-item" href="{{ route('suitability.approved') }}"><i class="fas fa-check"></i>  Listado Aceptados</a>
+            <a class="dropdown-item" href="{{ route('suitability.rejected') }}"><i class="fas fa-minus-circle"></i>  Listado Rechazados</a>            
+            
+        </div>
+    </div>
 
     <li class="nav-item">
         <a class="nav-link"
                       href="{{ route('suitability.results.index') }}">
-            <i class="fas fa-trophy"></i> Resultados Test (admin)
+            <i class="fas fa-trophy"></i> Resultados Test
         </a>
     </li>
 
@@ -43,6 +60,8 @@
             
         </div>
     </div>
+
+    @endcan
     
 
 </ul>
