@@ -38,10 +38,12 @@ class HealthGoalController extends Controller
             $values = collect(); //inicializamos collection de values para el indicador
             //completamos valores para el numerador
             if($indicator->numerator_cods != null){
-                if(Rem::year($year-1)->select('Mes')->whereIn('CodigoPrestacion', explode(',', $indicator->numerator_cods))->groupBy('Mes')->get()->count() == 2) //REM P
+                if(Rem::year($year-1)->select('Mes')->whereIn('CodigoPrestacion', explode(',', $indicator->numerator_cods))->groupBy('Mes')->get()->count() == 2){ //REM P
                     $indicator->numerator_acum_last_year = Rem::year($year-1)->where('Mes', 12)->whereIn('CodigoPrestacion', explode(',', $indicator->numerator_cods))->sum('Col01');
-                $result = Rem::year($year)->selectRaw('SUM(COALESCE(Col01,0)) AS valor, Mes')->whereIn('Mes', [6,12])->whereIn('CodigoPrestacion', explode(',', $indicator->numerator_cods))->groupBy('Mes')->orderBy('Mes')->get();
-                
+                    $result = Rem::year($year)->selectRaw('SUM(COALESCE(Col01,0)) AS valor, Mes')->whereIn('Mes', [6,12])->whereIn('CodigoPrestacion', explode(',', $indicator->numerator_cods))->groupBy('Mes')->orderBy('Mes')->get();
+                }else{ //REM A
+                    $result = Rem::year($year)->selectRaw('SUM(COALESCE(Col01,0)) AS valor, Mes')->whereIn('CodigoPrestacion', explode(',', $indicator->numerator_cods))->groupBy('Mes')->orderBy('Mes')->get();
+                }
                 foreach($result as $item)
                     $values->add(new Value(['month' => $item->Mes, 'factor' => 'numerador', 'value' => $item->valor]));
                 $indicator->setRelation('values', $values);
@@ -49,9 +51,13 @@ class HealthGoalController extends Controller
 
             //completamos valores para el denominador
             if($indicator->denominator_cods != null){
-                if(Rem::year($year-1)->select('Mes')->whereIn('CodigoPrestacion', explode(',', $indicator->denominator_cods))->groupBy('Mes')->get()->count() == 2) //REM P
+                if(Rem::year($year-1)->select('Mes')->whereIn('CodigoPrestacion', explode(',', $indicator->denominator_cods))->groupBy('Mes')->get()->count() == 2){ //REM P
                     $indicator->denominator_acum_last_year = Rem::year($year-1)->where('Mes', 12)->whereIn('CodigoPrestacion', explode(',', $indicator->denominator_cods))->sum('Col01');
-                $result = Rem::year($year)->selectRaw('SUM(COALESCE(Col01,0)) AS valor, Mes')->whereIn('Mes', [6,12])->whereIn('CodigoPrestacion', explode(',', $indicator->denominator_cods))->groupBy('Mes')->orderBy('Mes')->get();
+                    $result = Rem::year($year)->selectRaw('SUM(COALESCE(Col01,0)) AS valor, Mes')->whereIn('Mes', [6,12])->whereIn('CodigoPrestacion', explode(',', $indicator->denominator_cods))->groupBy('Mes')->orderBy('Mes')->get();
+                }else{
+                    $result = Rem::year($year)->selectRaw('SUM(COALESCE(Col01,0)) AS valor, Mes')->whereIn('CodigoPrestacion', explode(',', $indicator->denominator_cods))->groupBy('Mes')->orderBy('Mes')->get();
+                }
+                    
                 foreach($result as $item)
                     $values->add(new Value(['month' => $item->Mes, 'factor' => 'denominador', 'value' => $item->valor]));
                 $indicator->setRelation('values', $values);
