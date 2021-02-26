@@ -79,17 +79,22 @@
         </fieldset> --}}
     </div>
 
-    <div class="row">
+    <div class="">
 
     @livewire('vaccination.admin-book',['vaccination' => $vaccination])
 
     </div>
 
-    <hr>
+    <div>
+    <a class="btn btn-sm btn-danger" href="{{ route('vaccination.removeBooking', $vaccination) }}">Eliminar segunda cita</a>
 
+    </div>
+
+    <hr>
+    <h3>Inoculación</h3>
     <div class="row">
         <fieldset class="form-group col-md-3 col-12">
-            <label for="for_first_dose_at">Primera dosis</label>
+            <label for="for_first_dose_at">Primera dósis</label>
             <input type="datetime-local" class="form-control" name="first_dose_at"
                 id="for_first_dose_at" value="{{ optional($vaccination->first_dose_at)->format('Y-m-d\TH:i:s') }}">
         </fieldset>
@@ -105,7 +110,7 @@
     <div class="row">
 
         <fieldset class="form-group col-md-3 col-12">
-            <label for="for_second_dose_at">Segunda dosis</label>
+            <label for="for_second_dose_at">Segunda dósis</label>
             <input type="datetime-local" class="form-control" name="second_dose_at"
                 id="for_second_dose_at" value="{{ optional($vaccination->second_dose_at)->format('Y-m-d\TH:i:s') }}">
         </fieldset>
