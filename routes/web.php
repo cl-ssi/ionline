@@ -394,6 +394,12 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::post('/{year}/{comges}/corte/{section}/ind/{indicator}', 'Indicators\ComgesController@storeAction')->middleware('auth')->name('action.store');
     });
 
+    Route::prefix('health_goals')->as('health_goals.')->group(function () {
+        Route::get('/{law}', 'Indicators\HealthGoalController@index')->name('index');
+        Route::get('/{law}/{year}', 'Indicators\HealthGoalController@list')->name('list');
+        Route::get('/{law}/{year}/{health_goal}', 'Indicators\HealthGoalController@show')->name('show');
+    });
+
     Route::prefix('19813')->as('19813.')->group(function () {
         Route::get('/', function () {
             return view('indicators.19813.index');
