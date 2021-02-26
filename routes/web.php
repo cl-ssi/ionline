@@ -824,6 +824,10 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::get('/welcome', [TestsController::class, 'welcome'])->name('welcome');
     Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
     Route::post('/test', [TestsController::class, 'store'])->name('test.store');
+    Route::get('/pending', [SuitabilityController::class, 'pending'])->name('pending');
+    Route::get('/approved', [SuitabilityController::class, 'approved'])->name('approved');
+    Route::get('/rejected', [SuitabilityController::class, 'rejected'])->name('rejected');
+    Route::patch('/finalresult/{psirequest}/{result}', [SuitabilityController::class, 'finalresult'])->name('finalresult');
 
     Route::prefix('categories')->as('categories.')->middleware('auth')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])->name('index');
@@ -849,6 +853,14 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/create', [SchoolsController::class, 'create'])->name('create');
         Route::post('/store', [SchoolsController::class, 'store'])->name('store');
     });
+
+    Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
+        Route::get('/', [SchoolUserController::class, 'index'])->name('index');
+        Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
+        Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
+        Route::post('/storeuser', [SchoolUserController::class, 'storeuser'])->name('storeuser');
+    });
+
 
     Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
         Route::get('/', [SchoolUserController::class, 'index'])->name('index');
