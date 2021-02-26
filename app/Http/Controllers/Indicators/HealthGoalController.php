@@ -38,11 +38,19 @@ class HealthGoalController extends Controller
             $values = collect(); //inicializamos collection de values para el indicador
             //completamos valores para el numerador
             if($indicator->numerator_cods != null){
-                if(Rem::year($year-1)->select('Mes')->whereIn('CodigoPrestacion', explode(',', $indicator->numerator_cods))->groupBy('Mes')->get()->count() == 2){ //REM P
-                    $indicator->numerator_acum_last_year = Rem::year($year-1)->where('Mes', 12)->whereIn('CodigoPrestacion', explode(',', $indicator->numerator_cods))->sum('Col01');
-                    $result = Rem::year($year)->selectRaw('SUM(COALESCE(Col01,0)) AS valor, Mes')->whereIn('Mes', [6,12])->whereIn('CodigoPrestacion', explode(',', $indicator->numerator_cods))->groupBy('Mes')->orderBy('Mes')->get();
+                //procesamos los datos necesarios para las consultas rem
+                $cods = explode(',', $indicator->numerator_cods);
+                $cols = explode(',', $indicator->numerator_cols);
+                $raws = null;
+                foreach($cols as $col)
+                    $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
+                $raws .= ' AS valor, Mes';
+                //Es rem P la consulta?
+                if(Rem::year($year-1)->select('Mes')->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->get()->count() == 2){
+                    $indicator->numerator_acum_last_year = Rem::year($year-1)->where('Mes', 12)->whereIn('CodigoPrestacion', $cods)->sum(reset($cols));
+                    $result = Rem::year($year)->selectRaw($raws)->whereIn('Mes', [6,12])->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->orderBy('Mes')->get();
                 }else{ //REM A
-                    $result = Rem::year($year)->selectRaw('SUM(COALESCE(Col01,0)) AS valor, Mes')->whereIn('CodigoPrestacion', explode(',', $indicator->numerator_cods))->groupBy('Mes')->orderBy('Mes')->get();
+                    $result = Rem::year($year)->selectRaw($raws)->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->orderBy('Mes')->get();
                 }
                 foreach($result as $item)
                     $values->add(new Value(['month' => $item->Mes, 'factor' => 'numerador', 'value' => $item->valor]));
@@ -51,11 +59,19 @@ class HealthGoalController extends Controller
 
             //completamos valores para el denominador
             if($indicator->denominator_cods != null){
-                if(Rem::year($year-1)->select('Mes')->whereIn('CodigoPrestacion', explode(',', $indicator->denominator_cods))->groupBy('Mes')->get()->count() == 2){ //REM P
-                    $indicator->denominator_acum_last_year = Rem::year($year-1)->where('Mes', 12)->whereIn('CodigoPrestacion', explode(',', $indicator->denominator_cods))->sum('Col01');
-                    $result = Rem::year($year)->selectRaw('SUM(COALESCE(Col01,0)) AS valor, Mes')->whereIn('Mes', [6,12])->whereIn('CodigoPrestacion', explode(',', $indicator->denominator_cods))->groupBy('Mes')->orderBy('Mes')->get();
+                //procesamos los datos necesarios para las consultas rem
+                $cods = explode(',', $indicator->denominator_cods);
+                $cols = explode(',', $indicator->denominator_cols);
+                $raws = null;
+                foreach($cols as $col)
+                    $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
+                $raws .= ' AS valor, Mes';
+                //Es rem P la consulta?
+                if(Rem::year($year-1)->select('Mes')->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->get()->count() == 2){ //REM P
+                    $indicator->denominator_acum_last_year = Rem::year($year-1)->where('Mes', 12)->whereIn('CodigoPrestacion', $cods)->sum(reset($cols));
+                    $result = Rem::year($year)->selectRaw($raws)->whereIn('Mes', [6,12])->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->orderBy('Mes')->get();
                 }else{
-                    $result = Rem::year($year)->selectRaw('SUM(COALESCE(Col01,0)) AS valor, Mes')->whereIn('CodigoPrestacion', explode(',', $indicator->denominator_cods))->groupBy('Mes')->orderBy('Mes')->get();
+                    $result = Rem::year($year)->selectRaw($raws)->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->orderBy('Mes')->get();
                 }
                     
                 foreach($result as $item)
