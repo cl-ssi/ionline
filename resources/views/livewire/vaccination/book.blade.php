@@ -19,9 +19,12 @@
                 <ul class="list-group">
                 @foreach($day->slots as $slot)
                     <li class="list-group-item">
-                    {{ $slot->start_at->format('H:i') }} - 
-                    <button class="btn btn-sm btn-primary ml-3" wire:click="bookingFirst({{ $slot->id }})">Reservar</button> 
-                    <!-- ({{ $slot->available - $slot->used}} cupos disponibles) -->
+                        {{ $slot->start_at->format('H:i') }} - 
+                        @if($slot->available > $slot->used)
+                            <button class="btn btn-sm btn-primary ml-3" wire:click="bookingFirst({{ $slot->id }})">Reservar</button> 
+                        @else
+                            <div style=""></div>
+                        @endif
                     </li>
                 @endforeach
                 </ul>
@@ -54,10 +57,12 @@
                 <h4>{{ $slots->first()->day->day->format('d-m-Y') }}</h4>
                 <ul class="list-group">
                 @foreach($slots as $slot) 
-                    <li class="list-group-item">{{ $slot->start_at->format('H:i') }} - 
+                    <li class="list-group-item">
+                        {{ $slot->start_at->format('H:i') }} - 
                         @if($slot->available > $slot->used)
-                        <button class="btn btn-sm btn-primary ml-3" wire:click="bookingSecond({{ $slot->id }})">Reservar</button> 
-                        <!-- ({{ $slot->available - $slot->used}} cupos disponibles) -->
+                            <button class="btn btn-sm btn-primary ml-3" wire:click="bookingSecond({{ $slot->id }})">Reservar</button> 
+                        @else
+                            <div style=""></div>
                         @endif
                     </li>
                 @endforeach
