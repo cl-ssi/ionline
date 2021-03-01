@@ -46,8 +46,9 @@ Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::get('/{signaturesFlow}/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
-Route::post('/{signaturesFlow}/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
+Route::post('/{signaturesFlow}/firma', 'FirmaDigitalController@signPdfFlow')->name('signPdfFlow');
+Route::post('/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
+
 
 Route::get('/claveunica', 'ClaveUnicaController@autenticar')->name('claveunica.autenticar');
 Route::get('/claveunica/callback', 'ClaveUnicaController@callback')->name('claveunica.callback');
@@ -348,6 +349,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
     Route::get('/showPdf/{signaturesFile}', 'Documents\SignatureController@showPdf')->name('showPdf');
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('showPdfAnexo');
+    Route::get('/callback_firma/{signaturesFile?}', 'Documents\SignatureController@callbackFirma')->name('callbackFirma');
 
 });
 Route::resource('documents', 'Documents\DocumentController')->middleware('auth');
