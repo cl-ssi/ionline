@@ -16,7 +16,7 @@
             <tr>
         @foreach($days as $day)
             @if($day->first_dose_available > $day->first_dose_used)
-            <td>
+            <td class="align-top">
                 <strong>{{ $day->day->format('d-m-Y') }}</strong> <br>
                 ({{ $day->first_dose_available - $day->first_dose_used }} cupos)
                 <ul class="list-group">
@@ -62,7 +62,7 @@
                 <table>
                 <tr>
                 @foreach($days as $day)
-                    <td>
+                    <td class="align-top">
                         <strong>{{ $day->day->format('d-m-Y') }}</strong>
                         <ul class="list-group">
                         @foreach($day->slots as $slot)
