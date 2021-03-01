@@ -73,8 +73,8 @@ class RemController extends Controller
         if ($request->has('submit')) {
             $secciones = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie)->orderBy('name')->get();
             foreach($secciones as $seccion){
-                $seccion->cods = explode(',', $seccion->cods);
-                $seccion->cols = explode(',', $seccion->cols);
+                $seccion->cods = array_map('trim', explode(',', $seccion->cods));
+                $seccion->cols = array_map('trim', explode(',', $seccion->cols));
                 $seccion->prestaciones = Prestacion::year($year)->with(['rems' => function($q) use ($establecimiento, $periodo){
                                                     $q->whereIn('IdEstablecimiento', $establecimiento)->whereIn('Mes', $periodo);
                                             }])
