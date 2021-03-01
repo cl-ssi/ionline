@@ -45,8 +45,8 @@
         <tr>
             <th>Nombre Completo</th>
             <th>Run</th>
-            <th>Título</th>
-            <th>Número contacto</th>
+            <th>Título(s)</th>
+            <th>Título(s)</th>
             <th>Estado</th>
             <th></th>
         </tr>
@@ -56,9 +56,12 @@
         <tr>
             <td>{{ $staff->FullName }}</td>
             <td>{{ $staff->Identifier }}</td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>
+                @foreach($staff->profiles as $title)
+                    <span class="badge rounded-pill bg-secondary">{{ $title->profession }}</span>
+                @endforeach
+            </td>
+            <td>{{ $staff->StatusValue }}</td>
             <td>
                 <a href="{{ route('replacement_staff.edit', $staff) }}" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i></a>
             </td>

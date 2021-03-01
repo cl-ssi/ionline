@@ -6,34 +6,25 @@
 <h3 class="mb-3">Información sobre vacunación para funcionarios</h3>
 
 <ul>
-    <li>Esta dirigida solo a funcionarios del HETG y de la DSSI.</li>
-    <li>Los funcionarios de la red de salud mental extrahospitalaria tendrán
-        otros puntos de vacunación los que serán informados por sus
-        Directores de Establecimiento.</li>
-    <li>El lugar de vacunación es el domo en el estacionamiento atrás del HETG.</li>
+    <li>Está dirigida solo a funcionarios del HETG, Red de Salud Mental y de la DSSI</li>
+    <li>El lugar de vacunación es el domo en el estacionamiento detrás del HETG.</li>
     <li>Todos deben presentar su credencial al momento de su vacunación.</li>
-    <li>Si no te registraste y quieres vacunarte, tienes plazo hasta el 01-03-2021:
+    <li>Si no te registraste y quieres vacunarte, tienes plazo hasta el 01-03-2021:</li>
         <ul>
-            <li>Funcionarios del HETG deben tomar contacto con su jefatura o
-                supervisor/a de servicio y/o el Encargado de Vacunas del HETG
-                <a href="mailto:coordinacionvacunashetg@gmail.com">coordinacionvacunashetg@gmail.com</a></li>
-            <li>Funcionarios de la DSSI deben tomar contacto con la jefatura
-                de Calidad de Vida del SSI, Vanessa Sepúlveda, anexo
-                576443 - desde teléfonos externos al 572406443
-                <a href="mailto:vanessa.sepulvedam@redsalud.gov.cl">vanessa.sepulvedam@redsalud.gov.cl</a></li>
+            <li>Funcionario que ingresa a registro por su primera dosis, y no puede acceder 
+                debe tomar contacto con OIRS del Servicio de Salud</li>
+            <li>Funcionarios que tengan que inmunizarse con segunda dosis, 
+                sólo deben agendar hora, ya que el día está fijado dentro 
+                de su carnet de vacunación (28 días posterior a su primera dosis).</li>
         </ul>
     </li>
-    <li>Si te registraste y no apareces, entonces ponte en contacto con OIRS
-        (los datos aparecen al final) para corroborar tu inscripción.</li>
-    <li>Si tienes dificultades respecto al día y hora asignado, toma contacto con tu
-        jefatura o supervisor/a de servicio, si eres de la DSSI con Calidad de Vida.</li>
-    <li>Debes considerar que posterior a la vacunación debes quedarte
-        30 minutos en el lugar para observación post vacunación.</li>
-    <li>De presentar una reacción post vacunación leve a moderada,
-        preséntate en el lugar de vacunación con el Enfermera de Salud del Trabajador
-        (María Edith Vílchez) para tu notificación al ISP y seguimiento
-        por parte de la unidad de salud.
-        Si es algo importante dirigente a un sistema de urgencia,
+    <li>Debes considerar que posterior a la vacunación debes quedarte 30 minutos 
+        en el lugar para observación post vacunación.</li>
+    <li>De presentar una reacción post vacunación leve a moderada, 
+        preséntate en el lugar de vacunación con el Enfermera de 
+        Salud del Trabajador (María Edith Vílches) para tu 
+        notificación al ISP y seguimiento por parte de la unidad de salud. 
+        Si es algo importante dirigente a un sistema de urgencia, 
         donde de igual manera deben reportar el evento.</li>
 </ul>
 

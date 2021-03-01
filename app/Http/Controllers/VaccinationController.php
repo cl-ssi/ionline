@@ -200,15 +200,15 @@ class VaccinationController extends Controller
 
         /* Cantidad de agendados con segunda dosis */
         $report['sd_booking'] = Vaccination::whereNotNull('second_dose')->count();
-        $report['sd_booking_per'] = number_format($report['sd_booking'] / $report['total'] * 100, 1).'%';
+        $report['sd_booking_per'] = number_format($report['sd_booking'] / $report['fd_vaccined'] * 100, 1).'%';
 
         /* Cantidad de vacunados con segunda dosis */
         $report['sd_vaccined'] = Vaccination::whereNotNull('second_dose_at')->count();
         $report['sd_vaccined_per'] = number_format($report['sd_vaccined'] / $report['total'] * 100, 1).'%';
 
         /* Cantidad pendiente de vacunar con segunda dosis */
-        $report['sd_not_vaccined'] = $report['total'] - $report['sd_vaccined'];
-        $report['sd_not_vaccined_per'] = number_format($report['sd_not_vaccined'] / $report['total'] * 100, 1).'%';
+        $report['sd_not_vaccined'] = $report['fd_vaccined'] - $report['sd_vaccined'];
+        $report['sd_not_vaccined_per'] = number_format($report['sd_not_vaccined'] / $report['fd_vaccined'] * 100, 1).'%';
 
         //dd($report);
 
@@ -267,4 +267,14 @@ class VaccinationController extends Controller
         };
         return response()->stream($callback, 200, $headers);
     }
+
+    public function removeBooking(Vaccination $vaccination) {
+        $slot = Slot::where('start_at',$vaccination->second_dose)->first();
+
+        $slot->update(['used' => $slot->used - 1]);
+        $vaccination->update(['second_dose' => null]);
+
+        return redirect()->back();
+    }
+    
 }

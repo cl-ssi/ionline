@@ -7,6 +7,9 @@ use App\Http\Controllers\Suitability\CategoriesController;
 use App\Http\Controllers\Suitability\QuestionsController;
 use App\Http\Controllers\Suitability\OptionsController;
 use App\Http\Controllers\Suitability\ResultsController;
+use App\Http\Controllers\Suitability\SchoolsController;
+use App\Http\Controllers\Suitability\SchoolUserController;
+
 use App\Http\Controllers\RequestForms\ItemController;
 use App\Http\Controllers\RequestForms\PassageController;
 use App\Http\Controllers\RequestForms\RequestFormController;
@@ -239,7 +242,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('fulfillments/edit_fulfillment/{serviceRequest}', 'ServiceRequests\FulfillmentController@edit_fulfillment')->name('fulfillments.edit_fulfillment');
     Route::resource('fulfillments', 'ServiceRequests\FulfillmentController')->middleware('auth');
     Route::get('fulfillments/certificate-pdf/{fulfillment}', 'ServiceRequests\FulfillmentController@certificatePDF')->name('fulfillments.certificate-pdf')->middleware('auth');
-    Route::resource('fulfillmentAbsence', 'ServiceRequests\FulfillmentAbsenceController')->middleware('auth');
+    Route::get('fulfillments/confirmFulfillment/{fulfillment}', 'ServiceRequests\FulfillmentController@confirmFulfillment')->name('fulfillments.confirmFulfillment')->middleware('auth');
+    Route::resource('fulfillmentItem', 'ServiceRequests\FulfillmentItemController')->middleware('auth');
     Route::resource('service_requests', 'ServiceRequests\ServiceRequestController')->middleware('auth');
     Route::get('service_requests/resolution/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolution')->middleware('auth');
     Route::get('service_requests/resolution-pdf/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolutionPDF')->name('service_requests.resolution-pdf')->middleware('auth');
@@ -390,6 +394,12 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::get('/{year}/{comges}/corte/{section}/ind/{indicator}/action/{action}/edit', 'Indicators\ComgesController@editAction')->middleware('auth')->name('action.edit');
         Route::put('/{year}/{comges}/corte/{section}/ind/{indicator}/action/{action}', 'Indicators\ComgesController@updateAction')->middleware('auth')->name('action.update');
         Route::post('/{year}/{comges}/corte/{section}/ind/{indicator}', 'Indicators\ComgesController@storeAction')->middleware('auth')->name('action.store');
+    });
+
+    Route::prefix('health_goals')->as('health_goals.')->group(function () {
+        Route::get('/{law}', 'Indicators\HealthGoalController@index')->name('index');
+        Route::get('/{law}/{year}', 'Indicators\HealthGoalController@list')->name('list');
+        Route::get('/{law}/{year}/{health_goal}', 'Indicators\HealthGoalController@show')->name('show');
     });
 
     Route::prefix('19813')->as('19813.')->group(function () {
@@ -808,6 +818,7 @@ Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::get('/report',[VaccinationController::class,'report'])->name('report')->middleware('auth');
     Route::get('/export',[VaccinationController::class,'export'])->name('export')->middleware('auth');
     Route::put('/vaccinate/{vaccination}',[VaccinationController::class,'vaccinate'])->name('vaccinate')->middleware('auth');
+    Route::get('/vaccinate/remove-booking/{vaccination}',[VaccinationController::class,'removeBooking'])->name('removeBooking')->middleware('auth');
     Route::get('/card/{vaccination}',[VaccinationController::class,'card'])->name('card')->middleware('auth');
 });
 
@@ -822,6 +833,10 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::get('/welcome', [TestsController::class, 'welcome'])->name('welcome');
     Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
     Route::post('/test', [TestsController::class, 'store'])->name('test.store');
+    Route::get('/pending', [SuitabilityController::class, 'pending'])->name('pending');
+    Route::get('/approved', [SuitabilityController::class, 'approved'])->name('approved');
+    Route::get('/rejected', [SuitabilityController::class, 'rejected'])->name('rejected');
+    Route::patch('/finalresult/{psirequest}/{result}', [SuitabilityController::class, 'finalresult'])->name('finalresult');
 
     Route::prefix('categories')->as('categories.')->middleware('auth')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])->name('index');
@@ -834,13 +849,32 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/', [QuestionsController::class, 'index'])->name('index');
         Route::get('/create', [QuestionsController::class, 'create'])->name('create');
         Route::post('/store', [QuestionsController::class, 'store'])->name('store');
-
     });
 
     Route::prefix('options')->as('options.')->middleware('auth')->group(function () {
         Route::get('/', [OptionsController::class, 'index'])->name('index');
         Route::get('/create', [OptionsController::class, 'create'])->name('create');
         Route::post('/store', [OptionsController::class, 'store'])->name('store');
+    });
+
+    Route::prefix('schools')->as('schools.')->middleware('auth')->group(function () {
+        Route::get('/', [SchoolsController::class, 'index'])->name('index');
+        Route::get('/create', [SchoolsController::class, 'create'])->name('create');
+        Route::post('/store', [SchoolsController::class, 'store'])->name('store');
+    });
+
+    Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
+        Route::get('/', [SchoolUserController::class, 'index'])->name('index');
+        Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
+        Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
+        Route::post('/storeuser', [SchoolUserController::class, 'storeuser'])->name('storeuser');
+    });
+
+
+    Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
+        Route::get('/', [SchoolUserController::class, 'index'])->name('index');
+        Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
+        Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
     });
 
 

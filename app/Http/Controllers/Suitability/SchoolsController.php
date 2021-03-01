@@ -1,19 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\ServiceRequests;
+namespace App\Http\Controllers\Suitability;
 
-use Illuminate\Http\Request;
+use App\Models\Suitability\School;
+use App\Models\Commune;
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\Builder;
-use App\Models\ServiceRequests\ServiceRequest;
-use App\Models\ServiceRequests\FulfillmentAbsence;;
+use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Auth;
-use App\Rrhh\Authority;
-use Carbon\Carbon;
-
-
-class FulfillmentAbsenceController extends Controller
+class SchoolsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,6 +17,8 @@ class FulfillmentAbsenceController extends Controller
     public function index()
     {
         //
+        $schools = School::all();
+        return view('suitability.schools.index', compact('schools'));
     }
 
     /**
@@ -33,6 +29,10 @@ class FulfillmentAbsenceController extends Controller
     public function create()
     {
         //
+        $communes = Commune::All()->SortBy('name');
+        return view('suitability.schools.create', compact('communes'));
+
+
     }
 
     /**
@@ -43,13 +43,11 @@ class FulfillmentAbsenceController extends Controller
      */
     public function store(Request $request)
     {
-      $fulfillmentAbsence = new FulfillmentAbsence($request->All());
-      $fulfillmentAbsence->start_date = $request->start_date . " " .$request->start_hour;
-      $fulfillmentAbsence->end_date = $request->end_date . " " .$request->end_hour;
-      $fulfillmentAbsence->save();
-
-      session()->flash('success', 'Se ha registrado la inasistencia del período.');
-      return redirect()->back();
+        //
+        $school = new School($request->All());
+        $school->save();
+        session()->flash('success', 'Colegio Creado Exitosamente');
+        return redirect()->route('suitability.schools.index');
     }
 
     /**
@@ -92,10 +90,8 @@ class FulfillmentAbsenceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FulfillmentAbsence $fulfillmentAbsence)
+    public function destroy($id)
     {
-        $fulfillmentAbsence->delete();
-        session()->flash('success', 'La inasistencia se ha eliminado');
-        return redirect()->back();
+        //
     }
 }
