@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Fulfillment;
+use App\Models\ServiceRequests\FulfillmentItem;
 use DateTime;
 use DatePeriod;
 use DateInterval;
@@ -25,9 +26,9 @@ class FulfillmentController extends Controller
      */
     public function index()
     {
-      $user_id = 10962435;
-      $serviceRequests = ServiceRequest::where('rut',$user_id)
-                                       ->where('program_contract_type','Mensual') //solo mensuales
+      $user_id = Auth::user()->id;
+      $serviceRequests = ServiceRequest::where('responsable_id',$user_id)
+                                       // ->where('program_contract_type','Mensual') //solo mensuales
                                        ->orderBy('id','asc')
                                        ->get();
 
@@ -62,7 +63,34 @@ class FulfillmentController extends Controller
     public function store(Request $request)
     {
       $fulfillment = new Fulfillment($request->All());
+      // $fulfillment->responsable_approbation = 1;
+      // $fulfillment->responsable_approver_id = Auth::user()->id;
       $fulfillment->save();
+
+      //turnos
+      if ($request->record != null) {
+        foreach (ServiceRequest::find($request->service_request_id)->shiftControls as $key => $shiftControl) {
+
+          $flag = 0;
+          foreach ($request->record as $key => $record) {
+            $record = json_decode($record);
+            if ($record->start_date == $shiftControl->start_date && $record->end_date == $shiftControl->end_date) {
+              $flag = 1;
+            }
+          }
+          //guarda
+          $fulfillmentItem = new FulfillmentItem();
+          $fulfillmentItem->fulfillment_id = $fulfillment->id;
+          $fulfillmentItem->start_date = $shiftControl->start_date;
+          $fulfillmentItem->end_date = $shiftControl->end_date;
+          $fulfillmentItem->type = "TURNO";
+          $fulfillmentItem->responsable_approbation = $flag;
+          $fulfillmentItem->responsable_approver_id = Auth::user()->id;
+          $fulfillmentItem->observation = $shiftControl->observation;
+          $fulfillmentItem->save();
+
+        }
+      }
 
       session()->flash('success', 'Se ha registrado la información del período.');
       return redirect()->back();
@@ -145,4 +173,31 @@ class FulfillmentController extends Controller
 
         return $pdf->stream('mi-archivo.pdf');
     }
+
+    public function confirmFulfillment(Fulfillment $fulfillment)
+    {
+        // dd($fulfillment);
+        if ($fulfillment->responsable_approver_id == NULL) {
+          $fulfillment->responsable_approbation = 1;
+          $fulfillment->responsable_approbation_date = Carbon::now();
+          $fulfillment->responsable_approver_id = Auth::user()->id;
+          $fulfillment->save();
+        }
+        // if ($fulfillment->responsable_approver_id != NULL && $fulfillment->rrhh_approver_id == NULL) {
+        //   $fulfillment->rrhh_approbation = 1;
+        //   $fulfillment->rrhh_approver_id = Auth::user()->id;
+        //   $fulfillment->save();
+        // }
+        // if ($fulfillment->rrhh_approver_id != NULL && $fulfillment->finances_approver_id == NULL) {
+        //   $fulfillment->finances_approbation = 1;
+        //   $fulfillment->finances_approver_id = Auth::user()->id;
+        //   $fulfillment->save();
+        // }
+
+
+        session()->flash('success', 'Se ha confirmado la información del período.');
+        return redirect()->back();
+    }
+
+
 }

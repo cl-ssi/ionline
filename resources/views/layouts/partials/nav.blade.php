@@ -121,11 +121,17 @@
                           <span class="badge badge-secondary">{{ App\Models\ServiceRequests\ServiceRequest::getPendingRequests() }}</span>
                       </a>
 
+                      @canany(['Service Request: fulfillments'])
                       <a class="dropdown-item"
                           href="{{ route('rrhh.fulfillments.index') }}">
                           <i class="fas fa-wallet"></i> Cumplimiento de Solicitudes
-                          <!-- <span class="badge badge-secondary"></span> -->
                       </a>
+                      @endcan
+
+                      <!-- <a class="dropdown-item"
+                          href="{{ route('rrhh.fulfillments.index') }}">
+                          <i class="fas fa-wallet"></i> Cumplimiento de Solicitudes - RRHH / Finanzas
+                      </a> -->
 
                       @canany(['Service Request: additional data'])
                         <a class="dropdown-item"

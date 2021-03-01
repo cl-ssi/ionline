@@ -140,7 +140,7 @@
 <br><br><br><br>
 
 
-@if($fulfillment->FulfillmentAbsences->count() == 0)
+@if($fulfillment->FulfillmentItems->count() == 0)
   <div class="nueve">
       <div class="justify" style="width: 100%;">
           Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b> ha desempeñado las actividades estipuladas
@@ -153,7 +153,8 @@
       <div class="justify" style="width: 100%;">
           Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b> ha desempeñado las actividades estipuladas
           en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames durante el preríodo de contingencia COVID
-          del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>, registrando las siguientes ausencias:
+          del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>,
+          registrando @if($fulfillment->type == "Turnos") los siguientes turnos extra: @else las siguientes ausencias: @endif
       </div>
   </div>
 
@@ -169,12 +170,12 @@
       </tr>
     </thead>
     <tbody>
-      @foreach($fulfillment->FulfillmentAbsences as $key =>$FulfillmentAbsence)
+      @foreach($fulfillment->FulfillmentItems as $key =>$FulfillmentItem)
       <tr>
-          <td style="text-align:center">{{$FulfillmentAbsence->type}}</td>
-          <td style="text-align:center">{{$FulfillmentAbsence->start_date->format('d-m-Y H:i')}}</td>
-          <td style="text-align:center">{{$FulfillmentAbsence->end_date->format('d-m-Y H:i')}}</td>
-          <td style="text-align:center">{{$FulfillmentAbsence->observation}}</td>
+          <td style="text-align:center">{{$FulfillmentItem->type}}</td>
+          <td style="text-align:center">{{$FulfillmentItem->start_date->format('d-m-Y H:i')}}</td>
+          <td style="text-align:center">{{$FulfillmentItem->end_date->format('d-m-Y H:i')}}</td>
+          <td style="text-align:center">{{$FulfillmentItem->observation}}</td>
       </tr>
       @endforeach
   </table>
