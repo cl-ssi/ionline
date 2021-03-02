@@ -27,7 +27,7 @@ class InvoiceController extends Controller
                 $response = Http::withToken($access_token)->post($url_base);
                 $user_cu = json_decode($response);
 
-                $sr = ServiceRequest::where('rut',$user_cu->RolUnico->numero)->get();
+                $sr = ServiceRequest::where('rut',$user_cu->RolUnico->numero)->first();
             //     if($sr) {
                     
             //     }
