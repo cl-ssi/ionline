@@ -22,14 +22,14 @@
 </form>
 
 
-<h4>En espera</h4>
+<h4>En sala de espera</h4>
 
 <div class="table-responsive">
 <table class="table table-sm table-bordered small">
     <thead>
         <tr>
             <th></th>
-            <th>Id</th>
+            <th></th>
             <th></th>
             <th>Estab</th>
             <th class="d-none d-md-table-cell">Unidad Organ.</th>
@@ -49,22 +49,18 @@
             <tr>
                 <td>{{ ++$key }}</td>
                 <td class="small">
-                    <form method="POST" class="form-horizontal" action="{{ route('vaccination.arrival', $vaccination) }}">
+                    <form method="POST" class="form-horizontal" action="{{ route('vaccination.arrival', [$vaccination,'true']) }}">
                         @csrf
                         @method('PUT')
                         <button type="submit" class="btn btn-sm"><i class="fas fa-running"></i></button>
                     </form>
                 </td>
                 <td>
-                    @if($vaccination->first_dose_at)
-                        <div class="btn btn-sm" style="color:#007bff;"><i class="fas fa-syringe"></i></div>
-                    @else
-                    <form method="POST" class="form-horizontal" action="{{ route('vaccination.vaccinate',$vaccination) }}">
+                    <form method="POST" class="form-horizontal" action="{{ route('vaccination.dome',$vaccination) }}">
                         @csrf
                         @method('PUT')
-                        <button type="submit" class="btn btn-sm" onclick="return clicked('{{$vaccination->fullName()}}');"><i class="fas fa-syringe"></i></button>
+                        <button type="submit" class="btn btn-sm"><i class="fas fa-igloo"></i></button>
                     </form>
-                    @endif
                 </td>
                 <td>{{ $vaccination->aliasEstab }}</td>
                 <td class="d-none d-md-table-cell" style="width: 200px;">{{ $vaccination->organizationalUnit }}</td>
@@ -119,7 +115,6 @@
     <thead>
         <tr>
             <th></th>
-            <th>Id</th>
             <th></th>
             <th>Estab</th>
             <th class="d-none d-md-table-cell">Unidad Organ.</th>
@@ -136,7 +131,7 @@
     <tbody>
         
         @foreach ($slot->bookings as $key => $vaccination)
-            <tr>
+            <tr class="{{ ($vaccination->arrival_at)? 'table-success':''}}">
                 <td>{{ ++$key }}</td>
                 <td class="small">
                     <form method="POST" class="form-horizontal" action="{{ route('vaccination.arrival', $vaccination) }}">
@@ -144,17 +139,6 @@
                         @method('PUT')
                         <button type="submit" class="btn btn-sm"><i class="fas fa-running"></i></button>
                     </form>
-                </td>
-                <td>
-                    @if($vaccination->first_dose_at)
-                        <div class="btn btn-sm" style="color:#007bff;"><i class="fas fa-syringe"></i></div>
-                    @else
-                    <form method="POST" class="form-horizontal" action="{{ route('vaccination.vaccinate',$vaccination) }}">
-                        @csrf
-                        @method('PUT')
-                        <button type="submit" class="btn btn-sm" onclick="return clicked('{{$vaccination->fullName()}}');"><i class="fas fa-syringe"></i></button>
-                    </form>
-                    @endif
                 </td>
                 <td>{{ $vaccination->aliasEstab }}</td>
                 <td class="d-none d-md-table-cell" style="width: 200px;">{{ $vaccination->organizationalUnit }}</td>
