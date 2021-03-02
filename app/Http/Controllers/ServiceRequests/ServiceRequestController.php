@@ -160,7 +160,7 @@ class ServiceRequestController extends Controller
      elseif(Auth::user()->organizationalUnit->establishment_id == 1){
        $signatureFlows['Subdirector'] = 9882506; // 88 - Subdirección Médica
        $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-       $signatureFlows['S.G.D.P Hospital'] = 13866127; // 86 - Subdirección de Gestión de Desarrollo de las Personas
+       $signatureFlows['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
        $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
        $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
        $signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
@@ -206,7 +206,7 @@ class ServiceRequestController extends Controller
      elseif(Auth::user()->organizationalUnit->establishment_id == 1){
        $signatureFlowsTurnos['Subdirector'] = 9882506; // 88 - Subdirección Médica
        // $signatureFlowsTurnos['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-       $signatureFlowsTurnos['S.G.D.P Hospital'] = 13866127; // 86 - Subdirección de Gestión de Desarrollo de las Personas
+       $signatureFlowsTurnos['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
        $signatureFlowsTurnos['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
        // $signatureFlowsTurnos['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
        // $signatureFlowsTurnos['Director Hospital'] = 14101085; // 84 - Dirección

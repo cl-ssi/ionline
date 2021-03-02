@@ -243,6 +243,7 @@
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_administrativos">Administrativos/as</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_matronas">Matronas</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_tm_imageneologia">T.M. Imagenología</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_medico">Médico</button>
     </fieldset>
 
   </div>
@@ -597,8 +598,9 @@
 	$("#alias_tm_imageneologia").click(function(){
 		$('#service_description').val("Prestará servicios de Tecnología Médica en Imagenología realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-
-
+	$("#alias_medico").click(function(){
+		$('#service_description').val("Prestará servicios de médico realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid.");
+	});
 
 </script>
 @endsection
