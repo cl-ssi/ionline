@@ -65,7 +65,7 @@ class RemController extends Controller
     {
         if(!Prestacion::exists($year) OR !Seccion::exists($year)) abort(404);
         $establecimientos = Establecimiento::year($year)->orderBy('comuna')->get();
-        $prestacion = Prestacion::year($year)->where('serie', $serie)->where('Nserie', $nserie)->first();
+        $prestacion = Prestacion::year($year)->where('serie', $serie)->where('Nserie', $nserie)->orderBy('id_prestacion')->first();
         if($prestacion == null) return abort(404);
         $establecimiento = $request->get('establecimiento');
         $periodo = $request->get('periodo');
