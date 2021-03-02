@@ -27,7 +27,7 @@
     <thead>
         <tr>
             <th></th>
-            <th>Id</th>
+            <th></th>
             <th></th>
             <th>Estab</th>
             <th class="d-none d-md-table-cell">Unidad Organ.</th>
@@ -44,23 +44,23 @@
     <tbody>
         
         @foreach ($records as $key => $vaccination)
-            <tr>
+        <tr class="{{ ($vaccination->arrival_at)? 'table-success':''}}">
                 <td>{{ ++$key }}</td>
                 <td class="small">
+                    @if(!$vaccination->arrival_at)
                     <form method="POST" class="form-horizontal" action="{{ route('vaccination.arrival', $vaccination) }}">
                         @csrf
                         @method('PUT')
                         <button type="submit" class="btn btn-sm"><i class="fas fa-running"></i></button>
                     </form>
+                    @endif
                 </td>
                 <td>
-                    @if($vaccination->first_dose_at)
-                        <div class="btn btn-sm" style="color:#007bff;"><i class="fas fa-syringe"></i></div>
-                    @else
-                    <form method="POST" class="form-horizontal" action="{{ route('vaccination.vaccinate',$vaccination) }}">
+                    @if($vaccination->dome_at)
+                    <form method="POST" class="form-horizontal" action="{{ route('vaccination.dome',[$vaccination,'true']) }}">
                         @csrf
                         @method('PUT')
-                        <button type="submit" class="btn btn-sm" onclick="return clicked('{{$vaccination->fullName()}}');"><i class="fas fa-syringe"></i></button>
+                        <button type="submit" class="btn btn-sm"><i class="fas fa-igloo"></i></button>
                     </form>
                     @endif
                 </td>
