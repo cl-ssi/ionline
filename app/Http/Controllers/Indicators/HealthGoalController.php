@@ -42,8 +42,8 @@ class HealthGoalController extends Controller
 
                 if($factor_cods != null && $factor_cols != null){
                     //procesamos los datos necesarios para las consultas rem
-                    $cods = explode(',', $factor_cods);
-                    $cols = explode(',', $factor_cols);
+                    $cods = array_map('trim', explode(',', $factor_cods));
+                    $cols = array_map('trim', explode(',', $factor_cols));
                     $raws = null;
                     foreach($cols as $col)
                         $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
