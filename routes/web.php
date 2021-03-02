@@ -817,7 +817,7 @@ Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::put('/{vaccination}',[VaccinationController::class,'update'])->name('update')->middleware('auth');
     Route::get('/report',[VaccinationController::class,'report'])->name('report')->middleware('auth');
     Route::get('/export',[VaccinationController::class,'export'])->name('export')->middleware('auth');
-    Route::put('/vaccinate/{vaccination}',[VaccinationController::class,'vaccinate'])->name('vaccinate')->middleware('auth');
+    Route::put('/vaccinate/{vaccination}/{dose}',[VaccinationController::class,'vaccinate'])->name('vaccinate')->middleware('auth');
     Route::get('/vaccinate/remove-booking/{vaccination}',[VaccinationController::class,'removeBooking'])->name('removeBooking')->middleware('auth');
     Route::get('/card/{vaccination}',[VaccinationController::class,'card'])->name('card')->middleware('auth');
     Route::get('/slots',[VaccinationController::class,'slots'])->name('slots')->middleware('auth');
