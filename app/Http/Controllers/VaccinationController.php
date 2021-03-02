@@ -316,7 +316,10 @@ class VaccinationController extends Controller
         }
         $vaccination->save();
 
-        return redirect()->back();
+
+        return redirect()->route('vaccination.slots')->with('success', 'El funcionario ha llegado');
+
+        
     }
 
     public function dome(Vaccination $vaccination, $reverse = null)
