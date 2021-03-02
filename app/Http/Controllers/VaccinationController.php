@@ -278,7 +278,12 @@ class VaccinationController extends Controller
         return redirect()->back();
     }
 
-    public function slots() {
+    public function slots(Request $request) {
+        $records=null;
+        if($request->input('search'))
+        {
+        $records = Vaccination::search($request->input('search'))->get();
+        }
         $slots = Slot::whereBetween('start_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])->get();
         foreach($slots as $slot) {
             $bookings = Vaccination::where('first_dose',$slot->start_at)->orWhere('second_dose',$slot->start_at)->get();
@@ -287,8 +292,8 @@ class VaccinationController extends Controller
 
         $arrivals = Vaccination::orderBy('arrival_at')
         ->whereBetween('arrival_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])
-        ->get();
-        return view('vaccination.slots',compact('slots','arrivals'));
+        ->get();        
+        return view('vaccination.slots',compact('slots','arrivals','records'));
     }
 
     public function arrival(Vaccination $vaccination)
@@ -296,7 +301,7 @@ class VaccinationController extends Controller
         $vaccination->arrival_at = date("Y-m-d H:i:s");
         $vaccination->save();
 
-        return redirect()->back();
+        return redirect()->route('vaccination.slots')->with('success', 'El funcionario ha sido agregado a lista de espera');
     }
     
 }
