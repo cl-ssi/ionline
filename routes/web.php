@@ -24,6 +24,9 @@ use App\Http\Controllers\ReplacementStaff\TrainingController;
 use App\Http\Controllers\ReplacementStaff\LanguageController;
 use App\Http\Controllers\VaccinationController;
 
+use App\Http\Controllers\ServiceRequests\InvoiceController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -824,6 +827,15 @@ Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::put('/arrival/{vaccination}/{reverse?}',[VaccinationController::class,'arrival'])->name('arrival')->middleware('auth');
     Route::put('/dome/{vaccination}/{reverse?}',[VaccinationController::class,'dome'])->name('dome')->middleware('auth');
 });
+
+
+Route::prefix('invoice')->as('invoice.')->group(function () {
+    Route::get('/welcome',[InvoiceController::class,'welcome'])->name('welcome');
+    Route::get('/login/{access_token}',[InvoiceController::class,'login'])->name('login');
+
+});
+
+
 
 /* Nuevas rutas, Laravel 8.0. */
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
