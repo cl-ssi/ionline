@@ -45,10 +45,12 @@
                     @if($vaccination->first_dose_at)
                         <div class="btn btn-sm" style="color:#007bff;"><i class="fas fa-syringe"></i></div>
                     @else
-                    <form method="POST" class="form-horizontal" action="{{ route('vaccination.vaccinate',$vaccination) }}">
+                    <form method="POST" class="form-horizontal" action="{{ route('vaccination.vaccinate',['vaccination' => $vaccination, 'dose' => 'first']) }}">
                         @csrf
                         @method('PUT')
-                        <button type="submit" class="btn btn-sm" onclick="return clicked('{{$vaccination->fullName()}}');"><i class="fas fa-syringe"></i></button>
+                        @if($vaccination->first_dose)
+                        <button type="submit" class="btn btn-sm" onclick="return clicked('{{$vaccination->fullName()}}','primera');"><i class="fas fa-syringe"></i></button>
+                        @endif
                     </form>
                     @endif
                 </td>
@@ -56,10 +58,12 @@
                     @if($vaccination->second_dose_at)
                         <div class="btn btn-sm" style="color:#007bff;"><i class="fas fa-syringe"></i></div>
                     @else
-                    <form method="POST" class="form-horizontal" action="{{ route('vaccination.vaccinate',$vaccination) }}">
+                    <form method="POST" class="form-horizontal" action="{{ route('vaccination.vaccinate',['vaccination' => $vaccination, 'dose' => 'second']) }}">
                         @csrf
                         @method('PUT')
-                        <button type="submit" class="btn btn-sm" onclick="return clicked('{{$vaccination->fullName()}}');"><i class="fas fa-syringe"></i></button>
+                        @if($vaccination->second_dose)
+                        <button type="submit" class="btn btn-sm" onclick="return clicked('{{$vaccination->fullName()}}','segunda');"><i class="fas fa-syringe"></i></button>
+                        @endif
                     </form>
                     @endif
                 </td>
@@ -111,8 +115,8 @@
 
 @section('custom_js')
 <script type="text/javascript">
-    function clicked(user) {
-        return confirm('Desea registrar que se ha vacunado '+user+'?');
+    function clicked(user, dose) {
+        return confirm('Desea registrar que se ha vacunado '+user+' para la '+dose+' dosis?');
     }
 </script>
 @endsection

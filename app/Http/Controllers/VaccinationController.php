@@ -153,10 +153,20 @@ class VaccinationController extends Controller
         //
     }
 
-    public function vaccinate(Vaccination $vaccination)
+    public function vaccinate(Vaccination $vaccination, $dose)
     {
+        if ($dose = 'first')
+        {
         $vaccination->first_dose_at = date("Y-m-d H:i:s");
         $vaccination->save();
+        }
+        if ($dose = 'second')
+        {
+        $vaccination->second_dose_at = date("Y-m-d H:i:s");
+        $vaccination->save();
+        }
+
+
 
         return redirect()->back();
     }
