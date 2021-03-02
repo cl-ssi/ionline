@@ -102,7 +102,7 @@ class VaccinationController extends Controller
         $vaccination = new Vaccination($request->All());
         $vaccination->save();
 
-        return redirect()->route('vaccination.create')->with('success', 'El funcionario ha sido agregado');
+        return redirect()->route('vaccination.edit',$vaccination)->with('success', 'El funcionario ha sido agregado');
     }
 
     /**
@@ -139,7 +139,7 @@ class VaccinationController extends Controller
         $vaccination->fill($request->all());
         $vaccination->save();
 
-        return redirect()->route('vaccination.index');
+        return redirect()->back()->with('success', 'Se han guardado los cambios');;
     }
 
     /**
@@ -285,15 +285,28 @@ class VaccinationController extends Controller
             $slot->bookings = $bookings;
         }
 
-        $arrivals = Vaccination::orderBy('arrival_at')
-        ->whereBetween('arrival_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])
-        ->get();
+        $arrivals = Vaccination::orderBy('arrival_at')->whereNull('dome_at')
+            ->whereBetween('arrival_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])
+            ->get();
         return view('vaccination.slots',compact('slots','arrivals'));
     }
 
-    public function arrival(Vaccination $vaccination)
+    public function arrival(Vaccination $vaccination, $reverse = null)
     {
-        $vaccination->arrival_at = date("Y-m-d H:i:s");
+        if($reverse) {
+            $vaccination->arrival_at = null;    
+        }
+        else {
+            $vaccination->arrival_at = date("Y-m-d H:i:s");
+        }
+        $vaccination->save();
+
+        return redirect()->back();
+    }
+
+    public function dome(Vaccination $vaccination)
+    {
+        $vaccination->dome_at = date("Y-m-d H:i:s");
         $vaccination->save();
 
         return redirect()->back();

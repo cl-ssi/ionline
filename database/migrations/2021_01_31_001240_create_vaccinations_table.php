@@ -28,6 +28,7 @@ class CreateVaccinationsTable extends Migration
             $table->boolean('inform_method')->nullable();
 
             $table->datetime('arrival_at')->nullable();
+            $table->datetime('dome_at')->nullable();
 
             $table->datetime('first_dose')->nullable();
             $table->datetime('first_dose_arrival')->nullable();
