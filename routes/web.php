@@ -818,6 +818,8 @@ Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::put('/vaccinate/{vaccination}',[VaccinationController::class,'vaccinate'])->name('vaccinate')->middleware('auth');
     Route::get('/vaccinate/remove-booking/{vaccination}',[VaccinationController::class,'removeBooking'])->name('removeBooking')->middleware('auth');
     Route::get('/card/{vaccination}',[VaccinationController::class,'card'])->name('card')->middleware('auth');
+    Route::get('/slots',[VaccinationController::class,'slots'])->name('slots')->middleware('auth');
+    Route::put('/arrival/{vaccination}',[VaccinationController::class,'arrival'])->name('arrival')->middleware('auth');
 });
 
 /* Nuevas rutas, Laravel 8.0. */
