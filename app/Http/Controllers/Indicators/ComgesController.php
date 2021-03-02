@@ -54,7 +54,7 @@ class ComgesController extends Controller
         // $corte = $indicator->sections()->where('ind_sections.number', $section)->first();
         // $last_action = $corte->actions->last();
         // $last_number = $last_action != null ? $last_action->number + 1 : 1;
-        return view('indicators.comges.action.create', compact('section', 'indicator'))->with(['comges' => $indicator->comges]);
+        return view('indicators.comges.action.create', compact('section', 'indicator'))->with(['comges' => $indicator->indicatorable]);
     }
 
     public function edit(Comges $comges)
@@ -67,7 +67,7 @@ class ComgesController extends Controller
     public function editAction($year, $comges, $section, Indicator $indicator, Action $action)
     {
         $action->load('values', 'compliances');
-        return view('indicators.comges.action.edit', compact('section', 'indicator', 'action'))->with(['comges' => $indicator->comges]);
+        return view('indicators.comges.action.edit', compact('section', 'indicator', 'action'))->with(['comges' => $indicator->indicatorable]);
     }
 
     public function store($year, Request $request)
