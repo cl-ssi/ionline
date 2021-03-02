@@ -837,6 +837,7 @@ Route::prefix('vaccination')->as('vaccination.')->group(function () {
 Route::prefix('invoice')->as('invoice.')->group(function () {
     Route::get('/welcome',[InvoiceController::class,'welcome'])->name('welcome');
     Route::get('/login/{access_token}',[InvoiceController::class,'login'])->name('login');
+    Route::post('/show',[InvoiceController::class,'show'])->name('show');
 
 });
 
