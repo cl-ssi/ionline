@@ -239,8 +239,13 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::put('service_requests/update_aditional_data/{serviceRequest}', 'ServiceRequests\ServiceRequestController@update_aditional_data')->middleware('auth')->name('service_requests.update_aditional_data');
 
     Route::get('fulfillments/edit_fulfillment/{serviceRequest}', 'ServiceRequests\FulfillmentController@edit_fulfillment')->name('fulfillments.edit_fulfillment');
+    Route::get('fulfillments/save_approbed_fulfillment/{serviceRequest}', 'ServiceRequests\FulfillmentController@save_approbed_fulfillment')->name('fulfillments.save_approbed_fulfillment');
+    Route::get('fulfillments/confirmFulfillmentBySignPosition/{Fulfillment}/{approbed?}', 'ServiceRequests\FulfillmentController@confirmFulfillmentBySignPosition')->name('fulfillments.confirmFulfillmentBySignPosition');
+
+
     Route::resource('fulfillments', 'ServiceRequests\FulfillmentController')->middleware('auth');
     Route::get('fulfillments/certificate-pdf/{fulfillment}', 'ServiceRequests\FulfillmentController@certificatePDF')->name('fulfillments.certificate-pdf')->middleware('auth');
+    Route::get('service_requests/certificate-pdf/{serviceRequest}', 'ServiceRequests\ServiceRequestController@certificatePDF')->name('service_requests.certificate-pdf')->middleware('auth');
     Route::get('fulfillments/confirmFulfillment/{fulfillment}', 'ServiceRequests\FulfillmentController@confirmFulfillment')->name('fulfillments.confirmFulfillment')->middleware('auth');
     Route::resource('fulfillmentItem', 'ServiceRequests\FulfillmentItemController')->middleware('auth');
     Route::resource('service_requests', 'ServiceRequests\ServiceRequestController')->middleware('auth');
