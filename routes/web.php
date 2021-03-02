@@ -822,7 +822,7 @@ Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::get('/card/{vaccination}',[VaccinationController::class,'card'])->name('card')->middleware('auth');
     Route::get('/slots',[VaccinationController::class,'slots'])->name('slots')->middleware('auth');
     Route::put('/arrival/{vaccination}/{reverse?}',[VaccinationController::class,'arrival'])->name('arrival')->middleware('auth');
-    Route::put('/dome/{vaccination}',[VaccinationController::class,'dome'])->name('dome')->middleware('auth');
+    Route::put('/dome/{vaccination}/{reverse?}',[VaccinationController::class,'dome'])->name('dome')->middleware('auth');
 });
 
 /* Nuevas rutas, Laravel 8.0. */

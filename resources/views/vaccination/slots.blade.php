@@ -6,7 +6,7 @@
 
 @include('vaccination.partials.nav')
 
-<h3 class="mb-3">Listado de personal a vacunar</h3>
+<h3 class="mb-3" id="titulo">Listado de personal a vacunar</h3>
 
 
 <form method="GET" class="form-horizontal" action="{{ route('vaccination.slots') }}">
@@ -142,7 +142,7 @@
                     <form method="POST" class="form-horizontal" action="{{ route('vaccination.arrival', [$vaccination,'true']) }}">
                         @csrf
                         @method('PUT')
-                        <button type="submit" class="btn btn-sm"><i class="fas fa-running"></i></button>
+                        <button type="submit" class="btn btn-sm"><i class="fas fa-times"></i></button>
                     </form>
                 </td>
                 <td>
@@ -194,16 +194,24 @@
 
 </div>
 
-
-
+<ul class="nav">
+@foreach($slots as $slot)
+    <li class="nav-item">
+        <a class="nav-link active" href="#{{ $slot->start_at->format('H_i') }}">{{ $slot->start_at->format('H:i') }}</a>
+    </li>
+@endforeach
+</ul>
 
 @foreach($slots as $slot)
-<h4>{{ $slot->start_at->format('H:i') }}</h4>
+<h4 id="{{ $slot->start_at->format('H_i') }}">{{ $slot->start_at->format('H:i') }} 
+    <a href="#titulo"><i class="fas fa-arrow-up"></i></a>
+    </h4>
 
 <div class="table-responsive">
 <table class="table table-sm table-bordered small">
     <thead>
         <tr>
+            <th></th>
             <th></th>
             <th></th>
             <th>Estab</th>
@@ -224,11 +232,22 @@
             <tr class="{{ ($vaccination->arrival_at)? 'table-success':''}}">
                 <td>{{ ++$key }}</td>
                 <td class="small">
+                    @if(!$vaccination->arrival_at)
                     <form method="POST" class="form-horizontal" action="{{ route('vaccination.arrival', $vaccination) }}">
                         @csrf
                         @method('PUT')
                         <button type="submit" class="btn btn-sm"><i class="fas fa-running"></i></button>
                     </form>
+                    @endif
+                </td>
+                <td>
+                    @if($vaccination->dome_at)
+                    <form method="POST" class="form-horizontal" action="{{ route('vaccination.dome',[$vaccination,'true']) }}">
+                        @csrf
+                        @method('PUT')
+                        <button type="submit" class="btn btn-sm"><i class="fas fa-igloo"></i></button>
+                    </form>
+                    @endif
                 </td>
                 <td>{{ $vaccination->aliasEstab }}</td>
                 <td class="d-none d-md-table-cell" style="width: 200px;">{{ $vaccination->organizationalUnit }}</td>

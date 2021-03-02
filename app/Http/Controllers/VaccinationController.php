@@ -293,7 +293,7 @@ class VaccinationController extends Controller
         $arrivals = Vaccination::orderBy('arrival_at')->whereNull('dome_at')
             ->whereBetween('arrival_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])
             ->get();
-        return view('vaccination.slots',compact('slots','arrivals','records')));
+        return view('vaccination.slots',compact('slots','arrivals','records'));
     }
 
     public function arrival(Vaccination $vaccination, $reverse = null)
@@ -309,9 +309,15 @@ class VaccinationController extends Controller
         return redirect()->back();
     }
 
-    public function dome(Vaccination $vaccination)
+    public function dome(Vaccination $vaccination, $reverse = null)
     {
-        $vaccination->dome_at = date("Y-m-d H:i:s");
+        if($reverse) {
+            $vaccination->dome_at = null;    
+        }
+        else {
+            $vaccination->dome_at = date("Y-m-d H:i:s");
+        }
+        
         $vaccination->save();
 
         return redirect()->route('vaccination.slots')->with('success', 'El funcionario ha sido agregado a lista de espera');
