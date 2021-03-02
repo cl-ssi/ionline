@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Vaccination;
 use App\Models\Vaccination\Slot;
+use App\Models\Vaccination\Day;
 use Illuminate\Http\Request;
 //use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -273,6 +274,27 @@ class VaccinationController extends Controller
 
         $slot->update(['used' => $slot->used - 1]);
         $vaccination->update(['second_dose' => null]);
+
+        return redirect()->back();
+    }
+
+    public function slots() {
+        $slots = Slot::whereBetween('start_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])->get();
+        foreach($slots as $slot) {
+            $bookings = Vaccination::where('first_dose',$slot->start_at)->orWhere('second_dose',$slot->start_at)->get();
+            $slot->bookings = $bookings;
+        }
+
+        $arrivals = Vaccination::orderBy('arrival_at')
+        ->whereBetween('arrival_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])
+        ->get();
+        return view('vaccination.slots',compact('slots','arrivals'));
+    }
+
+    public function arrival(Vaccination $vaccination)
+    {
+        $vaccination->arrival_at = date("Y-m-d H:i:s");
+        $vaccination->save();
 
         return redirect()->back();
     }
