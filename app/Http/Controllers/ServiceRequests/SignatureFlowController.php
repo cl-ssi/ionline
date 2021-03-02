@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\SignatureFlow;
+use App\Models\ServiceRequests\Fulfillment;
 use App\Mail\ServiceRequestNotification;
 use Illuminate\Support\Facades\Mail;
 
@@ -15,6 +16,12 @@ use Carbon\Carbon;
 
 class SignatureFlowController extends Controller
 {
+    protected $FulfillmentController;
+    public function __construct(FulfillmentController $FulfillmentController)
+    {
+        $this->FulfillmentController = $FulfillmentController;
+    }
+
   /**
    * Display a listing of the resource.
    *
@@ -49,8 +56,19 @@ class SignatureFlowController extends Controller
       if ($request->status != null) {
         //verifica que el proximo usuario corresponde a proximo firmante
         $serviceRequest = ServiceRequest::find($request->service_request_id);
+
+        if ($serviceRequest->SignatureFlows->whereNull('status')->count() == 0) {
+          session()->flash('danger', "No existen visaciones por realizar.");
+          return redirect()->back();
+        }
+
         if ($serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->responsable_id != Auth::user()->id) {
           session()->flash('danger', "Existe otra persona que debe visar este documento antes que usted.");
+          return redirect()->back();
+        }
+
+        if ($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) {
+          session()->flash('danger', "No es posible visar esta solicitud puesto que ya fue rechazada.");
           return redirect()->back();
         }
 
@@ -88,6 +106,21 @@ class SignatureFlowController extends Controller
           //   session()->flash('success', 'Se ha registrado la visación (No se envió correo electrónico: ' . $e->getMessage() .').');
           //   return redirect()->route('rrhh.service_requests.index');
           // }
+
+          // //cuando visa responsable (2), se guarda automáticamente el cumplimiento (fulfillment) - solo para contrato por turno (horas)
+          // if ($serviceRequest->program_contract_type == "Horas" && $SignatureFlow->sign_position == 2) {
+          //   $this->FulfillmentController->save_approbed_fulfillment($serviceRequest);
+          // }
+          //
+          // if ($serviceRequest->Fulfillments->count() > 0 && $serviceRequest->program_contract_type == "Horas" && ($SignatureFlow->sign_position == 4 || $SignatureFlow->sign_position == 5)) {
+          //   $this->FulfillmentController->confirmFulfillmentBySignPosition($serviceRequest->Fulfillments->first(),$SignatureFlow->sign_position);
+          // }
+
+          if ($serviceRequest->program_contract_type == "Horas" && $SignatureFlow->sign_position == 2) {
+            session()->flash('info', 'Se ha registrado la visación de solicitud nro: <b>'.$serviceRequest->id.'</b>. Para visualizar el certificado de confirmación, hacer click <a href="'. route('rrhh.service_requests.certificate-pdf', $serviceRequest) . '" target="_blank">Aquí.</a>');
+            return redirect()->route('rrhh.service_requests.index');
+          }
+
        }
       }
 

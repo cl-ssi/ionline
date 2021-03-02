@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\FulfillmentItem;
+use App\Models\ServiceRequests\Fulfillment;
 
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
@@ -43,11 +44,39 @@ class FulfillmentItemController extends Controller
      */
     public function store(Request $request)
     {
+      //validation
+      if (Auth::user()->can('Service Request: fulfillments rrhh')) {
+        if (Fulfillment::where('id',$request->fulfillment_id)->first()->responsable_approver_id == NULL) {
+          session()->flash('danger', 'No es posible registrar, puesto que falta aprobación de Responsable.');
+          return redirect()->back();
+        }
+      }
+
+      if (Auth::user()->can('Service Request: fulfillments finance')) {
+        if (Fulfillment::where('id',$request->fulfillment_id)->first()->rrhh_approver_id == NULL) {
+          session()->flash('danger', 'No es posible registrar, puesto que falta aprobación de RRHH.');
+          return redirect()->back();
+        }
+      }
+
+      //save
       $fulfillmentItem = new FulfillmentItem($request->All());
       $fulfillmentItem->start_date = $request->start_date . " " .$request->start_hour;
       $fulfillmentItem->end_date = $request->end_date . " " .$request->end_hour;
-      $fulfillmentItem->responsable_approbation = 1;
-      $fulfillmentItem->responsable_approver_id = Auth::user()->id;
+      if (Auth::user()->can('Service Request: fulfillments responsable')) {
+        $fulfillmentItem->responsable_approbation = 1;
+        $fulfillmentItem->responsable_approbation_date = Carbon::now();
+        $fulfillmentItem->responsable_approver_id = Auth::user()->id;
+      }elseif(Auth::user()->can('Service Request: fulfillments rrhh')){
+        $fulfillmentItem->rrhh_approbation = 1;
+        $fulfillmentItem->rrhh_approbation_date = Carbon::now();
+        $fulfillmentItem->rrhh_approver_id = Auth::user()->id;
+      }
+      elseif(Auth::user()->can('Service Request: fulfillments finance')){
+        $fulfillmentItem->finances_approbation = 1;
+        $fulfillmentItem->finances_approbation_date = Carbon::now();
+        $fulfillmentItem->finances_approver_id = Auth::user()->id;
+      }
       $fulfillmentItem->save();
 
       session()->flash('success', 'Se ha registrado la inasistencia del período.');
