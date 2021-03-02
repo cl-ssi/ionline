@@ -58,6 +58,7 @@ class Indicator extends Model
 
     public function getContribution()
     {
-        return $this->getCompliance() * $this->weighting / preg_replace('/[^0-9.]/', '', $this->goal);
+        $result = ($this->getCompliance() * $this->weighting) / preg_replace('/[^0-9.]/', '', $this->goal);
+        return $result > $this->weighting ? $this->weighting : $result;
     }
 }

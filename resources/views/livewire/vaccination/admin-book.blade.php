@@ -16,14 +16,18 @@
             <tr>
         @foreach($days as $day)
             @if($day->first_dose_available > $day->first_dose_used)
-            <td>
+            <td class="align-top">
                 <strong>{{ $day->day->format('d-m-Y') }}</strong> <br>
                 ({{ $day->first_dose_available - $day->first_dose_used }} cupos)
                 <ul class="list-group">
                 @foreach($day->slots as $slot)
                     <li class="list-group-item text-center">
-                    {{ $slot->start_at->format('H:i') }} <br> 
-                    <button class="btn btn-sm btn-primary ml-3" wire:click="bookingFirst({{ $slot->id }})">Reservar</button>
+                    {{ $slot->start_at->format('H:i') }} <br>
+                    @if($slot->available > $slot->used) 
+                        <button class="btn btn-sm btn-primary ml-3" wire:click="bookingFirst({{ $slot->id }})">Reservar</button>
+                    @else
+                        <div style="height: 31px;"></div>
+                    @endif
                     </li>
                 @endforeach
                 </ul>
@@ -58,22 +62,22 @@
                 <table>
                 <tr>
                 @foreach($days as $day)
-                    <td>
+                    <td class="align-top">
                         <strong>{{ $day->day->format('d-m-Y') }}</strong>
                         <ul class="list-group">
                         @foreach($day->slots as $slot)
                             <li class="list-group-item text-center">
                             {{ $slot->start_at->format('H:i') }} <br> 
                             @if($slot->available > $slot->used)
-                            <button class="btn btn-sm btn-primary ml-3" wire:click="bookingSecond({{ $slot->id }})" onclick="return false;">Reservar</button>
+                                <button class="btn btn-sm btn-primary ml-3" wire:click="bookingSecond({{ $slot->id }})" onclick="return false;">Reservar</button>
+                            @else
+                                <div style="height: 31px;"></div>
                             @endif
-                            <br>
                             ({{ $slot->available - $slot->used }} cupos)
                             </li>
                         @endforeach
                         </ul>
                     </td>
-                   
                 @endforeach
                 </tr>
                 </table>

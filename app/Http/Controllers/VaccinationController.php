@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Vaccination;
 use App\Models\Vaccination\Slot;
+use App\Models\Vaccination\Day;
 use Illuminate\Http\Request;
 //use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -101,7 +102,7 @@ class VaccinationController extends Controller
         $vaccination = new Vaccination($request->All());
         $vaccination->save();
 
-        return redirect()->route('vaccination.create')->with('success', 'El funcionario ha sido agregado');
+        return redirect()->route('vaccination.edit',$vaccination)->with('success', 'El funcionario ha sido agregado');
     }
 
     /**
@@ -138,7 +139,7 @@ class VaccinationController extends Controller
         $vaccination->fill($request->all());
         $vaccination->save();
 
-        return redirect()->route('vaccination.index');
+        return redirect()->back()->with('success', 'Se han guardado los cambios');;
     }
 
     /**
@@ -152,10 +153,20 @@ class VaccinationController extends Controller
         //
     }
 
-    public function vaccinate(Vaccination $vaccination)
+    public function vaccinate(Vaccination $vaccination, $dose)
     {
+        if ($dose == 'first')
+        {
         $vaccination->first_dose_at = date("Y-m-d H:i:s");
         $vaccination->save();
+        }
+        if ($dose == 'second')
+        {
+        $vaccination->second_dose_at = date("Y-m-d H:i:s");
+        $vaccination->save();
+        }
+
+
 
         return redirect()->back();
     }
@@ -275,6 +286,54 @@ class VaccinationController extends Controller
         $vaccination->update(['second_dose' => null]);
 
         return redirect()->back();
+    }
+
+    public function slots(Request $request) {
+        $records=null;
+        if($request->input('search'))
+        {
+        $records = Vaccination::search($request->input('search'))->get();
+        }
+        $slots = Slot::whereBetween('start_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])->get();
+        foreach($slots as $slot) {
+            $bookings = Vaccination::where('first_dose',$slot->start_at)->orWhere('second_dose',$slot->start_at)->get();
+            $slot->bookings = $bookings;
+        }
+
+        $arrivals = Vaccination::orderBy('arrival_at')->whereNull('dome_at')
+            ->whereBetween('arrival_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])
+            ->get();
+        return view('vaccination.slots',compact('slots','arrivals','records'));
+    }
+
+    public function arrival(Vaccination $vaccination, $reverse = null)
+    {
+        if($reverse) {
+            $vaccination->arrival_at = null;    
+        }
+        else {
+            $vaccination->arrival_at = date("Y-m-d H:i:s");
+        }
+        $vaccination->save();
+
+
+        return redirect()->route('vaccination.slots')->with('success', 'El funcionario ha llegado');
+
+        
+    }
+
+    public function dome(Vaccination $vaccination, $reverse = null)
+    {
+        if($reverse) {
+            $vaccination->dome_at = null;    
+        }
+        else {
+            $vaccination->dome_at = date("Y-m-d H:i:s");
+        }
+        
+        $vaccination->save();
+
+        return redirect()->route('vaccination.slots')->with('success', 'El funcionario ha sido agregado a lista de espera');
     }
     
 }
