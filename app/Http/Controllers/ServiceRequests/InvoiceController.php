@@ -26,35 +26,23 @@ class InvoiceController extends Controller
                 $url_base = "https://www.claveunica.gob.cl/openid/userinfo/";
                 $response = Http::withToken($access_token)->post($url_base);
                 $user_cu = json_decode($response);
-
-                $sr = ServiceRequest::where('rut',$user_cu->RolUnico->numero)->first();
-            //     if($sr) {
-                    
-            //     }
-            //     else {
-            //         //$vaccination = new Vaccination();
-            //         ''
-            //     }
-            // } elseif (env('APP_ENV') == 'local') {
-            //     $vaccination = Vaccination::where('run',15287582)->first();
-            //     if($vaccination) {
-            //         $vaccination->dv = 7;
-            //         $vaccination->name = "Alvaro";
-            //         $vaccination->fathers_family = "Torres";
-            //         $vaccination->mothers_family = "Fuschslocher";
-            //         $vaccination->personal_email = "email@email.com";
-            //     }
-            //     else {
-            //         $vaccination = new Vaccination();
-            //     }
+                $user = $user_cu->RolUnico->numero;
+                $user = $user.'-'.$user_cu->RolUnico->DV;        
+                
+                
+            } else if (env('APP_ENV') == 'local') {
+                $user = '14105887-8';                 
+                
             }
-            return $this->show($sr);
+            return $this->show($user);
         }
     }
 
 
-    public function show(ServiceRequest $sr)
+    public function show($user)
     {
+        
+        $sr = ServiceRequest::where('rut',$user)->get();
         return view('service_requests.invoice.show', compact('sr'));
     }
 
