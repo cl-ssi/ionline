@@ -61,4 +61,9 @@ class Indicator extends Model
         $result = ($this->getCompliance() * $this->weighting) / preg_replace('/[^0-9.]/', '', $this->goal);
         return $result > $this->weighting ? $this->weighting : $result;
     }
+
+    public function isFactorSourceREM($factor)
+    {
+        return $factor == 'numerador' ? $this->numerator_source == 'REM' : $this->denominator_source == 'REM';
+    }
 }

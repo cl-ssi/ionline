@@ -186,9 +186,9 @@
 <div id="firmas">
     <div class="center" style="width: 100%;">
         <strong>
-        <span class="uppercase">{{$serviceRequest->user->getFullNameAttribute()}}</span><br>
-        <span class="uppercase">{{$serviceRequest->user->position}}</span><br>
-        <span class="uppercase">{{$serviceRequest->user->organizationalUnit->name}}</span><br>
+        <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}</span><br>
+        <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->position}}</span><br>
+        <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->organizationalUnit->name}}</span><br>
         HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
         </strong>
     </div>

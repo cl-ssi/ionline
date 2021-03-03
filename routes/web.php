@@ -408,6 +408,8 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::get('/{law}', 'Indicators\HealthGoalController@index')->name('index');
         Route::get('/{law}/{year}', 'Indicators\HealthGoalController@list')->name('list');
         Route::get('/{law}/{year}/{health_goal}', 'Indicators\HealthGoalController@show')->name('show');
+        Route::get('/{law}/{year}/{health_goal}/ind/{indicator}/edit', 'Indicators\HealthGoalController@editInd')->middleware('auth')->name('ind.edit');
+        Route::put('/{law}/{year}/{health_goal}/ind/{indicator}', 'Indicators\HealthGoalController@updateInd')->middleware('auth')->name('ind.update');
     });
 
     Route::prefix('19813')->as('19813.')->group(function () {
