@@ -55,7 +55,7 @@
 		    <label for="for_type">Tipo</label>
 		    <select name="type" class="form-control" required>
 					<option value="Covid">Honorarios - Covid</option>
-          <option value="Genérico">Honorarios - Genérico</option>
+          <!-- <option value="Genérico">Honorarios - Genérico</option> -->
         </select>
 		</fieldset>
 
