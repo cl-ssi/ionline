@@ -178,9 +178,9 @@
                 </tr>
 
                 {{--                ejemplo de modal firmador--}}
-                @include('documents.signatures.partials.sign_file')
-                <button type="button" data-toggle="modal"
-                        data-target="#signPdfModal{{$signedSignaturesFlow->id}}">Modal firmador incrustado</button>
+{{--                @include('documents.signatures.partials.sign_file')--}}
+{{--                <button type="button" data-toggle="modal"--}}
+{{--                        data-target="#signPdfModal{{$signedSignaturesFlow->id}}">Modal firmador incrustado</button>--}}
             @endforeach
             </tbody>
         </table>

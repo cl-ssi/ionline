@@ -326,6 +326,13 @@ class FulfillmentController extends Controller
 
     public function confirmFulfillment(Fulfillment $fulfillment)
     {
+//        if ($request->hasFile('invoice')){
+//            $invoiceFile = $request->file('invoice');
+//        };
+//
+//        Storage::disk('local')->put("invoices/$fulfillment->id.pdf", $invoiceFile);
+//        $fulfillment->invoice_path = '';
+
         // dd($fulfillment);
         if (Auth::user()->can('Service Request: fulfillments responsable')) {
           if ($fulfillment->responsable_approver_id == NULL) {
