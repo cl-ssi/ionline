@@ -16,6 +16,7 @@ use App\User;
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class FulfillmentController extends Controller
 {
@@ -468,6 +469,11 @@ class FulfillmentController extends Controller
 
         session()->flash('success', 'Se ha confirmado la información del período.');
         return redirect()->back();
+    }
+
+    public function downloadInvoice($fulfillmentId)
+    {
+        return Storage::response( 'invoices/' . $fulfillmentId . '.pdf', mb_convert_encoding($fulfillmentId . '.pdf', 'ASCII'));
     }
 
 
