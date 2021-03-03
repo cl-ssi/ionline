@@ -191,6 +191,7 @@ class FulfillmentController extends Controller
             $fulfillment->type = $program_contract_type;
             $fulfillment->start_date = $start_date_period;
             $fulfillment->end_date = $end_date_period;
+            $fulfillment->user_id = Auth::user()->id;
             $fulfillment->save();
           }
 
@@ -204,6 +205,7 @@ class FulfillmentController extends Controller
             $fulfillmentItem->end_date = $shiftControl->end_date;
             $fulfillmentItem->type = "Turno";
             $fulfillmentItem->observation = $shiftControl->observation;
+            $fulfillmentItem->user_id = Auth::user()->id;
             $fulfillmentItem->save();
 
           }
@@ -256,6 +258,7 @@ class FulfillmentController extends Controller
 
             $fulfillment->start_date = $start_date_period;
             $fulfillment->end_date = $end_date_period;
+            $fulfillment->user_id = Auth::user()->id;
             $fulfillment->save();
           }
 
@@ -274,6 +277,7 @@ class FulfillmentController extends Controller
             $fulfillmentItem->responsable_approver_id = Auth::user()->id;
 
             $fulfillmentItem->observation = $shiftControl->observation;
+            $fulfillmentItem->user_id = Auth::user()->id;
             $fulfillmentItem->save();
 
           }

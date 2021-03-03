@@ -35,10 +35,13 @@ class FulfillmentStagesTable extends Migration
           $table->datetime('finances_approbation_date')->nullable();
           $table->unsignedBigInteger('finances_approver_id')->nullable();
 
+          $table->unsignedBigInteger('user_id');
+
           $table->foreign('service_request_id')->references('id')->on('doc_service_requests');
           $table->foreign('responsable_approver_id')->references('id')->on('users');
           $table->foreign('rrhh_approver_id')->references('id')->on('users');
           $table->foreign('finances_approver_id')->references('id')->on('users');
+          $table->foreign('user_id')->references('id')->on('users');
           $table->timestamps();
           $table->softDeletes();
       });
@@ -63,10 +66,13 @@ class FulfillmentStagesTable extends Migration
           $table->datetime('finances_approbation_date')->nullable();
           $table->unsignedBigInteger('finances_approver_id')->nullable();
 
+          $table->unsignedBigInteger('user_id');
+
           $table->foreign('fulfillment_id')->references('id')->on('doc_fulfillments');
           $table->foreign('responsable_approver_id')->references('id')->on('users');
           $table->foreign('rrhh_approver_id')->references('id')->on('users');
           $table->foreign('finances_approver_id')->references('id')->on('users');
+          $table->foreign('user_id')->references('id')->on('users');
 
           $table->timestamps();
           $table->softDeletes();
