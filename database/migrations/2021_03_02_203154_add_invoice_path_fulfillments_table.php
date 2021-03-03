@@ -14,7 +14,7 @@ class AddInvoicePathFulfillmentsTable extends Migration
     public function up()
     {
         Schema::table('doc_fulfillments', function (Blueprint $table) {
-            $table->string('invoice_path')->after('finances_approver_id')->nullable();
+            $table->boolean('has_invoice_file')->after('finances_approver_id')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddInvoicePathFulfillmentsTable extends Migration
     public function down()
     {
         Schema::table('doc_fulfillments', function (Blueprint $table) {
-            $table->dropColumn('invoice_path');
+            $table->dropColumn('has_invoice_file');
         });
     }
 }
