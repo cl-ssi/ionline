@@ -17,7 +17,7 @@ class FulfillmentItem extends Model implements Auditable
    */
   protected $fillable = [
       'id', 'fulfillment_id', 'type', 'start_date', 'end_date', 'observation',
-      'responsable_approbation','responsable_approver_id','rrhh_approbation','rrhh_approver_id','finances_approbation','finances_approver_id'
+      'responsable_approbation','responsable_approver_id','rrhh_approbation','rrhh_approver_id','finances_approbation','finances_approver_id','user_id'
   ];
 
   public function Fulfillment() {

@@ -77,6 +77,7 @@ class FulfillmentItemController extends Controller
         $fulfillmentItem->finances_approbation_date = Carbon::now();
         $fulfillmentItem->finances_approver_id = Auth::user()->id;
       }
+      $fulfillmentItem->user_id = Auth::user()->id;
       $fulfillmentItem->save();
 
       session()->flash('success', 'Se ha registrado la inasistencia del período.');

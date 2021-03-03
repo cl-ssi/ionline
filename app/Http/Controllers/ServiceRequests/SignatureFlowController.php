@@ -124,6 +124,7 @@ class SignatureFlowController extends Controller
             $fulfillment->start_date = $serviceRequest->start_date;
             $fulfillment->end_date = $serviceRequest->end_date;
             $fulfillment->observation = "Aprobaciones en flujo de firmas";
+            $fulfillment->user_id = Auth::user()->id;
             $fulfillment->save();
 
             session()->flash('info', 'Se ha registrado la visación de solicitud nro: <b>'.$serviceRequest->id.'</b>. Para visualizar el certificado de confirmación, hacer click <a href="'. route('rrhh.service_requests.certificate-pdf', $serviceRequest) . '" target="_blank">Aquí.</a>');
