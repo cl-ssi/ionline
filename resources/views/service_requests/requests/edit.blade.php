@@ -165,12 +165,12 @@
 		</fieldset>
 
     <fieldset class="form-group col-12 col-md-4">
-		    <label for="for_start_date">Fecha de Inicio</label>
+		    <label for="for_start_date">F.Inicio de Contrato</label>
 		    <input type="date" class="form-control" id="for_start_date" name="start_date" required value="{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}">
 		</fieldset>
 
     <fieldset class="form-group col-12 col-md-4">
-		    <label for="for_end_date">Fecha de Término</label>
+		    <label for="for_end_date">F.Término de Contrato</label>
 		    <input type="date" class="form-control" id="for_end_date" name="end_date" required value="{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}">
 		</fieldset>
 
@@ -470,7 +470,7 @@
 					</fieldset>
 
           <fieldset class="form-group col-7 col-md-2">
-              <label for="for_nationality">País de Funcionario</label>
+              <label for="for_nationality">Nacionalidad</label>
               <select name="nationality" class="form-control">
                 <option value=""></option>
                 <option value="CHILENA" @if($serviceRequest->nationality == "CHILENA") selected @endif>CHILENA</option>

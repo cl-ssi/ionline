@@ -176,7 +176,7 @@
 	<div class="row ml-1 mr-1">
 
 		<fieldset class="form-group col-3">
-			<label for="for_nationality">País de Funcionario</label>
+			<label for="for_nationality">Nacionalidad</label>
 			<select name="nationality" class="form-control" required>
 				<option value=""></option>
 				<option value="CHILENA" >CHILENA</option>
@@ -217,12 +217,12 @@
 		</fieldset>
 
     <fieldset class="form-group col">
-		    <label for="for_start_date">Fecha de Inicio</label>
+		    <label for="for_start_date">F.Inicio de Contrato</label>
 		    <input type="date" class="form-control" id="for_start_date" name="start_date" max="2030-12-31" required>
 		</fieldset>
 
     <fieldset class="form-group col">
-		    <label for="for_end_date">Fecha de Término</label>
+		    <label for="for_end_date">F.Término de Contrato</label>
 		    <input type="date" class="form-control" id="for_end_date" name="end_date" max="2030-12-31" required>
 		</fieldset>
 
