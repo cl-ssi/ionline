@@ -315,7 +315,8 @@
 
       <div class="row">
         <fieldset class="form-group col-6">
-
+            <label for="for_invoice">Cargar Boleta</label>
+            <input type="file" class="form-control" id="for_invoice" name="invoice"  >
         </fieldset>
         <fieldset class="form-group col">
             <label for="for_estate"><br/></label>
@@ -335,7 +336,8 @@
             <form>
 
               @can('Service Request: fulfillments responsable')
-                @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approver_id == NULL)
+
+                    @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approver_id == NULL)
                   <a type="button"
                      class="btn btn-success form-control"
                      onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');"
@@ -361,6 +363,9 @@
               @endcan
 
               @can('Service Request: fulfillments finance')
+
+
+
                 @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->finances_approver_id == NULL)
                   <a type="button"
                      class="btn btn-success form-control"
@@ -371,6 +376,7 @@
                 @else
                   <button type="submit" class="btn btn-success form-control" disabled>Confirmar</button>
                 @endif
+
               @endcan
             </form>
         </fieldset>
