@@ -16,6 +16,7 @@
                 <thead>
                         <tr>
                                 <th>Id</th>
+                                <th>Nombre</th>
                                 <th>Tipo de Contrato</th>
                                 <th>Descripción de Servicio</th>
                                 <th>Fecha de Solicitud</th>
@@ -28,6 +29,7 @@
                         @foreach ($sr as $servicerequest)
                         <tr>
                                 <td class="small">{{ $servicerequest->id ?? '' }}</td>
+                                <td class="small">{{ $servicerequest->name ?? '' }}</td>
                                 <td>{{ $servicerequest->type ?? '' }}</td>
                                 <td class="small">{{ $servicerequest->service_description ?? '' }}</td>
                                 <td>{{ $servicerequest->request_date->format('d-m-Y') ?? '' }}</td>
