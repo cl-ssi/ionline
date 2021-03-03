@@ -117,6 +117,15 @@ class SignatureFlowController extends Controller
           // }
 
           if ($serviceRequest->program_contract_type == "Horas" && $SignatureFlow->sign_position == 2) {
+
+            $fulfillment = new Fulfillment();
+            $fulfillment->service_request_id = $serviceRequest->id;
+            $fulfillment->type = "Horas";
+            $fulfillment->start_date = $serviceRequest->start_date;
+            $fulfillment->end_date = $serviceRequest->end_date;
+            $fulfillment->observation = "Aprobaciones en flujo de firmas";
+            $fulfillment->save();
+
             session()->flash('info', 'Se ha registrado la visación de solicitud nro: <b>'.$serviceRequest->id.'</b>. Para visualizar el certificado de confirmación, hacer click <a href="'. route('rrhh.service_requests.certificate-pdf', $serviceRequest) . '" target="_blank">Aquí.</a>');
             return redirect()->route('rrhh.service_requests.index');
           }
