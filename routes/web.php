@@ -361,7 +361,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
     Route::get('/showPdf/{signaturesFile}', 'Documents\SignatureController@showPdf')->name('showPdf');
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('showPdfAnexo');
-    Route::get('/callback_firma/{signaturesFile?}', 'Documents\SignatureController@callbackFirma')->name('callbackFirma');
+    Route::get('/callback_firma/{message}/{signaturesFile?}', 'Documents\SignatureController@callbackFirma')->name('callbackFirma');
 
 });
 Route::resource('documents', 'Documents\DocumentController')->middleware('auth');

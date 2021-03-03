@@ -243,10 +243,12 @@ class SignatureController extends Controller
     }
 
 
-    public function callbackFirma(SignaturesFile $signaturesFile = null)
+    public function callbackFirma($message, SignaturesFile $signaturesFile = null)
     {
         if (!$signaturesFile) {
-            return view('home');
+//            return view('rrhh.fulfillments.index');
+            session()->flash('danger', $message);
+            return redirect()->route('rrhh.fulfillments.index');
         }
 
         header('Content-Type: application/pdf');
