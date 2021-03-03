@@ -157,10 +157,10 @@ class FulfillmentController extends Controller
         $periods   = new DatePeriod($start, $interval, $end);
         $cont_periods = iterator_count($periods);
 
-        if (!Auth::user()->can('Service Request: fulfillments responsable')) {
-          session()->flash('danger', 'No tiene privilegios para acceder a esta funcionalidad.');
-          return redirect()->back();
-        }
+        // if (!Auth::user()->can('Service Request: fulfillments responsable')) {
+        //   session()->flash('danger', 'No tiene privilegios para acceder a esta funcionalidad.');
+        //   return redirect()->back();
+        // }
 
         // crea de forma automática las cabeceras
         if ($serviceRequest->fulfillments->count() == 0) {
