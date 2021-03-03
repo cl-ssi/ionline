@@ -316,7 +316,8 @@
       <div class="row">
         <fieldset class="form-group col-6">
             <label for="for_invoice">Cargar Boleta</label>
-            <input type="file" class="form-control" id="for_invoice" name="invoice"  >
+            @livewire('invoice.upload', ['fulfillmentId' => $serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->id,
+            'hasInvoiceFile' =>  $serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->has_invoice_file ])
         </fieldset>
         <fieldset class="form-group col">
             <label for="for_estate"><br/></label>
