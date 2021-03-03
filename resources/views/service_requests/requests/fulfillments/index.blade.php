@@ -61,7 +61,7 @@
                         @if(Auth::user()->can('Service Request: sign document'))
                             @include('documents.signatures.partials.sign_file')
                             <button type="button" data-toggle="modal" class="btn btn-sm btn-outline-secondary "
-                                    data-target="#signPdfModal{{$idSignModal}}"><span class="fas fa-signature"
+                                    data-target="#signPdfModal{{$idSignModal}}" title="Firmar"><span class="fas fa-signature"
                                                                                       aria-hidden="true">
                                                                                         </span>
                             </button>
