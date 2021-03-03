@@ -12,11 +12,10 @@
     </form>
 
     @if($hasInvoiceFile)
+
         <a href="{{route('rrhh.fulfillments.downloadInvoice', $fulfillmentId)}}"
            target="_blank" data-toggle="tooltip" data-placement="top"
-           data-original-title="">Boleta <i
-                                        data-original-title="{{ $fulfillmentId . 'pdf' }}">   <i
-                class="fas fa-paperclip"></i>&nbsp
+           data-original-title="">Boleta
         </a>
     @endif
 
