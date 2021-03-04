@@ -55,5 +55,16 @@ class ReplacementStaff extends Model
     //     return $this->hasMany('\App\Models\ReplacementStaff\Language');
     // }
 
+    public function getStatusValueAttribute(){
+        switch ($this->status) {
+            case 'available':
+              return 'Disponible';
+              break;
+            default:
+              return '';
+              break;
+        }
+    }
+
     protected $table = 'rst_replacement_staff';
 }

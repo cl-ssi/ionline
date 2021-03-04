@@ -39,10 +39,10 @@ class CreateSignaturesTable extends Migration
 
         Schema::create('doc_signatures_files', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('signature_id');
-            $table->binary('file');
+            $table->foreignId('signature_id')->nullable();
+            $table->binary('file')->nullable();
             $table->string('md5_file')->nullable();
-            $table->enum('file_type', ['documento', 'anexo']);
+            $table->enum('file_type', ['documento', 'anexo'])->nullable();
             $table->binary('signed_file')->nullable();
             $table->string('md5_signed_file')->nullable();
 

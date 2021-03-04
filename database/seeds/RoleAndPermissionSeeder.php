@@ -95,6 +95,11 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Pharmacy: create programs']);
 
 
+        Permission::create(['name' => 'Suitability: admin']);
+        Permission::create(['name' => 'Suitability: test']);
+        Permission::create(['name' => 'Suitability: ssi']);
+
+
         Permission::create(['name' => 'Request Forms: Finance add item code']);
 
         Permission::create(['name' => 'Health Plan']);
@@ -147,6 +152,6 @@ class RoleAndPermissionSeeder extends Seeder
         $role->givePermissionTo(['Resources: create', 'Resources: edit', 'Resources: delete']);
 
         $role = Role::create(['name' => 'Tickets: admin']);
-        $role->givePermissionTo(['Tickets: create', 'Tickets: manage','Tickets: TI']);
+        $role->givePermissionTo(['Tickets: create', 'Tickets: manage','Tickets: TI']);        
     }
 }

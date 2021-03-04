@@ -30,4 +30,40 @@ class Indicator extends Model
     {
         return $this->morphMany('App\Indicators\Value', 'valueable')->orderBy('month');
     }
+
+    public function getValuesAcum($factor)
+    {
+        return $this->values->where('factor', $factor)->sum('value');
+    }
+
+    public function getCompliance()
+    {
+        if(isset($this->numerator_acum_last_year)) // REM P
+            return $this->getLastValueByFactor('denominador') != 0 ? $this->getLastValueByFactor('numerador') / $this->getLastValueByFactor('denominador') * 100 : 0;
+        else
+            return $this->getValuesAcum('denominador') != 0 ? $this->getValuesAcum('numerador') / $this->getValuesAcum('denominador') * 100 : 0;
+    }
+
+    public function getValueByFactorAndMonth($factor, $month)
+    {
+        $result = $this->values->where('factor', $factor)->where('month', $month)->first();
+        return $result != null ? $result->value : null;
+    }
+
+    public function getLastValueByFactor($factor)
+    {
+        $result = $this->values->where('factor', $factor)->last();
+        return $result != null ? $result->value : null;
+    }
+
+    public function getContribution()
+    {
+        $result = ($this->getCompliance() * $this->weighting) / preg_replace('/[^0-9.]/', '', $this->goal);
+        return $result > $this->weighting ? $this->weighting : $result;
+    }
+
+    public function isFactorSourceREM($factor)
+    {
+        return $factor == 'numerador' ? $this->numerator_source == 'REM' : $this->denominator_source == 'REM';
+    }
 }

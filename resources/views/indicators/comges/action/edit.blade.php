@@ -85,7 +85,7 @@
         @endfor
         <div class="form-group col-md-3 source" style="display: none">
             <label for="numerator_source">Fuente datos</label>
-            <input type="text" class="form-control" id="numerator_source" name="numerator_source" value="{{$action->denominator_source}}" disabled>
+            <input type="text" class="form-control" id="numerator_source" name="numerator_source" value="{{$action->numerator_source}}" disabled>
         </div>
     </div>
     <div class="form-row">

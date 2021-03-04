@@ -6,12 +6,12 @@
 <div style="margin-bottom: 10px;" class="row">
     <div class="col-lg-12">
         <a class="btn btn-success" href="{{ route('suitability.users.create') }}">
-            Agregar Usuario
+            Agregar Usuario Externo
         </a>
     </div>
 </div>
 
-<h6 class="mb-3">Asignar Usuario a Colegio</h6>
+<h6 class="mb-3">Asignar Usuario Administrador a Colegio</h6>
 
 
 <form method="POST" class="form-horizontal" action="{{ route('suitability.users.store') }}">

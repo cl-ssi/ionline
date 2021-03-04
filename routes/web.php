@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\Auth\LoginController;
+
 use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Suitability\SuitabilityController;
 use App\Http\Controllers\Suitability\CategoriesController;
@@ -26,6 +29,9 @@ use App\Http\Controllers\ReplacementStaff\ExperienceController;
 use App\Http\Controllers\ReplacementStaff\LanguageController;
 use App\Http\Controllers\VaccinationController;
 
+use App\Http\Controllers\ServiceRequests\InvoiceController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -49,10 +55,21 @@ Route::prefix('webservices')->name('webservices.')->group(function () {
 
 Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
 
+Route::get('/login/external', [LoginController::class,'showExternalLoginForm']);
+Route::post('/login/external', [LoginController::class,'externalLogin']);
+
+
+Route::group(['middleware' => 'auth:external'], function () {
+    Route::view('/kaka', 'test');
+    Route::view('/test', 'test');
+});
+
+
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::get('/{signaturesFlow}/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
-Route::post('/{signaturesFlow}/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
+Route::post('/{signaturesFlow}/firma', 'FirmaDigitalController@signPdfFlow')->name('signPdfFlow');
+Route::post('/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
+
 
 Route::get('/claveunica', 'ClaveUnicaController@autenticar')->name('claveunica.autenticar');
 Route::get('/claveunica/callback', 'ClaveUnicaController@callback')->name('claveunica.callback');
@@ -261,8 +278,13 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::put('service_requests/update_aditional_data/{serviceRequest}', 'ServiceRequests\ServiceRequestController@update_aditional_data')->middleware('auth')->name('service_requests.update_aditional_data');
 
     Route::get('fulfillments/edit_fulfillment/{serviceRequest}', 'ServiceRequests\FulfillmentController@edit_fulfillment')->name('fulfillments.edit_fulfillment');
+    Route::get('fulfillments/save_approbed_fulfillment/{serviceRequest}', 'ServiceRequests\FulfillmentController@save_approbed_fulfillment')->name('fulfillments.save_approbed_fulfillment');
+    Route::get('fulfillments/confirmFulfillmentBySignPosition/{Fulfillment}/{approbed?}', 'ServiceRequests\FulfillmentController@confirmFulfillmentBySignPosition')->name('fulfillments.confirmFulfillmentBySignPosition');
+    Route::get('filfillments/download_invoice/{fulfillmentId}','ServiceRequests\FulfillmentController@downloadInvoice')->name('fulfillments.downloadInvoice')->middleware('auth');
+
     Route::resource('fulfillments', 'ServiceRequests\FulfillmentController')->middleware('auth');
     Route::get('fulfillments/certificate-pdf/{fulfillment}', 'ServiceRequests\FulfillmentController@certificatePDF')->name('fulfillments.certificate-pdf')->middleware('auth');
+    Route::get('service_requests/certificate-pdf/{serviceRequest}', 'ServiceRequests\ServiceRequestController@certificatePDF')->name('service_requests.certificate-pdf')->middleware('auth');
     Route::get('fulfillments/confirmFulfillment/{fulfillment}', 'ServiceRequests\FulfillmentController@confirmFulfillment')->name('fulfillments.confirmFulfillment')->middleware('auth');
     Route::resource('fulfillmentItem', 'ServiceRequests\FulfillmentItemController')->middleware('auth');
     Route::resource('service_requests', 'ServiceRequests\ServiceRequestController')->middleware('auth');
@@ -374,6 +396,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
     Route::get('/showPdf/{signaturesFile}', 'Documents\SignatureController@showPdf')->name('showPdf');
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('showPdfAnexo');
+    Route::get('/callback_firma/{message}/{signaturesFile?}', 'Documents\SignatureController@callbackFirma')->name('callbackFirma');
 
 });
 Route::resource('documents', 'Documents\DocumentController')->middleware('auth');
@@ -414,6 +437,14 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::get('/{year}/{comges}/corte/{section}/ind/{indicator}/action/{action}/edit', 'Indicators\ComgesController@editAction')->middleware('auth')->name('action.edit');
         Route::put('/{year}/{comges}/corte/{section}/ind/{indicator}/action/{action}', 'Indicators\ComgesController@updateAction')->middleware('auth')->name('action.update');
         Route::post('/{year}/{comges}/corte/{section}/ind/{indicator}', 'Indicators\ComgesController@storeAction')->middleware('auth')->name('action.store');
+    });
+
+    Route::prefix('health_goals')->as('health_goals.')->group(function () {
+        Route::get('/{law}', 'Indicators\HealthGoalController@index')->name('index');
+        Route::get('/{law}/{year}', 'Indicators\HealthGoalController@list')->name('list');
+        Route::get('/{law}/{year}/{health_goal}', 'Indicators\HealthGoalController@show')->name('show');
+        Route::get('/{law}/{year}/{health_goal}/ind/{indicator}/edit', 'Indicators\HealthGoalController@editInd')->middleware('auth')->name('ind.edit');
+        Route::put('/{law}/{year}/{health_goal}/ind/{indicator}', 'Indicators\HealthGoalController@updateInd')->middleware('auth')->name('ind.update');
     });
 
     Route::prefix('19813')->as('19813.')->group(function () {
@@ -831,9 +862,23 @@ Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::put('/{vaccination}',[VaccinationController::class,'update'])->name('update')->middleware('auth');
     Route::get('/report',[VaccinationController::class,'report'])->name('report')->middleware('auth');
     Route::get('/export',[VaccinationController::class,'export'])->name('export')->middleware('auth');
-    Route::put('/vaccinate/{vaccination}',[VaccinationController::class,'vaccinate'])->name('vaccinate')->middleware('auth');
+    Route::put('/vaccinate/{vaccination}/{dose}',[VaccinationController::class,'vaccinate'])->name('vaccinate')->middleware('auth');
+    Route::get('/vaccinate/remove-booking/{vaccination}',[VaccinationController::class,'removeBooking'])->name('removeBooking')->middleware('auth');
     Route::get('/card/{vaccination}',[VaccinationController::class,'card'])->name('card')->middleware('auth');
+    Route::get('/slots',[VaccinationController::class,'slots'])->name('slots')->middleware('auth');
+    Route::put('/arrival/{vaccination}/{reverse?}',[VaccinationController::class,'arrival'])->name('arrival')->middleware('auth');
+    Route::put('/dome/{vaccination}/{reverse?}',[VaccinationController::class,'dome'])->name('dome')->middleware('auth');
 });
+
+
+Route::prefix('invoice')->as('invoice.')->group(function () {
+    Route::get('/welcome',[InvoiceController::class,'welcome'])->name('welcome');
+    Route::get('/login/{access_token}',[InvoiceController::class,'login'])->name('login');
+    Route::post('/show',[InvoiceController::class,'show'])->name('show');
+
+});
+
+
 
 /* Nuevas rutas, Laravel 8.0. */
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
@@ -846,6 +891,10 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::get('/welcome', [TestsController::class, 'welcome'])->name('welcome');
     Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
     Route::post('/test', [TestsController::class, 'store'])->name('test.store');
+    Route::get('/pending', [SuitabilityController::class, 'pending'])->name('pending');
+    Route::get('/approved', [SuitabilityController::class, 'approved'])->name('approved');
+    Route::get('/rejected', [SuitabilityController::class, 'rejected'])->name('rejected');
+    Route::patch('/finalresult/{psirequest}/{result}', [SuitabilityController::class, 'finalresult'])->name('finalresult');
 
     Route::prefix('categories')->as('categories.')->middleware('auth')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])->name('index');
@@ -871,6 +920,14 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/create', [SchoolsController::class, 'create'])->name('create');
         Route::post('/store', [SchoolsController::class, 'store'])->name('store');
     });
+
+    Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
+        Route::get('/', [SchoolUserController::class, 'index'])->name('index');
+        Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
+        Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
+        Route::post('/storeuser', [SchoolUserController::class, 'storeuser'])->name('storeuser');
+    });
+
 
     Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
         Route::get('/', [SchoolUserController::class, 'index'])->name('index');

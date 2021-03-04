@@ -65,7 +65,7 @@ class RemController extends Controller
     {
         if(!Prestacion::exists($year) OR !Seccion::exists($year)) abort(404);
         $establecimientos = Establecimiento::year($year)->orderBy('comuna')->get();
-        $prestacion = Prestacion::year($year)->where('serie', $serie)->where('Nserie', $nserie)->first();
+        $prestacion = Prestacion::year($year)->where('serie', $serie)->where('Nserie', $nserie)->orderBy('id_prestacion')->first();
         if($prestacion == null) return abort(404);
         $establecimiento = $request->get('establecimiento');
         $periodo = $request->get('periodo');
@@ -73,8 +73,8 @@ class RemController extends Controller
         if ($request->has('submit')) {
             $secciones = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie)->orderBy('name')->get();
             foreach($secciones as $seccion){
-                $seccion->cods = explode(',', $seccion->cods);
-                $seccion->cols = explode(',', $seccion->cols);
+                $seccion->cods = array_map('trim', explode(',', $seccion->cods));
+                $seccion->cols = array_map('trim', explode(',', $seccion->cols));
                 $seccion->prestaciones = Prestacion::year($year)->with(['rems' => function($q) use ($establecimiento, $periodo){
                                                     $q->whereIn('IdEstablecimiento', $establecimiento)->whereIn('Mes', $periodo);
                                             }])

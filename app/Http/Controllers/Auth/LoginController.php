@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+
 class LoginController extends Controller
 {
     /*
@@ -31,6 +32,7 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+        $this->middleware('guest:external')->except('logout');
     }
 
     /**
@@ -84,4 +86,34 @@ class LoginController extends Controller
     {
         return 'id';
     }
+
+    public function showExternalLoginForm()
+    {
+        
+        return view('auth.login', ['url' => 'external']);
+    }
+
+
+    public function externalLogin(Request $request)
+    {
+        
+        $credentials = $request->only('id', 'password');
+        $credentials['id'] = str_replace('.','',$credentials['id']);
+        $credentials['id'] = str_replace('-','',$credentials['id']);
+        $credentials['id'] = substr($credentials['id'], 0, -1);
+
+        
+
+
+        if (Auth::guard('external')->attempt($credentials, $request->filled('remember'))) {
+            // Authentication passed...
+            return redirect()->intended('external');
+        }
+        return back()->withInput($request->only('email', 'remember'));
+        
+    }
+
+
+
+
 }
