@@ -53,7 +53,7 @@
           @endif
 
           @if($serviceRequest->program_contract_type == "Horas")
-              @if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0)
+              <!-- @if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0)
                 <a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
                 <i class="fas fa-file" style="color:#B9B9B9"></i></a>
 
@@ -61,8 +61,11 @@
                 <a href="{{ route('rrhh.service_requests.certificate-pdf', $serviceRequest) }}"
                   class="btn btn-outline-secondary btn-sm" target="_blank">
                 <span class="fas fa-file" aria-hidden="true"></span></a>
-              @endif
-
+              @endif -->
+              <a href="{{ route('rrhh.fulfillments.edit_fulfillment',[$serviceRequest]) }}"
+      					class="btn btn-sm btn-outline-secondary">
+      					<span class="fas fa-edit" aria-hidden="true"></span>
+      				</a>
           @endif
 
     			</td>

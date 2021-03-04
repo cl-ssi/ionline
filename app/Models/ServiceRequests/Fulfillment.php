@@ -19,7 +19,8 @@ class Fulfillment extends Model implements Auditable
       'id', 'service_request_id', 'year', 'month', 'type', 'start_date', 'end_date', 'observation',
       'responsable_approbation','responsable_approbation_date','responsable_approver_id',
       'rrhh_approbation','rrhh_approbation_date','rrhh_approver_id',
-      'finances_approbation','finances_approbation_date','finances_approver_id', 'invoice_path', 'user_id'
+      'finances_approbation','finances_approbation_date','finances_approver_id', 'invoice_path', 'user_id',
+      'bill_number','total_hours_paid','total_paid','payment_date'
   ];
 
   public function FulfillmentItems() {
@@ -49,5 +50,5 @@ class Fulfillment extends Model implements Auditable
    *
    * @var array
    */
-  protected $dates = ['start_date', 'end_date'];
+  protected $dates = ['start_date', 'end_date','payment_date'];
 }
