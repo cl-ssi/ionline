@@ -44,10 +44,10 @@
 		    <label for="for_program_contract_type">Tipo de Contratación</label>
 		    <select name="program_contract_type" class="form-control" wire:model="art" id="program_contract_type" required>
 					<option value=""></option>
-          <option value="Semanal">Semanal</option>
+          <!-- <option value="Semanal">Semanal</option> -->
           <option value="Mensual">Mensual</option>
 					<option value="Horas">Horas</option>
-          <option value="Otro">Otro</option>
+          <!-- <option value="Otro">Otro</option> -->
         </select>
 		</fieldset>
 
