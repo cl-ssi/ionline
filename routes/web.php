@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\Auth\LoginController;
+
 use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Suitability\SuitabilityController;
 use App\Http\Controllers\Suitability\CategoriesController;
@@ -49,6 +52,20 @@ Route::prefix('webservices')->name('webservices.')->group(function () {
 });
 
 Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
+
+Route::get('/login/suitability', [LoginController::class,'showSuitabilityLoginForm']);
+Route::post('/login/suitability', [LoginController::class,'suitabilityLogin']);
+//Route::view('/test', 'suitability');
+Route::group(['middleware' => 'auth:suitability'], function () {
+    
+   // Route::view('/suitability/welcome', 'suitability');
+});
+
+Route::group(['middleware' => 'auth:suitability'], function () {
+    
+    Route::view('/test', 'test');
+});
+
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
