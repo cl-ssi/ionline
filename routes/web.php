@@ -1,9 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\Auth\LoginController;
-
 use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Suitability\SuitabilityController;
 use App\Http\Controllers\Suitability\CategoriesController;
@@ -52,16 +49,6 @@ Route::prefix('webservices')->name('webservices.')->group(function () {
 });
 
 Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
-
-Route::get('/login/external', [LoginController::class,'showExternalLoginForm']);
-Route::post('/login/external', [LoginController::class,'externalLogin']);
-
-
-Route::group(['middleware' => 'auth:external'], function () {
-    Route::view('/kaka', 'test');
-    Route::view('/test', 'test');
-});
-
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
