@@ -19,8 +19,12 @@ class Fulfillment extends Model implements Auditable
       'id', 'service_request_id', 'year', 'month', 'type', 'start_date', 'end_date', 'observation',
       'responsable_approbation','responsable_approbation_date','responsable_approver_id',
       'rrhh_approbation','rrhh_approbation_date','rrhh_approver_id',
+<<<<<<< HEAD
       'finances_approbation','finances_approbation_date','finances_approver_id', 'invoice_path', 'user_id',
       'bill_number','total_hours_paid','total_paid','payment_date'
+=======
+      'finances_approbation','finances_approbation_date','finances_approver_id','user_id'
+>>>>>>> c2c7279c5577a91af1a7e18102f46b37c3669cab
   ];
 
   public function FulfillmentItems() {
