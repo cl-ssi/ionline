@@ -56,13 +56,13 @@ Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
 Route::get('/login/suitability', [LoginController::class,'showSuitabilityLoginForm']);
 Route::post('/login/suitability', [LoginController::class,'suitabilityLogin']);
 //Route::view('/test', 'suitability');
-Route::group(['middleware' => 'auth:suitability'], function () {
+// Route::group(['middleware' => 'auth:suitability'], function () {
     
-   // Route::view('/suitability/welcome', 'suitability');
-});
+//    // Route::view('/suitability/welcome', 'suitability');
+// });
 
 Route::group(['middleware' => 'auth:suitability'], function () {
-    
+    Route::view('/kaka', 'test');
     Route::view('/test', 'test');
 });
 

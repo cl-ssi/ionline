@@ -109,7 +109,7 @@ class ServiceRequest extends Model implements Auditable
     		return $this->hasMany('\App\Models\ServiceRequests\ShiftControl');
     }
 
-    public function Fulfillments() {
+    public function fulfillments() {
     		return $this->hasMany('\App\Models\ServiceRequests\Fulfillment');
     }
 
