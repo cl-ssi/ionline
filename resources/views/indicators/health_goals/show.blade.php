@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @php
-    $months = array (1=>'Ene',2=>'Feb',3=>'Mar',4=>'Abr',5=>'May',6=>'Jun',7=>'Jul',8=>'Ago',9=>'Sep',10=>'Oct',11=>'Nov',12=>'Dec');
+    $months = array (1=>'Ene',2=>'Feb',3=>'Mar',4=>'Abr',5=>'May',6=>'Jun',7=>'Jul',8=>'Ago',9=>'Sep',10=>'Oct',11=>'Nov',12=>'Dic');
 @endphp
 @section('title', 'Metas Sanitarias Ley N° ' . $healthGoal->law . ' / '. $healthGoal->year . ' - ' . $healthGoal->name)
 
@@ -30,8 +30,7 @@
     <p>No existen indicadores o no se han definido aún para la meta sanitaria actual.</p>
 @else
     @foreach($indicators as $indicator)
-        <h5 class="mb-3">{{$indicator->number}} {{$indicator->name}}.
-        {{--@if($comges->users->contains('id', Auth::id())) <a href="{{route('indicators.comges.action.create', [$comges->year, $comges->number, isset($corte) ? $corte->number : $section, $indicator])}}"><span class="fa fa-plus-square"></span></a>@endif--}}</h5>
+        <h5 class="mb-3">{{$indicator->number}} {{$indicator->name}}. @can('Indicators: manager')<small><a href="{{route('indicators.health_goals.ind.edit', [$healthGoal->law, $healthGoal->year, $healthGoal->number, $indicator])}}"><span class="fa fa-edit"></span></a></small> @endcan</h5>
         <!-- print indicador -->
             <div class="table-responsive">
                 <table class="table table-sm table-bordered small mb-4">
@@ -67,13 +66,13 @@
                         </tr>
                         <!-- denominador -->
                         <tr class="text-center">
-                            <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{$indicator->denominator_source}}</td>
+                            <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{$indicator->denominator_source}}</span></td>
                             @if(isset($indicator->denominator_acum_last_year))
                             <td class="text-right">{{number_format($indicator->denominator_acum_last_year, 0, ',', '.')}}</td>
                             @endif
                             <td class="text-center">{{number_format(isset($indicator->denominator_acum_last_year) ? $indicator->getLastValueByFactor('denominador') : $indicator->getValuesAcum('denominador'), 0, ',', '.')}}</td>
                             @foreach($months as $number => $month)
-                            <td class="text-right">{{ $indicator->getValueByFactorAndMonth('numerador', $number) != null ? number_format($indicator->getValueByFactorAndMonth('denominador', $number), 0, ',', '.') : ''}}</td>
+                            <td class="text-right">{{ $indicator->getValueByFactorAndMonth('denominador', $number) != null ? number_format($indicator->getValueByFactorAndMonth('denominador', $number), 0, ',', '.') : ''}}</td>
                             @endforeach
                         </tr>
                     </tbody>

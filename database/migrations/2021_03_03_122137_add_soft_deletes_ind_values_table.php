@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddInvoicePathFulfillmentsTable extends Migration
+class AddSoftDeletesIndValuesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddInvoicePathFulfillmentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('doc_fulfillments', function (Blueprint $table) {
-            $table->boolean('has_invoice_file')->after('finances_approver_id')->nullable();
+        Schema::table('ind_values', function (Blueprint $table) {
+            $table->softDeletes();
         });
     }
 
@@ -25,8 +25,8 @@ class AddInvoicePathFulfillmentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('doc_fulfillments', function (Blueprint $table) {
-            $table->dropColumn('has_invoice_file');
+        Schema::table('ind_values', function (Blueprint $table) {
+            $table->dropSoftDeletes();
         });
     }
 }
