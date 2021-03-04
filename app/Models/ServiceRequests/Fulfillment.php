@@ -22,7 +22,7 @@ class Fulfillment extends Model implements Auditable
       'responsable_approbation','responsable_approbation_date','responsable_approver_id',
       'rrhh_approbation','rrhh_approbation_date','rrhh_approver_id',
       'finances_approbation','finances_approbation_date','finances_approver_id', 'invoice_path', 'user_id',
-      'bill_number','total_hours_paid','total_paid','payment_date'
+      'bill_number','total_hours_paid','total_paid','payment_date','contable_month'
   ];
 
   public function FulfillmentItems() {
