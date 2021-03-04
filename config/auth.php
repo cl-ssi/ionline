@@ -46,6 +46,11 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'suitability' => [
+            'driver' => 'session',
+            'provider' => 'suitabilities',
+        ],
     ],
 
     /*
@@ -70,6 +75,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\User::class,
         ],
+
+        'suitabilities' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\UserSuitability::class,
+        ]
 
         // 'users' => [
         //     'driver' => 'database',
