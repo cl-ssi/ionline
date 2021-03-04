@@ -308,8 +308,7 @@ class FirmaDigitalController extends Controller
         $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $signatureType);
 
         if (!$responseArray['statusOk']) {
-            session()->flash('danger', "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}");
-            return redirect()->route($returnUrl);
+            return redirect()->route($returnUrl, ['message' => "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}"]);
         }
 
         $signaturesFile = SignaturesFile::create();
@@ -317,8 +316,7 @@ class FirmaDigitalController extends Controller
         $signaturesFile->md5_file = $checksum_pdf;
         $signaturesFile->save();
 
-        session()->flash('info', "El documento $signaturesFile->id se ha firmado correctamente.");
-        return redirect()->route($returnUrl, ['signaturesFile' => $signaturesFile->id]);
+        return redirect()->route($returnUrl, ['message' => "El documento $signaturesFile->id se ha firmado correctamente.", 'signaturesFile' => $signaturesFile->id]);
     }
 
     /**
