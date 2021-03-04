@@ -21,4 +21,9 @@
             href="{{ route('vaccination.export') }}">
             <i class="fas fa-file-csv"></i> Exportar</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('vaccination.slots') }}">
+            <i class="fas fa-running"></i> Llegadas</a>
+    </li>
 </ul>

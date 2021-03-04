@@ -26,4 +26,11 @@ class ShiftControl extends Model implements Auditable
     }
 
     protected $table = 'doc_shift_controls';
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['start_date', 'end_date'];
 }

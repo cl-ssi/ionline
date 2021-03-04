@@ -108,7 +108,7 @@
                                 </button>
                             </div>
                             <form method="POST" class="form-horizontal"
-                                  action="{{route('signPdf', $pendingSignaturesFlow->id)}}"
+                                  action="{{route('signPdfFlow', $pendingSignaturesFlow->id)}}"
                                   enctype="multipart/form-data">
                                 <div class="modal-body">
                                 @csrf <!-- input hidden contra ataques CSRF -->
@@ -176,6 +176,11 @@
                         </a>
                     </td>
                 </tr>
+
+                {{--                ejemplo de modal firmador--}}
+{{--                @include('documents.signatures.partials.sign_file')--}}
+{{--                <button type="button" data-toggle="modal"--}}
+{{--                        data-target="#signPdfModal{{$signedSignaturesFlow->id}}">Modal firmador incrustado</button>--}}
             @endforeach
             </tbody>
         </table>
@@ -261,6 +266,9 @@
         </table>
 
     @endif
+
+
+
 
 @endsection
 

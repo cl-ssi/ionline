@@ -49,14 +49,6 @@ class SignatureController extends Controller
                 ->where('status', 1)
                 ->orderByDesc('id')
                 ->get();
-
-//            $signedSignatures = Signature::wherehas('signaturesFiles', function ($q) {
-//                $q->whereHas('signaturesFlows', function ($q) {
-//                    $q->where('user_id', Auth::id())
-//                        ->where('status', 1);
-//                });
-//            })->orderByDesc('id')
-//                ->get();
         }
 
         return view('documents.signatures.index', compact('mySignatures', 'pendingSignaturesFlows', 'signedSignaturesFlows', 'tab'));
@@ -97,7 +89,7 @@ class SignatureController extends Controller
             $documentFile = $request->file('document');
             $signaturesFile->file = base64_encode(file_get_contents($documentFile->getRealPath()));
             $signaturesFile->file_type = 'documento';
-            $signaturesFile->md5_file = md5_file($request->file('document'));
+            $signaturesFile->md5_file = md5_file($documentFile);
             $signaturesFile->save();
             $signaturesFileDocumentId = $signaturesFile->id;
 
@@ -248,5 +240,18 @@ class SignatureController extends Controller
     {
         header('Content-Type: application/pdf');
         echo base64_decode($anexo->file);
+    }
+
+
+    public function callbackFirma($message, SignaturesFile $signaturesFile = null)
+    {
+        if (!$signaturesFile) {
+//            return view('rrhh.fulfillments.index');
+            session()->flash('danger', $message);
+            return redirect()->route('rrhh.fulfillments.index');
+        }
+
+        header('Content-Type: application/pdf');
+        echo base64_decode($signaturesFile->signed_file);
     }
 }

@@ -40,11 +40,22 @@
 
 	<div class="row">
 
+		<fieldset class="form-group col">
+		    <label for="for_program_contract_type">Tipo de Contratación</label>
+		    <select name="program_contract_type" class="form-control" wire:model="art" id="program_contract_type" required>
+					<option value=""></option>
+          <option value="Semanal">Semanal</option>
+          <option value="Mensual">Mensual</option>
+					<option value="Horas">Horas</option>
+          <option value="Otro">Otro</option>
+        </select>
+		</fieldset>
+
     <fieldset class="form-group col">
 		    <label for="for_type">Tipo</label>
 		    <select name="type" class="form-control" required>
 					<option value="Covid">Honorarios - Covid</option>
-          <option value="Genérico">Honorarios - Genérico</option>
+          <!-- <option value="Genérico">Honorarios - Genérico</option> -->
         </select>
 		</fieldset>
 
@@ -72,6 +83,8 @@
 
 	<div class="row">
 
+		@livewire('signature-flow',['art' => 1])
+
 		<fieldset class="form-group col">
 				<label for="for_users">Responsable</label>
 				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" data-size="5" required>
@@ -92,72 +105,28 @@
 				</select>
 		</fieldset>
 
-		<!-- <fieldset class="form-group col">
-				<label for="for_users">Subdirector(a)</label>
-				<select name="users[]" id="subdirector_medico" class="form-control selectpicker" data-live-search="true" data-size="5">
-					<option value=""></option>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id != "9882506" && $user->id != "13835321") disabled @endif>{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-				</select>
-		</fieldset>
-
-		<fieldset class="form-group col">
-				<label for="for_users">S.D.G.A SSI</label>
-				<select name="users[]" id="sdga_servicio" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "14104369") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-				</select>
-		</fieldset> -->
-
 	</div>
 
-	<!-- <div class="row">
-
-		<fieldset class="form-group col">
-				<label for="for_users">S.G.D.P Hospital</label>
-				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "9018101") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-				</select>
-		</fieldset>
-
-		<fieldset class="form-group col">
-				<label for="for_users">Jefe Finanzas</label>
-				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "13866194") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-				</select>
-		</fieldset>
-
-		<fieldset class="form-group col">
-				<label for="for_users">S.G.D.P SSI</label>
-				<select name="users[]" id="jefe_finanzas" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "15685508") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-				</select>
-		</fieldset>
-
-		<fieldset class="form-group col">
-				<label for="for_users">Director Hospital</label>
-				<select name="users[]" id="director" class="form-control selectpicker" data-live-search="true" required="" data-size="5" readonly>
-					@foreach($users as $key => $user)
-						<option value="{{$user->id}}" @if($user->id == "14101085") selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
-					@endforeach
-				</select>
-		</fieldset>
-
-	</div> -->
-
-	<div class="row">
+	<div class="row" id="div_mensual">
 	  @foreach($signatureFlows as $key => $signatureFlow)
 			<fieldset class="form-group col-sm-4">
 					<label for="for_users">{{$key}}</label>
 					<select name="users[]" class="form-control selectpicker" id="{{$key}}" data-live-search="true" required="" data-size="5" readonly>
+						@foreach($users as $key => $user)
+							<option value="{{$user->id}}" @if($user->id == $signatureFlow) selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						@endforeach
+					</select>
+			</fieldset>
+		@endforeach
+
+	</div>
+
+	<div class="row" id="div_turno">
+
+		@foreach($signatureFlowsTurnos as $key => $signatureFlow)
+			<fieldset class="form-group col-sm-4">
+					<label for="for_users">{{$key}}</label>
+					<select name="users[]" class="form-control selectpicker" id="{{$key}}Turnos" data-live-search="true" required="" data-size="5" readonly>
 						@foreach($users as $key => $user)
 							<option value="{{$user->id}}" @if($user->id == $signatureFlow) selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
 						@endforeach
@@ -207,7 +176,7 @@
 	<div class="row ml-1 mr-1">
 
 		<fieldset class="form-group col-3">
-			<label for="for_nationality">País de Funcionario</label>
+			<label for="for_nationality">Nacionalidad</label>
 			<select name="nationality" class="form-control" required>
 				<option value=""></option>
 				<option value="CHILENA" >CHILENA</option>
@@ -248,12 +217,12 @@
 		</fieldset>
 
     <fieldset class="form-group col">
-		    <label for="for_start_date">Fecha de Inicio</label>
+		    <label for="for_start_date">F.Inicio de Contrato</label>
 		    <input type="date" class="form-control" id="for_start_date" name="start_date" max="2030-12-31" required>
 		</fieldset>
 
     <fieldset class="form-group col">
-		    <label for="for_end_date">Fecha de Término</label>
+		    <label for="for_end_date">F.Término de Contrato</label>
 		    <input type="date" class="form-control" id="for_end_date" name="end_date" max="2030-12-31" required>
 		</fieldset>
 
@@ -274,6 +243,7 @@
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_administrativos">Administrativos/as</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_matronas">Matronas</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_tm_imageneologia">T.M. Imagenología</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_medico">Médico</button>
     </fieldset>
 
   </div>
@@ -314,11 +284,11 @@
 		    <input type="number" class="form-control" id="for_amount" placeholder="" name="amount">
 		</fieldset> -->
 
-  </div>
+  <!-- </div>
 
-  <div class="row">
+  <div class="row"> -->
 
-    <fieldset class="form-group col">
+    <!-- <fieldset class="form-group col">
 		    <label for="for_program_contract_type">Tipo de Contratación</label>
 		    <select name="program_contract_type" class="form-control" id="program_contract_type" required>
 					<option value=""></option>
@@ -327,7 +297,7 @@
 					<option value="Horas">Horas</option>
           <option value="Otro">Otro</option>
         </select>
-		</fieldset>
+		</fieldset> -->
 
 		<fieldset class="form-group col">
 		    <label for="for_weekly_hours">Hrs.Semanales</label>
@@ -484,7 +454,9 @@
 	$( document ).ready(function() {
 
 		$("#control_turnos").hide();
+		$("#div_turno").hide();
 		$('#program_contract_type').on('change', function() {
+
 			if (this.value == "Horas") {
 				$('#for_daily_hours').val("");
 				$('#for_nightly_hours').val("");
@@ -492,11 +464,26 @@
 				$('#for_nightly_hours').attr('readonly', true);
 				$('#for_weekly_hours').attr('disabled', 'disabled');
 				$("#control_turnos").show();
+
+				// $("#div_mensual").attr('disabled','disabled');
+				$("#div_mensual :input").attr("disabled", true);
+				$("#div_mensual").hide();
+				// $('#div_turno').removeAttr('disabled');
+				$("#div_turno :input").attr("disabled", false);
+				$("#div_turno").show();
+
 			}else{
 				$('#for_daily_hours').attr('readonly', false);
 				$('#for_nightly_hours').attr('readonly', false);
 				$('#for_weekly_hours').removeAttr('disabled');
 				$("#control_turnos").hide();
+
+				// $("#div_mensual").removeAttr('disabled');
+				$("#div_mensual :input").attr("disabled", false);
+				$("#div_mensual").show();
+				// $('#div_turno').attr('disabled','disabled');
+				$("#div_turno :input").attr("disabled", true);
+				$("#div_turno").hide();
 			}
 		});
 
@@ -509,15 +496,23 @@
 
 	$('#subdirection_ou_id').on('change', function() {
 		var value = this.value;
+
 		//subdirección gestión del cuidado al paciente
 		if (value == 85) {
 			$("#Subdirector option[value=13835321]").removeAttr('disabled');
 			$('#Subdirector').val(13835321);
 			$('#Subdirector').selectpicker('refresh');
+
+			$("#SubdirectorTurnos option[value=13835321]").removeAttr('disabled');
+			$('#SubdirectorTurnos').val(13835321);
+			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 		if (value != 85) {
 			$('#Subdirector').val(9882506);
 			$('#Subdirector').selectpicker('refresh');
+
+			$('#SubdirectorTurnos').val(9882506);
+			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 	});
 
@@ -603,8 +598,9 @@
 	$("#alias_tm_imageneologia").click(function(){
 		$('#service_description').val("Prestará servicios de Tecnología Médica en Imagenología realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid");
 	});
-
-
+	$("#alias_medico").click(function(){
+		$('#service_description').val("Prestará servicios de médico realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid.");
+	});
 
 </script>
 @endsection

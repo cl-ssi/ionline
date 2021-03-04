@@ -17,6 +17,36 @@ class SuitabilityController extends Controller
         //return view('replacement_staff.index', compact('request'));
     }
 
+
+    public function pending()
+    {
+        $psirequests = PsiRequest::where('status','Test Finalizado')->get();
+        return view('suitability.pending', compact('psirequests'));
+    }
+
+    public function approved()
+    {
+        $psirequests = PsiRequest::where('status','Aprobado')->get();
+        return view('suitability.approved', compact('psirequests'));
+    }
+
+    public function rejected()
+    {
+        $psirequests = PsiRequest::where('status','Rechazado')->get();
+        return view('suitability.rejected', compact('psirequests'));
+    }
+
+    public function finalresult(PsiRequest $psirequest, $result)
+    {
+        
+        $psirequest->status = $result;
+        $psirequest->save();
+        session()->flash('success', 'Se dio resultado de manera correcta');
+        return redirect()->back();
+    }
+
+
+
     public function indexOwn()
     {
 

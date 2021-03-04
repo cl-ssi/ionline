@@ -54,4 +54,5 @@
         @if($i > 1)
             <button type="submit" class="btn btn-primary float-right">Guardar</button>
         @endif
+    </form>
 </div>

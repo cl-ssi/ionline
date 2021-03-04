@@ -160,7 +160,7 @@ class ServiceRequestController extends Controller
      elseif(Auth::user()->organizationalUnit->establishment_id == 1){
        $signatureFlows['Subdirector'] = 9882506; // 88 - Subdirección Médica
        $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-       $signatureFlows['S.G.D.P Hospital'] = 13866127; // 86 - Subdirección de Gestión de Desarrollo de las Personas
+       $signatureFlows['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
        $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
        $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
        $signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
@@ -179,9 +179,42 @@ class ServiceRequestController extends Controller
        return redirect()->back();
      }
 
-     // dd($signatureFlows);
 
-    return view('service_requests.requests.create', compact('subdirections','responsabilityCenters','users','establishments','signatureFlows'));
+
+     //array para solicitud por turnos
+     $signatureFlowsTurnos = [];
+     if (Auth::user()->organizationalUnit->establishment_id == 38) {
+       //Hector Reyno (CGU)
+       if (Auth::user()->organizationalUnit->id == 24) {
+         $signatureFlowsTurnos['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
+         // $signatureFlowsTurnos['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+         // $signatureFlowsTurnos['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
+         $signatureFlowsTurnos['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+         $signatureFlowsTurnos['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
+         // $signatureFlowsTurnos['Director SSI'] = 9381231; // 1 - Dirección
+       }
+       //servicio de salud iqq
+       else{
+         // $signatureFlowsTurnos['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+         $signatureFlowsTurnos['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
+         $signatureFlowsTurnos['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+         $signatureFlowsTurnos['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
+         // $signatureFlowsTurnos['Director SSI'] = 9381231; // 1 - Dirección
+       }
+     }
+     //hospital
+     elseif(Auth::user()->organizationalUnit->establishment_id == 1){
+       $signatureFlowsTurnos['Subdirector'] = 9882506; // 88 - Subdirección Médica
+       // $signatureFlowsTurnos['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+       $signatureFlowsTurnos['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
+       $signatureFlowsTurnos['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
+       // $signatureFlowsTurnos['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+       // $signatureFlowsTurnos['Director Hospital'] = 14101085; // 84 - Dirección
+     }
+
+     // dd($signatureFlowsTurnos);
+
+    return view('service_requests.requests.create', compact('subdirections','responsabilityCenters','users','establishments','signatureFlows','signatureFlowsTurnos'));
   }
 
   /**
@@ -301,6 +334,7 @@ class ServiceRequestController extends Controller
       }
 
       session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido creada.');
+      // session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido creada. Para visualizar el certificado de confirmación, hacer click <a href="'. route('rrhh.service_requests.certificate-pdf', $SignatureFlow) . '" target="_blank">Aquí.</a>');
       return redirect()->route('rrhh.service_requests.index');
   }
 
@@ -528,13 +562,13 @@ class ServiceRequestController extends Controller
           $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
 
           switch($fila->program_contract_type) {
-            case 'Horas': 
+            case 'Horas':
               $por_prestacion = 'S';
-              $sirh_n_cargo = 6; 
+              $sirh_n_cargo = 6;
               break;
-            default: 
+            default:
               $por_prestacion = 'N';
-              $sirh_n_cargo = 5; 
+              $sirh_n_cargo = 5;
               break;
           }
 
@@ -624,11 +658,11 @@ class ServiceRequestController extends Controller
           }
 
           switch($fila->rrhh_team) {
-            case "Residencia Médica": 
+            case "Residencia Médica":
               $sirh_profession_id=1000;
               $sirh_function_id=9082; // Antención clínica
               break;
-            case "Médico Diurno": 
+            case "Médico Diurno":
               $sirh_profession_id=1000;
               $sirh_function_id=9082; // Atención clínica
               break;
@@ -636,93 +670,93 @@ class ServiceRequestController extends Controller
               $sirh_profession_id=1058;
               $sirh_function_id=9082; // Atención clínica
               break;
-            case "Enfermera Diurna": 
+            case "Enfermera Diurna":
               $sirh_profession_id=1058;
               $sirh_function_id=9082; // Atención clínica
               break;
-            case "Enfermera Turno": 
+            case "Enfermera Turno":
               $sirh_profession_id=1058;
               $sirh_function_id=9082; // Atención clínica
               break;
-            case "Kinesiólogo Diurno": 
-              $sirh_profession_id=1057; 
-              $sirh_function_id=9082; // Atención clínica 
-              break;
-            case "Kinesiólogo Turno": 
+            case "Kinesiólogo Diurno":
               $sirh_profession_id=1057;
-              $sirh_function_id=9082; // Atención Clínica 
+              $sirh_function_id=9082; // Atención clínica
               break;
-            case "Téc.Paramédicos Diurno": 
+            case "Kinesiólogo Turno":
+              $sirh_profession_id=1057;
+              $sirh_function_id=9082; // Atención Clínica
+              break;
+            case "Téc.Paramédicos Diurno":
               $sirh_profession_id=1027;
-              $sirh_function_id=9082; // Atención Clínica 
+              $sirh_function_id=9082; // Atención Clínica
               break;
-            case "Téc.Paramédicos Turno": 
+            case "Téc.Paramédicos Turno":
               $sirh_profession_id=1027;
-              $sirh_function_id=9082; // Atención Clínica 
+              $sirh_function_id=9082; // Atención Clínica
               break;
-            case "Auxiliar Diurno": 
-              $sirh_profession_id=111;
-              $sirh_function_id=9083; // Apoyo Administrativo 
-              break;
-            case "Auxiliar Turno": 
+            case "Auxiliar Diurno":
               $sirh_profession_id=111;
               $sirh_function_id=9083; // Apoyo Administrativo
               break;
-            case "Terapeuta Ocupacional": 
+            case "Auxiliar Turno":
+              $sirh_profession_id=111;
+              $sirh_function_id=9083; // Apoyo Administrativo
+              break;
+            case "Terapeuta Ocupacional":
               $sirh_profession_id=1055;
-              $sirh_function_id=9082; // Atención Clínica 
+              $sirh_function_id=9082; // Atención Clínica
               break;
-            case "Químico Farmacéutico": 
+            case "Químico Farmacéutico":
               $sirh_profession_id=320;
-              $sirh_function_id=9082; // Atención Clínica 
+              $sirh_function_id=9082; // Atención Clínica
               break;
-            case "Bioquímico": 
+            case "Bioquímico":
               $sirh_profession_id=1003;
-              $sirh_function_id=9082; // Atención Clínica 
+              $sirh_function_id=9082; // Atención Clínica
               break;
-            case "Fonoaudiologo": 
+            case "Fonoaudiologo":
               $sirh_profession_id=1319;
-              $sirh_function_id=9082; // Atención Clínica 
+              $sirh_function_id=9082; // Atención Clínica
               break;
-            case "Administrativo Diurno": 
+            case "Administrativo Diurno":
               $sirh_profession_id=119;
               $sirh_function_id=9083; // Apoyo Administrativo
               break;
-            case "Administrativo Turno": 
+            case "Administrativo Turno":
               $sirh_profession_id=119;
               $sirh_function_id=9083; // Apoyo Administrativo
               break;
-            case "Biotecnólogo Turno": 
+            case "Biotecnólogo Turno":
               $sirh_profession_id=513;
-              $sirh_function_id=9082; // Atención Clínica 
+              $sirh_function_id=9082; // Atención Clínica
               break;
-            case "Matrona Turno": 
+            case "Matrona Turno":
               $sirh_profession_id=1060;
-              $sirh_function_id=9082; // Atención Clínica 
+              $sirh_function_id=9082; // Atención Clínica
               break;
-            case "Matrona Diurno": 
+            case "Matrona Diurno":
               $sirh_profession_id=1060;
-              $sirh_function_id=9082; // Atención Clínica 
+              $sirh_function_id=9082; // Atención Clínica
               break;
-            case "Otros técnicos": 
+            case "Otros técnicos":
               $sirh_profession_id=530;
-              $sirh_function_id=9082; // Atención Clínica 
+              $sirh_function_id=9082; // Atención Clínica
               break;
-            case "Psicólogo": 
+            case "Psicólogo":
               $sirh_profession_id=1160;
-              $sirh_function_id=9082; // Atención Clínica 
+              $sirh_function_id=9082; // Atención Clínica
               break;
-            case "Tecn. Médico Diurno": 
+            case "Tecn. Médico Diurno":
               $sirh_profession_id=1316;
-              $sirh_function_id=9082; // Atención Clínica 
+              $sirh_function_id=9082; // Atención Clínica
               break;
-            case "Tecn. Médico Turno": 
+            case "Tecn. Médico Turno":
               $sirh_profession_id=1316;
-              $sirh_function_id=9082; // Atención Clínica 
+              $sirh_function_id=9082; // Atención Clínica
               break;
-            case "Trabajador Social": 
+            case "Trabajador Social":
               $sirh_profession_id=1020;
-              $sirh_function_id=9082; // Atención Clínica 
+              $sirh_function_id=9082; // Atención Clínica
               break;
           }
 
@@ -754,7 +788,7 @@ class ServiceRequestController extends Controller
             '0', // Todas son excentas = 0
             ($fila->resolution_number) ? $fila->resolution_number : 1,
             ($fila->resolution_date) ? $fila->resolution_date->format('d/m/Y') : '15/02/2021',
-            substr($fila->digera_strategy,0,99), // maximo 100 
+            substr($fila->digera_strategy,0,99), // maximo 100
             $sirh_function_id,
             preg_replace( "/\r|\n/", " ", substr($fila->service_description,0,254)), // max 255
             'A',
@@ -845,48 +879,49 @@ class ServiceRequestController extends Controller
 
 
     public function corrige_firmas(){
-      $serviceRequests = ServiceRequest::whereIn('id',[
-      383,385,390,396,398,399,400,404,405,406,407,410,411,412,414,427,428,430,431,432,433,434,435,436,437,438,439,440,441,442,443,446,447,450,451,452,453,
-      458,459,464,473,484,489,493,494,502,504,505,506,507,508,510,511,512,513,514,517,519,520,521,522,523,524,557,565,566,567,568,569,571,573,574,577,578,
-      579,580,582,583,584,585,586,588,589,592,597,598,599,601,602,603,604,605,606,607,608,609,610,611,612,613,614,615,616,617,618,619,622,623,627,629,630])
-      ->get();
+      // $serviceRequests = ServiceRequest::whereIn('id',[
+      // 383,385,390,396,398,399,400,404,405,406,407,410,411,412,414,427,428,430,431,432,433,434,435,436,437,438,439,440,441,442,443,446,447,450,451,452,453,
+      // 458,459,464,473,484,489,493,494,502,504,505,506,507,508,510,511,512,513,514,517,519,520,521,522,523,524,557,565,566,567,568,569,571,573,574,577,578,
+      // 579,580,582,583,584,585,586,588,589,592,597,598,599,601,602,603,604,605,606,607,608,609,610,611,612,613,614,615,616,617,618,619,622,623,627,629,630])
+      // ->get();
+      //
+      // foreach ($serviceRequests as $key => $serviceRequest) {
+      //
+      //   foreach ($serviceRequest->SignatureFlows as $key => $SignatureFlow) {
+      //     if($SignatureFlow->sign_position > 2){
+      //       $SignatureFlow->sign_position += 1;
+      //       $SignatureFlow->save();
+      //     }
+      //   }
+      //
+      //   if ($serviceRequest->subdirection_ou_id == 85) {
+      //
+      //     $SignatureFlow = new SignatureFlow();
+      //     $SignatureFlow->ou_id = $serviceRequest->subdirection_ou_id;
+      //     $SignatureFlow->responsable_id = 13835321;
+      //     $SignatureFlow->user_id = 13835321;
+      //     $SignatureFlow->service_request_id = $serviceRequest->id;
+      //     $SignatureFlow->type = "visador";
+      //     $SignatureFlow->employee = "Subdirector SGCP";
+      //     $SignatureFlow->sign_position = 3;
+      //     $SignatureFlow->save();
+      //
+      //   }else{
+      //
+      //     $SignatureFlow = new SignatureFlow();
+      //     $SignatureFlow->ou_id = $serviceRequest->subdirection_ou_id;
+      //     $SignatureFlow->responsable_id = 9882506;
+      //     $SignatureFlow->user_id = 9882506;
+      //     $SignatureFlow->service_request_id = $serviceRequest->id;
+      //     $SignatureFlow->type = "visador";
+      //     $SignatureFlow->employee = "Subdirector Médico";
+      //     $SignatureFlow->sign_position = 3;
+      //     $SignatureFlow->save();
+      //
+      //   }
+      // }
+      // dd("terminó");
 
-      foreach ($serviceRequests as $key => $serviceRequest) {
-
-        foreach ($serviceRequest->SignatureFlows as $key => $SignatureFlow) {
-          if($SignatureFlow->sign_position > 2){
-            $SignatureFlow->sign_position += 1;
-            $SignatureFlow->save();
-          }
-        }
-
-        if ($serviceRequest->subdirection_ou_id == 85) {
-
-          $SignatureFlow = new SignatureFlow();
-          $SignatureFlow->ou_id = $serviceRequest->subdirection_ou_id;
-          $SignatureFlow->responsable_id = 13835321;
-          $SignatureFlow->user_id = 13835321;
-          $SignatureFlow->service_request_id = $serviceRequest->id;
-          $SignatureFlow->type = "visador";
-          $SignatureFlow->employee = "Subdirector SGCP";
-          $SignatureFlow->sign_position = 3;
-          $SignatureFlow->save();
-
-        }else{
-
-          $SignatureFlow = new SignatureFlow();
-          $SignatureFlow->ou_id = $serviceRequest->subdirection_ou_id;
-          $SignatureFlow->responsable_id = 9882506;
-          $SignatureFlow->user_id = 9882506;
-          $SignatureFlow->service_request_id = $serviceRequest->id;
-          $SignatureFlow->type = "visador";
-          $SignatureFlow->employee = "Subdirector Médico";
-          $SignatureFlow->sign_position = 3;
-          $SignatureFlow->save();
-
-        }
-      }
-      dd("terminó");
     }
 
     public function pending_requests(Request $request)
@@ -938,6 +973,14 @@ class ServiceRequestController extends Controller
       // dd($falta_aprobar);
 
       return view('service_requests.requests.pending_requests',compact('array','group_array','falta_aprobar'));
+    }
+
+    public function certificatePDF(ServiceRequest $serviceRequest)
+    {
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('service_requests.requests.report_certificate',compact('serviceRequest'));
+
+        return $pdf->stream('mi-archivo.pdf');
     }
 
 }
