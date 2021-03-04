@@ -167,10 +167,10 @@ class ServiceRequestController extends Controller
 
        $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
        $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
-                                                  ->where('name','LIKE','%unidad%')
-                                                  ->orwhere('name','LIKE','%servicio%')
-                                                  ->orwhere('name','LIKE','%estadio%')
-                                                  ->orwhere('name','LIKE','%covid%')
+                                                  // ->where('name','LIKE','%unidad%')
+                                                  // ->orwhere('name','LIKE','%servicio%')
+                                                  // ->orwhere('name','LIKE','%estadio%')
+                                                  // ->orwhere('name','LIKE','%covid%')
                                                   ->orderBy('name', 'ASC')->get();
      }
     //another
