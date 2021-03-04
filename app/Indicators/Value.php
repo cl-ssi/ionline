@@ -3,12 +3,10 @@
 namespace App\Indicators;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
 class Value extends Model
 {
-    use SoftDeletes;
     protected $table = 'ind_values';
     protected $fillable = ['month', 'factor', 'value', 'created_by', 'updated_by'];
 
