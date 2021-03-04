@@ -6,12 +6,17 @@
 <div class="jumbotron mt-5">
     <div class="row">
     <div class="col-9">
-        <h1 class="display-4">Intranet Online</h1>
+        <!-- <h1 class="display-4">Intranet Online</h1> -->
+        <h1 class="display-4 alert alert-danger center" style="text-align:center"><bold>AVISO IMPORTANTE</bold></h1>
         <p class="lead">{{ env('APP_SS') }}</p>
         <hr class="my-5">
-        <p>Contacto:
-            <a href="mailto:{{ env('APP_SS_EMAIL') }}">{{ env('APP_SS_EMAIL') }}</a>
-        </p>
+        <p>
+            Estimado usuario lamentamos informar que debido a trabajos interno en nuestra plataforma, los datos registrado entre el 03-03-2021 a las 15:00 hasta el 04-03-2021 a las 10:00 no se encuentran disponible, Se solicita su colaboración para revisar e ingresar los datos que faltan. Desde ya muchas gracias.
+            <br>
+            Saluda Atte. <br>
+            Equipo de Desarrollo SSI
+            <!-- <a href="mailto:{{ env('APP_SS_EMAIL') }}">{{ env('APP_SS_EMAIL') }}</a> -->
+        </p>        
 
     </div>
     <div class="col-md-3 col-12">
