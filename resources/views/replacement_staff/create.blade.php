@@ -88,6 +88,16 @@
         </fieldset>
     </div>
 
+    <div class="form-row">
+      <fieldset class="form-group col-6">
+          <label for="for_status">Disponibilidad</label>
+          <select name="status" id="for_status" class="form-control selectpicker" title="Seleccione...">
+              <option value="immediate_availability">Inmediata</option>
+              <option value="working_external">Trabajando</option>
+          </select>
+      </fieldset>
+    </div>
+
     <button type="submit" class="btn btn-primary float-right">Guardar</button>
 
 </form>

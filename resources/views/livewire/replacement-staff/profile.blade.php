@@ -12,6 +12,15 @@
       @foreach($inputs as $key => $value)
           <div class="form-row">
               <fieldset class="form-group col mt">
+                  <label for="for_profession">Estamento</label>
+                  <select name="profession[]" class="form-control">
+                      @foreach($professionManage as $profession)
+                          <option value="{{ $profession->id }}">{{ $profession->Name }}</option>
+                      @endforeach
+                  </select>
+              </fieldset>
+
+              <fieldset class="form-group col mt">
                   <label for="for_profession">Profesión</label>
                   <select name="profession[]" class="form-control">
                       <option value="Enfermera">Enfermera</option>
@@ -25,7 +34,7 @@
                     <input class="form-control" type="file" name="file[]" accept="application/pdf" required>
                   </div>
               </fieldset>
-              
+
               <fieldset class="form-group col-md-2">
                   <label for="for_button"><br></label>
                   <button class="btn btn-danger btn-block" wire:click.prevent="remove({{$key}})">Remover</button>
