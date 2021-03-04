@@ -11,7 +11,11 @@
         <p class="lead">{{ env('APP_SS') }}</p>
         <hr class="my-5">
         <p>
-            Estimado usuario lamentamos informar que debido a trabajos interno en nuestra plataforma, los datos registrado entre el 03-03-2021 a las 15:00 hasta el 04-03-2021 a las 10:00 no se encuentran disponible, Se solicita su colaboración para revisar e ingresar los datos que faltan. Desde ya muchas gracias.
+        Estimado usuario.<br>
+Lamentamos informar que los datos registrados en la plataforma entre el día de ayer <strong>(3 de marzo) a las 15:00 y hoy (4 de marzo) a las 10:00.</strong>
+no se encuentran disponibles, solicitamos su colaboración para actualizar o ingresar los datos faltantes.
+
+Para su tranquilidad este inconveniente fue aislado y tomamos las medidas necesarias para que no vuelva a ocurrir
             <br>
             Saluda Atte. <br>
             Equipo de Desarrollo SSI
