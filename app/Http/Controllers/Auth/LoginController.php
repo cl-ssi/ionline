@@ -32,7 +32,7 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-        $this->middleware('guest:suitability')->except('logout');
+        $this->middleware('guest:external')->except('logout');
     }
 
     /**
@@ -87,14 +87,14 @@ class LoginController extends Controller
         return 'id';
     }
 
-    public function showSuitabilityLoginForm()
+    public function showExternalLoginForm()
     {
         
-        return view('auth.login', ['url' => 'suitability']);
+        return view('auth.login', ['url' => 'external']);
     }
 
 
-    public function suitabilityLogin(Request $request)
+    public function externalLogin(Request $request)
     {
         
         $credentials = $request->only('id', 'password');
@@ -105,9 +105,9 @@ class LoginController extends Controller
         
 
 
-        if (Auth::guard('suitability')->attempt($credentials, $request->filled('remember'))) {
+        if (Auth::guard('external')->attempt($credentials, $request->filled('remember'))) {
             // Authentication passed...
-            return redirect()->intended('suitability');
+            return redirect()->intended('external');
         }
         return back()->withInput($request->only('email', 'remember'));
         

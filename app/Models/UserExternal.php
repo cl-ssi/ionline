@@ -8,15 +8,15 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class UserSuitability extends Authenticatable
+class UserExternal extends Authenticatable
 {
     use HasFactory;
     use HasRoles;
     use Notifiable;
 
-    public $table = 'users_suitability';
+    public $table = 'users_external';
 
-    protected $guard = 'suitability';
+    protected $guard = 'external';
 
     protected $fillable = [
         'name', 'email', 'password',

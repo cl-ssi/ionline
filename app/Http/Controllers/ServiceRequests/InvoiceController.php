@@ -31,7 +31,7 @@ class InvoiceController extends Controller
                 
                 
             } else if (env('APP_ENV') == 'local') {
-                $user = '14105887-8';                 
+                $user = '14105887-8';
                 
             }
             return $this->show($user);
