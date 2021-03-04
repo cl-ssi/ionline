@@ -329,6 +329,22 @@
                  Generar certificado
                  <i class="fas fa-file"></i>
               </a>
+                {{--modal firmador--}}
+                @php
+                    $fulfillmentId = $serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->id;
+                    $idSignModal = $serviceRequest->id;
+                    $routePdfSignModal = "/rrhh/fulfillments/certificate-pdf/$fulfillmentId";
+                    $returnUrlSignModal = "documents.callbackFirma";
+                @endphp
+
+                @if(Auth::user()->can('Service Request: sign document'))
+                    @include('documents.signatures.partials.sign_file')
+                    <button type="button" data-toggle="modal" class="btn btn-sm btn-outline-secondary form-control"
+                            data-target="#signPdfModal{{$idSignModal}}" title="Firmar">Firmar <span class="fas fa-signature"
+                                                                                             aria-hidden="true">
+                                                                                        </span>
+                    </button>
+                @endif
             @endif
 
         </fieldset>
