@@ -43,17 +43,17 @@ class ReplacementStaff extends Model
         return $this->hasMany('\App\Models\ReplacementStaff\Profile');
     }
 
-    public function experiences() {
-        return $this->hasMany('\App\Models\ReplacementStaff\Experience');
-    }
+    // public function experiences() {
+    //     return $this->hasMany('\App\Models\ReplacementStaff\Experience');
+    // }
 
     public function trainings() {
         return $this->hasMany('\App\Models\ReplacementStaff\Training');
     }
 
-    public function languages() {
-        return $this->hasMany('\App\Models\ReplacementStaff\Language');
-    }
+    // public function languages() {
+    //     return $this->hasMany('\App\Models\ReplacementStaff\Language');
+    // }
 
     protected $table = 'rst_replacement_staff';
 }

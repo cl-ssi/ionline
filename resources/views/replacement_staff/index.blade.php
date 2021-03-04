@@ -46,7 +46,9 @@
             <th>Nombre Completo</th>
             <th>Run</th>
             <th>Título</th>
-            <th>Número contacto</th>
+            <th>Estamento</th>
+            <th>Fecha Titulación</th>
+            <th>Años Exp.</th>
             <th>Estado</th>
             <th></th>
         </tr>
@@ -59,8 +61,16 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
+            <td></td>
             <td>
-                <a href="{{ route('replacement_staff.edit', $staff) }}" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i></a>
+                <a href="{{ route('replacement_staff.edit', $staff) }}"
+                  class="btn btn-outline-secondary btn-sm"
+                  title="Ir"> <i class="far fa-eye"></i></a>
+                <a href=""
+                  class="btn btn-outline-secondary btn-sm"
+                  title="Ir"
+                  target="_blank"> <i class="far fa-file-pdf"></i></a>
             </td>
         </tr>
         @endforeach

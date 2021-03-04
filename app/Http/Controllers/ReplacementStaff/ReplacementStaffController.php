@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ReplacementStaff;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ReplacementStaff\ReplacementStaff;
+use App\Models\ReplacementStaff\ProfessionManage;
 use App\Models\ReplacementStaff\Profile;
 use Illuminate\Support\Facades\DB;
 
@@ -18,6 +19,7 @@ class ReplacementStaffController extends Controller
     public function index(Request $request)
     {
         $replacementStaff = ReplacementStaff::paginate(15);
+
         return view('replacement_staff.index', compact('replacementStaff'));
     }
 
@@ -40,7 +42,6 @@ class ReplacementStaffController extends Controller
     public function store(Request $request)
     {
         $replacementStaff = new ReplacementStaff($request->All());
-        $replacementStaff->status = 'available';
         $replacementStaff->save();
 
         session()->flash('success', 'Se ha creado el postulante exitosamente');
@@ -50,10 +51,9 @@ class ReplacementStaffController extends Controller
 
     public function edit(ReplacementStaff $replacementStaff)
     {
-        // $profiles = Profile::where('replacement_staff_id', $replacementStaff->id)
-        //     ->get();
+        $professionManage = ProfessionManage::all();
 
-        return view('replacement_staff.edit', compact('replacementStaff'));
+        return view('replacement_staff.edit', compact('replacementStaff', 'professionManage'));
     }
 
     public function update(Request $request, $id)
