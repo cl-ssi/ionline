@@ -11,24 +11,32 @@
 @else
 <h5 class="mb-3">Información de sus solicitudes de pago de Honorario.</h5>
 <hr>
-@livewire('invoice.list' )
+
 
 <div class="table-responsive">
         <table class="table table-sm table-bordered small">
                 <thead>
                         <tr>
+                                <th>Número de Solicitud de Servicio</th>
                                 <th>Id</th>
-                                <th>Nombre</th>                                
+                                <th>Año</th>
+                                <th>Mes</th>
                         </tr>
                 </thead>
                 <tbody>
 
                 
                         @foreach ($serviceRequests as $serviceRequest)                        
-                        @foreach($serviceRequest->fulfillments as $fullfillment)
+                        @foreach($serviceRequest->fulfillments as $fullfillment)        
+                        
                         <tr>
-                                <td class="small">{{ $fullfillment->id ?? '' }}</td>                                
+                                <td class="small">{{ $serviceRequest->id ?? '' }}</td>
+                                <td class="small">{{ $fullfillment->id ?? '' }}</td>
+                                <td>{{ $fullfillment->year ?? '' }}</td>
+                                <td>{{ $fullfillment->month ?? '' }}</td>
                                 <td> <i class="fas fa-paperclip"></i></td>
+                                <td>                                 
+                                </td>
                         </tr>                        
                         @endforeach
                         @endforeach

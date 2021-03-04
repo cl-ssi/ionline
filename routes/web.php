@@ -53,15 +53,11 @@ Route::prefix('webservices')->name('webservices.')->group(function () {
 
 Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
 
-Route::get('/login/suitability', [LoginController::class,'showSuitabilityLoginForm']);
-Route::post('/login/suitability', [LoginController::class,'suitabilityLogin']);
-//Route::view('/test', 'suitability');
-// Route::group(['middleware' => 'auth:suitability'], function () {
-    
-//    // Route::view('/suitability/welcome', 'suitability');
-// });
+Route::get('/login/external', [LoginController::class,'showExternalLoginForm']);
+Route::post('/login/external', [LoginController::class,'externalLogin']);
 
-Route::group(['middleware' => 'auth:suitability'], function () {
+
+Route::group(['middleware' => 'auth:external'], function () {
     Route::view('/kaka', 'test');
     Route::view('/test', 'test');
 });

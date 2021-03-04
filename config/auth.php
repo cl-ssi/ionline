@@ -47,9 +47,9 @@ return [
             'hash' => false,
         ],
 
-        'suitability' => [
+        'external' => [
             'driver' => 'session',
-            'provider' => 'suitabilities',
+            'provider' => 'externals',
         ],
     ],
 
@@ -76,9 +76,9 @@ return [
             'model' => App\User::class,
         ],
 
-        'suitabilities' => [
+        'externals' => [
             'driver' => 'eloquent',
-            'model' => App\Models\UserSuitability::class,
+            'model' => App\Models\UserExternal::class,
         ]
 
         // 'users' => [
