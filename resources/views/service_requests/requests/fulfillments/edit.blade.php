@@ -259,11 +259,12 @@
 
           <fieldset class="form-group col">
       		    <label for="for_type">Tipo</label>
-      		    <select name="type" id="type" class="form-control" required>
+      		    <select name="type" id="for_type" class="form-control" required>
                 <option value=""></option>
       					<option value="Inasistencia Injustificada">INASISTENCIA INJUSTIFICADA</option>
                 <option value="Licencia no covid">LICENCIA NO COVID</option>
-                <option value="Renuncia voluntaria - abandono de funciones">RENUNCIA VOLUNTARIA - ABANDONO DE FUNCIONES</option>
+                <option value="Renuncia voluntaria">RENUNCIA VOLUNTARIA</option>
+                <option value="Abandono de funciones">ABANDONO DE FUNCIONES</option>
               </select>
       		</fieldset>
 
@@ -277,19 +278,19 @@
         <div class="row">
           <fieldset class="form-group col-3">
               <label for="for_estate">Entrada</label>
-              <input type="date" class="form-control" name="start_date" required>
+              <input type="date" class="form-control" name="start_date" id="start_date" required>
           </fieldset>
           <fieldset class="form-group col">
               <label for="for_estate">Hora</label>
-              <input type="time" class="form-control" name="start_hour" required>
+              <input type="time" class="form-control" name="start_hour" id="start_hour" required>
           </fieldset>
           <fieldset class="form-group col-3">
               <label for="for_estate">Salida</label>
-              <input type="date" class="form-control" name="end_date" required>
+              <input type="date" class="form-control" name="end_date" id="end_date" required>
           </fieldset>
           <fieldset class="form-group col">
               <label for="for_estate">Hora</label>
-              <input type="time" class="form-control" name="end_hour" required>
+              <input type="time" class="form-control" name="end_hour" id="end_hour" required>
           </fieldset>
 
 
@@ -366,8 +367,8 @@
                     @endcan
                   </td>
                   <td>{{$FulfillmentItem->type}}</td>
-                  <td>{{$FulfillmentItem->start_date->format('Y-m-d H:i')}}</td>
-                  <td>{{$FulfillmentItem->end_date->format('Y-m-d H:i')}}</td>
+                  <td>@if($FulfillmentItem->start_date){{$FulfillmentItem->start_date->format('Y-m-d H:i')}}@endif</td>
+                  <td>@if($FulfillmentItem->end_date){{$FulfillmentItem->end_date->format('Y-m-d H:i')}}@endif</td>
                   <td>{{$FulfillmentItem->observation}}</td>
               </tr>
             @endforeach
@@ -936,6 +937,41 @@
           }
       });
   });
+
+  $('#for_type').on('change', function() {
+    $('#start_date').attr('readonly', false);
+    $("#start_date").val('');
+    $('#start_hour').attr('readonly', false);
+    $('#start_hour').val('');
+    $('#end_date').attr('readonly', false);
+    $("#end_date").val('');
+    $('#end_hour').attr('readonly', false);
+    $('#end_hour').val('');
+    if (this.value == "Inasistencia Injustificada") {
+
+    }
+    if (this.value == "Licencia no covid") {
+      $('#start_hour').attr('readonly', true);
+      $('#end_hour').attr('readonly', true);
+    }
+    if (this.value == "Renuncia voluntaria") {
+      $('#start_date').attr('readonly', true);
+      $('#start_hour').attr('readonly', true);
+      $('#end_hour').attr('readonly', true);
+    }
+    if (this.value == "Abandono de funciones") {
+      $('#start_date').attr('readonly', true);
+      $('#start_hour').attr('readonly', true);
+      $('#end_hour').attr('readonly', true);
+    }
+
+    // start_date
+    // start_hour
+    // end_date
+    // end_hour
+  });
+
+
 
 </script>
 
