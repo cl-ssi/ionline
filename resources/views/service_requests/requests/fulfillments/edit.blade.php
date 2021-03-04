@@ -188,7 +188,7 @@
 
       <!-- información adicional finanzas -->
 
-      @canany(['Service Request: additional data finanzas'])
+      @canany(['Service Request: fulfillments finance'])
       <form method="POST" action="{{ route('rrhh.fulfillments.update',$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()) }}" enctype="multipart/form-data">
       @csrf
       @method('PUT')
