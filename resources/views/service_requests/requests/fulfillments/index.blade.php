@@ -51,21 +51,7 @@
     					<span class="fas fa-edit" aria-hidden="true"></span>
     				</a>
 
-                        {{--modal firmador--}}
-                        @php
-                            $idSignModal = $serviceRequest->id;
-                            $routePdfSignModal = "/rrhh/service_requests/certificate-pdf/$serviceRequest->id";
-                            $returnUrlSignModal = "documents.callbackFirma";
-                        @endphp
 
-                        @if(Auth::user()->can('Service Request: sign document'))
-                            @include('documents.signatures.partials.sign_file')
-                            <button type="button" data-toggle="modal" class="btn btn-sm btn-outline-secondary "
-                                    data-target="#signPdfModal{{$idSignModal}}" title="Firmar"><span class="fas fa-signature"
-                                                                                      aria-hidden="true">
-                                                                                        </span>
-                            </button>
-                        @endif
 
           @endif
 
@@ -78,21 +64,7 @@
                 <a href="{{ route('rrhh.service_requests.certificate-pdf', $serviceRequest) }}"
                   class="btn btn-outline-secondary btn-sm" target="_blank">
                 <span class="fas fa-file" aria-hidden="true"></span></a>
-                      {{--modal firmador--}}
-                      @php
-                          $idSignModal = $serviceRequest->id;
-                          $routePdfSignModal = "/rrhh/service_requests/certificate-pdf/$serviceRequest->id";
-                          $returnUrlSignModal = "documents.callbackFirma";
-                      @endphp
 
-                      @if(Auth::user()->can('Service Request: sign document'))
-                          @include('documents.signatures.partials.sign_file')
-                          <button type="button" data-toggle="modal" class="btn btn-sm btn-outline-secondary "
-                                  data-target="#signPdfModal{{$idSignModal}}" title="Firmar"><span class="fas fa-signature"
-                                                                                                   aria-hidden="true">
-                                                                                        </span>
-                          </button>
-                      @endif
               @endif
 
           @endif
