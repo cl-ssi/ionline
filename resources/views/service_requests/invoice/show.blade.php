@@ -35,7 +35,11 @@
                                 <td>{{ $servicerequest->request_date->format('d-m-Y') ?? '' }}</td>
                                 <td>{{ $servicerequest->start_date->format('d-m-Y') ?? '' }}</td>
                                 <td>{{ $servicerequest->end_date->format('d-m-Y') ?? '' }}</td>
-                                <input type="file" id="myfile" name="myfile">
+                                <td>
+                                <form>
+                                <input type="file" id="myfile" name="myfile"> </input>
+                                </form>
+                                </td>
                         </tr>
                         @endforeach
                 </tbody>
