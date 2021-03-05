@@ -139,7 +139,7 @@ class ServiceRequestController extends Controller
          // if(Authority::getAuthorityFromDate(1,Carbon::now(),'manager')==null) {$user=9381231;}
          // else{$user=Authority::getAuthorityFromDate(1,Carbon::now(),'manager')->user->id;}
          // $signatureFlows['Director SSI'] = $user;
-
+         $signatureFlows['RRHH CGU'] = 10739552; //RR.HH del CGU
          $signatureFlows['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
          $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
          $signatureFlows['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
@@ -186,6 +186,7 @@ class ServiceRequestController extends Controller
      if (Auth::user()->organizationalUnit->establishment_id == 38) {
        //Hector Reyno (CGU)
        if (Auth::user()->organizationalUnit->id == 24) {
+         $signatureFlows['RRHH CGU'] = 10739552; //RR.HH del CGU 
          $signatureFlowsTurnos['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
          // $signatureFlowsTurnos['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
          // $signatureFlowsTurnos['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
