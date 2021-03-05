@@ -25,18 +25,17 @@ class HealthGoalController extends Controller
     public function show($law, $year, $health_goal)
     {
         $healthGoal = HealthGoal::where('law', $law)->where('year', $year)->where('number', $health_goal)->first();
-        // Nos aseguramos que el comges existe y el corte consultado se encuentre entre 1 y 4
+        // Nos aseguramos que la meta sanitaria existe segun ley, año y numero.
         if($healthGoal == null) abort(404);
-        $indicators = $healthGoal->indicators()->with('values')->orderBy('number')->get();
-        $this->loadValuesWithRemSource($year, $healthGoal, $indicators);
+        $healthGoal->indicators()->with('values')->orderBy('number')->get();
+        $this->loadValuesWithRemSource($year, $healthGoal);
         // return $indicators;
-        return view('indicators.health_goals.show', compact('healthGoal', 'indicators'));
+        return view('indicators.health_goals.show', compact('healthGoal'));
     }
 
-    private function loadValuesWithRemSource($year, $healthGoal, $indicators)
+    private function loadValuesWithRemSource($year, $healthGoal)
     {
-        foreach($indicators as $indicator){
-            // $values = $indicator->values(); //inicializamos collection de values para el indicador con valores previos
+        foreach($healthGoal->indicators as $indicator){
             foreach(array('numerador', 'denominador') as $factor){
                 $factor_cods = $factor == 'numerador' ? $indicator->numerator_cods : $indicator->denominator_cods;
                 $factor_cols = $factor == 'numerador' ? $indicator->numerator_cols : $indicator->denominator_cols;
@@ -93,7 +92,6 @@ class HealthGoalController extends Controller
     
                     foreach($result as $item)
                         $indicator->values->add(new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => $item->valor]));
-                    // $indicator->setRelation('values', $values);
                 }
             }
         }
