@@ -8,6 +8,20 @@
 
 <div class="form-row">
 
+  <fieldset class="form-group col-6 col-md-6">
+      <label for="for_request_date">Responsable</label>
+      <input type="text" class="form-control" value="{{$serviceRequest->SignatureFlows->where('sign_position',1)->first()->user->getFullNameAttribute()}}" disabled>
+  </fieldset>
+
+  <fieldset class="form-group col-6 col-md-6">
+      <label for="for_start_date">Jefe Directo</label>
+      <input type="text" class="form-control" value="{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}" disabled>
+  </fieldset>
+
+</div>
+
+<div class="form-row">
+
   <fieldset class="form-group col-12 col-md-4">
       <label for="for_request_date">ID Solicitud</label>
       <input type="text" class="form-control" value="{{$serviceRequest->id}}" disabled>
@@ -33,7 +47,7 @@
   </fieldset>
 
   <fieldset class="form-group col-12 col-md-4">
-      <label for="for_start_date">Nombre</label>
+      <label for="for_start_date">Funcionario</label>
       <input type="text" class="form-control" value="{{$serviceRequest->name}}" disabled>
   </fieldset>
 
