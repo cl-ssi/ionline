@@ -104,7 +104,7 @@
             <td>{{ $doc->subject }}</td>
             <td>{!! $doc->fromHtml !!}</td>
             <td>{!! $doc->forHtml !!}</td>
-            <td class="small">{{ $doc->user->FullName }} <br> {{ $doc->created_at }}</td>
+            <td class="small">{{ optional($doc->user)->FullName }} <br> {{ $doc->created_at }}</td>
             <td nowrap>
                 @if(!$doc->file)
                     <a href="{{ route('documents.edit', $doc) }}" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i></a>
@@ -167,7 +167,7 @@
             <td>{{ $doc->subject }}</td>
             <td>{!! $doc->fromHtml !!}</td>
             <td>{!! $doc->forHtml !!}</td>
-            <td class="small">{{ $doc->user->FullName }} <br> {{ $doc->created_at }}</td>
+            <td class="small">{{ optional($doc->user)->FullName }} <br> {{ $doc->created_at }}</td>
             <td nowrap>
                 <a href="{{ route('documents.show', $doc->id) }}" class="btn btn-sm btn-primary" target="_blank"><i class="fas fa-file fa-lg"></i></a>
             </td>
