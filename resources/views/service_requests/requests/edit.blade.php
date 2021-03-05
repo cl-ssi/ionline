@@ -35,10 +35,10 @@
     <fieldset class="form-group col col-md">
 		    <label for="for_program_contract_type">Tipo de Contratación</label>
 		    <select name="program_contract_type" id="program_contract_type" class="form-control" required>
-          <option value="Semanal" @if($serviceRequest->program_contract_type == 'Semanal') selected @endif >Semanal</option>
+          <!-- <option value="Semanal" @if($serviceRequest->program_contract_type == 'Semanal') selected @endif >Semanal</option> -->
           <option value="Mensual" @if($serviceRequest->program_contract_type == 'Mensual') selected @endif >Mensual</option>
           <option value="Horas" @if($serviceRequest->program_contract_type == 'Horas') selected @endif >Horas</option>
-          <option value="Otro" @if($serviceRequest->program_contract_type == 'Otro') selected @endif >Otro</option>
+          <!-- <option value="Otro" @if($serviceRequest->program_contract_type == 'Otro') selected @endif >Otro</option> -->
         </select>
 		</fieldset>
 

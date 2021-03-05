@@ -5,11 +5,13 @@ namespace App\Models\ServiceRequests;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Fulfillment extends Model implements Auditable
 {
   use \OwenIt\Auditing\Auditable;
   use HasFactory;
+  use SoftDeletes;
   /**
    * The attributes that are mass assignable.
    *
@@ -19,7 +21,8 @@ class Fulfillment extends Model implements Auditable
       'id', 'service_request_id', 'year', 'month', 'type', 'start_date', 'end_date', 'observation',
       'responsable_approbation','responsable_approbation_date','responsable_approver_id',
       'rrhh_approbation','rrhh_approbation_date','rrhh_approver_id',
-      'finances_approbation','finances_approbation_date','finances_approver_id','user_id'
+      'finances_approbation','finances_approbation_date','finances_approver_id', 'invoice_path', 'user_id',
+      'bill_number','total_hours_paid','total_paid','payment_date','contable_month'
   ];
 
   public function FulfillmentItems() {
