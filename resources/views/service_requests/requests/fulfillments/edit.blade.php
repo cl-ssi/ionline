@@ -8,6 +8,20 @@
 
 <div class="form-row">
 
+  <fieldset class="form-group col-6 col-md-6">
+      <label for="for_request_date">Responsable</label>
+      <input type="text" class="form-control" value="{{$serviceRequest->SignatureFlows->where('sign_position',1)->first()->user->getFullNameAttribute()}}" disabled>
+  </fieldset>
+
+  <fieldset class="form-group col-6 col-md-6">
+      <label for="for_start_date">Jefe Directo</label>
+      <input type="text" class="form-control" value="{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}" disabled>
+  </fieldset>
+
+</div>
+
+<div class="form-row">
+
   <fieldset class="form-group col-12 col-md-4">
       <label for="for_request_date">ID Solicitud</label>
       <input type="text" class="form-control" value="{{$serviceRequest->id}}" disabled>
@@ -33,7 +47,7 @@
   </fieldset>
 
   <fieldset class="form-group col-12 col-md-4">
-      <label for="for_start_date">Nombre</label>
+      <label for="for_start_date">Funcionario</label>
       <input type="text" class="form-control" value="{{$serviceRequest->name}}" disabled>
   </fieldset>
 
@@ -185,6 +199,88 @@
 
       </form>
 
+
+      <!-- información adicional finanzas -->
+
+      @canany(['Service Request: fulfillments finance'])
+      <form method="POST" action="{{ route('rrhh.fulfillments.update',$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()) }}" enctype="multipart/form-data">
+      @csrf
+      @method('PUT')
+
+      <div class="card border-info mb-3">
+        <div class="card-header bg-info text-white">
+          Datos adicionales - Finanzas
+        </div>
+          <div class="card-body">
+
+            <div class="row">
+              <fieldset class="form-group col-5 col-md-6">
+                  <label for="for_resolution_number">N° Resolución</label>
+                  <input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
+              </fieldset>
+
+              <fieldset class="form-group col-7 col-md-6">
+                  <label for="for_resolution_date">Fecha Resolución</label>
+                  <input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+              </fieldset>
+            </div>
+
+            <div class="form-row">
+
+              <fieldset class="form-group col col-md">
+                  <label for="for_bill_number">N° Boleta</label>
+                  <input type="text" class="form-control" name="bill_number" value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->bill_number}}">
+              </fieldset>
+
+              <fieldset class="form-group col col-md">
+                  <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
+                  <input type="text" class="form-control" name="total_hours_paid" value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_hours_paid}}">
+              </fieldset>
+
+              <fieldset class="form-group col col-md">
+                  <label for="for_total_paid">Total pagado</label>
+                  <input type="text" class="form-control" name="total_paid" value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_paid}}">
+              </fieldset>
+
+              <fieldset class="form-group col col-md">
+                  <label for="for_payment_date">Fecha pago</label>
+                  <input type="date" class="form-control" name="payment_date" required @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->payment_date) value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->payment_date->format('Y-m-d')}}" @endif>
+              </fieldset>
+
+              <fieldset class="form-group col col-md">
+          			<label for="for_contable_month">Mes contable pago</label>
+          			<select name="contable_month" class="form-control" required>
+          				<option value=""></option>
+          				<option value="1" @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->contable_month == 1) selected @endif>Enero</option>
+          				<option value="2" @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->contable_month == 2) selected @endif>Febrero</option>
+          				<option value="3" @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->contable_month == 3) selected @endif>Marzo</option>
+          				<option value="4" @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->contable_month == 4) selected @endif>Abril</option>
+          				<option value="5" @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->contable_month == 5) selected @endif>Mayo</option>
+          				<option value="6" @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->contable_month == 6) selected @endif>Junio</option>
+          				<option value="7" @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->contable_month == 7) selected @endif>Julio</option>
+                  <option value="8" @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->contable_month == 8) selected @endif>Agosto</option>
+                  <option value="9" @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->contable_month == 9) selected @endif>Septiembre</option>
+                  <option value="10" @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->contable_month == 10) selected @endif>Octubre</option>
+                  <option value="11" @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->contable_month == 11) selected @endif>Noviembre</option>
+                  <option value="12" @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->contable_month == 12) selected @endif>Diciembre</option>
+          			</select>
+          		</fieldset>
+
+
+
+            </div>
+
+            <button type="submit" class="btn btn-info">Guardar</button>
+
+          </div>
+
+      </div>
+
+      </form>
+      @endcan
+
+
+
       <hr>
 
       <h4>Inasistencias</h4>
@@ -198,17 +294,18 @@
 
           <fieldset class="form-group col">
       		    <label for="for_type">Tipo</label>
-      		    <select name="type" id="type" class="form-control" required>
+      		    <select name="type" class="form-control for_type" required>
                 <option value=""></option>
       					<option value="Inasistencia Injustificada">INASISTENCIA INJUSTIFICADA</option>
                 <option value="Licencia no covid">LICENCIA NO COVID</option>
-                <option value="Renuncia voluntaria - abandono de funciones">RENUNCIA VOLUNTARIA - ABANDONO DE FUNCIONES</option>
+                <option value="Renuncia voluntaria">RENUNCIA VOLUNTARIA</option>
+                <option value="Abandono de funciones">ABANDONO DE FUNCIONES</option>
               </select>
       		</fieldset>
 
           <fieldset class="form-group col">
               <label for="for_estate">Observación</label>
-              <input type="text" class="form-control" name="observation" id="observation">
+              <input type="text" class="form-control" name="observation">
           </fieldset>
 
         </div>
@@ -216,19 +313,19 @@
         <div class="row">
           <fieldset class="form-group col-3">
               <label for="for_estate">Entrada</label>
-              <input type="date" class="form-control" name="start_date" required>
+              <input type="date" class="form-control start_date" name="start_date" required>
           </fieldset>
           <fieldset class="form-group col">
               <label for="for_estate">Hora</label>
-              <input type="time" class="form-control" name="start_hour" required>
+              <input type="time" class="form-control start_hour" name="start_hour" required>
           </fieldset>
           <fieldset class="form-group col-3">
               <label for="for_estate">Salida</label>
-              <input type="date" class="form-control" name="end_date" required>
+              <input type="date" class="form-control end_date" name="end_date" required>
           </fieldset>
           <fieldset class="form-group col">
               <label for="for_estate">Hora</label>
-              <input type="time" class="form-control" name="end_hour" required>
+              <input type="time" class="form-control end_hour" name="end_hour" required>
           </fieldset>
 
 
@@ -305,8 +402,8 @@
                     @endcan
                   </td>
                   <td>{{$FulfillmentItem->type}}</td>
-                  <td>{{$FulfillmentItem->start_date->format('Y-m-d H:i')}}</td>
-                  <td>{{$FulfillmentItem->end_date->format('Y-m-d H:i')}}</td>
+                  <td>@if($FulfillmentItem->start_date){{$FulfillmentItem->start_date->format('Y-m-d H:i')}}@endif</td>
+                  <td>@if($FulfillmentItem->end_date){{$FulfillmentItem->end_date->format('Y-m-d H:i')}}@endif</td>
                   <td>{{$FulfillmentItem->observation}}</td>
               </tr>
             @endforeach
@@ -716,6 +813,48 @@
     @endif
 
   </div>
+    <div class="card-body">
+
+      <div class="row">
+        <fieldset class="form-group col-5 col-md-6">
+            <label for="for_resolution_number">N° Resolución</label>
+            <input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
+        </fieldset>
+
+        <fieldset class="form-group col-7 col-md-6">
+            <label for="for_resolution_date">Fecha Resolución</label>
+            <input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+        </fieldset>
+      </div>
+
+      <div class="form-row">
+
+        <fieldset class="form-group col-3 col-md-3">
+            <label for="for_bill_number">N° Boleta</label>
+            <input type="text" class="form-control" name="bill_number" value="{{$serviceRequest->Fulfillments->first()->bill_number}}">
+        </fieldset>
+
+        <fieldset class="form-group col-3 col-md-3">
+            <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
+            <input type="text" class="form-control" name="total_hours_paid" value="{{$serviceRequest->Fulfillments->first()->total_hours_paid}}">
+        </fieldset>
+
+        <fieldset class="form-group col-3 col-md-3">
+            <label for="for_total_paid">Total pagado</label>
+            <input type="text" class="form-control" name="total_paid" value="{{$serviceRequest->Fulfillments->first()->total_paid}}">
+        </fieldset>
+
+        <fieldset class="form-group col-3 col-md-3">
+            <label for="for_payment_date">Fecha pago</label>
+            <input type="date" class="form-control" name="payment_date" required @if($serviceRequest->Fulfillments->first()->payment_date) value="{{$serviceRequest->Fulfillments->first()->payment_date->format('Y-m-d')}}" @endif>
+        </fieldset>
+
+      </div>
+
+      <button type="submit" class="btn btn-info">Guardar</button>
+
+    </div>
+
 </div>
 
 @endif
@@ -749,6 +888,41 @@
           }
       });
   });
+
+  $('.for_type').on('change', function() {
+    $('.start_date').attr('readonly', false);
+    $(".start_date").val('');
+    $('.start_hour').attr('readonly', false);
+    $('.start_hour').val('');
+    $('.end_date').attr('readonly', false);
+    $(".end_date").val('');
+    $('.end_hour').attr('readonly', false);
+    $('.end_hour').val('');
+    if (this.value == "Inasistencia Injustificada") {
+
+    }
+    if (this.value == "Licencia no covid") {
+      $('.start_hour').attr('readonly', true);
+      $('.end_hour').attr('readonly', true);
+    }
+    if (this.value == "Renuncia voluntaria") {
+      $('.start_date').attr('readonly', true);
+      $('.start_hour').attr('readonly', true);
+      $('.end_hour').attr('readonly', true);
+    }
+    if (this.value == "Abandono de funciones") {
+      $('.start_date').attr('readonly', true);
+      $('.start_hour').attr('readonly', true);
+      $('.end_hour').attr('readonly', true);
+    }
+
+    // start_date
+    // start_hour
+    // end_date
+    // end_hour
+  });
+
+
 
 </script>
 
