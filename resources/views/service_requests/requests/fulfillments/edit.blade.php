@@ -207,7 +207,7 @@
 
               <fieldset class="form-group col-7 col-md-6">
                   <label for="for_resolution_date">Fecha Resolución</label>
-                  <input type="date" class="form-control" id="for_resolution_date" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+                  <input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
               </fieldset>
             </div>
 
@@ -230,7 +230,7 @@
 
               <fieldset class="form-group col col-md">
                   <label for="for_payment_date">Fecha pago</label>
-                  <input type="date" class="form-control" id="for_payment_date" name="payment_date" required @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->payment_date) value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->payment_date->format('Y-m-d')}}" @endif>
+                  <input type="date" class="form-control" name="payment_date" required @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->payment_date) value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->payment_date->format('Y-m-d')}}" @endif>
               </fieldset>
 
               <fieldset class="form-group col col-md">
@@ -280,7 +280,7 @@
 
           <fieldset class="form-group col">
       		    <label for="for_type">Tipo</label>
-      		    <select name="type" id="for_type" class="form-control" required>
+      		    <select name="type" class="form-control for_type" required>
                 <option value=""></option>
       					<option value="Inasistencia Injustificada">INASISTENCIA INJUSTIFICADA</option>
                 <option value="Licencia no covid">LICENCIA NO COVID</option>
@@ -291,7 +291,7 @@
 
           <fieldset class="form-group col">
               <label for="for_estate">Observación</label>
-              <input type="text" class="form-control" name="observation" id="observation">
+              <input type="text" class="form-control" name="observation">
           </fieldset>
 
         </div>
@@ -299,19 +299,19 @@
         <div class="row">
           <fieldset class="form-group col-3">
               <label for="for_estate">Entrada</label>
-              <input type="date" class="form-control" name="start_date" id="start_date" required>
+              <input type="date" class="form-control start_date" name="start_date" required>
           </fieldset>
           <fieldset class="form-group col">
               <label for="for_estate">Hora</label>
-              <input type="time" class="form-control" name="start_hour" id="start_hour" required>
+              <input type="time" class="form-control start_hour" name="start_hour" required>
           </fieldset>
           <fieldset class="form-group col-3">
               <label for="for_estate">Salida</label>
-              <input type="date" class="form-control" name="end_date" id="end_date" required>
+              <input type="date" class="form-control end_date" name="end_date" required>
           </fieldset>
           <fieldset class="form-group col">
               <label for="for_estate">Hora</label>
-              <input type="time" class="form-control" name="end_hour" id="end_hour" required>
+              <input type="time" class="form-control end_hour" name="end_hour" required>
           </fieldset>
 
 
@@ -891,7 +891,7 @@
 
         <fieldset class="form-group col-7 col-md-6">
             <label for="for_resolution_date">Fecha Resolución</label>
-            <input type="date" class="form-control" id="for_resolution_date" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+            <input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
         </fieldset>
       </div>
 
@@ -914,7 +914,7 @@
 
         <fieldset class="form-group col-3 col-md-3">
             <label for="for_payment_date">Fecha pago</label>
-            <input type="date" class="form-control" id="for_payment_date" name="payment_date" required @if($serviceRequest->Fulfillments->first()->payment_date) value="{{$serviceRequest->Fulfillments->first()->payment_date->format('Y-m-d')}}" @endif>
+            <input type="date" class="form-control" name="payment_date" required @if($serviceRequest->Fulfillments->first()->payment_date) value="{{$serviceRequest->Fulfillments->first()->payment_date->format('Y-m-d')}}" @endif>
         </fieldset>
 
       </div>
@@ -959,31 +959,31 @@
       });
   });
 
-  $('#for_type').on('change', function() {
-    $('#start_date').attr('readonly', false);
-    $("#start_date").val('');
-    $('#start_hour').attr('readonly', false);
-    $('#start_hour').val('');
-    $('#end_date').attr('readonly', false);
-    $("#end_date").val('');
-    $('#end_hour').attr('readonly', false);
-    $('#end_hour').val('');
+  $('.for_type').on('change', function() {
+    $('.start_date').attr('readonly', false);
+    $(".start_date").val('');
+    $('.start_hour').attr('readonly', false);
+    $('.start_hour').val('');
+    $('.end_date').attr('readonly', false);
+    $(".end_date").val('');
+    $('.end_hour').attr('readonly', false);
+    $('.end_hour').val('');
     if (this.value == "Inasistencia Injustificada") {
 
     }
     if (this.value == "Licencia no covid") {
-      $('#start_hour').attr('readonly', true);
-      $('#end_hour').attr('readonly', true);
+      $('.start_hour').attr('readonly', true);
+      $('.end_hour').attr('readonly', true);
     }
     if (this.value == "Renuncia voluntaria") {
-      $('#start_date').attr('readonly', true);
-      $('#start_hour').attr('readonly', true);
-      $('#end_hour').attr('readonly', true);
+      $('.start_date').attr('readonly', true);
+      $('.start_hour').attr('readonly', true);
+      $('.end_hour').attr('readonly', true);
     }
     if (this.value == "Abandono de funciones") {
-      $('#start_date').attr('readonly', true);
-      $('#start_hour').attr('readonly', true);
-      $('#end_hour').attr('readonly', true);
+      $('.start_date').attr('readonly', true);
+      $('.start_hour').attr('readonly', true);
+      $('.end_hour').attr('readonly', true);
     }
 
     // start_date
