@@ -140,7 +140,7 @@
 <br><br><br><br>
 
 
-@if($fulfillment->type == "Mensual")
+@if($fulfillment->type == "Mensual" || $fulfillment->type == "Parcial")
   @if($fulfillment->FulfillmentItems->count() == 0)
     <div class="nueve">
         <div class="justify" style="width: 100%;">
