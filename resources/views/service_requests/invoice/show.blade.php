@@ -20,8 +20,8 @@
                                 <th>Tipo de Contrato</th>
                                 <th>Descripción de Servicio</th>
                                 <th>Fecha de Solicitud</th>
-                                <th>Inicio de Contrato</th>
-                                <th>Fin de Contrato</th>
+                                <th>Inicio de Periodo</th>
+                                <th>Fin de Periodo</th>
                                 <th>Subir Boleta</th>
                         </tr>
                 </thead>
