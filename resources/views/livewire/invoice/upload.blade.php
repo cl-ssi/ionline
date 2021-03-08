@@ -8,14 +8,18 @@
 
         <input type="file" wire:model="invoiceFile" required>
         @error('invoiceFile') <span class="error">{{ $message }}</span> @enderror
+        @if($hasInvoiceFile)
+        <button type="submit" class="btn btn-outline-primary">Actualizar Boleta</button>
+        @else
         <button type="submit" class="btn btn-outline-primary">Guardar Boleta</button>
+        @endif
     </form>
 
     @if($hasInvoiceFile)
 
         <a href="{{route('rrhh.fulfillments.downloadInvoice', $fulfillmentId)}}"
            target="_blank" data-toggle="tooltip" data-placement="top"
-           data-original-title="">Boleta
+           data-original-title="">Boleta Cargada
         </a>
     @endif
 
