@@ -3,13 +3,11 @@
 namespace App\Indicators;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Establecimiento extends Model
+class Percapita extends Model
 {
     protected $connection = 'mysql_rem';
-
-    protected $primaryKey = 'id_establecimiento';
 
     protected $year = null;
 
@@ -17,7 +15,7 @@ class Establecimiento extends Model
     {
         $this->year = $year;
         if($year != null){
-            $this->table = $year.'establecimientos';
+            $this->table = $year.'percapita';
         }
     }
 
@@ -35,25 +33,23 @@ class Establecimiento extends Model
         return $model;
     }
 
-    public function rems()
+    public function establecimiento()
     {
-        $instance = new Rem();
+        $instance = new Establecimiento();
         $instance->setYear($this->year);
 
         // $foreignKey = $instance->getTable.'.'.$this->getForeignKey();
         // $localKey = $this->getKeyName();
-
-        return new HasMany($instance->newQuery(), $this, 'IdEstablecimiento', 'Codigo');
+    
+        return new BelongsTo($instance->newQuery(), $this, 'COD_CENTRO', 'Codigo', 'establecimiento');
     }
 
-    public function percapitas()
-    {
-        $instance = new Percapita();
-        $instance->setYear($this->year);
+    // public function __construct($attributes = [], $year = null) 
+    // {
+    //     parent::__construct($attributes);
 
-        // $foreignKey = $instance->getTable.'.'.$this->getForeignKey();
-        // $localKey = $this->getKeyName();
+    //     $year = $year ?: date('Y');
 
-        return new HasMany($instance->newQuery(), $this, 'COD_CENTRO', 'Codigo');
-    }
+    //     $this->setTable($year.'rems');
+    // }
 }
