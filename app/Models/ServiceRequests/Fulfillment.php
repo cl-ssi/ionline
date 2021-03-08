@@ -52,5 +52,5 @@ class Fulfillment extends Model implements Auditable
    *
    * @var array
    */
-  protected $dates = ['start_date', 'end_date'];
+  protected $dates = ['start_date', 'end_date','payment_date'];
 }
