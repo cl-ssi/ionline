@@ -5,7 +5,7 @@
 
     <fieldset class="form-group col">
         <label for="for_run">Run (sin DV)</label>
-        <input type="number" min="1" max="50000000" class="form-control" id="for_run" name="run" wire:model="var" required>
+        <input type="number" min="1" max="50000000" class="form-control" id="for_run" name="run" wire:model.lazy="var" required>
     </fieldset>
 
     <fieldset class="form-group col-1">
