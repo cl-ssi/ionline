@@ -429,6 +429,7 @@
           <option value="CUARTO TURNO">CUARTO TURNO</option>
 					<option value="CUARTO TURNO - MODIFICADO">CUARTO TURNO - MODIFICADO</option>
 					<option value="HORA MÉDICA">HORA MÉDICA</option>
+					<option value="DIURNO PASADO A TURNO">DIURNO PASADO A TURNO</option>
 					<option value="OTRO">OTRO</option>
         </select>
 

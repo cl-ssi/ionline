@@ -434,8 +434,14 @@
             <form>
 
               @can('Service Request: fulfillments responsable')
-
                     @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approver_id == NULL)
+
+                  <a type="button"
+                     class="btn btn-danger form-control"
+                     onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');"
+                     href="{{ route('rrhh.fulfillments.refuseFulfillment',$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()) }}" >
+                     Rechazar
+                  </a>
                   <a type="button"
                      class="btn btn-success form-control"
                      onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');"
@@ -443,6 +449,7 @@
                      Confirmar
                   </a>
                 @else
+                  <button type="submit" class="btn btn-danger form-control" disabled>Rechazar</button>
                   <button type="submit" class="btn btn-success form-control" disabled>Confirmar</button>
                 @endif
               @endcan
@@ -450,21 +457,11 @@
               @can('Service Request: fulfillments rrhh')
                 @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->rrhh_approver_id == NULL)
                   <a type="button"
-                     class="btn btn-success form-control"
-                     onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');"
-                     href="{{ route('rrhh.fulfillments.confirmFulfillment',$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()) }}" >
-                     Confirmar
+                     class="btn btn-danger form-control"
+                     onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');"
+                     href="{{ route('rrhh.fulfillments.refuseFulfillment',$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()) }}" >
+                     Rechazar
                   </a>
-                @else
-                  <button type="submit" class="btn btn-success form-control" disabled>Confirmar</button>
-                @endif
-              @endcan
-
-              @can('Service Request: fulfillments finance')
-
-
-
-                @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->finances_approver_id == NULL)
                   <a type="button"
                      class="btn btn-success form-control"
                      onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');"
@@ -472,6 +469,27 @@
                      Confirmar
                   </a>
                 @else
+                  <button type="submit" class="btn btn-danger form-control" disabled>Rechazar</button>
+                  <button type="submit" class="btn btn-success form-control" disabled>Confirmar</button>
+                @endif
+              @endcan
+
+              @can('Service Request: fulfillments finance')
+                @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->finances_approver_id == NULL)
+                  <a type="button"
+                     class="btn btn-danger form-control"
+                     onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');"
+                     href="{{ route('rrhh.fulfillments.refuseFulfillment',$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()) }}" >
+                     Rechazar
+                  </a>
+                  <a type="button"
+                     class="btn btn-success form-control"
+                     onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');"
+                     href="{{ route('rrhh.fulfillments.confirmFulfillment',$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()) }}" >
+                     Confirmar
+                  </a>
+                @else
+                  <button type="submit" class="btn btn-danger form-control" disabled>Rechazar</button>
                   <button type="submit" class="btn btn-success form-control" disabled>Confirmar</button>
                 @endif
 
