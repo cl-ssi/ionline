@@ -582,7 +582,7 @@
   @endcan
 
 
-  @canany(['Service Request: additional data finanzas'])
+  <!-- @canany(['Service Request: additional data finanzas'])
   <form method="POST" action="{{ route('rrhh.service_requests.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
   @csrf
   @method('PUT')
@@ -637,7 +637,7 @@
 
   <br>
   </form>
-  @endcan
+  @endcan -->
 
 
 

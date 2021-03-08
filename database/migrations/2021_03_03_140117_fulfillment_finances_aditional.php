@@ -15,6 +15,8 @@ class FulfillmentFinancesAditional extends Migration
     {
         Schema::table('doc_fulfillments', function (Blueprint $table) {
           $table->bigInteger('bill_number')->after('finances_approver_id')->nullable();
+          $table->double('total_hours_to_pay', 10, 2)->after('finances_approver_id')->nullable();
+          $table->double('total_to_pay', 10, 2)->after('finances_approver_id')->nullable();
           $table->double('total_hours_paid', 10, 2)->after('finances_approver_id')->nullable();
           $table->double('total_paid', 10, 2)->after('finances_approver_id')->nullable();
           $table->datetime('payment_date')->after('finances_approver_id')->nullable();
