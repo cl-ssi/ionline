@@ -199,6 +199,50 @@
 
       </form>
 
+      <!-- información adicional rrhh -->
+
+      @canany(['Service Request: fulfillments rrhh'])
+      <form method="POST" action="{{ route('rrhh.fulfillments.update',$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()) }}" enctype="multipart/form-data">
+      @csrf
+      @method('PUT')
+
+      <div class="card border-danger mb-3">
+        <div class="card-header bg-danger text-white">
+          Datos adicionales - RRHH
+        </div>
+          <div class="card-body">
+
+            <div class="row">
+              <fieldset class="form-group col-5 col-md-6">
+                  <label for="for_resolution_number">N° Resolución</label>
+                  <input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
+              </fieldset>
+
+              <fieldset class="form-group col-7 col-md-6">
+                  <label for="for_resolution_date">Fecha Resolución</label>
+                  <input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+              </fieldset>
+            </div>
+
+            <div class="form-row">
+
+              <fieldset class="form-group col col-md">
+                  <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
+                  <input type="text" class="form-control" name="total_hours_to_pay" value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_hours_to_pay}}">
+              </fieldset>
+
+              <fieldset class="form-group col col-md">
+                  <label for="for_total_paid">Total a pagar</label>
+                  <input type="text" class="form-control" name="total_to_pay" value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_to_pay}}">
+              </fieldset>
+
+            </div>
+            <button type="submit" class="btn btn-danger">Guardar</button>
+          </div>
+      </div>
+      </form>
+      @endcan
+
 
       <!-- información adicional finanzas -->
 
@@ -223,6 +267,20 @@
                   <label for="for_resolution_date">Fecha Resolución</label>
                   <input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
               </fieldset>
+            </div>
+
+            <div class="form-row">
+
+              <fieldset class="form-group col col-md">
+                  <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
+                  <input type="text" class="form-control" name="total_hours_to_pay" disabled value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_hours_to_pay}}">
+              </fieldset>
+
+              <fieldset class="form-group col col-md">
+                  <label for="for_total_paid">Total a pagar</label>
+                  <input type="text" class="form-control" name="total_to_pay" disabled value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_to_pay}}">
+              </fieldset>
+
             </div>
 
             <div class="form-row">
@@ -265,17 +323,10 @@
                   <option value="12" @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->contable_month == 12) selected @endif>Diciembre</option>
           			</select>
           		</fieldset>
-
-
-
             </div>
-
             <button type="submit" class="btn btn-info">Guardar</button>
-
           </div>
-
       </div>
-
       </form>
       @endcan
 
@@ -904,7 +955,49 @@
 
 <br>
 
-@canany(['Service Request: additional data finanzas'])
+@canany(['Service Request: fulfillments rrhh'])
+<form method="POST" action="{{ route('rrhh.fulfillments.update',$serviceRequest->Fulfillments->first()) }}" enctype="multipart/form-data">
+@csrf
+@method('PUT')
+
+<div class="card border-danger mb-3">
+  <div class="card-header bg-danger text-white">
+    Datos adicionales - RRHH
+  </div>
+    <div class="card-body">
+
+      <div class="row">
+        <fieldset class="form-group col-5 col-md-6">
+            <label for="for_resolution_number">N° Resolución</label>
+            <input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
+        </fieldset>
+
+        <fieldset class="form-group col-7 col-md-6">
+            <label for="for_resolution_date">Fecha Resolución</label>
+            <input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+        </fieldset>
+      </div>
+
+      <div class="form-row">
+
+        <fieldset class="form-group col col-md">
+            <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
+            <input type="text" class="form-control" name="total_hours_to_pay" value="{{$serviceRequest->Fulfillments->first()->total_hours_to_pay}}">
+        </fieldset>
+
+        <fieldset class="form-group col col-md">
+            <label for="for_total_paid">Total a pagar</label>
+            <input type="text" class="form-control" name="total_to_pay" value="{{$serviceRequest->Fulfillments->first()->total_to_pay}}">
+        </fieldset>
+
+      </div>
+      <button type="submit" class="btn btn-danger">Guardar</button>
+    </div>
+</div>
+</form>
+@endcan
+
+@canany(['Service Request: fulfillments finance'])
 <form method="POST" action="{{ route('rrhh.fulfillments.update',$serviceRequest->Fulfillments->first()) }}" enctype="multipart/form-data">
 @csrf
 @method('PUT')
@@ -924,6 +1017,16 @@
         <fieldset class="form-group col-7 col-md-6">
             <label for="for_resolution_date">Fecha Resolución</label>
             <input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+        </fieldset>
+
+        <fieldset class="form-group col col-md">
+            <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
+            <input type="text" class="form-control" name="total_hours_to_pay" value="{{$serviceRequest->Fulfillments->first()->total_hours_to_pay}}" disabled>
+        </fieldset>
+
+        <fieldset class="form-group col col-md">
+            <label for="for_total_paid">Total a pagar</label>
+            <input type="text" class="form-control" name="total_to_pay" value="{{$serviceRequest->Fulfillments->first()->total_to_pay}}" disabled>
         </fieldset>
       </div>
 
