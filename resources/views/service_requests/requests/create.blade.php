@@ -137,7 +137,9 @@
 
 	<br>
 
-	<div class="border border-info rounded">
+	@livewire('service-request.employee-data')
+
+	<!-- <div class="border border-info rounded">
   <div class="row ml-1 mr-1">
 
 		<fieldset class="form-group col">
@@ -205,7 +207,7 @@
 		</fieldset>
 
 	</div>
-	</div>
+	</div> -->
 	<br>
 
 
