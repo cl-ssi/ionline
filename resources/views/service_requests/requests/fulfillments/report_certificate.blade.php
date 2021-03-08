@@ -160,7 +160,7 @@
               a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->format('d/m/Y')}}</b>. Además se registraron las siguientes ausencias:
             @else
               Junto con saludar, se adjunta renuncia voluntaria a honorarios de funcionario <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b>,
-              a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->format('d/m/Y')}}</b>.
+              a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->add(1, 'day')->format('d/m/Y')}}</b>.
             @endif
           @else
             Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b> ha desempeñado las actividades estipuladas
