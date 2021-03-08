@@ -216,7 +216,25 @@
       <div class="justify" style="width: 100%;">
           Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b> ha desempeñado las actividades
           estipuladas en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames, por <b>horas extras realizadas en el mes de
-          {{\Carbon\Carbon::parse($fulfillment->serviceRequest->start_date)->formatLocalized('%B de %Y')}} por contingencia COVID</b>.
+          {{\Carbon\Carbon::parse($fulfillment->serviceRequest->start_date)->formatLocalized('%B de %Y')}} por contingencia COVID</b>.<br><br>
+
+          <table class="siete">
+            <thead>
+              <tr>
+                <th>Inicio</th>
+                <th>Término</th>
+                <th>Observación</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($fulfillment->serviceRequest->shiftControls as $key => $shiftControl)
+                <tr>
+                  <td>{{Carbon\Carbon::parse($shiftControl->start_date)->format('d-m-Y H:i')}}</td>
+                  <td>{{Carbon\Carbon::parse($shiftControl->end_date)->format('d-m-Y H:i')}}</td>
+                  <td>{{$shiftControl->observation}}</td>
+                </tr>
+              @endforeach
+          </table>
 
           <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
       </div>
