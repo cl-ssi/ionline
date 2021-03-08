@@ -4,43 +4,41 @@
 
 @section('content')
 
-@if($sr === null)
+@if(empty($serviceRequests))
 <div class="alert alert-danger">
         <h4 class="alert-heading">No Posee Solicitudes de Pago de Honorario con este RUT.</h4>
 </div>
 @else
-<h5 class="mb-3">información de sus solicitudes de pago de Honorario.</h5>
+<h5 class="mb-3">Información de sus solicitudes de pago de Honorario.</h5>
 <hr>
+
+
 <div class="table-responsive">
         <table class="table table-sm table-bordered small">
                 <thead>
                         <tr>
+                                <th>Número de Solicitud de Servicio</th>
                                 <th>Id</th>
-                                <th>Nombre</th>
-                                <th>Tipo de Contrato</th>
-                                <th>Descripción de Servicio</th>
-                                <th>Fecha de Solicitud</th>
-                                <th>Inicio de Periodo</th>
-                                <th>Fin de Periodo</th>
-                                <th>Subir Boleta</th>
+                                <th>Año</th>
+                                <th>Mes</th>
                         </tr>
                 </thead>
                 <tbody>
-                        @foreach ($sr as $servicerequest)
+
+                
+                        @foreach ($serviceRequests as $serviceRequest)                        
+                        @foreach($serviceRequest->fulfillments as $fullfillment)        
+                        
                         <tr>
-                                <td class="small">{{ $servicerequest->id ?? '' }}</td>
-                                <td class="small">{{ $servicerequest->name ?? '' }}</td>
-                                <td>{{ $servicerequest->type ?? '' }}</td>
-                                <td class="small">{{ $servicerequest->service_description ?? '' }}</td>
-                                <td>{{ $servicerequest->request_date->format('d-m-Y') ?? '' }}</td>
-                                <td>{{ $servicerequest->start_date->format('d-m-Y') ?? '' }}</td>
-                                <td>{{ $servicerequest->end_date->format('d-m-Y') ?? '' }}</td>
-                                <td>
-                                <form>
-                                <input type="file" id="myfile" name="myfile"> </input>
-                                </form>
+                                <td class="small">{{ $serviceRequest->id ?? '' }}</td>
+                                <td class="small">{{ $fullfillment->id ?? '' }}</td>
+                                <td>{{ $fullfillment->year ?? '' }}</td>
+                                <td>{{ $fullfillment->month ?? '' }}</td>
+                                <td> <i class="fas fa-paperclip"></i></td>
+                                <td>                                 
                                 </td>
-                        </tr>
+                        </tr>                        
+                        @endforeach
                         @endforeach
                 </tbody>
         </table>

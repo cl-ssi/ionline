@@ -31,7 +31,7 @@ class InvoiceController extends Controller
                 
                 
             } else if (env('APP_ENV') == 'local') {
-                $user = '14105887-8';                 
+                $user = '14105887-8';
                 
             }
             return $this->show($user);
@@ -42,8 +42,8 @@ class InvoiceController extends Controller
     public function show($user)
     {
         
-        $sr = ServiceRequest::where('rut',$user)->get();
-        return view('service_requests.invoice.show', compact('sr'));
+        $serviceRequests = ServiceRequest::where('rut',$user)->get();
+        return view('service_requests.invoice.show', compact('serviceRequests'));
     }
 
 

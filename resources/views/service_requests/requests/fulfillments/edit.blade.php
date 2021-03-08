@@ -426,22 +426,6 @@
                  Generar certificado
                  <i class="fas fa-file"></i>
               </a>
-                {{--modal firmador--}}
-                @php
-                    $fulfillmentId = $serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->id;
-                    $idSignModal = $serviceRequest->id;
-                    $routePdfSignModal = "/rrhh/fulfillments/certificate-pdf/$fulfillmentId";
-                    $returnUrlSignModal = "documents.callbackFirma";
-                @endphp
-
-                @if(Auth::user()->can('Service Request: sign document'))
-                    @include('documents.signatures.partials.sign_file')
-                    <button type="button" data-toggle="modal" class="btn btn-sm btn-outline-secondary form-control"
-                            data-target="#signPdfModal{{$idSignModal}}" title="Firmar">Firmar <span class="fas fa-signature"
-                                                                                             aria-hidden="true">
-                                                                                        </span>
-                    </button>
-                @endif
             @endif
 
         </fieldset>
@@ -550,7 +534,47 @@
   </div>
   <div class="card-body">
 
-    @if($serviceRequest->Fulfillments->count() == 0)
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <!-- <th>Select</th> -->
+                <th>Entrada</th>
+                <!-- <th>H.Inicio</th> -->
+                <th>Salida</th>
+                <!-- <th>H.Término</th> -->
+                <th>Observación</th>
+            </tr>
+        </thead>
+        <tbody>
+          @foreach($serviceRequest->shiftControls as $key => $shiftControl)
+            <tr>
+              <!-- <td><input type='checkbox' name='record[]' value="{{$shiftControl}}"></td> -->
+              <td>{{Carbon\Carbon::parse($shiftControl->start_date)->format('d-m-Y H:i')}}</td>
+              <td>{{Carbon\Carbon::parse($shiftControl->end_date)->format('d-m-Y H:i')}}</td>
+              <td>{{$shiftControl->observation}}</td>
+            </tr>
+          @endforeach
+        </tbody>
+    </table>
+
+    <div class="row">
+      <fieldset class="form-group col-9">
+
+      </fieldset>
+      <fieldset class="form-group col">
+          <label for="for_estate"><br/></label>
+
+          <a type="button"
+             class="btn btn-outline-success form-control"
+             href="{{ route('rrhh.fulfillments.certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank">
+             Generar certificado
+             <i class="fas fa-file"></i>
+          </a>
+
+      </fieldset>
+    </div>
+
+    <!-- @if($serviceRequest->Fulfillments->count() == 0)
 
       <form method="POST" action="{{ route('rrhh.fulfillments.store') }}" enctype="multipart/form-data">
       @csrf
@@ -565,9 +589,7 @@
                 <tr>
                     <th>Select</th>
                     <th>Entrada</th>
-                    <!-- <th>H.Inicio</th> -->
                     <th>Salida</th>
-                    <!-- <th>H.Término</th> -->
                     <th>Observación</th>
                 </tr>
             </thead>
@@ -810,8 +832,68 @@
     </table>
     @endif
 
-    @endif
+    @endif -->
 
+  </div>
+</div>
+
+<br>
+<div class="card">
+  <div class="card-header">
+    Aprobaciones de Solicitud
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="card-table table table-sm table-bordered small">
+          <thead>
+            <tr>
+              <th scope="col">Fecha</th>
+              <th scope="col">U.Organizacional</th>
+              <th scope="col">Cargo</th>
+              <th scope="col">Usuario</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
+            @if($SignatureFlow->status === null)
+              <tr class="bg-light">
+            @elseif($SignatureFlow->status === 0)
+              <tr class="bg-danger">
+            @elseif($SignatureFlow->status === 1)
+              <tr>
+            @endif
+               <td>{{ $SignatureFlow->signature_date}}</td>
+               <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
+               <td>{{ $SignatureFlow->employee }}</td>
+               <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
+               <td>{{ $SignatureFlow->type }}</td>
+               <td>@if($SignatureFlow->status === null)  @elseif($SignatureFlow->status === 1) Aceptada @elseif($SignatureFlow->status === 0) Rechazada @endif</td>
+             </tr>
+
+             @if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
+             <tr>
+               <td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
+             </tr>
+             @endif
+           @endforeach
+          </tbody>
+      </table>
+      </div>
+  </div>
+</div>
+
+<br>
+
+@canany(['Service Request: additional data finanzas'])
+<form method="POST" action="{{ route('rrhh.fulfillments.update',$serviceRequest->Fulfillments->first()) }}" enctype="multipart/form-data">
+@csrf
+@method('PUT')
+
+<div class="card border-info mb-3">
+  <div class="card-header bg-info text-white">
+    Datos adicionales - Finanzas
   </div>
     <div class="card-body">
 
@@ -857,9 +939,11 @@
 
 </div>
 
+<br>
+</form>
+@endcan
 @endif
 
-<br>
 
 
 
