@@ -31,7 +31,10 @@ class FulfillmentController extends Controller
         $serviceRequests = null;
 
         if (Auth::user()->can('Service Request: fulfillments responsable')) {
-          $serviceRequests = ServiceRequest::where('responsable_id',$user_id)
+          $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
+                                               $subQuery->where('responsable_id',$user_id);
+                                               $subQuery->orwhere('user_id',$user_id);
+                                             })
                                            // ->where('program_contract_type','Mensual')
                                            ->orderBy('id','asc')
                                            ->get();
