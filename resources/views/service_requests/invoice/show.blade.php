@@ -21,6 +21,7 @@
                                 <th>Id</th>
                                 <th>Año</th>
                                 <th>Mes</th>
+                                <th>Cargar Boleta</th>
                         </tr>
                 </thead>
                 <tbody>
@@ -33,9 +34,10 @@
                                 <td class="small">{{ $serviceRequest->id ?? '' }}</td>
                                 <td class="small">{{ $fullfillment->id ?? '' }}</td>
                                 <td>{{ $fullfillment->year ?? '' }}</td>
-                                <td>{{ $fullfillment->month ?? '' }}</td>
-                                <td> <i class="fas fa-paperclip"></i></td>
-                                <td>                                 
+                                <td>{{ $fullfillment->month ?? '' }}</td>                                
+                                <td>
+                                @livewire('invoice.upload', ['fulfillmentId' => $fullfillment->id,
+                                'hasInvoiceFile' =>  $fullfillment->has_invoice_file ])
                                 </td>
                         </tr>                        
                         @endforeach
