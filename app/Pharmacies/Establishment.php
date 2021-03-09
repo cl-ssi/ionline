@@ -31,7 +31,7 @@ class Establishment extends Model
     public function products()
     {
       return $this->belongsToMany('App\Pharmacies\Product', 'frm_establishments_products')
-                              ->withPivot(['id', 'stock', 'critic_stock', 'max_stock'])
+                              ->withPivot('id', 'stock', 'critic_stock', 'max_stock')
                               ->withTimestamps();
     }
 
