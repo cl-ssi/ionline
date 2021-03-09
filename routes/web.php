@@ -85,6 +85,9 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
     Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
     Route::post('/store', [ReplacementStaffController::class, 'store'])->name('store');
     Route::get('/{replacement_staff}/edit', [ReplacementStaffController::class, 'edit'])->name('edit');
+    Route::get('/show_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('show_file');
+    Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
+    Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
     Route::prefix('profile')->name('profile.')->group(function(){
         Route::post('/{replacementStaff}/store', [ProfileController::class, 'store'])->name('store');
         Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
