@@ -186,7 +186,7 @@ class ServiceRequestController extends Controller
      if (Auth::user()->organizationalUnit->establishment_id == 38) {
        //Hector Reyno (CGU)
        if (Auth::user()->organizationalUnit->id == 24) {
-         $signatureFlows['RRHH CGU'] = 10739552; //RR.HH del CGU 
+         $signatureFlows['RRHH CGU'] = 10739552; //RR.HH del CGU
          $signatureFlowsTurnos['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
          // $signatureFlowsTurnos['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
          // $signatureFlowsTurnos['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
@@ -449,7 +449,7 @@ class ServiceRequestController extends Controller
     $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function($subQuery) {
                                          $subQuery->where('status',0);
                                        })
-                                       ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+                                       // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
                                        ->orderBy('request_date','asc')->get();
 
     foreach ($serviceRequests as $key => $serviceRequest) {
@@ -465,7 +465,7 @@ class ServiceRequestController extends Controller
     $serviceRequestsRejected = ServiceRequest::whereHas("SignatureFlows", function($subQuery) {
                                          $subQuery->where('status',0);
                                        })
-                                       ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+                                       // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
                                        ->orderBy('request_date','asc')->get();
 
     foreach ($serviceRequestsRejected as $key => $serviceRequest) {
