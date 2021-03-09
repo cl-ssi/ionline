@@ -25,6 +25,36 @@ class Fulfillment extends Model implements Auditable
       'bill_number','total_hours_to_pay','total_to_pay','total_hours_paid','total_paid','payment_date','contable_month'
   ];
 
+  public function MonthOfPayment() {
+    if ($this->contable_month) {
+      if ($this->contable_month == 1) {
+        return "Enero";
+      }elseif ($this->contable_month == 2) {
+        return "Febrero";
+      }elseif ($this->contable_month == 3) {
+        return "Marzo";
+      }elseif ($this->contable_month == 4) {
+        return "Abril";
+      }elseif ($this->contable_month == 5) {
+        return "Mayo";
+      }elseif ($this->contable_month == 6) {
+        return "Junio";
+      }elseif ($this->contable_month == 7) {
+        return "Julio";
+      }elseif ($this->contable_month == 8) {
+        return "Agosto";
+      }elseif ($this->contable_month == 9) {
+        return "Septiembre";
+      }elseif ($this->contable_month == 10) {
+        return "Octubre";
+      }elseif ($this->contable_month == 11) {
+        return "Noviembre";
+      }elseif ($this->contable_month == 12) {
+        return "Diciembre";
+      }
+    }
+  }
+
   public function FulfillmentItems() {
       return $this->hasMany('\App\Models\ServiceRequests\FulfillmentItem');
   }
