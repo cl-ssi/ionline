@@ -928,7 +928,9 @@ class ServiceRequestController extends Controller
     public function pending_requests(Request $request)
     {
       //solicitudes activas
-      $serviceRequests = ServiceRequest::orderBy('id','asc')->whereBetween('start_date',[$request->dateFrom,$request->dateTo])->get();
+      $serviceRequests = ServiceRequest::orderBy('id','asc')
+                                       // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+                                       ->get();
 
       $array = [];
       foreach ($serviceRequests as $key => $serviceRequest) {
@@ -960,7 +962,7 @@ class ServiceRequestController extends Controller
 
       //obtener subtotales
       $group_array = [];
-      $falta_aprobar = 0;
+      $hoja_ruta_falta_aprobar = 0;
       foreach ($array as $key => $data) {
         $group_array[$data['falta_aprobar']] = 0;
         // $group_array['rechazados'] = 0;
@@ -968,12 +970,38 @@ class ServiceRequestController extends Controller
       foreach ($array as $key => $data) {
         if ($data['rechazados'] == 0 && $data['falta_aprobar'] != "") {
           $group_array[$data['falta_aprobar']] += 1;
-          $falta_aprobar+=1;
+          $hoja_ruta_falta_aprobar+=1;
         }
       }
-      // dd($falta_aprobar);
 
-      return view('service_requests.requests.pending_requests',compact('array','group_array','falta_aprobar'));
+      arsort($group_array);
+      // dd($group_array);
+
+
+      //cumplimiento
+      $fulfillments_missing = [];
+      $cumplimiento_falta_ingresar = 0;
+      foreach ($serviceRequests as $key => $serviceRequest) {
+        if ($serviceRequest->Fulfillments->count() == 0) {
+          if ($serviceRequest->SignatureFlows->where('sign_position',2)->count() > 0) {
+            $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()] = 0;
+          }
+        }
+      }
+
+      foreach ($serviceRequests as $key => $serviceRequest) {
+        if ($serviceRequest->Fulfillments->count() == 0) {
+          if ($serviceRequest->SignatureFlows->where('sign_position',2)->count() > 0) {
+            $cumplimiento_falta_ingresar += 1;
+            $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()] += 1;
+          }
+        }
+      }
+
+      arsort($fulfillments_missing);
+      // dd($fulfillments_missing);
+
+      return view('service_requests.requests.pending_requests',compact('array','group_array','hoja_ruta_falta_aprobar','fulfillments_missing','cumplimiento_falta_ingresar'));
     }
 
     public function certificatePDF(ServiceRequest $serviceRequest)
