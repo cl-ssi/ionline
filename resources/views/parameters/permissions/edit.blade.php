@@ -14,15 +14,26 @@
 
     <div class="row">
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-6 col-md-3">
             <label for="for_name">Nombre</label>
             <input type="text" class="form-control" id="for_name" name="name"
                 value="{{ $permission->name }}" required>
         </fieldset>
 
+        <fieldset class="form-group col-6 col-md-2">
+            <label for="for_guard_name">Guard</label>
+            <input type="text" class="form-control" id="for_guard_name" name="guard_name" readonly
+                value="{{ $permission->guard_name }}" required>
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-7">
+            <label for="for_description">Descripción</label>
+            <input type="text" class="form-control" id="for_descripcion" name="descripcion"
+                value="{{ $permission->descripcion }}" required>
+        </fieldset>
     </div>
 
-    <button type="submit" class="btn btn-primary float-left">Guardar</button>
+    <button type="submit" class="btn btn-primary float-left">Actualizar</button>
 
 </form>
 

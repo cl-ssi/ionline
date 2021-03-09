@@ -14,13 +14,24 @@
 
     <div class="row">
 
-        <fieldset class="form-group col">
-            <label for="for_name">Nombre</label>
-            <input type="text" class="form-control" id="for_name"
-                placeholder="nombre del permiso" name="name" required>
+    <fieldset class="form-group col-6 col-md-3">
+            <label for="for_name">Nombre*</label>
+            <input type="text" class="form-control" id="for_name" name="name" required>
         </fieldset>
 
+        <fieldset class="form-group col-6 col-md-2">
+            <label for="for_guard_name">Guard</label>
+            <input type="text" class="form-control" id="for_guard_name" name="guard_name" readonly
+                value="{{$guard}}">
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-7">
+            <label for="for_descripcion">Descripción</label>
+            <input type="text" class="form-control" id="for_descripcion" name="descripcion"
+                 >
+        </fieldset>
     </div>
+    
 
     <button type="submit" class="btn btn-primary">Guardar</button>
 

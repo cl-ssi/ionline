@@ -295,7 +295,17 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
     Route::get('/', 'Parameters\ParameterController@index')->name('index');
     Route::put('/{parameter}', 'Parameters\ParameterController@update')->name('update');
     Route::get('drugs', 'Parameters\ParameterController@indexDrugs')->name('drugs')->middleware(['role:Drugs: admin']);
-    Route::resource('permissions', 'Parameters\PermissionController');
+    //Route::resource('permissions', 'Parameters\PermissionController');
+    Route::prefix('permissions')->as('permissions.')->group(function () {
+        Route::get('/create/{guard}', 'Parameters\PermissionController@create')->name('create');
+        Route::post('/store', 'Parameters\PermissionController@store')->name('store');
+        Route::get('/{guard}', 'Parameters\PermissionController@index')->name('index');        
+        Route::get('/edit/{permission}', 'Parameters\PermissionController@edit')->name('edit');
+        Route::put('/update/{permission}', 'Parameters\PermissionController@update')->name('update');
+        Route::delete('{permission}/destroy', 'Parameters\PermissionController@destroy')->name('destroy');
+
+    });
+    
     Route::resource('roles', 'Parameters\RoleController');
 
     Route::prefix('communes')->as('communes.')->group(function () {
