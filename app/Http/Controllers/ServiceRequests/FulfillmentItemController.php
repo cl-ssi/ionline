@@ -44,6 +44,7 @@ class FulfillmentItemController extends Controller
      */
     public function store(Request $request)
     {
+      // dd($request);
       //validation
       if (Auth::user()->can('Service Request: fulfillments rrhh')) {
         if (Fulfillment::where('id',$request->fulfillment_id)->first()->responsable_approver_id == NULL) {
@@ -61,8 +62,24 @@ class FulfillmentItemController extends Controller
 
       //save
       $fulfillmentItem = new FulfillmentItem($request->All());
-      $fulfillmentItem->start_date = $request->start_date . " " .$request->start_hour;
-      $fulfillmentItem->end_date = $request->end_date . " " .$request->end_hour;
+      if ($request->type == "Inasistencia Injustificada") {
+        $fulfillmentItem->start_date = $request->start_date . " " .$request->start_hour;
+        $fulfillmentItem->end_date = $request->end_date . " " .$request->end_hour;
+      }
+      if ($request->type == "Licencia no covid") {
+        $fulfillmentItem->start_date = $request->start_date;
+        $fulfillmentItem->end_date = $request->end_date;
+      }
+      if ($request->type == "Renuncia voluntaria") {
+        // $fulfillmentItem->start_date = $request->start_date . " " .$request->start_hour;
+        $fulfillmentItem->end_date = $request->end_date;
+      }
+      if ($request->type == "Abandono de funciones") {
+        // $fulfillmentItem->start_date = $request->start_date . " " .$request->start_hour;
+        $fulfillmentItem->end_date = $request->end_date;
+      }
+
+
       if (Auth::user()->can('Service Request: fulfillments responsable')) {
         $fulfillmentItem->responsable_approbation = 1;
         $fulfillmentItem->responsable_approbation_date = Carbon::now();

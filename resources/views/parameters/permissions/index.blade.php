@@ -6,15 +6,20 @@
 
 @include('parameters/nav')
 
-<h3 class="mb-3">Permisos</h3>
+@if ($guard == 'web')
+<h3 class="mb-3">Permisos Internos</h3>
+@else
+<h3 class="mb-3">Permisos Externos</h3>
+@endif
 
-<a class="btn btn-primary mb-3" href="{{ route('parameters.permissions.create') }}">Crear</a>
+
+<a class="btn btn-primary mb-3" href="{{ route('parameters.permissions.create', $guard) }}">Crear</a>
 
 <table class="table table-sm">
     <thead>
         <tr>
             <th>ID</th>
-            <th>Name</th>
+            <th>Nombre</th>
             <th>Descripción</th>
             <th>Guard</th>
             <th></th>
@@ -25,7 +30,7 @@
         <tr>
             <td>{{ $permission->id }}</td>
             <td>{{ $permission->name }}</td>
-            <td>{{ $permission->description }}</td>
+            <td>{{ $permission->descripcion }}</td>
             <td>{{ $permission->guard_name }}</td>
             <td>
                 <a href="{{ route('parameters.permissions.edit', $permission->id )}}">

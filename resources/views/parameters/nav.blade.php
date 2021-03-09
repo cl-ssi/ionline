@@ -18,9 +18,15 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link {{ Request::is('parameters/permissions*') ? 'active' : '' }}"
-            href="{{ route('parameters.permissions.index') }}">
-            <i class="fas fa-chalkboard-teacher"></i> Permisos</a>
+        <a class="nav-link"
+            href="{{ route('parameters.permissions.index', 'web') }}">
+            <i class="fas fa-chalkboard-teacher"></i> Permisos Internos</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('parameters.permissions.index', 'external') }}">
+            <i class="fas fa-chalkboard-teacher"></i> Permisos Externos</a>
     </li>
 
     <li class="nav-item">

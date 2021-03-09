@@ -16,4 +16,11 @@ class HealthGoal extends Model
     {
         return $this->morphMany('App\Indicators\Indicator', 'indicatorable');
     }
+
+    public function getCompliance()
+    {
+        $total = 0;
+        foreach($this->indicators as $indicator) $total += $indicator->getContribution();
+        return $total;
+    }
 }

@@ -87,10 +87,15 @@
         <tr>
             <th>Nombre Completo</th>
             <th>Run</th>
+<<<<<<< HEAD
             <th>Estamento</th>
             <th>Título</th>
             <th>Fecha Titulación</th>
             <th>Años Exp.</th>
+=======
+            <th>Título(s)</th>
+            <th>Título(s)</th>
+>>>>>>> 539da8e8e542e1d290d46553965be9205565d2f6
             <th>Estado</th>
             <th></th>
         </tr>
@@ -120,6 +125,7 @@
             @endforeach</td>
             <td>{{ $staff->StatusValue }}</td>
             <td>
+<<<<<<< HEAD
                 <a href="{{ route('replacement_staff.edit', $staff) }}"
                   class="btn btn-outline-secondary btn-sm"
                   title="Ir"> <i class="far fa-eye"></i></a>
@@ -127,6 +133,9 @@
                   class="btn btn-outline-secondary btn-sm"
                   title="Ir"
                   target="_blank"> <i class="far fa-file-pdf"></i></a>
+=======
+                <a href="{{ route('replacement_staff.edit', $staff) }}" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i></a>
+>>>>>>> 539da8e8e542e1d290d46553965be9205565d2f6
             </td>
         </tr>
         @endforeach

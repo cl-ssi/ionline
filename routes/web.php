@@ -1,9 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\Auth\LoginController;
-
 use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Suitability\SuitabilityController;
 use App\Http\Controllers\Suitability\CategoriesController;
@@ -22,10 +19,8 @@ use App\Http\Controllers\RequestForms\RequestFormCodeController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
 use App\Http\Controllers\ReplacementStaff\ProfileController;
-use App\Http\Controllers\ReplacementStaff\TrainingController;
-use App\Http\Controllers\ReplacementStaff\Manage\ProfileManageController;
-use App\Http\Controllers\ReplacementStaff\Manage\ProfessionManageController;
 use App\Http\Controllers\ReplacementStaff\ExperienceController;
+use App\Http\Controllers\ReplacementStaff\TrainingController;
 use App\Http\Controllers\ReplacementStaff\LanguageController;
 use App\Http\Controllers\VaccinationController;
 
@@ -54,16 +49,6 @@ Route::prefix('webservices')->name('webservices.')->group(function () {
 });
 
 Auth::routes(['register' => false, 'logout' => false, 'reset' => false]);
-
-Route::get('/login/external', [LoginController::class,'showExternalLoginForm']);
-Route::post('/login/external', [LoginController::class,'externalLogin']);
-
-
-Route::group(['middleware' => 'auth:external'], function () {
-    Route::view('/kaka', 'test');
-    Route::view('/test', 'test');
-});
-
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
@@ -95,32 +80,6 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
         Route::delete('{profile}/destroy', [ProfileController::class, 'destroy'])->name('destroy');
         // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
     });
-
-    Route::prefix('training')->name('training.')->group(function(){
-        Route::post('/{replacementStaff}/store', [TrainingController::class, 'store'])->name('store');
-        Route::get('/download/{training}', [TrainingController::class, 'download'])->name('download');
-        Route::get('/show_file/{training}', [TrainingController::class, 'show_file'])->name('show_file');
-        Route::delete('{training}/destroy', [TrainingController::class, 'destroy'])->name('destroy');
-        // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
-    });
-
-    Route::prefix('manage')->name('manage.')->group(function(){
-      Route::prefix('profile')->name('profile.')->group(function(){
-          Route::get('/', [ProfileManageController::class, 'index'])->name('index');
-          Route::post('/store', [ProfileManageController::class, 'store'])->name('store');
-          Route::get('/{profileManage}/edit', [ProfileManageController::class, 'edit'])->name('edit');
-          Route::put('/{profileManage}/update', [ProfileManageController::class, 'update'])->name('update');
-          Route::delete('{profileManage}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
-      });
-      Route::prefix('profession')->name('profession.')->group(function(){
-          Route::get('/', [ProfessionManageController::class, 'index'])->name('index');
-          Route::post('/store', [ProfessionManageController::class, 'store'])->name('store');
-          Route::get('/{professionManage}/edit', [ProfessionManageController::class, 'edit'])->name('edit');
-          Route::put('/{professionManage}/update', [ProfessionManageController::class, 'update'])->name('update');
-          Route::delete('{professionManage}/destroy', [ProfessionManageController::class, 'destroy'])->name('destroy');
-      });
-    });
-
     Route::prefix('experience')->name('experience.')->group(function(){
         Route::post('/{replacementStaff}/store', [ExperienceController::class, 'store'])->name('store');
         Route::get('/download/{experience}', [ExperienceController::class, 'download'])->name('download');
@@ -128,7 +87,13 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
         Route::delete('{experience}/destroy', [ExperienceController::class, 'destroy'])->name('destroy');
         // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
     });
-
+    Route::prefix('training')->name('training.')->group(function(){
+        Route::post('/{replacementStaff}/store', [TrainingController::class, 'store'])->name('store');
+        Route::get('/download/{training}', [TrainingController::class, 'download'])->name('download');
+        Route::get('/show_file/{training}', [TrainingController::class, 'show_file'])->name('show_file');
+        Route::delete('{training}/destroy', [TrainingController::class, 'destroy'])->name('destroy');
+        // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
+    });
     Route::prefix('language')->name('language.')->group(function(){
         Route::post('/{replacementStaff}/store', [languageController::class, 'store'])->name('store');
         Route::get('/download/{language}', [languageController::class, 'download'])->name('download');
@@ -289,6 +254,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('fulfillments/certificate-pdf/{fulfillment}', 'ServiceRequests\FulfillmentController@certificatePDF')->name('fulfillments.certificate-pdf')->middleware('auth');
     Route::get('service_requests/certificate-pdf/{serviceRequest}', 'ServiceRequests\ServiceRequestController@certificatePDF')->name('service_requests.certificate-pdf')->middleware('auth');
     Route::get('fulfillments/confirmFulfillment/{fulfillment}', 'ServiceRequests\FulfillmentController@confirmFulfillment')->name('fulfillments.confirmFulfillment')->middleware('auth');
+    Route::get('fulfillments/refuseFulfillment/{fulfillment}', 'ServiceRequests\FulfillmentController@refuseFulfillment')->name('fulfillments.refuseFulfillment')->middleware('auth');
     Route::resource('fulfillmentItem', 'ServiceRequests\FulfillmentItemController')->middleware('auth');
     Route::resource('service_requests', 'ServiceRequests\ServiceRequestController')->middleware('auth');
     Route::get('service_requests/resolution/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolution')->middleware('auth');
@@ -332,7 +298,17 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
     Route::get('/', 'Parameters\ParameterController@index')->name('index');
     Route::put('/{parameter}', 'Parameters\ParameterController@update')->name('update');
     Route::get('drugs', 'Parameters\ParameterController@indexDrugs')->name('drugs')->middleware(['role:Drugs: admin']);
-    Route::resource('permissions', 'Parameters\PermissionController');
+    //Route::resource('permissions', 'Parameters\PermissionController');
+    Route::prefix('permissions')->as('permissions.')->group(function () {
+        Route::get('/create/{guard}', 'Parameters\PermissionController@create')->name('create');
+        Route::post('/store', 'Parameters\PermissionController@store')->name('store');
+        Route::get('/{guard}', 'Parameters\PermissionController@index')->name('index');        
+        Route::get('/edit/{permission}', 'Parameters\PermissionController@edit')->name('edit');
+        Route::put('/update/{permission}', 'Parameters\PermissionController@update')->name('update');
+        Route::delete('{permission}/destroy', 'Parameters\PermissionController@destroy')->name('destroy');
+
+    });
+    
     Route::resource('roles', 'Parameters\RoleController');
 
     Route::prefix('communes')->as('communes.')->group(function () {

@@ -35,10 +35,10 @@
     <fieldset class="form-group col col-md">
 		    <label for="for_program_contract_type">Tipo de Contratación</label>
 		    <select name="program_contract_type" id="program_contract_type" class="form-control" required>
-          <option value="Semanal" @if($serviceRequest->program_contract_type == 'Semanal') selected @endif >Semanal</option>
+          <!-- <option value="Semanal" @if($serviceRequest->program_contract_type == 'Semanal') selected @endif >Semanal</option> -->
           <option value="Mensual" @if($serviceRequest->program_contract_type == 'Mensual') selected @endif >Mensual</option>
           <option value="Horas" @if($serviceRequest->program_contract_type == 'Horas') selected @endif >Horas</option>
-          <option value="Otro" @if($serviceRequest->program_contract_type == 'Otro') selected @endif >Otro</option>
+          <!-- <option value="Otro" @if($serviceRequest->program_contract_type == 'Otro') selected @endif >Otro</option> -->
         </select>
 		</fieldset>
 
@@ -409,6 +409,7 @@
           <option value="CUARTO TURNO" @if($serviceRequest->working_day_type == 'CUARTO TURNO') selected @endif >CUARTO TURNO</option>
           <option value="CUARTO TURNO - MODIFICADO" @if($serviceRequest->working_day_type == 'CUARTO TURNO - MODIFICADO') selected @endif >CUARTO TURNO - MODIFICADO</option>
           <option value="HORA MÉDICA" @if($serviceRequest->working_day_type == 'HORA MÉDICA') selected @endif >HORA MÉDICA</option>
+          <option value="DIURNO PASADO A TURNO" @if($serviceRequest->working_day_type == 'DIURNO PASADO A TURNO') selected @endif >DIURNO PASADO A TURNO</option>
           <option value="OTRO" @if($serviceRequest->working_day_type == 'OTRO') selected @endif >OTRO</option>
         </select>
 
@@ -581,7 +582,7 @@
   @endcan
 
 
-  @canany(['Service Request: additional data finanzas'])
+  <!-- @canany(['Service Request: additional data finanzas'])
   <form method="POST" action="{{ route('rrhh.service_requests.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
   @csrf
   @method('PUT')
@@ -636,7 +637,7 @@
 
   <br>
   </form>
-  @endcan
+  @endcan -->
 
 
 
