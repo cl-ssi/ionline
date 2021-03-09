@@ -149,11 +149,13 @@
 
                     @elseif( Auth::user()->can('Partes: oficina'))
                         @if($req->events->count() > 0)
+                            
                             <span  data-toggle="tooltip" data-placement="top"
-                            data-original-title="{{ $req->events->where('status', '<>', 'en copia')->first()->to_user->fullName }}
-                                                {{ $req->events->where('status', '<>', 'en copia')->first()->CreationDate }}">
-                            <i class="fas fa-rocket"></i>
+                            data-original-title="{{ optional($req->events->where('status', '<>', 'en copia')->first())->to_user_id }}
+                                                {{ optional($req->events->where('status', '<>', 'en copia')->first())->CreationDate }}">
+                            
                             </span>
+                            <i class="fas fa-rocket"></i>
                         @endif
                     @endif
                 @endforeach
