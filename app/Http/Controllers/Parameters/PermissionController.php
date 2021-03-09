@@ -9,16 +9,18 @@ use Spatie\Permission\Models\Role;
 
 class PermissionController extends Controller
 {
-    public function index()
+    public function index($guard)
     {
-        $permissions = Permission::OrderBy('name')->get();
+        
+        $permissions = Permission::where('guard_name',$guard)->OrderBy('name')->get();
         $roles = Role::All();
-        return view('parameters.permissions.index', compact('permissions','roles'));
+        return view('parameters.permissions.index', compact('permissions','roles','guard'));
     }
 
-    public function create()
+    public function create($guard)
     {
-        return view('parameters.permissions.create');
+                        
+        return view('parameters.permissions.create',compact('guard'));
     }
 
 
@@ -27,7 +29,7 @@ class PermissionController extends Controller
         $permission = new Permission($request->All());
         $permission->save();
 
-        return redirect()->route('parameters.permissions.index');
+        return redirect()->route('parameters.permissions.index',$request->guard_name);
     }
 
     public function edit(Permission $permission)
@@ -41,7 +43,7 @@ class PermissionController extends Controller
         $permission->save();
         session()->flash('success', 'Permiso: '.$permission->name.' ha sido actualizado.');
 
-        return redirect()->route('parameters.permissions.index');
+        return redirect()->route('parameters.permissions.index',$permission->guard_name);
     }
 
     public function destroy(Permission $permission)
@@ -49,6 +51,6 @@ class PermissionController extends Controller
         $permission->delete();
         session()->flash('success', 'Permiso: '.$permission->name.' ha sido eliminado.');
 
-        return redirect()->route('parameters.permissions.index');
+        return redirect()->route('parameters.permissions.index',$permission->guard_name);
     }
 }
