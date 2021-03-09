@@ -140,55 +140,117 @@
 <br><br><br><br>
 
 
-@if($fulfillment->FulfillmentItems->count() == 0)
-  <div class="nueve">
-      <div class="justify" style="width: 100%;">
-          Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b> ha desempeñado las actividades estipuladas
-          en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames durante el preríodo de contingencia COVID
-          del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>.
-      </div>
-  </div>
+@if($fulfillment->type == "Mensual" || $fulfillment->type == "Parcial")
+  @if($fulfillment->FulfillmentItems->count() == 0)
+    <div class="nueve">
+        <div class="justify" style="width: 100%;">
+            Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b> ha desempeñado las actividades estipuladas
+            en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames durante el preríodo de contingencia COVID
+            del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>.
+
+            <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
+        </div>
+    </div>
+  @else
+    <div class="nueve">
+        <div class="justify" style="width: 100%;">
+          @if($fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->count() > 0)
+            @if($fulfillment->FulfillmentItems->where('type','!=','Renuncia voluntaria')->count() > 0)
+              Junto con saludar, se adjunta renuncia voluntaria a honorarios del funcionario <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b>,
+              a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->format('d/m/Y')}}</b>. Además se registraron las siguientes ausencias:
+            @else
+              Junto con saludar, se adjunta renuncia voluntaria a honorarios de funcionario <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b>,
+              a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->add(1, 'day')->format('d/m/Y')}}</b>.
+            @endif
+          @else
+            Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b> ha desempeñado las actividades estipuladas
+            en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames durante el preríodo de contingencia COVID
+            del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>,
+            registrando las siguientes ausencias:
+          @endif
+        </div>
+    </div>
+
+    <br><br>
+
+    <table class="siete">
+      <thead>
+        <tr>
+          <th>Tipo</th>
+          <th>Inicio</th>
+          <th>Término</th>
+          <th>Observación</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if($fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->count() > 0)
+          @if($fulfillment->FulfillmentItems->where('type','!=','Renuncia voluntaria')->count() > 0)
+            @foreach($fulfillment->FulfillmentItems->where('type','!=','Renuncia voluntaria') as $key =>$FulfillmentItem)
+            <tr>
+                <td style="text-align:center">{{$FulfillmentItem->type}}</td>
+                <td style="text-align:center">{{$FulfillmentItem->start_date->format('d-m-Y H:i')}}</td>
+                <td style="text-align:center">{{$FulfillmentItem->end_date->format('d-m-Y H:i')}}</td>
+                <td style="text-align:center">{{$FulfillmentItem->observation}}</td>
+            </tr>
+            @endforeach
+          @endif
+        @else
+          @foreach($fulfillment->FulfillmentItems as $key =>$FulfillmentItem)
+          <tr>
+              <td style="text-align:center">{{$FulfillmentItem->type}}</td>
+              <td style="text-align:center">{{$FulfillmentItem->start_date->format('d-m-Y H:i')}}</td>
+              <td style="text-align:center">{{$FulfillmentItem->end_date->format('d-m-Y H:i')}}</td>
+              <td style="text-align:center">{{$FulfillmentItem->observation}}</td>
+          </tr>
+          @endforeach
+        @endif
+
+    </table>
+
+    <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
+  @endif
 @else
+
+  <?php setlocale(LC_ALL, 'es'); ?>
   <div class="nueve">
       <div class="justify" style="width: 100%;">
-          Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b> ha desempeñado las actividades estipuladas
-          en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames durante el preríodo de contingencia COVID
-          del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>,
-          registrando @if($fulfillment->type == "Turnos") los siguientes turnos extra: @else las siguientes ausencias: @endif
+          Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b> ha desempeñado las actividades
+          estipuladas en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames, por <b>horas extras realizadas en el mes de
+          {{\Carbon\Carbon::parse($fulfillment->serviceRequest->start_date)->formatLocalized('%B de %Y')}} por contingencia COVID</b>.<br><br>
+
+          <table class="siete">
+            <thead>
+              <tr>
+                <th>Inicio</th>
+                <th>Término</th>
+                <th>Observación</th>
+              </tr>
+            </thead>
+            <tbody>
+              @foreach($fulfillment->serviceRequest->shiftControls as $key => $shiftControl)
+                <tr>
+                  <td>{{Carbon\Carbon::parse($shiftControl->start_date)->format('d-m-Y H:i')}}</td>
+                  <td>{{Carbon\Carbon::parse($shiftControl->end_date)->format('d-m-Y H:i')}}</td>
+                  <td>{{$shiftControl->observation}}</td>
+                </tr>
+              @endforeach
+          </table>
+
+          <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
       </div>
   </div>
 
-  <br><br>
-
-  <table class="siete">
-    <thead>
-      <tr>
-        <th>Tipo</th>
-        <th>Inicio</th>
-        <th>Término</th>
-        <th>Observación</th>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach($fulfillment->FulfillmentItems as $key =>$FulfillmentItem)
-      <tr>
-          <td style="text-align:center">{{$FulfillmentItem->type}}</td>
-          <td style="text-align:center">{{$FulfillmentItem->start_date->format('d-m-Y H:i')}}</td>
-          <td style="text-align:center">{{$FulfillmentItem->end_date->format('d-m-Y H:i')}}</td>
-          <td style="text-align:center">{{$FulfillmentItem->observation}}</td>
-      </tr>
-      @endforeach
-  </table>
 @endif
+
 
 <br style="padding-bottom: 10px;">
 
 <div id="firmas">
     <div class="center" style="width: 100%;">
         <strong>
-        <span class="uppercase">{{$fulfillment->serviceRequest->user->getFullNameAttribute()}}</span><br>
-        <span class="uppercase">{{$fulfillment->serviceRequest->user->position}}</span><br>
-        <span class="uppercase">{{$fulfillment->serviceRequest->user->organizationalUnit->name}}</span><br>
+        <span class="uppercase">{{$fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}</span><br>
+        <span class="uppercase">{{$fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->position}}</span><br>
+        <span class="uppercase">{{$fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->organizationalUnit->name}}</span><br>
         HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
         </strong>
     </div>

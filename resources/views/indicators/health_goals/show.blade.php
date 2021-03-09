@@ -21,15 +21,15 @@
     }
 </style>
 
-<h3 class="mb-3">{{$healthGoal->name}}. <small>- Cumplimiento : </small>
+<h3 class="mb-3">{{$healthGoal->name}}. <small>- Cumplimiento : {{number_format($healthGoal->getCompliance(), 2, ',', '.')}}%</small>
     {{--<br><small>- Cumplimiento : {{ number_format(($data1_1[1]['cumplimientoponderado']+$data1_2[1]['cumplimientoponderado']+$data1_3[1]['cumplimientoponderado'])/3, 2, ',', '.') }}%</small>--}}
 </h3>
 <h6 class="mb-3">Metas Sanitarias Ley N° {{number_format($healthGoal->law,0,',','.')}}</h6>
 <hr>
-@if($indicators->isEmpty())
+@if($healthGoal->indicators->isEmpty())
     <p>No existen indicadores o no se han definido aún para la meta sanitaria actual.</p>
 @else
-    @foreach($indicators as $indicator)
+    @foreach($healthGoal->indicators as $indicator)
         <h5 class="mb-3">{{$indicator->number}} {{$indicator->name}}. @can('Indicators: manager')<small><a href="{{route('indicators.health_goals.ind.edit', [$healthGoal->law, $healthGoal->year, $healthGoal->number, $indicator])}}"><span class="fa fa-edit"></span></a></small> @endcan</h5>
         <!-- print indicador -->
             <div class="table-responsive">

@@ -31,7 +31,10 @@ class FulfillmentController extends Controller
         $serviceRequests = null;
 
         if (Auth::user()->can('Service Request: fulfillments responsable')) {
-          $serviceRequests = ServiceRequest::where('responsable_id',$user_id)
+          $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
+                                               $subQuery->where('responsable_id',$user_id);
+                                               $subQuery->orwhere('user_id',$user_id);
+                                             })
                                            // ->where('program_contract_type','Mensual')
                                            ->orderBy('id','asc')
                                            ->get();
@@ -57,14 +60,21 @@ class FulfillmentController extends Controller
             }
             //"turno"
             else{
-              //se consideran los que tengan más de una visación
-              if ($serviceRequest->SignatureFlows->whereNotNull('status')->count() == 1) {
-                $serviceRequests->forget($key);
-              }
+              // //se consideran los que tengan más de una visación
+              // if ($serviceRequest->SignatureFlows->whereNotNull('status')->count() == 1) {
+              //   $serviceRequests->forget($key);
+              // }
               // // no se consideran rechazados
               // if ($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) {
               //   $serviceRequests->forget($key);
               // }
+
+              //only completed
+              if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0 && $serviceRequest->SignatureFlows->whereNull('status')->count() == 0) {
+
+              }else{
+                $serviceRequests->forget($key);
+              }
             }
 
           }
@@ -158,59 +168,70 @@ class FulfillmentController extends Controller
         $periods   = new DatePeriod($start, $interval, $end);
         $cont_periods = iterator_count($periods);
 
-        // if (!Auth::user()->can('Service Request: fulfillments responsable')) {
-        //   session()->flash('danger', 'No tiene privilegios para acceder a esta funcionalidad.');
-        //   return redirect()->back();
-        // }
-
         // crea de forma automática las cabeceras
-        if ($serviceRequest->fulfillments->count() == 0) {
-          if (!Auth::user()->can('Service Request: fulfillments responsable')) {
-            session()->flash('danger', 'El usuario responsable no ha certificado el cumplimiento de la solicitud: <b>' . $serviceRequest->id . "</b>. No tiene acceso.");
-            return redirect()->back();
-          }
-          foreach ($periods as $key => $period) {
-            $program_contract_type = "Mensual";
-            $start_date_period = $period->format("d-m-Y");
-            $end_date_period = Carbon::createFromFormat('d-m-Y', $period->format("d-m-Y"))->endOfMonth()->format("d-m-Y");
-            if($key == 0){
-              $start_date_period = $serviceRequest->start_date->format("d-m-Y");
+        if ($serviceRequest->program_contract_type == "Mensual") {
+          if ($serviceRequest->fulfillments->count() == 0) {
+            if (!Auth::user()->can('Service Request: fulfillments responsable')) {
+              session()->flash('danger', 'El usuario responsable no ha certificado el cumplimiento de la solicitud: <b>' . $serviceRequest->id . "</b>. No tiene acceso.");
+              return redirect()->back();
             }
-            if (($cont_periods - 1) == $key) {
-              $end_date_period = $serviceRequest->end_date->format("d-m-Y");
-              $program_contract_type = "Parcial";
+            foreach ($periods as $key => $period) {
+              $program_contract_type = "Mensual";
+              $start_date_period = $period->format("d-m-Y");
+              $end_date_period = Carbon::createFromFormat('d-m-Y', $period->format("d-m-Y"))->endOfMonth()->format("d-m-Y");
+              if($key == 0){
+                $start_date_period = $serviceRequest->start_date->format("d-m-Y");
+              }
+              if (($cont_periods - 1) == $key) {
+                $end_date_period = $serviceRequest->end_date->format("d-m-Y");
+                $program_contract_type = "Parcial";
+              }
+
+              $fulfillment = new Fulfillment();
+              $fulfillment->service_request_id = $serviceRequest->id;
+              if ($serviceRequest->program_contract_type == "Mensual") {
+                $fulfillment->year = $period->format("Y");
+                $fulfillment->month = $period->format("m");
+              }else{
+                $program_contract_type = "Turnos";
+              }
+              $fulfillment->type = $program_contract_type;
+              $fulfillment->start_date = $start_date_period;
+              $fulfillment->end_date = $end_date_period;
+              $fulfillment->user_id = Auth::user()->id;
+              $fulfillment->save();
             }
 
+            //crea detalle
+            foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
+
+              //guarda
+              $fulfillmentItem = new FulfillmentItem();
+              $fulfillmentItem->fulfillment_id = $fulfillment->id;
+              $fulfillmentItem->start_date = $shiftControl->start_date;
+              $fulfillmentItem->end_date = $shiftControl->end_date;
+              $fulfillmentItem->type = "Turno";
+              $fulfillmentItem->observation = $shiftControl->observation;
+              $fulfillmentItem->user_id = Auth::user()->id;
+              $fulfillmentItem->save();
+
+            }
+          }
+        }
+
+        elseif($serviceRequest->program_contract_type == "Horas"){
+          if ($serviceRequest->fulfillments->count() == 0) {
             $fulfillment = new Fulfillment();
             $fulfillment->service_request_id = $serviceRequest->id;
-            if ($serviceRequest->program_contract_type == "Mensual") {
-              $fulfillment->year = $period->format("Y");
-              $fulfillment->month = $period->format("m");
-            }else{
-              $program_contract_type = "Turnos";
-            }
-            $fulfillment->type = $program_contract_type;
-            $fulfillment->start_date = $start_date_period;
-            $fulfillment->end_date = $end_date_period;
+            $fulfillment->type = "Horas";
+            $fulfillment->start_date = $serviceRequest->start_date;
+            $fulfillment->end_date = $serviceRequest->end_date;
+            $fulfillment->observation = "Aprobaciones en flujo de firmas";
             $fulfillment->user_id = Auth::user()->id;
             $fulfillment->save();
           }
-
-          //crea detalle
-          foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
-
-            //guarda
-            $fulfillmentItem = new FulfillmentItem();
-            $fulfillmentItem->fulfillment_id = $fulfillment->id;
-            $fulfillmentItem->start_date = $shiftControl->start_date;
-            $fulfillmentItem->end_date = $shiftControl->end_date;
-            $fulfillmentItem->type = "Turno";
-            $fulfillmentItem->observation = $shiftControl->observation;
-            $fulfillmentItem->user_id = Auth::user()->id;
-            $fulfillmentItem->save();
-
-          }
         }
+
 
         return view('service_requests.requests.fulfillments.edit',compact('serviceRequest','periods'));
     }
@@ -399,6 +420,72 @@ class FulfillmentController extends Controller
         }
 
         session()->flash('success', 'Se ha confirmado la información del período.');
+        return redirect()->back();
+    }
+
+
+    public function refuseFulfillment(Fulfillment $fulfillment)
+    {
+        if (Auth::user()->can('Service Request: fulfillments responsable')) {
+          if ($fulfillment->responsable_approver_id == NULL) {
+            $fulfillment->responsable_approbation = 0;
+            $fulfillment->responsable_approbation_date = Carbon::now();
+            $fulfillment->responsable_approver_id = Auth::user()->id;
+            $fulfillment->save();
+
+            //items
+            foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
+              $FulfillmentItem->responsable_approbation = 0;
+              $FulfillmentItem->responsable_approbation_date = Carbon::now();
+              $FulfillmentItem->responsable_approver_id = Auth::user()->id;
+              $FulfillmentItem->save();
+            }
+          }
+        }
+
+        if (Auth::user()->can('Service Request: fulfillments rrhh')) {
+          if ($fulfillment->responsable_approver_id == NULL) {
+            session()->flash('danger', 'No es posible rechazar, puesto que falta aprobación de Responsable.');
+            return redirect()->back();
+          }
+          if ($fulfillment->responsable_approver_id != NULL && $fulfillment->rrhh_approver_id == NULL) {
+            $fulfillment->rrhh_approbation = 0;
+            $fulfillment->rrhh_approbation_date = Carbon::now();
+            $fulfillment->rrhh_approver_id = Auth::user()->id;
+            $fulfillment->save();
+
+            //items
+            foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
+              $FulfillmentItem->rrhh_approbation = 0;
+              $FulfillmentItem->rrhh_approbation_date = Carbon::now();
+              $FulfillmentItem->rrhh_approver_id = Auth::user()->id;
+              $FulfillmentItem->save();
+            }
+          }
+        }
+
+        if (Auth::user()->can('Service Request: fulfillments finance')) {
+          if ($fulfillment->rrhh_approver_id == NULL) {
+            session()->flash('danger', 'No es posible rechazar, puesto que falta aprobación de RRHH');
+            return redirect()->back();
+          }
+          if ($fulfillment->rrhh_approver_id != NULL && $fulfillment->finances_approver_id == NULL) {
+            $fulfillment->finances_approbation = 0;
+            $fulfillment->finances_approbation_date = Carbon::now();
+            $fulfillment->finances_approver_id = Auth::user()->id;
+            $fulfillment->save();
+
+            //items
+            foreach ($fulfillment->FulfillmentItems as $key => $FulfillmentItem) {
+              $FulfillmentItem->finances_approbation = 0;
+              $FulfillmentItem->finances_approbation_date = Carbon::now();
+              $FulfillmentItem->finances_approver_id = Auth::user()->id;
+              $FulfillmentItem->save();
+            }
+          }
+        }
+
+        session()->flash('success', 'Se ha rechazado la información del período.');
         return redirect()->back();
     }
 

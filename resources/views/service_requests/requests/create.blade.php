@@ -44,10 +44,10 @@
 		    <label for="for_program_contract_type">Tipo de Contratación</label>
 		    <select name="program_contract_type" class="form-control" wire:model="art" id="program_contract_type" required>
 					<option value=""></option>
-          <option value="Semanal">Semanal</option>
+          <!-- <option value="Semanal">Semanal</option> -->
           <option value="Mensual">Mensual</option>
 					<option value="Horas">Horas</option>
-          <option value="Otro">Otro</option>
+          <!-- <option value="Otro">Otro</option> -->
         </select>
 		</fieldset>
 
@@ -137,7 +137,9 @@
 
 	<br>
 
-	<div class="border border-info rounded">
+	@livewire('service-request.employee-data')
+
+	<!-- <div class="border border-info rounded">
   <div class="row ml-1 mr-1">
 
 		<fieldset class="form-group col">
@@ -205,7 +207,7 @@
 		</fieldset>
 
 	</div>
-	</div>
+	</div> -->
 	<br>
 
 
@@ -429,6 +431,7 @@
           <option value="CUARTO TURNO">CUARTO TURNO</option>
 					<option value="CUARTO TURNO - MODIFICADO">CUARTO TURNO - MODIFICADO</option>
 					<option value="HORA MÉDICA">HORA MÉDICA</option>
+					<option value="DIURNO PASADO A TURNO">DIURNO PASADO A TURNO</option>
 					<option value="OTRO">OTRO</option>
         </select>
 

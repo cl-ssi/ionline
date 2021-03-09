@@ -34,7 +34,7 @@ class SignatureFlow extends Model implements Auditable
     }
 
     public function organizationalUnit(){
-      return $this->belongsTo('App\Rrhh\organizationalUnit','ou_id');
+      return $this->belongsTo('App\Rrhh\OrganizationalUnit','ou_id');
     }
 
     protected $table = 'doc_signature_flow';
