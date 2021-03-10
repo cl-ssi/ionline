@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Documents;
 use App\Http\Controllers\Controller;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
+use App\Models\ServiceRequests\Fulfillment;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -243,14 +244,17 @@ class SignatureController extends Controller
     }
 
 
-    public function callbackFirma($message, SignaturesFile $signaturesFile = null)
+    public function callbackFirma($message, $modelId, $returnUrl, SignaturesFile $signaturesFile = null)
     {
+        $fulfillment = Fulfillment::find($modelId);
+
         if (!$signaturesFile) {
-//            return view('rrhh.fulfillments.index');
             session()->flash('danger', $message);
-            return redirect()->route('rrhh.fulfillments.index');
+            return redirect()->route($returnUrl, $fulfillment->serviceRequest->id);
         }
 
+        $fulfillment->signatures_file_id = $signaturesFile->id;
+        $fulfillment->save();
         header('Content-Type: application/pdf');
         echo base64_decode($signaturesFile->signed_file);
     }
