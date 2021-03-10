@@ -980,6 +980,7 @@ class ServiceRequestController extends Controller
 
       $serviceRequests = ServiceRequest::orderBy('id','asc')
                                        // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+                                      ->where('program_contract_type','Mensual')
                                       ->whereDoesntHave("SignatureFlows", function($subQuery) {
                                                   $subQuery->where('status',0);
                                                 })
@@ -995,7 +996,7 @@ class ServiceRequestController extends Controller
       foreach ($serviceRequests as $key => $serviceRequest) {
         if ($serviceRequest->Fulfillments->count() == 0) {
           if ($serviceRequest->SignatureFlows->where('sign_position',2)->count() > 0) {
-            $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()] = 0;
+            $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()][$serviceRequest->SignatureFlows->where('sign_position',2)->first()->organizationalUnit->name] = 0;
           }
         }
       }
@@ -1004,7 +1005,7 @@ class ServiceRequestController extends Controller
         if ($serviceRequest->Fulfillments->count() == 0) {
           if ($serviceRequest->SignatureFlows->where('sign_position',2)->count() > 0) {
             $cumplimiento_falta_ingresar += 1;
-            $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()] += 1;
+            $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()][$serviceRequest->SignatureFlows->where('sign_position',2)->first()->organizationalUnit->name] += 1;
           }
         }
       }

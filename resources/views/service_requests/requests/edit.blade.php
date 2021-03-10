@@ -81,7 +81,7 @@
 		</fieldset>
 
 		<fieldset class="form-group col">
-				<label for="for_users">Jefe Directo</label>
+				<label for="for_users">Supervisor</label>
 				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',2)->first()->responsable_id) selected @endif >{{$user->getFullNameAttribute()}}</option>

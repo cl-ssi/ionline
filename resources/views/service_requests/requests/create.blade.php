@@ -96,7 +96,7 @@
 		</fieldset>
 
 		<fieldset class="form-group col">
-				<label for="for_users">Jefe Directo</label>
+				<label for="for_users">Supervisor</label>
 				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" data-size="5" required>
 					<option value=""></option>
 					@foreach($users as $key => $user)
