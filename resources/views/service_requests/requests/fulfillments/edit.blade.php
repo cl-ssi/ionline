@@ -22,38 +22,48 @@
 
 <div class="form-row">
 
-  <fieldset class="form-group col-12 col-md-4">
+  <fieldset class="form-group col-3 col-md-3">
       <label for="for_request_date">ID Solicitud</label>
       <input type="text" class="form-control" value="{{$serviceRequest->id}}" disabled>
   </fieldset>
 
-  <fieldset class="form-group col-12 col-md-4">
+  <fieldset class="form-group col-3 col-md-3">
       <label for="for_start_date">Fecha de Inicio</label>
       <input type="text" class="form-control" value="{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}" disabled>
   </fieldset>
 
-  <fieldset class="form-group col-12 col-md-4">
+  <fieldset class="form-group col-3 col-md-3">
       <label for="for_end_date">Fecha de Término</label>
       <input type="text" class="form-control" value="{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}" disabled>
+  </fieldset>
+
+  <fieldset class="form-group col-3 col-md-3">
+      <label for="for_end_date">Tipo de contrato</label>
+      <input type="text" class="form-control" value="{{$serviceRequest->program_contract_type}}" disabled>
   </fieldset>
 
 </div>
 
 <div class="form-row">
 
-  <fieldset class="form-group col-12 col-md-4">
+  <fieldset class="form-group col-3 col-md-3">
       <label for="for_request_date">Rut</label>
       <input type="text" class="form-control" value="{{$serviceRequest->rut}}" disabled>
   </fieldset>
 
-  <fieldset class="form-group col-12 col-md-4">
+  <fieldset class="form-group col-3 col-md-3">
       <label for="for_start_date">Funcionario</label>
       <input type="text" class="form-control" value="{{$serviceRequest->name}}" disabled>
   </fieldset>
 
-  <fieldset class="form-group col-12 col-md-4">
-      <label for="for_end_date">Tipo de contrato</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->program_contract_type}}" disabled>
+  <fieldset class="form-group col-3 col-md-3">
+      <label for="for_end_date">Estamento</label>
+      <input type="text" class="form-control" value="{{$serviceRequest->estate}}" disabled>
+  </fieldset>
+
+  <fieldset class="form-group col-3 col-md-3">
+      <label for="for_end_date">Jornada de trabajo</label>
+      <input type="text" class="form-control" value="{{$serviceRequest->working_day_type}}" disabled>
   </fieldset>
 
 </div>
@@ -229,12 +239,12 @@
               @if($period->format("Y") == 2021 && $period->format("m") == 1 && $serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_to_pay != NULL)
                 <fieldset class="form-group col col-md">
                     <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
-                    <input type="text" class="form-control" name="total_hours_to_pay" value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_hours_to_pay}}">
+                    <input type="text" class="form-control" name="total_hours_to_pay" disabled value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_hours_to_pay}}">
                 </fieldset>
 
                 <fieldset class="form-group col col-md">
                     <label for="for_total_paid">Total a pagar</label>
-                    <input type="text" class="form-control" name="total_to_pay" value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_to_pay}}">
+                    <input type="text" class="form-control" name="total_to_pay" disabled value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_to_pay}}">
                 </fieldset>
               @else
                 <fieldset class="form-group col col-md">
