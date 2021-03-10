@@ -200,8 +200,8 @@ class FulfillmentController extends Controller
               $fulfillment->end_date = $end_date_period;
               $fulfillment->user_id = Auth::user()->id;
 
-              $fulfillment->total_hours_to_pay = $serviceRequest->weekly_hours;
-              $fulfillment->total_to_pay = $serviceRequest->net_amount;
+              // $fulfillment->total_hours_to_pay = $serviceRequest->weekly_hours;
+              // $fulfillment->total_to_pay = $serviceRequest->net_amount;
 
               $fulfillment->save();
             }
