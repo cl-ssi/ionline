@@ -226,15 +226,27 @@
 
             <div class="form-row">
 
-              <fieldset class="form-group col col-md">
-                  <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
-                  <input type="text" class="form-control" name="total_hours_to_pay" value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_hours_to_pay}}">
-              </fieldset>
+              @if($period->format("Y") == 2021 && $period->format("m") == 1 && $serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_to_pay != NULL)
+                <fieldset class="form-group col col-md">
+                    <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
+                    <input type="text" class="form-control" name="total_hours_to_pay" value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_hours_to_pay}}">
+                </fieldset>
 
-              <fieldset class="form-group col col-md">
-                  <label for="for_total_paid">Total a pagar</label>
-                  <input type="text" class="form-control" name="total_to_pay" value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_to_pay}}">
-              </fieldset>
+                <fieldset class="form-group col col-md">
+                    <label for="for_total_paid">Total a pagar</label>
+                    <input type="text" class="form-control" name="total_to_pay" value="{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->total_to_pay}}">
+                </fieldset>
+              @else
+                <fieldset class="form-group col col-md">
+                    <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
+                    <input type="text" class="form-control" name="total_hours_to_pay" value="{{$serviceRequest->weekly_hours}}">
+                </fieldset>
+
+                <fieldset class="form-group col col-md">
+                    <label for="for_total_paid">Total a pagar</label>
+                    <input type="text" class="form-control" name="total_to_pay" value="{{$serviceRequest->net_amount}}">
+                </fieldset>
+              @endif
 
             </div>
             <button type="submit" class="btn btn-danger">Guardar</button>
