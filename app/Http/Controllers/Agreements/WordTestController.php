@@ -99,15 +99,15 @@ class WordTestController extends Controller
         $fechaResolucion = $agreements->resolution_date;
         $fechaResolucion = $fechaResolucion != NULL ? date('j', strtotime($fechaResolucion)).' de '.$meses[date('n', strtotime($fechaResolucion))-1].' '.date('Y', strtotime($fechaResolucion)) : '';
     	$referente = $agreements->referente;
-        $alcaldeApelativo = $municipality->appellative_representative;
-        $alcalde = $municipality->name_representative;
-        $alcaldeDecreto = $municipality->decree_representative;
+        $alcaldeApelativo = $agreements->representative_appelative;
+        $alcalde = $agreements->representative;
+        $alcaldeDecreto = $agreements->representative_decree;
     	$municipalidad = $municipality->name_municipality;
     	$ilustre = !Str::contains($municipality->name_municipality, 'ALTO HOSPICIO') ? 'ILUSTRE': null;
         //dd($municipalidad);
-    	$municipalidadDirec = $municipality->adress_municipality;
-    	$comunaRut = $municipality->rut_municipality;
-    	$alcaldeRut = $municipality->rut_representative;
+    	$municipalidadDirec = $agreements->municipality_adress;
+    	$comunaRut = $agreements->municipality_rut;
+    	$alcaldeRut = $agreements->representative_rut;
 
     	$comuna = $agreements->Commune->name; 
         $programa = $agreements->Program->name;
@@ -226,14 +226,14 @@ class WordTestController extends Controller
         $fechaResolucion = $agreements->resolution_date;
         $fechaResolucion = $fechaResolucion != "" ? date('j', strtotime($fechaResolucion)).' de '.$meses[date('n', strtotime($fechaResolucion))-1].' '.date('Y', strtotime($fechaResolucion)) : '';
         $referente = $agreements->referente;
-        $alcaldeApelativo = $municipality->appellative_representative;
-        $alcalde = $municipality->name_representative;
-        $alcaldeDecreto = $municipality->decree_representative;
+        $alcaldeApelativo = $agreements->representative_appelative;
+        $alcalde = $agreements->representative;
+        $alcaldeDecreto = $agreements->representative_decree;
         $municipalidad = $municipality->name_municipality;
         //dd($municipalidad);
-        $municipalidadDirec = $municipality->adress_municipality;
-        $comunaRut = $municipality->rut_municipality;
-        $alcaldeRut = $municipality->rut_representative;
+        $municipalidadDirec = $agreements->municipality_adress;
+        $comunaRut = $agreements->municipality_rut;
+        $alcaldeRut = $agreements->representative_rut;
 
         $comuna = $agreements->Commune->name; 
         $programa = $agreements->Program->name;
