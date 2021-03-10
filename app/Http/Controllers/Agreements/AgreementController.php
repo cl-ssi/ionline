@@ -75,6 +75,15 @@ class AgreementController extends Controller
         $agreement->period = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y');
         if($request->hasFile('file'))
             $agreement->file = $request->file('file')->store('resolutions');
+
+        $municipality = Municipality::where('commune_id', $request->commune_id)->first();
+        $agreement->representative = $municipality->name_representative;
+        $agreement->representative_rut = $municipality->rut_representative;
+        $agreement->representative_appelative = $municipality->appellative_representative;
+        $agreement->representative_decree = $municipality->decree_representative;
+        $agreement->municipality_adress = $municipality->adress_municipality;
+        $agreement->municipality_rut = $municipality->rut_municipality;
+
         $agreement->save();
 
         foreach($agreement->program->components as $component) {
@@ -156,7 +165,7 @@ class AgreementController extends Controller
     public function update(Request $request, $id)
     {
 
-        //dd($request);
+        // return $request;
         $Agreement = Agreement::find($id);
         $stages = Stage::where('agreement_id', $id)->first();
         //dd($stage->isEmpty());
@@ -171,8 +180,11 @@ class AgreementController extends Controller
 
         $Agreement->representative      = $request->representative;
         $Agreement->representative_rut  = $request->representative_rut;
+        $Agreement->representative_appelative = $request->representative_appelative;
+        $Agreement->representative_decree = $request->representative_decree;
         $Agreement->municipality_adress = $request->municipality_adress;
         $Agreement->municipality_rut    = $request->municipality_rut;
+
         $Agreement->establishment_list  = serialize($request->establishment);
         if($request->hasFile('file')){
 
