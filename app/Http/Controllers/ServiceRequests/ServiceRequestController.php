@@ -978,6 +978,17 @@ class ServiceRequestController extends Controller
       // dd($group_array);
 
 
+      $serviceRequests = ServiceRequest::orderBy('id','asc')
+                                       ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+                                      ->whereDoesntHave("SignatureFlows", function($subQuery) {
+                                                  $subQuery->where('status',0);
+                                                })
+                                      ->whereDoesntHave("SignatureFlows", function($subQuery) {
+                                                  $subQuery->whereNull('status');
+                                                })
+                                       ->get();
+
+
       //cumplimiento
       $fulfillments_missing = [];
       $cumplimiento_falta_ingresar = 0;
