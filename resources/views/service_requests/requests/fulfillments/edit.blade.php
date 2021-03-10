@@ -557,6 +557,7 @@
                   <th>Unidad</th>
                   <th>Fecha</th>
                   <th>Usuario</th>
+                  <th>Estado</th>
               </tr>
           </thead>
           <tbody>
@@ -565,6 +566,7 @@
                   <td>Responsable</td>
                   <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approbation_date}}</td>
                   <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsableUser->getFullNameAttribute()}}</td>
+                  <td>@if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approbation == 1) APROBADO @else RECHAZADO @endif</td>
               </tr>
               @endif
               @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->rrhh_approver_id != NULL)

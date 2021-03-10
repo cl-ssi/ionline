@@ -171,10 +171,10 @@ class FulfillmentController extends Controller
         // crea de forma automática las cabeceras
         if ($serviceRequest->program_contract_type == "Mensual") {
           if ($serviceRequest->fulfillments->count() == 0) {
-            if (!Auth::user()->can('Service Request: fulfillments responsable')) {
-              session()->flash('danger', 'El usuario responsable no ha certificado el cumplimiento de la solicitud: <b>' . $serviceRequest->id . "</b>. No tiene acceso.");
-              return redirect()->back();
-            }
+            // if (!Auth::user()->can('Service Request: fulfillments responsable')) {
+            //   session()->flash('danger', 'El usuario responsable no ha certificado el cumplimiento de la solicitud: <b>' . $serviceRequest->id . "</b>. No tiene acceso.");
+            //   return redirect()->back();
+            // }
             foreach ($periods as $key => $period) {
               $program_contract_type = "Mensual";
               $start_date_period = $period->format("d-m-Y");

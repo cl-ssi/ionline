@@ -70,12 +70,12 @@
     </tbody>
 </table> -->
 
-<h4>Usuarios con cumplimientos pendientes por ingresar</h4>
+<h4>Usuarios Responsables con cumplimientos pendientes por ingresar</h4>
 <!-- <hr> -->
 <table class="table table-sm small" >
     <thead>
         <tr>
-            <th>FUNCIONARIO</th>
+            <th>RESPONSABLE</th>
             <th>CANTIDAD</th>
         </tr>
     </thead>
