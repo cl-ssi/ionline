@@ -24,7 +24,7 @@
 
 <h4>Usuarios con hojas de ruta pendientes por visar</h4>
 <!-- <hr> -->
-<table class="table table-sm small" >
+<table class="table table-sm small table-striped" >
     <thead>
         <tr>
             <th>FUNCIONARIO</th>
@@ -72,7 +72,7 @@
 
 <h4>Cumplimientos pendientes por ingresar</h4>
 <!-- <hr> -->
-<table class="table table-sm small" >
+<table class="table table-sm small table-striped" >
     <thead>
         <tr>
             <th>SUPERVISOR</th>
@@ -91,6 +91,7 @@
 				@endforeach
       @endforeach
 			<tr>
+				<td nowrap></td>
         <td nowrap>Total</td>
         <td nowrap><b>{{$cumplimiento_falta_ingresar}}</b></td>
       </tr>
