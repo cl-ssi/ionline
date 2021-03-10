@@ -24,7 +24,7 @@
 
 <h4>Usuarios con hojas de ruta pendientes por visar</h4>
 <!-- <hr> -->
-<table class="table table-sm small" >
+<table class="table table-sm small table-striped" >
     <thead>
         <tr>
             <th>FUNCIONARIO</th>
@@ -70,23 +70,28 @@
     </tbody>
 </table> -->
 
-<h4>Usuarios Responsables con cumplimientos pendientes por ingresar</h4>
+<h4>Cumplimientos pendientes por ingresar</h4>
 <!-- <hr> -->
-<table class="table table-sm small" >
+<table class="table table-sm small table-striped" >
     <thead>
         <tr>
-            <th>RESPONSABLE</th>
+            <th>SUPERVISOR</th>
+						<th>UNIDAD</th>
             <th>CANTIDAD</th>
         </tr>
     </thead>
     <tbody>
       @foreach($fulfillments_missing as $key => $fulfillment)
-        <tr>
-          <td nowrap>{{$key}}</td>
-          <td nowrap>{{$fulfillment}}</td>
-        </tr>
+				@foreach($fulfillment as $key2 => $cant)
+	        <tr>
+	          <td nowrap>{{$key}}</td>
+						<td nowrap>{{$key2}}</td>
+	          <td nowrap>{{$cant}}</td>
+	        </tr>
+				@endforeach
       @endforeach
 			<tr>
+				<td nowrap></td>
         <td nowrap>Total</td>
         <td nowrap><b>{{$cumplimiento_falta_ingresar}}</b></td>
       </tr>

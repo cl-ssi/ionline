@@ -14,7 +14,7 @@
   </fieldset>
 
   <fieldset class="form-group col-6 col-md-6">
-      <label for="for_start_date">Jefe Directo</label>
+      <label for="for_start_date">Supervisor</label>
       <input type="text" class="form-control" value="{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}" disabled>
   </fieldset>
 
