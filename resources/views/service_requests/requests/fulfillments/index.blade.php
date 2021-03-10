@@ -12,7 +12,7 @@
     	<thead>
         <tr>
     			<th colspan="10"></th>
-    			<th colspan="3" class="text-center">Estado</th>
+    			<th colspan="3" class="text-center">Visados</th>
     		</tr>
     		<tr>
     			<th scope="col">Id</th>
@@ -76,7 +76,7 @@
           <!-- mensual -->
           @if($serviceRequest->program_contract_type == "Mensual")
           <td nowrap class="text-center">
-            @if($serviceRequest->Fulfillments->count() > 0)
+            <!-- @if($serviceRequest->Fulfillments->count() > 0)
               @if($serviceRequest->Fulfillments->whereNull('responsable_approver_id')->count() > 0)
                 <i class="fas fa-circle" style="color:yellow"></i>
               @elseif($serviceRequest->Fulfillments->where('responsable_approbation',1)->count() > 0)
@@ -86,11 +86,12 @@
               @endif
             @else
               <i class="far fa-circle" style="color:black"></i>
-            @endif
+            @endif -->
+            {{$serviceRequest->Fulfillments->whereNotNull('responsable_approver_id')->count()}} / {{$serviceRequest->Fulfillments->count()}}
     			</td>
 
           <td nowrap class="text-center">
-            @if($serviceRequest->Fulfillments->count() > 0)
+            <!-- @if($serviceRequest->Fulfillments->count() > 0)
               @if($serviceRequest->Fulfillments->whereNull('rrhh_approver_id')->count() > 0)
                 <i class="fas fa-circle" style="color:yellow"></i>
                 @elseif($serviceRequest->Fulfillments->where('rrhh_approbation',1)->count() > 0)
@@ -100,11 +101,12 @@
               @endif
             @else
               <i class="far fa-circle" style="color:black"></i>
-            @endif
+            @endif -->
+            {{$serviceRequest->Fulfillments->whereNotNull('rrhh_approver_id')->count()}} / {{$serviceRequest->Fulfillments->count()}}
     			</td>
 
           <td nowrap class="text-center">
-            @if($serviceRequest->Fulfillments->count() > 0)
+            <!-- @if($serviceRequest->Fulfillments->count() > 0)
               @if($serviceRequest->Fulfillments->whereNull('finances_approver_id')->count() > 0)
                 <i class="fas fa-circle" style="color:yellow"></i>
                 @elseif($serviceRequest->Fulfillments->where('finances_approbation',1)->count() > 0)
@@ -114,13 +116,14 @@
               @endif
             @else
               <i class="far fa-circle" style="color:black"></i>
-            @endif
+            @endif -->
+            {{$serviceRequest->Fulfillments->whereNotNull('finances_approver_id')->count()}} / {{$serviceRequest->Fulfillments->count()}}
     			</td>
           @endif
 
           <!-- x horas -->
           @if($serviceRequest->program_contract_type == "Horas")
-            <td nowrap class="text-center">
+            <!-- <td nowrap class="text-center">
               <i class="fas fa-circle" style="color:green"></i>
             </td>
 
@@ -150,7 +153,10 @@
                   @endif
                 @endif
               </td>
-            @endif
+            @endif -->
+            <td nowrap class="text-center" colspan="3">
+              {{$serviceRequest->SignatureFlows->whereNotNull('status')->count()}} / {{$serviceRequest->SignatureFlows->count()}}
+            </td>
           @endif
     		</tr>
     	@endforeach
