@@ -173,6 +173,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::resource('addendums', 'Agreements\AddendumController');
     Route::get('/addendum/{file}', 'Agreements\AddendumController@download')->name('addendum.download');
     Route::resource('programs', 'Agreements\ProgramController');
+    Route::resource('municipalities', 'MunicipalityController');
     Route::put('/amount/{agreement_amount}', 'Agreements\AgreementController@updateAmount')->name('amount.update');
     Route::delete('/amount/{agreement_amount}', 'Agreements\AgreementController@destroyAmount')->name('amount.destroy');
     Route::put('/quota/{agreement_quota}', 'Agreements\AgreementController@updateQuota')->name('quota.update');
