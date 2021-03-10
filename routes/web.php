@@ -300,13 +300,13 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
     Route::prefix('permissions')->as('permissions.')->group(function () {
         Route::get('/create/{guard}', 'Parameters\PermissionController@create')->name('create');
         Route::post('/store', 'Parameters\PermissionController@store')->name('store');
-        Route::get('/{guard}', 'Parameters\PermissionController@index')->name('index');        
+        Route::get('/{guard}', 'Parameters\PermissionController@index')->name('index');
         Route::get('/edit/{permission}', 'Parameters\PermissionController@edit')->name('edit');
         Route::put('/update/{permission}', 'Parameters\PermissionController@update')->name('update');
         Route::delete('{permission}/destroy', 'Parameters\PermissionController@destroy')->name('destroy');
 
     });
-    
+
     Route::resource('roles', 'Parameters\RoleController');
 
     Route::prefix('communes')->as('communes.')->group(function () {
@@ -373,7 +373,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
     Route::get('/showPdf/{signaturesFile}', 'Documents\SignatureController@showPdf')->name('showPdf');
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('showPdfAnexo');
-    Route::get('/callback_firma/{message}/{signaturesFile?}', 'Documents\SignatureController@callbackFirma')->name('callbackFirma');
+    Route::get('/callback_firma/{message}/{modelId}/{returnUrl}/{signaturesFile?}', 'Documents\SignatureController@callbackFirma')->name('callbackFirma');
 
 });
 Route::resource('documents', 'Documents\DocumentController')->middleware('auth');

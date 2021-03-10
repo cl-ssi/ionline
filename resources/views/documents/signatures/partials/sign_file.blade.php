@@ -1,15 +1,16 @@
-<div class="modal fade" id="signPdfModal{{$idSignModal}}" tabindex="-1" role="dialog"
+<div class="modal fade" id="signPdfModal{{$idModelModal}}" tabindex="-1" role="dialog"
      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Firmar documento {{$idSignModal}} </h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Firmar documento {{$idModelModal}} </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <form method="POST" class="form-horizontal"
                   action="{{route('signPdf')}}"
+                  target="_blank"
                   enctype="multipart/form-data">
                 <div class="modal-body">
                 @csrf <!-- input hidden contra ataques CSRF -->
@@ -22,6 +23,7 @@
 {{--                            <input type="hidden" name="file_path" value="modulo1/1.pdf">--}}
                             <input type="hidden" name="route" value={{$routePdfSignModal}}>
                             <input type="hidden" name="return_url" value={{$returnUrlSignModal}}>
+                            <input type="hidden" name="model_id" value={{$idModelModal}}>
                         </div>
                     </div>
                 </div>
