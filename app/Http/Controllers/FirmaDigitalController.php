@@ -303,12 +303,15 @@ class FirmaDigitalController extends Controller
         $modo = self::modoAtendidoProduccion;
         $otp = $request->otp;
         $returnUrl = $request->return_url;
+        $modelId = $request->model_id;
         $signatureType = 'firmante';
 
         $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $signatureType);
 
         if (!$responseArray['statusOk']) {
-            return redirect()->route($returnUrl, ['message' => "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}"]);
+            return redirect()->route('documents.callbackFirma', ['message' => "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}",
+                'modelId' => $modelId,
+                'returnUrl' => $returnUrl]);
         }
 
         $signaturesFile = SignaturesFile::create();
@@ -316,7 +319,10 @@ class FirmaDigitalController extends Controller
         $signaturesFile->md5_file = $checksum_pdf;
         $signaturesFile->save();
 
-        return redirect()->route($returnUrl, ['message' => "El documento $signaturesFile->id se ha firmado correctamente.", 'signaturesFile' => $signaturesFile->id]);
+        return redirect()->route('documents.callbackFirma', ['message' => "El documento $signaturesFile->id se ha firmado correctamente.",
+            'modelId' => $modelId,
+            'returnUrl' => $returnUrl,
+            'signaturesFile' => $signaturesFile->id]);
     }
 
     /**
@@ -411,6 +417,7 @@ class FirmaDigitalController extends Controller
             $secret = env('FIRMA_SECRET');
             $otp = $otp;
             $run = Auth::id();
+//            $run = 16351236;
 
             $purpose = 'Propósito General';
             $entity = 'Servicio de Salud Iquique';
