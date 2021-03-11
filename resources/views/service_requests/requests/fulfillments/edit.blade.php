@@ -600,12 +600,12 @@
               </tr>
           </thead>
           <tbody>
-              @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approver_id != NULL)
               <tr>
+                {{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approbation}}
                   <td>Responsable</td>
                   <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approbation_date}}</td>
                   <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsableUser->getFullNameAttribute()}}</td>
-                  <td>@if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approbation == 1) APROBADO @else RECHAZADO @endif</td>
+                  <td>@if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approbation === 1) APROBADO @else RECHAZADO @endif</td>
               </tr>
               @endif
               @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->rrhh_approver_id != NULL)
@@ -613,7 +613,7 @@
                   <td>RRHH</td>
                   <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->rrhh_approbation_date}}</td>
                   <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->rrhhUser->getFullNameAttribute()}}</td>
-                  <td>@if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->rrhh_approver_id == 1) APROBADO @else RECHAZADO @endif</td>
+                  <td>@if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->rrhh_approbation === 1) APROBADO @else RECHAZADO @endif</td>
               </tr>
               @endif
               @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->finances_approver_id != NULL)
@@ -621,7 +621,7 @@
                   <td>Finanzas</td>
                   <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->finances_approbation_date}}</td>
                   <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->financesUser->getFullNameAttribute()}}</td>
-                  <td>@if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->finances_approver_id == 1) APROBADO @else RECHAZADO @endif</td>
+                  <td>@if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->finances_approbation === 1) APROBADO @else RECHAZADO @endif</td>
               </tr>
               @endif
           </tbody>
