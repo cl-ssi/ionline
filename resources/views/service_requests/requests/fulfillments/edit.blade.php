@@ -600,8 +600,8 @@
               </tr>
           </thead>
           <tbody>
+              @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approver_id != NULL)
               <tr>
-                {{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approbation}}
                   <td>Responsable</td>
                   <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approbation_date}}</td>
                   <td>{{$serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsableUser->getFullNameAttribute()}}</td>
