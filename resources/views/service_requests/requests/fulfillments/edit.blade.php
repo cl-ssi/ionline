@@ -492,6 +492,7 @@
         <fieldset class="form-group col">
             <label for="for_estate"><br/></label>
 
+
             @if($serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->responsable_approbation != NULL)
               <a type="button"
                  class="btn btn-outline-success form-control"
@@ -515,7 +516,6 @@
                                                                                         </span>
                     </button>
                 @endif
-
             @endif
 
         </fieldset>
@@ -672,19 +672,27 @@
       @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
 
     <div class="row">
-      <fieldset class="form-group col-9">
+      <fieldset class="form-group col-5">
 
       </fieldset>
       <fieldset class="form-group col">
           <label for="for_estate"><br/></label>
-
           <a type="button"
              class="btn btn-outline-success form-control"
              href="{{ route('rrhh.fulfillments.certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank">
              Generar certificado
              <i class="fas fa-file"></i>
           </a>
+      </fieldset>
 
+      <fieldset class="form-group col">
+          <label for="for_estate"><br/></label>
+          <a type="button"
+             class="btn btn-outline-success form-control"
+             href="{{ route('rrhh.service_requests.resolution-pdf',$serviceRequest) }}" target="_blank">
+             Generar Resolución
+             <i class="fas fa-file"></i>
+          </a>
       </fieldset>
     </div>
 

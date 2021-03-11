@@ -267,7 +267,7 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
 </p>
 
 <p class="justify">
-    <strong>TERCERO:</strong> El prestador recibirá los lineamientos por parte del Jefe del Servicio de Urgencias, del Hospital Regional de Iquique, el cual tendrá la responsabilidad de evaluar sus servicios en forma mensual.
+    <strong>TERCERO:</strong> El prestador recibirá los lineamientos por parte del Jefe del {{$ServiceRequest->responsabilityCenter->name}}, del Hospital Regional de Iquique, el cual tendrá la responsabilidad de evaluar sus servicios en forma mensual.
 </p>
 
 <p class="justify">
@@ -297,7 +297,7 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
   @else
     <p class="justify">
         <strong>SÉPTIMO:</strong>
-          En el desempeño de sus funciones, el prestador cumplió con 12 Horas Diurnas y 14 Horas Nocturnas en el mes de Enero, cuya suma alzada totas es de $139,392.- (Ciento Treinta y Nueve Mil Trescientos Noventa y Dos Pesos)  impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de $139,392 el mes de Enero; se deberá acreditar contra presentación de certificado extendido por el Jefe del Servicio de Emergencia, dependiente del Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados.
+          En el desempeño de sus funciones, el prestador cumplió con 12 Horas Diurnas y 14 Horas Nocturnas en el mes de Enero, cuya suma alzada totas es de $139,392.- (Ciento Treinta y Nueve Mil Trescientos Noventa y Dos Pesos)  impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de $139,392 el mes de Enero; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados.
           Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios     prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
         </p>
   @endif
@@ -305,14 +305,14 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
 
 @if($ServiceRequest->program_contract_type == "Mensual")
   <p class="justify">
-      <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de $2,319,567.- (Dos Millones Trescientos Diecinueve Mil Quinientos Sesenta y Siete Pesos),  impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en tres cuotas, una de $773,189 el mes de Enero, una de $773,189 el mes de Febrero y una de $773,189 el mes de Marzo; se deberá acreditar contra presentación de certificado extendido por el Jefe del Servicio de Emergencia, dependiente del Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
+      <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de $2,319,567.- (Dos Millones Trescientos Diecinueve Mil Quinientos Sesenta y Siete Pesos),  impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en tres cuotas, una de $773,189 el mes de Enero, una de $773,189 el mes de Febrero y una de $773,189 el mes de Marzo; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
     <br>
     Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
   </p>
 @elseif($ServiceRequest->program_contract_type == "Horas")
   @if($ServiceRequest->estate == "Profesional Médico")
     <p class="justify">
-        <strong>OCTAVO:</strong> El “valor por hora” será por la suma de $32.000.- (Treinta y dos mil Pesos), para efectos del pago, cada final de mes el Jefe del Servicio de Emergencia o por la jefatura inmediatamente superior, deberá certificar las horas realizadas por el profesional médico de manera presencial (no es aceptable la suplantación de personas). Debiendo, además, adjuntar el registro de asistencia efectuado en el respectivo servicio, los cuales serán indispensables para su cancelación, sin perjuicio de las funciones de control de la Subdirección de Gestión y Desarrollo de las Personas del Hospital de Iquique,
+        <strong>OCTAVO:</strong> El “valor por hora” será por la suma de $32.000.- (Treinta y dos mil Pesos), para efectos del pago, cada final de mes el Jefe del {{$ServiceRequest->responsabilityCenter->name}} o por la jefatura inmediatamente superior, deberá certificar las horas realizadas por el profesional médico de manera presencial (no es aceptable la suplantación de personas). Debiendo, además, adjuntar el registro de asistencia efectuado en el respectivo servicio, los cuales serán indispensables para su cancelación, sin perjuicio de las funciones de control de la Subdirección de Gestión y Desarrollo de las Personas del Hospital de Iquique,
         <br><br>
       	El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
         <br><br>
@@ -360,16 +360,16 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
 
 @if($ServiceRequest->program_contract_type == "Mensual")
   <p class="justify">
-      <strong>DÉCIMO PRIMERO::</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
+      <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
   </p>
 @elseif($ServiceRequest->program_contract_type == "Horas")
   @if($ServiceRequest->estate == "Profesional Médico")
     <p class="justify">
-        <strong>DÉCIMO PRIMERO::</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
+        <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
     </p>
   @else
     <p class="justify">
-        <strong>DÉCIMO PRIMERO::</strong> La personería de D. HECTOR ALARCON ALARCON, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de Director, consta en Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020, del Servicio de Salud Iquique.
+        <strong>DÉCIMO PRIMERO:</strong> La personería de D. HECTOR ALARCON ALARCON, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de Director, consta en Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020, del Servicio de Salud Iquique.
     </p>
   @endif
 @endif
