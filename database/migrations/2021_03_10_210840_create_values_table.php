@@ -16,6 +16,7 @@ class CreateValuesTable extends Migration
         Schema::create('sr_values', function (Blueprint $table) {
             $table->id();
             $table->string('contract_type');
+            $table->string('type');
             $table->string('work_type');
             $table->integer('amount');
             $table->date('validity_from');
@@ -31,6 +32,6 @@ class CreateValuesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hour_values');
+        Schema::dropIfExists('sr_values');
     }
 }
