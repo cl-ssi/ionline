@@ -89,10 +89,18 @@ class ServiceRequestController extends Controller
       return view('service_requests.requests.index', compact('serviceRequestsMyPendings','serviceRequestsOthersPendings','serviceRequestsRejected','serviceRequestsAnswered','serviceRequestsCreated','users'));
   }
 
-  public function aditional_data_list(){
+  public function aditional_data_list(Request $request){
 
-    $serviceRequests = ServiceRequest::orderBy('id','asc')->get();
-    return view('service_requests.requests.aditional_data_list', compact('serviceRequests'));
+    // dd($request);
+    $responsability_center_ou_id = $request->responsability_center_ou_id;
+    // dd($responsability_center_ou_id);
+    $serviceRequests = ServiceRequest::
+                                       when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
+                                          return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+                                       })
+                                     ->orderBy('id','asc')->get();
+    $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)->orderBy('name', 'ASC')->get();
+    return view('service_requests.requests.aditional_data_list', compact('serviceRequests','responsabilityCenters'));
   }
 
   /**

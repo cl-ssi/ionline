@@ -4,7 +4,26 @@
 
 @section('content')
 
-<h3>Listado de Solicitudes de Contratación de Servicio - Datos adicionales</h3>
+<h3>Listado de Solicitudes de Contratación de Servicio - Datos adicionales</h3><br>
+
+<form method="GET" class="form-horizontal" action="{{ route('rrhh.service_requests.aditional_data_list') }}">
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Unidad</span>
+    </div>
+    <select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" data-size="5">
+      <option value="">Todos</option>
+      @foreach($responsabilityCenters as $key => $responsabilityCenter)
+        <option value="{{$responsabilityCenter->id}}">{{$responsabilityCenter->name}}</option>
+      @endforeach
+    </select>
+    <div class="input-group-append">
+        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+    </div>
+  </div>
+</form>
+
+<hr>
 
 <div class="table-responsive">
 <table class="table table-striped table-sm table-bordered">
