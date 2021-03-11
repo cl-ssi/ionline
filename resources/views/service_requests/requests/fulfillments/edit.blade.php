@@ -668,9 +668,9 @@
           @endforeach
         </tbody>
     </table>
-
-      @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
-
+      @can('be god')
+        @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
+      @endcan
     <div class="row">
       <fieldset class="form-group col-5">
 
