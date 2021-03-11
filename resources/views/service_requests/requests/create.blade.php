@@ -41,7 +41,7 @@
 	<div class="row">
 
 		<fieldset class="form-group col">
-		    <label for="for_program_contract_type">Tipo de Contratación</label>
+		    <label for="for_program_contract_type">Tipo</label>
 		    <select name="program_contract_type" class="form-control" wire:model="art" id="program_contract_type" required>
 					<option value=""></option>
           <!-- <option value="Semanal">Semanal</option> -->
@@ -251,6 +251,17 @@
   </div>
 
   <div class="row">
+
+		<fieldset class="form-group col">
+		    <label for="for_contractual_condition">Calidad Contractual</label>
+        <select name="contractual_condition" class="form-control">
+          <option value=""></option>
+          <option value="SUPLENTE" >SUPLENTE</option>
+          <option value="CONTRATA" >CONTRATA</option>
+          <option value="TITULAR" >TITULAR</option>
+          <option value="HONORARIO COVID" >HONORARIO COVID</option>
+        </select>
+		</fieldset>
 
     <fieldset class="form-group col">
 		    <label for="for_programm_name">Nombre del programa</label>

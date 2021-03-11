@@ -33,7 +33,7 @@
 	<div class="form-row">
 
     <fieldset class="form-group col col-md">
-		    <label for="for_program_contract_type">Tipo de Contratación</label>
+		    <label for="for_program_contract_type">Tipo</label>
 		    <select name="program_contract_type" id="program_contract_type" class="form-control" required>
           <!-- <option value="Semanal" @if($serviceRequest->program_contract_type == 'Semanal') selected @endif >Semanal</option> -->
           <option value="Mensual" @if($serviceRequest->program_contract_type == 'Mensual') selected @endif >Mensual</option>
@@ -188,6 +188,17 @@
   </div>
 
   <div class="form-row">
+
+    <fieldset class="form-group col">
+		    <label for="for_contractual_condition">Calidad Contractual</label>
+        <select name="contractual_condition" class="form-control">
+          <option value=""></option>
+          <option value="SUPLENTE" @if($serviceRequest->contractual_condition == 'SUPLENTE') selected @endif >SUPLENTE</option>
+          <option value="CONTRATA" @if($serviceRequest->contractual_condition == 'CONTRATA') selected @endif>CONTRATA</option>
+          <option value="TITULAR" @if($serviceRequest->contractual_condition == 'TITULAR') selected @endif>TITULAR</option>
+          <option value="HONORARIO COVID" @if($serviceRequest->contractual_condition == 'HONORARIO COVID') selected @endif>HONORARIO COVID</option>
+        </select>
+		</fieldset>
 
     <fieldset class="form-group col">
 		    <label for="for_programm_name">Nombre del programa</label>
