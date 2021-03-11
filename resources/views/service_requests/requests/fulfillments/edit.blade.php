@@ -504,7 +504,7 @@
                 {{--modal firmador--}}
                 @php
                     $idModelModal = $serviceRequest->Fulfillments->where('year',$period->format("Y"))->where('month',$period->format("m"))->first()->id;
-                    $routePdfSignModal = "/rrhh/service_requests/resolution-pdf/$idModelModal";
+                    $routePdfSignModal = "/rrhh/fulfillments/certificate-pdf/$idModelModal";
                     $returnUrlSignModal = "rrhh.fulfillments.edit_fulfillment";
                 @endphp
 
