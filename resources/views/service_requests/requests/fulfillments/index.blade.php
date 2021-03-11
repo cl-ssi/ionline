@@ -16,6 +16,7 @@
     		</tr>
     		<tr>
     			<th scope="col">Id</th>
+          <th scope="col">Nro.Res.</th>
     			<th scope="col">Tipo</th>
           <th scope="col">T.Contrato</th>
     			<th scope="col">F. Solicitud</th>
@@ -34,6 +35,7 @@
     	@foreach($serviceRequests as $serviceRequest)
     		<tr>
     			<td>{{ $serviceRequest->id }}</td>
+          <td>{{ $serviceRequest->resolution_number }}</td>
     			<td>{{ $serviceRequest->type }}</td>
           <td>{{ $serviceRequest->program_contract_type }}</td>
     			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
