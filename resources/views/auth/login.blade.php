@@ -22,10 +22,15 @@
     <div class="row justify-content-center mt-4">
         <div class="col-md-8 d-none" id="local_login">
             <div class="card">
-                <div class="card-header">{{ __('Iniciar sesión local') }}</div>
+                <div class="card-header justify-content-center"><h5> {{ isset($url) ? ucwords($url) : ""}} {{ __('Login') }} </h5></div>
+                <div class="card-header">{{ __('Iniciar sesión')  }} {{ isset($url) ? ucwords($url) : ""}}</div>
 
                 <div class="card-body">
+                    @isset($url)
+                    <form method="POST" action='{{ url("login/$url") }}'>
+                    @else                    
                     <form method="POST" action="{{ route('login') }}">
+                    @endisset
                         @csrf
 
                         <div class="form-group row">
