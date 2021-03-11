@@ -210,7 +210,7 @@
 									<span class="fas fa-edit" aria-hidden="true"></span>
 								</a>
 
-								@if($serviceRequest->program_contract_type == "Horas")
+								<!-- @if($serviceRequest->program_contract_type == "Horas")
 									<a href="{{ route('rrhh.service_requests.certificate-pdf', $serviceRequest) }}"
 										class="btn btn-outline-secondary btn-sm" target="_blank">
 									<span class="fas fa-file" aria-hidden="true"></span></a>
@@ -218,23 +218,25 @@
 									<a href="{{ route('rrhh.fulfillments.edit_fulfillment',[$serviceRequest]) }}"
 									   class="btn btn-outline-secondary btn-sm" tooltip="Ir a formulario de cumplimiento">
 									<i class="fas fa-file-import" style="color:#B9B9B9"></i></a>
-								@endif
+								@endif -->
 
-								@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
-									<a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
-									<i class="fas fa-file" style="color:#B9B9B9"></i></a>
-								@else
-									@if($serviceRequest->SignatureFlows->where('status',0)->count() > 0)
-										<a data-toggle="modal" 	class="btn btn-outline-secondary btn-sm" id="a_modal_flow_rejected">
+								@if($serviceRequest->program_contract_type == "Mensual")
+									@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
+										<a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
 										<i class="fas fa-file" style="color:#B9B9B9"></i></a>
 									@else
-										<!-- <a href="#"
-											class="btn btn-outline-secondary btn-sm" target="_blank">
-										<span class="fas fa-plus" aria-hidden="true"></span></a> -->
+										@if($serviceRequest->SignatureFlows->where('status',0)->count() > 0)
+											<a data-toggle="modal" 	class="btn btn-outline-secondary btn-sm" id="a_modal_flow_rejected">
+											<i class="fas fa-file" style="color:#B9B9B9"></i></a>
+										@else
+											<!-- <a href="#"
+												class="btn btn-outline-secondary btn-sm" target="_blank">
+											<span class="fas fa-plus" aria-hidden="true"></span></a> -->
 
-										<a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
-											class="btn btn-outline-secondary btn-sm" target="_blank">
-										<span class="fas fa-file" aria-hidden="true"></span></a>
+											<a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+												class="btn btn-outline-secondary btn-sm" target="_blank">
+											<span class="fas fa-file" aria-hidden="true"></span></a>
+										@endif
 									@endif
 								@endif
 							</td>
