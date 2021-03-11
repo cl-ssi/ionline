@@ -237,7 +237,7 @@ class FulfillmentController extends Controller
         }
 
 
-        return view('service_requests.requests.fulfillments.edit',compact('serviceRequest','periods'));
+        return view('service_requests.requests.fulfillments.edit',compact('serviceRequest'));
     }
 
     public function save_approbed_fulfillment(ServiceRequest $serviceRequest)
