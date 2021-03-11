@@ -13,13 +13,35 @@
 
     <div class="row">
         <fieldset class="form-group col-6 col-md-4">
-            <label for="for_contract_type">Tipo de Contrato*</label>
-            <input type="text" class="form-control" id="for_contract_type" name="contract_type" required>
+            <label for="for_contract_type" >Tipo de Contrato*</label>
+            <select name="contract_type" class="form-control" required>
+                <option value="">Seleccionar</option>
+                <option value="Mensual">Mensual</option>
+                <option value="Horas">Horas</option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-6 col-md-4">
+            <label for="for_type" >Tipo</label>
+            <select name="type" class="form-control" required>
+                <option value="">Seleccionar</option>
+                <option value="Covid">Honorarios - Covid</option>
+            </select>
         </fieldset>
 
         <fieldset class="form-group col-6 col-md-4">
             <label for="for_guard_name">Jornada</label>
-            <input type="text" class="form-control" id="for_work_type" name="work_type" required>
+            <select id="for_work_type" name="work_type"  class="form-control" required>
+                <option value="">Seleccionar</option>
+                <option value="DIURNO"  >DIURNO</option>
+                <option value="TERCER TURNO">TERCER TURNO</option>
+                <option value="TERCER TURNO - MODIFICADO">TERCER TURNO - MODIFICADO</option>
+                <option value="CUARTO TURNO">CUARTO TURNO</option>
+                <option value="CUARTO TURNO - MODIFICADO">CUARTO TURNO - MODIFICADO</option>
+                <option value="HORA MÉDICA">HORA MÉDICA</option>
+                <option value="DIURNO PASADO A TURNO">DIURNO PASADO A TURNO</option>
+                <option value="OTRO">OTRO</option>                
+            </select>            
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-2">
