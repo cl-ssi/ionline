@@ -658,12 +658,26 @@
         var selected = this.selectedIndex - 1;
         var ruts = new Array();
         var appelatives = new Array();
+        var decrees = new Array();
+        //Alcalde actual
         ruts.push(@json($municipality->rut_representative))
         appelatives.push('Alcalde Don')
-        if(@json($municipality->rut_representative_surrogate) != null){ ruts.push(@json($municipality->rut_representative_surrogate)); appelatives.push('Alcalde Subrogante Don'); }
-        if(@json($agreement->representative) != null && @json($agreement->representative) != @json($municipality->name_representative) && @json($agreement->representative) != @json($municipality->name_representative_surrogate)){ ruts.push(@json($agreement->representative_rut)); appelatives.push(@json($agreement->representative_appelative)); }
+        decrees.push(@json($municipality->decree_representative))
+        // alcalde subrogante actual
+        if(@json($municipality->rut_representative_surrogate) != null){ 
+            ruts.push(@json($municipality->rut_representative_surrogate))
+            appelatives.push('Alcalde Subrogante Don')
+            decrees.push(@json($municipality->decree_representative_surrogate))
+        }
+        // alcalde registrado al momento de completar el convenio pero que no es igual al alcalde ni al subrogante actual
+        if(@json($agreement->representative) != null && @json($agreement->representative) != @json($municipality->name_representative) && @json($agreement->representative) != @json($municipality->name_representative_surrogate)){ 
+            ruts.push(@json($agreement->representative_rut))
+            appelatives.push(@json($agreement->representative_appelative))
+            decrees.push(@json($agreement->representative_decree))
+        }
         $("#representative_rut").val(ruts[selected])
         $("#representative_appelative").val(appelatives[selected])
+        $("#representative_decree").val(decrees[selected])
     })
 </script>
 @endsection

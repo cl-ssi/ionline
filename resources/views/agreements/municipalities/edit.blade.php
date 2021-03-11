@@ -15,12 +15,12 @@
     <div class="form-row">
         <fieldset class="form-group col-2">
             <label for="for_rut">RUT</label>
-            <input type="text" class="form-control" id="rut_municipality" name="rut_municipality" value="{{$municipality->rut_municipality}}" required>
+            <input type="text" class="form-control" id="rut_municipality" name="rut_municipality" value="{{$municipality->rut_municipality}}" required readonly>
         </fieldset>
 
         <fieldset class="form-group col-4">
             <label for="for_name">Nombre municipio</label>
-            <input type="text" class="form-control" id="name_municipality" name="name_municipality" value="{{$municipality->name_municipality}}" required>
+            <input type="text" class="form-control" id="name_municipality" name="name_municipality" value="{{$municipality->name_municipality}}" required readonly>
         </fieldset>
 
         <fieldset class="form-group col-6">
@@ -54,6 +54,11 @@
         <fieldset class="form-group col-4">
             <label for="for_name">Nombre alcalde subrogante</label>
             <input type="text" class="form-control" id="name_representative_surrogate" name="name_representative_surrogate" value="{{$municipality->name_representative_surrogate}}">
+        </fieldset>
+
+        <fieldset class="form-group col-6">
+            <label for="for_address">Decreto</label>
+            <input type="text" class="form-control" id="decree_representative_surrogate" name="decree_representative_surrogate" value="{{$municipality->decree_representative_surrogate}}">
         </fieldset>
 
     </div>
