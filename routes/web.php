@@ -25,6 +25,7 @@ use App\Http\Controllers\ReplacementStaff\LanguageController;
 use App\Http\Controllers\VaccinationController;
 
 use App\Http\Controllers\ServiceRequests\InvoiceController;
+use App\Http\Controllers\ServiceRequests\ValueController;
 
 
 /*
@@ -288,6 +289,10 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/{user}/edit', 'Rrhh\UserController@edit_sr')->name('edit')->middleware('auth');
             Route::put('/{user}', 'Rrhh\UserController@update_sr')->name('update')->middleware('auth');
             Route::delete('/{user}', 'Rrhh\UserController@destroy_sr')->name('destroy')->middleware('auth');
+
+            Route::prefix('rrhh')->as('rrhh.')->group(function () {
+
+            });
         });
     });
 });
@@ -304,6 +309,15 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::get('/edit/{permission}', 'Parameters\PermissionController@edit')->name('edit');
         Route::put('/update/{permission}', 'Parameters\PermissionController@update')->name('update');
         Route::delete('{permission}/destroy', 'Parameters\PermissionController@destroy')->name('destroy');
+
+    });
+
+    Route::prefix('values')->as('values.')->group(function () {        
+        Route::get('/', [ValueController::class, 'index'])->name('index');
+        Route::get('/create', [ValueController::class, 'create'])->name('create');
+        Route::get('/{value}/edit', [ValueController::class, 'edit'])->name('edit');
+        Route::post('/store', [ValueController::class, 'store'])->name('store');
+        Route::put('/{value}/update', [ValueController::class, 'update'])->name('update');
 
     });
 
