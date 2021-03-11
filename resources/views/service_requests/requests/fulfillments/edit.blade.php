@@ -669,6 +669,8 @@
         </tbody>
     </table>
 
+      @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
+
     <div class="row">
       <fieldset class="form-group col-9">
 
