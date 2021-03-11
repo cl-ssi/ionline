@@ -453,7 +453,7 @@
                 {{--modal firmador--}}
                 @php
                     $idModelModal = $fulfillment->id;
-                    $routePdfSignModal = "/rrhh/service_requests/resolution-pdf/$idModelModal";
+                    $routePdfSignModal = "/rrhh/fulfillments/certificate-pdf/$idModelModal";
                     $returnUrlSignModal = "rrhh.fulfillments.edit_fulfillment";
                 @endphp
 
@@ -614,9 +614,9 @@
           @endforeach
         </tbody>
     </table>
-
-      @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
-
+      @can('be god')
+        @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
+      @endcan
     <div class="row">
       <fieldset class="form-group col-5">
 
