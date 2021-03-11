@@ -5,11 +5,9 @@
     </tr>
     </thead>
     <tbody>
-    @foreach($serviceRequest->shiftControls as $key => $shiftControl)
         <tr>
 
-            <td>{{Carbon\Carbon::parse($shiftControl->start_date)->diffInHours($shiftControl->end_date)}}</td>
+            <td>{{$totalHoursDay}}</td>
         </tr>
-    @endforeach
     </tbody>
 </table>
