@@ -8,7 +8,7 @@ class Municipality extends Model
 {
     protected $fillable = [
         'name','name_municipality','rut_municipality','adress_municipality','appellative_representative','decree_representative',
-        'name_representative','rut_representative','name_representative_surrogate','rut_representative_surrogate'
+        'name_representative','rut_representative','name_representative_surrogate','rut_representative_surrogate', 'decree_representative_surrogate'
     ];
 
     protected $hidden = [
