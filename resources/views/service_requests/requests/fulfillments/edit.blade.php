@@ -1017,16 +1017,20 @@
             <label for="for_resolution_date">Fecha Resolución</label>
             <input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
         </fieldset>
+      </div>
+
+      <div class="form-row">
 
         <fieldset class="form-group col col-md">
             <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
-            <input type="text" class="form-control" name="total_hours_to_pay" value="{{$serviceRequest->Fulfillments->first()->total_hours_to_pay}}" disabled>
+            <input type="text" class="form-control" name="total_hours_to_pay" disabled value="{{$fulfillment->total_hours_to_pay}}">
         </fieldset>
 
         <fieldset class="form-group col col-md">
             <label for="for_total_paid">Total a pagar</label>
-            <input type="text" class="form-control" name="total_to_pay" value="{{$serviceRequest->Fulfillments->first()->total_to_pay}}" disabled>
+            <input type="text" class="form-control" name="total_to_pay" disabled value="{{$fulfillment->total_to_pay}}">
         </fieldset>
+
       </div>
 
       <div class="form-row">
@@ -1049,6 +1053,25 @@
         <fieldset class="form-group col-3 col-md-3">
             <label for="for_payment_date">Fecha pago</label>
             <input type="date" class="form-control" name="payment_date" required @if($serviceRequest->Fulfillments->first()->payment_date) value="{{$serviceRequest->Fulfillments->first()->payment_date->format('Y-m-d')}}" @endif>
+        </fieldset>
+
+        <fieldset class="form-group col col-md">
+          <label for="for_contable_month">Mes contable pago</label>
+          <select name="contable_month" class="form-control" required>
+            <option value=""></option>
+            <option value="1" @if($fulfillment->contable_month == 1) selected @endif>Enero</option>
+            <option value="2" @if($fulfillment->contable_month == 2) selected @endif>Febrero</option>
+            <option value="3" @if($fulfillment->contable_month == 3) selected @endif>Marzo</option>
+            <option value="4" @if($fulfillment->contable_month == 4) selected @endif>Abril</option>
+            <option value="5" @if($fulfillment->contable_month == 5) selected @endif>Mayo</option>
+            <option value="6" @if($fulfillment->contable_month == 6) selected @endif>Junio</option>
+            <option value="7" @if($fulfillment->contable_month == 7) selected @endif>Julio</option>
+            <option value="8" @if($fulfillment->contable_month == 8) selected @endif>Agosto</option>
+            <option value="9" @if($fulfillment->contable_month == 9) selected @endif>Septiembre</option>
+            <option value="10" @if($fulfillment->contable_month == 10) selected @endif>Octubre</option>
+            <option value="11" @if($fulfillment->contable_month == 11) selected @endif>Noviembre</option>
+            <option value="12" @if($fulfillment->contable_month == 12) selected @endif>Diciembre</option>
+          </select>
         </fieldset>
 
       </div>
