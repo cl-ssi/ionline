@@ -13,9 +13,21 @@ class ShowTotalHours extends Component
     public $totalHoursNight;
     public $totalHours;
     public $totalAmount;
+    public $errorMsg;
 
     public function render()
     {
+        $value = Value::where('contract_type', $this->serviceRequest->program_contract_type)
+            ->where('work_type', $this->serviceRequest->working_day_type)
+            ->where('type', $this->serviceRequest->type)
+            ->where('estate', $this->serviceRequest->estate)
+            ->whereDate('validity_from', '<=', now())->first();
+
+        if (!$value) {
+            $this->errorMsg = "No se encuentra valor Hora/Jornada vigente para la solicitud de servicio";
+            return view('livewire.service-request.show-total-hours');
+        }
+
         foreach ($this->serviceRequest->shiftControls as $shiftControl) {
             $hoursDay =  $shiftControl->start_date->diffInHoursFiltered(
                 function ($date) {
@@ -39,13 +51,7 @@ class ShowTotalHours extends Component
         }
 
         $this->totalHours = $this->totalHoursDay + $this->totalHoursNight;
-
-        $hourValue = Value::where('contract_type', 'Horas')
-            ->where('work_type', 'HORA MÉDICA')
-            ->where('type', 'Covid')
-            ->whereDate('validity_from', '<', now())->first()->amount;
-
-        $this->totalAmount = $this->totalHours * $hourValue;
+        $this->totalAmount = $this->totalHours * $value->amount;
 
 //        dump('Horas totales dia: '.$this->totalHoursDay);
 //        dump('Horas totales noche: '.$this->totalHoursNight);
