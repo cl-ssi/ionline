@@ -40,8 +40,23 @@
                 <option value="CUARTO TURNO - MODIFICADO" @if($value->work_type == 'CUARTO TURNO - MODIFICADO') selected @endif>CUARTO TURNO - MODIFICADO</option>
                 <option value="HORA MÉDICA" @if($value->work_type == 'HORA MÉDICA') selected @endif>HORA MÉDICA</option>
                 <option value="DIURNO PASADO A TURNO" @if($value->work_type == 'DIURNO PASADO A TURNO') selected @endif>DIURNO PASADO A TURNO</option>
-                <option value="OTRO" @if($value->work_type == 'OTRO') selected @endif>OTRO</option>                
-            </select>            
+                <option value="OTRO" @if($value->work_type == 'OTRO') selected @endif>OTRO</option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_estate">Estamento al que corresponde CS</label>
+            <select name="estate" class="form-control" required>
+                <option value="Profesional Médico" @if($value->estate == 'Profesional Médico') selected @endif >Profesional Médico</option>
+                <option value="Profesional" @if($value->estate == 'Profesional') selected @endif >Profesional</option>
+                <option value="Técnico" @if($value->estate == 'Técnico') selected @endif >Técnico</option>
+                <option value="Administrativo" @if($value->estate == 'Administrativo') selected @endif >Administrativo</option>
+                <option value="Farmaceutico" @if($value->estate == 'Farmaceutico') selected @endif >Farmaceutico</option>
+                <option value="Odontólogo" @if($value->estate == 'Odontólogo') selected @endif >Odontólogo</option>
+                <option value="Bioquímico" @if($value->estate == 'Bioquímico') selected @endif >Bioquímico</option>
+                <option value="Auxiliar" @if($value->estate == 'Auxiliar') selected @endif >Auxiliar</option>
+                <option value="Otro (justificar)" @if($value->estate == 'Otro (justificar)') selected @endif >Otro (justificar)</option>
+            </select>
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-2">
