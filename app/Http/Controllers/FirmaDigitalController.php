@@ -317,6 +317,7 @@ class FirmaDigitalController extends Controller
         $signaturesFile = SignaturesFile::create();
         $signaturesFile->signed_file = $responseArray['content'];
         $signaturesFile->md5_file = $checksum_pdf;
+        $signaturesFile->signer_id = Auth::id();
         $signaturesFile->save();
 
         return redirect()->route('documents.callbackFirma', ['message' => "El documento $signaturesFile->id se ha firmado correctamente.",

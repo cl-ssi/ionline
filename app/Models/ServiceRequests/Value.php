@@ -12,6 +12,6 @@ class Value extends Model
     public $table = 'sr_values';
 
     protected $fillable = [
-        'contract_type','type','work_type','amount', 'validity_from'
+        'contract_type','type','work_type','amount', 'validity_from', 'estate'
     ];
 }
