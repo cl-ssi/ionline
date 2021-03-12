@@ -10,25 +10,26 @@ class MonthlyValue extends Component
     public $fulfillment;
 
     public function value($fulfillment) {
-        /* Si es tipo Mensual oy tipo Covid */
-        if($fulfillment->serviceRequest->program_contract_type == 'Mensual' AND
-        $fulfillment->serviceRequest->type = 'Covid') {
+        /* Si es tipo Mensual y tipo Covid */
+        if($fulfillment->serviceRequest->program_contract_type == 'Mensual' 
+            AND $fulfillment->serviceRequest->type = 'Covid') {
 
-            /* si tiene una "Renuncia voluntaria", el termino de calculo es ahí */
+            /* si tiene una "Renuncia voluntaria", el termino del contrato es ahí */
             if($renuncia = $fulfillment->fulfillmentItems->where('type','Renuncia voluntaria')->first()){
                 $fulfillment->end_date = $renuncia->end_date;
             }
 
             /* si inicio de contrato coincide con inicio de mes y término de contrato coincide con fin de mes */
-            $mes_completo = false;
-            if($fulfillment->start_date->toDateString() == $fulfillment->start_date->startOfMonth()->toDateString() AND
-            $fulfillment->end_date->toDateString() == $fulfillment->end_date->endOfMonth()->toDateString() ) {
+            if($fulfillment->start_date->toDateString() == $fulfillment->start_date->startOfMonth()->toDateString() 
+                AND $fulfillment->end_date->toDateString() == $fulfillment->end_date->endOfMonth()->toDateString() ) {
+
                 $total_dias_trabajados = 30;
                 $mes_completo = true;
             }
             /* De lo contrario es la diferencia entre el primer y último día */
             else {
                 $total_dias_trabajados = $fulfillment->start_date->diff($fulfillment->end_date)->days + 1;
+                $mes_completo = false;
             }
 
             /* Restar las ausencias */
@@ -49,7 +50,7 @@ class MonthlyValue extends Component
 
             $total_dias_trabajados -= $dias_descuento;
 
-            $valor_mensual = 0;
+            /* Obtener de sr_values el valor mensual */
             switch($fulfillment->serviceRequest->estate) 
             {
                 case 'Profesional Médico':
@@ -59,7 +60,8 @@ class MonthlyValue extends Component
                         case '28': $estate = 'Médico 28'; break;
                         case '22': $estate = 'Médico 22'; break;
                         default:
-                            /* NO se que hacer acá */
+                            /* TODO: No sé que hacer acá */
+                            $estate = null;
                             break;
                     }
                     /* Calcular total de la boleta */
@@ -72,6 +74,7 @@ class MonthlyValue extends Component
                         ->first()
                     )->amount;
                     break;
+                case 'Profesional':
                 case 'Técnico':
                 case 'Administrativo':
                 case 'Farmaceutico':
@@ -90,22 +93,25 @@ class MonthlyValue extends Component
                     break;
                 case 'Otro (justificar)':
                     /* TODO: No se que se hace acá */
+                    $valor_mensual = 0;
+                    break;
+                default:
+                    /* TODO: No se que se hace acá */
+                    $valor_mensual = 0;
                     break;
 
             }
 
-            if($mes_completo) 
-            {
+            if($mes_completo) {
                 $total = $valor_mensual - ($dias_descuento * ($valor_mensual / 30) ) ; 
             }
-            else 
-            {
+            else {
                 $total = $total_dias_trabajados * ($valor_mensual / 30);
             }
 
         }
 
-        return $total;
+        return number_format(round($total), 0, ',', '.');
         
 
         /*
