@@ -12,7 +12,7 @@
     @method('PUT')
 
     <div class="row">
-        <fieldset class="form-group col-6 col-md-4">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_contract_type" >Tipo de Contrato*</label>
             <select name="contract_type" class="form-control" required>
                 <option value="">Seleccionar</option>
@@ -21,7 +21,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-6 col-md-4">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_type" >Tipo</label>
             <select name="type" class="form-control" required>
                 <option value="">Seleccionar</option>
@@ -29,7 +29,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-6 col-md-4">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_guard_name">Jornada</label>
             <select id="for_work_type" name="work_type"  class="form-control" required>
                 <option value="">Seleccionar</option>
@@ -47,7 +47,9 @@
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_estate">Estamento al que corresponde CS</label>
             <select name="estate" class="form-control" required>
-                <option value="Profesional Médico" @if($value->estate == 'Profesional Médico') selected @endif >Profesional Médico</option>
+                <option value="Médico 44" {{ ($value->estate == 'Médico 44')? 'selected' : ''}}>Médico 19.664 (44hrs)</option>
+                <option value="Médico 28" {{ ($value->estate == 'Médico 28')? 'selected' : ''}}>Médico 15.076 (28hrs)</option>
+                <option value="Médico 22" {{ ($value->estate == 'Médico 22')? 'selected' : ''}}>Médico xx.xxx (22hrs)</option>
                 <option value="Profesional" @if($value->estate == 'Profesional') selected @endif >Profesional</option>
                 <option value="Técnico" @if($value->estate == 'Técnico') selected @endif >Técnico</option>
                 <option value="Administrativo" @if($value->estate == 'Administrativo') selected @endif >Administrativo</option>
@@ -59,13 +61,13 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md-2">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_descripcion">Monto</label>
-            <input type="number" class="form-control" id="for_amount" name="amount" value="{{$value->amount}}" required>
+            <input type="number" step="0.01" class="form-control" id="for_amount" name="amount" value="{{$value->amount}}" required>
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md-2">
-            <label for="for_descripcion">Vigencia</label>
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_descripcion">Vigencia desde</label>
             <input type="date" class="form-control" id="for_validity_from" name="validity_from" value="{{$value->validity_from}}" required>
         </fieldset>
     </div>

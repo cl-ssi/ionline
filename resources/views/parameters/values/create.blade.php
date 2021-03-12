@@ -12,7 +12,7 @@
     @method('POST')
 
     <div class="row">
-        <fieldset class="form-group col-6 col-md-4">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_contract_type" >Tipo de Contrato*</label>
             <select name="contract_type" class="form-control" required>
                 <option value="">Seleccionar</option>
@@ -21,7 +21,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-6 col-md-4">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_type" >Tipo</label>
             <select name="type" class="form-control" required>
                 <option value="">Seleccionar</option>
@@ -29,7 +29,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-6 col-md-4">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_guard_name">Jornada</label>
             <select id="for_work_type" name="work_type"  class="form-control" required>
                 <option value="">Seleccionar</option>
@@ -44,11 +44,13 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-6 col-md-4">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_estate">Estamento al que corresponde CS</label>
             <select name="estate" class="form-control" required>
                 <option value="">Seleccionar</option>
-                <option value="Profesional Médico">Profesional Médico</option>
+                <option value="Médico 44">Médico 19.664 (44hrs)</option>
+                <option value="Médico 28">Médico 15.076 (28hrs)</option>
+                <option value="Médico 22">Médico xx.xxx (22hrs)</option>
                 <option value="Profesional">Profesional</option>
                 <option value="Técnico">Técnico</option>
                 <option value="Administrativo">Administrativo</option>
@@ -60,19 +62,16 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md-2">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_descripcion">Monto</label>
-            <input type="number" class="form-control" id="for_amount" name="amount" required>
+            <input type="number" step="0.01" class="form-control" id="for_amount" name="amount" required>
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md-2">
-            <label for="for_descripcion">Vigencia</label>
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_descripcion">Vigente desde</label>
             <input type="date" class="form-control" id="for_validity_from" name="validity_from" required>
         </fieldset>
     </div>
-
-
-
 
     <button type="submit" class="btn btn-primary">Guardar</button>
 
