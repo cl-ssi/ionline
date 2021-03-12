@@ -14,9 +14,10 @@ class AddEstateToSrValuesTable extends Migration
     public function up()
     {
         Schema::table('sr_values', function (Blueprint $table) {
-            $table->enum('estate', ['Profesional Médico', 'Profesional', 'Técnico', 'Administrativo', 'Farmaceutico', 'Odontólogo', 'Bioquímico', 'Auxiliar', 'Otro (justificar)'])
+            $table->enum('estate', ['Médico 44', 'Médico 28', 'Médico 22', 'Profesional', 'Técnico', 'Administrativo', 'Farmaceutico', 'Odontólogo', 'Bioquímico', 'Auxiliar', 'Otro (justificar)'])
                 ->after('validity_from')
                 ->nullable();
+            $table->float('amount', 8,2)->change();
         });
     }
 
@@ -29,6 +30,7 @@ class AddEstateToSrValuesTable extends Migration
     {
         Schema::table('sr_values', function (Blueprint $table) {
             $table->dropColumn('estate');
+            $table->integer('amount')->change();
         });
     }
 }
