@@ -433,15 +433,7 @@
       </table>
 
       <div class="row">
-        <fieldset class="form-group col-6">
-            <label for="for_invoice">Cargar Boleta</label>
-            @livewire('invoice.upload', ['fulfillmentId' => $fulfillment->id,
-            'hasInvoiceFile' =>  $fulfillment->has_invoice_file ])
-        </fieldset>
         <fieldset class="form-group col">
-            <label for="for_estate"><br/></label>
-
-
             @if($fulfillment->responsable_approbation != NULL)
               <a type="button"
                  class="btn btn-outline-success form-control"
@@ -451,13 +443,12 @@
               </a>
 
                 {{--modal firmador--}}
-                @php
-                    $idModelModal = $fulfillment->id;
-                    $routePdfSignModal = "/rrhh/fulfillments/certificate-pdf/$idModelModal";
-                    $returnUrlSignModal = "rrhh.fulfillments.edit_fulfillment";
-                @endphp
-
                 @if(Auth::user()->can('Service Request: sign document'))
+                    @php
+                        $idModelModal = $fulfillment->id;
+                        $routePdfSignModal = "/rrhh/fulfillments/certificate-pdf/$idModelModal";
+                        $returnUrlSignModal = "rrhh.fulfillments.edit_fulfillment";
+                    @endphp
                     @include('documents.signatures.partials.sign_file')
                     <button type="button" data-toggle="modal" class="btn btn-outline-secondary form-control"
                             data-target="#signPdfModal{{$idModelModal}}" title="Firmar"> Firmar certificado <span class="fas fa-signature"
@@ -469,9 +460,6 @@
 
         </fieldset>
         <fieldset class="form-group col">
-            <label for="for_estate"><br/></label>
-            <form>
-
               @can('Service Request: fulfillments responsable')
                     @if($fulfillment->responsable_approver_id == NULL)
 
@@ -533,8 +521,23 @@
                 @endif
 
               @endcan
-            </form>
+
         </fieldset>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-md-4">
+          <strong>Valor de la boleta</strong>
+          <div>
+            $ @livewire('service-request.monthly-value',['fulfillment' => $fulfillment])
+          </div>
+        </div>
+        <div class="col-12 col-md-8">
+          <strong>Cargar Boleta:</strong>
+          @livewire('invoice.upload', ['fulfillmentId' => $fulfillment->id,
+            'hasInvoiceFile' =>  $fulfillment->has_invoice_file ])
+        </div>
+        
       </div>
 
       @if($fulfillment->responsable_approver_id != NULL)
