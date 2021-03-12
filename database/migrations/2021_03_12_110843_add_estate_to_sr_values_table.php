@@ -15,7 +15,7 @@ class AddEstateToSrValuesTable extends Migration
     {
         Schema::table('sr_values', function (Blueprint $table) {
             $table->enum('estate', ['Profesional Médico', 'Profesional', 'Técnico', 'Administrativo', 'Farmaceutico', 'Odontólogo', 'Bioquímico', 'Auxiliar', 'Otro (justificar)'])
-                ->after('validity_from')
+                ->after('work_type')
                 ->nullable();
         });
     }
