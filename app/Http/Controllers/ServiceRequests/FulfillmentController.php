@@ -169,7 +169,7 @@ class FulfillmentController extends Controller
         $cont_periods = iterator_count($periods);
 
         // crea de forma automática las cabeceras
-        if ($serviceRequest->program_contract_type == "Mensual") {
+        if ($serviceRequest->program_contract_type == "Mensual" || ($serviceRequest->program_contract_type == "Horas" && $serviceRequest->working_day_type == "HORA MÉDICA")) {
           if ($serviceRequest->fulfillments->count() == 0) {
             // if (!Auth::user()->can('Service Request: fulfillments responsable')) {
             //   session()->flash('danger', 'El usuario responsable no ha certificado el cumplimiento de la solicitud: <b>' . $serviceRequest->id . "</b>. No tiene acceso.");
@@ -193,7 +193,9 @@ class FulfillmentController extends Controller
                 $fulfillment->year = $period->format("Y");
                 $fulfillment->month = $period->format("m");
               }else{
-                $program_contract_type = "Turnos";
+                $program_contract_type = "Horas";
+                $fulfillment->year = $period->format("Y");
+                $fulfillment->month = $period->format("m");
               }
               $fulfillment->type = $program_contract_type;
               $fulfillment->start_date = $start_date_period;
@@ -236,6 +238,8 @@ class FulfillmentController extends Controller
           }
         }
 
+        //tuve que hacer esto ya que no me devolvia fulfillments guardados.
+        $serviceRequest = ServiceRequest::find($serviceRequest->id);
 
         return view('service_requests.requests.fulfillments.edit',compact('serviceRequest'));
     }
