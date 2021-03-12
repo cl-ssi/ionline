@@ -40,8 +40,24 @@
                 <option value="CUARTO TURNO - MODIFICADO">CUARTO TURNO - MODIFICADO</option>
                 <option value="HORA MÉDICA">HORA MÉDICA</option>
                 <option value="DIURNO PASADO A TURNO">DIURNO PASADO A TURNO</option>
-                <option value="OTRO">OTRO</option>                
-            </select>            
+                <option value="OTRO">OTRO</option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-6 col-md-4">
+            <label for="for_estate">Estamento al que corresponde CS</label>
+            <select name="estate" class="form-control" required>
+                <option value="">Seleccionar</option>
+                <option value="Profesional Médico">Profesional Médico</option>
+                <option value="Profesional">Profesional</option>
+                <option value="Técnico">Técnico</option>
+                <option value="Administrativo">Administrativo</option>
+                <option value="Farmaceutico">Farmaceutico</option>
+                <option value="Odontólogo">Odontólogo</option>
+                <option value="Bioquímico">Bioquímico</option>
+                <option value="Auxiliar">Auxiliar</option>
+                <option value="Otro (justificar)">Otro (justificar)</option>
+            </select>
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-2">

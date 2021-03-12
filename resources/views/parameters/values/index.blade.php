@@ -16,6 +16,7 @@
             <th>ID</th>
             <th>Tipo de Contrato</th>
             <th>Jornada</th>
+            <th>Estamento</th>
             <th>Valor Hora</th>
             <th>Vigencia</th>
             <th></th>
@@ -27,6 +28,7 @@
             <td>{{ $value->id }}</td>
             <td>{{ $value->contract_type }}</td>
             <td>{{ $value->work_type }}</td>
+            <td>{{ $value->estate }}</td>
             <td>{{ $value->amount }}</td>
             <td>{{ $value->validity_from }}</td>
             <td>
