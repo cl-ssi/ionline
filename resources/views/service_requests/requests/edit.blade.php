@@ -60,7 +60,7 @@
 		</fieldset>
     <fieldset class="form-group col col-md">
 		    <label for="for_responsability_center_ou_id">Centro de Responsabilidad</label>
-				<select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" required="" data-size="5">
+				<select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" required="" data-size="5" id="responsability_center_ou_id">
           @foreach($responsabilityCenters as $key => $responsabilityCenter)
             <option value="{{$responsabilityCenter->id}}" @if($serviceRequest->responsability_center_ou_id == $responsabilityCenter->id) selected @endif >{{$responsabilityCenter->name}}</option>
           @endforeach
@@ -497,7 +497,7 @@
 
           <fieldset class="form-group col-12 col-md-4">
               <label for="for_digera_strategy">Estrategia Digera Covid</label>
-              <select name="digera_strategy" class="form-control">
+              <select name="digera_strategy" class="form-control" id="digera_strategy">
                 <option value=""></option>
                 <option value="Camas MEDIAS Aperturadas" @if($serviceRequest->digera_strategy == "Camas MEDIAS Aperturadas") selected @endif>Camas MEDIAS Aperturadas</option>
                 <option value="Camas MEDIAS Complejizadas" @if($serviceRequest->digera_strategy == "Camas MEDIAS Complejizadas") selected @endif>Camas MEDIAS Complejizadas</option>
@@ -788,6 +788,56 @@
 <script type="text/javascript">
 
 	$( document ).ready(function() {
+
+    //temporal, solicitado por eduardo
+    if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Departamento de Salud Ocupacional" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Extensión Hospital -Estadio" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Sección Administrativa Honorarios Covid" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio de Cirugía" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio de Ginecología y Obstetricia" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio de Medicina" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad de Alimentación y Nutrición" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad de Gestión de Camas" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad de Ginecología" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad de Medicina Física y Rehabilitación" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad de Movilización" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad de Salud Ocupacional" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad Imagenología") {
+      $('#digera_strategy').val("Camas MEDIAS Complejizadas");
+    }
+
+    if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio de Anestesia y Pabellones" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio Unidad Paciente Crítico Adulto" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio Unidad Paciente Crítico Pediatrico"){
+      $('#digera_strategy').val("Camas UCI Complejizadas");
+    }
+
+    if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad de Hospitalización Domiciliaria"){
+      $('#digera_strategy').val("Cupos Hosp. Domiciliaria");
+    }
+
+    if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Subdirección de Gestion Asistencial / Subdirección Médica" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad Laboratorio Clínico"){
+      $('#digera_strategy').val("Refuerzo Laboratorio");
+    }
+
+    if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Establecimientos de Red de Urgencias"){
+      $('#digera_strategy').val("Refuerzo SAMU");
+    }
+
+    if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Consultorio General Urbano Dr. Hector Reyno" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio de Emergencia Hospitalaria" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio Urgencia Ginecoobstetricia"){
+      $('#digera_strategy').val("Refuerzo UEH");
+    }
+
+
+
+
+
+    if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "xxx") {
+      $('#digera_strategy').val("xxx");
+    }
 
     if ($('#program_contract_type').val() == "Horas") {
       $("#control_turnos").show();
