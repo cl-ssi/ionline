@@ -15,7 +15,7 @@ class UploadResolution extends Component
     public $fulfillment;
     public $storage_path = '/service_request/resolutions/';
 
-    public function upload()
+    public function save()
     {
         $this->validate([
             'resolutionFile' => 'required|mimes:pdf|max:10240', // 10MB Max
