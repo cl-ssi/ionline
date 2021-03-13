@@ -452,18 +452,20 @@
       </div>
 
       <div class="row">
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-2">
           <strong>Valor de la boleta</strong>
           <div>
             $ @livewire('service-request.monthly-value',['fulfillment' => $fulfillment])
           </div>
         </div>
-        <div class="col-12 col-md-8">
-          <strong>Cargar Boleta:</strong>
-          @livewire('invoice.upload', ['fulfillmentId' => $fulfillment->id,
-            'hasInvoiceFile' =>  $fulfillment->has_invoice_file ])
+        <div class="col-12 col-md-5">
+          <strong>Cargar Resolución:</strong>
+          @livewire('service-request.upload-resolution', ['fulfillment' => $fulfillment])
         </div>
-
+        <div class="col-12 col-md-5">
+          <strong>Cargar Boleta:</strong>
+          @livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment])
+        </div>
       </div>
 
       @if($fulfillment->responsable_approver_id != NULL)
