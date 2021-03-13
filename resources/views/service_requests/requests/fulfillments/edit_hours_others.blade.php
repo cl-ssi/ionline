@@ -54,6 +54,22 @@
       </fieldset>
     </div>
 
+    <div class="row">
+        <div class="col-12 col-md-2">
+          <strong class="text-muted">Valor de la boleta</strong>
+          <div>
+
+          </div>
+        </div>
+        <div class="col-12 col-md-5">
+          <strong>Cargar Resolución:</strong>
+          @livewire('service-request.upload-resolution', ['fulfillment' => $serviceRequest->fulfillments->first()])
+        </div>
+        <div class="col-12 col-md-5">
+          <strong>Cargar Boleta:</strong>
+          @livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ])
+        </div>
+      </div>
   </div>
 </div>
 
