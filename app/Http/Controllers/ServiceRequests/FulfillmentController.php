@@ -566,10 +566,17 @@ class FulfillmentController extends Controller
         return redirect()->back();
     }
 
-    public function downloadInvoice($fulfillmentId)
+    public function downloadInvoice(Fulfillment $fulfillment)
     {
-        return Storage::response( 'invoices/' . $fulfillmentId . '.pdf', mb_convert_encoding($fulfillmentId . '.pdf', 'ASCII'));
+        $storage_path = '/service_request/invoices/';
+        $file =  $storage_path . $fulfillment->id . '.pdf';
+        return Storage::response($file, mb_convert_encoding($fulfillment->id.'.pdf', 'ASCII'));
     }
-
+    public function downloadResolution(Fulfillment $fulfillment)
+    {
+        $storage_path = '/service_request/resolutions/';
+        $file =  $storage_path . $fulfillment->id . '.pdf';
+        return Storage::response($file, mb_convert_encoding($fulfillment->id.'.pdf', 'ASCII'));
+    }
 
 }
