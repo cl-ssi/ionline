@@ -7,10 +7,10 @@
             <i class="fas fa-trash"></i>
         </a>
     @else
-        <form wire:submit.prevent="upload">
+        <form wire:submit.prevent="save">
             <input type="file" wire:model="invoiceFile" required>
             @error('invoiceFile') <span class="error">{{ $message }}</span> @enderror
-            <div wire:loading wire:target="invoiceFile">Cargando...</div>
+            <div wire:loading wire:target="invoiceFile"><strong>Cargando</strong></div>
             <button type="submit" class="btn btn-sm btn-outline-primary">
                 <i class="fas fa-upload"></i>
             </button>

@@ -15,7 +15,7 @@ class UploadInvoice extends Component
     public $fulfillment;
     public $storage_path = '/service_request/invoices/';
 
-    public function upload()
+    public function save()
     {
         $this->validate([
             'invoiceFile' => 'required|mimes:pdf|max:10240', // 10MB Max
