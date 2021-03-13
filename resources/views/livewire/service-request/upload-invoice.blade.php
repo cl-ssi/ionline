@@ -10,7 +10,7 @@
         <form wire:submit.prevent="upload">
             <input type="file" wire:model="invoiceFile" required>
             @error('invoiceFile') <span class="error">{{ $message }}</span> @enderror
-        
+            <div wire:loading wire:target="invoiceFile">Cargando...</div>
             <button type="submit" class="btn btn-sm btn-outline-primary">
                 <i class="fas fa-upload"></i>
             </button>

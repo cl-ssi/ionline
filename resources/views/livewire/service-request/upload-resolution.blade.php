@@ -10,7 +10,7 @@
         <form wire:submit.prevent="upload">
             <input type="file" wire:model="resolutionFile" required>
             @error('resolutionFile') <span class="error">{{ $message }}</span> @enderror
-        
+            <div wire:loading wire:target="resolutionFile">Cargando...</div>
             <button type="submit" class="btn btn-sm btn-outline-primary">
                 <i class="fas fa-upload"></i>
             </button>
