@@ -11,7 +11,7 @@ class MonthlyValue extends Component
 
     public function value($fulfillment) {
         /* Si es tipo Mensual y tipo Covid */
-        if($fulfillment->serviceRequest->program_contract_type == 'Mensual' 
+        if($fulfillment->serviceRequest->program_contract_type == 'Mensual'
             AND $fulfillment->serviceRequest->type = 'Covid') {
 
             /* si tiene una "Renuncia voluntaria", el termino del contrato es ahí */
@@ -20,7 +20,7 @@ class MonthlyValue extends Component
             }
 
             /* si inicio de contrato coincide con inicio de mes y término de contrato coincide con fin de mes */
-            if($fulfillment->start_date->toDateString() == $fulfillment->start_date->startOfMonth()->toDateString() 
+            if($fulfillment->start_date->toDateString() == $fulfillment->start_date->startOfMonth()->toDateString()
                 AND $fulfillment->end_date->toDateString() == $fulfillment->end_date->endOfMonth()->toDateString() ) {
 
                 $total_dias_trabajados = 30;
@@ -35,9 +35,9 @@ class MonthlyValue extends Component
             /* Restar las ausencias */
             $dias_descuento = 0;
 
-            foreach($fulfillment->fulfillmentItems as $item) 
+            foreach($fulfillment->fulfillmentItems as $item)
             {
-                switch($item->type) 
+                switch($item->type)
                 {
                     case 'Inasistencia Injustificada':
                     case 'Licencia no covid':
@@ -45,13 +45,13 @@ class MonthlyValue extends Component
                         $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
                         break;
                 }
-                
+
             }
 
             $total_dias_trabajados -= $dias_descuento;
 
             /* Obtener de sr_values el valor mensual */
-            switch($fulfillment->serviceRequest->estate) 
+            switch($fulfillment->serviceRequest->estate)
             {
                 case 'Profesional Médico':
                     switch($fulfillment->serviceRequest->weekly_hours)
@@ -69,7 +69,7 @@ class MonthlyValue extends Component
                         Value::orderBy('validity_from','desc')
                         ->where('contract_type','Mensual')
                         ->where('type','covid')
-                        ->where('state', $estate)
+                        ->where('estate', $estate)
                         ->where('work_type', $fulfillment->serviceRequest->working_day_type)
                         ->first()
                     )->amount;
@@ -103,7 +103,7 @@ class MonthlyValue extends Component
             }
 
             if($mes_completo) {
-                $total = $valor_mensual - ($dias_descuento * ($valor_mensual / 30) ) ; 
+                $total = $valor_mensual - ($dias_descuento * ($valor_mensual / 30) ) ;
             }
             else {
                 $total = $total_dias_trabajados * ($valor_mensual / 30);
@@ -112,10 +112,10 @@ class MonthlyValue extends Component
         }
 
         return number_format(round($total), 0, ',', '.');
-        
+
 
         /*
-         
+
 
         if(Tipo de Contratación = Mensual AND Tipo == Honorario COVID)
             switch(Estamento)
