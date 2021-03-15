@@ -531,9 +531,13 @@
 	});
 
 	$('#working_day_type').on('change', function() {
-		var value = this.value;
-		$('#for_weekly_hours').val();
-		if (value == "HORA MÉDICA") {
+		var working_day_type = this.value;
+		var program_contract_type = document.getElementById("program_contract_type").value;
+
+		if (program_contract_type == "Horas") {
+			$('#for_weekly_hours').val("");
+		}
+		if (program_contract_type == "Horas" && working_day_type == "HORA MÉDICA") {
 			$('#for_weekly_hours').val(28);
 		}
 		$('#for_weekly_hours').selectpicker('refresh');
