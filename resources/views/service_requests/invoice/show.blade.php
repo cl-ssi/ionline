@@ -36,8 +36,8 @@
                                 <td>{{ $fullfillment->year ?? '' }}</td>
                                 <td>{{ $fullfillment->month ?? '' }}</td>                                
                                 <td>
-                                @livewire('invoice.upload', ['fulfillmentId' => $fullfillment->id,
-                                'hasInvoiceFile' =>  $fullfillment->has_invoice_file ])
+
+                                @livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])
                                 </td>
                         </tr>                        
                         @endforeach
