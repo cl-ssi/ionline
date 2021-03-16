@@ -78,6 +78,10 @@ class FulfillmentItemController extends Controller
         // $fulfillmentItem->start_date = $request->start_date . " " .$request->start_hour;
         $fulfillmentItem->end_date = $request->end_date;
       }
+      if ($request->type == "Horas") {
+        $fulfillmentItem->start_date = $request->start_date . " " .$request->start_hour;
+        $fulfillmentItem->end_date = $request->end_date . " " .$request->end_hour;
+      }
 
 
       if (Auth::user()->can('Service Request: fulfillments responsable')) {
