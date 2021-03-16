@@ -38,6 +38,7 @@
       <th scope="col">F. Término</th>
       <th scope="col">Estado Solicitud</th>
       <th scope="col"></th>
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
@@ -57,6 +58,27 @@
           class="btn btn-sm btn-outline-secondary">
           <span class="fas fa-edit" aria-hidden="true"></span>
         </a>
+      </td>
+      <td>
+        @if($serviceRequest->program_contract_type == "Mensual")
+          @if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
+            <a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
+            <i class="fas fa-file" style="color:#B9B9B9"></i></a>
+          @else
+            @if($serviceRequest->SignatureFlows->where('status',0)->count() > 0)
+              <a data-toggle="modal" 	class="btn btn-outline-secondary btn-sm" id="a_modal_flow_rejected">
+              <i class="fas fa-file" style="color:#B9B9B9"></i></a>
+            @else
+              <!-- <a href="#"
+                class="btn btn-outline-secondary btn-sm" target="_blank">
+              <span class="fas fa-plus" aria-hidden="true"></span></a> -->
+
+              <a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+                class="btn btn-outline-secondary btn-sm" target="_blank">
+              <span class="fas fa-file" aria-hidden="true"></span></a>
+            @endif
+          @endif
+        @endif
       </td>
     </tr>
   @endforeach
