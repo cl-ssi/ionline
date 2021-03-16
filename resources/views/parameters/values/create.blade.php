@@ -52,6 +52,7 @@
                 <option value="Médico 28">Médico 15.076 (28hrs)</option>
                 <option value="Médico 22">Médico xx.xxx (22hrs)</option>
                 <option value="Profesional">Profesional</option>
+                <option value="Profesional Médico">Profesional Médico</option>
                 <option value="Técnico">Técnico</option>
                 <option value="Administrativo">Administrativo</option>
                 <option value="Farmaceutico">Farmaceutico</option>
