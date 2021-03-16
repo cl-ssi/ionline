@@ -530,18 +530,18 @@
 		}
 	});
 
-	$('#working_day_type').on('change', function() {
-		var working_day_type = this.value;
-		var program_contract_type = document.getElementById("program_contract_type").value;
-
-		if (program_contract_type == "Horas") {
-			$('#for_weekly_hours').val("");
-		}
-		if (program_contract_type == "Horas" && working_day_type == "HORA MÉDICA") {
-			$('#for_weekly_hours').val(28);
-		}
-		$('#for_weekly_hours').selectpicker('refresh');
-	});
+	// $('#working_day_type').on('change', function() {
+	// 	var working_day_type = this.value;
+	// 	var program_contract_type = document.getElementById("program_contract_type").value;
+	//
+	// 	if (program_contract_type == "Horas") {
+	// 		$('#for_weekly_hours').val("");
+	// 	}
+	// 	if (program_contract_type == "Horas" && working_day_type == "HORA MÉDICA") {
+	// 		$('#for_weekly_hours').val(28);
+	// 	}
+	// 	$('#for_weekly_hours').selectpicker('refresh');
+	// });
 
 	$('#btn_fonasa').click(function() {
 	    var btn = $(this);
