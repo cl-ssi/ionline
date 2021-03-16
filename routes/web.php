@@ -251,6 +251,29 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('{user}/roles', 'Rrhh\RoleController@index')->name('roles.index')->middleware('auth');
     Route::post('{user}/roles', 'Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
 
+    /*
+    // TODO: ordenar rutas service request
+    // Urls en Singular y separadas por guion en medio
+
+    Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
+        // Rutas de service request
+
+        Route::prefix('fulfillment')->name('fulfillment.')->group(function () {
+            // Rutas de fulfillment
+        });
+
+        Route::prefix('report')->name('report.')->group(function () {
+            // Rutas a los reportes
+        });
+
+        Route::prefix('signature-flow')->name('signature-flow.')->group(function () {
+            // Rutas a signature flow
+        });
+    });
+    
+    
+    */
+
     Route::resource('shift_control', 'ServiceRequests\ShiftControlController')->middleware('auth');
     Route::post('service_requests.derive','ServiceRequests\ServiceRequestController@derive')->name('service_requests.derive')->middleware('auth');
     Route::get('service_requests.consolidated_data','ServiceRequests\ServiceRequestController@consolidated_data')->name('service_requests.consolidated_data')->middleware('auth');
@@ -264,6 +287,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('fulfillments/confirmFulfillmentBySignPosition/{Fulfillment}/{approbed?}', 'ServiceRequests\FulfillmentController@confirmFulfillmentBySignPosition')->name('fulfillments.confirmFulfillmentBySignPosition');
     Route::get('filfillments/download-invoice/{fulfillment}','ServiceRequests\FulfillmentController@downloadInvoice')->name('fulfillments.download.invoice')->middleware('auth');
     Route::get('filfillments/download-resolution/{fulfillment}','ServiceRequests\FulfillmentController@downloadResolution')->name('fulfillments.download.resolution')->middleware('auth');
+    Route::get('service_requests/report/to-pay','ServiceRequests\ReportController@toPay')->name('service_requests.report.toPay')->middleware('auth');
 
     Route::resource('fulfillments', 'ServiceRequests\FulfillmentController')->middleware('auth');
     Route::get('fulfillments/certificate-pdf/{fulfillment}', 'ServiceRequests\FulfillmentController@certificatePDF')->name('fulfillments.certificate-pdf')->middleware('auth');
@@ -275,6 +299,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('service_requests/resolution/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolution')->middleware('auth');
     Route::get('service_requests/resolution-pdf/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolutionPDF')->name('service_requests.resolution-pdf')->middleware('auth');
     Route::resource('signature_flow', 'ServiceRequests\SignatureFlowController')->middleware('auth');
+    
     Route::resource('authorities', 'Rrhh\AuthorityController')->middleware(['auth']);
 
     Route::prefix('organizational-units')->name('organizational-units.')->group(function () {
