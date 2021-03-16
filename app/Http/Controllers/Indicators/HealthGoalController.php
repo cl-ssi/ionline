@@ -114,6 +114,14 @@ class HealthGoalController extends Controller
             if($factor_cods != null && $factor_cols != null){
                 //procesamos los datos necesarios para las consultas rem
                 $cods = array_map('trim', explode(',', $factor_cods));
+                //buscamos por codigos de prestacion con valor negativo indica que existe otra consulta que necesita ser procesada para sumarle (resta) a primera consulta
+                $cods2 = null;
+                foreach($cods as $key => $value){
+                    if (strpos($value, "-") !== false) {
+                        $cods2[] = substr($value, 1); //le quitamos el signo negativo al codigo prestacion y guardamos valor en array $cods2
+                        unset($cods[$key]); //removemos item desde $cods
+                    }
+                }
                 $cols = array_map('trim', explode(',', $factor_cols));
                 $raws = null;
                 foreach($cols as $col)
@@ -144,7 +152,33 @@ class HealthGoalController extends Controller
                     $value->establishment = $item->establecimiento->alias_estab;
                     $indicator->values->add($value);
                 }
-                // dd($indicator);
+                //Existe otra consulta que ejecutar con valores negativos para sumarlos a la primera consulta
+                if($cods2 != null){
+                    //Es rem P la consulta?
+                    $isRemP = Rem::year($year-1)->select('Mes')
+                                ->whereHas('establecimiento',function($q){ return $q->where('meta_san', 1); })
+                                ->whereIn('CodigoPrestacion', $cods2)->groupBy('Mes')->get()->count() == 2;
+                    if($isRemP) $factor == 'numerador' ? $indicator->isNumRemP = true : $indicator->isDenRemP = true;
+
+                    $result = Rem::year($year)->selectRaw($raws)
+                                ->with(['establecimiento' => function($q){ 
+                                    return $q->where('meta_san', 1);
+                                }])
+                                ->whereHas('establecimiento', function($q){
+                                    return $q->where('meta_san', 1);
+                                })
+                                ->when($isRemP, function($query){
+                                    return $query->whereIn('Mes', [6,12]);
+                                })
+                                ->whereIn('CodigoPrestacion', $cods2)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
+
+                    foreach($result as $item){
+                        $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => -$item->valor]);
+                        $value->commune = $item->establecimiento->comuna;
+                        $value->establishment = $item->establecimiento->alias_estab;
+                        $indicator->values->add($value);
+                    }
+                }
             }
         }
     }
