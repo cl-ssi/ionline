@@ -434,7 +434,7 @@
 
     <fieldset class="form-group col">
 		    <label for="for_working_day_type">Jornada de Trabajo</label>
-		    <select name="working_day_type" class="form-control" required>
+		    <select name="working_day_type" class="form-control" required id="working_day_type">
 					<option value=""></option>
           <option value="DIURNO">DIURNO</option>
           <option value="TERCER TURNO">TERCER TURNO</option>
@@ -528,6 +528,19 @@
 			$('#SubdirectorTurnos').val(9882506);
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
+	});
+
+	$('#working_day_type').on('change', function() {
+		var working_day_type = this.value;
+		var program_contract_type = document.getElementById("program_contract_type").value;
+
+		if (program_contract_type == "Horas") {
+			$('#for_weekly_hours').val("");
+		}
+		if (program_contract_type == "Horas" && working_day_type == "HORA MÉDICA") {
+			$('#for_weekly_hours').val(28);
+		}
+		$('#for_weekly_hours').selectpicker('refresh');
 	});
 
 	$('#btn_fonasa').click(function() {
