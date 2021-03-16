@@ -6,6 +6,25 @@
 
 <h3>Transferencia de solicitudes</h3><br>
 
+<form method="GET" class="form-horizontal" action="{{ route('rrhh.service_requests.aditional_data_list') }}">
+  <div class="input-group mb-3">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Unidad</span>
+    </div>
+    <select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" data-size="5">
+      <option value="">Todos</option>
+      @foreach($users as $key => $user)
+        <option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
+      @endforeach
+    </select>
+    <div class="input-group-append">
+        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+    </div>
+  </div>
+</form>
+
+<hr>
+
 <h4>Hojas de ruta</h4>
 <form method="POST" enctype="multipart/form-data" id="derive" action="{{ route('rrhh.service_requests.derive') }}">
 @csrf
@@ -21,14 +40,16 @@
       </select>
   </fieldset>
 
+  <input type="hidden" class="form-control" name="sender_id" id="sender_id" value="">
+
   <fieldset class="form-group col">
       <label for="for_type">Disponibles para visar</label>
-      <input type="text" class="form-control" name="disponibles_para_visar" value="0">
+      <input type="text" class="form-control" name="disponibles_para_visar" id="disponibles_para_visar" value="0">
   </fieldset>
 
   <fieldset class="form-group col">
       <label for="for_type">No disponibles para visar</label>
-      <input type="text" class="form-control" name="no_disponibles_para_visar" value="0">
+      <input type="text" class="form-control" name="no_disponibles_para_visar" id="no_disponibles_para_visar" value="0">
   </fieldset>
 
   <fieldset class="form-group col">

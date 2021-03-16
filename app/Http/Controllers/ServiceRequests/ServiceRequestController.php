@@ -106,6 +106,7 @@ class ServiceRequestController extends Controller
   public function transfer_requests(Request $request){
 
     $users = User::orderBy('name','ASC')->get();
+    // dd(User::find(14101085)->serviceRequestsOthersPendingsCount());
     $responsability_center_ou_id = $request->responsability_center_ou_id;
     // dd($responsability_center_ou_id);
     $serviceRequests = ServiceRequest::
@@ -860,8 +861,8 @@ class ServiceRequestController extends Controller
 
     public function derive(Request $request){
 
-      $user_id = Auth::user()->id;
-      $sender_name = Auth::user()->getFullNameAttribute();
+      $user_id = $request->sender_id;
+      $sender_name = User::find($user_id)->getFullNameAttribute();
       $receiver_name = User::find($request->derive_user_id)->getFullNameAttribute();
       $receiver_email = User::find($request->derive_user_id)->email;
 
