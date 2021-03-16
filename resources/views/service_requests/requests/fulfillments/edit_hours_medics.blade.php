@@ -353,6 +353,7 @@
             @endforeach
           </tbody>
       </table>
+      @livewire('service-request.show-total-hours', ['fulfillment' => $fulfillment])
 
       <div class="row">
         <fieldset class="form-group col">
