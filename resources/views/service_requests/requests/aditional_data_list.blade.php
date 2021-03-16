@@ -4,7 +4,9 @@
 
 @section('content')
 
-<h3>Listado de Solicitudes de Contratación de Servicio - Datos adicionales</h3><br>
+@include('service_requests.partials.nav')
+
+<h3>Datos Adicionales - Listado de Solicitudes de Contratación de Servicio</h3><br>
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service_requests.aditional_data_list') }}">
   <div class="input-group mb-3">

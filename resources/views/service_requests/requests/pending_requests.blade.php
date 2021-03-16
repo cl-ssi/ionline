@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('service_requests.partials.nav')
+
 <h3 class="mb-3">Reporte estado de solicitudes</h3>
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service_requests.consolidated_data') }}">

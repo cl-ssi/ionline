@@ -51,6 +51,7 @@
                 <option value="Médico 28" {{ ($value->estate == 'Médico 28')? 'selected' : ''}}>Médico 15.076 (28hrs)</option>
                 <option value="Médico 22" {{ ($value->estate == 'Médico 22')? 'selected' : ''}}>Médico xx.xxx (22hrs)</option>
                 <option value="Profesional" @if($value->estate == 'Profesional') selected @endif >Profesional</option>
+                <option value="Profesional Médico" @if($value->estate == 'Profesional Médico') selected @endif >Profesional Médico</option>
                 <option value="Técnico" @if($value->estate == 'Técnico') selected @endif >Técnico</option>
                 <option value="Administrativo" @if($value->estate == 'Administrativo') selected @endif >Administrativo</option>
                 <option value="Farmaceutico" @if($value->estate == 'Farmaceutico') selected @endif >Farmaceutico</option>

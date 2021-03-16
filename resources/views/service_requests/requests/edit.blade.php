@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('service_requests.partials.nav')
+
 <h3>Solicitud de Contratación de Servicios</h3>
 
   @can('Service Request: additional data rrhh')
