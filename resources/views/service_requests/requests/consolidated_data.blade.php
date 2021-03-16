@@ -63,6 +63,8 @@
             <th>TOTAL HORAS PAGADAS PERIODO</th>
             <th>TOTAL PAGADO</th>
             <th>FECHA PAGO</th>
+						<th>T.CONTRATO</th>
+						<th>ESTADO.SOLICITUD</th>
         </tr>
     </thead>
     <tbody>
@@ -104,6 +106,11 @@
 								<td nowrap>{{$fulfillment->total_hours_paid}}</td>
 								<td nowrap>@if($fulfillment->total_paid){{$fulfillment->total_paid}}@else En proceso de pago @endif</td>
 								<td nowrap>@if($fulfillment->payment_date){{$fulfillment->payment_date->format('Y-m-d')}}@endif</td>
+								<td nowrap>{{$serviceRequest->program_contract_type}}</td>
+								<td nowrap>
+										@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
+										@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
+										@else Finalizada @endif</td>
 							</tr>
 						@else
 							@if($fulfillment->bill_number != NULL || $fulfillment->total_hours_paid != NULL || $fulfillment->total_paid != NULL ||
@@ -141,6 +148,11 @@
 										<td nowrap>{{$fulfillment->total_hours_paid}}</td>
 										<td nowrap>@if($fulfillment->total_paid){{$fulfillment->total_paid}}@else En proceso de pago @endif</td>
 										<td nowrap>@if($fulfillment->payment_date){{$fulfillment->payment_date->format('Y-m-d')}}@endif</td>
+										<td nowrap>{{$serviceRequest->program_contract_type}}</td>
+										<td nowrap>
+												@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
+												@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
+												@else Finalizada @endif</td>
 									</tr>
 							@else
 								<tr class="table-success">
@@ -176,6 +188,11 @@
 									<td nowrap>{{$serviceRequest->total_hours_paid}}</td>
 									<td nowrap>@if($serviceRequest->total_paid){{$serviceRequest->total_paid}}@else En proceso de pago @endif</td>
 									<td nowrap>@if($serviceRequest->payment_date){{$serviceRequest->payment_date->format('Y-m-d')}}@endif</td>
+									<td nowrap>{{$serviceRequest->program_contract_type}}</td>
+									<td nowrap>
+											@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
+											@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
+											@else Finalizada @endif</td>
 								</tr>
 							@endif
 						@endif
@@ -215,6 +232,11 @@
 						<td nowrap>{{$serviceRequest->total_hours_paid}}</td>
 						<td nowrap>@if($serviceRequest->total_paid){{$serviceRequest->total_paid}}@else En proceso de pago @endif</td>
 						<td nowrap>@if($serviceRequest->payment_date){{$serviceRequest->payment_date->format('Y-m-d')}}@endif</td>
+						<td nowrap>{{$serviceRequest->program_contract_type}}</td>
+						<td nowrap>
+								@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
+								@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
+								@else Finalizada @endif</td>
 					</tr>
 			  @endif
       @endforeach
@@ -253,6 +275,8 @@
             <th>TOTAL HORAS PAGADAS PERIODO</th>
             <th>TOTAL PAGADO</th>
             <th>FECHA PAGO</th>
+						<th>T.CONTRATO</th>
+						<th>ESTADO.SOLICITUD</th>
         </tr>
     </thead>
     <tbody>
@@ -290,6 +314,11 @@
           <td nowrap>{{$serviceRequest->total_hours_paid}}</td>
           <td nowrap>@if($serviceRequest->total_paid){{$serviceRequest->total_paid}}@else En proceso de pago @endif</td>
           <td nowrap>@if($serviceRequest->payment_date){{$serviceRequest->payment_date->format('Y-m-d')}}@endif</td>
+					<td nowrap>{{$serviceRequest->program_contract_type}}</td>
+					<td nowrap>
+							@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
+							@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
+							@else Finalizada @endif</td>
         </tr>
       @endforeach
     </tbody>

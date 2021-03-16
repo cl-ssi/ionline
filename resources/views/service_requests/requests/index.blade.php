@@ -4,8 +4,9 @@
 
 @section('content')
 
-<h3>Listado de Solicitudes de Contratación de Servicio</h3>
-<br><hr>
+@include('service_requests.partials.nav')
+
+<h3 class="mb-3">Listado de Solicitudes de Contratación de Servicio</h3>
 
 <div class="mb-3">
 	<a class="btn btn-primary"
