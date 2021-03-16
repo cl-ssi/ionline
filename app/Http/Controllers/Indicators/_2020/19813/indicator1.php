@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Indicators\_2020;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Indicators\Establecimiento;
+use App\Indicators\Rem;
 use Illuminate\Support\Facades\DB;
 use App\Indicators\SingleParameter;
 
@@ -69,6 +71,12 @@ $sql_numerador = "SELECT e.Comuna, e.alias_estab, r.Mes, sum((ifnull(Col08,0) + 
     GROUP BY e.Comuna, e.alias_estab, r.Mes
     ORDER BY e.Comuna, e.alias_estab, r.Mes";
 $numeradores = DB::connection('mysql_rem')->select($sql_numerador);
+
+// $numeradores = Rem::year(2020)->with(['establecimiento' => function($q){ return $q->where('meta_san', 1); }])
+//                   ->selectRaw('SUM(COALESCE(Col08, 0)) + SUM(COALESCE(Col09, 0)) + SUM(COALESCE(Col10, 0)) + SUM(COALESCE(Col11, 0)) AS valor, IdEstablecimiento, Mes')
+//                   ->whereHas('establecimiento', function($q){ return $q->where('meta_san', 1); })
+//                   ->whereIn('CodigoPrestacion', ['02010420','03500366'])->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
+// dd($numeradores);
 
 foreach($numeradores as $registro) {
     if( ($flag1 != $registro->Comuna) OR ($flag2 != $registro->alias_estab) ) {
