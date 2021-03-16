@@ -537,7 +537,7 @@
           @livewire('invoice.upload', ['fulfillmentId' => $fulfillment->id,
             'hasInvoiceFile' =>  $fulfillment->has_invoice_file ])
         </div>
-        
+
       </div>
 
       @if($fulfillment->responsable_approver_id != NULL)
@@ -617,9 +617,9 @@
           @endforeach
         </tbody>
     </table>
-      @can('be god')
+{{--      @can('be god')--}}
         @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
-      @endcan
+{{--      @endcan--}}
     <div class="row">
       <fieldset class="form-group col-5">
 
