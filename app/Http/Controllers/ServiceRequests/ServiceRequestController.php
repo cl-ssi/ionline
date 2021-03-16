@@ -103,6 +103,20 @@ class ServiceRequestController extends Controller
     return view('service_requests.requests.aditional_data_list', compact('serviceRequests','responsabilityCenters'));
   }
 
+  public function transfer_requests(Request $request){
+
+    $users = User::orderBy('name','ASC')->get();
+    $responsability_center_ou_id = $request->responsability_center_ou_id;
+    // dd($responsability_center_ou_id);
+    $serviceRequests = ServiceRequest::
+                                       when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
+                                          return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+                                       })
+                                     ->orderBy('id','asc')->get();
+    $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)->orderBy('name', 'ASC')->get();
+    return view('service_requests.requests.transfer_requests', compact('serviceRequests','responsabilityCenters','users'));
+  }
+
   /**
    * Show the form for creating a new resource.
    *
