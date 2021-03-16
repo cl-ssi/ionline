@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('service_requests.partials.nav')
+
 <h3>Cumplimiento de solicitud</h3>
 
 <div class="form-row">
