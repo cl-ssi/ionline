@@ -106,8 +106,6 @@
 
                     @canany(['Service Request'])
 
-                    <!-- <a class="dropdown-item"> -->
-
                     <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-file-alt"></i> Contratación Honorarios
@@ -128,11 +126,6 @@
                       </a>
                       @endcan
 
-                      <!-- <a class="dropdown-item"
-                          href="{{ route('rrhh.fulfillments.index') }}">
-                          <i class="fas fa-wallet"></i> Cumplimiento de Solicitudes - RRHH / Finanzas
-                      </a> -->
-
                       @canany(['Service Request: additional data'])
                         <a class="dropdown-item"
                             href="{{ route('rrhh.service_requests.aditional_data_list') }}">
@@ -140,7 +133,7 @@
                         </a>
                       @endcan
 
-                      @canany(['Service Request: transfer requests']) -->
+                      @canany(['Service Request: transfer requests'])
                         <a class="dropdown-item"
                             href="{{ route('rrhh.service_requests.transfer_requests') }}">
                             <i class="fas fa-wallet"></i> Transferecia de solicitudes
@@ -156,6 +149,15 @@
                     </div>
 
                     @endcan
+
+                    <!-- @canany(['Service Request'])
+
+                      <a class="dropdown-item"
+                          href="{{ route('rrhh.service_requests.index') }}">
+                          <i class="fas fa-file-alt"></i> Contratación Honorarios
+                      </a>
+
+                    @endcan -->
 
 
                     @canany(['Documents: signatures and distribution'])

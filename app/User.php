@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Suitability\Result;
+use App\Models\ServiceRequests\ServiceRequest;
 
 class User extends Authenticatable
 {
@@ -137,6 +138,122 @@ class User extends Authenticatable
     {
         return $this->hasMany(Result::class, 'user_id', 'id');
         //return $this->hasMany('App\Models\Result', 'user_id', 'id');
+    }
+
+    public function serviceRequestsMyPendingsCount()
+    {
+        $user_id = $this->id;
+
+        $serviceRequestsOthersPendings = [];
+        $serviceRequestsMyPendings = [];
+        $serviceRequestsAnswered = [];
+        $serviceRequestsCreated = [];
+        $serviceRequestsRejected = [];
+
+        $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
+                                             $subQuery->where('responsable_id',$user_id);
+                                             $subQuery->orwhere('user_id',$user_id);
+                                           })
+                                           ->orderBy('id','asc')
+                                           ->get();
+
+        foreach ($serviceRequests as $key => $serviceRequest) {
+          //not rejected
+          if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0) {
+            foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
+              //with responsable_id
+              if ($user_id == $signatureFlow->responsable_id) {
+                if ($signatureFlow->status == NULL) {
+                  if ($serviceRequest->SignatureFlows->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL) {
+                    $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
+                  }else{
+                    $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
+                  }
+                }else{
+                  $serviceRequestsAnswered[$serviceRequest->id] = $serviceRequest;
+                }
+              }
+              //with organizational unit authority
+              if ($user_id == $signatureFlow->ou_id) {
+
+              }
+            }
+          }
+          else{
+            $serviceRequestsRejected[$serviceRequest->id] = $serviceRequest;
+          }
+        }
+
+
+        foreach ($serviceRequests as $key => $serviceRequest) {
+          if (!array_key_exists($serviceRequest->id,$serviceRequestsOthersPendings)) {
+            if (!array_key_exists($serviceRequest->id,$serviceRequestsMyPendings)) {
+              if (!array_key_exists($serviceRequest->id,$serviceRequestsAnswered)) {
+                $serviceRequestsCreated[$serviceRequest->id] = $serviceRequest;
+              }
+            }
+          }
+        }
+
+        return count($serviceRequestsMyPendings);
+    }
+
+    public function serviceRequestsOthersPendingsCount()
+    {
+        $user_id = $this->id;
+
+        $serviceRequestsOthersPendings = [];
+        $serviceRequestsMyPendings = [];
+        $serviceRequestsAnswered = [];
+        $serviceRequestsCreated = [];
+        $serviceRequestsRejected = [];
+
+        $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
+                                             $subQuery->where('responsable_id',$user_id);
+                                             $subQuery->orwhere('user_id',$user_id);
+                                           })
+                                           ->orderBy('id','asc')
+                                           ->get();
+
+        foreach ($serviceRequests as $key => $serviceRequest) {
+          //not rejected
+          if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0) {
+            foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
+              //with responsable_id
+              if ($user_id == $signatureFlow->responsable_id) {
+                if ($signatureFlow->status == NULL) {
+                  if ($serviceRequest->SignatureFlows->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL) {
+                    $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
+                  }else{
+                    $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
+                  }
+                }else{
+                  $serviceRequestsAnswered[$serviceRequest->id] = $serviceRequest;
+                }
+              }
+              //with organizational unit authority
+              if ($user_id == $signatureFlow->ou_id) {
+
+              }
+            }
+          }
+          else{
+            $serviceRequestsRejected[$serviceRequest->id] = $serviceRequest;
+          }
+        }
+
+
+        foreach ($serviceRequests as $key => $serviceRequest) {
+          if (!array_key_exists($serviceRequest->id,$serviceRequestsOthersPendings)) {
+            if (!array_key_exists($serviceRequest->id,$serviceRequestsMyPendings)) {
+              if (!array_key_exists($serviceRequest->id,$serviceRequestsAnswered)) {
+                $serviceRequestsCreated[$serviceRequest->id] = $serviceRequest;
+              }
+            }
+          }
+        }
+
+        return count($serviceRequestsOthersPendings);
     }
 
     /**computers
