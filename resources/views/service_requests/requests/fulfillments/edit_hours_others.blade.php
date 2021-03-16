@@ -26,9 +26,9 @@
           @endforeach
         </tbody>
     </table>
-      @can('be god')
+{{--      @can('be god')--}}
         @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
-      @endcan
+{{--      @endcan--}}
     <div class="row">
       <fieldset class="form-group col-5">
 
