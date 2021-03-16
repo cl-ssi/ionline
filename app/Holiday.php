@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Holiday extends Model
@@ -14,6 +15,11 @@ class Holiday extends Model
     protected $fillable = [
         'date', 'name', 'region'
     ];
+
+    public function getFormattedDateAttribute()
+    {
+        return Carbon::parse($this->date);
+    }
 
     /**
      * The attributes that should be hidden for arrays.

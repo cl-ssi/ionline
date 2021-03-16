@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\ServiceRequest;
 
+use App\Holiday;
 use App\Models\ServiceRequests\Value;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -97,17 +98,31 @@ class ShowTotalHours extends Component
                     $this->totalHoursNight = $this->totalHoursNight + $hoursNight;
                 }
 
-                $this->refundHours = 202 - $this->totalHoursDay;
+
+                $firstDayOfMonth = $this->serviceRequest->shiftControls->first()->start_date->firstOfMonth();
+                $lastOfMonth = $this->serviceRequest->shiftControls->first()->start_date->lastOfMonth();
+
+                $holidays = Holiday::whereYear('date', '=', $firstDayOfMonth->year)
+                    ->whereMonth('date', '=', $firstDayOfMonth->month)
+                    ->get();
+
+                $holidaysArray = array();
+                foreach ($holidays as $holiday) {
+                    array_push($holidaysArray, $holiday->formattedDate);
+                }
+
+                $businessDays = $firstDayOfMonth->diffInDaysFiltered(function (Carbon $date) use($holidaysArray){
+                    return $date->isWeekday() && !in_array($date, $holidaysArray);
+                }, $lastOfMonth);
+
+                $workingHoursInMonth = $businessDays * 8.8;
+                $this->refundHours = round(($workingHoursInMonth - $this->totalHoursDay),0);
                 $this->totalHours = $this->refundHours + $this->totalHoursNight;
                 $totalAmountNight = $this->totalHoursNight * ($value->amount * 1.5);
                 $totalAmountDayRefund = $this->refundHours * $value->amount;
                 $this->totalAmount = $totalAmountNight - $totalAmountDayRefund;
                 break;
         }
-
-//        dump('Horas totales dia: '.$this->totalHoursDay);
-//        dump('Horas totales noche: '.$this->totalHoursNight);
-
         return view('livewire.service-request.show-total-hours');
     }
 }
