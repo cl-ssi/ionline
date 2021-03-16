@@ -127,12 +127,6 @@
     HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
     SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
 </div>
-<div class="siete" style="padding-top: 4px;">
-    HAA/
-    JFC/
-    VMM/
-    dmo
-</div>
 <div class="seis" style="padding-top: 4px;">
     N.I. {{$ServiceRequest->id}} - {{\Carbon\Carbon::now()->format('d/m/Y')}}
 </div>
