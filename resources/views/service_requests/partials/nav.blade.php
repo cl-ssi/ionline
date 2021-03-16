@@ -49,10 +49,12 @@
             </a>
             @endcan
 
+            @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service_requests.report.toPay') }}"
                 href="{{ route('rrhh.service_requests.report.toPay') }}">
                 <i class="fas fa-file-invoice-dollar"></i> Reporte para pagos
             </a>
+            @endcan
 
             <!-- <div class="dropdown-divider"></div>
 
