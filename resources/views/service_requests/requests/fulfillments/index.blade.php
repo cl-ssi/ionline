@@ -4,14 +4,16 @@
 
 @section('content')
 
-  <h3>Cumplimiento solicitudes de contratación</h3>
-  <br><hr>
+@include('service_requests.partials.nav')
+
+<h3 class="mb-3">Cumplimiento solicitudes de contratación</h3>
 
     <div class="table-responsive">
     <table class="table table-bordered table-sm small">
     	<thead>
         <tr>
     			<th colspan="10"></th>
+          <th></th>
     			<th colspan="3" class="text-center">Visados</th>
     		</tr>
     		<tr>
