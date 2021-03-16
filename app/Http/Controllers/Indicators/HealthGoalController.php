@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Indicators;
 
 use App\Http\Controllers\Controller;
+use App\Indicators\Establecimiento;
 use App\Indicators\HealthGoal;
 use App\Indicators\Indicator;
 use App\Indicators\Rem;
@@ -19,18 +20,25 @@ class HealthGoalController extends Controller
     public function list($law, $year)
     {
         $healthGoals = HealthGoal::where('law', $law)->where('year', $year)->orderBy('number')->get();
+        if($law == '19813') $healthGoals->load('indicators');
         return view('indicators.health_goals.list', compact('healthGoals', 'law', 'year'));
     }
 
     public function show($law, $year, $health_goal)
     {
-        $healthGoal = HealthGoal::where('law', $law)->where('year', $year)->where('number', $health_goal)->first();
-        // Nos aseguramos que la meta sanitaria existe segun ley, año y numero.
-        if($healthGoal == null) abort(404);
-        $healthGoal->indicators()->with('values')->orderBy('number')->get();
-        $this->loadValuesWithRemSource($year, $healthGoal);
-        // return $indicators;
-        return view('indicators.health_goals.show', compact('healthGoal'));
+        // $law == '19813' ? $indicator = Indicator::findOrFail($health_goal) : $healthGoal = HealthGoal::where('law', $law)->where('year', $year)->where('number', $health_goal)->firstOrFail();
+        // if($law != '19813') $healthGoal->indicators()->with('values')->orderBy('number')->get();
+        // $law == '19813' ? $this->loadValuesWithRemSourceLaw19813($year, $indicator) : $this->loadValuesWithRemSource($year, $healthGoal);
+        if($law == '19813'){
+            $indicator = Indicator::findOrFail($health_goal);
+            $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->orderBy('comuna')->get();
+            $this->loadValuesWithRemSourceLaw19813($year, $indicator);
+        } else {
+            $healthGoal = HealthGoal::where('law', $law)->where('year', $year)->where('number', $health_goal)->firstOrFail();
+            $healthGoal->indicators()->with('values')->orderBy('number')->get();
+            $this->loadValuesWithRemSource($year, $healthGoal);
+        }
+        return view('indicators.health_goals.show', compact($law == '19813' ? 'indicator' : 'healthGoal'));
     }
 
     private function loadValuesWithRemSource($year, $healthGoal)
@@ -93,6 +101,50 @@ class HealthGoalController extends Controller
                     foreach($result as $item)
                         $indicator->values->add(new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => $item->valor]));
                 }
+            }
+        }
+    }
+
+    private function loadValuesWithRemSourceLaw19813($year, $indicator)
+    {
+        foreach(array('numerador', 'denominador') as $factor){
+            $factor_cods = $factor == 'numerador' ? $indicator->numerator_cods : $indicator->denominator_cods;
+            $factor_cols = $factor == 'numerador' ? $indicator->numerator_cols : $indicator->denominator_cols;
+
+            if($factor_cods != null && $factor_cols != null){
+                //procesamos los datos necesarios para las consultas rem
+                $cods = array_map('trim', explode(',', $factor_cods));
+                $cols = array_map('trim', explode(',', $factor_cols));
+                $raws = null;
+                foreach($cols as $col)
+                    $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
+                $raws .= ' AS valor, IdEstablecimiento, Mes';
+
+                //Es rem P la consulta?
+                $isRemP = Rem::year($year-1)->select('Mes')
+                            ->whereHas('establecimiento',function($q){ return $q->where('meta_san', 1); })
+                            ->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->get()->count() == 2;
+                if($isRemP) $factor == 'numerador' ? $indicator->isNumRemP = true : $indicator->isDenRemP = true;
+
+                $result = Rem::year($year)->selectRaw($raws)
+                            ->with(['establecimiento' => function($q){ 
+                                return $q->where('meta_san', 1);
+                            }])
+                            ->whereHas('establecimiento', function($q){
+                                return $q->where('meta_san', 1);
+                            })
+                            ->when($isRemP, function($query){
+                                return $query->whereIn('Mes', [6,12]);
+                            })
+                            ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
+
+                foreach($result as $item){
+                    $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => $item->valor]);
+                    $value->commune = $item->establecimiento->comuna;
+                    $value->establishment = $item->establecimiento->alias_estab;
+                    $indicator->values->add($value);
+                }
+                // dd($indicator);
             }
         }
     }
