@@ -140,6 +140,13 @@
                         </a>
                       @endcan
 
+                      @canany(['Service Request: transfer requests']) -->
+                        <a class="dropdown-item"
+                            href="{{ route('rrhh.service_requests.transfer_requests') }}">
+                            <i class="fas fa-wallet"></i> Transferecia de solicitudes
+                        </a>
+                      @endcan
+
                       @canany(['Service Request: pending requests'])
                         <a class="dropdown-item"
                             href="{{ route('rrhh.service_requests.pending_requests') }}">
