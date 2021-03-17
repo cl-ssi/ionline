@@ -1,5 +1,3 @@
-<?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
-<?php setlocale(LC_ALL, 'es'); ?>
 <html lang="es">
     <head>
         <meta charset="utf-8">
@@ -117,6 +115,8 @@
         </style>
     </head>
     <body>
+
+    <?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
         <div class="content">
 
                 <div class="content">
