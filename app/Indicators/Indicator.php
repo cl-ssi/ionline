@@ -89,14 +89,22 @@ class Indicator extends Model
 
     public function getLastValueByFactor2($factor, $commune, $establishment)
     {
-        $result = $this->values->where('factor', $factor)
-                                ->when($commune, function($q) use ($commune){
-                                    return $q->where('commune', $commune);
-                                })
-                                ->when($establishment, function($q) use ($establishment){
-                                    return $q->where('establishment', $establishment);
-                                })->last();
-        return $result != null ? $result->value : null;
+        if($commune != null){
+            $last_item = $this->values->where('factor', $factor)->where('commune', $commune)->last();
+            $result = $this->values->where('factor', $factor)->where('commune', $commune)->where('month', $last_item ? $last_item->month : 0)->sum('value');
+            return $result != null ? $result : null;
+        } else {
+            $result = $this->values->where('factor', $factor)->where('establishment', $establishment)->last();
+            return $result != null ? $result->value : null;
+        }
+        // $result = $this->values->where('factor', $factor)
+        //                         ->when($commune, function($q) use ($commune){
+        //                             return $q->where('commune', $commune);
+        //                         })
+        //                         ->when($establishment, function($q) use ($establishment){
+        //                             return $q->where('establishment', $establishment);
+        //                         })->last();
+        // return $result != null ? $result->value : null;
     }
 
     public function getContribution()
