@@ -883,7 +883,7 @@ class ServiceRequestController extends Controller
           foreach ($serviceRequest->SignatureFlows->where('responsable_id',$user_id)->whereNull('status') as $key2 => $signatureFlow) {
             $signatureFlow->responsable_id = $request->derive_user_id;
             $signatureFlow->derive_date = Carbon::now();
-            $signatureFlow->employee = $signatureFlow->employee . " (Derivado)";
+            $signatureFlow->employee = $signatureFlow->employee . " (Traspasado desde ".$sender_name.")";
             $signatureFlow->save();
             $cont += 1;
           }
