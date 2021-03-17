@@ -836,9 +836,9 @@ class ServiceRequestController extends Controller
 
   }
 
-    public function resolution(ServiceRequest $serviceRequest)
+    public function resolution(ServiceRequest $ServiceRequest)
     {
-        return view('service_requests.report_resolution', compact('serviceRequest'));
+        return view('service_requests.report_resolution', compact('ServiceRequest'));
     }
 
     public function resolutionPDF(ServiceRequest $ServiceRequest)
