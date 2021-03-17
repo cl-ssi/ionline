@@ -1,5 +1,3 @@
-<div>
-    <pre>
+<span>
     {{ print_r($valores) }}
-    </pre>
-</div>
+</span>

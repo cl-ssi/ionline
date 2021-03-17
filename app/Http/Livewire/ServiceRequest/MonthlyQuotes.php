@@ -28,7 +28,7 @@ class MonthlyQuotes extends Component
             ->where('work_type', $serviceRequest->working_day_type)
             ->first()
         )->amount;
-        
+
         //echo $valor_mensual;
 
         for($i = $first_month; $i <= $last_month; $i ++){
@@ -38,7 +38,7 @@ class MonthlyQuotes extends Component
 
             /* Si es un solo mes */
             if($first_month == $last_month) {
-                if($serviceRequest->start_date->day == $first_day_month and 
+                if($serviceRequest->start_date->day == $first_day_month and
                    $serviceRequest->end_date->day == $last_day_month) {
                        /* Mes completo */
                        $valores[$i] = $valor_mensual;
@@ -78,15 +78,58 @@ class MonthlyQuotes extends Component
             }
 
         }
-        $this->valores = $valores;
-        /*
-        [1] 12313
-        [2] 23213
-        [2] 23213
-        */
-        /* Manipular el array y hacer que imprima el texto de las cuotas */
-        print_r($valores);
+
+        // setlocale(LC_ALL, 'es');
+        $string = count($valores) . " cuotas" ;
+        foreach ($valores as $key => $valor) {
+          if($key == count($valores)){
+            $string = $string . ", y una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->formatLocalized('%B') ."; ";
+          }else{
+            $string = $string . ", una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->formatLocalized('%B');
+          }
+        }
+
+        $this->valores = $string;
 
         return view('livewire.service-request.monthly-quotes');
+    }
+
+    public function monthName(Integer $month){
+      if ($month == 1) {
+        return "Enero";
+      }
+      if ($month == 2) {
+        return "Enero";
+      }
+      if ($month == 3) {
+        return "Enero";
+      }
+      if ($month == 4) {
+        return "Enero";
+      }
+      if ($month == 5) {
+        return "Enero";
+      }
+      if ($month == 6) {
+        return "Enero";
+      }
+      if ($month == 7) {
+        return "Enero";
+      }
+      if ($month == 8) {
+        return "Enero";
+      }
+      if ($month == 9) {
+        return "Enero";
+      }
+      if ($month == 10) {
+        return "Enero";
+      }
+      if ($month == 11) {
+        return "Enero";
+      }
+      if ($month == 12) {
+        return "Enero";
+      }
     }
 }
