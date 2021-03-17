@@ -111,7 +111,7 @@
 
             <div class="form-row">
 
-              @if($fulfillment->year == 2021 && $fulfillment->month == 1 && $fulfillment->total_to_pay != NULL)
+              <!-- @if($fulfillment->year == 2021 && $fulfillment->month == 1 && $fulfillment->total_to_pay != NULL)
                 <fieldset class="form-group col col-md">
                     <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
                     <input type="text" class="form-control" name="total_hours_to_pay" disabled value="{{$fulfillment->total_hours_to_pay}}">
@@ -131,7 +131,17 @@
                     <label for="for_total_paid">Total a pagar</label>
                     <input type="text" class="form-control" name="total_to_pay" value="{{$serviceRequest->net_amount}}">
                 </fieldset>
-              @endif
+              @endif -->
+
+              <fieldset class="form-group col col-md">
+                  <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
+                  <input type="text" class="form-control" name="total_hours_to_pay" value="{{$fulfillment->total_hours_to_pay}}">
+              </fieldset>
+
+              <fieldset class="form-group col col-md">
+                  <label for="for_total_paid">Total a pagar</label>
+                  <input type="text" class="form-control" name="total_to_pay" value="{{$fulfillment->total_to_pay}}">
+              </fieldset>
 
             </div>
             <button type="submit" class="btn btn-danger">Guardar</button>
