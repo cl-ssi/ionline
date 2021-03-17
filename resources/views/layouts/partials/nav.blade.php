@@ -104,62 +104,6 @@
                         <i class="fas fa-file-powerpoint"></i> Planes Comunales
                     </a>
 
-                    @canany(['Service Request'])
-
-                    <a class="dropdown-item dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-file-alt"></i> Contratación Honorarios
-                    </a>
-
-                    <div class="dropdown-menu">
-
-                      <a class="dropdown-item"
-                          href="{{ route('rrhh.service_requests.index') }}">
-                          <i class="fas fa-wallet"></i> Contratación de Servicios
-                          <span class="badge badge-secondary">{{ App\Models\ServiceRequests\ServiceRequest::getPendingRequests() }}</span>
-                      </a>
-
-                      @canany(['Service Request: fulfillments'])
-                      <a class="dropdown-item"
-                          href="{{ route('rrhh.fulfillments.index') }}">
-                          <i class="fas fa-wallet"></i> Cumplimiento de Solicitudes
-                      </a>
-                      @endcan
-
-                      @canany(['Service Request: additional data'])
-                        <a class="dropdown-item"
-                            href="{{ route('rrhh.service_requests.aditional_data_list') }}">
-                            <i class="fas fa-wallet"></i> Información adicional
-                        </a>
-                      @endcan
-
-                      @canany(['Service Request: transfer requests'])
-                        <a class="dropdown-item"
-                            href="{{ route('rrhh.service_requests.transfer_requests') }}">
-                            <i class="fas fa-wallet"></i> Transferecia de solicitudes
-                        </a>
-                      @endcan
-
-                      @canany(['Service Request: pending requests'])
-                        <a class="dropdown-item"
-                            href="{{ route('rrhh.service_requests.pending_requests') }}">
-                            <i class="fas fa-bomb"></i> Estado solicitudes
-                        </a>
-                      @endcan
-                    </div>
-
-                    @endcan
-
-                    <!-- @canany(['Service Request'])
-
-                      <a class="dropdown-item"
-                          href="{{ route('rrhh.service_requests.index') }}">
-                          <i class="fas fa-file-alt"></i> Contratación Honorarios
-                      </a>
-
-                    @endcan -->
-
-
                     @canany(['Documents: signatures and distribution'])
                       <a class="dropdown-item"
                           href="{{ route('documents.signatures.index', ['pendientes']) }}">
@@ -186,7 +130,8 @@
                     'OrganizationalUnits: delete',
                     'Authorities: manager',
                     'Authorities: view',
-                    'Users: service requests'])
+                    'Users: service requests',
+                    'Service Request'])
                 <li class="nav-item dropdown @active(['rrhh.users.*','rrhh.organizationalUnits.*']">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -194,6 +139,7 @@
                     </a>
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+
                         @canany(['Users: create', 'Users: edit','Users: delete'])
                         <a class="dropdown-item @active('rrhh.users.index')"
                             href="{{ route('rrhh.users.index') }}">
@@ -213,6 +159,15 @@
                                href="{{ route('rrhh.authorities.index') }}">
                                 <i class="fas fa-chess-king fa-fw"></i> Autoridades
                             </a>
+                        @endcan
+
+                        <div class="dropdown-divider"></div>
+
+                        @canany(['Service Request'])
+                        <a class="dropdown-item"
+                            href="{{ route('rrhh.service_requests.index') }}">
+                            <i class="fas fa-child fa-fw"></i> Contratación Honorarios
+                        </a>
                         @endcan
 
                         @canany(['Users: service requests'])
