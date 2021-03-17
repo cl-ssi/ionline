@@ -26,9 +26,6 @@ class HealthGoalController extends Controller
 
     public function show($law, $year, $health_goal)
     {
-        // $law == '19813' ? $indicator = Indicator::findOrFail($health_goal) : $healthGoal = HealthGoal::where('law', $law)->where('year', $year)->where('number', $health_goal)->firstOrFail();
-        // if($law != '19813') $healthGoal->indicators()->with('values')->orderBy('number')->get();
-        // $law == '19813' ? $this->loadValuesWithRemSourceLaw19813($year, $indicator) : $this->loadValuesWithRemSource($year, $healthGoal);
         if($law == '19813'){
             $indicator = Indicator::findOrFail($health_goal);
             $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->orderBy('comuna')->get();
