@@ -82,6 +82,15 @@
     @endif
 @endif
 
+@canany(['Service Request: audit'])
+<br /><hr />
+<div style="height: 300px; overflow-y: scroll;">
+  @foreach($serviceRequest->fulfillments as $key => $fulfillment)
+    @include('service_requests.requests.partials.audit', ['audits' => $fulfillment->audits] )
+  @endforeach
+</div>
+@endcanany
+
 @endsection
 
 @section('custom_js')
