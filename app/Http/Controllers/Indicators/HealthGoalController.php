@@ -116,7 +116,7 @@ class HealthGoalController extends Controller
                 $source = $factor == 'numerador' ? $indicator->numerator_source : $indicator->denominator_source;
 
                 if($source == 'FONASA'){
-                    $result = Percapita::year($year-1)->selectRaw('COUNT(*)*'.reset($cols).' AS valor, COD_CENTRO')
+                    $result = Percapita::year($year)->selectRaw('COUNT(*)*'.reset($cols).' AS valor, COD_CENTRO')
                                               ->with(['establecimiento' => function($q){ 
                                                   return $q->where('meta_san', 1);
                                               }])
@@ -173,7 +173,7 @@ class HealthGoalController extends Controller
                                 ->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->get()->count() == 2;
                     if($isRemP) $factor == 'numerador' ? $indicator->isNumRemP = true : $indicator->isDenRemP = true;
 
-                    $result = Rem::year($year-1)->selectRaw($raws)
+                    $result = Rem::year($year)->selectRaw($raws)
                                 ->with(['establecimiento' => function($q){ 
                                     return $q->where('meta_san', 1);
                                 }])
@@ -199,7 +199,7 @@ class HealthGoalController extends Controller
                                     ->whereIn('CodigoPrestacion', $cods2)->groupBy('Mes')->get()->count() == 2;
                         if($isRemP) $factor == 'numerador' ? $indicator->isNumRemP = true : $indicator->isDenRemP = true;
 
-                        $result = Rem::year($year-1)->selectRaw($raws)
+                        $result = Rem::year($year)->selectRaw($raws)
                                     ->with(['establecimiento' => function($q){ 
                                         return $q->where('meta_san', 1);
                                     }])
