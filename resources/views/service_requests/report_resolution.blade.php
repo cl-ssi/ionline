@@ -1,4 +1,4 @@
-<?php setlocale(LC_ALL, 'es'); ?>
+<?php setlocale(LC_ALL, 'es_MX', 'es', 'ES'); ?>
 <html lang="es">
     <head>
         <meta charset="utf-8">
