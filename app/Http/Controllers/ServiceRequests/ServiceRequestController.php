@@ -850,6 +850,15 @@ class ServiceRequestController extends Controller
         $formatter = new NumeroALetras();
         $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
 
+        if ($ServiceRequest->fulfillments) {
+          foreach ($ServiceRequest->fulfillments as $key => $fulfillment) {
+            $fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
+            // dd($fulfillment->total_to_pay_description);
+          }
+        }
+
+        // dd($ServiceRequest->fulfillments);
+
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('service_requests.report_resolution',compact('ServiceRequest'));
 
