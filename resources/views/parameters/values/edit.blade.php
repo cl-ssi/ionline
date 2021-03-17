@@ -40,6 +40,8 @@
                 <option value="CUARTO TURNO - MODIFICADO" @if($value->work_type == 'CUARTO TURNO - MODIFICADO') selected @endif>CUARTO TURNO - MODIFICADO</option>
                 <option value="HORA MÉDICA" @if($value->work_type == 'HORA MÉDICA') selected @endif>HORA MÉDICA</option>
                 <option value="DIURNO PASADO A TURNO" @if($value->work_type == 'DIURNO PASADO A TURNO') selected @endif>DIURNO PASADO A TURNO</option>
+                <option value="TURNO EXTRA" @if($value->work_type == 'TURNO EXTRA') selected @endif>TURNO EXTRA</option>
+                <option value="HORA EXTRA" @if($value->work_type == 'HORA EXTRA') selected @endif>HORA EXTRA</option>
                 <option value="OTRO" @if($value->work_type == 'OTRO') selected @endif>OTRO</option>
             </select>
         </fieldset>
