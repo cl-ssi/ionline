@@ -57,9 +57,37 @@ class ShowTotalHours extends Component
                             else return false;
                         }, $fulfillmentItem->end_date);
 
-//                    if(Auth::user()->can('be god')){
-//                        dump("{$fulfillmentItem->start_date->toDateString()} | dia: $hoursDay | Noche: $hoursNight");
-//                    }
+                    if (Auth::user()->can('be god')) {
+                        dump("{$fulfillmentItem->start_date} - {$fulfillmentItem->end_date} | dia: $hoursDay | Noche: $hoursNight");
+                    }
+
+                    $this->totalHoursDay = $this->totalHoursDay + $hoursDay;
+                    $this->totalHoursNight = $this->totalHoursNight + $hoursNight;
+                }
+
+                $this->totalHours = $this->totalHoursDay + $this->totalHoursNight;
+                $this->totalAmount = $this->totalHours * $value->amount;
+                break;
+            case 'TERCER TURNO':
+            case 'CUARTO TURNO':
+                foreach ($this->serviceRequest->shiftControls as $shiftControl) {
+                    $hoursDay = $shiftControl->start_date->diffInHoursFiltered(
+                        function ($date) {
+                            if (in_array($date->hour, [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]))
+                                return true;
+                            else return false;
+                        }, $shiftControl->end_date);
+
+                    $hoursNight = $shiftControl->start_date->diffInHoursFiltered(
+                        function ($date) {
+                            if (in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7]))
+                                return true;
+                            else return false;
+                        }, $shiftControl->end_date);
+
+                    if (Auth::user()->can('be god')) {
+                        dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia: $hoursDay | Noche: $hoursNight");
+                    }
 
                     $this->totalHoursDay = $this->totalHoursDay + $hoursDay;
                     $this->totalHoursNight = $this->totalHoursNight + $hoursNight;
@@ -84,15 +112,14 @@ class ShowTotalHours extends Component
                             else return false;
                         }, $shiftControl->end_date);
 
-
                     if ($shiftControl->start_date->dayOfWeek == 6 || $shiftControl->start_date->dayOfWeek == 0) {
                         $hoursNight = $hoursNight + $hoursDay;
                         $hoursDay = 0;
                     }
 
-//                    if(Auth::user()->can('be god')){
-//                        dump("{$shiftControl->start_date->toDateString()} | dia Semana: {$shiftControl->start_date->dayOfWeek} | dia: $hoursDay | Noche: $hoursNight");
-//                    }
+                    if (Auth::user()->can('be god')) {
+                        dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia Semana: {$shiftControl->start_date->dayOfWeek} | dia: $hoursDay | Noche: $hoursNight");
+                    }
 
                     $this->totalHoursDay = $this->totalHoursDay + $hoursDay;
                     $this->totalHoursNight = $this->totalHoursNight + $hoursNight;
@@ -111,12 +138,12 @@ class ShowTotalHours extends Component
                     array_push($holidaysArray, $holiday->formattedDate);
                 }
 
-                $businessDays = $firstDayOfMonth->diffInDaysFiltered(function (Carbon $date) use($holidaysArray){
+                $businessDays = $firstDayOfMonth->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
                     return $date->isWeekday() && !in_array($date, $holidaysArray);
                 }, $lastOfMonth);
 
                 $workingHoursInMonth = $businessDays * 8.8;
-                $this->refundHours = round(($workingHoursInMonth - $this->totalHoursDay),0);
+                $this->refundHours = round(($workingHoursInMonth - $this->totalHoursDay), 0);
                 $this->totalHours = $this->refundHours + $this->totalHoursNight;
                 $totalAmountNight = $this->totalHoursNight * ($value->amount * 1.5);
                 $totalAmountDayRefund = $this->refundHours * $value->amount;
