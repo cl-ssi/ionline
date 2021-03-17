@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Indicators\Establecimiento;
 use App\Indicators\HealthGoal;
 use App\Indicators\Indicator;
+use App\Indicators\Percapita;
 use App\Indicators\Rem;
 use App\Indicators\Value;
 use Illuminate\Http\Request;
@@ -111,50 +112,65 @@ class HealthGoalController extends Controller
             if($factor_cods != null && $factor_cols != null){
                 //procesamos los datos necesarios para las consultas rem
                 $cods = array_map('trim', explode(',', $factor_cods));
-                //buscamos por codigos de prestacion con valor negativo indica que existe otra consulta que necesita ser procesada para sumarle (resta) a primera consulta
-                $cods2 = null;
-                foreach($cods as $key => $value){
-                    if (strpos($value, "-") !== false) {
-                        $cods2[] = substr($value, 1); //le quitamos el signo negativo al codigo prestacion y guardamos valor en array $cods2
-                        unset($cods[$key]); //removemos item desde $cods
-                    }
-                }
                 $cols = array_map('trim', explode(',', $factor_cols));
-                $raws = null;
-                foreach($cols as $col)
-                    $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
-                $raws .= ' AS valor, IdEstablecimiento, Mes';
+                $source = $factor == 'numerador' ? $indicator->numerator_source : $indicator->denominator_source;
 
-                //Es rem P la consulta?
-                $isRemP = Rem::year($year-1)->select('Mes')
-                            ->whereHas('establecimiento',function($q){ return $q->where('meta_san', 1); })
-                            ->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->get()->count() == 2;
-                if($isRemP) $factor == 'numerador' ? $indicator->isNumRemP = true : $indicator->isDenRemP = true;
+                if($source == 'FONASA'){
+                    $result = Percapita::year($year)->selectRaw('COUNT(*)*'.reset($cols).' AS valor, COD_CENTRO')
+                                              ->with(['establecimiento' => function($q){ 
+                                                  return $q->where('meta_san', 1);
+                                              }])
+                                              ->whereHas('establecimiento', function($q){
+                                                  return $q->where('meta_san', 1);
+                                              })
+                                              ->whereRaw(implode(' AND ', $cods))
+                                              ->groupBy('COD_CENTRO')->orderBy('COD_CENTRO')->get();
 
-                $result = Rem::year($year)->selectRaw($raws)
-                            ->with(['establecimiento' => function($q){ 
-                                return $q->where('meta_san', 1);
-                            }])
-                            ->whereHas('establecimiento', function($q){
-                                return $q->where('meta_san', 1);
-                            })
-                            ->when($isRemP, function($query){
-                                return $query->whereIn('Mes', [6,12]);
-                            })
-                            ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
+                    foreach($result as $item){
+                        $value = new Value(['month' => 12, 'factor' => $factor, 'value' => $item->valor]);
+                        $value->commune = $item->establecimiento->comuna;
+                        $value->establishment = $item->establecimiento->alias_estab;
+                        $indicator->values->add($value);
+                    }
 
-                foreach($result as $item){
-                    $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => $item->valor]);
-                    $value->commune = $item->establecimiento->comuna;
-                    $value->establishment = $item->establecimiento->alias_estab;
-                    $indicator->values->add($value);
-                }
-                //Existe otra consulta que ejecutar con valores negativos para sumarlos a la primera consulta
-                if($cods2 != null){
+                    // Consultamos si existen en el denominador valores manuales por comuna
+                    if($factor == 'denominador' && $indicator->denominator_values_by_commune != null){
+                        $values = array_map('trim', explode(',', $indicator->denominator_values_by_commune));
+                        $communes = array('ALTO HOSPICIO', 'CAMIÑA', 'COLCHANE', 'HUARA', 'IQUIQUE', 'PICA', 'POZO ALMONTE');
+
+                        foreach($values as $index => $value){
+                            if(!empty($value)){ //valores distinto a 0 los procesamos
+                                $commune = $communes[$index]; //obtenemos nombre de comuna segun posicion del value en el array
+                                //borramos valores previos segun comuna y factor denominador
+                                $indicator->values = $indicator->values->reject(function($item, $key) use ($factor, $commune){
+                                    return $item->factor == $factor && $item->commune == $commune;
+                                });
+                                // Seteamos valores nuevos segun comuna y factor denominador
+                                $value = new Value(['month' => 12, 'factor' => $factor, 'value' => $value]);
+                                $value->commune = $commune;
+                                $indicator->values->add($value);
+                            }
+                        }
+                    }
+                } else { // fuente REM
+                    //buscamos por codigos de prestacion con valor negativo indica que existe otra consulta que necesita ser procesada para sumarle (resta) a primera consulta
+                    $cods2 = null;
+                    foreach($cods as $key => $value){
+                        if (strpos($value, "-") !== false) {
+                            $cods2[] = substr($value, 1); //le quitamos el signo negativo al codigo prestacion y guardamos valor en array $cods2
+                            unset($cods[$key]); //removemos item desde $cods
+                        }
+                    }
+                    $cols = array_map('trim', explode(',', $factor_cols));
+                    $raws = null;
+                    foreach($cols as $col)
+                        $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
+                    $raws .= ' AS valor, IdEstablecimiento, Mes';
+
                     //Es rem P la consulta?
                     $isRemP = Rem::year($year-1)->select('Mes')
                                 ->whereHas('establecimiento',function($q){ return $q->where('meta_san', 1); })
-                                ->whereIn('CodigoPrestacion', $cods2)->groupBy('Mes')->get()->count() == 2;
+                                ->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->get()->count() == 2;
                     if($isRemP) $factor == 'numerador' ? $indicator->isNumRemP = true : $indicator->isDenRemP = true;
 
                     $result = Rem::year($year)->selectRaw($raws)
@@ -167,13 +183,40 @@ class HealthGoalController extends Controller
                                 ->when($isRemP, function($query){
                                     return $query->whereIn('Mes', [6,12]);
                                 })
-                                ->whereIn('CodigoPrestacion', $cods2)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
+                                ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
 
                     foreach($result as $item){
-                        $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => -$item->valor]);
+                        $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => $item->valor]);
                         $value->commune = $item->establecimiento->comuna;
                         $value->establishment = $item->establecimiento->alias_estab;
                         $indicator->values->add($value);
+                    }
+                    //Existe otra consulta que ejecutar con valores negativos para sumarlos a la primera consulta
+                    if($cods2 != null){
+                        //Es rem P la consulta?
+                        $isRemP = Rem::year($year-1)->select('Mes')
+                                    ->whereHas('establecimiento',function($q){ return $q->where('meta_san', 1); })
+                                    ->whereIn('CodigoPrestacion', $cods2)->groupBy('Mes')->get()->count() == 2;
+                        if($isRemP) $factor == 'numerador' ? $indicator->isNumRemP = true : $indicator->isDenRemP = true;
+
+                        $result = Rem::year($year)->selectRaw($raws)
+                                    ->with(['establecimiento' => function($q){ 
+                                        return $q->where('meta_san', 1);
+                                    }])
+                                    ->whereHas('establecimiento', function($q){
+                                        return $q->where('meta_san', 1);
+                                    })
+                                    ->when($isRemP, function($query){
+                                        return $query->whereIn('Mes', [6,12]);
+                                    })
+                                    ->whereIn('CodigoPrestacion', $cods2)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
+
+                        foreach($result as $item){
+                            $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => -$item->valor]);
+                            $value->commune = $item->establecimiento->comuna;
+                            $value->establishment = $item->establecimiento->alias_estab;
+                            $indicator->values->add($value);
+                        }
                     }
                 }
             }
