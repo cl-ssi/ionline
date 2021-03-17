@@ -861,8 +861,8 @@ class ServiceRequestController extends Controller
 
     public function derive(Request $request){
 
-      $user_id = $request->sender_id;
-      $sender_name = User::find($user_id)->getFullNameAttribute();
+      $user_id = Auth::user()->id;
+      $sender_name = User::find(Auth::user()->id)->getFullNameAttribute();
       $receiver_name = User::find($request->derive_user_id)->getFullNameAttribute();
       $receiver_email = User::find($request->derive_user_id)->email;
 
