@@ -8,7 +8,7 @@
         <style media="screen">
         body {
             font-family: Arial, Helvetica, sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
         .content {
             margin: 0 auto;
