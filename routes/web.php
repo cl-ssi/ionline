@@ -30,6 +30,14 @@ use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\ServiceRequests\InvoiceController;
 use App\Http\Controllers\ServiceRequests\ValueController;
 
+use App\Http\Controllers\ServiceRequests\ServiceRequestController;
+use App\Http\Controllers\ServiceRequests\FulfillmentController;
+use App\Http\Controllers\ServiceRequests\SignatureFlowController;
+
+
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -258,23 +266,80 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
         // Rutas de service request
 
+        //descomposición del resource
+        Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
+        Route::get('/create', [ServiceRequestController::class, 'create'])->name('create');
+        Route::post('/store', [ServiceRequestController::class, 'store'])->name('store');
+        Route::get('/{serviceRequest}/edit', [ServiceRequestController::class, 'edit'])->name('edit');
+        Route::put('/{serviceRequest}/update', [ServiceRequestController::class, 'update'])->name('update');
+        Route::delete('{serviceRequest}/destroy', [ServiceRequestController::class, 'destroy'])->name('destroy');
+        //fin descomposicion
+
+        Route::post('/derive', [ServiceRequestController::class, 'derive'])->name('derive');
+        Route::get('/consolidated_data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
+        Route::get('/pending_request', [ServiceRequestController::class, 'pending_requests'])->name('pending_requests');
+        Route::get('/export-sirh', [ServiceRequestController::class, 'export_sirh'])->name('export_sirh');
+        Route::get('/aditional_data_list', [ServiceRequestController::class, 'aditional_data_list'])->name('aditional_data_list');
+        Route::get('/transfer_requests', [ServiceRequestController::class, 'transfer_requests'])->name('transfer_requests');
+        Route::put('/update_aditional_data/{serviceRequest}', [ServiceRequestController::class, 'update_aditional_data'])->name('update_aditional_data');
+        Route::get('/certificate-pdf/{serviceRequest}', [ServiceRequestController::class, 'certificatePDF'])->name('LE FALTA EL NAME');
+        Route::get('/resolution/{ServiceRequest}', [ServiceRequestController::class, 'resolution'])->name('certificate-pdf');
+
+        Route::get('service_requests/resolution/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolution')->middleware('auth');
+
+        
+        
+        
+        
+
+
+        Route::prefix('shift-control')->name('shift-control.')->group(function () {
+            // Rutas a signature flow
+        });
+
         Route::prefix('fulfillment')->name('fulfillment.')->group(function () {
-            // Rutas de fulfillment
+            // descomposición del resource
+            Route::get('/', [FulfillmentController::class, 'index'])->name('index');
+            Route::post('/store', [FulfillmentController::class, 'store'])->name('store');
+            Route::put('/{fulfillment}/update', [FulfillmentController::class, 'update'])->name('update');
+            ¿edit_fulfillment? es el ¿edit?
+            // fin descomposición
+            Route::get('/edit_fulfillment/{serviceRequest}', [FulfillmentController::class, 'edit_fulfillment'])->name('edit_fulfillment');
+            Route::get('/save_approbed_fulfillment/{serviceRequest}', [FulfillmentController::class, 'save_approbed_fulfillment'])->name('save_approbed_fulfillment');
+            Route::get('/confirm_Fulfillment_By_Sign_Position/{Fulfillment}/{approbed?}', [FulfillmentController::class, 'confirmFulfillmentBySignPosition'])->name('confirm_Fulfillment_By_SignPosition');
+            Route::get('/download-invoice/{fulfillment}', [FulfillmentController::class, 'downloadInvoice'])->name('download_invoice');
+            Route::get('/download-resolution/{fulfillment}', [FulfillmentController::class, 'downloadResolution'])->name('download_resolution');
+            Route::get('/certificate-pdf/{fulfillment}', [FulfillmentController::class, 'certificatePDF'])->name('certificate-pdf');
+            Route::get('/confirmFulfillment/{fulfillment}', [FulfillmentController::class, 'confirmFulfillment'])->name('confirm-Fulfillment');
+            Route::get('/refuseFulfillment/{fulfillment}', [FulfillmentController::class, 'refuseFulfillment'])->name('refuse-Fulfillment');
+
+            Route::get('fulfillments/refuseFulfillment/{fulfillment}', 'ServiceRequests\FulfillmentController@refuseFulfillment')->name('fulfillments.refuseFulfillment')->middleware('auth');
+
+            
+
+            
+            
+            
         });
 
         Route::prefix('report')->name('report.')->group(function () {
             // Rutas a los reportes
+            Route::get('/to-pay', [ServiceRequests\ReportController::class, 'toPay'])->name('toPay');
+
+            
         });
 
         Route::prefix('signature-flow')->name('signature-flow.')->group(function () {
             // Rutas a signature flow
+            ¿solamente tiene store?
+            Route::post('/store', [SignatureFlowController::class, 'store'])->name('store');
         });
     });
-    
-    
     */
+    
+    
 
-    Route::resource('shift_control', 'ServiceRequests\ShiftControlController')->middleware('auth');
+    //Route::resource('shift_control', 'ServiceRequests\ShiftControlController')->middleware('auth');
     Route::post('service_requests.derive','ServiceRequests\ServiceRequestController@derive')->name('service_requests.derive')->middleware('auth');
     Route::get('service_requests.consolidated_data','ServiceRequests\ServiceRequestController@consolidated_data')->name('service_requests.consolidated_data')->middleware('auth');
     Route::get('service_requests.pending_requests','ServiceRequests\ServiceRequestController@pending_requests')->name('service_requests.pending_requests')->middleware('auth');

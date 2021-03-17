@@ -379,7 +379,6 @@
 						<fieldset class="form-group col">
 								<label for="for_estate"><br/></label>
 								<button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
-								<!-- formnovalidate="formnovalidate" formaction="{{ route('rrhh.shift_control.store') }}" -->
 						</fieldset>
 					</div>
 
@@ -441,9 +440,12 @@
 					<option value="TERCER TURNO - MODIFICADO">TERCER TURNO - MODIFICADO</option>
           <option value="CUARTO TURNO">CUARTO TURNO</option>
 					<option value="CUARTO TURNO - MODIFICADO">CUARTO TURNO - MODIFICADO</option>
-					<option value="HORA MÉDICA">HORA MÉDICA</option>
+
 					<option value="DIURNO PASADO A TURNO">DIURNO PASADO A TURNO</option>
-					<option value="OTRO">OTRO</option>
+					<option value="HORA MÉDICA">HORA MÉDICA</option>
+          <option value="HORA EXTRA">HORA EXTRA</option>
+					<option value="TURNO EXTRA">TURNO EXTRA</option>
+					<!-- <option value="OTRO">OTRO</option> -->
         </select>
 
 		</fieldset>
@@ -486,6 +488,17 @@
 				$("#div_turno :input").attr("disabled", false);
 				$("#div_turno").show();
 
+				$("#working_day_type option[value='DIURNO']").hide();
+				$("#working_day_type option[value='TERCER TURNO']").hide();
+				$("#working_day_type option[value='TERCER TURNO - MODIFICADO']").hide();
+				$("#working_day_type option[value='CUARTO TURNO']").hide();
+				$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").hide();
+
+				$("#working_day_type option[value='DIURNO PASADO A TURNO']").show();
+				$("#working_day_type option[value='HORA MÉDICA']").show();
+				$("#working_day_type option[value='HORA EXTRA']").show();
+				$("#working_day_type option[value='TURNO EXTRA']").show();
+
 			}else{
 				$('#for_daily_hours').attr('readonly', false);
 				$('#for_nightly_hours').attr('readonly', false);
@@ -498,6 +511,17 @@
 				// $('#div_turno').attr('disabled','disabled');
 				$("#div_turno :input").attr("disabled", true);
 				$("#div_turno").hide();
+
+				$("#working_day_type option[value='DIURNO']").show();
+				$("#working_day_type option[value='TERCER TURNO']").show();
+				$("#working_day_type option[value='TERCER TURNO - MODIFICADO']").show();
+				$("#working_day_type option[value='CUARTO TURNO']").show();
+				$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").show();
+
+				$("#working_day_type option[value='DIURNO PASADO A TURNO']").hide();
+				$("#working_day_type option[value='HORA MÉDICA']").hide();
+				$("#working_day_type option[value='HORA EXTRA']").hide();
+				$("#working_day_type option[value='TURNO EXTRA']").hide();
 			}
 		});
 
