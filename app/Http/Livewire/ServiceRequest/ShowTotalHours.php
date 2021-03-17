@@ -73,6 +73,8 @@ class ShowTotalHours extends Component
             case 'DIURNO':
             case 'TERCER TURNO - MODIFICADO':
             case 'CUARTO TURNO - MODIFICADO':
+            case 'HORA EXTRA':
+            case 'TURNO EXTRA':
             case 'OTRO':
                 foreach ($this->serviceRequest->shiftControls as $shiftControl) {
                     $hoursDay = $shiftControl->start_date->diffInHoursFiltered(
