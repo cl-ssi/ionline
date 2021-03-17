@@ -277,26 +277,26 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
         Route::get('/transfer-requests', [ServiceRequestController::class, 'transfer_requests'])->name('transfer_requests');
         Route::post('/derive', [ServiceRequestController::class, 'derive'])->name('derive');
-        
-        
+
+
         Route::get('/pending-request', [ServiceRequestController::class, 'pending_requests'])->name('pending_requests');
-        
-        Route::get('/aditional-data-list', [ServiceRequestController::class, 'aditional_data_list'])->name('aditional_data_list');        
+
+        Route::get('/aditional-data-list', [ServiceRequestController::class, 'aditional_data_list'])->name('aditional_data_list');
         Route::put('/update-aditional-data/{serviceRequest}', [ServiceRequestController::class, 'update_aditional_data'])->name('update_aditional_data');
         Route::get('/certificate-pdf/{serviceRequest}', [ServiceRequestController::class, 'certificatePDF'])->name('certificate-pdf);
-        
+
         //no se esta ocupando
         Route::get('/resolution/{ServiceRequest}', [ServiceRequestController::class, 'resolution'])->name('no tiene name');
 
-        
+
         //pasar a reports
         Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
         Route::get('/export-sirh', [ServiceRequestController::class, 'export_sirh'])->name('export_sirh');
-               
-        
 
 
-        
+
+
+
 
         Route::prefix('fulfillment')->name('fulfillment.')->group(function () {
             // descomposición del resource
@@ -317,18 +317,18 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
             Route::get('fulfillments/refuseFulfillment/{fulfillment}', 'ServiceRequests\FulfillmentController@refuseFulfillment')->name('fulfillments.refuseFulfillment')->middleware('auth');
 
-            
 
-            
-            
-            
+
+
+
+
         });
 
         Route::prefix('report')->name('report.')->group(function () {
             // Rutas a los reportes
             Route::get('/to-pay', [ServiceRequests\ReportController::class, 'toPay'])->name('toPay');
 
-            
+
         });
 
         Route::prefix('signature-flow')->name('signature-flow.')->group(function () {
@@ -338,8 +338,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         });
     });
     */
-    
-    
+
+
 
     //Route::resource('shift_control', 'ServiceRequests\ShiftControlController')->middleware('auth');
     Route::post('service_requests.derive','ServiceRequests\ServiceRequestController@derive')->name('service_requests.derive')->middleware('auth');
@@ -356,6 +356,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('filfillments/download-invoice/{fulfillment}','ServiceRequests\FulfillmentController@downloadInvoice')->name('fulfillments.download.invoice')->middleware('auth');
     Route::get('filfillments/download-resolution/{fulfillment}','ServiceRequests\FulfillmentController@downloadResolution')->name('fulfillments.download.resolution')->middleware('auth');
     Route::get('service_requests/report/to-pay','ServiceRequests\ReportController@toPay')->name('service_requests.report.toPay')->middleware('auth');
+    Route::get('service_requests/report/bank-payment-file/{selected_week}','ServiceRequests\ReportController@bankPaymentFile')->name('service_requests.report.bankPaymentFile')->middleware('auth');
 
     Route::resource('fulfillments', 'ServiceRequests\FulfillmentController')->middleware('auth');
     Route::get('fulfillments/certificate-pdf/{fulfillment}', 'ServiceRequests\FulfillmentController@certificatePDF')->name('fulfillments.certificate-pdf')->middleware('auth');
@@ -367,7 +368,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('service_requests/resolution/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolution')->middleware('auth');
     Route::get('service_requests/resolution-pdf/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolutionPDF')->name('service_requests.resolution-pdf')->middleware('auth');
     Route::resource('signature_flow', 'ServiceRequests\SignatureFlowController')->middleware('auth');
-    
+
     Route::resource('authorities', 'Rrhh\AuthorityController')->middleware(['auth']);
 
     Route::prefix('organizational-units')->name('organizational-units.')->group(function () {
