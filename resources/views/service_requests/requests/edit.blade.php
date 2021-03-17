@@ -425,7 +425,7 @@
           <option value="DIURNO PASADO A TURNO" @if($serviceRequest->working_day_type == 'DIURNO PASADO A TURNO') selected @endif >DIURNO PASADO A TURNO</option>
           <option value="HORA MÉDICA" @if($serviceRequest->working_day_type == 'HORA MÉDICA') selected @endif >HORA MÉDICA</option>
           <option value="HORA EXTRA" @if($serviceRequest->working_day_type == 'HORA EXTRA') selected @endif>HORA EXTRA</option>
-					<option value="TURNO MÉDICO" @if($serviceRequest->working_day_type == 'TURNO MÉDICO') selected @endif>TURNO MÉDICO</option>
+					<option value="TURNO EXTRA" @if($serviceRequest->working_day_type == 'TURNO EXTRA') selected @endif>TURNO EXTRA</option>
 
           <option value="OTRO" @if($serviceRequest->working_day_type == 'OTRO') selected @endif >OTRO</option>
         </select>
