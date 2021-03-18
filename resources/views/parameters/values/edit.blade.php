@@ -42,7 +42,6 @@
                 <option value="DIURNO PASADO A TURNO" @if($value->work_type == 'DIURNO PASADO A TURNO') selected @endif>DIURNO PASADO A TURNO</option>
                 <option value="TURNO EXTRA" @if($value->work_type == 'TURNO EXTRA') selected @endif>TURNO EXTRA</option>
                 <option value="HORA EXTRA" @if($value->work_type == 'HORA EXTRA') selected @endif>HORA EXTRA</option>
-                <option value="OTRO" @if($value->work_type == 'OTRO') selected @endif>OTRO</option>
             </select>
         </fieldset>
 
