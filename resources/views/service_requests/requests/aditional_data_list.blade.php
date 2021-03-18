@@ -32,7 +32,7 @@
   <thead>
     <tr>
       <th scope="col">Id</th>
-      <th scope="col">Tipo</th>
+      <!-- <th scope="col">Tipo</th> -->
       <th scope="col">T.Contrato</th>
       <th scope="col">F. Solicitud</th>
       <th scope="col">Rut</th>
@@ -48,7 +48,7 @@
   @foreach($serviceRequests as $serviceRequest)
     <tr>
       <td>{{ $serviceRequest->id }}</td>
-      <td>{{ $serviceRequest->type }}</td>
+      <!-- <td>{{ $serviceRequest->type }}</td> -->
       <td>{{ $serviceRequest->program_contract_type }}</td>
       <td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
       <td nowrap>{{ $serviceRequest->rut }}</td>
