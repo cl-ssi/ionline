@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ServiceRequests;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Fulfillment;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -90,6 +91,22 @@ class ReportController extends Controller
 
         return $response;
 
+    }
+
+    public function pendingResolutions(Request $request){
+        $serviceRequests = ServiceRequest::whereNull('has_resolution_file')->orWhere('has_resolution_file','===',0)
+                                        ->get();
+        foreach ($serviceRequests as $key => $serviceRequest) {
+            //only completed
+            if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0 && $serviceRequest->SignatureFlows->whereNull('status')->count() == 0) {
+
+            }else{
+              $serviceRequests->forget($key);
+            }
+        }
+
+        // dd($fulfillments);
+        return view('service_requests.reports.pending_resolutions', compact('serviceRequests'));
     }
 
 }
