@@ -91,8 +91,7 @@ class ClaveUnicaController extends Controller
             if (env('APP_ENV') == 'production') {
                 //$access_token = session()->get('access_token');
                 $url_base = "https://www.claveunica.gob.cl/openid/userinfo";
-                $response = Http::withToken($access_token)->get($url_base);
-
+                $response = Http::withToken($access_token)->post($url_base);
                 $user_cu = json_decode($response);
 		if($user_cu) {
                     $user = new User();
