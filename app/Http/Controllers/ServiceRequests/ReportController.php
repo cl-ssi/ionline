@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ServiceRequests;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Fulfillment;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -73,6 +74,15 @@ class ReportController extends Controller
 
         return $response;
 
+    }
+
+    public function pendingResolutions(Request $request){
+        $serviceRequests = ServiceRequest::
+                                          // whereNull('has_resolution_file')->orWhere('has_resolution_file','===',0)
+                                        get();
+
+        // dd($fulfillments);
+        return view('service_requests.reports.pending_resolutions', compact('serviceRequests'));
     }
 
 }
