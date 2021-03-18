@@ -42,7 +42,6 @@
                 <option value="DIURNO PASADO A TURNO">DIURNO PASADO A TURNO</option>
                 <option value="TURNO EXTRA">TURNO EXTRA</option>
                 <option value="HORA EXTRA">HORA EXTRA</option>
-                <option value="OTRO">OTRO</option>
             </select>
         </fieldset>
 
