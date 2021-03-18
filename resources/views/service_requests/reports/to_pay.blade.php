@@ -27,9 +27,9 @@
 </div> -->
 
 <h3 class="mb-3 mt-3">Pendientes de pago</h3>
-@can('be god')
-    <a href="{{route('rrhh.service_requests.report.bankPaymentFile', $current_week)}}" class="btn btn-sm btn-outline-primary" > <i class="fas fa-file"></i> Archivo de pago banco</a>
-@endcan
+{{--@can('be god')--}}
+    <a href="{{route('rrhh.service_requests.report.bankPaymentFile', $current_week)}}" class="btn btn-sm btn-outline-primary" > <i class="fas fa-file"></i> Archivo de pago banco (En pruebas)</a>
+{{--@endcan--}}
 <table class="table table-sm table-bordered">
     <tr>
         <th>Id</th>
