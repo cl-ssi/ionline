@@ -18,11 +18,13 @@
         @endforeach
         </select>
     </fieldset>
+    @error('bank_id') <span class="error">{{ $message }}</span> @enderror
 
     <fieldset class="form-group col-4">
         <label>Número de Cuenta</label>
         <input type="number" wire:model="account_number" class="form-control" required>        
     </fieldset>
+    @error('account_number') <span class="error">{{ $message }}</span> @enderror
     
 
     <fieldset class="form-group col-4">
@@ -32,9 +34,10 @@
         <option value="01">CTA CORRIENTE / CTA VISTA</option>
         <option value="02">CTA AHORRO</option>
         <option value="30">CUENTA RUT</option>
-        </select>       
-        
-    </fieldset>   
+        </select>         
+    </fieldset>
+    @error('pay_method') <span class="error">{{ $message }}</span> @enderror
+    <br>
 
     <button wire:click="save()" type="button">Guardar/Actualizar</button>
 </div>
