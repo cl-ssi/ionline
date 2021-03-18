@@ -254,7 +254,7 @@
 
 		<fieldset class="form-group col">
 		    <label for="for_contractual_condition">Calidad Contractual</label>
-        <select name="contractual_condition" class="form-control">
+        <select name="contractual_condition" class="form-control" required>
           <option value=""></option>
           <option value="SUPLENTE" >SUPLENTE</option>
           <option value="CONTRATA" >CONTRATA</option>
