@@ -250,11 +250,72 @@
 
   </div>
 
+	<div id="control_turnos">
+		<br>
+		<div class="card" id="card">
+		  <div class="card-header">
+		    Control de Turnos
+		  </div>
+		  <ul class="list-group list-group-flush">
+		    <li class="list-group-item">
+					<div class="row">
+						<fieldset class="form-group col-3">
+								<label for="for_estate">Entrada</label>
+								<input type="date" class="form-control" name="shift_start_date" id="shift_start_date">
+						</fieldset>
+						<fieldset class="form-group col">
+								<label for="for_estate">Hora</label>
+								<input type="time" class="form-control" name="start_hour" id="start_hour">
+						</fieldset>
+						<fieldset class="form-group col-3">
+								<label for="for_estate">Salida</label>
+								<input type="date" class="form-control" name="shift_end_date" id="shift_end_date">
+						</fieldset>
+						<fieldset class="form-group col">
+								<label for="for_estate">Hora</label>
+								<input type="time" class="form-control" name="end_hour" id="end_hour">
+						</fieldset>
+						<fieldset class="form-group col">
+								<label for="for_estate">Observación</label>
+								<input type="text" class="form-control" name="observation" id="observation">
+						</fieldset>
+						<fieldset class="form-group col">
+								<label for="for_estate"><br/></label>
+								<button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
+						</fieldset>
+					</div>
+
+					<table class="table table-sm">
+			        <thead>
+			            <tr>
+			                <th>Select</th>
+			                <th>Entrada</th>
+			                <th>Hora</th>
+											<th>Salida</th>
+											<th>Hora</th>
+											<th>Observación</th>
+			            </tr>
+			        </thead>
+			        <tbody>
+			            <!-- <tr>
+			                <td><input type="checkbox" name="record"></td>
+			                <td>Peter Parker</td>
+			                <td>peterparker@mail.com</td>
+			            </tr> -->
+			        </tbody>
+			    </table>
+					<button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+				</li>
+		  </ul>
+		</div>
+		<br>
+	</div>
+
   <div class="row">
 
 		<fieldset class="form-group col">
 		    <label for="for_contractual_condition">Calidad Contractual</label>
-        <select name="contractual_condition" class="form-control">
+        <select name="contractual_condition" class="form-control" id="contractual_condition">
           <option value=""></option>
           <option value="SUPLENTE" >SUPLENTE</option>
           <option value="CONTRATA" >CONTRATA</option>
@@ -346,68 +407,6 @@
 
   </div>
 
-
-	<div id="control_turnos">
-		<br>
-		<div class="card" id="card">
-		  <div class="card-header">
-		    Control de Turnos
-		  </div>
-		  <ul class="list-group list-group-flush">
-		    <li class="list-group-item">
-					<div class="row">
-						<fieldset class="form-group col-3">
-								<label for="for_estate">Entrada</label>
-								<input type="date" class="form-control" name="shift_start_date" id="shift_start_date">
-						</fieldset>
-						<fieldset class="form-group col">
-								<label for="for_estate">Hora</label>
-								<input type="time" class="form-control" name="start_hour" id="start_hour">
-						</fieldset>
-						<fieldset class="form-group col-3">
-								<label for="for_estate">Salida</label>
-								<input type="date" class="form-control" name="shift_end_date" id="shift_end_date">
-						</fieldset>
-						<fieldset class="form-group col">
-								<label for="for_estate">Hora</label>
-								<input type="time" class="form-control" name="end_hour" id="end_hour">
-						</fieldset>
-						<fieldset class="form-group col">
-								<label for="for_estate">Observación</label>
-								<input type="text" class="form-control" name="observation" id="observation">
-						</fieldset>
-						<fieldset class="form-group col">
-								<label for="for_estate"><br/></label>
-								<button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
-						</fieldset>
-					</div>
-
-					<table class="table table-sm">
-			        <thead>
-			            <tr>
-			                <th>Select</th>
-			                <th>Entrada</th>
-			                <th>Hora</th>
-											<th>Salida</th>
-											<th>Hora</th>
-											<th>Observación</th>
-			            </tr>
-			        </thead>
-			        <tbody>
-			            <!-- <tr>
-			                <td><input type="checkbox" name="record"></td>
-			                <td>Peter Parker</td>
-			                <td>peterparker@mail.com</td>
-			            </tr> -->
-			        </tbody>
-			    </table>
-					<button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
-				</li>
-		  </ul>
-		</div>
-		<br>
-	</div>
-
   <div class="row">
 
     <fieldset class="form-group col">
@@ -422,12 +421,12 @@
           <option value="Odontólogo">Odontólogo</option>
 					<option value="Bioquímico">Bioquímico</option>
           <option value="Auxiliar">Auxiliar</option>
-          <option value="Otro (justificar)">Otro (justificar)</option>
+          <!-- <option value="Otro (justificar)">Otro (justificar)</option> -->
         </select>
 		</fieldset>
 
     <fieldset class="form-group col">
-		    <label for="for_estate_other">Otro</label>
+		    <label for="for_estate_other">Detalle estamento</label>
 		    <input type="text" class="form-control" id="for_estate_other" placeholder="" name="estate_other">
 		</fieldset>
 
@@ -456,6 +455,43 @@
 		</fieldset>
 
   </div>
+
+	<div class="row">
+		<fieldset class="form-group col-3 col-md-3">
+				<label for="for_rrhh_team">Equipo RRHH</label>
+				<select name="rrhh_team" class="form-control" required>
+
+					<option value=""></option>
+					<option value="Residencia Médica" >Residencia Médica</option>
+					<option value="Médico Diurno" >Médico Diurno</option>
+					<option value="Enfermera Supervisora">Enfermera Supervisora</option>
+					<option value="Enfermera Diurna" >Enfermera Diurna</option>
+					<option value="Enfermera Turno" >Enfermera Turno</option>
+					<option value="Kinesiólogo Diurno" >Kinesiólogo Diurno</option>
+					<option value="Kinesiólogo Turno">Kinesiólogo Turno</option>
+					<option value="Téc.Paramédicos Diurno">Téc.Paramédicos Diurno</option>
+					<option value="Téc.Paramédicos Turno" >Téc.Paramédicos Turno</option>
+					<option value="Auxiliar Diurno" >Auxiliar Diurno</option>
+					<option value="Auxiliar Turno">Auxiliar Turno</option>
+					<option value="Terapeuta Ocupacional" >Terapeuta Ocupacional</option>
+					<option value="Químico Farmacéutico" >Químico Farmacéutico</option>
+					<option value="Bioquímico" >Bioquímico</option>
+					<option value="Fonoaudiologo" >Fonoaudiologo</option>
+
+					<option value="Administrativo Diurno" >Administrativo Diurno</option>
+					<option value="Administrativo Turno" >Administrativo Turno</option>
+					<option value="Biotecnólogo Turno" >Biotecnólogo Turno</option>
+					<option value="Matrona Turno" >Matrona Turno</option>
+					<option value="Matrona Diurno" >Matrona Diurno</option>
+					<option value="Otros técnicos" >Otros técnicos</option>
+					<option value="Psicólogo" >Psicólogo</option>
+					<option value="Tecn. Médico Diurno" >Tecn. Médico Diurno</option>
+					<option value="Tecn. Médico Turno" >Tecn. Médico Turno</option>
+					<option value="Trabajador Social" >Trabajador Social</option>
+
+				</select>
+		</fieldset>
+	</div>
 
 	<button type="submit" id="principal_form" class="btn btn-primary">Crear</button>
 
@@ -499,6 +535,8 @@
 				$("#working_day_type option[value='HORA EXTRA']").show();
 				$("#working_day_type option[value='TURNO EXTRA']").show();
 
+				$("#contractual_condition").prop('required',true);
+
 			}else{
 				$('#for_daily_hours').attr('readonly', false);
 				$('#for_nightly_hours').attr('readonly', false);
@@ -522,6 +560,8 @@
 				$("#working_day_type option[value='HORA MÉDICA']").hide();
 				$("#working_day_type option[value='HORA EXTRA']").hide();
 				$("#working_day_type option[value='TURNO EXTRA']").hide();
+
+				$("#contractual_condition").prop('required',false);
 			}
 		});
 

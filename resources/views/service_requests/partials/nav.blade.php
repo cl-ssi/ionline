@@ -56,6 +56,13 @@
             </a>
             @endcan
 
+            @canany(['Service Request: pending requests'])
+            <a class="dropdown-item {{ active('rrhh.service_requests.report.pending-resolutions') }}"
+                href="{{ route('rrhh.service_requests.report.pending-resolutions') }}">
+                <i class="fas fa-file-invoice-dollar"></i> Resoluciones pendientes
+            </a>
+            @endcan
+
             <!-- <div class="dropdown-divider"></div>
 
             <a class="dropdown-item" href="#">Temp</a> -->
