@@ -94,13 +94,19 @@ class ClaveUnicaController extends Controller
                 $response = Http::withToken($access_token)->get($url_base);
 
                 $user_cu = json_decode($response);
-                $user = new User();
-                $user->id = $user_cu->RolUnico->numero;
-                $user->dv = $user_cu->RolUnico->DV;
-                $user->name = implode(' ', $user_cu->name->nombres);
-                $user->fathers_family = $user_cu->name->apellidos[0];
-                $user->mothers_family = $user_cu->name->apellidos[1];
-                $user->email = $user_cu->email;
+		if($user_cu) {
+                    $user = new User();
+                    $user->id = $user_cu->RolUnico->numero;
+                    $user->dv = $user_cu->RolUnico->DV;
+                    $user->name = implode(' ', $user_cu->name->nombres);
+                    $user->fathers_family = $user_cu->name->apellidos[0];
+                    $user->mothers_family = $user_cu->name->apellidos[1];
+		    $user->email = $user_cu->email;
+		}
+		else {
+                    session()->flash('danger', 'Error en clave única. No se pudo iniciar sesión');
+		    return redirect()->route('login');
+		}
             } elseif (env('APP_ENV') == 'local') {
                 $user = new User();
                 $user->id = 12345678;
