@@ -70,6 +70,8 @@
 
 </div>
 
+
+
 <hr>
 
 @if($serviceRequest->program_contract_type == "Mensual")
