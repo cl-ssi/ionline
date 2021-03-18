@@ -10,17 +10,30 @@ class UpdateAccount extends Component
 {
     public $bank_id;
     public $banks;
-    public $account_number;    
+    public $account_number;
     public $pay_method;
     public $serviceRequest;
     //
 
+    protected $rules = [
+        'account_number' => 'required',
+        'bank_id' => 'required',
+        'pay_method' => 'required',
+    ];
+
+    protected $messages = [
+        'account_number.required' => 'Debe Ingresar Número de Cuenta',
+        'bank_id.required' => 'Debe Seleccionar un Banco',
+        'pay_method.required' => 'Debe Seleccionar una Forma de Pago',
+    ];
     
 
 
 
     public function save()
     {        
+        $this->validate();
+        
         $this->serviceRequest->bank_id = $this->bank_id;
         $this->serviceRequest->account_number = $this->account_number;        
         $this->serviceRequest->pay_method = $this->pay_method;
