@@ -77,9 +77,16 @@ class ReportController extends Controller
     }
 
     public function pendingResolutions(Request $request){
-        $serviceRequests = ServiceRequest::
-                                          // whereNull('has_resolution_file')->orWhere('has_resolution_file','===',0)
-                                        get();
+        $serviceRequests = ServiceRequest::whereNull('has_resolution_file')->orWhere('has_resolution_file','===',0)
+                                        ->get();
+        foreach ($serviceRequests as $key => $serviceRequest) {
+            //only completed
+            if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0 && $serviceRequest->SignatureFlows->whereNull('status')->count() == 0) {
+
+            }else{
+              $serviceRequests->forget($key);
+            }
+        }
 
         // dd($fulfillments);
         return view('service_requests.reports.pending_resolutions', compact('serviceRequests'));
