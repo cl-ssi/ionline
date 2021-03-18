@@ -28,7 +28,7 @@ class ServiceRequest extends Model implements Auditable
         'budget_date', 'contract_number','month_of_payment','establishment_id','nationality',
         'digera_strategy','rrhh_team','gross_amount', 'net_amount','sirh_contract_registration',
         'resolution_number','resolution_date','bill_number','total_hours_paid','total_paid',
-        'bank_id','account_number','pay_method',
+        'bank_id','account_number','pay_method','has_resolution_file',
         'payment_date','address','phone_number','email','verification_code'
 
     ];

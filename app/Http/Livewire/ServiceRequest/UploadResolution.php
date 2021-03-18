@@ -4,7 +4,7 @@ namespace App\Http\Livewire\ServiceRequest;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Models\ServiceRequests\Fulfillment;
+use App\Models\ServiceRequests\ServiceRequest;
 use Illuminate\Support\Facades\Storage;
 
 class UploadResolution extends Component
@@ -12,7 +12,7 @@ class UploadResolution extends Component
     use WithFileUploads;
 
     public $resolutionFile;
-    public $fulfillment;
+    public $serviceRequest;
     public $storage_path = '/service_request/resolutions/';
 
     public function save()
@@ -23,20 +23,20 @@ class UploadResolution extends Component
 
         $this->resolutionFile->storeAs(
             $this->storage_path, 
-            $this->fulfillment->id.'.pdf'
+            $this->serviceRequest->id.'.pdf'
         );
 
-        $this->fulfillment->update(['has_resolution_file' => true]);
+        $this->serviceRequest->update(['has_resolution_file' => true]);
     }
 
     public function delete() {
-        Storage::delete($this->storage_path.$this->fulfillment->id.'.pdf');
-        $this->fulfillment->update(['has_resolution_file' => false]);
+        Storage::delete($this->storage_path.$this->serviceRequest->id.'.pdf');
+        $this->serviceRequest->update(['has_resolution_file' => false]);
     }
 
     public function render()
     {
         return view('livewire.service-request.upload-resolution', 
-            ['has_resolution_file' => $this->fulfillment->has_resolution_file]);
+            ['has_resolution_file' => $this->serviceRequest->has_resolution_file]);
     }
 }
