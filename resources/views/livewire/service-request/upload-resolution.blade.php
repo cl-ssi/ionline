@@ -1,6 +1,6 @@
 <div>
     @if($has_resolution_file)
-        <a href="{{route('rrhh.fulfillments.download.resolution', $fulfillment)}}"
+        <a href="{{route('rrhh.fulfillments.download.resolution', $serviceRequest)}}"
            target="_blank" class="mr-4">Resolución cargada
         </a>
         <a class="btn btn-sm btn-outline-danger ml-4" wire:click="delete">
