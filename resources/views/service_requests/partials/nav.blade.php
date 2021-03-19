@@ -42,6 +42,20 @@
         </a>
         <div class="dropdown-menu">
 
+            @can('Service Request: consolidated data')
+            <a class="dropdown-item"
+                href="{{ route('rrhh.service_requests.consolidated_data') }}">
+                <i class="far fa-file-excel"></i> Consolidado
+            </a>
+            @endcan
+
+            @can('Service Request: consolidated data')
+            <a class="dropdown-item"
+                href="{{ route('rrhh.service_requests.export_sirh') }}">
+                <i class="far fa-file"></i> Formato SIRH
+            </a>
+            @endcan
+
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service_requests.pending_requests') }}"
                 href="{{ route('rrhh.service_requests.pending_requests') }}">
