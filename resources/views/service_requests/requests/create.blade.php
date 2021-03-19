@@ -53,8 +53,11 @@
 
     <fieldset class="form-group col">
 		    <label for="for_type">Tipo</label>
-		    <select name="type" class="form-control" required>
+		    <select name="type" class="form-control" required id="type">
 					<option value="Covid">Honorarios - Covid</option>
+					@can('Service Request: additional data rrhh')
+						<option value="Suma alzada">Suma alzada</option>
+					@endcan
           <!-- <option value="Genérico">Honorarios - Genérico</option> -->
         </select>
 		</fieldset>
@@ -321,6 +324,9 @@
           <option value="CONTRATA" >CONTRATA</option>
           <option value="TITULAR" >TITULAR</option>
           <option value="HONORARIO COVID" >HONORARIO COVID</option>
+					@can('Service Request: additional data rrhh')
+						<option value="SUMA ALZADA" >SUMA ALZADA</option>
+					@endcan
         </select>
 		</fieldset>
 
@@ -642,6 +648,27 @@
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 	});
+
+	$('#type').on('change', function() {
+		var value = this.value;
+
+		@foreach($signatureFlows as $key => $signatureFlow)
+			$("[id='{{$key}}']").removeAttr('disabled');
+			$("[id='{{$key}}']").selectpicker('refresh');
+		@endforeach
+		//subdirección gestión del cuidado al paciente
+		if (value == "Suma alzada") {
+			// $("[id='Director Hospital']").hide();
+			@foreach($signatureFlows as $key => $signatureFlow)
+				if ('{{$key}}' != 'Director Hospital' && '{{$key}}' != 'S.G.D.P Hospital') {
+					$("[id='{{$key}}']").attr('disabled', 'disabled');
+					$("[id='{{$key}}']").selectpicker('refresh');
+				}
+			@endforeach
+		}
+	});
+
+
 
 	// $('#working_day_type').on('change', function() {
 	// 	var working_day_type = this.value;

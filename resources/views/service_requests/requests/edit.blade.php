@@ -48,6 +48,7 @@
 		    <label for="for_name">Tipo</label>
 		    <select name="type" class="form-control" required>
           <option value="Covid" @if($serviceRequest->type == 'Covid') selected @endif>Honorarios - Covid</option>
+          <option value="Suma alzada" @if($serviceRequest->type == 'Suma alzada') selected @endif>Suma alzada</option>
           <!-- <option value="Genérico" @if($serviceRequest->type == 'Genérico') selected @endif >Honorarios - Genérico</option> -->
         </select>
 		</fieldset>
@@ -199,6 +200,7 @@
           <option value="CONTRATA" @if($serviceRequest->contractual_condition == 'CONTRATA') selected @endif>CONTRATA</option>
           <option value="TITULAR" @if($serviceRequest->contractual_condition == 'TITULAR') selected @endif>TITULAR</option>
           <option value="HONORARIO COVID" @if($serviceRequest->contractual_condition == 'HONORARIO COVID') selected @endif>HONORARIO COVID</option>
+          <option value="SUMA ALZADA" @if($serviceRequest->contractual_condition == 'SUMA ALZADA') selected @endif>SUMA ALZADA</option>
         </select>
 		</fieldset>
 
