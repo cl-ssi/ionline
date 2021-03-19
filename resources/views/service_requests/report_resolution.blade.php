@@ -1,4 +1,4 @@
-<?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
+<?php setlocale(LC_ALL, 'es'); ?>
 <html lang="es">
     <head>
         <meta charset="utf-8">
@@ -8,7 +8,7 @@
         <style media="screen">
         body {
             font-family: Arial, Helvetica, sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
         .content {
             margin: 0 auto;
@@ -127,12 +127,6 @@
     HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
     SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
 </div>
-<div class="siete" style="padding-top: 4px;">
-    HAA/
-    JFC/
-    VMM/
-    dmo
-</div>
 <div class="seis" style="padding-top: 4px;">
     N.I. {{$ServiceRequest->id}} - {{\Carbon\Carbon::now()->format('d/m/Y')}}
 </div>
@@ -154,8 +148,15 @@
 <p class="justify">
 <strong>VISTOS:</strong><br>
 
-Dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud; Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020  del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.196, de 2019 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2020; Resoluciones  N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
-
+@if($ServiceRequest->program_contract_type == "Mensual")
+  En estos antecedentes, según lo dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud; Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020  del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones  N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
+@elseif($ServiceRequest->program_contract_type == "Horas")
+  @if($ServiceRequest->estate == "Profesional Médico")
+    Dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud; Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020  del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones  N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
+  @else
+    En estos antecedentes, según lo dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud; Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020 del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
+  @endif
+@endif
 </p>
 
 <p class="justify">
@@ -173,35 +174,83 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
 
 </p>
 
-<table class="siete">
-    <tr>
-        <th>Nombre</th>
-        <th>Run</th>
-        <th>Función</th>
-        <th>N° Horas</th>
-        <th>Desde</th>
-        <th>Hasta</th>
-        <th>Lugar de Trabajo</th>
-        <th>Monto Total</th>
-    </tr>
-    <tr>
-        <td style="text-align:center">{{$ServiceRequest->name}}</td>
-        <td style="text-align:center">{{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</td>
-        <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
-        <td style="text-align:center">{{$ServiceRequest->weekly_hours}}</td>
-        <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
-        <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
-        <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
-        <td style="text-align:center">{{$ServiceRequest->gross_amount}}</td>
-    </tr>
-</table>
+@if($ServiceRequest->program_contract_type == "Mensual")
+  <table class="siete">
+      <tr>
+          <th>Nombre</th>
+          <th>Run</th>
+          <th>Función</th>
+          <th>Jornada Laboral</th>
+          <th>Desde</th>
+          <th>Hasta</th>
+          <th>Lugar de Trabajo</th>
+          <th>Monto Total</th>
+      </tr>
+      <tr>
+          <td style="text-align:center">{{$ServiceRequest->name}}</td>
+          <td style="text-align:center">{{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</td>
+          <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
+          <td style="text-align:center">{{$ServiceRequest->weekly_hours}}</td>
+          <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
+          <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
+          <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
+          <td style="text-align:center">${{number_format($ServiceRequest->gross_amount)}}</td>
+      </tr>
+  </table>
+@elseif($ServiceRequest->program_contract_type == "Horas")
+  @if($ServiceRequest->estate == "Profesional Médico")
+    <table class="siete">
+        <tr>
+            <th>Nombre</th>
+            <th>Run</th>
+            <th>Función</th>
+            <th>Jornada Laboral</th>
+            <th>Desde</th>
+            <th>Hasta</th>
+            <th>Lugar de Trabajo</th>
+            <th>Valor por Hora</th>
+        </tr>
+        <tr>
+            <td style="text-align:center">{{$ServiceRequest->name}}</td>
+            <td style="text-align:center">{{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</td>
+            <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
+            <td style="text-align:center">{{$ServiceRequest->working_day_type}}</td>
+            <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
+            <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
+            <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
+            <td style="text-align:center">${{number_format($ServiceRequest->gross_amount)}}</td>
+        </tr>
+    </table>
+  @else
+    <table class="siete">
+        <tr>
+            <th>Nombre</th>
+            <th>Run</th>
+            <th>Función</th>
+            <th>Desde</th>
+            <th>Hasta</th>
+            <th>Lugar de Trabajo</th>
+            <th>Monto Total</th>
+        </tr>
+        <tr>
+            <td style="text-align:center">{{$ServiceRequest->name}}</td>
+            <td style="text-align:center">{{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</td>
+            <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
+            <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
+            <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
+            <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
+            <td style="text-align:center">${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}</td>
+        </tr>
+    </table>
+  @endif
+@endif
 
 <p class="justify">
     En Iquique, a catorce días del mes de enero de dos mil veintiuno, entre D. HECTOR ALARCON ALARCON RUN: 14.101.085-9,  en su calidad de Director  del Hospital “Dr. Ernesto Torres Galdames” de Iquique, con domicilio en Av. Héroes de la Concepción N° 502 de Iquique, en adelante "el Director  del Hospital “Dr. Ernesto Torres Galdames", y por la otra {{$ServiceRequest->name}}, RUN: {{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
 </p>
 
 <p class="justify">
-    <strong>PRIMERO:</strong> Don HECTOR ALARCON ALARCON, en su calidad de Director del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a {{$ServiceRequest->name}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el Servicio de Emergencia del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
+    <strong>PRIMERO:</strong> Don HECTOR ALARCON ALARCON, en su calidad de Director del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a {{$ServiceRequest->name}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
 </p>
 
 <p class="justify">
@@ -212,64 +261,170 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
 </p>
 
 <p class="justify">
-    <strong>TERCERO:</strong> El prestador recibirá los lineamientos por parte del Jefe del Servicio de Urgencias, del Hospital Regional de Iquique, el cual tendrá la responsabilidad de evaluar sus servicios en forma mensual.
+    <strong>TERCERO:</strong> El prestador recibirá los lineamientos por parte del Jefe del {{$ServiceRequest->responsabilityCenter->name}}, del Hospital Regional de Iquique, el cual tendrá la responsabilidad de evaluar sus servicios en forma mensual.
 </p>
 
 <p class="justify">
     <strong>CUARTO:</strong> El prestador de Servicios contratante a través de la declaración jurada señaló no estar afecto a ninguna de las inhabilidades establecidas en los arts. 54, 55 y 56 de la Ley Nº 18.575, Orgánica Constitucional de las Bases Generales de la Administración del Estado. Dichas disposiciones relativas a inhabilidades e incompatibilidades administrativas serán aplicables al prestador, con quién se suscribe el presente contrato a Honorarios a Suma Alzada.
 </p>
 
-<?php setlocale(LC_ALL, 'es'); ?>
 <p class="justify">
-    <strong>QUINTO:</strong> El presente convenio empezará a regir, a contar del {{\Carbon\Carbon::parse($ServiceRequest->start_date)->formatLocalized('%d de %B de %Y')}} al {{\Carbon\Carbon::parse($ServiceRequest->end_date)->formatLocalized('%d de %B de %Y')}}, de acuerdo al artículo 52 de la Ley 19.880, sobre Bases de Procedimientos Administrativos.
+    <strong>QUINTO:</strong> El presente convenio empezará a regir, a contar del {{$ServiceRequest->start_date->day}} de {{$ServiceRequest->start_date->monthName}} del {{$ServiceRequest->start_date->year}} al {{$ServiceRequest->end_date->day}} de {{$ServiceRequest->end_date->monthName}} del {{$ServiceRequest->end_date->year}}, de acuerdo al artículo 52 de la Ley 19.880, sobre Bases de Procedimientos Administrativos.
 </p>
 
 <p class="justify">
     <strong>SEXTO:</strong> El Hospital “Dr. Ernesto Torres Galdames” de Iquique podrá poner término anticipadamente a este contrato mediante razones fundadas, previo aviso por escrito al prestador con 48 horas hábiles de anticipación.
 </p>
 
-<p class="justify">
-    <strong>SÉPTIMO:</strong> En este caso, el Hospital “Dr. Ernesto Torres Galdames” de Iquique, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
-</p>
+@if($ServiceRequest->program_contract_type == "Mensual")
+  <p class="justify">
+      <strong>SÉPTIMO:</strong>
+      En este caso, el Hospital “Dr. Ernesto Torres Galdames”, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
+  </p>
+@elseif($ServiceRequest->program_contract_type == "Horas")
+  @if($ServiceRequest->estate == "Profesional Médico")
+    <p class="justify">
+        <strong>SÉPTIMO:</strong>
+        En este caso, el Hospital “Dr. Ernesto Torres Galdames”, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
+    </p>
+  @else
+    @if($ServiceRequest->working_day_type == "TURNO EXTRA")
+      <p class="justify">
+          <strong>SÉPTIMO:</strong>
+          En el desempeño de sus funciones, el prestador cumplió con un total de {{number_format($ServiceRequest->Fulfillments->first()->total_hours_to_pay)}} Horas en turno extras en el mes de {{$ServiceRequest->start_date->monthName}}, cuya suma alzada totas es de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}.- ({{$ServiceRequest->fulfillments->first()->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}} el mes de {{$ServiceRequest->start_date->monthName}}; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+      </p>
+    @elseif($ServiceRequest->working_day_type == "HORA EXTRA")
+      <p class="justify">
+          <strong>SÉPTIMO:</strong>
+          En el desempeño de sus funciones, el prestador cumplió con un total de {{number_format($ServiceRequest->Fulfillments->first()->total_hours_to_pay)}} Horas por extensión horaria en el mes de {{$ServiceRequest->start_date->monthName}}, cuya suma alzada totas es de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}.- ({{$ServiceRequest->fulfillments->first()->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}} el mes de {{$ServiceRequest->start_date->monthName}}; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+      </p>
+    @endif
+  @endif
+@endif
 
-<p class="justify">
-    <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de {{$ServiceRequest->gross_amount}}.- ({{$ServiceRequest->gross_amount_description}}), impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de {{$ServiceRequest->net_amount}} por el mes de diciembre del  2020; se deberá acreditar contra presentación de certificado extendido por el Jefe del Servicio de Urgencias, dependiente del Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
-	<br>
-	Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
-</p>
 
-<p class="justify">
-    <strong>NOVENO:</strong> El prestador deberá cumplir las prestaciones de servicios pactadas entre las partes en el presente convenio, y se deberá acreditar su porcentaje de cumplimiento conforme al verificador establecido, contra presentación de certificado extendido por la jefatura del área donde presta servicios.
-</p>
+@if($ServiceRequest->program_contract_type == "Mensual")
+  <p class="justify">
+      <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}),  impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en @livewire('service-request.monthly-quotes', ['serviceRequest' => $ServiceRequest]) se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
+    <br>
+    Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+  </p>
+@elseif($ServiceRequest->program_contract_type == "Horas")
+  @if($ServiceRequest->estate == "Profesional Médico")
+    <p class="justify">
+        <strong>OCTAVO:</strong> El “valor por hora” será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago, cada final de mes el Jefe del {{$ServiceRequest->responsabilityCenter->name}} o por la jefatura inmediatamente superior, deberá certificar las horas realizadas por el profesional médico de manera presencial (no es aceptable la suplantación de personas). Debiendo, además, adjuntar el registro de asistencia efectuado en el respectivo servicio, los cuales serán indispensables para su cancelación, sin perjuicio de las funciones de control de la Subdirección de Gestión y Desarrollo de las Personas del Hospital de Iquique,
+        <br><br>
+      	El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
+        <br><br>
+        Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Unidad de Honorarios Covid del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+        <br>
+    </p>
+  @else
+    <p class="justify">
+        <strong>OCTAVO:</strong> El prestador deberá cumplir las prestaciones de servicios pactadas entre las partes en el presente convenio, y se deberá acreditar su porcentaje de cumplimiento conforme al verificador establecido, contra presentación de certificado extendido por la jefatura del área donde presta servicios.
+    </p>
+  @endif
+@endif
 
-<p class="justify">
-    <strong>DÉCIMO:</strong> El prestador cumplirá con una jornada de {{$ServiceRequest->weekly_hours}} horas semanales, en {{$ServiceRequest->working_day_type}}, {{$ServiceRequest->working_day_type_description()}}. Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador, se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R., los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente, como también los días de inasistencia, los cuales deberán quedar informados en el respectivo informe de prestaciones mensual. Los reiterados atrasos e inasistencias deberán ser amonestados.
-</p>
+@if($ServiceRequest->program_contract_type == "Mensual")
+  <p class="justify">
+      <strong>NOVENO:</strong> El prestador deberá cumplir las prestaciones de servicios pactadas entre las partes en el presente convenio, y se deberá acreditar su porcentaje de cumplimiento conforme al verificador establecido, contra presentación de certificado extendido por la jefatura del área donde presta servicios.
+  </p>
+@elseif($ServiceRequest->program_contract_type == "Horas")
+  @if($ServiceRequest->estate == "Profesional Médico")
+    <p class="justify">
+        <strong>NOVENO:</strong> El prestador deberá cumplir las prestaciones de servicios pactadas entre las partes en el presente convenio, y se deberá acreditar su porcentaje de cumplimiento conforme al verificador establecido, contra presentación de certificado extendido por la jefatura del área donde presta servicios.
+    </p>
+  @else
+    <p class="justify">
+        <strong>NOVENO:</strong> Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador, se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R., los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente, como también los días de inasistencia, los cuales deberán quedar informados en el respectivo informe de prestaciones mensual. Los reiterados atrasos e inasistencias deberán ser amonestados.
+    </p>
+  @endif
+@endif
 
-<p class="justify">
-    <strong>DÉCIMO PRIMERO::</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
-</p>
+@if($ServiceRequest->program_contract_type == "Mensual")
+  <p class="justify">
+      <strong>DÉCIMO:</strong> El prestador cumplirá una jornada de turnos rotativos, en cuarto turno, un largo de 08:00 a 20:00 hrs., una noche de 20:00 a 08:00 hrs. y dos días libres. Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador, se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R., los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente, como también los días de inasistencia, los cuales deberán quedar informados en el respectivo informe de prestaciones mensual. Los reiterados atrasos e inasistencias deberán ser amonestados.
+  </p>
+@elseif($ServiceRequest->program_contract_type == "Horas")
+  @if($ServiceRequest->estate == "Profesional Médico")
+    <p class="justify">
+        <strong>DÉCIMO:</strong> Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador, se indican con el fin de verificar la realización de éstos, sin que se altere la naturaleza jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R., los atrasos superiores a una hora, serán descontados de sus horas realizadas.
+    </p>
+  @else
+    <p class="justify">
+        <strong>DÉCIMO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
+    </p>
+  @endif
+@endif
 
-<p class="justify">
-    <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que el prestador tendrá derecho a presentar licencias médicas de todo tipo, la cual sólo justificará los días de inasistencia, no procediendo el pago de éstos y siendo responsabilidad del prestador del servicio, la tramitación de la licencia médica ante el organismo que corresponda; además deberá dejar copia de licencia médica en la Subdirección de Gestión y Desarrollo de las Personas. Las ausencias por esta causa serán descontadas de la cuota mensual.
-</p>
-<p class="justify">
-    <strong>DECIMO TERCERO:</strong> En caso que el prestador tenga contacto con un contagiado de COVID-19, o en su defecto, deba realizar cuarentena obligatoria por ser positivo de COVID-19, el Director de Servicio o establecimiento, podrá disponer la autorización de permiso preventivo, el cual no será causal de descuento. De considerarse contacto estrecho, se podrá establecer un sistema de teletrabajo en aquellas funciones que lo permitan.
-</p>
-<p class="justify">
-    <strong>DECIMO CUARTO:</strong> La personería de D. HECTOR ALARCON ALARCON, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de Director, consta en Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020, del Servicio de Salud Iquique.
-</p>
+@if($ServiceRequest->program_contract_type == "Mensual")
+  <p class="justify">
+      <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
+  </p>
+@elseif($ServiceRequest->program_contract_type == "Horas")
+  @if($ServiceRequest->estate == "Profesional Médico")
+    <p class="justify">
+        <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
+    </p>
+  @else
+    <p class="justify">
+        <strong>DÉCIMO PRIMERO:</strong> La personería de D. HECTOR ALARCON ALARCON, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de Director, consta en Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020, del Servicio de Salud Iquique.
+    </p>
+  @endif
+@endif
 
+
+
+@if($ServiceRequest->program_contract_type == "Mensual")
+  <p class="justify">
+      <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que el prestador tendrá derecho a presentar licencias médicas de todo tipo, la cual sólo justificará los días de inasistencia, no procediendo el pago de éstos, además deberá dejar copia de licencia médica en la Subdirección de Recursos Humanos. Las ausencias por esta causa serán descontadas de la cuota mensual.
+      <br><br>
+      A contar del 01 de enero del 2019 el personal a honorarios estará obligado a imponer, tanto en salud como en AFP, de manera personal, como lo indica la Ley N°20.894, por lo tanto, deberá realizar el cobro del subsidio de salud directamente en la institución correspondiente, ya sea Fonasa o Isapre.
+  </p>
+  <p class="justify">
+      <strong>DECIMO TERCERO:</strong> En caso que el prestador tenga contacto con un contagiado de COVID-19, o en su defecto, deba realizar cuarentena obligatoria por ser positivo de COVID-19, el Director de Servicio o establecimiento podrá disponer la autorización de permiso preventivo, el cual no será causal de descuento. De considerarse contacto estrecho, se podrá establecer un sistema de teletrabajo en aquellas funciones que lo permitan.
+  </p>
+  <p class="justify">
+      <strong>DECIMO CUARTO:</strong> La personería de D. HECTOR ALARCON ALARCON, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de Director, consta en Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020, del Servicio de Salud Iquique.
+  </p>
+@elseif($ServiceRequest->program_contract_type == "Horas")
+  @if($ServiceRequest->estate == "Profesional Médico")
+    <p class="justify">
+        <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que el presente convenio de honorarios covid, el prestador no dará derecho a beneficios de feriados legales, permisos administrativos y otro tipo de permisos contemplados y/o asimilados a funciones estatutarias, complementariamente con respecto al ausentismo por licencias médicas.
+        <br><br>
+        A contar del 01 de enero del 2019 el personal a honorarios estará obligado a imponer, tanto en salud como en AFP, de manera personal, como lo indica la Ley N°20.894, por lo tanto, deberá realizar el cobro del subsidio de salud directamente en la institución correspondiente, ya sea Fonasa o Isapre.
+    </p>
+    <p class="justify">
+        <strong>DECIMO TERCERO:</strong> La personería de D. HECTOR ALARCON ALARCON, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de Director, consta en Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020, del Servicio de Salud Iquique.
+    </p>
+  @else
+
+  @endif
+@endif
+
+<br><br>
+Para constancia firman:
 
 <p class="">
     <strong>2.</strong> El convenio que por este acto se aprueban, se entiende que forman parte integrante de la presente Resolución.
 </p>
 
-<p class="">
-    <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique.
-</p>
-
-<br style="padding-bottom: 6px;">
+@if($ServiceRequest->program_contract_type == "Mensual")
+  <p class="">
+      <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique.
+  </p>
+@elseif($ServiceRequest->program_contract_type == "Horas")
+  @if($ServiceRequest->estate == "Profesional Médico")
+    <p class="">
+        <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique.
+    </p>
+  @else
+    <p class="">
+        <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique.
+    </p>
+  @endif
+@endif
 
 <p class="center">
     <strong>
@@ -284,12 +439,12 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
         DIRECTOR<br>
         HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
         </strong>
-        <br style="padding-bottom: 6px;">
+        <br style="padding-bottom: 4px;">
         Lo que me permito transcribe a usted para su conocimiento y fines consiguientes.
     </div>
 </div>
-<br style="padding-bottom: 6px;">
-<div class="siete" style="padding-top: 4px;">
+<br style="padding-bottom: 4px;">
+<div class="siete" style="padding-top: 2px;">
     <strong><u>DISTRIBUCIÓN:</u></strong><br>
     Honorarios Covid<br>
     Finanzas<br>

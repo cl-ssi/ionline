@@ -13,6 +13,10 @@
 <hr>
 
 
+@livewire('service-request.update-account' , ['serviceRequest' => $serviceRequests->last()])
+
+<br><br><hr>
+
 <div class="table-responsive">
         <table class="table table-sm table-bordered small">
                 <thead>
@@ -27,17 +31,17 @@
                 <tbody>
 
                 
-                        @foreach ($serviceRequests as $serviceRequest)                        
-                        @foreach($serviceRequest->fulfillments as $fullfillment)        
-                        
+                        @foreach ($serviceRequests as $serviceRequest) 
+                        @foreach($serviceRequest->fulfillments as $fullfillment)
+                        <tr></tr>
                         <tr>
                                 <td class="small">{{ $serviceRequest->id ?? '' }}</td>
                                 <td class="small">{{ $fullfillment->id ?? '' }}</td>
                                 <td>{{ $fullfillment->year ?? '' }}</td>
                                 <td>{{ $fullfillment->month ?? '' }}</td>                                
                                 <td>
-                                @livewire('invoice.upload', ['fulfillmentId' => $fullfillment->id,
-                                'hasInvoiceFile' =>  $fullfillment->has_invoice_file ])
+
+                                @livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])
                                 </td>
                         </tr>                        
                         @endforeach

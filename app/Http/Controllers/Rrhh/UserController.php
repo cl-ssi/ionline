@@ -345,6 +345,8 @@ class UserController extends Controller
         $user->givePermissionTo('Calendar: view');
         $user->givePermissionTo('Requirements: create');
         $user->givePermissionTo('Service Request');
+        $user->givePermissionTo('Service Request: fulfillments');
+        $user->givePermissionTo('Service Request: fulfillments responsable');
 
 
         session()->flash('info', 'El usuario '.$user->name.' ha sido creado.');

@@ -89,10 +89,33 @@ class ServiceRequestController extends Controller
       return view('service_requests.requests.index', compact('serviceRequestsMyPendings','serviceRequestsOthersPendings','serviceRequestsRejected','serviceRequestsAnswered','serviceRequestsCreated','users'));
   }
 
-  public function aditional_data_list(){
+  public function aditional_data_list(Request $request){
 
-    $serviceRequests = ServiceRequest::orderBy('id','asc')->get();
-    return view('service_requests.requests.aditional_data_list', compact('serviceRequests'));
+    // dd($request);
+    $responsability_center_ou_id = $request->responsability_center_ou_id;
+    // dd($responsability_center_ou_id);
+    $serviceRequests = ServiceRequest::
+                                       when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
+                                          return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+                                       })
+                                     ->orderBy('id','asc')->get();
+    $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)->orderBy('name', 'ASC')->get();
+    return view('service_requests.requests.aditional_data_list', compact('serviceRequests','responsabilityCenters'));
+  }
+
+  public function transfer_requests(Request $request){
+
+    $users = User::orderBy('name','ASC')->get();
+    // dd(User::find(14101085)->serviceRequestsOthersPendingsCount());
+    $responsability_center_ou_id = $request->responsability_center_ou_id;
+    // dd($responsability_center_ou_id);
+    $serviceRequests = ServiceRequest::
+                                       when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
+                                          return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+                                       })
+                                     ->orderBy('id','asc')->get();
+    $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)->orderBy('name', 'ASC')->get();
+    return view('service_requests.requests.transfer_requests', compact('serviceRequests','responsabilityCenters','users'));
   }
 
   /**
@@ -186,7 +209,7 @@ class ServiceRequestController extends Controller
      if (Auth::user()->organizationalUnit->establishment_id == 38) {
        //Hector Reyno (CGU)
        if (Auth::user()->organizationalUnit->id == 24) {
-         $signatureFlows['RRHH CGU'] = 10739552; //RR.HH del CGU 
+         $signatureFlows['RRHH CGU'] = 10739552; //RR.HH del CGU
          $signatureFlowsTurnos['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
          // $signatureFlowsTurnos['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
          // $signatureFlowsTurnos['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
@@ -449,7 +472,7 @@ class ServiceRequestController extends Controller
     $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function($subQuery) {
                                          $subQuery->where('status',0);
                                        })
-                                       ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+                                       // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
                                        ->orderBy('request_date','asc')->get();
 
     foreach ($serviceRequests as $key => $serviceRequest) {
@@ -465,7 +488,7 @@ class ServiceRequestController extends Controller
     $serviceRequestsRejected = ServiceRequest::whereHas("SignatureFlows", function($subQuery) {
                                          $subQuery->where('status',0);
                                        })
-                                       ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+                                       // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
                                        ->orderBy('request_date','asc')->get();
 
     foreach ($serviceRequestsRejected as $key => $serviceRequest) {
@@ -813,9 +836,9 @@ class ServiceRequestController extends Controller
 
   }
 
-    public function resolution(ServiceRequest $serviceRequest)
+    public function resolution(ServiceRequest $ServiceRequest)
     {
-        return view('service_requests.report_resolution', compact('serviceRequest'));
+        return view('service_requests.report_resolution', compact('ServiceRequest'));
     }
 
     public function resolutionPDF(ServiceRequest $ServiceRequest)
@@ -826,6 +849,15 @@ class ServiceRequestController extends Controller
 
         $formatter = new NumeroALetras();
         $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
+
+        if ($ServiceRequest->fulfillments) {
+          foreach ($ServiceRequest->fulfillments as $key => $fulfillment) {
+            $fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
+            // dd($fulfillment->total_to_pay_description);
+          }
+        }
+
+        // dd($ServiceRequest->fulfillments);
 
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('service_requests.report_resolution',compact('ServiceRequest'));
@@ -839,7 +871,7 @@ class ServiceRequestController extends Controller
     public function derive(Request $request){
 
       $user_id = Auth::user()->id;
-      $sender_name = Auth::user()->getFullNameAttribute();
+      $sender_name = User::find(Auth::user()->id)->getFullNameAttribute();
       $receiver_name = User::find($request->derive_user_id)->getFullNameAttribute();
       $receiver_email = User::find($request->derive_user_id)->email;
 
@@ -860,7 +892,7 @@ class ServiceRequestController extends Controller
           foreach ($serviceRequest->SignatureFlows->where('responsable_id',$user_id)->whereNull('status') as $key2 => $signatureFlow) {
             $signatureFlow->responsable_id = $request->derive_user_id;
             $signatureFlow->derive_date = Carbon::now();
-            $signatureFlow->employee = $signatureFlow->employee . " (Derivado)";
+            $signatureFlow->employee = $signatureFlow->employee . " (Traspasado desde ".$sender_name.")";
             $signatureFlow->save();
             $cont += 1;
           }
@@ -928,7 +960,9 @@ class ServiceRequestController extends Controller
     public function pending_requests(Request $request)
     {
       //solicitudes activas
-      $serviceRequests = ServiceRequest::orderBy('id','asc')->whereBetween('start_date',[$request->dateFrom,$request->dateTo])->get();
+      $serviceRequests = ServiceRequest::orderBy('id','asc')
+                                       // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+                                       ->get();
 
       $array = [];
       foreach ($serviceRequests as $key => $serviceRequest) {
@@ -960,7 +994,7 @@ class ServiceRequestController extends Controller
 
       //obtener subtotales
       $group_array = [];
-      $falta_aprobar = 0;
+      $hoja_ruta_falta_aprobar = 0;
       foreach ($array as $key => $data) {
         $group_array[$data['falta_aprobar']] = 0;
         // $group_array['rechazados'] = 0;
@@ -968,12 +1002,50 @@ class ServiceRequestController extends Controller
       foreach ($array as $key => $data) {
         if ($data['rechazados'] == 0 && $data['falta_aprobar'] != "") {
           $group_array[$data['falta_aprobar']] += 1;
-          $falta_aprobar+=1;
+          $hoja_ruta_falta_aprobar+=1;
         }
       }
-      // dd($falta_aprobar);
 
-      return view('service_requests.requests.pending_requests',compact('array','group_array','falta_aprobar'));
+      arsort($group_array);
+      // dd($group_array);
+
+
+      $serviceRequests = ServiceRequest::orderBy('id','asc')
+                                       // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+                                      ->where('program_contract_type','Mensual')
+                                      ->whereDoesntHave("SignatureFlows", function($subQuery) {
+                                                  $subQuery->where('status',0);
+                                                })
+                                      ->whereDoesntHave("SignatureFlows", function($subQuery) {
+                                                  $subQuery->whereNull('status');
+                                                })
+                                       ->get();
+
+
+      //cumplimiento
+      $fulfillments_missing = [];
+      $cumplimiento_falta_ingresar = 0;
+      foreach ($serviceRequests as $key => $serviceRequest) {
+        if ($serviceRequest->Fulfillments->count() == 0) {
+          if ($serviceRequest->SignatureFlows->where('sign_position',2)->count() > 0) {
+            $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()][$serviceRequest->SignatureFlows->where('sign_position',2)->first()->organizationalUnit->name] = 0;
+          }
+        }
+      }
+
+      foreach ($serviceRequests as $key => $serviceRequest) {
+        if ($serviceRequest->Fulfillments->count() == 0) {
+          if ($serviceRequest->SignatureFlows->where('sign_position',2)->count() > 0) {
+            $cumplimiento_falta_ingresar += 1;
+            $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()][$serviceRequest->SignatureFlows->where('sign_position',2)->first()->organizationalUnit->name] += 1;
+          }
+        }
+      }
+
+      arsort($fulfillments_missing);
+      // dd($fulfillments_missing);
+
+      return view('service_requests.requests.pending_requests',compact('array','group_array','hoja_ruta_falta_aprobar','fulfillments_missing','cumplimiento_falta_ingresar'));
     }
 
     public function certificatePDF(ServiceRequest $serviceRequest)

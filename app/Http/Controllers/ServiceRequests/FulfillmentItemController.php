@@ -44,7 +44,6 @@ class FulfillmentItemController extends Controller
      */
     public function store(Request $request)
     {
-      // dd($request);
       //validation
       if (Auth::user()->can('Service Request: fulfillments rrhh')) {
         if (Fulfillment::where('id',$request->fulfillment_id)->first()->responsable_approver_id == NULL) {
@@ -77,6 +76,10 @@ class FulfillmentItemController extends Controller
       if ($request->type == "Abandono de funciones") {
         // $fulfillmentItem->start_date = $request->start_date . " " .$request->start_hour;
         $fulfillmentItem->end_date = $request->end_date;
+      }
+      if ($request->type == "Turno") {
+        $fulfillmentItem->start_date = $request->start_date . " " .$request->start_hour;
+        $fulfillmentItem->end_date = $request->end_date . " " .$request->end_hour;
       }
 
 

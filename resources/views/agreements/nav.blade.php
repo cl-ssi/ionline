@@ -9,9 +9,13 @@
     </li>
 
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('agreements.programs.index') }}"><i class="fas fa-cog"></i> Parametros</a>
+        <a class="nav-link" href="{{ route('agreements.programs.index') }}"><i class="fas fa-cog"></i> Programas</a>
     </li>
-
+    @can('Agreement: manage municipalities')
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('agreements.municipalities.index') }}"><i class="fas fa-building"></i> Municipios</a>
+    </li>
+    @endcan
     <li class="nav-item">
         <a class="nav-link" href="{{ route('agreements.tracking.index') }}"><i class="fas fa-paper-plane"></i> Seguimiento Convenio</a>
     </li>
