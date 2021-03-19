@@ -17,11 +17,22 @@
 @if($healthGoals->isEmpty())
     <p>No existen o no se han definido aún metas sanitarias ley N° {{number_format($law,0,',','.')}} para el presente año</p>
 @else
+    @if($law == '19813')
+    @foreach($healthGoals as $item)
+    <p>{{$item->name}}</p>
+        <ul style="list-style-type: none;">
+        @foreach($item->indicators as $indicator)
+            <li><a href="{{ route('indicators.health_goals.show', [$law, $year, $indicator->id]) }}">{{$indicator->number}}. {{$indicator->name}}</a></li>
+        @endforeach
+        </ul>
+    @endforeach
+    @else
     @foreach($healthGoals as $item)
     <p>
         <a href="{{ route('indicators.health_goals.show', [$law, $year, $item->number]) }}">{{$item->number}}. {{$item->name}}</a>
     </p>
     @endforeach
+    @endif
 @endif
 @endsection
 

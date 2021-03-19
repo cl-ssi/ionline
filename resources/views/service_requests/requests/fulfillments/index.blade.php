@@ -4,18 +4,21 @@
 
 @section('content')
 
-  <h3>Cumplimiento solicitudes de contratación</h3>
-  <br><hr>
+@include('service_requests.partials.nav')
+
+<h3 class="mb-3">Cumplimiento solicitudes de contratación</h3>
 
     <div class="table-responsive">
     <table class="table table-bordered table-sm small">
     	<thead>
         <tr>
     			<th colspan="10"></th>
-    			<th colspan="3" class="text-center">Estado</th>
+          <th></th>
+    			<th colspan="3" class="text-center">Visados</th>
     		</tr>
     		<tr>
     			<th scope="col">Id</th>
+          <th scope="col">Nro.Res.</th>
     			<th scope="col">Tipo</th>
           <th scope="col">T.Contrato</th>
     			<th scope="col">F. Solicitud</th>
@@ -34,6 +37,7 @@
     	@foreach($serviceRequests as $serviceRequest)
     		<tr>
     			<td>{{ $serviceRequest->id }}</td>
+          <td>{{ $serviceRequest->resolution_number }}</td>
     			<td>{{ $serviceRequest->type }}</td>
           <td>{{ $serviceRequest->program_contract_type }}</td>
     			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
@@ -51,21 +55,7 @@
     					<span class="fas fa-edit" aria-hidden="true"></span>
     				</a>
 
-                        {{--modal firmador--}}
-                        @php
-                            $idSignModal = $serviceRequest->id;
-                            $routePdfSignModal = "/rrhh/service_requests/resolution-pdf/2";
-                            $returnUrlSignModal = "documents.callbackFirma";
-                        @endphp
 
-                        @if(Auth::user()->can('Service Request: sign document'))
-                            @include('documents.signatures.partials.sign_file')
-                            <button type="button" data-toggle="modal" class="btn btn-sm btn-outline-secondary "
-                                    data-target="#signPdfModal{{$idSignModal}}" title="Firmar"><span class="fas fa-signature"
-                                                                                      aria-hidden="true">
-                                                                                        </span>
-                            </button>
-                        @endif
 
           @endif
 
@@ -90,7 +80,7 @@
           <!-- mensual -->
           @if($serviceRequest->program_contract_type == "Mensual")
           <td nowrap class="text-center">
-            @if($serviceRequest->Fulfillments->count() > 0)
+            <!-- @if($serviceRequest->Fulfillments->count() > 0)
               @if($serviceRequest->Fulfillments->whereNull('responsable_approver_id')->count() > 0)
                 <i class="fas fa-circle" style="color:yellow"></i>
               @elseif($serviceRequest->Fulfillments->where('responsable_approbation',1)->count() > 0)
@@ -100,11 +90,12 @@
               @endif
             @else
               <i class="far fa-circle" style="color:black"></i>
-            @endif
+            @endif -->
+            {{$serviceRequest->Fulfillments->whereNotNull('responsable_approver_id')->count()}} / {{$serviceRequest->Fulfillments->count()}}
     			</td>
 
           <td nowrap class="text-center">
-            @if($serviceRequest->Fulfillments->count() > 0)
+            <!-- @if($serviceRequest->Fulfillments->count() > 0)
               @if($serviceRequest->Fulfillments->whereNull('rrhh_approver_id')->count() > 0)
                 <i class="fas fa-circle" style="color:yellow"></i>
                 @elseif($serviceRequest->Fulfillments->where('rrhh_approbation',1)->count() > 0)
@@ -114,11 +105,12 @@
               @endif
             @else
               <i class="far fa-circle" style="color:black"></i>
-            @endif
+            @endif -->
+            {{$serviceRequest->Fulfillments->whereNotNull('rrhh_approver_id')->count()}} / {{$serviceRequest->Fulfillments->count()}}
     			</td>
 
           <td nowrap class="text-center">
-            @if($serviceRequest->Fulfillments->count() > 0)
+            <!-- @if($serviceRequest->Fulfillments->count() > 0)
               @if($serviceRequest->Fulfillments->whereNull('finances_approver_id')->count() > 0)
                 <i class="fas fa-circle" style="color:yellow"></i>
                 @elseif($serviceRequest->Fulfillments->where('finances_approbation',1)->count() > 0)
@@ -128,13 +120,14 @@
               @endif
             @else
               <i class="far fa-circle" style="color:black"></i>
-            @endif
+            @endif -->
+            {{$serviceRequest->Fulfillments->whereNotNull('finances_approver_id')->count()}} / {{$serviceRequest->Fulfillments->count()}}
     			</td>
           @endif
 
           <!-- x horas -->
           @if($serviceRequest->program_contract_type == "Horas")
-            <td nowrap class="text-center">
+            <!-- <td nowrap class="text-center">
               <i class="fas fa-circle" style="color:green"></i>
             </td>
 
@@ -164,7 +157,10 @@
                   @endif
                 @endif
               </td>
-            @endif
+            @endif -->
+            <td nowrap class="text-center" colspan="3">
+              {{$serviceRequest->SignatureFlows->whereNotNull('status')->count()}} / {{$serviceRequest->SignatureFlows->count()}}
+            </td>
           @endif
     		</tr>
     	@endforeach

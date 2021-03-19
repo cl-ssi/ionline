@@ -82,7 +82,7 @@
 
                 <fieldset class="form-group col-5">
                     <label for="forestablishment">Centros de Atencion</label>
-                    <select id="establishment" class="selectpicker " name="establishment[]" title="Seleccionar" data-selected-text-format="count > 2" data-width="75%" multiple>
+                    <select id="establishment" class="selectpicker " name="establishment[]" title="Seleccionar" data-selected-text-format="count > 2" data-width="100%" multiple>
                     @foreach($commune->establishments as $key => $establishment)
                       <option value="{{ $establishment->id }}">{{ $establishment->type }} - {{ $establishment->name }}</option>
                     @endforeach
@@ -93,21 +93,28 @@
             </div>
             <div class="form-row">
                 <fieldset class="form-group col-4">
-                    <label for="fornumber">Representante</label>
-                    <input type="integer" name="representative" class="form-control" id="fornumber" value="{{ $municipality->name_representative }}" disabled>
+                    <label for="forrepresentative">Representante</label>
+                    <!-- <input type="integer" name="representative" class="form-control" id="fornumber" value="{{ $municipality->name_representative }}" disabled> -->
+                    <select id="representative" class="selectpicker" name="representative" title="Seleccionar" data-width="100%">
+                      <option value="{{ $municipality->name_representative }}" @if($municipality->name_representative == $agreement->representative) selected @endif>{{ $municipality->name_representative }}</option>
+                      @if($municipality->name_representative_surrogate != null) <option value="{{ $municipality->name_representative_surrogate }}" @if($municipality->name_representative_surrogate == $agreement->representative) selected @endif>{{ $municipality->name_representative_surrogate }}</option> @endif
+                      @if($agreement->representative != null && $agreement->representative != $municipality->name_representative && $agreement->representative != $municipality->name_representative_surrogate) <option value="{{ $agreement->representative }}" selected>{{ $agreement->representative }}</option> @endif
+                    </select>   
                     <small class="form-text text-muted">Ej: Alcalde Subrogante Don Nombre Apellidos</small>
                 </fieldset>
+                <input type="hidden" name="representative_appelative" id="representative_appelative" value="{{$agreement->representative_appelative}}">
+                <input type="hidden" name="representative_decree" id="representative_decree" value="{{$agreement->representative_decree}}">
                 <fieldset class="form-group col-2">
-                    <label for="fornumber">Rut Reptesentante</label>
-                    <input type="integer" name="representative_rut" class="form-control" id="fornumber" value="{{ $municipality->rut_representative }}" disabled>
+                    <label for="fornumber">Rut Representante</label>
+                    <input type="integer" name="representative_rut" class="form-control" id="representative_rut" value="{{ $agreement->representative_rut }}" readonly>
                 </fieldset>
                 <fieldset class="form-group col-4">
                     <label for="fornumber">Dirección Municipalidad</label>
-                    <input type="integer" name="municipality_adress" class="form-control" id="fornumber" value="{{ $municipality->name_municipality }}" disabled>
+                    <input type="integer" name="municipality_adress" class="form-control" id="fornumber" value="{{ $agreement->municipality_adress }}" readonly>
                 </fieldset>
                  <fieldset class="form-group col-2">
                     <label for="fornumber">Rut Municipalidad</label>
-                    <input type="integer" name="municipality_rut" class="form-control" id="fornumber" value="{{ $municipality->rut_municipality }}" disabled>
+                    <input type="integer" name="municipality_rut" class="form-control" id="fornumber" value="{{ $agreement->municipality_rut }}" readonly>
                 </fieldset>
             </div>
 
@@ -645,6 +652,32 @@
         modal.find('input[name="date"]').val(button.data('date'))
 
         modal.find("#form-edit").attr('action', button.data('formaction'))
+    })
+
+    $('#representative').on('change', function(e){
+        var selected = this.selectedIndex - 1;
+        var ruts = new Array();
+        var appelatives = new Array();
+        var decrees = new Array();
+        //Alcalde actual
+        ruts.push(@json($municipality->rut_representative))
+        appelatives.push('Alcalde Don')
+        decrees.push(@json($municipality->decree_representative))
+        // alcalde subrogante actual
+        if(@json($municipality->rut_representative_surrogate) != null){ 
+            ruts.push(@json($municipality->rut_representative_surrogate))
+            appelatives.push('Alcalde Subrogante Don')
+            decrees.push(@json($municipality->decree_representative_surrogate))
+        }
+        // alcalde registrado al momento de completar el convenio pero que no es igual al alcalde ni al subrogante actual
+        if(@json($agreement->representative) != null && @json($agreement->representative) != @json($municipality->name_representative) && @json($agreement->representative) != @json($municipality->name_representative_surrogate)){ 
+            ruts.push(@json($agreement->representative_rut))
+            appelatives.push(@json($agreement->representative_appelative))
+            decrees.push(@json($agreement->representative_decree))
+        }
+        $("#representative_rut").val(ruts[selected])
+        $("#representative_appelative").val(appelatives[selected])
+        $("#representative_decree").val(decrees[selected])
     })
 </script>
 @endsection

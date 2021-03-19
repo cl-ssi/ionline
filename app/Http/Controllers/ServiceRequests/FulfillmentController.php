@@ -169,12 +169,12 @@ class FulfillmentController extends Controller
         $cont_periods = iterator_count($periods);
 
         // crea de forma automática las cabeceras
-        if ($serviceRequest->program_contract_type == "Mensual") {
+        if ($serviceRequest->program_contract_type == "Mensual" || ($serviceRequest->program_contract_type == "Horas" && $serviceRequest->working_day_type == "HORA MÉDICA")) {
           if ($serviceRequest->fulfillments->count() == 0) {
-            if (!Auth::user()->can('Service Request: fulfillments responsable')) {
-              session()->flash('danger', 'El usuario responsable no ha certificado el cumplimiento de la solicitud: <b>' . $serviceRequest->id . "</b>. No tiene acceso.");
-              return redirect()->back();
-            }
+            // if (!Auth::user()->can('Service Request: fulfillments responsable')) {
+            //   session()->flash('danger', 'El usuario responsable no ha certificado el cumplimiento de la solicitud: <b>' . $serviceRequest->id . "</b>. No tiene acceso.");
+            //   return redirect()->back();
+            // }
             foreach ($periods as $key => $period) {
               $program_contract_type = "Mensual";
               $start_date_period = $period->format("d-m-Y");
@@ -193,12 +193,18 @@ class FulfillmentController extends Controller
                 $fulfillment->year = $period->format("Y");
                 $fulfillment->month = $period->format("m");
               }else{
-                $program_contract_type = "Turnos";
+                $program_contract_type = "Horas";
+                $fulfillment->year = $period->format("Y");
+                $fulfillment->month = $period->format("m");
               }
               $fulfillment->type = $program_contract_type;
               $fulfillment->start_date = $start_date_period;
               $fulfillment->end_date = $end_date_period;
               $fulfillment->user_id = Auth::user()->id;
+
+              // $fulfillment->total_hours_to_pay = $serviceRequest->weekly_hours;
+              // $fulfillment->total_to_pay = $serviceRequest->net_amount;
+
               $fulfillment->save();
             }
 
@@ -232,8 +238,10 @@ class FulfillmentController extends Controller
           }
         }
 
+        //tuve que hacer esto ya que no me devolvia fulfillments guardados.
+        $serviceRequest = ServiceRequest::find($serviceRequest->id);
 
-        return view('service_requests.requests.fulfillments.edit',compact('serviceRequest','periods'));
+        return view('service_requests.requests.fulfillments.edit',compact('serviceRequest'));
     }
 
     public function save_approbed_fulfillment(ServiceRequest $serviceRequest)
@@ -558,10 +566,17 @@ class FulfillmentController extends Controller
         return redirect()->back();
     }
 
-    public function downloadInvoice($fulfillmentId)
+    public function downloadInvoice(Fulfillment $fulfillment)
     {
-        return Storage::response( 'invoices/' . $fulfillmentId . '.pdf', mb_convert_encoding($fulfillmentId . '.pdf', 'ASCII'));
+        $storage_path = '/service_request/invoices/';
+        $file =  $storage_path . $fulfillment->id . '.pdf';
+        return Storage::response($file, mb_convert_encoding($fulfillment->id.'.pdf', 'ASCII'));
     }
-
+    public function downloadResolution(ServiceRequest $serviceRequest)
+    {
+        $storage_path = '/service_request/resolutions/';
+        $file =  $storage_path . $serviceRequest->id . '.pdf';
+        return Storage::response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
+    }
 
 }

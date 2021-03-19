@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('service_requests.partials.nav')
+
 <h3>Solicitud de Contratación de Servicios</h3>
 
   @can('Service Request: additional data rrhh')
@@ -33,7 +35,7 @@
 	<div class="form-row">
 
     <fieldset class="form-group col col-md">
-		    <label for="for_program_contract_type">Tipo de Contratación</label>
+		    <label for="for_program_contract_type">Tipo</label>
 		    <select name="program_contract_type" id="program_contract_type" class="form-control" required>
           <!-- <option value="Semanal" @if($serviceRequest->program_contract_type == 'Semanal') selected @endif >Semanal</option> -->
           <option value="Mensual" @if($serviceRequest->program_contract_type == 'Mensual') selected @endif >Mensual</option>
@@ -60,7 +62,7 @@
 		</fieldset>
     <fieldset class="form-group col col-md">
 		    <label for="for_responsability_center_ou_id">Centro de Responsabilidad</label>
-				<select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" required="" data-size="5">
+				<select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" required="" data-size="5" id="responsability_center_ou_id">
           @foreach($responsabilityCenters as $key => $responsabilityCenter)
             <option value="{{$responsabilityCenter->id}}" @if($serviceRequest->responsability_center_ou_id == $responsabilityCenter->id) selected @endif >{{$responsabilityCenter->name}}</option>
           @endforeach
@@ -81,7 +83,7 @@
 		</fieldset>
 
 		<fieldset class="form-group col">
-				<label for="for_users">Jefe Directo</label>
+				<label for="for_users">Supervisor</label>
 				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
 						<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',2)->first()->responsable_id) selected @endif >{{$user->getFullNameAttribute()}}</option>
@@ -188,6 +190,17 @@
   </div>
 
   <div class="form-row">
+
+    <fieldset class="form-group col">
+		    <label for="for_contractual_condition">Calidad Contractual</label>
+        <select name="contractual_condition" class="form-control">
+          <option value=""></option>
+          <option value="SUPLENTE" @if($serviceRequest->contractual_condition == 'SUPLENTE') selected @endif >SUPLENTE</option>
+          <option value="CONTRATA" @if($serviceRequest->contractual_condition == 'CONTRATA') selected @endif>CONTRATA</option>
+          <option value="TITULAR" @if($serviceRequest->contractual_condition == 'TITULAR') selected @endif>TITULAR</option>
+          <option value="HONORARIO COVID" @if($serviceRequest->contractual_condition == 'HONORARIO COVID') selected @endif>HONORARIO COVID</option>
+        </select>
+		</fieldset>
 
     <fieldset class="form-group col">
 		    <label for="for_programm_name">Nombre del programa</label>
@@ -408,8 +421,12 @@
           <option value="TERCER TURNO - MODIFICADO" @if($serviceRequest->working_day_type == 'TERCER TURNO - MODIFICADO') selected @endif >TERCER TURNO - MODIFICADO</option>
           <option value="CUARTO TURNO" @if($serviceRequest->working_day_type == 'CUARTO TURNO') selected @endif >CUARTO TURNO</option>
           <option value="CUARTO TURNO - MODIFICADO" @if($serviceRequest->working_day_type == 'CUARTO TURNO - MODIFICADO') selected @endif >CUARTO TURNO - MODIFICADO</option>
-          <option value="HORA MÉDICA" @if($serviceRequest->working_day_type == 'HORA MÉDICA') selected @endif >HORA MÉDICA</option>
+
           <option value="DIURNO PASADO A TURNO" @if($serviceRequest->working_day_type == 'DIURNO PASADO A TURNO') selected @endif >DIURNO PASADO A TURNO</option>
+          <option value="HORA MÉDICA" @if($serviceRequest->working_day_type == 'HORA MÉDICA') selected @endif >HORA MÉDICA</option>
+          <option value="HORA EXTRA" @if($serviceRequest->working_day_type == 'HORA EXTRA') selected @endif>HORA EXTRA</option>
+					<option value="TURNO EXTRA" @if($serviceRequest->working_day_type == 'TURNO EXTRA') selected @endif>TURNO EXTRA</option>
+
           <option value="OTRO" @if($serviceRequest->working_day_type == 'OTRO') selected @endif >OTRO</option>
         </select>
 
@@ -486,7 +503,7 @@
 
           <fieldset class="form-group col-12 col-md-4">
               <label for="for_digera_strategy">Estrategia Digera Covid</label>
-              <select name="digera_strategy" class="form-control">
+              <select name="digera_strategy" class="form-control" id="digera_strategy">
                 <option value=""></option>
                 <option value="Camas MEDIAS Aperturadas" @if($serviceRequest->digera_strategy == "Camas MEDIAS Aperturadas") selected @endif>Camas MEDIAS Aperturadas</option>
                 <option value="Camas MEDIAS Complejizadas" @if($serviceRequest->digera_strategy == "Camas MEDIAS Complejizadas") selected @endif>Camas MEDIAS Complejizadas</option>
@@ -777,6 +794,56 @@
 <script type="text/javascript">
 
 	$( document ).ready(function() {
+
+    //temporal, solicitado por eduardo
+    if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Departamento de Salud Ocupacional" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Extensión Hospital -Estadio" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Sección Administrativa Honorarios Covid" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio de Cirugía" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio de Ginecología y Obstetricia" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio de Medicina" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad de Alimentación y Nutrición" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad de Gestión de Camas" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad de Ginecología" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad de Medicina Física y Rehabilitación" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad de Movilización" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad de Salud Ocupacional" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad Imagenología") {
+      $('#digera_strategy').val("Camas MEDIAS Complejizadas");
+    }
+
+    if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio de Anestesia y Pabellones" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio Unidad Paciente Crítico Adulto" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio Unidad Paciente Crítico Pediatrico"){
+      $('#digera_strategy').val("Camas UCI Complejizadas");
+    }
+
+    if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad de Hospitalización Domiciliaria"){
+      $('#digera_strategy').val("Cupos Hosp. Domiciliaria");
+    }
+
+    if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Subdirección de Gestion Asistencial / Subdirección Médica" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Unidad Laboratorio Clínico"){
+      $('#digera_strategy').val("Refuerzo Laboratorio");
+    }
+
+    if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Establecimientos de Red de Urgencias"){
+      $('#digera_strategy').val("Refuerzo SAMU");
+    }
+
+    if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Consultorio General Urbano Dr. Hector Reyno" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio de Emergencia Hospitalaria" ||
+        $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Servicio Urgencia Ginecoobstetricia"){
+      $('#digera_strategy').val("Refuerzo UEH");
+    }
+
+
+
+
+
+    if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "xxx") {
+      $('#digera_strategy').val("xxx");
+    }
 
     if ($('#program_contract_type').val() == "Horas") {
       $("#control_turnos").show();
