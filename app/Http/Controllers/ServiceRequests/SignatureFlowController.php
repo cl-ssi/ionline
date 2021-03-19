@@ -85,16 +85,49 @@ class SignatureFlowController extends Controller
         //si seleccionó una opción, se agrega visto bueno.
         if ($request->status != null) {
 
-          $SignatureFlow = SignatureFlow::where('responsable_id',Auth::user()->id)
-                                        ->where('service_request_id',$request->service_request_id)
-                                        ->whereNull('status')
-                                        ->first();
+          //Devolver
+          if ($request->status == 2) {
+            foreach ($serviceRequest->SignatureFlows as $key => $SignatureFlow) {
+              //Devuelve firma
+              $SignatureFlow->signature_date = Carbon::now();
+              $SignatureFlow->status = $request->status;
+              $SignatureFlow->observation = "Firma devuelta - " . $request->observation;
+              $SignatureFlow->save();
 
-          $SignatureFlow->employee = $request->employee;
-          $SignatureFlow->signature_date = Carbon::now();
-          $SignatureFlow->status = $request->status;
-          $SignatureFlow->observation = $request->observation;
-          $SignatureFlow->save();
+              //Nuevo flujo
+              $SignatureFlowNew = new SignatureFlow();
+              $SignatureFlowNew->user_id = $SignatureFlow->user_id;
+              $SignatureFlowNew->ou_id = $SignatureFlow->ou_id;
+              $SignatureFlowNew->responsable_id = $SignatureFlow->responsable_id;
+              $SignatureFlowNew->service_request_id = $SignatureFlow->service_request_id;
+              $SignatureFlowNew->type = $SignatureFlow->type;
+              $SignatureFlowNew->employee = $SignatureFlow->employee;
+              $SignatureFlowNew->sign_position = $SignatureFlow->sign_position;
+              if ($SignatureFlow->sign_position == 1) {
+                $SignatureFlowNew->signature_date = Carbon::now();
+                $SignatureFlowNew->status = 1;
+              }
+              $SignatureFlowNew->save();
+            }
+
+            session()->flash('success', 'Se ha reiniciado el flujo de firmas.');
+            return redirect()->route('rrhh.service_requests.index');
+          }
+          //Aceptar o rechazar
+          else{
+            $SignatureFlow = SignatureFlow::where('responsable_id',Auth::user()->id)
+                                          ->where('service_request_id',$request->service_request_id)
+                                          ->whereNull('status')
+                                          ->first();
+
+            $SignatureFlow->employee = $request->employee;
+            $SignatureFlow->signature_date = Carbon::now();
+            $SignatureFlow->status = $request->status;
+            $SignatureFlow->observation = $request->observation;
+            $SignatureFlow->save();
+          }
+
+
 
           // // send emails (next flow position)
           // try {
@@ -116,20 +149,20 @@ class SignatureFlowController extends Controller
           //   $this->FulfillmentController->confirmFulfillmentBySignPosition($serviceRequest->Fulfillments->first(),$SignatureFlow->sign_position);
           // }
 
-          if ($serviceRequest->program_contract_type == "Horas" && $SignatureFlow->sign_position == 2) {
-
-            $fulfillment = new Fulfillment();
-            $fulfillment->service_request_id = $serviceRequest->id;
-            $fulfillment->type = "Horas";
-            $fulfillment->start_date = $serviceRequest->start_date;
-            $fulfillment->end_date = $serviceRequest->end_date;
-            $fulfillment->observation = "Aprobaciones en flujo de firmas";
-            $fulfillment->user_id = Auth::user()->id;
-            $fulfillment->save();
-
-            session()->flash('info', 'Se ha registrado la visación de solicitud nro: <b>'.$serviceRequest->id.'</b>. Para visualizar el certificado de confirmación, hacer click <a href="'. route('rrhh.service_requests.certificate-pdf', $serviceRequest) . '" target="_blank">Aquí.</a>');
-            return redirect()->route('rrhh.service_requests.index');
-          }
+          // if ($serviceRequest->program_contract_type == "Horas" && $SignatureFlow->sign_position == 2) {
+          //
+          //   $fulfillment = new Fulfillment();
+          //   $fulfillment->service_request_id = $serviceRequest->id;
+          //   $fulfillment->type = "Horas";
+          //   $fulfillment->start_date = $serviceRequest->start_date;
+          //   $fulfillment->end_date = $serviceRequest->end_date;
+          //   $fulfillment->observation = "Aprobaciones en flujo de firmas";
+          //   $fulfillment->user_id = Auth::user()->id;
+          //   $fulfillment->save();
+          //
+          //   session()->flash('info', 'Se ha registrado la visación de solicitud nro: <b>'.$serviceRequest->id.'</b>. Para visualizar el certificado de confirmación, hacer click <a href="'. route('rrhh.service_requests.certificate-pdf', $serviceRequest) . '" target="_blank">Aquí.</a>');
+          //   return redirect()->route('rrhh.service_requests.index');
+          // }
 
        }
       }
