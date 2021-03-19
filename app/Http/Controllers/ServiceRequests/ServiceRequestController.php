@@ -525,6 +525,7 @@ class ServiceRequestController extends Controller
     );
 
     $filas = ServiceRequest::where('establishment_id',1)
+              ->where('sirh_contract_registration',0)->orWhereNull('sirh_contract_registration')
               ->whereDoesntHave("SignatureFlows", function($subQuery) {
                 $subQuery->where('status',0);
               })
