@@ -13,18 +13,26 @@ class UpdateAccount extends Component
     public $account_number;
     public $pay_method;
     public $serviceRequest;
+
+    public $phone_number;
+    public $email;
     //
 
     protected $rules = [
         'account_number' => 'required',
         'bank_id' => 'required',
         'pay_method' => 'required',
+        'phone_number' => 'required',
+        'email' => 'required|email',
     ];
 
     protected $messages = [
         'account_number.required' => 'Debe Ingresar Número de Cuenta',
         'bank_id.required' => 'Debe Seleccionar un Banco',
         'pay_method.required' => 'Debe Seleccionar una Forma de Pago',
+        'phone_number.required' => 'Debe Ingresar su Número Telefónico',
+        'email.required' => 'Debe Ingresar un Correo Electrónico',
+        'email.email' => 'El Formato del Correo Electrónico no es válido',
     ];
     
 
@@ -37,6 +45,9 @@ class UpdateAccount extends Component
         $this->serviceRequest->bank_id = $this->bank_id;
         $this->serviceRequest->account_number = $this->account_number;        
         $this->serviceRequest->pay_method = $this->pay_method;
+
+        $this->serviceRequest->phone_number = $this->phone_number;
+        $this->serviceRequest->email = $this->email;
         $this->serviceRequest->save();
         session()->flash('message', 'Información Bancaria Actualizada Exitosamente');
     }
@@ -47,6 +58,9 @@ class UpdateAccount extends Component
         $this->account_number = $this->serviceRequest->account_number;
         $this->account_type = $this->serviceRequest->account_type;
         $this->pay_method = $this->serviceRequest->pay_method;
+
+        $this->phone_number = $this->serviceRequest->phone_number;
+        $this->email = $this->serviceRequest->email;
     }
 
     public function render()

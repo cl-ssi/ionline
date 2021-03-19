@@ -114,6 +114,10 @@ class ServiceRequest extends Model implements Auditable
     		return $this->hasMany('\App\Models\ServiceRequests\Fulfillment');
     }
 
+    public function bank(){
+        return $this->belongsTo('\App\Models\Parameters\Bank', 'bank_id');
+    }
+
     public static function getPendingRequests()
     {
       // $serviceRequestsPendingsCount = ServiceRequest::whereHas("SignatureFlows", function($subQuery) {
