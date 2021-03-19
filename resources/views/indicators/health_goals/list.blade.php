@@ -22,8 +22,7 @@
     <p>{{$item->name}}</p>
         <ul style="list-style-type: none;">
         @foreach($item->indicators as $indicator)
-        
-            <li><a href="{{ route('indicators.health_goals.show', [$law, $year, $indicator->id]) }}">{{$item->number}}. {{$indicator->name}}</a></li>
+            <li><a href="{{ route('indicators.health_goals.show', [$law, $year, $indicator->id]) }}">{{$indicator->number}}. {{$indicator->name}}</a></li>
         @endforeach
         </ul>
     @endforeach

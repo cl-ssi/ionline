@@ -14,7 +14,7 @@
     <div class="row">
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_contract_type" >Tipo de Contrato*</label>
-            <select name="contract_type" class="form-control" required>
+            <select name="contract_type" class="form-control" id="for_contract_type" required>
                 <option value="">Seleccionar</option>
                 <option value="Mensual">Mensual</option>
                 <option value="Horas">Horas</option>
@@ -42,7 +42,6 @@
                 <option value="DIURNO PASADO A TURNO">DIURNO PASADO A TURNO</option>
                 <option value="TURNO EXTRA">TURNO EXTRA</option>
                 <option value="HORA EXTRA">HORA EXTRA</option>
-                <option value="OTRO">OTRO</option>
             </select>
         </fieldset>
 
@@ -82,5 +81,33 @@
 @endsection
 
 @section('custom_js')
+    <script type="text/javascript">
+        $(document).ready(function (){
+           $('#for_contract_type').on('change', function (){
+               if(this.value === 'Horas'){
+                   $("#for_work_type option[value='DIURNO']").hide();
+                   $("#for_work_type option[value='TERCER TURNO']").hide();
+                   $("#for_work_type option[value='TERCER TURNO - MODIFICADO']").hide();
+                   $("#for_work_type option[value='CUARTO TURNO']").hide();
+                   $("#for_work_type option[value='CUARTO TURNO - MODIFICADO']").hide();
 
+                   $("#for_work_type option[value='DIURNO PASADO A TURNO']").show();
+                   $("#for_work_type option[value='HORA MÉDICA']").show();
+                   $("#for_work_type option[value='HORA EXTRA']").show();
+                   $("#for_work_type option[value='TURNO EXTRA']").show();
+               }else {
+                   $("#for_work_type option[value='DIURNO']").show();
+                   $("#for_work_type option[value='TERCER TURNO']").show();
+                   $("#for_work_type option[value='TERCER TURNO - MODIFICADO']").show();
+                   $("#for_work_type option[value='CUARTO TURNO']").show();
+                   $("#for_work_type option[value='CUARTO TURNO - MODIFICADO']").show();
+
+                   $("#for_work_type option[value='DIURNO PASADO A TURNO']").hide();
+                   $("#for_work_type option[value='HORA MÉDICA']").hide();
+                   $("#for_work_type option[value='HORA EXTRA']").hide();
+                   $("#for_work_type option[value='TURNO EXTRA']").hide();
+               }
+           })
+        })
+    </script>
 @endsection

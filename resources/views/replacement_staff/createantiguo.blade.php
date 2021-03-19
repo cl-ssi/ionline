@@ -1,12 +1,12 @@
-@extends('layouts.external')
+@extends('layouts.app')
 
 @section('title', 'Nuevo Staff')
 
 @section('content')
 
+@include('replacement_staff.nav')
 
-
-<h5>Ingreso de nuevo staff {{Auth::guard('external')->user()->id}}</h5>
+<h5>Ingreso de nuevo staff</h5>
 
 <br>
 

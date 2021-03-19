@@ -32,7 +32,8 @@
   <thead>
     <tr>
       <th scope="col">Id</th>
-      <th scope="col">Tipo</th>
+      <!-- <th scope="col">Tipo</th> -->
+      <th scope="col">T.Contrato</th>
       <th scope="col">F. Solicitud</th>
       <th scope="col">Rut</th>
       <th scope="col">Funcionario</th>
@@ -47,7 +48,8 @@
   @foreach($serviceRequests as $serviceRequest)
     <tr>
       <td>{{ $serviceRequest->id }}</td>
-      <td>{{ $serviceRequest->type }}</td>
+      <!-- <td>{{ $serviceRequest->type }}</td> -->
+      <td>{{ $serviceRequest->program_contract_type }}</td>
       <td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
       <td nowrap>{{ $serviceRequest->rut }}</td>
       <td nowrap>{{ $serviceRequest->name }}</td>
@@ -62,7 +64,7 @@
         </a>
       </td>
       <td>
-        @if($serviceRequest->program_contract_type == "Mensual")
+        @if($serviceRequest->program_contract_type == "Horas" && $serviceRequest->working_day_type == "HORA MÉDICA")
           @if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
             <a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
             <i class="fas fa-file" style="color:#B9B9B9"></i></a>

@@ -10,6 +10,7 @@ use App\Indicators\Percapita;
 use App\Indicators\Rem;
 use App\Indicators\Value;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class HealthGoalController extends Controller
 {
@@ -94,6 +95,11 @@ class HealthGoalController extends Controller
                                 ->when($isRemP, function($query){
                                     return $query->whereIn('Mes', [6,12]);
                                 })
+                                ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && Str::contains($indicator->name, 'UEH'), function($query){
+                                    return $query->whereHas('establecimiento', function($q){
+                                        return $q->where('meta_san_18834_hosp', 1);
+                                    });
+                                })
                                 ->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->orderBy('Mes')->get();
     
                     foreach($result as $item)
@@ -116,7 +122,7 @@ class HealthGoalController extends Controller
                 $source = $factor == 'numerador' ? $indicator->numerator_source : $indicator->denominator_source;
 
                 if($source == 'FONASA'){
-                    $result = Percapita::year($year)->selectRaw('COUNT(*)*'.reset($cols).' AS valor, COD_CENTRO')
+                    $result = Percapita::year($year-1)->selectRaw('COUNT(*)*'.reset($cols).' AS valor, COD_CENTRO')
                                               ->with(['establecimiento' => function($q){ 
                                                   return $q->where('meta_san', 1);
                                               }])
