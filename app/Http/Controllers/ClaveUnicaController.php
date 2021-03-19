@@ -100,7 +100,7 @@ class ClaveUnicaController extends Controller
                     $user->name = implode(' ', $user_cu->name->nombres);
                     $user->fathers_family = $user_cu->name->apellidos[0];
                     $user->mothers_family = $user_cu->name->apellidos[1];
-                    if($user_cu->email) {
+                    if(isset($user_cu->email)) {
                         $user->email = $user_cu->email;
                     }
 		        }
