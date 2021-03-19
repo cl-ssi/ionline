@@ -83,9 +83,9 @@ class MonthlyQuotes extends Component
         $string = count($valores) . " cuotas" ;
         foreach ($valores as $key => $valor) {
           if($key == count($valores)){
-            $string = $string . ", y una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->formatLocalized('%B') ."; ";
+            $string = $string . ", y una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->monthName ."; ";
           }else{
-            $string = $string . ", una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->formatLocalized('%B');
+            $string = $string . ", una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->monthName;
           }
         }
 
@@ -94,42 +94,4 @@ class MonthlyQuotes extends Component
         return view('livewire.service-request.monthly-quotes');
     }
 
-    public function monthName(Integer $month){
-      if ($month == 1) {
-        return "Enero";
-      }
-      if ($month == 2) {
-        return "Enero";
-      }
-      if ($month == 3) {
-        return "Enero";
-      }
-      if ($month == 4) {
-        return "Enero";
-      }
-      if ($month == 5) {
-        return "Enero";
-      }
-      if ($month == 6) {
-        return "Enero";
-      }
-      if ($month == 7) {
-        return "Enero";
-      }
-      if ($month == 8) {
-        return "Enero";
-      }
-      if ($month == 9) {
-        return "Enero";
-      }
-      if ($month == 10) {
-        return "Enero";
-      }
-      if ($month == 11) {
-        return "Enero";
-      }
-      if ($month == 12) {
-        return "Enero";
-      }
-    }
 }

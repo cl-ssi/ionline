@@ -1,3 +1,3 @@
 <span>
-    {{ print_r($valores) }}
+    {{ $valores }}
 </span>
