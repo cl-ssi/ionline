@@ -525,13 +525,13 @@ class ServiceRequestController extends Controller
         "Expires" => "0"
     );
 
-    $filas = ServiceRequest::where('establishment_id',1)
-              ->where('sirh_contract_registration',0)->orWhereNull('sirh_contract_registration')
-              ->whereDoesntHave("SignatureFlows", function($subQuery) {
-                $subQuery->where('status',0);
-              })
-              ->orderBy('request_date','asc')
-              ->get();
+    $filas = ServiceRequest::where('establishment_id',1)->get();
+              // ->where('sirh_contract_registration',0)->orWhereNull('sirh_contract_registration')
+              // ->whereDoesntHave("SignatureFlows", function($subQuery) {
+              //   $subQuery->where('status',0);
+              // })
+              // ->orderBy('request_date','asc')
+              // ->get();
 
     $columnas = array(
         'RUN',
