@@ -6,9 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ReplacementStaff\ReplacementStaff;
 use App\Models\ReplacementStaff\Profile;
-use App\Models\UserExternal;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 
 class ReplacementStaffController extends Controller
 {
@@ -30,25 +28,7 @@ class ReplacementStaffController extends Controller
      */
     public function create()
     {
-
-        //$replacementStaff = ReplacementStaff::where('run',$user_cu->RolUnico->numero)->first();
-        $replacementStaff = ReplacementStaff::where('run',Auth::guard('external')->user()->id)->first();
-        if($replacementStaff == null)
-        {
-            $userexternal = UserExternal::where('run',Auth::guard('external')->user()->id)->first();
-
-            $replacementStaff = new ReplacementStaff();
-            $replacementStaff->run = $userexternal->id;
-
-            return view('replacement_staff.create',compact('replacementStaff'));
-
-        }
-        else{
-            
-            return $this->edit($replacementStaff);
-        }
-        
-        //return view('replacement_staff.create');
+        return view('replacement_staff.create');
     }
 
     /**

@@ -21,8 +21,10 @@
         <table class="table table-sm table-bordered small">
                 <thead>
                         <tr>
-                                <th>Número de Solicitud de Servicio</th>
-                                <th>Id</th>
+                                <th>ID Solicitud</th>
+                                <th>Tipo de Contrato</th>
+                                <th>Jornada de Trabajo</th>
+                                <th>ID Cumplimiento</th>
                                 <th>Año</th>
                                 <th>Mes</th>
                                 <th>Cargar Boleta</th>
@@ -32,16 +34,21 @@
 
                 
                         @foreach ($serviceRequests as $serviceRequest) 
-                        @foreach($serviceRequest->fulfillments as $fullfillment)
+                        @foreach($serviceRequest->fulfillments->reverse() as $fullfillment)
                         <tr></tr>
                         <tr>
-                                <td class="small">{{ $serviceRequest->id ?? '' }}</td>
+                                <td class="small">{{ $serviceRequest->id ?? '' }}</td>                                
+                                <td>{{ $serviceRequest->program_contract_type ?? '' }}</td>
+                                <td>{{ $serviceRequest->working_day_type ?? '' }}</td>
                                 <td class="small">{{ $fullfillment->id ?? '' }}</td>
                                 <td>{{ $fullfillment->year ?? '' }}</td>
                                 <td>{{ $fullfillment->month ?? '' }}</td>                                
                                 <td>
-
+                                @if($fullfillment->total_to_pay)
                                 @livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])
+                                @else
+                                No se ha cargado información de Pago
+                                @endif
                                 </td>
                         </tr>                        
                         @endforeach
