@@ -66,9 +66,8 @@ Route::get('/login/external', [LoginController::class,'showExternalLoginForm']);
 Route::post('/login/external', [LoginController::class,'externalLogin']);
 
 
-Route::group(['middleware' => 'auth:external'], function () {
-    //Route::view('/kaka', 'test');
-    Route::view('/test', 'test');
+Route::group(['middleware' => 'auth:external'], function () {    
+    Route::view('/testing', 'testing');
 });
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
