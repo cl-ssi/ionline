@@ -6,6 +6,12 @@
 
 <h3>Transferencia de solicitudes</h3><br>
 
+@livewire('service-request.derive')
+<hr>
+
+@php
+/*
+
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service_requests.aditional_data_list') }}">
   <div class="input-group mb-3">
     <div class="input-group-prepend">
@@ -23,7 +29,8 @@
   </div>
 </form>
 
-<hr>
+
+
 
 <h4>Hojas de ruta</h4>
 <form method="POST" enctype="multipart/form-data" id="derive" action="{{ route('rrhh.service_requests.derive') }}">
@@ -152,7 +159,8 @@
   </tbody>
 </table>
 </div>
-
+*/
+@endphp
 @endsection
 
 @section('custom_js')
