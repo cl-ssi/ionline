@@ -81,11 +81,13 @@ class MonthlyQuotes extends Component
 
         // setlocale(LC_ALL, 'es');
         $string = count($valores) . " cuotas" ;
+        $count = 0;
         foreach ($valores as $key => $valor) {
-          if($key == count($valores)){
-            $string = $string . ", y una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->formatLocalized('%B') ."; ";
+          $count += 1;
+          if($count == count($valores)){
+            $string = $string . ", y una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->monthName ."; ";
           }else{
-            $string = $string . ", una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->formatLocalized('%B');
+            $string = $string . ", una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->monthName;
           }
         }
 
