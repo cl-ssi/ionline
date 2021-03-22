@@ -118,7 +118,7 @@ class ShowTotalHours extends Component
                     $minutesDay = 0;
                     $minutesNight = 0;
                     foreach ($period as $key => $minute) {
-                        if($key != 0){
+                        if ($key != 0) {
                             if ($minute->format('H:i:s') >= '08:00:00' && $minute->format('H:i:s') <= '20:59:00') {
                                 $minutesDay = $minutesDay + 1;
                             } else {
@@ -127,19 +127,18 @@ class ShowTotalHours extends Component
                         }
                     }
 
-
-                    $totalMinutesDay = $totalMinutesDay + $minutesDay;
-                    $totalMinutesNight = $totalMinutesNight + $minutesNight;
-
-                    $this->totalHoursDay = intdiv($totalMinutesDay, 60) . ':' . ($totalMinutesDay % 60);
-                    $this->totalHoursNight = intdiv($totalMinutesNight, 60) . ':' . ($totalMinutesNight % 60);
-
                     //Calculo para el debug
-                    $hoursDayString = intdiv($minutesDay, 60) . ':' . ($minutesDay % 60);
-                    $hoursNightString = intdiv($minutesNight, 60) . ':' . ($minutesNight % 60);
+                    $hoursDayString = sprintf('%d:%02d', intdiv($minutesDay, 60), ($minutesDay % 60));
+                    $hoursNightString = sprintf('%d:%02d', intdiv($minutesNight, 60), ($minutesNight % 60));
                     if (Auth::user()->can('be god')) {
                         dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia: $hoursDayString | Noche: $hoursNightString");
                     }
+
+                    //Horas noche dia
+                    $totalMinutesDay = $totalMinutesDay + $minutesDay;
+                    $totalMinutesNight = $totalMinutesNight + $minutesNight;
+                    $this->totalHoursDay = sprintf('%d:%02d', intdiv($totalMinutesDay, 60), ($totalMinutesDay % 60));
+                    $this->totalHoursNight = sprintf('%d:%02d', intdiv($totalMinutesNight, 60), ($totalMinutesNight % 60));
 
                     //Calculo total que se ocupa para calcular monto
                     $diffInMinutes = $shiftControl->start_date->diffInMinutes($shiftControl->end_date);
@@ -155,14 +154,14 @@ class ShowTotalHours extends Component
                 foreach ($this->serviceRequest->shiftControls as $shiftControl) {
                     $hoursDayString = $shiftControl->start_date->diffInHoursFiltered(
                         function ($date) {
-                            if (in_array($date->hour, [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]))
+                            if (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]))
                                 return true;
                             else return false;
                         }, $shiftControl->end_date);
 
                     $hoursNightString = $shiftControl->start_date->diffInHoursFiltered(
                         function ($date) {
-                            if (in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7]))
+                            if (in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]))
                                 return true;
                             else return false;
                         }, $shiftControl->end_date);
@@ -181,11 +180,11 @@ class ShowTotalHours extends Component
                 }
 
 
-                $firstDayOfMonth = $this->serviceRequest->shiftControls->first()->start_date->firstOfMonth();
-                $lastOfMonth = $this->serviceRequest->shiftControls->first()->start_date->lastOfMonth();
+//                $firstDayOfMonth = $this->serviceRequest->shiftControls->first()->start_date->firstOfMonth();
+//                $lastOfMonth = $this->serviceRequest->shiftControls->first()->start_date->lastOfMonth();
 
-                $holidays = Holiday::whereYear('date', '=', $firstDayOfMonth->year)
-                    ->whereMonth('date', '=', $firstDayOfMonth->month)
+                $holidays = Holiday::whereYear('date', '=', $this->serviceRequest->start_date->year)
+                    ->whereMonth('date', '=', $this->serviceRequest->start_date->month)
                     ->get();
 
                 $holidaysArray = array();
@@ -193,9 +192,9 @@ class ShowTotalHours extends Component
                     array_push($holidaysArray, $holiday->formattedDate);
                 }
 
-                $businessDays = $firstDayOfMonth->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
+                $businessDays = $this->serviceRequest->start_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
                     return $date->isWeekday() && !in_array($date, $holidaysArray);
-                }, $lastOfMonth);
+                }, $this->serviceRequest->end_date);
 
                 $workingHoursInMonth = $businessDays * 8.8;
                 $this->refundHours = round(($workingHoursInMonth - $this->totalHoursDay), 0);

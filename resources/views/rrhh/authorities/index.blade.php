@@ -7,7 +7,7 @@
 <h3 class="mb-3">Autoridades del {{($ouTopLevel->establishment->name)}}</h3>
 
 @can('Authorities: manager')
-<a href="{{ route('rrhh.authorities.create') }}" class="btn btn-primary">Crear</a>
+<a href="{{ route('rrhh.authorities.create') }}?establishment_id={{$ouTopLevel->establishment_id}}" class="btn btn-primary">Crear Autoridad del {{($ouTopLevel->establishment->name)}}</a>
 @endcan
 
 
