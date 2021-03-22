@@ -94,12 +94,16 @@ class ServiceRequestController extends Controller
     // dd($request);
     $responsability_center_ou_id = $request->responsability_center_ou_id;
     $name = $request->name;
+    $id = $request->id;
     // dd($responsability_center_ou_id);
     $serviceRequests = ServiceRequest::when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
-                                          return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
-                                       })
+                                             return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+                                          })
                                      ->when($name != NULL, function ($q) use ($name) {
                                              return $q->where('name','LIKE','%'.$name.'%');
+                                          })
+                                     ->when($id != NULL, function ($q) use ($id) {
+                                             return $q->where('id',$id);
                                           })
                                      ->orderBy('id','asc')
                                      ->paginate(100);
