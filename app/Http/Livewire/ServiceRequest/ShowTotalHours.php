@@ -180,11 +180,11 @@ class ShowTotalHours extends Component
                 }
 
 
-                $firstDayOfMonth = $this->serviceRequest->shiftControls->first()->start_date->firstOfMonth();
-                $lastOfMonth = $this->serviceRequest->shiftControls->first()->start_date->lastOfMonth();
+//                $firstDayOfMonth = $this->serviceRequest->shiftControls->first()->start_date->firstOfMonth();
+//                $lastOfMonth = $this->serviceRequest->shiftControls->first()->start_date->lastOfMonth();
 
-                $holidays = Holiday::whereYear('date', '=', $firstDayOfMonth->year)
-                    ->whereMonth('date', '=', $firstDayOfMonth->month)
+                $holidays = Holiday::whereYear('date', '=', $this->serviceRequest->start_date->year)
+                    ->whereMonth('date', '=', $this->serviceRequest->start_date->month)
                     ->get();
 
                 $holidaysArray = array();
@@ -192,9 +192,9 @@ class ShowTotalHours extends Component
                     array_push($holidaysArray, $holiday->formattedDate);
                 }
 
-                $businessDays = $firstDayOfMonth->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
+                $businessDays = $this->serviceRequest->start_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
                     return $date->isWeekday() && !in_array($date, $holidaysArray);
-                }, $lastOfMonth);
+                }, $this->serviceRequest->end_date);
 
                 $workingHoursInMonth = $businessDays * 8.8;
                 $this->refundHours = round(($workingHoursInMonth - $this->totalHoursDay), 0);
