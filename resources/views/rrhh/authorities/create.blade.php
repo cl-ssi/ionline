@@ -3,7 +3,7 @@
 @section('title', 'Agregar Autoridad')
 
 @section('content')
-<h3 class="mb-3">Agregar Autoridad</h3>
+<h3 class="mb-3">Agregar Autoridad del {{ $ouTopLevel->establishment->name }}</h3>
 
 @can('Authorities: manager')
 <form method="POST" class="form-horizontal" action="{{ route('rrhh.authorities.store') }}">
