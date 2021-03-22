@@ -93,14 +93,19 @@ class ServiceRequestController extends Controller
 
     // dd($request);
     $responsability_center_ou_id = $request->responsability_center_ou_id;
+    $name = $request->name;
     // dd($responsability_center_ou_id);
-    $serviceRequests = ServiceRequest::
-                                       when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
+    $serviceRequests = ServiceRequest::when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
                                           return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
                                        })
-                                     ->orderBy('id','asc')->get();
+                                     ->when($name != NULL, function ($q) use ($name) {
+                                             return $q->where('name','LIKE','%'.$name.'%');
+                                          })
+                                     ->orderBy('id','asc')
+                                     ->paginate(100);
+                                     // ->get();
     $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)->orderBy('name', 'ASC')->get();
-    return view('service_requests.requests.aditional_data_list', compact('serviceRequests','responsabilityCenters'));
+    return view('service_requests.requests.aditional_data_list', compact('serviceRequests','responsabilityCenters','request'));
   }
 
   public function transfer_requests(Request $request){

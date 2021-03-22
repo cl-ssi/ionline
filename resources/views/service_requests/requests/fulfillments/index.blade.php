@@ -168,6 +168,8 @@
     </table>
     </div>
 
+    {{ $serviceRequests->links() }}
+
 @endsection
 
 @section('custom_js')o

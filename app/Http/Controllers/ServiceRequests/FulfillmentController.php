@@ -37,13 +37,15 @@ class FulfillmentController extends Controller
                                              })
                                            // ->where('program_contract_type','Mensual')
                                            ->orderBy('id','asc')
-                                           ->get();
+                                           ->paginate(100);
+                                           // ->get();
         }
         // Service Request: fulfillments rrhh - Service Request: fulfillments finance
         else{
           $serviceRequests = ServiceRequest::orderBy('id','asc')
                                            // ->where('program_contract_type','Mensual')
-                                           ->get();
+                                           ->paginate(100);
+                                           // ->get();
         }
 
 
