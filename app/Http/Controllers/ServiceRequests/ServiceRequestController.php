@@ -206,6 +206,7 @@ class ServiceRequestController extends Controller
 
      //array para solicitud por turnos
      $signatureFlowsTurnos = [];
+     $sumaAlzadaFlow = [];
      if (Auth::user()->organizationalUnit->establishment_id == 38) {
        //Hector Reyno (CGU)
        if (Auth::user()->organizationalUnit->id == 24) {
@@ -236,9 +237,13 @@ class ServiceRequestController extends Controller
        // $signatureFlowsTurnos['Director Hospital'] = 14101085; // 84 - Dirección
      }
 
+     $sumaAlzadaFlow['S.G.D.P Hospital'] = 16390845;
+     $sumaAlzadaFlow['Jefe Finanzas'] = 13866194;
+     $sumaAlzadaFlow['Director Hospital'] = 14101085;
+
      // dd($signatureFlowsTurnos);
 
-    return view('service_requests.requests.create', compact('subdirections','responsabilityCenters','users','establishments','signatureFlows','signatureFlowsTurnos'));
+    return view('service_requests.requests.create', compact('subdirections','responsabilityCenters','users','establishments','signatureFlows','signatureFlowsTurnos','sumaAlzadaFlow'));
   }
 
   /**

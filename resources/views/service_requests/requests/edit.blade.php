@@ -719,36 +719,71 @@
             </tr>
           </thead>
           <tbody>
-            @foreach($serviceRequest->SignatureFlows->sortBy('created_at') as $key => $SignatureFlow)
-            @if($SignatureFlow->status === null)
-              <tr class="bg-light">
-            @elseif($SignatureFlow->status === 0)
-              <tr class="bg-danger">
-            @elseif($SignatureFlow->status === 1)
-              <tr>
-            @elseif($SignatureFlow->status === 2)
-              <tr class="bg-warning">
-            @endif
-               <td>{{ $SignatureFlow->signature_date}}</td>
-               <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
-               <td>{{ $SignatureFlow->employee }}</td>
-               <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
-               <td>{{ $SignatureFlow->type }}</td>
-               <td>@if($SignatureFlow->status === null)
-                   @elseif($SignatureFlow->status === 1) Aceptada
-                   @elseif($SignatureFlow->status === 0) Rechazada
-                   @elseif($SignatureFlow->status === 2) Devuelta
-                   @endif
-              </td>
-               <td>{{ $SignatureFlow->observation }}</td>
-             </tr>
+            <!-- aceptado o rechazado -->
+            @if($serviceRequest->SignatureFlows->where('status',2)->count()==0)
+              @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
+                @if($SignatureFlow->status === null)
+                  <tr class="bg-light">
+                @elseif($SignatureFlow->status === 0)
+                  <tr class="bg-danger">
+                @elseif($SignatureFlow->status === 1)
+                  <tr>
+                @elseif($SignatureFlow->status === 2)
+                  <tr class="bg-warning">
+                @endif
+                   <td>{{ $SignatureFlow->signature_date}}</td>
+                   <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
+                   <td>{{ $SignatureFlow->employee }}</td>
+                   <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
+                   <td>{{ $SignatureFlow->type }}</td>
+                   <td>@if($SignatureFlow->status === null)
+                       @elseif($SignatureFlow->status === 1) Aceptada
+                       @elseif($SignatureFlow->status === 0) Rechazada
+                       @elseif($SignatureFlow->status === 2) Devuelta
+                       @endif
+                  </td>
+                   <td>{{ $SignatureFlow->observation }}</td>
+                 </tr>
 
-             @if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
-             <tr>
-               <td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
-             </tr>
-             @endif
-           @endforeach
+                 @if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
+                 <tr>
+                   <td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
+                 </tr>
+                 @endif
+             @endforeach
+            @else
+            <!-- devolucion -->
+              @foreach($serviceRequest->SignatureFlows->sortBy('created_at') as $key => $SignatureFlow)
+                @if($SignatureFlow->status === null)
+                  <tr class="bg-light">
+                @elseif($SignatureFlow->status === 0)
+                  <tr class="bg-danger">
+                @elseif($SignatureFlow->status === 1)
+                  <tr>
+                @elseif($SignatureFlow->status === 2)
+                  <tr class="bg-warning">
+                @endif
+                   <td>{{ $SignatureFlow->signature_date}}</td>
+                   <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
+                   <td>{{ $SignatureFlow->employee }}</td>
+                   <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
+                   <td>{{ $SignatureFlow->type }}</td>
+                   <td>@if($SignatureFlow->status === null)
+                       @elseif($SignatureFlow->status === 1) Aceptada
+                       @elseif($SignatureFlow->status === 0) Rechazada
+                       @elseif($SignatureFlow->status === 2) Devuelta
+                       @endif
+                  </td>
+                   <td>{{ $SignatureFlow->observation }}</td>
+                 </tr>
+
+                 @if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
+                 <tr>
+                   <td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
+                 </tr>
+                 @endif
+             @endforeach
+            @endif
           </tbody>
       </table>
       </div>
