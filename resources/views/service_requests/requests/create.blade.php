@@ -522,10 +522,12 @@
 				$('#for_weekly_hours').attr('disabled', 'disabled');
 				$("#control_turnos").show();
 
-				// $("#div_mensual").attr('disabled','disabled');
 				$("#div_mensual :input").attr("disabled", true);
 				$("#div_mensual").hide();
-				// $('#div_turno').removeAttr('disabled');
+
+				$("#div_suma_alzada :input").attr("disabled", true);
+				$("#div_suma_alzada").hide();
+
 				$("#div_turno :input").attr("disabled", false);
 				$("#div_turno").show();
 
@@ -548,10 +550,12 @@
 				$('#for_weekly_hours').removeAttr('disabled');
 				$("#control_turnos").hide();
 
-				// $("#div_mensual").removeAttr('disabled');
 				$("#div_mensual :input").attr("disabled", false);
 				$("#div_mensual").show();
-				// $('#div_turno').attr('disabled','disabled');
+
+				$("#div_suma_alzada :input").attr("disabled", true);
+				$("#div_suma_alzada").hide();
+
 				$("#div_turno :input").attr("disabled", true);
 				$("#div_turno").hide();
 
@@ -676,12 +680,19 @@
 			// $('#div_turno').attr('disabled','disabled');
 			$("#div_turno :input").attr("disabled", true);
 			$("#div_turno").hide();
+
+			$("#div_mensual :input").attr("disabled", true);
+			$("#div_mensual").hide();
+
 		}else{
 			$("#div_turno :input").attr("disabled", false);
 			$("#div_turno").show();
 			// $('#div_turno').attr('disabled','disabled');
 			$("#div_suma_alzada :input").attr("disabled", true);
 			$("#div_suma_alzada").hide();
+
+			$("#div_mensual :input").attr("disabled", true);
+			$("#div_mensual").hide();
 		}
 	});
 
