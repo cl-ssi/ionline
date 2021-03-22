@@ -5,6 +5,9 @@ namespace App\Http\Livewire\ServiceRequest;
 use App\Holiday;
 use App\Models\ServiceRequests\Value;
 use Carbon\Carbon;
+use Carbon\CarbonInterface;
+use Carbon\CarbonInterval;
+use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -43,14 +46,14 @@ class ShowTotalHours extends Component
         switch ($this->serviceRequest->working_day_type) {
             case 'HORA MÉDICA':
                 foreach ($this->fulfillment->fulfillmentItems as $fulfillmentItem) {
-                    $hoursDay = $fulfillmentItem->start_date->diffInHoursFiltered(
+                    $hoursDayString = $fulfillmentItem->start_date->diffInHoursFiltered(
                         function ($date) {
                             if (in_array($date->hour, [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]))
                                 return true;
                             else return false;
                         }, $fulfillmentItem->end_date);
 
-                    $hoursNight = $fulfillmentItem->start_date->diffInHoursFiltered(
+                    $hoursNightString = $fulfillmentItem->start_date->diffInHoursFiltered(
                         function ($date) {
                             if (in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7]))
                                 return true;
@@ -58,11 +61,11 @@ class ShowTotalHours extends Component
                         }, $fulfillmentItem->end_date);
 
                     if (Auth::user()->can('be god')) {
-                        dump("{$fulfillmentItem->start_date} - {$fulfillmentItem->end_date} | dia: $hoursDay | Noche: $hoursNight");
+                        dump("{$fulfillmentItem->start_date} - {$fulfillmentItem->end_date} | dia: $hoursDayString | Noche: $hoursNightString");
                     }
 
-                    $this->totalHoursDay = $this->totalHoursDay + $hoursDay;
-                    $this->totalHoursNight = $this->totalHoursNight + $hoursNight;
+                    $this->totalHoursDay = $this->totalHoursDay + $hoursDayString;
+                    $this->totalHoursNight = $this->totalHoursNight + $hoursNightString;
                 }
 
                 $this->totalHours = $this->totalHoursDay + $this->totalHoursNight;
@@ -76,42 +79,88 @@ class ShowTotalHours extends Component
             case 'HORA EXTRA':
             case 'TURNO EXTRA':
             case 'OTRO':
+
+                $totalMinutes = 0;
+                $totalMinutesDay = 0;
+                $totalMinutesNight = 0;
                 foreach ($this->serviceRequest->shiftControls as $shiftControl) {
-                    $hoursDay = $shiftControl->start_date->diffInHoursFiltered(
-                        function ($date) {
-                            if (in_array($date->hour, [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]))
-                                return true;
-                            else return false;
-                        }, $shiftControl->end_date);
+//                    $hoursDay = $shiftControl->start_date->diffInHoursFiltered(
+//                        function ($date) {
+//                            if (in_array($date->hour, [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])){
+//                                return true;
+//                            }
+//                            else return false;
+//                        }, $shiftControl->end_date);
+//
+//                    $hoursNight = $shiftControl->start_date->diffInHoursFiltered(
+//                        function ($date) {
+//                            if (in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7]))
+//                                return true;
+//                            else return false;
+//                        }, $shiftControl->end_date);
+//
+//                    if ($shiftControl->start_date->minute != 0) {
+//                        if (in_array($shiftControl->start_date->hour, [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])) {
+//                            $hoursDay = $hoursDay - 1;
+//                        }else{
+//                            $hoursNight = $hoursNight - 1;
+//                        }
+//                    }elseif ($shiftControl->end_date->minute != 0) {
+//                        if (in_array($shiftControl->end_date->hour, [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])) {
+//                            $hoursDay = $hoursDay - 1;
+//                        }else{
+//                            $hoursNight = $hoursNight - 1;
+//                        }
+//                    }
 
-                    $hoursNight = $shiftControl->start_date->diffInHoursFiltered(
-                        function ($date) {
-                            if (in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7]))
-                                return true;
-                            else return false;
-                        }, $shiftControl->end_date);
 
-                    if (Auth::user()->can('be god')) {
-                        dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia: $hoursDay | Noche: $hoursNight");
+                    $period = new CarbonPeriod($shiftControl->start_date, '1 minute', $shiftControl->end_date);
+                    $minutesDay = 0;
+                    $minutesNight = 0;
+                    foreach ($period as $key => $minute) {
+                        if($key != 0){
+                            if ($minute->format('H:i:s') >= '08:00:00' && $minute->format('H:i:s') <= '20:59:00') {
+                                $minutesDay = $minutesDay + 1;
+                            } else {
+                                $minutesNight = $minutesNight + 1;
+                            }
+                        }
                     }
 
-                    $this->totalHoursDay = $this->totalHoursDay + $hoursDay;
-                    $this->totalHoursNight = $this->totalHoursNight + $hoursNight;
+
+                    $totalMinutesDay = $totalMinutesDay + $minutesDay;
+                    $totalMinutesNight = $totalMinutesNight + $minutesNight;
+
+                    $this->totalHoursDay = intdiv($totalMinutesDay, 60) . ':' . ($totalMinutesDay % 60);
+                    $this->totalHoursNight = intdiv($totalMinutesNight, 60) . ':' . ($totalMinutesNight % 60);
+
+                    //Calculo para el debug
+                    $hoursDayString = intdiv($minutesDay, 60) . ':' . ($minutesDay % 60);
+                    $hoursNightString = intdiv($minutesNight, 60) . ':' . ($minutesNight % 60);
+                    if (Auth::user()->can('be god')) {
+                        dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia: $hoursDayString | Noche: $hoursNightString");
+                    }
+
+                    //Calculo total que se ocupa para calcular monto
+                    $diffInMinutes = $shiftControl->start_date->diffInMinutes($shiftControl->end_date);
+                    $totalMinutes = $totalMinutes + $diffInMinutes;
                 }
 
-                $this->totalHours = $this->totalHoursDay + $this->totalHoursNight;
+
+//                $this->totalHours = $this->totalHoursDay + $this->totalHoursNight;
+                $this->totalHours = floor($totalMinutes / 60);
                 $this->totalAmount = $this->totalHours * $value->amount;
                 break;
             case 'DIURNO PASADO A TURNO':
                 foreach ($this->serviceRequest->shiftControls as $shiftControl) {
-                    $hoursDay = $shiftControl->start_date->diffInHoursFiltered(
+                    $hoursDayString = $shiftControl->start_date->diffInHoursFiltered(
                         function ($date) {
                             if (in_array($date->hour, [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]))
                                 return true;
                             else return false;
                         }, $shiftControl->end_date);
 
-                    $hoursNight = $shiftControl->start_date->diffInHoursFiltered(
+                    $hoursNightString = $shiftControl->start_date->diffInHoursFiltered(
                         function ($date) {
                             if (in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7]))
                                 return true;
@@ -119,16 +168,16 @@ class ShowTotalHours extends Component
                         }, $shiftControl->end_date);
 
                     if ($shiftControl->start_date->dayOfWeek == 6 || $shiftControl->start_date->dayOfWeek == 0) {
-                        $hoursNight = $hoursNight + $hoursDay;
-                        $hoursDay = 0;
+                        $hoursNightString = $hoursNightString + $hoursDayString;
+                        $hoursDayString = 0;
                     }
 
                     if (Auth::user()->can('be god')) {
-                        dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia Semana: {$shiftControl->start_date->dayOfWeek} | dia: $hoursDay | Noche: $hoursNight");
+                        dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia Semana: {$shiftControl->start_date->dayOfWeek} | dia: $hoursDayString | Noche: $hoursNightString");
                     }
 
-                    $this->totalHoursDay = $this->totalHoursDay + $hoursDay;
-                    $this->totalHoursNight = $this->totalHoursNight + $hoursNight;
+                    $this->totalHoursDay = $this->totalHoursDay + $hoursDayString;
+                    $this->totalHoursNight = $this->totalHoursNight + $hoursNightString;
                 }
 
 
