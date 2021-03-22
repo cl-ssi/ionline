@@ -138,6 +138,22 @@
 		@endforeach
 	</div>
 
+	<div class="row" id="div_suma_alzada">
+
+		@foreach($sumaAlzadaFlow as $key => $signatureFlow)
+			<fieldset class="form-group col-sm-4">
+					<label for="for_users">{{$key}}</label>
+					<select name="users[]" class="form-control selectpicker" id="{{$key}}Turnos" data-live-search="true" required="" data-size="5" readonly>
+						@foreach($users as $key => $user)
+							<option value="{{$user->id}}" @if($user->id == $signatureFlow) selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						@endforeach
+					</select>
+			</fieldset>
+		@endforeach
+	</div>
+
+
+
 	<br>
 
 	@livewire('service-request.employee-data')
@@ -494,6 +510,8 @@
 
 		$("#control_turnos").hide();
 		$("#div_turno").hide();
+		$("#div_suma_alzada").hide();
+
 		$('#program_contract_type').on('change', function() {
 
 			if (this.value == "Horas") {
@@ -652,19 +670,18 @@
 	$('#type').on('change', function() {
 		var value = this.value;
 
-		@foreach($signatureFlows as $key => $signatureFlow)
-			$("[id='{{$key}}']").removeAttr('disabled');
-			$("[id='{{$key}}']").selectpicker('refresh');
-		@endforeach
-		//subdirección gestión del cuidado al paciente
 		if (value == "Suma alzada") {
-			// $("[id='Director Hospital']").hide();
-			@foreach($signatureFlows as $key => $signatureFlow)
-				if ('{{$key}}' != 'Director Hospital' && '{{$key}}' != 'S.G.D.P Hospital') {
-					$("[id='{{$key}}']").attr('disabled', 'disabled');
-					$("[id='{{$key}}']").selectpicker('refresh');
-				}
-			@endforeach
+			$("#div_suma_alzada :input").attr("disabled", false);
+			$("#div_suma_alzada").show();
+			// $('#div_turno').attr('disabled','disabled');
+			$("#div_turno :input").attr("disabled", true);
+			$("#div_turno").hide();
+		}else{
+			$("#div_turno :input").attr("disabled", false);
+			$("#div_turno").show();
+			// $('#div_turno').attr('disabled','disabled');
+			$("#div_suma_alzada :input").attr("disabled", true);
+			$("#div_suma_alzada").hide();
 		}
 	});
 
