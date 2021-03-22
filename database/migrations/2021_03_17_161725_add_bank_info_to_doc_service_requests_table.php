@@ -17,7 +17,7 @@ class AddBankInfoToDocServiceRequestsTable extends Migration
             //
             $table->foreignId('bank_id')->after('payment_date')->nullable();
             $table->foreign('bank_id')->references('id')->on('cfg_banks');
-            $table->integer('account_number')->after('bank_id')->nullable();            
+            $table->integer('account_number')->after('bank_id')->nullable();
             $table->string('pay_method')->after('account_number')->nullable();            
         });
     }
@@ -34,7 +34,7 @@ class AddBankInfoToDocServiceRequestsTable extends Migration
             $table->dropForeign(['bank_id']);
             $table->dropColumn('bank_id');
             $table->dropColumn('account_number');
-            $table->dropColumn('pay_method');            
+            $table->dropColumn('pay_method');
         });
     }
 }
