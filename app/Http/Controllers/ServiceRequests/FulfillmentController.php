@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Fulfillment;
 use App\Models\ServiceRequests\FulfillmentItem;
+use App\Rrhh\OrganizationalUnit;
 use DateTime;
 use DatePeriod;
 use DateInterval;
@@ -25,25 +26,42 @@ class FulfillmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $user_id = Auth::user()->id;
         $serviceRequests = null;
+
+        $responsability_center_ou_id = $request->responsability_center_ou_id;
+        $name = $request->name;
 
         if (Auth::user()->can('Service Request: fulfillments responsable')) {
           $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                                $subQuery->where('responsable_id',$user_id);
                                                $subQuery->orwhere('user_id',$user_id);
                                              })
+                                          ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
+                                               return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+                                            })
+                                          ->when($name != NULL, function ($q) use ($name) {
+                                                  return $q->where('name','LIKE','%'.$name.'%');
+                                               })
                                            // ->where('program_contract_type','Mensual')
                                            ->orderBy('id','asc')
-                                           ->get();
+                                           ->paginate(100);
+                                           // ->get();
         }
         // Service Request: fulfillments rrhh - Service Request: fulfillments finance
         else{
           $serviceRequests = ServiceRequest::orderBy('id','asc')
+                                          ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
+                                               return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+                                            })
+                                          ->when($name != NULL, function ($q) use ($name) {
+                                                  return $q->where('name','LIKE','%'.$name.'%');
+                                               })
                                            // ->where('program_contract_type','Mensual')
-                                           ->get();
+                                           ->paginate(100);
+                                           // ->get();
         }
 
 
@@ -80,8 +98,9 @@ class FulfillmentController extends Controller
           }
         }
 
+        $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
 
-        return view('service_requests.requests.fulfillments.index',compact('serviceRequests'));
+        return view('service_requests.requests.fulfillments.index',compact('serviceRequests','responsabilityCenters','request'));
     }
 
     /**
