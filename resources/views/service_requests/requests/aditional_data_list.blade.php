@@ -20,6 +20,10 @@
       @endforeach
     </select>
     <div class="input-group-prepend">
+      <span class="input-group-text">Id</span>
+    </div>
+    <input type="text" name="id" value="{{$request->id}}">
+    <div class="input-group-prepend">
       <span class="input-group-text">Profesional</span>
     </div>
     <input type="text" name="name" value="{{$request->name}}">

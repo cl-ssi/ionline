@@ -33,17 +33,21 @@ class FulfillmentController extends Controller
 
         $responsability_center_ou_id = $request->responsability_center_ou_id;
         $name = $request->name;
+        $id = $request->id;
 
         if (Auth::user()->can('Service Request: fulfillments responsable')) {
           $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                                $subQuery->where('responsable_id',$user_id);
                                                $subQuery->orwhere('user_id',$user_id);
-                                             })
+                                               })
                                           ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
                                                return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
                                             })
                                           ->when($name != NULL, function ($q) use ($name) {
                                                   return $q->where('name','LIKE','%'.$name.'%');
+                                               })
+                                          ->when($id != NULL, function ($q) use ($id) {
+                                                 return $q->where('id',$id);
                                                })
                                            // ->where('program_contract_type','Mensual')
                                            ->orderBy('id','asc')
@@ -54,10 +58,13 @@ class FulfillmentController extends Controller
         else{
           $serviceRequests = ServiceRequest::orderBy('id','asc')
                                           ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
-                                               return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+                                                return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
                                             })
                                           ->when($name != NULL, function ($q) use ($name) {
-                                                  return $q->where('name','LIKE','%'.$name.'%');
+                                                return $q->where('name','LIKE','%'.$name.'%');
+                                               })
+                                          ->when($id != NULL, function ($q) use ($id) {
+                                                return $q->where('id',$id);
                                                })
                                            // ->where('program_contract_type','Mensual')
                                            ->paginate(100);
