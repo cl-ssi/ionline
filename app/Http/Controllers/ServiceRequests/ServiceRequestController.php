@@ -104,7 +104,7 @@ class ServiceRequestController extends Controller
                                      ->orderBy('id','asc')
                                      ->paginate(100);
                                      // ->get();
-    $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)->orderBy('name', 'ASC')->get();
+    $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
     return view('service_requests.requests.aditional_data_list', compact('serviceRequests','responsabilityCenters','request'));
   }
 
