@@ -118,7 +118,7 @@ class ShowTotalHours extends Component
                     $minutesDay = 0;
                     $minutesNight = 0;
                     foreach ($period as $key => $minute) {
-                        if($key != 0){
+                        if ($key != 0) {
                             if ($minute->format('H:i:s') >= '08:00:00' && $minute->format('H:i:s') <= '20:59:00') {
                                 $minutesDay = $minutesDay + 1;
                             } else {
@@ -127,19 +127,18 @@ class ShowTotalHours extends Component
                         }
                     }
 
-
-                    $totalMinutesDay = $totalMinutesDay + $minutesDay;
-                    $totalMinutesNight = $totalMinutesNight + $minutesNight;
-
-                    $this->totalHoursDay = intdiv($totalMinutesDay, 60) . ':' . ($totalMinutesDay % 60);
-                    $this->totalHoursNight = intdiv($totalMinutesNight, 60) . ':' . ($totalMinutesNight % 60);
-
                     //Calculo para el debug
-                    $hoursDayString = intdiv($minutesDay, 60) . ':' . ($minutesDay % 60);
-                    $hoursNightString = intdiv($minutesNight, 60) . ':' . ($minutesNight % 60);
+                    $hoursDayString = sprintf('%d:%02d', intdiv($minutesDay, 60), ($minutesDay % 60));
+                    $hoursNightString = sprintf('%d:%02d', intdiv($minutesNight, 60), ($minutesNight % 60));
                     if (Auth::user()->can('be god')) {
                         dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia: $hoursDayString | Noche: $hoursNightString");
                     }
+
+                    //Horas noche dia
+                    $totalMinutesDay = $totalMinutesDay + $minutesDay;
+                    $totalMinutesNight = $totalMinutesNight + $minutesNight;
+                    $this->totalHoursDay = sprintf('%d:%02d', intdiv($totalMinutesDay, 60), ($totalMinutesDay % 60));
+                    $this->totalHoursNight = sprintf('%d:%02d', intdiv($totalMinutesNight, 60), ($totalMinutesNight % 60));
 
                     //Calculo total que se ocupa para calcular monto
                     $diffInMinutes = $shiftControl->start_date->diffInMinutes($shiftControl->end_date);
