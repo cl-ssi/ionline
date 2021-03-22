@@ -37,8 +37,6 @@ use App\Http\Controllers\ServiceRequests\SignatureFlowController;
 
 
 
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -338,13 +336,17 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     });
     */
 
-
+    Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
+        // Rutas de service request
+        Route::get('export-sirh','ServiceRequests\ServiceRequestController@export_sirh')->name('export-sirh');
+        Route::get('export-sirh-txt', 'ServiceRequests\ServiceRequestController@export_sirh_txt')->name('export-sirh-txt');
+    });
 
     //Route::resource('shift_control', 'ServiceRequests\ShiftControlController')->middleware('auth');
     Route::post('service_requests.derive','ServiceRequests\ServiceRequestController@derive')->name('service_requests.derive')->middleware('auth');
     Route::get('service_requests.consolidated_data','ServiceRequests\ServiceRequestController@consolidated_data')->name('service_requests.consolidated_data')->middleware('auth');
     Route::get('service_requests.pending_requests','ServiceRequests\ServiceRequestController@pending_requests')->name('service_requests.pending_requests')->middleware('auth');
-    Route::get('service_requests/export-sirh','ServiceRequests\ServiceRequestController@export_sirh')->name('service_requests.export_sirh')->middleware('auth');
+
     Route::get('service_requests.aditional_data_list','ServiceRequests\ServiceRequestController@aditional_data_list')->name('service_requests.aditional_data_list')->middleware('auth');
     Route::get('service_requests.transfer_requests','ServiceRequests\ServiceRequestController@transfer_requests')->name('service_requests.transfer_requests')->middleware('auth');
     Route::put('service_requests/update_aditional_data/{serviceRequest}', 'ServiceRequests\ServiceRequestController@update_aditional_data')->middleware('auth')->name('service_requests.update_aditional_data');

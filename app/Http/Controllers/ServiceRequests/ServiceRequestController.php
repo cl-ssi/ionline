@@ -504,8 +504,11 @@ class ServiceRequestController extends Controller
     return view('service_requests.requests.consolidated_data',compact('serviceRequests','serviceRequestsRejected'));
   }
 
-
   public function export_sirh() {
+    return view('service_requests.export_sirh');
+  }
+
+  public function export_sirh_txt() {
     // foreach ($serviceRequests as $key => $serviceRequest) {
     //   foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
     //     $start_date = Carbon::parse($shiftControl->start_date);

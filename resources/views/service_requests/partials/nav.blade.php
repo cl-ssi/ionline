@@ -51,7 +51,7 @@
 
             @can('Service Request: consolidated data')
             <a class="dropdown-item"
-                href="{{ route('rrhh.service_requests.export_sirh') }}">
+                href="{{ route('rrhh.service-request.export-sirh') }}">
                 <i class="far fa-file"></i> Formato SIRH
             </a>
             @endcan
