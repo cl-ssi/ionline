@@ -254,7 +254,7 @@ class ServiceRequestController extends Controller
    */
   public function store(Request $request)
   {
-    dd($request->users);
+    // dd($request->users);
     //dd($request->users);
       //validation existence
       $serviceRequest = ServiceRequest::where('rut',$request->run."-".$request->dv)
