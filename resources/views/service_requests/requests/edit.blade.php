@@ -443,9 +443,16 @@
 
 
   @can('Service Request: additional data rrhh')
-
-    <button type="submit" class="btn btn-primary">Guardar</button>
-
+    <div class="form-group row">
+      <div class="col-sm-3">
+      </div>
+      <div class="col-sm-6">
+        <input type="text" class="form-control" name="observation" placeholder="Observación" value="{{$serviceRequest->observation}}">
+      </div>
+      <div class="col-sm-3">
+        <button type="submit" class="form-control btn btn-primary">Guardar</button>
+      </div>
+    </div>
   @else
 
     <!-- solo el creador de la solicitud puede editar  -->
@@ -467,7 +474,7 @@
 
 
 
-  <br><br>
+  <br>
 
   </form>
 
@@ -819,13 +826,23 @@
 
 
 @can('Service Request: delete request')
-
-  <form method="POST" action="{{ route('rrhh.service_requests.destroy', $serviceRequest) }}" enctype="multipart/form-data" class="d-inline">
+  <br>
+  <form method="POST" action="{{ route('rrhh.service_requests.destroy_with_parameters') }}" enctype="multipart/form-data" class="d-inline">
       @csrf
-      @method('DELETE')
-      <button type="submit" class="btn btn-danger">Eliminar solicitud</button>
-  </form>
+      @method('POST')
+      <input type="hidden" name="id" value="{{$serviceRequest->id}}">
 
+      <div class="form-group row">
+        <div class="col-sm-3">
+        </div>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" name="observation" placeholder="Observación">
+        </div>
+        <div class="col-sm-3">
+          <button type="submit" class="form-control btn btn-danger">Eliminar solicitud</button>
+        </div>
+      </div>
+  </form>
 @endcan
 
     @canany(['Service Request: audit'])
