@@ -260,7 +260,10 @@ class ServiceRequestController extends Controller
       $serviceRequest = ServiceRequest::where('rut',$request->run."-".$request->dv)
                                       ->where('program_contract_type',$request->program_contract_type)
                                       ->where('start_date',$request->start_date)
-                                      ->where('end_date',$request->end_date)->get();
+                                      ->where('end_date',$request->end_date)
+                                      ->where('responsability_center_ou_id',$request->responsability_center_ou_id)
+                                      ->where('working_day_type',$request->working_day_type)
+                                      ->get();
       if ($serviceRequest->count() > 0) {
         session()->flash('info', 'Ya existe una solicitud ingresada para este funcionario (Solicitud nro <b>'.$serviceRequest->first()->id.'</b> )');
         return redirect()->back();
