@@ -484,6 +484,16 @@ class ServiceRequestController extends Controller
 
   }
 
+  public function destroy_with_parameters(Request $request){
+    $serviceRequest = ServiceRequest::find($request->id);
+    $serviceRequest->observation = $request->observation;
+    $serviceRequest->save();
+
+    $serviceRequest->delete();
+    session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido eliminada.');
+    return redirect()->route('rrhh.service_requests.index');
+  }
+
   public function consolidated_data(Request $request)
   {
 
