@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('service_requests.partials.nav')
+
 <h3>Solicitud de Contratación de Servicios</h3>
 
 <form method="POST" enctype="multipart/form-data" action="{{ route('rrhh.service_requests.store') }}">
@@ -444,7 +446,7 @@
 	<div class="row">
 		<fieldset class="form-group col-3 col-md-3">
 				<label for="for_rrhh_team">Equipo RRHH</label>
-				<select name="rrhh_team" class="form-control" required id="rrhh_team">
+				<select name="rrhh_team" class="form-control" id="rrhh_team" required>
 
 					<option value=""></option>
 					<option value="Residencia Médica" >Residencia Médica</option>
@@ -479,7 +481,7 @@
 
 		<fieldset class="form-group col-3 col-md-3">
 				<label for="for_digera_strategy">Estrategia Digera Covid</label>
-				<select name="digera_strategy" class="form-control" id="digera_strategy">
+				<select name="digera_strategy" class="form-control" id="digera_strategy" required>
 					<option value=""></option>
 					<option value="Camas MEDIAS Aperturadas" >Camas MEDIAS Aperturadas</option>
 					<option value="Camas MEDIAS Complejizadas" >Camas MEDIAS Complejizadas</option>
