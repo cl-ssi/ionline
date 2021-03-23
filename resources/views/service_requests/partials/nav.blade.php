@@ -31,7 +31,7 @@
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.service_requests.transfer_requests') }}"
             href="{{ route('rrhh.service_requests.transfer_requests') }}">
-            <i class="fas fa-sign-in-alt"></i> Transferecia de solicitudes
+            <i class="fas fa-sign-in-alt"></i> Transferencia de solicitudes
         </a>
     </li>
     @endcan
@@ -67,6 +67,14 @@
             <a class="dropdown-item {{ active('rrhh.service_requests.report.toPay') }}"
                 href="{{ route('rrhh.service_requests.report.toPay') }}">
                 <i class="fas fa-file-invoice-dollar"></i> Reporte para pagos
+            </a>
+            @endcan
+
+            
+            @canany(['Service Request: pending requests'])
+            <a class="dropdown-item {{ active('rrhh.service_requests.report.withoutBankDetails') }}"
+                href="{{ route('rrhh.service_requests.report.withoutBankDetails') }}">
+                <i class="fas fa-piggy-bank"></i> Sin Cuentas Bancarias
             </a>
             @endcan
 
