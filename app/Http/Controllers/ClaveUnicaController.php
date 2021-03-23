@@ -167,8 +167,6 @@ class ClaveUnicaController extends Controller
                         $user->save();
                         
                     }
-                    Auth::login($user, true);
-                    $route = '/external';
                     
                     
 		        }
@@ -184,11 +182,11 @@ class ClaveUnicaController extends Controller
                 $user->fathers_family = "Ap1";
                 $user->mothers_family = "Ap2";
                 $user->email = "email@email.com";
-                $route = '/external';
             }            
+            Auth::guard('external')->login($user, true);
             
 
-            return redirect()->route($route);
+            return redirect()->route('external');
             //Auth::loginUsingId($user->id, true);
         }
     }
