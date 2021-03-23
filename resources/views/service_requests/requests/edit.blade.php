@@ -571,35 +571,45 @@
 
         <div class="form-row">
 
-          <fieldset class="form-group col col-md">
+          <fieldset class="form-group col col-md-3">
 					    <label for="for_name">N°Contrato</label>
               <input type="text" class="form-control" name="contract_number" value="{{$serviceRequest->contract_number}}">
 					</fieldset>
 
-          <fieldset class="form-group col col-md">
+          <fieldset class="form-group col col-md-3">
 					    <label for="for_resolution_number">N° Resolución</label>
               <input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
 					</fieldset>
 
-          <fieldset class="form-group col col-md">
+          <fieldset class="form-group col col-md-3">
               <label for="for_resolution_date">Fecha Resolución</label>
               <input type="date" class="form-control" id="for_resolution_date" name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
           </fieldset>
 
+          <fieldset class="form-group col col-md-2">
+            <label for="for_sirh_contract_registration">&nbsp;</label>
+            <div>
+              <a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+                class="btn btn-outline-secondary" target="_blank" title="Resolución">
+              <span class="fas fa-file-pdf" aria-hidden="true"></span></a>
+            </div>
+          </fieldset>
+
         </div>
+
         <div class="form-row">
 
-          <fieldset class="form-group col col-md">
+          <fieldset class="form-group col col-md-3">
 					    <label for="for_net_amount">Monto Neto</label>
               <input type="text" class="form-control" name="net_amount" value="{{$serviceRequest->net_amount}}">
 					</fieldset>
 
-          <fieldset class="form-group col col-md">
+          <fieldset class="form-group col col-md-3">
 					    <label for="for_gross_amount">Monto Bruto</label>
               <input type="text" class="form-control" name="gross_amount" value="{{$serviceRequest->gross_amount}}">
 					</fieldset>
 
-          <fieldset class="form-group col col-md">
+          <fieldset class="form-group col col-md-2">
               <label for="for_sirh_contract_registration">Registrado en SIRH</label>
               <select name="sirh_contract_registration" class="form-control">
                 <option value=""></option>
