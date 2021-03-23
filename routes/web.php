@@ -65,7 +65,7 @@ Route::post('/login/external', [LoginController::class,'externalLogin']);
 
 
 Route::group(['middleware' => 'auth:external'], function () {
-    Route::view('/testing', 'testing');
+    Route::view('/external', 'external');
 });
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
@@ -80,6 +80,7 @@ Route::post('/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
 Route::get('/claveunica', 'ClaveUnicaController@autenticar')->name('claveunica.autenticar');
 Route::get('/claveunica/callback', 'ClaveUnicaController@callback')->name('claveunica.callback');
 Route::get('/claveunica/login/{access_token}', 'ClaveUnicaController@login')->name('claveunica.login');
+Route::get('/claveunica/login-external/{access_token}', 'ClaveUnicaController@loginExternal');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
