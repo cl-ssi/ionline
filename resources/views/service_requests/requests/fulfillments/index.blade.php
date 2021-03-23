@@ -20,6 +20,14 @@
       @endforeach
     </select>
     <div class="input-group-prepend">
+      <span class="input-group-text">Tipo</span>
+    </div>
+    <select class="form-control selectpicker" data-live-search="true" name="program_contract_type" data-size="5">
+      <option value="">Todos</option>
+      <option value="Mensual" @if($request->program_contract_type == "Mensual") selected @endif>Mensual</option>
+      <option value="Horas" @if($request->program_contract_type == "Horas") selected @endif>Horas</option>
+    </select>
+    <div class="input-group-prepend">
       <span class="input-group-text">Id</span>
     </div>
     <input type="text" name="id" value="{{$request->id}}">
