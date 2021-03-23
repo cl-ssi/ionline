@@ -10,6 +10,7 @@ class MonthlyQuotes extends Component
 {
     public $serviceRequest;
     public $valores;
+    public $resultadoEnNumero = false;
 
     public function render()
     {
@@ -80,18 +81,32 @@ class MonthlyQuotes extends Component
 
         }
 
-        $string = count($valores) . " cuotas" ;
+        if ($this->resultadoEnNumero) {
+            $this->valores = $valores;
+        }else{
+            $nroCuotas = count($valores);
+            if ($nroCuotas == 1){
+                $string = $nroCuotas . " cuota" ;
+                $string .= " de $" . number_format(current($valores)) . " el mes de " . Carbon::create()->day(1)->month(key($valores))->monthName ."; ";
+            }
+            else{
+                $string = $nroCuotas . " cuotas" ;
 
-        foreach ($valores as $key => $valor) {
-            if ($key === array_key_last($valores)) {
-                $string .= " y una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->monthName ."; ";
+                foreach ($valores as $key => $valor) {
+                    if ($key === array_key_last($valores)) {
+                        $string .= " y una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->monthName ."; ";
+                    }
+                    else {
+                        $string .= ", una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->monthName;
+                    }
+                }
             }
-            else {
-                $string .= ", una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->monthName;
-            }
+
+
+            $this->valores = $string;
         }
 
-        $this->valores = $string;
+
 
         return view('livewire.service-request.monthly-quotes');
     }
