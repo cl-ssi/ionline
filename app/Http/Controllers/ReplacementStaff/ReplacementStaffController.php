@@ -35,7 +35,7 @@ class ReplacementStaffController extends Controller
         $replacementStaff = ReplacementStaff::where('run',Auth::guard('external')->user()->id)->first();
         if($replacementStaff == null)
         {
-            $userexternal = UserExternal::where('run',Auth::guard('external')->user()->id)->first();
+            $userexternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();
 
             $replacementStaff = new ReplacementStaff();
             $replacementStaff->run = $userexternal->id;
