@@ -63,7 +63,10 @@ class LoginController extends Controller
     {
 		if(Auth::check())
 		{
-			Auth::logout();
+			//Auth::guard('external')->logout();
+            Auth::logout();           
+            
+            
             request()->session()->invalidate();
             request()->session()->regenerateToken();
 
@@ -72,6 +75,12 @@ class LoginController extends Controller
             $url = $url_logout.urlencode($url_redirect);
             return redirect()->to($url)->send();
 		}
+
+        if(Auth::guard('external')->check()) // significa que es un usuario externo
+        {
+            Auth::guard('external')->logout();
+            return redirect('/');
+        }
 
 		return redirect('/');
 	}
@@ -110,6 +119,26 @@ class LoginController extends Controller
             return redirect()->intended('/external');
         }
         return back()->withInput($request->only('email', 'remember'));
+        
+    }
+
+
+
+    public function LogoutExternal(Request $request)
+    {
+        
+        dd('llegue');
+        Auth::guard('external')->logout();
+        
+        $request->session()->flush();
+        $request->session()->regenerate();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        $url_logout = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
+        $url_redirect = "https://i.saludiquique.cl/logout";
+        $url = $url_logout.urlencode($url_redirect);
+        return redirect()->to($url)->send();
         
     }
 
