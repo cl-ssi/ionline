@@ -55,7 +55,7 @@ class ServiceRequestController extends Controller
             //with responsable_id
             if ($user_id == $signatureFlow->responsable_id) {
               if ($signatureFlow->status == NULL) {
-                if ($serviceRequest->SignatureFlows->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL) {
+                if ($serviceRequest->SignatureFlows->where('status','!=',2)->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL) {
                   $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
                 }else{
                   $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
