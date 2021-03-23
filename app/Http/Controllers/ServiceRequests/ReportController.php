@@ -114,4 +114,20 @@ class ReportController extends Controller
         return view('service_requests.reports.pending_resolutions', compact('serviceRequests'));
     }
 
+
+    public function withoutBankDetails()
+    {
+
+        $servicerequests = ServiceRequest::whereHas("fulfillments", function($subQuery) {
+            $subQuery->where('has_invoice_file',1);
+          })          
+          ->get();
+
+        return view('service_requests.reports.without_bank_details', compact('servicerequests'));
+    
+    }
+
+
+
+
 }
