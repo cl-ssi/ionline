@@ -38,4 +38,11 @@ class SignatureFlow extends Model implements Auditable
     }
 
     protected $table = 'doc_signature_flow';
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['signature_date'];
 }

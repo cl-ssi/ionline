@@ -79,6 +79,11 @@ class User extends Authenticatable
         return "{$this->name} {$this->fathers_family} {$this->mothers_family}";
     }
 
+    public function getShortNameAttribute()
+    {
+        return "{$this->name} {$this->fathers_family}";
+    }
+
     public function getFirstNameAttribute() {
         $names = explode(' ',trim($this->name));
         return "{$names[0]}";
