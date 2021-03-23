@@ -445,7 +445,7 @@
 
 	<div class="row">
 		<fieldset class="form-group col-3 col-md-3">
-				<label for="for_rrhh_team">Equipo RRHH</label>
+				<label for="for_rrhh_team">Equipo RRHH*</label>
 				<select name="rrhh_team" class="form-control" id="rrhh_team" required>
 
 					<option value=""></option>
@@ -464,7 +464,7 @@
 					<option value="Químico Farmacéutico" >Químico Farmacéutico</option>
 					<option value="Bioquímico" >Bioquímico</option>
 					<option value="Fonoaudiologo" >Fonoaudiologo</option>
-
+					<option value="Prevencionista Diurno">Prevencionista Diurno</option>
 					<option value="Administrativo Diurno" >Administrativo Diurno</option>
 					<option value="Administrativo Turno" >Administrativo Turno</option>
 					<option value="Biotecnólogo Turno" >Biotecnólogo Turno</option>
