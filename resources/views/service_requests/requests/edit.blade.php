@@ -620,7 +620,19 @@
 
         </div>
 
-        <button type="submit" class="btn btn-danger">Guardar</button>
+          <div class="form-row">
+              <fieldset class="form-group col col-md-3">
+                  <button type="submit" class="btn btn-danger">Guardar</button>
+              </fieldset>
+              <fieldset class="form-group col col-md-6">
+                  @if($serviceRequest->program_contract_type == 'Mensual')
+                      @livewire('service-request.monthly-quotes', ['serviceRequest' => $serviceRequest, 'resultadoEnNumero' => true])
+                  @else
+                     @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
+                  @endif
+              </fieldset>
+          </div>
+
 
       </div>
 
