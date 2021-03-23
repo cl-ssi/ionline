@@ -93,11 +93,15 @@ class ServiceRequestController extends Controller
 
     // dd($request);
     $responsability_center_ou_id = $request->responsability_center_ou_id;
+    $program_contract_type = $request->program_contract_type;
     $name = $request->name;
     $id = $request->id;
     // dd($responsability_center_ou_id);
     $serviceRequests = ServiceRequest::when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
                                              return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+                                          })
+                                     ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
+                                            return $q->where('program_contract_type',$program_contract_type);
                                           })
                                      ->when($name != NULL, function ($q) use ($name) {
                                              return $q->where('name','LIKE','%'.$name.'%');
