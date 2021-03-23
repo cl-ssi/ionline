@@ -23,41 +23,42 @@ class ReportController extends Controller
         // $week = $request->week;
         // $current_week = $now->format('Y').'-W'.$now->week();
 
-        if ($request->week != NULL) {
-          $current_week = $request->week;
-        }else{
-          $current_week = date('Y').'-W'.date('W');
-        }
+        // if ($request->week != NULL) {
+        //   $current_week = $request->week;
+        // }else{
+        //   $current_week = date('Y').'-W'.date('W');
+        // }
+        //
+        // $now = Carbon::now();
+        // list($year, $week) = explode('-W',$current_week);
+        // $now->setISODate($year,$week);
+        // $from = $now->startOfWeek()->format('Y-m-d 00:00:00');
+        // $to   = $now->endOfWeek()->format('Y-m-d 23:59:59');
 
-        $now = Carbon::now();
-        list($year, $week) = explode('-W',$current_week);
-        $now->setISODate($year,$week);
-        $from = $now->startOfWeek()->format('Y-m-d 00:00:00');
-        $to   = $now->endOfWeek()->format('Y-m-d 23:59:59');
 
-
-        $fulfillments = Fulfillment::whereHas("ServiceRequest", function($subQuery) use($from,$to){
-                                       $subQuery->whereBetween('request_date',[$from,$to]);
+        $fulfillments = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
+                                       $subQuery->where('has_resolution_file',1);
                                      })
+                                     ->where('has_invoice_file',1)
                                      ->get();
 
-        // dd($fulfillments);
-        return view('service_requests.reports.to_pay', compact('current_week','fulfillments'));
+        return view('service_requests.reports.to_pay', compact('fulfillments'));
     }
 
-    public function bankPaymentFile($selected_week)
+    public function bankPaymentFile()
     {
-        $now = Carbon::now();
-        list($year, $week) = explode('-W', $selected_week);
-        $now->setISODate($year, $week);
-        $from = $now->startOfWeek()->format('Y-m-d 00:00:00');
-        $to = $now->endOfWeek()->format('Y-m-d 23:59:59');
-        $fromFormatted = $now->startOfWeek()->format('d-m-Y');
+        // $now = Carbon::now();
+        // list($year, $week) = explode('-W', $selected_week);
+        // $now->setISODate($year, $week);
+        // $from = $now->startOfWeek()->format('Y-m-d 00:00:00');
+        // $to = $now->endOfWeek()->format('Y-m-d 23:59:59');
+        // $fromFormatted = $now->startOfWeek()->format('d-m-Y');
 
-        $fulfillments = Fulfillment::whereHas("ServiceRequest", function ($subQuery) use ($from, $to) {
-            $subQuery->whereBetween('request_date', [$from, $to]);
-        })
-            ->get();
+        // $fulfillments = Fulfillment::whereHas("ServiceRequest", function ($subQuery) use ($from, $to) {
+        //     $subQuery->whereBetween('request_date', [$from, $to]);
+        // })
+        //     ->get();
+        $fulfillments = Fulfillment::get();
 
         $txt = '';
         foreach ($fulfillments as $fulfillment) {
