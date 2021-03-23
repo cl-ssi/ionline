@@ -10,7 +10,7 @@
     <div class="form-row">
     <fieldset class="form-group col-4">
         <label>Banco</label>        
-        <select wire:model="bank_id" class="form-control" required>
+        <select wire:model.lazy="bank_id" class="form-control" required>
         <option value="">Seleccionar Banco</option>
         @foreach($banks as $bank)
         <option value="{{$bank->id}}">{{$bank->name}}</option>
@@ -22,7 +22,7 @@
 
     <fieldset class="form-group col-4">
         <label>Número de Cuenta</label>
-        <input type="number" wire:model="account_number" class="form-control" required>
+        <input type="number" wire:model.lazy="account_number" class="form-control" required>
         @error('account_number') <span class="text-danger">{{ $message }}</span> @enderror
     </fieldset>
     
@@ -30,7 +30,7 @@
 
     <fieldset class="form-group col-4">
         <label for="for_pay_method">Tipo de Pago</label>
-        <select wire:model="pay_method" class="form-control">
+        <select wire:model.lazy="pay_method" class="form-control">
         <option value="">Seleccionar Forma de Pago</option>
         <option value="01">CTA CORRIENTE / CTA VISTA</option>
         <option value="02">CTA AHORRO</option>
@@ -43,7 +43,7 @@
     <div class="form-row">
     <fieldset class="form-group col-4">
         <label>Número de Teléfono</label>
-        <input type="text" wire:model="phone_number" class="form-control" required>
+        <input type="text" wire:model.lazy="phone_number" class="form-control" required>
         @error('phone_number') <span class="text-danger">{{ $message }}</span> @enderror
     </fieldset>
     
