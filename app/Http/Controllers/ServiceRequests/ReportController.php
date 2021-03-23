@@ -58,7 +58,11 @@ class ReportController extends Controller
         //     $subQuery->whereBetween('request_date', [$from, $to]);
         // })
         //     ->get();
-        $fulfillments = Fulfillment::get();
+        $fulfillments = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
+                                       $subQuery->where('has_resolution_file',1);
+                                     })
+                                     ->where('has_invoice_file',1)
+                                     ->get();
 
         $txt = '';
         foreach ($fulfillments as $fulfillment) {
