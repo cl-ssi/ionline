@@ -22,7 +22,7 @@
 
     <fieldset class="form-group col-4">
         <label>Número de Cuenta</label>
-        <input type="number" wire:model="account_number" class="form-control" required>
+        <input type="text" wire:model="account_number" class="form-control" required>
         @error('account_number') <span class="text-danger">{{ $message }}</span> @enderror
     </fieldset>
     
