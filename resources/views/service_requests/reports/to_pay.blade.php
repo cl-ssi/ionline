@@ -9,7 +9,7 @@
 <h3 class="mb-3">Reporte para pagos</h3>
 
 
-<h3 class="mb-3 mt-3">Pendientes de pago</h3>
+<h4 class="mb-3 mt-3">Pendientes de pago</h4>
 {{--@can('be god')--}}
     <a href="{{route('rrhh.service_requests.report.bankPaymentFile')}}" class="btn btn-sm btn-outline-primary" > <i class="fas fa-file"></i> Archivo de pago banco (En pruebas)</a>
 {{--@endcan--}}
@@ -66,7 +66,7 @@
 
 <hr>
 
-<h3 class="mb-3 mt-3">Pagados</h3>
+<h4 class="mb-3 mt-3">Pagados</h4>
 <table class="table table-sm table-bordered">
     <tr>
         <th>Id</th>
