@@ -571,41 +571,41 @@
 
         <div class="form-row">
 
-          <fieldset class="form-group col-5 col-md-2">
+          <fieldset class="form-group col col-md">
 					    <label for="for_name">N°Contrato</label>
               <input type="text" class="form-control" name="contract_number" value="{{$serviceRequest->contract_number}}">
 					</fieldset>
 
+          <fieldset class="form-group col col-md">
+					    <label for="for_resolution_number">N° Resolución</label>
+              <input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
+					</fieldset>
+
+          <fieldset class="form-group col col-md">
+              <label for="for_resolution_date">Fecha Resolución</label>
+              <input type="date" class="form-control" id="for_resolution_date" name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+          </fieldset>
+
         </div>
         <div class="form-row">
 
-          <fieldset class="form-group col-6 col-md-2">
+          <fieldset class="form-group col col-md">
 					    <label for="for_net_amount">Monto Neto</label>
               <input type="text" class="form-control" name="net_amount" value="{{$serviceRequest->net_amount}}">
 					</fieldset>
 
-          <fieldset class="form-group col-6 col-md-2">
+          <fieldset class="form-group col col-md">
 					    <label for="for_gross_amount">Monto Bruto</label>
               <input type="text" class="form-control" name="gross_amount" value="{{$serviceRequest->gross_amount}}">
 					</fieldset>
 
-          <fieldset class="form-group col-6 col-md-2">
+          <fieldset class="form-group col col-md">
               <label for="for_sirh_contract_registration">Registrado en SIRH</label>
               <select name="sirh_contract_registration" class="form-control">
                 <option value=""></option>
                 <option value="1"  @if($serviceRequest->sirh_contract_registration == '1') selected @endif>Sí</option>
                 <option value="0"  @if($serviceRequest->sirh_contract_registration == '0') selected @endif>No</option>
               </select>
-          </fieldset>
-
-          <fieldset class="form-group col-6 col-md-2">
-					    <label for="for_resolution_number">N° Resolución</label>
-              <input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
-					</fieldset>
-
-          <fieldset class="form-group col-12 col-md-3">
-              <label for="for_resolution_date">Fecha Resolución</label>
-              <input type="date" class="form-control" id="for_resolution_date" name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
           </fieldset>
 
         </div>
@@ -693,12 +693,12 @@
 
         <div class="form-row">
 
-          <fieldset class="form-group col-5 col-md-2">
+          <fieldset class="form-group col col-md">
 					    <label for="for_resolution_number">N° Resolución</label>
               <input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
 					</fieldset>
 
-          <fieldset class="form-group col-7 col-md-3">
+          <fieldset class="form-group col col-md">
               <label for="for_resolution_date">Fecha Resolución</label>
               <input type="date" class="form-control" id="for_resolution_date" name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
           </fieldset>
