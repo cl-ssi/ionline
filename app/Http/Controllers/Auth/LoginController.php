@@ -107,9 +107,10 @@ class LoginController extends Controller
 
         if (Auth::guard('external')->attempt($credentials, $request->filled('remember'))) {
             // Authentication passed...
-            return redirect()->intended('/test');
+            return redirect()->intended('/external');
         }
         return back()->withInput($request->only('email', 'remember'));
         
     }
+
 }

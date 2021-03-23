@@ -14,13 +14,28 @@ class CreateUsersExternal extends Migration
     public function up()
     {
         Schema::create('users_external', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
+            $table->id()->unique();
+            // $table->string('name');
+            // $table->string('email')->unique();
+            // $table->string('password');
+            // $table->boolean('is_super')->default(false);
+            // $table->rememberToken();
+            // $table->timestamps();
+            $table->char('dv',1)->nullable();
+            $table->string('name')->nullable();
+            $table->string('fathers_family')->nullable();
+            $table->string('mothers_family')->nullable();
             $table->string('email')->unique();
-            $table->string('password');
-            $table->boolean('is_super')->default(false);
+            $table->string('email_personal')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password')->nullable();
+            $table->string('position')->nullable();
+            $table->date('birthday')->nullable();
+            $table->foreignId('school_id')->nullable();
+            $table->foreign('school_id')->references('id')->on('schools');
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

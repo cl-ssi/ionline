@@ -38,7 +38,7 @@ class Seccion extends Model
 
     public function getCountPrestacionBy($group)
     {
-        $result = $this->subtotals_first ? 2 : 1; //para efectos de mostrar bien los subtotales en las celdas de la tabla
+        $result = $this->subtotals_first || $this->subtotals != null ? 1 : 0; //para efectos de mostrar bien los subtotales en las celdas de la tabla
         return $this->prestaciones->filter(function ($prestacion) use ($group){
             return Str::contains($prestacion->descripcion, '- '. $group . ' -') OR Str::contains($prestacion->descripcion, '- '. $group . '  -') OR Str::contains($prestacion->descripcion, '- '. $group . '   -');
         })->count() + ($this->subtotalExists($group) ? $result : 0) + ($this->subtotalExists($group . ' ') ? $result : 0) + ($this->subtotalExists($group . '  ') ? $result : 0);
