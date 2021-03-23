@@ -87,9 +87,11 @@
 </ul>
 
 
+
+
 <ul class="nav flex-column">   
     <li class="nav-item border-top">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{{ route('logout') }}">
         <span data-feather="log-out"></span>
         Cerrar sesión
         </a>
