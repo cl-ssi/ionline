@@ -55,7 +55,7 @@ class ServiceRequestController extends Controller
             //with responsable_id
             if ($user_id == $signatureFlow->responsable_id) {
               if ($signatureFlow->status == NULL) {
-                if ($serviceRequest->SignatureFlows->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL) {
+                if ($serviceRequest->SignatureFlows->where('status','!=',2)->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL) {
                   $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
                 }else{
                   $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
@@ -93,11 +93,15 @@ class ServiceRequestController extends Controller
 
     // dd($request);
     $responsability_center_ou_id = $request->responsability_center_ou_id;
+    $program_contract_type = $request->program_contract_type;
     $name = $request->name;
     $id = $request->id;
     // dd($responsability_center_ou_id);
     $serviceRequests = ServiceRequest::when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
                                              return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+                                          })
+                                     ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
+                                            return $q->where('program_contract_type',$program_contract_type);
                                           })
                                      ->when($name != NULL, function ($q) use ($name) {
                                              return $q->where('name','LIKE','%'.$name.'%');
@@ -482,6 +486,16 @@ class ServiceRequestController extends Controller
       session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido eliminada.');
       return redirect()->route('rrhh.service_requests.index');
 
+  }
+
+  public function destroy_with_parameters(Request $request){
+    $serviceRequest = ServiceRequest::find($request->id);
+    $serviceRequest->observation = $request->observation;
+    $serviceRequest->save();
+
+    $serviceRequest->delete();
+    session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido eliminada.');
+    return redirect()->route('rrhh.service_requests.index');
   }
 
   public function consolidated_data(Request $request)
