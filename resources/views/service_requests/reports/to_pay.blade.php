@@ -22,6 +22,7 @@
         <th nowrap>Rut</th>
         <th>Periodo</th>
         <th>Banco - N° Cuenta</th>
+        <th>Telefono</th>
         <th>Certif.</th>
         <th>Boleta</th>
         <th>Resolución</th>
@@ -36,6 +37,7 @@
           <td>{{$fulfillment->serviceRequest->rut}}</td>
           <td>{{$fulfillment->year}} - {{$fulfillment->month}}</td>
           <td>{{$fulfillment->serviceRequest->bank->name ?? ''}} - {{$fulfillment->serviceRequest->account_number?? ''}}</td>
+          <td>{{$fulfillment->serviceRequest->phone_number ?? ''}}</td>
           <td>
               <a href="{{ route('rrhh.fulfillments.certificate-pdf',$fulfillment) }}" target="_blank">
                  <i class="fas fa-paperclip"></i>
