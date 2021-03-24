@@ -3,7 +3,10 @@
 @section('content')
 
 <h3 class="mb-3">Nueva Solicitud de Evaluación de Idoneidad Psicológica para el colegio </h3>
-<h6 class="mb-3">(Revisar el histórico de Solicitudes antes de generar una nueva)</h6>
+<h6 class="mb-3"><strong>Recordar revisar el Historico de Solicitudes en "Mis Solitudes" antes de generar una nueva</strong></h6>
+<h6 class="mb-3"><strong>Para personas que ingresaron a trabajar antes del 01-03-2009 NO se le debe generar solicitud de idoneidad</strong></h6>
+
+
 
 <form method="POST" class="form-horizontal" action="{{ route('idoneidad.storeExternal') }}">
     @csrf
@@ -12,11 +15,11 @@
     <div class="form-row align-items-end">
         <fieldset class="form-group col-5 col-sm-4 col-md-4 col-lg-2">
             <label for="for_run">Run</label>
-            <input type="number" class="form-control" id="for_run" name="id" autocomplete="off" max="50000000" required>
+            <input type="number" class="form-control" id="for_run" name="id" autocomplete="off" max="50000000"  required>
         </fieldset>
         <fieldset class="form-group col-2 col-sm-2 col-md-1 col-lg-1">
             <label for="for_dv">DV</label>
-            <input type="text" class="form-control" id="for_dv" name="dv" autocomplete="off" readonly>
+            <input type="text" class="form-control" id="for_dv" name="dv" autocomplete="off">
         </fieldset>
 
         <fieldset class="form-group col-4">
@@ -59,7 +62,7 @@
 
         <fieldset class="form-group col-6">
             <label for="for_start_date">Fecha de Ingreso*</label>
-            <input type="date" class="form-control" id="for_start_date" placeholder="" name="start_date" required="">
+            <input type="date" class="form-control" id="for_start_date" placeholder="" name="start_date" min="2009-03-01" max="{{Carbon\Carbon::now()->toDateString()}}" required="">
         </fieldset>
     </div>
 
@@ -90,11 +93,11 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="{{ asset('js/jquery.rut.chileno.js') }}"></script>
 <script type="text/javascript">
-    //obtiene digito verificador
-    $('input[name=id]').keyup(function(e) {
-        var str = $("#for_run").val();
-        $('#for_dv').val($.rut.dv(str));
-    });
+            //obtiene digito verificador
+            $('input[name=id]').keyup(function(e) {
+                var str = $("#for_run").val();
+                $('#for_dv').val($.rut.dv(str));
+            });
 </script>
 
 @endsection
