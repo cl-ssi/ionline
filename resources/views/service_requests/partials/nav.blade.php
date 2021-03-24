@@ -71,12 +71,12 @@
             @endcan
 
             
-            @canany(['Service Request: pending requests'])
+            <!-- @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service_requests.report.withoutBankDetails') }}"
                 href="{{ route('rrhh.service_requests.report.withoutBankDetails') }}">
                 <i class="fas fa-piggy-bank"></i> Sin Cuentas Bancarias
             </a>
-            @endcan
+            @endcan -->
 
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service_requests.report.pending-resolutions') }}"
