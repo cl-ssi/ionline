@@ -19,10 +19,18 @@ class UserExternal extends Authenticatable
     protected $guard = 'external';
 
     protected $fillable = [
+        'id',
         'name', 'email', 'password',
+        'dv', 'fathers_family', 'mothers_family',
+        'position','gender',
     ];
 
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function getFullNameAttribute()
+    {
+        return "{$this->name} {$this->fathers_family} {$this->mothers_family}";
+    }
 }

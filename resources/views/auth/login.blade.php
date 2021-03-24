@@ -6,7 +6,11 @@
 
 <div class="container">
     <div class="text-center">
+        @isset($url)
+        <h4>Sistemas para personas external al {{ env('APP_SS') }}</h4>
+        @else
         <h4>iOnline del {{ env('APP_SS') }}</h4>
+        @endisset
     </div>
     <div class="row justify-content-center">
         <div class="mt-4">

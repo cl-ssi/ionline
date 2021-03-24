@@ -25,6 +25,7 @@ class CreateUsersExternal extends Migration
             $table->string('name')->nullable();
             $table->string('fathers_family')->nullable();
             $table->string('mothers_family')->nullable();
+            $table->string('gender')->nullable();
             $table->string('email')->unique();
             $table->string('email_personal')->nullable();
             $table->timestamp('email_verified_at')->nullable();
@@ -46,6 +47,8 @@ class CreateUsersExternal extends Migration
      */
     public function down()
     {
+        //Schema::dropForeign(['school_id']);
+        //$table->dropForeign(['school_id']);
         Schema::dropIfExists('users_external');
     }
 }
