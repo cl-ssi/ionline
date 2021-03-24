@@ -1,4 +1,4 @@
-<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
+<!-- <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
     <span>Mi información</span>
     <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
     <span data-feather="plus-circle"></span>
@@ -17,7 +17,7 @@
         Mi perfíl<span class="sr-only"></span>
         </a>
     </li>
-</ul>
+</ul> -->
 
 
 <!-- <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
@@ -42,7 +42,7 @@
 </ul> -->
 
 
-<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
+<!-- <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
     <span>Staff de Reemplazo</span>
     <a class="d-flex align-items-center text-muted" href="{{ route('replacement_staff.create') }}" aria-label="Ver Mis datos">
     <span data-feather="plus-circle"></span>
@@ -54,7 +54,7 @@
         <span data-feather="users"></span>
         Mis Datos<span class="sr-only">(current)</span>
         </a>
-    </li>
+    </li> -->
     <!-- <li class="nav-item">
         <a class="nav-link {{ active('patient.create') }}" href="#">
         <span data-feather="plus-circle"></span>
@@ -65,7 +65,7 @@
 
 
 
-<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
+<!-- <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
     <span>Administrador</span>
     <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
     <span data-feather="plus-circle"></span>
@@ -84,7 +84,7 @@
         Mis permisos
         </a>
     </li>
-</ul>
+</ul> -->
 
 
 

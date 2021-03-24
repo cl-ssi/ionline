@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SchoolUser extends Model
 {
     use HasFactory;
+    public $table = 'school_users_external';
 
     protected $dates = [
         'created_at',
@@ -18,12 +19,12 @@ class SchoolUser extends Model
 
     protected $fillable = [
         'school_id',
-        'user_id',        
+        'user_external_id',
     ];
 
 
     public function user() {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Models\UserExternal','user_external_id');
     }
 
     public function school() {
