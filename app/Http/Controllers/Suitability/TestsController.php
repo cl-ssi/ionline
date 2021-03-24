@@ -36,7 +36,8 @@ class TestsController extends Controller
         ->whereHas('categoryQuestions')
         ->get();
 
-    return view('suitability.test', compact('categories','psi_request_id'));
+    // return view('suitability.test', compact('categories','psi_request_id'));
+    return view('external.suitability.test', compact('categories','psi_request_id'));
     }
 
     /**

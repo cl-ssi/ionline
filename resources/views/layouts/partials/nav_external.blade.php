@@ -99,7 +99,7 @@ $schools = App\Models\Suitability\SchoolUser::where('user_external_id',Auth::gua
     <span data-feather="book-open"></span>
 </h6>
 <ul class="nav flex-column">
-    
+
     <li class="nav-item">
         <a class="nav-link {{ active('parameter.permission.index') }}" href="{{ route('idoneidad.createExternal', $school->school->id) }}">
             <span data-feather="file-plus"></span>
@@ -109,10 +109,38 @@ $schools = App\Models\Suitability\SchoolUser::where('user_external_id',Auth::gua
             <span data-feather="list"></span>
             Mis Solicitudes<span class="sr-only">(current)</span>
         </a>
-    </li>   
-    @endforeach    
+    </li>
+    @endforeach
 </ul>
 @endcan
+
+
+@php
+$psirequests = App\Models\Suitability\PsiRequest::where('user_external_id',Auth::guard('external')->user()->id)->where('status','Esperando Test')->get();
+@endphp
+
+@if($psirequests->isNotEmpty())
+
+<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
+    <span>Test de Idoneidad</span>
+    <span data-feather="file-text"></span>
+</h6>
+
+<ul class="nav flex-column">
+    @foreach($psirequests as $psirequest)
+    <li class="nav-item">
+    <a class="nav-link {{ active('parameter.permission.index') }}" href="{{ route('idoneidad.test', $school->school->id) }}" onclick="return confirm('Al momento de apretar en aceptar, usted tendrá 45 minutos para poder realizar el Test de Idoneidad, no tendrá más oportunidades, luego de realizado el test. Por favor asegurarse que posea buena conexión a internet. ¿Está seguro que desea rendir el test?')">
+            <span data-feather="list"></span>
+            Realizar test para cargo <br>{{$psirequest->job}} ({{$psirequest->school->name}}) <span class="sr-only">(current)</span>
+        </a>
+    </li>
+    @endforeach
+</ul>
+@endif
+
+
+
+
 
 
 
