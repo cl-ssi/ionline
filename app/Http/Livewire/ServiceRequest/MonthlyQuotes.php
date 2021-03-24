@@ -52,18 +52,18 @@ class MonthlyQuotes extends Component
             }
 
             /* Más de un mes */
-            // else if($i == $first_month) {
-            //     /* Creo que sólo necesito el valor mensual acá, el if y else no deberían ser necesarios */
-            //     if($serviceRequest->start_date->day == $first_day_month) {
-            //         $valores[$i] = $valor_mensual;
-            //     }
-            //     else {
-            //         $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
-            //         /* Días trabajados */
-            //         $valores[$i] = round($dias_trabajados * ($valor_mensual/30));
-            //     }
+            else if($i == $first_month) {
+                 /* Creo que sólo necesito el valor mensual acá, el if y else no deberían ser necesarios */
+                 if($serviceRequest->start_date->day == $first_day_month) {
+                     $valores[$i] = $valor_mensual;
+                 }
+                 else {
+                     $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
+                     /* Días trabajados */
+                     $valores[$i] = round($dias_trabajados * ($valor_mensual/30));
+                 }
 
-            // }
+            }
             else if($i == $last_month) {
                 if($serviceRequest->end_date->lastOfMonth()->day == $last_day_month) {
                     $valores[$i] = $valor_mensual;
