@@ -61,6 +61,7 @@
         <script>
             feather.replace()
         </script>
+        @yield('custom_js')
         @livewireScripts
     </body>
 </html>
