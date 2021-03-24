@@ -43,6 +43,11 @@ class ShowTotalHours extends Component
             return view('livewire.service-request.show-total-hours');
         }
 
+        if (!$this->fulfillment) {
+          // $this->errorMsg = "No se ha creado cumplimiento.";
+          return view('livewire.service-request.show-total-hours');
+        }
+
         switch ($this->serviceRequest->working_day_type) {
             case 'HORA MÉDICA':
                 foreach ($this->fulfillment->fulfillmentItems as $fulfillmentItem) {
