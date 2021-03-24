@@ -44,7 +44,7 @@ class ShowTotalHours extends Component
         }
 
         if (!$this->fulfillment) {
-          $this->errorMsg = "No se ha creado cumplimiento.";
+          // $this->errorMsg = "No se ha creado cumplimiento.";
           return view('livewire.service-request.show-total-hours');
         }
 
