@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
 use App\Models\Suitability\PsiRequest;
+use App\Models\Suitability\School;
+use App\Models\UserExternal;
 use Illuminate\Support\Facades\Auth;
 
 class SuitabilityController extends Controller
@@ -15,6 +17,21 @@ class SuitabilityController extends Controller
     public function index(Request $request)
     {
         //return view('replacement_staff.index', compact('request'));
+    }
+
+    public function createExternal(School $school)
+    {
+        
+        return view('external.suitability.create',compact('school'));
+    }
+
+    public function listOwn($school)
+    {
+
+        $psirequests = PsiRequest::where('school_id',$school)->get();        
+        return view('external.suitability.index',compact('psirequests'));
+        
+
     }
 
 
@@ -45,12 +62,14 @@ class SuitabilityController extends Controller
         return redirect()->back();
     }
 
+    
+
 
 
     public function indexOwn()
     {
 
-        $psirequests = PsiRequest::where('user_creator_id',Auth::id())->get();
+        $psirequests = PsiRequest::all();
         return view('suitability.indexown', compact('psirequests'));
 
     }
@@ -84,6 +103,23 @@ class SuitabilityController extends Controller
         $user = User::firstOrNew(['id'=>$run]);
         return view('suitability.create',compact('run','user'));
         
+    }
+    public function storeExternal(Request $request)
+    {
+        $userexternal = new UserExternal($request->All());
+        $userexternal->save();        
+        $psirequest = new PsiRequest();
+        $psirequest->job = $request->input('job');
+        $psirequest->country = $request->input('country');
+        $psirequest->start_date = $request->input('start_date');
+        $psirequest->disability = $request->input('disability');        
+        $psirequest->status = "Esperando Test";
+        $psirequest->user_external_id = $request->input('id');
+        $psirequest->user_creator_id = Auth::guard('external')->user()->id;
+        $psirequest->school_id = $request->input('school_id');
+        $psirequest->save();
+        session()->flash('success', 'Solicitud Creada Exitosamente');
+        return redirect()->route('external');
     }
 
     public function store(Request $request)

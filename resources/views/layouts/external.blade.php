@@ -38,7 +38,7 @@
             </button>
             <ul class="navbar-nav px-3 d-none d-md-block">
                 <li class="nav-item"> 
-                    <span class="nav-link">@auth {{ Auth::guard('external')->firstName }} @endauth</span>
+                    <span class="nav-link">@auth {{ Auth::guard('external')->user()->name }} @endauth</span>
                 </li>
             </ul>
         </nav>

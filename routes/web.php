@@ -66,6 +66,12 @@ Route::post('/login/external', [LoginController::class,'externalLogin']);
 
 Route::group(['middleware' => 'auth:external'], function () {
     Route::view('/external', 'external')->name('external');
+    //Route::view('/external', 'external')->name('external');
+    Route::prefix('idoneidad')->as('idoneidad.')->group(function(){
+    Route::get('/create/{school}', [SuitabilityController::class, 'createExternal'])->name('createExternal');
+    Route::post('/', [SuitabilityController::class, 'storeExternal'])->name('storeExternal');
+    Route::get('/list/{school}', [SuitabilityController::class, 'listOwn'])->name('listOwn');
+    });
 });
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');

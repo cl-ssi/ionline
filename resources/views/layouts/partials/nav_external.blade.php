@@ -55,7 +55,7 @@
         Mis Datos<span class="sr-only">(current)</span>
         </a>
     </li> -->
-    <!-- <li class="nav-item">
+<!-- <li class="nav-item">
         <a class="nav-link {{ active('patient.create') }}" href="#">
         <span data-feather="plus-circle"></span>
         Ingresar nuevo
@@ -86,14 +86,43 @@
     </li>
 </ul> -->
 
+@can('Suitability: admin')
+@php
+$schools = App\Models\Suitability\SchoolUser::where('user_external_id',Auth::guard('external')->user()->id)->get();
+@endphp
+@foreach($schools as $school)
+<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
+    <span>{{ $school->school->name}}</span>
+    <!-- <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
+        <span data-feather="plus-circle"></span>
+    </a> -->
+    <span data-feather="book-open"></span>
+</h6>
+<ul class="nav flex-column">
+    
+    <li class="nav-item">
+        <a class="nav-link {{ active('parameter.permission.index') }}" href="{{ route('idoneidad.createExternal', $school->school->id) }}">
+            <span data-feather="file-plus"></span>
+            Crear Solicitud<span class="sr-only">(current)</span>
+        </a>
+        <a class="nav-link {{ active('parameter.permission.index') }}" href="{{ route('idoneidad.listOwn', $school->school->id) }}">
+            <span data-feather="list"></span>
+            Mis Solicitudes<span class="sr-only">(current)</span>
+        </a>
+    </li>   
+    @endforeach    
+</ul>
+@endcan
 
 
 
-<ul class="nav flex-column">   
+
+
+<ul class="nav flex-column">
     <li class="nav-item border-top">
         <a class="nav-link" href="{{ route('logout') }}">
-        <span data-feather="log-out"></span>
-        Cerrar sesión
+            <span data-feather="log-out"></span>
+            Cerrar sesión
         </a>
     </li>
 </ul>
