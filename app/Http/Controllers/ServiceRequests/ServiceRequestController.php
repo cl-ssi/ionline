@@ -1002,6 +1002,8 @@ class ServiceRequestController extends Controller
                                        ->get();
 
       $array = [];
+      $hoja_ruta_falta_aprobar = 0;
+      // $group_array = [];
       foreach ($serviceRequests as $key => $serviceRequest) {
         $total = 0;
         $cant_aprobados = 0;
@@ -1015,36 +1017,33 @@ class ServiceRequestController extends Controller
           if ($SignatureFlow->status === 0) {
             $cant_rechazados += 1;
           }
-          if (!($cant_rechazados > 0)) {
-            if ($total != $cant_aprobados) {
-              $falta_aprobar = $serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user->getFullNameAttribute();
-            }
+        }
+
+        if ($cant_rechazados == 0) {
+          if ($total != $cant_aprobados) {
+            $array[$serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user->getFullNameAttribute()][$serviceRequest->id] = $serviceRequest;
+            $hoja_ruta_falta_aprobar += 1;
           }
-
-        }
-        $array[$serviceRequest->id]['objeto'] = $serviceRequest;
-        $array[$serviceRequest->id]['total'] = $total;
-        $array[$serviceRequest->id]['aprobados'] = $cant_aprobados;
-        $array[$serviceRequest->id]['rechazados'] = $cant_rechazados;
-        $array[$serviceRequest->id]['falta_aprobar'] = $falta_aprobar;
-      }
-
-      //obtener subtotales
-      $group_array = [];
-      $hoja_ruta_falta_aprobar = 0;
-      foreach ($array as $key => $data) {
-        $group_array[$data['falta_aprobar']] = 0;
-        // $group_array['rechazados'] = 0;
-      }
-      foreach ($array as $key => $data) {
-        if ($data['rechazados'] == 0 && $data['falta_aprobar'] != "") {
-          $group_array[$data['falta_aprobar']] += 1;
-          $hoja_ruta_falta_aprobar+=1;
         }
       }
+      // dd($array,$hoja_ruta_falta_aprobar);
+      //
+      // //obtener subtotales
+      // $group_array = [];
+      // $hoja_ruta_falta_aprobar = 0;
+      // foreach ($array as $key => $data) {
+      //   $group_array[$data['falta_aprobar']] = 0;
+      //   // $group_array['rechazados'] = 0;
+      // }
+      // foreach ($array as $key => $data) {
+      //   if ($data['rechazados'] == 0 && $data['falta_aprobar'] != "") {
+      //     $group_array[$data['falta_aprobar']] += 1;
+      //     $hoja_ruta_falta_aprobar+=1;
+      //   }
+      // }
 
-      arsort($group_array);
-      // dd($group_array);
+      arsort($array);
+      // dd($array);
 
 
       $serviceRequests = ServiceRequest::orderBy('id','asc')
@@ -1082,7 +1081,7 @@ class ServiceRequestController extends Controller
       arsort($fulfillments_missing);
       // dd($fulfillments_missing);
 
-      return view('service_requests.requests.pending_requests',compact('array','group_array','hoja_ruta_falta_aprobar','fulfillments_missing','cumplimiento_falta_ingresar'));
+      return view('service_requests.requests.pending_requests',compact('array','hoja_ruta_falta_aprobar','fulfillments_missing','cumplimiento_falta_ingresar'));
     }
 
     public function certificatePDF(ServiceRequest $serviceRequest)
