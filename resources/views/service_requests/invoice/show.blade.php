@@ -30,7 +30,8 @@
                                 <th>Año</th>
                                 <th>Mes</th>
                                 <th>Monto de Boleta</th>
-                                <th>Cargar Boleta</th>
+                                <th>Fecha de Pago</th>
+                                <th>Cargar Boleta</th>                                
                         </tr>
                 </thead>
                 <tbody>
@@ -74,6 +75,7 @@
                                 <td>{{ $fullfillment->year ?? '' }}</td>
                                 <td>{{ $fullfillment->month ?? '' }}</td>
                                 <td>{{ $serviceRequest->gross_amount ?? '' }}</td>
+                                <td>{{ $fullfillment->payment_date?$fullfillment->payment_date->format('d-m-Y'):''}} </td>
                                 <td>
                                 @if($fullfillment->total_to_pay)
                                 @livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])
