@@ -16,11 +16,15 @@ class CreateRstProfilesTable extends Migration
         Schema::create('rst_profiles', function (Blueprint $table) {
             $table->id();
 
-            $table->string('profession');
+            $table->date('degree_date');
             $table->string('file');
 
+            $table->foreignId('profile_manage_id');
+            $table->foreignId('profession_manage_id');
             $table->foreignId('replacement_staff_id');
 
+            $table->foreign('profile_manage_id')->references('id')->on('rst_profile_manages');
+            $table->foreign('profession_manage_id')->references('id')->on('rst_profession_manages');
             $table->foreign('replacement_staff_id')->references('id')->on('rst_replacement_staff');
 
             $table->timestamps();

@@ -6,49 +6,60 @@
 
 @include('replacement_staff.nav')
 
-<h5>Staff</h5>
+<p>
+    <a class="btn btn-primary" data-toggle="collapse" href="#collapseSearch" role="button" aria-expanded="false" aria-controls="collapseExample">
+      <i class="fas fa-search"></i> Busqueda
+    </a>
+</p>
+<div class="collapse" id="collapseSearch">
+  <div class="card card-body">
+      <form method="GET" class="form-horizontal" action="{{ route('replacement_staff.index') }}">
+          <div class="form-row">
+              <fieldset class="form-group col-4">
+                  <label for="for_name">Nombres</label>
+                  <input class="form-control" type="text" name="search" autocomplete="off" style="text-transform: uppercase;" placeholder="RUN (sin dígito verificador) / NOMBRE" value="{{$request->search}}">
+              </fieldset>
+
+              <fieldset class="form-group col-4">
+                  <label for="for_profile_search">Estamento</label>
+                  <select name="profile_search" class="form-control">
+                      <option value="0">Seleccione...</option>
+                          @foreach($profileManage as $profile)
+
+                              <option value="{{ $profile->id }}" {{ ($request->profile_search == $profile->id)?'selected':'' }}>{{ $profile->Name }}</option>
+                          @endforeach
+                  </select>
+              </fieldset>
+
+              <fieldset class="form-group col-4">
+                  <label for="for_profession_search">Profesión</label>
+                  <select name="profession_search" class="form-control">
+                      <option value="0">Seleccione...</option>
+                          @foreach($professionManage as $profession)
+                              <option value="{{ $profession->id }}" {{ ($request->profession_search == $profession->id)?'selected':'' }}>{{ $profession->Name }}</option>
+                          @endforeach
+                  </select>
+              </fieldset>
+
+              <button type="submit" class="btn btn-primary float-right">Guardar</button>
+          </div>
+      </form>
+  </div>
+</div>
 
 <br>
 
-
-<!-- <table class="table table-sm table-bordered small text-uppercase" style="width:50%;">
-    <tbody>
-        <tr>
-            <td>Filtro Profesiones:</td>
-            <td>
-              <form method="GET" id="form" class="form-horizontal" action="#">
-                <select name="filter" onchange="this.form.submit()">
-                  <option value="0">Todos</option>
-                  <option value="1">Enfermera</option>
-                  <option value="2">Informático</option>
-                </select>
-              </form>
-            </td>
-        </tr>
-        <tr>
-            <td>Filtro Estado:</td>
-            <td>
-              <form method="GET" id="form" class="form-horizontal" action="#">
-                <select name="filter" onchange="this.form.submit()">
-                  <option value="0" >Todos</option>
-                  <option value="1" >Disponible</option>
-                </select>
-              </form>
-            </td>
-        </tr>
-    </tbody>
-</table> -->
-
-
-<table class="table small">
+<table class="table small table-striped">
     <thead>
         <tr>
             <th>Nombre Completo</th>
             <th>Run</th>
-            <th>Título(s)</th>
-            <th>Título(s)</th>
+            <th>Estamento</th>
+            <th>Título</th>
+            <th>Fecha Titulación</th>
+            <th>Años Exp.</th>
             <th>Estado</th>
-            <th></th>
+            <th style="width: 10%"></th>
         </tr>
     </thead>
     <tbody>
@@ -58,12 +69,33 @@
             <td>{{ $staff->Identifier }}</td>
             <td>
                 @foreach($staff->profiles as $title)
-                    <span class="badge rounded-pill bg-secondary">{{ $title->profession }}</span>
+                    <h6><span class="badge rounded-pill bg-light">{{ $title->profile_manage->name }}</span></h6>
+                @endforeach
+            </td>
+            <td>
+                @foreach($staff->profiles as $title)
+                    <h6><span class="badge rounded-pill bg-light">{{ $title->profession_manage->name }}</span></h6>
+                @endforeach
+            </td>
+            <td>
+                @foreach($staff->profiles as $title)
+                    <h6><span class="badge rounded-pill bg-light">{{ Carbon\Carbon::parse($title->degree_date)->format('d-m-Y') }}</span></h6>
+                @endforeach
+            </td>
+            <td>
+                @foreach($staff->profiles as $title)
+                    <h6><span class="badge rounded-pill bg-light">{{ $title->YearsOfDegree }}</span></h6>
                 @endforeach
             </td>
             <td>{{ $staff->StatusValue }}</td>
             <td>
-                <a href="{{ route('replacement_staff.edit', $staff) }}" class="btn btn-sm btn-primary"><i class="fas fa-pen"></i></a>
+                <a href="{{ route('replacement_staff.edit', $staff) }}"
+                  class="btn btn-outline-secondary btn-sm"
+                  title="Ir"> <i class="far fa-eye"></i></a>
+                <a href="{{ route('replacement_staff.show_file', $staff) }}"
+                  class="btn btn-outline-secondary btn-sm"
+                  title="Ir"
+                  target="_blank"> <i class="far fa-file-pdf"></i></a>
             </td>
         </tr>
         @endforeach

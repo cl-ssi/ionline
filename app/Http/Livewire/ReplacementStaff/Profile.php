@@ -9,6 +9,8 @@ class Profile extends Component
     public $inputs = [];
     public $i = 1;
     public $replacementStaff;
+    public $professionManage;
+    public $profileManage;
 
     public function add($i)
     {
@@ -22,14 +24,16 @@ class Profile extends Component
         unset($this->inputs[$i]);
     }
 
-    public function mount($replacementStaff)
+    public function mount($replacementStaff, $professionManage, $profileManage)
     {
         $this->replacementStaff = $replacementStaff;
+        $this->professionManage = $professionManage;
+        $this->profileManage = $profileManage;
     }
 
     public function render()
     {
-        return view('livewire.replacement-staff.profile', $this->replacementStaff);
+        return view('livewire.replacement-staff.profile', compact($this->replacementStaff, $this->professionManage, $this->profileManage));
     }
 
 }

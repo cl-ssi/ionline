@@ -16,7 +16,7 @@ class ReplacementStaff extends Model
         'run', 'dv', 'birthday', 'name', 'fathers_family',
         'mothers_family', 'gender', 'email', 'telephone',
         'telephone2', 'commune', 'address', 'observations',
-        'file', 'status'
+        'file', 'status', 'cv_file'
     ];
 
     /**
@@ -57,13 +57,43 @@ class ReplacementStaff extends Model
 
     public function getStatusValueAttribute(){
         switch ($this->status) {
-            case 'available':
-              return 'Disponible';
+            case 'immediate_availability':
+              return 'Disponibilidad Inmediata';
+              break;
+            case 'working_external':
+              return 'Trabajando';
               break;
             default:
               return '';
               break;
         }
+    }
+
+    public function scopeSearch($query, $search, $profile_search, $profession_search)
+    {
+          if ($search OR $profile_search OR $profession_search) {
+              $array_name_search = explode(' ', $search);
+              foreach($array_name_search as $word){
+                  $query->where(function($query) use($word){
+                      $query->where('name', 'LIKE', '%'.$word.'%')
+                          ->orwhere('fathers_family','LIKE', '%'.$word.'%')
+                          ->orwhere('mothers_family','LIKE', '%'.$word.'%')
+                          ->orwhere('run','LIKE', '%'.$word.'%');
+                  });
+              }
+
+              if($profile_search != 0){
+                  $query->whereHas('profiles', function($q) use ($profile_search){
+                      $q->Where('profile_manage_id', $profile_search);
+                  });
+              }
+
+              if($profession_search != 0){
+                  $query->whereHas('profiles', function($q) use ($profession_search){
+                      $q->Where('profession_manage_id', $profession_search);
+                  });
+              }
+          }
     }
 
     protected $table = 'rst_replacement_staff';
