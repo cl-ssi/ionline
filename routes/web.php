@@ -71,7 +71,9 @@ Route::group(['middleware' => 'auth:external'], function () {
     Route::get('/create/{school}', [SuitabilityController::class, 'createExternal'])->name('createExternal');
     Route::post('/', [SuitabilityController::class, 'storeExternal'])->name('storeExternal');
     Route::get('/list/{school}', [SuitabilityController::class, 'listOwn'])->name('listOwn');
+    Route::patch('/update/{psi_request_id?}', [TestsController::class, 'updateStatus'])->name('updateStatus');
     Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
+    Route::post('/test', [TestsController::class, 'storeExternal'])->name('storeExternal');
     });
 });
 

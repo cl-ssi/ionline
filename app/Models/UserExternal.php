@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Suitability\Result;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class UserExternal extends Authenticatable
@@ -30,8 +31,18 @@ class UserExternal extends Authenticatable
         'password', 'remember_token',
     ];
 
+    public function runFormat() {
+        return number_format($this->id, 0,'.','.') . '-' . $this->dv;
+    }
+
     public function getFullNameAttribute()
     {
         return "{$this->name} {$this->fathers_family} {$this->mothers_family}";
+    }
+
+    public function userResults()
+    {
+        return $this->hasMany(Result::class, 'user_id', 'id');
+        //return $this->hasMany('App\Models\Result', 'user_id', 'id');
     }
 }
