@@ -19,7 +19,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>CANTIDAD</th>
+                    <th>FUNCIONARIO</th>
                 </tr>
             </thead>
             @foreach($data as $key => $row)
