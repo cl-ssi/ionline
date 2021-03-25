@@ -43,14 +43,13 @@ class ShowTotalHours extends Component
             return view('livewire.service-request.show-total-hours');
         }
 
-        /* TODO: Comenté esto porque no calcula las horas */
-        // if (!$this->fulfillment) {
-        //   // $this->errorMsg = "No se ha creado cumplimiento.";
-        //   return view('livewire.service-request.show-total-hours');
-        // }
-
         switch ($this->serviceRequest->working_day_type) {
             case 'HORA MÉDICA':
+
+                if (!$this->fulfillment) {
+                  return view('livewire.service-request.show-total-hours');
+                }
+
                 foreach ($this->fulfillment->fulfillmentItems as $fulfillmentItem) {
                     $hoursDayString = $fulfillmentItem->start_date->diffInHoursFiltered(
                         function ($date) {
