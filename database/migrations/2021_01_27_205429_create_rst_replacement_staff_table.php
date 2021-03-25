@@ -31,7 +31,7 @@ class CreateRstReplacementStaffTable extends Migration
             $table->string('commune');
             $table->string('address');
             $table->text('observations')->nullable();
-            //$table->string('file')->nullable();
+            $table->string('cv_file')->nullable();
 
             $table->string('status')->nullable();
 

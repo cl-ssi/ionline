@@ -10,7 +10,7 @@
 
 <br>
 
-<form method="POST" class="form-horizontal" action="{{ route('replacement_staff.store') }}">
+<form method="POST" class="form-horizontal" action="{{ route('replacement_staff.store') }}" enctype="multipart/form-data">
     @csrf
     @method('POST')
     <div class="form-row">
@@ -88,9 +88,27 @@
         </fieldset>
     </div>
 
+    <div class="form-row">
+      <fieldset class="form-group col-6">
+          <label for="for_status">Disponibilidad</label>
+          <select name="status" id="for_status" class="form-control selectpicker" title="Seleccione...">
+              <option value="immediate_availability">Inmediata</option>
+              <option value="working_external">Trabajando</option>
+          </select>
+      </fieldset>
+      <fieldset class="form-group col mt">
+          <div class="mb-3">
+              <label for="forcv_file" class="form-label">Adjuntar Curriculum</label>
+              <input class="form-control" type="file" name="cv_file" accept="application/pdf" required>
+          </div>
+      </fieldset>
+    </div>
+
     <button type="submit" class="btn btn-primary float-right">Guardar</button>
 
 </form>
+
+<br><br>
 
 
     <!-- <div class="form-row">

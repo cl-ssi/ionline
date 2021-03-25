@@ -5,6 +5,7 @@ namespace App\Models\ReplacementStaff;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Carbon\Carbon;
 
 class Profile extends Model
 {
@@ -12,11 +13,24 @@ class Profile extends Model
     use softDeletes;
 
     protected $fillable = [
-        'profession', 'file', 'replacement_staff_id'
+        'profile_manage_id','profession_manage_id', 'file', 'degree_date','replacement_staff_id'
     ];
 
     public function replacement_staff() {
         return $this->belongsTo('App\Models\ReplacementStaff\ReplacementStaff');
+    }
+
+    public function profile_manage() {
+        return $this->belongsTo('App\Models\ReplacementStaff\ProfileManage');
+    }
+
+    public function profession_manage() {
+        return $this->belongsTo('App\Models\ReplacementStaff\ProfessionManage');
+    }
+
+    public function getYearsOfDegreeAttribute()
+    {
+        return Carbon::createFromDate($this->degree_date)->age;
     }
 
     protected $hidden = [
