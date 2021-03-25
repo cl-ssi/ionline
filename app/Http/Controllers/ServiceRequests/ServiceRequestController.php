@@ -1096,4 +1096,11 @@ class ServiceRequestController extends Controller
         return $pdf->stream('mi-archivo.pdf');
     }
 
+    public function indexWithResolutionFile() {
+      $srs = ServiceRequest::where('has_resolution_file',1)->get();
+
+      return view('service_requests.report.index_with_resolution_file', compact('srs'));
+      /* Hacer foreach de cada SRs y dentro hacer un foreach de sus fulfillments y mostrar cual tiene boleta y cual no */
+    }
+
 }
