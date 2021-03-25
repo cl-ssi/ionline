@@ -20,6 +20,8 @@ class CreatePsiQuestionResultTable extends Migration
             $table->foreign('question_id')->references('id')->on('psi_questions')->onDelete('cascade');
             $table->foreignId('option_id');
             $table->foreign('option_id')->references('id')->on('psi_options')->onDelete('cascade');
+            $table->foreignId('request_id');
+            $table->foreign('request_id')->references('id')->on('psi_requests')->onDelete('cascade');
             $table->integer('points')->default(0);
             $table->timestamps();
         });
