@@ -23,10 +23,8 @@
                         <tr>
                                 <th>ID</th>
                                 <th>Tipo Contrato</th>
-                                <th>Jornada de Trabajo</th>
                                 <th>Estado</th>
                                 <th class="text-center">Visaciones</th>
-                                <!-- <th>ID Cumplimiento</th> -->
                                 <th>Año</th>
                                 <th>Mes</th>
                                 <th>Monto de Boleta</th>
@@ -40,8 +38,8 @@
                         <tr></tr>
                         <tr>
                                 <td class="small">{{ $serviceRequest->id ?? '' }}</td>
-                                <td>{{ $serviceRequest->program_contract_type ?? '' }}</td>
-                                <td>{{ $serviceRequest->working_day_type ?? '' }}</td>
+                                <td>{{ $serviceRequest->program_contract_type ?? '' }} <br>
+                                    {{ $serviceRequest->working_day_type ?? '' }}</td>
                                 <td>@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
                   									@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
                   									@else Finalizada @endif</td>
@@ -60,20 +58,24 @@
                                           @endif
                                             <td>{{ $SignatureFlow->signature_date->format('Y-m-d H:i')}}</td>
                                             <td>{{ $SignatureFlow->user->getShortNameAttribute() }}</td>
-                                            <!-- <td>@if($SignatureFlow->status === null)
-                                                @elseif($SignatureFlow->status === 1) Aceptada
-                                                @elseif($SignatureFlow->status === 0) Rechazada
-                                                @elseif($SignatureFlow->status === 2) Devuelta
-                                                @endif</td> -->
                                           </tr>
                                         @endforeach
                                       </tbody>
                                   </table>
-
                                 </td>
-                                <!-- <td class="small">{{ $fullfillment->id ?? '' }}</td> -->
-                                <td>{{ $fullfillment->year ?? '' }}</td>
-                                <td>{{ $fullfillment->month ?? '' }}</td>
+                                <td>@if($fullfillment->type == "Horas")
+                                      {{$fullfillment->start_date->format('Y')}}
+                                    @else
+                                      {{ $fullfillment->year ?? '' }}
+                                    @endif
+                                </td>
+                                <td>
+                                  @if($fullfillment->type == "Horas")
+                                        {{$fullfillment->start_date->format('m')}}
+                                      @else
+                                        {{ $fullfillment->month ?? '' }}
+                                      @endif
+                                </td>
                                 <td>{{ $fullfillment->total_to_pay ?? '' }}</td>
                                 <td>{{ $fullfillment->payment_date?$fullfillment->payment_date->format('d-m-Y'):''}} </td>
                                 <td>
