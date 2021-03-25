@@ -10,9 +10,7 @@
 
 
 <h4 class="mb-3 mt-3">Pendientes de pago</h4>
-{{--@can('be god')--}}
     <a href="{{route('rrhh.service_requests.report.bankPaymentFile')}}" class="btn btn-sm btn-outline-primary" > <i class="fas fa-file"></i> Archivo de pago banco (En pruebas)</a>
-{{--@endcan--}}
 <table class="table table-sm table-bordered">
     <tr>
         <th>Id</th>
@@ -27,7 +25,7 @@
         <th>Boleta</th>
         <th>Resolución</th>
         <th>Editar</th>
-        <th>Pago listo</th>
+        <th>Apto para pago</th>
     </tr>
     @foreach($fulfillments->whereNull('total_paid') as $key => $fulfillment)
       <tr>
