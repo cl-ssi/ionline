@@ -154,8 +154,9 @@
                             data-original-title="{{ optional($req->events->where('status', '<>', 'en copia')->first())->to_user_id }}
                                                 {{ optional($req->events->where('status', '<>', 'en copia')->first())->CreationDate }}">
                             
-                            </span>
+                            
                             <i class="fas fa-rocket"></i>
+                            </span>
                         @endif
                     @endif
                 @endforeach
@@ -165,7 +166,7 @@
                         <a href="{{ route('documents.partes.download', $file->id) }}"
                             target="_blank"
                             data-toggle="tooltip" data-placement="top"
-                            data-original-title="{{ $file->name }}">
+                            data-original-title="{{ $file->name }} ">
                             <i class="fas fa-paperclip"></i>
                         </a>
                     @endforeach
