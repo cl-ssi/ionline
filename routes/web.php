@@ -1047,6 +1047,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/', [SchoolUserController::class, 'index'])->name('index');
         Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
         Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
+        Route::delete('/{schooluser}/destroy', [SchoolUserController::class, 'destroy'])->name('destroy');
         Route::post('/storeuser', [SchoolUserController::class, 'storeuser'])->name('storeuser');
     });
 
