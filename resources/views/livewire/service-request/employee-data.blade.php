@@ -75,9 +75,9 @@
       <fieldset class="form-group col-4">
         <label>Banco</label>        
         <select name="bank_id" class="form-control">
-        <option value="">Seleccionar Banco {{$ServiceRequest->bank_id}}</option>
+        <option value="">Seleccionar Banco</option>
         @foreach($banks as $bank)
-        <option value="{{$bank->id}}" {{ ($ServiceRequest->bank_id == $bank->id)? 'selected':'' }}>{{$bank->name}}</option>
+        <option value="{{$bank->id}}" @if($ServiceRequest){{ ($ServiceRequest->bank_id == $bank->id)? 'selected':'' }}@endif>{{$bank->name}}</option>
         @endforeach
       </select>
     </fieldset>
@@ -93,12 +93,12 @@
         <label for="for_pay_method">Tipo de cuenta</label>
         <select name="pay_method" class="form-control">
           <option value="">Seleccionar tipo de cuenta</option>
-          <option value="01" {{ ($ServiceRequest->pay_method == '01')? 'selected':'' }}>CTA CORRIENTE / CTA VISTA</option>
-          <option value="02" {{ ($ServiceRequest->pay_method == '02')? 'selected':'' }}>CTA AHORRO</option>
-          <option value="30" {{ ($ServiceRequest->pay_method == '30')? 'selected':'' }}>CUENTA RUT</option>
+          <option value="01" @if($ServiceRequest){{ ($ServiceRequest->pay_method == '01')? 'selected':'' }}@endif>CTA CORRIENTE / CTA VISTA</option>
+          <option value="02" @if($ServiceRequest){{ ($ServiceRequest->pay_method == '02')? 'selected':'' }}@endif>CTA AHORRO</option>
+          <option value="30" @if($ServiceRequest){{ ($ServiceRequest->pay_method == '30')? 'selected':'' }}@endif>CUENTA RUT</option>
         </select>
     </fieldset>   
   </div>
 
-
+</div>
 </div>
