@@ -31,6 +31,7 @@
         <tr>
             <th>FUNCIONARIO</th>
             <th>CANTIDAD</th>
+						<th></th>
         </tr>
     </thead>
     <tbody>
@@ -39,6 +40,7 @@
         <tr>
           <td nowrap>{{$key}}</td>
           <td nowrap>{{count($data)}}</td>
+					<td>@livewire('service-request.pending-service-request' , ['data' => $data])</td>
         </tr>
       @endif
       @endforeach
