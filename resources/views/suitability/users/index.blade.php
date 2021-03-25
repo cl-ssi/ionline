@@ -65,7 +65,11 @@
             <td>{{ $schooluser->user->fullname }}</td>
             <td>{{ $schooluser->school->name }}</td>
             <td>
-                
+                <form method="POST" class="form-horizontal" action="{{ route('suitability.users.destroy', $schooluser->id) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger float-left" onclick="return confirm('¿Está seguro que desea eliminar a {{ $schooluser->user->fullname }} como administrador de idoneidad del colegio {{ $schooluser->school->name }}? ' )"><i class="fas fa-trash-alt"></i></button>
+                </form>
             </td>
         </tr>
         @endforeach
