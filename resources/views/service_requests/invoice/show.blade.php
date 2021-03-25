@@ -31,7 +31,7 @@
                                 <th>Mes</th>
                                 <th>Monto de Boleta</th>
                                 <th>Fecha de Pago</th>
-                                <th>Cargar Boleta</th>                                
+                                <th>Cargar Boleta</th>
                         </tr>
                 </thead>
                 <tbody>
@@ -74,7 +74,7 @@
                                 <!-- <td class="small">{{ $fullfillment->id ?? '' }}</td> -->
                                 <td>{{ $fullfillment->year ?? '' }}</td>
                                 <td>{{ $fullfillment->month ?? '' }}</td>
-                                <td>{{ $serviceRequest->gross_amount ?? '' }}</td>
+                                <td>{{ $fullfillment->total_to_pay ?? '' }}</td>
                                 <td>{{ $fullfillment->payment_date?$fullfillment->payment_date->format('d-m-Y'):''}} </td>
                                 <td>
                                 @if($fullfillment->total_to_pay)
