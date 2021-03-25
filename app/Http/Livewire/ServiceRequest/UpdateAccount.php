@@ -63,10 +63,25 @@ class UpdateAccount extends Component
         $this->email = $this->serviceRequest->email;
     }
 
+    public function updateAllSr(){
+        $rut = $this->serviceRequest->rut;
+        $srs = ServiceRequest::where('rut',$rut)->orderByDesc('id')->get();
+        $with_account = $srs->whereNotNull('account_number')->first();
+        if($with_account) {
+            $bank_id        = $with_account->bank_id;
+            $account_number = $with_account->account_number;
+            $pay_method     = $with_account->pay_method;
+            foreach($srs as $sr) {
+                $sr->update(['bank_id' => $bank_id, 'account_number'=>$account_number, 'pay_method'=>$pay_method]);
+            }
+        }
+    }
+
     public function render()
     {
         //obtener el último ServiRequest del Rut Logeado
         //$this->serviceRequest = ServiceRequest::find(1);
+        $this->updateAllSr();
         $this->banks = Bank::all();
         return view('livewire.service-request.update-account');
     }
