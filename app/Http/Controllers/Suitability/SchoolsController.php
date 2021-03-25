@@ -31,8 +31,6 @@ class SchoolsController extends Controller
         //
         $communes = Commune::All()->SortBy('name');
         return view('suitability.schools.create', compact('communes'));
-
-
     }
 
     /**
@@ -67,9 +65,11 @@ class SchoolsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(School $school)
     {
         //
+        $communes = Commune::All()->SortBy('name');
+        return view('suitability.schools.edit', compact('school', 'communes'));
     }
 
     /**
@@ -79,9 +79,13 @@ class SchoolsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, School $school)
     {
-        //
+        //        
+        $school->fill($request->all());
+        $school->save();
+        session()->flash('success', 'Colegio Actualizado Exitosamente');
+        return redirect()->route('suitability.schools.index');
     }
 
     /**
