@@ -36,8 +36,8 @@ use App\Http\Controllers\ServiceRequests\SignatureFlowController;
 
 
 /* Grabar en Google storage  */
-// $disk = \Storage::disk('gcs');
-// $url = $disk->put('FILE.txt',"hola");
+#$disk = \Storage::disk('gcs');
+#$url = $disk->put('FILE.txt',"hola");
 
 /*
 |--------------------------------------------------------------------------
