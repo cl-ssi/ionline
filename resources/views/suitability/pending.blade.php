@@ -17,6 +17,7 @@
             <th>Cargo</th>
             <th>Correo</th>
             <th>Estado</th>
+            <th>Puntaje</th>
             <th>Aceptar</th>
             <th>Rechazar</th>
         </tr>
@@ -25,11 +26,12 @@
     @foreach($psirequests as $psirequest)
         <tr>
             <td>{{$psirequest->id}}</td>
-            <td>{{$psirequest->user_id}}</td>
+            <td>{{$psirequest->user->runFormat()}}</td>
             <td>{{$psirequest->user->fullName}}</td>
             <td>{{$psirequest->job}}</td>
             <td>{{$psirequest->user->email}}</td>
             <td>{{$psirequest->status}}</td>
+            <td>{{$psirequest->result->total_points}}</td>
             <td>
             <form action="{{ route('suitability.finalresult',['psirequest' => $psirequest, 'result' => 'Aprobado']) }}" method="POST" >
             @csrf

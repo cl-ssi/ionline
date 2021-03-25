@@ -32,5 +32,9 @@ class PsiRequest extends Model
         return $this->belongsTo('App\Models\Suitability\School','school_id');
       }
 
+      public function result(){
+        return $this->belongsTo('App\Models\Suitability\Result','id','request_id');
+      }
+
 
 }

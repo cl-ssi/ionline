@@ -27,9 +27,9 @@
                     </div>
                     @endif
 
-                    <form method="POST" action="{{ route('suitability.test.store') }}" name="test" id="test">
+                    <form method="POST" action="{{ route('idoneidad.storeExternal') }}" name="test" id="test">
                         @csrf
-                        <input type="text" id="for_psi_request_id" name="psi_request_id" value="{{$psi_request_id}}">
+                        <input type="hidden" id="for_psi_request_id" name="psi_request_id" value="{{$psi_request_id}}">
 
                         @foreach($categories as $category)
                         <div class="card mb-3">
