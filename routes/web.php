@@ -34,11 +34,6 @@ use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 use App\Http\Controllers\ServiceRequests\FulfillmentController;
 use App\Http\Controllers\ServiceRequests\SignatureFlowController;
 
-
-/* Grabar en Google storage  */
-#$disk = \Storage::disk('gcs');
-#$url = $disk->put('FILE.txt',"hola");
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
