@@ -89,7 +89,8 @@ class ReportController extends Controller
                 return redirect()->back();
             }
 
-            $txt .= "{$fulfillment->serviceRequest->rut}\t{$fulfillment->serviceRequest->name}\t{$fulfillment->serviceRequest->bank->code}\t{$fulfillment->serviceRequest->pay_method}\t{$fulfillment->serviceRequest->account_number}\t{$fulfillment->total_to_pay}\n";
+            $totalToPay = $fulfillment->total_to_pay - round($fulfillment->total_to_pay * 0.115);
+            $txt .= "{$fulfillment->serviceRequest->rut}\t{$fulfillment->serviceRequest->name}\t{$fulfillment->serviceRequest->bank->code}\t{$fulfillment->serviceRequest->pay_method}\t{$fulfillment->serviceRequest->account_number}\t{$totalToPay}\n";
         }
 
         $response = new StreamedResponse();
