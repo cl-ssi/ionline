@@ -66,7 +66,7 @@ class ReportController extends Controller
             ->get();
 
         if ($fulfillments->count() == 0) {
-            session()->flash('warning', "No existen solicitudes disponibles para pago.");
+            session()->flash('warning', "No existen solicitudes aptas para pago.");
             return redirect()->back();
         }
 
