@@ -52,6 +52,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//maqueteo calendario
+Route::get('/calendar', function () {
+    return view('calendar');
+});
+
 Route::get('corrige_firmas','ServiceRequests\ServiceRequestController@corrige_firmas')->middleware('auth');
 
 Route::prefix('webservices')->name('webservices.')->group(function () {
@@ -1037,6 +1042,8 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/', [SchoolsController::class, 'index'])->name('index');
         Route::get('/create', [SchoolsController::class, 'create'])->name('create');
         Route::post('/store', [SchoolsController::class, 'store'])->name('store');
+        Route::get('{school}/edit', [SchoolsController::class, 'edit'])->name('edit');
+        Route::put('{school}/update', [SchoolsController::class, 'update'])->name('update');
     });
 
     Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
