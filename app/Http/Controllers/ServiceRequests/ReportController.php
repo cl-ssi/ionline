@@ -84,12 +84,13 @@ class ReportController extends Controller
                 session()->flash('warning', "La solicitud con id {$fulfillment->serviceRequest->id} no contiene número de cuenta.");
                 return redirect()->back();
             }
-            if (!$fulfillment->serviceRequest->total_paid) {
+            if (!$fulfillment->total_to_pay) {
                 session()->flash('warning', "La solicitud con id {$fulfillment->serviceRequest->id} no contiene total a pagar.");
                 return redirect()->back();
             }
 
-            $txt .= "{$fulfillment->serviceRequest->rut}\t{$fulfillment->serviceRequest->name}\t{$fulfillment->serviceRequest->bank->code}\t{$fulfillment->serviceRequest->pay_method}\t{$fulfillment->serviceRequest->account_number}\t{$fulfillment->total_paid}\n";
+            $totalToPay = $fulfillment->total_to_pay - round($fulfillment->total_to_pay * 0.115);
+            $txt .= "{$fulfillment->serviceRequest->rut}\t{$fulfillment->serviceRequest->name}\t{$fulfillment->serviceRequest->bank->code}\t{$fulfillment->serviceRequest->pay_method}\t{$fulfillment->serviceRequest->account_number}\t{$totalToPay}\n";
         }
 
         $response = new StreamedResponse();
@@ -97,7 +98,7 @@ class ReportController extends Controller
             echo $txt;
         });
         $response->headers->set('Content-Type', 'text/plain');
-        $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, "pago-banco-semana-del-$fromFormatted.txt");
+        $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, "pago-banco.txt");
         $response->headers->set('Content-Disposition', $disposition);
 
         return $response;
