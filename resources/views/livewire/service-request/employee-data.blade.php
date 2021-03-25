@@ -74,7 +74,7 @@
   <div class="form-row ml-2 mr-1">
       <fieldset class="form-group col-4">
         <label>Banco</label>        
-        <select name="bank_id" class="form-control" required>
+        <select name="bank_id" class="form-control">
         <option value="">Seleccionar Banco {{$ServiceRequest->bank_id}}</option>
         @foreach($banks as $bank)
         <option value="{{$bank->id}}" {{ ($ServiceRequest->bank_id == $bank->id)? 'selected':'' }}>{{$bank->name}}</option>
