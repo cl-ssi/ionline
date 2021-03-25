@@ -376,6 +376,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('service_requests/report/pending-resolutions','ServiceRequests\ReportController@pendingResolutions')->name('service_requests.report.pending-resolutions')->middleware('auth');
     Route::get('service_requests/report/bank-payment-file','ServiceRequests\ReportController@bankPaymentFile')->name('service_requests.report.bankPaymentFile')->middleware('auth');
     Route::get('service_requests/report/without-bank-details','ServiceRequests\ReportController@withoutBankDetails')->name('service_requests.report.withoutBankDetails')->middleware('auth');
+    Route::get('service_requests/report/with-resolution-file','ServiceRequests\ReportController@indexWithResolutionFile')->name('service_requests.report.withResolutionFile')->middleware('auth');
 
     Route::resource('fulfillments', 'ServiceRequests\FulfillmentController')->middleware('auth');
     Route::get('fulfillments/certificate-pdf/{fulfillment}', 'ServiceRequests\FulfillmentController@certificatePDF')->name('fulfillments.certificate-pdf')->middleware('auth');

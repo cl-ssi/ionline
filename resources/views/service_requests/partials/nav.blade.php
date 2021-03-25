@@ -70,7 +70,7 @@
             </a>
             @endcan
 
-            
+
             <!-- @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service_requests.report.withoutBankDetails') }}"
                 href="{{ route('rrhh.service_requests.report.withoutBankDetails') }}">
@@ -84,6 +84,14 @@
                 <i class="fas fa-file-invoice-dollar"></i> Resoluciones pendientes
             </a>
             @endcan
+
+            @canany(['Service Request: with resolution'])
+                <a class="dropdown-item {{ active('rrhh.service_requests.report.withResolutionFile') }}"
+                   href="{{ route('rrhh.service_requests.report.withResolutionFile') }}">
+                    <i class="fas fa-file-invoice-dollar"></i> Solicitudes con resolución cargada
+                </a>
+            @endcan
+
 
             <!-- <div class="dropdown-divider"></div>
 
