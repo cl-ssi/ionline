@@ -108,8 +108,13 @@ class SchoolUserController extends Controller
      * @param  \App\Models\SchoolUser  $schoolUser
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SchoolUser $schoolUser)
+    public function destroy($schoolUser)
     {
-        //
+        
+        $schooluser = SchoolUser::find($schoolUser);
+        $schooluser->delete();
+        session()->flash('success', 'Usuario Eliminado como Administrador Exitosamente');        
+        return redirect()->back();
+
     }
 }
