@@ -1025,7 +1025,7 @@ class ServiceRequestController extends Controller
 
         if ($cant_rechazados == 0) {
           if ($total != $cant_aprobados) {
-            $array[$serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user->getFullNameAttribute()][$serviceRequest->id] = $serviceRequest;
+            $array[$serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user->getFullNameAttribute()][$serviceRequest->id] = $serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user;
             $hoja_ruta_falta_aprobar += 1;
           }
         }
