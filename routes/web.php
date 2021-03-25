@@ -25,6 +25,8 @@ use App\Http\Controllers\ReplacementStaff\ProfileController;
 use App\Http\Controllers\ReplacementStaff\ExperienceController;
 use App\Http\Controllers\ReplacementStaff\TrainingController;
 use App\Http\Controllers\ReplacementStaff\LanguageController;
+use App\Http\Controllers\ReplacementStaff\Manage\ProfessionManageController;
+use App\Http\Controllers\ReplacementStaff\Manage\ProfileManageController;
 use App\Http\Controllers\VaccinationController;
 
 use App\Http\Controllers\ServiceRequests\InvoiceController;
@@ -96,41 +98,52 @@ Route::get('/claveunica/login-external/{access_token}', 'ClaveUnicaController@lo
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-
-
 /* Nuevas rutas, Laravel 8.0 */
 Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
     Route::get('/', [ReplacementStaffController::class, 'index'])->name('index');
     Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
     Route::post('/store', [ReplacementStaffController::class, 'store'])->name('store');
     Route::get('/{replacement_staff}/edit', [ReplacementStaffController::class, 'edit'])->name('edit');
+    Route::get('/show_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('show_file');
+    Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
+    Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
     Route::prefix('profile')->name('profile.')->group(function(){
         Route::post('/{replacementStaff}/store', [ProfileController::class, 'store'])->name('store');
         Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
         Route::get('/show_file/{profile}', [ProfileController::class, 'show_file'])->name('show_file');
         Route::delete('{profile}/destroy', [ProfileController::class, 'destroy'])->name('destroy');
-        // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
     });
     Route::prefix('experience')->name('experience.')->group(function(){
         Route::post('/{replacementStaff}/store', [ExperienceController::class, 'store'])->name('store');
         Route::get('/download/{experience}', [ExperienceController::class, 'download'])->name('download');
         Route::get('/show_file/{experience}', [ExperienceController::class, 'show_file'])->name('show_file');
         Route::delete('{experience}/destroy', [ExperienceController::class, 'destroy'])->name('destroy');
-        // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
     });
     Route::prefix('training')->name('training.')->group(function(){
         Route::post('/{replacementStaff}/store', [TrainingController::class, 'store'])->name('store');
         Route::get('/download/{training}', [TrainingController::class, 'download'])->name('download');
         Route::get('/show_file/{training}', [TrainingController::class, 'show_file'])->name('show_file');
         Route::delete('{training}/destroy', [TrainingController::class, 'destroy'])->name('destroy');
-        // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
     });
     Route::prefix('language')->name('language.')->group(function(){
         Route::post('/{replacementStaff}/store', [languageController::class, 'store'])->name('store');
         Route::get('/download/{language}', [languageController::class, 'download'])->name('download');
         Route::get('/show_file/{language}', [languageController::class, 'show_file'])->name('show_file');
         Route::delete('{language}/destroy', [languageController::class, 'destroy'])->name('destroy');
-        // Route::put('{telephone}/update', 'TelephoneController@update')->name('update'); /{replacement_staff}
+    });
+    Route::prefix('manage')->name('manage.')->group(function(){
+        Route::prefix('profession')->name('profession.')->group(function(){
+            Route::get('/', [ProfessionManageController::class, 'index'])->name('index');
+            Route::post('/store', [ProfessionManageController::class, 'store'])->name('store');
+            Route::get('/{profession}/edit', [ProfessionManageController::class, 'edit'])->name('edit');
+            Route::delete('{profession}/destroy', [ProfessionManageController::class, 'destroy'])->name('destroy');
+        });
+        Route::prefix('profile')->name('profile.')->group(function(){
+            Route::get('/', [ProfileManageController::class, 'index'])->name('index');
+            Route::post('/store', [ProfileManageController::class, 'store'])->name('store');
+            Route::get('/{profile}/edit', [ProfileManageController::class, 'edit'])->name('edit');
+            Route::delete('{profile}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
+        });
     });
     Route::prefix('request')->name('request.')->group(function(){
         Route::get('/', [ReplacementStaffController::class, 'requestIndex'])->name('index');
@@ -376,6 +389,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('service_requests/report/pending-resolutions','ServiceRequests\ReportController@pendingResolutions')->name('service_requests.report.pending-resolutions')->middleware('auth');
     Route::get('service_requests/report/bank-payment-file','ServiceRequests\ReportController@bankPaymentFile')->name('service_requests.report.bankPaymentFile')->middleware('auth');
     Route::get('service_requests/report/without-bank-details','ServiceRequests\ReportController@withoutBankDetails')->name('service_requests.report.withoutBankDetails')->middleware('auth');
+    Route::get('service_requests/report/with-resolution-file','ServiceRequests\ReportController@indexWithResolutionFile')->name('service_requests.report.withResolutionFile')->middleware('auth');
 
     Route::resource('fulfillments', 'ServiceRequests\FulfillmentController')->middleware('auth');
     Route::get('fulfillments/certificate-pdf/{fulfillment}', 'ServiceRequests\FulfillmentController@certificatePDF')->name('fulfillments.certificate-pdf')->middleware('auth');

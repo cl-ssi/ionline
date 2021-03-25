@@ -5,9 +5,13 @@ namespace App\Http\Controllers\ReplacementStaff;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ReplacementStaff\ReplacementStaff;
+use App\Models\ReplacementStaff\ProfessionManage;
+use App\Models\ReplacementStaff\ProfileManage;
 use App\Models\ReplacementStaff\Profile;
 use App\Models\UserExternal;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
 class ReplacementStaffController extends Controller
@@ -19,8 +23,15 @@ class ReplacementStaffController extends Controller
      */
     public function index(Request $request)
     {
-        $replacementStaff = ReplacementStaff::paginate(15);
-        return view('replacement_staff.index', compact('replacementStaff'));
+        $replacementStaff = ReplacementStaff::search($request->input('search'),
+                                                     $request->input('profile_search'),
+                                                     $request->input('profession_search'))
+            ->paginate(15);
+
+        $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
+        $profileManage = ProfileManage::orderBy('name', 'ASC')->get();
+
+        return view('replacement_staff.index', compact('replacementStaff', 'request', 'professionManage', 'profileManage'));
     }
 
     /**
@@ -44,10 +55,10 @@ class ReplacementStaffController extends Controller
 
         }
         else{
-            
+
             return $this->edit($replacementStaff);
         }
-        
+
         //return view('replacement_staff.create');
     }
 
@@ -59,9 +70,19 @@ class ReplacementStaffController extends Controller
      */
     public function store(Request $request)
     {
-        $replacementStaff = new ReplacementStaff($request->All());
-        $replacementStaff->status = 'available';
-        $replacementStaff->save();
+        if($request->hasFile('cv_file'))
+        {
+            $replacementStaff = new ReplacementStaff($request->All());
+            $now = Carbon::now()->format('Y_m_d_H_i_s');
+            $file_name = $now.'_cv_'.$replacementStaff->run;
+            $file = $request->file('cv_file');
+            // dd($file);
+            //$upload = $request->file('arquivo')->storeAs('products', 'novonomeaffffff.jpg');
+            $replacementStaff->cv_file = $file->storeAs('replacement_staff/cv_docs', $file_name.'.'.$file->extension());
+            $replacementStaff->save();
+        }
+
+
 
         session()->flash('success', 'Se ha creado el postulante exitosamente');
         //return redirect()->back();
@@ -70,19 +91,45 @@ class ReplacementStaffController extends Controller
 
     public function edit(ReplacementStaff $replacementStaff)
     {
-        // $profiles = Profile::where('replacement_staff_id', $replacementStaff->id)
-        //     ->get();
+        $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
 
-        return view('replacement_staff.edit', compact('replacementStaff'));
+        $profileManage = ProfileManage::orderBy('name', 'ASC')->get();
+
+        return view('replacement_staff.edit', compact('replacementStaff', 'professionManage', 'profileManage'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, ReplacementStaff $replacementStaff)
     {
-        //
+
+        if($request->hasFile('cv_file'))
+        {
+            $replacementStaff->fill($request->all());
+            $now = Carbon::now()->format('Y_m_d_H_i_s');
+            $file_name = $now.'_cv_'.$replacementStaff->run;
+            $file = $request->file('cv_file');
+            $replacementStaff->cv_file = $file->storeAs('replacement_staff/cv_docs', $file_name.'.'.$file->extension());
+            $replacementStaff->save();
+        }
+        else{
+            $replacementStaff->fill($request->all());
+            $replacementStaff->save();
+        }
+        session()->flash('success', 'Sus datos personales han sido correctamente actualizados.');
+        return redirect()->route('replacement_staff.edit', $replacementStaff);
     }
 
     public function destroy($id)
     {
         //
+    }
+
+    public function show_file(ReplacementStaff $replacementStaff)
+    {
+        return Storage::response($replacementStaff->cv_file);
+    }
+
+    public function download(ReplacementStaff $replacementStaff)
+    {
+        return Storage::download($replacementStaff->cv_file);
     }
 }
