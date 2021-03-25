@@ -81,6 +81,7 @@ class UpdateAccount extends Component
     {
         //obtener el último ServiRequest del Rut Logeado
         //$this->serviceRequest = ServiceRequest::find(1);
+        $this->updateAllSr();
         $this->banks = Bank::all();
         return view('livewire.service-request.update-account');
     }
