@@ -620,6 +620,35 @@
 
         </div>
 
+        <div class="form-row">
+            <fieldset class="form-group col col-md-3">
+              <label>Banco</label>
+              <select name="bank_id" class="form-control">
+              <option value="">Seleccionar Banco (opcional)</option>
+              @foreach($banks as $bank)
+                <option value="{{$bank->id}}" @if($serviceRequest->bank_id == $bank->id) selected @endif>{{$bank->name}}</option>
+              @endforeach
+            </select>
+          </fieldset>
+
+
+          <fieldset class="form-group col col-md-3">
+              <label>Número de Cuenta (opcional)</label>
+              <input type="number" name="account_number" class="form-control"
+                value="{{ $serviceRequest->account_number }}" >
+          </fieldset>
+
+          <fieldset class="form-group col col-md-3">
+              <label for="for_pay_method">Tipo de cuenta (opcional)</label>
+              <select name="pay_method" class="form-control">
+                <option value="">Seleccionar tipo de cuenta</option>
+                <option value="01" @if($serviceRequest->bank_id == "01") selected @endif>CTA CORRIENTE / CTA VISTA</option>
+                <option value="02" @if($serviceRequest->bank_id == "02") selected @endif>CTA AHORRO</option>
+                <option value="30" @if($serviceRequest->bank_id == "03") selected @endif>CUENTA RUT</option>
+              </select>
+          </fieldset>
+        </div>
+
           <div class="form-row">
               <fieldset class="form-group col col-md-3">
                   <button type="submit" class="btn btn-danger">Guardar</button>
