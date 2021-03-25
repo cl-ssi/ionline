@@ -65,6 +65,7 @@
             <th>FECHA PAGO</th>
 						<th>T.CONTRATO</th>
 						<th>ESTADO.SOLICITUD</th>
+						<th>JORNADA TRABAJO</th>
         </tr>
     </thead>
     <tbody>
@@ -111,6 +112,7 @@
 										@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
 										@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
 										@else Finalizada @endif</td>
+								<td nowrap>working_day_type</td>
 							</tr>
 						@else
 							@if($fulfillment->bill_number != NULL || $fulfillment->total_hours_paid != NULL || $fulfillment->total_paid != NULL ||
@@ -153,6 +155,7 @@
 												@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
 												@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
 												@else Finalizada @endif</td>
+										<td nowrap>working_day_type</td>
 									</tr>
 							@else
 								<tr class="table-success">
@@ -193,6 +196,7 @@
 											@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
 											@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
 											@else Finalizada @endif</td>
+									<td nowrap>working_day_type</td>
 								</tr>
 							@endif
 						@endif
@@ -237,6 +241,7 @@
 								@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
 								@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
 								@else Finalizada @endif</td>
+						<td nowrap>working_day_type</td>
 					</tr>
 			  @endif
       @endforeach
@@ -319,6 +324,7 @@
 							@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
 							@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
 							@else Finalizada @endif</td>
+					<td nowrap>working_day_type</td>
         </tr>
       @endforeach
     </tbody>
