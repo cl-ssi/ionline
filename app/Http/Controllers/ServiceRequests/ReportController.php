@@ -65,6 +65,11 @@ class ReportController extends Controller
             ->where('has_invoice_file', 1)
             ->get();
 
+        if ($fulfillments->count() == 0) {
+            session()->flash('warning', "No existen solicitudes aptas para pago.");
+            return redirect()->back();
+        }
+
         $txt = '';
         foreach ($fulfillments as $fulfillment) {
             if (!$fulfillment->serviceRequest->bank) {
