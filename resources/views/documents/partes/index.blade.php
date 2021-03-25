@@ -152,6 +152,7 @@
                             
                             <span  data-toggle="tooltip" data-placement="top"
                             data-original-title="{{ optional($req->events->where('status', '<>', 'en copia')->first())->to_user_id }}
+                                                {{ ($req->events->where('status', '<>', 'en copia')->first()->to_user->fullname)??''}}
                                                 {{ optional($req->events->where('status', '<>', 'en copia')->first())->CreationDate }}">
                             
                             
