@@ -610,6 +610,8 @@ class FulfillmentController extends Controller
         $storage_path = '/service_request/resolutions/';
         $file =  $storage_path . $serviceRequest->id . '.pdf';
         return Storage::response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
+        /* Para google storage */
+        //return Storage::disk('gcs')->response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
     }
 
 }
