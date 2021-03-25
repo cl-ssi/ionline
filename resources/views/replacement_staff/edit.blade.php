@@ -130,11 +130,13 @@
     <div class="card-body">
         @if($replacementStaff->profiles->count() > 0)
         <table class="table small table-striped ">
-            <thead>
+            <thead class="text-center">
                 <tr>
                     <th style="width: 11%">Fecha Registro</th>
+                    <th>Estamento</th>
                     <th>Título</th>
-                    <th>Archivo</th>
+                    <th>Fecha Titulación</th>
+                    <th>Años Exp.</th>
                     <th style="width: 10%"></th>
                     <th style="width: 2%"></th>
                 </tr>
@@ -143,12 +145,10 @@
                 @foreach($replacementStaff->profiles as $profile)
                 <tr>
                     <td>{{ $profile->updated_at->format('d-m-Y H:i:s') }}</td>
-                    <td>{{ $profile->profession }}</td>
-                    <td>
-                      @if(pathinfo($profile->file, PATHINFO_EXTENSION) == 'pdf')
-                          <i class="fas fa-file-pdf fa-2x"></i>
-                      @endif
-                    </td>
+                    <td>{{ $profile->profile_manage->name }}</td>
+                    <td>{{ $profile->profession_manage->name }}</td>
+                    <td>{{ Carbon\Carbon::parse($profile->degree_date)->format('d-m-Y') }}</td>
+                    <td align="center">{{ $profile->YearsOfDegree }}</td>
                     <td>
                         <a href="{{ route('replacement_staff.profile.show_file', $profile) }}"
                             class="btn btn-outline-secondary btn-sm"
@@ -179,58 +179,6 @@
                                                 'professionManage' => $professionManage,
                                                 'profileManage' => $profileManage])
 
-        <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
-    </div>
-</div>
-
-<br>
-
-<div class="card">
-    <div class="card-header">
-        <h5>Experiencia laboral</h5>
-    </div>
-
-    <div class="card-body">
-        @if($replacementStaff->experiences->count() > 0)
-        <table class="table small table-striped ">
-            <thead>
-                <tr>
-                    <th style="width: 11%">Fecha Registro</th>
-                    <th>Experiencia</th>
-                    <th>Funciones Realizadas</th>
-                    <th style="width: 15%">Contacto</th>
-                    <th style="width: 5%"></th>
-                    <th style="width: 2%"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($replacementStaff->experiences as $experience)
-                <tr>
-                    <td>{{ $experience->updated_at->format('d-m-Y H:i:s') }}</td>
-                    <td>{{ substr($experience->previous_experience, 0, 150) }}</td>
-                    <td>{{ substr($experience->performed_functions, 0, 150) }}</td>
-                    <td>{{ $experience->contact_name }}<br>{{ $experience->contact_telephone }}</td>
-                    <td>
-                        <button href="" class="btn btn-outline-secondary btn-sm exp-modal" title="Ir" data-toggle="modal" data-target="#exampleModal-exp-{{ $experience->id }}"> <i class="far fa-eye"></i></button>
-                    </td>
-                    <td>
-                        <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.experience.destroy', $experience) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger btn-sm"
-                                    onclick="return confirm('¿Está seguro que desea eliminar su Experiencia Laboral? ' )">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                @include('replacement_staff.modals.experience_details')
-                @endforeach
-            </tbody>
-        </table>
-        @endif
-
-        @livewire('replacement-staff.experience', ['replacementStaff' => $replacementStaff])
     </div>
 </div>
 
@@ -295,63 +243,6 @@
 
     <br>
 
-    <div class="card">
-        <div class="card-header">
-            <h5>Idiomas</h5>
-        </div>
-        <div class="card-body">
-            @if($replacementStaff->languages->count() > 0)
-                <table class="table small table-striped ">
-                    <thead>
-                        <tr>
-                            <th style="width: 11%">Fecha Registro</th>
-                            <th>Idioma</th>
-                            <th>Nivel</th>
-                            <th>Archivo</th>
-                            <th style="width: 10%"></th>
-                            <th style="width: 2%"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($replacementStaff->languages as $language)
-                        <tr>
-                            <td>{{ $profile->updated_at->format('d-m-Y H:i:s') }}</td>
-                            <td>{{ $language->LanguageValue }}</td>
-                            <td>{{ $language->LevelValue }}</td>
-                            <td>
-                                @if(pathinfo($language->file, PATHINFO_EXTENSION) == 'pdf')
-                                    <i class="fas fa-file-pdf fa-2x"></i>
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('replacement_staff.language.show_file', $language) }}"
-                                    class="btn btn-outline-secondary btn-sm"
-                                    title="Ir"
-                                    target="_blank"> <i class="far fa-eye"></i></a>
-                                <a class="btn btn-outline-secondary btn-sm"
-                                    href="{{ route('replacement_staff.language.download', $language) }}"
-                                    target="_blank"><i class="fas fa-download"></i>
-                                </a>
-                            </td>
-                            <td>
-                              <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.language.destroy', $language) }}">
-                                  @csrf
-                                  @method('DELETE')
-                                  <button type="submit" class="btn btn-outline-danger btn-sm"
-                                      onclick="return confirm('¿Está seguro que desea eliminar su idioma: {{$language->LanguageValue}}?')">
-                                      <i class="fas fa-trash"></i>
-                                  </button>
-                              </form>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            @endif
-
-            @livewire('replacement-staff.languages', ['replacementStaff' => $replacementStaff])
-        </div>
-    </div>
 </div>
 
 @endsection
