@@ -25,7 +25,15 @@ class PsiRequest extends Model
     ];
 
     public function user(){
-        return $this->belongsTo('App\User','user_id');
+        return $this->belongsTo('App\Models\UserExternal','user_external_id');
+      }
+
+    public function school(){
+        return $this->belongsTo('App\Models\Suitability\School','school_id');
+      }
+
+      public function result(){
+        return $this->belongsTo('App\Models\Suitability\Result','id','request_id');
       }
 
 

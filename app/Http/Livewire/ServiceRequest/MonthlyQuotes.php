@@ -10,6 +10,7 @@ class MonthlyQuotes extends Component
 {
     public $serviceRequest;
     public $valores;
+    public $resultadoEnNumero = false;
 
     public function render()
     {
@@ -44,22 +45,23 @@ class MonthlyQuotes extends Component
                        $valores[$i] = $valor_mensual;
                    }
                 else {
-                    $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->end_date)->days;
+                    $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->end_date)->days + 1;
                     /* Días trabajados */
                     $valores[$i] = round($dias_trabajados * ($valor_mensual/30));
                 }
             }
 
             /* Más de un mes */
-            if($i == $first_month) {
-                if($serviceRequest->start_date->day == $first_day_month) {
-                    $valores[$i] = $valor_mensual;
-                }
-                else {
-                    $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days;
-                    /* Días trabajados */
-                    $valores[$i] = round($dias_trabajados * ($valor_mensual/30));
-                }
+            else if($i == $first_month) {
+                 /* Creo que sólo necesito el valor mensual acá, el if y else no deberían ser necesarios */
+                 if($serviceRequest->start_date->day == $first_day_month) {
+                     $valores[$i] = $valor_mensual;
+                 }
+                 else {
+                     $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
+                     /* Días trabajados */
+                     $valores[$i] = round($dias_trabajados * ($valor_mensual/30));
+                 }
 
             }
             else if($i == $last_month) {
@@ -67,7 +69,7 @@ class MonthlyQuotes extends Component
                     $valores[$i] = $valor_mensual;
                 }
                 else {
-                    $dias_trabajados = $serviceRequest->end_date->diff($serviceRequest->end_date->firstOfMonth())->days;
+                    $dias_trabajados = $serviceRequest->end_date->diff($serviceRequest->end_date->firstOfMonth())->days + 1;
                     /* Días trabajados */
                     $valores[$i] = round($dias_trabajados * ($valor_mensual/30));
                 }
@@ -79,57 +81,34 @@ class MonthlyQuotes extends Component
 
         }
 
-        // setlocale(LC_ALL, 'es');
-        $string = count($valores) . " cuotas" ;
-        foreach ($valores as $key => $valor) {
-          if($key == count($valores)){
-            $string = $string . ", y una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->formatLocalized('%B') ."; ";
-          }else{
-            $string = $string . ", una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->formatLocalized('%B');
-          }
+        if ($this->resultadoEnNumero) {
+            $this->valores = $valores;
+        }else{
+            $nroCuotas = count($valores);
+            if ($nroCuotas == 1){
+                $string = $nroCuotas . " cuota" ;
+                $string .= " de $" . number_format(current($valores)) . " el mes de " . Carbon::create()->day(1)->month(key($valores))->monthName ."; ";
+            }
+            else{
+                $string = $nroCuotas . " cuotas" ;
+
+                foreach ($valores as $key => $valor) {
+                    if ($key === array_key_last($valores)) {
+                        $string .= " y una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->monthName ."; ";
+                    }
+                    else {
+                        $string .= ", una de $" . number_format($valor) . " el mes de " . Carbon::create()->day(1)->month($key)->monthName;
+                    }
+                }
+            }
+
+
+            $this->valores = $string;
         }
 
-        $this->valores = $string;
+
 
         return view('livewire.service-request.monthly-quotes');
     }
 
-    public function monthName(Integer $month){
-      if ($month == 1) {
-        return "Enero";
-      }
-      if ($month == 2) {
-        return "Enero";
-      }
-      if ($month == 3) {
-        return "Enero";
-      }
-      if ($month == 4) {
-        return "Enero";
-      }
-      if ($month == 5) {
-        return "Enero";
-      }
-      if ($month == 6) {
-        return "Enero";
-      }
-      if ($month == 7) {
-        return "Enero";
-      }
-      if ($month == 8) {
-        return "Enero";
-      }
-      if ($month == 9) {
-        return "Enero";
-      }
-      if ($month == 10) {
-        return "Enero";
-      }
-      if ($month == 11) {
-        return "Enero";
-      }
-      if ($month == 12) {
-        return "Enero";
-      }
-    }
 }

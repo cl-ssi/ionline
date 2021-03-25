@@ -31,14 +31,16 @@
         <tr>
             <th>FUNCIONARIO</th>
             <th>CANTIDAD</th>
+						<th></th>
         </tr>
     </thead>
     <tbody>
-      @foreach($group_array as $key => $data)
+      @foreach($array as $key => $data)
       @if($key != NULL)
         <tr>
           <td nowrap>{{$key}}</td>
-          <td nowrap>{{$data}}</td>
+          <td nowrap>{{count($data)}}</td>
+					<td>@livewire('service-request.pending-service-request' , ['data' => $data])</td>
         </tr>
       @endif
       @endforeach
@@ -48,29 +50,6 @@
       </tr>
     </tbody>
 </table>
-
-<!-- <h4>Detalle</h4>
-<hr>
-<table class="table table-sm small" >
-    <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">APROBADAS</th>
-            <th scope="col">RECHAZADAS</th>
-            <th scope="col">VISADOR PENDIENTE</th>
-        </tr>
-    </thead>
-    <tbody>
-      @foreach($array as $key => $data)
-        <tr>
-          <td nowrap>{{$key}}</td>
-          <td nowrap>{{$data['aprobados']}}</td>
-          <td nowrap>{{$data['rechazados']}}</td>
-          <td nowrap>{{$data['falta_aprobar']}}</td>
-        </tr>
-      @endforeach
-    </tbody>
-</table> -->
 
 <h4>Cumplimientos pendientes por ingresar</h4>
 <!-- <hr> -->

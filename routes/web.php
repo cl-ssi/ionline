@@ -36,11 +36,6 @@ use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 use App\Http\Controllers\ServiceRequests\FulfillmentController;
 use App\Http\Controllers\ServiceRequests\SignatureFlowController;
 
-
-
-
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -56,6 +51,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//maqueteo calendario
+Route::get('/calendar', function () {
+    return view('calendar');
+});
+
 Route::get('corrige_firmas','ServiceRequests\ServiceRequestController@corrige_firmas')->middleware('auth');
 
 Route::prefix('webservices')->name('webservices.')->group(function () {
@@ -69,8 +69,16 @@ Route::post('/login/external', [LoginController::class,'externalLogin']);
 
 
 Route::group(['middleware' => 'auth:external'], function () {
-    //Route::view('/kaka', 'test');
-    Route::view('/test', 'test');
+    Route::view('/external', 'external')->name('external');
+    //Route::view('/external', 'external')->name('external');
+    Route::prefix('idoneidad')->as('idoneidad.')->group(function(){
+    Route::get('/create/{school}', [SuitabilityController::class, 'createExternal'])->name('createExternal');
+    Route::post('/', [SuitabilityController::class, 'storeExternal'])->name('storeExternal');
+    Route::get('/list/{school}', [SuitabilityController::class, 'listOwn'])->name('listOwn');
+    Route::patch('/update/{psi_request_id?}', [TestsController::class, 'updateStatus'])->name('updateStatus');
+    Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
+    Route::post('/test', [TestsController::class, 'storeExternal'])->name('storeExternal');
+    });
 });
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
@@ -84,7 +92,9 @@ Route::post('/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
 
 Route::get('/claveunica', 'ClaveUnicaController@autenticar')->name('claveunica.autenticar');
 Route::get('/claveunica/callback', 'ClaveUnicaController@callback')->name('claveunica.callback');
+Route::get('/claveunica/callback-testing', 'ClaveUnicaController@callback');
 Route::get('/claveunica/login/{access_token}', 'ClaveUnicaController@login')->name('claveunica.login');
+Route::get('/claveunica/login-external/{access_token}', 'ClaveUnicaController@loginExternal');
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -272,6 +282,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('{user}/roles', 'Rrhh\RoleController@index')->name('roles.index')->middleware('auth');
     Route::post('{user}/roles', 'Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
 
+
+
     /*
     // TODO: ordenar rutas service request
     // Urls en Singular y separadas por guion en medio
@@ -352,13 +364,18 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     });
     */
 
-
+    Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
+        // Rutas de service request
+        Route::get('export-sirh','ServiceRequests\ServiceRequestController@export_sirh')->name('export-sirh');
+        Route::get('export-sirh-txt', 'ServiceRequests\ServiceRequestController@export_sirh_txt')->name('export-sirh-txt');
+    });
 
     //Route::resource('shift_control', 'ServiceRequests\ShiftControlController')->middleware('auth');
     Route::post('service_requests.derive','ServiceRequests\ServiceRequestController@derive')->name('service_requests.derive')->middleware('auth');
     Route::get('service_requests.consolidated_data','ServiceRequests\ServiceRequestController@consolidated_data')->name('service_requests.consolidated_data')->middleware('auth');
+    Route::post('service_requests.destroy_with_parameters','ServiceRequests\ServiceRequestController@destroy_with_parameters')->name('service_requests.destroy_with_parameters')->middleware('auth');
     Route::get('service_requests.pending_requests','ServiceRequests\ServiceRequestController@pending_requests')->name('service_requests.pending_requests')->middleware('auth');
-    Route::get('service_requests/export-sirh','ServiceRequests\ServiceRequestController@export_sirh')->name('service_requests.export_sirh')->middleware('auth');
+
     Route::get('service_requests.aditional_data_list','ServiceRequests\ServiceRequestController@aditional_data_list')->name('service_requests.aditional_data_list')->middleware('auth');
     Route::get('service_requests.transfer_requests','ServiceRequests\ServiceRequestController@transfer_requests')->name('service_requests.transfer_requests')->middleware('auth');
     Route::put('service_requests/update_aditional_data/{serviceRequest}', 'ServiceRequests\ServiceRequestController@update_aditional_data')->middleware('auth')->name('service_requests.update_aditional_data');
@@ -370,7 +387,9 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('filfillments/download-resolution/{serviceRequest}','ServiceRequests\FulfillmentController@downloadResolution')->name('fulfillments.download.resolution')->middleware('auth');
     Route::get('service_requests/report/to-pay','ServiceRequests\ReportController@toPay')->name('service_requests.report.toPay')->middleware('auth');
     Route::get('service_requests/report/pending-resolutions','ServiceRequests\ReportController@pendingResolutions')->name('service_requests.report.pending-resolutions')->middleware('auth');
-    Route::get('service_requests/report/bank-payment-file/{selected_week}','ServiceRequests\ReportController@bankPaymentFile')->name('service_requests.report.bankPaymentFile')->middleware('auth');
+    Route::get('service_requests/report/bank-payment-file','ServiceRequests\ReportController@bankPaymentFile')->name('service_requests.report.bankPaymentFile')->middleware('auth');
+    Route::get('service_requests/report/without-bank-details','ServiceRequests\ReportController@withoutBankDetails')->name('service_requests.report.withoutBankDetails')->middleware('auth');
+    Route::get('service_requests/report/with-resolution-file','ServiceRequests\ReportController@indexWithResolutionFile')->name('service_requests.report.withResolutionFile')->middleware('auth');
 
     Route::resource('fulfillments', 'ServiceRequests\FulfillmentController')->middleware('auth');
     Route::get('fulfillments/certificate-pdf/{fulfillment}', 'ServiceRequests\FulfillmentController@certificatePDF')->name('fulfillments.certificate-pdf')->middleware('auth');
@@ -1034,12 +1053,15 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/', [SchoolsController::class, 'index'])->name('index');
         Route::get('/create', [SchoolsController::class, 'create'])->name('create');
         Route::post('/store', [SchoolsController::class, 'store'])->name('store');
+        Route::get('{school}/edit', [SchoolsController::class, 'edit'])->name('edit');
+        Route::put('{school}/update', [SchoolsController::class, 'update'])->name('update');
     });
 
     Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
         Route::get('/', [SchoolUserController::class, 'index'])->name('index');
         Route::get('/create', [SchoolUserController::class, 'create'])->name('create');
         Route::post('/store', [SchoolUserController::class, 'store'])->name('store');
+        Route::delete('/{schooluser}/destroy', [SchoolUserController::class, 'destroy'])->name('destroy');
         Route::post('/storeuser', [SchoolUserController::class, 'storeuser'])->name('storeuser');
     });
 

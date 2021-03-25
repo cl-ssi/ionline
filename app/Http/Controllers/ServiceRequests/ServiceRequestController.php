@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Subdirection;
 use App\Models\ServiceRequests\ResponsabilityCenter;
+use App\Models\Parameters\Bank;
 use App\Models\ServiceRequests\SignatureFlow;
 use App\Models\ServiceRequests\ShiftControl;
 use Luecano\NumeroALetras\NumeroALetras;
@@ -55,7 +56,7 @@ class ServiceRequestController extends Controller
             //with responsable_id
             if ($user_id == $signatureFlow->responsable_id) {
               if ($signatureFlow->status == NULL) {
-                if ($serviceRequest->SignatureFlows->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL) {
+                if ($serviceRequest->SignatureFlows->where('status','!=',2)->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL) {
                   $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
                 }else{
                   $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
@@ -93,14 +94,27 @@ class ServiceRequestController extends Controller
 
     // dd($request);
     $responsability_center_ou_id = $request->responsability_center_ou_id;
+    $program_contract_type = $request->program_contract_type;
+    $name = $request->name;
+    $id = $request->id;
     // dd($responsability_center_ou_id);
-    $serviceRequests = ServiceRequest::
-                                       when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
-                                          return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
-                                       })
-                                     ->orderBy('id','asc')->get();
-    $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)->orderBy('name', 'ASC')->get();
-    return view('service_requests.requests.aditional_data_list', compact('serviceRequests','responsabilityCenters'));
+    $serviceRequests = ServiceRequest::when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
+                                             return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+                                          })
+                                     ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
+                                            return $q->where('program_contract_type',$program_contract_type);
+                                          })
+                                     ->when($name != NULL, function ($q) use ($name) {
+                                             return $q->where('name','LIKE','%'.$name.'%');
+                                          })
+                                     ->when($id != NULL, function ($q) use ($id) {
+                                             return $q->where('id',$id);
+                                          })
+                                     ->orderBy('id','asc')
+                                     ->paginate(100);
+                                     // ->get();
+    $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
+    return view('service_requests.requests.aditional_data_list', compact('serviceRequests','responsabilityCenters','request'));
   }
 
   public function transfer_requests(Request $request){
@@ -181,7 +195,7 @@ class ServiceRequestController extends Controller
      }
      //hospital
      elseif(Auth::user()->organizationalUnit->establishment_id == 1){
-       $signatureFlows['Subdirector'] = 9882506; // 88 - Subdirección Médica
+       $signatureFlows['Subdirector'] = 14101085; // 88 - Subdirección Médica (IRIONDO: 9882506)
        $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
        $signatureFlows['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
        $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
@@ -206,6 +220,7 @@ class ServiceRequestController extends Controller
 
      //array para solicitud por turnos
      $signatureFlowsTurnos = [];
+     $sumaAlzadaFlow = [];
      if (Auth::user()->organizationalUnit->establishment_id == 38) {
        //Hector Reyno (CGU)
        if (Auth::user()->organizationalUnit->id == 24) {
@@ -228,7 +243,7 @@ class ServiceRequestController extends Controller
      }
      //hospital
      elseif(Auth::user()->organizationalUnit->establishment_id == 1){
-       $signatureFlowsTurnos['Subdirector'] = 9882506; // 88 - Subdirección Médica
+       $signatureFlowsTurnos['Subdirector'] = 14101085; // 88 - Subdirección Médica (IRIONDO: 9882506)
        // $signatureFlowsTurnos['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
        $signatureFlowsTurnos['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
        $signatureFlowsTurnos['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
@@ -236,9 +251,13 @@ class ServiceRequestController extends Controller
        // $signatureFlowsTurnos['Director Hospital'] = 14101085; // 84 - Dirección
      }
 
+     $sumaAlzadaFlow['S.G.D.P Hospital'] = 16390845;
+     $sumaAlzadaFlow['Jefe Finanzas'] = 13866194;
+     $sumaAlzadaFlow['Director Hospital'] = 14101085;
+
      // dd($signatureFlowsTurnos);
 
-    return view('service_requests.requests.create', compact('subdirections','responsabilityCenters','users','establishments','signatureFlows','signatureFlowsTurnos'));
+    return view('service_requests.requests.create', compact('subdirections','responsabilityCenters','users','establishments','signatureFlows','signatureFlowsTurnos','sumaAlzadaFlow'));
   }
 
   /**
@@ -249,11 +268,16 @@ class ServiceRequestController extends Controller
    */
   public function store(Request $request)
   {
+    // dd($request->users);
+    //dd($request->users);
       //validation existence
       $serviceRequest = ServiceRequest::where('rut',$request->run."-".$request->dv)
                                       ->where('program_contract_type',$request->program_contract_type)
                                       ->where('start_date',$request->start_date)
-                                      ->where('end_date',$request->end_date)->get();
+                                      ->where('end_date',$request->end_date)
+                                      ->where('responsability_center_ou_id',$request->responsability_center_ou_id)
+                                      ->where('working_day_type',$request->working_day_type)
+                                      ->get();
       if ($serviceRequest->count() > 0) {
         session()->flash('info', 'Ya existe una solicitud ingresada para este funcionario (Solicitud nro <b>'.$serviceRequest->first()->id.'</b> )');
         return redirect()->back();
@@ -406,7 +430,10 @@ class ServiceRequestController extends Controller
         $employee = $authorities[0]->position . " - " . $authorities[0]->organizationalUnit->name;
       }
 
-      return view('service_requests.requests.edit', compact('serviceRequest', 'users', 'establishments', 'subdirections', 'responsabilityCenters', 'SignatureFlow','employee'));
+      $banks = Bank::all();
+
+      return view('service_requests.requests.edit', compact('serviceRequest', 'users', 'establishments', 'subdirections',
+                                                            'responsabilityCenters', 'SignatureFlow','employee','banks'));
   }
 
   /**
@@ -465,6 +492,16 @@ class ServiceRequestController extends Controller
 
   }
 
+  public function destroy_with_parameters(Request $request){
+    $serviceRequest = ServiceRequest::find($request->id);
+    $serviceRequest->observation = $request->observation;
+    $serviceRequest->save();
+
+    $serviceRequest->delete();
+    session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido eliminada.');
+    return redirect()->route('rrhh.service_requests.index');
+  }
+
   public function consolidated_data(Request $request)
   {
 
@@ -503,8 +540,11 @@ class ServiceRequestController extends Controller
     return view('service_requests.requests.consolidated_data',compact('serviceRequests','serviceRequestsRejected'));
   }
 
-
   public function export_sirh() {
+    return view('service_requests.export_sirh');
+  }
+
+  public function export_sirh_txt() {
     // foreach ($serviceRequests as $key => $serviceRequest) {
     //   foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
     //     $start_date = Carbon::parse($shiftControl->start_date);
@@ -524,12 +564,13 @@ class ServiceRequestController extends Controller
         "Expires" => "0"
     );
 
-    $filas = ServiceRequest::where('establishment_id',1)
-              ->whereDoesntHave("SignatureFlows", function($subQuery) {
-                $subQuery->where('status',0);
-              })
-              ->orderBy('request_date','asc')
-              ->get();
+    $filas = ServiceRequest::where('establishment_id',1)->get();
+              // ->where('sirh_contract_registration',0)->orWhereNull('sirh_contract_registration')
+              // ->whereDoesntHave("SignatureFlows", function($subQuery) {
+              //   $subQuery->where('status',0);
+              // })
+              // ->orderBy('request_date','asc')
+              // ->get();
 
     $columnas = array(
         'RUN',
@@ -965,6 +1006,8 @@ class ServiceRequestController extends Controller
                                        ->get();
 
       $array = [];
+      $hoja_ruta_falta_aprobar = 0;
+      // $group_array = [];
       foreach ($serviceRequests as $key => $serviceRequest) {
         $total = 0;
         $cant_aprobados = 0;
@@ -978,36 +1021,33 @@ class ServiceRequestController extends Controller
           if ($SignatureFlow->status === 0) {
             $cant_rechazados += 1;
           }
-          if (!($cant_rechazados > 0)) {
-            if ($total != $cant_aprobados) {
-              $falta_aprobar = $serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user->getFullNameAttribute();
-            }
+        }
+
+        if ($cant_rechazados == 0) {
+          if ($total != $cant_aprobados) {
+            $array[$serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user->getFullNameAttribute()][$serviceRequest->id] = $serviceRequest->SignatureFlows->whereNull('status')->sortBy('sign_position')->first()->user;
+            $hoja_ruta_falta_aprobar += 1;
           }
-
-        }
-        $array[$serviceRequest->id]['objeto'] = $serviceRequest;
-        $array[$serviceRequest->id]['total'] = $total;
-        $array[$serviceRequest->id]['aprobados'] = $cant_aprobados;
-        $array[$serviceRequest->id]['rechazados'] = $cant_rechazados;
-        $array[$serviceRequest->id]['falta_aprobar'] = $falta_aprobar;
-      }
-
-      //obtener subtotales
-      $group_array = [];
-      $hoja_ruta_falta_aprobar = 0;
-      foreach ($array as $key => $data) {
-        $group_array[$data['falta_aprobar']] = 0;
-        // $group_array['rechazados'] = 0;
-      }
-      foreach ($array as $key => $data) {
-        if ($data['rechazados'] == 0 && $data['falta_aprobar'] != "") {
-          $group_array[$data['falta_aprobar']] += 1;
-          $hoja_ruta_falta_aprobar+=1;
         }
       }
+      // dd($array,$hoja_ruta_falta_aprobar);
+      //
+      // //obtener subtotales
+      // $group_array = [];
+      // $hoja_ruta_falta_aprobar = 0;
+      // foreach ($array as $key => $data) {
+      //   $group_array[$data['falta_aprobar']] = 0;
+      //   // $group_array['rechazados'] = 0;
+      // }
+      // foreach ($array as $key => $data) {
+      //   if ($data['rechazados'] == 0 && $data['falta_aprobar'] != "") {
+      //     $group_array[$data['falta_aprobar']] += 1;
+      //     $hoja_ruta_falta_aprobar+=1;
+      //   }
+      // }
 
-      arsort($group_array);
-      // dd($group_array);
+      arsort($array);
+      // dd($array);
 
 
       $serviceRequests = ServiceRequest::orderBy('id','asc')
@@ -1045,7 +1085,7 @@ class ServiceRequestController extends Controller
       arsort($fulfillments_missing);
       // dd($fulfillments_missing);
 
-      return view('service_requests.requests.pending_requests',compact('array','group_array','hoja_ruta_falta_aprobar','fulfillments_missing','cumplimiento_falta_ingresar'));
+      return view('service_requests.requests.pending_requests',compact('array','hoja_ruta_falta_aprobar','fulfillments_missing','cumplimiento_falta_ingresar'));
     }
 
     public function certificatePDF(ServiceRequest $serviceRequest)
@@ -1055,5 +1095,6 @@ class ServiceRequestController extends Controller
 
         return $pdf->stream('mi-archivo.pdf');
     }
+
 
 }

@@ -59,15 +59,46 @@
 
     <fieldset class="form-group col-3">
         <label for="for_phone_number">Número telefónico</label>
-        <input type="text" class="form-control" id="for_phone_number" placeholder="" name="phone_number" @if($ServiceRequest) value="{{$ServiceRequest->phone_number}}" @endif>
+        <input type="text" class="form-control" id="for_phone_number" name="phone_number"
+          @if($ServiceRequest) value="{{$ServiceRequest->phone_number}}" @endif>
     </fieldset>
 
     <fieldset class="form-group col-3">
         <label for="for_email">Correo electrónico</label>
-        <input type="text" class="form-control" id="for_email" placeholder="" name="email" @if($ServiceRequest) value="{{$ServiceRequest->email}}" @endif>
+        <input type="text" class="form-control" id="for_email" name="email"
+          @if($ServiceRequest) value="{{$ServiceRequest->email}}" @endif>
     </fieldset>
 
   </div>
+
+  <div class="form-row ml-2 mr-1">
+      <fieldset class="form-group col-4">
+        <label>Banco</label>
+        <select name="bank_id" class="form-control">
+        <option value="">Seleccionar Banco (opcional)</option>
+        @foreach($banks as $bank)
+        <option value="{{$bank->id}}" @if($ServiceRequest){{ ($ServiceRequest->bank_id == $bank->id)? 'selected':'' }}@endif>{{$bank->name}}</option>
+        @endforeach
+      </select>
+    </fieldset>
+
+
+    <fieldset class="form-group col-4">
+        <label>Número de Cuenta (opcional)</label>
+        <input type="number" name="account_number" class="form-control"
+          @if($ServiceRequest) value="{{ $ServiceRequest->account_number }}" @endif>
+    </fieldset>
+
+    <fieldset class="form-group col-4">
+        <label for="for_pay_method">Tipo de cuenta (opcional)</label>
+        <select name="pay_method" class="form-control">
+          <option value="">Seleccionar tipo de cuenta</option>
+          <option value="01" @if($ServiceRequest){{ ($ServiceRequest->pay_method == '01')? 'selected':'' }}@endif>CTA CORRIENTE / CTA VISTA</option>
+          <option value="02" @if($ServiceRequest){{ ($ServiceRequest->pay_method == '02')? 'selected':'' }}@endif>CTA AHORRO</option>
+          <option value="30" @if($ServiceRequest){{ ($ServiceRequest->pay_method == '30')? 'selected':'' }}@endif>CUENTA RUT</option>
+        </select>
+    </fieldset>
   </div>
 
+</div>
 </div>

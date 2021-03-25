@@ -8,9 +8,11 @@ use App\Models\ReplacementStaff\ReplacementStaff;
 use App\Models\ReplacementStaff\ProfessionManage;
 use App\Models\ReplacementStaff\ProfileManage;
 use App\Models\ReplacementStaff\Profile;
+use App\Models\UserExternal;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ReplacementStaffController extends Controller
 {
@@ -39,7 +41,25 @@ class ReplacementStaffController extends Controller
      */
     public function create()
     {
-        return view('replacement_staff.create');
+
+        //$replacementStaff = ReplacementStaff::where('run',$user_cu->RolUnico->numero)->first();
+        $replacementStaff = ReplacementStaff::where('run',Auth::guard('external')->user()->id)->first();
+        if($replacementStaff == null)
+        {
+            $userexternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();
+
+            $replacementStaff = new ReplacementStaff();
+            $replacementStaff->run = $userexternal->id;
+
+            return view('replacement_staff.create',compact('replacementStaff'));
+
+        }
+        else{
+
+            return $this->edit($replacementStaff);
+        }
+
+        //return view('replacement_staff.create');
     }
 
     /**

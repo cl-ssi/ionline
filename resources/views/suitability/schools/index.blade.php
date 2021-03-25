@@ -25,21 +25,21 @@
         </tr>
     </thead>
     <tbody>
-    @foreach($schools as $school)
+        @foreach($schools as $school)
         <tr>
             <td>{{ $school->rbd ?? '' }}</td>
             <td>{{ $school->name ?? '' }}</td>
             <td>{{ $school->commune->name ?? '' }}</td>
             <td>{{ $school->municipality ?? '' }}</td>
             <td>{{ $school->legal ?? '' }}</td>
-            <td>{{ $school->holder ?? '' }}</td>            
+            <td>{{ $school->holder ?? '' }}</td>
             <td>
-                <button type="submit" class="btn btn-sm btn-outline-secondary">
-                    <i class="fas fa-edit"></i>
-                </button>
+                <a href="{{ route('suitability.schools.edit', $school->id) }}" class="btn btn-outline-secondary btn-sm">
+                    <span class="fas fa-edit" aria-hidden="true"></span>
+                </a>
             </td>
         </tr>
-    @endforeach
+        @endforeach
     </tbody>
 
 </table>

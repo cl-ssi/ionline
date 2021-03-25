@@ -20,9 +20,12 @@ class CreatePsiRequestsTable extends Migration
             $table->date('start_date');
             $table->string('status');
             $table->boolean('disability');
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_external_id');
+            $table->foreign('user_external_id')->references('id')->on('users_external');
             $table->foreignId('user_creator_id');
-            $table->foreign('user_creator_id')->references('id')->on('users');
+            $table->foreign('user_creator_id')->references('id')->on('users_external');
+            $table->foreignId('school_id');
+            $table->foreign('school_id')->references('id')->on('schools');
             $table->timestamps();
             $table->softDeletes();
         });

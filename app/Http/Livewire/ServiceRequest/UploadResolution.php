@@ -25,6 +25,21 @@ class UploadResolution extends Component
             $this->storage_path, 
             $this->serviceRequest->id.'.pdf'
         );
+        
+        /* Para google storage agregar al final 'gcs'
+        
+        $this->resolutionFile->storeAs(
+            $this->storage_path, 
+            $this->serviceRequest->id.'.pdf',
+            'gcs'
+        );
+        
+        */
+        
+        /* Ejemplo para guardar en Google storage  */
+        // $disk = Storage::disk('gcs');
+        // $url = $disk->put('ionline.txt',"storage desde ionline");
+        
 
         $this->serviceRequest->update(['has_resolution_file' => true]);
     }

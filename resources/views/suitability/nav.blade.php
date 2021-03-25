@@ -1,13 +1,14 @@
 <ul class="nav nav-tabs mb-3 d-print-none">
+    @can('Suitability: ssi')
 
     <li class="nav-item">
         <a class="nav-link"
                       href="{{ route('suitability.own') }}">
-            <i class="fas fa-inbox"></i> Mis Solicitudes
+            <i class="fas fa-clone"></i> Todas las Solicitudes
         </a>
     </li>
 
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link"
                       href="{{ route('suitability.validaterequest') }}">
             <i class="fas fa-file"></i> Nueva Solicitud de Idoneidad
@@ -16,13 +17,13 @@
 
 
     
-    @can('Suitability: ssi')
+    
     <li class="nav-item">
         <a class="nav-link"
                       href="#">
             <i class="fas fa-clone"></i> Solicitudes
         </a>
-    </li>
+    </li> -->
     
 
     <div class="dropdown show">

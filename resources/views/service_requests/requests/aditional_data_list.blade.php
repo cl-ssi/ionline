@@ -16,9 +16,25 @@
     <select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" data-size="5">
       <option value="">Todos</option>
       @foreach($responsabilityCenters as $key => $responsabilityCenter)
-        <option value="{{$responsabilityCenter->id}}">{{$responsabilityCenter->name}}</option>
+        <option value="{{$responsabilityCenter->id}}" @if($responsabilityCenter->id == $request->responsability_center_ou_id) selected @endif>{{$responsabilityCenter->name}}</option>
       @endforeach
     </select>
+    <div class="input-group-prepend">
+      <span class="input-group-text">Tipo</span>
+    </div>
+    <select class="form-control selectpicker" data-live-search="true" name="program_contract_type" data-size="5">
+      <option value="">Todos</option>
+      <option value="Mensual" @if($request->program_contract_type == "Mensual") selected @endif>Mensual</option>
+      <option value="Horas" @if($request->program_contract_type == "Horas") selected @endif>Horas</option>
+    </select>
+    <div class="input-group-prepend">
+      <span class="input-group-text">Id</span>
+    </div>
+    <input type="text" name="id" value="{{$request->id}}">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Profesional</span>
+    </div>
+    <input type="text" name="name" value="{{$request->name}}">
     <div class="input-group-append">
         <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
     </div>
@@ -82,6 +98,24 @@
               <span class="fas fa-file" aria-hidden="true"></span></a>
             @endif
           @endif
+          @elseif($serviceRequest->program_contract_type == "Mensual")
+            @if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
+              <a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
+              <i class="fas fa-file" style="color:#B9B9B9"></i></a>
+            @else
+              @if($serviceRequest->SignatureFlows->where('status',0)->count() > 0)
+                <a data-toggle="modal" 	class="btn btn-outline-secondary btn-sm" id="a_modal_flow_rejected">
+                <i class="fas fa-file" style="color:#B9B9B9"></i></a>
+              @else
+                <!-- <a href="#"
+                  class="btn btn-outline-secondary btn-sm" target="_blank">
+                <span class="fas fa-plus" aria-hidden="true"></span></a> -->
+
+                <a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+                  class="btn btn-outline-secondary btn-sm" target="_blank">
+                <span class="fas fa-file" aria-hidden="true"></span></a>
+              @endif
+            @endif
         @endif
       </td>
     </tr>
@@ -89,6 +123,8 @@
   </tbody>
 </table>
 </div>
+
+{{ $serviceRequests->links() }}
 
 @endsection
 

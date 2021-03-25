@@ -13,16 +13,16 @@ class CreateSchoolUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('school_users', function (Blueprint $table) {
+        Schema::create('school_users_external', function (Blueprint $table) {
             $table->id();
             $table->foreignId('school_id');
-            $table->foreignId('user_id');
+            $table->foreignId('user_external_id');
             $table->boolean('admin')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('school_id')->references('id')->on('schools');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_external_id')->references('id')->on('users_external');
         });
     }
 
@@ -33,6 +33,6 @@ class CreateSchoolUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('school_users');
+        Schema::dropIfExists('school_users_external');
     }
 }

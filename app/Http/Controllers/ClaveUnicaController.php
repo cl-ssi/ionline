@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
 use App\User;
+use App\Models\UserExternal;
 
 class ClaveUnicaController extends Controller
 {
@@ -19,7 +20,8 @@ class ClaveUnicaController extends Controller
         $client_id = env("CLAVEUNICA_CLIENT_ID");
         $redirect_uri = urlencode(env("CLAVEUNICA_CALLBACK"));
         $state = base64_encode(csrf_token().$redirect);
-        $scope = 'openid+run+name+email';
+        $scope = env("CLAVEUNICA_SCOPE");
+        //'openid+run+name+email';
 
         $url=$url_base.urlencode('?client_id='.$client_id.'&redirect_uri='.$redirect_uri.'&scope='.$scope.'&response_type=code&state='.$state);
 
@@ -35,7 +37,7 @@ class ClaveUnicaController extends Controller
         $client_secret = env("CLAVEUNICA_SECRET_ID");
         $redirect_uri = urlencode(env("CLAVEUNICA_CALLBACK"));
         //$state = csrf_token();
-        $scope = 'openid+run+name+email';
+        //$scope = 'openid+run+name+email';
 
         $response = Http::asForm()->post($url_base, [
             'client_id' => $client_id,
@@ -88,24 +90,26 @@ class ClaveUnicaController extends Controller
     {
         if ($access_token) {
             //dd($access_token);
-            if (env('APP_ENV') == 'production') {
+            if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
                 //$access_token = session()->get('access_token');
                 $url_base = "https://www.claveunica.gob.cl/openid/userinfo";
                 $response = Http::withToken($access_token)->post($url_base);
                 $user_cu = json_decode($response);
-		if($user_cu) {
+		        if($user_cu) {
                     $user = new User();
                     $user->id = $user_cu->RolUnico->numero;
                     $user->dv = $user_cu->RolUnico->DV;
                     $user->name = implode(' ', $user_cu->name->nombres);
                     $user->fathers_family = $user_cu->name->apellidos[0];
                     $user->mothers_family = $user_cu->name->apellidos[1];
-		    $user->email = $user_cu->email;
-		}
-		else {
+                    if(isset($user_cu->email)) {
+                        $user->email = $user_cu->email;
+                    }
+		        }
+		        else {
                     session()->flash('danger', 'Error en clave única. No se pudo iniciar sesión');
-		    return redirect()->route('login');
-		}
+		            return redirect()->route('login');
+		        }
             } elseif (env('APP_ENV') == 'local') {
                 $user = new User();
                 $user->id = 12345678;
@@ -135,4 +139,57 @@ class ClaveUnicaController extends Controller
             //Auth::loginUsingId($user->id, true);
         }
     }
+
+    public function loginExternal($access_token = null)
+    {
+        if ($access_token) {
+            //dd($access_token);
+            if (env('APP_ENV') == 'production') {
+                //$access_token = session()->get('access_token');
+                $url_base = "https://www.claveunica.gob.cl/openid/userinfo";
+                $response = Http::withToken($access_token)->post($url_base);
+                $user_cu = json_decode($response);
+                
+		        if($user_cu) {
+                    //ACA HAY QUE BUSCAR POR EL ID EL USUARIO SI EXISTE LO CARGO Y LOGEO
+
+                    $user = UserExternal::find($user_cu->RolUnico->numero);
+                    if(!$user)
+                    {
+                        $user = new UserExternal();
+                        $user->id = $user_cu->RolUnico->numero;
+                        $user->dv = $user_cu->RolUnico->DV;
+                        $user->name = implode(' ', $user_cu->name->nombres);
+                        $user->fathers_family = $user_cu->name->apellidos[0];
+                        $user->mothers_family = $user_cu->name->apellidos[1];
+                        if(isset($user_cu->email)) {
+                            $user->email = $user_cu->email;
+                        }                        
+                        $user->save();
+                        
+                    }
+                    
+                    
+		        }
+		        else {
+                    session()->flash('danger', 'Error en clave única. No se pudo iniciar sesión');
+		            return redirect()->route('login');
+		        }
+            } elseif (env('APP_ENV') == 'local') {
+                $user = new User();
+                $user->id = 12345678;
+                $user->dv = 9;
+                $user->name = "Administrador";
+                $user->fathers_family = "Ap1";
+                $user->mothers_family = "Ap2";
+                $user->email = "email@email.com";
+            }            
+            Auth::guard('external')->login($user, true);
+            
+
+            return redirect()->route('external');
+            //Auth::loginUsingId($user->id, true);
+        }
+    }
+
 }

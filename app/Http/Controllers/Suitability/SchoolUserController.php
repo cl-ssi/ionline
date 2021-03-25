@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Suitability;
 use App\Models\Suitability\SchoolUser;
 use App\Models\Suitability\School;
 use App\User;
+use App\Models\UserExternal;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -19,7 +20,7 @@ class SchoolUserController extends Controller
     {
         //        
         $schoolusers = SchoolUser::where('admin',1)->get();
-        $users = User::where('external',1)->orderBy('name')->get();
+        $users = UserExternal::orderBy('fathers_family')->get();
         $schools = School::all();
         return view('suitability.users.index', compact('schoolusers','users', 'schools'));
     }
@@ -47,18 +48,21 @@ class SchoolUserController extends Controller
         $school_user = new SchoolUser($request->All());
         $school_user->admin = 1;
         $school_user->save();
+        $user = UserExternal::find($request->user_external_id);
+        $user->givePermissionTo('Suitability: admin');
 
-        session()->flash('success', 'Se Asigno al Usuario al colegio');
+        session()->flash('success', 'Se Asigno al Usuario Externo como Adminitrador al colegio');
         return redirect()->back();
     }
 
     public function storeuser(Request $request)
     {
         //
-        $user = new User($request->All());
-        $user->email_personal = $request->email;
-        $user->external = 1;
-        $user->givePermissionTo('Suitability: admin');
+        //$user = new User($request->All());
+        $user = new UserExternal($request->All());
+        //$user->email_personal = $request->email;
+        //$user->external = 1;
+        //$user->givePermissionTo('Suitability: admin');
         $user->save();
         session()->flash('success', 'Se Asigno al Usuario al colegio');        
         return redirect()->route('suitability.users.index');
@@ -104,8 +108,13 @@ class SchoolUserController extends Controller
      * @param  \App\Models\SchoolUser  $schoolUser
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SchoolUser $schoolUser)
+    public function destroy($schoolUser)
     {
-        //
+        
+        $schooluser = SchoolUser::find($schoolUser);
+        $schooluser->delete();
+        session()->flash('success', 'Usuario Eliminado como Administrador Exitosamente');        
+        return redirect()->back();
+
     }
 }

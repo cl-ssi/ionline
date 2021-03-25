@@ -1,16 +1,17 @@
 # Autoría
-Sistema desarrollado la unidad TIC del Servicio de Salud de Iquique.
+Sistema desarrollado el Departamento TIC del Servicio de Salud de Iquique.
 
 sistemas.ssi@redsalud.gob.cl
 
 # Instalacion
-> Este proyecto está desarrollado en Laravel 7
+> Este proyecto está desarrollado en Laravel 8
 
 > Incluye Bootstrap 4, jQuery y Font Awesome
 
 ## Prerequisitos
 - git
 - composer
+- php >= 7.3
 
 ## Ejecutar en un terminal los siguientes comandos
 ```
