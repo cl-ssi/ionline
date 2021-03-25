@@ -58,11 +58,12 @@ class ReportController extends Controller
         //     $subQuery->whereBetween('request_date', [$from, $to]);
         // })
         //     ->get();
-        $fulfillments = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
-                                       $subQuery->where('has_resolution_file',1);
-                                     })
-                                     ->where('has_invoice_file',1)
-                                     ->get();
+        $fulfillments = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
+            $subQuery->where('has_resolution_file', 1)
+                ->where('payment_ready', 1);
+        })
+            ->where('has_invoice_file', 1)
+            ->get();
 
         $txt = '';
         foreach ($fulfillments as $fulfillment) {
@@ -120,11 +121,11 @@ class ReportController extends Controller
 
         $servicerequests = ServiceRequest::whereHas("fulfillments", function($subQuery) {
             $subQuery->where('has_invoice_file',1);
-          })          
+          })
           ->get();
 
         return view('service_requests.reports.without_bank_details', compact('servicerequests'));
-    
+
     }
 
 
