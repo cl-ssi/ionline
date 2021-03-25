@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Subdirection;
 use App\Models\ServiceRequests\ResponsabilityCenter;
+use App\Models\Parameters\Bank;
 use App\Models\ServiceRequests\SignatureFlow;
 use App\Models\ServiceRequests\ShiftControl;
 use Luecano\NumeroALetras\NumeroALetras;
@@ -429,7 +430,10 @@ class ServiceRequestController extends Controller
         $employee = $authorities[0]->position . " - " . $authorities[0]->organizationalUnit->name;
       }
 
-      return view('service_requests.requests.edit', compact('serviceRequest', 'users', 'establishments', 'subdirections', 'responsabilityCenters', 'SignatureFlow','employee'));
+      $banks = Bank::all();
+
+      return view('service_requests.requests.edit', compact('serviceRequest', 'users', 'establishments', 'subdirections',
+                                                            'responsabilityCenters', 'SignatureFlow','employee','banks'));
   }
 
   /**
