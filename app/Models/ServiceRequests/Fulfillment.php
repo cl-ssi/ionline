@@ -20,7 +20,7 @@ class Fulfillment extends Model implements Auditable
   protected $fillable = [
       'id', 'service_request_id', 'year', 'month', 'type', 'start_date', 'end_date', 'observation',
       'responsable_approbation','responsable_approbation_date','responsable_approver_id',
-      'rrhh_approbation','rrhh_approbation_date','rrhh_approver_id','has_resolution_file','has_invoice_file',
+      'rrhh_approbation','rrhh_approbation_date','rrhh_approver_id','payment_ready','has_invoice_file',
       'finances_approbation','finances_approbation_date','finances_approver_id', 'invoice_path', 'user_id',
       'bill_number','total_hours_to_pay','total_to_pay','total_hours_paid','total_paid','payment_date','contable_month'
   ];
