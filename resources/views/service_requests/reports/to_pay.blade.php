@@ -26,7 +26,8 @@
         <th>Certif.</th>
         <th>Boleta</th>
         <th>Resolución</th>
-        <th></th>
+        <th>Editar</th>
+        <th>Pago listo</th>
     </tr>
     @foreach($fulfillments->whereNull('total_paid') as $key => $fulfillment)
       <tr>
@@ -63,6 +64,9 @@
               <a href="{{ route('rrhh.fulfillments.edit_fulfillment',$fulfillment->serviceRequest) }}">
       					<span class="fas fa-edit" aria-hidden="true"></span>
       				</a>
+          </td>
+          <td>
+            @livewire('service-request.pay-ready-toggle', ['fulfillment' => $fulfillment])
           </td>
       </tr>
     @endforeach
