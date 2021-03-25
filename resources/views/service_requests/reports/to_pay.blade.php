@@ -66,7 +66,7 @@
       				</a>
           </td>
           <td>
-            @livewire('service-request.pay-ready-toggle', ['fulfillment' => $fulfillment])
+            @livewire('service-request.payment-ready-toggle', ['fulfillment' => $fulfillment])
           </td>
       </tr>
     @endforeach
