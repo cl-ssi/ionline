@@ -134,7 +134,12 @@ class ReportController extends Controller
 
     }
 
+    public function indexWithResolutionFile() {
+        $serviceRequests = ServiceRequest::where('has_resolution_file',1)->get();
 
+        return view('service_requests.reports.index_with_resolution_file', compact('serviceRequests'));
+        /* Hacer foreach de cada SRs y dentro hacer un foreach de sus fulfillments y mostrar cual tiene boleta y cual no */
+    }
 
 
 }
