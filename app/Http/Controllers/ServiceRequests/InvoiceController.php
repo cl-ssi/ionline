@@ -27,12 +27,12 @@ class InvoiceController extends Controller
                 $response = Http::withToken($access_token)->post($url_base);
                 $user_cu = json_decode($response);
                 $user = $user_cu->RolUnico->numero;
-                $user = $user.'-'.$user_cu->RolUnico->DV;        
-                
-                
+                $user = $user.'-'.$user_cu->RolUnico->DV;
+
+
             } else if (env('APP_ENV') == 'local') {
-                $user = '14105887-8';
-                
+                $user = $access_token;
+
             }
             return $this->show($user);
         }
@@ -41,7 +41,7 @@ class InvoiceController extends Controller
 
     public function show($user)
     {
-        
+
         $serviceRequests = ServiceRequest::where('rut',$user)->get();
         return view('service_requests.invoice.show', compact('serviceRequests'));
     }

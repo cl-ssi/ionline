@@ -81,12 +81,20 @@ class AuthorityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    //public function create($establishment_id)
+    public function create(Request $request)
     {
+        //dd($request->establishment_id);
+        if($request->establishment_id)
+        {
         $users = User::orderBy('name')->orderBy('fathers_family')->get();
         $ous = OrganizationalUnit::All();
-        $ouTopLevel = OrganizationalUnit::Find(1);
+        //$ouTopLevel = OrganizationalUnit::Find(1);
+        $ouTopLevel = OrganizationalUnit::where('level', 1)->where('establishment_id', $request->establishment_id)->first();
+        //dd($ouTopLevel);
         return view('rrhh.authorities.create', compact('ous','users','ouTopLevel'));
+        }
+
     }
 
     /**

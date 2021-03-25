@@ -4,6 +4,8 @@
 
 @section('content')
 
+@include('service_requests.partials.nav')
+
 <h3>Solicitud de Contratación de Servicios</h3>
 
 <form method="POST" enctype="multipart/form-data" action="{{ route('rrhh.service_requests.store') }}">
@@ -53,8 +55,11 @@
 
     <fieldset class="form-group col">
 		    <label for="for_type">Tipo</label>
-		    <select name="type" class="form-control" required>
+		    <select name="type" class="form-control" required id="type">
 					<option value="Covid">Honorarios - Covid</option>
+					@can('Service Request: additional data rrhh')
+						<option value="Suma alzada">Suma alzada</option>
+					@endcan
           <!-- <option value="Genérico">Honorarios - Genérico</option> -->
         </select>
 		</fieldset>
@@ -134,6 +139,22 @@
 			</fieldset>
 		@endforeach
 	</div>
+
+	<div class="row" id="div_suma_alzada">
+
+		@foreach($sumaAlzadaFlow as $key => $signatureFlow)
+			<fieldset class="form-group col-sm-4">
+					<label for="for_users">{{$key}}</label>
+					<select name="users[]" class="form-control selectpicker" id="{{$key}}Turnos" data-live-search="true" required="" data-size="5" readonly>
+						@foreach($users as $key => $user)
+							<option value="{{$user->id}}" @if($user->id == $signatureFlow) selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
+						@endforeach
+					</select>
+			</fieldset>
+		@endforeach
+	</div>
+
+
 
 	<br>
 
@@ -321,6 +342,9 @@
           <option value="CONTRATA" >CONTRATA</option>
           <option value="TITULAR" >TITULAR</option>
           <option value="HONORARIO COVID" >HONORARIO COVID</option>
+					@can('Service Request: additional data rrhh')
+						<option value="SUMA ALZADA" >SUMA ALZADA</option>
+					@endcan
         </select>
 		</fieldset>
 
@@ -421,8 +445,8 @@
 
 	<div class="row">
 		<fieldset class="form-group col-3 col-md-3">
-				<label for="for_rrhh_team">Equipo RRHH</label>
-				<select name="rrhh_team" class="form-control" required id="rrhh_team">
+				<label for="for_rrhh_team">Equipo RRHH*</label>
+				<select name="rrhh_team" class="form-control" id="rrhh_team" required>
 
 					<option value=""></option>
 					<option value="Residencia Médica" >Residencia Médica</option>
@@ -440,7 +464,7 @@
 					<option value="Químico Farmacéutico" >Químico Farmacéutico</option>
 					<option value="Bioquímico" >Bioquímico</option>
 					<option value="Fonoaudiologo" >Fonoaudiologo</option>
-
+					<option value="Prevencionista Diurno">Prevencionista Diurno</option>
 					<option value="Administrativo Diurno" >Administrativo Diurno</option>
 					<option value="Administrativo Turno" >Administrativo Turno</option>
 					<option value="Biotecnólogo Turno" >Biotecnólogo Turno</option>
@@ -457,7 +481,7 @@
 
 		<fieldset class="form-group col-3 col-md-3">
 				<label for="for_digera_strategy">Estrategia Digera Covid</label>
-				<select name="digera_strategy" class="form-control" id="digera_strategy">
+				<select name="digera_strategy" class="form-control" id="digera_strategy" required>
 					<option value=""></option>
 					<option value="Camas MEDIAS Aperturadas" >Camas MEDIAS Aperturadas</option>
 					<option value="Camas MEDIAS Complejizadas" >Camas MEDIAS Complejizadas</option>
@@ -488,6 +512,8 @@
 
 		$("#control_turnos").hide();
 		$("#div_turno").hide();
+		$("#div_suma_alzada").hide();
+
 		$('#program_contract_type').on('change', function() {
 
 			if (this.value == "Horas") {
@@ -498,10 +524,12 @@
 				$('#for_weekly_hours').attr('disabled', 'disabled');
 				$("#control_turnos").show();
 
-				// $("#div_mensual").attr('disabled','disabled');
 				$("#div_mensual :input").attr("disabled", true);
 				$("#div_mensual").hide();
-				// $('#div_turno').removeAttr('disabled');
+
+				$("#div_suma_alzada :input").attr("disabled", true);
+				$("#div_suma_alzada").hide();
+
 				$("#div_turno :input").attr("disabled", false);
 				$("#div_turno").show();
 
@@ -524,10 +552,12 @@
 				$('#for_weekly_hours').removeAttr('disabled');
 				$("#control_turnos").hide();
 
-				// $("#div_mensual").removeAttr('disabled');
 				$("#div_mensual :input").attr("disabled", false);
 				$("#div_mensual").show();
-				// $('#div_turno').attr('disabled','disabled');
+
+				$("#div_suma_alzada :input").attr("disabled", true);
+				$("#div_suma_alzada").hide();
+
 				$("#div_turno :input").attr("disabled", true);
 				$("#div_turno").hide();
 
@@ -635,13 +665,40 @@
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 		if (value != 85) {
-			$('#Subdirector').val(9882506);
+			$('#Subdirector').val(14101085); //PERDRO IRIONDO: 9882506
 			$('#Subdirector').selectpicker('refresh');
 
-			$('#SubdirectorTurnos').val(9882506);
+			$('#SubdirectorTurnos').val(14101085); //PERDRO IRIONDO: 9882506
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 	});
+
+	$('#type').on('change', function() {
+		var value = this.value;
+
+		if (value == "Suma alzada") {
+			$("#div_suma_alzada :input").attr("disabled", false);
+			$("#div_suma_alzada").show();
+			// $('#div_turno').attr('disabled','disabled');
+			$("#div_turno :input").attr("disabled", true);
+			$("#div_turno").hide();
+
+			$("#div_mensual :input").attr("disabled", true);
+			$("#div_mensual").hide();
+
+		}else{
+			$("#div_turno :input").attr("disabled", false);
+			$("#div_turno").show();
+			// $('#div_turno').attr('disabled','disabled');
+			$("#div_suma_alzada :input").attr("disabled", true);
+			$("#div_suma_alzada").hide();
+
+			$("#div_mensual :input").attr("disabled", true);
+			$("#div_mensual").hide();
+		}
+	});
+
+
 
 	// $('#working_day_type').on('change', function() {
 	// 	var working_day_type = this.value;

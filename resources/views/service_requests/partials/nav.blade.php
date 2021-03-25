@@ -31,7 +31,7 @@
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.service_requests.transfer_requests') }}"
             href="{{ route('rrhh.service_requests.transfer_requests') }}">
-            <i class="fas fa-sign-in-alt"></i> Transferecia de solicitudes
+            <i class="fas fa-sign-in-alt"></i> Transferencia de solicitudes
         </a>
     </li>
     @endcan
@@ -41,6 +41,20 @@
             <i class="fas fa-archive"></i> Reportes
         </a>
         <div class="dropdown-menu">
+
+            @can('Service Request: consolidated data')
+            <a class="dropdown-item"
+                href="{{ route('rrhh.service_requests.consolidated_data') }}">
+                <i class="far fa-file-excel"></i> Consolidado
+            </a>
+            @endcan
+
+            @can('Service Request: consolidated data')
+            <a class="dropdown-item"
+                href="{{ route('rrhh.service-request.export-sirh') }}">
+                <i class="far fa-file"></i> Formato SIRH
+            </a>
+            @endcan
 
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service_requests.pending_requests') }}"
@@ -56,12 +70,28 @@
             </a>
             @endcan
 
+
+            <!-- @canany(['Service Request: pending requests'])
+            <a class="dropdown-item {{ active('rrhh.service_requests.report.withoutBankDetails') }}"
+                href="{{ route('rrhh.service_requests.report.withoutBankDetails') }}">
+                <i class="fas fa-piggy-bank"></i> Sin Cuentas Bancarias
+            </a>
+            @endcan -->
+
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service_requests.report.pending-resolutions') }}"
                 href="{{ route('rrhh.service_requests.report.pending-resolutions') }}">
                 <i class="fas fa-file-invoice-dollar"></i> Resoluciones pendientes
             </a>
             @endcan
+
+            @canany(['Service Request: with resolution'])
+                <a class="dropdown-item {{ active('rrhh.service_requests.report.withResolutionFile') }}"
+                   href="{{ route('rrhh.service_requests.report.withResolutionFile') }}">
+                    <i class="fas fa-file-invoice-dollar"></i> Solicitudes con resolución cargada
+                </a>
+            @endcan
+
 
             <!-- <div class="dropdown-divider"></div>
 

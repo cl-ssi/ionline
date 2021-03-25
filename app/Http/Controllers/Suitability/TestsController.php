@@ -36,7 +36,8 @@ class TestsController extends Controller
         ->whereHas('categoryQuestions')
         ->get();
 
-    return view('suitability.test', compact('categories','psi_request_id'));
+    // return view('suitability.test', compact('categories','psi_request_id'));
+    return view('external.suitability.test', compact('categories','psi_request_id'));
     }
 
     /**
@@ -87,6 +88,38 @@ class TestsController extends Controller
         //return redirect()->route('client.results.show', $result->id);
     }
 
+
+    public function storeExternal(Request $request)
+    {
+        //
+        $options = Option::find(array_values($request->input('questions')));
+
+        $result = auth()->user()->userResults()->create([
+            'total_points' => $options->sum('points'),
+            'request_id' => $request->input('psi_request_id')
+        ]);
+
+        $questions = $options->mapWithKeys(function ($option) {
+            return [$option->question_id => [
+                        'option_id' => $option->id,
+                        'points' => $option->points
+                    ]
+                ];
+            })->toArray();
+
+        $result->questions()->sync($questions);
+
+
+        $psirequests = PsiRequest::find($request->input('psi_request_id'));
+        $psirequests->status = "Test Finalizado";
+        $psirequests->update();
+
+
+        session()->flash('success', 'Finalizó el Test Exitosamente');
+        return redirect()->route('external');
+        
+    }
+
     /**
      * Display the specified resource.
      *
@@ -119,6 +152,15 @@ class TestsController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function updateStatus($psirequestid)
+    {
+        
+        $psirequest = PsiRequest::find($psirequestid);
+        $psirequest->status = 'Realizando Test';        
+        $psirequest->save();
+        return $this->index($psirequestid);
     }
 
     /**

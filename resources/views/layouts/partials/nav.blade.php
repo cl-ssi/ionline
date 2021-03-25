@@ -154,6 +154,8 @@
                             </a>
                         @endcan
 
+                        
+
                         @canany(['Authorities: manager', 'Authorities: view'])
                             <a class="dropdown-item"
                                href="{{ route('rrhh.authorities.index') }}">
@@ -162,6 +164,14 @@
                         @endcan
 
                         <div class="dropdown-divider"></div>
+
+                        @can('Suitability: ssi')
+                            <a class="dropdown-item"
+                               href="{{ route('suitability.own') }}">                               
+                                <i class="fas fa-chalkboard-teacher"></i> Idoneidad
+                            </a>
+                        @endcan
+
 
                         @canany(['Service Request'])
                         <a class="dropdown-item"

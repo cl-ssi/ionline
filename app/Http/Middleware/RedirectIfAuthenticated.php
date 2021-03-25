@@ -19,7 +19,7 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if ($guard == "external" && Auth::guard($guard)->check()) {
-            return redirect('/test');
+            return redirect('/external');
         }
 
         if (Auth::guard($guard)->check()) {

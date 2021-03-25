@@ -26,9 +26,11 @@
         "phpoffice/phpword": "^0.17.0",
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.3",
-        "spatie/laravel-permission": "^3.13"
+        "spatie/laravel-permission": "^3.13",
+        "superbalist/laravel-google-cloud-storage": "^2.2"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.5",
         "barryvdh/laravel-ide-helper": "^2.9",
         "facade/ignition": "^2.3.6",
         "fzaninotto/faker": "^1.9.1",

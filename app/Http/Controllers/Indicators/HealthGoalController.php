@@ -78,6 +78,11 @@ class HealthGoalController extends Controller
                         ->when($healthGoal->name == 'Consultorio General Urbano Dr. Héctor Reyno Gutiérrez', function($query){
                             return $query->where('IdEstablecimiento', 102307);
                         })
+                        ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && Str::contains($indicator->name, 'UEH'), function($query){
+                            return $query->whereHas('establecimiento', function($q){
+                                return $q->where('meta_san_18834_hosp', 1);
+                            });
+                        })
                         ->where('Mes', 12)->whereIn('CodigoPrestacion', $cods)->sum(reset($cols));
 
                         $factor == 'numerador' ? $indicator->numerator_acum_last_year = $acum_last_year : $indicator->denominator_acum_last_year = $acum_last_year;
@@ -122,7 +127,7 @@ class HealthGoalController extends Controller
                 $source = $factor == 'numerador' ? $indicator->numerator_source : $indicator->denominator_source;
 
                 if($source == 'FONASA'){
-                    $result = Percapita::year($year-1)->selectRaw('COUNT(*)*'.reset($cols).' AS valor, COD_CENTRO')
+                    $result = Percapita::year($year)->selectRaw('COUNT(*)*'.reset($cols).' AS valor, COD_CENTRO')
                                               ->with(['establecimiento' => function($q){ 
                                                   return $q->where('meta_san', 1);
                                               }])

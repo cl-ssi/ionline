@@ -11,7 +11,8 @@
     </div>
 </div>
 
-<h6 class="mb-3">Asignar Usuario Administrador a Colegio</h6>
+
+<h3 class="mb-3">Asignar Usuario Administrador a Colegio</h3>
 
 
 <form method="POST" class="form-horizontal" action="{{ route('suitability.users.store') }}">
@@ -31,7 +32,7 @@
 
         <fieldset class="form-group col">
             <label for="for_user_id">Usuarios Externos</label>
-            <select name="user_id" id="for_user_id" class="form-control" required>
+            <select name="user_external_id" id="for_user_external_id" class="form-control" required>
                 <option value="">Seleccionar Usuario</option>
                 @foreach($users as $user)
                 <option value="{{ $user->id }}">{{ $user->fullname }}</option>
@@ -47,6 +48,7 @@
 
 <hr>
 
+<h3 class="mb-3">Listado de Usuarios Administradores de Colegio</h3>
 <table class="table table-sm table-bordered">
     <thead>
         <tr>
@@ -63,7 +65,11 @@
             <td>{{ $schooluser->user->fullname }}</td>
             <td>{{ $schooluser->school->name }}</td>
             <td>
-                
+                <form method="POST" class="form-horizontal" action="{{ route('suitability.users.destroy', $schooluser->id) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger float-left" onclick="return confirm('¿Está seguro que desea eliminar a {{ $schooluser->user->fullname }} como administrador de idoneidad del colegio {{ $schooluser->school->name }}? ' )"><i class="fas fa-trash-alt"></i></button>
+                </form>
             </td>
         </tr>
         @endforeach

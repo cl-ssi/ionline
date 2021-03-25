@@ -23,41 +23,52 @@ class ReportController extends Controller
         // $week = $request->week;
         // $current_week = $now->format('Y').'-W'.$now->week();
 
-        if ($request->week != NULL) {
-          $current_week = $request->week;
-        }else{
-          $current_week = date('Y').'-W'.date('W');
-        }
+        // if ($request->week != NULL) {
+        //   $current_week = $request->week;
+        // }else{
+        //   $current_week = date('Y').'-W'.date('W');
+        // }
+        //
+        // $now = Carbon::now();
+        // list($year, $week) = explode('-W',$current_week);
+        // $now->setISODate($year,$week);
+        // $from = $now->startOfWeek()->format('Y-m-d 00:00:00');
+        // $to   = $now->endOfWeek()->format('Y-m-d 23:59:59');
 
-        $now = Carbon::now();
-        list($year, $week) = explode('-W',$current_week);
-        $now->setISODate($year,$week);
-        $from = $now->startOfWeek()->format('Y-m-d 00:00:00');
-        $to   = $now->endOfWeek()->format('Y-m-d 23:59:59');
 
-
-        $fulfillments = Fulfillment::whereHas("ServiceRequest", function($subQuery) use($from,$to){
-                                       $subQuery->whereBetween('request_date',[$from,$to]);
+        $fulfillments = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
+                                       $subQuery->where('has_resolution_file',1);
                                      })
+                                     ->where('has_invoice_file',1)
                                      ->get();
 
-        // dd($fulfillments);
-        return view('service_requests.reports.to_pay', compact('current_week','fulfillments'));
+        return view('service_requests.reports.to_pay', compact('fulfillments'));
     }
 
-    public function bankPaymentFile($selected_week)
+    public function bankPaymentFile()
     {
-        $now = Carbon::now();
-        list($year, $week) = explode('-W', $selected_week);
-        $now->setISODate($year, $week);
-        $from = $now->startOfWeek()->format('Y-m-d 00:00:00');
-        $to = $now->endOfWeek()->format('Y-m-d 23:59:59');
-        $fromFormatted = $now->startOfWeek()->format('d-m-Y');
+        // $now = Carbon::now();
+        // list($year, $week) = explode('-W', $selected_week);
+        // $now->setISODate($year, $week);
+        // $from = $now->startOfWeek()->format('Y-m-d 00:00:00');
+        // $to = $now->endOfWeek()->format('Y-m-d 23:59:59');
+        // $fromFormatted = $now->startOfWeek()->format('d-m-Y');
 
-        $fulfillments = Fulfillment::whereHas("ServiceRequest", function ($subQuery) use ($from, $to) {
-            $subQuery->whereBetween('request_date', [$from, $to]);
+        // $fulfillments = Fulfillment::whereHas("ServiceRequest", function ($subQuery) use ($from, $to) {
+        //     $subQuery->whereBetween('request_date', [$from, $to]);
+        // })
+        //     ->get();
+        $fulfillments = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
+            $subQuery->where('has_resolution_file', 1)
+                ->where('payment_ready', 1);
         })
+            ->where('has_invoice_file', 1)
             ->get();
+
+        if ($fulfillments->count() == 0) {
+            session()->flash('warning', "No existen solicitudes aptas para pago.");
+            return redirect()->back();
+        }
 
         $txt = '';
         foreach ($fulfillments as $fulfillment) {
@@ -73,12 +84,13 @@ class ReportController extends Controller
                 session()->flash('warning', "La solicitud con id {$fulfillment->serviceRequest->id} no contiene número de cuenta.");
                 return redirect()->back();
             }
-            if (!$fulfillment->serviceRequest->total_paid) {
+            if (!$fulfillment->total_to_pay) {
                 session()->flash('warning', "La solicitud con id {$fulfillment->serviceRequest->id} no contiene total a pagar.");
                 return redirect()->back();
             }
 
-            $txt .= "{$fulfillment->serviceRequest->rut}\t{$fulfillment->serviceRequest->name}\t{$fulfillment->serviceRequest->bank->code}\t{$fulfillment->serviceRequest->pay_method}\t{$fulfillment->serviceRequest->account_number}\t{$fulfillment->total_paid}\n";
+            $totalToPay = $fulfillment->total_to_pay - round($fulfillment->total_to_pay * 0.115);
+            $txt .= "{$fulfillment->serviceRequest->rut}\t{$fulfillment->serviceRequest->name}\t{$fulfillment->serviceRequest->bank->code}\t{$fulfillment->serviceRequest->pay_method}\t{$fulfillment->serviceRequest->account_number}\t{$totalToPay}\n";
         }
 
         $response = new StreamedResponse();
@@ -86,7 +98,7 @@ class ReportController extends Controller
             echo $txt;
         });
         $response->headers->set('Content-Type', 'text/plain');
-        $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, "pago-banco-semana-del-$fromFormatted.txt");
+        $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, "pago-banco.txt");
         $response->headers->set('Content-Disposition', $disposition);
 
         return $response;
@@ -108,5 +120,26 @@ class ReportController extends Controller
         // dd($fulfillments);
         return view('service_requests.reports.pending_resolutions', compact('serviceRequests'));
     }
+
+
+    public function withoutBankDetails()
+    {
+
+        $servicerequests = ServiceRequest::whereHas("fulfillments", function($subQuery) {
+            $subQuery->where('has_invoice_file',1);
+          })
+          ->get();
+
+        return view('service_requests.reports.without_bank_details', compact('servicerequests'));
+
+    }
+
+    public function indexWithResolutionFile() {
+        $serviceRequests = ServiceRequest::where('has_resolution_file',1)->get();
+
+        return view('service_requests.reports.index_with_resolution_file', compact('serviceRequests'));
+        /* Hacer foreach de cada SRs y dentro hacer un foreach de sus fulfillments y mostrar cual tiene boleta y cual no */
+    }
+
 
 }
