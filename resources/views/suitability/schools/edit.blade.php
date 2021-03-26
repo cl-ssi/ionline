@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Nuevo Colegio')
+@section('title', 'Editar Colegio')
 
 @section('content')
 
 @include('suitability.nav')
 
-<h3 class="mb-3">Nuevo Colegio</h3>
+<h3 class="mb-3">Editar Colegio</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('suitability.schools.update', $school) }}">
     @csrf
@@ -24,6 +24,13 @@
         </fieldset>
     </div>
 
+    <div class="row">
+    <fieldset class="form-group col-8 col-sm-8 col-md-8 col-lg-8">
+            <label for="for_holder">Dirección*</label>
+            <input type="text" class="form-control" id="for_address" name="address" autocomplete="off" value="{{$school->address}}" required>
+        </fieldset>
+    </div>
+    
     <div class="row">
 
     <fieldset class="form-group col-8 col-sm-8 col-md-8 col-lg-8">
@@ -49,8 +56,11 @@
             <label>Situación Legal*</label>
             <select class="form-control" name="legal" required>
             <option value="">Seleccionar Situación</option>
-            <option value="Privado" {{ $school->legal == "Privado" ? 'selected' : '' }}>Privado</option>
-            <option value="Particular Subvencionado" {{ $school->legal == "Particular Subvencionado" ? 'selected' : '' }}>Particular Subvencionado</option>
+            <option value="PARTICULAR SUBVENCIONADO" {{ $school->legal == "PARTICULAR SUBVENCIONADO" ? 'selected' : '' }}>PARTICULAR SUBVENCIONADO</option>
+            <option value="PARTICULAR NO SUBVENCIONADO" {{ $school->legal == "PARTICULAR NO SUBVENCIONADO" ? 'selected' : '' }}>PARTICULAR NO SUBVENCIONADO</option>
+            <option value="MUNICIPAL CORPORACION" {{ $school->legal == "MUNICIPAL CORPORACION" ? 'selected' : '' }}>MUNICIPAL CORPORACION</option>
+            <option value="MUNICIPAL DAEM" {{ $school->legal == "MUNICIPAL DAEM" ? 'selected' : '' }}>MUNICIPAL DAEM</option>
+            <option value="ADMINISTRACION DELEGADA" {{ $school->legal == "ADMINISTRACION DELEGADA" ? 'selected' : '' }}>ADMINISTRACION DELEGADA</option>
             </select>
         </fieldset>
     </div>
@@ -67,9 +77,21 @@
             </div>
         </fieldset>
     
+        <label for="forBrand">Gratuito*</label>
+        <fieldset class="form-group col-4">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="free" id="RadioType1" value="1" {{ ( $school->free== '1' ) ? 'checked="checked"' : null }} required>
+                <label class="form-check-label" for="inlineRadio1">Sí</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="free" id="RadioType2" value="0" {{ ( $school->free== '0' ) ? 'checked="checked"' : null }} required>
+                <label class="form-check-label" for="inlineRadio2">No</label>
+            </div>
+        </fieldset>
+    
 
 
-    <button type="submit" class="btn btn-primary">Guardar</button>
+    <button type="submit" class="btn btn-primary">Actualizar</button>
 
 </form>
 
