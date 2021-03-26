@@ -8,7 +8,7 @@
 
 
 
-<form method="POST" class="form-horizontal" action="{{ route('idoneidad.storeExternal') }}">
+<form method="POST" class="form-horizontal" action="{{ route('idoneidad.storeSuitabilityExternal') }}">
     @csrf
     @method('POST')
     <input id="school_id" name="school_id" type="hidden" value="{{$school->id}}">

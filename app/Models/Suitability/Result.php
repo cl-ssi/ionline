@@ -41,7 +41,7 @@ class Result extends Model
 
     public function questions()
     {
-        return $this->belongsToMany(Question::class,'psi_question_result')->withPivot(['option_id', 'points']);
+        return $this->belongsToMany(Question::class,'psi_question_result')->withPivot(['option_id', 'points','request_id']);
     }
 
 
