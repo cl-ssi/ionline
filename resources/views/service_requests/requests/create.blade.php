@@ -644,7 +644,7 @@
 		$('#service_description').val("Prestará servicios de Fonoaudiologia realizando las funciones descritas en el Manuel de Organización interno , en el contexto de pandemia covid.");
 	});
 	$("#alias_terapeuta_ocupacional").click(function(){
-		$('#service_description').val("Prestará servicios de Terapeuta Ocupacional realizando las funciones descritas en el Manuel de Organización interno , en el contexto de pandemia covid.");
+		$('#service_description').val("Prestará servicios de Terapia Ocupacional realizando las funciones descritas en el Manuel de Organización interno , en el contexto de pandemia covid.");
 	});
 
 
