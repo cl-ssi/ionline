@@ -82,7 +82,7 @@
                                 @if($fullfillment->total_to_pay)
                                 @livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])
                                 @else
-                                No se ha cargado información de Pago
+                                  RRHH aún no ha ingresado el "Total a pagar".
                                 @endif
                                 </td>
                         </tr>
