@@ -65,54 +65,6 @@
 </div>
 
 <br>
-<div class="card">
-  <div class="card-header">
-    Aprobaciones de Solicitud
-  </div>
-  <div class="card-body">
-    <div class="table-responsive">
-      <table class="card-table table table-sm table-bordered small">
-          <thead>
-            <tr>
-              <th scope="col">Fecha</th>
-              <th scope="col">U.Organizacional</th>
-              <th scope="col">Cargo</th>
-              <th scope="col">Usuario</th>
-              <th scope="col">Tipo</th>
-              <th scope="col">Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
-            @if($SignatureFlow->status === null)
-              <tr class="bg-light">
-            @elseif($SignatureFlow->status === 0)
-              <tr class="bg-danger">
-            @elseif($SignatureFlow->status === 1)
-              <tr>
-            @endif
-               <td>{{ $SignatureFlow->signature_date}}</td>
-               <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
-               <td>{{ $SignatureFlow->employee }}</td>
-               <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
-               <td>{{ $SignatureFlow->type }}</td>
-               <td>@if($SignatureFlow->status === null)  @elseif($SignatureFlow->status === 1) Aceptada @elseif($SignatureFlow->status === 0) Rechazada @endif</td>
-             </tr>
-
-             @if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
-             <tr>
-               <td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
-             </tr>
-             @endif
-           @endforeach
-          </tbody>
-      </table>
-      </div>
-  </div>
-</div>
-
-<br>
-
 @canany(['Service Request: fulfillments rrhh'])
 <form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$serviceRequest->Fulfillments->first()) }}" enctype="multipart/form-data">
 @csrf
@@ -155,6 +107,7 @@
 </form>
 @endcan
 
+<br>
 @canany(['Service Request: fulfillments finance'])
 <form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$serviceRequest->Fulfillments->first()) }}" enctype="multipart/form-data">
 @csrf
@@ -243,3 +196,50 @@
 <br>
 </form>
 @endcan
+
+<br>
+<div class="card">
+  <div class="card-header">
+    Aprobaciones de Solicitud
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="card-table table table-sm table-bordered small">
+          <thead>
+            <tr>
+              <th scope="col">Fecha</th>
+              <th scope="col">U.Organizacional</th>
+              <th scope="col">Cargo</th>
+              <th scope="col">Usuario</th>
+              <th scope="col">Tipo</th>
+              <th scope="col">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
+            @if($SignatureFlow->status === null)
+              <tr class="bg-light">
+            @elseif($SignatureFlow->status === 0)
+              <tr class="bg-danger">
+            @elseif($SignatureFlow->status === 1)
+              <tr>
+            @endif
+               <td>{{ $SignatureFlow->signature_date}}</td>
+               <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
+               <td>{{ $SignatureFlow->employee }}</td>
+               <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
+               <td>{{ $SignatureFlow->type }}</td>
+               <td>@if($SignatureFlow->status === null)  @elseif($SignatureFlow->status === 1) Aceptada @elseif($SignatureFlow->status === 0) Rechazada @endif</td>
+             </tr>
+
+             @if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
+             <tr>
+               <td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
+             </tr>
+             @endif
+           @endforeach
+          </tbody>
+      </table>
+      </div>
+  </div>
+</div>
