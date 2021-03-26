@@ -288,7 +288,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
         // Rutas de service request
         Route::get('/home', function () { return view('service_requests.home'); })->name('home');
-        
+
         //descomposición del resource
         Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
         Route::get('/create', [ServiceRequestController::class, 'create'])->name('create');
@@ -320,7 +320,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/save-approbed-fulfillment/{serviceRequest}', [FulfillmentController::class, 'save_approbed_fulfillment'])->name('save_approbed_fulfillment');
             Route::get('/confirm-fulfillment-by-sign-position/{Fulfillment}/{approbed?}', [FulfillmentController::class, 'confirmFulfillmentBySignPosition'])->name('confirm_Fulfillment_By_SignPosition');
             Route::get('/download-invoice/{fulfillment}', [FulfillmentController::class, 'downloadInvoice'])->name('download_invoice');
-            Route::get('/download-resolution/{fulfillment}', [FulfillmentController::class, 'downloadResolution'])->name('download_resolution');
+            Route::get('/download-resolution/{serviceRequest}', [FulfillmentController::class, 'downloadResolution'])->name('download_resolution');
             Route::get('/certificate-pdf/{fulfillment}', [FulfillmentController::class, 'certificatePDF'])->name('certificate-pdf');
             //eliminar palabra fulfiment en URL y en metodo
             Route::get('/confirm-fulfillment/{fulfillment}', [FulfillmentController::class, 'confirmFulfillment'])->name('confirm-Fulfillment');
