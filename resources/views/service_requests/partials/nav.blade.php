@@ -1,4 +1,11 @@
 <ul class="nav nav-tabs mb-3">
+    
+    <li class="nav-item">
+        <a class="nav-link {{ active('rrhh.service-request.home') }}"
+            href="{{ route('rrhh.service-request.home') }}">
+            <i class="fas fa-home"></i> Home
+        </a>
+    </li>
 
 
     <li class="nav-item">
