@@ -11,58 +11,11 @@
 <form method="POST" enctype="multipart/form-data" action="{{ route('rrhh.service-request.store') }}">
 	@csrf
 
-	<!-- <div class="card">
-    <div class="card-header">
-      Aprobaciones de Solicitud
-    </div>
-      <div class="card-body">
-				<div class="row">
-
-					<fieldset class="form-group col-4">
-					    <label for="for_name">Tipo</label>
-					    <select name="employee" class="form-control" readonly="readonly">
-			          	<option value="Jefatura de servicio" readonly="readonly">Jefatura de servicio</option>
-			        </select>
-					</fieldset>
-
-					<fieldset class="form-group col">
-					    <label for="for_name">Usuario Aprobador</label>
-					    <select name="user_id" class="form-control selectpicker" data-live-search="true" required="" data-size="5">
-								@foreach($users as $key => $user)
-			          	<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
-			          @endforeach
-			        </select>
-					</fieldset>
-
-				</div>
-      </div>
-  </div>
-
-	<br> -->
-
 	<div class="row">
 
-		<fieldset class="form-group col">
-		    <label for="for_program_contract_type">Tipo</label>
-		    <select name="program_contract_type" class="form-control" wire:model="art" id="program_contract_type" required>
-					<option value=""></option>
-          <!-- <option value="Semanal">Semanal</option> -->
-          <option value="Mensual">Mensual</option>
-					<option value="Horas">Horas</option>
-          <!-- <option value="Otro">Otro</option> -->
-        </select>
-		</fieldset>
-
-    <fieldset class="form-group col">
-		    <label for="for_type">Tipo</label>
-		    <select name="type" class="form-control" required id="type">
-					<option value="Covid">Honorarios - Covid</option>
-					@can('Service Request: additional data rrhh')
-						<option value="Suma alzada">Suma alzada</option>
-					@endcan
-          <!-- <option value="Genérico">Honorarios - Genérico</option> -->
-        </select>
-		</fieldset>
+		<div class="form-group col-6">
+			@livewire('service-request.create-types')
+		</div>
 
     <fieldset class="form-group col">
 		    <label for="for_subdirection_ou_id">Subdirección</label>
@@ -88,8 +41,6 @@
 
 	<div class="row">
 
-		@livewire('signature-flow',['art' => 1])
-
 		<fieldset class="form-group col">
 				<label for="for_users">Responsable</label>
 				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" data-size="5" required>
@@ -112,125 +63,13 @@
 
 	</div>
 
-	<div class="row" id="div_mensual">
-	  @foreach($signatureFlows as $key => $signatureFlow)
-			<fieldset class="form-group col-sm-4">
-					<label for="for_users">{{$key}}</label>
-					<select name="users[]" class="form-control selectpicker" id="{{$key}}" data-live-search="true" required="" data-size="5" readonly>
-						@foreach($users as $key => $user)
-							<option value="{{$user->id}}" @if($user->id == $signatureFlow) selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
-						@endforeach
-					</select>
-			</fieldset>
-		@endforeach
-
-	</div>
-
-	<div class="row" id="div_turno">
-
-		@foreach($signatureFlowsTurnos as $key => $signatureFlow)
-			<fieldset class="form-group col-sm-4">
-					<label for="for_users">{{$key}}</label>
-					<select name="users[]" class="form-control selectpicker" id="{{$key}}Turnos" data-live-search="true" required="" data-size="5" readonly>
-						@foreach($users as $key => $user)
-							<option value="{{$user->id}}" @if($user->id == $signatureFlow) selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
-						@endforeach
-					</select>
-			</fieldset>
-		@endforeach
-	</div>
-
-	<div class="row" id="div_suma_alzada">
-
-		@foreach($sumaAlzadaFlow as $key => $signatureFlow)
-			<fieldset class="form-group col-sm-4">
-					<label for="for_users">{{$key}}</label>
-					<select name="users[]" class="form-control selectpicker" id="{{$key}}Turnos" data-live-search="true" required="" data-size="5" readonly>
-						@foreach($users as $key => $user)
-							<option value="{{$user->id}}" @if($user->id == $signatureFlow) selected @else disabled @endif >{{$user->getFullNameAttribute()}}</option>
-						@endforeach
-					</select>
-			</fieldset>
-		@endforeach
-	</div>
-
-
+	@livewire('service-request.signature-flows')
 
 	<br>
 
 	@livewire('service-request.employee-data')
 
-	<!-- <div class="border border-info rounded">
-  <div class="row ml-1 mr-1">
-
-		<fieldset class="form-group col">
-        <label for="for_run">Run (sin DV)</label>
-        <input type="number" min="1" max="50000000" class="form-control" id="for_run" name="run" required>
-    </fieldset>
-
-    <fieldset class="form-group col-1">
-        <label for="for_dv">Digito</label>
-        <input type="text" class="form-control" id="for_dv" name="dv" readonly>
-    </fieldset>
-
-		<fieldset class="form-group col-1">
-        <label for="">&nbsp;</label>
-        <button type="button" id="btn_fonasa" class="btn btn-outline-success">Fonasa&nbsp;</button>
-    </fieldset>
-
-    <fieldset class="form-group col">
-		    <label for="for_name">Nombre completo</label>
-		    <input type="text" class="form-control" id="name" placeholder="" name="name" required="required">
-		</fieldset>
-
-		<fieldset class="form-group col">
-		    <label for="for_contract_type">Tipo de Contrato</label>
-		    <select name="contract_type" class="form-control" required>
-					<option value=""></option>
-          <option value="NUEVO">Nuevo</option>
-          <option value="ANTIGUO">Antiguo</option>
-          <option value="CONTRATO PERM.">Permanente</option>
-          <option value="PRESTACION">Prestación</option>
-        </select>
-		</fieldset>
-
-  </div>
-
-	<div class="row ml-1 mr-1">
-
-		<fieldset class="form-group col-3">
-			<label for="for_nationality">Nacionalidad</label>
-			<select name="nationality" class="form-control" required>
-				<option value=""></option>
-				<option value="CHILENA" >CHILENA</option>
-				<option value="ARGENTINA" >ARGENTINA</option>
-				<option value="VENEZOLANA" >VENEZOLANA</option>
-				<option value="COLOMBIANA" >COLOMBIANA</option>
-				<option value="PERUANA" >PERUANA</option>
-				<option value="BOLIVIANA" >BOLIVIANA</option>
-				<option value="CUBANA" >CUBANA</option>
-			</select>
-		</fieldset>
-
-    <fieldset class="form-group col-3">
-		    <label for="for_address">Dirección</label>
-		    <input type="text" class="form-control" id="foraddress" placeholder="" name="address">
-		</fieldset>
-
-    <fieldset class="form-group col-3">
-		    <label for="for_phone_number">Número telefónico</label>
-		    <input type="text" class="form-control" id="for_phone_number" placeholder="" name="phone_number">
-		</fieldset>
-
-		<fieldset class="form-group col-3">
-		    <label for="for_email">Correo electrónico</label>
-		    <input type="text" class="form-control" id="for_email" placeholder="" name="email">
-		</fieldset>
-
-	</div>
-	</div> -->
 	<br>
-
 
   <div class="row">
 
@@ -524,14 +363,14 @@
 				$('#for_weekly_hours').attr('disabled', 'disabled');
 				$("#control_turnos").show();
 
-				$("#div_mensual :input").attr("disabled", true);
-				$("#div_mensual").hide();
-
-				$("#div_suma_alzada :input").attr("disabled", true);
-				$("#div_suma_alzada").hide();
-
-				$("#div_turno :input").attr("disabled", false);
-				$("#div_turno").show();
+				// $("#div_mensual :input").attr("disabled", true);
+				// $("#div_mensual").hide();
+				//
+				// $("#div_suma_alzada :input").attr("disabled", true);
+				// $("#div_suma_alzada").hide();
+				//
+				// $("#div_turno :input").attr("disabled", false);
+				// $("#div_turno").show();
 
 				$("#working_day_type option[value='DIURNO']").hide();
 				$("#working_day_type option[value='TERCER TURNO']").hide();
@@ -552,14 +391,14 @@
 				$('#for_weekly_hours').removeAttr('disabled');
 				$("#control_turnos").hide();
 
-				$("#div_mensual :input").attr("disabled", false);
-				$("#div_mensual").show();
-
-				$("#div_suma_alzada :input").attr("disabled", true);
-				$("#div_suma_alzada").hide();
-
-				$("#div_turno :input").attr("disabled", true);
-				$("#div_turno").hide();
+				// $("#div_mensual :input").attr("disabled", false);
+				// $("#div_mensual").show();
+				//
+				// $("#div_suma_alzada :input").attr("disabled", true);
+				// $("#div_suma_alzada").hide();
+				//
+				// $("#div_turno :input").attr("disabled", true);
+				// $("#div_turno").hide();
 
 				$("#working_day_type option[value='DIURNO']").show();
 				$("#working_day_type option[value='TERCER TURNO']").show();
@@ -673,30 +512,30 @@
 		}
 	});
 
-	$('#type').on('change', function() {
-		var value = this.value;
-
-		if (value == "Suma alzada") {
-			$("#div_suma_alzada :input").attr("disabled", false);
-			$("#div_suma_alzada").show();
-			// $('#div_turno').attr('disabled','disabled');
-			$("#div_turno :input").attr("disabled", true);
-			$("#div_turno").hide();
-
-			$("#div_mensual :input").attr("disabled", true);
-			$("#div_mensual").hide();
-
-		}else{
-			$("#div_turno :input").attr("disabled", false);
-			$("#div_turno").show();
-			// $('#div_turno').attr('disabled','disabled');
-			$("#div_suma_alzada :input").attr("disabled", true);
-			$("#div_suma_alzada").hide();
-
-			$("#div_mensual :input").attr("disabled", true);
-			$("#div_mensual").hide();
-		}
-	});
+	// $('#type').on('change', function() {
+	// 	var value = this.value;
+	//
+	// 	if (value == "Suma alzada") {
+	// 		$("#div_suma_alzada :input").attr("disabled", false);
+	// 		$("#div_suma_alzada").show();
+	// 		// $('#div_turno').attr('disabled','disabled');
+	// 		$("#div_turno :input").attr("disabled", true);
+	// 		$("#div_turno").hide();
+	//
+	// 		$("#div_mensual :input").attr("disabled", true);
+	// 		$("#div_mensual").hide();
+	//
+	// 	}else{
+	// 		$("#div_turno :input").attr("disabled", false);
+	// 		$("#div_turno").show();
+	// 		// $('#div_turno').attr('disabled','disabled');
+	// 		$("#div_suma_alzada :input").attr("disabled", true);
+	// 		$("#div_suma_alzada").hide();
+	//
+	// 		$("#div_mensual :input").attr("disabled", true);
+	// 		$("#div_mensual").hide();
+	// 	}
+	// });
 
 
 
