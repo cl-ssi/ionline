@@ -35,7 +35,7 @@
           <label for="for_estate"><br/></label>
           <a type="button"
              class="btn btn-outline-success form-control"
-             href="{{ route('rrhh.fulfillments.certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank">
+             href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank">
              Generar certificado
              <i class="fas fa-file"></i>
           </a>
@@ -45,7 +45,7 @@
           <label for="for_estate"><br/></label>
           <a type="button"
              class="btn btn-outline-success form-control"
-             href="{{ route('rrhh.service_requests.resolution-pdf',$serviceRequest) }}" target="_blank">
+             href="{{ route('rrhh.service-request.report.resolution-pdf',$serviceRequest) }}" target="_blank">
              Generar Resolución
              <i class="fas fa-file"></i>
           </a>
@@ -114,7 +114,7 @@
 <br>
 
 @canany(['Service Request: fulfillments rrhh'])
-<form method="POST" action="{{ route('rrhh.fulfillments.update',$serviceRequest->Fulfillments->first()) }}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$serviceRequest->Fulfillments->first()) }}" enctype="multipart/form-data">
 @csrf
 @method('PUT')
 
@@ -156,7 +156,7 @@
 @endcan
 
 @canany(['Service Request: fulfillments finance'])
-<form method="POST" action="{{ route('rrhh.fulfillments.update',$serviceRequest->Fulfillments->first()) }}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$serviceRequest->Fulfillments->first()) }}" enctype="multipart/form-data">
 @csrf
 @method('PUT')
 

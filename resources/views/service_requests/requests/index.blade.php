@@ -10,7 +10,7 @@
 
 <div class="mb-3">
 	<a class="btn btn-primary"
-		href="{{ route('rrhh.service_requests.create') }}">
+		href="{{ route('rrhh.service-request.create') }}">
 		<i class="far fa-file"></i> Nueva Solicitud
 	</a>
 
@@ -69,7 +69,7 @@
 							<!-- <td>{{$serviceRequest->SignatureFlows->last()->employee}}</td> -->
 							<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
 							<td nowrap>
-								<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
+								<a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}"
 									class="btn btn-sm btn-outline-secondary">
 									<span class="fas fa-edit" aria-hidden="true"></span>
 								</a>
@@ -127,7 +127,7 @@
 							<!-- <td>{{$serviceRequest->SignatureFlows->last()->employee}}</td> -->
 							<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
 							<td nowrap>
-								<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
+								<a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}"
 									class="btn btn-sm btn-outline-secondary">
 									<span class="fas fa-edit" aria-hidden="true"></span>
 								</a>
@@ -188,17 +188,17 @@
 							<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
 							<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
 							<td nowrap>
-								<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
+								<a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}"
 									class="btn btn-sm btn-outline-secondary">
 									<span class="fas fa-edit" aria-hidden="true"></span>
 								</a>
 
 								<!-- @if($serviceRequest->program_contract_type == "Horas")
-									<a href="{{ route('rrhh.service_requests.certificate-pdf', $serviceRequest) }}"
+									<a href="{{ route('rrhh.service-request.certificate-pdf', $serviceRequest) }}"
 										class="btn btn-outline-secondary btn-sm" target="_blank">
 									<span class="fas fa-file" aria-hidden="true"></span></a>
 								@else
-									<a href="{{ route('rrhh.fulfillments.edit_fulfillment',[$serviceRequest]) }}"
+									<a href="{{ route('rrhh.service-request.fulfillment.edit_fulfillment',[$serviceRequest]) }}"
 									   class="btn btn-outline-secondary btn-sm" tooltip="Ir a formulario de cumplimiento">
 									<i class="fas fa-file-import" style="color:#B9B9B9"></i></a>
 								@endif -->
@@ -216,7 +216,7 @@
 												class="btn btn-outline-secondary btn-sm" target="_blank">
 											<span class="fas fa-plus" aria-hidden="true"></span></a> -->
 
-											<a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+											<a href="{{ route('rrhh.service-request.report.resolution-pdf', $serviceRequest) }}"
 												class="btn btn-outline-secondary btn-sm" target="_blank">
 											<span class="fas fa-file" aria-hidden="true"></span></a>
 										@endif
@@ -277,7 +277,7 @@
 							<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
 							<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
 							<td nowrap>
-								<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
+								<a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}"
 									class="btn btn-sm btn-outline-secondary">
 									<span class="fas fa-edit" aria-hidden="true"></span>
 								</a>
@@ -289,7 +289,7 @@
 										<a data-toggle="modal" 	class="btn btn-outline-secondary btn-sm" id="a_modal_flow_rejected">
 										<i class="fas fa-file" style="color:#B9B9B9"></i></a>
 									@else
-										<a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+										<a href="{{ route('rrhh.service-request.report.resolution-pdf', $serviceRequest) }}"
 											class="btn btn-outline-secondary btn-sm" target="_blank">
 										<span class="fas fa-file" aria-hidden="true"></span></a>
 									@endif
@@ -355,7 +355,7 @@
 									@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
 									@else Finalizada @endif</td>
 							<td nowrap>
-								<a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
+								<a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}"
 									class="btn btn-sm btn-outline-secondary">
 									<span class="fas fa-edit" aria-hidden="true"></span>
 								</a>
@@ -367,7 +367,7 @@
 										<a data-toggle="modal" 	class="btn btn-outline-secondary btn-sm" id="a_modal_flow_rejected">
 										<i class="fas fa-file" style="color:#B9B9B9"></i></a>
 									@else
-										<a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+										<a href="{{ route('rrhh.service-request.report.resolution-pdf', $serviceRequest) }}"
 											class="btn btn-outline-secondary btn-sm" target="_blank">
 										<span class="fas fa-file" aria-hidden="true"></span></a>
 									@endif
@@ -419,7 +419,7 @@
       <div class="modal-body">
 
 				<div class="row">
-					<form method="POST" enctype="multipart/form-data" id="derive" action="{{ route('rrhh.service_requests.derive') }}">
+					<form method="POST" enctype="multipart/form-data" id="derive" action="{{ route('rrhh.service-request.derive') }}">
 						@csrf
 
 			    <fieldset class="form-group col">
@@ -485,7 +485,7 @@ $('#button_derive').click(function(){
 	var result = confirm("¿Está seguro de continuar con la derivación?");
 	if (result) {
 		$('#derive').submit();
-		 // window.location.href = '{{route("rrhh.service_requests.derive",1)}}';
+		 // window.location.href = '{{route("rrhh.service-request.derive",1)}}';
 	}
 });
 

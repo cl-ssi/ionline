@@ -8,7 +8,7 @@
 
 <h3>Datos Adicionales - Listado de Solicitudes de Contratación de Servicio</h3><br>
 
-<form method="GET" class="form-horizontal" action="{{ route('rrhh.service_requests.aditional_data_list') }}">
+<form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.aditional_data_list') }}">
   <div class="input-group mb-3">
     <div class="input-group-prepend">
       <span class="input-group-text">Unidad</span>
@@ -74,7 +74,7 @@
       <td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
           @else Finalizada @endif</td>
       <td nowrap>
-        <a href="{{ route('rrhh.service_requests.edit', $serviceRequest) }}"
+        <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}"
           class="btn btn-sm btn-outline-secondary">
           <span class="fas fa-edit" aria-hidden="true"></span>
         </a>
@@ -93,7 +93,7 @@
                 class="btn btn-outline-secondary btn-sm" target="_blank">
               <span class="fas fa-plus" aria-hidden="true"></span></a> -->
 
-              <a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+              <a href="{{ route('rrhh.service-request.report.resolution-pdf', $serviceRequest) }}"
                 class="btn btn-outline-secondary btn-sm" target="_blank">
               <span class="fas fa-file" aria-hidden="true"></span></a>
             @endif
@@ -111,7 +111,7 @@
                   class="btn btn-outline-secondary btn-sm" target="_blank">
                 <span class="fas fa-plus" aria-hidden="true"></span></a> -->
 
-                <a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+                <a href="{{ route('rrhh.service-request.report.resolution-pdf', $serviceRequest) }}"
                   class="btn btn-outline-secondary btn-sm" target="_blank">
                 <span class="fas fa-file" aria-hidden="true"></span></a>
               @endif
