@@ -313,6 +313,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/', [FulfillmentController::class, 'index'])->name('index');
             Route::post('/store', [FulfillmentController::class, 'store'])->name('store');
             Route::put('/{fulfillment}/update', [FulfillmentController::class, 'update'])->name('update');
+            Route::delete('{fulfillment}/destroy', [FulfillmentController::class, 'destroy'])->name('destroy');
             // fin descomposición
             Route::get('/edit/{serviceRequest}', [FulfillmentController::class, 'edit_fulfillment'])->name('edit');
             Route::get('/save-approbed-fulfillment/{serviceRequest}', [FulfillmentController::class, 'save_approbed_fulfillment'])->name('save_approbed_fulfillment');
