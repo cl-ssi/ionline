@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Fulfillment;
+use Luecano\NumeroALetras\NumeroALetras;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -139,6 +140,33 @@ class ReportController extends Controller
 
         return view('service_requests.reports.index_with_resolution_file', compact('serviceRequests'));
         /* Hacer foreach de cada SRs y dentro hacer un foreach de sus fulfillments y mostrar cual tiene boleta y cual no */
+    }
+
+    public function resolutionPDF(ServiceRequest $ServiceRequest)
+    {
+        $rut = explode("-", $ServiceRequest->rut);
+        $ServiceRequest->run_s_dv = number_format($rut[0],0, ",", ".");
+        $ServiceRequest->dv = $rut[1];
+
+        $formatter = new NumeroALetras();
+        $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
+
+        if ($ServiceRequest->fulfillments) {
+          foreach ($ServiceRequest->fulfillments as $key => $fulfillment) {
+            $fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
+            // dd($fulfillment->total_to_pay_description);
+          }
+        }
+
+        // dd($ServiceRequest->fulfillments);
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('service_requests.report_resolution',compact('ServiceRequest'));
+
+        return $pdf->stream('mi-archivo.pdf');
+        // return view('service_requests.report_resolution', compact('serviceRequest'));
+        // $pdf = \PDF::loadView('service_requests.report_resolution');
+        // return $pdf->stream();
     }
 
 

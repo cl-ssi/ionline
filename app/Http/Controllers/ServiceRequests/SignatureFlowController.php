@@ -111,7 +111,7 @@ class SignatureFlowController extends Controller
             }
 
             session()->flash('success', 'Se ha reiniciado el flujo de firmas.');
-            return redirect()->route('rrhh.service_requests.index');
+            return redirect()->route('rrhh.service-request.index');
           }
           //Aceptar o rechazar
           else{
@@ -137,7 +137,7 @@ class SignatureFlowController extends Controller
           //   }
           // } catch (\Exception $e) {
           //   session()->flash('success', 'Se ha registrado la visación (No se envió correo electrónico: ' . $e->getMessage() .').');
-          //   return redirect()->route('rrhh.service_requests.index');
+          //   return redirect()->route('rrhh.service-request.index');
           // }
 
           // //cuando visa responsable (2), se guarda automáticamente el cumplimiento (fulfillment) - solo para contrato por turno (horas)
@@ -160,15 +160,15 @@ class SignatureFlowController extends Controller
           //   $fulfillment->user_id = Auth::user()->id;
           //   $fulfillment->save();
           //
-          //   session()->flash('info', 'Se ha registrado la visación de solicitud nro: <b>'.$serviceRequest->id.'</b>. Para visualizar el certificado de confirmación, hacer click <a href="'. route('rrhh.service_requests.certificate-pdf', $serviceRequest) . '" target="_blank">Aquí.</a>');
-          //   return redirect()->route('rrhh.service_requests.index');
+          //   session()->flash('info', 'Se ha registrado la visación de solicitud nro: <b>'.$serviceRequest->id.'</b>. Para visualizar el certificado de confirmación, hacer click <a href="'. route('rrhh.service-request.certificate-pdf', $serviceRequest) . '" target="_blank">Aquí.</a>');
+          //   return redirect()->route('rrhh.service-request.index');
           // }
 
        }
       }
 
       session()->flash('success', 'Se ha registrado la visación.');
-      return redirect()->route('rrhh.service_requests.index');
+      return redirect()->route('rrhh.service-request.index');
   }
 
   /**
@@ -208,7 +208,7 @@ class SignatureFlowController extends Controller
       // $serviceRequest->save();
       //
       // session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido modificada.');
-      // return redirect()->route('rrhh.service_requests.index');
+      // return redirect()->route('rrhh.service-request.index');
   }
 
   /**

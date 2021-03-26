@@ -10,18 +10,18 @@
 
   @can('Service Request: additional data rrhh')
 
-    <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('rrhh.service-request.update', $serviceRequest) }}" enctype="multipart/form-data">
 
   @else
 
     @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-      <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ route('rrhh.service-request.update', $serviceRequest) }}" enctype="multipart/form-data">
     @else
       <!-- si existe una firma, no se deja modificar solicitud -->
       @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
         <form>
       @else
-        <form method="POST" action="{{ route('rrhh.service_requests.update', $serviceRequest) }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('rrhh.service-request.update', $serviceRequest) }}" enctype="multipart/form-data">
       @endif
     @endif
 
@@ -559,7 +559,7 @@
   </form>
 
   @canany(['Service Request: additional data rrhh'])
-  <form method="POST" action="{{ route('rrhh.service_requests.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
+  <form method="POST" action="{{ route('rrhh.service-request.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
   @csrf
   @method('PUT')
 
@@ -589,7 +589,7 @@
           <fieldset class="form-group col col-md-2">
             <label for="for_sirh_contract_registration">&nbsp;</label>
             <div>
-              <a href="{{ route('rrhh.service_requests.resolution-pdf', $serviceRequest) }}"
+              <a href="{{ route('rrhh.service-request.report.resolution-pdf', $serviceRequest) }}"
                 class="btn btn-outline-secondary" target="_blank" title="Resolución">
               <span class="fas fa-file-pdf" aria-hidden="true"></span></a>
             </div>
@@ -673,7 +673,7 @@
 
 
   <!-- @canany(['Service Request: additional data finanzas'])
-  <form method="POST" action="{{ route('rrhh.service_requests.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
+  <form method="POST" action="{{ route('rrhh.service-request.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
   @csrf
   @method('PUT')
 
@@ -732,7 +732,7 @@
 
 
   @canany(['Service Request: additional data oficina partes'])
-  <form method="POST" action="{{ route('rrhh.service_requests.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
+  <form method="POST" action="{{ route('rrhh.service-request.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
   @csrf
   @method('PUT')
 
@@ -767,7 +767,7 @@
 
 <hr>
 
-<form method="POST" action="{{ route('rrhh.signature_flow.store') }}" enctype="multipart/form-data">
+<form method="POST" action="{{ route('rrhh.service-request.signature-flow.store') }}" enctype="multipart/form-data">
 @csrf
 
 
@@ -891,7 +891,7 @@
 
 @can('Service Request: delete request')
   <br>
-  <form method="POST" action="{{ route('rrhh.service_requests.destroy_with_parameters') }}" enctype="multipart/form-data" class="d-inline">
+  <form method="POST" action="{{ route('rrhh.service-request.destroy-with-parameters') }}" enctype="multipart/form-data" class="d-inline">
       @csrf
       @method('POST')
       <input type="hidden" name="id" value="{{$serviceRequest->id}}">
