@@ -94,7 +94,7 @@ class ReportController extends Controller
             $txt .= 
                 strtoupper(str_replace('-','',$fulfillment->serviceRequest->rut))."\t".
                 strtoupper(trim($fulfillment->serviceRequest->name))."\t".
-                $fulfillment->serviceRequest->email."\t".
+                strtolower($fulfillment->serviceRequest->email)."\t".
                 $fulfillment->serviceRequest->bank->code."\t".
                 $fulfillment->serviceRequest->pay_method."\t".
                 intval($fulfillment->serviceRequest->account_number)."\t".
