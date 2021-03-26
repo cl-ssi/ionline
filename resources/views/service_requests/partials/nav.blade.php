@@ -86,8 +86,8 @@
             @endcan
 
             @canany(['Service Request: with resolution'])
-                <a class="dropdown-item {{ active('rrhh.service-request.report.withResolutionFile') }}"
-                   href="{{ route('rrhh.service-request.report.withResolutionFile') }}">
+                <a class="dropdown-item {{ active('rrhh.service-request.report.with-resolution-file') }}"
+                   href="{{ route('rrhh.service-request.report.with-resolution-file') }}">
                     <i class="fas fa-file-invoice-dollar"></i> Solicitudes con resolución cargada
                 </a>
             @endcan

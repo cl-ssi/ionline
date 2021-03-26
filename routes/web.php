@@ -354,6 +354,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/pending-resolutions', [ReportController::class, 'pendingResolutions'])->name('pending-resolutions');
             Route::get('/resolution-pdf/{ServiceRequest}', [ReportController::class, 'resolutionPDF'])->name('resolution-pdf');
             Route::get('/bank-payment-file', [ReportController::class, 'bankPaymentFile'])->name('bank-payment-file');
+            Route::get('/with-resolution-file', [ReportController::class, 'indexWithResolutionFile'])->name('with-resolution-file');
         });
 
         Route::prefix('signature-flow')->name('signature-flow.')->group(function () {
