@@ -20,8 +20,8 @@ class SchoolUserController extends Controller
     {
         //        
         $schoolusers = SchoolUser::where('admin',1)->get();
-        $users = UserExternal::orderBy('fathers_family')->get();
-        $schools = School::all();
+        $users = UserExternal::orderBy('name')->get();
+        $schools = School::orderBy('name')->get();
         return view('suitability.users.index', compact('schoolusers','users', 'schools'));
     }
 

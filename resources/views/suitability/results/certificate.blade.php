@@ -15,7 +15,7 @@
     <div class="center" style="width: 100%;">
         <p class="uppercase" style="font-weight:bold; font-size:22px;">
         INFORME DE IDONEIDAD PSICOLÓGICA<br>
-        COMPETENCIA LABORAL PARA DESEMPEÑAR EL CARGO DE<br>
+        PARA DESEMPEÑAR EL CARGO DE<br>
         ASISTENTE A LA EDUCACIÓN<br>
         LEY N° 21.109
         </p>
@@ -25,7 +25,7 @@
 <div style="border-top: 1px solid #CCC; margin: 15px 0px 15px;"></div>
 <p class="justify" style="font-size:18px; line-height:150%;">
     El Subdirector de Gestión y Desarrollo de las Personas que suscribe, certifica que se realizó a <strong>{{ $result->user->fullName ?? ''  }}, Rut:{{ $result->user->id ?? ''  }}-{{ $result->user->dv ?? ''  }} </strong>
-    evaluaciones psicológicas, en su calidad de postulante al cargo de Asistente de la Educación en el Establecimiento XXX, según lo dispone el artículo 1° del Articulo 4 de la ley
+    evaluaciones psicológicas, en su calidad de postulante al cargo de Asistente de la Educación en el Establecimiento XXX, según lo dispone el Parrafo 1 del Artículo 4 de la ley
     21.109
 </p>
 <br>
