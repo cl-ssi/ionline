@@ -30,14 +30,14 @@
           <td>{{$serviceRequest->working_day_type}}</td>
           <!-- <td>
             @if($serviceRequest->has_resolution_file)
-              <a href="{{route('rrhh.fulfillments.download.resolution', $serviceRequest)}}"
+              <a href="{{route('rrhh.service-request.fulfillment.download-resolution', $serviceRequest)}}"
                  target="_blank" class="mr-4">
                  <i class="fas fa-paperclip"></i>
               </a>
             @endif
           </td> -->
           <td>
-              <a href="{{ route('rrhh.fulfillments.edit_fulfillment',$serviceRequest) }}">
+              <a href="{{ route('rrhh.service-request.fulfillment.edit_fulfillment',$serviceRequest) }}">
       					<span class="fas fa-edit" aria-hidden="true"></span>
       				</a>
           </td>

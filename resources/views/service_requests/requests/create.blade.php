@@ -8,7 +8,7 @@
 
 <h3>Solicitud de Contratación de Servicios</h3>
 
-<form method="POST" enctype="multipart/form-data" action="{{ route('rrhh.service_requests.store') }}">
+<form method="POST" enctype="multipart/form-data" action="{{ route('rrhh.service-request.store') }}">
 	@csrf
 
 	<!-- <div class="card">

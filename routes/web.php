@@ -35,6 +35,8 @@ use App\Http\Controllers\ServiceRequests\ValueController;
 use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 use App\Http\Controllers\ServiceRequests\FulfillmentController;
 use App\Http\Controllers\ServiceRequests\SignatureFlowController;
+use App\Http\Controllers\ServiceRequests\FulfillmentItemController;
+use App\Http\Controllers\ServiceRequests\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -283,11 +285,6 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::post('{user}/roles', 'Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
 
 
-
-    /*
-    // TODO: ordenar rutas service request
-    // Urls en Singular y separadas por guion en medio
-
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
         // Rutas de service request
 
@@ -303,24 +300,20 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/transfer-requests', [ServiceRequestController::class, 'transfer_requests'])->name('transfer_requests');
         Route::post('/derive', [ServiceRequestController::class, 'derive'])->name('derive');
 
-
-        Route::get('/pending-request', [ServiceRequestController::class, 'pending_requests'])->name('pending_requests');
+        Route::get('/destroy-with-parameters', [ServiceRequestController::class, 'destroy_with_parameters'])->name('destroy-with-parameters');
+        Route::get('/pending-requests', [ServiceRequestController::class, 'pending_requests'])->name('pending-requests');
 
         Route::get('/aditional-data-list', [ServiceRequestController::class, 'aditional_data_list'])->name('aditional_data_list');
         Route::put('/update-aditional-data/{serviceRequest}', [ServiceRequestController::class, 'update_aditional_data'])->name('update_aditional_data');
-        Route::get('/certificate-pdf/{serviceRequest}', [ServiceRequestController::class, 'certificatePDF'])->name('certificate-pdf);
+        Route::get('/certificate-pdf/{serviceRequest}', [ServiceRequestController::class, 'certificatePDF'])->name('certificate-pdf');
 
         //no se esta ocupando
-        Route::get('/resolution/{ServiceRequest}', [ServiceRequestController::class, 'resolution'])->name('no tiene name');
-
+        // Route::get('/resolution/{ServiceRequest}', [ServiceRequestController::class, 'resolution'])->name('no tiene name');
 
         //pasar a reports
         Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
         Route::get('/export-sirh', [ServiceRequestController::class, 'export_sirh'])->name('export_sirh');
-
-
-
-
+        Route::get('/export-sirh-txt', [ServiceRequestController::class, 'export_sirh_txt'])->name('export-sirh-txt');
 
 
         Route::prefix('fulfillment')->name('fulfillment.')->group(function () {
@@ -328,7 +321,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/', [FulfillmentController::class, 'index'])->name('index');
             Route::post('/store', [FulfillmentController::class, 'store'])->name('store');
             Route::put('/{fulfillment}/update', [FulfillmentController::class, 'update'])->name('update');
-            ¿edit_fulfillment? es el ¿edit?
+            // ¿edit_fulfillment? es el ¿edit?
             // fin descomposición
             Route::get('/edit-fulfillment/{serviceRequest}', [FulfillmentController::class, 'edit_fulfillment'])->name('edit_fulfillment');
             Route::get('/save-approbed-fulfillment/{serviceRequest}', [FulfillmentController::class, 'save_approbed_fulfillment'])->name('save_approbed_fulfillment');
@@ -340,10 +333,15 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/confirm-fulfillment/{fulfillment}', [FulfillmentController::class, 'confirmFulfillment'])->name('confirm-Fulfillment');
             Route::get('/refuse-fulfillment/{fulfillment}', [FulfillmentController::class, 'refuseFulfillment'])->name('refuse-Fulfillment');
 
-            Route::get('fulfillments/refuseFulfillment/{fulfillment}', 'ServiceRequests\FulfillmentController@refuseFulfillment')->name('fulfillments.refuseFulfillment')->middleware('auth');
+            // Route::get('fulfillments/refuseFulfillment/{fulfillment}', 'ServiceRequests\FulfillmentController@refuseFulfillment')->name('fulfillments.refuseFulfillment')->middleware('auth');
 
 
-
+            Route::prefix('item')->name('item.')->group(function () {
+                // descomposición del resource
+                Route::get('/', [FulfillmentItemController::class, 'index'])->name('index');
+                Route::post('/store', [FulfillmentItemController::class, 'store'])->name('store');
+                Route::put('/{fulfillment}/update', [FulfillmentItemController::class, 'update'])->name('update');
+            });
 
 
 
@@ -351,56 +349,58 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
         Route::prefix('report')->name('report.')->group(function () {
             // Rutas a los reportes
-            Route::get('/to-pay', [ServiceRequests\ReportController::class, 'toPay'])->name('toPay');
-
-
+            Route::get('/to-pay', [ReportController::class, 'toPay'])->name('to-pay');
+            Route::get('/without-bank-details', [ReportController::class, 'withoutBankDetails'])->name('without-bank-details');
+            Route::get('/pending-resolutions', [ReportController::class, 'pendingResolutions'])->name('pending-resolutions');
+            Route::get('/resolution-pdf/{ServiceRequest}', [ReportController::class, 'resolutionPDF'])->name('resolution-pdf');
+            Route::get('/bank-payment-file', [ReportController::class, 'bankPaymentFile'])->name('bank-payment-file');
         });
 
         Route::prefix('signature-flow')->name('signature-flow.')->group(function () {
             // Rutas a signature flow
-            ¿solamente tiene store?
+            // ¿solamente tiene store?
             Route::post('/store', [SignatureFlowController::class, 'store'])->name('store');
         });
     });
-    */
 
-    Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
-        // Rutas de service request
-        Route::get('export-sirh','ServiceRequests\ServiceRequestController@export_sirh')->name('export-sirh');
-        Route::get('export-sirh-txt', 'ServiceRequests\ServiceRequestController@export_sirh_txt')->name('export-sirh-txt');
-    });
 
-    //Route::resource('shift_control', 'ServiceRequests\ShiftControlController')->middleware('auth');
-    Route::post('service_requests.derive','ServiceRequests\ServiceRequestController@derive')->name('service_requests.derive')->middleware('auth');
-    Route::get('service_requests.consolidated_data','ServiceRequests\ServiceRequestController@consolidated_data')->name('service_requests.consolidated_data')->middleware('auth');
-    Route::post('service_requests.destroy_with_parameters','ServiceRequests\ServiceRequestController@destroy_with_parameters')->name('service_requests.destroy_with_parameters')->middleware('auth');
-    Route::get('service_requests.pending_requests','ServiceRequests\ServiceRequestController@pending_requests')->name('service_requests.pending_requests')->middleware('auth');
-
-    Route::get('service_requests.aditional_data_list','ServiceRequests\ServiceRequestController@aditional_data_list')->name('service_requests.aditional_data_list')->middleware('auth');
-    Route::get('service_requests.transfer_requests','ServiceRequests\ServiceRequestController@transfer_requests')->name('service_requests.transfer_requests')->middleware('auth');
-    Route::put('service_requests/update_aditional_data/{serviceRequest}', 'ServiceRequests\ServiceRequestController@update_aditional_data')->middleware('auth')->name('service_requests.update_aditional_data');
-
-    Route::get('fulfillments/edit_fulfillment/{serviceRequest}', 'ServiceRequests\FulfillmentController@edit_fulfillment')->name('fulfillments.edit_fulfillment');
-    Route::get('fulfillments/save_approbed_fulfillment/{serviceRequest}', 'ServiceRequests\FulfillmentController@save_approbed_fulfillment')->name('fulfillments.save_approbed_fulfillment');
-    Route::get('fulfillments/confirmFulfillmentBySignPosition/{Fulfillment}/{approbed?}', 'ServiceRequests\FulfillmentController@confirmFulfillmentBySignPosition')->name('fulfillments.confirmFulfillmentBySignPosition');
-    Route::get('filfillments/download-invoice/{fulfillment}','ServiceRequests\FulfillmentController@downloadInvoice')->name('fulfillments.download.invoice')->middleware('auth');
-    Route::get('filfillments/download-resolution/{serviceRequest}','ServiceRequests\FulfillmentController@downloadResolution')->name('fulfillments.download.resolution')->middleware('auth');
-    Route::get('service_requests/report/to-pay','ServiceRequests\ReportController@toPay')->name('service_requests.report.toPay')->middleware('auth');
-    Route::get('service_requests/report/pending-resolutions','ServiceRequests\ReportController@pendingResolutions')->name('service_requests.report.pending-resolutions')->middleware('auth');
-    Route::get('service_requests/report/bank-payment-file','ServiceRequests\ReportController@bankPaymentFile')->name('service_requests.report.bankPaymentFile')->middleware('auth');
-    Route::get('service_requests/report/without-bank-details','ServiceRequests\ReportController@withoutBankDetails')->name('service_requests.report.withoutBankDetails')->middleware('auth');
-    Route::get('service_requests/report/with-resolution-file','ServiceRequests\ReportController@indexWithResolutionFile')->name('service_requests.report.withResolutionFile')->middleware('auth');
-
-    Route::resource('fulfillments', 'ServiceRequests\FulfillmentController')->middleware('auth');
-    Route::get('fulfillments/certificate-pdf/{fulfillment}', 'ServiceRequests\FulfillmentController@certificatePDF')->name('fulfillments.certificate-pdf')->middleware('auth');
-    Route::get('service_requests/certificate-pdf/{serviceRequest}', 'ServiceRequests\ServiceRequestController@certificatePDF')->name('service_requests.certificate-pdf')->middleware('auth');
-    Route::get('fulfillments/confirmFulfillment/{fulfillment}', 'ServiceRequests\FulfillmentController@confirmFulfillment')->name('fulfillments.confirmFulfillment')->middleware('auth');
-    Route::get('fulfillments/refuseFulfillment/{fulfillment}', 'ServiceRequests\FulfillmentController@refuseFulfillment')->name('fulfillments.refuseFulfillment')->middleware('auth');
-    Route::resource('fulfillmentItem', 'ServiceRequests\FulfillmentItemController')->middleware('auth');
-    Route::resource('service_requests', 'ServiceRequests\ServiceRequestController')->middleware('auth');
-    Route::get('service_requests/resolution/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolution')->middleware('auth');
-    Route::get('service_requests/resolution-pdf/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolutionPDF')->name('service_requests.resolution-pdf')->middleware('auth');
-    Route::resource('signature_flow', 'ServiceRequests\SignatureFlowController')->middleware('auth');
+    // Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
+    //     // Rutas de service request
+    //     Route::get('export-sirh','ServiceRequests\ServiceRequestController@export_sirh')->name('export-sirh');
+    //     Route::get('export-sirh-txt', 'ServiceRequests\ServiceRequestController@export_sirh_txt')->name('export-sirh-txt');
+    // });
+    //
+    // //Route::resource('shift_control', 'ServiceRequests\ShiftControlController')->middleware('auth');
+    // Route::post('service_requests.derive','ServiceRequests\ServiceRequestController@derive')->name('service_requests.derive')->middleware('auth');
+    // Route::get('service_requests.consolidated_data','ServiceRequests\ServiceRequestController@consolidated_data')->name('service_requests.consolidated_data')->middleware('auth');
+    // Route::post('service_requests.destroy_with_parameters','ServiceRequests\ServiceRequestController@destroy_with_parameters')->name('service_requests.destroy_with_parameters')->middleware('auth');
+    // Route::get('service_requests.pending_requests','ServiceRequests\ServiceRequestController@pending_requests')->name('service_requests.pending_requests')->middleware('auth');
+    //
+    // Route::get('service_requests.aditional_data_list','ServiceRequests\ServiceRequestController@aditional_data_list')->name('service_requests.aditional_data_list')->middleware('auth');
+    // Route::get('service_requests.transfer_requests','ServiceRequests\ServiceRequestController@transfer_requests')->name('service_requests.transfer_requests')->middleware('auth');
+    // Route::put('service_requests/update_aditional_data/{serviceRequest}', 'ServiceRequests\ServiceRequestController@update_aditional_data')->middleware('auth')->name('service_requests.update_aditional_data');
+    //
+    // Route::get('fulfillments/edit_fulfillment/{serviceRequest}', 'ServiceRequests\FulfillmentController@edit_fulfillment')->name('fulfillments.edit_fulfillment');
+    // Route::get('fulfillments/save_approbed_fulfillment/{serviceRequest}', 'ServiceRequests\FulfillmentController@save_approbed_fulfillment')->name('fulfillments.save_approbed_fulfillment');
+    // Route::get('fulfillments/confirmFulfillmentBySignPosition/{Fulfillment}/{approbed?}', 'ServiceRequests\FulfillmentController@confirmFulfillmentBySignPosition')->name('fulfillments.confirmFulfillmentBySignPosition');
+    // Route::get('filfillments/download-invoice/{fulfillment}','ServiceRequests\FulfillmentController@downloadInvoice')->name('fulfillments.download.invoice')->middleware('auth');
+    // Route::get('filfillments/download-resolution/{serviceRequest}','ServiceRequests\FulfillmentController@downloadResolution')->name('fulfillments.download.resolution')->middleware('auth');
+    // Route::get('service_requests/report/to-pay','ServiceRequests\ReportController@toPay')->name('service_requests.report.toPay')->middleware('auth');
+    // Route::get('service_requests/report/pending-resolutions','ServiceRequests\ReportController@pendingResolutions')->name('service_requests.report.pending-resolutions')->middleware('auth');
+    // Route::get('service_requests/report/bank-payment-file','ServiceRequests\ReportController@bankPaymentFile')->name('service_requests.report.bankPaymentFile')->middleware('auth');
+    // Route::get('service_requests/report/without-bank-details','ServiceRequests\ReportController@withoutBankDetails')->name('service_requests.report.withoutBankDetails')->middleware('auth');
+    // Route::get('service_requests/report/with-resolution-file','ServiceRequests\ReportController@indexWithResolutionFile')->name('service_requests.report.withResolutionFile')->middleware('auth');
+    //
+    // Route::resource('fulfillments', 'ServiceRequests\FulfillmentController')->middleware('auth');
+    // Route::get('fulfillments/certificate-pdf/{fulfillment}', 'ServiceRequests\FulfillmentController@certificatePDF')->name('fulfillments.certificate-pdf')->middleware('auth');
+    // Route::get('service_requests/certificate-pdf/{serviceRequest}', 'ServiceRequests\ServiceRequestController@certificatePDF')->name('service_requests.certificate-pdf')->middleware('auth');
+    // Route::get('fulfillments/confirmFulfillment/{fulfillment}', 'ServiceRequests\FulfillmentController@confirmFulfillment')->name('fulfillments.confirmFulfillment')->middleware('auth');
+    // Route::get('fulfillments/refuseFulfillment/{fulfillment}', 'ServiceRequests\FulfillmentController@refuseFulfillment')->name('fulfillments.refuseFulfillment')->middleware('auth');
+    // Route::resource('fulfillmentItem', 'ServiceRequests\FulfillmentItemController')->middleware('auth');
+    // Route::resource('service_requests', 'ServiceRequests\ServiceRequestController')->middleware('auth');
+    // Route::get('service_requests/resolution/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolution')->middleware('auth');
+    // Route::get('service_requests/resolution-pdf/{ServiceRequest}', 'ServiceRequests\ServiceRequestController@resolutionPDF')->name('service_requests.resolution-pdf')->middleware('auth');
+    // Route::resource('signature_flow', 'ServiceRequests\SignatureFlowController')->middleware('auth');
 
     Route::resource('authorities', 'Rrhh\AuthorityController')->middleware(['auth']);
 

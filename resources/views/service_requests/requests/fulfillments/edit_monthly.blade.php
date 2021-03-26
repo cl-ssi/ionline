@@ -8,7 +8,7 @@
 
     <h4>Información del período</h4>
 
-      <form method="POST" action="{{ route('rrhh.fulfillments.update',$fulfillment) }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$fulfillment) }}" enctype="multipart/form-data">
       @csrf
       @method('PUT')
 
@@ -86,7 +86,7 @@
       <!-- información adicional rrhh -->
 
       @canany(['Service Request: fulfillments rrhh'])
-      <form method="POST" action="{{ route('rrhh.fulfillments.update',$fulfillment) }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$fulfillment) }}" enctype="multipart/form-data">
       @csrf
       @method('PUT')
 
@@ -153,7 +153,7 @@
       <!-- información adicional finanzas -->
 
       @canany(['Service Request: fulfillments finance'])
-      <form method="POST" action="{{ route('rrhh.fulfillments.update',$fulfillment) }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$fulfillment) }}" enctype="multipart/form-data">
       @csrf
       @method('PUT')
 
@@ -242,7 +242,7 @@
 
       <h4>Inasistencias</h4>
 
-      <form method="POST" action="{{ route('rrhh.fulfillmentItem.store') }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.store') }}" enctype="multipart/form-data">
       @csrf
 
       <div class="row">
@@ -349,7 +349,7 @@
                   <td>
                     @can('Service Request: fulfillments responsable')
                       @if($fulfillment->responsable_approver_id == NULL)
-                      <form method="POST" action="{{ route('rrhh.fulfillmentItem.destroy', $FulfillmentItem) }}" class="d-inline">
+                      <form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.destroy', $FulfillmentItem) }}" class="d-inline">
             						@csrf
             						@method('DELETE')
             						<button type="submit" class="btn btn-outline-secondary btn-sm" onclick="return confirm('¿Está seguro de eliminar la información?');">
@@ -373,7 +373,7 @@
             @if($fulfillment->responsable_approbation != NULL)
               <a type="button"
                  class="btn btn-outline-success form-control"
-                 href="{{ route('rrhh.fulfillments.certificate-pdf',$fulfillment) }}" target="_blank">
+                 href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank">
                  Generar certificado
                  <i class="fas fa-file"></i>
               </a>
@@ -383,7 +383,7 @@
                     @php
                         $idModelModal = $fulfillment->id;
                         $routePdfSignModal = "/rrhh/fulfillments/certificate-pdf/$idModelModal";
-                        $returnUrlSignModal = "rrhh.fulfillments.edit_fulfillment";
+                        $returnUrlSignModal = "rrhh.service-request.fulfillment.edit_fulfillment";
                     @endphp
                     @include('documents.signatures.partials.sign_file')
                     <button type="button" data-toggle="modal" class="btn btn-outline-secondary form-control"
@@ -402,13 +402,13 @@
                   <a type="button"
                      class="btn btn-danger form-control"
                      onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');"
-                     href="{{ route('rrhh.fulfillments.refuseFulfillment',$fulfillment) }}" >
+                     href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}" >
                      Rechazar
                   </a>
                   <a type="button"
                      class="btn btn-success form-control"
                      onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');"
-                     href="{{ route('rrhh.fulfillments.confirmFulfillment',$fulfillment) }}" >
+                     href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}" >
                      Confirmar
                   </a>
                 @else
@@ -422,13 +422,13 @@
                   <a type="button"
                      class="btn btn-danger form-control"
                      onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');"
-                     href="{{ route('rrhh.fulfillments.refuseFulfillment',$fulfillment) }}" >
+                     href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}" >
                      Rechazar
                   </a>
                   <a type="button"
                      class="btn btn-success form-control"
                      onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');"
-                     href="{{ route('rrhh.fulfillments.confirmFulfillment',$fulfillment) }}" >
+                     href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}" >
                      Confirmar
                   </a>
                 @else
@@ -442,13 +442,13 @@
                   <a type="button"
                      class="btn btn-danger form-control"
                      onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');"
-                     href="{{ route('rrhh.fulfillments.refuseFulfillment',$fulfillment) }}" >
+                     href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}" >
                      Rechazar
                   </a>
                   <a type="button"
                      class="btn btn-success form-control"
                      onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');"
-                     href="{{ route('rrhh.fulfillments.confirmFulfillment',$fulfillment) }}" >
+                     href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}" >
                      Confirmar
                   </a>
                 @else
