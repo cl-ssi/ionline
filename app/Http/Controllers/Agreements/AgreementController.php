@@ -11,6 +11,7 @@ use App\Agreements\Addendum;
 use App\Establishment;
 use App\Models\Commune;
 use App\Municipality;
+use App\Rrhh\Authority;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -84,6 +85,8 @@ class AgreementController extends Controller
         $agreement->municipality_adress = $municipality->adress_municipality;
         $agreement->municipality_rut = $municipality->rut_municipality;
 
+        // $agreement->authority_id = Authority::whereIn('organizational_unit_id',[1,84])->where('from', '<=', $request->date)->where('to', '>=', $request->date)->first()->id;
+        $agreement->authority_id = Authority::getAuthorityFromDate(1, $request->date, 'manager')->id;
         $agreement->save();
 
         foreach($agreement->program->components as $component) {
@@ -135,11 +138,14 @@ class AgreementController extends Controller
      */
     public function show(Agreement $agreement)
     {
-        $establishment = Establishment::All();
+        // $establishment = Establishment::All();
+        $agreement->load('authority.user');
         $commune = Commune::with('establishments')->Where('id', $agreement->commune->id)->first();
         $municipality = Municipality::where('commune_id', $agreement->Commune->id)->first();
         $establishment_list = unserialize($agreement->establishment_list);
-        return view('agreements/agreements/show')->withAgreement($agreement)->withCommune($commune)->withMunicipality($municipality)->with('establishment_list', $establishment_list);
+        // $authorities = Authority::with('user')->whereIn('organizational_unit_id',[1,84])->where('from', '<=', $agreement->date)->where('to', '>=', $agreement->date)->where('position', 'LIKE', '%Director%')->get();
+        // return $authorities;
+        return view('agreements/agreements/show', compact('agreement', 'commune', 'municipality', 'establishment_list'));
     }
 
     /**
@@ -201,6 +207,8 @@ class AgreementController extends Controller
         }
 
         $Agreement->referente = $request->referente;
+        // $Agreement->authority_id = $request->authority_id;
+        $Agreement->authority_id = Authority::getAuthorityFromDate(1, $request->date, 'manager')->id;
         $Agreement->save();
         return redirect()->back();
     }
