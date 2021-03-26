@@ -56,37 +56,40 @@ class TestsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
-        $options = Option::find(array_values($request->input('questions')));
+    // public function store(Request $request)
+    // {
+    //     //
+    //     $options = Option::find(array_values($request->input('questions')));
 
-        $result = auth()->user()->userResults()->create([
-            'total_points' => $options->sum('points'),
-            'request_id' => $request->input('psi_request_id')
-        ]);
+    //     $result = auth()->user()->userResults()->create([
+    //         'total_points' => $options->sum('points'),
+    //         'request_id' => $request->input('psi_request_id')
+    //     ]);
+    //     $valor = $request->input('psi_request_id');
+    //     $questions = $options->mapWithKeys(function ($option) use ($valor) {
+    //         return [$option->question_id => [
+    //                     'option_id' => $option->id,
+    //                     'points' => $option->points,
+    //                     'request_id' => $valor
+    //                     //'request_id' => '1'
+    //                     //'request_id' => 1
+    //                 ]
+    //             ];
+    //         })->toArray();
 
-        $questions = $options->mapWithKeys(function ($option) {
-            return [$option->question_id => [
-                        'option_id' => $option->id,
-                        'points' => $option->points
-                    ]
-                ];
-            })->toArray();
-
-        $result->questions()->sync($questions);
-
-
-        $psirequests = PsiRequest::find($request->input('psi_request_id'));
-        $psirequests->status = "Test Finalizado";
-        $psirequests->update();
+    //     $result->questions()->sync($questions);
 
 
-        session()->flash('success', 'Finalizó el Test Exitosamente');
-        return redirect()->route('suitability.welcome');
+    //     $psirequests = PsiRequest::find($request->input('psi_request_id'));
+    //     $psirequests->status = "Test Finalizado";
+    //     $psirequests->update();
 
-        //return redirect()->route('client.results.show', $result->id);
-    }
+
+    //     session()->flash('success', 'Finalizó el Test Exitosamente');
+    //     return redirect()->route('suitability.welcome');
+
+    //     //return redirect()->route('client.results.show', $result->id);
+    // }
 
 
     public function storeExternal(Request $request)
@@ -99,10 +102,13 @@ class TestsController extends Controller
             'request_id' => $request->input('psi_request_id')
         ]);
 
-        $questions = $options->mapWithKeys(function ($option) {
+        $request_id = $request->input('psi_request_id');
+
+        $questions = $options->mapWithKeys(function ($option) use ($request_id) {
             return [$option->question_id => [
                         'option_id' => $option->id,
-                        'points' => $option->points
+                        'points' => $option->points,
+                        'request_id' => $request_id
                     ]
                 ];
             })->toArray();

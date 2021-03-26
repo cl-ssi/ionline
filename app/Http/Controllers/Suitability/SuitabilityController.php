@@ -104,10 +104,17 @@ class SuitabilityController extends Controller
         return view('suitability.create',compact('run','user'));
         
     }
-    public function storeExternal(Request $request)
+    public function storeSuitabilityExternal(Request $request)
     {
         $userexternal = new UserExternal($request->All());
-        $userexternal->save();        
+        if(UserExternal::find(request('id')))
+        {
+            $userexternal->update();
+        }
+        else
+        {
+            $userexternal->save();
+        }        
         $psirequest = new PsiRequest();
         $psirequest->job = $request->input('job');
         $psirequest->country = $request->input('country');
