@@ -93,10 +93,10 @@ class ReportController extends Controller
             $totalToPay = $fulfillment->total_to_pay - round($fulfillment->total_to_pay * 0.115);
             $txt .= 
                 str_replace('-','',$fulfillment->serviceRequest->rut)."\t".
-                $fulfillment->serviceRequest->name."\t".
+                strtoupper($fulfillment->serviceRequest->name)."\t".
                 $fulfillment->serviceRequest->bank->code."\t".
                 $fulfillment->serviceRequest->pay_method."\t".
-                $fulfillment->serviceRequest->account_number."\t".
+                intval($fulfillment->serviceRequest->account_number)."\t".
                 $totalToPay."\r\n"; // Para final de linea de txt en windows
         }
 
