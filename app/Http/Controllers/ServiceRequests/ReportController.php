@@ -91,9 +91,10 @@ class ReportController extends Controller
             }
 
             $totalToPay = $fulfillment->total_to_pay - round($fulfillment->total_to_pay * 0.115);
-            $txt .=
-                str_replace('-','',$fulfillment->serviceRequest->rut)."\t".
-                strtoupper($fulfillment->serviceRequest->name)."\t".
+            $txt .= 
+                strtoupper(str_replace('-','',$fulfillment->serviceRequest->rut))."\t".
+                strtoupper(trim($fulfillment->serviceRequest->name))."\t".
+                strtolower($fulfillment->serviceRequest->email)."\t".
                 $fulfillment->serviceRequest->bank->code."\t".
                 $fulfillment->serviceRequest->pay_method."\t".
                 intval($fulfillment->serviceRequest->account_number)."\t".
@@ -142,7 +143,7 @@ class ReportController extends Controller
     }
 
     public function indexWithResolutionFile() {
-        $serviceRequests = ServiceRequest::where('has_resolution_file',1)->paginate(50);
+        $serviceRequests = ServiceRequest::where('has_resolution_file',1)->get();
 
         return view('service_requests.reports.index_with_resolution_file', compact('serviceRequests'));
         /* Hacer foreach de cada SRs y dentro hacer un foreach de sus fulfillments y mostrar cual tiene boleta y cual no */
