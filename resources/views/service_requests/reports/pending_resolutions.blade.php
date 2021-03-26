@@ -37,7 +37,7 @@
             @endif
           </td> -->
           <td>
-              <a href="{{ route('rrhh.service-request.fulfillment.edit_fulfillment',$serviceRequest) }}">
+              <a href="{{ route('rrhh.service-request.fulfillment.edit',$serviceRequest) }}">
       					<span class="fas fa-edit" aria-hidden="true"></span>
       				</a>
           </td>

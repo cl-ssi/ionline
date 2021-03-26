@@ -307,23 +307,14 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::put('/update-aditional-data/{serviceRequest}', [ServiceRequestController::class, 'update_aditional_data'])->name('update_aditional_data');
         Route::get('/certificate-pdf/{serviceRequest}', [ServiceRequestController::class, 'certificatePDF'])->name('certificate-pdf');
 
-        //no se esta ocupando
-        // Route::get('/resolution/{ServiceRequest}', [ServiceRequestController::class, 'resolution'])->name('no tiene name');
-
-        //pasar a reports
-        Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
-        Route::get('/export-sirh', [ServiceRequestController::class, 'export_sirh'])->name('export_sirh');
-        Route::get('/export-sirh-txt', [ServiceRequestController::class, 'export_sirh_txt'])->name('export-sirh-txt');
-
 
         Route::prefix('fulfillment')->name('fulfillment.')->group(function () {
             // descomposición del resource
             Route::get('/', [FulfillmentController::class, 'index'])->name('index');
             Route::post('/store', [FulfillmentController::class, 'store'])->name('store');
             Route::put('/{fulfillment}/update', [FulfillmentController::class, 'update'])->name('update');
-            // ¿edit_fulfillment? es el ¿edit?
             // fin descomposición
-            Route::get('/edit-fulfillment/{serviceRequest}', [FulfillmentController::class, 'edit_fulfillment'])->name('edit_fulfillment');
+            Route::get('/edit/{serviceRequest}', [FulfillmentController::class, 'edit_fulfillment'])->name('edit');
             Route::get('/save-approbed-fulfillment/{serviceRequest}', [FulfillmentController::class, 'save_approbed_fulfillment'])->name('save_approbed_fulfillment');
             Route::get('/confirm-fulfillment-by-sign-position/{Fulfillment}/{approbed?}', [FulfillmentController::class, 'confirmFulfillmentBySignPosition'])->name('confirm_Fulfillment_By_SignPosition');
             Route::get('/download-invoice/{fulfillment}', [FulfillmentController::class, 'downloadInvoice'])->name('download_invoice');
@@ -332,8 +323,6 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             //eliminar palabra fulfiment en URL y en metodo
             Route::get('/confirm-fulfillment/{fulfillment}', [FulfillmentController::class, 'confirmFulfillment'])->name('confirm-Fulfillment');
             Route::get('/refuse-fulfillment/{fulfillment}', [FulfillmentController::class, 'refuseFulfillment'])->name('refuse-Fulfillment');
-
-            // Route::get('fulfillments/refuseFulfillment/{fulfillment}', 'ServiceRequests\FulfillmentController@refuseFulfillment')->name('fulfillments.refuseFulfillment')->middleware('auth');
 
 
             Route::prefix('item')->name('item.')->group(function () {
@@ -355,6 +344,11 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/resolution-pdf/{ServiceRequest}', [ReportController::class, 'resolutionPDF'])->name('resolution-pdf');
             Route::get('/bank-payment-file', [ReportController::class, 'bankPaymentFile'])->name('bank-payment-file');
             Route::get('/with-resolution-file', [ReportController::class, 'indexWithResolutionFile'])->name('with-resolution-file');
+
+            //pasar a reports
+            Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
+            Route::get('/export-sirh', [ServiceRequestController::class, 'export_sirh'])->name('export_sirh');
+            Route::get('/export-sirh-txt', [ServiceRequestController::class, 'export_sirh_txt'])->name('export-sirh-txt');
         });
 
         Route::prefix('signature-flow')->name('signature-flow.')->group(function () {

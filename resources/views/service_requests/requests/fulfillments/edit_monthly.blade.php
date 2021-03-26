@@ -383,7 +383,7 @@
                     @php
                         $idModelModal = $fulfillment->id;
                         $routePdfSignModal = "/rrhh/fulfillments/certificate-pdf/$idModelModal";
-                        $returnUrlSignModal = "rrhh.service-request.fulfillment.edit_fulfillment";
+                        $returnUrlSignModal = "rrhh.service-request.fulfillment.edit";
                     @endphp
                     @include('documents.signatures.partials.sign_file')
                     <button type="button" data-toggle="modal" class="btn btn-outline-secondary form-control"

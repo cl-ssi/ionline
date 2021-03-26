@@ -44,14 +44,14 @@
 
             @can('Service Request: consolidated data')
             <a class="dropdown-item"
-                href="{{ route('rrhh.service-request.consolidated_data') }}">
+                href="{{ route('rrhh.service-request.report.consolidated_data') }}">
                 <i class="far fa-file-excel"></i> Consolidado
             </a>
             @endcan
 
             @can('Service Request: consolidated data')
             <a class="dropdown-item"
-                href="{{ route('rrhh.service-request.export_sirh') }}">
+                href="{{ route('rrhh.service-request.report.export_sirh') }}">
                 <i class="far fa-file"></i> Formato SIRH
             </a>
             @endcan
