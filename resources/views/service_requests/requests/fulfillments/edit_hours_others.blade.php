@@ -4,28 +4,28 @@
   </div>
   <div class="card-body">
 
-    <table class="table table-sm">
-        <thead>
-            <tr>
-                <!-- <th>Select</th> -->
-                <th>Entrada</th>
-                <!-- <th>H.Inicio</th> -->
-                <th>Salida</th>
-                <!-- <th>H.Término</th> -->
-                <th>Observación</th>
-            </tr>
-        </thead>
-        <tbody>
-          @foreach($serviceRequest->shiftControls as $key => $shiftControl)
-            <tr>
-              <!-- <td><input type='checkbox' name='record[]' value="{{$shiftControl}}"></td> -->
-              <td>{{$shiftControl->start_date->format('d-m-Y H:i')}}</td>
-              <td>{{$shiftControl->end_date->format('d-m-Y H:i')}}</td>
-              <td>{{$shiftControl->observation}}</td>
-            </tr>
-          @endforeach
-        </tbody>
-    </table>
+{{--    <table class="table table-sm">--}}
+{{--        <thead>--}}
+{{--            <tr>--}}
+{{--                <!-- <th>Select</th> -->--}}
+{{--                <th>Entrada</th>--}}
+{{--                <!-- <th>H.Inicio</th> -->--}}
+{{--                <th>Salida</th>--}}
+{{--                <!-- <th>H.Término</th> -->--}}
+{{--                <th>Observación</th>--}}
+{{--            </tr>--}}
+{{--        </thead>--}}
+{{--        <tbody>--}}
+{{--          @foreach($serviceRequest->shiftControls as $key => $shiftControl)--}}
+{{--            <tr>--}}
+{{--              <!-- <td><input type='checkbox' name='record[]' value="{{$shiftControl}}"></td> -->--}}
+{{--              <td>{{$shiftControl->start_date->format('d-m-Y H:i')}}</td>--}}
+{{--              <td>{{$shiftControl->end_date->format('d-m-Y H:i')}}</td>--}}
+{{--              <td>{{$shiftControl->observation}}</td>--}}
+{{--            </tr>--}}
+{{--          @endforeach--}}
+{{--        </tbody>--}}
+{{--    </table>--}}
         @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
     <div class="row">
       <fieldset class="form-group col-5">
