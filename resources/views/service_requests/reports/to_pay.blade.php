@@ -25,7 +25,9 @@
         <th>Boleta</th>
         <th>Resolución</th>
         <th>Editar</th>
-        <th>Apto para pago</th>
+        @canany(['Service Request: fulfillments finance'])
+          <th>Apto para pago</th>
+        @endcanany
     </tr>
     @foreach($fulfillments->whereNull('total_paid') as $key => $fulfillment)
       <tr>
@@ -63,9 +65,11 @@
       					<span class="fas fa-edit" aria-hidden="true"></span>
       				</a>
           </td>
-          <td>
-            @livewire('service-request.payment-ready-toggle', ['fulfillment' => $fulfillment])
-          </td>
+          @canany(['Service Request: fulfillments finance'])
+            <td>
+              @livewire('service-request.payment-ready-toggle', ['fulfillment' => $fulfillment])
+            </td>
+          @endcanany
       </tr>
     @endforeach
 </table>
