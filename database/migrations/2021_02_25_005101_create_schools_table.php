@@ -15,11 +15,13 @@ class CreateSchoolsTable extends Migration
     {
         Schema::create('schools', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('rbd');
-            $table->boolean('municipality');
-            $table->string('legal');
-            $table->string('holder');
+            $table->string('name')->nullable();
+            $table->string('address')->nullable();
+            $table->string('rbd')->nullable();
+            $table->boolean('municipality')->nullable();
+            $table->boolean('free')->nullable();
+            $table->string('legal')->nullable();
+            $table->string('holder')->nullable();
             $table->unsignedInteger('commune_id');
             $table->foreign('commune_id')->references('id')->on('communes');
             $table->timestamps();
