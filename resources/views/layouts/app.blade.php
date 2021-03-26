@@ -33,6 +33,11 @@
             @switch(env('APP_ENV'))
                 @case('local') background-color: rgb(73, 17, 82); @break
                 @case('testing') background-color: rgb(2, 82, 0); @break
+                @case('production') 
+                    @if(env('APP_DEBUG') == true) 
+                        background-color: rgb(255, 0, 0); 
+                    @endif 
+                    @break;
             @endswitch
         }
     </style>
