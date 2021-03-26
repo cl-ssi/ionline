@@ -7,7 +7,7 @@
 @include('service_requests.partials.nav')
 
 <a class="btn btn-outline-success mb-3"
-    href="{{ route('rrhh.service-request.export-sirh-txt') }}">
+    href="{{ route('rrhh.service-request.report.export-sirh-txt') }}">
     <i class="far fa-file"></i> Descargar Formato SIRH
 </a>
 

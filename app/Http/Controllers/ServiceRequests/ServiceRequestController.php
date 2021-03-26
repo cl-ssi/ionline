@@ -382,8 +382,8 @@ class ServiceRequestController extends Controller
       }
 
       session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido creada.');
-      // session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido creada. Para visualizar el certificado de confirmación, hacer click <a href="'. route('rrhh.service_requests.certificate-pdf', $SignatureFlow) . '" target="_blank">Aquí.</a>');
-      return redirect()->route('rrhh.service_requests.index');
+      // session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido creada. Para visualizar el certificado de confirmación, hacer click <a href="'. route('rrhh.service-request.certificate-pdf', $SignatureFlow) . '" target="_blank">Aquí.</a>');
+      return redirect()->route('rrhh.service-request.index');
   }
 
   /**
@@ -411,7 +411,7 @@ class ServiceRequestController extends Controller
         if ($serviceRequest->signatureFlows->where('responsable_id',$user_id)->count() == 0 &&
             $serviceRequest->signatureFlows->where('user_id',$user_id)->count() == 0) {
           session()->flash('danger','No tiene acceso a esta solicitud');
-          return redirect()->route('rrhh.service_requests.index');
+          return redirect()->route('rrhh.service-request.index');
         }
       }
 
@@ -465,7 +465,7 @@ class ServiceRequestController extends Controller
       }
 
       session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido modificada.');
-      return redirect()->route('rrhh.service_requests.index');
+      return redirect()->route('rrhh.service-request.index');
   }
 
   public function update_aditional_data(Request $request, ServiceRequest $serviceRequest)
@@ -475,7 +475,7 @@ class ServiceRequestController extends Controller
       $serviceRequest->save();
 
       session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido modificada.');
-      return redirect()->route('rrhh.service_requests.aditional_data_list');
+      return redirect()->route('rrhh.service-request.aditional_data_list');
   }
 
   /**
@@ -488,7 +488,7 @@ class ServiceRequestController extends Controller
   {
       $serviceRequest->delete();
       session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido eliminada.');
-      return redirect()->route('rrhh.service_requests.index');
+      return redirect()->route('rrhh.service-request.index');
 
   }
 
@@ -499,7 +499,7 @@ class ServiceRequestController extends Controller
 
     $serviceRequest->delete();
     session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido eliminada.');
-    return redirect()->route('rrhh.service_requests.index');
+    return redirect()->route('rrhh.service-request.index');
   }
 
   public function consolidated_data(Request $request)
@@ -882,33 +882,6 @@ class ServiceRequestController extends Controller
         return view('service_requests.report_resolution', compact('ServiceRequest'));
     }
 
-    public function resolutionPDF(ServiceRequest $ServiceRequest)
-    {
-        $rut = explode("-", $ServiceRequest->rut);
-        $ServiceRequest->run_s_dv = number_format($rut[0],0, ",", ".");
-        $ServiceRequest->dv = $rut[1];
-
-        $formatter = new NumeroALetras();
-        $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
-
-        if ($ServiceRequest->fulfillments) {
-          foreach ($ServiceRequest->fulfillments as $key => $fulfillment) {
-            $fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
-            // dd($fulfillment->total_to_pay_description);
-          }
-        }
-
-        // dd($ServiceRequest->fulfillments);
-
-        $pdf = app('dompdf.wrapper');
-        $pdf->loadView('service_requests.report_resolution',compact('ServiceRequest'));
-
-        return $pdf->stream('mi-archivo.pdf');
-        // return view('service_requests.report_resolution', compact('serviceRequest'));
-        // $pdf = \PDF::loadView('service_requests.report_resolution');
-        // return $pdf->stream();
-    }
-
     public function derive(Request $request){
 
       $user_id = Auth::user()->id;
@@ -948,7 +921,7 @@ class ServiceRequestController extends Controller
       }
 
       session()->flash('info', $cont . ' solicitudes fueron derivadas.');
-      return redirect()->route('rrhh.service_requests.index');
+      return redirect()->route('rrhh.service-request.index');
     }
 
 

@@ -4,9 +4,11 @@
 
 @section('content')
 
+@include('service_requests.partials.nav')
+
 	<h3 class="mb-3">Reporte consolidado</h3>
 
-	<form method="GET" class="form-horizontal" action="{{ route('rrhh.service_requests.consolidated_data') }}">
+	<form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.consolidated_data') }}">
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<span class="input-group-text">Rango de fechas (Inicio de contrato)</span>

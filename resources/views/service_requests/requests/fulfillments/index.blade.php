@@ -8,7 +8,7 @@
 
 <h3 class="mb-3">Cumplimiento solicitudes de contratación</h3>
 
-<form method="GET" class="form-horizontal" action="{{ route('rrhh.fulfillments.index') }}">
+<form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.fulfillment.index') }}">
   <div class="input-group mb-3">
     <div class="input-group-prepend">
       <span class="input-group-text">Unidad</span>
@@ -85,7 +85,7 @@
               @else Finalizada @endif</td>
     			<td nowrap class="text-center">
           @if($serviceRequest->program_contract_type == "Mensual")
-    				<a href="{{ route('rrhh.fulfillments.edit_fulfillment',[$serviceRequest]) }}"
+    				<a href="{{ route('rrhh.service-request.fulfillment.edit',[$serviceRequest]) }}"
     					class="btn btn-sm btn-outline-secondary">
     					<span class="fas fa-edit" aria-hidden="true"></span>
     				</a>
@@ -100,11 +100,11 @@
                 <i class="fas fa-file" style="color:#B9B9B9"></i></a>
 
               @else
-                <a href="{{ route('rrhh.service_requests.certificate-pdf', $serviceRequest) }}"
+                <a href="{{ route('rrhh.service-request.certificate-pdf', $serviceRequest) }}"
                   class="btn btn-outline-secondary btn-sm" target="_blank">
                 <span class="fas fa-file" aria-hidden="true"></span></a>
               @endif -->
-              <a href="{{ route('rrhh.fulfillments.edit_fulfillment',[$serviceRequest]) }}"
+              <a href="{{ route('rrhh.service-request.fulfillment.edit',[$serviceRequest]) }}"
       					class="btn btn-sm btn-outline-secondary">
       					<span class="fas fa-edit" aria-hidden="true"></span>
       				</a>
