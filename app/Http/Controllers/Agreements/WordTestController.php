@@ -29,7 +29,7 @@ class WordTestController extends Controller
     public function createWordDocx($id)
     {
     	// SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
-    	$agreements     = Agreement::with('Program','Commune','agreement_amounts')->where('id', $id)->first();
+    	$agreements     = Agreement::with('Program','Commune','agreement_amounts','authority')->where('id', $id)->first();
     	$stage          = Stage::where('agreement_id', $id)->first();
     	$components     = ProgramComponent::where('program_id', $agreements->program_id)->get();
     	$amounts        = AgreementAmount::with('program_component')->Where('agreement_id', $id)->get();
@@ -76,15 +76,15 @@ class WordTestController extends Controller
         $formatter = new NumeroALetras;
         $formatter->apocope = true;
         $totalConvenio = $agreements->agreement_amounts->sum('amount');
-        $totalConvenioLetras = ucwords(mb_strtolower($formatter->toMoney($totalConvenio,0, 'pesos','')));
+        $totalConvenioLetras = $this->correctAmountText($formatter->toMoney($totalConvenio,0, 'pesos',''));
  
         // ARRAY PARA OBTENER LAS CUOTAS ASOCIADAS AL TOTAL DEL CONVENIO
         foreach ($quotas as $key => $quota) {
-                $cuotaConvenioLetras = $formatter->toMoney($quota->amount,0, 'pesos','');
+                $cuotaConvenioLetras = $this->correctAmountText($formatter->toMoney($quota->amount,0, 'pesos',''));
                 $arrayQuota[] = array('index' => ($this->ordinal($key+1))
                                       ,'cuotaDescripcion' => $quota->description . ($key+1 == 1 ? ' del total de los recursos del convenio una vez aprobada la resolución exenta que aprueba el presente instrumento y recibidos los recursos del Ministerio de Salud.' : ' restante del total de recursos y se enviará en el mes de octubre, según resultados obtenidos en la primera evaluación definida en la cláusula anterior. Así también, dependerá de la recepción de dichos recursos desde Ministerio de Salud y existencia de rendición financiera según lo establece la resolución N°30/2015 que fija normas sobre procedimiento de rendición de cuentas de la Contraloría General de la Republica, por parte de la “MUNICIPALIDAD”.')
                                       ,'cuotaMonto' => number_format($quota->amount,0,",",".")
-                                      ,'cuotaLetra' => ucwords(mb_strtolower($cuotaConvenioLetras)));
+                                      ,'cuotaLetra' => $cuotaConvenioLetras);
              } 
 
              //dd($arrayQuota);
@@ -115,6 +115,15 @@ class WordTestController extends Controller
         $totalEjemplares = Str::contains($municipality->name_municipality, 'IQUIQUE') ? 'cuatro': 'tres';
         $addEjemplar = Str::contains($municipality->name_municipality, 'IQUIQUE') ? 'un ejemplar para CORMUDESI': null;
 
+        //Director
+        //construir nombre director
+        $first_name = explode(' ',trim($agreements->authority->user->name))[0];
+        $director = mb_strtoupper($first_name . ' ' . $agreements->authority->user->fathers_family . ' ' . $agreements->authority->user->mothers_family);
+        $directorApelativo = $agreements->authority->position;
+        $directorRut = mb_strtoupper($agreements->authority->user->runFormat());
+        $directorDecreto = $agreements->authority->decree;
+        $directorNationality = Str::contains($agreements->authority->position, 'a') ? 'chilena' : 'chileno';
+
 		$templateProcesor->setValue('programa',$programa);
 		$templateProcesor->setValue('programaTitulo',mb_strtoupper($programa));
 		$templateProcesor->setValue('periodoConvenio',$periodoConvenio);
@@ -136,6 +145,11 @@ class WordTestController extends Controller
         $templateProcesor->setValue('alcaldeDecreto',$alcaldeDecreto);
         $templateProcesor->setValue('totalEjemplares',$totalEjemplares);
         $templateProcesor->setValue('addEjemplar',$addEjemplar);
+        $templateProcesor->setValue('director',$director);
+        $templateProcesor->setValue('directorApelativo',$directorApelativo);
+        $templateProcesor->setValue('directorRut',$directorRut);
+        $templateProcesor->setValue('directorDecreto',$directorDecreto);
+        $templateProcesor->setValue('directorNationality',$directorNationality);
 
         // CLONE BLOCK PARA LISTAR COMPONENTES
         if(env('APP_ENV') == 'local') ini_set("pcre.backtrack_limit", -1);
@@ -305,6 +319,14 @@ class WordTestController extends Controller
             return $ordinales[$n-1];
         }
         return $n.'-esimo';
+    }
+
+    public function correctAmountText($amount_text)
+    {
+        $amount_text = ucwords(mb_strtolower($amount_text));
+        // verificamos si antes de cerrar en pesos la ultima palabra termina en Millón o Millones, de ser así se agregar "de" antes de cerrar con pesos
+        $words_amount = explode(' ',trim($amount_text));
+        return ($words_amount[count($words_amount) - 2] == 'Millon' || $words_amount[count($words_amount) - 2] == 'Millones') ? substr_replace($amount_text, 'de ', (strlen($amount_text) - 5), 0) : $amount_text;
     }
 
 }

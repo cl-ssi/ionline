@@ -13,7 +13,7 @@ class Agreement extends Model
      * @var array
      */
     protected $fillable = [
-        'number', 'date', 'period', 'file', 'commune_id', 'program_id', 'quotas', 'referente'
+        'number', 'date', 'period', 'file', 'commune_id', 'program_id', 'quotas', 'referente', 'authority_id'
     ];
 
     protected $casts = [
@@ -54,6 +54,10 @@ class Agreement extends Model
 
     public function stages() {
         return $this->hasMany('App\Agreements\Stage');
+    }
+
+    public function authority(){
+        return $this->belongsTo('App\Rrhh\Authority');
     }
     
 

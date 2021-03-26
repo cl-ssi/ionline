@@ -83,8 +83,13 @@
                 <option value="secretary">Secretario/a</option>
             </select>
         </fieldset>
+    </div>
 
-
+    <div class="row">
+        <fieldset class="form-group col">
+            <label for="for_decree">Decreto que autoriza al funcionario ejercer cargo</label>
+            <input type="text" class="form-control" id="for_decree" name="decree">
+        </fieldset>
     </div>
 
     <button type="submit" class="btn btn-primary">Guardar</button>
