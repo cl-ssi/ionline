@@ -59,7 +59,7 @@
             @endif
           </td>
           <td>
-              <a href="{{ route('rrhh.service-request.fulfillment.edit_fulfillment',$fulfillment->serviceRequest) }}">
+              <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}">
       					<span class="fas fa-edit" aria-hidden="true"></span>
       				</a>
           </td>
@@ -120,7 +120,7 @@
             {{$fulfillment->payment_date->format('Y-m-d')}}
           </td>
           <td>
-              <a href="{{ route('rrhh.service-request.fulfillment.edit_fulfillment',$fulfillment->serviceRequest) }}">
+              <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}">
       					<span class="fas fa-edit" aria-hidden="true"></span>
       				</a>
           </td>

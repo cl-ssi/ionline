@@ -198,7 +198,7 @@
 										class="btn btn-outline-secondary btn-sm" target="_blank">
 									<span class="fas fa-file" aria-hidden="true"></span></a>
 								@else
-									<a href="{{ route('rrhh.service-request.fulfillment.edit_fulfillment',[$serviceRequest]) }}"
+									<a href="{{ route('rrhh.service-request.fulfillment.edit',[$serviceRequest]) }}"
 									   class="btn btn-outline-secondary btn-sm" tooltip="Ir a formulario de cumplimiento">
 									<i class="fas fa-file-import" style="color:#B9B9B9"></i></a>
 								@endif -->
