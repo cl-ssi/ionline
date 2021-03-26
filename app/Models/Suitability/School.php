@@ -19,8 +19,10 @@ class School extends Model
 
     protected $fillable = [
         'name',
+        'address',
         'rbd',
         'municipality',
+        'free',
         'legal',
         'holder',
         'commune_id',
