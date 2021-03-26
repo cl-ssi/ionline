@@ -300,7 +300,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/transfer-requests', [ServiceRequestController::class, 'transfer_requests'])->name('transfer_requests');
         Route::post('/derive', [ServiceRequestController::class, 'derive'])->name('derive');
 
-        Route::get('/destroy-with-parameters', [ServiceRequestController::class, 'destroy_with_parameters'])->name('destroy-with-parameters');
+        Route::post('/destroy-with-parameters', [ServiceRequestController::class, 'destroy_with_parameters'])->name('destroy-with-parameters');
         Route::get('/pending-requests', [ServiceRequestController::class, 'pending_requests'])->name('pending-requests');
 
         Route::get('/aditional-data-list', [ServiceRequestController::class, 'aditional_data_list'])->name('aditional_data_list');
