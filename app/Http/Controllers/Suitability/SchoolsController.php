@@ -17,7 +17,7 @@ class SchoolsController extends Controller
     public function index()
     {
         //
-        $schools = School::all();
+        $schools = School::orderBy('name')->get();;
         return view('suitability.schools.index', compact('schools'));
     }
 

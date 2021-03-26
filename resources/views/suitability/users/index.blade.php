@@ -62,8 +62,8 @@
         @foreach($schoolusers as $schooluser)
         <tr>
 
-            <td>{{ $schooluser->user->fullname }}</td>
-            <td>{{ $schooluser->school->name }}</td>
+            <td>{{ $schooluser->user->fullname??'' }}</td>
+            <td>{{ $schooluser->school->name??'' }}</td>
             <td>
                 <form method="POST" class="form-horizontal" action="{{ route('suitability.users.destroy', $schooluser->id) }}">
                     @csrf
