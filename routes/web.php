@@ -288,8 +288,6 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
         // Rutas de service request
         Route::get('/home', function () { return view('service_requests.home'); })->name('home');
-
-        //Route::get('/home', [ServiceRequestController::class, 'home'])->name('home');
         
         //descomposición del resource
         Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
