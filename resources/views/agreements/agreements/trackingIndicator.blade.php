@@ -735,7 +735,14 @@
                         data-formaction="{{ route('agreements.stage.store', $agreement->id )}}"><i class="fas fa-ellipsis-h"></i></button>
                 @endif</td>
               <td>
-                {{ $agreement->res_exempt_number }}
+                @if($agreement->fileResEnd != null)  
+                  <a class="text-info" href="{{ route('agreements.downloadRes', $agreement->id) }}" target="_blank">
+                    {{ $agreement->res_exempt_number }}
+                  </a>
+                @else
+                    {{ $agreement->res_exempt_number }}
+                @endif
+
                 @if (!$agreement->addendums->isEmpty())
                   <hr class="mt-0 mb-1"/>
                   @foreach($agreement->addendums as $addendum)

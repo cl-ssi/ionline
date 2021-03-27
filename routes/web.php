@@ -294,6 +294,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
         // Rutas de service request
+        Route::get('/home', function () { return view('service_requests.home'); })->name('home');
 
         //descomposición del resource
         Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
@@ -307,7 +308,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/transfer-requests', [ServiceRequestController::class, 'transfer_requests'])->name('transfer_requests');
         Route::post('/derive', [ServiceRequestController::class, 'derive'])->name('derive');
 
-        Route::get('/destroy-with-parameters', [ServiceRequestController::class, 'destroy_with_parameters'])->name('destroy-with-parameters');
+        Route::post('/destroy-with-parameters', [ServiceRequestController::class, 'destroy_with_parameters'])->name('destroy-with-parameters');
         Route::get('/pending-requests', [ServiceRequestController::class, 'pending_requests'])->name('pending-requests');
 
         Route::get('/aditional-data-list', [ServiceRequestController::class, 'aditional_data_list'])->name('aditional_data_list');
@@ -320,12 +321,13 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/', [FulfillmentController::class, 'index'])->name('index');
             Route::post('/store', [FulfillmentController::class, 'store'])->name('store');
             Route::put('/{fulfillment}/update', [FulfillmentController::class, 'update'])->name('update');
+            Route::delete('{fulfillment}/destroy', [FulfillmentController::class, 'destroy'])->name('destroy');
             // fin descomposición
             Route::get('/edit/{serviceRequest}', [FulfillmentController::class, 'edit_fulfillment'])->name('edit');
             Route::get('/save-approbed-fulfillment/{serviceRequest}', [FulfillmentController::class, 'save_approbed_fulfillment'])->name('save_approbed_fulfillment');
             Route::get('/confirm-fulfillment-by-sign-position/{Fulfillment}/{approbed?}', [FulfillmentController::class, 'confirmFulfillmentBySignPosition'])->name('confirm_Fulfillment_By_SignPosition');
             Route::get('/download-invoice/{fulfillment}', [FulfillmentController::class, 'downloadInvoice'])->name('download_invoice');
-            Route::get('/download-resolution/{fulfillment}', [FulfillmentController::class, 'downloadResolution'])->name('download_resolution');
+            Route::get('/download-resolution/{serviceRequest}', [FulfillmentController::class, 'downloadResolution'])->name('download_resolution');
             Route::get('/certificate-pdf/{fulfillment}', [FulfillmentController::class, 'certificatePDF'])->name('certificate-pdf');
             //eliminar palabra fulfiment en URL y en metodo
             Route::get('/confirm-fulfillment/{fulfillment}', [FulfillmentController::class, 'confirmFulfillment'])->name('confirm-Fulfillment');
@@ -337,6 +339,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
                 Route::get('/', [FulfillmentItemController::class, 'index'])->name('index');
                 Route::post('/store', [FulfillmentItemController::class, 'store'])->name('store');
                 Route::put('/{fulfillment}/update', [FulfillmentItemController::class, 'update'])->name('update');
+                Route::delete('{fulfillment}/destroy', [FulfillmentItemController::class, 'destroy'])->name('destroy');
             });
 
 

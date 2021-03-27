@@ -24,7 +24,7 @@
     <tbody>
     @foreach($options as $option)
         <tr>
-            <td>{{ $option->question->question_text ?? '' }}</td>
+            <td>{{$option->question->id ?? "" }}) {{ $option->question->question_text ?? '' }}</td>
             <td>{{ $option->option_text ?? '' }}</td>
             <td>{{ $option->points ?? '' }}</td>
             <td>

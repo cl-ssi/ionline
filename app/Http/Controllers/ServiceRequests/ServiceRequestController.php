@@ -144,63 +144,39 @@ class ServiceRequestController extends Controller
 
      //signature flow
      // dd(Auth::user()->organizationalUnit->establishment_id);
-     $signatureFlows = [];
+     // $signatureFlows = [];
      if (Auth::user()->organizationalUnit->establishment_id == 38) {
 
        $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',38)->orderBy('name', 'ASC')->get();
        $responsabilityCenters = OrganizationalUnit::where('establishment_id',38)->orderBy('name', 'ASC')->get();
 
-       //Hector Reyno (CGU)
-       if (Auth::user()->organizationalUnit->id == 24) {
-         // // 24 - Consultorio General Urbano Dr. Hector Reyno
-         // if(Authority::getAuthorityFromDate(24,Carbon::now(),'manager')==null) {$user=14745638;}
-         // else{$user=Authority::getAuthorityFromDate(24,Carbon::now(),'manager')->user->id;}
-         // $signatureFlows['Directora CGU'] = $user;
-         // // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-         // if(Authority::getAuthorityFromDate(2,Carbon::now(),'manager')==null) {$user=14104369;}
-         // else{$user=Authority::getAuthorityFromDate(2,Carbon::now(),'manager')->user->id;}
-         // $signatureFlows['S.D.G.A SSI'] = $user;
-         // // 59 - Planificación y Control de Gestión de Recursos Humanos
-         // if(Authority::getAuthorityFromDate(59,Carbon::now(),'manager')==null) {$user=14112543;}
-         // else{$user=Authority::getAuthorityFromDate(59,Carbon::now(),'manager')->user->id;}
-         // $signatureFlows['Planificación CG RRHH'] = $user;
-         // // 44 - Subdirección de Gestión y Desarrollo de las Personas
-         // if(Authority::getAuthorityFromDate(44,Carbon::now(),'manager')==null) {$user=15685508;}
-         // else{$user=Authority::getAuthorityFromDate(44,Carbon::now(),'manager')->user->id;}
-         // $signatureFlows['S.G.D.P SSI'] = $user;
-         // // 31 - Subdirección de Recursos Físicos y Financieros
-         // if(Authority::getAuthorityFromDate(31,Carbon::now(),'manager')==null) {$user=11612834;}
-         // else{$user=Authority::getAuthorityFromDate(31,Carbon::now(),'manager')->user->id;}
-         // $signatureFlows['S.D.A SSI'] = $user;
-         // // 1 - Dirección
-         // if(Authority::getAuthorityFromDate(1,Carbon::now(),'manager')==null) {$user=9381231;}
-         // else{$user=Authority::getAuthorityFromDate(1,Carbon::now(),'manager')->user->id;}
-         // $signatureFlows['Director SSI'] = $user;
-         $signatureFlows['RRHH CGU'] = 10739552; //RR.HH del CGU
-         $signatureFlows['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
-         $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-         $signatureFlows['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
-         $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-         $signatureFlows['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
-         $signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
-       }
-       //servicio de salud iqq
-       else{
-         $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-         $signatureFlows['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
-         $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-         $signatureFlows['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
-         $signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
-       }
+       // //Hector Reyno (CGU)
+       // if (Auth::user()->organizationalUnit->id == 24) {
+       //   $signatureFlows['RRHH CGU'] = 10739552; //RR.HH del CGU
+       //   $signatureFlows['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
+       //   $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+       //   $signatureFlows['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
+       //   $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+       //   $signatureFlows['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
+       //   $signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
+       // }
+       // //servicio de salud iqq
+       // else{
+       //   $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+       //   $signatureFlows['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
+       //   $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+       //   $signatureFlows['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
+       //   $signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
+       // }
      }
      //hospital
      elseif(Auth::user()->organizationalUnit->establishment_id == 1){
-       $signatureFlows['Subdirector'] = 14101085; // 88 - Subdirección Médica (IRIONDO: 9882506)
-       $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-       $signatureFlows['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
-       $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
-       $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-       $signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
+       // $signatureFlows['Subdirector'] = 14101085; // 88 - Subdirección Médica (IRIONDO: 9882506)
+       // $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+       // $signatureFlows['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
+       // $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
+       // $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+       // $signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
 
        $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
        $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
@@ -218,46 +194,36 @@ class ServiceRequestController extends Controller
 
 
 
-     //array para solicitud por turnos
-     $signatureFlowsTurnos = [];
-     $sumaAlzadaFlow = [];
-     if (Auth::user()->organizationalUnit->establishment_id == 38) {
-       //Hector Reyno (CGU)
-       if (Auth::user()->organizationalUnit->id == 24) {
-         $signatureFlows['RRHH CGU'] = 10739552; //RR.HH del CGU
-         $signatureFlowsTurnos['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
-         // $signatureFlowsTurnos['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-         // $signatureFlowsTurnos['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
-         $signatureFlowsTurnos['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-         $signatureFlowsTurnos['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
-         // $signatureFlowsTurnos['Director SSI'] = 9381231; // 1 - Dirección
-       }
-       //servicio de salud iqq
-       else{
-         // $signatureFlowsTurnos['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-         $signatureFlowsTurnos['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
-         $signatureFlowsTurnos['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-         $signatureFlowsTurnos['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
-         // $signatureFlowsTurnos['Director SSI'] = 9381231; // 1 - Dirección
-       }
-     }
-     //hospital
-     elseif(Auth::user()->organizationalUnit->establishment_id == 1){
-       $signatureFlowsTurnos['Subdirector'] = 14101085; // 88 - Subdirección Médica (IRIONDO: 9882506)
-       // $signatureFlowsTurnos['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-       $signatureFlowsTurnos['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
-       $signatureFlowsTurnos['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
-       // $signatureFlowsTurnos['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-       // $signatureFlowsTurnos['Director Hospital'] = 14101085; // 84 - Dirección
-     }
+     // //array para solicitud por turnos
+     // $signatureFlowsTurnos = [];
+     // $sumaAlzadaFlow = [];
+     // if (Auth::user()->organizationalUnit->establishment_id == 38) {
+     //   //Hector Reyno (CGU)
+     //   if (Auth::user()->organizationalUnit->id == 24) {
+     //     $signatureFlows['RRHH CGU'] = 10739552; //RR.HH del CGU
+     //     $signatureFlowsTurnos['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
+     //     $signatureFlowsTurnos['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+     //     $signatureFlowsTurnos['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
+     //   }
+     //   //servicio de salud iqq
+     //   else{
+     //     $signatureFlowsTurnos['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
+     //     $signatureFlowsTurnos['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+     //     $signatureFlowsTurnos['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
+     //   }
+     // }
+     // //hospital
+     // elseif(Auth::user()->organizationalUnit->establishment_id == 1){
+     //   $signatureFlowsTurnos['Subdirector'] = 14101085; // 88 - Subdirección Médica (IRIONDO: 9882506)
+     //   $signatureFlowsTurnos['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
+     //   $signatureFlowsTurnos['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
+     // }
+     //
+     // $sumaAlzadaFlow['S.G.D.P Hospital'] = 16390845;
+     // $sumaAlzadaFlow['Jefe Finanzas'] = 13866194;
+     // $sumaAlzadaFlow['Director Hospital'] = 14101085;
 
-     $sumaAlzadaFlow['S.G.D.P Hospital'] = 16390845;
-     $sumaAlzadaFlow['Jefe Finanzas'] = 13866194;
-     $sumaAlzadaFlow['Director Hospital'] = 14101085;
-
-     // dd($signatureFlowsTurnos);
-
-    return view('service_requests.requests.create', compact('subdirections','responsabilityCenters','users','establishments','signatureFlows','signatureFlowsTurnos','sumaAlzadaFlow'));
+    return view('service_requests.requests.create', compact('subdirections','responsabilityCenters','users','establishments'));
   }
 
   /**
@@ -268,8 +234,6 @@ class ServiceRequestController extends Controller
    */
   public function store(Request $request)
   {
-    // dd($request->users);
-    //dd($request->users);
       //validation existence
       $serviceRequest = ServiceRequest::where('rut',$request->run."-".$request->dv)
                                       ->where('program_contract_type',$request->program_contract_type)

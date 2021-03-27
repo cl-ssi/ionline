@@ -37,9 +37,15 @@
                         @foreach($serviceRequest->fulfillments->reverse() as $fullfillment)
                         <tr></tr>
                         <tr>
-                                <td class="small">{{ $serviceRequest->id ?? '' }}</td>
+                                <td class="small">{{ $serviceRequest->id ?? '' }} </td>
                                 <td>{{ $serviceRequest->program_contract_type ?? '' }} <br>
-                                    {{ $serviceRequest->working_day_type ?? '' }}</td>
+                                    {{ $serviceRequest->working_day_type ?? '' }} <br>
+                                  @if($serviceRequest->has_resolution_file)
+                                    <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $serviceRequest)}}"
+                                        target="_blank" class="mr-4"><i class="fas fa-paperclip"></i> Resolución
+                                    </a>
+                                  @endif
+                                </td>
                                 <td>@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
                   									@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
                   									@else Finalizada @endif</td>
@@ -82,7 +88,7 @@
                                 @if($fullfillment->total_to_pay)
                                 @livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])
                                 @else
-                                No se ha cargado información de Pago
+                                  No se ha ingresado el "Total a pagar". <br>Contacte a RRHH.
                                 @endif
                                 </td>
                         </tr>

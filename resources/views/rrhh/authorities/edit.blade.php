@@ -87,6 +87,13 @@
 
     </div>
 
+    <div class="row">
+        <fieldset class="form-group col">
+            <label for="for_decree">Decreto que autoriza al funcionario ejercer cargo</label>
+            <input type="text" class="form-control" id="for_decree" name="decree" value="{{$authority->decree}}">
+        </fieldset>
+    </div>
+
     <fieldset class="form-group">
 		<button type="submit" class="btn btn-primary">
 			<span class="fas fa-save" aria-hidden="true"></span> Actualizar</button>
