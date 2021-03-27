@@ -15,7 +15,7 @@
             <select class="form-control" name="question_id" id="question_id" required>
             <option value="">Seleccionar Pregunta</option>
             @foreach($questions as $question)
-            <option value="{{ $question->id }}">{{ $question->question_text }} ({{$question->category->name}})</option>
+            <option value="{{ $question->id }}">{{ $question->id }}) {{ $question->question_text }} ({{$question->category->name}})</option>
             @endforeach
             </select>
         </fieldset>

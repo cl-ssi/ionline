@@ -175,7 +175,7 @@
 
                         @canany(['Service Request'])
                         <a class="dropdown-item"
-                            href="{{ route('rrhh.service-request.index') }}">
+                            href="{{ route('rrhh.service-request.home') }}">
                             <i class="fas fa-child fa-fw"></i> Contratación Honorarios
                         </a>
                         @endcan

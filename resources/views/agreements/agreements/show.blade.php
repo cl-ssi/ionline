@@ -93,28 +93,58 @@
             </div>
             <div class="form-row">
                 <fieldset class="form-group col-4">
-                    <label for="forrepresentative">Representante</label>
-                    <!-- <input type="integer" name="representative" class="form-control" id="fornumber" value="{{ $municipality->name_representative }}" disabled> -->
+                    <label for="for_authority">Director/a a cargo según fecha convenio</label>
+                    {{--<select id="authority_id" class="selectpicker" name="authority_id" title="Seleccionar" data-width="100%" required>
+                      @foreach($authorities as $authority)
+                      @if($authority->id == $agreement->authority_id) {{$selected_authority = $authority}} @endif
+                      <option value="{{ $authority->id }}" @if($authority->id == $agreement->authority_id) selected @endif>{{ $authority->user->full_name }}</option>
+                      @endforeach
+                    </select>  --}}
+                    <input type="text" name="authority_name" class="form-control" id="authority_name" value="{{$agreement->authority->user->full_name}}" readonly>
+                </fieldset>
+                <fieldset class="form-group col-2">
+                    <label for="fornumber">Rut director/a</label>
+                    <input type="text" name="authority_rut" class="form-control" id="authority_rut" value="{{$agreement->authority->user->runFormat()}}" readonly>
+                </fieldset>
+                <fieldset class="form-group col-6">
+                    <label for="fornumber">Decreto director/a</label>
+                    <input type="text" name="authority_decree" class="form-control" id="authority_decree" value="{{$agreement->authority->decree}}" readonly>
+                </fieldset>
+            </div>
+
+            <div class="form-row">
+                <fieldset class="form-group col-4">
+                    <label for="forrepresentative">Representante alcalde</label>
                     <select id="representative" class="selectpicker" name="representative" title="Seleccionar" data-width="100%">
                       <option value="{{ $municipality->name_representative }}" @if($municipality->name_representative == $agreement->representative) selected @endif>{{ $municipality->name_representative }}</option>
                       @if($municipality->name_representative_surrogate != null) <option value="{{ $municipality->name_representative_surrogate }}" @if($municipality->name_representative_surrogate == $agreement->representative) selected @endif>{{ $municipality->name_representative_surrogate }}</option> @endif
                       @if($agreement->representative != null && $agreement->representative != $municipality->name_representative && $agreement->representative != $municipality->name_representative_surrogate) <option value="{{ $agreement->representative }}" selected>{{ $agreement->representative }}</option> @endif
                     </select>   
-                    <small class="form-text text-muted">Ej: Alcalde Subrogante Don Nombre Apellidos</small>
+                    <!-- <small class="form-text text-muted">Ej: Alcalde Subrogante Don Nombre Apellidos</small> -->
                 </fieldset>
-                <input type="hidden" name="representative_appelative" id="representative_appelative" value="{{$agreement->representative_appelative}}">
-                <input type="hidden" name="representative_decree" id="representative_decree" value="{{$agreement->representative_decree}}">
                 <fieldset class="form-group col-2">
                     <label for="fornumber">Rut Representante</label>
-                    <input type="integer" name="representative_rut" class="form-control" id="representative_rut" value="{{ $agreement->representative_rut }}" readonly>
+                    <input type="text" name="representative_rut" class="form-control" id="representative_rut" value="{{ $agreement->representative_rut }}" readonly>
                 </fieldset>
+                <fieldset class="form-group col-6">
+                    <label for="fornumber">Decreto representante</label>
+                    <input type="text" name="representative_decree" class="form-control" id="representative_decree" value="{{$agreement->representative_decree}}" readonly>
+                </fieldset>
+                <input type="hidden" name="representative_appelative" id="representative_appelative" value="{{$agreement->representative_appelative}}">
+            </div>
+
+            <div class="form-row">
                 <fieldset class="form-group col-4">
-                    <label for="fornumber">Dirección Municipalidad</label>
-                    <input type="integer" name="municipality_adress" class="form-control" id="fornumber" value="{{ $agreement->municipality_adress }}" readonly>
+                    <label for="fornumber">Municipio</label>
+                    <input type="integer" name="municipality_name" class="form-control" id="municipality_name" value="{{ $municipality->name_municipality }}" readonly>
                 </fieldset>
                  <fieldset class="form-group col-2">
                     <label for="fornumber">Rut Municipalidad</label>
-                    <input type="integer" name="municipality_rut" class="form-control" id="fornumber" value="{{ $agreement->municipality_rut }}" readonly>
+                    <input type="integer" name="municipality_rut" class="form-control" id="municipality_rut" value="{{ $agreement->municipality_rut }}" readonly>
+                </fieldset>
+                <fieldset class="form-group col-6">
+                    <label for="fornumber">Dirección Municipalidad</label>
+                    <input type="integer" name="municipality_adress" class="form-control" id="municipality_adress" value="{{ $agreement->municipality_adress }}" readonly>
                 </fieldset>
             </div>
 
@@ -653,6 +683,13 @@
 
         modal.find("#form-edit").attr('action', button.data('formaction'))
     })
+
+    // $('#authority_id').on('change', function(e){
+    //     var selected = this.value;
+    //     var ruts = {{-- $authorities->map(function ($authority) { return ['id' => $authority->id , 'rut' => $authority->user->runFormat(), 'decree' => $authority->decree];})->toJson() --}};
+    //     $("#authority_rut").val(ruts.find(item => item.id == selected).rut)
+    //     $("#authority_decree").val(ruts.find(item => item.id == selected).decree)
+    // })
 
     $('#representative').on('change', function(e){
         var selected = this.selectedIndex - 1;
