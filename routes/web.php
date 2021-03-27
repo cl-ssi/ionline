@@ -81,6 +81,13 @@ Route::group(['middleware' => 'auth:external'], function () {
     Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
     Route::post('/test', [TestsController::class, 'storeExternal'])->name('storeExternal');
     });
+
+    Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
+        Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
+        Route::post('/store', [ReplacementStaffController::class, 'store'])->name('store');
+        Route::get('/{replacement_staff}/edit', [ReplacementStaffController::class, 'edit'])->name('edit');
+    });
+
 });
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
@@ -103,9 +110,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 /* Nuevas rutas, Laravel 8.0 */
 Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
     Route::get('/', [ReplacementStaffController::class, 'index'])->name('index');
-    Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
-    Route::post('/store', [ReplacementStaffController::class, 'store'])->name('store');
-    Route::get('/{replacement_staff}/edit', [ReplacementStaffController::class, 'edit'])->name('edit');
+    // Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
+    // Route::post('/store', [ReplacementStaffController::class, 'store'])->name('store');
+    // Route::get('/{replacement_staff}/edit', [ReplacementStaffController::class, 'edit'])->name('edit');
     Route::get('/show_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('show_file');
     Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
     Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
