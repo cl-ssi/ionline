@@ -48,18 +48,12 @@ class ReplacementStaffController extends Controller
         {
             $userexternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();
 
-            $replacementStaff = new ReplacementStaff();
-            $replacementStaff->run = $userexternal->id;
-
-            return view('replacement_staff.create',compact('replacementStaff'));
+            return view('replacement_staff.create',compact('userexternal'));
 
         }
         else{
-
             return $this->edit($replacementStaff);
         }
-
-        //return view('replacement_staff.create');
     }
 
     /**
@@ -81,8 +75,6 @@ class ReplacementStaffController extends Controller
             $replacementStaff->cv_file = $file->storeAs('replacement_staff/cv_docs', $file_name.'.'.$file->extension());
             $replacementStaff->save();
         }
-
-
 
         session()->flash('success', 'Se ha creado el postulante exitosamente');
         //return redirect()->back();

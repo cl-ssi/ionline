@@ -4,7 +4,7 @@
     <span data-feather="plus-circle"></span>
     </a>
 </h6>
-<ul class="nav flex-column">   
+<ul class="nav flex-column">
     <li class="nav-item">
         <a class="nav-link {{ active('profile.observation.index') }}" href="#">
         <span data-feather="user"></span>
@@ -42,14 +42,14 @@
 </ul> -->
 
 
-<!-- <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
+<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
     <span>Staff de Reemplazo</span>
     <a class="d-flex align-items-center text-muted" href="{{ route('replacement_staff.create') }}" aria-label="Ver Mis datos">
     <span data-feather="plus-circle"></span>
     </a>
 </h6>
 <ul class="nav flex-column">
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link {{ active('patient.index') }}" href="{{ route('replacement_staff.create') }}">
         <span data-feather="users"></span>
         Mis Datos<span class="sr-only">(current)</span>
@@ -139,7 +139,7 @@ $psirequests = App\Models\Suitability\PsiRequest::where('user_external_id',Auth:
         @csrf
         @method('PATCH')
         <!-- <span data-feather="list"></span> -->
-        <button type="submit" class="btn btn-danger float-left"><i class="fa fa-ban" onclick="return confirm('Al momento de apretar en aceptar, usted tendrá 45 minutos para poder realizar el Test de Idoneidad, no tendrá más oportunidades, luego de realizado este test. Por favor asegurarse que posea buena conexión a internet. ¿Está seguro que desea rendir el test?')">Realizar test para cargo <br>{{$psirequest->job}} ({{$psirequest->school->name}})</i></button> 
+        <button type="submit" class="btn btn-danger float-left"><i class="fa fa-ban" onclick="return confirm('Al momento de apretar en aceptar, usted tendrá 45 minutos para poder realizar el Test de Idoneidad, no tendrá más oportunidades, luego de realizado este test. Por favor asegurarse que posea buena conexión a internet. ¿Está seguro que desea rendir el test?')">Realizar test para cargo <br>{{$psirequest->job}} ({{$psirequest->school->name}})</i></button>
     </form>
     </li>
 

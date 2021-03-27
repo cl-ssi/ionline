@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.external')
 
-@section('title', 'Nuevo Staff')
+@section('title', 'Editar Mi Staff')
 
 @section('content')
 
@@ -44,7 +44,8 @@
         </fieldset>
         <fieldset class="form-group col-3">
             <label for="for_gender" >Género</label>
-            <select name="gender" id="for_gender" class="form-control selectpicker" title="Seleccione...">
+            <select name="gender" id="for_gender" class="form-control" title="Seleccione...">
+                <!-- <option value="">Seleccione...</option> -->
                 <option value="male" {{ ($replacementStaff->gender == 'male')?'selected':'' }}>Masculino</option>
                 <option value="female" {{ ($replacementStaff->gender == 'female')?'selected':'' }}>Femenino</option>
                 <option value="other" {{ ($replacementStaff->gender == 'other')?'selected':'' }}>Otro</option>
@@ -71,7 +72,7 @@
     <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_commune_id">Comuna</label>
-            <select name="commune" id="for_commune" class="form-control selectpicker" title="Seleccione...">
+            <select name="commune" id="for_commune" class="form-control" title="Seleccione...">
                 <option value="alto hospicio" {{ ($replacementStaff->commune == 'alto hospicio')?'selected':'' }}>Alto Hospicio</option>
                 <option value="camina" {{ ($replacementStaff->commune == 'camina')?'selected':'' }}>Camiña</option>
                 <option value="colchane" {{ ($replacementStaff->commune == 'colchane')?'selected':'' }}>Colchane</option>
@@ -91,7 +92,7 @@
     <div class="form-row">
       <fieldset class="form-group col-6">
           <label for="for_status">Disponibilidad</label>
-          <select name="status" id="for_status" class="form-control selectpicker" title="Seleccione...">
+          <select name="status" id="for_status" class="form-control" title="Seleccione...">
               <option value="immediate_availability" {{ ($replacementStaff->status == 'immediate_availability')?'selected':'' }}>Inmediata</option>
               <option value="working_external" {{ ($replacementStaff->status == 'working_external')?'selected':'' }}>Trabajando</option>
           </select>
@@ -249,7 +250,13 @@
 
 @section('custom_js')
 
-<link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap-select.min.css') }}">
-<script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 @endsection

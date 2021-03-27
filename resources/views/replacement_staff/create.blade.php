@@ -6,7 +6,7 @@
 
 
 
-<h5>Ingreso de nuevo staff {{Auth::guard('external')->user()->id}}</h5>
+<h5>Ingreso de nuevo staff</h5>
 
 <br>
 
@@ -16,11 +16,11 @@
     <div class="form-row">
         <fieldset class="form-group col-sm-2">
             <label for="for_run">RUT</label>
-            <input type="text" class="form-control" name="run" id="for_run">
+            <input type="text" class="form-control" name="run" id="for_run" value="{{ $userexternal->id }}" readonly>
         </fieldset>
         <fieldset class="form-group col-sm-1">
             <label for="for_dv">DV</label>
-            <input type="text" class="form-control" name="dv" id="for_dv">
+            <input type="text" class="form-control" name="dv" id="for_dv" value="{{ $userexternal->dv }}" readonly>
         </fieldset>
 
         <fieldset class="form-group col-sm-3">
@@ -33,19 +33,19 @@
     <div class="form-row">
         <fieldset class="form-group col-3">
             <label for="for_name">Nombres</label>
-            <input type="text" class="form-control" name="name" id="for_name">
+            <input type="text" class="form-control" name="name" id="for_name" value="{{ $userexternal->name }}" readonly>
         </fieldset>
         <fieldset class="form-group col-3">
             <label for="for_name">Apellido Paterno</label>
-            <input type="text" class="form-control" name="fathers_family" id="for_fathers_family">
+            <input type="text" class="form-control" name="fathers_family" id="for_fathers_family" value="{{ $userexternal->fathers_family }}" readonly>
         </fieldset>
         <fieldset class="form-group col-3">
             <label for="for_name">Apellido Materno</label>
-            <input type="text" class="form-control" name="mothers_family" id="for_mothers_family">
+            <input type="text" class="form-control" name="mothers_family" id="for_mothers_family" value="{{ $userexternal->mothers_family }}" readonly>
         </fieldset>
         <fieldset class="form-group col-3">
             <label for="for_gender" >Género</label>
-            <select name="gender" id="for_gender" class="form-control selectpicker" title="Seleccione...">
+            <select name="gender" id="for_gender" class="form-control" title="Seleccione...">
                 <option value="male">Masculino</option>
                 <option value="female">Femenino</option>
                 <option value="other">Otro</option>
@@ -72,7 +72,8 @@
     <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_commune_id">Comuna</label>
-            <select name="commune" id="for_commune" class="form-control selectpicker" title="Seleccione...">
+            <select name="commune" id="for_commune" class="form-control" title="Seleccione...">
+                <option value="alto hospicio">Alto Hospicio</option>
                 <option value="camina">Camiña</option>
                 <option value="colchane">Colchane</option>
                 <option value="huara">Huara</option>
@@ -91,7 +92,7 @@
     <div class="form-row">
       <fieldset class="form-group col-6">
           <label for="for_status">Disponibilidad</label>
-          <select name="status" id="for_status" class="form-control selectpicker" title="Seleccione...">
+          <select name="status" id="for_status" class="form-control" title="Seleccione...">
               <option value="immediate_availability">Inmediata</option>
               <option value="working_external">Trabajando</option>
           </select>
@@ -200,7 +201,7 @@
 
 <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap-select.min.css') }}">
 
-<script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 
 <script>
   // Add the following code if you want the name of the file appear on select
