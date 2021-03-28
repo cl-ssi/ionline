@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use app\Documents\Document;
 use Illuminate\Support\Facades\Storage;
+use App\Documents\Document;
 
 class DocumentsFiles extends Command
 {
@@ -42,10 +42,11 @@ class DocumentsFiles extends Command
         $documents = Document::whereNotNull('file')->get();
         foreach($documents as $document) {
             list($folder,$name) = explode('/',$document->file);
-            echo $name."\n";
             $file = Storage::disk('local')->get($document->file);
             Storage::disk('gcs')->put('ionline/documents/documents/'.$name, $file);
-            $document->update(['file' => 'ionline/documents/documents/'.$name]);
+	    $document->file = 'ionline/documents/documents/'.$name;
+	    $document->save();
+	    echo $document->file."\n";
         }
         return 0;
     }
