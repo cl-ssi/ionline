@@ -1046,6 +1046,8 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/', [QuestionsController::class, 'index'])->name('index');
         Route::get('/create', [QuestionsController::class, 'create'])->name('create');
         Route::post('/store', [QuestionsController::class, 'store'])->name('store');
+        Route::get('{question}/edit', [QuestionsController::class, 'edit'])->name('edit');
+        Route::put('{question}/update', [QuestionsController::class, 'update'])->name('update');
     });
 
     Route::prefix('options')->as('options.')->middleware('auth')->group(function () {

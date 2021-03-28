@@ -67,6 +67,8 @@ class QuestionsController extends Controller
     public function edit(Question $question)
     {
         //
+        $categories = Category::all();
+        return view('suitability.questions.edit', compact('question', 'categories'));
     }
 
     /**
@@ -79,6 +81,10 @@ class QuestionsController extends Controller
     public function update(Request $request, Question $question)
     {
         //
+        $question->fill($request->all());
+        $question->save();
+        session()->flash('success', 'Se ha actualizado la pregunta correctamente.');
+        return redirect()->route('suitability.questions.index');
     }
 
     /**
