@@ -79,7 +79,7 @@ class ParteController extends Controller
             foreach($request->file('forfile') as $file) {
                 $filename = $file->getClientOriginalName();
                 $fileModel = New ParteFile;
-                $fileModel->file = $file->disk('gcs')->store('ionline/documents/partes');
+                $fileModel->file = $file->store('ionline/documents/partes',['disk' => 'gcs']);
                 $fileModel->name = $filename;
                 $fileModel->parte_id = $parte->id;
                 $fileModel->save();
@@ -135,7 +135,7 @@ class ParteController extends Controller
             foreach($request->file('forfile') as $file) {
                 $filename = $file->getClientOriginalName();
                 $fileModel = New ParteFile;
-                $fileModel->file = $file->disk('gcs')->store('ionline/documents/partes');
+                $fileModel->file = $file->store('ionline/documents/partes',['disk'=>'gcs']);
                 $fileModel->name = $filename;
                 $fileModel->parte_id = $parte->id;
                 $fileModel->save();
