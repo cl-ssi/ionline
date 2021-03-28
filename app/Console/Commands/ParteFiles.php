@@ -44,9 +44,9 @@ class ParteFiles extends Command
             foreach($parte->files as $file) {
                 list($folder,$name) = explode('/',$file->file);
                 echo $name."\n";
-		$file->update(['file' => 'ionline/documents/partes/'.$name]);
-                //$file = Storage::disk('local')->get($file->file);
-                //Storage::disk('gcs')->put('ionline/documents/partes/'.$name, $file);
+		        $file->update(['file' => 'ionline/documents/partes/'.$name]);
+                $file = Storage::disk('local')->get($file->file);
+                Storage::disk('gcs')->put('ionline/documents/partes/'.$name, $file);
             }
         }
         return 0;
