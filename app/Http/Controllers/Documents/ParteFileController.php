@@ -17,7 +17,7 @@ class ParteFileController extends Controller
      */
     public function destroy(ParteFile $file)
     {
-        Storage::delete($file->file);
+        Storage::disk('gcs')->delete($file->file);
         $file->delete();
         session()->flash('success', 'El archivo ha sido eliminado');
         return back();
