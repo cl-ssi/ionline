@@ -601,15 +601,15 @@ class FulfillmentController extends Controller
 
     public function downloadInvoice(Fulfillment $fulfillment)
     {
-        $storage_path = '/service_request/invoices/';
+        $storage_path = '/ionline/service_request/invoices/';
         $file =  $storage_path . $fulfillment->id . '.pdf';
-        return Storage::response($file, mb_convert_encoding($fulfillment->id.'.pdf', 'ASCII'));
+        return Storage::disk('gcs')->response($file, mb_convert_encoding($fulfillment->id.'.pdf', 'ASCII'));
     }
     public function downloadResolution(ServiceRequest $serviceRequest)
     {
-        $storage_path = '/service_request/resolutions/';
+        $storage_path = '/ionline/service_request/resolutions/';
         $file =  $storage_path . $serviceRequest->id . '.pdf';
-        return Storage::response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
+        return Storage::disk('gcs')->response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
         /* Para google storage */
         //return Storage::disk('gcs')->response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
     }
