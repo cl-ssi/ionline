@@ -88,9 +88,6 @@ class DocumentController extends Controller
      */
     public function show(Document $document)
     {
-        // $document->distribution =
-        //
-        // $phrase  = "You should eat fruits, vegetables, and fiber every day.";
         if($document->type == 'Acta de recepción') {
             return view('documents.reception')->withDocument($document);
         }
@@ -113,7 +110,7 @@ class DocumentController extends Controller
             session()->flash('danger', 'Lo siento mi amor, el documento ya tiene un archivo adjunto');
             return redirect()->route('documents.index');
         }
-        /* De lo contrario retornda para editar el documento */
+        /* De lo contrario retorna para editar el documento */
         else {
             return view('documents.edit', compact('document'));
         }
@@ -161,7 +158,7 @@ class DocumentController extends Controller
      */
     public function deleteFile(Document $document)
     {
-        Storage::delete($document->file);
+        Storage::disk('gcs')->delete($document->file);
 
         $document->file = null;
         $document->save();
@@ -189,7 +186,7 @@ class DocumentController extends Controller
                         $document->type . '_' .
                         $document->number . '.' .
                         $request->file->getClientOriginalExtension();
-            $document->file = $request->file->storeAs('documentos',$filename);
+            $document->file = $request->file->storeAs('ionline/documents/documents',$filename,['disk'=>'gcs']);
 
         }
         $document->save();
@@ -232,7 +229,7 @@ class DocumentController extends Controller
                     $document->number . '.' .
                     File::extension($document->file);
         //return Storage::download($document->file, $filename);
-        return Storage::response($document->file, $filename);
+        return Storage::disk('gcs')->response($document->file, $filename);
     }
 
     public function report()
