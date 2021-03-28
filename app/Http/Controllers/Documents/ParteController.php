@@ -79,7 +79,7 @@ class ParteController extends Controller
             foreach($request->file('forfile') as $file) {
                 $filename = $file->getClientOriginalName();
                 $fileModel = New ParteFile;
-                $fileModel->file = $file->store('parte');
+                $fileModel->file = $file->disk('gcs')->store('ionline/documents/partes');
                 $fileModel->name = $filename;
                 $fileModel->parte_id = $parte->id;
                 $fileModel->save();
@@ -135,7 +135,7 @@ class ParteController extends Controller
             foreach($request->file('forfile') as $file) {
                 $filename = $file->getClientOriginalName();
                 $fileModel = New ParteFile;
-                $fileModel->file = $file->store('parte');
+                $fileModel->file = $file->disk('gcs')->store('ionline/documents/partes');
                 $fileModel->name = $filename;
                 $fileModel->parte_id = $parte->id;
                 $fileModel->save();
@@ -181,6 +181,6 @@ class ParteController extends Controller
 
     public function download(ParteFile $file)
     {
-        return Storage::response($file->file, mb_convert_encoding($file->name,'ASCII'));
+        return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
     }
 }
