@@ -59,7 +59,7 @@
     @endcan
 
 
-    @if($authorities AND $calendar)
+    @if($authorities AND $calendar AND ($ouTopLevel->establishment_id == $ou->establishment_id))
         @if($ou)
         <h3>{{ $ou->name }}</h3>
         @endif
@@ -79,7 +79,7 @@
 
             <div class="dia_calendario small p-2" {!! ($today->format('Y-m-d') == $key)?'style="border: 2px solid black;"':'' !!}>
                 <center>
-                    {{ $key }}
+                    {{ $key }}                    
                     <hr class="mt-1 mb-1" >
                     @if($entry) {{ $entry->user->name }} @endif <br>
                     @if($entry) {{ $entry->user->fathers_family }} @endif <br>
