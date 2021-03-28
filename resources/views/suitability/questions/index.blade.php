@@ -29,9 +29,9 @@
             <td>{{ $question->category->name ?? '' }}</td>
             <td>{{ $question->question_text ?? '' }}</td>
             <td>
-					<a href="{{ route('suitability.questions.edit', $question) }}" class="btn btn-outline-secondary btn-sm">
-					<span class="fas fa-edit" aria-hidden="true"></span></a>
-				</td>
+				<a href="{{ route('suitability.questions.edit', $question) }}" class="btn btn-outline-secondary btn-sm">
+				<span class="fas fa-edit" aria-hidden="true"></span></a>
+			</td>
         </tr>
         @endforeach
     </tbody>
