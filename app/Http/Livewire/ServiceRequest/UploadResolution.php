@@ -42,7 +42,7 @@ class UploadResolution extends Component
     }
 
     public function delete() {
-        Storage::delete($this->storage_path.$this->serviceRequest->id.'.pdf');
+        Storage::disk('gcs')->delete($this->storage_path.$this->serviceRequest->id.'.pdf');
         $this->serviceRequest->update(['has_resolution_file' => false]);
     }
 
