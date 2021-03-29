@@ -42,17 +42,17 @@
             @endswitch
         }
     </style>
+
+    <!-- Place your kit's code here -->
+    <script src="https://kit.fontawesome.com/7c4f606aba.js" SameSite="None"
+        crossorigin="anonymous"></script>
 </head>
 
 <body>
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm container bg-nav-gobierno">
         <h5 class="my-0 mr-md-auto font-weight-normal"> <img src="{{ asset('images/gob-header.svg') }}" alt="Logo del gobierno de chile"> </h5>
         <nav class="my-2 my-md-0 mr-md-3">
-            <a class="p-2" href="http://www.saludiquique.cl">Servicio de Salud</a>
-            <a class="p-2 btn btn-sm btn-outline-primary" href="{{ route('login') }}/external">Externos</a>
-            <a class="p-2 btn btn-sm btn-outline-primary" href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1">Siremx</a>
-            <a class="p-2 btn btn-sm btn-outline-primary" href="http://intranet.saludiquique.cl">Intranet</a>
-            <a class="p-2 btn btn-sm btn-outline-primary" href="{{ route('login') }}">iOnline</a>
+            <a class="p-2" href="http://www.saludiquique.cl">Servicio de Salud Iquique</a>
         </nav>
 
     </div>
@@ -76,12 +76,11 @@
 
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Coronavirus</h4>
+                    <h4 class="my-0 font-weight-normal">Resultado exámenes</h4>
                 </div>
                 <div class="card-body">
 
                     <ul class="list-unstyled mt-3 mb-4">
-                        <h2>Resultado exámenes</h2>
                         <p>Si perteneces a la región de Tarapacá, puedes revisar
                             el resultado de tu exámen de Covid-19 utilizando tu
                             clave única del estado, haciendo click en el botón
@@ -131,10 +130,21 @@
             </div>
 
             <div class="card shadow-sm">
-                <img class="card-img" src="{{ asset('images/prevencion-contagio.png') }}" alt="Prevención COVID19">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Ingresa a Nuestros Sistemas</h4>
+                </div>
+
+                <div class="list-group">
+                    <a href="{{ route('login') }}/external" class="list-group-item list-group-item-action">Portal Externo</a>
+                    <a href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1" class="list-group-item list-group-item-action">Siremx</a>
+                    <a href="http://intranet.saludiquique.cl" class="list-group-item list-group-item-action">Intranet</a>
+                    <a href="{{ route('login') }}" class="list-group-item list-group-item-action">iOnline</a>
+                </div>
+
+                <br>
+                <hr class="">
+                <p>Pronto, mucho más...</p>
             </div>
-
-
         </div>
 
         <footer class="pt-4 my-md-5 pt-md-5 border-top">
