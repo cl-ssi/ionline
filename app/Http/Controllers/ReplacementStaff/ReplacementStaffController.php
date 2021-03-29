@@ -84,10 +84,14 @@ class ReplacementStaffController extends Controller
     public function edit(ReplacementStaff $replacementStaff)
     {
         $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
-
         $profileManage = ProfileManage::orderBy('name', 'ASC')->get();
-
-        return view('replacement_staff.edit', compact('replacementStaff', 'professionManage', 'profileManage'));
+        // dd(Auth()->user());
+        if($replacementStaff->run == Auth()->user()->id){
+          return view('replacement_staff.edit', compact('replacementStaff', 'professionManage', 'profileManage'));
+        }
+        else{
+            return redirect()->back();
+        }
     }
 
     public function update(Request $request, ReplacementStaff $replacementStaff)
@@ -123,5 +127,12 @@ class ReplacementStaffController extends Controller
     public function download(ReplacementStaff $replacementStaff)
     {
         return Storage::download($replacementStaff->cv_file);
+    }
+
+    public function show_replacement_staff(ReplacementStaff $replacementStaff){
+      $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
+      $profileManage = ProfileManage::orderBy('name', 'ASC')->get();
+
+      return view('replacement_staff.show_replacement_staff', compact('replacementStaff', 'professionManage', 'profileManage'));
     }
 }

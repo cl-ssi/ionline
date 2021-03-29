@@ -86,6 +86,18 @@ Route::group(['middleware' => 'auth:external'], function () {
         Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
         Route::post('/store', [ReplacementStaffController::class, 'store'])->name('store');
         Route::get('/{replacement_staff}/edit', [ReplacementStaffController::class, 'edit'])->name('edit');
+        Route::prefix('profile')->name('profile.')->group(function(){
+            Route::post('/{replacementStaff}/store', [ProfileController::class, 'store'])->name('store');
+            Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
+            Route::get('/show_file/{profile}', [ProfileController::class, 'show_file'])->name('show_file');
+            Route::delete('{profile}/destroy', [ProfileController::class, 'destroy'])->name('destroy');
+        });
+        Route::prefix('training')->name('training.')->group(function(){
+            Route::post('/{replacementStaff}/store', [TrainingController::class, 'store'])->name('store');
+            Route::get('/download/{training}', [TrainingController::class, 'download'])->name('download');
+            Route::get('/show_file/{training}', [TrainingController::class, 'show_file'])->name('show_file');
+            Route::delete('{training}/destroy', [TrainingController::class, 'destroy'])->name('destroy');
+        });
     });
 
 });
@@ -109,51 +121,49 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 /* Nuevas rutas, Laravel 8.0 */
 Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
-    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index');
-    // Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
-    // Route::post('/store', [ReplacementStaffController::class, 'store'])->name('store');
-    // Route::get('/{replacement_staff}/edit', [ReplacementStaffController::class, 'edit'])->name('edit');
+    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware('auth');;
+    Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
     Route::get('/show_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('show_file');
     Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
     Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
+
     Route::prefix('profile')->name('profile.')->group(function(){
-        Route::post('/{replacementStaff}/store', [ProfileController::class, 'store'])->name('store');
+        // Route::post('/{replacementStaff}/store', [ProfileController::class, 'store'])->name('store');
         Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
         Route::get('/show_file/{profile}', [ProfileController::class, 'show_file'])->name('show_file');
-        Route::delete('{profile}/destroy', [ProfileController::class, 'destroy'])->name('destroy');
+        //Route::delete('{profile}/destroy', [ProfileController::class, 'destroy'])->name('destroy');
     });
-    Route::prefix('experience')->name('experience.')->group(function(){
-        Route::post('/{replacementStaff}/store', [ExperienceController::class, 'store'])->name('store');
-        Route::get('/download/{experience}', [ExperienceController::class, 'download'])->name('download');
-        Route::get('/show_file/{experience}', [ExperienceController::class, 'show_file'])->name('show_file');
-        Route::delete('{experience}/destroy', [ExperienceController::class, 'destroy'])->name('destroy');
+
+    // Route::prefix('experience')->name('experience.')->group(function(){
+    //     Route::post('/{replacementStaff}/store', [ExperienceController::class, 'store'])->name('store');
+    //     Route::get('/download/{experience}', [ExperienceController::class, 'download'])->name('download');
+    //     Route::get('/show_file/{experience}', [ExperienceController::class, 'show_file'])->name('show_file');
+    //     Route::delete('{experience}/destroy', [ExperienceController::class, 'destroy'])->name('destroy');
+    // });
+    // Route::prefix('language')->name('language.')->group(function(){
+    //     Route::post('/{replacementStaff}/store', [languageController::class, 'store'])->name('store');
+    //     Route::get('/download/{language}', [languageController::class, 'download'])->name('download');
+    //     Route::get('/show_file/{language}', [languageController::class, 'show_file'])->name('show_file');
+    //     Route::delete('{language}/destroy', [languageController::class, 'destroy'])->name('destroy');
+    // });
+
+    Route::group(['middleware' => ['role:Replacement Staff: admin']], function () {
+      Route::prefix('manage')->name('manage.')->group(function(){
+          Route::prefix('profession')->name('profession.')->group(function(){
+              Route::get('/', [ProfessionManageController::class, 'index'])->name('index');
+              Route::post('/store', [ProfessionManageController::class, 'store'])->name('store');
+              Route::get('/{profession}/edit', [ProfessionManageController::class, 'edit'])->name('edit');
+              Route::delete('{profession}/destroy', [ProfessionManageController::class, 'destroy'])->name('destroy');
+          });
+          Route::prefix('profile')->name('profile.')->group(function(){
+              Route::get('/', [ProfileManageController::class, 'index'])->name('index');
+              Route::post('/store', [ProfileManageController::class, 'store'])->name('store');
+              Route::get('/{profile}/edit', [ProfileManageController::class, 'edit'])->name('edit');
+              Route::delete('{profile}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
+          });
+      });
     });
-    Route::prefix('training')->name('training.')->group(function(){
-        Route::post('/{replacementStaff}/store', [TrainingController::class, 'store'])->name('store');
-        Route::get('/download/{training}', [TrainingController::class, 'download'])->name('download');
-        Route::get('/show_file/{training}', [TrainingController::class, 'show_file'])->name('show_file');
-        Route::delete('{training}/destroy', [TrainingController::class, 'destroy'])->name('destroy');
-    });
-    Route::prefix('language')->name('language.')->group(function(){
-        Route::post('/{replacementStaff}/store', [languageController::class, 'store'])->name('store');
-        Route::get('/download/{language}', [languageController::class, 'download'])->name('download');
-        Route::get('/show_file/{language}', [languageController::class, 'show_file'])->name('show_file');
-        Route::delete('{language}/destroy', [languageController::class, 'destroy'])->name('destroy');
-    });
-    Route::prefix('manage')->name('manage.')->group(function(){
-        Route::prefix('profession')->name('profession.')->group(function(){
-            Route::get('/', [ProfessionManageController::class, 'index'])->name('index');
-            Route::post('/store', [ProfessionManageController::class, 'store'])->name('store');
-            Route::get('/{profession}/edit', [ProfessionManageController::class, 'edit'])->name('edit');
-            Route::delete('{profession}/destroy', [ProfessionManageController::class, 'destroy'])->name('destroy');
-        });
-        Route::prefix('profile')->name('profile.')->group(function(){
-            Route::get('/', [ProfileManageController::class, 'index'])->name('index');
-            Route::post('/store', [ProfileManageController::class, 'store'])->name('store');
-            Route::get('/{profile}/edit', [ProfileManageController::class, 'edit'])->name('edit');
-            Route::delete('{profile}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
-        });
-    });
+
     Route::prefix('request')->name('request.')->group(function(){
         Route::get('/', [ReplacementStaffController::class, 'requestIndex'])->name('index');
         Route::get('/create', [ReplacementStaffController::class, 'requestCreate'])->name('create');
