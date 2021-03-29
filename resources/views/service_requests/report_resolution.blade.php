@@ -481,7 +481,7 @@ a la persona que más abajo se individualiza, para apoyar de acuerdo de funcione
 @endif
 
 <br><br>
-Para constancia firman: <br><br> {{$ServiceRequest->name}}
+Para constancia firman: <br><br> {{$ServiceRequest->name}} <br><br>
 
 <p class="">
     <strong>2.</strong> El convenio que por este acto se aprueban, se entiende que forman parte integrante de la presente Resolución.
