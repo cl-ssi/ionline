@@ -124,7 +124,11 @@
 
 
 <div class="siete" style="padding-top: 3px;">
-    HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
+    @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+      HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
+    @else
+
+    @endif
     SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
 </div>
 <div class="seis" style="padding-top: 4px;">
