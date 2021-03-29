@@ -8,7 +8,7 @@
 
 <p>
     <a class="btn btn-primary" data-toggle="collapse" href="#collapseSearch" role="button" aria-expanded="false" aria-controls="collapseExample">
-      <i class="fas fa-search"></i> Busqueda
+      <i class="fas fa-filter"></i> Filtros
     </a>
 </p>
 <div class="collapse" id="collapseSearch">
@@ -41,7 +41,7 @@
                   </select>
               </fieldset>
 
-              <button type="submit" class="btn btn-primary float-right">Guardar</button>
+              <button type="submit" class="btn btn-primary float-right"><i class="fas fa-search"></i> Buscar</button>
           </div>
       </form>
   </div>
@@ -89,7 +89,7 @@
             </td>
             <td>{{ $staff->StatusValue }}</td>
             <td>
-                <a href="{{ route('replacement_staff.edit', $staff) }}"
+                <a href="{{ route('replacement_staff.show_replacement_staff', $staff) }}"
                   class="btn btn-outline-secondary btn-sm"
                   title="Ir"> <i class="far fa-eye"></i></a>
                 <a href="{{ route('replacement_staff.show_file', $staff) }}"

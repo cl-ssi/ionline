@@ -14,6 +14,7 @@
               <fieldset class="form-group col mt">
                   <label for="for_profile">Estamento</label>
                   <select name="profile[]" class="form-control">
+                      <option value="">Seleccione</option>
                       @foreach($profileManage as $profile)
                           <option value="{{ $profile->id }}">{{ $profile->Name }}</option>
                       @endforeach
@@ -23,6 +24,7 @@
               <fieldset class="form-group col mt">
                   <label for="for_profession">Profesión</label>
                   <select name="profession[]" class="form-control">
+                      <option value="">Seleccione</option>
                       @foreach($professionManage as $profession)
                           <option value="{{ $profession->id }}">{{ $profession->Name }}</option>
                       @endforeach

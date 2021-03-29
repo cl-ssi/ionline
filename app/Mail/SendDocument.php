@@ -39,7 +39,7 @@ class SendDocument extends Mailable
         $file_name = 'SSI_'.$this->document->type.'_'.$this->document->number.'.pdf';
         $subject = $this->document->type.' N°:'.$this->document->number.': '.$this->document->subject;
         return $this->view('documents.mails.send')->subject($subject)
-            ->attachFromStorage($this->document->file, $file_name, [
+            ->attachFromStorageDisk('gcs',$this->document->file, $file_name, [
                                 'mime' => 'application/pdf'
             ]);;
     }

@@ -4,7 +4,7 @@
 
 @section('content')
 
-
+<br>
 
 <h5>Ingreso de nuevo staff</h5>
 
@@ -45,7 +45,8 @@
         </fieldset>
         <fieldset class="form-group col-3">
             <label for="for_gender" >Género</label>
-            <select name="gender" id="for_gender" class="form-control" title="Seleccione...">
+            <select name="gender" id="for_gender" class="form-control" required>
+                <option value="">Seleccione...</option>
                 <option value="male">Masculino</option>
                 <option value="female">Femenino</option>
                 <option value="other">Otro</option>
@@ -57,7 +58,7 @@
     <div class="form-row">
         <fieldset class="form-group col-6">
             <label for="for_email">Correo Electrónico</label>
-            <input type="text" class="form-control" name="email" id="for_email">
+            <input type="text" class="form-control" name="email" id="for_email" required>
         </fieldset>
         <fieldset class="form-group col-3">
             <label for="for_telephone">Teléfono Movil</label>
@@ -72,7 +73,8 @@
     <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_commune_id">Comuna</label>
-            <select name="commune" id="for_commune" class="form-control" title="Seleccione...">
+            <select name="commune" id="for_commune" class="form-control" required>
+                <option value="">Seleccione...</option>
                 <option value="alto hospicio">Alto Hospicio</option>
                 <option value="camina">Camiña</option>
                 <option value="colchane">Colchane</option>
@@ -85,14 +87,15 @@
 
         <fieldset class="form-group col">
             <label for="for_address">Dirección</label>
-            <input type="text" class="form-control" name="address" id="for_address"  placeholder="">
+            <input type="text" class="form-control" name="address" id="for_address"  placeholder="" required>
         </fieldset>
     </div>
 
     <div class="form-row">
       <fieldset class="form-group col-6">
           <label for="for_status">Disponibilidad</label>
-          <select name="status" id="for_status" class="form-control" title="Seleccione...">
+          <select name="status" id="for_status" class="form-control" required>
+              <option value="">Seleccione...</option>
               <option value="immediate_availability">Inmediata</option>
               <option value="working_external">Trabajando</option>
           </select>
