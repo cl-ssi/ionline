@@ -278,19 +278,25 @@ a la persona que más abajo se individualiza, para apoyar de acuerdo de funcione
     @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
       Don HECTOR ALARCON ALARCON, en su calidad de Director del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a {{$ServiceRequest->name}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
     @else
-      Don JORGE GALLEGUILLOS MÖLLER, en su calidad de Director del Servicio de Salud Iquique de Iquique, contrata a D. NELSON CAMPILLAY QUEVEDO, (Enfermero), para que preste servicios en el Servicio de Emergencia del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
+      Don JORGE GALLEGUILLOS MÖLLER, en su calidad de Director del Servicio de Salud Iquique de Iquique, contrata a {{$ServiceRequest->name}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
     @endif
   </p>
 
 <p class="justify">
-    <strong>SEGUNDO:</strong> En cumplimiento del presente convenio La Profesional deberá llevar a cabo las siguientes prestaciones:
+    <strong>SEGUNDO:</strong> En cumplimiento del presente convenio El prestador deberá llevar a cabo las siguientes prestaciones:
     <ul>
         <li>{{$ServiceRequest->service_description}}</li>
     </ul>
 </p>
 
 <p class="justify">
-    <strong>TERCERO:</strong> El prestador recibirá los lineamientos por parte del Jefe del {{$ServiceRequest->responsabilityCenter->name}}, del Hospital Regional de Iquique, el cual tendrá la responsabilidad de evaluar sus servicios en forma mensual.
+    <strong>TERCERO:</strong> El prestador recibirá los lineamientos por parte del Jefe del {{$ServiceRequest->responsabilityCenter->name}}, del
+    @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+      Hospital Regional de Iquique,
+    @else
+      Servicio de Salud Iquique,
+    @endif
+    el cual tendrá la responsabilidad de evaluar sus servicios en forma mensual.
 </p>
 
 <p class="justify">
@@ -332,7 +338,13 @@ a la persona que más abajo se individualiza, para apoyar de acuerdo de funcione
             @else
               Servicio de Salud Iquique,
             @endif
-            en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+            en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas
+            @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+              del Hospital Dr. Ernesto Torres Galdames de Iquique,
+            @else
+              de la Dirección del servicio de salud Iquique,
+            @endif
+            el cual debe venir con las debidas observaciones de la Jefatura directa.
         </p>
       @elseif($ServiceRequest->working_day_type == "HORA EXTRA")
         <p class="justify">
@@ -469,7 +481,7 @@ a la persona que más abajo se individualiza, para apoyar de acuerdo de funcione
 @endif
 
 <br><br>
-Para constancia firman:
+Para constancia firman: <br><br> {{$ServiceRequest->name}}
 
 <p class="">
     <strong>2.</strong> El convenio que por este acto se aprueban, se entiende que forman parte integrante de la presente Resolución.
