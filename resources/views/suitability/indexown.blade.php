@@ -17,6 +17,7 @@
             <th>Nombre Completo</th>
             <th>Cargo</th>
             <th>Correo</th>
+            <th>Telefono</th>
             <th>Estado</th>
             <th></th>
         </tr>
@@ -30,6 +31,7 @@
             <td>{{$psirequest->user->fullName}}</td>            
             <td>{{$psirequest->job}}</td>
             <td>{{$psirequest->user->email}}</td>
+            <td>{{$psirequest->user->phone_number}}</td>
             <td>{{$psirequest->status}}</td>
         </tr>
     @endforeach
