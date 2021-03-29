@@ -15,6 +15,9 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
         <!-- Custom styles for this template -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+            integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+            crossorigin="anonymous">
         <link href="{{ asset('css/ssi.css') }}" rel="stylesheet">
 
         <!-- Favicons -->
@@ -27,6 +30,10 @@
         @else
         <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon-local.ico">
         @endproduction
+
+        <!-- Place your kit's code here -->
+        <script src="https://kit.fontawesome.com/7c4f606aba.js" SameSite="None"
+            crossorigin="anonymous"></script>
 
         @livewireStyles
     </head>
@@ -84,7 +91,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.18/js/bootstrap-select.min.js"
                 integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg=="
                 crossorigin="anonymous"></script>
-                
+
         @yield('custom_js')
         @livewireScripts
     </body>

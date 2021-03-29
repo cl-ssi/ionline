@@ -187,6 +187,15 @@
                         </a>
                         @endcan
 
+                        @can('Replacement Staff: manage')
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item @active('replacement_staff.index')"
+                               href="{{ route('replacement_staff.index') }}">
+                                <i class="far fa-id-card"></i> Staff de Reemplazos
+                            </a>
+                        @endcan
+
                     </div>
 
                 </li>
