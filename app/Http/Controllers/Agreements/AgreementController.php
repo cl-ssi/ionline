@@ -139,13 +139,13 @@ class AgreementController extends Controller
     public function show(Agreement $agreement)
     {
         // $establishment = Establishment::All();
-        $agreement->load('authority.user');
-        $commune = Commune::with('establishments')->Where('id', $agreement->commune->id)->first();
-        $municipality = Municipality::where('commune_id', $agreement->Commune->id)->first();
+        $agreement->load('authority.user', 'commune.establishments');
+        // $commune = Commune::with('establishments')->Where('id', $agreement->commune->id)->first();
+        $municipality = Municipality::where('commune_id', $agreement->commune->id)->first();
         $establishment_list = unserialize($agreement->establishment_list);
         // $authorities = Authority::with('user')->whereIn('organizational_unit_id',[1,84])->where('from', '<=', $agreement->date)->where('to', '>=', $agreement->date)->where('position', 'LIKE', '%Director%')->get();
         // return $authorities;
-        return view('agreements/agreements/show', compact('agreement', 'commune', 'municipality', 'establishment_list'));
+        return view('agreements/agreements/show', compact('agreement', 'municipality', 'establishment_list'));
     }
 
     /**

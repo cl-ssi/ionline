@@ -13,7 +13,7 @@ class UploadResolution extends Component
 
     public $resolutionFile;
     public $serviceRequest;
-    public $storage_path = '/service_request/resolutions/';
+    public $storage_path = '/ionline/service_request/resolutions/';
 
     public function save()
     {
@@ -23,7 +23,8 @@ class UploadResolution extends Component
 
         $this->resolutionFile->storeAs(
             $this->storage_path, 
-            $this->serviceRequest->id.'.pdf'
+            $this->serviceRequest->id.'.pdf',
+            'gcs'
         );
         
         /* Para google storage agregar al final 'gcs'
@@ -36,16 +37,12 @@ class UploadResolution extends Component
         
         */
         
-        /* Ejemplo para guardar en Google storage  */
-        // $disk = Storage::disk('gcs');
-        // $url = $disk->put('ionline.txt',"storage desde ionline");
-        
 
         $this->serviceRequest->update(['has_resolution_file' => true]);
     }
 
     public function delete() {
-        Storage::delete($this->storage_path.$this->serviceRequest->id.'.pdf');
+        Storage::disk('gcs')->delete($this->storage_path.$this->serviceRequest->id.'.pdf');
         $this->serviceRequest->update(['has_resolution_file' => false]);
     }
 

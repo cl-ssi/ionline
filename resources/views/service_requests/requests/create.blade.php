@@ -317,7 +317,8 @@
 					<option value="Tecn. Médico Diurno" >Tecn. Médico Diurno</option>
 					<option value="Tecn. Médico Turno" >Tecn. Médico Turno</option>
 					<option value="Trabajador Social" >Trabajador Social</option>
-
+					<option value="Nutricionista Diurno" >Nutricionista Diurno</option>
+					<option value="Prevencionista de Riesgo" >Prevencionista de Riesgo</option>
 				</select>
 		</fieldset>
 

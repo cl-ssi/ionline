@@ -124,7 +124,11 @@
 
 
 <div class="siete" style="padding-top: 3px;">
-    HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
+    @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+      HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
+    @else
+
+    @endif
     SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
 </div>
 <div class="seis" style="padding-top: 4px;">
@@ -148,29 +152,45 @@
 <p class="justify">
 <strong>VISTOS:</strong><br>
 
-@if($ServiceRequest->program_contract_type == "Mensual")
-  En estos antecedentes, según lo dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud; Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020  del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones  N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
-@elseif($ServiceRequest->program_contract_type == "Horas")
-  @if($ServiceRequest->estate == "Profesional Médico")
-    Dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud; Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020  del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones  N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
-  @else
-    En estos antecedentes, según lo dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud; Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020 del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
+@if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+  @if($ServiceRequest->program_contract_type == "Mensual")
+    En estos antecedentes, según lo dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud; Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020  del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones  N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
+  @elseif($ServiceRequest->program_contract_type == "Horas")
+    @if($ServiceRequest->estate == "Profesional Médico")
+      Dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud; Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020  del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones  N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
+    @else
+      En estos antecedentes, según lo dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud; Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020 del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
+    @endif
   @endif
+@else
+  dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.1289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones  N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República, las facultades que me confiere el Dto. de Nombramiento N° 42/2019 del Ministerio de Salud;
 @endif
+
 </p>
 
 <p class="justify">
 <strong>CONSIDERANDO:</strong><br>
 Que, mediante Decreto N°1 de fecha 07 de enero de 2021 prorroga vigencia del Decreto N° 4 de fecha 05 de enero de 2020, del Ministerio de Salud, se decreta alerta sanitaria por el período que se señala y otorga facultades extraordinarias que indica por emergencia de salud pública de importancia internacional (ESPII) por brote del nuevo coronavirus (2019-ncov).
-Que, el Hospital “Dr. Ernesto Torres Galdames” de Iquique debido a la contingencia ha debido implementar diversas estrategias asociadas a la complejización e incremento de camas básicas a medias y de alta complejidad a modo de satisfacer y dar cobertura a las necesidades de la población, producto de la pandemia sanitaria.
-Que, el Hospital “Dr. Ernesto Torres Galdames” de Iquique, producto de esta contingencia ha debido mantener los servicios de personal para reforzar los equipos de salud, quienes apoyaran la implementación de estrategias definidas por el nivel central en las líneas de detección y tratamiento de la enfermedad, además de reforzar las unidades de apoyo que deben ponerse a disposición para enfrentar la pandemia.
+@if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+  Que, el Hospital “Dr. Ernesto Torres Galdames” de Iquique debido a la contingencia ha debido implementar diversas estrategias asociadas a la complejización e incremento de camas básicas a medias y de alta complejidad a modo de satisfacer y dar cobertura a las necesidades de la población, producto de la pandemia sanitaria.
+  Que, el Hospital “Dr. Ernesto Torres Galdames” de Iquique, producto de esta contingencia ha debido mantener los servicios de personal para reforzar los equipos de salud, quienes apoyaran la implementación de estrategias definidas por el nivel central en las líneas de detección y tratamiento de la enfermedad, además de reforzar las unidades de apoyo que deben ponerse a disposición para enfrentar la pandemia.
+@else
+  Que, la Dirección del Servicio de Salud Iquique debido a la contingencia ha debido implementar diversas estrategias asociadas a la complejización e incremento de camas básicas a medias y de alta complejidad a modo de satisfacer y dar cobertura a las necesidades de la población, producto de la pandemia sanitaria.
+  Que, la Dirección del Servicio de Salud Iquique, producto de esta contingencia ha debido mantener los servicios de personal para reforzar los equipos de salud, quienes apoyaran la implementación de estrategias definidas por el nivel central en las líneas de detección y tratamiento de la enfermedad, además de reforzar las unidades de apoyo que deben ponerse a disposición para enfrentar la pandemia.
+@endif
 Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido por el Jefe de División de Gestión y Desarrollo de las Personas del Minsal, se envía instrucciones para la construcción de nómina gasto en honorarios Covid-19 año 2021, con la finalidad de gestionar los recursos financieros extraordinarios ante DIPRES, como también tener un control respecto de todas las contrataciones adicionales que deberán ser consideradas en el presupuesto 2021.
 </p>
 
 <p class="justify">
 <strong>RESUELVO:</strong><br><br>
 
-<strong>1.</strong> APRUÉBESE <strong>Convenio a Honorario a Suma Alzada</strong> en el Hospital Dr. “Ernesto Torres Galdames” de Iquique, a la persona que más abajo se individualiza, para apoyar de acuerdo de funciones, de acuerdo con su área de competencia, en el período que se señala.
+<strong>1.</strong> APRUÉBESE <strong>Convenio a Honorario a Suma Alzada</strong>
+@if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+  en el Hospital Dr. “Ernesto Torres Galdames” de Iquique,
+@else
+  en la Dirección del Servicio de Salud Iquique,
+@endif
+a la persona que más abajo se individualiza, para apoyar de acuerdo de funciones, de acuerdo con su área de competencia, en el período que se señala.
 
 </p>
 
@@ -246,12 +266,21 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
 @endif
 
 <p class="justify">
-    En Iquique, a catorce días del mes de enero de dos mil veintiuno, entre D. HECTOR ALARCON ALARCON RUN: 14.101.085-9,  en su calidad de Director  del Hospital “Dr. Ernesto Torres Galdames” de Iquique, con domicilio en Av. Héroes de la Concepción N° 502 de Iquique, en adelante "el Director  del Hospital “Dr. Ernesto Torres Galdames", y por la otra {{$ServiceRequest->name}}, RUN: {{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
+    @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+      En Iquique, a catorce días del mes de enero de dos mil veintiuno, entre <b>D. HECTOR ALARCON ALARCON RUN: 14.101.085-9</b>,  en su calidad de Director  del Hospital “Dr. Ernesto Torres Galdames” de Iquique, con domicilio en Av. Héroes de la Concepción N° 502 de Iquique, en adelante "el Director  del Hospital “Dr. Ernesto Torres Galdames", y por la otra <b>{{$ServiceRequest->name}}, RUN: {{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
+    @else
+      En Iquique, a catorce días del mes de enero de dos mil veintiuno, entre <b>D. JORGE GALLEGUILLOS MÖLLER, RUN: 9.381.231-K</b>,  en su calidad de Director del Servicio de Salud Iquique, con domicilio Aníbal Pinto N° 815 de Iquique, en adelante el Director del Servicio de Salud Iquique, y por la otra <b>{{$ServiceRequest->name}}, RUN: {{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
+    @endif
 </p>
 
 <p class="justify">
-    <strong>PRIMERO:</strong> Don HECTOR ALARCON ALARCON, en su calidad de Director del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a {{$ServiceRequest->name}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
-</p>
+    <strong>PRIMERO:</strong>
+    @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+      Don HECTOR ALARCON ALARCON, en su calidad de Director del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a {{$ServiceRequest->name}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
+    @else
+      Don JORGE GALLEGUILLOS MÖLLER, en su calidad de Director del Servicio de Salud Iquique de Iquique, contrata a D. NELSON CAMPILLAY QUEVEDO, (Enfermero), para que preste servicios en el Servicio de Emergencia del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
+    @endif
+  </p>
 
 <p class="justify">
     <strong>SEGUNDO:</strong> En cumplimiento del presente convenio La Profesional deberá llevar a cabo las siguientes prestaciones:
@@ -273,39 +302,70 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
 </p>
 
 <p class="justify">
-    <strong>SEXTO:</strong> El Hospital “Dr. Ernesto Torres Galdames” de Iquique podrá poner término anticipadamente a este contrato mediante razones fundadas, previo aviso por escrito al prestador con 48 horas hábiles de anticipación.
-</p>
-
-@if($ServiceRequest->program_contract_type == "Mensual")
-  <p class="justify">
-      <strong>SÉPTIMO:</strong>
-      En este caso, el Hospital “Dr. Ernesto Torres Galdames”, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
+    <strong>SEXTO:</strong>
+    @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+      El Hospital “Dr. Ernesto Torres Galdames” de Iquique podrá poner término anticipadamente a este contrato mediante razones fundadas, previo aviso por escrito al prestador con 48 horas hábiles de anticipación.
+    @else
+      La Dirección del Servicio de Salud Iquique podrá poner término anticipadamente a este contrato mediante razones fundadas, previo aviso por escrito al prestador con 48 horas hábiles de anticipación.
+    @endif
   </p>
-@elseif($ServiceRequest->program_contract_type == "Horas")
-  @if($ServiceRequest->estate == "Profesional Médico")
+
+@if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+  @if($ServiceRequest->program_contract_type == "Mensual")
     <p class="justify">
         <strong>SÉPTIMO:</strong>
         En este caso, el Hospital “Dr. Ernesto Torres Galdames”, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
     </p>
-  @else
-    @if($ServiceRequest->working_day_type == "TURNO EXTRA")
+  @elseif($ServiceRequest->program_contract_type == "Horas")
+    @if($ServiceRequest->estate == "Profesional Médico")
       <p class="justify">
           <strong>SÉPTIMO:</strong>
-          En el desempeño de sus funciones, el prestador cumplió con un total de {{number_format($ServiceRequest->Fulfillments->first()->total_hours_to_pay)}} Horas en turno extras en el mes de {{$ServiceRequest->start_date->monthName}}, cuya suma alzada totas es de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}.- ({{$ServiceRequest->fulfillments->first()->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}} el mes de {{$ServiceRequest->start_date->monthName}}; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+          En este caso, el Hospital “Dr. Ernesto Torres Galdames”, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
       </p>
-    @elseif($ServiceRequest->working_day_type == "HORA EXTRA")
-      <p class="justify">
-          <strong>SÉPTIMO:</strong>
-          En el desempeño de sus funciones, el prestador cumplió con un total de {{number_format($ServiceRequest->Fulfillments->first()->total_hours_to_pay)}} Horas por extensión horaria en el mes de {{$ServiceRequest->start_date->monthName}}, cuya suma alzada totas es de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}.- ({{$ServiceRequest->fulfillments->first()->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}} el mes de {{$ServiceRequest->start_date->monthName}}; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
-      </p>
+    @else
+      @if($ServiceRequest->working_day_type == "TURNO EXTRA")
+        <p class="justify">
+            <strong>SÉPTIMO:</strong>
+            En el desempeño de sus funciones, el prestador cumplió con un total de {{number_format($ServiceRequest->Fulfillments->first()->total_hours_to_pay)}} Horas en turno extras en el mes de {{$ServiceRequest->start_date->monthName}}, cuya suma alzada totas es de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}.- ({{$ServiceRequest->fulfillments->first()->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}} el mes de {{$ServiceRequest->start_date->monthName}}; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
+            @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+              Hospital Regional de Iquique,
+            @else
+              Servicio de Salud Iquique,
+            @endif
+            en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+        </p>
+      @elseif($ServiceRequest->working_day_type == "HORA EXTRA")
+        <p class="justify">
+            <strong>SÉPTIMO:</strong>
+            En el desempeño de sus funciones, el prestador cumplió con un total de {{number_format($ServiceRequest->Fulfillments->first()->total_hours_to_pay)}} Horas por extensión horaria en el mes de {{$ServiceRequest->start_date->monthName}}, cuya suma alzada totas es de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}.- ({{$ServiceRequest->fulfillments->first()->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}} el mes de {{$ServiceRequest->start_date->monthName}}; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
+            @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+              Hospital Regional de Iquique,
+            @else
+              Servicio de Salud Iquique,
+            @endif
+            en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+        </p>
+      @endif
     @endif
   @endif
+@else
+  <p class="justify">
+      <strong>SÉPTIMO:</strong>
+      En este caso, La Dirección del Servicio de Salud Iquique, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
+  </p>
 @endif
+
 
 
 @if($ServiceRequest->program_contract_type == "Mensual")
   <p class="justify">
-      <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}),  impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en @livewire('service-request.monthly-quotes', ['serviceRequest' => $ServiceRequest]) se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del Hospital Regional de Iquique, en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
+      <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}),  impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en @livewire('service-request.monthly-quotes', ['serviceRequest' => $ServiceRequest]) se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
+      @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+        Hospital Regional de Iquique,
+      @else
+        Servicio de Salud Iquique,
+      @endif
+      en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
     <br>
     Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
   </p>
@@ -386,7 +446,12 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
       <strong>DECIMO TERCERO:</strong> En caso que el prestador tenga contacto con un contagiado de COVID-19, o en su defecto, deba realizar cuarentena obligatoria por ser positivo de COVID-19, el Director de Servicio o establecimiento podrá disponer la autorización de permiso preventivo, el cual no será causal de descuento. De considerarse contacto estrecho, se podrá establecer un sistema de teletrabajo en aquellas funciones que lo permitan.
   </p>
   <p class="justify">
-      <strong>DECIMO CUARTO:</strong> La personería de D. HECTOR ALARCON ALARCON, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de Director, consta en Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020, del Servicio de Salud Iquique.
+      <strong>DECIMO CUARTO:</strong>
+      @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+        La personería de D. HECTOR ALARCON ALARCON, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de Director, consta en Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020, del Servicio de Salud Iquique.
+      @else
+        La personería de D. JORGE GALLEGUILLOS MÖLLER, para representar al Servicio de Salud Iquique, en su calidad de Director, consta en el Dto. de Nombramiento N° 42/2019 del Ministerio de Salud.
+      @endif
   </p>
 @elseif($ServiceRequest->program_contract_type == "Horas")
   @if($ServiceRequest->estate == "Profesional Médico")
@@ -434,11 +499,21 @@ Para constancia firman:
 
 <div id="firmas">
     <div class="center" style="width: 100%;">
-        <strong>
-        <span class="uppercase">HECTOR ALARCÓN ALARCÓN</span><br>
-        DIRECTOR<br>
-        HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
-        </strong>
+
+        @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+          <strong>
+          <span class="uppercase">HECTOR ALARCÓN ALARCÓN</span><br>
+          DIRECTOR<br>
+          HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
+          </strong>
+        @else
+          <strong>
+          <span class="uppercase">JORGE GALLEGUILLOS MOLLER</span><br>
+          DIRECTOR<br>
+          SERVICIO DE SALUD IQUIQUE<br>
+          </strong>
+        @endif
+
         <br style="padding-bottom: 4px;">
         Lo que me permito transcribe a usted para su conocimiento y fines consiguientes.
     </div>
@@ -446,10 +521,17 @@ Para constancia firman:
 <br style="padding-bottom: 4px;">
 <div class="siete" style="padding-top: 2px;">
     <strong><u>DISTRIBUCIÓN:</u></strong><br>
-    Honorarios Covid<br>
-    Finanzas<br>
-    Interesado<br>
-    Oficina de partes<br>
+    @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+      Honorarios Covid<br>
+      Finanzas<br>
+      Interesado<br>
+      Oficina de partes<br>
+    @else
+      Personal SSI (vania.ardiles@redsalud.gov.cl, rosa.contreras@redsalud.gov.cl)<br>
+      Finanzas (roxana.penaranda@redsalud.gov.cl)<br>
+      Interesado<br>
+      Oficina de Partes<br>
+    @endif
 </div>
 
 
