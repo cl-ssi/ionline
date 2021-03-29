@@ -83,7 +83,7 @@
                 <fieldset class="form-group col-5">
                     <label for="forestablishment">Centros de Atencion</label>
                     <select id="establishment" class="selectpicker " name="establishment[]" title="Seleccionar" data-selected-text-format="count > 2" data-width="100%" multiple>
-                    @foreach($commune->establishments as $key => $establishment)
+                    @foreach($agreement->commune->establishments as $key => $establishment)
                       <option value="{{ $establishment->id }}">{{ $establishment->type }} - {{ $establishment->name }}</option>
                     @endforeach
                     </select>

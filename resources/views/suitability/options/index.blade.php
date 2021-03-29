@@ -28,10 +28,9 @@
             <td>{{ $option->option_text ?? '' }}</td>
             <td>{{ $option->points ?? '' }}</td>
             <td>
-                <button type="submit" class="btn btn-sm btn-outline-secondary">
-                    <i class="fas fa-edit"></i>
-                </button>
-            </td>
+				<a href="{{ route('suitability.options.edit', $option) }}" class="btn btn-outline-secondary btn-sm">
+				<span class="fas fa-edit" aria-hidden="true"></span></a>
+			</td>
         </tr>
     @endforeach
     </tbody>

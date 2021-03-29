@@ -65,9 +65,12 @@ class OptionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Option $option)
     {
         //
+        $questions = Question::all();
+        return view('suitability.options.edit', compact('questions', 'option'));
+
     }
 
     /**
@@ -77,9 +80,13 @@ class OptionsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Option $option)
     {
         //
+        $option->fill($request->all());
+        $option->save();
+        session()->flash('success', 'Se ha actualizado la opción correctamente.');
+        return redirect()->route('suitability.options.index');
     }
 
     /**
