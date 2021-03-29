@@ -10,9 +10,9 @@
     <h1 class="display-3">Phuqhaña</h1>
     <p class="lead">Bienvenido el sistema de honorarios Phuqhaña, palabra Aymara que significa "Cumplir".</p>
     <hr class="my-2">
-    <p>Desarrollado por el Departamento TIC, 
-    en conjunto con los que trabajan en el proceso cada día, 
-    liderado por el Director del Servcio de Salud Iquique Jorge Galleguillos Möller.</p>
+    <p>Desarrollado por el Departamento TIC,
+    en conjunto con los que trabajan en el proceso cada día,
+    liderado por el Director del Servicio de Salud Iquique Jorge Galleguillos Möller.</p>
 </div>
 
 
