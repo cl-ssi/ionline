@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Rrhh\OrganizationalUnit;
 use App\Establishment;
 use App\User;
+use DB;
 
 use Illuminate\Support\Facades\Auth;
 use App\Rrhh\Authority;
@@ -33,6 +34,21 @@ class ServiceRequestController extends Controller
    */
   public function index()
   {
+    $srs =   DB::table('doc_service_requests')
+           ->select('rut', DB::raw('MAX(created_at) as last_post_created_at'))
+           ->groupBy('rut')
+           ->get();
+
+            // dd($srs);
+
+    $array1 = array();
+    foreach($srs as $key => $sr) {
+      dd($sr);
+      // $array1[$sr->rut][$sr->name][$sr->address][$sr->phone_number][$sr->email] = $sr->created_at;
+    }
+
+    dd("");
+
       $user_id = Auth::user()->id;
       $users = User::orderBy('name','ASC')->get();
 
