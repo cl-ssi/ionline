@@ -1,10 +1,10 @@
-@extends('layouts.external')
+@extends('layouts.app')
 
-@section('title', 'Editar Mi Staff')
+@section('title', 'Staff')
 
 @section('content')
 
-<br>
+@include('replacement_staff.nav')
 
 <h5>Edición de Staff</h5>
 
@@ -25,7 +25,7 @@
 
         <fieldset class="form-group col-sm-3">
             <label for="for_birthday">Fecha Nacimiento</label>
-            <input type="date" class="form-control" id="for_birthday" name="birthday" value="{{ $replacementStaff->birthday }}" required>
+            <input type="date" class="form-control" id="for_birthday" name="birthday" value="{{ $replacementStaff->birthday }}" required readonly>
         </fieldset>
     </div>
 
@@ -44,7 +44,7 @@
         </fieldset>
         <fieldset class="form-group col-3">
             <label for="for_gender" >Género</label>
-            <select name="gender" id="for_gender" class="form-control" required>
+            <select name="gender" id="for_gender" class="form-control" required readonly>
                 <option value="">Seleccione...</option>
                 <option value="male" {{ ($replacementStaff->gender == 'male')?'selected':'' }}>Masculino</option>
                 <option value="female" {{ ($replacementStaff->gender == 'female')?'selected':'' }}>Femenino</option>
@@ -57,22 +57,22 @@
     <div class="form-row">
         <fieldset class="form-group col-6">
             <label for="for_email">Correo Electrónico</label>
-            <input type="text" class="form-control" name="email" id="for_email" value="{{ $replacementStaff->email }}" required>
+            <input type="text" class="form-control" name="email" id="for_email" value="{{ $replacementStaff->email }}" required readonly>
         </fieldset>
         <fieldset class="form-group col-3">
             <label for="for_telephone">Teléfono Movil</label>
-            <input type="text" class="form-control" name="telephone" id="for_telephone"  placeholder="+569xxxxxxxx" value="{{ $replacementStaff->telephone }}" required>
+            <input type="text" class="form-control" name="telephone" id="for_telephone"  placeholder="+569xxxxxxxx" value="{{ $replacementStaff->telephone }}" required readonly>
         </fieldset>
         <fieldset class="form-group col-3">
             <label for="for_telephone2">Teléfono Fijo</label>
-            <input type="text" class="form-control" name="telephone2" id="for_telephone2"  placeholder="572xxxxxx" value="{{ $replacementStaff->telephone2 }}">
+            <input type="text" class="form-control" name="telephone2" id="for_telephone2"  placeholder="572xxxxxx" value="{{ $replacementStaff->telephone2 }}" readonly>
         </fieldset>
     </div>
 
     <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_commune_id">Comuna</label>
-            <select name="commune" id="for_commune" class="form-control" required>
+            <select name="commune" id="for_commune" class="form-control" required readonly>
                 <option value="">Seleccione...</option>
                 <option value="alto hospicio" {{ ($replacementStaff->commune == 'alto hospicio')?'selected':'' }}>Alto Hospicio</option>
                 <option value="camina" {{ ($replacementStaff->commune == 'camina')?'selected':'' }}>Camiña</option>
@@ -86,27 +86,27 @@
 
         <fieldset class="form-group col">
             <label for="for_address">Dirección</label>
-            <input type="text" class="form-control" name="address" id="for_address" value="{{ $replacementStaff->address }}" required>
+            <input type="text" class="form-control" name="address" id="for_address" value="{{ $replacementStaff->address }}" required readonly>
         </fieldset>
     </div>
 
     <div class="form-row">
       <fieldset class="form-group col-6">
           <label for="for_status">Disponibilidad</label>
-          <select name="status" id="for_status" class="form-control" required>
+          <select name="status" id="for_status" class="form-control" required readonly>
               <option value="">Seleccione...</option>
               <option value="immediate_availability" {{ ($replacementStaff->status == 'immediate_availability')?'selected':'' }}>Inmediata</option>
               <option value="working_external" {{ ($replacementStaff->status == 'working_external')?'selected':'' }}>Trabajando</option>
           </select>
       </fieldset>
-      <fieldset class="form-group col-5">
+      <!-- <fieldset class="form-group col-5">
           <div class="mb-3">
             <label for="forcv_file" class="form-label">Actualizar Curriculum Vitae</label>
-            <input class="form-control" type="file" name="cv_file" accept="application/pdf" value="{{ $replacementStaff->telephone2 }}">
+            <input class="form-control" type="file" name="cv_file" accept="application/pdf" readonly>
           </div>
-      </fieldset>
-      <div class="col-1">
-        <p>&nbsp;</p>
+      </fieldset> -->
+      <div class="col">
+        <p>Curriculum Vitae</p>
         <a href="{{ route('replacement_staff.show_file', $replacementStaff) }}"
             class="btn btn-outline-secondary btn-sm"
             title="Ir"
@@ -118,7 +118,7 @@
       </div>
     </div>
 
-    <button type="submit" class="btn btn-primary float-right">Guardar <i class="fas fa-save"></i></button>
+    <button type="submit" class="btn btn-primary float-right" disabled>Guardar <i class="fas fa-save"></i></button>
 
 </form>
 
@@ -167,7 +167,7 @@
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-outline-danger btn-sm"
-                                    onclick="return confirm('¿Está seguro que desea eliminar su perfil : {{$profile->profession}}? ' )">
+                                    onclick="return confirm('¿Está seguro que desea eliminar su perfil : {{$profile->profession}}? ' )" disabled>
                                 <i class="fas fa-trash"></i>
                             </button>
                         </form>
@@ -177,11 +177,6 @@
             </tbody>
         </table>
         @endif
-
-        @livewire('replacement-staff.profile', ['replacementStaff' => $replacementStaff,
-                                                'professionManage' => $professionManage,
-                                                'profileManage' => $profileManage])
-
     </div>
 </div>
 
@@ -230,7 +225,7 @@
                               @csrf
                               @method('DELETE')
                               <button type="submit" class="btn btn-outline-danger btn-sm"
-                                  onclick="return confirm('¿Está seguro que desea eliminar su Capacitación?')">
+                                  onclick="return confirm('¿Está seguro que desea eliminar su Capacitación?')" disabled>
                                   <i class="fas fa-trash"></i>
                               </button>
                           </form>
@@ -240,8 +235,6 @@
                 </tbody>
             </table>
         @endif
-
-        @livewire('replacement-staff.training', ['replacementStaff' => $replacementStaff])
     </div>
 
     <br>
