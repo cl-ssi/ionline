@@ -16,7 +16,7 @@ class AddRelationshipToResultsTable extends Migration
         Schema::table('psi_results', function (Blueprint $table) {
             //
             $table->foreignId('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users_external');
             $table->foreignId('request_id');
             $table->foreign('request_id')->references('id')->on('psi_requests');
         });
