@@ -489,7 +489,7 @@
           <option value="Trabajador Social" @if($serviceRequest->rrhh_team == "Trabajador Social") selected @endif>Trabajador Social</option>
 
           <option value="Nutricionista Diurno" @if($serviceRequest->rrhh_team == "Nutricionista Diurno") selected @endif>Nutricionista Diurno</option>
-					<option value="Prevencionista de Riesgo" @if($serviceRequest->rrhh_team == ""Prevencionista de Riesgo") selected @endif>Prevencionista de Riesgo</option>
+					<option value="Prevencionista de Riesgo" @if($serviceRequest->rrhh_team == "Prevencionista de Riesgo") selected @endif>Prevencionista de Riesgo</option>
 
         </select>
     </fieldset>
