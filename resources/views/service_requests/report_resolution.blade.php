@@ -555,7 +555,7 @@ Para constancia firman: <br><br> {{$ServiceRequest->name}} <br><br>
         Finanzas (patricia.salinasm@redsalud.gov.cl, finanzas.ssi@redsalud.gov.cl)<br>
         Interesado<br>
         Oficina de Partes<br>
-      @end
+      @endif
     @endif
 </div>
 
