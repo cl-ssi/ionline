@@ -535,8 +535,6 @@ Para constancia firman: <br><br> {{$ServiceRequest->name}} <br><br>
     <strong><u>DISTRIBUCIÓN:</u></strong><br>
     @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
       Honorarios Covid<br>
-      Finanzas<br>
-      Interesado<br>
       Oficina de partes<br>
     @else
       Personal SSI (vania.ardiles@redsalud.gov.cl, rosa.contreras@redsalud.gov.cl)<br>
