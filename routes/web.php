@@ -301,7 +301,9 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('{user}/roles', 'Rrhh\RoleController@index')->name('roles.index')->middleware('auth');
     Route::post('{user}/roles', 'Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
 
-
+    Route::prefix('shiftManagement')->group(function () {
+        Route::get('/', 'Rrhh\ShiftManagementController@index')->name('shiftManag.index')->middleware('auth');
+    });
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
         // Rutas de service request
         Route::get('/home', function () { return view('service_requests.home'); })->name('home');
