@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateShiftTypes extends Migration
+class CreateRrhhShiftTypes extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateShiftTypes extends Migration
      */
     public function up()
     {
-        Schema::create('shift_types', function (Blueprint $table) {
+        Schema::create('rrhh_shift_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('shortname');
@@ -30,6 +30,6 @@ class CreateShiftTypes extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('shift_types');
+        Schema::dropIfExists('rrhh_shift_types');
     }
 }
