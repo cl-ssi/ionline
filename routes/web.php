@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
 
+use App\Http\Controllers\Rrhh\AttendanceController;
+
 use App\Http\Controllers\Suitability\TestsController;
 use App\Http\Controllers\Suitability\SuitabilityController;
 use App\Http\Controllers\Suitability\CategoriesController;
@@ -301,6 +303,11 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('{user}/roles', 'Rrhh\RoleController@index')->name('roles.index')->middleware('auth');
     Route::post('{user}/roles', 'Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
 
+    Route::prefix('attendance')->name('attendance.')->middleware('auth')->group(function() {
+        Route::get('/',[AttendanceController::class,'index'])->name('index');
+        Route::get('/import',[AttendanceController::class,'import'])->name('import');
+        Route::post('/store',[AttendanceController::class,'store'])->name('store');
+    });
 
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
         // Rutas de service request

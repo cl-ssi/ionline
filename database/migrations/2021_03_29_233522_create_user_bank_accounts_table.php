@@ -24,6 +24,8 @@ class CreateUserBankAccountsTable extends Migration
             $table->string('number')->nullable();
             $table->string('type')->nullable();     
             $table->timestamps();
+
+            $table->unique(["user_id"], 'user_id_unique');
         });
     }
 
