@@ -4,7 +4,8 @@
 
 @section('content')
 
-@include('parameters/nav')
+@include('service_requests.partials.nav')
+
 <h3 class="mb-3">Valores Hora/Jornada</h3>
 
 <a class="btn btn-primary mb-3" href="{{ route('parameters.values.create') }}">Crear</a>
