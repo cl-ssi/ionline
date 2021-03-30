@@ -1,5 +1,5 @@
 <ul class="nav nav-tabs mb-3">
-    
+
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.service-request.home') }}"
             href="{{ route('rrhh.service-request.home') }}">
@@ -106,5 +106,21 @@
 
         </div>
     </li>
+
+    @canany(['Service Request: maintainers'])
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle {{ active('parameters.values.report.*') }}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-archive"></i> Mantenedores
+        </a>
+        <div class="dropdown-menu">
+
+          <a class="dropdown-item {{ active('parameters.values.index') }}"
+              href="{{ route('parameters.values.index') }}">
+              <i class="fas fa-money-bill-alt"></i> Valor Hora/Jornada</a>
+          </a>
+
+        </div>
+    </li>
+    @endcan
 
 </ul>

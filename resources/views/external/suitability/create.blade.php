@@ -49,8 +49,8 @@
         </fieldset>
 
         <fieldset class="form-group col-6">
-            <label for="for_mothers_family">Apellido Materno*</label>
-            <input type="text" class="form-control" id="for_mothers_family" placeholder="" name="mothers_family" required="" autocomplete="off">
+            <label for="for_mothers_family">Apellido Materno</label>
+            <input type="text" class="form-control" id="for_mothers_family" placeholder="" name="mothers_family" autocomplete="off">
         </fieldset>
 
         <fieldset class="form-group col-6">

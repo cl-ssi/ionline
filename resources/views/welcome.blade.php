@@ -131,20 +131,25 @@
 
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Ingresa a Nuestros Sistemas</h4>
+                    <h4 class="my-0 font-weight-normal">Nuestros Sistemas</h4>
                 </div>
-
-                <div class="list-group">
-                    <a href="{{ route('login') }}/external" class="list-group-item list-group-item-action">Portal Externo</a>
-                    <a href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1" class="list-group-item list-group-item-action">Siremx</a>
-                    <a href="http://intranet.saludiquique.cl" class="list-group-item list-group-item-action">Intranet</a>
-                    <a href="{{ route('login') }}" class="list-group-item list-group-item-action">iOnline</a>
-                </div>
-
-                <br>
-                <hr class="">
-                <p>Pronto, mucho más...</p>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item list-group-item-action">
+                        <a class="btn btn-outline-primary btn-block" href="{{ route('login') }}/external">Portal Externos</a>
+                    </li>
+                    <li class="list-group-item list-group-item-action">
+                        <a class="btn btn-outline-primary btn-block" href="{{ route('claveunica.autenticar') }}?redirect=L3NpcmVteC9sb2dpbmN1">Sirmx</a>
+                    </li>
+                    <li class="list-group-item list-group-item-action">
+                        <a class="btn btn-outline-primary btn-block" href="http://intranet.saludiquique.cl">Intranet</a>
+                    </li>
+                    <li class="list-group-item list-group-item-action">
+                        <a class="btn btn-outline-primary btn-block" href="{{ route('login') }}">iOnline</a>
+                    </li>
+                    <hr class="">
+                </ul>
             </div>
+
         </div>
 
         <footer class="pt-4 my-md-5 pt-md-5 border-top">
