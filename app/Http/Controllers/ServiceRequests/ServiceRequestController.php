@@ -34,20 +34,72 @@ class ServiceRequestController extends Controller
    */
   public function index()
   {
-    $srs =   DB::table('doc_service_requests')
-           ->select('rut', DB::raw('MAX(created_at) as last_post_created_at'))
-           ->groupBy('rut')
-           ->get();
-
-            // dd($srs);
-
-    $array1 = array();
-    foreach($srs as $key => $sr) {
-      dd($sr);
-      // $array1[$sr->rut][$sr->name][$sr->address][$sr->phone_number][$sr->email] = $sr->created_at;
-    }
-
-    dd("");
+    // $srs =   DB::table('doc_service_requests')
+    //        ->select('rut', DB::raw('MAX(created_at) as last_created_at'))
+    //        ->where('deleted_at',NULL)
+    //        ->groupBy('rut')
+    //        ->get();
+    //
+    //        // dd($srs);
+    //
+    // $array1 = array();
+    // foreach($srs as $key => $sr) {
+    //   print_r($sr->rut . " " . $sr->last_created_at . " <br>");
+    //   $serviceRequest = ServiceRequest::where('rut',$sr->rut)
+    //                                   ->where('created_at',$sr->last_created_at)
+    //                                   ->first();
+    //
+    //   $explode_rut = explode("-", str_replace(".","",$serviceRequest->rut));
+    //   $explode_name = explode(" ", $serviceRequest->name);
+    //
+    //   //si es que está eliminado, lo vuelve a activar
+    //   if(User::withTrashed()->find($explode_rut[0])){
+    //     if(User::withTrashed()->find($explode_rut[0])->deleted_at != null){
+    //       User::withTrashed()->find($explode_rut[0])->restore();
+    //     }
+    //   }
+    //
+    //   if (User::find($explode_rut[0]) == null) {
+    //     $user = new User();
+    //     $user->id = $explode_rut[0];
+    //     $user->dv = $explode_rut[1];
+    //     if (count($explode_name) == 2) {
+    //       $user->name = $explode_name[0];
+    //       $user->fathers_family = $explode_name[1];
+    //       $user->mothers_family ="";
+    //     }elseif (count($explode_name) == 3) {
+    //       $user->name = $explode_name[0];
+    //       $user->fathers_family = $explode_name[1];
+    //       $user->mothers_family = $explode_name[2];
+    //     }elseif (count($explode_name) == 4) {
+    //       $user->name = $explode_name[0] . " " . $explode_name[1];
+    //       $user->fathers_family = $explode_name[2];
+    //       $user->mothers_family = $explode_name[3];
+    //     }else{
+    //       $user->name = $explode_name[0] . " " . $explode_name[1];
+    //       $user->fathers_family = $explode_name[count($explode_name)-2];
+    //       $user->mothers_family = $explode_name[count($explode_name)-1];
+    //     }
+    //     $user->address = $serviceRequest->address;
+    //     $user->phone_number = $serviceRequest->phone_number;
+    //     $user->email = $serviceRequest->email;
+    //     $user->active = 1;
+    //     $user->external = 0;
+    //     $user->save();
+    //   }else{
+    //     $user = User::find($explode_rut[0]);
+    //   }
+    //
+    //   // dd($explode_rut[0]);
+    //   $serviceRequests = ServiceRequest::withTrashed()->where('rut',(int)$explode_rut[0])->get();
+    //   foreach ($serviceRequests as $key => $serviceRequest) {
+    //     $serviceRequest->creator_id = $serviceRequest->user_id;
+    //     $serviceRequest->user_id = $user->id;
+    //     $serviceRequest->save();
+    //   }
+    // }
+    //
+    // dd("terminó");
 
       $user_id = Auth::user()->id;
       $users = User::orderBy('name','ASC')->get();
