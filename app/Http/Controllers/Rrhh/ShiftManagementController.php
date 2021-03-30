@@ -16,6 +16,11 @@ class ShiftManagementController extends Controller
     	$users = User::Search($request->get('name'))->orderBy('name','Asc')->paginate(500);
         return view('rrhh.shift_management.index', compact('users'));
     }
- 
+ 	
+ 	public function shiftstypesindex()
+    {
+        // return view('rrhh.shift_management.shiftstypes', compact('users'));
+        return view('rrhh.shift_management.shiftstypes');
+    }
 
 }
