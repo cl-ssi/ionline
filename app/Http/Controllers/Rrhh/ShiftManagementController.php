@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\User;
+use App\Models\Rrhh\ShiftTypes;
 use Spatie\Permission\Models\Role;
 
 class ShiftManagementController extends Controller
@@ -20,7 +21,22 @@ class ShiftManagementController extends Controller
  	public function shiftstypesindex()
     {
         // return view('rrhh.shift_management.shiftstypes', compact('users'));
-        return view('rrhh.shift_management.shiftstypes');
+        $sTypes = ShiftTypes::all(); 
+        // $sTypes = 1;
+        return view('rrhh.shift_management.shiftstypes', compact('sTypes'));
+    }
+    public function editshifttype(Request $r)
+    {	
+
+    	$tiposJornada =   array(
+    							'F' => "Libre",
+								'D' => "Dia",
+								'L' => "Largo",
+								'N' => "Noche"
+						);
+        $sType = ShiftTypes::findOrFail($r->id); 
+        return view('rrhh.shift_management.editshiftstype', compact('sType','tiposJornada'));
+
     }
 
 }
