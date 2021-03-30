@@ -66,7 +66,9 @@ class OrganizationalUnitController extends Controller
      */
     public function edit(OrganizationalUnit $organizationalUnit)
     {
-        $organizationalUnits = OrganizationalUnit::All();
+        
+        $organizationalUnits = OrganizationalUnit::where('establishment_id', $organizationalUnit->establishment_id)->get();
+        //$organizationalUnits = OrganizationalUnit::all();
         return view('rrhh/organizationalunit/edit')
             ->withOrganizationalUnit($organizationalUnit)
             ->withOrganizationalUnits($organizationalUnits);
