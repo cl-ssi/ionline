@@ -190,7 +190,7 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
 @else
   en la Dirección del Servicio de Salud Iquique,
 @endif
-a la persona que más abajo se individualiza, para apoyar de acuerdo de funciones, de acuerdo con su área de competencia, en el período que se señala.
+a la persona que más abajo se individualiza, para prestar servicios, de acuerdo con su área de competencia, en el período que se señala.
 
 </p>
 
@@ -265,13 +265,21 @@ a la persona que más abajo se individualiza, para apoyar de acuerdo de funcione
   @endif
 @endif
 
+@php
+$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+$fecha = \Carbon\Carbon::parse($ServiceRequest->start_date);
+$mes = $meses[($fecha->format('n')) - 1];
+$inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' . $fecha->format('Y');
+@endphp
+
 <p class="justify">
     @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
-      En Iquique, a catorce días del mes de enero de dos mil veintiuno, entre <b>D. HECTOR ALARCON ALARCON RUN: 14.101.085-9</b>,  en su calidad de Director  del Hospital “Dr. Ernesto Torres Galdames” de Iquique, con domicilio en Av. Héroes de la Concepción N° 502 de Iquique, en adelante "el Director  del Hospital “Dr. Ernesto Torres Galdames", y por la otra <b>{{$ServiceRequest->name}}, RUN: {{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
+      En Iquique, a {{$inputs['Fecha']}}, entre <b>D. HECTOR ALARCON ALARCON RUN: 14.101.085-9</b>,  en su calidad de Director  del Hospital “Dr. Ernesto Torres Galdames” de Iquique, con domicilio en Av. Héroes de la Concepción N° 502 de Iquique, en adelante "el Director  del Hospital “Dr. Ernesto Torres Galdames", y por la otra <b>{{$ServiceRequest->name}}, RUN: {{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
     @else
-      En Iquique, a catorce días del mes de enero de dos mil veintiuno, entre <b>D. JORGE GALLEGUILLOS MÖLLER, RUN: 9.381.231-K</b>,  en su calidad de Director del Servicio de Salud Iquique, con domicilio Aníbal Pinto N° 815 de Iquique, en adelante el Director del Servicio de Salud Iquique, y por la otra <b>{{$ServiceRequest->name}}, RUN: {{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
+      En Iquique, a {{$inputs['Fecha']}}, entre <b>D. JORGE GALLEGUILLOS MÖLLER, RUN: 9.381.231-K</b>,  en su calidad de Director del Servicio de Salud Iquique, con domicilio Aníbal Pinto N° 815 de Iquique, en adelante el Director del Servicio de Salud Iquique, y por la otra <b>{{$ServiceRequest->name}}, RUN: {{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
     @endif
 </p>
+
 
 <p class="justify">
     <strong>PRIMERO:</strong>
