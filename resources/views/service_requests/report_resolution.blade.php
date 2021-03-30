@@ -545,10 +545,17 @@ Para constancia firman: <br><br> {{$ServiceRequest->name}} <br><br>
       Honorarios Covid<br>
       Oficina de partes<br>
     @else
-      Personal SSI (vania.ardiles@redsalud.gov.cl, rosa.contreras@redsalud.gov.cl)<br>
-      Finanzas (roxana.penaranda@redsalud.gov.cl)<br>
-      Interesado<br>
-      Oficina de Partes<br>
+      @if($ServiceRequest->user->organizationalUnit->establishment_id == 12)
+        CGU (roxana.penaranda@redsalud.gov.cl, anakena.bravo@redsalud.gov.cl)<br>
+        Finanzas (patricia.salinasm@redsalud.gov.cl, finanzas.ssi@redsalud.gov.cl)<br>
+        Interesado<br>
+        Oficina de Partes<br>
+      @else
+        Personal SSI (vania.ardiles@redsalud.gov.cl, rosa.contreras@redsalud.gov.cl, isis.gallardo@redsalud.gov.cl)<br>
+        Finanzas (patricia.salinasm@redsalud.gov.cl, finanzas.ssi@redsalud.gov.cl)<br>
+        Interesado<br>
+        Oficina de Partes<br>
+      @end
     @endif
 </div>
 
