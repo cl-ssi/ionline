@@ -303,6 +303,17 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::get('{user}/roles', 'Rrhh\RoleController@index')->name('roles.index')->middleware('auth');
     Route::post('{user}/roles', 'Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
 
+
+    Route::prefix('shiftManagement')->group(function () {
+        Route::get('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftManag.index')->middleware('auth');
+        Route::post('/storeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.index')->middleware('auth');
+        
+        Route::get('/shiftstypes', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftstypesindex'])->name('shiftsTypes.index')->middleware('auth');
+        Route::get('/newshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.index')->middleware('auth');
+        Route::get('/editshifttype/{id}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'editshifttype'])->name('shiftsTypes.edit')->middleware('auth');
+        Route::post('/storeshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.index')->middleware('auth');
+    });
+
     Route::prefix('attendance')->name('attendance.')->middleware('auth')->group(function() {
         Route::get('/',[AttendanceController::class,'index'])->name('index');
         Route::get('/import',[AttendanceController::class,'import'])->name('import');

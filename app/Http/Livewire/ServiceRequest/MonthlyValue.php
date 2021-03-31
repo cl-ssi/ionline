@@ -54,6 +54,7 @@ class MonthlyValue extends Component
             switch($fulfillment->serviceRequest->estate)
             {
                 case 'Profesional Médico':
+                case 'Farmaceutico':
                     switch($fulfillment->serviceRequest->weekly_hours)
                     {
                         case '44': $estate = 'Médico 44'; break;
@@ -77,7 +78,6 @@ class MonthlyValue extends Component
                 case 'Profesional':
                 case 'Técnico':
                 case 'Administrativo':
-                case 'Farmaceutico':
                 case 'Odontólogo':
                 case 'Bioquímico':
                 case 'Auxiliar':
