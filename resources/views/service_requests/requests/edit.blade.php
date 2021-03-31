@@ -576,34 +576,6 @@
 
         </div>
 
-        <div class="form-row">
-            <fieldset class="form-group col col-md-3">
-              <label>Banco</label>
-              <select name="bank_id" class="form-control">
-              <option value="">Seleccionar Banco (opcional)</option>
-              @foreach($banks as $bank)
-                <option value="{{$bank->id}}" @if($serviceRequest->employee->bankAccount && $serviceRequest->employee->bankAccount->bank_id == $bank->id) selected @endif>{{$bank->name}}</option>
-              @endforeach
-            </select>
-          </fieldset>
-
-          <fieldset class="form-group col col-md-3">
-              <label>Número de Cuenta (opcional)</label>
-              <input type="number" name="number" class="form-control"
-                @if($serviceRequest->employee->bankAccount) value="{{ $serviceRequest->employee->bankAccount->number }}" @endif >
-          </fieldset>
-
-          <fieldset class="form-group col col-md-3">
-              <label for="for_type">Tipo de cuenta (opcional)</label>
-              <select name="type" class="form-control">
-                <option value="">Seleccionar tipo de cuenta</option>
-                <option value="01" @if($serviceRequest->employee->bankAccount && $serviceRequest->employee->bankAccount->type == "01") selected @endif>CTA CORRIENTE / CTA VISTA</option>
-                <option value="02" @if($serviceRequest->employee->bankAccount && $serviceRequest->employee->bankAccount->type == "02") selected @endif>CTA AHORRO</option>
-                <option value="30" @if($serviceRequest->employee->bankAccount && $serviceRequest->employee->bankAccount->type == "03") selected @endif>CUENTA RUT</option>
-              </select>
-          </fieldset>
-        </div>
-
         <button type="submit" class="btn btn-primary mb-3">Guardar</button>
 
         @if($serviceRequest->program_contract_type == 'Mensual')
