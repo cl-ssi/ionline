@@ -144,7 +144,7 @@
   @if($fulfillment->FulfillmentItems->count() == 0)
     <div class="nueve">
         <div class="justify" style="width: 100%;">
-            Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b> ha desempeñado las actividades estipuladas
+            Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
             en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames durante el preríodo de contingencia COVID
             del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>.
 
@@ -156,14 +156,14 @@
         <div class="justify" style="width: 100%;">
           @if($fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->count() > 0)
             @if($fulfillment->FulfillmentItems->where('type','!=','Renuncia voluntaria')->count() > 0)
-              Junto con saludar, se adjunta renuncia voluntaria a honorarios del funcionario <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b>,
+              Junto con saludar, se adjunta renuncia voluntaria a honorarios del funcionario <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b>,
               a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->format('d/m/Y')}}</b>. Además se registraron las siguientes ausencias:
             @else
-              Junto con saludar, se adjunta renuncia voluntaria a honorarios de funcionario <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b>,
+              Junto con saludar, se adjunta renuncia voluntaria a honorarios de funcionario <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b>,
               a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->add(1, 'day')->format('d/m/Y')}}</b>.
             @endif
           @else
-            Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b> ha desempeñado las actividades estipuladas
+            Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
             en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames durante el preríodo de contingencia COVID
             del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>,
             registrando las siguientes ausencias:
@@ -214,7 +214,7 @@
   <?php setlocale(LC_ALL, 'es'); ?>
   <div class="nueve">
       <div class="justify" style="width: 100%;">
-          Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->name}}</span></b> ha desempeñado las actividades
+          Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades
           estipuladas en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames, por <b>horas extras realizadas en el mes de
           {{\Carbon\Carbon::parse($fulfillment->serviceRequest->start_date)->formatLocalized('%B de %Y')}} por contingencia COVID</b>.<br><br>
 
@@ -248,7 +248,7 @@
 <div id="firmas">
     <div class="center" style="width: 100%;">
         <strong>
-        <span class="uppercase">{{$fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}</span><br>
+        <span class="uppercase">{{$fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->fullName}}</span><br>
         <span class="uppercase">{{$fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->position}}</span><br>
         <span class="uppercase">{{$fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->organizationalUnit->name}}</span><br>
         HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>

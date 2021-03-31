@@ -11,7 +11,7 @@
 <form method="POST" enctype="multipart/form-data" action="{{ route('rrhh.service-request.store') }}">
 	@csrf
 
-	<div class="row">
+	<div class="form-row">
 
 		<div class="form-group col-6">
 			@livewire('service-request.create-types')
@@ -39,7 +39,7 @@
 
 	</div>
 
-	<div class="row">
+	<div class="form-row">
 
 		<fieldset class="form-group col">
 				<label for="for_users">Responsable</label>
@@ -72,6 +72,17 @@
 	<br>
 
   <div class="row">
+
+		<fieldset class="form-group col">
+        <label for="for_contract_type">Tipo de Contrato</label>
+        <select name="contract_type" class="form-control" required>
+          <option value=""></option>
+          <option value="NUEVO">Nuevo</option>
+          <option value="ANTIGUO">Antiguo</option>
+          <option value="CONTRATO PERM.">Permanente</option>
+          <option value="PRESTACION">Prestación</option>
+        </select>
+    </fieldset>
 
 		<fieldset class="form-group col">
 		    <label for="for_request_date">Fecha Solicitud</label>
@@ -488,8 +499,8 @@
 
 
 		//obtiene digito verificador
-    $('input[name=run]').keyup(function(e) {
-        var str = $("#for_run").val();
+    $('input[name=user_id]').keyup(function(e) {
+        var str = $("#for_user_id").val();
         $('#for_dv').val($.rut.dv(str));
     });
 	});

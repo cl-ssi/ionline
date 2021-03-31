@@ -76,7 +76,8 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        $permissions = Permission::Where('guard_name','web');
+        $permissions = Permission::Where('guard_name','web')->get();
+        //dd($permissions);
         return view('parameters.roles.edit', compact('role','permissions'));
     }
 

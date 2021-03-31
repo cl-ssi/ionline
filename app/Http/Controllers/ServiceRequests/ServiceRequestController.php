@@ -11,6 +11,8 @@ use App\Models\ServiceRequests\ResponsabilityCenter;
 use App\Models\Parameters\Bank;
 use App\Models\ServiceRequests\SignatureFlow;
 use App\Models\ServiceRequests\ShiftControl;
+use App\Models\Country;
+use App\Models\Rrhh\UserBankAccount;
 use Luecano\NumeroALetras\NumeroALetras;
 use App\Mail\ServiceRequestNotification;
 use App\Mail\DerivationNotification;
@@ -34,73 +36,6 @@ class ServiceRequestController extends Controller
    */
   public function index()
   {
-    // $srs =   DB::table('doc_service_requests')
-    //        ->select('rut', DB::raw('MAX(created_at) as last_created_at'))
-    //        ->where('deleted_at',NULL)
-    //        ->groupBy('rut')
-    //        ->get();
-    //
-    //        // dd($srs);
-    //
-    // $array1 = array();
-    // foreach($srs as $key => $sr) {
-    //   print_r($sr->rut . " " . $sr->last_created_at . " <br>");
-    //   $serviceRequest = ServiceRequest::where('rut',$sr->rut)
-    //                                   ->where('created_at',$sr->last_created_at)
-    //                                   ->first();
-    //
-    //   $explode_rut = explode("-", str_replace(".","",$serviceRequest->rut));
-    //   $explode_name = explode(" ", $serviceRequest->name);
-    //
-    //   //si es que está eliminado, lo vuelve a activar
-    //   if(User::withTrashed()->find($explode_rut[0])){
-    //     if(User::withTrashed()->find($explode_rut[0])->deleted_at != null){
-    //       User::withTrashed()->find($explode_rut[0])->restore();
-    //     }
-    //   }
-    //
-    //   if (User::find($explode_rut[0]) == null) {
-    //     $user = new User();
-    //     $user->id = $explode_rut[0];
-    //     $user->dv = $explode_rut[1];
-    //     if (count($explode_name) == 2) {
-    //       $user->name = $explode_name[0];
-    //       $user->fathers_family = $explode_name[1];
-    //       $user->mothers_family ="";
-    //     }elseif (count($explode_name) == 3) {
-    //       $user->name = $explode_name[0];
-    //       $user->fathers_family = $explode_name[1];
-    //       $user->mothers_family = $explode_name[2];
-    //     }elseif (count($explode_name) == 4) {
-    //       $user->name = $explode_name[0] . " " . $explode_name[1];
-    //       $user->fathers_family = $explode_name[2];
-    //       $user->mothers_family = $explode_name[3];
-    //     }else{
-    //       $user->name = $explode_name[0] . " " . $explode_name[1];
-    //       $user->fathers_family = $explode_name[count($explode_name)-2];
-    //       $user->mothers_family = $explode_name[count($explode_name)-1];
-    //     }
-    //     $user->address = $serviceRequest->address;
-    //     $user->phone_number = $serviceRequest->phone_number;
-    //     $user->email = $serviceRequest->email;
-    //     $user->active = 1;
-    //     $user->external = 0;
-    //     $user->save();
-    //   }else{
-    //     $user = User::find($explode_rut[0]);
-    //   }
-    //
-    //   // dd($explode_rut[0]);
-    //   $serviceRequests = ServiceRequest::withTrashed()->where('rut',(int)$explode_rut[0])->get();
-    //   foreach ($serviceRequests as $key => $serviceRequest) {
-    //     $serviceRequest->creator_id = $serviceRequest->user_id;
-    //     $serviceRequest->user_id = $user->id;
-    //     $serviceRequest->save();
-    //   }
-    // }
-    //
-    // dd("terminó");
-
       $user_id = Auth::user()->id;
       $users = User::orderBy('name','ASC')->get();
 
@@ -172,8 +107,10 @@ class ServiceRequestController extends Controller
                                      ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
                                             return $q->where('program_contract_type',$program_contract_type);
                                           })
-                                     ->when($name != NULL, function ($q) use ($name) {
-                                             return $q->where('name','LIKE','%'.$name.'%');
+                                     ->when(($name != NULL), function ($q) use ($name) {
+                                             return $q->whereHas("employee", function($subQuery) use ($name){
+                                                        $subQuery->where('name','LIKE','%'.$name.'%');
+                                                   });
                                           })
                                      ->when($id != NULL, function ($q) use ($id) {
                                              return $q->where('id',$id);
@@ -211,47 +148,15 @@ class ServiceRequestController extends Controller
     $establishments = Establishment::orderBy('name', 'ASC')->get();
 
      //signature flow
-     // dd(Auth::user()->organizationalUnit->establishment_id);
-     // $signatureFlows = [];
      if (Auth::user()->organizationalUnit->establishment_id == 38) {
 
        $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',38)->orderBy('name', 'ASC')->get();
        $responsabilityCenters = OrganizationalUnit::where('establishment_id',38)->orderBy('name', 'ASC')->get();
-
-       // //Hector Reyno (CGU)
-       // if (Auth::user()->organizationalUnit->id == 24) {
-       //   $signatureFlows['RRHH CGU'] = 10739552; //RR.HH del CGU
-       //   $signatureFlows['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
-       //   $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-       //   $signatureFlows['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
-       //   $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-       //   $signatureFlows['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
-       //   $signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
-       // }
-       // //servicio de salud iqq
-       // else{
-       //   $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-       //   $signatureFlows['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
-       //   $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-       //   $signatureFlows['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
-       //   $signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
-       // }
      }
      //hospital
      elseif(Auth::user()->organizationalUnit->establishment_id == 1){
-       // $signatureFlows['Subdirector'] = 14101085; // 88 - Subdirección Médica (IRIONDO: 9882506)
-       // $signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
-       // $signatureFlows['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
-       // $signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
-       // $signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-       // $signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
-
        $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->where('establishment_id',1)->orderBy('name', 'ASC')->get();
        $responsabilityCenters = OrganizationalUnit::where('establishment_id',1)
-                                                  // ->where('name','LIKE','%unidad%')
-                                                  // ->orwhere('name','LIKE','%servicio%')
-                                                  // ->orwhere('name','LIKE','%estadio%')
-                                                  // ->orwhere('name','LIKE','%covid%')
                                                   ->orderBy('name', 'ASC')->get();
      }
     //another
@@ -259,37 +164,6 @@ class ServiceRequestController extends Controller
        session()->flash('info', 'Usted no posee una unidad organizacional válida para ingresar hojas de ruta.');
        return redirect()->back();
      }
-
-
-
-     // //array para solicitud por turnos
-     // $signatureFlowsTurnos = [];
-     // $sumaAlzadaFlow = [];
-     // if (Auth::user()->organizationalUnit->establishment_id == 38) {
-     //   //Hector Reyno (CGU)
-     //   if (Auth::user()->organizationalUnit->id == 24) {
-     //     $signatureFlows['RRHH CGU'] = 10739552; //RR.HH del CGU
-     //     $signatureFlowsTurnos['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
-     //     $signatureFlowsTurnos['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-     //     $signatureFlowsTurnos['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
-     //   }
-     //   //servicio de salud iqq
-     //   else{
-     //     $signatureFlowsTurnos['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
-     //     $signatureFlowsTurnos['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-     //     $signatureFlowsTurnos['S.D.A SSI'] = 11612834; // 31 - Subdirección de Recursos Físicos y Financieros
-     //   }
-     // }
-     // //hospital
-     // elseif(Auth::user()->organizationalUnit->establishment_id == 1){
-     //   $signatureFlowsTurnos['Subdirector'] = 14101085; // 88 - Subdirección Médica (IRIONDO: 9882506)
-     //   $signatureFlowsTurnos['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
-     //   $signatureFlowsTurnos['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
-     // }
-     //
-     // $sumaAlzadaFlow['S.G.D.P Hospital'] = 16390845;
-     // $sumaAlzadaFlow['Jefe Finanzas'] = 13866194;
-     // $sumaAlzadaFlow['Director Hospital'] = 14101085;
 
     return view('service_requests.requests.create', compact('subdirections','responsabilityCenters','users','establishments'));
   }
@@ -303,7 +177,7 @@ class ServiceRequestController extends Controller
   public function store(Request $request)
   {
       //validation existence
-      $serviceRequest = ServiceRequest::where('rut',$request->run."-".$request->dv)
+      $serviceRequest = ServiceRequest::where('user_id',$request->user_id)
                                       ->where('program_contract_type',$request->program_contract_type)
                                       ->where('start_date',$request->start_date)
                                       ->where('end_date',$request->end_date)
@@ -338,10 +212,22 @@ class ServiceRequestController extends Controller
         }
       }
 
-      // dd($request->users);
+      //devuelve user o lo crea
+      $user = User::updateOrCreate(
+          ['id' => $request->user_id],
+          $request->All()
+      );
+
+      //devuelve UserBankAccount o crea
+      $userBankAccount = UserBankAccount::updateOrCreate(
+          ['user_id' => $request->user_id],
+          $request->All()
+      );
+
+      //crea service request
       $serviceRequest = new ServiceRequest($request->All());
-      $serviceRequest->rut = $request->run ."-". $request->dv;
-      $serviceRequest->user_id = Auth::id();
+      $serviceRequest->user_id = $user->id;
+      $serviceRequest->creator_id = Auth::id();
       $serviceRequest->save();
 
       //guarda control de turnos
@@ -452,6 +338,7 @@ class ServiceRequestController extends Controller
 
       $subdirections = OrganizationalUnit::where('name','LIKE','%subdirec%')->orderBy('name', 'ASC')->get();
       $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
+      $countries = Country::orderBy('name', 'ASC')->get();
 
       $SignatureFlow = $serviceRequest->SignatureFlows->where('employee','Supervisor de servicio')->first();
 
@@ -465,7 +352,8 @@ class ServiceRequestController extends Controller
       $banks = Bank::all();
 
       return view('service_requests.requests.edit', compact('serviceRequest', 'users', 'establishments', 'subdirections',
-                                                            'responsabilityCenters', 'SignatureFlow','employee','banks'));
+                                                            'responsabilityCenters', 'SignatureFlow','employee','banks',
+                                                            'countries'));
   }
 
   /**
@@ -505,6 +393,12 @@ class ServiceRequestController extends Controller
       //se guarda información de la solicitud
       $serviceRequest->fill($request->all());
       $serviceRequest->save();
+
+      //devuelve UserBankAccount o crea
+      $userBankAccount = UserBankAccount::updateOrCreate(
+          ['user_id' => $serviceRequest->employee->id],
+          $request->All()
+      );
 
       session()->flash('info', 'La solicitud '.$serviceRequest->id.' ha sido modificada.');
       return redirect()->route('rrhh.service-request.aditional_data_list');
@@ -655,7 +549,7 @@ class ServiceRequestController extends Controller
           if(!$fila->resolution_number or !$fila->resolution_date) {
 
 
-          list($run,$dv) = explode('-',$fila->rut);
+          // list($run,$dv) = explode('-',$fila->rut);
           $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
 
           switch($fila->program_contract_type) {
@@ -859,8 +753,8 @@ class ServiceRequestController extends Controller
 
 
           $data = array(
-            $run,
-            $dv,
+            $fila->employee->id,
+            $fila->employee->dv,
             $sirh_n_cargo, // contrato 5, prestaión u hora extra es 6
             $fila->start_date->format('d/m/Y'),
             $fila->end_date->format('d/m/Y'),
