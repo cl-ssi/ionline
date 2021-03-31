@@ -52,6 +52,7 @@ class ReportController extends Controller
                                      })
                                      ->where('has_invoice_file',1)
                                      ->where('payment_ready', 1)
+                                     ->whereNull('total_paid')
                                      ->where('type','Mensual')
                                      ->where('responsable_approbation',1)
                                      ->where('rrhh_approbation',1)
@@ -63,6 +64,7 @@ class ReportController extends Controller
                                       })
                                       ->where('has_invoice_file',1)
                                       ->where('payment_ready', 1)
+                                      ->whereNull('total_paid')
                                       ->where('type','<>','Mensual')
                                       ->get();
 
@@ -75,15 +77,15 @@ class ReportController extends Controller
 
         $txt = '';
         foreach ($fulfillments as $fulfillment) {
-            if (!$fulfillment->serviceRequest->bank) {
+            if (!$fulfillment->serviceRequest->employee->bankAccount) {
                 session()->flash('warning', "La solicitud con id {$fulfillment->serviceRequest->id} no contiene el banco a donde se debe pagar.");
                 return redirect()->back();
             }
-            if (!$fulfillment->serviceRequest->pay_method) {
+            if (!$fulfillment->serviceRequest->employee->bankAccount->type) {
                 session()->flash('warning', "La solicitud con id {$fulfillment->serviceRequest->id} no contiene método de pago.");
                 return redirect()->back();
             }
-            if (!$fulfillment->serviceRequest->account_number) {
+            if (!$fulfillment->serviceRequest->employee->bankAccount->number) {
                 session()->flash('warning', "La solicitud con id {$fulfillment->serviceRequest->id} no contiene número de cuenta.");
                 return redirect()->back();
             }
@@ -95,11 +97,11 @@ class ReportController extends Controller
             $totalToPay = $fulfillment->total_to_pay - round($fulfillment->total_to_pay * 0.115);
             $txt .=
                 $fulfillment->serviceRequest->employee->id . strtoupper($fulfillment->serviceRequest->employee->dv)."\t".
-                strtoupper(trim($fulfillment->serviceRequest->employee->getFullNameAttribute()))."\t".
+                strtoupper(trim($fulfillment->serviceRequest->employee->fullName))."\t".
                 strtolower($fulfillment->serviceRequest->email)."\t".
-                $fulfillment->serviceRequest->bank->code."\t".
-                $fulfillment->serviceRequest->pay_method."\t".
-                intval($fulfillment->serviceRequest->account_number)."\t".
+                $fulfillment->serviceRequest->employee->bankAccount->bank->code."\t".
+                $fulfillment->serviceRequest->employee->bankAccount->type."\t".
+                intval($fulfillment->serviceRequest->employee->bankAccount->number)."\t".
                 $totalToPay."\r\n"; // Para final de linea de txt en windows
         }
 
