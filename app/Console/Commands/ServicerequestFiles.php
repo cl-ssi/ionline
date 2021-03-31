@@ -69,7 +69,7 @@ class ServicerequestFiles extends Command
 
         $array1 = array();
         foreach($srs as $key => $sr) {
-          print_r($sr->rut . " " . $sr->last_created_at . " <br>");
+          print_r($sr->rut . " " . $sr->last_created_at . " \n");
           $serviceRequest = ServiceRequest::where('rut',$sr->rut)
                                           ->where('created_at',$sr->last_created_at)
                                           ->first();
@@ -133,12 +133,18 @@ class ServicerequestFiles extends Command
 
           //save bank parameters
           if ($serviceRequest->bank_id != null) {
-            $userBankAccount = new UserBankAccount();
-            $userBankAccount->bank_id = $serviceRequest->bank_id;
-            $userBankAccount->user_id = $user->id;
-            $userBankAccount->number = $serviceRequest->account_number;
-            $userBankAccount->type = $serviceRequest->pay_method;
-            $userBankAccount->save();
+            // $userBankAccount = new UserBankAccount();
+            // $userBankAccount->bank_id = $serviceRequest->bank_id;
+            // $userBankAccount->user_id = $user->id;
+            // $userBankAccount->number = $serviceRequest->account_number;
+            // $userBankAccount->type = $serviceRequest->pay_method;
+            // $userBankAccount->save();
+            $userBankAccount = UserBankAccount::updateOrCreate(
+                ['user_id' => $user->id],
+                ['bank_id' => $serviceRequest->bank_id,
+                 'number' => $serviceRequest->account_number,
+                 'type' => $serviceRequest->pay_method]
+            );
           }
 
 
