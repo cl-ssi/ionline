@@ -21,12 +21,12 @@
         <th>Periodo</th>
         <th>Banco - N° Cuenta</th>
         <th>Telefono</th>
-        <th>Certif.</th>
-        <th>Boleta</th>
-        <th>Resolución</th>
-        <th>Editar</th>
+        <th>C.</th>
+        <th>B.</th>
+        <th>R.</th>
+        <th></th>
         @canany(['Service Request: fulfillments finance'])
-          <th nowrap>Aprobación de pago</th>
+          <th nowrap style="width: 21%"  >Aprobación de pago </th>
         @endcanany
     </tr>
     @foreach($fulfillments->whereNull('total_paid') as $key => $fulfillment)
@@ -53,7 +53,7 @@
           <td>
             @if($fulfillment->has_invoice_file)
               <a href="{{route('rrhh.service-request.fulfillment.download_invoice', $fulfillment)}}"
-                 target="_blank" class="mr-4">
+                 target="_blank" >
                  <i class="fas fa-paperclip"></i>
               </a>
             @endif
@@ -61,7 +61,7 @@
           <td>
             @if($fulfillment->serviceRequest->has_resolution_file)
               <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fulfillment->serviceRequest)}}"
-                 target="_blank" class="mr-4">
+                 target="_blank" >
                  <i class="fas fa-paperclip"></i>
               </a>
             @endif
