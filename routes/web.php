@@ -23,6 +23,7 @@ use App\Http\Controllers\RequestForms\RequestFormFileController;
 use App\Http\Controllers\RequestForms\RequestFormCodeController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
+use App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController;
 use App\Http\Controllers\ReplacementStaff\ProfileController;
 use App\Http\Controllers\ReplacementStaff\ExperienceController;
 use App\Http\Controllers\ReplacementStaff\TrainingController;
@@ -39,6 +40,10 @@ use App\Http\Controllers\ServiceRequests\FulfillmentController;
 use App\Http\Controllers\ServiceRequests\SignatureFlowController;
 use App\Http\Controllers\ServiceRequests\FulfillmentItemController;
 use App\Http\Controllers\ServiceRequests\ReportController;
+
+
+
+use App\Http\Controllers\Parameters\ProfessionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -129,6 +134,13 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
     Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
     Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
 
+    Route::prefix('request')->name('request.')->group(function(){
+        Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index');
+        Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
+        // Route::get('/own', [ReplacementStaffController::class, 'requestOwn'])->name('own');
+        // Route::get('/edit', [ReplacementStaffController::class, 'requestEdit'])->name('edit');
+    });
+
     Route::prefix('profile')->name('profile.')->group(function(){
         // Route::post('/{replacementStaff}/store', [ProfileController::class, 'store'])->name('store');
         Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
@@ -164,13 +176,6 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
               Route::delete('{profile}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
           });
       });
-    });
-
-    Route::prefix('request')->name('request.')->group(function(){
-        Route::get('/', [ReplacementStaffController::class, 'requestIndex'])->name('index');
-        Route::get('/create', [ReplacementStaffController::class, 'requestCreate'])->name('create');
-        Route::get('/own', [ReplacementStaffController::class, 'requestOwn'])->name('own');
-        Route::get('/edit', [ReplacementStaffController::class, 'requestEdit'])->name('edit');
     });
 });
 
@@ -308,7 +313,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftManag.index')->middleware('auth');
         Route::post('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'indexfiltered'])->name('shiftManag.index')->middleware('auth');
         Route::post('/storeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.index')->middleware('auth');
-        
+
         Route::get('/shiftstypes', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftstypesindex'])->name('shiftsTypes.index')->middleware('auth');
         Route::get('/newshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.new')->middleware('auth');
         Route::get('/newshifttype/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'newshifttype'])->name('shiftsTypes.create')->middleware('auth');
@@ -491,6 +496,16 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
 
     });
 
+    Route::prefix('professions')->as('professions.')->group(function () {
+        Route::get('/', [ProfessionController::class, 'index'])->name('index');
+        Route::get('/create', [ProfessionController::class, 'create'])->name('create');
+        Route::post('/store', [ProfessionController::class, 'store'])->name('store');
+        Route::get('/{profession}/edit', [ProfessionController::class, 'edit'])->name('edit');
+        Route::put('/{profession}/update', [ProfessionController::class, 'update'])->name('update');
+
+
+    });
+
     Route::prefix('values')->as('values.')->group(function () {
         Route::get('/', [ValueController::class, 'index'])->name('index');
         Route::get('/create', [ValueController::class, 'create'])->name('create');
@@ -615,6 +630,11 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::get('/{law}/{year}/{health_goal}', 'Indicators\HealthGoalController@show')->name('show');
         Route::get('/{law}/{year}/{health_goal}/ind/{indicator}/edit', 'Indicators\HealthGoalController@editInd')->middleware('auth')->name('ind.edit');
         Route::put('/{law}/{year}/{health_goal}/ind/{indicator}', 'Indicators\HealthGoalController@updateInd')->middleware('auth')->name('ind.update');
+    });
+
+    Route::prefix('programming_aps')->as('programming_aps.')->group(function () {
+        Route::get('/', 'Indicators\ProgramApsController@index')->name('index');
+        Route::get('/{year}/{commune}', 'Indicators\ProgramApsController@show')->name('show');
     });
 
     Route::prefix('19813')->as('19813.')->group(function () {

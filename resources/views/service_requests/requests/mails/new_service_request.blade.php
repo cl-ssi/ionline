@@ -7,8 +7,8 @@
   <p>Se informa que la solicitud de contratación de honorarios nro <b>{{$serviceRequest->id}}</b> se encuentra disponible para su visación.</p>
   <p> <strong>Tipo:</strong> {{ $serviceRequest->type }}</p>
   <p> <strong>Fecha solicitud:</strong> {{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</p>
-  <p> <strong>Rut:</strong> {{ $serviceRequest->rut }}</p>
-  <p> <strong>Funcionario: </strong> {{ $serviceRequest->name }} </p>
+  <p> <strong>Rut:</strong> {{ $serviceRequest->employee->runFormat() }}</p>
+  <p> <strong>Funcionario: </strong> {{ $serviceRequest->employee->getFullNameAttribute() }} </p>
   <p> <strong>Fecha inicio:</strong> {{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</p>
   <p> <strong>Fecha término:</strong> {{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</p>
   <br>

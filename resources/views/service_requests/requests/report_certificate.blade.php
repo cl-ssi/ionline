@@ -143,7 +143,7 @@
 @if($serviceRequest->SignatureFlows->count() == 0)
   <div class="nueve">
       <div class="justify" style="width: 100%;">
-          Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$serviceRequest->serviceRequest->name}}</span></b> ha desempeñado las actividades estipuladas
+          Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
           en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames durante el preríodo de contingencia COVID
           del <b>{{$serviceRequest->start_date->format('d/m/Y')}}</b> al <b>{{$serviceRequest->end_date->format('d/m/Y')}}</b>.
       </div>
@@ -151,7 +151,7 @@
 @else
   <div class="nueve">
       <div class="justify" style="width: 100%;">
-          Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$serviceRequest->name}}</span></b> ha desempeñado las actividades estipuladas
+          Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
           en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames durante el preríodo de contingencia COVID
           del <b>{{$serviceRequest->start_date->format('d/m/Y')}}</b> al <b>{{$serviceRequest->end_date->format('d/m/Y')}}</b>,
           registrando @if($serviceRequest->type == "Turnos") los siguientes turnos extra: @else los siguientes turnos extra: @endif

@@ -118,22 +118,17 @@
 
     <fieldset class="form-group col-8 col-md-3">
 		    <label for="for_rut">Rut</label>
-		    <input type="text" class="form-control" id="for_rut" placeholder="" name="rut" required="required" value="{{ $serviceRequest->rut }}" disabled>
+		    <input type="text" class="form-control" id="for_rut" placeholder="" name="rut" required="required" value="{{ $serviceRequest->employee->id }}" disabled>
 		</fieldset>
 
-    <fieldset class="form-group col-12 col-md-5">
+    <fieldset class="form-group col-1">
+        <label for="for_dv">Digito</label>
+        <input type="text" class="form-control" id="for_dv" name="dv" readonly value="{{ $serviceRequest->employee->dv }}">
+    </fieldset>
+
+    <fieldset class="form-group col col-md">
 		    <label for="for_name">Nombre completo</label>
-		    <input type="text" class="form-control" id="for_name" placeholder="" name="name" required="required" value="{{ $serviceRequest->name }}">
-		</fieldset>
-
-    <fieldset class="form-group col-12 col-md-4">
-		    <label for="for_name">Tipo de Contrato</label>
-		    <select name="contract_type" class="form-control" required>
-          <option value="NUEVO" @if($serviceRequest->contract_type == 'NUEVO') selected @endif >Nuevo</option>
-          <option value="ANTIGUO" @if($serviceRequest->contract_type == 'ANTIGUO') selected @endif>Antiguo</option>
-          <option value="CONTRATO PERM" @if($serviceRequest->contract_type == 'CONTRATO PERM') selected @endif>Permanente</option>
-          <option value="PRESTACION" @if($serviceRequest->contract_type == 'PRESTACION') selected @endif>Prestación</option>
-        </select>
+		    <input type="text" class="form-control" id="for_name" placeholder="" name="name" required="required" value="{{ $serviceRequest->employee->getFullNameAttribute() }}" disabled>
 		</fieldset>
 
   </div>
@@ -142,15 +137,11 @@
 
     <fieldset class="form-group col col-md">
         <label for="for_nationality">Nacionalidad</label>
-        <select name="nationality" class="form-control">
+        <select name="nationality" class="form-control" disabled>
           <option value=""></option>
-          <option value="CHILENA" @if($serviceRequest->nationality == "CHILENA") selected @endif>CHILENA</option>
-          <option value="ARGENTINA" @if($serviceRequest->nationality == "ARGENTINA") selected @endif>ARGENTINA</option>
-          <option value="VENEZOLANA" @if($serviceRequest->nationality == "VENEZOLANA") selected @endif>VENEZOLANA</option>
-          <option value="COLOMBIANA" @if($serviceRequest->nationality == "COLOMBIANA") selected @endif>COLOMBIANA</option>
-          <option value="PERUANA" @if($serviceRequest->nationality == "PERUANA") selected @endif>PERUANA</option>
-          <option value="BOLIVIANA" @if($serviceRequest->nationality == "BOLIVIANA") selected @endif>BOLIVIANA</option>
-          <option value="CUBANA" @if($serviceRequest->nationality == "CUBANA") selected @endif>CUBANA</option>
+          @foreach($countries as $key => $country)
+            <option value="{{$country->id}}" @if($serviceRequest->employee->country_id == $country->id) selected @endif>{{$country->name}}</option>
+          @endforeach
         </select>
     </fieldset>
 
@@ -176,17 +167,27 @@
 
   <div class="form-row">
 
-    <fieldset class="form-group col-12 col-md-4">
+    <fieldset class="form-group col col-md-3">
+		    <label for="for_name">Tipo de Contrato</label>
+		    <select name="contract_type" class="form-control" required>
+          <option value="NUEVO" @if($serviceRequest->contract_type == 'NUEVO') selected @endif >Nuevo</option>
+          <option value="ANTIGUO" @if($serviceRequest->contract_type == 'ANTIGUO') selected @endif>Antiguo</option>
+          <option value="CONTRATO PERM" @if($serviceRequest->contract_type == 'CONTRATO PERM') selected @endif>Permanente</option>
+          <option value="PRESTACION" @if($serviceRequest->contract_type == 'PRESTACION') selected @endif>Prestación</option>
+        </select>
+		</fieldset>
+
+    <fieldset class="form-group col col-md-3">
 		    <label for="for_request_date">Fecha Solicitud</label>
 		    <input type="date" class="form-control" id="for_request_date" name="request_date" required value="{{\Carbon\Carbon::parse($serviceRequest->request_date)->format('Y-m-d')}}">
 		</fieldset>
 
-    <fieldset class="form-group col-12 col-md-4">
+    <fieldset class="form-group col col-md-3">
 		    <label for="for_start_date">F.Inicio de Contrato</label>
 		    <input type="date" class="form-control" id="for_start_date" name="start_date" required value="{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}">
 		</fieldset>
 
-    <fieldset class="form-group col-12 col-md-4">
+    <fieldset class="form-group col col-md-3">
 		    <label for="for_end_date">F.Término de Contrato</label>
 		    <input type="date" class="form-control" id="for_end_date" name="end_date" required value="{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}">
 		</fieldset>
@@ -201,107 +202,6 @@
         <label for="for_service_description">Descripción Servicio</label>
         <textarea id="service_description" name="service_description" class="form-control" rows="5">{{ $serviceRequest->service_description }}</textarea>
     </fieldset>
-
-  </div>
-
-  <div class="form-row">
-
-    <fieldset class="form-group col">
-		    <label for="for_contractual_condition">Calidad Contractual</label>
-        <select name="contractual_condition" class="form-control">
-          <option value=""></option>
-          <option value="SUPLENTE" @if($serviceRequest->contractual_condition == 'SUPLENTE') selected @endif >SUPLENTE</option>
-          <option value="CONTRATA" @if($serviceRequest->contractual_condition == 'CONTRATA') selected @endif>CONTRATA</option>
-          <option value="TITULAR" @if($serviceRequest->contractual_condition == 'TITULAR') selected @endif>TITULAR</option>
-          <option value="HONORARIO COVID" @if($serviceRequest->contractual_condition == 'HONORARIO COVID') selected @endif>HONORARIO COVID</option>
-          <option value="SUMA ALZADA" @if($serviceRequest->contractual_condition == 'SUMA ALZADA') selected @endif>SUMA ALZADA</option>
-        </select>
-		</fieldset>
-
-    <fieldset class="form-group col col-md">
-		    <label for="for_estate">Estamento al que corresponde CS</label>
-		    <select name="estate" class="form-control" required>
-          <option value="Profesional Médico" @if($serviceRequest->estate == 'Profesional Médico') selected @endif >Profesional Médico</option>
-          <option value="Profesional" @if($serviceRequest->estate == 'Profesional') selected @endif >Profesional</option>
-          <option value="Técnico" @if($serviceRequest->estate == 'Técnico') selected @endif >Técnico</option>
-          <option value="Administrativo" @if($serviceRequest->estate == 'Administrativo') selected @endif >Administrativo</option>
-          <option value="Farmaceutico" @if($serviceRequest->estate == 'Farmaceutico') selected @endif >Farmaceutico</option>
-          <option value="Odontólogo" @if($serviceRequest->estate == 'Odontólogo') selected @endif >Odontólogo</option>
-          <option value="Bioquímico" @if($serviceRequest->estate == 'Bioquímico') selected @endif >Bioquímico</option>
-          <option value="Auxiliar" @if($serviceRequest->estate == 'Auxiliar') selected @endif >Auxiliar</option>
-          <option value="Otro (justificar)" @if($serviceRequest->estate == 'Otro (justificar)') selected @endif >Otro (justificar)</option>
-        </select>
-		</fieldset>
-
-    <!-- <fieldset class="form-group col">
-		    <label for="for_name">Otro</label>
-		    <select name="other" class="form-control" required>
-          <option value="Brecha" @if($serviceRequest->other == 'Brecha') selected @endif >Brecha</option>
-          <option value="LM:LICENCIAS MEDICAS" @if($serviceRequest->other == 'LM:LICENCIAS MEDICAS') selected @endif >LM:LICENCIAS MEDICAS</option>
-          <option value="HE:HORAS EXTRAS" @if($serviceRequest->other == 'HE:HORAS EXTRAS') selected @endif >HE:HORAS EXTRAS</option>
-        </select>
-		</fieldset> -->
-
-    <!-- <fieldset class="form-group col">
-		    <label for="for_normal_hour_payment">Pago Hora Normal</label>
-		    <select name="normal_hour_payment" class="form-control">
-          <option value="" @if($serviceRequest->normal_hour_payment == '') selected @endif ></option>
-          <option value="MACROZONA" @if($serviceRequest->normal_hour_payment == 'MACROZONA') selected @endif >MACROZONA</option>
-        </select>
-		</fieldset>
-
-    <fieldset class="form-group col">
-		    <label for="for_amount">Valor $</label>
-		    <input type="number" class="form-control" id="for_amount" placeholder="" name="amount" value="{{ $serviceRequest->amount }}">
-		</fieldset> -->
-
-  <!-- </div>
-
-  <div class="form-row"> -->
-
-    <!-- <fieldset class="form-group col-8 col-md-4">
-		    <label for="for_program_contract_type">Tipo de Contratación</label>
-		    <select name="program_contract_type" id="program_contract_type" class="form-control" required>
-          <option value="Semanal" @if($serviceRequest->program_contract_type == 'Semanal') selected @endif >Semanal</option>
-          <option value="Mensual" @if($serviceRequest->program_contract_type == 'Mensual') selected @endif >Mensual</option>
-          <option value="Horas" @if($serviceRequest->program_contract_type == 'Horas') selected @endif >Horas</option>
-          <option value="Otro" @if($serviceRequest->program_contract_type == 'Otro') selected @endif >Otro</option>
-        </select>
-		</fieldset> -->
-
-    <fieldset class="form-group col col-md">
-		    <label for="for_weekly_hours">Hrs.Semanales</label>
-		    <select name="weekly_hours" class="form-control" id="for_weekly_hours" required>
-					<option value=""></option>
-          <option value="44" @if($serviceRequest->weekly_hours == 44) selected @endif>44</option>
-          <option value="33" @if($serviceRequest->weekly_hours == 33) selected @endif>33</option>
-					<option value="28" @if($serviceRequest->weekly_hours == 28) selected @endif>28</option>
-					<option value="22" @if($serviceRequest->weekly_hours == 22) selected @endif>22</option>
-          <option value="11" @if($serviceRequest->weekly_hours == 11) selected @endif>11</option>
-        </select>
-		</fieldset>
-
-    <fieldset class="form-group col col-md">
-        <label for="for_establishment_id">Establecimiento</label>
-        <select name="establishment_id" class="form-control" required>
-          <option value=""></option>
-          @foreach($establishments as $key => $establishment)
-            <option value="{{$establishment->id}}" @if($serviceRequest->establishment_id == $establishment->id) selected @endif>{{$establishment->name}}</option>
-          @endforeach
-        </select>
-    </fieldset>
-
-    <!-- <fieldset class="form-group col">
-		    <label for="for_daily_hours">Horas Diurnas</label>
-		    <input type="number" class="form-control" id="for_daily_hours" placeholder="" name="daily_hours" value="{{ $serviceRequest->daily_hours }}">
-		</fieldset>
-
-    <fieldset class="form-group col">
-		    <label for="for_nightly_hours">Horas Nocturnas</label>
-		    <input type="number" class="form-control" id="for_nightly_hours" placeholder="" name="nightly_hours" value="{{ $serviceRequest->nightly_hours }}">
-		</fieldset> -->
-
-    <br>
 
   </div>
 
@@ -337,7 +237,7 @@
 
               @can('Service Request: additional data rrhh')
 
-                <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+                <button type="button" class="btn btn-danger delete-row">Eliminar filas</button>
 
               @else
 
@@ -385,7 +285,7 @@
 
         @can('Service Request: additional data rrhh')
 
-          <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+          <button type="button" class="btn btn-danger delete-row">Eliminar filas</button>
 
         @else
 
@@ -393,12 +293,12 @@
           @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
             <!-- si existe una firma, no se deja modificar solicitud -->
             @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-              <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
+              <button type="button" class="btn btn-danger delete-row" disabled>Eliminar filas</button>
             @else
-              <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+              <button type="button" class="btn btn-danger delete-row">Eliminar filas</button>
             @endif
           @else
-            <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
+            <button type="button" class="btn btn-danger delete-row" disabled>Eliminar filas</button>
           @endif
 
         @endcan
@@ -408,6 +308,59 @@
   </div>
 
   <br>
+
+  <div class="form-row">
+
+    <fieldset class="form-group col">
+		    <label for="for_contractual_condition">Calidad Contractual</label>
+        <select name="contractual_condition" class="form-control">
+          <option value=""></option>
+          <option value="SUPLENTE" @if($serviceRequest->contractual_condition == 'SUPLENTE') selected @endif >SUPLENTE</option>
+          <option value="CONTRATA" @if($serviceRequest->contractual_condition == 'CONTRATA') selected @endif>CONTRATA</option>
+          <option value="TITULAR" @if($serviceRequest->contractual_condition == 'TITULAR') selected @endif>TITULAR</option>
+          <option value="HONORARIO COVID" @if($serviceRequest->contractual_condition == 'HONORARIO COVID') selected @endif>HONORARIO COVID</option>
+          <option value="SUMA ALZADA" @if($serviceRequest->contractual_condition == 'SUMA ALZADA') selected @endif>SUMA ALZADA</option>
+        </select>
+		</fieldset>
+
+    <fieldset class="form-group col col-md">
+		    <label for="for_estate">Estamento al que corresponde CS</label>
+		    <select name="estate" class="form-control" required>
+          <option value="Profesional Médico" @if($serviceRequest->estate == 'Profesional Médico') selected @endif >Profesional Médico</option>
+          <option value="Profesional" @if($serviceRequest->estate == 'Profesional') selected @endif >Profesional</option>
+          <option value="Técnico" @if($serviceRequest->estate == 'Técnico') selected @endif >Técnico</option>
+          <option value="Administrativo" @if($serviceRequest->estate == 'Administrativo') selected @endif >Administrativo</option>
+          <option value="Farmaceutico" @if($serviceRequest->estate == 'Farmaceutico') selected @endif >Farmaceutico</option>
+          <option value="Odontólogo" @if($serviceRequest->estate == 'Odontólogo') selected @endif >Odontólogo</option>
+          <option value="Bioquímico" @if($serviceRequest->estate == 'Bioquímico') selected @endif >Bioquímico</option>
+          <option value="Auxiliar" @if($serviceRequest->estate == 'Auxiliar') selected @endif >Auxiliar</option>
+          <option value="Otro (justificar)" @if($serviceRequest->estate == 'Otro (justificar)') selected @endif >Otro (justificar)</option>
+        </select>
+		</fieldset>
+
+    <fieldset class="form-group col col-md">
+		    <label for="for_weekly_hours">Hrs.Semanales</label>
+		    <select name="weekly_hours" class="form-control" id="for_weekly_hours" required>
+					<option value=""></option>
+          <option value="44" @if($serviceRequest->weekly_hours == 44) selected @endif>44</option>
+          <option value="33" @if($serviceRequest->weekly_hours == 33) selected @endif>33</option>
+					<option value="28" @if($serviceRequest->weekly_hours == 28) selected @endif>28</option>
+					<option value="22" @if($serviceRequest->weekly_hours == 22) selected @endif>22</option>
+          <option value="11" @if($serviceRequest->weekly_hours == 11) selected @endif>11</option>
+        </select>
+		</fieldset>
+
+    <fieldset class="form-group col col-md">
+        <label for="for_establishment_id">Establecimiento</label>
+        <select name="establishment_id" class="form-control" required>
+          <option value=""></option>
+          @foreach($establishments as $key => $establishment)
+            <option value="{{$establishment->id}}" @if($serviceRequest->establishment_id == $establishment->id) selected @endif>{{$establishment->name}}</option>
+          @endforeach
+        </select>
+    </fieldset>
+
+  </div>
 
   <div class="form-row">
 
@@ -612,7 +565,7 @@
               <input type="text" class="form-control" name="gross_amount" value="{{$serviceRequest->gross_amount}}">
 					</fieldset>
 
-          <fieldset class="form-group col col-md-2">
+          <fieldset class="form-group col col-md-3">
               <label for="for_sirh_contract_registration">Registrado en SIRH</label>
               <select name="sirh_contract_registration" class="form-control">
                 <option value=""></option>
@@ -623,47 +576,14 @@
 
         </div>
 
-        <div class="form-row">
-            <fieldset class="form-group col col-md-3">
-              <label>Banco</label>
-              <select name="bank_id" class="form-control">
-              <option value="">Seleccionar Banco (opcional)</option>
-              @foreach($banks as $bank)
-                <option value="{{$bank->id}}" @if($serviceRequest->bank_id == $bank->id) selected @endif>{{$bank->name}}</option>
-              @endforeach
-            </select>
-          </fieldset>
+        <button type="submit" class="btn btn-primary mb-3">Guardar</button>
 
+        @if($serviceRequest->program_contract_type == 'Mensual')
+            @livewire('service-request.monthly-quotes', ['serviceRequest' => $serviceRequest, 'resultadoEnNumero' => true])
+        @else
+            @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
+        @endif
 
-          <fieldset class="form-group col col-md-3">
-              <label>Número de Cuenta (opcional)</label>
-              <input type="number" name="account_number" class="form-control"
-                value="{{ $serviceRequest->account_number }}" >
-          </fieldset>
-
-          <fieldset class="form-group col col-md-3">
-              <label for="for_pay_method">Tipo de cuenta (opcional)</label>
-              <select name="pay_method" class="form-control">
-                <option value="">Seleccionar tipo de cuenta</option>
-                <option value="01" @if($serviceRequest->bank_id == "01") selected @endif>CTA CORRIENTE / CTA VISTA</option>
-                <option value="02" @if($serviceRequest->bank_id == "02") selected @endif>CTA AHORRO</option>
-                <option value="30" @if($serviceRequest->bank_id == "03") selected @endif>CUENTA RUT</option>
-              </select>
-          </fieldset>
-        </div>
-
-          <div class="form-row">
-              <fieldset class="form-group col col-md-3">
-                  <button type="submit" class="btn btn-danger">Guardar</button>
-              </fieldset>
-              <fieldset class="form-group col col-md-6">
-                  @if($serviceRequest->program_contract_type == 'Mensual')
-                      @livewire('service-request.monthly-quotes', ['serviceRequest' => $serviceRequest, 'resultadoEnNumero' => true])
-                  @else
-                     @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
-                  @endif
-              </fieldset>
-          </div>
 
 
       </div>
@@ -759,7 +679,7 @@
 
         </div>
 
-        <button type="submit" class="btn btn-success">Guardar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
 
       </div>
 

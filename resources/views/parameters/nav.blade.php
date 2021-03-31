@@ -53,6 +53,13 @@
             <i class="fas fa-smile-beam"></i> Frases del día</a>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('parameters.professions.index') }}">
+            <i class="fas fa-external-link-alt"></i> Professionales</a>
+    </li>
+
+
     <!-- <li class="nav-item">
         <a class="nav-link"
             href="{{ route('parameters.values.index') }}">
