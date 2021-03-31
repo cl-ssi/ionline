@@ -488,7 +488,6 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
   @endif
 @endif
 
-<br><br>
 Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribute()}} <br><br>
 
 <p class="">
