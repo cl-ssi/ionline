@@ -59,15 +59,12 @@
 							<td>{{ $serviceRequest->id }}</td>
 							<!-- <td>{{ $serviceRequest->type }}</td> -->
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
-							<td nowrap>{{ $serviceRequest->rut }}</td>
-							<td nowrap>{{ $serviceRequest->name }}</td>
+							<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
+		    			<td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 							<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
 									@else Finalizada @endif</td>
-							<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
-							<!-- <td>{{$serviceRequest->SignatureFlows->last()->employee}}</td> -->
-							<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
 							<td nowrap>
 								<a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}"
 									class="btn btn-sm btn-outline-secondary">
@@ -117,15 +114,12 @@
 							<td>{{ $serviceRequest->id }}</td>
 							<!-- <td>{{ $serviceRequest->type }}</td> -->
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
-							<td nowrap>{{ $serviceRequest->rut }}</td>
-							<td nowrap>{{ $serviceRequest->name }}</td>
+							<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
+		    			<td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 							<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
 									@else Finalizada @endif</td>
-							<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
-							<!-- <td>{{$serviceRequest->SignatureFlows->last()->employee}}</td> -->
-							<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
 							<td nowrap>
 								<a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}"
 									class="btn btn-sm btn-outline-secondary">
@@ -177,16 +171,14 @@
 							<!-- <td>{{ $serviceRequest->type }}</td> -->
 							<td>{{ $serviceRequest->program_contract_type }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
-							<td nowrap>{{ $serviceRequest->rut }}</td>
-							<td nowrap>{{ $serviceRequest->name }}</td>
+							<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
+		    			<td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 							<td>
 								  @if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
 									@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
 									@else Finalizada @endif</td>
-							<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
-							<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
 							<td nowrap>
 								<a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}"
 									class="btn btn-sm btn-outline-secondary">
@@ -266,16 +258,14 @@
 							<td>{{ $serviceRequest->id }}</td>
 							<!-- <td>{{ $serviceRequest->type }}</td> -->
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
-							<td nowrap>{{ $serviceRequest->rut }}</td>
-							<td nowrap>{{ $serviceRequest->name }}</td>
+							<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
+		    			<td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 							<td>
 									@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
 									@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
 									@else Finalizada @endif</td>
-							<!-- $serviceRequest->SignatureFlows->last()->user->getFullNameAttribute()}} -  -->
-							<!-- <td>{{$serviceRequest->user->getFullNameAttribute()}}</td> -->
 							<td nowrap>
 								<a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}"
 									class="btn btn-sm btn-outline-secondary">
@@ -346,8 +336,8 @@
 							<td>{{ $serviceRequest->id }}</td>
 							<!-- <td>{{ $serviceRequest->type }}</td> -->
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
-							<td nowrap>{{ $serviceRequest->rut }}</td>
-							<td nowrap>{{ $serviceRequest->name }}</td>
+							<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
+		    			<td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 							<td>

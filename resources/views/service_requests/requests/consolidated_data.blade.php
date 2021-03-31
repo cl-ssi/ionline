@@ -84,9 +84,9 @@
 								<td nowrap>SERVICIO DE SALUD DE IQUIQUE</td>
 								<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->sirh_code}}@endif</td>
 								<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
-								<td nowrap>{{$serviceRequest->rut}}</td>
-								<td nowrap>{{$serviceRequest->name}}</td>
-								<td nowrap>{{$serviceRequest->nationality}}</td>
+								<td nowrap>{{$serviceRequest->employee->runNotFormat()}}</td>
+								<td nowrap>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
+								<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
 								<td nowrap>{{$serviceRequest->programm_name}}</td>
 								<td nowrap>{{$serviceRequest->digera_strategy}}</td>
 								<td nowrap>{{$serviceRequest->rrhh_team}}</td>
@@ -127,9 +127,9 @@
 										<td nowrap>SERVICIO DE SALUD DE IQUIQUE</td>
 										<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->sirh_code}}@endif</td>
 										<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
-										<td nowrap>{{$serviceRequest->rut}}</td>
-										<td nowrap>{{$serviceRequest->name}}</td>
-										<td nowrap>{{$serviceRequest->nationality}}</td>
+										<td nowrap>{{$serviceRequest->employee->runNotFormat()}}</td>
+										<td nowrap>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
+										<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
 										<td nowrap>{{$serviceRequest->programm_name}}</td>
 										<td nowrap>{{$serviceRequest->digera_strategy}}</td>
 										<td nowrap>{{$serviceRequest->rrhh_team}}</td>
@@ -168,9 +168,9 @@
 									<td nowrap>SERVICIO DE SALUD DE IQUIQUE</td>
 									<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->sirh_code}}@endif</td>
 									<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
-									<td nowrap>{{$serviceRequest->rut}}</td>
-									<td nowrap>{{$serviceRequest->name}}</td>
-									<td nowrap>{{$serviceRequest->nationality}}</td>
+									<td nowrap>{{$serviceRequest->employee->runNotFormat()}}</td>
+									<td nowrap>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
+									<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
 									<td nowrap>{{$serviceRequest->programm_name}}</td>
 									<td nowrap>{{$serviceRequest->digera_strategy}}</td>
 									<td nowrap>{{$serviceRequest->rrhh_team}}</td>
@@ -213,9 +213,9 @@
 						<td nowrap>SERVICIO DE SALUD DE IQUIQUE</td>
 						<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->sirh_code}}@endif</td>
 						<td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
-						<td nowrap>{{$serviceRequest->rut}}</td>
-						<td nowrap>{{$serviceRequest->name}}</td>
-						<td nowrap>{{$serviceRequest->nationality}}</td>
+						<td nowrap>{{$serviceRequest->employee->runNotFormat()}}</td>
+						<td nowrap>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
+						<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
 						<td nowrap>{{$serviceRequest->programm_name}}</td>
 						<td nowrap>{{$serviceRequest->digera_strategy}}</td>
 						<td nowrap>{{$serviceRequest->rrhh_team}}</td>
@@ -296,9 +296,9 @@
           <td nowrap>SERVICIO DE SALUD DE IQUIQUE</td>
           <td nowrap>130</td>
           <td nowrap>@if($serviceRequest->establishment){{$serviceRequest->establishment->name}}@endif</td>
-          <td nowrap>{{$serviceRequest->rut}}</td>
-          <td nowrap>{{$serviceRequest->name}}</td>
-          <td nowrap>{{$serviceRequest->nationality}}</td>
+					<td nowrap>{{$serviceRequest->employee->runNotFormat()}}</td>
+					<td nowrap>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
+					<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
           <td nowrap>{{$serviceRequest->programm_name}}</td>
           <td nowrap>{{$serviceRequest->digera_strategy}}</td>
           <td nowrap>{{$serviceRequest->rrhh_team}}</td>

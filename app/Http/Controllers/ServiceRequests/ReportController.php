@@ -94,8 +94,8 @@ class ReportController extends Controller
 
             $totalToPay = $fulfillment->total_to_pay - round($fulfillment->total_to_pay * 0.115);
             $txt .=
-                strtoupper(str_replace('-','',$fulfillment->serviceRequest->rut))."\t".
-                strtoupper(trim($fulfillment->serviceRequest->name))."\t".
+                $fulfillment->serviceRequest->employee->id . strtoupper($fulfillment->serviceRequest->employee->dv)."\t".
+                strtoupper(trim($fulfillment->serviceRequest->employee->getFullNameAttribute()))."\t".
                 strtolower($fulfillment->serviceRequest->email)."\t".
                 $fulfillment->serviceRequest->bank->code."\t".
                 $fulfillment->serviceRequest->pay_method."\t".
@@ -153,21 +153,14 @@ class ReportController extends Controller
 
     public function resolutionPDF(ServiceRequest $ServiceRequest)
     {
-        $rut = explode("-", $ServiceRequest->rut);
-        $ServiceRequest->run_s_dv = number_format($rut[0],0, ",", ".");
-        $ServiceRequest->dv = $rut[1];
-
         $formatter = new NumeroALetras();
         $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
 
         if ($ServiceRequest->fulfillments) {
           foreach ($ServiceRequest->fulfillments as $key => $fulfillment) {
             $fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
-            // dd($fulfillment->total_to_pay_description);
           }
         }
-
-        // dd($ServiceRequest->fulfillments);
 
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('service_requests.report_resolution',compact('ServiceRequest'));
