@@ -1,5 +1,5 @@
 <div>
-    <select class="selectpicker" name="payment_ready" wire:model="payment_ready" wire:click="save()" @if($payment_ready == '1') data-style="btn-success" @elseif($payment_ready == '0') data-style="btn-danger"  @endif >
+    <select class="form-control" name="payment_ready" wire:model="payment_ready" wire:click="save()" >
         <option value="1">Apto</option>
         <option value="0">Rechazado</option>
         <option value="null">Pendiente</option>
