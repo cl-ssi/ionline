@@ -105,7 +105,7 @@
 
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Estado de Urgencias</h4>
+                    <h4 class="my-0 font-weight-normal">Estado de urgencias</h4>
                 </div>
 
                 @php($array = json_decode(file_get_contents('status.json'),true))
@@ -131,7 +131,7 @@
 
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Nuestros Sistemas</h4>
+                    <h4 class="my-0 font-weight-normal">Nuestros sistemas</h4>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item list-group-item-action">

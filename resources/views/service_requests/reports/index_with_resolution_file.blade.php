@@ -22,7 +22,7 @@
         <tr>
             <td rowspan="{{$serviceRequest->fulfillments->count()}}">{{$key + 1}}</td>
             <td rowspan="{{$serviceRequest->fulfillments->count()}}">{{$serviceRequest->id}}</td>
-            <td rowspan="{{$serviceRequest->fulfillments->count()}}">{{$serviceRequest->name}}</td>
+            <td rowspan="{{$serviceRequest->fulfillments->count()}}">{{$serviceRequest->employee->getFullNameAttribute()}}</td>
             <td rowspan="{{$serviceRequest->fulfillments->count()}}">{{$serviceRequest->phone_number}}</td>
             @foreach($serviceRequest->fulfillments as $fulfillment)
                 <td nowrap>{{ $fulfillment->start_date->format('d-m-Y') }}</td>
