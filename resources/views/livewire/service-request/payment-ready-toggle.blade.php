@@ -8,7 +8,7 @@
             </select>
         </div>
         <div class="col-2 my-auto">
-            <button class="btn btn-primary btn-sm "><i class="fas fa-save" wire:click="save()"></i></button>
+            <button class="btn btn-primary btn-sm" wire:click="save()"><i class="fas fa-save"></i></button>
         </div>
     </div>
 
