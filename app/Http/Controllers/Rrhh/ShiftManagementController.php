@@ -38,5 +38,27 @@ class ShiftManagementController extends Controller
         return view('rrhh.shift_management.editshiftstype', compact('sType','tiposJornada'));
 
     }
+    public function newshifttype(){
+    	echo "create";
+    }
+    public function storenewshift(Request $r){
+
+        $nSType = new ShiftTypes; 
+        $nSType->name = $r->name;
+        $nSType->shortname = $r->shortname;
+        $nSType->day_series = implode(",", $r->day_series);
+    }
+    public function updateshifttype(Request $r){
+    	// echo "updateshifttype ".implode(",", $r->day_series); 
+
+    	$fSType = ShiftTypes::find($r->id);
+    	$fSType->name = $r->name;
+		$fSType->shortname = $r->shortname;
+		$fSType->day_series = implode(",", $r->day_series);
+		$fSType->update();
+        session()->flash('info', 'El Turno tipo "'.$r->name.'" ha sido modificado.');
+        return redirect()->route('rrhh.shiftsTypes.index');
+
+    }
 
 }

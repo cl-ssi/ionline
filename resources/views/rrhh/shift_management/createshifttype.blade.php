@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Editando Tipos de Turnos')
+@section('title', 'Creando Tipos de Turnos')
 @section('content')
 <style type="text/css">
 	.shadow {
@@ -8,7 +8,7 @@
   		-webkit-box-shadow: 0px 2px 2px black;
 	}
 </style>
-<h3>Editando <i>"{{$sType->name}}"</i> - <b>{{$sType->shortname}}</b> </h3>
+<h3>Creando un nuevo  <i>"Tipo de Turno"</i> </h3>
 <div class="row ">
 	<div class="col-md-6 col-md-offset-4 shadow"> 
 
@@ -20,28 +20,25 @@
 
     			<fieldset class="form-group col-6 col-md-3">
             		<label for="for_name">Nombre*</label>
-            		<input type="text" class="form-control" id="for_name" name="name" value="{{$sType->name}}" required>
+            		<input type="text" placeholder="Ej: Turno ALPHA" class="form-control" id="for_name" name="name" value="{{$sType->name}}" required>
         		</fieldset>
     		</div>
     		<div class="row">
 
         		<fieldset class="form-group col-6 col-md-2">
         		    <label for="for_guard_name">Abreviacion</label>
-        		    <input type="text" class="form-control" id="for_shortname" name="shortname" 
-        		        value="{{$sType->shortname}}">
+        		    <input type="text" class="form-control"  placeholder="Ej: TAlph" id="for_shortname" name="shortname" 
+        		        >
         		</fieldset>
     		</div>
     		<div class="row">
-    			@php
-    				$days = explode(",",$sType->day_series)
-    			@endphp
         		<fieldset class="form-group col-12 col-md-7">
-        		    <label for="for_descripcion">Jornada</label>
+        		    <label for="for_descripcion">Jornada*</label>
         		    @for($i=0;$i<7;$i++)
         		         <select class="form-control"  id="for_day_series" name="day_series[]">
         		        
         		         	@foreach($tiposJornada as $index => $t  )
-        		         		<option value="{{ $index}}" {{($index == $days[$i])?"selected":""}}> {{$index}} - {{$t}}</option>
+        		         		<option value="{{ $index}}"> {{$index}} - {{$t}}</option>
 
         		         	@endforeach
         		         </select>
@@ -49,7 +46,7 @@
         		</fieldset>
     		</div>
     		<input hidden id="for_id" name="id" value="{{$sType->id}}">
-    		<button type="submit" class="btn btn-primary">Guardar</button>
+    		<button type="submit" class="btn btn-primary">Crear</button>
     		<button type="button" onclick="cancelar();" class="btn btn-danger">Cancelar</button>
     
 		</form>
