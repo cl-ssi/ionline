@@ -237,7 +237,7 @@
 
               @can('Service Request: additional data rrhh')
 
-                <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+                <button type="button" class="btn btn-danger delete-row">Eliminar filas</button>
 
               @else
 
@@ -285,7 +285,7 @@
 
         @can('Service Request: additional data rrhh')
 
-          <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+          <button type="button" class="btn btn-danger delete-row">Eliminar filas</button>
 
         @else
 
@@ -293,12 +293,12 @@
           @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
             <!-- si existe una firma, no se deja modificar solicitud -->
             @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-              <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
+              <button type="button" class="btn btn-danger delete-row" disabled>Eliminar filas</button>
             @else
-              <button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
+              <button type="button" class="btn btn-danger delete-row">Eliminar filas</button>
             @endif
           @else
-            <button type="button" class="btn btn-primary delete-row" disabled>Eliminar filas</button>
+            <button type="button" class="btn btn-danger delete-row" disabled>Eliminar filas</button>
           @endif
 
         @endcan
@@ -604,18 +604,14 @@
           </fieldset>
         </div>
 
-          <div class="form-row">
-              <fieldset class="form-group col col-md-3">
-                  <button type="submit" class="btn btn-danger">Guardar</button>
-              </fieldset>
-              <fieldset class="form-group col col-md-6">
-                  @if($serviceRequest->program_contract_type == 'Mensual')
-                      @livewire('service-request.monthly-quotes', ['serviceRequest' => $serviceRequest, 'resultadoEnNumero' => true])
-                  @else
-                     @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
-                  @endif
-              </fieldset>
-          </div>
+        <button type="submit" class="btn btn-primary mb-3">Guardar</button>
+
+        @if($serviceRequest->program_contract_type == 'Mensual')
+            @livewire('service-request.monthly-quotes', ['serviceRequest' => $serviceRequest, 'resultadoEnNumero' => true])
+        @else
+            @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
+        @endif
+
 
 
       </div>
@@ -711,7 +707,7 @@
 
         </div>
 
-        <button type="submit" class="btn btn-success">Guardar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
 
       </div>
 
