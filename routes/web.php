@@ -311,12 +311,15 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
     Route::prefix('shiftManagement')->group(function () {
         Route::get('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftManag.index')->middleware('auth');
+        Route::post('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'indexfiltered'])->name('shiftManag.index')->middleware('auth');
         Route::post('/storeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.index')->middleware('auth');
 
         Route::get('/shiftstypes', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftstypesindex'])->name('shiftsTypes.index')->middleware('auth');
-        Route::get('/newshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.index')->middleware('auth');
+        Route::get('/newshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.new')->middleware('auth');
+        Route::get('/newshifttype/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'newshifttype'])->name('shiftsTypes.create')->middleware('auth');
         Route::get('/editshifttype/{id}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'editshifttype'])->name('shiftsTypes.edit')->middleware('auth');
-        Route::post('/storeshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.index')->middleware('auth');
+        Route::post('/updateshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'updateshifttype'])->name('shiftsTypes.update')->middleware('auth');
+        Route::post('/storeshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'storenewshift'])->name('shiftsTypes.store')->middleware('auth');
     });
 
     Route::prefix('attendance')->name('attendance.')->middleware('auth')->group(function() {
