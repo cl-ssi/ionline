@@ -124,7 +124,7 @@
 
 
 <div class="siete" style="padding-top: 3px;">
-    @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+    @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
       HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
     @else
 
@@ -152,7 +152,7 @@
 <p class="justify">
 <strong>VISTOS:</strong><br>
 
-@if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+@if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
   @if($ServiceRequest->program_contract_type == "Mensual")
     En estos antecedentes, según lo dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud; Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020  del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones  N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
   @elseif($ServiceRequest->program_contract_type == "Horas")
@@ -171,7 +171,7 @@
 <p class="justify">
 <strong>CONSIDERANDO:</strong><br>
 Que, mediante Decreto N°1 de fecha 07 de enero de 2021 prorroga vigencia del Decreto N° 4 de fecha 05 de enero de 2020, del Ministerio de Salud, se decreta alerta sanitaria por el período que se señala y otorga facultades extraordinarias que indica por emergencia de salud pública de importancia internacional (ESPII) por brote del nuevo coronavirus (2019-ncov).
-@if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+@if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
   Que, el Hospital “Dr. Ernesto Torres Galdames” de Iquique debido a la contingencia ha debido implementar diversas estrategias asociadas a la complejización e incremento de camas básicas a medias y de alta complejidad a modo de satisfacer y dar cobertura a las necesidades de la población, producto de la pandemia sanitaria.
   Que, el Hospital “Dr. Ernesto Torres Galdames” de Iquique, producto de esta contingencia ha debido mantener los servicios de personal para reforzar los equipos de salud, quienes apoyaran la implementación de estrategias definidas por el nivel central en las líneas de detección y tratamiento de la enfermedad, además de reforzar las unidades de apoyo que deben ponerse a disposición para enfrentar la pandemia.
 @else
@@ -185,12 +185,12 @@ Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido p
 <strong>RESUELVO:</strong><br><br>
 
 <strong>1.</strong> APRUÉBESE <strong>Convenio a Honorario a Suma Alzada</strong>
-@if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+@if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
   en el Hospital Dr. “Ernesto Torres Galdames” de Iquique,
 @else
   en la Dirección del Servicio de Salud Iquique,
 @endif
-a la persona que más abajo se individualiza, para apoyar de acuerdo de funciones, de acuerdo con su área de competencia, en el período que se señala.
+a la persona que más abajo se individualiza, para prestar servicios, de acuerdo con su área de competencia, en el período que se señala.
 
 </p>
 
@@ -207,8 +207,8 @@ a la persona que más abajo se individualiza, para apoyar de acuerdo de funcione
           <th>Monto Total</th>
       </tr>
       <tr>
-          <td style="text-align:center">{{$ServiceRequest->name}}</td>
-          <td style="text-align:center">{{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</td>
+          <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
+          <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
           <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
           <td style="text-align:center">{{$ServiceRequest->weekly_hours}}</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
@@ -231,8 +231,8 @@ a la persona que más abajo se individualiza, para apoyar de acuerdo de funcione
             <th>Valor por Hora</th>
         </tr>
         <tr>
-            <td style="text-align:center">{{$ServiceRequest->name}}</td>
-            <td style="text-align:center">{{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</td>
+            <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
+            <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
             <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
             <td style="text-align:center">{{$ServiceRequest->working_day_type}}</td>
             <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
@@ -253,8 +253,8 @@ a la persona que más abajo se individualiza, para apoyar de acuerdo de funcione
             <th>Monto Total</th>
         </tr>
         <tr>
-            <td style="text-align:center">{{$ServiceRequest->name}}</td>
-            <td style="text-align:center">{{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</td>
+            <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
+            <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
             <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
             <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
             <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
@@ -265,32 +265,46 @@ a la persona que más abajo se individualiza, para apoyar de acuerdo de funcione
   @endif
 @endif
 
+@php
+$meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+$fecha = \Carbon\Carbon::parse($ServiceRequest->start_date);
+$mes = $meses[($fecha->format('n')) - 1];
+$inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' . $fecha->format('Y');
+@endphp
+
 <p class="justify">
-    @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
-      En Iquique, a catorce días del mes de enero de dos mil veintiuno, entre <b>D. HECTOR ALARCON ALARCON RUN: 14.101.085-9</b>,  en su calidad de Director  del Hospital “Dr. Ernesto Torres Galdames” de Iquique, con domicilio en Av. Héroes de la Concepción N° 502 de Iquique, en adelante "el Director  del Hospital “Dr. Ernesto Torres Galdames", y por la otra <b>{{$ServiceRequest->name}}, RUN: {{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
+    @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
+      En Iquique, a {{$inputs['Fecha']}}, entre <b>D. HECTOR ALARCON ALARCON RUN: 14.101.085-9</b>,  en su calidad de Director  del Hospital “Dr. Ernesto Torres Galdames” de Iquique, con domicilio en Av. Héroes de la Concepción N° 502 de Iquique, en adelante "el Director  del Hospital “Dr. Ernesto Torres Galdames", y por la otra <b>{{$ServiceRequest->employee->getFullNameAttribute()}}, RUN: {{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
     @else
-      En Iquique, a catorce días del mes de enero de dos mil veintiuno, entre <b>D. JORGE GALLEGUILLOS MÖLLER, RUN: 9.381.231-K</b>,  en su calidad de Director del Servicio de Salud Iquique, con domicilio Aníbal Pinto N° 815 de Iquique, en adelante el Director del Servicio de Salud Iquique, y por la otra <b>{{$ServiceRequest->name}}, RUN: {{$ServiceRequest->run_s_dv}}-{{$ServiceRequest->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
+      En Iquique, a {{$inputs['Fecha']}}, entre <b>D. JORGE GALLEGUILLOS MÖLLER, RUN: 9.381.231-K</b>,  en su calidad de Director del Servicio de Salud Iquique, con domicilio Aníbal Pinto N° 815 de Iquique, en adelante el Director del Servicio de Salud Iquique, y por la otra <b>{{$ServiceRequest->employee->getFullNameAttribute()}}, RUN: {{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
     @endif
 </p>
 
+
 <p class="justify">
     <strong>PRIMERO:</strong>
-    @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
-      Don HECTOR ALARCON ALARCON, en su calidad de Director del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a {{$ServiceRequest->name}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
+    @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
+      Don HECTOR ALARCON ALARCON, en su calidad de Director del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
     @else
-      Don JORGE GALLEGUILLOS MÖLLER, en su calidad de Director del Servicio de Salud Iquique de Iquique, contrata a D. NELSON CAMPILLAY QUEVEDO, (Enfermero), para que preste servicios en el Servicio de Emergencia del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
+      Don JORGE GALLEGUILLOS MÖLLER, en su calidad de Director del Servicio de Salud Iquique de Iquique, contrata a {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
     @endif
   </p>
 
 <p class="justify">
-    <strong>SEGUNDO:</strong> En cumplimiento del presente convenio La Profesional deberá llevar a cabo las siguientes prestaciones:
+    <strong>SEGUNDO:</strong> En cumplimiento del presente convenio El prestador deberá llevar a cabo las siguientes prestaciones:
     <ul>
         <li>{{$ServiceRequest->service_description}}</li>
     </ul>
 </p>
 
 <p class="justify">
-    <strong>TERCERO:</strong> El prestador recibirá los lineamientos por parte del Jefe del {{$ServiceRequest->responsabilityCenter->name}}, del Hospital Regional de Iquique, el cual tendrá la responsabilidad de evaluar sus servicios en forma mensual.
+    <strong>TERCERO:</strong> El prestador recibirá los lineamientos por parte del Jefe del {{$ServiceRequest->responsabilityCenter->name}}, del
+    @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
+      Hospital Regional de Iquique,
+    @else
+      Servicio de Salud Iquique,
+    @endif
+    el cual tendrá la responsabilidad de evaluar sus servicios en forma mensual.
 </p>
 
 <p class="justify">
@@ -303,14 +317,14 @@ a la persona que más abajo se individualiza, para apoyar de acuerdo de funcione
 
 <p class="justify">
     <strong>SEXTO:</strong>
-    @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+    @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
       El Hospital “Dr. Ernesto Torres Galdames” de Iquique podrá poner término anticipadamente a este contrato mediante razones fundadas, previo aviso por escrito al prestador con 48 horas hábiles de anticipación.
     @else
       La Dirección del Servicio de Salud Iquique podrá poner término anticipadamente a este contrato mediante razones fundadas, previo aviso por escrito al prestador con 48 horas hábiles de anticipación.
     @endif
   </p>
 
-@if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+@if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
   @if($ServiceRequest->program_contract_type == "Mensual")
     <p class="justify">
         <strong>SÉPTIMO:</strong>
@@ -327,18 +341,24 @@ a la persona que más abajo se individualiza, para apoyar de acuerdo de funcione
         <p class="justify">
             <strong>SÉPTIMO:</strong>
             En el desempeño de sus funciones, el prestador cumplió con un total de {{number_format($ServiceRequest->Fulfillments->first()->total_hours_to_pay)}} Horas en turno extras en el mes de {{$ServiceRequest->start_date->monthName}}, cuya suma alzada totas es de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}.- ({{$ServiceRequest->fulfillments->first()->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}} el mes de {{$ServiceRequest->start_date->monthName}}; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
-            @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+            @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
               Hospital Regional de Iquique,
             @else
               Servicio de Salud Iquique,
             @endif
-            en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+            en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas
+            @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
+              del Hospital Dr. Ernesto Torres Galdames de Iquique,
+            @else
+              de la Dirección del servicio de salud Iquique,
+            @endif
+            el cual debe venir con las debidas observaciones de la Jefatura directa.
         </p>
       @elseif($ServiceRequest->working_day_type == "HORA EXTRA")
         <p class="justify">
             <strong>SÉPTIMO:</strong>
             En el desempeño de sus funciones, el prestador cumplió con un total de {{number_format($ServiceRequest->Fulfillments->first()->total_hours_to_pay)}} Horas por extensión horaria en el mes de {{$ServiceRequest->start_date->monthName}}, cuya suma alzada totas es de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}.- ({{$ServiceRequest->fulfillments->first()->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}} el mes de {{$ServiceRequest->start_date->monthName}}; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
-            @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+            @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
               Hospital Regional de Iquique,
             @else
               Servicio de Salud Iquique,
@@ -360,7 +380,7 @@ a la persona que más abajo se individualiza, para apoyar de acuerdo de funcione
 @if($ServiceRequest->program_contract_type == "Mensual")
   <p class="justify">
       <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}),  impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en @livewire('service-request.monthly-quotes', ['serviceRequest' => $ServiceRequest]) se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
-      @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+      @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
         Hospital Regional de Iquique,
       @else
         Servicio de Salud Iquique,
@@ -447,7 +467,7 @@ a la persona que más abajo se individualiza, para apoyar de acuerdo de funcione
   </p>
   <p class="justify">
       <strong>DECIMO CUARTO:</strong>
-      @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+      @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
         La personería de D. HECTOR ALARCON ALARCON, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de Director, consta en Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020, del Servicio de Salud Iquique.
       @else
         La personería de D. JORGE GALLEGUILLOS MÖLLER, para representar al Servicio de Salud Iquique, en su calidad de Director, consta en el Dto. de Nombramiento N° 42/2019 del Ministerio de Salud.
@@ -468,8 +488,7 @@ a la persona que más abajo se individualiza, para apoyar de acuerdo de funcione
   @endif
 @endif
 
-<br><br>
-Para constancia firman:
+Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribute()}} <br><br>
 
 <p class="">
     <strong>2.</strong> El convenio que por este acto se aprueban, se entiende que forman parte integrante de la presente Resolución.
@@ -500,7 +519,7 @@ Para constancia firman:
 <div id="firmas">
     <div class="center" style="width: 100%;">
 
-        @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+        @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
           <strong>
           <span class="uppercase">HECTOR ALARCÓN ALARCÓN</span><br>
           DIRECTOR<br>
@@ -521,16 +540,21 @@ Para constancia firman:
 <br style="padding-bottom: 4px;">
 <div class="siete" style="padding-top: 2px;">
     <strong><u>DISTRIBUCIÓN:</u></strong><br>
-    @if($ServiceRequest->user->organizationalUnit->establishment_id == 1)
+    @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
       Honorarios Covid<br>
-      Finanzas<br>
-      Interesado<br>
       Oficina de partes<br>
     @else
-      Personal SSI (vania.ardiles@redsalud.gov.cl, rosa.contreras@redsalud.gov.cl)<br>
-      Finanzas (roxana.penaranda@redsalud.gov.cl)<br>
-      Interesado<br>
-      Oficina de Partes<br>
+      @if($ServiceRequest->employee->organizationalUnit->establishment_id == 12)
+        CGU (roxana.penaranda@redsalud.gov.cl, anakena.bravo@redsalud.gov.cl)<br>
+        Finanzas (patricia.salinasm@redsalud.gov.cl, finanzas.ssi@redsalud.gov.cl)<br>
+        Interesado<br>
+        Oficina de Partes<br>
+      @else
+        Personal SSI (vania.ardiles@redsalud.gov.cl, rosa.contreras@redsalud.gov.cl, isis.gallardo@redsalud.gov.cl)<br>
+        Finanzas (patricia.salinasm@redsalud.gov.cl, finanzas.ssi@redsalud.gov.cl)<br>
+        Interesado<br>
+        Oficina de Partes<br>
+      @endif
     @endif
 </div>
 

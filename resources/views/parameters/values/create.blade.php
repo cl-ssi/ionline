@@ -4,7 +4,8 @@
 
 @section('content')
 
-@include('parameters/nav')
+@include('service_requests.partials.nav')
+
 <h3 class="mb-3">Crear nuevo valor Hora/Jornada</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('parameters.values.store') }}">

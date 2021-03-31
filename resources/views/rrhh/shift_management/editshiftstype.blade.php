@@ -1,0 +1,60 @@
+@extends('layouts.app')
+@section('title', 'Editando Tipos de Turnos')
+@section('content')
+<style type="text/css">
+	.shadow {
+  		box-shadow: 0px 2px 2px black;
+  		-moz-box-shadow: 0px 2px 2px black, ;
+  		-webkit-box-shadow: 0px 2px 2px black;
+	}
+</style>
+<h3>Editando <i>"{{$sType->name}}"</i> - <b>{{$sType->shortname}}</b> </h3>
+<div class="row ">
+	<div class="col-md-6 col-md-offset-4 shadow"> 
+
+		<form method="POST" class="form-horizontal" action="{{ route('parameters.permissions.store') }}">
+    		@csrf
+    		@method('POST')
+
+    		<div class="row">
+
+    			<fieldset class="form-group col-6 col-md-3">
+            		<label for="for_name">Nombre*</label>
+            		<input type="text" class="form-control" id="for_name" name="name" value="{{$sType->name}}" required>
+        		</fieldset>
+    		</div>
+    		<div class="row">
+
+        		<fieldset class="form-group col-6 col-md-2">
+        		    <label for="for_guard_name">Abreviacion</label>
+        		    <input type="text" class="form-control" id="for_shortname" name="guard_name" 
+        		        value="{{$sType->shortname}}">
+        		</fieldset>
+    		</div>
+    		<div class="row">
+    			@php
+    				$days = explode(",",$sType->day_series)
+    			@endphp
+        		<fieldset class="form-group col-12 col-md-7">
+        		    <label for="for_descripcion">Jornada</label>
+        		    @for($i=0;$i<7;$i++)
+        		         <select class="form-control"  id="for_day_series" name="day_series">
+        		        
+        		         	@foreach($tiposJornada as $index => $t  )
+        		         		<option value="{{ $index}}" {{($index == $days[$i])?"":"selected"}}> {{$index}} - {{$t}}</option>
+
+        		         	@endforeach
+        		         </select>
+        		    @endfor
+        		</fieldset>
+    		</div>
+    		<button type="submit" class="btn btn-primary">Guardar</button>
+    
+		</form>
+
+
+
+	</div>
+	
+</div>
+@endsection
