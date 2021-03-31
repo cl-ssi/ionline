@@ -41,10 +41,12 @@ class UpdateAccount extends Component
     public function save()
     {
         $this->validate();
-
-        $this->serviceRequest->bank_id = $this->bank_id;
-        $this->serviceRequest->account_number = $this->account_number;
-        $this->serviceRequest->pay_method = $this->pay_method;
+        
+        //$this->serviceRequest->bank_id = $this->bank_id;
+        $this->serviceRequest->employee->bankAccount->bank_id = $this->bank_id;        
+        $this->serviceRequest->employee->bankAccount->number = $this->account_number;
+        $this->serviceRequest->employee->bankAccount->type = $this->pay_method;
+        $this->serviceRequest->employee->bankAccount->save();
 
         $this->serviceRequest->phone_number = $this->phone_number;
         $this->serviceRequest->email = $this->email;
@@ -54,12 +56,13 @@ class UpdateAccount extends Component
 
     public function mount()
     {
-        $this->bank_id = $this->serviceRequest->bank_id;
-        $this->account_number = $this->serviceRequest->account_number;
-        $this->account_type = $this->serviceRequest->account_type;
-        $this->pay_method = $this->serviceRequest->pay_method;
+        $this->bank_id = $this->serviceRequest->employee->bankAccount->bank_id;
+        $this->account_number = $this->serviceRequest->employee->bankAccount->number;
+        //$this->account_type = $this->serviceRequest->account_type;
+        $this->pay_method = $this->serviceRequest->employee->bankAccount->type;
 
-        $this->phone_number = $this->serviceRequest->phone_number;
+        //$this->phone_number = $this->serviceRequest->phone_number;
+        $this->phone_number = $this->serviceRequest->employee->phone_number;
         $this->email = $this->serviceRequest->email;
     }
 
