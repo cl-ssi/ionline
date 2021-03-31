@@ -41,6 +41,10 @@ use App\Http\Controllers\ServiceRequests\SignatureFlowController;
 use App\Http\Controllers\ServiceRequests\FulfillmentItemController;
 use App\Http\Controllers\ServiceRequests\ReportController;
 
+
+
+use App\Http\Controllers\Parameters\ProfessionController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -486,6 +490,16 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::get('/edit/{permission}', 'Parameters\PermissionController@edit')->name('edit');
         Route::put('/update/{permission}', 'Parameters\PermissionController@update')->name('update');
         Route::delete('{permission}/destroy', 'Parameters\PermissionController@destroy')->name('destroy');
+
+    });
+
+    Route::prefix('professions')->as('professions.')->group(function () {
+        Route::get('/', [ProfessionController::class, 'index'])->name('index');
+        Route::get('/create', [ProfessionController::class, 'create'])->name('create');
+        Route::post('/store', [ProfessionController::class, 'store'])->name('store');
+        Route::get('/{profession}/edit', [ProfessionController::class, 'edit'])->name('edit');
+        Route::put('/{profession}/update', [ProfessionController::class, 'update'])->name('update');
+
 
     });
 
