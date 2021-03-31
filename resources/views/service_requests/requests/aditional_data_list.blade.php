@@ -67,8 +67,8 @@
       <!-- <td>{{ $serviceRequest->type }}</td> -->
       <td>{{ $serviceRequest->program_contract_type }}</td>
       <td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
-      <td nowrap>{{ $serviceRequest->rut }}</td>
-      <td nowrap>{{ $serviceRequest->name }}</td>
+      <td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
+      <td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
       <td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
       <td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
       <td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente

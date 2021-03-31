@@ -50,12 +50,12 @@
 
   <fieldset class="form-group col-3 col-md-3">
       <label for="for_request_date">Rut</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->rut}}" disabled>
+      <input type="text" class="form-control" value="{{$serviceRequest->employee->runNotFormat()}}" disabled>
   </fieldset>
 
   <fieldset class="form-group col-3 col-md-3">
       <label for="for_start_date">Funcionario</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->name}}" disabled>
+      <input type="text" class="form-control" value="{{$serviceRequest->employee->getFullNameAttribute()}}" disabled>
   </fieldset>
 
   <fieldset class="form-group col-3 col-md-3">

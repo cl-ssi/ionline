@@ -20,17 +20,17 @@ class ServiceRequest extends Model implements Auditable
      */
     protected $fillable = [
         'id', 'responsable_id','user_id','subdirection_ou_id', 'responsability_center_ou_id',
-        'type', 'rut', 'name', 'request_date', 'start_date', 'end_date', 'contract_type','contractual_condition',
+        'type', 'request_date', 'start_date', 'end_date', 'contract_type','contractual_condition',
         'service_description', 'programm_name', 'other', 'normal_hour_payment', 'amount',
         'program_contract_type', 'weekly_hours', 'daily_hours', 'nightly_hours', 'estate',
         'estate_other', 'working_day_type', 'working_day_type_other', 'subdirection_id',
         'responsability_center_id','budget_cdp_number', 'budget_item', 'budget_amount',
-        'budget_date', 'contract_number','month_of_payment','establishment_id','nationality',
+        'budget_date', 'contract_number','month_of_payment','establishment_id',
         'digera_strategy','rrhh_team','gross_amount', 'net_amount','sirh_contract_registration',
         'resolution_number','resolution_date','bill_number','total_hours_paid','total_paid',
-        'bank_id','account_number','pay_method','has_resolution_file',
-        'payment_date','address','phone_number','email','verification_code','observation'
-
+        'has_resolution_file','payment_date','verification_code','observation','creator_id',
+        'address','phone_number','email'
+        // 'rut', 'name','bank_id','account_number','pay_method','nationality',
     ];
 
     public function MonthOfPayment() {
@@ -82,8 +82,16 @@ class ServiceRequest extends Model implements Auditable
       }
     }
 
-    public function user(){
+    public function responsable(){
       return $this->belongsTo('App\User','responsable_id');
+    }
+
+    public function employee(){
+      return $this->belongsTo('App\User','user_id');
+    }
+
+    public function creator(){
+      return $this->belongsTo('App\User','creator_id');
     }
 
     public function SignatureFlows() {
