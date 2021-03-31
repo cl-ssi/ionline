@@ -68,7 +68,7 @@ input:checked + .slider:before {
 </style>
 
 	<h3 class="inline mt-3">Tipos de turno 
-		<a href="{{ route('rrhh.shiftsTypes.create') }}" class="btn btn-primary">Crear</a>
+		<a href="{{ route('rrhh.shiftsTypes.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> CREAR</a>
 	</h3>
 	<br>
 
