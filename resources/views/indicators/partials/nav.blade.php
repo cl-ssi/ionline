@@ -24,6 +24,7 @@
                         @case('18834')      Ley 18.834      @break
                         @case('iaaps')      IAAPS           @break
                         @case('program_aps') Programación APS @break
+                        @case('programming_aps') Programación APS @break
                         @case('0')  RESUMEN @break;
                         @case('1')  COLCHANE @break;
                         @case('2')  HUARA @break;

@@ -132,7 +132,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
 
     Route::prefix('request')->name('request.')->group(function(){
         Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index');
-        // Route::get('/create', [ReplacementStaffController::class, 'requestCreate'])->name('create');
+        Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
         // Route::get('/own', [ReplacementStaffController::class, 'requestOwn'])->name('own');
         // Route::get('/edit', [ReplacementStaffController::class, 'requestEdit'])->name('edit');
     });
@@ -308,7 +308,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::prefix('shiftManagement')->group(function () {
         Route::get('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftManag.index')->middleware('auth');
         Route::post('/storeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.index')->middleware('auth');
-        
+
         Route::get('/shiftstypes', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftstypesindex'])->name('shiftsTypes.index')->middleware('auth');
         Route::get('/newshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.index')->middleware('auth');
         Route::get('/editshifttype/{id}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'editshifttype'])->name('shiftsTypes.edit')->middleware('auth');
@@ -613,6 +613,11 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::get('/{law}/{year}/{health_goal}', 'Indicators\HealthGoalController@show')->name('show');
         Route::get('/{law}/{year}/{health_goal}/ind/{indicator}/edit', 'Indicators\HealthGoalController@editInd')->middleware('auth')->name('ind.edit');
         Route::put('/{law}/{year}/{health_goal}/ind/{indicator}', 'Indicators\HealthGoalController@updateInd')->middleware('auth')->name('ind.update');
+    });
+
+    Route::prefix('programming_aps')->as('programming_aps.')->group(function () {
+        Route::get('/', 'Indicators\ProgramApsController@index')->name('index');
+        Route::get('/{year}/{commune}', 'Indicators\ProgramApsController@show')->name('show');
     });
 
     Route::prefix('19813')->as('19813.')->group(function () {
