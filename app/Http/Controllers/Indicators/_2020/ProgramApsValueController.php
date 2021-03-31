@@ -8,6 +8,7 @@ use App\Models\Commune;
 use App\Establishment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+// use App\Indicators\Rem;
 use Illuminate\Support\Facades\DB;
 
 class ProgramApsValueController extends Controller
@@ -170,6 +171,25 @@ class ProgramApsValueController extends Controller
                 '. $filter_commune_reyno . ' 
                 GROUP BY NombreComuna, mes ORDER BY NombreComuna, mes';
         $cantidades = DB::connection('mysql_rem')->select($query);
+
+        // $cantidades = Rem::year(2020)->selectRaw('SUM(COALESCE(Col06,0)) + SUM(COALESCE(Col08,0)) + SUM(COALESCE(Col10,0)) AS valor, IdEstablecimiento, Mes')
+        // ->with('establecimiento')
+        // ->when(isset($comuna) && $comuna->id != 8, function($q) use ($comuna){
+        //     return $q->whereHas('establecimiento', function($q2) use ($comuna){
+        //         return $q2->where('comuna', $comuna->name)->where('Codigo', '!=', 102307);
+        //         });
+        // })
+        // ->when(isset($comuna) && $comuna->id == 8, function($q){
+        //     return $q->whereHas('establecimiento', function($q2){
+        //         return $q2->where('Codigo', 102307);
+        //         });
+        // })
+        // ->whereIn('CodigoPrestacion', ['02010201'])
+        // ->whereIn('Mes',[1,2,3,4,5,6,7,8,9,10,11])
+        // ->whereNotIn('CodigoPrestacion', ['102100','102600','102601','102602','102011'])
+        // ->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
+        
+        // dd($cantidades->sum('valor'));
 
         foreach($cantidades as $cantidad) {
             if($comuna == null){

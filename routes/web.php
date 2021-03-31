@@ -615,6 +615,11 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::put('/{law}/{year}/{health_goal}/ind/{indicator}', 'Indicators\HealthGoalController@updateInd')->middleware('auth')->name('ind.update');
     });
 
+    Route::prefix('programming_aps')->as('programming_aps.')->group(function () {
+        Route::get('/', 'Indicators\ProgramApsController@index')->name('index');
+        Route::get('/{year}/{commune}', 'Indicators\ProgramApsController@show')->name('show');
+    });
+
     Route::prefix('19813')->as('19813.')->group(function () {
         Route::get('/', function () {
             return view('indicators.19813.index');
