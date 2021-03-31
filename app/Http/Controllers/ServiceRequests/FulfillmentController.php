@@ -47,11 +47,11 @@ class FulfillmentController extends Controller
                                           ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
                                                  return $q->where('program_contract_type',$program_contract_type);
                                                })
-                                          // ->when($name != NULL, function ($q) use ($name) {
-                                          //         return $q->whereHas("employee", function($subQuery) use($user_id){
-                                          //                    $subQuery->where('name','LIKE','%'.$name.'%');
-                                          //               });
-                                          //      })
+                                           ->when(($name != NULL), function ($q) use ($name) {
+                                                   return $q->whereHas("employee", function($subQuery) use ($name){
+                                                              $subQuery->where('name','LIKE','%'.$name.'%');
+                                                         });
+                                                })
                                           ->when($id != NULL, function ($q) use ($id) {
                                                  return $q->where('id',$id);
                                                })
@@ -69,9 +69,11 @@ class FulfillmentController extends Controller
                                           ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
                                                  return $q->where('program_contract_type',$program_contract_type);
                                                })
-                                          ->when($name != NULL, function ($q) use ($name) {
-                                                return $q->where('name','LIKE','%'.$name.'%');
-                                               })
+                                           ->when(($name != NULL), function ($q) use ($name) {
+                                                   return $q->whereHas("employee", function($subQuery) use ($name){
+                                                              $subQuery->where('name','LIKE','%'.$name.'%');
+                                                         });
+                                                })
                                           ->when($id != NULL, function ($q) use ($id) {
                                                 return $q->where('id',$id);
                                                })
@@ -94,14 +96,6 @@ class FulfillmentController extends Controller
             }
             //"turno"
             else{
-              // //se consideran los que tengan más de una visación
-              // if ($serviceRequest->SignatureFlows->whereNotNull('status')->count() == 1) {
-              //   $serviceRequests->forget($key);
-              // }
-              // // no se consideran rechazados
-              // if ($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) {
-              //   $serviceRequests->forget($key);
-              // }
 
               //only completed
               if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0 && $serviceRequest->SignatureFlows->whereNull('status')->count() == 0) {
