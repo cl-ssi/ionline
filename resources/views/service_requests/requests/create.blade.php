@@ -119,6 +119,7 @@
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_medico">Médico</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fonoaudiologas">Fonoaudiologas</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_terapeuta_ocupacional">Terapeuta Ocupacional</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_psicologo">Psicólogo</button>
 
     </fieldset>
 
@@ -658,7 +659,9 @@
 	$("#alias_terapeuta_ocupacional").click(function(){
 		$('#service_description').val("Prestará servicios de Terapia Ocupacional realizando las funciones descritas en el Manuel de Organización interno , en el contexto de pandemia covid.");
 	});
-
+	$("#alias_psicologo").click(function(){
+		$('#service_description').val("Prestará servicios de psicología realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid.");
+	});
 
 
 </script>
