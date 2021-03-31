@@ -29,7 +29,7 @@
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.service-request.aditional_data_list') }}"
             href="{{ route('rrhh.service-request.aditional_data_list') }}">
-            <i class="fas fa-file-alt"></i> Información adicional
+            <i class="fas fa-file-alt"></i> Info. adicional
         </a>
     </li>
     @endcan
@@ -38,7 +38,7 @@
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.service-request.transfer_requests') }}"
             href="{{ route('rrhh.service-request.transfer_requests') }}">
-            <i class="fas fa-sign-in-alt"></i> Transferencia de solicitudes
+            <i class="fas fa-sign-in-alt"></i> Transferir solicitudes
         </a>
     </li>
     @endcan
@@ -110,7 +110,7 @@
     @canany(['Service Request: maintainers'])
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle {{ active('parameters.values.report.*') }}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-archive"></i> Mantenedores
+            <i class="fas fa-cog"></i>
         </a>
         <div class="dropdown-menu">
 
