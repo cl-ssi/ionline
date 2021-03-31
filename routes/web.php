@@ -23,6 +23,7 @@ use App\Http\Controllers\RequestForms\RequestFormFileController;
 use App\Http\Controllers\RequestForms\RequestFormCodeController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
+use App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController;
 use App\Http\Controllers\ReplacementStaff\ProfileController;
 use App\Http\Controllers\ReplacementStaff\ExperienceController;
 use App\Http\Controllers\ReplacementStaff\TrainingController;
@@ -129,6 +130,13 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
     Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
     Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
 
+    Route::prefix('request')->name('request.')->group(function(){
+        Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index');
+        // Route::get('/create', [ReplacementStaffController::class, 'requestCreate'])->name('create');
+        // Route::get('/own', [ReplacementStaffController::class, 'requestOwn'])->name('own');
+        // Route::get('/edit', [ReplacementStaffController::class, 'requestEdit'])->name('edit');
+    });
+
     Route::prefix('profile')->name('profile.')->group(function(){
         // Route::post('/{replacementStaff}/store', [ProfileController::class, 'store'])->name('store');
         Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
@@ -164,13 +172,6 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
               Route::delete('{profile}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
           });
       });
-    });
-
-    Route::prefix('request')->name('request.')->group(function(){
-        Route::get('/', [ReplacementStaffController::class, 'requestIndex'])->name('index');
-        Route::get('/create', [ReplacementStaffController::class, 'requestCreate'])->name('create');
-        Route::get('/own', [ReplacementStaffController::class, 'requestOwn'])->name('own');
-        Route::get('/edit', [ReplacementStaffController::class, 'requestEdit'])->name('edit');
     });
 });
 
