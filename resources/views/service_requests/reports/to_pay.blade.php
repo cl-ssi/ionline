@@ -34,8 +34,8 @@
           <td>{{$fulfillment->serviceRequest->id}}</td>
           <td>{{$fulfillment->serviceRequest->program_contract_type}}</td>
           <td>{{$fulfillment->serviceRequest->working_day_type}}</td>
-          <td>{{$fulfillment->serviceRequest->name}}</td>
-          <td>{{$fulfillment->serviceRequest->rut}}</td>
+          <td>{{$fulfillment->serviceRequest->employee->getFullNameAttribute()}}</td>
+          <td>{{$fulfillment->serviceRequest->employee->runNotFormat()}}</td>
           <td>{{$fulfillment->year}} - {{$fulfillment->month}}</td>
           <td>{{$fulfillment->serviceRequest->bank->name ?? ''}} - {{$fulfillment->serviceRequest->account_number?? ''}}</td>
           <td>{{$fulfillment->serviceRequest->phone_number ?? ''}}</td>
@@ -96,8 +96,8 @@
           <td>{{$fulfillment->serviceRequest->id}}</td>
           <td>{{$fulfillment->serviceRequest->program_contract_type}}</td>
           <td>{{$fulfillment->serviceRequest->working_day_type}}</td>
-          <td>{{$fulfillment->serviceRequest->name}}</td>
-          <td nowrap>{{$fulfillment->serviceRequest->rut}}</td>
+          <td>{{$fulfillment->serviceRequest->employee->getFullNameAttribute()}}</td>
+          <td>{{$fulfillment->serviceRequest->employee->runNotFormat()}}</td>
           <td>{{$fulfillment->year}} - {{$fulfillment->month}}</td>
           <td>
               <a href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank">

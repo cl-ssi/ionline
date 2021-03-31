@@ -47,9 +47,11 @@ class FulfillmentController extends Controller
                                           ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
                                                  return $q->where('program_contract_type',$program_contract_type);
                                                })
-                                          ->when($name != NULL, function ($q) use ($name) {
-                                                  return $q->where('name','LIKE','%'.$name.'%');
-                                               })
+                                          // ->when($name != NULL, function ($q) use ($name) {
+                                          //         return $q->whereHas("employee", function($subQuery) use($user_id){
+                                          //                    $subQuery->where('name','LIKE','%'.$name.'%');
+                                          //               });
+                                          //      })
                                           ->when($id != NULL, function ($q) use ($id) {
                                                  return $q->where('id',$id);
                                                })
@@ -376,15 +378,6 @@ class FulfillmentController extends Controller
 
     public function certificatePDF(Fulfillment $fulfillment)
     {
-        // dd($fulfillment);
-
-        // $rut = explode("-", $ServiceRequest->rut);
-        // $ServiceRequest->run_s_dv = number_format($rut[0],0, ",", ".");
-        // $ServiceRequest->dv = $rut[1];
-        //
-        // $formatter = new NumeroALetras();
-        // $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
-
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('service_requests.requests.fulfillments.report_certificate',compact('fulfillment'));
 

@@ -34,16 +34,16 @@ class UpdateAccount extends Component
         'email.required' => 'Debe Ingresar un Correo Electrónico',
         'email.email' => 'El Formato del Correo Electrónico no es válido',
     ];
-    
+
 
 
 
     public function save()
-    {        
+    {
         $this->validate();
-        
+
         $this->serviceRequest->bank_id = $this->bank_id;
-        $this->serviceRequest->account_number = $this->account_number;        
+        $this->serviceRequest->account_number = $this->account_number;
         $this->serviceRequest->pay_method = $this->pay_method;
 
         $this->serviceRequest->phone_number = $this->phone_number;
@@ -64,8 +64,8 @@ class UpdateAccount extends Component
     }
 
     public function updateAllSr(){
-        $rut = $this->serviceRequest->rut;
-        $srs = ServiceRequest::where('rut',$rut)->orderByDesc('id')->get();
+        $rut = $this->serviceRequest->user_id;
+        $srs = ServiceRequest::where('user_id',$rut)->orderByDesc('id')->get();
         $with_account = $srs->whereNotNull('account_number')->first();
         if($with_account) {
             $bank_id        = $with_account->bank_id;

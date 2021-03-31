@@ -26,23 +26,22 @@ class InvoiceController extends Controller
                 $url_base = "https://www.claveunica.gob.cl/openid/userinfo/";
                 $response = Http::withToken($access_token)->post($url_base);
                 $user_cu = json_decode($response);
-                $user = $user_cu->RolUnico->numero;
-                $user = $user.'-'.$user_cu->RolUnico->DV;
+                $user_id = $user_cu->RolUnico->numero;
+                // $user = $user.'-'.$user_cu->RolUnico->DV;
 
 
             } else if (env('APP_ENV') == 'local') {
-                $user = $access_token;
+                $user_id = $access_token;
 
             }
-            return $this->show($user);
+            return $this->show($user_id);
         }
     }
 
 
-    public function show($user)
+    public function show($user_id)
     {
-
-        $serviceRequests = ServiceRequest::where('rut',$user)->get();
+        $serviceRequests = ServiceRequest::where('user_id',$user_id)->get();
         return view('service_requests.invoice.show', compact('serviceRequests'));
     }
 

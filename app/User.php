@@ -28,8 +28,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'dv', 'name', 'fathers_family','mothers_family','gender', 'email',
-        'password','birthday','position','active','external'
+        'id', 'dv', 'name', 'fathers_family','mothers_family','gender','address','phone_number','email',
+        'password','birthday','position','active','external','country_id'
     ];
 
     /**
@@ -61,6 +61,14 @@ class User extends Authenticatable
         return $this->hasOne('\App\Resources\Mobile');
     }
 
+    public function country() {
+        return $this->belongsTo('\App\Models\Country');
+    }
+
+    public function bankAccount() {
+        return $this->hasOne('\App\Models\Rrhh\UserBankAccount','user_id');
+    }
+
 
     public function scopeSearch($query, $name) {
         if($name != "") {
@@ -72,6 +80,10 @@ class User extends Authenticatable
 
     public function runFormat() {
         return number_format($this->id, 0,'.','.') . '-' . $this->dv;
+    }
+
+    public function runNotFormat() {
+        return $this->id . '-' . $this->dv;
     }
 
     public function getFullNameAttribute()
