@@ -26,7 +26,7 @@
         <th>Resolución</th>
         <th>Editar</th>
         @canany(['Service Request: fulfillments finance'])
-          <th>Apto para pago</th>
+          <th nowrap>Aprobación de pago</th>
         @endcanany
     </tr>
     @foreach($fulfillments->whereNull('total_paid') as $key => $fulfillment)
@@ -34,10 +34,16 @@
           <td>{{$fulfillment->serviceRequest->id}}</td>
           <td>{{$fulfillment->serviceRequest->program_contract_type}}</td>
           <td>{{$fulfillment->serviceRequest->working_day_type}}</td>
-          <td>{{$fulfillment->serviceRequest->name}}</td>
-          <td>{{$fulfillment->serviceRequest->rut}}</td>
-          <td>{{$fulfillment->year}} - {{$fulfillment->month}}</td>
-          <td>{{$fulfillment->serviceRequest->bank->name ?? ''}} - {{$fulfillment->serviceRequest->account_number?? ''}}</td>
+          <td>{{$fulfillment->serviceRequest->employee->fullName}}</td>
+          <td>{{$fulfillment->serviceRequest->employee->id}}</td>
+          <td>
+            @if($fulfillment->year)
+              {{ $fulfillment->year }}-{{ $fulfillment->month }}
+            @else
+              {{ $fulfillment->start_date->format('Y-m') }}
+            @endif
+          </td>
+          <td>{{$fulfillment->serviceRequest->employee->bankAccount->bank->name ?? ''}} - {{$fulfillment->serviceRequest->employee->bankAccount->number?? ''}}</td>
           <td>{{$fulfillment->serviceRequest->phone_number ?? ''}}</td>
           <td>
               <a href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank">
@@ -96,9 +102,15 @@
           <td>{{$fulfillment->serviceRequest->id}}</td>
           <td>{{$fulfillment->serviceRequest->program_contract_type}}</td>
           <td>{{$fulfillment->serviceRequest->working_day_type}}</td>
-          <td>{{$fulfillment->serviceRequest->name}}</td>
-          <td nowrap>{{$fulfillment->serviceRequest->rut}}</td>
-          <td>{{$fulfillment->year}} - {{$fulfillment->month}}</td>
+          <td>{{$fulfillment->serviceRequest->employee->fullName}}</td>
+          <td nowrap>{{$fulfillment->serviceRequest->employee->id}}</td>
+          <td>
+            @if($fulfillment->year)
+              {{ $fulfillment->year }}-{{ $fulfillment->month }}
+            @else
+              {{ $fulfillment->start_date->format('Y-m') }}
+            @endif
+          </td>
           <td>
               <a href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank">
                  <i class="fas fa-paperclip"></i>
@@ -106,15 +118,15 @@
           </td>
           <td>
             @if($fulfillment->has_invoice_file)
-              <a href="{{route('rrhh.service-request.fulfillment.download-invoice', $fulfillment)}}"
+              <a href="{{route('rrhh.service-request.fulfillment.download_invoice', $fulfillment)}}"
                  target="_blank" class="mr-4">
                  <i class="fas fa-paperclip"></i>
               </a>
             @endif
           </td>
           <td>
-            @if($fulfillment->has_resolution_file)
-              <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fulfillment)}}"
+          @if($fulfillment->serviceRequest->has_resolution_file)
+              <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fulfillment->serviceRequest)}}"
                  target="_blank" class="mr-4">
                  <i class="fas fa-paperclip"></i>
               </a>

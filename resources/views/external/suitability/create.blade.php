@@ -30,6 +30,11 @@
                 <option value="female">Femenino</option>
             </select>
         </fieldset>
+
+        <fieldset class="form-group col-5 col-sm-4 col-md-4 col-lg-2">
+            <label for="for_phone">Telefono</label>
+            <input type="text" class="form-control" id="for_phone_number" name="phone_number" autocomplete="off" placeholder="ej: +56982064875"  required>
+        </fieldset>
     </div>
 
     <div class="row">
@@ -44,8 +49,8 @@
         </fieldset>
 
         <fieldset class="form-group col-6">
-            <label for="for_mothers_family">Apellido Materno*</label>
-            <input type="text" class="form-control" id="for_mothers_family" placeholder="" name="mothers_family" required="" autocomplete="off">
+            <label for="for_mothers_family">Apellido Materno</label>
+            <input type="text" class="form-control" id="for_mothers_family" placeholder="" name="mothers_family" autocomplete="off">
         </fieldset>
 
         <fieldset class="form-group col-6">

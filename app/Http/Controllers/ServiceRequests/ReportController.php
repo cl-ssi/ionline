@@ -14,57 +14,61 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class ReportController extends Controller
 {
     public function toPay(Request $request){
-        /* 2 querys con listado de fullfillment pendientes y pagados */
-
-        // $current_week = date('Y').'-W'.date('W');
-
-        // $now = Carbon::now();
-        // $weekStartDate = $now->startOfWeek()->format('Y-m-d H:i');
-        // $weekEndDate = $now->endOfWeek()->format('Y-m-d H:i');
-        // $week = $request->week;
-        // $current_week = $now->format('Y').'-W'.$now->week();
-
-        // if ($request->week != NULL) {
-        //   $current_week = $request->week;
-        // }else{
-        //   $current_week = date('Y').'-W'.date('W');
-        // }
-        //
-        // $now = Carbon::now();
-        // list($year, $week) = explode('-W',$current_week);
-        // $now->setISODate($year,$week);
-        // $from = $now->startOfWeek()->format('Y-m-d 00:00:00');
-        // $to   = $now->endOfWeek()->format('Y-m-d 23:59:59');
-
-
-        $fulfillments = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
+        $fulfillments1 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
                                        $subQuery->where('has_resolution_file',1);
                                      })
                                      ->where('has_invoice_file',1)
+                                     ->where('type','Mensual')
+                                     ->where('responsable_approbation',1)
+                                     ->where('rrhh_approbation',1)
+                                     ->where('finances_approbation',1)
                                      ->get();
+
+         $fulfillments2 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
+                                        $subQuery->where('has_resolution_file',1);
+                                      })
+                                      ->where('has_invoice_file',1)
+                                      ->where('type','<>','Mensual')
+                                      ->get();
+
+        $fulfillments = $fulfillments1->merge($fulfillments2);
+
+                                     // dd($fulfillments);
 
         return view('service_requests.reports.to_pay', compact('fulfillments'));
     }
 
     public function bankPaymentFile()
     {
-        // $now = Carbon::now();
-        // list($year, $week) = explode('-W', $selected_week);
-        // $now->setISODate($year, $week);
-        // $from = $now->startOfWeek()->format('Y-m-d 00:00:00');
-        // $to = $now->endOfWeek()->format('Y-m-d 23:59:59');
-        // $fromFormatted = $now->startOfWeek()->format('d-m-Y');
-
-        // $fulfillments = Fulfillment::whereHas("ServiceRequest", function ($subQuery) use ($from, $to) {
-        //     $subQuery->whereBetween('request_date', [$from, $to]);
+        // $fulfillments = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
+        //     $subQuery->where('has_resolution_file', 1)
+        //         ->where('payment_ready', 1);
         // })
+        //     ->where('has_invoice_file', 1)
         //     ->get();
-        $fulfillments = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
-            $subQuery->where('has_resolution_file', 1)
-                ->where('payment_ready', 1);
-        })
-            ->where('has_invoice_file', 1)
-            ->get();
+
+        $fulfillments1 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
+                                       $subQuery->where('has_resolution_file',1);
+                                     })
+                                     ->where('has_invoice_file',1)
+                                     ->where('payment_ready', 1)
+                                     ->whereNull('total_paid')
+                                     ->where('type','Mensual')
+                                     ->where('responsable_approbation',1)
+                                     ->where('rrhh_approbation',1)
+                                     ->where('finances_approbation',1)
+                                     ->get();
+
+         $fulfillments2 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
+                                        $subQuery->where('has_resolution_file',1);
+                                      })
+                                      ->where('has_invoice_file',1)
+                                      ->where('payment_ready', 1)
+                                      ->whereNull('total_paid')
+                                      ->where('type','<>','Mensual')
+                                      ->get();
+
+        $fulfillments = $fulfillments1->merge($fulfillments2);
 
         if ($fulfillments->count() == 0) {
             session()->flash('warning', "No existen solicitudes aptas para pago.");
@@ -73,15 +77,15 @@ class ReportController extends Controller
 
         $txt = '';
         foreach ($fulfillments as $fulfillment) {
-            if (!$fulfillment->serviceRequest->bank) {
+            if (!$fulfillment->serviceRequest->employee->bankAccount) {
                 session()->flash('warning', "La solicitud con id {$fulfillment->serviceRequest->id} no contiene el banco a donde se debe pagar.");
                 return redirect()->back();
             }
-            if (!$fulfillment->serviceRequest->pay_method) {
+            if (!$fulfillment->serviceRequest->employee->bankAccount->type) {
                 session()->flash('warning', "La solicitud con id {$fulfillment->serviceRequest->id} no contiene método de pago.");
                 return redirect()->back();
             }
-            if (!$fulfillment->serviceRequest->account_number) {
+            if (!$fulfillment->serviceRequest->employee->bankAccount->number) {
                 session()->flash('warning', "La solicitud con id {$fulfillment->serviceRequest->id} no contiene número de cuenta.");
                 return redirect()->back();
             }
@@ -92,12 +96,12 @@ class ReportController extends Controller
 
             $totalToPay = $fulfillment->total_to_pay - round($fulfillment->total_to_pay * 0.115);
             $txt .=
-                strtoupper(str_replace('-','',$fulfillment->serviceRequest->rut))."\t".
-                strtoupper(trim($fulfillment->serviceRequest->name))."\t".
+                $fulfillment->serviceRequest->employee->id . strtoupper($fulfillment->serviceRequest->employee->dv)."\t".
+                strtoupper(trim($fulfillment->serviceRequest->employee->fullName))."\t".
                 strtolower($fulfillment->serviceRequest->email)."\t".
-                $fulfillment->serviceRequest->bank->code."\t".
-                $fulfillment->serviceRequest->pay_method."\t".
-                intval($fulfillment->serviceRequest->account_number)."\t".
+                $fulfillment->serviceRequest->employee->bankAccount->bank->code."\t".
+                $fulfillment->serviceRequest->employee->bankAccount->type."\t".
+                intval($fulfillment->serviceRequest->employee->bankAccount->number)."\t".
                 $totalToPay."\r\n"; // Para final de linea de txt en windows
         }
 
@@ -151,21 +155,14 @@ class ReportController extends Controller
 
     public function resolutionPDF(ServiceRequest $ServiceRequest)
     {
-        $rut = explode("-", $ServiceRequest->rut);
-        $ServiceRequest->run_s_dv = number_format($rut[0],0, ",", ".");
-        $ServiceRequest->dv = $rut[1];
-
         $formatter = new NumeroALetras();
         $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
 
         if ($ServiceRequest->fulfillments) {
           foreach ($ServiceRequest->fulfillments as $key => $fulfillment) {
             $fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
-            // dd($fulfillment->total_to_pay_description);
           }
         }
-
-        // dd($ServiceRequest->fulfillments);
 
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('service_requests.report_resolution',compact('ServiceRequest'));
