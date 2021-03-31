@@ -20,6 +20,8 @@ class PaymentReadyToggle extends Component
     {
         $this->fulfillment->update(['payment_ready' => $this->payment_ready == 'null' ? null : $this->payment_ready]);
         $this->fulfillment->update(['payment_rejection_detail' => $this->rejection_detail]);
+        $this->rejection_detail = $this->fulfillment->payment_rejection_detail;
+        $this->payment_ready = $this->fulfillment->payment_ready;
     }
 
     public function render()
