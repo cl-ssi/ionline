@@ -107,9 +107,11 @@ class ServiceRequestController extends Controller
                                      ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
                                             return $q->where('program_contract_type',$program_contract_type);
                                           })
-                                     // ->when($name != NULL, function ($q) use ($name) {
-                                     //         return $q->where('name','LIKE','%'.$name.'%');
-                                     //      })
+                                     ->when(($name != NULL), function ($q) use ($name) {
+                                             return $q->whereHas("employee", function($subQuery) use ($name){
+                                                        $subQuery->where('name','LIKE','%'.$name.'%');
+                                                   });
+                                          })
                                      ->when($id != NULL, function ($q) use ($id) {
                                              return $q->where('id',$id);
                                           })
