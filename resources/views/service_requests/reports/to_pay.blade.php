@@ -26,7 +26,7 @@
         <th>Resolución</th>
         <th>Editar</th>
         @canany(['Service Request: fulfillments finance'])
-          <th>Apto para pago</th>
+          <th width="30%">Apto para pago</th>
         @endcanany
     </tr>
     @foreach($fulfillments->whereNull('total_paid') as $key => $fulfillment)
