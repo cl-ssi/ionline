@@ -43,7 +43,7 @@
               {{ $fulfillment->start_date->format('Y-m') }}
             @endif
           </td>
-          <td>{{$fulfillment->serviceRequest->bank->name ?? ''}} - {{$fulfillment->serviceRequest->account_number?? ''}}</td>
+          <td>{{$fulfillment->serviceRequest->employee->bankAccount->bank->name ?? ''}} - {{$fulfillment->serviceRequest->employee->bankAccount->number?? ''}}</td>
           <td>{{$fulfillment->serviceRequest->phone_number ?? ''}}</td>
           <td>
               <a href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank">
