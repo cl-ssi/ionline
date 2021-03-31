@@ -68,7 +68,7 @@
                 <th>Población a atender</th>
                 <th>Actividades Programadas</th>
                 <th>Verificación</th>
-                <th>Obs.</th>
+                <th>Prof.</th>
                 @foreach($months as $month)
                 <th>{{$month}}</th>
                 @endforeach
@@ -85,7 +85,7 @@
                 <td>{{ $tracer->population }}</td>
                 <td class="text-right">{{ $tracer->getValuesAcum2('denominador', $comuna, null) }}</td>
                 <td>{{ $tracer->numerator_source }}</td>
-                <td></td>
+                <td>{{ $tracer->professional }}</td>
                 @foreach($months as $number => $month)
                 <td class="text-right">{{ $tracer->getValueByFactorAndMonth2('numerador', $number, $comuna, null) != null ? number_format($tracer->getValueByFactorAndMonth2('numerador', $number, $comuna, null), 0, ',', '.') : ''}}</td>
                 @endforeach
@@ -108,7 +108,7 @@
                 <th>Población a atender</th>
                 <th>Actividades Programadas</th>
                 <th>Verificación</th>
-                <th>Obs.</th>
+                <th>Prof.</th>
                 @foreach($months as $month)
                 <th>{{$month}}</th>
                 @endforeach
@@ -125,7 +125,7 @@
                 <td>{{ $tracer->population }}</td>
                 <td class="text-right">{{ $tracer->getValuesAcum2('denominador', $comuna, null) }}</td>
                 <td>{{ $tracer->numerator_source }}</td>
-                <td></td>
+                <td>{{ $tracer->professional }}</td>
                 @foreach($months as $number => $month)
                 <td class="text-right">{{ $tracer->getValueByFactorAndMonth2('numerador', $number, null, $establishment) != null ? number_format($tracer->getValueByFactorAndMonth2('numerador', $number, null, $establishment), 0, ',', '.') : ''}}</td>
                 @endforeach
@@ -158,7 +158,7 @@
                 <th>Población a atender</th>
                 <th>Actividades Programadas</th>
                 <th>Verificación</th>
-                <th>Obs.</th>
+                <th>Prof.</th>
                 @foreach($months as $month)
                 <th>{{$month}}</th>
                 @endforeach
@@ -175,7 +175,7 @@
                 <td>{{ $tracer->population }}</td>
                 <td class="text-right">{{ $tracer->getValuesAcum('denominador') }}</td>
                 <td>{{ $tracer->numerator_source }}</td>
-                <td></td>
+                <td>{{ $tracer->professional }}</td>
                 @foreach($months as $number => $month)
                 <td class="text-right">{{ $tracer->getValueByFactorAndMonth('numerador', $number) != null ? number_format($tracer->getValueByFactorAndMonth('numerador', $number), 0, ',', '.') : ''}}</td>
                 @endforeach

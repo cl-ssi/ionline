@@ -46,7 +46,7 @@ class ProgramApsController extends Controller
                     $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
                 $raws .= ' AS valor, IdEstablecimiento, Mes';
 
-                $result = Rem::year($year-1)->selectRaw($raws)
+                $result = Rem::year($year)->selectRaw($raws)
                 ->when($commune_id != 0, function($query){ return $query->with('establecimiento'); })
                 ->when(isset($communes[$commune_id]) && $commune_id != 8, function($q) use ($communes, $commune_id){
                     return $q->whereHas('establecimiento', function($q2) use ($communes, $commune_id){
