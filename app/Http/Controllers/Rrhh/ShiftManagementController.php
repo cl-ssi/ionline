@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\User;
 use App\Models\Rrhh\ShiftTypes;
+use App\Programmings\Professional;
 use Spatie\Permission\Models\Role;
 
 class ShiftManagementController extends Controller
@@ -14,8 +15,11 @@ class ShiftManagementController extends Controller
      public function index(Request $r)
     {
     	// echo "Shift Management";
+    	  $dias = 31;
+        $sTypes = ShiftTypes::all(); 
     	$users = User::Search($r->get('name'))->orderBy('name','Asc')->paginate(500);
-        return view('rrhh.shift_management.index', compact('users'));
+    	$cargos = Professional::all();
+        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','dias'));
     }
  	public function indexfiltered(Request $r){
 
