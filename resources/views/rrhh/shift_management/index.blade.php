@@ -3,6 +3,7 @@
 
 
 @section('content')
+
 <style type="text/css">
 	:root {
     font-size: 16px;
@@ -74,16 +75,16 @@
 </style>
 <div class="form-group" >
 	<!-- <div class="col-lg-12"> -->
-		
-		<form method="POST" class="form-horizontal" action="{{ route('rrhh.shiftsTypes.store') }}">
+		<h3> Gestión de Turnos </h3>
+		<form method="POST" class="form-horizontal shadow" action="{{ route('rrhh.shiftsTypes.store') }}">
 			@csrf
     		@method('POST')
-<div class="row"> 
+			<div class="row"> 
 	
     		<div class="col-lg-3">
 				<div class="input-group">
             	
-            		<label for="for_name">CARGOS</label>
+            		<label for="for_name">CARGOS </label>
             		<select class="form-control" id="for_turnFilter" name="turnFilter">
             			<option>0 - Todos</option>
             			@foreach($cargos as $c)
@@ -95,7 +96,7 @@
     		<div class=" col-lg-3">
 				<div class="input-group">
 
-            		<label for="for_name" class="input-group-addon">TURNOS</label>
+            		<label for="for_name" class="input-group-addon">TURNOS </label>
             
             		<select class="form-control" id="for_turnFilter" name="turnFilter">
             			<option>1 - Todos</option>
@@ -107,12 +108,41 @@
 
         	  	</div>
         	</div>
-        	<div class=" col-lg-2">
+        	<div class="col-lg-2">
+				<div class="input-group">
+            	
+            		<label for="for_name">AÑO </label>
+            		<select class="form-control" id="for_turnFilter" name="yearFilter">
+            			@for($i = $actuallyYear; $i< (intval($actuallyYear) + 4); $i++)
+            				<option value="{{$i}}"> {{$i}}</option>
+            				
+            			@endfor	
+            		</select>
+        	  	</div>
+        	</div>
+        	<div class="col-lg-2">
+				<div class="input-group">
+            	
+            		<label for="for_name">MES </label>
+            		<select class="form-control" id="for_turnFilter" name="turnFilter">
+            			
+            			@foreach($months AS $index => $month)
+            				<option value="{{ $index }}" {{ ($index == $actuallyMonth )?"selected":"" }}>{{$loop->iteration}} - {{$month}}</option>
+            			@endforeach
+            			
+            		</select>
+        	  	</div>
+        	</div>
+        	<div class=" col-lg-1">
 				<div class="input-group">
     				<button type="submit" class="btn btn-primary btn-xs">Filtrar</button>
     			</div>
         	</div>
-
+        	<div class=" col-lg-1">
+				<div class="input-group">
+    				<button type="button" class="btn btn-outline-success btn-xs"><i class="fa fa-file-excel"></i></button>
+    			</div>
+        	</div>
 
 </div>
 
@@ -121,7 +151,7 @@
 
 	<!-- </div> -->
 </div>
-<div class="row" style=" overflow: auto;white-space: nowrap;">
+<div class="row  shadow" style=" overflow: auto;white-space: nowrap;">
 	<div class="col-md-2">
             <table class="table">
                 <thead class="thead-dark">

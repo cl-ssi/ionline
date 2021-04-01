@@ -16,10 +16,30 @@ class ShiftManagementController extends Controller
     {
     	// echo "Shift Management";
     	  $dias = 31;
+        
+        $actuallyMonth = Carbon::now()->format('m');
+        $actuallyDay = Carbon::now()->format('d');
+        $actuallyYear = Carbon::now()->format('Y');
+
+        $months =  (object) array(
+						'01'=>'Enero',
+						'02'=>'Febrero',
+						'03'=>'Marzo',
+						'04'=>'Abril',
+						'05'=>'Mayo',
+						'06'=>'Junio',
+						'07'=>'Julio',
+						'08'=>'Agosto',
+						'09'=>'Septiembre',
+						'10'=>'Octubre',
+						'11'=>'Noviembre',
+						'12'=>'Diciembre',
+					);
+
         $sTypes = ShiftTypes::all(); 
     	$users = User::Search($r->get('name'))->orderBy('name','Asc')->paginate(500);
     	$cargos = Professional::all();
-        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','dias'));
+        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','dias','actuallyMonth','actuallyDay','actuallyYear','months'));
     }
  	public function indexfiltered(Request $r){
 
