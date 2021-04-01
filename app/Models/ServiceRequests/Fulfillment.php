@@ -76,6 +76,11 @@ class Fulfillment extends Model implements Auditable
       return $this->belongsTo('App\User','finances_approver_id');
   }
 
+    public function signedCertificate()
+    {
+        return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signatures_file_id');
+    }
+
   protected $table = 'doc_fulfillments';
 
   /**
