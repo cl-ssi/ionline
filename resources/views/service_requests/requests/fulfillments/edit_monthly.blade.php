@@ -380,17 +380,19 @@
 
                 {{--modal firmador--}}
                 @if(Auth::user()->can('Service Request: sign document'))
-                    @php
-                        $idModelModal = $fulfillment->id;
-                        $routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal";
-                        $returnUrlSignModal = "rrhh.service-request.fulfillment.edit";
-                    @endphp
-                    @include('documents.signatures.partials.sign_file')
-                    <button type="button" data-toggle="modal" class="btn btn-outline-secondary form-control"
-                            data-target="#signPdfModal{{$idModelModal}}" title="Firmar"> Firmar certificado <span class="fas fa-signature"
-                                                                                             aria-hidden="true">
+                    @if(!$fulfillment->signatures_file_id)
+                        @php
+                            $idModelModal = $fulfillment->id;
+                            $routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal";
+                            $returnUrlSignModal = "rrhh.service-request.fulfillment.edit";
+                        @endphp
+                        @include('documents.signatures.partials.sign_file')
+                        <button type="button" data-toggle="modal" class="btn btn-outline-secondary form-control"
+                                data-target="#signPdfModal{{$idModelModal}}" title="Firmar"> Firmar certificado <span class="fas fa-signature"
+                                                                                                                      aria-hidden="true">
                                                                                         </span>
-                    </button>
+                        </button>
+                    @endif
                 @endif
             @endif
 
