@@ -5,9 +5,10 @@
 @section('content')
 @foreach($ouTopLevels as $ouTopLevel)
 <h3 class="mb-3">Autoridades del {{($ouTopLevel->establishment->name)}}</h3>
-
 @can('Authorities: manager')
+@if($ouTopLevel->establishment_id == Auth::user()->organizationalUnit->establishment->id)
 <a href="{{ route('rrhh.authorities.create') }}?establishment_id={{$ouTopLevel->establishment_id}}" class="btn btn-primary">Crear Autoridad del {{($ouTopLevel->establishment->name)}}</a>
+@endif
 @endcan
 
 
