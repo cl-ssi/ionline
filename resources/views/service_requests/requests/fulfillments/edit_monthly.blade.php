@@ -382,7 +382,7 @@
                 @if(Auth::user()->can('Service Request: sign document'))
                     @php
                         $idModelModal = $fulfillment->id;
-                        $routePdfSignModal = "/rrhh/fulfillments/certificate-pdf/$idModelModal";
+                        $routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal";
                         $returnUrlSignModal = "rrhh.service-request.fulfillment.edit";
                     @endphp
                     @include('documents.signatures.partials.sign_file')
