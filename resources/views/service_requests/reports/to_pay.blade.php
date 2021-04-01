@@ -50,14 +50,14 @@
           <td class="small">{{$fulfillment->serviceRequest->employee->bankAccount->bank->name ?? ''}} - {{$fulfillment->serviceRequest->employee->bankAccount->number?? ''}}</td>
           <td>{{$fulfillment->serviceRequest->phone_number ?? ''}}</td>
           <td>
-              <a href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank">
+              <a href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
                  <i class="fas fa-paperclip"></i>
               </a>
           </td>
           <td>
             @if($fulfillment->has_invoice_file)
               <a href="{{route('rrhh.service-request.fulfillment.download_invoice', $fulfillment)}}"
-                 target="_blank" >
+                 target="_blank" title="Boleta" >
                  <i class="fas fa-paperclip"></i>
               </a>
             @endif
@@ -65,13 +65,13 @@
           <td>
             @if($fulfillment->serviceRequest->has_resolution_file)
               <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fulfillment->serviceRequest)}}"
-                 target="_blank" >
+                 target="_blank" title="Resolución">
                  <i class="fas fa-paperclip"></i>
               </a>
             @endif
           </td>
           <td>
-              <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}">
+              <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}" title="Editar">
       					<span class="fas fa-edit" aria-hidden="true"></span>
       				</a>
           </td>

@@ -163,7 +163,7 @@
                                 @endif
                                 <td class="text-center">{{number_format(isset($indicator->numerator_acum_last_year) ? $indicator->getLastValueByFactor('numerador') : $indicator->getValuesAcum('numerador'), 0, ',', '.')}}</td>
                                 @if($indicator->numerator_source == 'Programación anual')
-                                    <td colspan="12" class="text-center">{{ number_format($indicator->getLastValueByFactor('numerador'), 0, ',', '.') }}</td>
+                                    <td colspan="12" class="text-center">{{ $indicator->getLastValueByFactor('numerador') != null ? number_format($indicator->getLastValueByFactor('numerador'), 0, ',', '.') : '' }}</td>
                                 @else
                                     @foreach($months as $number => $month)
                                     <td class="text-right">{{ $indicator->getValueByFactorAndMonth('numerador', $number) != null ? number_format($indicator->getValueByFactorAndMonth('numerador', $number), 0, ',', '.') : ''}}</td>
@@ -178,7 +178,7 @@
                                 @endif
                                 <td class="text-center">{{number_format(isset($indicator->denominator_acum_last_year) ? $indicator->getLastValueByFactor('denominador') : $indicator->getValuesAcum('denominador'), 0, ',', '.')}}</td>
                                 @if($indicator->denominator_source == 'Programación anual')
-                                    <td colspan="12" class="text-center">{{ number_format($indicator->getLastValueByFactor('denominador'), 0, ',', '.') }}</td>
+                                    <td colspan="12" class="text-center">{{ $indicator->getLastValueByFactor('denominador') != null ? number_format($indicator->getLastValueByFactor('denominador'), 0, ',', '.') : '' }}</td>
                                 @else
                                     @foreach($months as $number => $month)
                                     <td class="text-right">{{ $indicator->getValueByFactorAndMonth('denominador', $number) != null ? number_format($indicator->getValueByFactorAndMonth('denominador', $number), 0, ',', '.') : ''}}</td>
