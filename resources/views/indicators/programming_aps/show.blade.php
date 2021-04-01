@@ -49,7 +49,7 @@
             <i class="fas fa-download"></i>
         </button>
         {{ $comuna }}
-        @if(count($program_aps->establishments) > 1)
+        @if(count($program_aps->establishments) > 0)
         <select name="establishment" id="establishment" class="form-control col-3 float-right">
                     <option value="{{ str_replace(" ","_",$comuna) }}">Todas</option>
                 @foreach($program_aps->establishments as $establishment)
