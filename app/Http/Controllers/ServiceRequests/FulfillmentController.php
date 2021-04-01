@@ -608,4 +608,12 @@ class FulfillmentController extends Controller
         //return Storage::disk('gcs')->response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
     }
 
+    public function signedCertificatePDF(Fulfillment $fulfillment)
+    {
+        header('Content-Type: application/pdf');
+        if (isset($fulfillment->signedCertificate)) {
+            echo base64_decode($fulfillment->signedCertificate->signed_file);
+        }
+    }
+
 }
