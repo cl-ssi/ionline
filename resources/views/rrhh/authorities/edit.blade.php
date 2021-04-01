@@ -31,7 +31,8 @@
     <div class="row">
         <fieldset class="form-group col-4">
             <label for="for_user_id">Funcionario</label>
-            <select name="user_id" id="for_user_id" class="form-control">
+            <select class="form-control selectpicker" data-live-search="true" id="for_user_id" name="user_id" required data-size="5">
+            <!-- <select name="user_id" id="for_user_id" class="form-control"> -->
                 @foreach($users as $user)
                 <option value="{{ $user->id }}" {{ ($user->id == $authority->user_id)?'selected':''}}>{{ $user->fullName }}</option>
                 @endforeach
