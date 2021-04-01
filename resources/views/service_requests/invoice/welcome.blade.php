@@ -27,7 +27,7 @@
 
 
 <div class="alert alert-info mt-3" role="alert">
-    Si no tienes clave única, Acercate a tu sucursal de registro civil a pedir una    
+Si no tienes clave única, puedes obtener la tuya en sucursales de Registro Civil o en los totem ubicados en el SOME del Hospital, Mall Zofri o Mall Plaza Iquique.
 </div>
 
 @endsection

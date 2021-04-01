@@ -41,6 +41,10 @@ use App\Http\Controllers\ServiceRequests\SignatureFlowController;
 use App\Http\Controllers\ServiceRequests\FulfillmentItemController;
 use App\Http\Controllers\ServiceRequests\ReportController;
 
+
+
+use App\Http\Controllers\Parameters\ProfessionController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -310,12 +314,15 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
     Route::prefix('shiftManagement')->group(function () {
         Route::get('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftManag.index')->middleware('auth');
+        Route::post('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'indexfiltered'])->name('shiftManag.index')->middleware('auth');
         Route::post('/storeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.index')->middleware('auth');
 
         Route::get('/shiftstypes', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftstypesindex'])->name('shiftsTypes.index')->middleware('auth');
-        Route::get('/newshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.index')->middleware('auth');
+        Route::get('/newshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.new')->middleware('auth');
+        Route::get('/newshifttype/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'newshifttype'])->name('shiftsTypes.create')->middleware('auth');
         Route::get('/editshifttype/{id}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'editshifttype'])->name('shiftsTypes.edit')->middleware('auth');
-        Route::post('/storeshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.index')->middleware('auth');
+        Route::post('/updateshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'updateshifttype'])->name('shiftsTypes.update')->middleware('auth');
+        Route::post('/storeshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'storenewshift'])->name('shiftsTypes.store')->middleware('auth');
     });
 
     Route::prefix('attendance')->name('attendance.')->middleware('auth')->group(function() {
@@ -489,6 +496,16 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::get('/edit/{permission}', 'Parameters\PermissionController@edit')->name('edit');
         Route::put('/update/{permission}', 'Parameters\PermissionController@update')->name('update');
         Route::delete('{permission}/destroy', 'Parameters\PermissionController@destroy')->name('destroy');
+
+    });
+
+    Route::prefix('professions')->as('professions.')->group(function () {
+        Route::get('/', [ProfessionController::class, 'index'])->name('index');
+        Route::get('/create', [ProfessionController::class, 'create'])->name('create');
+        Route::post('/store', [ProfessionController::class, 'store'])->name('store');
+        Route::get('/{profession}/edit', [ProfessionController::class, 'edit'])->name('edit');
+        Route::put('/{profession}/update', [ProfessionController::class, 'update'])->name('update');
+
 
     });
 
