@@ -124,7 +124,11 @@
 
 
 <div class="siete" style="padding-top: 3px;">
-    HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
+    @if($fulfillment->serviceRequest->employee->organizationalUnit->establishment_id == 1)
+      HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
+    @else
+      SERVICIO SALUD IQUIQUE<br>
+    @endif
     SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
 </div>
 
@@ -145,7 +149,17 @@
     <div class="nueve">
         <div class="justify" style="width: 100%;">
             Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
-            en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames durante el preríodo de contingencia COVID
+            en su convenio de prestación de servicios con el
+            @if($fulfillment->serviceRequest->employee->organizationalUnit->establishment_id == 38)
+              @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
+                Consultorio General Urbano Dr. Hector Reyno
+              @else
+                Servicio Salud Iquique
+              @endif
+            @else
+              Hospital Dr.Ernesto Torres Galdames
+            @endif
+            durante el preríodo de contingencia COVID
             del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>.
 
             <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
@@ -164,7 +178,17 @@
             @endif
           @else
             Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
-            en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames durante el preríodo de contingencia COVID
+            en su convenio de prestación de servicios con el
+            @if($fulfillment->serviceRequest->employee->organizationalUnit->establishment_id == 38)
+              @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
+                Consultorio General Urbano Dr. Hector Reyno
+              @else
+                Servicio Salud Iquique
+              @endif
+            @else
+              Hospital Dr.Ernesto Torres Galdames
+            @endif
+            durante el preríodo de contingencia COVID
             del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>,
             registrando las siguientes ausencias:
           @endif
@@ -215,7 +239,17 @@
   <div class="nueve">
       <div class="justify" style="width: 100%;">
           Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades
-          estipuladas en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames, por <b>horas extras realizadas en el mes de
+          estipuladas en su convenio de prestación de servicios con el
+          @if($fulfillment->serviceRequest->employee->organizationalUnit->establishment_id == 38)
+            @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
+              Consultorio General Urbano Dr. Hector Reyno
+            @else
+              Servicio Salud Iquique
+            @endif
+          @else
+            Hospital Dr.Ernesto Torres Galdames
+          @endif
+          , por <b>horas extras realizadas en el mes de
           {{\Carbon\Carbon::parse($fulfillment->serviceRequest->start_date)->formatLocalized('%B de %Y')}} por contingencia COVID</b>.<br><br>
 
           <table class="siete">
@@ -251,7 +285,15 @@
         <span class="uppercase">{{$fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->fullName}}</span><br>
         <span class="uppercase">{{$fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->position}}</span><br>
         <span class="uppercase">{{$fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->organizationalUnit->name}}</span><br>
-        HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
+        @if($fulfillment->serviceRequest->employee->organizationalUnit->establishment_id == 38)
+          @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
+            CONSULTORIO GENERAL URBANO DR. HECTOR REYNO<br>
+          @else
+            SERVICIO SALUD IQUIQUE<br>
+          @endif
+        @else
+          HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
+        @endif
         </strong>
     </div>
 </div>
