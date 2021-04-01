@@ -8,7 +8,6 @@
 
 <h3 class="mb-3">Listado de Solicitudes</h3>
 
-
 <table class="table">
     <thead>
         <tr>
@@ -30,7 +29,9 @@
             <td>Reemplazo o Suplencia</td>
             <td>
                 <button type="submit" class="btn btn-sm btn-outline-secondary">
-                    <i class="fas fa-edit"></i>
+                    <a href="{{ route('replacement_staff.request.edit') }}">
+                        <i class="fas fa-edit"></i>
+                    </a>
                 </button>
             </td>
         </tr>
@@ -40,10 +41,12 @@
             <td>Honorario</td>
             <td>16-11-2020</td>
             <td>31-12-2020</td>
-            <td>Reemplazo o Suplencia</td>
+            <td>Reemplazo </td>
             <td>
                 <button type="submit" class="btn btn-sm btn-outline-secondary">
-                    <i class="fas fa-edit"></i>
+                    <a href="{{ route('replacement_staff.request.edit') }}">
+                        <i class="fas fa-edit"></i>
+                    </a>
                 </button>
             </td>
         </tr>
