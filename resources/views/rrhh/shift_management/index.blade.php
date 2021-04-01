@@ -1,5 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Gestion de Turnos')
+
+
 @section('content')
 <style type="text/css">
 	:root {
@@ -70,27 +72,30 @@
 .bg-red, .bg-green, .bg-purple {color: white;}
 
 </style>
-
-<div class="row" >
-	<div class="col-xs-12">
-			
+<div class="form-group" >
+	<!-- <div class="col-lg-12"> -->
+		
 		<form method="POST" class="form-horizontal" action="{{ route('rrhh.shiftsTypes.store') }}">
 			@csrf
     		@method('POST')
-
-    		<fieldset class="form-group col-6 col-xs-3">
+<div class="row"> 
+	
+    		<div class="col-lg-3">
+				<div class="input-group">
+            	
             		<label for="for_name">CARGOS</label>
-            
             		<select class="form-control" id="for_turnFilter" name="turnFilter">
             			<option>0 - Todos</option>
             			@foreach($cargos as $c)
             				<option value="{{$c->id}}">{{$loop->iteration}} - {{$c->name}} </option>
             			@endforeach
             		</select>
-        	</fieldset>
+        	  	</div>
+        	</div>
+    		<div class=" col-lg-3">
+				<div class="input-group">
 
-    		<fieldset class="form-group col-6 col-xs-3">
-            		<label for="for_name">TURNOS</label>
+            		<label for="for_name" class="input-group-addon">TURNOS</label>
             
             		<select class="form-control" id="for_turnFilter" name="turnFilter">
             			<option>1 - Todos</option>
@@ -99,14 +104,22 @@
             			@endforeach
             			<option value="99">99 - Solo Turno Personalizado</option>
             		</select>
-        	</fieldset>
 
-    		<button type="submit" class="btn btn-primary btn-xs">Filtrar</button>
+        	  	</div>
+        	</div>
+        	<div class=" col-lg-2">
+				<div class="input-group">
+    				<button type="submit" class="btn btn-primary btn-xs">Filtrar</button>
+    			</div>
+        	</div>
+
+
+</div>
 
 		</form>
 
 
-	</div>
+	<!-- </div> -->
 </div>
 <div class="row" style=" overflow: auto;white-space: nowrap;">
 	<div class="col-md-2">
@@ -167,5 +180,21 @@
             </table>
     </div>
 </div>
-@endsection
 
+@endsection
+@section('custom_js')
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+
+<script type="text/javascript">
+	var obj = {
+  foo: 'bar'
+}
+
+Object.freeze(obj)
+
+new Vue({
+  el: '#app',
+  data: obj
+})
+</script>
+@endsection
