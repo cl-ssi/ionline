@@ -36,10 +36,17 @@ class FulfillmentController extends Controller
         $name = $request->name;
         $id = $request->id;
 
+        $authorities = Authority::getAmIAuthorityFromOu(now(),'manager',$user_id);
+        $array = array();
+        foreach ($authorities as $key => $authority) {
+          $array[] = $authority->organizational_unit_id;
+        }
+
         if (Auth::user()->can('Service Request: fulfillments responsable')) {
-          $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
+          $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id, $array){
                                                $subQuery->where('responsable_id',$user_id);
                                                $subQuery->orwhere('user_id',$user_id);
+                                               $subQuery->orWhereIn('ou_id',$array);
                                                })
                                           ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
                                                return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
