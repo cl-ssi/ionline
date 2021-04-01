@@ -6,134 +6,184 @@
 
 @include('replacement_staff.nav')
 
-<h3 class="mb-3">Formulario Solicitud Contratación de Personal</h3>
-
-<p>Por medio del presente solicita a usted autorizar el llamado a presentar
-antecedentes al cargo de:</p>
-
-<form method="POST" class="form-horizontal" action="">
-    @csrf
-    @method('POST')
-
-    <div class="form-row">
-        <fieldset class="form-group col">
-            <label for="for_cargo">Cargo</label>
-            <input type="text" class="form-control" name="cargo"
-                id="for_cargo" required placeholder="">
-        </fieldset>
-
+<div class="card">
+    <div class="card-header">
+        Formulario Solicitud Contratación de Personal
     </div>
+    <div class="card-body">
 
-    <div class="form-row">
-        <fieldset class="form-group col-2">
-            <label for="for_grado">Grado</label>
-            <select name="grado" id="for_grado" class="form-control">
-                <option value="">15</option>
-            </select>
-        </fieldset>
+        <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.store') }}">
+            @csrf
+            @method('POST')
 
-        <fieldset class="form-group col-3">
-            <label for="for_calidad_juridica">Calidad Jurídica</label>
-            <div class="mt-1">
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                  <label class="form-check-label" for="inlineRadio1">Contrata</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                  <label class="form-check-label" for="inlineRadio2">Honorario</label>
-                </div>
+            <!-- <div class="form-row">
+                <fieldset class="form-group col">
+                    <label for="for_name">Nombre de Cargo</label>
+                    <input type="text" class="form-control" name="name"
+                        id="for_name" required>
+                </fieldset>
+            </div> -->
+
+            <div class="form-row">
+                <fieldset class="form-group col-6">
+                    <label for="for_name">Nombre de Cargo</label>
+                    <input type="text" class="form-control" name="name"
+                        id="for_name" required>
+                </fieldset>
+
+                <fieldset class="form-group col-2">
+                    <label for="degree">Grado</label>
+                    <input type="number" class="form-control" name="degree"
+                        id="for_degree" min="1" max="26" required>
+                </fieldset>
+
+                <fieldset class="form-group col-4">
+                    <label for="for_legal_quality" >Calidad Jurídica</label>
+                    <select name="legal_quality" id="for_legal_quality" class="form-control" required>
+                        <option value="">Seleccione...</option>
+                        <option value="to hire">Contrata</option>
+                        <option value="fee">Honorarios</option>
+                    </select>
+                </fieldset>
             </div>
 
-        </fieldset>
+            <div class="form-row">
+                <fieldset class="form-group col-6">
+                    <label for="for_calidad_juridica">Jornada</label>
+                    <div class="mt-1">
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="work_day" id="for_work_day_diurnal" value="diurnal" required>
+                          <label class="form-check-label" for="for_work_day_diurnal">Diurno</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="work_day" id="for_work_day_third_shift" value="third_shift" required>
+                          <label class="form-check-label" for="for_work_day_third_shift">Tercer Turno</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="work_day" id="for_work_day_fourth_shift" value="fourth_shift" required>
+                          <label class="form-check-label" for="for_work_day_fourth_shift">Cuarto Turno</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="work_day" id="for_work_day_other" value="other" required>
+                          <label class="form-check-label" for="for_work_day_other">Otro</label>
+                        </div>
+                    </div>
+                </fieldset>
 
-        <fieldset class="form-group col">
-            <label for="for_calidad_juridica">La persona cumplirá las labores en Jornada</label>
-            <div class="mt-1">
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-                  <label class="form-check-label" for="inlineRadio1">Diurno</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                  <label class="form-check-label" for="inlineRadio2">Tercer Turno</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                  <label class="form-check-label" for="inlineRadio2">Cuarto Turno</label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
-                  <label class="form-check-label" for="inlineRadio2">Otro</label>
-                </div>
+                <fieldset class="form-group col-6">
+                    <label for="for_name">&nbsp;</label>
+                    <input type="text" class="form-control" name="other_work_day"
+                        id="for_other_work_day" placeholder="Otro">
+                </fieldset>
             </div>
 
-        </fieldset>
+            <div class="form-row">
+                <fieldset class="form-group col-3">
+                    <label for="for_start_date">Desde</label>
+                    <input type="date" class="form-control" name="start_date"
+                        id="for_start_date" required>
+                </fieldset>
 
+                <fieldset class="form-group col-3">
+                    <label for="for_end_date">Hasta</label>
+                    <input type="date" class="form-control" name="end_date"
+                        id="for_end_date" required>
+                </fieldset>
 
+                <fieldset class="form-group col-3">
+                    <label for="for_fundament">Fundamento</label>
+                    <select name="fundament" id="for_fundament" class="form-control">
+                        <option value="">Seleccione...</option>
+                        <option value="replacement">Reemplazo o suplencia</option>
+                        <option value="quit">Renuncia</option>
+                        <option value="allowance without payment">Permiso sin goce de sueldo</option>
+                        <option value="regularization work position">Regulación de cargos</option>
+                        <option value="expand work position">Cargo expansión</option>
+                        <option value="vacations">Feriado legal</option>
+                        <option value="other">Otro</option>
+                    </select>
+                </fieldset>
+
+                <fieldset class="form-group col-3">
+                    <label for="for_name_to_replace">&nbsp;</label>
+                    <input type="text" class="form-control" name="name_to_replace"
+                        id="for_name_to_replace" placeholder="Nombre de Reemplazo">
+
+                    <label for="for_other_fundament">&nbsp;</label>
+                    <input type="text" class="form-control" name="other_fundament"
+                        id="for_other_fundament" placeholder="Otro fundamento...">
+                </fieldset>
+            </div>
+
+            <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>
+
+        </form>
     </div>
-
-    <div class="form-row">
-        <fieldset class="form-group col">
-            <label for="for_desde">Desde</label>
-            <input type="date" class="form-control" name="desde"
-                id="for_desde" required placeholder="">
-        </fieldset>
-
-        <fieldset class="form-group col">
-            <label for="for_Hasta">Hasta</label>
-            <input type="date" class="form-control" name="Hasta"
-                id="for_Hasta" required placeholder="">
-        </fieldset>
-
-        <fieldset class="form-group col">
-            <label for="for_fundamento">Fundamento</label>
-            <select name="fundamento" id="for_fundamento" class="form-control">
-                <option value="">Reemplazo o suplencia</option>
-                <option value="">Renuncia</option>
-                <option value="">Permiso sin goce de sueldo</option>
-                <option value="">Regulación de cargos</option>
-                <option value="">Cargo expansión</option>
-                <option value="">Feriado legal</option>
-                <option value="">Otros</option>
-            </select>
-        </fieldset>
-
-        <fieldset class="form-group col">
-            <label for="for_justificacion_otros">Justificación Otros</label>
-            <input type="text" class="form-control" name="justificacion_otros"
-                id="for_justificacion_otros" required placeholder="">
-        </fieldset>
-
-    </div>
-
-        <button type="submit" class="btn btn-primary">Crear</button>
-
-    <p>El documento debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</p>
-
-    JEFATURA SOLICITANTE
-    DEL CARGO
-
-    V°B° DIRECCIÓN o SUBDIRECCION
-(Según corresponda)
-
-
-V°B° SUBDIRECCIÓN
-RRHH
-
-
-Correlativo:
-Nº
-Ítem Presupuestario:
-Disposición presupuestaria:
-SI   	 NO
-
-
-VºBº Unidad Gestión de Personal y Ciclo de Vida Laboral
-</form>
+</div>
 
 @endsection
 
 @section('custom_js')
+
+<script type="text/javascript">
+    // ID campo oculto
+    $("#for_other_work_day").hide();
+    // NAME Option
+    $("input[name=work_day]").click(function() {
+        switch(this.value){
+            case "other":
+                // ID campo oculto
+                $("#for_other_work_day").show("slow");
+                break;
+            default:
+                // ID campo oculto
+                $("#for_other_work_day").hide("slow");
+                document.getElementById('for_other_work_day').value = '';
+                break;
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    $("#for_name_to_replace").hide();
+    $("#for_other_fundament").hide();
+    jQuery('select[name=fundament]').change(function(){
+        var fieldsetName = $(this).val();
+        alert(fieldsetName);
+        switch(this.value){
+            case "replacement":
+                // ID campo oculto
+                $("#for_name_to_replace").show();
+                $("#for_other_fundament").hide();
+                document.getElementById('for_other_fundament').value = '';
+                break;
+            case "quit":
+                // ID campo oculto
+                $("#for_name_to_replace").show();
+                $("#for_other_fundament").hide();
+                document.getElementById('for_other_fundament').value = '';
+                break;
+            case "allowance without payment":
+                // ID campo oculto
+                $("#for_name_to_replace").show();
+                $("#for_other_fundament").hide();
+                document.getElementById('for_other_fundament').value = '';
+                break;
+            case "other":
+                // ID campo oculto
+                $("#for_other_fundament").show();
+                $("#for_name_to_replace").hide();
+                document.getElementById('for_name_to_replace').value = '';
+                break;
+            default:
+                // ID campo oculto
+                $("#for_name_to_replace").hide();
+                document.getElementById('for_name_to_replace').value = '';
+                $("#for_other_fundament").hide();
+                document.getElementById('for_other_fundament').value = '';
+                break;
+        }
+    });
+</script>
 
 @endsection
