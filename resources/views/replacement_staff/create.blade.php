@@ -108,7 +108,7 @@
       </fieldset>
     </div>
 
-    <button type="submit" class="btn btn-primary float-right">Guardar</button>
+    <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>
 
 </form>
 
