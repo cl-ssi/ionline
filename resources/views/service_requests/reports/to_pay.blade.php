@@ -50,9 +50,15 @@
           <td class="small">{{$fulfillment->serviceRequest->employee->bankAccount->bank->name ?? ''}} - {{$fulfillment->serviceRequest->employee->bankAccount->number?? ''}}</td>
           <td>{{$fulfillment->serviceRequest->phone_number ?? ''}}</td>
           <td>
-              <a href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
-                 <i class="fas fa-paperclip"></i>
-              </a>
+              @if($fulfillment->signatures_file_id)
+                <a href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
+                  <i class="fas fa-signature"></i>
+                </a>
+              @else
+                <a href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
+                  <i class="fas fa-paperclip"></i>
+                </a>
+              @endif
           </td>
           <td>
             @if($fulfillment->has_invoice_file)
@@ -117,9 +123,15 @@
             @endif
           </td>
           <td>
-              <a href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank">
-                 <i class="fas fa-paperclip"></i>
-              </a>
+              @if($fulfillment->signatures_file_id)
+                <a href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
+                  <i class="fas fa-signature"></i>
+                </a>
+              @else
+                <a href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
+                  <i class="fas fa-paperclip"></i>
+                </a>
+              @endif
           </td>
           <td>
             @if($fulfillment->has_invoice_file)
