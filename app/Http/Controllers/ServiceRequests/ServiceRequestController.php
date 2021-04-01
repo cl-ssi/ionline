@@ -950,7 +950,6 @@ class ServiceRequestController extends Controller
 
 
       $serviceRequests = ServiceRequest::orderBy('id','asc')
-                                       // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
                                       ->where('program_contract_type','Mensual')
                                       ->whereDoesntHave("SignatureFlows", function($subQuery) {
                                                   $subQuery->where('status',0);
@@ -965,24 +964,29 @@ class ServiceRequestController extends Controller
       $fulfillments_missing = [];
       $cumplimiento_falta_ingresar = 0;
       foreach ($serviceRequests as $key => $serviceRequest) {
-        if ($serviceRequest->Fulfillments->count() == 0) {
-          if ($serviceRequest->SignatureFlows->where('sign_position',2)->count() > 0) {
-            $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()][$serviceRequest->SignatureFlows->where('sign_position',2)->first()->organizationalUnit->name] = 0;
-          }
-        }
+        // $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()][$serviceRequest->SignatureFlows->where('sign_position',2)->first()->organizationalUnit->name] = 0;
+        $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()] = 0;
       }
 
       foreach ($serviceRequests as $key => $serviceRequest) {
-        if ($serviceRequest->Fulfillments->count() == 0) {
-          if ($serviceRequest->SignatureFlows->where('sign_position',2)->count() > 0) {
-            $cumplimiento_falta_ingresar += 1;
-            $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()][$serviceRequest->SignatureFlows->where('sign_position',2)->first()->organizationalUnit->name] += 1;
-          }
+
+        //si es que no tiene cumplimiento
+        if ($serviceRequest->fulfillments->count() == 0) {
+          $cumplimiento_falta_ingresar += 1;
+          // $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()][$serviceRequest->SignatureFlows->where('sign_position',2)->first()->organizationalUnit->name] += 1;
+          $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()] += 1;
         }
+
+        //si es que tiene cumplimiento, pero no aprobado
+        if ($serviceRequest->fulfillments->whereNull('responsable_approbation')->count() > 0) {
+          $cumplimiento_falta_ingresar += 1;
+          // $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()][$serviceRequest->SignatureFlows->where('sign_position',2)->first()->organizationalUnit->name] += 1;
+          $fulfillments_missing[$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()] += 1;
+        }
+
       }
 
       arsort($fulfillments_missing);
-      // dd($fulfillments_missing);
 
       return view('service_requests.requests.pending_requests',compact('array','hoja_ruta_falta_aprobar','fulfillments_missing','cumplimiento_falta_ingresar'));
     }
