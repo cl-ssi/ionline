@@ -368,6 +368,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/download-invoice/{fulfillment}', [FulfillmentController::class, 'downloadInvoice'])->name('download_invoice');
             Route::get('/download-resolution/{serviceRequest}', [FulfillmentController::class, 'downloadResolution'])->name('download_resolution');
             Route::get('/certificate-pdf/{fulfillment}', [FulfillmentController::class, 'certificatePDF'])->name('certificate-pdf');
+            Route::get('/signed-certificate-pdf/{fulfillment}', [FulfillmentController::class, 'signedCertificatePDF'])->name('signed-certificate-pdf');
             //eliminar palabra fulfiment en URL y en metodo
             Route::get('/confirm-fulfillment/{fulfillment}', [FulfillmentController::class, 'confirmFulfillment'])->name('confirm-Fulfillment');
             Route::get('/refuse-fulfillment/{fulfillment}', [FulfillmentController::class, 'refuseFulfillment'])->name('refuse-Fulfillment');
