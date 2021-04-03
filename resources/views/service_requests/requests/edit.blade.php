@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Programa Farmacia')
+@section('title', 'Editar Solicitud de Contratación')
 
 @section('content')
 

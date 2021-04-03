@@ -94,11 +94,29 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Pharmacy: create products']);
         Permission::create(['name' => 'Pharmacy: create programs']);
 
+        Permission::create(['name' => 'Service Request']);
+        Permission::create(['name' => 'Service Request: additional data']);
+        Permission::create(['name' => 'Service Request: additional data finanzas']);
+        Permission::create(['name' => 'Service Request: additional data oficina partes']);
+        Permission::create(['name' => 'Service Request: additional data rrhh']);
+        Permission::create(['name' => 'Service Request: consolidated data']);
+        Permission::create(['name' => 'Service Request: audit']);
+        Permission::create(['name' => 'Service Request: delete request']);
+        Permission::create(['name' => 'Service Request: derive requests']);
+        Permission::create(['name' => 'Service Request: fulfillments']);
+        Permission::create(['name' => 'Service Request: fulfillments finance']);
+        Permission::create(['name' => 'Service Request: fulfillments responsable']);
+        Permission::create(['name' => 'Service Request: fulfillments rrhh']);
+        Permission::create(['name' => 'Service Request: maintainers']);
+        Permission::create(['name' => 'Service Request: pending requests']);
+        Permission::create(['name' => 'Service Request: report to pay']);
+        Permission::create(['name' => 'Service Request: sign document']);
+        Permission::create(['name' => 'Service Request: transfer requests']);
+        Permission::create(['name' => 'Service Request: with resolution']);
 
         Permission::create(['name' => 'Suitability: admin']);
         Permission::create(['name' => 'Suitability: test']);
         Permission::create(['name' => 'Suitability: ssi']);
-
 
         Permission::create(['name' => 'Request Forms: Finance add item code']);
 
