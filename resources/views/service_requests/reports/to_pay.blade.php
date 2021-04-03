@@ -10,28 +10,37 @@
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.to-pay') }}">
 
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text">Establecimiento</span>
+<div class="form-row">
+
+	<div class="col-10">
+		<div class="input-group mb-3">
+			<div class="input-group-prepend">
+				<span class="input-group-text">Establecimiento</span>
+    		</div>
+			<select class="form-control selectpicker" data-live-search="true" name="establishment_id" data-size="5">
+				<option value="">Todos</option>
+				<option value="1" @if($request->establishment_id == 1) selected @endif>Hospital Ernesto Torres Galdames</option>
+				<option value="12" @if($request->establishment_id == 12) selected @endif>Dr. Héctor Reyno G.</option>
+				<option value="38" @if($request->establishment_id === 0) selected @endif>Dirección SSI</option>
+			</select>
+			<div class="input-group-append">
+				<button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+			</div>
+		</div> 
+	</div>
+
+    <div class="col-2">
+    	@if($request->establishment_id)
+      	<a class="btn btn-outline-success" href="{{route('rrhh.service-request.report.bank-payment-file',$request->establishment_id)}}">
+        	<i class="fas fa-file"></i>Archivo de pago banco
+		</a>
+      	@endif
     </div>
-    <select class="form-control selectpicker" data-live-search="true" name="establishment_id" data-size="5">
-      <option value="">Todos</option>
-      <option value="1" @if($request->establishment_id == 1) selected @endif>Hospital Ernesto Torres Galdames</option>
-      <option value="12" @if($request->establishment_id == 12) selected @endif>Dr. Héctor Reyno G.</option>
-      <option value="38" @if($request->establishment_id === 0) selected @endif>Dirección SSI</option>
-    </select>
-    <div class="input-group-append">
-        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
-    </div>
-  </div>
+</div>
+
 </form>
 
 <hr>
-
-  @if($request->establishment_id)
-  <a href="{{route('rrhh.service-request.report.bank-payment-file',$request->establishment_id)}}" class="btn btn-sm btn-outline-primary" >
-    <i class="fas fa-file"></i>Archivo de pago banco</a>
-  @endif
 
   <table class="table table-sm table-bordered table-stripped">
     <tr>

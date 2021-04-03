@@ -64,7 +64,7 @@ class ReportController extends Controller
         $fulfillments1 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
                                        $subQuery->where('has_resolution_file',1);
                                      })
-                                     ->when($request->establishment_id != null, function ($q) use ($establishment_id) {
+                                     ->when($establishment_id != null, function ($q) use ($establishment_id) {
                                           return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
                                                       $subQuery->where('establishment_id',$establishment_id);
                                                 });
@@ -86,7 +86,7 @@ class ReportController extends Controller
          $fulfillments2 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
                                         $subQuery->where('has_resolution_file',1);
                                       })
-                                      ->when($request->establishment_id != null, function ($q) use ($establishment_id) {
+                                      ->when($establishment_id != null, function ($q) use ($establishment_id) {
                                            return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
                                                        $subQuery->where('establishment_id',$establishment_id);
                                                      });
