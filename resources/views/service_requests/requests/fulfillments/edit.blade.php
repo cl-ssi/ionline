@@ -6,7 +6,9 @@
 
 @include('service_requests.partials.nav')
 
-<h3>Cumplimiento de solicitud</h3>
+<h3>Cumplimiento de solicitud: 
+  <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}">{{ $serviceRequest->id }}</a>
+</h3>
 
 <div class="form-row">
 
