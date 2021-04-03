@@ -218,10 +218,10 @@ class ServiceRequestController extends Controller
     );
 
     //devuelve UserBankAccount o crea
-    $userBankAccount = UserBankAccount::updateOrCreate(
-      ['user_id' => $request->user_id],
-      $request->All()
-    );
+    // $userBankAccount = UserBankAccount::updateOrCreate(
+    //   ['user_id' => $request->user_id],
+    //   $request->All()
+    // );
 
     //crea service request
     $serviceRequest = new ServiceRequest($request->All());
@@ -404,10 +404,10 @@ class ServiceRequestController extends Controller
     $serviceRequest->save();
 
     //devuelve UserBankAccount o crea
-    $userBankAccount = UserBankAccount::updateOrCreate(
-      ['user_id' => $serviceRequest->employee->id],
-      $request->All()
-    );
+    // $userBankAccount = UserBankAccount::updateOrCreate(
+    //   ['user_id' => $serviceRequest->employee->id],
+    //   $request->All()
+    // );
 
     session()->flash('info', 'La solicitud ' . $serviceRequest->id . ' ha sido modificada.');
     return redirect()->route('rrhh.service-request.aditional_data_list');
