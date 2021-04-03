@@ -57,6 +57,8 @@ class FulfillmentController extends Controller
                                            ->when(($name != NULL), function ($q) use ($name) {
                                                    return $q->whereHas("employee", function($subQuery) use ($name){
                                                               $subQuery->where('name','LIKE','%'.$name.'%');
+                                                              $subQuery->orwhere('fathers_family', 'LIKE', '%' . $name . '%');
+                                                              $subQuery->orwhere('mothers_family', 'LIKE', '%' . $name . '%');
                                                          });
                                                 })
                                           ->when($id != NULL, function ($q) use ($id) {
@@ -79,6 +81,8 @@ class FulfillmentController extends Controller
                                            ->when(($name != NULL), function ($q) use ($name) {
                                                    return $q->whereHas("employee", function($subQuery) use ($name){
                                                               $subQuery->where('name','LIKE','%'.$name.'%');
+                                                              $subQuery->orwhere('fathers_family', 'LIKE', '%' . $name . '%');
+                                                              $subQuery->orwhere('mothers_family', 'LIKE', '%' . $name . '%');
                                                          });
                                                 })
                                           ->when($id != NULL, function ($q) use ($id) {
