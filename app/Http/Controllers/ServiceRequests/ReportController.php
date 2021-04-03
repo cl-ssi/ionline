@@ -148,8 +148,15 @@ class ReportController extends Controller
 
     public function indexWithResolutionFile() {
         $serviceRequests = ServiceRequest::where('has_resolution_file',1)->paginate(50);
+        $title = 'Solicitudes con resolución cargada';
+        return view('service_requests.reports.index_with_resolution_file', compact('serviceRequests','title'));
+        /* Hacer foreach de cada SRs y dentro hacer un foreach de sus fulfillments y mostrar cual tiene boleta y cual no */
+    }
 
-        return view('service_requests.reports.index_with_resolution_file', compact('serviceRequests'));
+    public function indexWithoutResolutionFile() {
+        $serviceRequests = ServiceRequest::where('has_resolution_file','<>',1)->paginate(50);
+        $title = 'Solicitudes sin resolución cargada';
+        return view('service_requests.reports.index_with_resolution_file', compact('serviceRequests','title'));
         /* Hacer foreach de cada SRs y dentro hacer un foreach de sus fulfillments y mostrar cual tiene boleta y cual no */
     }
 
@@ -173,5 +180,8 @@ class ReportController extends Controller
         // return $pdf->stream();
     }
 
-
+    public function payRejected() {
+        $fulfillments = Fulfillment::where('payment_ready',0)->orderByDesc('id')->get();
+        return view('service_requests.reports.pay_rejected', compact('fulfillments'));
+    }
 }

@@ -6,12 +6,14 @@
 
 @include('service_requests.partials.nav')
 
-<h3 class="mb-3">Reporte para pagos</h3>
+<h3 class="mb-3">Pendientes de pago</h3>
 
+<a href="{{route('rrhh.service-request.report.bank-payment-file')}}" 
+  class="btn btn-sm btn-outline-primary mb-3" > 
+  <i class="fas fa-file"></i> Archivo de pago banco
+</a>
 
-<h4 class="mb-3 mt-3">Pendientes de pago</h4>
-    <a href="{{route('rrhh.service-request.report.bank-payment-file')}}" class="btn btn-sm btn-outline-primary" > <i class="fas fa-file"></i> Archivo de pago banco (En pruebas)</a>
-<table class="table table-sm table-bordered">
+<table class="table table-sm table-bordered table-stripped">
     <tr>
         <th>Id</th>
         <th>Establecimiento</th>
