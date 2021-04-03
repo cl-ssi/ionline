@@ -70,7 +70,7 @@
             </a>
             @endcan
 
-            @canany(['Service Request: pending requests'])
+            @canany(['Service Request: report to pay'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.to-pay') }}"
                 href="{{ route('rrhh.service-request.report.to-pay') }}">
                 <i class="fas fa-file-invoice-dollar"></i> Reporte para pagos
