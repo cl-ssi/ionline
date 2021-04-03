@@ -389,11 +389,13 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::prefix('report')->name('report.')->group(function () {
             // Rutas a los reportes
             Route::get('/to-pay', [ReportController::class, 'toPay'])->name('to-pay');
+            Route::get('/pay-rejected', [ReportController::class, 'payRejected'])->name('pay-rejected');
             Route::get('/without-bank-details', [ReportController::class, 'withoutBankDetails'])->name('without-bank-details');
             Route::get('/pending-resolutions', [ReportController::class, 'pendingResolutions'])->name('pending-resolutions');
             Route::get('/resolution-pdf/{ServiceRequest}', [ReportController::class, 'resolutionPDF'])->name('resolution-pdf');
             Route::get('/bank-payment-file', [ReportController::class, 'bankPaymentFile'])->name('bank-payment-file');
             Route::get('/with-resolution-file', [ReportController::class, 'indexWithResolutionFile'])->name('with-resolution-file');
+            Route::get('/without-resolution-file', [ReportController::class, 'indexWithoutResolutionFile'])->name('without-resolution-file');
 
             //pasar a reports
             Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');

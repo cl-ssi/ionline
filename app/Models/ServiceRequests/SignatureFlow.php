@@ -22,7 +22,7 @@ class SignatureFlow extends Model implements Auditable
     ];
 
     public function user(){
-      return $this->belongsTo('App\User','responsable_id');
+      return $this->belongsTo('App\User','responsable_id')->withTrashed();
     }
 
     public function serviceRequest(){

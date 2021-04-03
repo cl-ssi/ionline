@@ -1,18 +1,20 @@
 <div>
     <div class="form-row">
         <div class="col-10">
-            <select class="form-control" name="payment_ready" wire:model="payment_ready">
-                <option value="1">Apto</option>
+            <select class="form-control {{ $bg_color }}" name="payment_ready" wire:model="payment_ready">
+                <option value="1">Aceptado</option>
                 <option value="0">Rechazado</option>
-                <option value="null">Pendiente</option>
+                <option value="null"></option>
             </select>
         </div>
         <div class="col-2 my-auto">
-            <button class="btn btn-primary btn-sm" wire:click="save()" title="Guardar"><i class="fas fa-save"></i></button>
+            <button class="btn btn-primary btn-sm" wire:click="save()" title="Guardar">
+                <i class="fas fa-save"></i>
+            </button>
         </div>
     </div>
 
-    <div class="form-row"{{$payment_ready != '0' ? 'hidden' : '' }}>
+    <div class="form-row"{{ $payment_ready == '1' ? 'hidden' : '' }}>
         <div class="col-12">
             <input class="form-control" type="text" name="rejection_detail" placeholder="Ingrese motivo"
                    wire:model.lazy="rejection_detail">
