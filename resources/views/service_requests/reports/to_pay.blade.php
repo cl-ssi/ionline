@@ -18,7 +18,7 @@
       <option value="">Todos</option>
       <option value="1" @if($request->establishment_id == 1) selected @endif>Hospital Ernesto Torres Galdames</option>
       <option value="12" @if($request->establishment_id == 12) selected @endif>Dr. Héctor Reyno G.</option>
-      <option value="0" @if($request->establishment_id == 0) selected @endif>Dirección SSI</option>
+      <option value="0" @if($request->establishment_id === 0) selected @endif>Dirección SSI</option>
     </select>
     <div class="input-group-append">
         <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
@@ -28,9 +28,11 @@
 
 <hr>
 
+  @if($request->establishment_id)
   <a href="{{route('rrhh.service-request.report.bank-payment-file',$request->establishment_id)}}" class="btn btn-sm btn-outline-primary" >
     <i class="fas fa-file"></i>Archivo de pago banco</a>
-  
+  @endif
+
   <table class="table table-sm table-bordered table-stripped">
     <tr>
         <th>Id</th>

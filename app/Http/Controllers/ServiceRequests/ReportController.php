@@ -23,7 +23,7 @@ class ReportController extends Controller
                                                       $subQuery->where('establishment_id',$establishment_id);
                                                     });
                                        })
-                                     ->when($request->establishment_id == 0, function ($q) use ($establishment_id) {
+                                     ->when($request->establishment_id === 0, function ($q) use ($establishment_id) {
                                           return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
                                                       $subQuery->whereNotIn('establishment_id',[1,12]);
                                                     });
@@ -44,8 +44,8 @@ class ReportController extends Controller
                                                        $subQuery->where('establishment_id',$establishment_id);
                                                      });
                                         })
-                                      ->when($request->establishment_id == 0, function ($q) use ($establishment_id) {
-                                           return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {-
+                                      ->when($request->establishment_id === 0, function ($q) use ($establishment_id) {
+                                           return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
                                                        $subQuery->whereNotIn('establishment_id',[1,12]);
                                                      });
                                         })
@@ -59,7 +59,7 @@ class ReportController extends Controller
         return view('service_requests.reports.to_pay', compact('topay_fulfillments','request'));
     }
 
-    public function bankPaymentFile($establishment_id)
+    public function bankPaymentFile($establishment_id = NULL)
     {
         $fulfillments1 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
                                        $subQuery->where('has_resolution_file',1);
@@ -69,7 +69,7 @@ class ReportController extends Controller
                                                       $subQuery->where('establishment_id',$establishment_id);
                                                 });
                                        })
-                                     ->when($establishment_id == 0, function ($q) use ($establishment_id) {
+                                     ->when($establishment_id === 0, function ($q) use ($establishment_id) {
                                           return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
                                                       $subQuery->whereNotIn('establishment_id',[1,2]);
                                                     });
@@ -91,7 +91,7 @@ class ReportController extends Controller
                                                        $subQuery->where('establishment_id',$establishment_id);
                                                      });
                                         })
-                                      ->when($establishment_id == 0, function ($q) use ($establishment_id) {
+                                      ->when($establishment_id === 0, function ($q) use ($establishment_id) {
                                            return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
                                                        $subQuery->whereNotIn('establishment_id',[1,2]);
                                                      });
