@@ -11,6 +11,7 @@
 
 <table class="table table-sm table-bordered table-stripped">
     <tr>
+        <th></th>
         <th>Id</th>
         <th>Establecimiento</th>
         <th>Tipo/Jornada</th>
@@ -22,12 +23,11 @@
         <th>Cer.</th>
         <th>Bol.</th>
         <th>Res.</th>
-        @canany(['Service Request: fulfillments finance'])
-          <th nowrap style="width: 21%"  >Aprobación de pago </th>
-        @endcanany
+        <th>Motivo</th>
     </tr>
     @foreach($fulfillments->whereNull('total_paid') as $key => $fulfillment)
       <tr>
+          <td>{{ ++$key }}</td>
           <td>
                 <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}" title="Editar">
                     {{$fulfillment->serviceRequest->id}}
