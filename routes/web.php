@@ -379,7 +379,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
                 Route::get('/', [FulfillmentItemController::class, 'index'])->name('index');
                 Route::post('/store', [FulfillmentItemController::class, 'store'])->name('store');
                 Route::put('/{fulfillment}/update', [FulfillmentItemController::class, 'update'])->name('update');
-                Route::delete('{fulfillment}/destroy', [FulfillmentItemController::class, 'destroy'])->name('destroy');
+                Route::delete('{fulfillmentItem}/destroy', [FulfillmentItemController::class, 'destroy'])->name('destroy');
             });
 
 
