@@ -99,25 +99,31 @@ class ServiceRequestController extends Controller
     $program_contract_type = $request->program_contract_type;
     $name = $request->name;
     $id = $request->id;
+
+    $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+
     // dd($responsability_center_ou_id);
     $serviceRequests = ServiceRequest::when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
-      return $q->where('responsability_center_ou_id', $responsability_center_ou_id);
-    })
-      ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
-        return $q->where('program_contract_type', $program_contract_type);
-      })
-      ->when(($name != NULL), function ($q) use ($name) {
-        return $q->whereHas("employee", function ($subQuery) use ($name) {
-          $subQuery->where('name', 'LIKE', '%' . $name . '%');
-          $subQuery->orwhere('fathers_family', 'LIKE', '%' . $name . '%');
-          $subQuery->orwhere('mothers_family', 'LIKE', '%' . $name . '%');
-        });
-      })
-      ->when($id != NULL, function ($q) use ($id) {
-        return $q->where('id', $id);
-      })
-      ->orderBy('id', 'asc')
-      ->paginate(100);
+                                         return $q->where('responsability_center_ou_id', $responsability_center_ou_id);
+                                       })
+                                      ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
+                                        return $q->where('program_contract_type', $program_contract_type);
+                                      })
+                                      ->when(($name != NULL), function ($q) use ($name) {
+                                        return $q->whereHas("employee", function ($subQuery) use ($name) {
+                                          $subQuery->where('name', 'LIKE', '%' . $name . '%');
+                                          $subQuery->orwhere('fathers_family', 'LIKE', '%' . $name . '%');
+                                          $subQuery->orwhere('mothers_family', 'LIKE', '%' . $name . '%');
+                                        });
+                                      })
+                                      ->when($id != NULL, function ($q) use ($id) {
+                                        return $q->where('id', $id);
+                                      })
+                                      ->whereHas("responsabilityCenter", function($subQuery) use ($establishment_id){
+                                               $subQuery->where('establishment_id',$establishment_id);
+                                           })
+                                      ->orderBy('id', 'asc')
+                                      ->paginate(100);
     // ->get();
     $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
     return view('service_requests.requests.aditional_data_list', compact('serviceRequests', 'responsabilityCenters', 'request'));
