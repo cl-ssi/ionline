@@ -4,7 +4,7 @@
 
 @section('content')
 
-<h3 class="mb-3">Unidades organizacionales</h3>
+<h3 class="mb-3">Unidades organizacionales del {{Auth::user()->organizationalUnit->establishment->name}}</h3>
 
 <fieldset class="form-group">
     <div class="input-group">
