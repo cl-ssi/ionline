@@ -278,13 +278,14 @@
 
 
 <br style="padding-bottom: 10px;">
-
+<br><br><br><br><br><br><br><br><br><br>
 <div id="firmas">
     <div class="center" style="width: 100%;">
         <strong>
-        <span class="uppercase">{{$fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->fullName}}</span><br>
-        <span class="uppercase">{{$fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->position}}</span><br>
-        <span class="uppercase">{{$fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->organizationalUnit->name}}</span><br>
+        <span class="uppercase">{{ $signer->fullName }}</span><br>
+        <span class="uppercase">{{ $signer->position }}</span><br>
+        <span class="uppercase">{{ $signer->organizationalUnit->name }}</span><br>
+
         @if($fulfillment->serviceRequest->employee->organizationalUnit->establishment_id == 38)
           @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
             CONSULTORIO GENERAL URBANO DR. HECTOR REYNO<br>
