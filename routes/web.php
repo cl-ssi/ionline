@@ -380,7 +380,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
                 Route::get('/', [FulfillmentItemController::class, 'index'])->name('index');
                 Route::post('/store', [FulfillmentItemController::class, 'store'])->name('store');
                 Route::put('/{fulfillment}/update', [FulfillmentItemController::class, 'update'])->name('update');
-                Route::delete('{fulfillment}/destroy', [FulfillmentItemController::class, 'destroy'])->name('destroy');
+                Route::delete('{fulfillmentItem}/destroy', [FulfillmentItemController::class, 'destroy'])->name('destroy');
             });
 
 
@@ -390,11 +390,13 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::prefix('report')->name('report.')->group(function () {
             // Rutas a los reportes
             Route::get('/to-pay', [ReportController::class, 'toPay'])->name('to-pay');
+            Route::get('/pay-rejected', [ReportController::class, 'payRejected'])->name('pay-rejected');
             Route::get('/without-bank-details', [ReportController::class, 'withoutBankDetails'])->name('without-bank-details');
             Route::get('/pending-resolutions', [ReportController::class, 'pendingResolutions'])->name('pending-resolutions');
             Route::get('/resolution-pdf/{ServiceRequest}', [ReportController::class, 'resolutionPDF'])->name('resolution-pdf');
-            Route::get('/bank-payment-file', [ReportController::class, 'bankPaymentFile'])->name('bank-payment-file');
+            Route::get('/bank-payment-file/{establishment_id?}', [ReportController::class, 'bankPaymentFile'])->name('bank-payment-file');
             Route::get('/with-resolution-file', [ReportController::class, 'indexWithResolutionFile'])->name('with-resolution-file');
+            Route::get('/without-resolution-file', [ReportController::class, 'indexWithoutResolutionFile'])->name('without-resolution-file');
 
             //pasar a reports
             Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
