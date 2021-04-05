@@ -44,6 +44,7 @@
 
   <table class="table table-sm table-bordered table-stripped">
     <tr>
+				<th></th>
         <th>Id</th>
         <th>Establecimiento</th>
         <th>Tipo/Jornada</th>
@@ -62,6 +63,7 @@
     </tr>
     @foreach($payed_fulfillments as $key => $fulfillment)
       <tr>
+					<td>{{$key+1}}</td>
           <td>{{$fulfillment->serviceRequest->id}}</td>
           <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
           <td>
