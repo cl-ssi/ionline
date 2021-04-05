@@ -377,7 +377,7 @@ class FirmaDigitalController extends Controller
         imagettftext($im, $fontSize + 1, 0, $xAxis, $yPading * 2 + $marginTop + 2,
             $text_color, $font_bold, $fullName);
         imagettftext($im, $fontSize, 0, $xAxis, $yPading * 3 + $marginTop + 3,
-            $text_color, $font_regular, "$email");
+            $text_color, $font_regular, $email);
         imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 4,
             $text_color, $font_regular, "$actualDate - ID: $docId - Código: $verificationCode");
         /*
@@ -460,7 +460,7 @@ class FirmaDigitalController extends Controller
             $coordenada_x = 310;
             $coordenada_y = 49;
             $ancho = 170 * 1.4;
-            $alto = 30 * 1.4;
+            $alto = 50 * 1.4;
         }
 
         $data = [
