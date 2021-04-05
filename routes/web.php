@@ -140,6 +140,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
         Route::get('/ou_index', [RequestReplacementStaffController::class, 'ou_index'])->name('ou_index');
         Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
         Route::post('/store', [RequestReplacementStaffController::class, 'store'])->name('store');
+        Route::get('/to_select/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_select'])->name('to_select');
         // Route::get('/own', [ReplacementStaffController::class, 'requestOwn'])->name('own');
         // Route::get('/edit', [ReplacementStaffController::class, 'requestEdit'])->name('edit');
     });
