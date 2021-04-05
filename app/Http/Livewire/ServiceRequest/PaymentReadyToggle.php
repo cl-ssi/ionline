@@ -9,6 +9,7 @@ class PaymentReadyToggle extends Component
     public $payment_ready;
     public $fulfillment;
     public $rejection_detail;
+    public $bg_color;
 
     public function mount()
     {
@@ -26,6 +27,11 @@ class PaymentReadyToggle extends Component
 
     public function render()
     {
+        switch($this->payment_ready) {
+            case '0': $this->bg_color = 'bg-danger text-white'; break;
+            case '1': $this->bg_color = 'bg-success text-white'; break;
+            case null: $this->bg_color = 'bg-light'; break;
+        }
         return view('livewire.service-request.payment-ready-toggle');
     }
 }
