@@ -31,13 +31,13 @@
 
       <fieldset class="form-group col-12 col-md-6">
           <label for="for_estate"><br/></label>
-          <a type="button" class="btn btn-outline-success"
+          <a type="button" class="btn btn-outline-primary"
              href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank">
              Ver certificado <i class="fas fa-file"></i>
           </a>
           
           @if($serviceRequest->Fulfillments->first()->signatures_file_id)
-            <a class="btn btn-outline-success" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank" title="Certificado">
+            <a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank" title="Certificado">
               Certificado firmado<i class="fas fa-signature"></i>
             </a>
           @else
@@ -49,7 +49,7 @@
                   $returnUrlSignModal = "rrhh.service-request.fulfillment.edit";
               @endphp
               @include('documents.signatures.partials.sign_file')
-              <button type="button" data-toggle="modal" class="btn btn-outline-secondary"
+              <button type="button" data-toggle="modal" class="btn btn-outline-info"
                       data-target="#signPdfModal{{$idModelModal}}" title="Firmar"> 
                       Firmar certificado <i class="fas fa-signature"></i>
               </button>
