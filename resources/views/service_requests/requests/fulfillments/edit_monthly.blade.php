@@ -376,7 +376,7 @@
                   <i class="fas fa-signature"></i>
                 </a>
               @else
-                  @if(auth()->user() == $fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user)
+                  @if(1 = 1)
                   {{--modal firmador--}}
                   @php
                       $idModelModal = $fulfillment->id;
