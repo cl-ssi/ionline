@@ -381,10 +381,16 @@ class FulfillmentController extends Controller
         //
     }
 
-    public function certificatePDF(Fulfillment $fulfillment)
+    public function certificatePDF(Fulfillment $fulfillment, User $user = null)
     {
+        if($user) {
+          $signer = $user;
+        }
+        else {
+          $signer = $fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user;
+        }
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('service_requests.requests.fulfillments.report_certificate',compact('fulfillment'));
+        $pdf->loadView('service_requests.requests.fulfillments.report_certificate',compact('fulfillment','signer'));
 
         return $pdf->stream('mi-archivo.pdf');
     }

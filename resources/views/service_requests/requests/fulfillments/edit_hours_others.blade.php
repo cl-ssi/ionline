@@ -37,15 +37,15 @@
           </a>
           
           @if($serviceRequest->Fulfillments->first()->signatures_file_id)
-            <a href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank" title="Certificado">
-              <i class="fas fa-signature"></i>
+            <a class="btn btn-outline-success" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank" title="Certificado">
+              Certificado firmado<i class="fas fa-signature"></i>
             </a>
           @else
-              @if(auth()->user() == $serviceRequest->Fulfillments->first()->responsableUser)
+
               {{--modal firmador--}}
               @php
                   $idModelModal = $serviceRequest->Fulfillments->first()->id;
-                  $routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal";
+                  $routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal/".auth()->id();
                   $returnUrlSignModal = "rrhh.service-request.fulfillment.edit";
               @endphp
               @include('documents.signatures.partials.sign_file')
@@ -53,9 +53,7 @@
                       data-target="#signPdfModal{{$idModelModal}}" title="Firmar"> 
                       Firmar certificado <i class="fas fa-signature"></i>
               </button>
-              @else
-                Sólo puede firmar digitalmente el responsable.
-              @endif
+
           @endif
       </fieldset>
 
