@@ -8,6 +8,7 @@ use Auth;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Log;
@@ -19,6 +20,7 @@ use Exception;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Exception\ConnectException;
 use Storage;
+use Str;
 
 class FirmaDigitalController extends Controller
 {
@@ -93,7 +95,7 @@ class FirmaDigitalController extends Controller
         imagettftext($im, $fontSize + 1, 0, $xAxis, $yPading * 2 + $marginTop + 2,
             $text_color, $font_bold, $fullName);
         imagettftext($im, $fontSize, 0, $xAxis, $yPading * 3 + $marginTop + 3,
-            $text_color, $font_regular, "email = $email");
+            $text_color, $font_regular, $email);
         /*
         imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 3,
             $text_color, $font_light, 'serialNumber = 15287582-7');
@@ -306,7 +308,11 @@ class FirmaDigitalController extends Controller
         $modelId = $request->model_id;
         $signatureType = 'firmante';
 
-        $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $signatureType);
+        $id=DB::select("SHOW TABLE STATUS LIKE 'doc_signatures_files'");
+        $docId=$id[0]->Auto_increment;
+        $verificationCode = Str::random(6);
+
+        $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $signatureType, $docId, $verificationCode);
 
         if (!$responseArray['statusOk']) {
             return redirect()->route('documents.callbackFirma', ['message' => "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}",
@@ -318,6 +324,7 @@ class FirmaDigitalController extends Controller
         $signaturesFile->signed_file = $responseArray['content'];
         $signaturesFile->md5_file = $checksum_pdf;
         $signaturesFile->signer_id = Auth::id();
+        $signaturesFile->verification_code = $verificationCode;
         $signaturesFile->save();
 
         return redirect()->route('documents.callbackFirma', ['message' => "El documento $signaturesFile->id se ha firmado correctamente.",
@@ -337,7 +344,7 @@ class FirmaDigitalController extends Controller
      * @return array
      */
     public function signPdfApi(string $pdfbase64, string $checksum_pdf, $modo, string $otp, string $signatureType,
-                               int $ct_firmas = null, int $posicion_firma = null): array
+                               int $docId, string $verificationCode, int $ct_firmas = null, int $posicion_firma = null): array
     {
 
 //        dd($pdfbase64, $checksum_pdf, $modo, $otp, $signatureType);
@@ -346,13 +353,13 @@ class FirmaDigitalController extends Controller
         $font_bold = public_path('fonts/verdana-bold-2.ttf');
         $font_regular = public_path('fonts/Verdana.ttf');
 
-        $im = @imagecreate(400, 60) or die("Cannot Initialize new GD image stream");
+        $im = @imagecreate(400, 80) or die("Cannot Initialize new GD image stream");
 
         $background_color = imagecolorallocate($im, 204, 204, 204);
         $white = imagecolorallocate($im, 255, 255, 255);
 
         //imagefilledrectangle($image,int $x1,int $y1,int $x2,int $y2,int $color).
-        imagefilledrectangle($im, 1, 1, 398, 58, $white);
+        imagefilledrectangle($im, 1, 1, 398, 78, $white);
 
         $text_color = imagecolorallocate($im, 0, 0, 0);
 
@@ -366,11 +373,13 @@ class FirmaDigitalController extends Controller
         $email = Auth::user()->email;
 
         imagettftext($im, $fontSize, 0, $xAxis, $yPading * 1 + $marginTop,
-            $text_color, $font_light, "Firmado digitalmente el $actualDate por:");
+            $text_color, $font_light, "Firmado digitalmente de acuerdo con la ley Nº 19.799");
         imagettftext($im, $fontSize + 1, 0, $xAxis, $yPading * 2 + $marginTop + 2,
             $text_color, $font_bold, $fullName);
         imagettftext($im, $fontSize, 0, $xAxis, $yPading * 3 + $marginTop + 3,
-            $text_color, $font_regular, "email = $email");
+            $text_color, $font_regular, "$email");
+        imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 4,
+            $text_color, $font_regular, "$actualDate - ID: $docId - Código: $verificationCode");
         /*
         imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 3,
             $text_color, $font_light, 'serialNumber = 15287582-7');
