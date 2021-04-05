@@ -16,14 +16,6 @@
             @csrf
             @method('POST')
 
-            <!-- <div class="form-row">
-                <fieldset class="form-group col">
-                    <label for="for_name">Nombre de Cargo</label>
-                    <input type="text" class="form-control" name="name"
-                        id="for_name" required>
-                </fieldset>
-            </div> -->
-
             <div class="form-row">
                 <fieldset class="form-group col-6">
                     <label for="for_name">Nombre de Cargo</label>

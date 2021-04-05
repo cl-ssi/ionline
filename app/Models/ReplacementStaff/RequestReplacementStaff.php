@@ -25,6 +25,10 @@ class RequestReplacementStaff extends Model
         return $this->belongsTo('App\Rrhh\OrganizationalUnit');
     }
 
+    public function requestSing() {
+        return $this->hasOne('App\Models\ReplacementStaff\RequestSing');
+    }
+
     public function getLegalQualityValueAttribute() {
         switch($this->legal_quality) {
           case 'to hire':
@@ -32,6 +36,23 @@ class RequestReplacementStaff extends Model
             break;
           case 'fee':
             return 'Honorarios';
+            break;
+        }
+    }
+
+    public function getWorkDayValueAttribute() {
+        switch($this->work_day) {
+          case 'diurnal':
+            return 'Diurno';
+            break;
+          case 'third_shift':
+            return 'Tercer Turno';
+            break;
+          case 'fourth_shift':
+            return 'Cuarto Turno';
+            break;
+          case 'other':
+            return 'Otro';
             break;
         }
     }
