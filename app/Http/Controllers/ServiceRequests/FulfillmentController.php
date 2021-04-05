@@ -42,6 +42,8 @@ class FulfillmentController extends Controller
           $array[] = $authority->organizational_unit_id;
         }
 
+        $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+
         if (Auth::user()->can('Service Request: fulfillments responsable')) {
           $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id, $array){
                                                $subQuery->where('responsable_id',$user_id);
@@ -64,7 +66,9 @@ class FulfillmentController extends Controller
                                           ->when($id != NULL, function ($q) use ($id) {
                                                  return $q->where('id',$id);
                                                })
-                                           // ->where('program_contract_type','Mensual')
+                                          ->whereHas("responsabilityCenter", function($subQuery) use ($establishment_id){
+                                                   $subQuery->where('establishment_id',$establishment_id);
+                                               })
                                            ->orderBy('id','asc')
                                            ->paginate(100);
                                            // ->get();
@@ -87,6 +91,9 @@ class FulfillmentController extends Controller
                                                 })
                                           ->when($id != NULL, function ($q) use ($id) {
                                                 return $q->where('id',$id);
+                                               })
+                                          ->whereHas("responsabilityCenter", function($subQuery) use ($establishment_id){
+                                                    $subQuery->where('establishment_id',$establishment_id);
                                                })
                                            // ->where('program_contract_type','Mensual')
                                            ->paginate(100);
