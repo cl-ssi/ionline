@@ -663,7 +663,7 @@ class ServiceRequestController extends Controller
               $sirh_ou_id = 1301620;
               break;
             case   138:
-              $sirh_ou_id = 1301401;
+              $sirh_ou_id = '3510-1';
               break;
             case   130:
               $sirh_ou_id = 1301650;
