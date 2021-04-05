@@ -75,6 +75,7 @@ class UpdateAccount extends Component
 
     public function mount()
     {
+        if($this->serviceRequest){
         if ($this->serviceRequest->employee->bankAccount) {
           $this->bank_id = $this->serviceRequest->employee->bankAccount->bank_id;
           $this->account_number = $this->serviceRequest->employee->bankAccount->number;
@@ -84,11 +85,18 @@ class UpdateAccount extends Component
         $this->phone_number = $this->serviceRequest->employee->phone_number;
         $this->email = $this->serviceRequest->employee->email;
     }
+    }
 
     public function render()
     {
+        if($this->serviceRequest){
         $this->banks = Bank::all();
         return view('livewire.service-request.update-account');
+        }
+        else{
+            return view('livewire.service-request.update-account-empty');
+        }
+        
     }
 
 }

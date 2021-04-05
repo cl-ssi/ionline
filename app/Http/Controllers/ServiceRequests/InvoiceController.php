@@ -41,7 +41,7 @@ class InvoiceController extends Controller
 
     public function show($user_id)
     {
-        $serviceRequests = ServiceRequest::where('user_id',$user_id)->get();
+        $serviceRequests = ServiceRequest::where('user_id',$user_id)->get();        
         return view('service_requests.invoice.show', compact('serviceRequests'));
     }
 

@@ -151,6 +151,10 @@ class User extends Authenticatable
                     ->withTimestamps();
     }
 
+    public function requests() {
+        return $this->hasMany('App\Models\ReplacementStaff\RequestReplacementStaff');
+    }
+
     public function userResults()
     {
         return $this->hasMany(Result::class, 'user_id', 'id');

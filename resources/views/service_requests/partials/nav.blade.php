@@ -70,13 +70,19 @@
             </a>
             @endcan
 
-            @canany(['Service Request: pending requests'])
+            @canany(['Service Request: report to pay'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.to-pay') }}"
                 href="{{ route('rrhh.service-request.report.to-pay') }}">
-                <i class="fas fa-file-invoice-dollar"></i> Reporte para pagos
+                <i class="fas fa-piggy-bank"></i> Reporte para pagos
             </a>
             @endcan
 
+            @canany(['Service Request: pending requests'])
+            <a class="dropdown-item {{ active('rrhh.service-request.report.pay-rejected') }}"
+                href="{{ route('rrhh.service-request.report.pay-rejected') }}">
+                <i class="fas fa-ban"></i> Pagos rechazados
+            </a>
+            @endcan
 
             <!-- @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.without-bank-details') }}"
@@ -88,14 +94,21 @@
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.pending-resolutions') }}"
                 href="{{ route('rrhh.service-request.report.pending-resolutions') }}">
-                <i class="fas fa-file-invoice-dollar"></i> Resoluciones pendientes
+                <i class="fas fa-exclamation-circle"></i> Resoluciones pendientes
             </a>
             @endcan
 
             @canany(['Service Request: with resolution'])
                 <a class="dropdown-item {{ active('rrhh.service-request.report.with-resolution-file') }}"
                    href="{{ route('rrhh.service-request.report.with-resolution-file') }}">
-                    <i class="fas fa-file-invoice-dollar"></i> Solicitudes con resolución cargada
+                    <i class="fas fa-clipboard-check"></i> Solicitudes con resolución cargada
+                </a>
+            @endcan
+
+            @canany(['Service Request: with resolution'])
+                <a class="dropdown-item {{ active('rrhh.service-request.report.without-resolution-file') }}"
+                   href="{{ route('rrhh.service-request.report.without-resolution-file') }}">
+                    <i class="fas fa-clipboard"></i> Solicitudes sin resolución cargada
                 </a>
             @endcan
 

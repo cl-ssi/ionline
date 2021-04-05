@@ -70,7 +70,7 @@
         }
 
         #firmas {
-            margin-top: 100px;
+            margin-top: 80px;
         }
 
         #firmas > div {
@@ -535,6 +535,10 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
 
         <br style="padding-bottom: 4px;">
         Lo que me permito transcribe a usted para su conocimiento y fines consiguientes.
+
+        <br><br><br>
+        <br style="padding-bottom: 4px;">
+        MINISTRO DE FE
     </div>
 </div>
 <br style="padding-bottom: 4px;">

@@ -36,10 +36,17 @@ class FulfillmentController extends Controller
         $name = $request->name;
         $id = $request->id;
 
+        $authorities = Authority::getAmIAuthorityFromOu(now(),'manager',$user_id);
+        $array = array();
+        foreach ($authorities as $key => $authority) {
+          $array[] = $authority->organizational_unit_id;
+        }
+
         if (Auth::user()->can('Service Request: fulfillments responsable')) {
-          $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
+          $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id, $array){
                                                $subQuery->where('responsable_id',$user_id);
                                                $subQuery->orwhere('user_id',$user_id);
+                                               $subQuery->orWhereIn('ou_id',$array);
                                                })
                                           ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
                                                return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
@@ -50,6 +57,8 @@ class FulfillmentController extends Controller
                                            ->when(($name != NULL), function ($q) use ($name) {
                                                    return $q->whereHas("employee", function($subQuery) use ($name){
                                                               $subQuery->where('name','LIKE','%'.$name.'%');
+                                                              $subQuery->orwhere('fathers_family', 'LIKE', '%' . $name . '%');
+                                                              $subQuery->orwhere('mothers_family', 'LIKE', '%' . $name . '%');
                                                          });
                                                 })
                                           ->when($id != NULL, function ($q) use ($id) {
@@ -72,6 +81,8 @@ class FulfillmentController extends Controller
                                            ->when(($name != NULL), function ($q) use ($name) {
                                                    return $q->whereHas("employee", function($subQuery) use ($name){
                                                               $subQuery->where('name','LIKE','%'.$name.'%');
+                                                              $subQuery->orwhere('fathers_family', 'LIKE', '%' . $name . '%');
+                                                              $subQuery->orwhere('mothers_family', 'LIKE', '%' . $name . '%');
                                                          });
                                                 })
                                           ->when($id != NULL, function ($q) use ($id) {
@@ -370,10 +381,16 @@ class FulfillmentController extends Controller
         //
     }
 
-    public function certificatePDF(Fulfillment $fulfillment)
+    public function certificatePDF(Fulfillment $fulfillment, User $user = null)
     {
+        if($user) {
+          $signer = $user;
+        }
+        else {
+          $signer = $fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user;
+        }
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('service_requests.requests.fulfillments.report_certificate',compact('fulfillment'));
+        $pdf->loadView('service_requests.requests.fulfillments.report_certificate',compact('fulfillment','signer'));
 
         return $pdf->stream('mi-archivo.pdf');
     }
@@ -599,6 +616,14 @@ class FulfillmentController extends Controller
         return Storage::disk('gcs')->response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
         /* Para google storage */
         //return Storage::disk('gcs')->response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
+    }
+
+    public function signedCertificatePDF(Fulfillment $fulfillment)
+    {
+        header('Content-Type: application/pdf');
+        if (isset($fulfillment->signedCertificate)) {
+            echo base64_decode($fulfillment->signedCertificate->signed_file);
+        }
     }
 
 }

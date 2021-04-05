@@ -14,42 +14,66 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class ReportController extends Controller
 {
     public function toPay(Request $request){
-        $fulfillments1 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
+        $establishment_id = $request->establishment_id;
+        $topay_fulfillments1 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
                                        $subQuery->where('has_resolution_file',1);
                                      })
+                                     ->when($establishment_id != null, function ($q) use ($establishment_id) {
+                                          return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
+                                                      $subQuery->where('establishment_id',$establishment_id);
+                                                    });
+                                       })
+                                     // ->when($establishment_id == 0, function ($q) use ($establishment_id) {
+                                     //      return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
+                                     //                  $subQuery->where('establishment_id',38);
+                                     //                });
+                                     //   })
                                      ->where('has_invoice_file',1)
                                      ->where('type','Mensual')
                                      ->where('responsable_approbation',1)
                                      ->where('rrhh_approbation',1)
                                      ->where('finances_approbation',1)
+                                     ->whereNull('total_paid')
                                      ->get();
 
-         $fulfillments2 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
+         $topay_fulfillments2 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
                                         $subQuery->where('has_resolution_file',1);
                                       })
+                                      ->when($request->establishment_id != null, function ($q) use ($establishment_id) {
+                                           return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
+                                                       $subQuery->where('establishment_id',$establishment_id);
+                                                     });
+                                        })
+                                      // ->when($request->establishment_id === 0, function ($q) use ($establishment_id) {
+                                      //      return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
+                                      //                  $subQuery->where('establishment_id',38);
+                                      //                });
+                                      //   })
                                       ->where('has_invoice_file',1)
                                       ->where('type','<>','Mensual')
+                                      ->whereNull('total_paid')
                                       ->get();
 
-        $fulfillments = $fulfillments1->merge($fulfillments2);
+        $topay_fulfillments = $topay_fulfillments1->merge($topay_fulfillments2);
 
-                                     // dd($fulfillments);
-
-        return view('service_requests.reports.to_pay', compact('fulfillments'));
+        return view('service_requests.reports.to_pay', compact('topay_fulfillments','request'));
     }
 
-    public function bankPaymentFile()
+    public function bankPaymentFile($establishment_id = NULL)
     {
-        // $fulfillments = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
-        //     $subQuery->where('has_resolution_file', 1)
-        //         ->where('payment_ready', 1);
-        // })
-        //     ->where('has_invoice_file', 1)
-        //     ->get();
-
         $fulfillments1 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
                                        $subQuery->where('has_resolution_file',1);
                                      })
+                                     ->when($establishment_id != null, function ($q) use ($establishment_id) {
+                                          return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
+                                                      $subQuery->where('establishment_id',$establishment_id);
+                                                });
+                                       })
+                                     // ->when($establishment_id === 0, function ($q) use ($establishment_id) {
+                                     //      return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
+                                     //                  $subQuery->whereNotIn('establishment_id',[1,2]);
+                                     //                });
+                                     //   })
                                      ->where('has_invoice_file',1)
                                      ->where('payment_ready', 1)
                                      ->whereNull('total_paid')
@@ -62,6 +86,16 @@ class ReportController extends Controller
          $fulfillments2 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
                                         $subQuery->where('has_resolution_file',1);
                                       })
+                                      ->when($establishment_id != null, function ($q) use ($establishment_id) {
+                                           return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
+                                                       $subQuery->where('establishment_id',$establishment_id);
+                                                     });
+                                        })
+                                      // ->when($establishment_id === 0, function ($q) use ($establishment_id) {
+                                      //      return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
+                                      //                  $subQuery->whereNotIn('establishment_id',[1,2]);
+                                      //                });
+                                      //   })
                                       ->where('has_invoice_file',1)
                                       ->where('payment_ready', 1)
                                       ->whereNull('total_paid')
@@ -148,8 +182,15 @@ class ReportController extends Controller
 
     public function indexWithResolutionFile() {
         $serviceRequests = ServiceRequest::where('has_resolution_file',1)->paginate(50);
+        $title = 'Solicitudes con resolución cargada';
+        return view('service_requests.reports.index_with_resolution_file', compact('serviceRequests','title'));
+        /* Hacer foreach de cada SRs y dentro hacer un foreach de sus fulfillments y mostrar cual tiene boleta y cual no */
+    }
 
-        return view('service_requests.reports.index_with_resolution_file', compact('serviceRequests'));
+    public function indexWithoutResolutionFile() {
+        $serviceRequests = ServiceRequest::where('has_resolution_file','<>',1)->paginate(50);
+        $title = 'Solicitudes sin resolución cargada';
+        return view('service_requests.reports.index_with_resolution_file', compact('serviceRequests','title'));
         /* Hacer foreach de cada SRs y dentro hacer un foreach de sus fulfillments y mostrar cual tiene boleta y cual no */
     }
 
@@ -173,5 +214,8 @@ class ReportController extends Controller
         // return $pdf->stream();
     }
 
-
+    public function payRejected() {
+        $fulfillments = Fulfillment::where('payment_ready',0)->orderByDesc('id')->get();
+        return view('service_requests.reports.pay_rejected', compact('fulfillments'));
+    }
 }
