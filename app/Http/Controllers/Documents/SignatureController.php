@@ -255,7 +255,9 @@ class SignatureController extends Controller
 
         $fulfillment->signatures_file_id = $signaturesFile->id;
         $fulfillment->save();
-        header('Content-Type: application/pdf');
-        echo base64_decode($signaturesFile->signed_file);
+        // header('Content-Type: application/pdf');
+        // echo base64_decode($signaturesFile->signed_file);
+        session()->flash('success', $message);
+        return redirect()->route($returnUrl, $fulfillment->serviceRequest->id);
     }
 }
