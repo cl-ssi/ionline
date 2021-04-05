@@ -4,7 +4,7 @@
 
 @section('content')
 
-<h3>Crear nueva unidad organizacional</h3>
+<h3>Crear nueva unidad organizacional del {{Auth::user()->organizationalUnit->establishment->name}}</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('rrhh.organizational-units.store') }}">
 	{{ csrf_field() }}
@@ -13,7 +13,7 @@
 		<fieldset class="form-group col-4">
 			<label for="forEstablishment">Id Establecimiento</label>
 			<input type="text" class="form-control" id="forEstablishment"
-				name="establishment_id" required="required" value="1">
+				name="establishment_id" required="required" readonly value="{{Auth::user()->organizationalUnit->establishment->id}}">
 		</fieldset>
 	</div>
 
