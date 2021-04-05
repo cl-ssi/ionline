@@ -6,44 +6,12 @@
 
 @include('service_requests.partials.nav')
 
-<h4 class="mb-3">Pendientes de pago</h4>
+<h3 class="mb-3">Pagos rechados</h3>
 
-<form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.to-pay') }}">
 
-<div class="form-row">
-
-	<div class="col-10">
-		<div class="input-group mb-3">
-			<div class="input-group-prepend">
-				<span class="input-group-text">Establecimiento</span>
-    		</div>
-			<select class="form-control selectpicker" data-live-search="true" name="establishment_id" data-size="5">
-				<option value="">Todos</option>
-				<option value="1" @if($request->establishment_id == 1) selected @endif>Hospital Ernesto Torres Galdames</option>
-				<option value="12" @if($request->establishment_id == 12) selected @endif>Dr. Héctor Reyno G.</option>
-				<option value="38" @if($request->establishment_id === 0) selected @endif>Dirección SSI</option>
-			</select>
-			<div class="input-group-append">
-				<button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
-			</div>
-		</div> 
-	</div>
-
-    <div class="col-2">
-    	@if($request->establishment_id)
-      	<a class="btn btn-outline-success" href="{{route('rrhh.service-request.report.bank-payment-file',$request->establishment_id)}}">
-        	<i class="fas fa-file"></i>Archivo de pago banco
-		</a>
-      	@endif
-    </div>
-</div>
-
-</form>
-
-<hr>
-
-  <table class="table table-sm table-bordered table-stripped">
+<table class="table table-sm table-bordered table-stripped">
     <tr>
+        <th></th>
         <th>Id</th>
         <th>Establecimiento</th>
         <th>Tipo/Jornada</th>
@@ -55,14 +23,16 @@
         <th>Cer.</th>
         <th>Bol.</th>
         <th>Res.</th>
-        <th></th>
-        @canany(['Service Request: fulfillments finance'])
-          <th nowrap style="width: 21%"  >Aprobación de pago </th>
-        @endcanany
+        <th>Motivo</th>
     </tr>
-    @foreach($topay_fulfillments as $key => $fulfillment)
+    @foreach($fulfillments->whereNull('total_paid') as $key => $fulfillment)
       <tr>
-          <td>{{$fulfillment->serviceRequest->id}}</td>
+          <td>{{ ++$key }}</td>
+          <td>
+                <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}" title="Editar">
+                    {{$fulfillment->serviceRequest->id}}
+      			</a>
+            </td>
           <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
           <td>
             {{$fulfillment->serviceRequest->program_contract_type}}
@@ -108,18 +78,12 @@
             @endif
           </td>
           <td>
-              <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}" title="Editar">
-      					<span class="fas fa-edit" aria-hidden="true"></span>
-      				</a>
-          </td>
-          @canany(['Service Request: fulfillments finance'])
-            <td>
-              @livewire('service-request.payment-ready-toggle', ['fulfillment' => $fulfillment])
+            {{ $fulfillment->payment_rejection_detail }}
             </td>
-          @endcanany
       </tr>
     @endforeach
 </table>
+
 
 @endsection
 

@@ -57,19 +57,19 @@
     <thead>
         <tr>
             <th>SUPERVISOR</th>
-						<th>UNIDAD</th>
+						<!-- <th>UNIDAD</th> -->
             <th>CANTIDAD</th>
         </tr>
     </thead>
     <tbody>
       @foreach($fulfillments_missing as $key => $fulfillment)
-				@foreach($fulfillment as $key2 => $cant)
+
 	        <tr>
 	          <td nowrap>{{$key}}</td>
-						<td nowrap>{{$key2}}</td>
-	          <td nowrap>{{$cant}}</td>
+
+	          <td nowrap>{{$fulfillment}}</td>
 	        </tr>
-				@endforeach
+
       @endforeach
 			<tr>
 				<td nowrap></td>

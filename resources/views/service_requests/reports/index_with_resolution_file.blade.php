@@ -6,7 +6,7 @@
 
 @include('service_requests.partials.nav')
 
-<h3 class="mb-3">Reporte - Solicitudes con resolución cargada</h3>
+<h3 class="mb-3">Reporte - {{ $title }}</h3>
 
 <table class="table table-sm table-bordered">
     <tr>

@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Suitability;
+namespace App\Http\Controllers;
 
-use App\Models\Suitability\Result;
-use App\Http\Controllers\Controller;
+use App\Models\RequestSing;
 use Illuminate\Http\Request;
 
-class ResultsController extends Controller
+class RequestSingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +15,6 @@ class ResultsController extends Controller
     public function index()
     {
         //
-        $results = Result::all();        
-        return view('suitability.results.index', compact('results'));
     }
 
     /**
@@ -44,23 +41,21 @@ class ResultsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\RequestSing  $requestSing
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(RequestSing $requestSing)
     {
         //
-        $result = Result::find($id);
-        return view('suitability.results.show', compact('result'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\RequestSing  $requestSing
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(RequestSing $requestSing)
     {
         //
     }
@@ -69,10 +64,10 @@ class ResultsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\RequestSing  $requestSing
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, RequestSing $requestSing)
     {
         //
     }
@@ -80,27 +75,11 @@ class ResultsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\RequestSing  $requestSing
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(RequestSing $requestSing)
     {
         //
-    }
-
-
-    public function certificate($id)
-    {
-        //
-        $result = Result::find($id);
-        return view('suitability.results.certificate', compact('result'));
-    }
-
-    public function certificatepdf($id)
-    {
-        //
-        $result = Result::find($id);
-        $pdf = \PDF::loadView('suitability.results.certificate', compact('result'));
-        return $pdf->download('Certificado de Idoneidad '.$result->user->fullName.'.pdf');
     }
 }

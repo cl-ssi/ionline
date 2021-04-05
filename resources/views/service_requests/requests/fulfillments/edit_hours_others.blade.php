@@ -1,6 +1,6 @@
 <div class="card">
   <div class="card-header">
-    Información de la solicitud
+    <h4>Información de la solicitud</h4>
   </div>
   <div class="card-body">
 
@@ -27,24 +27,40 @@
 {{--        </tbody>--}}
 {{--    </table>--}}
         @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
-    <div class="row">
-      <fieldset class="form-group col-5">
+    <div class="form-row">
 
-      </fieldset>
-      <fieldset class="form-group col">
+      <fieldset class="form-group col-12 col-md-6">
           <label for="for_estate"><br/></label>
-          <a type="button"
-             class="btn btn-outline-success form-control"
+          <a type="button" class="btn btn-outline-primary"
              href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank">
-             Generar certificado
-             <i class="fas fa-file"></i>
+             Ver certificado <i class="fas fa-file"></i>
           </a>
+          
+          @if($serviceRequest->Fulfillments->first()->signatures_file_id)
+            <a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank" title="Certificado">
+              Certificado firmado<i class="fas fa-signature"></i>
+            </a>
+          @else
+
+              {{--modal firmador--}}
+              @php
+                  $idModelModal = $serviceRequest->Fulfillments->first()->id;
+                  $routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal/".auth()->id();
+                  $returnUrlSignModal = "rrhh.service-request.fulfillment.edit";
+              @endphp
+              @include('documents.signatures.partials.sign_file')
+              <button type="button" data-toggle="modal" class="btn btn-outline-info"
+                      data-target="#signPdfModal{{$idModelModal}}" title="Firmar"> 
+                      Firmar certificado <i class="fas fa-signature"></i>
+              </button>
+
+          @endif
       </fieldset>
 
-      <fieldset class="form-group col">
+      <fieldset class="form-group col-6 col-md-6 text-right">
           <label for="for_estate"><br/></label>
           <a type="button"
-             class="btn btn-outline-success form-control"
+             class="btn btn-outline-success"
              href="{{ route('rrhh.service-request.report.resolution-pdf',$serviceRequest) }}" target="_blank">
              Generar Resolución
              <i class="fas fa-file"></i>
@@ -52,11 +68,8 @@
       </fieldset>
     </div>
 
-    <div class="row">
-        <div class="col-12 col-md-5">
-
-        </div>
-        <div class="col-12 col-md-5">
+    <div class="form-row">
+        <div class="col-12 col-md-6">
           <strong>Cargar Boleta:</strong>
           @livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ])
         </div>
@@ -76,32 +89,29 @@
   </div>
     <div class="card-body">
 
-      <div class="row">
-        <fieldset class="form-group col-5 col-md-6">
+      <div class="form-row">
+        <fieldset class="form-group col-5 col-md-2">
             <label for="for_resolution_number">N° Resolución</label>
             <input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
         </fieldset>
 
-        <fieldset class="form-group col-7 col-md-6">
+        <fieldset class="form-group col-7 col-md-3">
             <label for="for_resolution_date">Fecha Resolución</label>
             <input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
         </fieldset>
-      </div>
 
-      <div class="form-row">
-
-        <fieldset class="form-group col col-md">
+        <fieldset class="form-group col-6 col-md-3">
             <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
             <input type="text" class="form-control" name="total_hours_to_pay" value="{{$serviceRequest->Fulfillments->first()->total_hours_to_pay}}">
         </fieldset>
 
-        <fieldset class="form-group col col-md">
+        <fieldset class="form-group col-6 col-md-3">
             <label for="for_total_paid">Total a pagar</label>
             <input type="text" class="form-control" name="total_to_pay" value="{{$serviceRequest->Fulfillments->first()->total_to_pay}}">
         </fieldset>
 
       </div>
-      <button type="submit" class="btn btn-danger">Guardar</button>
+      <button type="submit" class="btn btn-primary">Guardar</button>
     </div>
 </div>
 </form>
@@ -119,26 +129,23 @@
   </div>
     <div class="card-body">
 
-      <div class="row">
-        <fieldset class="form-group col-5 col-md-6">
+      <div class="form-row">
+        <fieldset class="form-group col-5 col-md-2">
             <label for="for_resolution_number">N° Resolución</label>
             <input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
         </fieldset>
 
-        <fieldset class="form-group col-7 col-md-6">
+        <fieldset class="form-group col-7 col-md-3">
             <label for="for_resolution_date">Fecha Resolución</label>
             <input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
         </fieldset>
-      </div>
 
-      <div class="form-row">
-
-        <fieldset class="form-group col col-md">
+        <fieldset class="form-group col-6 col-md-3">
             <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
             <input type="text" class="form-control" name="total_hours_to_pay" disabled value="{{$serviceRequest->Fulfillments->first()->total_hours_to_pay}}">
         </fieldset>
 
-        <fieldset class="form-group col col-md">
+        <fieldset class="form-group col-6 col-md-3">
             <label for="for_total_paid">Total a pagar</label>
             <input type="text" class="form-control" name="total_to_pay" disabled value="{{$serviceRequest->Fulfillments->first()->total_to_pay}}">
         </fieldset>
@@ -146,17 +153,17 @@
       </div>
 
       <div class="form-row">
-        <fieldset class="form-group col-3 col-md-3">
+        <fieldset class="form-group col-3 col-md-2">
             <label for="for_bill_number">N° Boleta</label>
             <input type="text" class="form-control" name="bill_number" value="{{$serviceRequest->Fulfillments->first()->bill_number}}">
         </fieldset>
 
-        <fieldset class="form-group col-3 col-md-3">
+        <fieldset class="form-group col-3 col-md-2">
             <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
             <input type="text" class="form-control" name="total_hours_paid" value="{{$serviceRequest->Fulfillments->first()->total_hours_paid}}">
         </fieldset>
 
-        <fieldset class="form-group col-3 col-md-3">
+        <fieldset class="form-group col-3 col-md-2">
             <label for="for_total_paid">Total pagado</label>
             <input type="text" class="form-control" name="total_paid" value="{{$serviceRequest->Fulfillments->first()->total_paid}}">
         </fieldset>
@@ -187,7 +194,7 @@
 
       </div>
 
-      <button type="submit" class="btn btn-info">Guardar</button>
+      <button type="submit" class="btn btn-primary">Guardar</button>
 
     </div>
 

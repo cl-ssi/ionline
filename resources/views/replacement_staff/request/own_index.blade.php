@@ -6,7 +6,7 @@
 
 @include('replacement_staff.nav')
 
-<h4 class="mb-3">Solicitudes de mi Unidad Organizacional: <small>{{ Auth::user()->organizationalUnit->name }}</small></h4>
+<h4 class="mb-3">Mis Solicitudes</h4>
 
 <p>
     <a class="btn btn-primary" href="{{ route('replacement_staff.request.create') }}">
@@ -32,7 +32,7 @@
 <br>
 
 <div class="col">
-  <table class="table table-sm table-striped">
+  <table class="table small table-striped">
       <thead>
           <tr>
               <th>#</th>
@@ -47,7 +47,7 @@
           </tr>
       </thead>
       <tbody>
-          @foreach($requests as $request)
+          @foreach($my_request as $request)
           <tr>
               <td>{{ $request->id }}</td>
               <td>{{ $request->name }}</td>
@@ -60,19 +60,16 @@
                   {{ $request->organizationalUnit->name }}
               </td>
               <td>
-                  <!-- <button type="submit" class="btn btn-sm btn-outline-secondary">
-                      <i class="fas fa-edit" title="Editar"></i>
-                  </button> -->
-                  <a href="{{ route('replacement_staff.request.to_select', $request) }}"
-                      class="btn btn-outline-secondary btn-sm" title="Selección">
-                      <i class="fas fa-list-ol"></i></a>
+                  <button type="submit" class="btn btn-sm btn-outline-secondary">
+                      <i class="fas fa-edit"></i>
+                  </button>
               </td>
           </tr>
           @endforeach
       </tbody>
   </table>
 
-  {{ $requests->links() }}
+  {{ $my_request->links() }}
 
 </div>
 @endsection

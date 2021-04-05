@@ -81,7 +81,6 @@ class MonthlyValue extends Component
                 case 'Odontólogo':
                 case 'Bioquímico':
                 case 'Auxiliar':
-                    /* Calcular total de la boleta */
                     $valor_mensual = optional(
                         Value::orderBy('validity_from','desc')
                         ->where('contract_type','Mensual')
@@ -90,6 +89,14 @@ class MonthlyValue extends Component
                         ->where('work_type', $fulfillment->serviceRequest->working_day_type)
                         ->first()
                     )->amount;
+
+                    switch($fulfillment->serviceRequest->weekly_hours)
+                    {
+                        case '33': $valor_mensual = $valor_mensual * 0.75; break;
+                        case '28': $valor_mensual = $valor_mensual * 0.636363; break;
+                        case '22': $valor_mensual = $valor_mensual * 0.5; break;
+                        case '11': $valor_mensual = $valor_mensual * 0.25; break;
+                    }
                     break;
                 case 'Otro (justificar)':
                     /* TODO: No se que se hace acá */
