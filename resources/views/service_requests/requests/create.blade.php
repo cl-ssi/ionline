@@ -350,6 +350,9 @@
 					<option value="Refuerzo Laboratorio" >Refuerzo Laboratorio</option>
 					<option value="Refuerzo SAMU" >Refuerzo SAMU</option>
 					<option value="Refuerzo UEH" >Refuerzo UEH</option>
+					@if(Auth::user()->organizationalUnit->establishment_id == 1)
+						<option value="Migración Colchane" >Migración Colchane</option>
+					@endif
 				</select>
 		</fieldset>
 	</div>
