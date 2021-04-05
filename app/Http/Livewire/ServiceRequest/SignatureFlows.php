@@ -53,7 +53,7 @@ class SignatureFlows extends Component
           }
           //hospital
           elseif(Auth::user()->organizationalUnit->establishment_id == 1){
-            $this->signatureFlows['Subdirector'] = 14101085; // 88 - Subdirección Médica (IRIONDO: 9882506)
+            $this->signatureFlows['Subdirector'] = 9882506; // 88 - Subdirección Médica
             $this->signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
             $this->signatureFlows['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
             $this->signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
@@ -78,7 +78,7 @@ class SignatureFlows extends Component
           }
           //hospital
           elseif(Auth::user()->organizationalUnit->establishment_id == 1){
-            $this->signatureFlows['Subdirector'] = 14101085; // 88 - Subdirección Médica (IRIONDO: 9882506)
+            $this->signatureFlows['Subdirector'] = 9882506; // 88 - Subdirección Médica
             $this->signatureFlows['S.G.D.P Hospital'] = 16390845; // 86 - Subdirección de Gestión de Desarrollo de las Personas
             $this->signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
           }
