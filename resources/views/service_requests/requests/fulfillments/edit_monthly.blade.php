@@ -376,8 +376,7 @@
                   <i class="fas fa-signature"></i>
                 </a>
               @else
-                  @if(1 = 1)
-                  {{--modal firmador--}}
+
                   @php
                       $idModelModal = $fulfillment->id;
                       $routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal";
@@ -388,9 +387,7 @@
                           data-target="#signPdfModal{{$idModelModal}}" title="Firmar"> 
                           Firmar certificado <i class="fas fa-signature"></i>
                   </button>
-                  @else
-                    Sólo puede firmar digitalmente {{$fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->fullName }}.
-                  @endif
+
               @endif
 
             @endif
