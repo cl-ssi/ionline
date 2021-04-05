@@ -438,22 +438,33 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
   @endif
 @endif
 
-@if($ServiceRequest->program_contract_type == "Mensual")
-  <p class="justify">
-      <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
-  </p>
-@elseif($ServiceRequest->program_contract_type == "Horas")
-  @if($ServiceRequest->estate == "Profesional Médico")
+@if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
+  @if($ServiceRequest->program_contract_type == "Mensual")
     <p class="justify">
         <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
     </p>
-  @else
+  @elseif($ServiceRequest->program_contract_type == "Horas")
+    @if($ServiceRequest->estate == "Profesional Médico")
+      <p class="justify">
+          <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
+      </p>
+    @else
+      <p class="justify">
+          <strong>DÉCIMO PRIMERO:</strong> La personería de D. HECTOR ALARCON ALARCON, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de Director, consta en Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020, del Servicio de Salud Iquique.
+      </p>
+    @endif
+  @endif
+@else
+  @if($ServiceRequest->program_contract_type == "Mensual")
     <p class="justify">
-        <strong>DÉCIMO PRIMERO:</strong> La personería de D. HECTOR ALARCON ALARCON, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de Director, consta en Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020, del Servicio de Salud Iquique.
+        <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
+    </p>
+  @elseif($ServiceRequest->program_contract_type == "Horas")
+    <p class="justify">
+        <strong>DÉCIMO PRIMERO:</strong> La personería de D. JORGE GALLEGUILLOS MÖLLER , para representar al Servicio Salud Iquique, en su calidad de Director, consta en Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020, del Servicio de Salud Iquique.
     </p>
   @endif
 @endif
-
 
 
 @if($ServiceRequest->program_contract_type == "Mensual")
@@ -481,7 +492,12 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
         A contar del 01 de enero del 2019 el personal a honorarios estará obligado a imponer, tanto en salud como en AFP, de manera personal, como lo indica la Ley N°20.894, por lo tanto, deberá realizar el cobro del subsidio de salud directamente en la institución correspondiente, ya sea Fonasa o Isapre.
     </p>
     <p class="justify">
-        <strong>DECIMO TERCERO:</strong> La personería de D. HECTOR ALARCON ALARCON, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de Director, consta en Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020, del Servicio de Salud Iquique.
+        <strong>DECIMO TERCERO:</strong>
+        @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
+          La personería de D. HECTOR ALARCON ALARCON, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de Director, consta en Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020, del Servicio de Salud Iquique.
+        @else
+          La personería de D. JORGE GALLEGUILLOS MÖLLER, para representar al Servicio de Salud Iquique, en su calidad de Director, consta en el Dto. de Nombramiento N° 42/2019 del Ministerio de Salud.
+        @endif
     </p>
   @else
 
@@ -496,16 +512,31 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
 
 @if($ServiceRequest->program_contract_type == "Mensual")
   <p class="">
-      <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique.
+      <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del
+      @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
+        Hospital “Dr. Ernesto Torres Galdames” de Iquique.
+      @else
+        Servicio Salud Iquique.
+      @endif
   </p>
 @elseif($ServiceRequest->program_contract_type == "Horas")
   @if($ServiceRequest->estate == "Profesional Médico")
     <p class="">
-        <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique.
+        <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico del presupuesto del
+        @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
+          Hospital “Dr. Ernesto Torres Galdames” de Iquique.
+        @else
+          Servicio Salud Iquique.
+        @endif
     </p>
   @else
     <p class="">
-        <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique.
+        <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del
+        @if($ServiceRequest->employee->organizationalUnit->establishment_id == 1)
+          Hospital “Dr. Ernesto Torres Galdames” de Iquique.
+        @else
+          Servicio Salud Iquique.
+        @endif
     </p>
   @endif
 @endif
