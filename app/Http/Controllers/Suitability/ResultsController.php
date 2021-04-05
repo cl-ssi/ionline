@@ -16,7 +16,7 @@ class ResultsController extends Controller
     public function index()
     {
         //
-        $results = Result::all();
+        $results = Result::all();        
         return view('suitability.results.index', compact('results'));
     }
 

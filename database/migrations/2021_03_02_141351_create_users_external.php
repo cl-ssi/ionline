@@ -32,8 +32,8 @@ class CreateUsersExternal extends Migration
             $table->string('password')->nullable();
             $table->string('position')->nullable();
             $table->date('birthday')->nullable();
-            $table->foreignId('school_id')->nullable();
-            $table->foreign('school_id')->references('id')->on('schools');
+            // $table->foreignId('school_id')->nullable();
+            // $table->foreign('school_id')->references('id')->on('schools');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
