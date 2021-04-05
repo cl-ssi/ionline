@@ -10,34 +10,24 @@
     @endrole
 
     @role('Replacement Staff: admin|Replacement Staff: user')
-    <li class="nav-item">
-        <a class="nav-link"
-                      href="{{ route('replacement_staff.request.own_index') }}">
-            <i class="fas fa-inbox"></i> Mis Solicitudes
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            <i class="fas fa-inbox"></i> Solicitudes
         </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link"
-                      href="{{ route('replacement_staff.request.ou_index') }}">
-            <i class="fas fa-inbox"></i> Solicitudes de mi U.O.
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link"
-                      href="{{ route('replacement_staff.request.create') }}">
-            <i class="fas fa-plus"></i> Nueva Solicitud
-        </a>
-    </li>
+        <div class="dropdown-menu">
+            @role('Replacement Staff: admin')
+            <a class="dropdown-item" href="{{ route('replacement_staff.request.index') }}"><i class="fas fa-inbox"></i> Gestión de Solicitudes</a>
+            <div class="dropdown-divider"></div>
+            @endrole
+            <a class="dropdown-item" href="{{ route('replacement_staff.request.own_index') }}"><i class="fas fa-inbox"></i> Mis Solicitudes</a>
+            <a class="dropdown-item" href="{{ route('replacement_staff.request.ou_index') }}"><i class="fas fa-inbox"></i> Solicitudes de mi U.O.</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{{ route('replacement_staff.request.create') }}"><i class="fas fa-plus"></i> Nueva Solicitud</a>
+       </div>
+   </li>
     @endrole
 
     @role('Replacement Staff: admin')
-    <li class="nav-item">
-        <a class="nav-link"
-                      href="{{ route('replacement_staff.request.index') }}">
-            <i class="fas fa-inbox"></i> Solicitudes de Remplazo
-        </a>
-    </li>
-
     <li class="nav-item dropdown">
        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
             <i class="fas fa-cog"></i> Configuración

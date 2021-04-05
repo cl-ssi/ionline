@@ -4,6 +4,8 @@ namespace App\Http\Controllers\ReplacementStaff;
 
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 use App\Models\ReplacementStaff\ReplacementStaff;
+use App\Models\ReplacementStaff\RequestSing;
+use App\Rrhh\OrganizationalUnit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -18,15 +20,10 @@ class RequestReplacementStaffController extends Controller
      */
     public function index()
     {
-        // $my_request = RequestReplacementStaff::where('user_id', Auth::user()->id)
-        //     ->orderBy('id', 'DESC')
-        //     ->paginate(10);
-        //
-        // $ou_request = RequestReplacementStaff::where('organizational_unit_id', Auth::user()->organizationalUnit->id)
-        //     ->orderBy('id', 'DESC')
-        //     ->paginate(10);
-        //
-        // return view('replacement_staff.request.index', compact('my_request', 'ou_request'));
+        $requests = RequestReplacementStaff::orderBy('id', 'DESC')
+            ->paginate(10);
+
+        return view('replacement_staff.request.index', compact('requests'));
     }
 
     public function own_index()
@@ -45,6 +42,13 @@ class RequestReplacementStaffController extends Controller
             ->paginate(10);
 
         return view('replacement_staff.request.ou_index', compact('ou_request'));
+    }
+
+    public function to_select(RequestReplacementStaff $requestReplacementStaff)
+    {
+
+
+        return view('replacement_staff.request.to_select', compact('requestReplacementStaff'));
     }
 
     /**
@@ -69,6 +73,42 @@ class RequestReplacementStaffController extends Controller
         $request_replacement->user()->associate(Auth::user());
         $request_replacement->organizational_unit_id = Auth::user()->organizationalUnit->id;
         $request_replacement->save();
+
+        $request_sing = new RequestSing();
+        $request_sing->leadership_organizational_unit_id = $request_replacement->organizational_unit_id;
+        $request_sing->leadership_request_status = 'pending';
+
+        //SUB
+        $direct_sub = OrganizationalUnit::where('id', $request_sing->leadership_organizational_unit_id)
+            ->get()
+            ->last();
+
+        switch ($direct_sub->level) {
+            case 2:
+                $request_sing->sub_organizational_unit_id = $request_replacement->organizational_unit_id;
+                break;
+            case 3:
+                $request_sing->sub_organizational_unit_id = $direct_sub->father->id;
+                break;
+            case 4:
+                $request_sing->sub_organizational_unit_id = $direct_sub->father->father->id;
+                break;
+            case 5:
+                $request_sing->sub_organizational_unit_id = $direct_sub->father->father->father->id;
+                break;
+        }
+
+        $request_sing->sub_request_status = 'pending';
+
+        //SUB RRHH
+        $request_sing->sub_rrhh_organizational_unit_id = 44;
+        $request_sing->sub_rrhh_request_status = 'pending';
+
+        $request_sing->request_replacement_staff_id = $request_replacement->id;
+
+        $request_sing->save();
+
+        //AuthorityFromDate($ou_id, $date, $type)
 
         session()->flash('success', 'Se ha creado la Solicitud Exitosamente');
         return redirect()->route('replacement_staff.request.index');
