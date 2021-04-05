@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Programa Farmacia')
+@section('title', 'Crear Solicitud de Contratación de Servicios')
 
 @section('content')
 
@@ -493,6 +493,10 @@
 				$('#digera_strategy').selectpicker('refresh');
 			}
 			if ($("#responsability_center_ou_id option:selected").text() == "Departamento Operaciones" ) {
+				$('#digera_strategy').val('Camas MEDIAS Complejizadas');
+				$('#digera_strategy').selectpicker('refresh');
+			}
+			if ($("#responsability_center_ou_id option:selected").text() == "Unidad Farmacia" ) {
 				$('#digera_strategy').val('Camas MEDIAS Complejizadas');
 				$('#digera_strategy').selectpicker('refresh');
 			}
