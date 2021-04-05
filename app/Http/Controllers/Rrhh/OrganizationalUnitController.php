@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Rrhh;
 use App\Rrhh\OrganizationalUnit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class OrganizationalUnitController extends Controller
 {
@@ -15,7 +16,7 @@ class OrganizationalUnitController extends Controller
      */
     public function index()
     {
-        $organizationalUnits = OrganizationalUnit::where('level', 1)->get();
+        $organizationalUnits = OrganizationalUnit::where('level', 1)->where('establishment_id', Auth::user()->organizationalUnit->establishment->id)->get();
         return view('rrhh.organizationalunit.index', compact('organizationalUnits'));
     }
 
@@ -26,7 +27,8 @@ class OrganizationalUnitController extends Controller
      */
     public function create()
     {
-        $organizationalUnit = OrganizationalUnit::find(84);
+        //$organizationalUnit = OrganizationalUnit::find(84);
+        $organizationalUnit = OrganizationalUnit::where('level', 1)->where('establishment_id', Auth::user()->organizationalUnit->establishment->id)->first();
         return view('rrhh.organizationalunit.create',compact('organizationalUnit'));
     }
 

@@ -458,7 +458,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::post('/store', 'Rrhh\OrganizationalUnitController@store')->name('store');
         Route::get('{organizationalUnit}/edit', 'Rrhh\OrganizationalUnitController@edit')->name('edit');
         Route::put('{organizationalUnit}', 'Rrhh\OrganizationalUnitController@update')->name('update');
-        Route::get('{organizationalUnit}/destroy', 'Rrhh\OrganizationalUnitController@destroy')->name('destroy');
+        Route::delete('{organizationalUnit}/destroy', 'Rrhh\OrganizationalUnitController@destroy')->name('destroy');
     });
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('ou/{ou_id?}', 'Rrhh\UserController@getFromOu')->name('get.from.ou')->middleware('auth');
