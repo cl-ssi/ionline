@@ -25,7 +25,7 @@ class UserExternal extends Authenticatable
         'dv', 'fathers_family', 'mothers_family',
         'position','gender',
         'address','phone_number',
-        'school_id',
+        //'school_id',
     ];
 
     protected $hidden = [
