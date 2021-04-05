@@ -376,7 +376,7 @@
                   <i class="fas fa-signature"></i>
                 </a>
               @else
-                  @if(auth()->user() == $fulfillment->responsableUser)
+                  @if(auth()->user() == $fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user)
                   {{--modal firmador--}}
                   @php
                       $idModelModal = $fulfillment->id;
@@ -389,7 +389,7 @@
                           Firmar certificado <i class="fas fa-signature"></i>
                   </button>
                   @else
-                    Sólo puede firmar digitalmente el responsable.
+                    Sólo puede firmar digitalmente {{$fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->fullName }}.
                   @endif
               @endif
 
