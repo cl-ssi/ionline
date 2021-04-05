@@ -331,6 +331,7 @@
 					<option value="Trabajador Social" >Trabajador Social</option>
 					<option value="Nutricionista Diurno" >Nutricionista Diurno</option>
 					<option value="Prevencionista de Riesgo" >Prevencionista de Riesgo</option>
+					<option value="Nutricionista turno" >Nutricionista turno</option>
 				</select>
 		</fieldset>
 
