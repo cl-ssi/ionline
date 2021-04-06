@@ -78,7 +78,7 @@
             @endif
           </td>
           <td>
-            {{ $fulfillment->payment_rejection_detail }}
+            @livewire('service-request.payment-feedback-toggle', ['fulfillment' => $fulfillment])
             </td>
       </tr>
     @endforeach
