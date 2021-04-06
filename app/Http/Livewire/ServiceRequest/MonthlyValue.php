@@ -44,6 +44,9 @@ class MonthlyValue extends Component
                     case 'Abandono de funciones':
                         $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
                         break;
+                    case 'Renuncia voluntaria':
+                        $dias_descuento += 1;
+                        break;
                 }
 
             }

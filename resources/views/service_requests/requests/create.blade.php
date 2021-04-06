@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Programa Farmacia')
+@section('title', 'Crear Solicitud de Contratación de Servicios')
 
 @section('content')
 
@@ -331,6 +331,7 @@
 					<option value="Trabajador Social" >Trabajador Social</option>
 					<option value="Nutricionista Diurno" >Nutricionista Diurno</option>
 					<option value="Prevencionista de Riesgo" >Prevencionista de Riesgo</option>
+					<option value="Nutricionista turno" >Nutricionista turno</option>
 				</select>
 		</fieldset>
 
@@ -349,6 +350,9 @@
 					<option value="Refuerzo Laboratorio" >Refuerzo Laboratorio</option>
 					<option value="Refuerzo SAMU" >Refuerzo SAMU</option>
 					<option value="Refuerzo UEH" >Refuerzo UEH</option>
+					@if(Auth::user()->organizationalUnit->establishment_id == 1)
+						<option value="Migración Colchane" >Migración Colchane</option>
+					@endif
 				</select>
 		</fieldset>
 	</div>
@@ -492,6 +496,10 @@
 				$('#digera_strategy').selectpicker('refresh');
 			}
 			if ($("#responsability_center_ou_id option:selected").text() == "Departamento Operaciones" ) {
+				$('#digera_strategy').val('Camas MEDIAS Complejizadas');
+				$('#digera_strategy').selectpicker('refresh');
+			}
+			if ($("#responsability_center_ou_id option:selected").text() == "Unidad Farmacia" ) {
 				$('#digera_strategy').val('Camas MEDIAS Complejizadas');
 				$('#digera_strategy').selectpicker('refresh');
 			}

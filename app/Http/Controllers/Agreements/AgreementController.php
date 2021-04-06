@@ -20,6 +20,22 @@ use Illuminate\Support\Facades\Storage;
 class AgreementController extends Controller
 {
     /**
+     * Return a listing of quota options.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getQuotaOptions()
+    {
+        return collect([
+            ['id' => 1, 'name' => '1 cuota', 'percentages' => '100', 'quotas' => 1],
+            ['id' => 2, 'name' => '2 cuotas, 30% y 70% respectivamente', 'percentages' => '30,70', 'quotas' => 2], 
+            ['id' => 3, 'name' => '3 cuotas, 50%, 20% y 30% respectivamente', 'percentages' => '50,20,30', 'quotas' => 3], 
+            ['id' => 4, 'name' => '3 cuotas, 50%, 25% y 25% respectivamente', 'percentages' => '50,25,25', 'quotas' => 3],
+            ['id' => 5, 'name' => '12 cuotas', 'percentages' => null, 'quotas' => 12]
+        ]);
+     }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -61,7 +77,8 @@ class AgreementController extends Controller
     {
         $programs = Program::All()->SortBy('name');
         $communes = Commune::All()->SortBy('name');
-        return view('agreements/agreements/create')->withPrograms($programs)->withCommunes($communes);
+        $quota_options = $this->getQuotaOptions();
+        return view('agreements/agreements/create', compact('programs', 'communes', 'quota_options'));
     }
 
     /**
@@ -85,47 +102,28 @@ class AgreementController extends Controller
         $agreement->municipality_adress = $municipality->adress_municipality;
         $agreement->municipality_rut = $municipality->rut_municipality;
 
-        // $agreement->authority_id = Authority::whereIn('organizational_unit_id',[1,84])->where('from', '<=', $request->date)->where('to', '>=', $request->date)->first()->id;
+        $quota_options = $this->getQuotaOptions();
+        $quota_option_selected = $quota_options->firstWhere('id', $request->quota_id);
+        $agreement->quotas = $quota_option_selected['quotas'];
+        
         $agreement->authority_id = Authority::getAuthorityFromDate(1, $request->date, 'manager')->id;
         $agreement->save();
-
+        
         foreach($agreement->program->components as $component) {
             $agreement->agreement_amounts()->create(['subtitle' => null, 'amount'=>0, 'program_component_id'=>$component->id]);
         }
-        switch ($agreement->quotas) {
-            /* Si son 2 cuotas crea una de 70% y otra de 30%*/
-            case '2':
-                $agreement->agreement_quotas()->create(['description' => '70%', 'percentage' => '70', 'amount'=>0]);
-                $agreement->agreement_quotas()->create(['description' => '30%', 'percentage' => '30', 'amount'=>0]);
-                break;
-            /* Si son 3 cuotas crea una de 50% y dos de 25%*/
-            case '3':
-                $agreement->agreement_quotas()->create(['description' => '50%', 'percentage' => '50', 'amount'=>0]);
-                $agreement->agreement_quotas()->create(['description' => '25%', 'percentage' => '25', 'amount'=>0]);
-                $agreement->agreement_quotas()->create(['description' => '25%', 'percentage' => '25', 'amount'=>0]);
-                break;
-            /* Si son 12 cuotas crea una por cada mes */
-            case '12':
-                $agreement->agreement_quotas()->create(['description' => 'Enero', 'amount'=>0]);
-                $agreement->agreement_quotas()->create(['description' => 'Febrero', 'amount'=>0]);
-                $agreement->agreement_quotas()->create(['description' => 'Marzo', 'amount'=>0]);
-                $agreement->agreement_quotas()->create(['description' => 'Abril', 'amount'=>0]);
-                $agreement->agreement_quotas()->create(['description' => 'Mayo', 'amount'=>0]);
-                $agreement->agreement_quotas()->create(['description' => 'Junio', 'amount'=>0]);
-                $agreement->agreement_quotas()->create(['description' => 'Julio', 'amount'=>0]);
-                $agreement->agreement_quotas()->create(['description' => 'Agosto', 'amount'=>0]);
-                $agreement->agreement_quotas()->create(['description' => 'Septiembre', 'amount'=>0]);
-                $agreement->agreement_quotas()->create(['description' => 'Octubre', 'amount'=>0]);
-                $agreement->agreement_quotas()->create(['description' => 'Noviembre', 'amount'=>0]);
-                $agreement->agreement_quotas()->create(['description' => 'Diciembre', 'amount'=>0]);
-                break;
-            default:
-                /* De lo contrario crea la cantidad de cuotas que se agregaron */
-                for($i=1; $i<=$agreement->quotas; $i++) {
-                    $agreement->agreement_quotas()->create(['description' => 'Descripción '.$i, 'amount'=>0]);
-                }
-                break;
-        }
+        
+        $months = array (1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
+        $quota_percentages = explode(',', $quota_option_selected['percentages']);
+        
+        if($quota_option_selected['quotas'] == 1)
+            $agreement->agreement_quotas()->create(['description' => 'Descripción 1', 'amount' => 0]);
+        elseif($quota_option_selected['quotas'] == 12)
+            for($i = 1; $i <= 12; $i++) 
+                $agreement->agreement_quotas()->create(['description' => $months[$i], 'amount' => 0]);
+        else
+            for($i = 0; $i < $quota_option_selected['quotas']; $i++)
+                $agreement->agreement_quotas()->create(['description' => $quota_percentages[$i].'%', 'percentage' => $quota_percentages[$i], 'amount' => 0]);
 
         return redirect('agreements');
     }
@@ -138,13 +136,9 @@ class AgreementController extends Controller
      */
     public function show(Agreement $agreement)
     {
-        // $establishment = Establishment::All();
         $agreement->load('authority.user', 'commune.establishments');
-        // $commune = Commune::with('establishments')->Where('id', $agreement->commune->id)->first();
         $municipality = Municipality::where('commune_id', $agreement->commune->id)->first();
         $establishment_list = unserialize($agreement->establishment_list);
-        // $authorities = Authority::with('user')->whereIn('organizational_unit_id',[1,84])->where('from', '<=', $agreement->date)->where('to', '>=', $agreement->date)->where('position', 'LIKE', '%Director%')->get();
-        // return $authorities;
         return view('agreements/agreements/show', compact('agreement', 'municipality', 'establishment_list'));
     }
 
