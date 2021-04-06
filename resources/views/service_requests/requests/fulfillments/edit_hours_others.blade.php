@@ -71,7 +71,11 @@
     <div class="form-row">
         <div class="col-12 col-md-6">
           <strong>Cargar Boleta:</strong>
-          @livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ])
+          @if($fulfillment->total_to_pay)
+            @livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ])
+          @else
+            No se ha ingresado el "Total a pagar". <br>Contacte a RRHH.
+          @endif
         </div>
       </div>
   </div>
