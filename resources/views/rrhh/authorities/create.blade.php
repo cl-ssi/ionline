@@ -20,6 +20,12 @@
                             <option value="{{ $child_level_2->id }}"> - - {{ $child_level_2->name }}</option>
                                 @foreach($child_level_2->childs as $child_level_3)
                                     <option value="{{ $child_level_3->id }}"> - - - {{ $child_level_3->name }}</option>
+                                        @foreach($child_level_3->childs as $child_level_4)
+                                        <option value="{{ $child_level_4->id }}"> - - - - {{ $child_level_4->name }}</option>
+                                            @foreach($child_level_4->childs as $child_level_5)
+                                            <option value="{{ $child_level_5->id }}"> - - - - - {{ $child_level_5->name }}</option>
+                                            @endforeach
+                                        @endforeach
                                 @endforeach
                         @endforeach
                 @endforeach
