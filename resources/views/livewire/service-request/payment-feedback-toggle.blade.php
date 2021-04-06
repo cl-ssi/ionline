@@ -2,9 +2,8 @@
     <div class="form-row">
         <div class="col-10">
             <select class="form-control {{ $bg_color }}" name="payment_ready" wire:model="payment_ready">
-                <option value="1">Aceptado</option>
                 <option value="0">Rechazado</option>
-                <option value="null"></option>
+                <option value="null">Pendiente</option>
             </select>
         </div>
         <div class="col-2 my-auto">
@@ -16,7 +15,7 @@
 
     <div class="form-row"{{ $payment_ready == '1' ? 'hidden' : '' }}>
         <div class="col-12">
-            <input class="form-control" type="text" name="rejection_detail" wire:model="rejection_detail_input" placeholder="Ingrese motivo">
+            <input class="form-control" type="text" name="rejection_detail_input" wire:model="rejection_detail_input" placeholder="Ingrese motivo">
         </div>
     </div>
 
