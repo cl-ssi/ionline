@@ -185,7 +185,7 @@
 
             <div class="form-row">
 
-              <fieldset class="form-group col col-md">
+              <fieldset class="form-group col col-md-2">
                   <label for="for_bill_number">N° Boleta</label>
                   <input type="text" class="form-control" name="bill_number" value="{{$fulfillment->bill_number}}">
               </fieldset>
