@@ -444,6 +444,8 @@
           <option value="Nutricionista Diurno" @if($serviceRequest->rrhh_team == "Nutricionista Diurno") selected @endif>Nutricionista Diurno</option>
 					<option value="Prevencionista de Riesgo" @if($serviceRequest->rrhh_team == "Prevencionista de Riesgo") selected @endif>Prevencionista de Riesgo</option>
 
+          <option value="Nutricionista turno" @if($serviceRequest->rrhh_team == "Nutricionista turno") selected @endif>Nutricionista turno</option>
+
         </select>
     </fieldset>
 
@@ -462,6 +464,7 @@
           <option value="Refuerzo Laboratorio" @if($serviceRequest->digera_strategy == "Refuerzo Laboratorio") selected @endif>Refuerzo Laboratorio</option>
           <option value="Refuerzo SAMU" @if($serviceRequest->digera_strategy == "Refuerzo SAMU") selected @endif>Refuerzo SAMU</option>
           <option value="Refuerzo UEH" @if($serviceRequest->digera_strategy == "Refuerzo UEH") selected @endif>Refuerzo UEH</option>
+          <option value="Migración Colchane" @if($serviceRequest->digera_strategy == "Migración Colchane") selected @endif>Migración Colchane</option>
         </select>
     </fieldset>
 

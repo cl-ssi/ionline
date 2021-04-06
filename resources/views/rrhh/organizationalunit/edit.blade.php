@@ -4,7 +4,7 @@
 
 @section('content')
 
-<h3>Editar Unidad Organizacional</h3>
+<h3>Editar Unidad Organizacional del {{Auth::user()->organizationalUnit->establishment->name}}</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('rrhh.organizational-units.update',$organizationalUnit->id) }}">
 	{{ method_field('PUT') }} {{ csrf_field() }}
@@ -13,7 +13,7 @@
 		<fieldset class="form-group col-4">
 			<label for="forEstablishment">Id Establecimiento</label>
 			<input type="text" class="form-control" id="forEstablishment"
-				name="establishment_id" required="required" value="{{ $organizationalUnit->establishment_id }}">
+				name="establishment_id" required="required" value="{{ $organizationalUnit->establishment_id }}" readonly>
 		</fieldset>
 	</div>
 

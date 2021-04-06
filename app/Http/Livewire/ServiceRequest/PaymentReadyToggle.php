@@ -2,6 +2,8 @@
 
 namespace App\Http\Livewire\ServiceRequest;
 
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class PaymentReadyToggle extends Component
@@ -9,6 +11,7 @@ class PaymentReadyToggle extends Component
     public $payment_ready;
     public $fulfillment;
     public $rejection_detail;
+    public $rejection_detail_input;
     public $bg_color;
 
     public function mount()
@@ -19,9 +22,11 @@ class PaymentReadyToggle extends Component
 
     public function save()
     {
+        $rejection_detail = $this->fulfillment->payment_rejection_detail . "<br><br>" . "(". Carbon::now() . " - " . Auth::user()->initials .")" . ":" . $this->rejection_detail_input;
+
         $this->fulfillment->update(['payment_ready' => $this->payment_ready == 'null' ? null : $this->payment_ready]);
-        $this->fulfillment->update(['payment_rejection_detail' => $this->rejection_detail]);
-        $this->rejection_detail = $this->fulfillment->payment_rejection_detail;
+        $this->fulfillment->update(['payment_rejection_detail' => $rejection_detail]);
+        $this->rejection_detail = $rejection_detail;
         $this->payment_ready = $this->fulfillment->payment_ready;
     }
 
