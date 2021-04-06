@@ -8,6 +8,7 @@
         </a>
     @else
         <form wire:submit.prevent="save">
+            <strong>Boleta:</strong>
             <input type="file" wire:model="invoiceFile" required>
             @error('invoiceFile') <span class="error">{{ $message }}</span> @enderror
             <div wire:loading wire:target="invoiceFile"><strong>Cargando</strong></div>
