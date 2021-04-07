@@ -404,9 +404,10 @@
 							<button type="submit" class="btn btn-primary">Guardar</button>
 						</div>
 						<div class="col-6">
-							@if($fulfillment->has_invoice_file)
-							<a href="{{route('rrhh.service-request.fulfillment.download_invoice', $fulfillment)}}"
-									target="_blank" class="btn btn-outline-info"> <i class="fas fa-dollar-sign"></i> Boleta </a>
+							@if($fulfillment->total_to_pay)
+								@livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment])
+							@else
+								No se ha ingresado el "Total a pagar".
 							@endif
 						</div>
 						<div class="col-3 text-right">
