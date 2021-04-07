@@ -277,6 +277,8 @@ class FulfillmentController extends Controller
             $fulfillment = new Fulfillment();
             $fulfillment->service_request_id = $serviceRequest->id;
             $fulfillment->type = "Horas";
+            $fulfillment->year = $start_date->format("Y");
+            $fulfillment->month = $start_date->format("m");
             $fulfillment->start_date = $serviceRequest->start_date;
             $fulfillment->end_date = $serviceRequest->end_date;
             $fulfillment->observation = "Aprobaciones en flujo de firmas";
