@@ -6,7 +6,7 @@
 
 @include('service_requests.partials.nav')
 
-<h4 class="mb-3">Pendientes de pago</h4>
+<h4 class="mb-3">Pagados</h4>
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.to-pay') }}">
 
