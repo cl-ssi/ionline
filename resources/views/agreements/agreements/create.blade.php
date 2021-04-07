@@ -39,8 +39,13 @@
 
         <fieldset class="form-group col-4">
             <label for="forquotas">Cuotas</label>
-            <input type="integer" class="form-control" id="forquotas" placeholder="Número de cuotas" name="quotas" required="">
-            <small> * 2 = cuotas 30% y 70% / 3 = cuotas 50%,25%,25%</small>
+            <!-- <input type="integer" class="form-control" id="forquotas" placeholder="Número de cuotas" name="quotas" required="">
+            <small> * 2 = cuotas 30% y 70% / 3 = cuotas 50%,25%,25%</small> -->
+            <select name="quota_id" id="forquotas" class="form-control">
+                @foreach($quota_options as $quota_option)
+                    <option value="{{ $quota_option['id'] }}">{{ $quota_option['name'] }}</option>
+                @endforeach
+            </select>
         </fieldset>
 
         <fieldset class="form-group col-5">

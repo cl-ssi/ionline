@@ -11,13 +11,17 @@
 </h3>
 
 <div class="form-row">
+  <fieldset class="form-group col-12 col-md-2">
+      <label for="for_request_date">ID Solicitud</label>
+      <input type="text" class="form-control" value="{{$serviceRequest->id}}" disabled>
+  </fieldset>
 
-  <fieldset class="form-group col-6 col-md-6">
+  <fieldset class="form-group col-12 col-md-5">
       <label for="for_request_date">Responsable</label>
       <input type="text" class="form-control" value="{{$serviceRequest->SignatureFlows->where('sign_position',1)->first()->user->getFullNameAttribute()}}" disabled>
   </fieldset>
 
-  <fieldset class="form-group col-6 col-md-6">
+  <fieldset class="form-group col-12 col-md-5">
       <label for="for_start_date">Supervisor</label>
       <input type="text" class="form-control" value="{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}" disabled>
   </fieldset>
@@ -25,11 +29,6 @@
 </div>
 
 <div class="form-row">
-
-  <fieldset class="form-group col-3 col-md-3">
-      <label for="for_request_date">ID Solicitud</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->id}}" disabled>
-  </fieldset>
 
   <fieldset class="form-group col-3 col-md-3">
       <label for="for_start_date">Fecha de Inicio</label>
@@ -46,6 +45,11 @@
       <input type="text" class="form-control" value="{{$serviceRequest->program_contract_type}}" disabled>
   </fieldset>
 
+  <fieldset class="form-group col-3 col-md-3">
+      <label for="for_end_date">Jornada de trabajo</label>
+      <input type="text" class="form-control" value="{{$serviceRequest->working_day_type}}" disabled>
+  </fieldset>
+
 </div>
 
 <div class="form-row">
@@ -55,7 +59,7 @@
       <input type="text" class="form-control" value="{{$serviceRequest->employee->runNotFormat()}}" disabled>
   </fieldset>
 
-  <fieldset class="form-group col-3 col-md-3">
+  <fieldset class="form-group col-3 col-md-6">
       <label for="for_start_date">Funcionario</label>
       <input type="text" class="form-control" value="{{$serviceRequest->employee->getFullNameAttribute()}}" disabled>
   </fieldset>
@@ -63,11 +67,6 @@
   <fieldset class="form-group col-3 col-md-3">
       <label for="for_end_date">Estamento</label>
       <input type="text" class="form-control" value="{{$serviceRequest->estate}}" disabled>
-  </fieldset>
-
-  <fieldset class="form-group col-3 col-md-3">
-      <label for="for_end_date">Jornada de trabajo</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->working_day_type}}" disabled>
   </fieldset>
 
 </div>

@@ -77,6 +77,13 @@
             </a>
             @endcan
 
+            @canany(['Service Request: report payed'])
+            <a class="dropdown-item {{ active('rrhh.service-request.report.payed') }}"
+                href="{{ route('rrhh.service-request.report.payed') }}">
+                <i class="fas fa-piggy-bank"></i> Reporte pagados
+            </a>
+            @endcan
+
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.pay-rejected') }}"
                 href="{{ route('rrhh.service-request.report.pay-rejected') }}">
