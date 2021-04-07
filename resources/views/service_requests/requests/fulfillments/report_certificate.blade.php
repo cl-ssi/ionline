@@ -252,7 +252,6 @@
           , por <b>horas extras realizadas en el mes de {{$fulfillment->serviceRequest->start_date->monthName}} del {{$fulfillment->serviceRequest->start_date->year}} por contingencia COVID</b>.<br><br>
 
 
-          @if($fulfillment->serviceRequest->working_day_type != 'DIURNO PASADO A TURNO')
               <table class="siete">
                   <thead>
                   <tr>
@@ -266,11 +265,13 @@
                       <tr>
                           <td>{{$shiftControl->start_date->format('d-m-Y H:i')}}</td>
                           <td>{{$shiftControl->end_date->format('d-m-Y H:i')}}</td>
-                          <td>{{$shiftControl->observation}}</td>
+                          <td>{{ ($fulfillment->serviceRequest->working_day_type == 'DIURNO PASADO A TURNO') ? 'DIURNO PASADO A TURNO' : $shiftControl->observation}}</td>
                       </tr>
                   @endforeach
               </table>
-          @endif
+          <br>
+          @livewire('service-request.show-total-hours', ['serviceRequest' => $fulfillment->serviceRequest,
+                                                            'forCertificate' => true])
 
           <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
       </div>
@@ -280,7 +281,7 @@
 
 
 <br style="padding-bottom: 10px;">
-<br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br>
 <div id="firmas">
     <div class="center" style="width: 100%;">
         <strong>
