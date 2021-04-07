@@ -251,23 +251,26 @@
           @endif
           , por <b>horas extras realizadas en el mes de {{$fulfillment->serviceRequest->start_date->monthName}} del {{$fulfillment->serviceRequest->start_date->year}} por contingencia COVID</b>.<br><br>
 
-          <table class="siete">
-            <thead>
-              <tr>
-                <th>Inicio</th>
-                <th>Término</th>
-                <th>Observación</th>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach($fulfillment->serviceRequest->shiftControls as $key => $shiftControl)
-                <tr>
-                  <td>{{$shiftControl->start_date->format('d-m-Y H:i')}}</td>
-                  <td>{{$shiftControl->end_date->format('d-m-Y H:i')}}</td>
-                  <td>{{$shiftControl->observation}}</td>
-                </tr>
-              @endforeach
-          </table>
+
+          @if($fulfillment->serviceRequest->working_day_type != 'DIURNO PASADO A TURNO')
+              <table class="siete">
+                  <thead>
+                  <tr>
+                      <th>Inicio</th>
+                      <th>Término</th>
+                      <th>Observación</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  @foreach($fulfillment->serviceRequest->shiftControls as $key => $shiftControl)
+                      <tr>
+                          <td>{{$shiftControl->start_date->format('d-m-Y H:i')}}</td>
+                          <td>{{$shiftControl->end_date->format('d-m-Y H:i')}}</td>
+                          <td>{{$shiftControl->observation}}</td>
+                      </tr>
+                  @endforeach
+              </table>
+          @endif
 
           <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
       </div>
