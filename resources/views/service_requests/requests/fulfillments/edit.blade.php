@@ -73,7 +73,6 @@
 
 <div class="form-row">
   <div class="col">
-      <strong>Cargar Resolución:</strong>
       @livewire('service-request.upload-resolution', ['serviceRequest' => $serviceRequest])
   </div>
 </div>
