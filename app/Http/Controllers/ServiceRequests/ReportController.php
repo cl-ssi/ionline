@@ -29,7 +29,7 @@ class ReportController extends Controller
                                      //                });
                                      //   })
                                      ->where('has_invoice_file',1)
-                                     ->where('type','Mensual')
+                                     ->whereIn('type',['Mensual','Parcial'])
                                      ->where('responsable_approbation',1)
                                      ->where('rrhh_approbation',1)
                                      ->where('finances_approbation',1)
@@ -50,7 +50,7 @@ class ReportController extends Controller
                                       //                });
                                       //   })
                                       ->where('has_invoice_file',1)
-                                      ->where('type','<>','Mensual')
+                                      ->whereNotIn('type',['Mensual','Parcial'])
                                       ->whereNull('total_paid')
                                       ->get();
 
@@ -71,7 +71,7 @@ class ReportController extends Controller
                                                     });
                                        })
                                      ->where('has_invoice_file',1)
-                                     ->where('type','Mensual')
+                                     ->whereIn('type',['Mensual','Parcial'])
                                      ->where('responsable_approbation',1)
                                      ->where('rrhh_approbation',1)
                                      ->where('finances_approbation',1)
@@ -87,7 +87,7 @@ class ReportController extends Controller
                                                      });
                                         })
                                       ->where('has_invoice_file',1)
-                                      ->where('type','<>','Mensual')
+                                      ->whereNotIn('type',['Mensual','Parcial'])
                                       ->whereNull('total_paid')
                                       ->get();
 
@@ -114,7 +114,7 @@ class ReportController extends Controller
                                      ->where('has_invoice_file',1)
                                      ->where('payment_ready', 1)
                                      ->whereNull('total_paid')
-                                     ->where('type','Mensual')
+                                     ->whereIn('type',['Mensual','Parcial'])
                                      ->where('responsable_approbation',1)
                                      ->where('rrhh_approbation',1)
                                      ->where('finances_approbation',1)
@@ -136,7 +136,7 @@ class ReportController extends Controller
                                       ->where('has_invoice_file',1)
                                       ->where('payment_ready', 1)
                                       ->whereNull('total_paid')
-                                      ->where('type','<>','Mensual')
+                                      ->whereNotIn('type',['Mensual','Parcial'])
                                       ->get();
 
         $fulfillments = $fulfillments1->merge($fulfillments2);
