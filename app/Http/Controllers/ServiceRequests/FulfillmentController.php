@@ -277,13 +277,25 @@ class FulfillmentController extends Controller
             $fulfillment = new Fulfillment();
             $fulfillment->service_request_id = $serviceRequest->id;
             $fulfillment->type = "Horas";
-            $fulfillment->year = $start_date->format("Y");
-            $fulfillment->month = $start_date->format("m");
+            $fulfillment->year = $serviceRequest->start_date->format("Y");
+            $fulfillment->month = $serviceRequest->start_date->format("m");
             $fulfillment->start_date = $serviceRequest->start_date;
             $fulfillment->end_date = $serviceRequest->end_date;
             $fulfillment->observation = "Aprobaciones en flujo de firmas";
             $fulfillment->user_id = Auth::user()->id;
             $fulfillment->save();
+          }
+
+          //crea detalle
+          foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
+            $fulfillmentItem = new FulfillmentItem();
+            $fulfillmentItem->fulfillment_id = $fulfillment->id;
+            $fulfillmentItem->start_date = $shiftControl->start_date;
+            $fulfillmentItem->end_date = $shiftControl->end_date;
+            $fulfillmentItem->type = "Turno";
+            $fulfillmentItem->observation = $shiftControl->observation;
+            $fulfillmentItem->user_id = Auth::user()->id;
+            $fulfillmentItem->save();
           }
         }
 
