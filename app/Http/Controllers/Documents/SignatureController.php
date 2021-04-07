@@ -243,9 +243,11 @@ class SignatureController extends Controller
         echo base64_decode($anexo->file);
     }
 
+
     public function verify(Request $request)
     {
         if($request->id && $request->verification_code){
+            //TODO verificar que exista algun signaturesFile
             $signaturesFile = SignaturesFile::find($request->id);
             if ($signaturesFile->verification_code == $request->verification_code) {
                  header('Content-Type: application/pdf');
