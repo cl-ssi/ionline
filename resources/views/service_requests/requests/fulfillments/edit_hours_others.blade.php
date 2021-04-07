@@ -197,7 +197,10 @@
         </fieldset>
 
       </div>
-
+        @if($serviceRequest->Fulfillments->first()->has_invoice_file)
+					<a href="{{route('rrhh.service-request.fulfillment.download_invoice', $serviceRequest->Fulfillments->first())}}"
+							target="_blank" class="btn btn-outline-info"> <i class="fas fa-dollar-sign"></i> Boleta </a>
+				@endif
       <button type="submit" class="btn btn-primary">Guardar</button>
 
     </div>

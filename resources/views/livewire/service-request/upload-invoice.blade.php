@@ -1,7 +1,7 @@
 <div>
     @if($has_invoice_file)
         <a href="{{route('rrhh.service-request.fulfillment.download_invoice', $fulfillment)}}"
-           target="_blank" class="mr-4">Boleta cargada
+           target="_blank" class="btn btn-outline-info"> <i class="fas fa-dollar-sign"></i> Boleta </a>
         </a>
         <a class="btn btn-sm btn-outline-danger ml-4" wire:click="delete">
             <i class="fas fa-trash"></i>

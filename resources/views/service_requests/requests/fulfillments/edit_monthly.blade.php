@@ -400,10 +400,16 @@
 						</fieldset>
 					</div>
 					<div class="form-row">
-						<div class="col-6">
+						<div class="col-3">
 							<button type="submit" class="btn btn-primary">Guardar</button>
 						</div>
-						<div class="col-6 text-right">
+						<div class="col-6">
+							@if($fulfillment->has_invoice_file)
+							<a href="{{route('rrhh.service-request.fulfillment.download_invoice', $fulfillment)}}"
+									target="_blank" class="btn btn-outline-info"> <i class="fas fa-dollar-sign"></i> Boleta </a>
+							@endif
+						</div>
+						<div class="col-3 text-right">
 							@can('Service Request: fulfillments finance')
 							@if($fulfillment->finances_approver_id == NULL)
 							<a type="button"
