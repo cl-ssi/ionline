@@ -12,7 +12,7 @@
         <input type="file" wire:model="invoiceFile" required>
         @error('invoiceFile') <span class="error">{{ $message }}</span> @enderror
         <div wire:loading wire:target="invoiceFile"><strong>Cargando</strong></div>
-        <button type="button" wire:click='save()' class="btn btn-sm btn-outline-primary">
+        <button type="button" wire:click="save()" class="btn btn-sm btn-outline-primary">
             <i class="fas fa-save"></i>
         </button>
         
