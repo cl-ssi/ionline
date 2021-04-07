@@ -249,8 +249,7 @@
           @else
             Hospital Dr.Ernesto Torres Galdames
           @endif
-          , por <b>horas extras realizadas en el mes de
-          {{\Carbon\Carbon::parse($fulfillment->serviceRequest->start_date)->formatLocalized('%B de %Y')}} por contingencia COVID</b>.<br><br>
+          , por <b>horas extras realizadas en el mes de {{$fulfillment->serviceRequest->start_date->monthName}} del {{$fulfillment->serviceRequest->start_date->year}} por contingencia COVID</b>.<br><br>
 
           <table class="siete">
             <thead>
@@ -263,8 +262,8 @@
             <tbody>
               @foreach($fulfillment->serviceRequest->shiftControls as $key => $shiftControl)
                 <tr>
-                  <td>{{Carbon\Carbon::parse($shiftControl->start_date)->format('d-m-Y H:i')}}</td>
-                  <td>{{Carbon\Carbon::parse($shiftControl->end_date)->format('d-m-Y H:i')}}</td>
+                  <td>{{$shiftControl->start_date->format('d-m-Y H:i')}}</td>
+                  <td>{{$shiftControl->end_date->format('d-m-Y H:i')}}</td>
                   <td>{{$shiftControl->observation}}</td>
                 </tr>
               @endforeach

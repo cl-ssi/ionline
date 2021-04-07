@@ -35,22 +35,34 @@ class Authority extends Model
     public static function getAuthorityFromDate($ou_id, $date, $type) {
         return Authority::with('user','organizationalUnit')
             ->where('organizational_unit_id', $ou_id)
-            ->where('type', $type)
+            // ->where('type', $type)
+            ->when(is_array($type), function ($q) use ($type) {
+              return $q->whereIn('type', $type);
+            })
+            ->when(!is_array($type), function ($q) use ($type) {
+              return $q->where('type', $type);
+            })
             ->where('from','<=',$date)->where('to','>=',$date)->get()->last();
     }
-    
+
     public static function getAmIAuthorityFromOu($date, $type, $user_id) {
         // return Authority::with('user','organizationalUnit')
         //                 ->where('user_id', $user_id)
         //                 ->where('type', $type)
         //                 ->where('from','<=',$date)->where('to','>=',$date)->get();
-        
+
         $ous = OrganizationalUnit::All();
         $authorities = array();
         foreach($ous as $ou) {
             $authority = Authority::with('user','organizationalUnit')
                 ->where('organizational_unit_id', $ou->id)
-                ->where('type', $type)
+                // ->where('type', $type)
+                ->when(is_array($type), function ($q) use ($type) {
+                  return $q->whereIn('type', $type);
+                })
+                ->when(!is_array($type), function ($q) use ($type) {
+                  return $q->where('type', $type);
+                })
                 ->where('from','<=',$date)->where('to','>=',$date)->get()->last();
             if($authority) {
                 if($authority->user_id == $user_id){
