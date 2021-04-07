@@ -56,7 +56,9 @@ class Requirement extends Model
       $users[0] = Auth::user()->id;
       $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'),'secretary', Auth::user()->id);
       foreach($ous_secretary as $secretary){
+        if (Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')) {
           $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
+        }
       }
 
       $archived_requirements = Requirement::with('events')
