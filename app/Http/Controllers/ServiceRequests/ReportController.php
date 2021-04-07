@@ -75,7 +75,7 @@ class ReportController extends Controller
                                      ->where('responsable_approbation',1)
                                      ->where('rrhh_approbation',1)
                                      ->where('finances_approbation',1)
-                                     ->whereNull('total_paid')
+                                     ->whereNotNull('total_paid')
                                      ->get();
 
          $payed_fulfillments2 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
@@ -88,7 +88,7 @@ class ReportController extends Controller
                                         })
                                       ->where('has_invoice_file',1)
                                       ->whereNotIn('type',['Mensual','Parcial'])
-                                      ->whereNull('total_paid')
+                                      ->whereNotNull('total_paid')
                                       ->get();
 
         $payed_fulfillments = $payed_fulfillments1->merge($payed_fulfillments2);
