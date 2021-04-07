@@ -81,7 +81,7 @@ class ShowTotalHours extends Component
                 }
 
                 $this->totalHours = $this->totalHoursDay + $this->totalHoursNight;
-                $this->totalAmount = $this->totalHours * $value->amount;
+                $this->totalAmount = $this->totalHours * $this->serviceRequest->gross_amount;
                 break;
             case 'TERCER TURNO':
             case 'CUARTO TURNO':
