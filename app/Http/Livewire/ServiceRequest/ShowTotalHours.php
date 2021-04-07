@@ -20,6 +20,7 @@ class ShowTotalHours extends Component
     public $errorMsg;
     public $refundHours;
     public $hoursDetailArray = array();
+    public $forCertificate = false;
 
     public function render()
     {
@@ -27,6 +28,7 @@ class ShowTotalHours extends Component
             $this->serviceRequest = $this->fulfillment->serviceRequest;
         }
 
+        //TODO HORA MÉDICA ya no obtiene el valor hora de value
         $value = Value::where('contract_type', $this->serviceRequest->program_contract_type)
             ->where('work_type', $this->serviceRequest->working_day_type)
             ->where('type', $this->serviceRequest->type)
@@ -68,6 +70,7 @@ class ShowTotalHours extends Component
                         dump("{$fulfillmentItem->start_date} - {$fulfillmentItem->end_date} | dia: $hoursDayString | Noche: $hoursNightString");
                     }
 
+//                    $this->hoursDetailArray[$keyFulfillment]['type'] = $fulfillmentItem->type;
 //                    $this->hoursDetailArray[$keyFulfillment]['start_date'] = $fulfillmentItem->start_date->format('d-m-Y H:i');
 //                    $this->hoursDetailArray[$keyFulfillment]['end_date'] = $fulfillmentItem->end_date->format('d-m-Y H:i');
 //                    $this->hoursDetailArray[$keyFulfillment]['hours_day'] = $hoursDayString;
