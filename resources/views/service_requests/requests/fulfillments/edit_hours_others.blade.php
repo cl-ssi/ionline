@@ -197,10 +197,11 @@
         </fieldset>
 
       </div>
-        @if($serviceRequest->Fulfillments->first()->has_invoice_file)
-					<a href="{{route('rrhh.service-request.fulfillment.download_invoice', $serviceRequest->Fulfillments->first())}}"
-							target="_blank" class="btn btn-outline-info"> <i class="fas fa-dollar-sign"></i> Boleta </a>
-				@endif
+      @if($serviceRequest->Fulfillments->first()->total_to_pay)
+        @livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ])
+      @else
+        No se ha ingresado el "Total a pagar". <br>Contacte a RRHH.
+      @endif
       <button type="submit" class="btn btn-primary">Guardar</button>
 
     </div>
