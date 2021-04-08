@@ -52,7 +52,8 @@
         <th nowrap>Rut</th>
         <th>Periodo</th>
         <th>Banco - N° Cuenta</th>
-        <th>Telefono</th>
+        <th>F.Pago</th>
+				<th>Monto</th>
         <th>Cer.</th>
         <th>Bol.</th>
         <th>Res.</th>
@@ -63,17 +64,17 @@
     </tr>
     @foreach($payed_fulfillments as $key => $fulfillment)
       <tr>
-					<td>{{$key+1}}</td>
-          <td>{{$fulfillment->serviceRequest->id}}</td>
+					<td class="small">{{$key+1}}</td>
+          <td class="small">{{$fulfillment->serviceRequest->id}}</td>
           <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
-          <td>
+          <td class="small">
             {{$fulfillment->serviceRequest->program_contract_type}}
             <br>
             {{$fulfillment->serviceRequest->working_day_type}}
           </td>
-          <td>{{$fulfillment->serviceRequest->employee->fullName}}</td>
-          <td nowrap>{{$fulfillment->serviceRequest->employee->runFormat()}}</td>
-          <td>
+          <td class="small">{{$fulfillment->serviceRequest->employee->fullName}}</td>
+          <td class="small" nowrap>{{$fulfillment->serviceRequest->employee->runFormat()}}</td>
+          <td class="small">
             @if($fulfillment->year)
               {{ $fulfillment->year }}-{{ $fulfillment->month }}
             @else
@@ -81,8 +82,9 @@
             @endif
           </td>
           <td class="small">{{$fulfillment->serviceRequest->employee->bankAccount->bank->name ?? ''}} - {{$fulfillment->serviceRequest->employee->bankAccount->number?? ''}}</td>
-          <td>{{$fulfillment->serviceRequest->phone_number ?? ''}}</td>
-          <td>
+          <td class="small">{{$fulfillment->payment_date ?? ''}}</td>
+					<td class="small">{{$fulfillment->total_paid ?? ''}}</td>
+          <td class="small">
               @if($fulfillment->signatures_file_id)
                 <a href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
                   <i class="fas fa-signature"></i>
@@ -93,7 +95,7 @@
                 </a>
               @endif
           </td>
-          <td>
+          <td class="small">
             @if($fulfillment->has_invoice_file)
               <a href="{{route('rrhh.service-request.fulfillment.download_invoice', $fulfillment)}}"
                  target="_blank" title="Boleta" >
@@ -101,7 +103,7 @@
               </a>
             @endif
           </td>
-          <td>
+          <td class="small">
             @if($fulfillment->serviceRequest->has_resolution_file)
               <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fulfillment->serviceRequest)}}"
                  target="_blank" title="Resolución">
@@ -109,7 +111,7 @@
               </a>
             @endif
           </td>
-          <td>
+          <td class="small">
               <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}" title="Editar">
       					<span class="fas fa-edit" aria-hidden="true"></span>
       				</a>
