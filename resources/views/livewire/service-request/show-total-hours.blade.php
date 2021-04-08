@@ -15,7 +15,7 @@
                 </tr>
                 </thead>
                 <body>
-                @foreach($hoursDetailArray as $hourDetailArray)
+                @foreach($hoursDetailArray->sortBy('start_date') as $hourDetailArray)
                     <tr>
                         {{--                    @if($serviceRequest->working_day_type == 'HORA MÉDICA')--}}
                         {{--                        <td> {{$hoursDetailArray['type']}} </td>--}}
