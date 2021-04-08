@@ -6,7 +6,7 @@
 <div class="jumbotron mt-5">
   <div class="row">
   <div class="col-9">
-      <h1 class="display-4">Intranet Online</h1>      
+      <h1 class="display-4">Intranet iOnline</h1>      
       <p class="lead">{{ env('APP_SS') }}</p>
       <hr class="my-5">
         <p>Contacto:
