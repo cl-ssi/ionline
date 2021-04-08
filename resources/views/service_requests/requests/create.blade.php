@@ -285,6 +285,10 @@
 					<option value="HORA MÉDICA">HORA MÉDICA</option>
           <option value="HORA EXTRA">HORA EXTRA</option>
 					<option value="TURNO EXTRA">TURNO EXTRA</option>
+
+					@canany(['Service Request: additional data rrhh','Service Request: turno de llamado'])
+		        <option value="TURNO DE LLAMADO">TURNO DE LLAMADO</option>
+		      @endcan
 					<!-- <option value="OTRO">OTRO</option> -->
         </select>
 
