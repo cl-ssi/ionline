@@ -6,18 +6,38 @@
 
 @if(empty($serviceRequests))
 <div class="alert alert-danger">
-        <h4 class="alert-heading">No Posee Solicitudes de Pago de Honorario con este RUT.</h4>
+    <h4 class="alert-heading">No Posee Solicitudes de Pago de Honorario con este RUT.</h4>
 </div>
 @else
-<h5 class="mb-3">Información de sus solicitudes de pago de Honorario.</h5>
-<hr>
-
 
 @livewire('service-request.update-account' , ['serviceRequest' => $serviceRequests->last()])
 
+<hr>
+
+<h4 class="mt-3 mb-3">Información de sus contratos de honorarios</h4>
 
 
-<br><br><hr>
+<!-- <div class="card">
+	<div class="card-body">
+		<h4 class="card-title">	Mensual DIURNO Resolución</h4>
+		<p class="card-text">602</p>
+	</div>
+	<div class="card-body">
+	<ul class="list-group list-group-flush">
+		<li class="list-group-item">Item 1</li>
+		<li class="list-group-item">Item 2</li>
+		<li class="list-group-item">Item 3</li>
+	</ul>
+	</div>
+	<div class="card-footer text-muted">
+		Footer
+	</div>
+</div> 
+
+<hr>
+-->
+
+
 
 <div class="table-responsive">
         <table class="table table-sm table-bordered small">
