@@ -28,33 +28,39 @@ class FulfillmentController extends Controller
      */
     public function index(Request $request)
     {
-        $user_id = Auth::user()->id;
+        $user = Auth::user();
         $serviceRequests = null;
 
         $responsability_center_ou_id = $request->responsability_center_ou_id;
         $program_contract_type = $request->program_contract_type;
+        $estate = $request->estate;
         $name = $request->name;
         $id = $request->id;
 
-        $authorities = Authority::getAmIAuthorityFromOu(now(),['manager','secretary'],$user_id);
-        $array = array();
-        foreach ($authorities as $key => $authority) {
-          $array[] = $authority->organizational_unit_id;
-        }
+        // $authorities = Authority::getAmIAuthorityFromOu(now(),['manager','secretary'],$user_id);
+        // $array = array();
+        // foreach ($authorities as $key => $authority) {
+        //   $array[] = $authority->organizational_unit_id;
+        // }
 
         $establishment_id = Auth::user()->organizationalUnit->establishment_id;
 
         if (Auth::user()->can('Service Request: fulfillments responsable')) {
-          $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id, $array){
-                                               $subQuery->where('responsable_id',$user_id);
-                                               $subQuery->orwhere('user_id',$user_id);
-                                               $subQuery->orWhereIn('ou_id',$array);
-                                               })
-                                          ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
-                                               return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
-                                            })
+          $serviceRequests = ServiceRequest::
+                                           // whereHas("SignatureFlows", function($subQuery) use($user_id, $array){
+                                           //     $subQuery->where('responsable_id',$user_id);
+                                           //     $subQuery->orwhere('user_id',$user_id);
+                                           //     // $subQuery->orWhereIn('ou_id',$array);
+                                           //     })
+                                            where('responsability_center_ou_id',$user->organizational_unit_id)
+                                          // ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
+                                          //      return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+                                          //   })
                                           ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
                                                  return $q->where('program_contract_type',$program_contract_type);
+                                               })
+                                          ->when($estate != NULL, function ($q) use ($estate) {
+                                                return $q->where('estate',$estate);
                                                })
                                            ->when(($name != NULL), function ($q) use ($name) {
                                                    return $q->whereHas("employee", function($subQuery) use ($name){
@@ -82,6 +88,9 @@ class FulfillmentController extends Controller
                                           ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
                                                  return $q->where('program_contract_type',$program_contract_type);
                                                })
+                                           ->when($estate != NULL, function ($q) use ($estate) {
+                                                 return $q->where('estate',$estate);
+                                                })
                                            ->when(($name != NULL), function ($q) use ($name) {
                                                    return $q->whereHas("employee", function($subQuery) use ($name){
                                                               $subQuery->where('name','LIKE','%'.$name.'%');
@@ -647,6 +656,18 @@ class FulfillmentController extends Controller
         if (isset($fulfillment->signedCertificate)) {
             echo base64_decode($fulfillment->signedCertificate->signed_file);
         }
+    }
+
+    public function updatePaidValues(Request $request)
+    {
+        $fulfillment = Fulfillment::find($request->fulfillment_id);
+        $fulfillment->update(['bill_number' => $request->bill_number,
+            'total_hours_paid' => $request->total_hours_paid,
+            'total_paid' => $request->total_paid,
+            'payment_date' => $request->payment_date,
+            'contable_month' => $request->contable_month]);
+
+        return redirect()->back();
     }
 
 }

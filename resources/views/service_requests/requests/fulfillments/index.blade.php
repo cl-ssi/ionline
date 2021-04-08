@@ -28,6 +28,20 @@
       <option value="Horas" @if($request->program_contract_type == "Horas") selected @endif>Horas</option>
     </select>
     <div class="input-group-prepend">
+      <span class="input-group-text">Estam.</span>
+    </div>
+    <select class="form-control selectpicker" data-live-search="true" name="estate" data-size="5">
+      <option value=""></option>
+      <option value="Profesional Médico" @if($request->estate == "Profesional Médico") selected @endif>Profesional Médico</option>
+      <option value="Profesional" @if($request->estate == "Profesional") selected @endif>Profesional</option>
+      <option value="Técnico" @if($request->estate == "Técnico") selected @endif>Técnico</option>
+      <option value="Administrativo" @if($request->estate == "Administrativo") selected @endif>Administrativo</option>
+      <option value="Farmaceutico" @if($request->estate == "Farmaceutico") selected @endif>Farmaceutico</option>
+      <option value="Odontólogo" @if($request->estate == "Odontólogo") selected @endif>Odontólogo</option>
+      <option value="Bioquímico" @if($request->estate == "Bioquímico") selected @endif>Bioquímico</option>
+      <option value="Auxiliar" @if($request->estate == "Auxiliar") selected @endif>Auxiliar</option>
+    </select>
+    <div class="input-group-prepend">
       <span class="input-group-text">Id</span>
     </div>
     <input type="text" name="id" value="{{$request->id}}">
