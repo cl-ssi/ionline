@@ -34,7 +34,7 @@
                     {{$fulfillment->serviceRequest->id}}
       			    </a>
             @else
-              {{$fulfillment->serviceRequest->id}}
+              
             @endif
             </td>
           <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
