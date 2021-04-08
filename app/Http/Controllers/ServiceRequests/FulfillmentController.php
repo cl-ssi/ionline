@@ -658,4 +658,16 @@ class FulfillmentController extends Controller
         }
     }
 
+    public function updatePaidValues(Request $request)
+    {
+        $fulfillment = Fulfillment::find($request->fulfillment_id);
+        $fulfillment->update(['bill_number' => $request->bill_number,
+            'total_hours_paid' => $request->total_hours_paid,
+            'total_paid' => $request->total_paid,
+            'payment_date' => $request->payment_date,
+            'contable_month' => $request->contable_month]);
+
+        return redirect()->back();
+    }
+
 }
