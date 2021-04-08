@@ -12,7 +12,7 @@
     <label for="for_type">Tipo</label>
     <select name="type" class="form-control" wire:model.lazy="type" required id="type">
       <option value="Covid">Honorarios - Covid</option>
-      @can('Service Request: additional data rrhh')
+      @canany(['Service Request: additional data rrhh','Service Request: turno de llamado'])
         <option value="Suma alzada">Suma alzada</option>
       @endcan
     </select>

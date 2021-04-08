@@ -141,7 +141,6 @@
     $("#for_other_fundament").hide();
     jQuery('select[name=fundament]').change(function(){
         var fieldsetName = $(this).val();
-        alert(fieldsetName);
         switch(this.value){
             case "replacement":
                 // ID campo oculto

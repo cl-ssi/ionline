@@ -16,13 +16,15 @@
         </a>
         <div class="dropdown-menu">
             @role('Replacement Staff: admin')
-            <a class="dropdown-item" href="{{ route('replacement_staff.request.index') }}"><i class="fas fa-inbox"></i> Gestión de Solicitudes</a>
+            <a class="dropdown-item" href="{{ route('replacement_staff.request.index') }}"><i class="fas fa-inbox"></i> Reclutamiento: Gestión de Solicitudes</a>
             <div class="dropdown-divider"></div>
             @endrole
             <a class="dropdown-item" href="{{ route('replacement_staff.request.own_index') }}"><i class="fas fa-inbox"></i> Mis Solicitudes</a>
             <a class="dropdown-item" href="{{ route('replacement_staff.request.ou_index') }}"><i class="fas fa-inbox"></i> Solicitudes de mi U.O.</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{{ route('replacement_staff.request.create') }}"><i class="fas fa-plus"></i> Nueva Solicitud</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{{ route('replacement_staff.request.to_sign') }}"><i class="fas fa-check-circle"></i> Gestión de Solicitudes</a>
        </div>
    </li>
     @endrole

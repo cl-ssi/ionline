@@ -107,10 +107,12 @@
                                 <td>{{ $fullfillment->total_to_pay ?? '' }}</td>
                                 <td>{{ $fullfillment->payment_date?$fullfillment->payment_date->format('d-m-Y'):''}} </td>
                                 <td>
-                                @if($fullfillment->total_to_pay)
-                                  @livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])
+                                @if($fullfillment->total_to_pay)                                  
+                                  @livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])                                  
+                                  {{ $fullfillment->payment_rejection_detail ?? '' }}
                                 @else
                                   No se ha ingresado el "Total a pagar". <br>Contacte a RRHH.
+                                  
                                 @endif
                                 </td>
                         </tr>
