@@ -131,7 +131,8 @@
                     'Authorities: manager',
                     'Authorities: view',
                     'Users: service requests',
-                    'Service Request'])
+                    'Service Request',
+                    'Replacement Staff: create request'])
                 <li class="nav-item dropdown @active(['rrhh.users.*','rrhh.organizationalUnits.*']">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
