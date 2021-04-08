@@ -82,7 +82,7 @@
             @endif
           </td>
           <td class="small">{{$fulfillment->serviceRequest->employee->bankAccount->bank->name ?? ''}} - {{$fulfillment->serviceRequest->employee->bankAccount->number?? ''}}</td>
-          <td class="small">{{$fulfillment->payment_date ?? ''}}</td>
+          <td class="small">{{$fulfillment->payment_date->format('Y-m-d') ?? ''}}</td>
 					<td class="small">{{$fulfillment->total_paid ?? ''}}</td>
           <td class="small">
               @if($fulfillment->signatures_file_id)
