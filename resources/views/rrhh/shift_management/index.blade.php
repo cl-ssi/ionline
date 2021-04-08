@@ -179,8 +179,8 @@
 					@foreach($users as $user)
 					<tr>
 						
-						   <td class="bless br">{{ $user->runFormat()}} - {{$user->name}}</td>
-                           <td class="bless br">
+						   <td class="bless br"  rowspan="2">{{ $user->runFormat()}} - {{$user->name}}</td>
+                           <td class="bless br "  rowspan="2"		>
                            	<select class="form-control">
                            		
                            		@foreach($sTypes as $st)
@@ -194,16 +194,30 @@
                            	</select>	
                            </td>
 
-						   <?php
-                                    for($j = 1; $j <= $dias; $j++) {
-                                        ?>
-                                        <td class="bbd day">L</td>
-                                        <td class="bbn night">N</td>
-                                        <?php
-                                    }
-                                ?>
+						    @for($j = 1; $j <= $dias; $j++) 
+
+						     	<td>	
+                                   	<div class="bbd day">D</div>
+						     	</td>	
+						    	<td>	
+                                    <div class="bbn night">N</div>
+						     	</td>	
+					
+                                       
+                            @endfor
+							</tr>	
+                            	<tr>	
+						    @for($j = 1; $j <= $dias; $j++) 
+
+
+										<td colspan="2">
+                                		      <div  class="bbd day">L</div>
+										</td>
+                            @endfor
+								</tr>	
+                                        
+                                        
  
-					</tr>	
 					@endforeach
                    
                 </tbody>
