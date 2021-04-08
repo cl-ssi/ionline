@@ -400,10 +400,10 @@
 						</fieldset>
 					</div>
 					<div class="form-row">
-						<div class="col-3">
+						<div class="col-2">
 							<button type="submit" class="btn btn-primary">Guardar</button>
 						</div>
-						<div class="col-6">
+						<div class="col-7">
 							@if($fulfillment->total_to_pay)
 								@livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment])
 							@else
