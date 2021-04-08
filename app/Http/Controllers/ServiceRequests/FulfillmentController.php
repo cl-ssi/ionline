@@ -36,7 +36,7 @@ class FulfillmentController extends Controller
         $name = $request->name;
         $id = $request->id;
 
-        $authorities = Authority::getAmIAuthorityFromOu(now(),'manager',$user_id);
+        $authorities = Authority::getAmIAuthorityFromOu(now(),['manager','secretary'],$user_id);
         $array = array();
         foreach ($authorities as $key => $authority) {
           $array[] = $authority->organizational_unit_id;
@@ -255,20 +255,20 @@ class FulfillmentController extends Controller
               $fulfillment->save();
             }
 
-            //crea detalle
-            foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
-
-              //guarda
-              $fulfillmentItem = new FulfillmentItem();
-              $fulfillmentItem->fulfillment_id = $fulfillment->id;
-              $fulfillmentItem->start_date = $shiftControl->start_date;
-              $fulfillmentItem->end_date = $shiftControl->end_date;
-              $fulfillmentItem->type = "Turno Médico";
-              $fulfillmentItem->observation = $shiftControl->observation;
-              $fulfillmentItem->user_id = Auth::user()->id;
-              $fulfillmentItem->save();
-
-            }
+            // //crea detalle
+            // foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
+            //
+            //   //guarda
+            //   $fulfillmentItem = new FulfillmentItem();
+            //   $fulfillmentItem->fulfillment_id = $fulfillment->id;
+            //   $fulfillmentItem->start_date = $shiftControl->start_date;
+            //   $fulfillmentItem->end_date = $shiftControl->end_date;
+            //   $fulfillmentItem->type = "Turno Médico";
+            //   $fulfillmentItem->observation = $shiftControl->observation;
+            //   $fulfillmentItem->user_id = Auth::user()->id;
+            //   $fulfillmentItem->save();
+            //
+            // }
           }
         }
 
@@ -276,7 +276,7 @@ class FulfillmentController extends Controller
           if ($serviceRequest->fulfillments->count() == 0) {
             $fulfillment = new Fulfillment();
             $fulfillment->service_request_id = $serviceRequest->id;
-            $fulfillment->type = "Horas";
+            $fulfillment->type = "Horas No Médicas";
             $fulfillment->year = $serviceRequest->start_date->format("Y");
             $fulfillment->month = $serviceRequest->start_date->format("m");
             $fulfillment->start_date = $serviceRequest->start_date;
@@ -288,17 +288,17 @@ class FulfillmentController extends Controller
             $fulfillment = $serviceRequest->fulfillments->first();
           }
 
-          //crea detalle
-          foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
-            $fulfillmentItem = new FulfillmentItem();
-            $fulfillmentItem->fulfillment_id = $fulfillment->id;
-            $fulfillmentItem->start_date = $shiftControl->start_date;
-            $fulfillmentItem->end_date = $shiftControl->end_date;
-            $fulfillmentItem->type = "Turno";
-            $fulfillmentItem->observation = $shiftControl->observation;
-            $fulfillmentItem->user_id = Auth::user()->id;
-            $fulfillmentItem->save();
-          }
+          // //crea detalle
+          // foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
+          //   $fulfillmentItem = new FulfillmentItem();
+          //   $fulfillmentItem->fulfillment_id = $fulfillment->id;
+          //   $fulfillmentItem->start_date = $shiftControl->start_date;
+          //   $fulfillmentItem->end_date = $shiftControl->end_date;
+          //   $fulfillmentItem->type = "Turno";
+          //   $fulfillmentItem->observation = $shiftControl->observation;
+          //   $fulfillmentItem->user_id = Auth::user()->id;
+          //   $fulfillmentItem->save();
+          // }
         }
 
         //tuve que hacer esto ya que no me devolvia fulfillments guardados.

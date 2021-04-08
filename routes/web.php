@@ -24,6 +24,7 @@ use App\Http\Controllers\RequestForms\RequestFormCodeController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
 use App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController;
+use App\Http\Controllers\ReplacementStaff\RequestSignController;
 use App\Http\Controllers\ReplacementStaff\ProfileController;
 use App\Http\Controllers\ReplacementStaff\ExperienceController;
 use App\Http\Controllers\ReplacementStaff\TrainingController;
@@ -127,8 +128,8 @@ Route::get('/claveunica/login-external/{access_token}', 'ClaveUnicaController@lo
 Route::get('/home', 'HomeController@index')->name('home');
 
 /* Nuevas rutas, Laravel 8.0 */
-Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
-    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware('auth');;
+Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')->group(function(){
+    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index');
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
     Route::get('/show_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('show_file');
     Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
@@ -140,9 +141,13 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
         Route::get('/ou_index', [RequestReplacementStaffController::class, 'ou_index'])->name('ou_index');
         Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
         Route::post('/store', [RequestReplacementStaffController::class, 'store'])->name('store');
+        Route::get('/{requestReplacementStaff}/edit', [RequestReplacementStaffController::class, 'edit'])->name('edit');
+        Route::put('/{requestReplacementStaff}/update', [RequestReplacementStaffController::class, 'update'])->name('update');
         Route::get('/to_select/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_select'])->name('to_select');
-        // Route::get('/own', [ReplacementStaffController::class, 'requestOwn'])->name('own');
-        // Route::get('/edit', [ReplacementStaffController::class, 'requestEdit'])->name('edit');
+        Route::get('/to_sign', [RequestReplacementStaffController::class, 'to_sign'])->name('to_sign');
+        Route::prefix('sign')->name('sign.')->group(function(){
+            Route::put('/{requestSign}/{status}/update', [RequestSignController::class, 'update'])->name('update');
+        });
     });
 
     Route::prefix('profile')->name('profile.')->group(function(){
@@ -170,14 +175,16 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
           Route::prefix('profession')->name('profession.')->group(function(){
               Route::get('/', [ProfessionManageController::class, 'index'])->name('index');
               Route::post('/store', [ProfessionManageController::class, 'store'])->name('store');
-              Route::get('/{profession}/edit', [ProfessionManageController::class, 'edit'])->name('edit');
-              Route::delete('{profession}/destroy', [ProfessionManageController::class, 'destroy'])->name('destroy');
+              Route::get('/{professionManage}/edit', [ProfessionManageController::class, 'edit'])->name('edit');
+              Route::put('{professionManage}/update', [ProfessionManageController::class, 'update'])->name('update');
+              Route::delete('{professionManage}/destroy', [ProfessionManageController::class, 'destroy'])->name('destroy');
           });
           Route::prefix('profile')->name('profile.')->group(function(){
               Route::get('/', [ProfileManageController::class, 'index'])->name('index');
               Route::post('/store', [ProfileManageController::class, 'store'])->name('store');
-              Route::get('/{profile}/edit', [ProfileManageController::class, 'edit'])->name('edit');
-              Route::delete('{profile}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
+              Route::get('/{profileManage}/edit', [ProfileManageController::class, 'edit'])->name('edit');
+              Route::put('{profileManage}/update', [ProfileManageController::class, 'update'])->name('update');
+              Route::delete('{profileManage}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
           });
       });
     });

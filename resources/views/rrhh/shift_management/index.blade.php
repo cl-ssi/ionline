@@ -1,6 +1,9 @@
 @extends('layouts.app')
 @section('title', 'Gestion de Turnos')
+
+
 @section('content')
+
 <style type="text/css">
 	:root {
     font-size: 16px;
@@ -70,27 +73,30 @@
 .bg-red, .bg-green, .bg-purple {color: white;}
 
 </style>
-
-<div class="row" >
-	<div class="col-xs-12">
-			
-		<form method="POST" class="form-horizontal" action="{{ route('rrhh.shiftsTypes.store') }}">
+<div class="form-group" >
+	<!-- <div class="col-lg-12"> -->
+		<h3> Gestión de Turnos </h3>
+		<form method="POST" class="form-horizontal shadow" action="{{ route('rrhh.shiftsTypes.store') }}">
 			@csrf
     		@method('POST')
-
-    		<fieldset class="form-group col-6 col-xs-3">
-            		<label for="for_name">CARGOS</label>
-            
+			<div class="row"> 
+	
+    		<div class="col-lg-3">
+				<div class="input-group">
+            	
+            		<label for="for_name">CARGOS </label>
             		<select class="form-control" id="for_turnFilter" name="turnFilter">
             			<option>0 - Todos</option>
             			@foreach($cargos as $c)
             				<option value="{{$c->id}}">{{$loop->iteration}} - {{$c->name}} </option>
             			@endforeach
             		</select>
-        	</fieldset>
+        	  	</div>
+        	</div>
+    		<div class=" col-lg-3">
+				<div class="input-group">
 
-    		<fieldset class="form-group col-6 col-xs-3">
-            		<label for="for_name">TURNOS</label>
+            		<label for="for_name" class="input-group-addon">TURNOS </label>
             
             		<select class="form-control" id="for_turnFilter" name="turnFilter">
             			<option>1 - Todos</option>
@@ -99,16 +105,53 @@
             			@endforeach
             			<option value="99">99 - Solo Turno Personalizado</option>
             		</select>
-        	</fieldset>
 
-    		<button type="submit" class="btn btn-primary btn-xs">Filtrar</button>
+        	  	</div>
+        	</div>
+        	<div class="col-lg-2">
+				<div class="input-group">
+            	
+            		<label for="for_name">AÑO </label>
+            		<select class="form-control" id="for_turnFilter" name="yearFilter">
+            			@for($i = $actuallyYear; $i< (intval($actuallyYear) + 4); $i++)
+            				<option value="{{$i}}"> {{$i}}</option>
+            				
+            			@endfor	
+            		</select>
+        	  	</div>
+        	</div>
+        	<div class="col-lg-2">
+				<div class="input-group">
+            	
+            		<label for="for_name">MES </label>
+            		<select class="form-control" id="for_turnFilter" name="turnFilter">
+            			
+            			@foreach($months AS $index => $month)
+            				<option value="{{ $index }}" {{ ($index == $actuallyMonth )?"selected":"" }}>{{$loop->iteration}} - {{$month}}</option>
+            			@endforeach
+            			
+            		</select>
+        	  	</div>
+        	</div>
+        	<div class=" col-lg-1">
+				<div class="input-group">
+    				<button type="submit" class="btn btn-primary btn-xs">Filtrar</button>
+    			</div>
+        	</div>
+        	<div class=" col-lg-1">
+				<div class="input-group">
+    				<button type="button" class="btn btn-outline-success btn-xs"><i class="fa fa-file-excel"></i></button>
+    			</div>
+        	</div>
+
+</div>
 
 		</form>
 
 
-	</div>
+	<!-- </div> -->
 </div>
-<div class="row" style=" overflow: auto;white-space: nowrap;">
+<div class="row  shadow" style=" overflow: auto;white-space: nowrap;">
 	<div class="col-md-2">
             <table class="table">
                 <thead class="thead-dark">
@@ -136,8 +179,8 @@
 					@foreach($users as $user)
 					<tr>
 						
-						   <td class="bless br">{{ $user->runFormat()}} - {{$user->name}}</td>
-                           <td class="bless br">
+						   <td class="bless br"  rowspan="2">{{ $user->runFormat()}} - {{$user->name}}</td>
+                           <td class="bless br "  rowspan="2"		>
                            	<select class="form-control">
                            		
                            		@foreach($sTypes as $st)
@@ -151,21 +194,51 @@
                            	</select>	
                            </td>
 
-						   <?php
-                                    for($j = 1; $j <= $dias; $j++) {
-                                        ?>
-                                        <td class="bbd day">L</td>
-                                        <td class="bbn night">N</td>
-                                        <?php
-                                    }
-                                ?>
+						    @for($j = 1; $j <= $dias; $j++) 
+
+						     	<td>	
+                                   	<div class="bbd day">D</div>
+						     	</td>	
+						    	<td>	
+                                    <div class="bbn night">N</div>
+						     	</td>	
+					
+                                       
+                            @endfor
+							</tr>	
+                            	<tr>	
+						    @for($j = 1; $j <= $dias; $j++) 
+
+
+										<td colspan="2">
+                                		      <div  class="bbd day">L</div>
+										</td>
+                            @endfor
+								</tr>	
+                                        
+                                        
  
-					</tr>	
 					@endforeach
                    
                 </tbody>
             </table>
     </div>
 </div>
-@endsection
 
+@endsection
+@section('custom_js')
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+
+<script type="text/javascript">
+	var obj = {
+  foo: 'bar'
+}
+
+Object.freeze(obj)
+
+new Vue({
+  el: '#app',
+  data: obj
+})
+</script>
+@endsection

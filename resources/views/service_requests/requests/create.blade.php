@@ -285,6 +285,10 @@
 					<option value="HORA MÉDICA">HORA MÉDICA</option>
           <option value="HORA EXTRA">HORA EXTRA</option>
 					<option value="TURNO EXTRA">TURNO EXTRA</option>
+
+					@canany(['Service Request: additional data rrhh','Service Request: turno de llamado'])
+		        <option value="TURNO DE LLAMADO">TURNO DE LLAMADO</option>
+		      @endcan
 					<!-- <option value="OTRO">OTRO</option> -->
         </select>
 
@@ -528,10 +532,10 @@
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 		if (value != 85) {
-			$('#Subdirector').val(14101085); //PERDRO IRIONDO: 9882506
+			$('#Subdirector').val(9882506); //PERDRO IRIONDO: 9882506
 			$('#Subdirector').selectpicker('refresh');
 
-			$('#SubdirectorTurnos').val(14101085); //PERDRO IRIONDO: 9882506
+			$('#SubdirectorTurnos').val(9882506); //PERDRO IRIONDO: 9882506
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 	});

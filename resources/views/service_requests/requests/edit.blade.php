@@ -237,7 +237,7 @@
 
               @can('Service Request: additional data rrhh')
 
-                <button type="button" class="btn btn-danger delete-row">Eliminar filas</button>
+                <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
 
               @else
 
@@ -395,6 +395,8 @@
           <option value="HORA MÉDICA" @if($serviceRequest->working_day_type == 'HORA MÉDICA') selected @endif >HORA MÉDICA</option>
           <option value="HORA EXTRA" @if($serviceRequest->working_day_type == 'HORA EXTRA') selected @endif>HORA EXTRA</option>
 					<option value="TURNO EXTRA" @if($serviceRequest->working_day_type == 'TURNO EXTRA') selected @endif>TURNO EXTRA</option>
+
+          <option value="TURNO DE LLAMADO" @if($serviceRequest->working_day_type == 'TURNO DE LLAMADO') selected @endif>TURNO DE LLAMADO</option>
 
           <option value="OTRO" @if($serviceRequest->working_day_type == 'OTRO') selected @endif >OTRO</option>
         </select>
