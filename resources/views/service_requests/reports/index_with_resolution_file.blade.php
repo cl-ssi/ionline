@@ -14,22 +14,18 @@
         <th>Id. solicitud</th>
         <th>Nombre</th>
         <th>Teléfono</th>
-        <th scope="col">F. Inicio</th>
-        <th scope="col">F. Pago</th>
-        <th>Boleta</th>
+        <th>F. Inicio</th>
+        <th>F. Término</th>
     </tr>
     @foreach($serviceRequests as $key => $serviceRequest)
         <tr>
-            <td rowspan="{{$serviceRequest->fulfillments->count()}}">{{$key + 1}}</td>
-            <td rowspan="{{$serviceRequest->fulfillments->count()}}">{{$serviceRequest->id}}</td>
-            <td rowspan="{{$serviceRequest->fulfillments->count()}}">{{$serviceRequest->employee->getFullNameAttribute()}}</td>
-            <td rowspan="{{$serviceRequest->fulfillments->count()}}">{{$serviceRequest->phone_number}}</td>
-            @foreach($serviceRequest->fulfillments as $fulfillment)
-                <td nowrap>{{ $fulfillment->start_date->format('d-m-Y') }}</td>
-                <td nowrap>{{ ($fulfillment->payment_date) ? $fulfillment->payment_date->format('d-m-Y') : ''}}</td>
-                <td> @if($fulfillment->has_invoice_file == 1) Sí @else No @endif</td>
-            </tr>
-        @endforeach
+            <td>{{$key + 1}}</td>
+            <td>{{$serviceRequest->id}}</td>
+            <td>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
+            <td>{{$serviceRequest->phone_number}}</td>
+            <td>{{ optional($serviceRequest->start_date)->format('Y-m-d') }}</td>
+            <td>{{ optional($serviceRequest->end_date)->format('Y-m-d') }}</td>
+        </tr>
     @endforeach
 </table>
 {{ $serviceRequests->links() }}
