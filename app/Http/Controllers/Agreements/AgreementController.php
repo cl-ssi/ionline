@@ -28,7 +28,7 @@ class AgreementController extends Controller
     {
         return collect([
             ['id' => 1, 'name' => '1 cuota', 'percentages' => '100', 'quotas' => 1],
-            ['id' => 2, 'name' => '2 cuotas, 30% y 70% respectivamente', 'percentages' => '30,70', 'quotas' => 2], 
+            ['id' => 2, 'name' => '2 cuotas, 70% y 30% respectivamente', 'percentages' => '70,30', 'quotas' => 2], 
             ['id' => 3, 'name' => '3 cuotas, 50%, 20% y 30% respectivamente', 'percentages' => '50,20,30', 'quotas' => 3], 
             ['id' => 4, 'name' => '3 cuotas, 50%, 25% y 25% respectivamente', 'percentages' => '50,25,25', 'quotas' => 3],
             ['id' => 5, 'name' => '12 cuotas', 'percentages' => null, 'quotas' => 12]

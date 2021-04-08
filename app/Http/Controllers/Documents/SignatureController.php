@@ -244,6 +244,25 @@ class SignatureController extends Controller
     }
 
 
+    public function verify(Request $request)
+    {
+        if($request->id && $request->verification_code){
+            //TODO verificar que exista algun signaturesFile
+            $signaturesFile = SignaturesFile::find($request->id);
+            if ($signaturesFile->verification_code == $request->verification_code) {
+                 header('Content-Type: application/pdf');
+                 echo base64_decode($signaturesFile->signed_file);
+            }
+            else{
+                session()->flash('warning', 'El código de verificación no corresponde con el documento.');
+                return view('documents.signatures.verify');
+            }
+
+        }else{
+            return view('documents.signatures.verify');
+        }
+    }
+
     public function callbackFirma($message, $modelId, $returnUrl, SignaturesFile $signaturesFile = null)
     {
         $fulfillment = Fulfillment::find($modelId);

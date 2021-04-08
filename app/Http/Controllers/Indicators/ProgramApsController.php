@@ -34,43 +34,50 @@ class ProgramApsController extends Controller
     {
         $communes = array(1 => 'COLCHANE', 2 => 'HUARA', 3 => 'CAMIÑA', 4 => 'POZO ALMONTE', 5 => 'PICA', 6 => 'IQUIQUE', 7 => 'ALTO HOSPICIO', 8 => 'HECTOR REYNO');
         $establishments_filter = collect();
+
         foreach($program_aps->tracers as $tracer){
             $establishments = collect();
-
+            //Comsultas REM numerador
             if($tracer->numerator_cods != null && $tracer->numerator_cols != null){
-                //procesamos los datos necesarios para las consultas rem
-                $cods = array_map('trim', explode(',', $tracer->numerator_cods));
-                $cols = array_map('trim', explode(',', $tracer->numerator_cols));
-                $raws = null;
-                foreach($cols as $col)
-                    $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
-                $raws .= ' AS valor, IdEstablecimiento, Mes';
+                //procesamos los datos necesarios para todas consultas rem que se necesiten para la trazadora
+                $cods_array = array_map('trim', explode(';', $tracer->numerator_cods));
+                $cols_array = array_map('trim', explode(';', $tracer->numerator_cols));
+                
+                for($i = 0; $i < count($cods_array); $i++){
+                    //procesamos los datos necesarios por cada consultas rem
+                    $cods = array_map('trim', explode(',', $cods_array[$i]));
+                    $cols = array_map('trim', explode(',', $cols_array[$i]));
+                    $raws = null;
+                    foreach($cols as $col)
+                        $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
+                    $raws .= ' AS valor, IdEstablecimiento, Mes';
 
-                $result = Rem::year($year)->selectRaw($raws)
-                ->when($commune_id != 0, function($query){ return $query->with('establecimiento'); })
-                ->when(isset($communes[$commune_id]) && $commune_id != 8, function($q) use ($communes, $commune_id){
-                    return $q->whereHas('establecimiento', function($q2) use ($communes, $commune_id){
-                        return $q2->where('comuna', $communes[$commune_id])->where('Codigo', '!=', 102307);
-                        });
-                })
-                ->when(isset($communes[$commune_id]) && $commune_id == 8, function($q){
-                    return $q->whereHas('establecimiento', function($q2){
-                        return $q2->where('Codigo', 102307);
-                        });
-                })
-                ->whereIn('CodigoPrestacion', $cods)
-                ->whereIn('Mes',[1,2,3,4,5,6,7,8,9,10,11])
-                ->whereNotIn('CodigoPrestacion', ['102100','102600','102601','102602','102011'])
-                ->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
+                    $result = Rem::year($year)->selectRaw($raws)
+                    ->when($commune_id != 0, function($query){ return $query->with('establecimiento'); })
+                    ->when(isset($communes[$commune_id]) && $commune_id != 8, function($q) use ($communes, $commune_id){
+                        return $q->whereHas('establecimiento', function($q2) use ($communes, $commune_id){
+                            return $q2->where('comuna', $communes[$commune_id])->where('Codigo', '!=', 102307);
+                            });
+                    })
+                    ->when(isset($communes[$commune_id]) && $commune_id == 8, function($q){
+                        return $q->whereHas('establecimiento', function($q2){
+                            return $q2->where('Codigo', 102307);
+                            });
+                    })
+                    ->whereIn('CodigoPrestacion', $cods)
+                    ->whereIn('Mes',[1,2,3,4,5,6,7,8,9,10,11])
+                    ->whereNotIn('CodigoPrestacion', ['102100','102600','102601','102602','102011'])
+                    ->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
 
-                foreach($result as $item){
-                    $value = new Value(['month' => $item->Mes, 'factor' => 'numerador', 'value' => $item->valor]);
-                    if($commune_id != 0){ // No es resumen por lo que procedo a guardar comuna y establecimiento del valor
-                        $value->commune = $commune_id != 8 ? $item->establecimiento->comuna : $communes[$commune_id];
-                        $value->establishment = $commune_id != 8 ? $item->establecimiento->alias_estab : null;
-                        if($commune_id != 8) $establishments[] = $value->establishment; //No es necesario ejecutar si el valor viene del Hector Reyno
+                    foreach($result as $item){
+                        $value = new Value(['month' => $item->Mes, 'factor' => 'numerador', 'value' => $item->valor]);
+                        if($commune_id != 0){ // No es resumen por lo que procedo a guardar comuna y establecimiento del valor
+                            $value->commune = $commune_id != 8 ? $item->establecimiento->comuna : $communes[$commune_id];
+                            $value->establishment = $commune_id != 8 ? $item->establecimiento->alias_estab : null;
+                            if($commune_id != 8) $establishments[] = $value->establishment; //No es necesario ejecutar si el valor viene del Hector Reyno
+                        }
+                        $tracer->values->add($value);
                     }
-                    $tracer->values->add($value);
                 }
             }
 

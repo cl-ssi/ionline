@@ -124,7 +124,7 @@
 
 
 <div class="siete" style="padding-top: 3px;">
-    @if($fulfillment->serviceRequest->employee->organizationalUnit->establishment_id == 1)
+    @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 1)
       HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
     @else
       SERVICIO SALUD IQUIQUE<br>
@@ -150,7 +150,7 @@
         <div class="justify" style="width: 100%;">
             Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
             en su convenio de prestación de servicios con el
-            @if($fulfillment->serviceRequest->employee->organizationalUnit->establishment_id == 38)
+            @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
               @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
                 Consultorio General Urbano Dr. Hector Reyno
               @else
@@ -179,7 +179,7 @@
           @else
             Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
             en su convenio de prestación de servicios con el
-            @if($fulfillment->serviceRequest->employee->organizationalUnit->establishment_id == 38)
+            @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
               @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
                 Consultorio General Urbano Dr. Hector Reyno
               @else
@@ -240,7 +240,7 @@
       <div class="justify" style="width: 100%;">
           Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades
           estipuladas en su convenio de prestación de servicios con el
-          @if($fulfillment->serviceRequest->employee->organizationalUnit->establishment_id == 38)
+          @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
             @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
               Consultorio General Urbano Dr. Hector Reyno
             @else
@@ -249,26 +249,29 @@
           @else
             Hospital Dr.Ernesto Torres Galdames
           @endif
-          , por <b>horas extras realizadas en el mes de
-          {{\Carbon\Carbon::parse($fulfillment->serviceRequest->start_date)->formatLocalized('%B de %Y')}} por contingencia COVID</b>.<br><br>
+          , por <b>horas extras realizadas en el mes de {{$fulfillment->serviceRequest->start_date->monthName}} del {{$fulfillment->serviceRequest->start_date->year}} por contingencia COVID</b>.<br><br>
 
-          <table class="siete">
-            <thead>
-              <tr>
-                <th>Inicio</th>
-                <th>Término</th>
-                <th>Observación</th>
-              </tr>
-            </thead>
-            <tbody>
-              @foreach($fulfillment->serviceRequest->shiftControls as $key => $shiftControl)
-                <tr>
-                  <td>{{Carbon\Carbon::parse($shiftControl->start_date)->format('d-m-Y H:i')}}</td>
-                  <td>{{Carbon\Carbon::parse($shiftControl->end_date)->format('d-m-Y H:i')}}</td>
-                  <td>{{$shiftControl->observation}}</td>
-                </tr>
-              @endforeach
-          </table>
+
+              <table class="siete">
+                  <thead>
+                  <tr>
+                      <th>Inicio</th>
+                      <th>Término</th>
+                      <th>Observación</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  @foreach($fulfillment->serviceRequest->shiftControls as $key => $shiftControl)
+                      <tr>
+                          <td>{{$shiftControl->start_date->format('d-m-Y H:i')}}</td>
+                          <td>{{$shiftControl->end_date->format('d-m-Y H:i')}}</td>
+                          <td>{{ ($fulfillment->serviceRequest->working_day_type == 'DIURNO PASADO A TURNO') ? 'DIURNO PASADO A TURNO' : $shiftControl->observation}}</td>
+                      </tr>
+                  @endforeach
+              </table>
+          <br>
+          @livewire('service-request.show-total-hours', ['serviceRequest' => $fulfillment->serviceRequest,
+                                                            'forCertificate' => true])
 
           <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
       </div>
@@ -278,7 +281,7 @@
 
 
 <br style="padding-bottom: 10px;">
-<br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br>
 <div id="firmas">
     <div class="center" style="width: 100%;">
         <strong>
@@ -286,7 +289,7 @@
         <span class="uppercase">{{ $signer->position }}</span><br>
         <span class="uppercase">{{ $signer->organizationalUnit->name }}</span><br>
 
-        @if($fulfillment->serviceRequest->employee->organizationalUnit->establishment_id == 38)
+        @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
           @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
             CONSULTORIO GENERAL URBANO DR. HECTOR REYNO<br>
           @else
