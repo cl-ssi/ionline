@@ -5,8 +5,6 @@ namespace App\Http\Livewire\ServiceRequest;
 use App\Holiday;
 use App\Models\ServiceRequests\Value;
 use Carbon\Carbon;
-use Carbon\CarbonInterface;
-use Carbon\CarbonInterval;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
@@ -22,7 +20,7 @@ class ShowTotalHours extends Component
     public $errorMsg;
     public $refundHours;
     public $hoursDetailArray = array();
-
+    public $forCertificate = false;
 
     public function render()
     {
@@ -30,6 +28,7 @@ class ShowTotalHours extends Component
             $this->serviceRequest = $this->fulfillment->serviceRequest;
         }
 
+        //TODO HORA MÉDICA ya no obtiene el valor hora de value
         $value = Value::where('contract_type', $this->serviceRequest->program_contract_type)
             ->where('work_type', $this->serviceRequest->working_day_type)
             ->where('type', $this->serviceRequest->type)
@@ -71,6 +70,7 @@ class ShowTotalHours extends Component
                         dump("{$fulfillmentItem->start_date} - {$fulfillmentItem->end_date} | dia: $hoursDayString | Noche: $hoursNightString");
                     }
 
+//                    $this->hoursDetailArray[$keyFulfillment]['type'] = $fulfillmentItem->type;
 //                    $this->hoursDetailArray[$keyFulfillment]['start_date'] = $fulfillmentItem->start_date->format('d-m-Y H:i');
 //                    $this->hoursDetailArray[$keyFulfillment]['end_date'] = $fulfillmentItem->end_date->format('d-m-Y H:i');
 //                    $this->hoursDetailArray[$keyFulfillment]['hours_day'] = $hoursDayString;
@@ -84,7 +84,7 @@ class ShowTotalHours extends Component
                 }
 
                 $this->totalHours = $this->totalHoursDay + $this->totalHoursNight;
-                $this->totalAmount = $this->totalHours * $value->amount;
+                $this->totalAmount = $this->totalHours * $this->serviceRequest->gross_amount;
                 break;
             case 'TERCER TURNO':
             case 'CUARTO TURNO':
@@ -112,13 +112,8 @@ class ShowTotalHours extends Component
                         }
                     }
 
-                    //Calculo para el debug
                     $hoursDayString = sprintf('%d:%02d', intdiv($minutesDay, 60), ($minutesDay % 60));
                     $hoursNightString = sprintf('%d:%02d', intdiv($minutesNight, 60), ($minutesNight % 60));
-//                    if (Auth::user()->can('be god')) {
-//                        dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia: $hoursDayString | Noche: $hoursNightString");
-//                    }
-
                     $this->hoursDetailArray[$keyShiftControl]['start_date'] = $shiftControl->start_date->format('d-m-Y H:i');
                     $this->hoursDetailArray[$keyShiftControl]['end_date'] = $shiftControl->end_date->format('d-m-Y H:i');
                     $this->hoursDetailArray[$keyShiftControl]['hours_day'] = $hoursDayString;
@@ -137,10 +132,6 @@ class ShowTotalHours extends Component
                     $totalMinutes = $totalMinutes + $diffInMinutes;
                 }
 
-//            dump($this->hoursDetailArray);
-
-
-//                $this->totalHours = $this->totalHoursDay + $this->totalHoursNight;
                 $this->totalHours = floor($totalMinutes / 60);
                 $this->totalAmount = $this->totalHours * $value->amount;
                 break;
@@ -151,13 +142,13 @@ class ShowTotalHours extends Component
 
                 $holidaysArray = array();
                 foreach ($holidays as $holiday) {
-                    array_push($holidaysArray, $holiday->formattedDate);
+                    array_push($holidaysArray, $holiday->date);
                 }
 
                 foreach ($this->serviceRequest->shiftControls as $keyShiftControl => $shiftControl) {
                     $hoursDay = $shiftControl->start_date->diffInHoursFiltered(
                         function ($date) use ($holidaysArray) {
-                            if (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && $date->isWeekday() && !in_array($date, $holidaysArray))
+                            if (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray))
                                 return true;
                             else return false;
                         }, $shiftControl->end_date);
@@ -165,31 +156,25 @@ class ShowTotalHours extends Component
                     $hoursNight = $shiftControl->start_date->diffInHoursFiltered(
                         function ($date) use ($holidaysArray) {
                             if (in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]) ||
-                                (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && ($date->dayOfWeek == 6 || $date->dayOfWeek == 0 || in_array($date, $holidaysArray))))
+                                (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && ($date->dayOfWeek == 6 || $date->dayOfWeek == 0 || in_array($date->toDateString(), $holidaysArray))))
                                 return true;
                             else return false;
                         }, $shiftControl->end_date);
-
-
-//                    if (Auth::user()->can('be god')) {
-//                        dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia Semana: {$shiftControl->start_date->dayOfWeek} | dia: $hoursDay | Noche: $hoursNight");
-//                    }
 
                     $this->hoursDetailArray[$keyShiftControl]['start_date'] = $shiftControl->start_date->format('d-m-Y H:i');
                     $this->hoursDetailArray[$keyShiftControl]['end_date'] = $shiftControl->end_date->format('d-m-Y H:i');
                     $this->hoursDetailArray[$keyShiftControl]['hours_day'] = $hoursDay;
                     $this->hoursDetailArray[$keyShiftControl]['hours_night'] = $hoursNight;
                     $this->hoursDetailArray[$keyShiftControl]['observation'] = $shiftControl->observation;
-                    $this->hoursDetailArray[$keyShiftControl]['is_start_date_holiday'] = $shiftControl->start_date->dayOfWeek == 6 || $shiftControl->start_date->dayOfWeek == 0 || in_array($shiftControl->start_date , $holidaysArray);
-                    $this->hoursDetailArray[$keyShiftControl]['is_end_date_holiday'] = $shiftControl->end_date->dayOfWeek == 6 || $shiftControl->end_date->dayOfWeek == 0 || in_array($shiftControl->end_date , $holidaysArray);
-
+                    $this->hoursDetailArray[$keyShiftControl]['is_start_date_holiday'] = $shiftControl->start_date->dayOfWeek == 6 || $shiftControl->start_date->dayOfWeek == 0 || in_array($shiftControl->start_date->toDateString() , $holidaysArray);
+                    $this->hoursDetailArray[$keyShiftControl]['is_end_date_holiday'] = $shiftControl->end_date->dayOfWeek == 6 || $shiftControl->end_date->dayOfWeek == 0 || in_array($shiftControl->end_date->toDateString() , $holidaysArray);
 
                     $this->totalHoursDay = $this->totalHoursDay + $hoursDay;
                     $this->totalHoursNight = $this->totalHoursNight + $hoursNight;
                 }
 
                 $businessDays = $this->serviceRequest->start_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
-                    return $date->isWeekday() && !in_array($date, $holidaysArray);
+                    return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
                 }, $this->serviceRequest->end_date);
 
                 $workingHoursInMonth = $businessDays * 8.8;

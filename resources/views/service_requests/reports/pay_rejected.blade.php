@@ -6,7 +6,7 @@
 
 @include('service_requests.partials.nav')
 
-<h3 class="mb-3">Pagos rechados</h3>
+<h3 class="mb-3">Pagos rechazados</h3>
 
 
 <table class="table table-sm table-bordered table-stripped">
@@ -78,7 +78,7 @@
             @endif
           </td>
           <td>
-            {{ $fulfillment->payment_rejection_detail }}
+            @livewire('service-request.payment-feedback-toggle', ['fulfillment' => $fulfillment])
             </td>
       </tr>
     @endforeach

@@ -29,7 +29,7 @@ class ReportController extends Controller
                                      //                });
                                      //   })
                                      ->where('has_invoice_file',1)
-                                     ->where('type','Mensual')
+                                     ->whereIn('type',['Mensual','Parcial'])
                                      ->where('responsable_approbation',1)
                                      ->where('rrhh_approbation',1)
                                      ->where('finances_approbation',1)
@@ -50,13 +50,50 @@ class ReportController extends Controller
                                       //                });
                                       //   })
                                       ->where('has_invoice_file',1)
-                                      ->where('type','<>','Mensual')
+                                      ->whereNotIn('type',['Mensual','Parcial'])
                                       ->whereNull('total_paid')
                                       ->get();
 
         $topay_fulfillments = $topay_fulfillments1->merge($topay_fulfillments2);
 
         return view('service_requests.reports.to_pay', compact('topay_fulfillments','request'));
+    }
+
+    public function payed(Request $request){
+        $establishment_id = $request->establishment_id;
+
+        $payed_fulfillments1 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
+                                       $subQuery->where('has_resolution_file',1);
+                                     })
+                                     ->when($establishment_id != null, function ($q) use ($establishment_id) {
+                                          return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
+                                                      $subQuery->where('establishment_id',$establishment_id);
+                                                    });
+                                       })
+                                     ->where('has_invoice_file',1)
+                                     ->whereIn('type',['Mensual','Parcial'])
+                                     ->where('responsable_approbation',1)
+                                     ->where('rrhh_approbation',1)
+                                     ->where('finances_approbation',1)
+                                     ->whereNotNull('total_paid')
+                                     ->get();
+
+         $payed_fulfillments2 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
+                                        $subQuery->where('has_resolution_file',1);
+                                      })
+                                      ->when($request->establishment_id != null, function ($q) use ($establishment_id) {
+                                           return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
+                                                       $subQuery->where('establishment_id',$establishment_id);
+                                                     });
+                                        })
+                                      ->where('has_invoice_file',1)
+                                      ->whereNotIn('type',['Mensual','Parcial'])
+                                      ->whereNotNull('total_paid')
+                                      ->get();
+
+        $payed_fulfillments = $payed_fulfillments1->merge($payed_fulfillments2);
+
+        return view('service_requests.reports.payed', compact('payed_fulfillments','request'));
     }
 
     public function bankPaymentFile($establishment_id = NULL)
@@ -77,7 +114,7 @@ class ReportController extends Controller
                                      ->where('has_invoice_file',1)
                                      ->where('payment_ready', 1)
                                      ->whereNull('total_paid')
-                                     ->where('type','Mensual')
+                                     ->whereIn('type',['Mensual','Parcial'])
                                      ->where('responsable_approbation',1)
                                      ->where('rrhh_approbation',1)
                                      ->where('finances_approbation',1)
@@ -99,7 +136,7 @@ class ReportController extends Controller
                                       ->where('has_invoice_file',1)
                                       ->where('payment_ready', 1)
                                       ->whereNull('total_paid')
-                                      ->where('type','<>','Mensual')
+                                      ->whereNotIn('type',['Mensual','Parcial'])
                                       ->get();
 
         $fulfillments = $fulfillments1->merge($fulfillments2);

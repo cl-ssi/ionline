@@ -350,6 +350,9 @@
 					<option value="Refuerzo Laboratorio" >Refuerzo Laboratorio</option>
 					<option value="Refuerzo SAMU" >Refuerzo SAMU</option>
 					<option value="Refuerzo UEH" >Refuerzo UEH</option>
+					@if(Auth::user()->organizationalUnit->establishment_id == 1)
+						<option value="Migración Colchane" >Migración Colchane</option>
+					@endif
 				</select>
 		</fieldset>
 	</div>
@@ -525,10 +528,10 @@
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 		if (value != 85) {
-			$('#Subdirector').val(14101085); //PERDRO IRIONDO: 9882506
+			$('#Subdirector').val(9882506); //PERDRO IRIONDO: 9882506
 			$('#Subdirector').selectpicker('refresh');
 
-			$('#SubdirectorTurnos').val(14101085); //PERDRO IRIONDO: 9882506
+			$('#SubdirectorTurnos').val(9882506); //PERDRO IRIONDO: 9882506
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 	});

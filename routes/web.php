@@ -397,6 +397,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::prefix('report')->name('report.')->group(function () {
             // Rutas a los reportes
             Route::get('/to-pay', [ReportController::class, 'toPay'])->name('to-pay');
+            Route::get('/payed', [ReportController::class, 'payed'])->name('payed');
             Route::get('/pay-rejected', [ReportController::class, 'payRejected'])->name('pay-rejected');
             Route::get('/without-bank-details', [ReportController::class, 'withoutBankDetails'])->name('without-bank-details');
             Route::get('/pending-resolutions', [ReportController::class, 'pendingResolutions'])->name('pending-resolutions');
@@ -591,6 +592,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     });
     Route::resource('partes', 'Documents\ParteController');
 
+    Route::get('signatures/verify', 'Documents\SignatureController@verify')->name('signatures.verify');
     Route::get('signatures/index/{tab}', 'Documents\SignatureController@index')->name('signatures.index');
     Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
     Route::get('/showPdf/{signaturesFile}', 'Documents\SignatureController@showPdf')->name('showPdf');
