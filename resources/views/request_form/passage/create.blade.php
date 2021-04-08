@@ -1,86 +1,67 @@
-<div class="card mt-4 d-print-none">
-    <div class="card-body">
+@extends('layouts.app')
 
-        <h5 class="card-title">Agregar Pasajeros</h5>
+@section('title', '- Formulario de Requerimientos')
 
-        <!-- <form class="form-horizontal" method="POST" action="{{ route('request_forms.passages.createFromPrevious', $requestForm) }}">
-            @csrf
-            <div class="form-row">
-                <div class="form-group col-3">
-                    <input type="number" class="form-control form-control-sm" id="forrun" placeholder="Ingrese RUN sin puntos ni guión..." name="run" required>
-                </div>
-                <div class="form-group col-2">
-                    <button type="submit" class="btn btn-outline-secondary btn-sm"> <i class="fas fa-search"></i> Precargar</button>
-                </div>
-            </div>
-        </form> -->
+@section('content')
 
-        <form method="POST" class="form-horizontal" action="{{ route('request_forms.passages.store', $requestForm) }}">
-            @csrf
-            <div class="form-row">
-                <div class="form-group col-3">
-                    <label for="forrun">RUN:</label>
-                    <input type="number" class="form-control form-control-sm" id="forrun" placeholder="Ingrese RUN sin puntos ni guión..." name="run" required>
-                </div>
-                <div class="form-group col-1">
-                    <label for="fordv">DV:</label>
-                    <input type="number" class="form-control form-control-sm" id="fordv" placeholder="K" name="dv" required>
-                </div>
-            </div>
+<link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
 
-            <div class="form-row">
-                <div class="form-group col-4">
-                    <label for="forname">Nombre:</label>
-                    <input type="text" class="form-control form-control-sm" id="forname" placeholder="..." name="name" required>
-                </div>
-                <div class="form-group col-4">
-                    <label for="forfathers_family">Apellido Paterno:</label>
-                    <input type="text" class="form-control form-control-sm" id="forfathers_family" placeholder="..." name="fathers_family" required>
-                </div>
-                <div class="form-group col-4">
-                    <label for="formothers_family">Apellido Paterno:</label>
-                    <input type="text" class="form-control form-control-sm" id="formothers_family" placeholder="..." name="mothers_family" required>
-                </div>
-            </div>
+<h3 class="mb-3">Solicitud de Cotización - Pasajes Aéreos</h3>
 
-            <div class="form-row">
-                <div class="form-group col-4">
-            				<label for="forbirthday">Fecha Nacimiento:</label>
-            				<input type="date" class="form-control form-control-sm" id="forbirthday" name="birthday" required>
-        			  </div>
-                <div class="form-group col-4">
-                		<label for="fortelephone_number">Teléfono:</label>
-                		<input type="number" class="form-control form-control-sm" id="fortelephone_number" placeholder="569xxxxxxxx" name="telephone_number" required>
-              	</div>
-                <div class="form-group col-4">
-                		<label for="foremail">E-mail:</label>
-                		<input type="email" class="form-control form-control-sm" id="foremail" placeholder="correo@redsalud.gob.cl" name="email" required>
-              	</div>
-        		</div>
+@include('request_form.nav')
 
-            <div class="form-row">
-                <div class="form-group col-4">
-            				<label for="fordeparture_date">Fecha Ida, Hora:</label>
-            				<input type="datetime-local" class="form-control form-control-sm" id="fordeparture_date" name="departure_date" required>
-        			  </div>
-                <div class="form-group col-4">
-                		<label for="forfrom_date">Fecha Regreso, Hora:</label>
-                		<input type="datetime-local" class="form-control form-control-sm" id="forfrom_date" name="from_date" required>
-              	</div>
-                <div class="form-group col-4">
-                    <label for="forbaggage">Seleccione una opción de equipaje:</label>
-                    <select class="form-control form-control-sm selectpicker" id="forbaggage" name="baggage" title="Seleccione..." data-live-search="true" data-size="5" required>
-                        <option value="baggage" data-icon="fas fa-suitcase-rolling">Bodega</option>
-                        <option value="hand luggage" data-icon="fas fa-suitcase">Mano</option>
-                        <option value="handbag" data-icon="fas fa-briefcase">Bolso de mano</option>
-                    </select>
-                </div>
-        		</div>
+<div class="container-fluid"><!-- CONTENEDOR -->
 
-            <button class="btn btn-primary btn-sm float-right mr-3" type="submit">
-                <i class="fas fa-save"></i> Enviar
-            </button>
+      <div class="card bg-light">
+        <div class="card-body">
+           <h5 class="card-title mb-2 text-muted">Datos del Solicitante:</h5>
+           <div class="row justify-content-md-center"><!-- FILA 1 -->
+             <div class="my-2 col-3">
+                 <label for="forRut" class="form-label">Rut:</label>
+                 <input class="form-control form-control-sm" type="text" name="" id="rut" name="rut" value="13.414.559-5" readonly>
+             </div>
+              <div class="my-2 col-3">
+                  <label for="forNombres" class="form-label">Nombres:</label>
+                  <input class="form-control form-control-sm" type="text" name="" id="nombres" name="nombres" value="Oscar Jesús" readonly>
+              </div>
+              <div class="my-2 col-3">
+                  <label for="forApellido_p" class="form-label">Apellido Paterno:</label>
+                  <input class="form-control form-control-sm" type="text" name="" id="apellido_p" name="apellido_p" value="Zavala" readonly>
+              </div>
+              <div class="my-2 col-3">
+                  <label for="forApellido_m" class="form-label">Apellido Materno:</label>
+                  <input class="form-control form-control-sm" type="text" name="" id="apellido_m" name="apellido_m" value="Cortés" readonly>
+              </div>
+            </div><!-- FILA 1 -->
 
-        </form>
-    </div>
+            <div class="row justify-content-md-center"><!-- FILA 2 -->
+              <div class="my-3 col-3">
+                  <label for="forCorreo">Correo:</label>
+                  <input class="form-control form-control-sm" type="text" name="" id="correo" name="correo" value="oscar.zavala@redsalud.gob.cl" readonly>
+              </div>
+               <div class="my-3 col-3">
+                   <label for="forTelefono">Teléfono:</label>
+                   <input class="form-control form-control-sm" type="text" name="" id="telefono" name="telefono" value="+56 9 97877170" readonly>
+               </div>
+               <div class="my-3 col-3">
+                   <label for="forCargo">Cargo:</label>
+                   <input class="form-control form-control-sm" type="text" name="" id="cargo" name="cargo" value="Informático" readonly>
+               </div>
+               <div class="my-3 col-3">
+                   <label for="forUnidad">Unidad:</label>
+                   <input class="form-control form-control-sm" type="text" name="" id="unidad" name="unidad" value="TIC" readonly>
+               </div>
+             </div><!-- FILA 2 -->
+          </div><!-- CARD BODY -->
+      </div><!-- CARD -->
+        <br>
+        <livewire:request-form.passage.ticket-request />
+
 </div>
+
+
+@endsection
+
+@section('custom_js_head')
+
+@endsection

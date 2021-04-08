@@ -1,6 +1,8 @@
 <?php
+//namespace Database\Seeds;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Model;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,7 +28,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PlaceSeeder::class);
         $this->call(ProfessionalTableSeeder::class);
         $this->call(MinisterialProgramTableSeeder::class);
-        $this->call(ActionTypeTableSeeder::class);
+        $this->call(ActionTypeTableSeeder::class);*/
+        //$this->call(database\seeds\UnitOfMeasurement::class);
 
     }
 }
