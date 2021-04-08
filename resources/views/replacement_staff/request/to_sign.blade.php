@@ -6,15 +6,15 @@
 
 @include('replacement_staff.nav')
 
-<h4 class="mb-3">Mis Solicitudes</h4>
+<h4 class="mb-3">Gestión de Solicitudes para aprobación: <small>{{ Auth::user()->organizationalUnit->name }}</small></h4>
 
-<p>
+<!-- <p>
     <a class="btn btn-primary" href="{{ route('replacement_staff.request.create') }}">
         <i class="fas fa-plus"></i> Agregar nuevo</a>
     <a class="btn btn-primary" data-toggle="collapse" href="#collapseSearch" role="button" aria-expanded="false" aria-controls="collapseExample">
         <i class="fas fa-filter"></i> Filtros
     </a>
-</p>
+</p> -->
 
 <div class="collapse" id="collapseSearch">
   <br>
@@ -47,7 +47,8 @@
           </tr>
       </thead>
       <tbody>
-          @foreach($my_request as $request)
+        @if($request_to_sign != NULL)
+          @foreach($request_to_sign as $request)
           <tr>
               <td>{{ $request->id }}</td>
               <td>{{ $request->name }}</td>
@@ -74,20 +75,27 @@
                   @endforeach
               </td>
               <td>
-                  @if($request->RequestSign->first()->request_status != 'pending')
-                  <a href="{{ route('replacement_staff.request.edit', $request) }}"
-                      class="btn btn-outline-secondary btn-sm disabled" title="Selección"><i class="fas fa-edit"></i></a>
-                  @else
-                  <a href="{{ route('replacement_staff.request.edit', $request) }}"
-                      class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-                  @endif
+                  <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                      data-target="#exampleModalCenter-req-{{ $request->id }}">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  @include('replacement_staff.modals.modal_to_sign')
               </td>
           </tr>
           @endforeach
+        @else
+          <tr>
+              <td>Hola
+                <div class="alert alert-secondary" role="alert">
+                  A simple secondary alert—check it out!
+                </div>
+              </td>
+          </tr>
+        @endif
       </tbody>
   </table>
 
-  {{ $my_request->links() }}
+  {{ $request_to_sign->links() }}
 
 </div>
 @endsection

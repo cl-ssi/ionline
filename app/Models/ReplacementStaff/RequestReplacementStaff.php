@@ -25,8 +25,8 @@ class RequestReplacementStaff extends Model
         return $this->belongsTo('App\Rrhh\OrganizationalUnit');
     }
 
-    public function requestSing() {
-        return $this->hasOne('App\Models\ReplacementStaff\RequestSing');
+    public function requestSign() {
+        return $this->hasMany('App\Models\ReplacementStaff\RequestSign');
     }
 
     public function getLegalQualityValueAttribute() {
