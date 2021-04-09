@@ -17,22 +17,17 @@
 <h4 class="mt-3 mb-3">Información de sus contratos de honorarios</h4>
 
 @foreach ($serviceRequests as $serviceRequest)
-@foreach($serviceRequest->fulfillments->reverse() as $fullfillment)
-<div class="card mb-3">
-	<div class="card-header">
-		@if ($fullfillment->payment_date)
-		<div class="card-header bg-success text-white">
-			@else
-			<div class="card-header">
-				@endif
-
+	@foreach($serviceRequest->fulfillments->reverse() as $fullfillment)
+	
+		<div class="card mb-3">
+			<div class="card-header {{ ($fullfillment->payment_date)?'bg-success text-white':'' }}">
 				<h4 class="card-title">
 					Período: <span class="font-weight-normal">
-						@if($fullfillment->type == "Horas")
-						{{$fullfillment->start_date->format('Y')}} - {{$fullfillment->start_date->format('m')}}
-						@else
+					@if($fullfillment->type == "Horas")
+						{{ optional($fullfillment->start_date)->format('Y') }} - {{ optional($fullfillment->start_date)->format('m') }}
+					@else
 						{{ $fullfillment->year ?? '' }} - {{ $fullfillment->month ?? '' }}
-						@endif</span>
+					@endif</span>
 				</h4>
 				<p class="card-text">
 					<strong>ID:</strong> {{ $serviceRequest->id ?? '' }} <span class="small">({{ $fullfillment->id ?? '' }})</span> -
@@ -43,107 +38,112 @@
 
 			<ul class="list-group list-group-flush">
 				
-					<li class="list-group-item">
-						@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0)
-						<i class="fas fa-circle text-secondary"></i> Proceso en Firma de Resolución Rechazado
-						@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-						<i class="fas fa-circle text-secondary"></i>
-						Proceso en Firma de Resolución Pendiente
-						@else
-						<i class="fas fa-circle text-success"></i>
-						Proceso en Firma de Resolución Finalizado
+				<li class="list-group-item">
+					@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0)
+						<i class="fas fa-circle text-secondary"></i> 
+						Firmas de resolución rechazada.
+					@elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0)
+						<i class="fas fa-circle text-secondary"></i> 
+						Firmas de resolución pendiente.
+					@else
+						<i class="fas fa-circle text-success"></i> 
+						Firmas de resolución finalizado.
+					@endif
 
-						@endif
-						<a href="#" data-toggle="collapse" data-target="#collapseOne">Ver Detalle.</a>
+					<a href="#" data-toggle="collapse" data-target="#firmas{{$fullfillment->id}}"> <i class="fas fa-chevron-down"></i> </a>
 
-						<div id="collapseOne" class="collapse" aria-labelledby="headingOne">
-							<table class="table table-sm table-bordered small">
-								<tbody>
-									@foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
-									@if($SignatureFlow->status === null)
-									<tr class="bg-light">
-										@elseif($SignatureFlow->status === 0)
-									<tr class="bg-danger">
-										@elseif($SignatureFlow->status === 1)
-									<tr>
-										@elseif($SignatureFlow->status === 2)
-									<tr class="bg-warning">
-										@endif
-										<td>{{ $SignatureFlow->signature_date->format('Y-m-d H:i')}}</td>
-										<td>{{ $SignatureFlow->user->getShortNameAttribute() }}</td>
-									</tr>
-									@endforeach
-								</tbody>
-							</table>
-						</div>
-					</li>
+					<div id="firmas{{$fullfillment->id}}" class="collapse" aria-labelledby="headingOne">
+						<table class="table table-sm table-bordered small">
+							<tbody>
+								@foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
+								@if($SignatureFlow->status === null)
+								<tr class="bg-light">
+									@elseif($SignatureFlow->status === 0)
+								<tr class="bg-danger">
+									@elseif($SignatureFlow->status === 1)
+								<tr>
+									@elseif($SignatureFlow->status === 2)
+								<tr class="bg-warning">
+									@endif
+									<td>{{ optional($SignatureFlow->signature_date)->format('Y-m-d H:i')}}</td>
+									<td>{{ $SignatureFlow->user->getShortNameAttribute() }}</td>
+								</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</li>
 				
 				<li class="list-group-item">
 					@if($serviceRequest->has_resolution_file)
-					<i class="fas fa-circle text-success"></i>
-					<a href="{{route('rrhh.service-request.fulfillment.download_resolution', $serviceRequest)}}" target="_blank" title="Resolución"> Resolución. <i class="fas fa-paperclip"></i></a>
+						<i class="fas fa-circle text-success"></i>
+						<a href="{{route('rrhh.service-request.fulfillment.download_resolution', $serviceRequest)}}" 
+							target="_blank" title="Resolución"> Resolución. <i class="fas fa-paperclip"></i></a>
 					@else
-					<i class="fas fa-circle text-secondary"></i>
-					No se ha Cargado Resolución.
+						<i class="fas fa-circle text-secondary"></i>
+						No se ha cargado resolución.
 					@endif
 				</li>
 				<li class="list-group-item">
 					@if($fullfillment->signatures_file_id)
-					<i class="fas fa-circle text-success"></i>
-					<a href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$fullfillment) }}" target="_blank" title="Certificado">Certificado de cumplimiento. <i class="fas fa-paperclip"></i></a>
+						<i class="fas fa-circle text-success"></i>
+						<a href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$fullfillment) }}" 
+							target="_blank" title="Certificado">Certificado de cumplimiento. <i class="fas fa-paperclip"></i></a>
 					@else
-					<i class="fas fa-circle text-secondary"></i>
-					No se ha Generado Certificado de Cumplimiento
+						<i class="fas fa-circle text-secondary"></i>
+						No se ha firmado certificado de cumplimiento.
 					@endif
 				</li>
 				<li class="list-group-item">
 					@if($fullfillment->total_to_pay)
-					<i class="fas fa-circle text-success"></i>
-					Monto cargado por RRHH.
+						<i class="fas fa-circle text-success"></i>
+						Total a pagar cargado por RRHH.
 					@else
-					<i class="fas fa-circle text-secondary"></i>
-					Falta cargar Monto por RRHH.
+						<i class="fas fa-circle text-secondary"></i>
+						No se ha cargado el "total a pagar" por RRHH.
 					@endif
 				</li>
 				<li class="list-group-item">
-					@if($fullfillment->total_to_pay and $fullfillment->has_invoice_file)
-					<i class="fas fa-circle text-success"></i>
-					Boleta Cargada
-					@livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])
+					@if($fullfillment->total_to_pay)
+						@if($fullfillment->has_invoice_file)
+							<i class="fas fa-circle text-success"></i>
+							@livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])
+						@else
+							<i class="fas fa-circle text-secondary"></i>
+							@livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])
+						@endif
 					@else
-					<i class="fas fa-circle text-secondary"></i>
-					No se ha cargado la Boleta
-					@livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])
+						<i class="fas fa-circle text-secondary"></i> No es posible cargar boleta.
 					@endif
 				</li>
 				<li class="list-group-item">
 					@if($fullfillment->payment_date)
-					<i class="fas fa-circle text-success"></i>
-					Pagado realizado el {{ $fullfillment->payment_date->format('d-m-Y')}}
+						<i class="fas fa-circle text-success"></i>
+						Pagado realizado el {{ optional($fullfillment->payment_date)->format('d-m-Y')}}
 					@else
-					<i class="fas fa-circle text-secondary"></i>
-					Pago pendiente.
-					@if($fullfillment->payment_rejection_detail)
-					<a href="#" data-toggle="collapse" data-target="#collapseTwo">Ver Detalle.</a>
-					<div id="collapseTwo" class="collapse" aria-labelledby="headingOne">
-						{!! $fullfillment->payment_rejection_detail !!}
-					</div>
-					@endif
+						<i class="fas fa-circle text-secondary"></i>
+						Pago pendiente.
+						@if($fullfillment->payment_rejection_detail)
+						<a href="#" data-toggle="collapse" data-target="#collapseTwo">Ver Detalle.</a>
+						<div id="collapseTwo" class="collapse" aria-labelledby="headingOne">
+							{!! $fullfillment->payment_rejection_detail !!}
+						</div>
+						@endif
 					@endif
 				</li>
-
-				<div class="card-footer text-muted">
-					<strong>Monto de boleta:</strong> {{$fullfillment->total_to_pay}}
-				</div>
-
 			</ul>
+
+			<div class="card-footer text-muted">
+				<strong>Monto de boleta:</strong> {{ @money($fullfillment->total_to_pay) }}
+			</div>
+
 		</div>
-	</div>
 
-		@endforeach
-		@endforeach
+	@endforeach
+@endforeach
 
-		<!-- <div class="card mb-3">
+		<!-- 
+<div class="card mb-3">
 	<div class="card-header">
 		<h4 class="card-title">
 			Período: <span class="font-weight-normal">2021-03</span>
@@ -282,7 +282,7 @@
 										@elseif($SignatureFlow->status === 2)
 									<tr class="bg-warning">
 										@endif
-										<td>{{ $SignatureFlow->signature_date->format('Y-m-d H:i')}}</td>
+										<td>{{ optional($SignatureFlow->signature_date)->format('Y-m-d H:i')}}</td>
 										<td>{{ $SignatureFlow->user->getShortNameAttribute() }}</td>
 									</tr>
 									@endforeach
@@ -290,20 +290,20 @@
 							</table>
 						</td>
 						<td>@if($fullfillment->type == "Horas")
-							{{$fullfillment->start_date->format('Y')}}
+							{{ optional($fullfillment->start_date)->format('Y')}}
 							@else
 							{{ $fullfillment->year ?? '' }}
 							@endif
 						</td>
 						<td>
 							@if($fullfillment->type == "Horas")
-							{{$fullfillment->start_date->format('m')}}
+							{{ optional($fullfillment->start_date)->format('m')}}
 							@else
 							{{ $fullfillment->month ?? '' }}
 							@endif
 						</td>
 						<td>{{ $fullfillment->total_to_pay ?? '' }}</td>
-						<td>{{ $fullfillment->payment_date?$fullfillment->payment_date->format('d-m-Y'):''}} </td>
+						<td>{{ $fullfillment->payment_date ? $fullfillment->payment_date->format('d-m-Y'):''}} </td>
 						<td>
 							@if($fullfillment->total_to_pay)
 							@livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])

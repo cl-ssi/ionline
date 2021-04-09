@@ -22,12 +22,12 @@ class ShowTotalHours extends Component
     public $hoursDetailArray = array();
     public $forCertificate = false;
 
-    protected $listeners = ['listener_shift_control'];
-
-    public function listener_shift_control()
-    {
-      $this->fulfillment = Fulfillment::find($this->fulfillment->id);
-    }
+//    protected $listeners = ['listener_shift_control'];
+//
+//    public function listener_shift_control()
+//    {
+//      $this->fulfillment = Fulfillment::find($this->fulfillment->id);
+//    }
 
     public function render()
     {
@@ -69,9 +69,9 @@ class ShowTotalHours extends Component
                             else return false;
                         }, $shiftControl->end_date);
 
-                    if (Auth::user()->can('be god')) {
-                        dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia: $hoursDayString | Noche: $hoursNightString");
-                    }
+//                    if (Auth::user()->can('be god')) {
+//                        dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia: $hoursDayString | Noche: $hoursNightString");
+//                    }
 
 //                    $this->hoursDetailArray[$keyFulfillment]['type'] = $fulfillmentItem->type;
 //                    $this->hoursDetailArray[$keyFulfillment]['start_date'] = $fulfillmentItem->start_date->format('d-m-Y H:i');
