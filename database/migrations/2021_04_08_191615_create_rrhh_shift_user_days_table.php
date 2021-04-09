@@ -22,7 +22,7 @@ class CreateRrhhShiftUserDaysTable extends Migration
             $table->unsignedBigInteger('shift_user_id');
 
 
-            $table->foreign('shift_types_id')->references('id')->on('rrhh_shift_users');
+            $table->foreign('shift_user_id')->references('id')->on('rrhh_shift_users');
             $table->timestamps();
         });
     }
