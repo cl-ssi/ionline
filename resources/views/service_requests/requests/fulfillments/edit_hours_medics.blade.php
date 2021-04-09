@@ -76,9 +76,11 @@
 		</form>
 
 		<hr>
-		
+
 		<h4>Turnos extra</h4>
-		<form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.store') }}" enctype="multipart/form-data">
+		@livewire('service-request.shifts-control', ['fulfillment' => $fulfillment])
+		<br>
+		<!-- <form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.store') }}" enctype="multipart/form-data">
 			@csrf
 			<div class="form-row">
 				<input type="hidden" name="fulfillment_id" value="{{$fulfillment->id}}">
@@ -189,7 +191,7 @@
 				</tr>
 				@endforeach
 			</tbody>
-		</table>
+		</table>-->
 
 		@livewire('service-request.show-total-hours', ['fulfillment' => $fulfillment])
 
@@ -207,18 +209,18 @@
 							Certificado firmado<i class="fas fa-signature"></i>
 						</a>
 					@else
-					
+
 						{{--modal firmador--}}
-						
+
 						@php
 						$idModelModal = $fulfillment->id;
 						$routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal/".auth()->id();
 						$returnUrlSignModal = "rrhh.service-request.fulfillment.edit";
 						@endphp
-						
+
 						@include('documents.signatures.partials.sign_file')
 						<button type="button" data-toggle="modal" class="btn btn-outline-info"
-							data-target="#signPdfModal{{$idModelModal}}" title="Firmar"> 
+							data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
 							Firmar certificado <i class="fas fa-signature"></i>
 						</button>
 					@endif
@@ -269,7 +271,7 @@
 							    <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
 							    <input type="text" class="form-control" name="total_hours_to_pay" disabled value="{{$fulfillment->total_hours_to_pay}}">
 							</fieldset>
-							
+
 							<fieldset class="form-group col col-md">
 							    <label for="for_total_paid">Total a pagar</label>
 							    <input type="text" class="form-control" name="total_to_pay" disabled value="{{$fulfillment->total_to_pay}}">
@@ -279,7 +281,7 @@
 							    <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
 							    <input type="text" class="form-control" name="total_hours_to_pay" value="{{$serviceRequest->weekly_hours}}">
 							</fieldset>
-							
+
 							<fieldset class="form-group col col-md">
 							    <label for="for_total_paid">Total a pagar</label>
 							    <input type="text" class="form-control" name="total_to_pay" value="{{$serviceRequest->net_amount}}">
