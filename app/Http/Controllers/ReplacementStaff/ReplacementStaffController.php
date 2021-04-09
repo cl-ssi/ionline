@@ -43,12 +43,10 @@ class ReplacementStaffController extends Controller
     {
 
         //$replacementStaff = ReplacementStaff::where('run',$user_cu->RolUnico->numero)->first();
-        $replacementStaff = ReplacementStaff::where('run',Auth::guard('external')->user()->id)->first();
-        dd($replacementStaff);
+        $replacementStaff = ReplacementStaff::where('run',Auth::guard('external')->user()->id)->first();        
         if($replacementStaff == null)
         {
-            $userexternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();
-            //dd($userexternal);
+            $userexternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();            
             return view('replacement_staff.create',compact('userexternal'));
 
         }
