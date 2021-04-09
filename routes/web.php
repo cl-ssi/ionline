@@ -654,6 +654,12 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::get('/{year}/{commune}', 'Indicators\ProgramApsController@show')->name('show');
     });
 
+    Route::prefix('iaps')->as('iaps.')->group(function () {
+        Route::get('/', 'Indicators\ApsController@index')->name('index');
+        Route::get('/{year}', 'Indicators\ApsController@list')->name('list');
+        Route::get('/{year}/{slug}/{establishment_type}', 'Indicators\ApsController@show')->name('show');
+    });
+
     Route::prefix('19813')->as('19813.')->group(function () {
         Route::get('/', function () {
             return view('indicators.19813.index');

@@ -34,7 +34,8 @@ class HealthGoalController extends Controller
             $this->loadValuesWithRemSourceLaw19813($year, $indicator);
         } else {
             $healthGoal = HealthGoal::where('law', $law)->where('year', $year)->where('number', $health_goal)->firstOrFail();
-            $healthGoal->indicators()->with('values')->orderBy('number')->get();
+            // $healthGoal->indicators()->with('values')->orderBy('number')->get();
+            $healthGoal->load('indicators.values');
             $this->loadValuesWithRemSource($year, $healthGoal);
         }
         return view('indicators.health_goals.show', compact($law == '19813' ? 'indicator' : 'healthGoal'));
@@ -72,7 +73,7 @@ class HealthGoalController extends Controller
                         $acum_last_year = Rem::year($year-1)
                         ->when($healthGoal->name == 'Hospital Dr. Ernesto Torres Galdames', function($query){
                             return $query->whereHas('establecimiento', function($q){
-                            return $q->where('meta_san_18834_hosp', 1);
+                                return $q->where('meta_san_18834_hosp', 1);
                             });
                         })
                         ->when($healthGoal->name == 'Consultorio General Urbano Dr. Héctor Reyno Gutiérrez', function($query){
@@ -286,7 +287,8 @@ class HealthGoalController extends Controller
 
         //Regresamos a los indicadores con sus respectivos valores. Es lo mismo que hay en el método show salvo por el mensaje de confirmación.
         $healthGoal = $indicator->indicatorable;
-        $indicators = $healthGoal->indicators()->with('values')->orderBy('number')->get();
+        // $indicators = $healthGoal->indicators()->with('values')->orderBy('number')->get();
+        $indicators = $healthGoal->load('indicators.values');
         $this->loadValuesWithRemSource($year, $healthGoal, $indicators);
 
         return view('indicators.health_goals.show', compact('indicators', 'healthGoal'))->with('success', 'Registros actualizados satisfactoriamente');
