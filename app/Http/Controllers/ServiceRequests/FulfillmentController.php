@@ -421,12 +421,15 @@ class FulfillmentController extends Controller
 
     public function certificatePDF(Fulfillment $fulfillment, User $user = null)
     {
-        if($user) {
-          $signer = $user;
-        }
-        else {
-          $signer = $fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user;
-        }
+        // if($user) {
+        //   $signer = $user;
+        // }
+        // else {
+        //   $signer = $fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user;
+        // }
+        
+        /* Siempre firma el que está logeado */
+        $signer = auth()->user();
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('service_requests.requests.fulfillments.report_certificate',compact('fulfillment','signer'));
 
