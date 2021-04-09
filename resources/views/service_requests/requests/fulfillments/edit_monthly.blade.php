@@ -266,39 +266,30 @@
 							<label for="for_resolution_number">N° Resolución</label>
 							<input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
 						</fieldset>
-						<fieldset class="form-group col-7 col-md-3">
+						<fieldset class="form-group col-7 col-md-2">
 							<label for="for_resolution_date">Fecha Resolución</label>
 							<input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
 						</fieldset>
-						<!-- @if($fulfillment->year == 2021 && $fulfillment->month == 1 && $fulfillment->total_to_pay != NULL)
-							<fieldset class="form-group col col-md">
-							    <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
-							    <input type="text" class="form-control" name="total_hours_to_pay" disabled value="{{$serviceRequest->weekly_hours}}">
-							</fieldset>
-							
-							<fieldset class="form-group col col-md">
-							    <label for="for_total_paid">Total a pagar</label>
-							    <input type="text" class="form-control" name="total_to_pay" disabled value="{{$serviceRequest->net_amount}}">
-							</fieldset>
-							@else
-							<fieldset class="form-group col col-md">
-							    <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
-							    <input type="text" class="form-control" name="total_hours_to_pay" value="{{$fulfillment->total_hours_to_pay}}">
-							</fieldset>
-							
-							<fieldset class="form-group col col-md">
-							    <label for="for_total_paid">Total a pagar</label>
-							    <input type="text" class="form-control" name="total_to_pay" value="{{$fulfillment->total_to_pay}}">
-							</fieldset>
-							@endif -->
-						<fieldset class="form-group col col-md-3">
-							<label for="for_total_hours_paid">Total hrs. a pagar per.</label>
+						<fieldset class="form-group col col-md-2">
+							<label for="for_total_hours_paid">Total hrs. a pagar</label>
 							<input type="text" class="form-control" name="total_hours_to_pay" value="{{$fulfillment->total_hours_to_pay}}">
 						</fieldset>
-						<fieldset class="form-group col col-md-3">
+						<fieldset class="form-group col col-md-2">
 							<label for="for_total_paid">Total a pagar</label>
 							<input type="text" class="form-control" name="total_to_pay" value="{{$fulfillment->total_to_pay}}">
 						</fieldset>
+						<!-- <div class="form-check form-check-inline">
+							<input class="form-check-input" type="checkbox" id="licencias" value="licencias">
+							<label class="form-check-label" for="licencias">Licencias</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="checkbox" id="permisos" value="permisos">
+							<label class="form-check-label" for="permisos">Permisos</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="checkbox" id="asistencia" value="asistencia">
+							<label class="form-check-label" for="asistencia">Asistencia</label>
+						</div> -->
 					</div>
 
 					<div class="form-row">
