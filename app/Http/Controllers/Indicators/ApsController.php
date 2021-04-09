@@ -31,7 +31,7 @@ class ApsController extends Controller
         $iaps = Aps::where('year', $year)->where('slug', $slug)->firstOrFail();
         $iaps->load('indicators.values');
         $this->loadValuesWithRemSource($year, $iaps, $establishment_type);
-        return $iaps;
+        // return $iaps;
         return view('indicators.iaps.show', compact('iaps'));
     }
     
