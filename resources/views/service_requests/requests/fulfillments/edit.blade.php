@@ -16,12 +16,17 @@
       <input type="text" class="form-control" value="{{$serviceRequest->id}}" disabled>
   </fieldset>
 
-  <fieldset class="form-group col-12 col-md-5">
+  <fieldset class="form-group col-12 col-md-4">
+      <label for="for_request_date">C.Responsabilidad</label>
+      <input type="text" class="form-control" value="{{$serviceRequest->responsabilityCenter->name}}" disabled>
+  </fieldset>
+
+  <fieldset class="form-group col-12 col-md-3">
       <label for="for_request_date">Responsable</label>
       <input type="text" class="form-control" value="{{$serviceRequest->SignatureFlows->where('sign_position',1)->first()->user->getFullNameAttribute()}}" disabled>
   </fieldset>
 
-  <fieldset class="form-group col-12 col-md-5">
+  <fieldset class="form-group col-12 col-md-3">
       <label for="for_start_date">Supervisor</label>
       <input type="text" class="form-control" value="{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}" disabled>
   </fieldset>
