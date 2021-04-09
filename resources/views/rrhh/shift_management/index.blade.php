@@ -80,13 +80,16 @@
     border-radius: 50%;
   
 }
+
 </style>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <div id="shiftapp">
-	
+	<br>
+	<br>
 <div class="form-group" >
 	<!-- <div class="col-lg-12"> -->
 		<h3> Gestión de Turnos </h3>
-		<form method="POST" class="form-horizontal shadow" action="{{ route('rrhh.shiftsTypes.store') }}">
+		<form method="POST" class="form-horizontal shadow" action="{{ route('rrhh.shiftManag.index') }}">
 			@csrf
     		@method('POST')
 			<div class="row"> 
@@ -161,12 +164,21 @@
 			<br>
 			<div class="row"> 
 				
-				<div class="col-md-offset-4 col-md-12 ">
-					<div class="input-group">
-            			<input type="text" style="text-align: center;" placeholder="Agregar personal a turno.." name="search2" class="form-control">
+				<div class="col-lg-8 " style="margin-left: 10%">
+					<label style="text-align: center;"><b>Buscar Personal de la unidad "{{$actuallyOrgUnit->name}}"</b></label>
+	            		<select class="find-personal-input form-control" style="text-align: center;" >
+            				<option> - </option>
+            				<option value="a">2</option>
+            				<option value="a1">1</option>
+            			</select>
+        	  	</div>
+				<div class="col-lg-2 ">
+            			<label style="text-align: center;"></label>
+
             			<button  type="button" class="btn btn-success"><i class="fas fa-user-plus"></i></button>
-            				
+
         	  		</div>
+
         		</div>
 
 			</div>
@@ -181,10 +193,10 @@
             <table class="table">
                 <thead class="thead-dark">
                     <th rowspan="2">Personal</th>
-                            <th class="calendar-day" colspan="{{$dias}}">ABRIL - TURNO A</th> 
+                            <th class="calendar-day" colspan="{{$days}}">ABRIL - TURNO A</th> 
 
                         <tr>
-                            @for($i = 1; $i <= $dias; $i++) 
+                            @for($i = 1; $i <= $days; $i++) 
                                     
                                     <th class="brless dia">{{$i}}</th>
                                     <!-- <th class="brless dia">🌞</th> -->
@@ -199,7 +211,7 @@
 						
 						   <td class="bless br" >{{ $user->runFormat()}} - {{$user->name}}</td>
                           
-						    @for($j = 1; $j <= $dias; $j++) 
+						    @for($j = 1; $j <= $days; $j++) 
 
 
 										<td  style="text-align:center;width:54px;height:54px">
@@ -221,10 +233,18 @@
 
 @endsection
 @section('custom_js')
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 <script src=https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.1/axios.js></script>
 
 <script type="text/javascript">
+
+	$(document).ready(function() {
+    	$('.find-personal-input').select2();
+	});
+
+
 	var obj = {
  		foo: 'bar',
       	cargandoPagina:1,
