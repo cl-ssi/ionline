@@ -56,6 +56,10 @@ class Fulfillment extends Model implements Auditable
     }
   }
 
+  public function shiftControls() {
+      return $this->hasMany('\App\Models\ServiceRequests\ShiftControl');
+  }
+
   public function FulfillmentItems() {
       return $this->hasMany('\App\Models\ServiceRequests\FulfillmentItem');
   }

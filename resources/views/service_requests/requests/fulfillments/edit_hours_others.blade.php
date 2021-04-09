@@ -3,30 +3,8 @@
     <h4>Información de la solicitud</h4>
   </div>
   <div class="card-body">
-
-{{--    <table class="table table-sm">--}}
-{{--        <thead>--}}
-{{--            <tr>--}}
-{{--                <!-- <th>Select</th> -->--}}
-{{--                <th>Entrada</th>--}}
-{{--                <!-- <th>H.Inicio</th> -->--}}
-{{--                <th>Salida</th>--}}
-{{--                <!-- <th>H.Término</th> -->--}}
-{{--                <th>Observación</th>--}}
-{{--            </tr>--}}
-{{--        </thead>--}}
-{{--        <tbody>--}}
-{{--          @foreach($serviceRequest->shiftControls as $key => $shiftControl)--}}
-{{--            <tr>--}}
-{{--              <!-- <td><input type='checkbox' name='record[]' value="{{$shiftControl}}"></td> -->--}}
-{{--              <td>{{$shiftControl->start_date->format('d-m-Y H:i')}}</td>--}}
-{{--              <td>{{$shiftControl->end_date->format('d-m-Y H:i')}}</td>--}}
-{{--              <td>{{$shiftControl->observation}}</td>--}}
-{{--            </tr>--}}
-{{--          @endforeach--}}
-{{--        </tbody>--}}
-{{--    </table>--}}
-        @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
+        <!-- @livewire('service-request.shifts-control', ['fulfillment' => $serviceRequest->fulfillments->first()]) -->
+        @livewire('service-request.show-total-hours', ['fulfillment' => $serviceRequest->fulfillments->first()])
     <div class="form-row">
 
       <fieldset class="form-group col-12 col-md-6">
@@ -35,7 +13,7 @@
              href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank">
              Ver certificado <i class="fas fa-file"></i>
           </a>
-          
+
           @if($serviceRequest->Fulfillments->first()->signatures_file_id)
             <a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank" title="Certificado">
               Certificado firmado<i class="fas fa-signature"></i>
@@ -50,7 +28,7 @@
               @endphp
               @include('documents.signatures.partials.sign_file')
               <button type="button" data-toggle="modal" class="btn btn-outline-info"
-                      data-target="#signPdfModal{{$idModelModal}}" title="Firmar"> 
+                      data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
                       Firmar certificado <i class="fas fa-signature"></i>
               </button>
 
