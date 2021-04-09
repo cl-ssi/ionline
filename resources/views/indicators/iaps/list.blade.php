@@ -14,17 +14,18 @@
 
 
 <h3 class="mb-3">Indicadores APS {{$year}}.</h3>
-@if($iaps->indicators->isEmpty())
+@if($iaps->isEmpty())
     <p>No existen o no se han definido aún indicadores APS para el presente año</p>
 @else
+    @foreach($iaps as $item)
     <p>
-    <!-- class="btn btn-outline-primary btn-sm"  -->
-        {{$iaps->number}}. {{$iaps->name}} 
-        <a class="badge badge-primary" href="{{ route('indicators.iaps.show', [$year, $iaps->slug, 'aps']) }}">APS</a> 
-        @if($iaps->reyno_active)<a class="badge badge-primary" href="{{ route('indicators.iaps.show', [$year, $iaps->slug, 'reyno']) }}">CGU Dr. Hector Reyno</a> @endif
-        @if($iaps->hospital_active)<a class="badge badge-primary" href="{{ route('indicators.iaps.show', [$year, $iaps->slug, 'hospital']) }}">Hospital Dr. Ernesto Torres G.</a> @endif
-        @if($iaps->ssi_active)<a class="badge badge-primary" href="{{ route('indicators.iaps.show', [$year, $iaps->slug, 'ssi']) }}">Dirección Servicio de Salud</a> @endif
+        {{$item->number}}. {{$item->name}} 
+        <a class="badge badge-primary" href="{{ route('indicators.iaps.show', [$year, $item->slug, 'aps']) }}">APS</a> 
+        @if($item->reyno_active)<a class="badge badge-primary" href="{{ route('indicators.iaps.show', [$year, $item->slug, 'reyno']) }}">CGU Dr. Hector Reyno</a> @endif
+        @if($item->hospital_active)<a class="badge badge-primary" href="{{ route('indicators.iaps.show', [$year, $item->slug, 'hospital']) }}">Hospital Dr. Ernesto Torres G.</a> @endif
+        @if($item->ssi_active)<a class="badge badge-primary" href="{{ route('indicators.iaps.show', [$year, $item->slug, 'ssi']) }}">Dirección Servicio de Salud</a> @endif
     </p>
+    @endforeach
 @endif
 @endsection
 
