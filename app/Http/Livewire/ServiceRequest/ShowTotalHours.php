@@ -22,12 +22,12 @@ class ShowTotalHours extends Component
     public $hoursDetailArray = array();
     public $forCertificate = false;
 
-    protected $listeners = ['listener_shift_control'];
-
-    public function listener_shift_control()
-    {
-      $this->fulfillment = Fulfillment::find($this->fulfillment->id);
-    }
+//    protected $listeners = ['listener_shift_control'];
+//
+//    public function listener_shift_control()
+//    {
+//      $this->fulfillment = Fulfillment::find($this->fulfillment->id);
+//    }
 
     public function render()
     {
