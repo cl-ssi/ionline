@@ -18,11 +18,15 @@ class ShiftControl extends Model implements Auditable
      * @var array
      */
     protected $fillable = [
-        'id', 'service_request_id', 'start_date','end_date','observation'
+        'id', 'service_request_id','fulfillment_id','start_date','end_date','observation'
     ];
 
     public function serviceRequest(){
       return $this->belongsTo('App\ServiceRequests\ServiceRequest');
+    }
+
+    public function fulfillment(){
+      return $this->belongsTo('App\ServiceRequests\Fulfillment');
     }
 
     protected $table = 'doc_shift_controls';

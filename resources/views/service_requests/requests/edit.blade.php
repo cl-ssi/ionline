@@ -205,7 +205,7 @@
 
   </div>
 
-  <div class="card" id="control_turnos">
+  <!-- <div class="card" id="control_turnos">
     <div class="card-header">
       Control de Turnos
     </div>
@@ -241,9 +241,7 @@
 
               @else
 
-                <!-- solo tiene acceso la persona que crea la solicitud -->
                 @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-                  <!-- si existe una firma, no se deja modificar solicitud -->
                   @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
                     <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
                   @else
@@ -289,9 +287,7 @@
 
         @else
 
-          <!-- solo tiene acceso la persona que crea la solicitud -->
           @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-            <!-- si existe una firma, no se deja modificar solicitud -->
             @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
               <button type="button" class="btn btn-danger delete-row" disabled>Eliminar filas</button>
             @else
@@ -305,7 +301,9 @@
 
       </li>
     </ul>
-  </div>
+  </div> -->
+
+  @livewire('service-request.shifts-control', ['fulfillment' => $serviceRequest->fulfillments->first()])
 
   <br>
 
@@ -582,14 +580,6 @@
         </div>
 
         <button type="submit" class="btn btn-primary mb-3">Guardar</button>
-
-        @if($serviceRequest->program_contract_type == 'Mensual')
-            @livewire('service-request.monthly-quotes', ['serviceRequest' => $serviceRequest, 'resultadoEnNumero' => true])
-        @else
-            @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
-        @endif
-
-
 
       </div>
 
