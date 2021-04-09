@@ -12,35 +12,45 @@ use App\Programmings\Professional;
 use Spatie\Permission\Models\Role;
 
 class ShiftManagementController extends Controller
-{
+{   
+
+
+    private $months = array(
+
+        '01'=>'Enero',
+        '02'=>'Febrero',
+        '03'=>'Marzo',
+        '04'=>'Abril',
+        '05'=>'Mayo',
+        '06'=>'Junio',
+        '07'=>'Julio',
+        '08'=>'Agosto',
+        '09'=>'Septiembre',
+        '10'=>'Octubre',
+        '11'=>'Noviembre',
+        '12'=>'Diciembre',
+    );
+
+    private $tiposJornada = array(
+            'F' => "Libre",
+            'D' => "Dia",
+            'L' => "Largo",
+            'N' => "Noche"
+    );
+
      public function index(Request $r)
     {
     	// echo "Shift Management";
-    	  $dias = 31;
-        
+    	$days = Carbon::now()->daysInMonth;
+        $months = (object) $this->months;
         $actuallyMonth = Carbon::now()->format('m');
         $actuallyDay = Carbon::now()->format('d');
         $actuallyYear = Carbon::now()->format('Y');
-
-        $months =  (object) array(
-						'01'=>'Enero',
-						'02'=>'Febrero',
-						'03'=>'Marzo',
-						'04'=>'Abril',
-						'05'=>'Mayo',
-						'06'=>'Junio',
-						'07'=>'Julio',
-						'08'=>'Agosto',
-						'09'=>'Septiembre',
-						'10'=>'Octubre',
-						'11'=>'Noviembre',
-						'12'=>'Diciembre',
-					);
-
         $sTypes = ShiftTypes::all(); 
     	$users = User::Search($r->get('name'))->orderBy('name','Asc')->paginate(500);
     	$cargos = OrganizationalUnit::all();
-        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','dias','actuallyMonth','actuallyDay','actuallyYear','months'));
+        $actuallyOrgUnit = $cargos->first();
+        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit'));
     }
  	public function indexfiltered(Request $r){
 
@@ -58,24 +68,15 @@ class ShiftManagementController extends Controller
     public function editshifttype(Request $r)
     {	
 
-    	$tiposJornada =   array(
-    							'F' => "Libre",
-								'D' => "Dia",
-								'L' => "Largo",
-								'N' => "Noche"
-						);
+    	$tiposJornada =   $this->tiposJornada;
         $sType = ShiftTypes::findOrFail($r->id); 
         return view('rrhh.shift_management.editshiftstype', compact('sType','tiposJornada'));
 
     }
     public function newshifttype(){
     	// echo "create";
-    	$tiposJornada =   array(
-    							'F' => "Libre",
-								'D' => "Dia",
-								'L' => "Largo",
-								'N' => "Noche"
-						);
+        $tiposJornada =   $this->tiposJornada;
+    	
         return view('rrhh.shift_management.createshifttype', compact('tiposJornada'));
 
     }
@@ -101,6 +102,8 @@ class ShiftManagementController extends Controller
         session()->flash('info', 'El Turno tipo <i>"'.$r->name.'"</i> ha sido modificado.');
         return redirect()->route('rrhh.shiftsTypes.index');
 
-    }
+    } 
+    public function assignPersonal(Request $r){
 
+    }
 }
