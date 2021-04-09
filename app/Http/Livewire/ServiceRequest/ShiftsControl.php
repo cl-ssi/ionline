@@ -28,7 +28,7 @@ class ShiftsControl extends Component
 
       $this->fulfillment = Fulfillment::find($this->fulfillment->id);
 
-      $this->emit('listener_shift_control');
+//      $this->emit('listener_shift_control');
     }
 
     public function delete($shiftControl)
