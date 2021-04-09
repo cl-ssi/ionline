@@ -91,12 +91,12 @@
 
     <fieldset class="form-group col">
 		    <label for="for_start_date">F.Inicio de Contrato</label>
-		    <input type="date" class="form-control" id="for_start_date" name="start_date" max="2030-12-31" required>
+		    <input type="date" class="form-control" id="for_start_date" name="start_date" min="2020-01-01" max="2030-12-31" required>
 		</fieldset>
 
     <fieldset class="form-group col">
 		    <label for="for_end_date">F.Término de Contrato</label>
-		    <input type="date" class="form-control" id="for_end_date" name="end_date" max="2030-12-31" required>
+		    <input type="date" class="form-control" id="for_end_date" name="end_date" min="2020-01-01" max="2030-12-31" required>
 		</fieldset>
 
   </div>

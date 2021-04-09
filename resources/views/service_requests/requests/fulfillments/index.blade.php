@@ -70,12 +70,13 @@
           <th scope="col">Nro.Res.</th>
     			<th scope="col">Tipo</th>
           <th scope="col">T.Contrato</th>
+          <th scope="col">C.Responsabilidad</th>
     			<th scope="col">F. Solicitud</th>
     			<th scope="col">Rut</th>
     			<th scope="col">Funcionario</th>
     			<th scope="col">F. Inicio</th>
     			<th scope="col">F. Término</th>
-    			<th scope="col">Estado Solicitud</th>
+    			<!-- <th scope="col">Estado Solicitud</th> -->
     			<th scope="col">Acción</th>
           <th scope="col">Resp.</th>
           <th scope="col">RRHH</th>
@@ -89,14 +90,15 @@
           <td>{{ $serviceRequest->resolution_number }}</td>
     			<td>{{ $serviceRequest->type }}</td>
           <td>{{ $serviceRequest->program_contract_type }}</td>
+          <td>{{ $serviceRequest->responsabilityCenter->name }}</td>
     			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
     			<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
     			<td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
     			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
     			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
-    			<td>@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
+    			<!-- <td>@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
               @elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-              @else Finalizada @endif</td>
+              @else Finalizada @endif</td> -->
     			<td nowrap class="text-center">
           @if($serviceRequest->program_contract_type == "Mensual")
     				<a href="{{ route('rrhh.service-request.fulfillment.edit',[$serviceRequest]) }}"

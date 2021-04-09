@@ -154,7 +154,19 @@ class ShiftControlLoad extends Command
       }
 
 
+      print_r(" \n\n actualiza fulfillment_id antiguos en shiftcontrol \n\n");
 
+      $serviceRequests = ServiceRequest::where('working_day_type','!=','HORA MÉDICA')->get();
+      foreach ($serviceRequests as $key => $serviceRequest) {
+        foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
+          if ($shiftControl->fulfillment_id == null) {
+            $shiftControl->fulfillment_id = $serviceRequest->fulfillments->first()->id;
+            $shiftControl->save();
+
+            print_r("xxx:".$shiftControl->id  . " \n");
+          }
+        }
+      }
 
 
         return 0;
