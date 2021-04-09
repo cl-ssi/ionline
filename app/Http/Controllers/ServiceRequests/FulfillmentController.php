@@ -47,13 +47,12 @@ class FulfillmentController extends Controller
         $establishment_id = Auth::user()->organizationalUnit->establishment_id;
 
         if (Auth::user()->can('Service Request: fulfillments responsable')) {
-          $serviceRequests = ServiceRequest::
-                                           // whereHas("SignatureFlows", function($subQuery) use($user_id, $array){
-                                           //     $subQuery->where('responsable_id',$user_id);
-                                           //     $subQuery->orwhere('user_id',$user_id);
-                                           //     // $subQuery->orWhereIn('ou_id',$array);
-                                           //     })
-                                            where('responsability_center_ou_id',$user->organizational_unit_id)
+          $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user){
+                                               $subQuery->where('responsable_id',$user->id);
+                                               $subQuery->orwhere('user_id',$user->id);
+                                               // $subQuery->orWhereIn('ou_id',$array);
+                                               })
+                                          ->orWhere('responsability_center_ou_id',$user->organizational_unit_id)
                                           // ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
                                           //      return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
                                           //   })
