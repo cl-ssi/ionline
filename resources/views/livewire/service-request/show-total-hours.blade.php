@@ -13,7 +13,7 @@
                 </tr>
                 </thead>
                 <body>
-                @foreach($hoursDetailArray as $hourDetailArray)
+                @foreach($hoursDetailArray->sortBy('start_date') as $hourDetailArray)
                     <tr>
                         <td @if($fulfillment->serviceRequest->working_day_type === 'DIURNO PASADO A TURNO') @if($hourDetailArray['is_start_date_holiday']) style="color:#dc3545" @endif @endif >{{$hourDetailArray['start_date']}}</td>
                         <td @if($fulfillment->serviceRequest->working_day_type === 'DIURNO PASADO A TURNO') @if($hourDetailArray['is_end_date_holiday']) style="color:#dc3545" @endif @endif>{{$hourDetailArray['end_date']}}</td>
