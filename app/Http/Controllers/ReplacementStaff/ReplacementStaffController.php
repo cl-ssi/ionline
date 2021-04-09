@@ -47,7 +47,7 @@ class ReplacementStaffController extends Controller
         if($replacementStaff == null)
         {
             $userexternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();
-
+            dd($userexternal);
             return view('replacement_staff.create',compact('userexternal'));
 
         }
