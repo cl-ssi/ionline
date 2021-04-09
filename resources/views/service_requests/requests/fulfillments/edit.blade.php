@@ -6,7 +6,7 @@
 
 @include('service_requests.partials.nav')
 
-<h3>Cumplimiento de solicitud: 
+<h3>Cumplimiento de solicitud:
   <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}">{{ $serviceRequest->id }}</a>
 </h3>
 
@@ -104,25 +104,25 @@
 
 <script type="text/javascript">
 
-	$(".add-row").click(function(){
-      var type = $("#type").val();
-      var shift_start_date = $("#shift_start_date").val();
-      var start_hour = $("#start_hour").val();
-			var shift_end_date = $("#shift_end_date").val();
-			var end_hour = $("#end_hour").val();
-			var observation = $("#observation").val();
-      var markup = "<tr><td><input type='checkbox' name='record'></td><td> <input type='hidden' class='form-control' name='type[]' id='type' value='"+ type +"'>"+ type +"</td><td> <input type='hidden' class='form-control' name='shift_start_date[]' id='shift_start_date' value='"+ shift_start_date +"'>"+ shift_start_date +"</td><td> <input type='hidden' class='form-control' name='shift_start_hour[]' id='start_hour' value='"+ start_hour +"'>" + start_hour + "</td><td> <input type='hidden' class='form-control' name='shift_end_date[]' id='shift_end_date' value='"+ shift_end_date +"'>"+ shift_end_date +"</td><td> <input type='hidden' class='form-control' name='shift_end_hour[]' id='end_hour' value='"+ end_hour +"'>" + end_hour + "</td><td> <input type='hidden' class='form-control' name='shift_observation[]' id='observation' value='"+ observation +"'>" + observation + "</td></tr>";
-      $("table tbody").append(markup);
-  });
-
-	// Find and remove selected table rows
-  $(".delete-row").click(function(){
-      $("table tbody").find('input[name="record"]').each(function(){
-      	if($(this).is(":checked")){
-              $(this).parents("tr").remove();
-          }
-      });
-  });
+	// $(".add-row").click(function(){
+  //     var type = $("#type").val();
+  //     var shift_start_date = $("#shift_start_date").val();
+  //     var start_hour = $("#start_hour").val();
+	// 		var shift_end_date = $("#shift_end_date").val();
+	// 		var end_hour = $("#end_hour").val();
+	// 		var observation = $("#observation").val();
+  //     var markup = "<tr><td><input type='checkbox' name='record'></td><td> <input type='hidden' class='form-control' name='type[]' id='type' value='"+ type +"'>"+ type +"</td><td> <input type='hidden' class='form-control' name='shift_start_date[]' id='shift_start_date' value='"+ shift_start_date +"'>"+ shift_start_date +"</td><td> <input type='hidden' class='form-control' name='shift_start_hour[]' id='start_hour' value='"+ start_hour +"'>" + start_hour + "</td><td> <input type='hidden' class='form-control' name='shift_end_date[]' id='shift_end_date' value='"+ shift_end_date +"'>"+ shift_end_date +"</td><td> <input type='hidden' class='form-control' name='shift_end_hour[]' id='end_hour' value='"+ end_hour +"'>" + end_hour + "</td><td> <input type='hidden' class='form-control' name='shift_observation[]' id='observation' value='"+ observation +"'>" + observation + "</td></tr>";
+  //     $("table tbody").append(markup);
+  // });
+  //
+	// // Find and remove selected table rows
+  // $(".delete-row").click(function(){
+  //     $("table tbody").find('input[name="record"]').each(function(){
+  //     	if($(this).is(":checked")){
+  //             $(this).parents("tr").remove();
+  //         }
+  //     });
+  // });
 
   $('.for_type').on('change', function() {
     $('.start_date').attr('readonly', false);

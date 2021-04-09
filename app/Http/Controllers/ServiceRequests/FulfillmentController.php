@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Fulfillment;
 use App\Models\ServiceRequests\FulfillmentItem;
+use App\Models\ServiceRequests\ShiftControl;
 use App\Rrhh\OrganizationalUnit;
 use DateTime;
 use DatePeriod;
@@ -216,102 +217,102 @@ class FulfillmentController extends Controller
 
     public function edit_fulfillment(ServiceRequest $serviceRequest)
     {
-        $start    = new DateTime($serviceRequest->start_date);
-        $start->modify('first day of this month');
-        $end      = new DateTime($serviceRequest->end_date);
-        $end->modify('first day of next month');
-        $interval = DateInterval::createFromDateString('1 month');
-        $periods   = new DatePeriod($start, $interval, $end);
-        $cont_periods = iterator_count($periods);
-
-        // crea de forma automática las cabeceras
-        if ($serviceRequest->program_contract_type == "Mensual" || ($serviceRequest->program_contract_type == "Horas" && $serviceRequest->working_day_type == "HORA MÉDICA")) {
-          if ($serviceRequest->fulfillments->count() == 0) {
-            // if (!Auth::user()->can('Service Request: fulfillments responsable')) {
-            //   session()->flash('danger', 'El usuario responsable no ha certificado el cumplimiento de la solicitud: <b>' . $serviceRequest->id . "</b>. No tiene acceso.");
-            //   return redirect()->back();
-            // }
-            foreach ($periods as $key => $period) {
-              $program_contract_type = "Mensual";
-              $start_date_period = $period->format("d-m-Y");
-              $end_date_period = Carbon::createFromFormat('d-m-Y', $period->format("d-m-Y"))->endOfMonth()->format("d-m-Y");
-              if($key == 0){
-                $start_date_period = $serviceRequest->start_date->format("d-m-Y");
-              }
-              if (($cont_periods - 1) == $key) {
-                $end_date_period = $serviceRequest->end_date->format("d-m-Y");
-                $program_contract_type = "Parcial";
-              }
-
-              $fulfillment = new Fulfillment();
-              $fulfillment->service_request_id = $serviceRequest->id;
-              if ($serviceRequest->program_contract_type == "Mensual") {
-                $fulfillment->year = $period->format("Y");
-                $fulfillment->month = $period->format("m");
-              }else{
-                $program_contract_type = "Horas Médicas";
-                $fulfillment->year = $period->format("Y");
-                $fulfillment->month = $period->format("m");
-              }
-              $fulfillment->type = $program_contract_type;
-              $fulfillment->start_date = $start_date_period;
-              $fulfillment->end_date = $end_date_period;
-              $fulfillment->user_id = Auth::user()->id;
-
-              // $fulfillment->total_hours_to_pay = $serviceRequest->weekly_hours;
-              // $fulfillment->total_to_pay = $serviceRequest->net_amount;
-
-              $fulfillment->save();
-            }
-
-            // //crea detalle
-            // foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
-            //
-            //   //guarda
-            //   $fulfillmentItem = new FulfillmentItem();
-            //   $fulfillmentItem->fulfillment_id = $fulfillment->id;
-            //   $fulfillmentItem->start_date = $shiftControl->start_date;
-            //   $fulfillmentItem->end_date = $shiftControl->end_date;
-            //   $fulfillmentItem->type = "Turno Médico";
-            //   $fulfillmentItem->observation = $shiftControl->observation;
-            //   $fulfillmentItem->user_id = Auth::user()->id;
-            //   $fulfillmentItem->save();
-            //
-            // }
-          }
-        }
-
-        elseif($serviceRequest->program_contract_type == "Horas"){
-          if ($serviceRequest->fulfillments->count() == 0) {
-            $fulfillment = new Fulfillment();
-            $fulfillment->service_request_id = $serviceRequest->id;
-            $fulfillment->type = "Horas No Médicas";
-            $fulfillment->year = $serviceRequest->start_date->format("Y");
-            $fulfillment->month = $serviceRequest->start_date->format("m");
-            $fulfillment->start_date = $serviceRequest->start_date;
-            $fulfillment->end_date = $serviceRequest->end_date;
-            // $fulfillment->observation = "Aprobaciones en flujo de firmas";
-            $fulfillment->user_id = Auth::user()->id;
-            $fulfillment->save();
-          }else {
-            $fulfillment = $serviceRequest->fulfillments->first();
-          }
-
-          // //crea detalle
-          // foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
-          //   $fulfillmentItem = new FulfillmentItem();
-          //   $fulfillmentItem->fulfillment_id = $fulfillment->id;
-          //   $fulfillmentItem->start_date = $shiftControl->start_date;
-          //   $fulfillmentItem->end_date = $shiftControl->end_date;
-          //   $fulfillmentItem->type = "Turno";
-          //   $fulfillmentItem->observation = $shiftControl->observation;
-          //   $fulfillmentItem->user_id = Auth::user()->id;
-          //   $fulfillmentItem->save();
-          // }
-        }
-
-        //tuve que hacer esto ya que no me devolvia fulfillments guardados.
-        $serviceRequest = ServiceRequest::find($serviceRequest->id);
+        // $start    = new DateTime($serviceRequest->start_date);
+        // $start->modify('first day of this month');
+        // $end      = new DateTime($serviceRequest->end_date);
+        // $end->modify('first day of next month');
+        // $interval = DateInterval::createFromDateString('1 month');
+        // $periods   = new DatePeriod($start, $interval, $end);
+        // $cont_periods = iterator_count($periods);
+        //
+        // // crea de forma automática las cabeceras
+        // if ($serviceRequest->program_contract_type == "Mensual" || ($serviceRequest->program_contract_type == "Horas" && $serviceRequest->working_day_type == "HORA MÉDICA")) {
+        //   if ($serviceRequest->fulfillments->count() == 0) {
+        //     // if (!Auth::user()->can('Service Request: fulfillments responsable')) {
+        //     //   session()->flash('danger', 'El usuario responsable no ha certificado el cumplimiento de la solicitud: <b>' . $serviceRequest->id . "</b>. No tiene acceso.");
+        //     //   return redirect()->back();
+        //     // }
+        //     foreach ($periods as $key => $period) {
+        //       $program_contract_type = "Mensual";
+        //       $start_date_period = $period->format("d-m-Y");
+        //       $end_date_period = Carbon::createFromFormat('d-m-Y', $period->format("d-m-Y"))->endOfMonth()->format("d-m-Y");
+        //       if($key == 0){
+        //         $start_date_period = $serviceRequest->start_date->format("d-m-Y");
+        //       }
+        //       if (($cont_periods - 1) == $key) {
+        //         $end_date_period = $serviceRequest->end_date->format("d-m-Y");
+        //         $program_contract_type = "Parcial";
+        //       }
+        //
+        //       $fulfillment = new Fulfillment();
+        //       $fulfillment->service_request_id = $serviceRequest->id;
+        //       if ($serviceRequest->program_contract_type == "Mensual") {
+        //         $fulfillment->year = $period->format("Y");
+        //         $fulfillment->month = $period->format("m");
+        //       }else{
+        //         $program_contract_type = "Horas Médicas";
+        //         $fulfillment->year = $period->format("Y");
+        //         $fulfillment->month = $period->format("m");
+        //       }
+        //       $fulfillment->type = $program_contract_type;
+        //       $fulfillment->start_date = $start_date_period;
+        //       $fulfillment->end_date = $end_date_period;
+        //       $fulfillment->user_id = Auth::user()->id;
+        //
+        //       // $fulfillment->total_hours_to_pay = $serviceRequest->weekly_hours;
+        //       // $fulfillment->total_to_pay = $serviceRequest->net_amount;
+        //
+        //       $fulfillment->save();
+        //     }
+        //
+        //     // //crea detalle
+        //     // foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
+        //     //
+        //     //   //guarda
+        //     //   $fulfillmentItem = new FulfillmentItem();
+        //     //   $fulfillmentItem->fulfillment_id = $fulfillment->id;
+        //     //   $fulfillmentItem->start_date = $shiftControl->start_date;
+        //     //   $fulfillmentItem->end_date = $shiftControl->end_date;
+        //     //   $fulfillmentItem->type = "Turno Médico";
+        //     //   $fulfillmentItem->observation = $shiftControl->observation;
+        //     //   $fulfillmentItem->user_id = Auth::user()->id;
+        //     //   $fulfillmentItem->save();
+        //     //
+        //     // }
+        //   }
+        // }
+        //
+        // elseif($serviceRequest->program_contract_type == "Horas"){
+        //   if ($serviceRequest->fulfillments->count() == 0) {
+        //     $fulfillment = new Fulfillment();
+        //     $fulfillment->service_request_id = $serviceRequest->id;
+        //     $fulfillment->type = "Horas No Médicas";
+        //     $fulfillment->year = $serviceRequest->start_date->format("Y");
+        //     $fulfillment->month = $serviceRequest->start_date->format("m");
+        //     $fulfillment->start_date = $serviceRequest->start_date;
+        //     $fulfillment->end_date = $serviceRequest->end_date;
+        //     // $fulfillment->observation = "Aprobaciones en flujo de firmas";
+        //     $fulfillment->user_id = Auth::user()->id;
+        //     $fulfillment->save();
+        //   }else {
+        //     $fulfillment = $serviceRequest->fulfillments->first();
+        //   }
+        //
+        //   // //crea detalle
+        //   // foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
+        //   //   $fulfillmentItem = new FulfillmentItem();
+        //   //   $fulfillmentItem->fulfillment_id = $fulfillment->id;
+        //   //   $fulfillmentItem->start_date = $shiftControl->start_date;
+        //   //   $fulfillmentItem->end_date = $shiftControl->end_date;
+        //   //   $fulfillmentItem->type = "Turno";
+        //   //   $fulfillmentItem->observation = $shiftControl->observation;
+        //   //   $fulfillmentItem->user_id = Auth::user()->id;
+        //   //   $fulfillmentItem->save();
+        //   // }
+        // }
+        //
+        // //tuve que hacer esto ya que no me devolvia fulfillments guardados.
+        // $serviceRequest = ServiceRequest::find($serviceRequest->id);
 
         return view('service_requests.requests.fulfillments.edit',compact('serviceRequest'));
     }

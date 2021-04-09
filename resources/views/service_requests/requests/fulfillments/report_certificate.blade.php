@@ -249,7 +249,7 @@
           @else
             Hospital Dr.Ernesto Torres Galdames
           @endif
-          , por <b>horas extras realizadas en el mes de {{$fulfillment->serviceRequest->start_date->monthName}} del {{$fulfillment->serviceRequest->start_date->year}} por contingencia COVID</b>.<br><br>
+          , por <b>horas extras realizadas en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}} por contingencia COVID</b>.<br><br>
 
 
               <table class="siete">
@@ -261,7 +261,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  @foreach($fulfillment->serviceRequest->shiftControls as $key => $shiftControl)
+                  @foreach($fulfillment->shiftControls as $key => $shiftControl)
                       <tr>
                           <td>{{$shiftControl->start_date->format('d-m-Y H:i')}}</td>
                           <td>{{$shiftControl->end_date->format('d-m-Y H:i')}}</td>
@@ -270,8 +270,8 @@
                   @endforeach
               </table>
           <br>
-          @livewire('service-request.show-total-hours', ['serviceRequest' => $fulfillment->serviceRequest,
-                                                            'forCertificate' => true])
+          @livewire('service-request.show-total-hours', ['fulfillment' => $fulfillment,
+                                                         'forCertificate' => true])
 
           <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
       </div>
