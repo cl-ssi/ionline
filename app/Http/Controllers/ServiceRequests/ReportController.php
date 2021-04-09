@@ -218,14 +218,17 @@ class ReportController extends Controller
     }
 
     public function indexWithResolutionFile() {
-        $serviceRequests = ServiceRequest::where('has_resolution_file',1)->paginate(50);
+        $serviceRequests = ServiceRequest::orderByDesc('id')
+                            ->where('has_resolution_file',1)->paginate(50);
         $title = 'Solicitudes con resolución cargada';
         return view('service_requests.reports.index_with_resolution_file', compact('serviceRequests','title'));
         /* Hacer foreach de cada SRs y dentro hacer un foreach de sus fulfillments y mostrar cual tiene boleta y cual no */
     }
 
     public function indexWithoutResolutionFile() {
-        $serviceRequests = ServiceRequest::where('has_resolution_file','<>',1)->paginate(50);
+        $serviceRequests = ServiceRequest::orderByDesc('id')
+                            ->whereNull('has_resolution_file')
+                            ->orWhere('has_resolution_file',0)->paginate(50);
         $title = 'Solicitudes sin resolución cargada';
         return view('service_requests.reports.index_with_resolution_file', compact('serviceRequests','title'));
         /* Hacer foreach de cada SRs y dentro hacer un foreach de sus fulfillments y mostrar cual tiene boleta y cual no */
