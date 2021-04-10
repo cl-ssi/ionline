@@ -98,10 +98,10 @@
 				<div class="input-group">
             	
             		<label for="for_name">U. ORGANIZACIONAL </label>
-            		<select class="form-control" id="for_turnFilter" name="turnFilter">
+            		<select class="form-control" id="for_orgunitFilter" name="orgunitFilter">
             			<!-- <option>0 - Todos</option> -->
             			@foreach($cargos as $c)
-            				<option value="{{$c->id}}">{{$loop->iteration}} - {{$c->name}} </option>
+            				<option value="{{$c->id}}" {{($c->id==$actuallyOrgUnit->id)?'selected':''}}>{{$loop->iteration}} - {{$c->name}} </option>
             			@endforeach
             		</select>
         	  	</div>
@@ -114,7 +114,7 @@
             		<select class="form-control" id="for_turnFilter" name="turnFilter">
             			<option>1 - Todos</option>
             			@foreach($sTypes as $st)
-            				<option value="{{$st->id}}">{{$loop->iteration}} - Solo {{$st->name}}</option>
+            				<option value="{{$st->id}}" {{($st->id==$actuallyShift->id)?'selected':''}}>{{$loop->iteration}} - Solo {{$st->name}}</option>
             			@endforeach
             			<option value="99">99 - Solo Turno Personalizado</option>
             		</select>
@@ -137,10 +137,10 @@
 				<div class="input-group">
             	
             		<label for="for_name">MES </label>
-            		<select class="form-control" id="for_turnFilter" name="turnFilter">
+            		<select class="form-control" id="for_turnFilter" name="monthFilter">
             			
             			@foreach($months AS $index => $month)
-            				<option value="{{ $index }}" {{ ($index == $actuallyMonth )?"selected":"" }}>{{$loop->iteration}} - {{$month}}</option>
+            				<option value="{{ $index }}" {{ ($index == $actuallyMonth )?"selected":"" }}>{{$loop->iteration}} - {{$month}} </option>
             			@endforeach
             			
             		</select>
@@ -168,8 +168,10 @@
 					<label style="text-align: center;"><b>Buscar Personal de la unidad "{{$actuallyOrgUnit->name}}"</b></label>
 	            		<select class="find-personal-input form-control" style="text-align: center;" >
             				<option> - </option>
-            				<option value="a">2</option>
-            				<option value="a1">1</option>
+							@foreach($staff as $user)
+            					<option value="{{$user->id}}">{{$user->name}} {{$user->fathers_family}} {{$user->mothers_family}}</option> 
+
+							@endforeach
             			</select>
         	  	</div>
 				<div class="col-lg-2 ">
@@ -193,12 +195,26 @@
             <table class="table">
                 <thead class="thead-dark">
                     <th rowspan="2">Personal</th>
-                            <th class="calendar-day" colspan="{{$days}}">ABRIL - TURNO A</th> 
+                            <th class="calendar-day" colspan="{{$days}}">
+
+                            	@foreach($months AS $index => $month)
+            						{{ ($index == $actuallyMonth )?$month:"" }}
+								@endforeach
+
+								{{$actuallyYear}}
+                            	-  
+
+                            	@foreach($sTypes as $st)
+            						{{($st->id==$actuallyShift->id)?$st->name:''}} 
+            					@endforeach
+                        </th> 
 
                         <tr>
                             @for($i = 1; $i <= $days; $i++) 
-                                    
-                                    <th class="brless dia">{{$i}}</th>
+                                    @php
+                                    	 $dateFiltered = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$i, 'Europe/London');  
+                                    @endphp
+                                    <th class="brless dia" style="color:{{ ($dateFiltered->isWeekend() )?'red':'white'}}" >{{$i}}</th>
                                     <!-- <th class="brless dia">🌞</th> -->
                                     <!-- <th class="noche">🌒</th> -->
                             @endfor
@@ -206,7 +222,7 @@
                 </thead>
                 <tbody>
                   
-					@foreach($users as $user)
+					@foreach($staff as $user)
 					<tr>
 						
 						   <td class="bless br" >{{ $user->runFormat()}} - {{$user->name}}</td>
@@ -223,7 +239,9 @@
                                         
  
 					@endforeach
-                   
+                   	@if(count($staff)<1)
+                   		<td style="text-align:  center;" colspan="{{$days}}">SIN PERSONAL ASIGNADO</td>
+                   	@endif
                 </tbody>
             </table>
     </div>
