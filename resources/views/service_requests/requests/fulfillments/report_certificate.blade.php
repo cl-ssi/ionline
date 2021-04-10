@@ -132,23 +132,23 @@
     SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
 </div>
 
-<br><br><br><br><br><br><br><br>
+<br><br>
 <div class="titulo">
     <div class="center" style="width: 100%;">
         <strong>
-        <span class="uppercase">CERTIFICADO</span><br>
+        <span class="uppercase">Certificado de Cumplimiento</span><br>
         </strong>
     </div>
 </div>
 
-<br><br><br><br>
+<br><br>
 
 
 @if($fulfillment->type == "Mensual" || $fulfillment->type == "Parcial")
   @if($fulfillment->FulfillmentItems->count() == 0)
     <div class="nueve">
         <div class="justify" style="width: 100%;">
-            Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
+            Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
             en su convenio de prestación de servicios con el
             @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
               @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
@@ -177,7 +177,7 @@
               a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->add(1, 'day')->format('d/m/Y')}}</b>.
             @endif
           @else
-            Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
+            Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
             en su convenio de prestación de servicios con el
             @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
               @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
@@ -238,18 +238,18 @@
   <?php setlocale(LC_ALL, 'es'); ?>
   <div class="nueve">
       <div class="justify" style="width: 100%;">
-          Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades
+          Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades
           estipuladas en su convenio de prestación de servicios con el
           @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
             @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
-              Consultorio General Urbano Dr. Hector Reyno
+              Consultorio General Urbano Dr. Hector Reyno,
             @else
-              Servicio Salud Iquique
+              Servicio Salud Iquique,
             @endif
           @else
-            Hospital Dr.Ernesto Torres Galdames
+            Hospital Dr. Ernesto Torres Galdames,
           @endif
-          , por <b>horas extras realizadas en el mes de {{$fulfillment->serviceRequest->start_date->monthName}} del {{$fulfillment->serviceRequest->start_date->year}} por contingencia COVID</b>.<br><br>
+            por <b>horas extras realizadas en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}} por contingencia COVID</b>.<br><br>
 
 
               <table class="siete">
@@ -261,7 +261,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  @foreach($fulfillment->serviceRequest->shiftControls as $key => $shiftControl)
+                  @foreach($fulfillment->shiftControls as $key => $shiftControl)
                       <tr>
                           <td>{{$shiftControl->start_date->format('d-m-Y H:i')}}</td>
                           <td>{{$shiftControl->end_date->format('d-m-Y H:i')}}</td>
@@ -270,8 +270,8 @@
                   @endforeach
               </table>
           <br>
-          @livewire('service-request.show-total-hours', ['serviceRequest' => $fulfillment->serviceRequest,
-                                                            'forCertificate' => true])
+          @livewire('service-request.show-total-hours', ['fulfillment' => $fulfillment,
+                                                         'forCertificate' => true])
 
           <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
       </div>
@@ -281,7 +281,9 @@
 
 
 <br style="padding-bottom: 10px;">
-<br><br><br><br><br><br><br><br>
+
+<br><br><br><br>
+
 <div id="firmas">
     <div class="center" style="width: 100%;">
         <strong>

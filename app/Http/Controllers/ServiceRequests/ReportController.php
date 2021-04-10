@@ -32,6 +32,7 @@ class ReportController extends Controller
                                      ->whereIn('type',['Mensual','Parcial'])
                                      ->where('responsable_approbation',1)
                                      ->where('rrhh_approbation',1)
+                                     ->whereNotNull('signatures_file_id')
                                      ->where('finances_approbation',1)
                                      ->whereNull('total_paid')
                                      ->get();
@@ -50,6 +51,7 @@ class ReportController extends Controller
                                       //                });
                                       //   })
                                       ->where('has_invoice_file',1)
+                                      ->whereNotNull('signatures_file_id')
                                       ->whereNotIn('type',['Mensual','Parcial'])
                                       ->whereNull('total_paid')
                                       ->get();
@@ -118,6 +120,7 @@ class ReportController extends Controller
                                      ->where('responsable_approbation',1)
                                      ->where('rrhh_approbation',1)
                                      ->where('finances_approbation',1)
+                                     ->whereNotNull('signatures_file_id')
                                      ->get();
 
          $fulfillments2 = Fulfillment::whereHas("ServiceRequest", function($subQuery) {
@@ -137,6 +140,7 @@ class ReportController extends Controller
                                       ->where('payment_ready', 1)
                                       ->whereNull('total_paid')
                                       ->whereNotIn('type',['Mensual','Parcial'])
+                                      ->whereNotNull('signatures_file_id')
                                       ->get();
 
         $fulfillments = $fulfillments1->merge($fulfillments2);
@@ -218,14 +222,17 @@ class ReportController extends Controller
     }
 
     public function indexWithResolutionFile() {
-        $serviceRequests = ServiceRequest::where('has_resolution_file',1)->paginate(50);
+        $serviceRequests = ServiceRequest::orderByDesc('id')
+                            ->where('has_resolution_file',1)->paginate(50);
         $title = 'Solicitudes con resolución cargada';
         return view('service_requests.reports.index_with_resolution_file', compact('serviceRequests','title'));
         /* Hacer foreach de cada SRs y dentro hacer un foreach de sus fulfillments y mostrar cual tiene boleta y cual no */
     }
 
     public function indexWithoutResolutionFile() {
-        $serviceRequests = ServiceRequest::where('has_resolution_file','<>',1)->paginate(50);
+        $serviceRequests = ServiceRequest::orderByDesc('id')
+                            ->whereNull('has_resolution_file')
+                            ->orWhere('has_resolution_file',0)->paginate(50);
         $title = 'Solicitudes sin resolución cargada';
         return view('service_requests.reports.index_with_resolution_file', compact('serviceRequests','title'));
         /* Hacer foreach de cada SRs y dentro hacer un foreach de sus fulfillments y mostrar cual tiene boleta y cual no */

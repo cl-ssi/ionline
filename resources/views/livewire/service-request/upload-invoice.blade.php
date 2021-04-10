@@ -1,4 +1,4 @@
-<div>
+<span>
     @if($has_invoice_file)
         <a href="{{route('rrhh.service-request.fulfillment.download_invoice', $fulfillment)}}"
            target="_blank" class="btn btn-outline-info"> <i class="fas fa-dollar-sign"></i> Boleta </a>
@@ -17,4 +17,4 @@
         </button>
         
     @endif
-</div>
+</span>

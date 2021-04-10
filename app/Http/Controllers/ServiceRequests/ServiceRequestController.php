@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\ServiceRequests\ServiceRequest;
+use App\Models\ServiceRequests\Fulfillment;
 use App\Models\ServiceRequests\Subdirection;
 use App\Models\ServiceRequests\ResponsabilityCenter;
 use App\Models\Parameters\Bank;
@@ -27,6 +28,10 @@ use App\Rrhh\Authority;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+
+use DateTime;
+use DatePeriod;
+use DateInterval;
 
 class ServiceRequestController extends Controller
 
@@ -227,23 +232,93 @@ class ServiceRequestController extends Controller
       $request->All()
     );
 
-    //devuelve UserBankAccount o crea
-    // $userBankAccount = UserBankAccount::updateOrCreate(
-    //   ['user_id' => $request->user_id],
-    //   $request->All()
-    // );
-
     //crea service request
     $serviceRequest = new ServiceRequest($request->All());
     $serviceRequest->user_id = $user->id;
     $serviceRequest->creator_id = Auth::id();
     $serviceRequest->save();
 
+
+
+
+
+    //############ guarda cumplimiento ##############
+
+    $start    = new DateTime($serviceRequest->start_date);
+    $start->modify('first day of this month');
+    $end      = new DateTime($serviceRequest->end_date);
+    $end->modify('first day of next month');
+    $interval = DateInterval::createFromDateString('1 month');
+    $periods   = new DatePeriod($start, $interval, $end);
+    $cont_periods = iterator_count($periods);
+
+    // crea de forma automática las cabeceras
+    if ($serviceRequest->program_contract_type == "Mensual" || ($serviceRequest->program_contract_type == "Horas" && $serviceRequest->working_day_type == "HORA MÉDICA")) {
+      if ($serviceRequest->fulfillments->count() == 0) {
+        foreach ($periods as $key => $period) {
+          $program_contract_type = "Mensual";
+          $start_date_period = $period->format("d-m-Y");
+          $end_date_period = Carbon::createFromFormat('d-m-Y', $period->format("d-m-Y"))->endOfMonth()->format("d-m-Y");
+          if($key == 0){
+            $start_date_period = $serviceRequest->start_date->format("d-m-Y");
+          }
+          if (($cont_periods - 1) == $key) {
+            $end_date_period = $serviceRequest->end_date->format("d-m-Y");
+            $program_contract_type = "Parcial";
+          }
+
+          $fulfillment = new Fulfillment();
+          $fulfillment->service_request_id = $serviceRequest->id;
+          if ($serviceRequest->program_contract_type == "Mensual") {
+            $fulfillment->year = $period->format("Y");
+            $fulfillment->month = $period->format("m");
+          }else{
+            $program_contract_type = "Horas Médicas";
+            $fulfillment->year = $period->format("Y");
+            $fulfillment->month = $period->format("m");
+          }
+          $fulfillment->type = $program_contract_type;
+          $fulfillment->start_date = $start_date_period;
+          $fulfillment->end_date = $end_date_period;
+          $fulfillment->user_id = Auth::user()->id;
+          $fulfillment->save();
+        }
+      }
+    }
+
+    elseif($serviceRequest->program_contract_type == "Horas"){
+      if ($serviceRequest->fulfillments->count() == 0) {
+        $fulfillment = new Fulfillment();
+        $fulfillment->service_request_id = $serviceRequest->id;
+        $fulfillment->type = "Horas No Médicas";
+        $fulfillment->year = $serviceRequest->start_date->format("Y");
+        $fulfillment->month = $serviceRequest->start_date->format("m");
+        $fulfillment->start_date = $serviceRequest->start_date;
+        $fulfillment->end_date = $serviceRequest->end_date;
+        $fulfillment->user_id = Auth::user()->id;
+        $fulfillment->save();
+      }else {
+        $fulfillment = $serviceRequest->fulfillments->first();
+      }
+    }
+
+    // ################### fin guarda cumplimiento #######################
+
+
+
+
+
+
+
+
+
+
     //guarda control de turnos
     if ($request->shift_start_date != null) {
       foreach ($request->shift_start_date as $key => $shift_start_date) {
         $shiftControl = new ShiftControl($request->All());
-        $shiftControl->service_request_id = $serviceRequest->id;
+        // $shiftControl->service_request_id = $serviceRequest->id;
+        $shiftControl->fulfillment_id = $fulfillment->id;
         $shiftControl->start_date = $shift_start_date . " " . $request->shift_start_hour[$key];
         $shiftControl->end_date = $request->shift_end_date[$key] . " " . $request->shift_end_hour[$key];
         $shiftControl->observation = $request->shift_observation[$key];
