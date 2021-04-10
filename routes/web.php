@@ -353,6 +353,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         //fin descomposicion
 
         Route::get('/transfer-requests', [ServiceRequestController::class, 'transfer_requests'])->name('transfer_requests');
+        Route::get('/change_signature_flow_view', [ServiceRequestController::class, 'change_signature_flow_view'])->name('change_signature_flow_view');
+        Route::post('/change-signature-flow', [ServiceRequestController::class, 'change_signature_flow'])->name('change_signature_flow');
         Route::post('/derive', [ServiceRequestController::class, 'derive'])->name('derive');
 
         Route::post('/destroy-with-parameters', [ServiceRequestController::class, 'destroy_with_parameters'])->name('destroy-with-parameters');
