@@ -151,6 +151,25 @@ class ServiceRequestController extends Controller
     return view('service_requests.requests.transfer_requests', compact('serviceRequests', 'responsabilityCenters', 'users'));
   }
 
+  public function change_signature_flow_view(Request $request)
+  {
+    $users = User::orderBy('name', 'ASC')->get();
+    $serviceRequests = ServiceRequest::find($request->id);
+    return view('service_requests.requests.change_signature_flow',compact('users','request','serviceRequests'));
+  }
+
+  public function change_signature_flow(Request $request)
+  {
+    $signatureFlow = SignatureFlow::find($request->signature_flow_id);
+    $signatureFlow->responsable_id = $request->user_id;
+    $signatureFlow->save();
+
+    session()->flash('success', 'Se ha modificado el responsable del flujo de firmas.');
+    return redirect()->back();
+  }
+
+
+
   /**
    * Show the form for creating a new resource.
    *
