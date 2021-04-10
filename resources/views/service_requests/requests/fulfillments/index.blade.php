@@ -28,6 +28,20 @@
       <option value="Horas" @if($request->program_contract_type == "Horas") selected @endif>Horas</option>
     </select>
     <div class="input-group-prepend">
+      <span class="input-group-text">Estam.</span>
+    </div>
+    <select class="form-control selectpicker" data-live-search="true" name="estate" data-size="5">
+      <option value=""></option>
+      <option value="Profesional Médico" @if($request->estate == "Profesional Médico") selected @endif>Profesional Médico</option>
+      <option value="Profesional" @if($request->estate == "Profesional") selected @endif>Profesional</option>
+      <option value="Técnico" @if($request->estate == "Técnico") selected @endif>Técnico</option>
+      <option value="Administrativo" @if($request->estate == "Administrativo") selected @endif>Administrativo</option>
+      <option value="Farmaceutico" @if($request->estate == "Farmaceutico") selected @endif>Farmaceutico</option>
+      <option value="Odontólogo" @if($request->estate == "Odontólogo") selected @endif>Odontólogo</option>
+      <option value="Bioquímico" @if($request->estate == "Bioquímico") selected @endif>Bioquímico</option>
+      <option value="Auxiliar" @if($request->estate == "Auxiliar") selected @endif>Auxiliar</option>
+    </select>
+    <div class="input-group-prepend">
       <span class="input-group-text">Id</span>
     </div>
     <input type="text" name="id" value="{{$request->id}}">
@@ -56,12 +70,13 @@
           <th scope="col">Nro.Res.</th>
     			<th scope="col">Tipo</th>
           <th scope="col">T.Contrato</th>
+          <th scope="col">C.Responsabilidad</th>
     			<th scope="col">F. Solicitud</th>
     			<th scope="col">Rut</th>
     			<th scope="col">Funcionario</th>
     			<th scope="col">F. Inicio</th>
     			<th scope="col">F. Término</th>
-    			<th scope="col">Estado Solicitud</th>
+    			<!-- <th scope="col">Estado Solicitud</th> -->
     			<th scope="col">Acción</th>
           <th scope="col">Resp.</th>
           <th scope="col">RRHH</th>
@@ -75,14 +90,15 @@
           <td>{{ $serviceRequest->resolution_number }}</td>
     			<td>{{ $serviceRequest->type }}</td>
           <td>{{ $serviceRequest->program_contract_type }}</td>
+          <td>{{ $serviceRequest->responsabilityCenter->name }}</td>
     			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
     			<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
     			<td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
     			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
     			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
-    			<td>@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
+    			<!-- <td>@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
               @elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-              @else Finalizada @endif</td>
+              @else Finalizada @endif</td> -->
     			<td nowrap class="text-center">
           @if($serviceRequest->program_contract_type == "Mensual")
     				<a href="{{ route('rrhh.service-request.fulfillment.edit',[$serviceRequest]) }}"

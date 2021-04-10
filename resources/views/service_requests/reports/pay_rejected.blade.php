@@ -29,9 +29,13 @@
       <tr>
           <td>{{ ++$key }}</td>
           <td>
+            @if($fulfillment->serviceRequest != null)
                 <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}" title="Editar">
                     {{$fulfillment->serviceRequest->id}}
-      			</a>
+      			    </a>
+            @else
+              
+            @endif
             </td>
           <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
           <td>

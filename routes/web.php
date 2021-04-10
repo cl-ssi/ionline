@@ -380,6 +380,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             //eliminar palabra fulfiment en URL y en metodo
             Route::get('/confirm-fulfillment/{fulfillment}', [FulfillmentController::class, 'confirmFulfillment'])->name('confirm-Fulfillment');
             Route::get('/refuse-fulfillment/{fulfillment}', [FulfillmentController::class, 'refuseFulfillment'])->name('refuse-Fulfillment');
+            Route::post('/update-paid-values', [FulfillmentController::class, 'updatePaidValues'])->name('update-paid-values');
 
 
             Route::prefix('item')->name('item.')->group(function () {
@@ -651,6 +652,12 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::prefix('programming_aps')->as('programming_aps.')->group(function () {
         Route::get('/', 'Indicators\ProgramApsController@index')->name('index');
         Route::get('/{year}/{commune}', 'Indicators\ProgramApsController@show')->name('show');
+    });
+
+    Route::prefix('iaps')->as('iaps.')->group(function () {
+        Route::get('/', 'Indicators\ApsController@index')->name('index');
+        Route::get('/{year}', 'Indicators\ApsController@list')->name('list');
+        Route::get('/{year}/{slug}/{establishment_type}', 'Indicators\ApsController@show')->name('show');
     });
 
     Route::prefix('19813')->as('19813.')->group(function () {
