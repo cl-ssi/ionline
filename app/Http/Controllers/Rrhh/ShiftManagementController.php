@@ -41,8 +41,11 @@ class ShiftManagementController extends Controller
      public function index(Request $r)
     {
     	// echo "Shift Management";
-    	$days = Carbon::now()->daysInMonth;
         $months = (object) $this->months;
+
+     
+
+    	$days = Carbon::now()->daysInMonth;
         $actuallyMonth = Carbon::now()->format('m');
         $actuallyDay = Carbon::now()->format('d');
         $actuallyYear = Carbon::now()->format('Y');
@@ -50,12 +53,38 @@ class ShiftManagementController extends Controller
     	$users = User::Search($r->get('name'))->orderBy('name','Asc')->paginate(500);
     	$cargos = OrganizationalUnit::all();
         $actuallyOrgUnit = $cargos->first();
-        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit'));
+        $actuallyShift=$sTypes->first();
+        $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
+
+        // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
+
+        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift'));
     }
  	public function indexfiltered(Request $r){
-
         
-        return view('rrhh.shift_management.index', compact('users'));
+     
+
+        $months = (object) $this->months;
+        $actuallyDay = Carbon::now()->format('d');
+        $sTypes = ShiftTypes::all(); 
+        $cargos = OrganizationalUnit::all();
+
+
+        $dateFiltered = Carbon::createFromFormat('Y-m-d',  $r->yearFilter."-".$r->monthFilter."-".$actuallyDay, 'Europe/London');
+
+        $days = $dateFiltered->daysInMonth;
+        $actuallyMonth = $dateFiltered->format('m');
+        $actuallyYear = $dateFiltered->format('Y');
+        
+        
+
+        $actuallyShift=ShiftTypes::find($r->turnFilter);
+         
+        $actuallyOrgUnit =  OrganizationalUnit::find($r->orgunitFilter);
+        $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
+        // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
+
+        return view('rrhh.shift_management.index', compact('cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift'));
 
  	}
  	public function shiftstypesindex()
