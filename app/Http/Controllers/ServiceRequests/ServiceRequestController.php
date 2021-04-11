@@ -1158,11 +1158,11 @@ class ServiceRequestController extends Controller
     return view('service_requests.requests.pending_requests', compact('array', 'hoja_ruta_falta_aprobar', 'fulfillments_missing', 'cumplimiento_falta_ingresar'));
   }
 
-  public function certificatePDF(ServiceRequest $serviceRequest)
-  {
-    $pdf = app('dompdf.wrapper');
-    $pdf->loadView('service_requests.requests.report_certificate', compact('serviceRequest'));
+  // public function certificatePDF(ServiceRequest $serviceRequest)
+  // {
+  //   $pdf = app('dompdf.wrapper');
+  //   $pdf->loadView('service_requests.requests.report_certificate', compact('serviceRequest'));
 
-    return $pdf->stream('mi-archivo.pdf');
-  }
+  //   return $pdf->stream('mi-archivo.pdf');
+  // }
 }
