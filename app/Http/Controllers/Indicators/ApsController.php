@@ -18,10 +18,12 @@ class ApsController extends Controller
 
     public function list($year)
     {
-        $iaps = Aps::with('indicators')->where('year', $year)->orderBy('number')->first();
-        $iaps->reyno_active = $iaps->indicators()->where('establishment_cods','LIKE', '%102307%')->count() > 0;
-        $iaps->hospital_active = $iaps->indicators()->where('establishment_cods','LIKE', '%102100%')->count() > 0;
-        $iaps->ssi_active = $iaps->indicators()->where('establishment_cods','LIKE', '%102010%')->count() > 0;
+        $iaps = Aps::with('indicators')->where('year', $year)->orderBy('number')->get();
+        foreach($iaps as $item){
+            $item->reyno_active = $item->indicators()->where('establishment_cods','LIKE', '%102307%')->count() > 0;
+            $item->hospital_active = $item->indicators()->where('establishment_cods','LIKE', '%102100%')->count() > 0;
+            $item->ssi_active = $item->indicators()->where('establishment_cods','LIKE', '%102010%')->count() > 0;
+        }
         // return $iaps;
         return view('indicators.iaps.list', compact('iaps', 'year'));
     }
@@ -47,7 +49,7 @@ class ApsController extends Controller
                 $factor_source = $factor == 'numerador' ? $indicator->numerator_source : $indicator->denominator_source;
                 $establishment_cods = null;
 
-                if($factor == 'numerador' && $establishment_type == 'aps'){
+                if($establishment_type == 'aps'){
                     $establishment_cods = array_map('trim', explode(',',$indicator->establishment_cods));
                     $establishment_cods = array_diff($establishment_cods, array("102307", "102100", "102010")); //descartar reyno, hospital y ssi
                     $establishments = Establecimiento::year($year)->whereIn('Codigo', $establishment_cods)->get(['id_establecimiento','alias_estab','comuna']);
