@@ -71,7 +71,7 @@ class LoginController extends Controller
             request()->session()->regenerateToken();
 
             $url_logout = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
-            $url_redirect = "https://i.saludiquique.cl/logout";
+            $url_redirect = env('APP_URL')."/logout";
             $url = $url_logout.urlencode($url_redirect);
             return redirect()->to($url)->send();
 		}

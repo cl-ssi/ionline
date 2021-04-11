@@ -43,6 +43,15 @@
     </li>
     @endcan
 
+    @canany(['Service Request: change signature flow'])
+    <li class="nav-item">
+        <a class="nav-link {{ active('rrhh.service-request.change_signature_flow_view') }}"
+            href="{{ route('rrhh.service-request.change_signature_flow_view') }}">
+            <i class="fas fa-sign-in-alt"></i> Modificar flujo de firmas
+        </a>
+    </li>
+    @endcan
+
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle {{ active('rrhh.service-request.report.*') }}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-archive"></i> Reportes
