@@ -124,15 +124,18 @@
 
 
 <div class="siete" style="padding-top: 3px;">
-    HOSPITAL DR. ERNESTO TORRES GALDÁMEZ<br>
-    SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
+    MINISTERIO DE SALUD<br>
+    REGIÓN DE TARAPACÁ<br>
+    <u>SERVICIO DE SALUD</u><br>
+    <u>IQUIQUE</u>
+
 </div>
 
 <br><br><br><br><br><br><br><br>
 <div class="titulo">
     <div class="center" style="width: 100%;">
         <strong>
-        <span class="uppercase">CERTIFICADO</span><br>
+        <span class="uppercase">CERTIFICADO DE DISPONIBILIDAD PRESUPUESTARIA</span><br>
         </strong>
     </div>
 </div>
@@ -143,23 +146,33 @@
 @if($serviceRequest->SignatureFlows->count() == 0)
   <div class="nueve">
       <div class="justify" style="width: 100%;">
-          Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
+      De conformidad a lo dispuesto en la Ley N° 21.192, de 2019 del Ministerio de Hacienda, que aprueba el presupuesto del Sector Público para el año 2020, vengo en certificar que la Dirección del Servicio de Salud Iquique
+      cuenta con el Presupuesto para contratación de don (ña) <b><span class="uppercase">{{$serviceRequest->employee->fullName}}</span></b>
+      desde el <b>{{$serviceRequest->start_date->format('d-m-Y') }} hasta el {{$serviceRequest->end_date->format('d-m-Y') }}</b>
+      por contingencia originada por la Pandemia Coronavirus (COVID-19), con cargo al SUBTITULO 21-03-001-001-02, personal no médico, 
+      <u>"Honorario Suma Alzada de la Dirección del Servicio de Salud Iquique"</u>
+          <!-- Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
           en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames durante el preríodo de contingencia COVID
-          del <b>{{$serviceRequest->start_date->format('d/m/Y')}}</b> al <b>{{$serviceRequest->end_date->format('d/m/Y')}}</b>.
+          del <b>{{$serviceRequest->start_date->format('d/m/Y')}}</b> al <b>{{$serviceRequest->end_date->format('d/m/Y')}}</b>. -->
       </div>
   </div>
 @else
   <div class="nueve">
       <div class="justify" style="width: 100%;">
-          Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
+      De conformidad a lo dispuesto en la Ley N° 21.192, de 2019 del Ministerio de Hacienda, que aprueba el presupuesto del Sector Público para el año 2020, vengo en certificar que la Dirección del Servicio de Salud Iquique
+      cuenta con el Presupuesto para contratación de don (ña) <b><span class="uppercase">{{$serviceRequest->employee->fullName}}</span></b>
+      desde el <b>{{$serviceRequest->start_date->format('d-m-Y') }} hasta el {{$serviceRequest->end_date->format('d-m-Y') }}</b>
+      por contingencia originada por la Pandemia Coronavirus (COVID-19), con cargo al SUBTITULO 21-03-001-001-02, personal no médico, 
+      <u>"Honorario Suma Alzada de la Dirección del Servicio de Salud Iquique"</u>
+          <!-- Mediante el presente certifico que don(a) o Sr(a) <b><span class="uppercase">{{$serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
           en su convenio de prestación de servicios con el Hospital Dr.Ernesto Torres Galdames durante el preríodo de contingencia COVID
           del <b>{{$serviceRequest->start_date->format('d/m/Y')}}</b> al <b>{{$serviceRequest->end_date->format('d/m/Y')}}</b>,
-          registrando @if($serviceRequest->type == "Turnos") los siguientes turnos extra: @else los siguientes turnos extra: @endif
+          registrando @if($serviceRequest->type == "Turnos") los siguientes turnos extra: @else los siguientes turnos extra: @endif -->
       </div>
   </div>
 
   <br><br>
-
+<!-- 
   <table class="siete">
     <thead>
       <tr>
@@ -178,7 +191,7 @@
           <td style="text-align:center">{{$shiftControl->observation}}</td>
       </tr>
       @endforeach
-  </table>
+  </table> -->
 @endif
 
 <br style="padding-bottom: 10px;">
@@ -186,10 +199,22 @@
 <div id="firmas">
     <div class="center" style="width: 100%;">
         <strong>
-        <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}</span><br>
+        <!-- <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}</span><br>
         <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->position}}</span><br>
-        <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->organizationalUnit->name}}</span><br>
-        HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
+        <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->organizationalUnit->name}}</span><br> -->
+        <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}</span><br>
+        <!-- <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->position}}</span><br>
+        <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->organizationalUnit->name}}</span><br> -->
+        <!-- 1 Hospital -->
+        @if($serviceRequest->responsabilityCenter->establishment->id == 1)
+        <!-- <span class="uppercase">{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}</span><br> -->
+        
+
+        {{$serviceRequest->responsabilityCenter->establishment->name}}
+
+        @endif
+
+        
         </strong>
     </div>
 </div>

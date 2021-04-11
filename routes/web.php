@@ -360,7 +360,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
         Route::get('/aditional-data-list', [ServiceRequestController::class, 'aditional_data_list'])->name('aditional_data_list');
         Route::put('/update-aditional-data/{serviceRequest}', [ServiceRequestController::class, 'update_aditional_data'])->name('update_aditional_data');
-        Route::get('/certificate-pdf/{serviceRequest}', [ServiceRequestController::class, 'certificatePDF'])->name('certificate-pdf');
+        
 
 
         Route::prefix('fulfillment')->name('fulfillment.')->group(function () {
@@ -406,6 +406,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/bank-payment-file/{establishment_id?}', [ReportController::class, 'bankPaymentFile'])->name('bank-payment-file');
             Route::get('/with-resolution-file', [ReportController::class, 'indexWithResolutionFile'])->name('with-resolution-file');
             Route::get('/without-resolution-file', [ReportController::class, 'indexWithoutResolutionFile'])->name('without-resolution-file');
+            Route::get('/budget-availability/{serviceRequest}', [ReportController::class, 'budgetAvailability'])->name('budget-availability');
 
             //pasar a reports
             Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
