@@ -19,3 +19,4 @@ yarn-error.log
 /_ide_helper_models.php
 /.phpstorm.meta.php
 .tic-ssi.json
+app.yaml
