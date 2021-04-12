@@ -196,9 +196,8 @@
           <option value="CONTRATA" >CONTRATA</option>
           <option value="TITULAR" >TITULAR</option>
           <option value="HONORARIO COVID" >HONORARIO COVID</option>
-					@can('Service Request: additional data rrhh')
-						<option value="SUMA ALZADA" >SUMA ALZADA</option>
-					@endcan
+
+					<option value="SUMA ALZADA" >SUMA ALZADA</option>
         </select>
 		</fieldset>
 
@@ -286,9 +285,7 @@
           <option value="HORA EXTRA">HORA EXTRA</option>
 					<option value="TURNO EXTRA">TURNO EXTRA</option>
 
-					@canany(['Service Request: additional data rrhh','Service Request: turno de llamado'])
-		        <option value="TURNO DE LLAMADO">TURNO DE LLAMADO</option>
-		      @endcan
+		      <option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
 					<!-- <option value="OTRO">OTRO</option> -->
         </select>
 
