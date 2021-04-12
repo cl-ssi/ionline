@@ -303,7 +303,9 @@
     </ul>
   </div> -->
 
+@if($serviceRequest->fulfillments->count()>0)
   @livewire('service-request.shifts-control', ['fulfillment' => $serviceRequest->fulfillments->first()])
+@endif
 
   <br>
 
