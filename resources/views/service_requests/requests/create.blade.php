@@ -393,6 +393,24 @@
 		$("#div_turno").hide();
 		$("#div_suma_alzada").hide();
 
+		$("#programm_name option[value='PRAPS']").hide();
+		$("#programm_name option[value='PESPI']").hide();
+		$("#programm_name option[value='CHILE CRECE CONTIGO']").hide();
+		$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
+		$("#programm_name option[value='LISTA ESPERA']").hide();
+		$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+		$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
+		$("#programm_name option[value='33 MIL HORAS']").hide();
+		$("#programm_name option[value='DFL']").hide();
+		$("#programm_name option[value='TURNOS VACANTES']").hide();
+		$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
+		$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+		$("#programm_name option[value='PABELLON TARDE']").hide();
+		$("#programm_name option[value='PABELLON GINE']").hide();
+		$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+
+
+
 		$('#program_contract_type').on('change', function() {
 
 			if (this.value == "Horas") {
@@ -556,30 +574,78 @@
 		}
 	});
 
-	// $('#type').on('change', function() {
-	// 	var value = this.value;
-	//
-	// 	if (value == "Suma alzada") {
-	// 		$("#div_suma_alzada :input").attr("disabled", false);
-	// 		$("#div_suma_alzada").show();
-	// 		// $('#div_turno').attr('disabled','disabled');
-	// 		$("#div_turno :input").attr("disabled", true);
-	// 		$("#div_turno").hide();
-	//
-	// 		$("#div_mensual :input").attr("disabled", true);
-	// 		$("#div_mensual").hide();
-	//
-	// 	}else{
-	// 		$("#div_turno :input").attr("disabled", false);
-	// 		$("#div_turno").show();
-	// 		// $('#div_turno').attr('disabled','disabled');
-	// 		$("#div_suma_alzada :input").attr("disabled", true);
-	// 		$("#div_suma_alzada").hide();
-	//
-	// 		$("#div_mensual :input").attr("disabled", true);
-	// 		$("#div_mensual").hide();
-	// 	}
-	// });
+	$('#type').on('change', function() {
+		var value = this.value;
+		if (value == "Suma alzada") {
+
+			$("#programm_name option[value='Covid19-APS No Médicos']").hide();
+			$("#programm_name option[value='Covid19-APS Médicos']").hide();
+			$("#programm_name option[value='Covid19 No Médicos']").hide();
+			$("#programm_name option[value='Covid19 Médicos']").hide();
+
+			if ({{Auth::user()->organizationalUnit->establishment_id}} == 1) {
+				$("#programm_name option[value='PRAPS']").hide();
+				$("#programm_name option[value='PESPI']").hide();
+				$("#programm_name option[value='CHILE CRECE CONTIGO']").hide();
+				$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
+				$("#programm_name option[value='LISTA ESPERA']").hide();
+				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+
+				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").show();
+				$("#programm_name option[value='33 MIL HORAS']").show();
+				$("#programm_name option[value='DFL']").show();
+				$("#programm_name option[value='TURNOS VACANTES']").show();
+				$("#programm_name option[value='OTROS PROGRAMAS HETG']").show();
+				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+				$("#programm_name option[value='PABELLON TARDE']").show();
+				$("#programm_name option[value='PABELLON GINE']").show();
+				$("#programm_name option[value='TURNO DE RESIDENCIA']").show();
+
+
+			}else{
+				$("#programm_name option[value='PRAPS']").show();
+				$("#programm_name option[value='PESPI']").show();
+				$("#programm_name option[value='CHILE CRECE CONTIGO']").show();
+				$("#programm_name option[value='OTROS PROGRAMAS SSI']").show();
+				$("#programm_name option[value='LISTA ESPERA']").show();
+				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+
+				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
+				$("#programm_name option[value='33 MIL HORAS']").hide();
+				$("#programm_name option[value='DFL']").hide();
+				$("#programm_name option[value='TURNOS VACANTES']").hide();
+				$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
+				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+				$("#programm_name option[value='PABELLON TARDE']").hide();
+				$("#programm_name option[value='PABELLON GINE']").hide();
+				$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+			}
+		}
+		else
+		{
+			$("#programm_name option[value='Covid19-APS No Médicos']").show();
+			$("#programm_name option[value='Covid19-APS Médicos']").show();
+			$("#programm_name option[value='Covid19 No Médicos']").show();
+			$("#programm_name option[value='Covid19 Médicos']").show();
+
+			$("#programm_name option[value='PRAPS']").hide();
+			$("#programm_name option[value='PESPI']").hide();
+			$("#programm_name option[value='CHILE CRECE CONTIGO']").hide();
+			$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
+			$("#programm_name option[value='LISTA ESPERA']").hide();
+			$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+
+			$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
+			$("#programm_name option[value='33 MIL HORAS']").hide();
+			$("#programm_name option[value='DFL']").hide();
+			$("#programm_name option[value='TURNOS VACANTES']").hide();
+			$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
+			$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+			$("#programm_name option[value='PABELLON TARDE']").hide();
+			$("#programm_name option[value='PABELLON GINE']").hide();
+			$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+		}
+	});
 
 
 
