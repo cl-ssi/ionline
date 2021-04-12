@@ -222,10 +222,10 @@
                 </thead>
                 <tbody>
                   
-					@foreach($staff as $user)
+					@foreach($staffInShift as $sis)
 					<tr>
 						
-						   <td class="bless br" >{{ $user->runFormat()}} - {{$user->name}}</td>
+						   <td class="bless br" >{{ $sis->user->runFormat()}} - {{$sis->user->name}}</td>
                           
 						    @for($j = 1; $j <= $days; $j++) 
 
@@ -239,7 +239,7 @@
                                         
  
 					@endforeach
-                   	@if(count($staff)<1)
+                   	@if(count($staffInShift)<1)
                    		<td style="text-align:  center;" colspan="{{$days}}">SIN PERSONAL ASIGNADO</td>
                    	@endif
                 </tbody>

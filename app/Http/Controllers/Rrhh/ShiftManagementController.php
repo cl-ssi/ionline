@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\User;
 use App\Models\Rrhh\ShiftTypes;
+use App\Models\Rrhh\ShiftUser;
 use App\Rrhh\OrganizationalUnit;
 use App\Programmings\Professional;
 use Spatie\Permission\Models\Role;
@@ -55,10 +56,11 @@ class ShiftManagementController extends Controller
         $actuallyOrgUnit = $cargos->first();
         $actuallyShift=$sTypes->first();
         $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
+        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->get();
 
         // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
 
-        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift'));
+        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift'));
     }
  	public function indexfiltered(Request $r){
         
@@ -82,9 +84,10 @@ class ShiftManagementController extends Controller
          
         $actuallyOrgUnit =  OrganizationalUnit::find($r->orgunitFilter);
         $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
+        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->get();
         // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
 
-        return view('rrhh.shift_management.index', compact('cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift'));
+        return view('rrhh.shift_management.index', compact('cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift'));
 
  	}
  	public function shiftstypesindex()
