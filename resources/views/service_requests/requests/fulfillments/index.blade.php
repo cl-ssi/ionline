@@ -116,7 +116,7 @@
                 <i class="fas fa-file" style="color:#B9B9B9"></i></a>
 
               @else
-                <a href="{{ route('rrhh.service-request.certificate-pdf', $serviceRequest) }}"
+                
                   class="btn btn-outline-secondary btn-sm" target="_blank">
                 <span class="fas fa-file" aria-hidden="true"></span></a>
               @endif -->
