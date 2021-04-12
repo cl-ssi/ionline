@@ -17,16 +17,16 @@
 <h4 class="mt-3 mb-3">Información de sus contratos de honorarios</h4>
 
 @foreach ($serviceRequests as $serviceRequest)
-	@foreach($serviceRequest->fulfillments->reverse() as $fullfillment)
+	@foreach($serviceRequest->fulfillments->sortBy('payment_date') as $fullfillment)
 	
 		<div class="card mb-3">
 			<div class="card-header {{ ($fullfillment->payment_date)?'bg-success text-white':'' }}">
 				<h4 class="card-title">
 					Período: <span class="font-weight-normal">
 					@if($fullfillment->type == "Horas")
-						{{ optional($fullfillment->start_date)->format('Y') }} - {{ optional($fullfillment->start_date)->format('m') }}
+						{{ optional($fullfillment->start_date)->format('Y') }} - {{ optional($fullfillment->start_date)->format('m') }} @if($fullfillment->payment_date)<a href="#" data-toggle="collapse" data-target="#collapse{{$fullfillment->id}}"> <i class="fas fa-chevron-down"></i> </a>@endif
 					@else
-						{{ $fullfillment->year ?? '' }} - {{ $fullfillment->month ?? '' }}
+						{{ $fullfillment->year ?? '' }} - {{ $fullfillment->month ?? '' }} @if($fullfillment->payment_date)<a href="#" data-toggle="collapse" data-target="#collapse{{$fullfillment->id}}"> <i class="fas fa-chevron-down"></i> </a>@endif
 					@endif</span>
 				</h4>
 				<p class="card-text">
@@ -35,7 +35,7 @@
 					<strong>Jornada:</strong> {{ $serviceRequest->working_day_type ?? '' }}</strong>
 				</p>
 			</div>
-
+			<div id="collapse{{$fullfillment->id}}" class="collapse">
 			<ul class="list-group list-group-flush">
 				
 				<li class="list-group-item">
@@ -132,6 +132,7 @@
 					@endif
 				</li>
 			</ul>
+			</div>
 
 			<div class="card-footer text-muted">
 				<strong>Monto de boleta:</strong> {{ @money($fullfillment->total_to_pay) }}
