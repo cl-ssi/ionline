@@ -135,7 +135,15 @@ class ShiftManagementController extends Controller
         return redirect()->route('rrhh.shiftsTypes.index');
 
     } 
-    public function assignPersonal(Request $r){
-
+    public function assignStaff(Request $r){
+        $nShift = new ShiftUser;
+        $nShift->date_from = $r->dateFrom;
+        $nShift->date_up = $r->dateUp;
+        $nShift->asigned_by = Auth()->user()->id; 
+        $nShift->user_id = $r->slcStaff;
+        $nShift->shift_types_id = $r->shiftId;
+        $nShift->organizational_units_id = $r->orgUnitId;
+        $nShift->save();
+        echo "staff assigned to shift";
     }
 }
