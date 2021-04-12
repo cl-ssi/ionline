@@ -206,11 +206,11 @@
 				@php
 				$idModelModal = $fulfillment->id;
 				$routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal/".auth()->id();
-				$returnUrlSignModal = "rrhh.service-request.fulfillment.edit";
+                $routeCallbackSignModal = 'documents.callbackFirma';
 				@endphp
 				@include('documents.signatures.partials.sign_file')
 				<button type="button" data-toggle="modal" class="btn btn-outline-info"
-					data-target="#signPdfModal{{$idModelModal}}" title="Firmar"> 
+					data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
 				Firmar certificado <i class="fas fa-signature"></i>
 				</button>
 				@endif
@@ -426,13 +426,13 @@
 							@endcan
 						</div>
 					</div>
-	
+
 				</div>
 			</div>
 		</form>
 		@endcan
 
-		
+
 		@if($fulfillment->responsable_approver_id != NULL)
 		<h5>Visaciones</h5>
 		<table class="table table-sm small">

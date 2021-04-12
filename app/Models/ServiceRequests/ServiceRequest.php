@@ -156,6 +156,10 @@ class ServiceRequest extends Model implements Auditable
       return $cont;
     }
 
+    public function signedBudgetAvailabilityCert()
+    {
+        return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signed_budget_availability_cert_id');
+    }
 
     protected $table = 'doc_service_requests';
 

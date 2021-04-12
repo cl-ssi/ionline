@@ -77,9 +77,21 @@
 </div>
 
 <div class="form-row">
-  <div class="col">
-      @livewire('service-request.upload-resolution', ['serviceRequest' => $serviceRequest])
-  </div>
+    <div class="col-6">
+        @livewire('service-request.upload-resolution', ['serviceRequest' => $serviceRequest])
+    </div>
+
+    @can('be god')
+    <div class="col-6 text-right">
+        <a type="button" class="btn btn-outline-primary"
+           href="{{ route('rrhh.service-request.report.budget-availability',$serviceRequest->id) }}" target="_blank">Ver
+            C. Disp. Presupuestaria <i class="fas fa-file"></i> </a>
+
+        @livewire('service-request.sign-budget-availability', ['serviceRequest' => $serviceRequest])
+    </div>
+    @endcan
+
+
 </div>
 
 <hr>
