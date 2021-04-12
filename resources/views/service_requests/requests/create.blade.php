@@ -262,6 +262,25 @@
           <option value="Covid19-APS Médicos">Covid19-APS Médicos</option>
           <option value="Covid19 No Médicos">Covid19 No Médicos</option>
           <option value="Covid19 Médicos">Covid19 Médicos</option>
+
+					@if(Auth::user()->organizationalUnit->establishment_id == 1)
+						<option value="CONSULTORIO DE LLAMADA">CONSULTORIO DE LLAMADA</option>
+						<option value="33 MIL HORAS">33 MIL HORAS</option>
+						<option value="DFL">DFL</option>
+						<option value="TURNOS VACANTES">TURNOS VACANTES</option>
+						<option value="OTROS PROGRAMAS HETG">OTROS PROGRAMAS HETG</option>
+						<option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option>
+						<option value="PABELLON TARDE">PABELLON TARDE</option>
+						<option value="PABELLON GINE">PABELLON GINE</option>
+						<option value="TURNO DE RESIDENCIA">TURNO DE RESIDENCIA</option>
+					@else
+						<option value="PRAPS">PRAPS</option>
+						<option value="PESPI">PESPI</option>
+						<option value="CHILE CRECE CONTIGO">CHILE CRECE CONTIGO</option>
+						<option value="OTROS PROGRAMAS SSI">OTROS PROGRAMAS SSI</option>
+						<option value="LISTA ESPERA">LISTA ESPERA</option>
+						<option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option>
+					@endif
         </select>
 		</fieldset>
 
