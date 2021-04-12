@@ -52,7 +52,7 @@ class FulfillmentController extends Controller
                                                $subQuery->orwhere('user_id',$user->id);
                                                $subQuery->orWhereIn('ou_id',$array);
                                           })
-                                          ->orWhere('responsability_center_ou_id',$user->organizational_unit_id)
+                                          // ->orWhere('responsability_center_ou_id',$user->organizational_unit_id)
                                           // ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
                                           //      return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
                                           //   })
@@ -427,7 +427,7 @@ class FulfillmentController extends Controller
         // else {
         //   $signer = $fulfillment->serviceRequest->SignatureFlows->where('sign_position',2)->first()->user;
         // }
-        
+
         /* Siempre firma el que está logeado */
         $signer = auth()->user();
         $pdf = app('dompdf.wrapper');
