@@ -13,13 +13,13 @@
 					<a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank" title="Certificado">
 						Certificado firmado<i class="fas fa-signature"></i>
 					</a>
-                @else 
-					{{--modal firmador--}} 
-					@php $idModelModal = $serviceRequest->Fulfillments->first()->id; 
-					$routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal/".auth()->id(); 
-					$returnUrlSignModal = "rrhh.service-request.fulfillment.edit"; 
-					@endphp 
-					
+                @else
+					{{--modal firmador--}}
+					@php $idModelModal = $serviceRequest->Fulfillments->first()->id;
+					$routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal/".auth()->id();
+                    $routeCallbackSignModal = 'documents.callbackFirma';
+					@endphp
+
 					@include('documents.signatures.partials.sign_file')
 					<button type="button" data-toggle="modal" class="btn btn-outline-info" data-target="#signPdfModal{{$idModelModal}}" title="Firmar">Firmar certificado <i class="fas fa-signature"></i></button>
                 @endif
@@ -69,14 +69,14 @@
 							<button type="submit" class="btn btn-primary">Guardar</button>
 						</div>
 						<div class="col-12 col-md-7">
-							@if($serviceRequest->Fulfillments->first()->total_to_pay) 
-								@livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ]) 
-							@else 
+							@if($serviceRequest->Fulfillments->first()->total_to_pay)
+								@livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ])
+							@else
 								No se ha ingresado el "Total a pagar".
 							@endif
 						</div>
 					</div>
-					
+
 				</div>
 			</div>
 		</form>
@@ -126,7 +126,7 @@
 							<input class="form-check-input" type="checkbox"  name="assistance" value="1" {{ ( $serviceRequest->Fulfillments->first()->assistance== '1' ) ? 'checked="checked"' : null }} >
 							<label class="form-check-label" for="asistencia">Asistencia</label>
 						</div>
-						
+
 
 
 					</div>
@@ -176,9 +176,9 @@
 							<button type="submit" class="btn btn-primary">Guardar</button>
 						</div>
 						<div class="col-12 col-md-7">
-							@if($serviceRequest->Fulfillments->first()->total_to_pay) 
-								@livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ]) 
-							@else 
+							@if($serviceRequest->Fulfillments->first()->total_to_pay)
+								@livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ])
+							@else
 								No se ha ingresado el "Total a pagar".
 							@endif
 						</div>
@@ -221,9 +221,9 @@
 							<td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
 							<td>{{ $SignatureFlow->type }}</td>
 							<td>
-								@if($SignatureFlow->status === null) 
-								@elseif($SignatureFlow->status === 1) Aceptada 
-								@elseif($SignatureFlow->status === 0) Rechazada 
+								@if($SignatureFlow->status === null)
+								@elseif($SignatureFlow->status === 1) Aceptada
+								@elseif($SignatureFlow->status === 0) Rechazada
 								@endif
 							</td>
 						</tr>
@@ -232,7 +232,7 @@
 						<tr>
 							<td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
 						</tr>
-						@endif 
+						@endif
 					@endforeach
                 </tbody>
             </table>

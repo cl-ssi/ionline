@@ -362,7 +362,9 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
         Route::get('/aditional-data-list', [ServiceRequestController::class, 'aditional_data_list'])->name('aditional_data_list');
         Route::put('/update-aditional-data/{serviceRequest}', [ServiceRequestController::class, 'update_aditional_data'])->name('update_aditional_data');
-        
+
+        Route::get('/signed-budget-availability-pdf/{serviceRequest}', [ServiceRequestController::class, 'signedBudgetAvailabilityPDF'])->name('signed-budget_availability-pdf');
+        Route::get('/callback-firma-budget-availability/{message}/{modelId}/{signaturesFile?}', [ServiceRequestController::class, 'callbackFirmaBudgetAvailability'])->name('callbackFirmaBudgetAvailability');
 
 
         Route::prefix('fulfillment')->name('fulfillment.')->group(function () {
@@ -601,7 +603,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
     Route::get('/showPdf/{signaturesFile}', 'Documents\SignatureController@showPdf')->name('showPdf');
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('showPdfAnexo');
-    Route::get('/callback_firma/{message}/{modelId}/{returnUrl}/{signaturesFile?}', 'Documents\SignatureController@callbackFirma')->name('callbackFirma');
+    Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', 'Documents\SignatureController@callbackFirma')->name('callbackFirma');
 
 });
 Route::resource('documents', 'Documents\DocumentController')->middleware('auth');
