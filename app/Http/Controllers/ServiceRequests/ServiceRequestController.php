@@ -151,6 +151,25 @@ class ServiceRequestController extends Controller
     return view('service_requests.requests.transfer_requests', compact('serviceRequests', 'responsabilityCenters', 'users'));
   }
 
+  public function change_signature_flow_view(Request $request)
+  {
+    $users = User::orderBy('name', 'ASC')->get();
+    $serviceRequests = ServiceRequest::find($request->id);
+    return view('service_requests.requests.change_signature_flow',compact('users','request','serviceRequests'));
+  }
+
+  public function change_signature_flow(Request $request)
+  {
+    $signatureFlow = SignatureFlow::find($request->signature_flow_id);
+    $signatureFlow->responsable_id = $request->user_id;
+    $signatureFlow->save();
+
+    session()->flash('success', 'Se ha modificado el responsable del flujo de firmas.');
+    return redirect()->back();
+  }
+
+
+
   /**
    * Show the form for creating a new resource.
    *
@@ -1158,11 +1177,11 @@ class ServiceRequestController extends Controller
     return view('service_requests.requests.pending_requests', compact('array', 'hoja_ruta_falta_aprobar', 'fulfillments_missing', 'cumplimiento_falta_ingresar'));
   }
 
-  public function certificatePDF(ServiceRequest $serviceRequest)
-  {
-    $pdf = app('dompdf.wrapper');
-    $pdf->loadView('service_requests.requests.report_certificate', compact('serviceRequest'));
+  // public function certificatePDF(ServiceRequest $serviceRequest)
+  // {
+  //   $pdf = app('dompdf.wrapper');
+  //   $pdf->loadView('service_requests.requests.report_certificate', compact('serviceRequest'));
 
-    return $pdf->stream('mi-archivo.pdf');
-  }
+  //   return $pdf->stream('mi-archivo.pdf');
+  // }
 }
