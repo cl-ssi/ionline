@@ -234,25 +234,24 @@
                 <tbody>
                   
 					@foreach($staffInShift as $sis)
-					<tr>
-						
-						   <td class="bless br" >{{ $sis->user->runFormat()}} - {{$sis->user->name}}</td>
+						<tr>
+						   <td class="bless br" ><i class="fa fa-close" style="color:red"></i> {{ $sis->user->runFormat()}} - {{$sis->user->name}}  </td>
                           
 						    @for($j = 1; $j <= $days; $j++) 
-
-
-										<td  style="text-align:center;width:54px;height:54px">
-                                		      <div  class="bbd day" >L</div>
-										</td>
+						    	@php
+						    		$d = $sis->days->where('day',"2021-04-01");
+						    	@endphp
+								<td  style="text-align:center;width:54px;height:54px">
+                                	<div  class="bbd day" >{{$d[0]->working_day }}</div>
+								</td>
                             @endfor
-								</tr>	
-                                        
-                                        
- 
+						</tr>	
 					@endforeach
+                                     
                    	@if(count($staffInShift)<1)
                    		<td style="text-align:  center;" colspan="{{$days}}">SIN PERSONAL ASIGNADO</td>
                    	@endif
+
                 </tbody>
             </table>
     </div>
