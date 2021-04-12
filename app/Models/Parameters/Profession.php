@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class Profession extends Model
 {
     use HasFactory;
-    public $table = 'cfg_profession';
+    public $table = 'cfg_professions';
 
     protected $fillable = [
         'name', 'category'
