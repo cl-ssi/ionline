@@ -56,7 +56,7 @@
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('parameters.professions.index') }}">
-            <i class="fas fa-external-link-alt"></i> Professionales</a>
+            <i class="fas fa-external-link-alt"></i> Profesiones</a>
     </li>
 
 
