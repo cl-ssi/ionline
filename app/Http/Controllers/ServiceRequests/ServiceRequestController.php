@@ -210,16 +210,18 @@ class ServiceRequestController extends Controller
   public function store(Request $request)
   {
     //validation existence
-    $serviceRequest = ServiceRequest::where('user_id', $request->user_id)
-      ->where('program_contract_type', $request->program_contract_type)
-      ->where('start_date', $request->start_date)
-      ->where('end_date', $request->end_date)
-      ->where('responsability_center_ou_id', $request->responsability_center_ou_id)
-      ->where('working_day_type', $request->working_day_type)
-      ->get();
-    if ($serviceRequest->count() > 0) {
-      session()->flash('info', 'Ya existe una solicitud ingresada para este funcionario (Solicitud nro <b>' . $serviceRequest->first()->id . '</b> )');
-      return redirect()->back();
+    if ($request->type != "Suma alzada") {
+      $serviceRequest = ServiceRequest::where('user_id', $request->user_id)
+        ->where('program_contract_type', $request->program_contract_type)
+        ->where('start_date', $request->start_date)
+        ->where('end_date', $request->end_date)
+        ->where('responsability_center_ou_id', $request->responsability_center_ou_id)
+        ->where('working_day_type', $request->working_day_type)
+        ->get();
+      if ($serviceRequest->count() > 0) {
+        session()->flash('info', 'Ya existe una solicitud ingresada para este funcionario (Solicitud nro <b>' . $serviceRequest->first()->id . '</b> )');
+        return redirect()->back();
+      }
     }
 
 

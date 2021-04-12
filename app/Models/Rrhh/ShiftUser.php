@@ -25,4 +25,8 @@ class ShiftUser extends Model
 	{
     	return $this->belongsTo(ShiftTypes::class, 'shift_types_id');
 	}
+	public function days()
+	{
+		return $this->hasMany(ShiftUserDay::class, 'shift_user_id');
+	}
 }
