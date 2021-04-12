@@ -13,6 +13,10 @@ use App\Models\Rrhh\ShiftUserDay;
 use App\Rrhh\OrganizationalUnit;
 use App\Programmings\Professional;
 use Spatie\Permission\Models\Role;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
+
 
 class ShiftManagementController extends Controller
 {   
@@ -139,8 +143,8 @@ class ShiftManagementController extends Controller
     } 
     public function assignStaff(Request $r){
         $nShift = new ShiftUser;
-        $nShift->date_from = $r->dateFrom;
-        $nShift->date_up = $r->dateUp;
+        $nShift->date_from = $r->dateFromAssign;
+        $nShift->date_up = $r->dateUpAssign;
         $nShift->asigned_by = Auth()->user()->id; 
         $nShift->user_id = $r->slcStaff;
         $nShift->shift_types_id = $r->shiftId;
@@ -167,5 +171,16 @@ class ShiftManagementController extends Controller
                 $i=0;
             }
         }
+    }
+
+    public function downloadShiftInXls(Request $r){
+        
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'Hello World !');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('hello world.xlsx');
+
     }
 }
