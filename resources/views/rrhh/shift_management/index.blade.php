@@ -92,9 +92,10 @@
 		<form method="POST" class="form-horizontal shadow" action="{{ route('rrhh.shiftManag.index') }}">
 			@csrf
     		@method('POST')
+    		<!-- Menu de Filtros  -->
 			<div class="row"> 
 	
-    		<div class="col-lg-3">
+    			<div class="col-lg-3">
 				<div class="input-group">
             	
             		<label for="for_name">U. ORGANIZACIONAL </label>
@@ -105,8 +106,8 @@
             			@endforeach
             		</select>
         	  	</div>
-        	</div>
-    		<div class=" col-lg-2">
+        		</div>
+    			<div class=" col-lg-2">
 				<div class="input-group">
 
             		<label for="for_name" class="input-group-addon">TURNOS </label>
@@ -120,8 +121,8 @@
             		</select>
 
         	  	</div>
-        	</div>
-        	<div class="col-lg-2">
+        		</div>
+        		<div class="col-lg-2">
 				<div class="input-group">
             	
             		<label for="for_name">AÑO </label>
@@ -132,8 +133,8 @@
             			@endfor	
             		</select>
         	  	</div>
-        	</div>
-        	<div class="col-lg-2">
+        		</div>
+        		<div class="col-lg-2">
 				<div class="input-group">
             	
             		<label for="for_name">MES </label>
@@ -145,47 +146,57 @@
             			
             		</select>
         	  	</div>
-        	</div>
-        	<div class=" col-lg-1">
+        		</div>
+        		<div class=" col-lg-1">
 				<div class="input-group">
     				<button type="submit" class="btn btn-primary btn-xs">Filtrar</button>
     			</div>
-        	</div>
-        	<div class=" col-lg-2">
+        		</div>
+        		<div class=" col-lg-2">
 				<div class="input-group">
     				<button type="button" class="btn btn-outline-success btn-xs"><i class="fa fa-file-excel"></i></button>
     				<button type="button" class="btn btn-outline-danger btn-xs"><i class="fa fa-file-pdf"></i></button>
 
     			</div>
-    		</div>
-
-
+    			</div> 
 			</div>
+			</form>
+
+    		<!-- Select con personal de la unidad  -->
 			<br>
-			<div class="row"> 
-				
+		<form method="POST" class="form-horizontal shadow" action="{{ route('rrhh.shiftsTypes.assign') }}">
+			@csrf
+    		@method('POST')
+
+			
+			
+			<input hidden name="dateFrom" value="{{$actuallyYear}}-{{$actuallyMonth}}-01">
+			<input hidden name="dateUp" value="{{$actuallyYear}}-{{$actuallyMonth}}-{{$days}}">
+			<input hidden name="shiftId" value="{{$actuallyShift->id}}">
+			<input hidden name="orgUnitId" value="{{$actuallyOrgUnit->id}}">
+			<div class="row"> 	
 				<div class="col-lg-8 " style="margin-left: 10%">
 					<label style="text-align: center;"><b>Buscar Personal de la unidad "{{$actuallyOrgUnit->name}}"</b></label>
-	            		<select class="find-personal-input form-control" style="text-align: center;" >
+	            		<select class="find-personal-input form-control" name="slcStaff" style="text-align: center;" >
             				<option> - </option>
 							@foreach($staff as $user)
-            					<option value="{{$user->id}}">{{$user->name}} {{$user->fathers_family}} {{$user->mothers_family}}</option> 
+            					<option value="{{$user->id}}">{{$user->runFormat() }} - {{$user->name}} {{$user->fathers_family}} {{$user->mothers_family}}</option> 
 
 							@endforeach
             			</select>
         	  	</div>
-				<div class="col-lg-2 ">
+				<div class="col-lg-2 " style="margin-top:20px">
             			<label style="text-align: center;"></label>
 
-            			<button  type="button" class="btn btn-success"><i class="fas fa-user-plus"></i></button>
-
-        	  		</div>
-
-        		</div>
-
-			</div>
-
+            			<button   class="btn btn-success"><i class="fas fa-user-plus"></i></button>
+        	  	</div>
+        	</div>
 		</form>
+
+
+
+
+</div>
 
 
 	<!-- </div> -->
