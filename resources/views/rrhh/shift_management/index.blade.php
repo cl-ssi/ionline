@@ -80,7 +80,14 @@
     border-radius: 50%;
   
 }
-
+.only-icon {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
 </style>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <div id="shiftapp">
@@ -154,7 +161,7 @@
         		</div>
         		<div class=" col-lg-2">
 				<div class="input-group">
-    				<button type="button" class="btn btn-outline-success btn-xs"><i class="fa fa-file-excel"></i></button>
+    				<a href="{{route('rrhh.shiftsTypes.downloadShiftInXls')}}" class="btn btn-outline-success btn-xs"><i class="fa fa-file-excel"></i></a>
     				<button type="button" class="btn btn-outline-danger btn-xs"><i class="fa fa-file-pdf"></i></button>
 
     			</div>
@@ -174,9 +181,10 @@
 			<input hidden name="dateUp" value="{{$actuallyYear}}-{{$actuallyMonth}}-{{$days}}">
 			<input hidden name="shiftId" value="{{$actuallyShift->id}}">
 			<input hidden name="orgUnitId" value="{{$actuallyOrgUnit->id}}">
+            <h4>Agregar personal a turno</h4>
 			<div class="row"> 	
-				<div class="col-lg-8 " style="margin-left: 10%">
-					<label style="text-align: center;"><b>Buscar Personal de la unidad "{{$actuallyOrgUnit->name}}"</b></label>
+				<div class="col-lg-4 " style="margin-left: 10%">
+					<label style="text-align: center;">Personal de"{{$actuallyOrgUnit->name}}"</label>
 	            		<select class="find-personal-input form-control" name="slcStaff" style="text-align: center;" >
             				<option> - </option>
 							@foreach($staff as $user)
@@ -185,10 +193,19 @@
 							@endforeach
             			</select>
         	  	</div>
-				<div class="col-lg-2 " style="margin-top:20px">
-            			<label style="text-align: center;"></label>
+                <div class="col-lg-2 ">
+                    <label>De</label>
+                    <input type="date" class="form-control" name="dateFromAssign" value="{{$actuallyYear}}-{{$actuallyMonth}}-01">
+                </div>
 
-            			<button   class="btn btn-success"><i class="fas fa-user-plus"></i></button>
+                <div class="col-lg-2 ">
+                    <label>Hasta</label>
+                    <input type="date" class="form-control" name="dateUpAssign" value="{{$actuallyYear}}-{{$actuallyMonth}}-{{$days}}">
+                </div>
+				
+                <div class="col-lg-2 " style="margin-top:20px">
+            		<label style="text-align: center;"></label>
+            		<button   class="btn btn-success"><i class="fas fa-user-plus"></i></button>
         	  	</div>
         	</div>
 		</form>
@@ -235,7 +252,13 @@
                   
 					@foreach($staffInShift as $sis)
 						<tr>
-						   <td class="bless br" ><i class="fa fa-close" style="color:red"></i> {{ $sis->user->runFormat()}} - {{$sis->user->name}}  </td>
+						   <td class="bless br" >
+                            <form method="POST" action="{{ route('rrhh.shiftsTypes.deleteassign') }}">
+                                @csrf
+                                @method('POST')
+                                <input hidden name="idAssign" value="{{$sis->id}}">
+                            <button class="only-icon"><i class="fa fa-close" style="color:red"></i></button> {{ $sis->user->runFormat()}} - {{$sis->user->name}}  </td>
+                            </form>
                           
 						    @for($j = 1; $j <= $days; $j++) 
 
