@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCfgProfessionTable extends Migration
+class AddWorkingDayToRrhhShiftUserDaysTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateCfgProfessionTable extends Migration
      */
     public function up()
     {
-        Schema::create('cfg_professions', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('category')->nullable();;
-            $table->timestamps();
-            $table->softDeletes();
+        Schema::table('rrhh_shift_user_days', function (Blueprint $table) {
+            $table->string('working_day');
         });
     }
 
@@ -29,6 +25,8 @@ class CreateCfgProfessionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cfg_professions');
+        Schema::table('rrhh_shift_user_days', function (Blueprint $table) {
+            $table->dropColumn('working_day');  
+        });
     }
 }

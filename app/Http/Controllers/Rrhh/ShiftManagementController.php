@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Rrhh;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use App\User;
 use App\Models\Rrhh\ShiftTypes;
 use App\Models\Rrhh\ShiftUser;
+use App\Models\Rrhh\ShiftUserDay;
 use App\Rrhh\OrganizationalUnit;
 use App\Programmings\Professional;
 use Spatie\Permission\Models\Role;
@@ -145,5 +147,25 @@ class ShiftManagementController extends Controller
         $nShift->organizational_units_id = $r->orgUnitId;
         $nShift->save();
         echo "staff assigned to shift";
+
+        $ranges = CarbonPeriod::create($nShift->date_from, $nShift->date_up);
+        $actuallyShift = ShiftTypes::find( $r->shiftId );
+        $currentSeries =  explode(",", $actuallyShift->day_series); 
+        $i = 0;
+        foreach ($ranges as $date) {
+            $nShiftD = new ShiftUserDay;
+            $nShiftD->day = $date->format('Y-m-d');
+            $nShiftD->status = 1;//assgined
+            $nShiftD->working_day = $currentSeries[$i]; 
+            $nShiftD->commentary = "// Automatically added by the shift ".$nShift->id."//"; 
+            $nShiftD->shift_user_id = $nShift->id;
+            $nShiftD->save();
+            // echo $date->format('Y-m-d');
+            if( $i <  ( sizeof($currentSeries) - 1) ){
+                $i++;
+            }else{
+                $i=0;
+            }
+        }
     }
 }
