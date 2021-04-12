@@ -165,7 +165,15 @@
     		<!-- Select con personal de la unidad  -->
 			<br>
 		<form method="POST" class="form-horizontal shadow" action="{{ route('rrhh.shiftsTypes.assign') }}">
+			@csrf
+    		@method('POST')
 
+			
+			
+			<input hidden name="dateFrom" value="{{$actuallyYear}}-{{$actuallyMonth}}-01">
+			<input hidden name="dateUp" value="{{$actuallyYear}}-{{$actuallyMonth}}-{{$days}}">
+			<input hidden name="shiftId" value="{{$actuallyShift->id}}">
+			<input hidden name="orgUnitId" value="{{$actuallyOrgUnit->id}}">
 			<div class="row"> 	
 				<div class="col-lg-8 " style="margin-left: 10%">
 					<label style="text-align: center;"><b>Buscar Personal de la unidad "{{$actuallyOrgUnit->name}}"</b></label>
@@ -180,7 +188,7 @@
 				<div class="col-lg-2 " style="margin-top:20px">
             			<label style="text-align: center;"></label>
 
-            			<button  type="button" class="btn btn-success"><i class="fas fa-user-plus"></i></button>
+            			<button   class="btn btn-success"><i class="fas fa-user-plus"></i></button>
         	  	</div>
         	</div>
 		</form>
