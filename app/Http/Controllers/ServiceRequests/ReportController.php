@@ -276,7 +276,7 @@ class ReportController extends Controller
     //1 es el hospital
     if($serviceRequest->responsabilityCenter->establishment->id == 1)
     {
-      $authority = authority->getAuthorityFromDate(1,'2020-04-09','manager');
+      //$authority = authority->getAuthorityFromDate(1,'2020-04-09','manager');
     }
 
 
