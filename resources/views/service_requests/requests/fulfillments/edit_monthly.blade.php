@@ -278,18 +278,21 @@
 							<label for="for_total_paid">Total a pagar</label>
 							<input type="text" class="form-control" name="total_to_pay" value="{{$fulfillment->total_to_pay}}">
 						</fieldset>
-						<!-- <div class="form-check form-check-inline">
-							<input class="form-check-input" type="checkbox" id="licencias" value="licencias">
-							<label class="form-check-label" for="licencias">Licencias</label>
+						<div class="form-check form-check-inline">
+							<input type="hidden" name="illness_leave" value="0">
+							<input class="form-check-input" type="checkbox" name="illness_leave"  value="1" {{ ( $fulfillment->illness_leave== '1' ) ? 'checked="checked"' : null }} >
+							<label class="form-check-label" for="for_illness_leave">Licencias</label>
 						</div>
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="checkbox" id="permisos" value="permisos">
+							<input type="hidden" name="leave_of_absence" value="0">
+							<input class="form-check-input" type="checkbox" id="permisos" name="leave_of_absence" value="1" {{ ( $fulfillment->leave_of_absence== '1' ) ? 'checked="checked"' : null }} >
 							<label class="form-check-label" for="permisos">Permisos</label>
 						</div>
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="checkbox" id="asistencia" value="asistencia">
+							<input type="hidden" name="assistance" value="0">
+							<input class="form-check-input" type="checkbox"  name="assistance" value="1" {{ ( $fulfillment->assistance== '1' ) ? 'checked="checked"' : null }} >
 							<label class="form-check-label" for="asistencia">Asistencia</label>
-						</div> -->
+						</div>
 					</div>
 
 					<div class="form-row">
