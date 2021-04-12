@@ -81,11 +81,11 @@
         @livewire('service-request.upload-resolution', ['serviceRequest' => $serviceRequest])
     </div>
 
-    @can('be god')
+    @can('Service Request: fulfillments finance')
     <div class="col-6 text-right">
-        <a type="button" class="btn btn-outline-primary"
+        <a type="button" class="btn btn-outline-primary" title="Ver Certificado de Disponibilidad Presupuestaria"
            href="{{ route('rrhh.service-request.report.budget-availability',$serviceRequest->id) }}" target="_blank">Ver
-            C. Disp. Presupuestaria <i class="fas fa-file"></i> </a>
+            CDP <i class="fas fa-file"></i> </a>
 
         @livewire('service-request.sign-budget-availability', ['serviceRequest' => $serviceRequest])
     </div>
