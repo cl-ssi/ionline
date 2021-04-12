@@ -396,7 +396,7 @@
           <option value="HORA EXTRA" @if($serviceRequest->working_day_type == 'HORA EXTRA') selected @endif>HORA EXTRA</option>
 					<option value="TURNO EXTRA" @if($serviceRequest->working_day_type == 'TURNO EXTRA') selected @endif>TURNO EXTRA</option>
 
-          <option value="TURNO DE LLAMADO" @if($serviceRequest->working_day_type == 'TURNO DE LLAMADO') selected @endif>TURNO DE LLAMADO</option>
+          <option value="TURNO DE REEMPLAZO" @if($serviceRequest->working_day_type == 'TURNO DE REEMPLAZO') selected @endif>TURNO DE REEMPLAZO</option>
 
           <option value="OTRO" @if($serviceRequest->working_day_type == 'OTRO') selected @endif >OTRO</option>
         </select>
