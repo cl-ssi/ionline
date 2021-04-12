@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ShiftUserDay extends Model
 {
     use HasFactory;
-    protected $fillable = [ 'day' ,'commentary' ,'status','shift_user_id' ];
+    protected $fillable = [ 'day' ,'commentary' ,'status','shift_user_id','working_day' ];
 
 	protected $table = 'rrhh_shift_user_days';
 	
