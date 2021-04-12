@@ -190,14 +190,13 @@
 
 		<fieldset class="form-group col">
 		    <label for="for_contractual_condition">Calidad Contractual</label>
-        <select name="contractual_condition" class="form-control" id="contractual_condition">
+        <select name="contractual_condition" class="form-control" id="contractual_condition" disabled>
           <option value=""></option>
           <option value="SUPLENTE" >SUPLENTE</option>
           <option value="CONTRATA" >CONTRATA</option>
           <option value="TITULAR" >TITULAR</option>
-          <option value="HONORARIO COVID" >HONORARIO COVID</option>
-
-					<option value="SUMA ALZADA" >SUMA ALZADA</option>
+          <!-- <option value="HONORARIO COVID" >HONORARIO COVID</option>
+					<option value="SUMA ALZADA" >SUMA ALZADA</option> -->
         </select>
 		</fieldset>
 
@@ -488,6 +487,15 @@
 			if (this.value == "HORA MÉDICA") {
 				$('#rrhh_team').val('Residencia Médica');
 				$('#rrhh_team').selectpicker('refresh');
+			}
+			if (this.value == "DIURNO PASADO A TURNO") {
+				if ($('#program_contract_type').val() == "Horas") {
+					$('#contractual_condition').removeAttr('disabled');
+				}else{
+					$('#contractual_condition').attr('disabled', 'disabled');
+				}
+			}else{
+				$('#contractual_condition').attr('disabled', 'disabled');
 			}
 		});
 
