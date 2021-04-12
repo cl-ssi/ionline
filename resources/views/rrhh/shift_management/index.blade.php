@@ -58,14 +58,14 @@
     border-top: none;
     border-left: none;
     border-right: none;
-    border-bottom: solid 1px #454d55;
+ 
 }
 
 .bbn {
     border-top: none !important;
     border-left: none;
     border-right: solid 1px #454d55;
-    border-bottom: solid 1px #454d55;
+   
 }
 .bg-red {background-color: #ff5133;}
 .bg-green {background-color: #00e63d;}
@@ -238,13 +238,19 @@
 						   <td class="bless br" ><i class="fa fa-close" style="color:red"></i> {{ $sis->user->runFormat()}} - {{$sis->user->name}}  </td>
                           
 						    @for($j = 1; $j <= $days; $j++) 
+
 						    	@php
-						    		$d = $sis->days->where('day',"2021-04-01");
+						    		$date = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$j);
+						    		$date =explode(" ",$date);
+
+						    		$d = $sis->days->where('day',$date[0]);
 						    	@endphp
-								<td  style="text-align:center;width:54px;height:54px">
-                                	<div  class="bbd day" >{{$d[0]->working_day }}</div>
-								</td>
+                            <td  style="text-align:center;width:54px;height:54px">
+                                <div  class="bbd day" >{{ ( isset($d) && count($d) )? ( ($d->first()->working_day!="F")?$d->first()->working_day:"-" ) :"n/a" }}</div>
+                            </td>
                             @endfor
+                           
+                            
 						</tr>	
 					@endforeach
                                      
