@@ -318,8 +318,8 @@
           <option value="SUPLENTE" @if($serviceRequest->contractual_condition == 'SUPLENTE') selected @endif >SUPLENTE</option>
           <option value="CONTRATA" @if($serviceRequest->contractual_condition == 'CONTRATA') selected @endif>CONTRATA</option>
           <option value="TITULAR" @if($serviceRequest->contractual_condition == 'TITULAR') selected @endif>TITULAR</option>
-          <option value="HONORARIO COVID" @if($serviceRequest->contractual_condition == 'HONORARIO COVID') selected @endif>HONORARIO COVID</option>
-          <option value="SUMA ALZADA" @if($serviceRequest->contractual_condition == 'SUMA ALZADA') selected @endif>SUMA ALZADA</option>
+          <!-- <option value="HONORARIO COVID" @if($serviceRequest->contractual_condition == 'HONORARIO COVID') selected @endif>HONORARIO COVID</option>
+          <option value="SUMA ALZADA" @if($serviceRequest->contractual_condition == 'SUMA ALZADA') selected @endif>SUMA ALZADA</option> -->
         </select>
 		</fieldset>
 
