@@ -93,6 +93,14 @@
             </a>
             @endcan
 
+            @canany(['Service Request: fulfillments rrhh'])
+            <a class="dropdown-item {{ active('rrhh.service-request.report.compliance') }}"
+                href="{{ route('rrhh.service-request.report.compliance') }}">
+                <i class="fas fa-flag-checkered"></i> Reporte de cumplimientos
+            </a>
+            @endcan
+            
+
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.pay-rejected') }}"
                 href="{{ route('rrhh.service-request.report.pay-rejected') }}">

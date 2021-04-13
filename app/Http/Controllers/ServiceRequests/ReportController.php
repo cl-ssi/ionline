@@ -287,4 +287,15 @@ class ReportController extends Controller
     return view('service_requests.reports.budget_availability', compact('serviceRequest'));
   }
 
+
+  public function compliance(Request $request)
+  {
+
+    
+      $fulfillments = Fulfillment::Search($request)->paginate(100);  
+    
+
+    return view('service_requests.reports.compliance', compact('fulfillments','request'));
+  }
+
 }
