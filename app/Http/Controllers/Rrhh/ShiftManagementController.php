@@ -50,7 +50,6 @@ class ShiftManagementController extends Controller
     	// echo "Shift Management";
         $months = (object) $this->months;
 
-     
 
     	$days = Carbon::now()->daysInMonth;
         $actuallyMonth = Carbon::now()->format('m');
@@ -62,7 +61,21 @@ class ShiftManagementController extends Controller
         $actuallyOrgUnit = $cargos->first();
         $actuallyShift=$sTypes->first();
         $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
+        
         $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->get();
+
+        Session::put('users',$users);
+        Session::put('cargos',$cargos);
+        Session::put('sTypes',$sTypes);
+        Session::put('days',$days);
+        Session::put('actuallyMonth',$actuallyMonth);
+        Session::put('actuallyDay',$actuallyDay);
+        Session::put('actuallyYear',$actuallyYear);
+        Session::put('months',$months);
+        Session::put('actuallyOrgUnit',$actuallyOrgUnit);
+        Session::put('staff',$staff);
+        Session::put('actuallyShift',$actuallyShift);
+        Session::put('staffInShift',$staffInShift);
 
         // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
 
@@ -92,6 +105,18 @@ class ShiftManagementController extends Controller
         $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
         $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->get();
         // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
+        Session::put('users',$users);
+        Session::put('cargos',$cargos);
+        Session::put('sTypes',$sTypes);
+        Session::put('days',$days);
+        Session::put('actuallyMonth',$actuallyMonth);
+        Session::put('actuallyDay',$actuallyDay);
+        Session::put('actuallyYear',$actuallyYear);
+        Session::put('months',$months);
+        Session::put('actuallyOrgUnit',$actuallyOrgUnit);
+        Session::put('staff',$staff);
+        Session::put('actuallyShift',$actuallyShift);
+        Session::put('staffInShift',$staffInShift);
 
         return view('rrhh.shift_management.index', compact('cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift'));
 
@@ -174,6 +199,21 @@ class ShiftManagementController extends Controller
     }
 
     public function downloadShiftInXls(Request $r){
+
+
+        $users = Session::get('users',$users);
+        $cargos = Session::get('cargos',$cargos);
+        $sTypes = Session::get('sTypes',$sTypes);
+        $days = Session::get('days',$days);
+        $actuallyMonth = Session::get('actuallyMonth',$actuallyMonth);
+        $actuallyDay = Session::get('actuallyDay',$actuallyDay);
+        $actuallyYear = Session::get('actuallyYear',$actuallyYear);
+        $months = Session::get('months',$months);
+        $actuallyOrgUnit = Session::get('actuallyOrgUnit',$actuallyOrgUnit);
+        $staff = Session::get('staff',$staff);
+        $actuallyShift = Session::get('actuallyShift',$actuallyShift);
+        $staffInShift = Session::get('staffInShift',$staffInShift);
+        Session::flush();
         
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
