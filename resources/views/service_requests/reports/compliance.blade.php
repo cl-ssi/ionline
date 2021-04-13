@@ -10,9 +10,9 @@
 
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-2">
-            <label for="for_rut">Rut</label>
+            <label for="for_rut">Rut/Nombre</label>
             <input name="rut" class="form-control" 
-                placeholder="sin digito verificador ni puntos ej: 18006504" @if($request->input('rut')) value="{{$request->input('rut')}}" @endif >
+                placeholder="rut, nombre o apellido" @if($request->input('rut')) value="{{$request->input('rut')}}" @endif  aucomplete="off">
             </input>
         </fieldset>
 
