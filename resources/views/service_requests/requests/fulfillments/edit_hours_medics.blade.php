@@ -215,7 +215,7 @@
 						@php
 						$idModelModal = $fulfillment->id;
 						$routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal/".auth()->id();
-						$returnUrlSignModal = "rrhh.service-request.fulfillment.edit";
+                        $routeCallbackSignModal = 'documents.callbackFirma';
 						@endphp
 
 						@include('documents.signatures.partials.sign_file')

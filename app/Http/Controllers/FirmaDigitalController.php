@@ -66,9 +66,9 @@ class FirmaDigitalController extends Controller
 
         $modo = self::modoAtendidoProduccion;
         $otp = $request->otp;
-        $returnUrl = $request->return_url;
         $modelId = $request->model_id;
         $signatureType = 'firmante';
+        $callbackRoute = $request->callback_route;
 
         $id=DB::select("SHOW TABLE STATUS LIKE 'doc_signatures_files'");
         $docId=$id[0]->Auto_increment;
@@ -77,9 +77,8 @@ class FirmaDigitalController extends Controller
         $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $signatureType, $docId, $verificationCode);
 
         if (!$responseArray['statusOk']) {
-            return redirect()->route('documents.callbackFirma', ['message' => "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}",
-                'modelId' => $modelId,
-                'returnUrl' => $returnUrl]);
+            return redirect()->route($callbackRoute, ['message' => "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}",
+                'modelId' => $modelId]);
         }
 
         $signaturesFile = SignaturesFile::create();
@@ -89,9 +88,8 @@ class FirmaDigitalController extends Controller
         $signaturesFile->verification_code = $verificationCode;
         $signaturesFile->save();
 
-        return redirect()->route('documents.callbackFirma', ['message' => "El documento $signaturesFile->id se ha firmado correctamente.",
+        return redirect()->route($callbackRoute, ['message' => "El documento $signaturesFile->id se ha firmado correctamente.",
             'modelId' => $modelId,
-            'returnUrl' => $returnUrl,
             'signaturesFile' => $signaturesFile->id]);
     }
 

@@ -13,7 +13,7 @@ class CreateCfgProfessionTable extends Migration
      */
     public function up()
     {
-        Schema::create('cfg_profession', function (Blueprint $table) {
+        Schema::create('cfg_professions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('category')->nullable();;
@@ -29,6 +29,6 @@ class CreateCfgProfessionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cfg_profession');
+        Schema::dropIfExists('cfg_professions');
     }
 }

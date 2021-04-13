@@ -31,6 +31,7 @@ class ReportController extends Controller
       //                });
       //   })
       ->where('has_invoice_file', 1)
+      ->whereNotNull('signatures_file_id')
       ->whereIn('type', ['Mensual', 'Parcial'])
       ->where('responsable_approbation', 1)
       ->where('rrhh_approbation', 1)
@@ -52,6 +53,7 @@ class ReportController extends Controller
       //                });
       //   })
       ->where('has_invoice_file', 1)
+      ->whereNotNull('signatures_file_id')
       ->whereNotIn('type', ['Mensual', 'Parcial'])
       ->whereNull('total_paid')
       ->get();
@@ -115,6 +117,7 @@ class ReportController extends Controller
       //                });
       //   })
       ->where('has_invoice_file', 1)
+      ->whereNotNull('signatures_file_id')
       ->where('payment_ready', 1)
       ->whereNull('total_paid')
       ->whereIn('type', ['Mensual', 'Parcial'])
@@ -137,6 +140,7 @@ class ReportController extends Controller
       //                });
       //   })
       ->where('has_invoice_file', 1)
+      ->whereNotNull('signatures_file_id')
       ->where('payment_ready', 1)
       ->whereNull('total_paid')
       ->whereNotIn('type', ['Mensual', 'Parcial'])
@@ -281,6 +285,17 @@ class ReportController extends Controller
 
 
     return view('service_requests.reports.budget_availability', compact('serviceRequest'));
+  }
+
+
+  public function compliance(Request $request)
+  {
+
+    
+      $fulfillments = Fulfillment::Search($request)->paginate(100);  
+    
+
+    return view('service_requests.reports.compliance', compact('fulfillments','request'));
   }
 
 }

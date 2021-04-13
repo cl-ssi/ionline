@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\ServiceRequests;
 
+use App\Models\Documents\SignaturesFile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
@@ -1186,4 +1187,30 @@ class ServiceRequestController extends Controller
 
   //   return $pdf->stream('mi-archivo.pdf');
   // }
+
+    public function callbackFirmaBudgetAvailability($message, $modelId, SignaturesFile $signaturesFile = null)
+    {
+        $serviceRequest = ServiceRequest::find($modelId);
+
+        if (!$signaturesFile) {
+            session()->flash('danger', $message);
+            return redirect()->route('rrhh.service-request.fulfillment.edit', $serviceRequest->id);
+        }
+
+        $serviceRequest->signed_budget_availability_cert_id = $signaturesFile->id;
+        $serviceRequest->save();
+        // header('Content-Type: application/pdf');
+        // echo base64_decode($signaturesFile->signed_file);
+        session()->flash('success', $message);
+        return redirect()->route('rrhh.service-request.fulfillment.edit', $serviceRequest->id);
+    }
+
+    public function signedBudgetAvailabilityPDF(ServiceRequest $serviceRequest)
+    {
+        header('Content-Type: application/pdf');
+        if (isset($serviceRequest->signedBudgetAvailabilityCert)) {
+            echo base64_decode($serviceRequest->signedBudgetAvailabilityCert->signed_file);
+        }
+    }
+
 }
