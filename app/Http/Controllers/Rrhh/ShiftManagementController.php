@@ -178,9 +178,12 @@ class ShiftManagementController extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', 'Hello World !');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="Reportecitas.xlsx"');
+        header('Cache-Control: max-age=0');
 
         $writer = new Xlsx($spreadsheet);
-        $writer->save('hello world.xlsx');
+        $writer->save('php://output');
 
     }
 }
