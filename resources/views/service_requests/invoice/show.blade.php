@@ -35,7 +35,9 @@
 					<strong>Jornada:</strong> {{ $serviceRequest->working_day_type ?? '' }}</strong>
 				</p>
 			</div>
+			@if($fullfillment->payment_date)
 			<div id="collapse{{$fullfillment->id}}" class="collapse">
+			@endif
 			<ul class="list-group list-group-flush">
 				
 				<li class="list-group-item">
@@ -132,7 +134,9 @@
 					@endif
 				</li>
 			</ul>
+			@if($fullfillment->payment_date)
 			</div>
+			@endif
 
 			<div class="card-footer text-muted">
 				<strong>Monto de boleta:</strong> {{ @money($fullfillment->total_to_pay) }}
