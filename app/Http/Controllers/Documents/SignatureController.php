@@ -263,13 +263,13 @@ class SignatureController extends Controller
         }
     }
 
-    public function callbackFirma($message, $modelId, $returnUrl, SignaturesFile $signaturesFile = null)
+    public function callbackFirma($message, $modelId, SignaturesFile $signaturesFile = null)
     {
         $fulfillment = Fulfillment::find($modelId);
 
         if (!$signaturesFile) {
             session()->flash('danger', $message);
-            return redirect()->route($returnUrl, $fulfillment->serviceRequest->id);
+            return redirect()->route('rrhh.service-request.fulfillment.edit', $fulfillment->serviceRequest->id);
         }
 
         $fulfillment->signatures_file_id = $signaturesFile->id;
@@ -277,6 +277,6 @@ class SignatureController extends Controller
         // header('Content-Type: application/pdf');
         // echo base64_decode($signaturesFile->signed_file);
         session()->flash('success', $message);
-        return redirect()->route($returnUrl, $fulfillment->serviceRequest->id);
+        return redirect()->route('rrhh.service-request.fulfillment.edit', $fulfillment->serviceRequest->id);
     }
 }

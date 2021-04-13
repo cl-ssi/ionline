@@ -24,13 +24,14 @@ class ProgramApsController extends Controller
     public function show($year, $commune_id)
     {
         if(!in_array($commune_id, range(0,8)) OR !preg_match('/^\d+$/', $commune_id)) abort(404);
-        $program_aps = ProgramAps::with('tracers')->where('year', $year)->firstOrFail();
-        $this->loadValues($year, $commune_id, $program_aps);
+        $program_aps = ProgramAps::where('year', $year)->firstOrFail();
+        $program_aps->load('tracers.values');
+        $this->loadValuesWithRemSource($year, $commune_id, $program_aps);
         // return $program_aps;
         return view('indicators.programming_aps.show', compact('program_aps', 'commune_id'));
     }
 
-    private function loadValues($year, $commune_id, $program_aps)
+    private function loadValuesWithRemSource($year, $commune_id, $program_aps)
     {
         $communes = array(1 => 'COLCHANE', 2 => 'HUARA', 3 => 'CAMIÑA', 4 => 'POZO ALMONTE', 5 => 'PICA', 6 => 'IQUIQUE', 7 => 'ALTO HOSPICIO', 8 => 'HECTOR REYNO');
         $establishments_filter = collect();

@@ -97,7 +97,7 @@
           </td>
           <td class="small">
             @if($fulfillment->has_invoice_file)
-              <a href="{{route('rrhh.service-request.fulfillment.download_invoice', $fulfillment)}}"
+              <a href="{{route('rrhh.service-request.fulfillment.download_invoice', [$fulfillment, time()])}}"
                  target="_blank" title="Boleta" >
                  <i class="fas fa-paperclip"></i>
               </a>

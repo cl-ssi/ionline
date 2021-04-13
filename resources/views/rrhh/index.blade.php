@@ -14,7 +14,7 @@
 
 <form class="form-inline float-right" method="GET" action="{{ route('rrhh.users.index') }}">
 	<div class="input-group mb-3">
-		<input type="text" name="name" class="form-control" placeholder="Nombre o Apellido" autofocus>
+		<input type="text" name="name" class="form-control" placeholder="Nombres, Apellidos o RUN sin DV" autofocus>
 		<div class="input-group-append">
 			<button class="btn btn-outline-secondary" type="submit">
 				<i class="fas fa-search" aria-hidden="true"></i>

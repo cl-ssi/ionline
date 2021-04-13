@@ -9,7 +9,7 @@ class Indicator extends Model
     protected $fillable = ['number', 'name', 'weighting_by_section', 'numerator',  
                            'numerator_source','denominator', 'denominator_source',
                            'numerator_cods','numerator_cols','denominator_cods',
-                           'denominator_cols','goal','weighting'];
+                           'denominator_cols','goal','weighting', 'establishment_cods'];
 
     public function indicatorable()
     {

@@ -43,6 +43,15 @@
     </li>
     @endcan
 
+    @canany(['Service Request: change signature flow'])
+    <li class="nav-item">
+        <a class="nav-link {{ active('rrhh.service-request.change_signature_flow_view') }}"
+            href="{{ route('rrhh.service-request.change_signature_flow_view') }}">
+            <i class="fas fa-sign-in-alt"></i> Modificar flujo de firmas
+        </a>
+    </li>
+    @endcan
+
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle {{ active('rrhh.service-request.report.*') }}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-archive"></i> Reportes
@@ -83,6 +92,14 @@
                 <i class="fas fa-piggy-bank"></i> Reporte pagados
             </a>
             @endcan
+
+            @canany(['Service Request: fulfillments rrhh','Service Request: fulfillments finance'])            
+            <a class="dropdown-item {{ active('rrhh.service-request.report.compliance') }}"
+                href="{{ route('rrhh.service-request.report.compliance') }}">
+                <i class="fas fa-flag-checkered"></i> Reporte de cumplimientos
+            </a>
+            @endcan
+            
 
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.pay-rejected') }}"

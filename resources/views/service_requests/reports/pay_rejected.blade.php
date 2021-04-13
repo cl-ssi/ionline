@@ -29,9 +29,13 @@
       <tr>
           <td>{{ ++$key }}</td>
           <td>
+            @if($fulfillment->serviceRequest != null)
                 <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}" title="Editar">
                     {{$fulfillment->serviceRequest->id}}
-      			</a>
+      			    </a>
+            @else
+              
+            @endif
             </td>
           <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
           <td>
@@ -63,7 +67,7 @@
           </td>
           <td>
             @if($fulfillment->has_invoice_file)
-              <a href="{{route('rrhh.service-request.fulfillment.download_invoice', $fulfillment)}}"
+              <a href="{{route('rrhh.service-request.fulfillment.download_invoice', [$fulfillment, time()])}}"
                  target="_blank" title="Boleta" >
                  <i class="fas fa-paperclip"></i>
               </a>
