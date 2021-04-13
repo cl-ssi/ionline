@@ -318,9 +318,9 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
 <p class="justify">
     <strong>SEXTO:</strong>
     @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-      El Hospital “Dr. Ernesto Torres Galdames” de Iquique podrá poner término anticipadamente a este contrato mediante razones fundadas, previo aviso por escrito al prestador con 48 horas hábiles de anticipación.
+      El Hospital “Dr. Ernesto Torres Galdames” de Iquique podrá poner término anticipadamente a este contrato mediante razones fundadas, previo aviso por escrito al prestador con 48 horas de anticipación.
     @else
-      La Dirección del Servicio de Salud Iquique podrá poner término anticipadamente a este contrato mediante razones fundadas, previo aviso por escrito al prestador con 48 horas hábiles de anticipación.
+      La Dirección del Servicio de Salud Iquique podrá poner término anticipadamente a este contrato mediante razones fundadas, previo aviso por escrito al prestador con 48 horas de anticipación.
     @endif
   </p>
 
@@ -424,7 +424,28 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
 
 @if($ServiceRequest->program_contract_type == "Mensual")
   <p class="justify">
-      <strong>DÉCIMO:</strong> El prestador cumplirá una jornada de turnos rotativos, en cuarto turno, un largo de 08:00 a 20:00 hrs., una noche de 20:00 a 08:00 hrs. y dos días libres. Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador, se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R., los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente, como también los días de inasistencia, los cuales deberán quedar informados en el respectivo informe de prestaciones mensual. Los reiterados atrasos e inasistencias deberán ser amonestados.
+      <strong>DÉCIMO:</strong> El prestador cumplirá una jornada 
+      
+      @switch($ServiceRequest->working_day_type)
+        @case('DIURNO')
+          DIURNA de lunes a viernes de 08:00 a 16:48 hrs.
+          @break
+        @case('TERCER TURNO')
+        @case('TERCER TURNO - MODIFICADO')
+          de turnos rotativos, en TERCER TURNO, 2 largo de 08:00 a 20:00 hrs, 2 noche de 20:00 a 08:00 hrs y 2 días libres.
+          @break
+        @case('CUARTO TURNO')
+        @case('CUARTO TURNO - MODIFICADO')
+          de turnos rotativos, en CUARTO TURNO, 1 largo de 08:00 a 20:00 hrs, 1 noche de 20:00 a 08:00 hrs y 2 días libres.
+          @break
+      @endswitch
+
+      Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador, 
+      se indica con el fin de verificar la realización de éstos, 
+      sin que altere la naturaleza jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R., 
+      los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente, 
+      como también los días de inasistencia, los cuales deberán quedar informados en el respectivo 
+      informe de prestaciones mensual. Los reiterados atrasos e inasistencias deberán ser amonestados.
   </p>
 @elseif($ServiceRequest->program_contract_type == "Horas")
   @if($ServiceRequest->estate == "Profesional Médico")

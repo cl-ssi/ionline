@@ -10,7 +10,6 @@
             </div>
             <form method="POST" class="form-horizontal"
                   action="{{route('signPdf')}}"
-                  target="_blank"
                   enctype="multipart/form-data">
                 <div class="modal-body">
                 @csrf <!-- input hidden contra ataques CSRF -->
@@ -22,8 +21,8 @@
                                    name="otp" maxlength="6" autocomplete="off" required/>
 {{--                            <input type="hidden" name="file_path" value="modulo1/1.pdf">--}}
                             <input type="hidden" name="route" value={{$routePdfSignModal}}>
-                            <input type="hidden" name="return_url" value={{$returnUrlSignModal}}>
                             <input type="hidden" name="model_id" value={{$idModelModal}}>
+                            <input type="hidden" name="callback_route" value={{$routeCallbackSignModal}}>
                         </div>
                     </div>
                 </div>

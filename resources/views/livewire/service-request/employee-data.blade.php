@@ -54,7 +54,7 @@
 
     <fieldset class="form-group col-3">
         <label for="for_phone_number">Número telefónico</label>
-        <input type="text" class="form-control" id="for_phone_number" name="phone_number"
+        <input type="text" class="form-control" id="for_phone_number" name="phone_number" required
           @if($user) value="{{$user->phone_number}}" @endif>
     </fieldset>
 
