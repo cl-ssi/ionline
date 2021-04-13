@@ -411,6 +411,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/with-resolution-file', [ReportController::class, 'indexWithResolutionFile'])->name('with-resolution-file');
             Route::get('/without-resolution-file', [ReportController::class, 'indexWithoutResolutionFile'])->name('without-resolution-file');
             Route::get('/budget-availability/{serviceRequest}', [ReportController::class, 'budgetAvailability'])->name('budget-availability');
+            Route::get('/compliance', [ReportController::class, 'compliance'])->name('compliance');
 
             //pasar a reports
             Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');

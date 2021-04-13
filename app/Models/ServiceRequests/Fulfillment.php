@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Request;
 
 class Fulfillment extends Model implements Auditable
 {
@@ -18,72 +19,123 @@ class Fulfillment extends Model implements Auditable
    * @var array
    */
   protected $fillable = [
-      'id', 'service_request_id', 'year', 'month', 'type', 'start_date', 'end_date', 'observation',
-      'responsable_approbation','responsable_approbation_date','responsable_approver_id',
-      'rrhh_approbation','rrhh_approbation_date','rrhh_approver_id','payment_ready','has_invoice_file',
-      'finances_approbation','finances_approbation_date','finances_approver_id', 'invoice_path', 'user_id',
-      'bill_number','total_hours_to_pay','total_to_pay','total_hours_paid','total_paid','payment_date','contable_month',
-     'payment_rejection_detail','illness_leave','leave_of_absence','assistance'
+    'id', 'service_request_id', 'year', 'month', 'type', 'start_date', 'end_date', 'observation',
+    'responsable_approbation', 'responsable_approbation_date', 'responsable_approver_id',
+    'rrhh_approbation', 'rrhh_approbation_date', 'rrhh_approver_id', 'payment_ready', 'has_invoice_file',
+    'finances_approbation', 'finances_approbation_date', 'finances_approver_id', 'invoice_path', 'user_id',
+    'bill_number', 'total_hours_to_pay', 'total_to_pay', 'total_hours_paid', 'total_paid', 'payment_date', 'contable_month',
+    'payment_rejection_detail', 'illness_leave', 'leave_of_absence', 'assistance'
   ];
 
-  public function MonthOfPayment() {
+  public function MonthOfPayment()
+  {
     if ($this->contable_month) {
       if ($this->contable_month == 1) {
         return "Enero";
-      }elseif ($this->contable_month == 2) {
+      } elseif ($this->contable_month == 2) {
         return "Febrero";
-      }elseif ($this->contable_month == 3) {
+      } elseif ($this->contable_month == 3) {
         return "Marzo";
-      }elseif ($this->contable_month == 4) {
+      } elseif ($this->contable_month == 4) {
         return "Abril";
-      }elseif ($this->contable_month == 5) {
+      } elseif ($this->contable_month == 5) {
         return "Mayo";
-      }elseif ($this->contable_month == 6) {
+      } elseif ($this->contable_month == 6) {
         return "Junio";
-      }elseif ($this->contable_month == 7) {
+      } elseif ($this->contable_month == 7) {
         return "Julio";
-      }elseif ($this->contable_month == 8) {
+      } elseif ($this->contable_month == 8) {
         return "Agosto";
-      }elseif ($this->contable_month == 9) {
+      } elseif ($this->contable_month == 9) {
         return "Septiembre";
-      }elseif ($this->contable_month == 10) {
+      } elseif ($this->contable_month == 10) {
         return "Octubre";
-      }elseif ($this->contable_month == 11) {
+      } elseif ($this->contable_month == 11) {
         return "Noviembre";
-      }elseif ($this->contable_month == 12) {
+      } elseif ($this->contable_month == 12) {
         return "Diciembre";
       }
     }
   }
 
-  public function shiftControls() {
-      return $this->hasMany('\App\Models\ServiceRequests\ShiftControl');
+  public function shiftControls()
+  {
+    return $this->hasMany('\App\Models\ServiceRequests\ShiftControl');
   }
 
-  public function FulfillmentItems() {
-      return $this->hasMany('\App\Models\ServiceRequests\FulfillmentItem');
+  public function FulfillmentItems()
+  {
+    return $this->hasMany('\App\Models\ServiceRequests\FulfillmentItem');
   }
 
-  public function ServiceRequest() {
-      return $this->belongsTo('\App\Models\ServiceRequests\ServiceRequest');
+  public function ServiceRequest()
+  {
+    return $this->belongsTo('\App\Models\ServiceRequests\ServiceRequest');
   }
 
-  public function responsableUser() {
-      return $this->belongsTo('App\User','responsable_approver_id');
+  public function responsableUser()
+  {
+    return $this->belongsTo('App\User', 'responsable_approver_id');
   }
 
-  public function rrhhUser() {
-      return $this->belongsTo('App\User','rrhh_approver_id');
+  public function rrhhUser()
+  {
+    return $this->belongsTo('App\User', 'rrhh_approver_id');
   }
 
-  public function financesUser() {
-      return $this->belongsTo('App\User','finances_approver_id');
+  public function financesUser()
+  {
+    return $this->belongsTo('App\User', 'finances_approver_id');
   }
 
-    public function signedCertificate()
-    {
-        return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signatures_file_id');
+  public function signedCertificate()
+  {
+    return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signatures_file_id');
+  }
+
+  public function scopeSearch($query, Request $request)
+  {
+
+
+    if ($request->input('rut') != "") {
+      $query->whereHas('servicerequest', function ($q) use ($request) {
+        $q->Where('user_id', $request->input('rut'));
+      });
     }
+
+    if ($request->input('year') != "") {
+      $query->where('year', $request->input('year'));
+    }
+
+    if ($request->input('month') != "") {
+      $query->where('month', $request->input('month'));
+    }
+
+    if ($request->input('payment_date') != "") {
+      if ($request->input('payment_date') == 1) {
+        $query->whereNotNull('payment_date');
+      }
+      if ($request->input('payment_date') == 0) {
+        $query->whereNull('payment_date');
+      }
+    }
+    
+
+    if ($request->input('program_contract_type') != "") {
+      $query->whereHas('servicerequest', function ($q) use ($request) {
+        $q->Where('program_contract_type', $request->input('program_contract_type'));
+      });
+    }
+
+
+    if ($request->input('type') != "") {
+      $query->whereHas('servicerequest', function ($q) use ($request) {
+        $q->Where('type', $request->input('type'));
+      });
+    }    
+
+    return $query;
+  }
 
   protected $table = 'doc_fulfillments';
 
@@ -92,5 +144,5 @@ class Fulfillment extends Model implements Auditable
    *
    * @var array
    */
-  protected $dates = ['start_date', 'end_date','payment_date'];
+  protected $dates = ['start_date', 'end_date', 'payment_date'];
 }
