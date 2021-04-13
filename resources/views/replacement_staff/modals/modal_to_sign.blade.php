@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="exampleModalCenter-req-{{ $request->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable" role="document">
+  <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenterTitle">Gestión de Solicitudes para aprobación</h5>
@@ -93,7 +93,11 @@
                                     <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
                                     <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($requestSign->date_sign)->format('d-m-Y H:i:s') }}<br>
                                 @else
-                                    Estado: No disponible para aprobación.<br>
+                                    @if($requestSign->request_status == NULL)
+                                        <i class="fas fa-ban"></i> No disponible para Aprobación.<br>
+                                    @else
+                                        <i class="fas fa-clock"></i> {{ $requestSign->StatusValue }}<br>
+                                    @endif
                                 @endif
                             </td>
                           @endforeach
