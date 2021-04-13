@@ -95,7 +95,9 @@
 	<br>
 <div class="form-group" >
 	<!-- <div class="col-lg-12"> -->
-		<h3> Gestión de Turnos </h3>
+		<h3> Gestión de Turnos 
+
+        </h3>
 		<form method="POST" class="form-horizontal shadow" action="{{ route('rrhh.shiftManag.index') }}">
 			@csrf
     		@method('POST')
