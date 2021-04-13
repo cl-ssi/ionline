@@ -69,8 +69,8 @@
             <label for="for_program_contract_type">Pagado/No Pagado</label>
             <select name="payment_date" class="form-control">
                 <option value=""></option>
-                <option value="1" @if($request->input('payment_date')==1) selected @endif>Pagado</option>
-                <option value="0" @if($request->input('payment_date')===0) selected @endif>No Pagado</option>
+                <option value="P" @if($request->input('payment_date')=='P') selected @endif>Pagado</option>
+                <option value="SP" @if($request->input('payment_date')=='SP')) selected @endif>No Pagado</option>
             </select>
         </fieldset>
     </div>
