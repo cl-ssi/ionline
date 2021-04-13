@@ -9,15 +9,14 @@
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.compliance') }}">
 
     <div class="form-row">
-        <fieldset class="form-group col-6 col-md-6">
+        <fieldset class="form-group col-12 col-md-2">
             <label for="for_rut">Rut</label>
-            <input name="rut" class="form-control" placeholder="rut sin digito verificador ni punto ej: 18006504" @if($request->input('rut')) value="{{$request->input('rut')}}" @endif >
+            <input name="rut" class="form-control" 
+                placeholder="sin digito verificador ni puntos ej: 18006504" @if($request->input('rut')) value="{{$request->input('rut')}}" @endif >
             </input>
         </fieldset>
-    </div>
 
-    <div class="form-row">
-        <fieldset class="form-group col-2 col-md-2">
+        <fieldset class="form-group col-6 col-md-1">
             <label for="for_year">Año</label>
             <select name="year" class="form-control">
                 <option value=""></option>
@@ -26,7 +25,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-2 col-md-2">
+        <fieldset class="form-group col-6 col-md-2">
             <label for="for_month">Mes</label>
             <select name="month" class="form-control">
                 <option value=""></option>
@@ -73,15 +72,18 @@
                 <option value="SP" @if($request->input('payment_date')=='SP')) selected @endif>No Pagado</option>
             </select>
         </fieldset>
-    </div>
-    <div class="form-row">
-        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+
+        <fieldset class="form-group col-2 col-md-1">
+            <label for="">&nbsp;</label>
+            <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
+        </fieldset>
+        
     </div>
 </form>
 
 <hr>
 
-<h3 class="mb-3">Reporte de Cumplimiento</h3>
+<h3 class="mb-3">Reporte de cumplimiento</h3>
 
 
 <table class="table table-sm table-bordered table-stripped">
