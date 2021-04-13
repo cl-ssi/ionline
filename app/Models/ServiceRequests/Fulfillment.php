@@ -98,8 +98,14 @@ class Fulfillment extends Model implements Auditable
 
 
     if ($request->input('rut') != "") {
-      $query->whereHas('servicerequest', function ($q) use ($request) {
-        $q->Where('user_id', $request->input('rut'));
+      $query->whereHas('servicerequest', function ($q) use ($request) {        
+
+        $q->whereHas('employee', function ($q) use($request) {
+          $q->where('id', $request->input('rut'))
+          ->orWhere('fathers_family', 'LIKE', '%'.$request->input('rut').'%')
+          ->orWhere('name', 'LIKE', '%'.$request->input('rut').'%')
+          ->orWhere('mothers_family', 'LIKE', '%'.$request->input('rut').'%');
+        });
       });
     }
 
@@ -119,7 +125,7 @@ class Fulfillment extends Model implements Auditable
         $query->whereNull('payment_date');
       }
     }
-    
+
 
     if ($request->input('program_contract_type') != "") {
       $query->whereHas('servicerequest', function ($q) use ($request) {
@@ -132,7 +138,7 @@ class Fulfillment extends Model implements Auditable
       $query->whereHas('servicerequest', function ($q) use ($request) {
         $q->Where('type', $request->input('type'));
       });
-    }    
+    }
 
     return $query;
   }
