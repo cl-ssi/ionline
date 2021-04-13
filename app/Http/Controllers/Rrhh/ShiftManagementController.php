@@ -15,7 +15,7 @@ use App\Programmings\Professional;
 use Spatie\Permission\Models\Role;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-
+use Session;
 
 
 class ShiftManagementController extends Controller
@@ -105,7 +105,6 @@ class ShiftManagementController extends Controller
         $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
         $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->get();
         // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
-        Session::put('users',$users);
         Session::put('cargos',$cargos);
         Session::put('sTypes',$sTypes);
         Session::put('days',$days);
@@ -201,25 +200,104 @@ class ShiftManagementController extends Controller
     public function downloadShiftInXls(Request $r){
 
 
-        $users = Session::get('users',$users);
-        $cargos = Session::get('cargos',$cargos);
-        $sTypes = Session::get('sTypes',$sTypes);
-        $days = Session::get('days',$days);
-        $actuallyMonth = Session::get('actuallyMonth',$actuallyMonth);
-        $actuallyDay = Session::get('actuallyDay',$actuallyDay);
-        $actuallyYear = Session::get('actuallyYear',$actuallyYear);
-        $months = Session::get('months',$months);
-        $actuallyOrgUnit = Session::get('actuallyOrgUnit',$actuallyOrgUnit);
-        $staff = Session::get('staff',$staff);
-        $actuallyShift = Session::get('actuallyShift',$actuallyShift);
-        $staffInShift = Session::get('staffInShift',$staffInShift);
-        Session::flush();
+        $users = Session::get('users');
+        $cargos = Session::get('cargos');
+        $sTypes = Session::get('sTypes');
+        $days = Session::get('days');
+        $actuallyMonth = Session::get('actuallyMonth');
+        $actuallyDay = Session::get('actuallyDay');
+        $actuallyYear = Session::get('actuallyYear');
+        $months = $this->months;
+        $actuallyOrgUnit = Session::get('actuallyOrgUnit');
+        $staff = Session::get('staff');
+        $actuallyShift = Session::get('actuallyShift');
+        $staffInShift = Session::get('staffInShift');
+        // Session::flush();
         
+
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Hello World !');
+        
+        $sheet->setCellValue('A1',  strtoupper($months[$actuallyMonth]).' '.$actuallyYear);
+        if($days==28)
+            $sheet->MergeCells('A1:AE1');
+        elseif($days==29)
+            $sheet->MergeCells('A1:AF1');
+        elseif($days==30)
+            $sheet->MergeCells('A1:AG1');
+        elseif($days==31)
+            $sheet->MergeCells('A1:AH1');
+        $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+
+        $sheet->setCellValue('A2', 'CARGO');
+        $sheet->setCellValue('B2', '');
+        $index = 67;
+        $index2 = 65;
+        $cell = "";
+        for ($i=1; $i < ($days+1) ; $i++) { 
+           
+            if($index<91){
+                $cell = chr($index);
+                $index++;
+            }  else{
+                $cell = "A".chr($index2);
+                $index2++;
+            }
+            $sheet->setCellValue($cell."2", $i);
+            $sheet->getColumnDimension($cell)->setAutoSize(true);
+        }   
+
+
+
+        $sheet->getStyle('A1:AH1')->applyFromArray(
+                array(
+                    'font' => array(
+                    'bold' => true
+                    )
+                )
+            );
+        $sheet->getStyle('A2:AH2')->applyFromArray(
+                array(
+                    'font' => array(
+                    'bold' => true
+                    )
+                )
+            );
+        $i=3;
+        $staffType="Titular";
+        foreach ($staffInShift as $sis) {
+            $sheet->setCellValue("A".$i, $sis->user->runFormat()." - ".$sis->user->name." ".$sis->user->fathers_family);
+             $sheet->setCellValue("B".$i, $staffType);
+            $index = 67;// lleter C in ascii
+            $index2 = 65; //letter A in ascii
+            $cell = "";
+            for ($j=1; $j < ($days+1) ; $j++) { 
+           
+                if($index<91){
+                    $cell = chr($index);
+                    $index++;
+                }  else{
+                    $cell = "A".chr($index2);
+                    $index2++;
+                }
+                $date = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$j);
+                $date =explode(" ",$date);
+                $d = $sis->days->where('day',$date[0]);
+
+                $sheet->setCellValue($cell.$i, 
+                ( ( isset($d) && count($d) )? ( ($d->first()->working_day!="F")?$d->first()->working_day:"-" ) :"n/a" )
+                 );
+                $sheet->getColumnDimension($cell)->setAutoSize(true);
+            }   
+            $i++;
+            
+        }
+
+         $sheet->getColumnDimension("A")->setAutoSize(true);
+
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="Reportecitas.xlsx"');
+        header('Content-Disposition: attachment;filename="turnos20210413-113325.xlsx"');
         header('Cache-Control: max-age=0');
 
         $writer = new Xlsx($spreadsheet);
