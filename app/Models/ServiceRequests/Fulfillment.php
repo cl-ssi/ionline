@@ -112,10 +112,10 @@ class Fulfillment extends Model implements Auditable
     }
 
     if ($request->input('payment_date') != "") {
-      if ($request->input('payment_date') == 1) {
+      if ($request->input('payment_date') == 'P') {
         $query->whereNotNull('payment_date');
       }
-      if ($request->input('payment_date') == 0) {
+      if ($request->input('payment_date') == 'SP') {
         $query->whereNull('payment_date');
       }
     }
