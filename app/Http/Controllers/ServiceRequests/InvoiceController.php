@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use App\Models\ServiceRequests\ServiceRequest;
+use App\Models\ServiceRequests\Fulfillment;
 
 
 class InvoiceController extends Controller
@@ -41,8 +42,18 @@ class InvoiceController extends Controller
 
     public function show($user_id)
     {
-        $serviceRequests = ServiceRequest::where('user_id',$user_id)->get();        
-        return view('service_requests.invoice.show', compact('serviceRequests'));
+        //$serviceRequests = ServiceRequest::where('user_id',$user_id)->get();
+
+        //$fulfillment = Fulfillment::whereHas('ServiceRequest', function($query, use $user_id) { $query->where('user_id',$user_id);})->orderBy('payment_date')->get();
+
+
+
+        $fulfillments = Fulfillment::whereHas('ServiceRequest', function($query) use ($user_id) { 
+            $query->where('user_id',$user_id);}
+            )->orderBy('payment_date')->get();
+
+        
+        return view('service_requests.invoice.show', compact('fulfillments'));
     }
 
 

@@ -206,11 +206,11 @@
 				@php
 				$idModelModal = $fulfillment->id;
 				$routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal/".auth()->id();
-				$returnUrlSignModal = "rrhh.service-request.fulfillment.edit";
+                $routeCallbackSignModal = 'documents.callbackFirma';
 				@endphp
 				@include('documents.signatures.partials.sign_file')
 				<button type="button" data-toggle="modal" class="btn btn-outline-info"
-					data-target="#signPdfModal{{$idModelModal}}" title="Firmar"> 
+					data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
 				Firmar certificado <i class="fas fa-signature"></i>
 				</button>
 				@endif
@@ -266,53 +266,47 @@
 							<label for="for_resolution_number">N° Resolución</label>
 							<input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
 						</fieldset>
-						<fieldset class="form-group col-7 col-md-3">
+						<fieldset class="form-group col-7 col-md-2">
 							<label for="for_resolution_date">Fecha Resolución</label>
 							<input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
 						</fieldset>
-						<!-- @if($fulfillment->year == 2021 && $fulfillment->month == 1 && $fulfillment->total_to_pay != NULL)
-							<fieldset class="form-group col col-md">
-							    <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
-							    <input type="text" class="form-control" name="total_hours_to_pay" disabled value="{{$serviceRequest->weekly_hours}}">
-							</fieldset>
-							
-							<fieldset class="form-group col col-md">
-							    <label for="for_total_paid">Total a pagar</label>
-							    <input type="text" class="form-control" name="total_to_pay" disabled value="{{$serviceRequest->net_amount}}">
-							</fieldset>
-							@else
-							<fieldset class="form-group col col-md">
-							    <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
-							    <input type="text" class="form-control" name="total_hours_to_pay" value="{{$fulfillment->total_hours_to_pay}}">
-							</fieldset>
-							
-							<fieldset class="form-group col col-md">
-							    <label for="for_total_paid">Total a pagar</label>
-							    <input type="text" class="form-control" name="total_to_pay" value="{{$fulfillment->total_to_pay}}">
-							</fieldset>
-							@endif -->
-						<fieldset class="form-group col col-md-3">
-							<label for="for_total_hours_paid">Total hrs. a pagar per.</label>
+						<fieldset class="form-group col col-md-2">
+							<label for="for_total_hours_paid">Total hrs. a pagar</label>
 							<input type="text" class="form-control" name="total_hours_to_pay" value="{{$fulfillment->total_hours_to_pay}}">
 						</fieldset>
-						<fieldset class="form-group col col-md-3">
+						<fieldset class="form-group col col-md-2">
 							<label for="for_total_paid">Total a pagar</label>
 							<input type="text" class="form-control" name="total_to_pay" value="{{$fulfillment->total_to_pay}}">
 						</fieldset>
+						<div class="form-check form-check-inline">
+							<input type="hidden" name="illness_leave" value="0">
+							<input class="form-check-input" type="checkbox" name="illness_leave"  value="1" {{ ( $fulfillment->illness_leave== '1' ) ? 'checked="checked"' : null }} >
+							<label class="form-check-label" for="for_illness_leave">Licencias</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input type="hidden" name="leave_of_absence" value="0">
+							<input class="form-check-input" type="checkbox" id="permisos" name="leave_of_absence" value="1" {{ ( $fulfillment->leave_of_absence== '1' ) ? 'checked="checked"' : null }} >
+							<label class="form-check-label" for="permisos">Permisos</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input type="hidden" name="assistance" value="0">
+							<input class="form-check-input" type="checkbox"  name="assistance" value="1" {{ ( $fulfillment->assistance== '1' ) ? 'checked="checked"' : null }} >
+							<label class="form-check-label" for="asistencia">Asistencia</label>
+						</div>
 					</div>
 
 					<div class="form-row">
-						<div class="col-3">
+						<div class="col-12 col-md-2">
 							<button type="submit" class="btn btn-primary">Guardar</button>
 						</div>
-						<div class="col-12 col-md-5">
+						<div class="col-12 col-md-7">
 							@if($fulfillment->total_to_pay)
 							@livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment])
 							@else
 							No se ha ingresado el "Total a pagar".
 							@endif
 						</div>
-						<div class="col-4 text-right">
+						<div class="col-3 text-right">
 							@if($fulfillment->rrhh_approver_id == NULL)
 							<a type="button" class="btn btn-danger"
 								onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');"
@@ -400,10 +394,10 @@
 						</fieldset>
 					</div>
 					<div class="form-row">
-						<div class="col-3">
+						<div class="col-2">
 							<button type="submit" class="btn btn-primary">Guardar</button>
 						</div>
-						<div class="col-6">
+						<div class="col-7">
 							@if($fulfillment->total_to_pay)
 								@livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment])
 							@else
@@ -432,13 +426,13 @@
 							@endcan
 						</div>
 					</div>
-	
+
 				</div>
 			</div>
 		</form>
 		@endcan
 
-		
+
 		@if($fulfillment->responsable_approver_id != NULL)
 		<h5>Visaciones</h5>
 		<table class="table table-sm small">

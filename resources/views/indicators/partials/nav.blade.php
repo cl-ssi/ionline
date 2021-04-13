@@ -35,6 +35,7 @@
                         @case('7')  ALTO HOSPICIO @break;
                         @case('8')  HECTOR REYNO @break;
                         @case('aps') Indicadores APS @break
+                        @case('iaps') Indicadores APS @break
                         @case('depsev') Dependencia Severa @break
                         @case('saserep') Salud Sexual y Reproductiva @break
                         @case('ges_odont') GES Odontológico @break

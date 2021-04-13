@@ -4,7 +4,7 @@
 
 @section('content')
 
-@include('parameters/nav')
+@include('parameters.nav')
 
 <h3 class="mb-3">Crear Nueva Professión</h3>
 
@@ -14,14 +14,22 @@
 
     <div class="row">
 
-    <fieldset class="form-group col-6 col-md-3">
+    <fieldset class="form-group col-12 col-md-3">
             <label for="for_name">Nombre*</label>
-            <input type="text" class="form-control" id="for_name" name="name" autocomplete="off" required>
+            <input type="text" class="form-control" id="for_name" name="name"required>
         </fieldset>        
 
-        <fieldset class="form-group col-12 col-md-7">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_category">Categoría</label>
-            <input type="text" class="form-control" id="for_category" autocomplete="off" name="category">
+            <select class="form-control" name="category" id="for_category" require>
+                <option value=""></option>
+                <option value="A">A (Medicos, Odontologos, Quimicos)</option>
+                <option value="B">B (Profesionales)</option>
+                <option value="C">C (Técnicos Nivel Superior)</option>
+                <option value="D">D (Técnicos Paramédicos)</option>
+                <option value="E">E (Administrativos)</option>
+                <option value="F">F (Choferes)</option>
+            </select>
         </fieldset>
     </div>
     
