@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\ReplacementStaff;
 
-use App\Models\Commission;
+use App\Models\ReplacementStaff\Commission;
 use App\Models\ReplacementStaff\TechnicalEvaluation;
+use App\Rrhh\Authority;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 
 class CommissionController extends Controller
 {
@@ -37,7 +40,20 @@ class CommissionController extends Controller
      */
     public function store(Request $request, TechnicalEvaluation $technicalEvaluation)
     {
-        dd($request, $technicalEvaluation);
+        foreach ($request->user_id as $key_file => $req) {
+            $commission = new Commission();
+            $commission->user_id = $req;
+            $commission->job_title = $request->input('job_title.'.$key_file.'');
+
+            $user_ou = User::where('id', $commission->user_id)->first();
+            $commission->organizational_unit_id = $user_ou->organizationalUnit->id;
+
+            $commission->technicalEvaluation()->associate($technicalEvaluation);
+            $commission->save();
+        }
+
+        session()->flash('success', 'Integrantes de Comisión ha/n sido correctamente ingresado/s.');
+        return redirect()->back();
     }
 
     /**
@@ -82,6 +98,9 @@ class CommissionController extends Controller
      */
     public function destroy(Commission $commission)
     {
-        //
+        $commission->delete();
+
+        session()->flash('danger', 'El Integrante de Comisión ha sido eliminado de la Evaluación Técnica.');
+        return redirect()->back();
     }
 }

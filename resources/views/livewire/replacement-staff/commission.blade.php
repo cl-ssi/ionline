@@ -1,9 +1,11 @@
 <div>
   <div class="form-row">
+      @if($technicalEvaluation->technical_evaluation_status == 'pending')
       <fieldset class="form-group">
           <label for="">&nbsp;</label>
           <button class="btn text-white btn-info float-right" wire:click.prevent="add({{$i}})">Agregar <i class="fas fa-plus"></i></button>
       </fieldset>
+      @endif
   </div>
 
   <form method="POST" class="form-horizontal"
@@ -14,19 +16,18 @@
           <div class="form-row">
               <fieldset class="form-group col mt">
                   <label for="for_user_id">Integrante</label>
-                  <select name="user_id[]" class="form-control">
+                  <select name="user_id[]" class="form-control" required>
                       <option value="">Seleccione</option>
                       @foreach($users as $user)
-                          <option value="{{ $user->id }}">{{ $user->FullName }}</option>
+                          <option value="{{ $user->id }}">{{ ucfirst(trans($user->FullName)) }}</option>
                       @endforeach
                   </select>
               </fieldset>
 
               <fieldset class="form-group col mt">
                   <fieldset class="form-group">
-                      <label for="for_cargo">Cargo</label>
-                      <input type="text" class="form-control" name="cargo"
-                          id="for_cargo" readonly>
+                      <label for="for_job_title">Cargo</label>
+                      <input type="text" class="form-control" name="job_title[]" required>
                   </fieldset>
               </fieldset>
 

@@ -101,7 +101,7 @@
     </tbody>
 </table>
 
-<hr>
+<br>
 
 <table class="table table-sm table-bordered">
     <thead>
@@ -127,13 +127,40 @@
 
 <br>
 
-<h5 class="mb-3">Selección de Postulantes</h5>
-
 <div class="card">
     <div class="card-header">
-        <h5>Integrantes Comisión</h5>
+        <h6>Integrantes Comisión</h6>
     </div>
     <div class="card-body">
+        <table class="table table-sm table-striped">
+            <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Unidad Organizacional</th>
+                  <th>Cargo</th>
+                  <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($technicalEvaluation->commission as $commission)
+                <tr>
+                    <td>{{ $commission->user->FullName }}</td>
+                    <td>{{ $commission->user->organizationalUnit->name }}</td>
+                    <td>{{ $commission->job_title }}</td>
+                    <td>
+                        <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.commission.destroy', $commission) }}">
+                            @csrf
+                            @method('DELETE')
+                                <button type="submit" class="btn btn-outline-danger btn-sm"
+                                    onclick="return confirm('¿Está seguro que desea eliminar el Integrante de Comisión?')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
         @livewire('replacement-staff.commission', ['users' => $users,
                                                    'technicalEvaluation' => $technicalEvaluation])
     </div>

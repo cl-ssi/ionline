@@ -157,6 +157,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
             Route::get('/store/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'store'])->name('store');
             Route::prefix('commission')->name('commission.')->group(function(){
                 Route::post('/store/{technicalEvaluation}', [CommissionController::class, 'store'])->name('store');
+                Route::delete('{commission}/destroy', [CommissionController::class, 'destroy'])->name('destroy');
             });
         });
 
