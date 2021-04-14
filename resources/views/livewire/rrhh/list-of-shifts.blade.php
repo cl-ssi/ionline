@@ -1,5 +1,4 @@
 <div>
-<h1 {{$modalProperty}}>Editing</h1>
     	@foreach($staffInShift as $sis)
 						<tr>
 						   <td class="bless br" >
@@ -20,7 +19,6 @@
 						    	@endphp
                             <td  style="text-align:center;width:54px;height:54px">
                                 <div  class="bbd day" >
-                                	
                                 	@if(isset($d) && count($d) )
                                 		<button wire:click="editStatusDay({{$d->first()->id }})">
                                 			@if($d->first()->working_day!="F")
@@ -43,4 +41,5 @@
                    	@if(count($staffInShift)<1)
                    		<td style="text-align:  center;" colspan="{{$days}}">SIN PERSONAL ASIGNADO</td>
                    	@endif
+
 </div>

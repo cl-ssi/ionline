@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Rrhh;
 
 use Livewire\Component;
-use App\Models\Rrhh\ShiftUserDay;
 
 class ListOfShifts extends Component
 {
@@ -11,14 +10,15 @@ class ListOfShifts extends Component
 	public $actuallyYear;
 	public $actuallyMonth;
 	public $days;
-	public $modalProperty ="hidden";
+	 public function editStatusDay($id)
 
-	public function editStatusDay($sfId){
-		$this->modalProperty = "";
-	}
-
+    {
+    	$this->days=2;
+    }
     public function render()
     {
         return view('livewire.rrhh.list-of-shifts');
     }
+
+
 }
