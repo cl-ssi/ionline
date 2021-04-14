@@ -10,7 +10,8 @@
 </div>
 @else
 
-@livewire('service-request.update-account' , ['serviceRequest' => $fulfillments->last()->ServiceRequest])
+
+@livewire('service-request.update-account' , ['bankaccount' => $bankaccount->last()])
 
 <hr>
 
