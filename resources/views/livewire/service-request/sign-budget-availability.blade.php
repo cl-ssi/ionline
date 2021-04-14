@@ -3,7 +3,8 @@
            title="Ver Certificado de Disponibilidad Presupuestaria firmado"
            href="{{ route('rrhh.service-request.signed-budget_availability-pdf',$serviceRequest) }}"
            target="_blank" title="Certificado">
-            CDP Firmado
+            CDP Firmado<i
+                class="fas fa-signature"></i>
         </a>
     @else
         {{--modal firmador--}}

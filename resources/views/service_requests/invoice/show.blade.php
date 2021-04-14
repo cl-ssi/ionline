@@ -16,6 +16,9 @@
 <hr>
 
 <h4 class="mt-3 mb-3">Información de sus contratos de honorarios</h4>
+<p>Si alguna duda, respecto a algún contrato, puedes ponerte en contacto con el área de RRHH a través de  
+<a href="https://wa.me/message/IBHMJ3XRQZA3P1" data-toggle="tooltip" title="<img src='{{ asset('images/qr_wp_rrhh.svg') }}' />">WhatsApp</a>.</p>
+
 
 
 @foreach($fulfillments as $fullfillment)
@@ -142,13 +145,17 @@
 
 @endforeach
 
-
-
 @endif
 
 
 @endsection
 
 @section('custom_js')
-
+<script>
+$('a[data-toggle="tooltip"]').tooltip({
+    animated: 'fade',
+    placement: 'top',
+    html: true
+});
+</script>
 @endsection
