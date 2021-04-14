@@ -9,6 +9,8 @@
 <div class="jumbotron mt-3">
     <h1 class="display-3">Phuqhaña</h1>
     <p class="lead">Bienvenido el sistema de honorarios Phuqhaña, palabra Aymara que significa "Cumplir".</p>
+    <p>Si alguna duda, respecto a algún contrato, puedes ponerte en contacto con el área de RRHH a través de  
+    <a href="https://wa.me/message/IBHMJ3XRQZA3P1" data-toggle="tooltip" title="<img src='{{ asset('images/qr_wp_rrhh.svg') }}' />">WhatsApp</a>.</p>
     <hr class="my-2">
     <p>Desarrollado por el Departamento TIC,
     en conjunto con los que trabajan en el proceso cada día,
@@ -32,5 +34,11 @@
 @endsection
 
 @section('custom_js')
-
+<script>
+$('a[data-toggle="tooltip"]').tooltip({
+    animated: 'fade',
+    placement: 'top',
+    html: true
+});
+</script>
 @endsection

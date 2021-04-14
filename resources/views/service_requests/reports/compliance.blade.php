@@ -16,7 +16,7 @@
             </input>
         </fieldset>
 
-        <fieldset class="form-group col-6 col-md-1">
+        <fieldset class="form-group col-4 col-md-1">
             <label for="for_year">Año</label>
             <select name="year" class="form-control">
                 <option value=""></option>
@@ -25,7 +25,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-6 col-md-2">
+        <fieldset class="form-group col-4 col-md-2">
             <label for="for_month">Mes</label>
             <select name="month" class="form-control">
                 <option value=""></option>
@@ -45,7 +45,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-2 col-md-2">
+        <fieldset class="form-group col-4 col-md-2">
             <label for="for_type">Tipo</label>
             <select name="type" class="form-control">
                 <option value=""></option>
@@ -55,7 +55,7 @@
         </fieldset>
 
 
-        <fieldset class="form-group col-2 col-md-2">
+        <fieldset class="form-group col-6 col-md-2">
             <label for="for_program_contract_type">Tipo de contrato</label>
             <select name="program_contract_type" class="form-control">
                 <option value=""></option>
@@ -64,7 +64,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-2 col-md-2">
+        <fieldset class="form-group col-6 col-md-2">
             <label for="for_program_contract_type">Pagado/No Pagado</label>
             <select name="payment_date" class="form-control">
                 <option value=""></option>
@@ -85,53 +85,54 @@
 
 <h3 class="mb-3">Reporte de cumplimiento</h3>
 
+<div class="table-responsive">
+    <table class="table table-sm table-bordered table-stripped">
+        <tr>
 
-<table class="table table-sm table-bordered table-stripped">
-    <tr>
+            <th>Id Sol.</th>
+            <th class="small">Id Cump.</th>
+            <th nowrap>Rut</th>
+            <th>Nombre</th>
+            <th>Año</th>
+            <th>Mes</th>
+            <th>Tipo</th>
+            <th>Tipo de Contrato</th>
+            <th>Pago</th>
+            <th></th>
+        </tr>
+        @foreach($fulfillments as $fulfillment)
+        <tr>
+            <td>{{$fulfillment->servicerequest->id?? ''}}</td>
+            <td class="small">{{$fulfillment->id}}</td>
+            <td>{{$fulfillment->servicerequest?$fulfillment->servicerequest->employee->runFormat(): ''}}</td>
+            <td>{{$fulfillment->servicerequest->employee->fullname?? ''}}</td>
+            <td>{{$fulfillment->year}}</td>
+            <td>{{$fulfillment->month}}</td>
+            <td>{{$fulfillment->servicerequest->type?? ''}}</td>
+            <td>{{$fulfillment->servicerequest->program_contract_type?? ''}}</td>
+            <td>
+                @if($fulfillment->payment_date)
+                PAGADO
+                @else
+                NO PAGADO
+                @endif
+            </td>
+            <td>
+                @if($fulfillment->servicerequest)
+                <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->servicerequest) }}" title="Editar">
+                    <span class="fas fa-edit" aria-hidden="true"></span>
+                </a>
+                @endif
+            </td>
 
-        <th>Id Sol.</th>
-        <th class="small">Id Cump.</th>
-        <th nowrap>Rut</th>
-        <th>Nombre</th>
-        <th>Año</th>
-        <th>Mes</th>
-        <th>Tipo</th>
-        <th>Tipo de Contrato</th>
-        <th>Pago</th>
-        <th></th>
-    </tr>
-    @foreach($fulfillments as $fulfillment)
-    <tr>
-        <td>{{$fulfillment->servicerequest->id?? ''}}</td>
-        <td class="small">{{$fulfillment->id}}</td>
-        <td>{{$fulfillment->servicerequest?$fulfillment->servicerequest->employee->runFormat(): ''}}</td>
-        <td>{{$fulfillment->servicerequest->employee->fullname?? ''}}</td>
-        <td>{{$fulfillment->year}}</td>
-        <td>{{$fulfillment->month}}</td>
-        <td>{{$fulfillment->servicerequest->type?? ''}}</td>
-        <td>{{$fulfillment->servicerequest->program_contract_type?? ''}}</td>
-        <td>
-            @if($fulfillment->payment_date)
-            PAGADO
-            @else
-            NO PAGADO
-            @endif
-        </td>
-        <td>
-            @if($fulfillment->servicerequest)
-            <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->servicerequest) }}" title="Editar">
-                <span class="fas fa-edit" aria-hidden="true"></span>
-            </a>
-            @endif
-        </td>
+        </tr>
 
-    </tr>
+        @endforeach
+    </table>
 
-    @endforeach
-</table>
-{{ $fulfillments->appends(request()->query())->links() }}
+    {{ $fulfillments->appends(request()->query())->links() }}
 
-
+</div>
 
 
 @endsection
