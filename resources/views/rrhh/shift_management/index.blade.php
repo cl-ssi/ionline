@@ -253,7 +253,15 @@
                 </thead>
                 <tbody>
 
-                    <livewire:rrhh.list-of-shifts  :staffInShift="$staffInShift" :actuallyYear="$actuallyYear" :actuallyMonth="$actuallyMonth" :days="$days">
+                  
+                    @livewire('rrhh.list-of-shifts', 
+                        [
+                            'staffInShift'=>$staffInShift,
+                            'actuallyYear'=>$actuallyYear,
+                            'actuallyMonth'=>$actuallyMonth,
+                            'days'=>$days
+                        ]
+                    )
                   
                   
                 </tbody>
