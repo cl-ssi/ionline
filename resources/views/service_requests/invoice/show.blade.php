@@ -10,7 +10,8 @@
 </div>
 @else
 
-@livewire('service-request.update-account' , ['serviceRequest' => $fulfillments->last()->ServiceRequest])
+
+@livewire('service-request.update-account' , ['bankaccount' => $bankaccount->last()])
 
 <hr>
 
@@ -97,7 +98,7 @@
 			<li class="list-group-item">
 				@if($fullfillment->total_to_pay)
 				<i class="fas fa-circle text-success"></i>
-				Total a pagar cargado por RRHH.
+				Monto de boleta: {{ @money($fullfillment->total_to_pay) }}
 				@else
 				<i class="fas fa-circle text-secondary"></i>
 				No se ha cargado el "total a pagar" por RRHH.
@@ -135,10 +136,7 @@
 		@if($fullfillment->payment_date)
 	</div>
 	@endif
-
-	<div class="card-footer text-muted">
-		<strong>Monto de boleta:</strong> {{ @money($fullfillment->total_to_pay) }}
-	</div>
+	
 
 </div>
 

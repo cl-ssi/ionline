@@ -31,6 +31,10 @@ use App\Http\Controllers\ReplacementStaff\TrainingController;
 use App\Http\Controllers\ReplacementStaff\LanguageController;
 use App\Http\Controllers\ReplacementStaff\Manage\ProfessionManageController;
 use App\Http\Controllers\ReplacementStaff\Manage\ProfileManageController;
+use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationController;
+use App\Http\Controllers\ReplacementStaff\CommissionController;
+
+
 use App\Http\Controllers\VaccinationController;
 
 use App\Http\Controllers\ServiceRequests\InvoiceController;
@@ -148,6 +152,14 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::prefix('sign')->name('sign.')->group(function(){
             Route::put('/{requestSign}/{status}/update', [RequestSignController::class, 'update'])->name('update');
         });
+        Route::prefix('technical_evaluation')->name('technical_evaluation.')->group(function(){
+            Route::get('/{technicalEvaluation}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
+            Route::get('/store/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'store'])->name('store');
+            Route::prefix('commission')->name('commission.')->group(function(){
+                Route::post('/store/{technicalEvaluation}', [CommissionController::class, 'store'])->name('store');
+            });
+        });
+
     });
 
     Route::prefix('profile')->name('profile.')->group(function(){
@@ -324,6 +336,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftManag.index')->middleware('auth');
         Route::post('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'indexfiltered'])->name('shiftManag.index')->middleware('auth');
         Route::post('/assign', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'assignStaff'])->name('shiftsTypes.assign')->middleware('auth');
+        Route::post('/deleteassign', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'assignStaff'])->name('shiftsTypes.deleteassign')->middleware('auth');
+         Route::get('/downloadShiftInXls', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'downloadShiftInXls'])->name('shiftsTypes.downloadShiftInXls')->middleware('auth');
 
         Route::get('/shiftstypes', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftstypesindex'])->name('shiftsTypes.index')->middleware('auth');
         Route::get('/newshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.new')->middleware('auth');
@@ -377,7 +391,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/edit/{serviceRequest}', [FulfillmentController::class, 'edit_fulfillment'])->name('edit');
             Route::get('/save-approbed-fulfillment/{serviceRequest}', [FulfillmentController::class, 'save_approbed_fulfillment'])->name('save_approbed_fulfillment');
             Route::get('/confirm-fulfillment-by-sign-position/{Fulfillment}/{approbed?}', [FulfillmentController::class, 'confirmFulfillmentBySignPosition'])->name('confirm_Fulfillment_By_SignPosition');
-            Route::get('/download-invoice/{fulfillment}', [FulfillmentController::class, 'downloadInvoice'])->name('download_invoice');
+            Route::get('/download-invoice/{fulfillment}/{timestamp?}', [FulfillmentController::class, 'downloadInvoice'])->name('download_invoice');
             Route::get('/download-resolution/{serviceRequest}', [FulfillmentController::class, 'downloadResolution'])->name('download_resolution');
             Route::get('/certificate-pdf/{fulfillment}/{user?}', [FulfillmentController::class, 'certificatePDF'])->name('certificate-pdf');
             Route::get('/signed-certificate-pdf/{fulfillment}', [FulfillmentController::class, 'signedCertificatePDF'])->name('signed-certificate-pdf');
