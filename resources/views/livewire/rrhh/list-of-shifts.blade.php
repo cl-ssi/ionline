@@ -1,4 +1,5 @@
 <div>
+<h1 {{$modalProperty}}>Editing</h1>
     	@foreach($staffInShift as $sis)
 						<tr>
 						   <td class="bless br" >
@@ -18,7 +19,20 @@
 						    		$d = $sis->days->where('day',$date[0]);
 						    	@endphp
                             <td  style="text-align:center;width:54px;height:54px">
-                                <div  class="bbd day" >{{ ( isset($d) && count($d) )? ( ($d->first()->working_day!="F")?$d->first()->working_day:"-" ) :"n/a" }}</div>
+                                <div  class="bbd day" >
+                                	
+                                	@if(isset($d) && count($d) )
+                                		<button wire:click="editStatusDay({{$d->first()->id }})">
+                                			@if($d->first()->working_day!="F")
+                                				{{$d->first()->working_day}}
+                                			@else
+                                				-
+                                			@endif
+                                		</button>
+                                	@else
+                                		N/A
+                                	@endif
+                                </div>
                             </td>
                             @endfor
                            
@@ -29,5 +43,4 @@
                    	@if(count($staffInShift)<1)
                    		<td style="text-align:  center;" colspan="{{$days}}">SIN PERSONAL ASIGNADO</td>
                    	@endif
-
 </div>
