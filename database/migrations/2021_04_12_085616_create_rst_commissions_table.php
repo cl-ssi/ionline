@@ -17,9 +17,12 @@ class CreateRstCommissionsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable();
             $table->foreignId('organizational_unit_id');
+            $table->string('job_title');
+            $table->foreignId('technical_evaluation_id');
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('organizational_unit_id')->references('id')->on('organizational_units');
+            $table->foreign('technical_evaluation_id')->references('id')->on('rst_technical_evaluations');
 
             $table->timestamps();
             $table->softDeletes();
