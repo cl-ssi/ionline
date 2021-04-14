@@ -38,7 +38,7 @@
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.service-request.transfer_requests') }}"
             href="{{ route('rrhh.service-request.transfer_requests') }}">
-            <i class="fas fa-sign-in-alt"></i> Transferir solicitudes
+            <i class="fas fa-sign-in-alt"></i> Transf. solicitudes
         </a>
     </li>
     @endcan
@@ -47,7 +47,7 @@
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.service-request.change_signature_flow_view') }}"
             href="{{ route('rrhh.service-request.change_signature_flow_view') }}">
-            <i class="fas fa-sign-in-alt"></i> Modificar flujo de firmas
+            <i class="fas fa-sign-in-alt"></i> Flujo de firmas
         </a>
     </li>
     @endcan
