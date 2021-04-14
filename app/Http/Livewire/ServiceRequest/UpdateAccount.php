@@ -91,13 +91,13 @@ class UpdateAccount extends Component
 
     public function render()
     {
-        if($this->bankaccount){
+        //if($this->bankaccount){
         $this->banks = Bank::all();
         return view('livewire.service-request.update-account');
-        }
-        else{
-            return view('livewire.service-request.update-account-empty');
-        }
+        //}
+        // else{
+        //     return view('livewire.service-request.update-account-empty');
+        // }
         
     }
 
