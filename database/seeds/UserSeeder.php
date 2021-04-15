@@ -27,6 +27,7 @@ class UserSeeder extends Seeder
         $user->password = bcrypt('admin');
         $user->position = "Administrator";
         $user->email = "alvaro.torres@redsalud.gob.cl";
+        $user->organizationalUnit()->associate($ouTIC);
         $user->save();
         $user->assignRole('god', 'dev','RRHH: admin');
         //$user->givePermissionTo(Permission::all());
