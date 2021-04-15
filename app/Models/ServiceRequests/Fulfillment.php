@@ -109,6 +109,12 @@ class Fulfillment extends Model implements Auditable
       });
     }*/
 
+    if ($request->input('sr_id') != "") {
+      $query->whereHas('servicerequest', function ($q) use ($request) {
+        $q->Where('id', $request->input('sr_id'));
+      });
+    }
+
     if ($request->input('rut') != ""){
       $query->whereHas('servicerequest', function ($q) use ($request) {
         $q->whereHas('employee', function ($q) use($request) {

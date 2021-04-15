@@ -49,13 +49,13 @@ class FulfillmentController extends Controller
         if (Auth::user()->can('Service Request: fulfillments responsable')) {
           $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user, $array){
                                                $subQuery->where('responsable_id',$user->id);
-                                               $subQuery->orwhere('user_id',$user->id);
+                                               // $subQuery->orwhere('user_id',$user->id);
                                                $subQuery->orWhereIn('ou_id',$array);
                                           })
                                           // ->orWhere('responsability_center_ou_id',$user->organizational_unit_id)
-                                          // ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
-                                          //      return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
-                                          //   })
+                                          ->when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
+                                               return $q->where('responsability_center_ou_id',$responsability_center_ou_id);
+                                            })
                                           ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
                                                  return $q->where('program_contract_type',$program_contract_type);
                                                })
