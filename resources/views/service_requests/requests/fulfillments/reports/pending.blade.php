@@ -11,13 +11,13 @@
     <div class="form-row">
         <fieldset class="form-group col-6 col-md-1">
             <label for="for_program_contract_type">ID</label>
-            <input class="form-control" type="text" name="sr_id">
+            <input class="form-control" type="text" name="sr_id" value="{{ old('sr_id') }}">
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-2">
             <label for="for_rut">Rut/Nombre</label>
             <input name="rut" class="form-control" 
-                placeholder="Run, nombre o apellido" @if($request->input('rut')) value="{{$request->input('rut')}}" @endif  aucomplete="off">
+                placeholder="Run, nombre o apellido" value="{{ old('rut') }}" aucomplete="off">
             </input>
         </fieldset>
 
