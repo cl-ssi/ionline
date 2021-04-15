@@ -47,6 +47,7 @@
 				<th></th>
         <th>Id</th>
         <th>Establecimiento</th>
+				<th>Unidad</th>
         <th>Tipo/Jornada</th>
         <th>Nombre</th>
         <th nowrap>Rut</th>
@@ -67,6 +68,7 @@
 					<td class="small">{{$key+1}}</td>
           <td class="small">{{$fulfillment->serviceRequest->id}}</td>
           <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
+					<td class="small">{{$fulfillment->serviceRequest->responsabilityCenter->name}}</td>
           <td class="small">
             {{$fulfillment->serviceRequest->program_contract_type}}
             <br>
