@@ -191,7 +191,7 @@ class WordTestController extends Controller
         $numResourceResolucion = $agreements->res_resource_number;
         $yearResourceResolucion = $agreements->res_resource_date != NULL ? date('Y', strtotime($agreements->res_resource_date)) : '';
         $fechaResourceResolucion = $agreements->res_resource_date != NULL ? date('j', strtotime($agreements->res_resource_date)).' de '.$meses[date('n', strtotime($agreements->res_resource_date))-1].' del '.date('Y', strtotime($agreements->res_resource_date)) : '';
-    	$ilustre = !Str::contains($municipality->name_municipality, 'ALTO HOSPICIO') ? 'ILUSTRE': null;
+    	$ilustre = !Str::contains($municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre': null;
         $emailMunicipality = $municipality->email_municipality;
         $comuna = $agreements->Commune->name; 
         $programa = $agreements->Program->name;
