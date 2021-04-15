@@ -9,6 +9,11 @@
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.fulfillment-pending',$who) }}">
 
     <div class="form-row">
+        <fieldset class="form-group col-6 col-md-1">
+            <label for="for_program_contract_type">ID</label>
+            <input class="form-control" type="text" name="sr_id">
+        </fieldset>
+
         <fieldset class="form-group col-12 col-md-2">
             <label for="for_rut">Rut/Nombre</label>
             <input name="rut" class="form-control" 
@@ -61,15 +66,6 @@
                 <option value=""></option>
                 <option value="Mensual" @if($request->input('program_contract_type')=='Mensual') selected @endif>Mensual</option>
                 <option value="Horas" @if($request->input('program_contract_type')=='Horas') selected @endif>Horas</option>
-            </select>
-        </fieldset>
-
-        <fieldset class="form-group col-6 col-md-2">
-            <label for="for_program_contract_type">Pagado/No Pagado</label>
-            <select name="payment_date" class="form-control">
-                <option value=""></option>
-                <option value="P" @if($request->input('payment_date')=='P') selected @endif>Pagado</option>
-                <option value="SP" @if($request->input('payment_date')=='SP')) selected @endif>No Pagado</option>
             </select>
         </fieldset>
 
