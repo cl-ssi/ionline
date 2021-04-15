@@ -120,11 +120,12 @@ class FirmaDigitalController extends Controller
         $ct_firmas_visator = null;
         $ct_posicion_firmas = null;
         if ($type === 'visador') {
-            $ct_firmas = $signaturesFlow->signaturesFile->signaturesFlows->where('type', 'visador')->count();
+            $ct_firmas_visator = $signaturesFlow->signaturesFile->signaturesFlows->where('type', 'visador')->count();
             $ct_posicion_firmas = $signaturesFlow->sign_position;
         }
 
-        $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $type, $docId, $verificationCode, $ct_firmas_visator, $ct_posicion_firmas);
+        $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $type, $docId, $verificationCode,
+            $ct_firmas_visator, $ct_posicion_firmas, false);
 
         if (!$responseArray['statusOk']) {
             session()->flash('warning', "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}");
@@ -136,6 +137,7 @@ class FirmaDigitalController extends Controller
         $signaturesFlow->save();
 
         $signaturesFlow->signaturesFile->signed_file = $responseArray['content'];
+        if($type === 'firmante') $signaturesFlow->signaturesFile->verification_code = $verificationCode;
         $signaturesFlow->signaturesFile->save();
 
         session()->flash('info', "El documento {$signaturesFlow->signature->id} se ha firmado correctamente.");
@@ -153,7 +155,7 @@ class FirmaDigitalController extends Controller
      * @param string $verificationCode
      * @param int|null $ct_firmas Cantidad de firmas de tipo visador
      * @param int|null $posicion_firma
-     * @param bool|null $visatorSameAsSignature Si es true, las firmas de visador se visualizaran igual a las de las firmas
+     * @param bool|null $visatorSameAsSignature Si es true, el template de visador se visualizaran igual a las de las firmas
      * @return array
      */
     public function signPdfApi(string $pdfbase64, string $checksum_pdf, $modo, string $otp, string $signatureType,
@@ -176,7 +178,7 @@ class FirmaDigitalController extends Controller
         $fullName = Auth::user()->full_name;
         $email = Auth::user()->email;
 
-        if($signatureType === 'firmante'){
+        if($signatureType === 'firmante' || $visatorSameAsSignature === true){
             $im = @imagecreate(400, 80) or die("Cannot Initialize new GD image stream");
             $background_color = imagecolorallocate($im, 204, 204, 204);
             $white = imagecolorallocate($im, 255, 255, 255);
@@ -190,13 +192,13 @@ class FirmaDigitalController extends Controller
             imagettftext($im, $fontSize, 0, $xAxis, $yPading * 3 + $marginTop + 3,
                 $text_color, $font_regular, $email);
             imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 4,
-                $text_color, $font_regular, "$actualDate - ID: $docId - Código: $verificationCode");
+                $text_color, $font_regular, $actualDate . ($signatureType === 'firmante' ? "- ID: $docId - Código: $verificationCode" : ''));
         }
         else{
-            $im = @imagecreate(400, 80) or die("Cannot Initialize new GD image stream");
+            $im = @imagecreate(400, 40) or die("Cannot Initialize new GD image stream");
 //            $background_color = imagecolorallocate($im, 204, 204, 204);
             $white = imagecolorallocate($im, 255, 255, 255);
-            imagefilledrectangle($im, 0, 0, 400, 80, $white);
+            imagefilledrectangle($im, 0, 0, 400, 40, $white);
             $text_color = imagecolorallocate($im, 0, 0, 0);
             imagettftext($im, $fontSize, 0, $xAxis, $yPading * 1 + $marginTop,
                 $text_color, $font_light, Str::upper(Auth::user()->initials));
@@ -265,7 +267,11 @@ class FirmaDigitalController extends Controller
 //            $ct_firmas = $signaturesFlow->signature->signaturesFlows->where('type', 'visador')->count();
 //            $pocision_firma = $signaturesFlow->sign_position;
 
-            $padding = 25;
+            if($visatorSameAsSignature === true){
+                $padding = 50;
+            }else{
+                $padding = 25;
+            }
             $coordenada_x = 65;
             $coordenada_y = 50 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
             $ancho = 170 * 1.4;
