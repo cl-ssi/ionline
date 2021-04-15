@@ -29,35 +29,35 @@
 					<input type="text" class="form-control" name="observation" value="{{$fulfillment->observation}}">
 				</fieldset>
 
-				@can('Service Request: fulfillments responsable')
-				@if($fulfillment->responsable_approver_id == NULL)
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary form-control">Guardar</button>
-				</fieldset>
-				@else
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary form-control" disabled>Guardar</button>
-				</fieldset>
+				<!-- @can('Service Request: fulfillments responsable')
+					@if($fulfillment->responsable_approver_id == NULL)
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn btn-primary form-control">Guardar</button>
+					</fieldset>
+					@else
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn btn-primary form-control" disabled>Guardar</button>
+					</fieldset>
 				@endif
 				@endcan
 
 				@can('Service Request: fulfillments rrhh')
-				@if($fulfillment->rrhh_approver_id == NULL)
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary form-control">Guardar</button>
-				</fieldset>
-				@else
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary form-control" disabled>Guardar</button>
-				</fieldset>
-				@endif
+					@if($fulfillment->rrhh_approver_id == NULL)
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn btn-primary form-control">Guardar</button>
+					</fieldset>
+					@else
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn btn-primary form-control" disabled>Guardar</button>
+					</fieldset>
+					@endif
 				@endcan
 
-				@can('Service Request: fulfillments finance')
+				 @can('Service Request: fulfillments finance')
 				@if($fulfillment->finances_approver_id == NULL)
 				<fieldset class="form-group col">
 					<label for="for_estate"><br/></label>
@@ -69,7 +69,7 @@
 					<button type="submit" class="btn btn-primary form-control" disabled>Guardar</button>
 				</fieldset>
 				@endif
-				@endcan
+				@endcan -->
 			</div>
 		</form>
 
@@ -96,10 +96,14 @@
 					<input type="text" class="form-control" name="observation">
 				</fieldset>
 			</div>
+			@php
+			$ano = \Carbon\Carbon::now()->format('Y');
+			$anopasado = $ano-1;
+			@endphp
 			<div class="row">
 				<fieldset class="form-group col-3">
 					<label for="for_estate">Entrada</label>
-					<input type="date" class="form-control start_date" name="start_date" required>
+					<input type="date" class="form-control start_date" name="start_date" min="{{$anopasado}}-01-01" max="{{$ano}}-12-31"  required>
 				</fieldset>
 				<fieldset class="form-group col">
 					<label for="for_estate">Hora</label>
@@ -107,39 +111,39 @@
 				</fieldset>
 				<fieldset class="form-group col-3">
 					<label for="for_estate">Salida</label>
-					<input type="date" class="form-control end_date" name="end_date" required>
+					<input type="date" class="form-control end_date" name="end_date" min="{{$anopasado}}-01-01" max="{{$ano}}-12-31" required>
 				</fieldset>
 				<fieldset class="form-group col">
 					<label for="for_estate">Hora</label>
 					<input type="time" class="form-control end_hour" name="end_hour" required>
 				</fieldset>
 				@can('Service Request: fulfillments responsable')
-				@if($fulfillment->responsable_approver_id == NULL)
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary">Guardar</button>
-				</fieldset>
-				@else
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary" disabled>Guardar</button>
-				</fieldset>
-				@endif
+					@if($fulfillment->responsable_approver_id == NULL)
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn form-control btn-primary">Guardar</button>
+					</fieldset>
+					@else
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn form-control btn-primary" disabled>Guardar</button>
+					</fieldset>
+					@endif
 				@endcan
 				@can('Service Request: fulfillments rrhh')
-				@if($fulfillment->rrhh_approver_id == NULL)
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary">Guardar</button>
-				</fieldset>
-				@else
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary" disabled>Guardar</button>
-				</fieldset>
-				@endif
+					@if($fulfillment->rrhh_approver_id == NULL)
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn form-control btn-primary">Guardar</button>
+					</fieldset>
+					@else
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn form-control btn-primary" disabled>Guardar</button>
+					</fieldset>
+					@endif
 				@endcan
-				@can('Service Request: fulfillments finance')
+				<!-- @can('Service Request: fulfillments finance')
 				@if($fulfillment->finances_approver_id == NULL)
 				<fieldset class="form-group col">
 					<label for="for_estate"><br/></label>
@@ -151,7 +155,7 @@
 					<button type="submit" class="btn btn-primary" disabled>Guardar</button>
 				</fieldset>
 				@endif
-				@endcan
+				@endcan -->
 			</div>
 		</form>
 		<table class="table table-sm">

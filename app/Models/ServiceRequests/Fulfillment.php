@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use app\User;
 
 class Fulfillment extends Model implements Auditable
 {
@@ -96,9 +97,8 @@ class Fulfillment extends Model implements Auditable
   public function scopeSearch($query, Request $request)
   {
 
-
-    if ($request->input('rut') != "") {
-      $query->whereHas('servicerequest', function ($q) use ($request) {        
+/*    if ($request->input('rut') != "") {
+      $query->whereHas('servicerequest', function ($q) use ($request) {
 
         $q->whereHas('employee', function ($q) use($request) {
           $q->where('id', $request->input('rut'))
@@ -107,7 +107,18 @@ class Fulfillment extends Model implements Auditable
           ->orWhere('mothers_family', 'LIKE', '%'.$request->input('rut').'%');
         });
       });
+    }*/
+
+    if ($request->input('rut') != ""){
+      $query->whereHas('servicerequest', function ($q) use ($request) {
+        $q->whereHas('employee', function ($q) use($request) {
+          $users = User::getUsersBySearch($request->input('rut'));
+          $q->whereIn('id', $users->get('id'));
+        });
+      });
     }
+
+
 
     if ($request->input('year') != "") {
       $query->where('year', $request->input('year'));

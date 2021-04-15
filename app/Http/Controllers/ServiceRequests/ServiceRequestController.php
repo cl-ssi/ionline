@@ -546,13 +546,18 @@ class ServiceRequestController extends Controller
 
   public function consolidated_data(Request $request)
   {
+    $establishment_id = Auth::user()->organizationalUnit->establishment_id;
 
     //solicitudes activas
     $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function ($subQuery) {
-      $subQuery->where('status', 0);
-    })
-      // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
-      ->orderBy('request_date', 'asc')->get();
+                                        $subQuery->where('status', 0);
+                                      })
+                                      ->whereHas("responsabilityCenter", function($subQuery) use ($establishment_id){
+                                           $subQuery->where('establishment_id',$establishment_id);
+                                       })
+                                       // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+                                       ->orderBy('request_date', 'asc')
+                                       ->get();
 
     foreach ($serviceRequests as $key => $serviceRequest) {
       foreach ($serviceRequest->shiftControls as $key => $shiftControl) {

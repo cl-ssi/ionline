@@ -19,8 +19,8 @@
         </fieldset>
 
         <fieldset class="form-group col-4">
-            <label for="for_name">Nombre municipio</label>
-            <input type="text" class="form-control" id="name_municipality" name="name_municipality" value="{{$municipality->name_municipality}}" required readonly>
+            <label for="for_name">E-mail municipio</label>
+            <input type="text" class="form-control" id="email_municipality" name="email_municipality" value="{{$municipality->email_municipality}}">
         </fieldset>
 
         <fieldset class="form-group col-6">
