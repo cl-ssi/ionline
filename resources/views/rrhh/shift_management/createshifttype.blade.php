@@ -34,9 +34,12 @@
     		<div class="row">
         		<fieldset class="form-group col-12 col-md-4">
         		    <label for="for_descripcion">Jornada*</label>
+
         		    @for($i=0;$i<7;$i++)
         		         <select class="form-control"  id="for_day_series" name="day_series[]">
-        		        
+        		          @if($i>1)
+                            <option value=""> ---- </option>
+                          @endif    
         		         	@foreach($tiposJornada as $index => $t  )
         		         		<option value="{{ $index}}"> {{$index}} - {{$t}}</option>
 
