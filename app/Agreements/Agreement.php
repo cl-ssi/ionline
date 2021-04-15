@@ -13,7 +13,7 @@ class Agreement extends Model
      * @var array
      */
     protected $fillable = [
-        'number', 'date', 'period', 'file', 'commune_id', 'program_id', 'quotas', 'referente', 'authority_id'
+        'number', 'date', 'period', 'file', 'commune_id', 'program_id', 'quotas', 'referente', 'authority_id', 'referrer_id'
     ];
 
     protected $casts = [
@@ -34,6 +34,10 @@ class Agreement extends Model
 
     public function commune() {
         return $this->belongsTo('App\Models\Commune');
+    }
+
+    public function referrer() {
+        return $this->belongsTo('App\User');
     }
 
     public function municipality() {

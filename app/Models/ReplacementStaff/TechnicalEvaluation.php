@@ -23,6 +23,10 @@ class TechnicalEvaluation extends Model
         return $this->belongsTo('App\Models\ReplacementStaff\RequestReplacementStaff');
     }
 
+    public function commission() {
+        return $this->hasMany('App\Models\ReplacementStaff\Commission');
+    }
+
     public function getStatusValueAttribute() {
         switch($this->technical_evaluation_status) {
           case 'pending':

@@ -15,6 +15,7 @@ use App\Rrhh\Authority;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Support\Facades\Storage;
 
 class AgreementController extends Controller
@@ -42,30 +43,19 @@ class AgreementController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->period){
-            $agreements = Agreement::where('period', $request->period)->latest()->paginate(50);
-        } else {
-            $agreements = Agreement::where('period', date('Y'))->latest()->paginate(50);
-        }
-
-        return view('agreements/agreements/index')->withAgreements($agreements);
+        $agreements = Agreement::with('commune','program','agreement_amounts.program_component')->where('period', $request->period ? $request->period : date('Y'))->latest()->paginate(50);
+        
+        return view('agreements/agreements/index', compact('agreements'));
     }
 
     public function indexTracking(Request $request)
     {
-        if($request->commune){
-            $agreements = Agreement::where('commune_id',$request->commune)->where('period', $request->period)->latest()->paginate(50);
-        }elseif($request->period){
-            $agreements = Agreement::where('period', $request->period)->latest()->paginate(50);
-        } else {
-            $agreements = Agreement::where('period', date('Y'))->latest()->paginate(50);
-        }
-        $communes = Commune::All()->SortBy('name');
-        $stages = Stage::All();
+        $agreements = Agreement::with('program','stages','agreement_amounts.program_component','addendums','commune')
+                               ->when($request->commune, function($q) use ($request){ return $q->where('commune_id', $request->commune); })
+                               ->where('period', $request->period ? $request->period : date('Y'))->latest()->paginate(50);
 
-        //$agreements =  Agreement::with('Stages')->get();
-        //dd($agreements);
-        return view('agreements/agreements/trackingIndicator')->withAgreements($agreements)->withStages($stages)->withCommunes($communes);
+        $communes = Commune::All()->SortBy('name');
+        return view('agreements/agreements/trackingIndicator', compact('agreements', 'communes'));
     }
 
     /**
@@ -77,8 +67,9 @@ class AgreementController extends Controller
     {
         $programs = Program::All()->SortBy('name');
         $communes = Commune::All()->SortBy('name');
+        $referrers = User::all()->sortBy('name');
         $quota_options = $this->getQuotaOptions();
-        return view('agreements/agreements/create', compact('programs', 'communes', 'quota_options'));
+        return view('agreements/agreements/create', compact('programs', 'communes', 'referrers', 'quota_options'));
     }
 
     /**
@@ -136,10 +127,11 @@ class AgreementController extends Controller
      */
     public function show(Agreement $agreement)
     {
-        $agreement->load('authority.user', 'commune.establishments');
+        $agreement->load('authority.user', 'commune.establishments', 'referrer');
         $municipality = Municipality::where('commune_id', $agreement->commune->id)->first();
         $establishment_list = unserialize($agreement->establishment_list);
-        return view('agreements/agreements/show', compact('agreement', 'municipality', 'establishment_list'));
+        $referrers = User::all()->sortBy('name');
+        return view('agreements/agreements/show', compact('agreement', 'municipality', 'establishment_list', 'referrers'));
     }
 
     /**
@@ -200,7 +192,7 @@ class AgreementController extends Controller
             $Agreement->fileResEnd = $request->file('fileResEnd')->store('resolutions');
         }
 
-        $Agreement->referente = $request->referente;
+        $Agreement->referrer_id = $request->referrer_id;
         // $Agreement->authority_id = $request->authority_id;
         $Agreement->authority_id = Authority::getAuthorityFromDate(1, $request->date, 'manager')->id;
         $Agreement->save();
