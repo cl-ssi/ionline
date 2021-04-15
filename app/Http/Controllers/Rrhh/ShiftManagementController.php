@@ -181,14 +181,40 @@ class ShiftManagementController extends Controller
         $currentSeries =  explode(",", $actuallyShift->day_series); 
         $i = 0;
         foreach ($ranges as $date) {
-            $nShiftD = new ShiftUserDay;
-            $nShiftD->day = $date->format('Y-m-d');
-            $nShiftD->status = 1;//assgined
-            $nShiftD->working_day = $currentSeries[$i]; 
-            $nShiftD->commentary = "// Automatically added by the shift ".$nShift->id."//"; 
-            $nShiftD->shift_user_id = $nShift->id;
-            $nShiftD->save();
-            // echo $date->format('Y-m-d');
+
+
+                $nShiftD = new ShiftUserDay;
+                $nShiftD->day = $date->format('Y-m-d');
+                $nShiftD->status = 1;//assgined
+               
+
+                if(isset($currentSeries[$i]) && $currentSeries[$i] != ""){
+                    $nShiftD->working_day = $currentSeries[$i]; 
+                    echo "if";
+
+                }
+                else{
+                    echo "else";
+                    while( !isset($currentSeries[$i])  ||  (isset($currentSeries[$i]) && $currentSeries[$i] == "") ){
+                        echo "currentSeries[i]:".$currentSeries[$i]."<br>";
+                        if(isset($currentSeries[$i]) && $currentSeries[$i] != "")
+                            $previous = $currentSeries[$i];
+                        if( $i <  ( sizeof($currentSeries) - 1) ){
+                            $i++;
+                        }else{
+                            $i=0;
+                        }
+                    }
+                    if(isset($currentSeries[$i]) && $currentSeries[$i] != "")
+                        $nShiftD->working_day = $currentSeries[$i]; 
+                    else
+                         $nShiftD->working_day =$previous;
+
+                }
+                $nShiftD->commentary = "// Automatically added by the shift ".$nShift->id."//"; 
+                $nShiftD->shift_user_id = $nShift->id;
+                $nShiftD->save();
+           
             if( $i <  ( sizeof($currentSeries) - 1) ){
                 $i++;
             }else{
