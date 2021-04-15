@@ -590,6 +590,7 @@
 			$("#programm_name option[value='Covid19-APS Médicos']").hide();
 			$("#programm_name option[value='Covid19 No Médicos']").hide();
 			$("#programm_name option[value='Covid19 Médicos']").hide();
+			$('#digera_strategy').attr('disabled', 'disabled');
 
 			if ({{Auth::user()->organizationalUnit->establishment_id}} == 1) {
 				$("#programm_name option[value='PRAPS']").hide();
@@ -635,6 +636,7 @@
 			$("#programm_name option[value='Covid19-APS Médicos']").show();
 			$("#programm_name option[value='Covid19 No Médicos']").show();
 			$("#programm_name option[value='Covid19 Médicos']").show();
+			$('#digera_strategy').removeAttr('disabled');
 
 			$("#programm_name option[value='PRAPS']").hide();
 			$("#programm_name option[value='PESPI']").hide();

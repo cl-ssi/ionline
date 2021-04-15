@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('title', 'Gestion de Turnos')
 
-
 @section('content')
 
 <style type="text/css">
@@ -96,7 +95,9 @@
 <div class="form-group" >
 	<!-- <div class="col-lg-12"> -->
 		<h3> Gestión de Turnos 
-
+  
+  <livewire:rrhh.change-shift-day-status />
+   
         </h3>
 		<form method="POST" class="form-horizontal shadow" action="{{ route('rrhh.shiftManag.index') }}">
 			@csrf
@@ -251,51 +252,29 @@
                         </tr>
                 </thead>
                 <tbody>
+
                   
-					@foreach($staffInShift as $sis)
-						<tr>
-						   <td class="bless br" >
-                            <form method="POST" action="{{ route('rrhh.shiftsTypes.deleteassign') }}">
-                                @csrf
-                                @method('POST')
-                                <input hidden name="idAssign" value="{{$sis->id}}">
-                            <button class="only-icon"><i class="fa fa-close" style="color:red"></i></button> {{ $sis->user->runFormat()}} - {{$sis->user->name}}  </td>
-                            </form>
-                          
-						    @for($j = 1; $j <= $days; $j++) 
-
-						    	@php
-						    		$date = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$j);
-						    		$date =explode(" ",$date);
-
-						    		$d = $sis->days->where('day',$date[0]);
-						    	@endphp
-                            <td  style="text-align:center;width:54px;height:54px">
-                                <div  class="bbd day" >{{ ( isset($d) && count($d) )? ( ($d->first()->working_day!="F")?$d->first()->working_day:"-" ) :"n/a" }}</div>
-                            </td>
-                            @endfor
-                           
-                            
-						</tr>	
-					@endforeach
-                                     
-                   	@if(count($staffInShift)<1)
-                   		<td style="text-align:  center;" colspan="{{$days}}">SIN PERSONAL ASIGNADO</td>
-                   	@endif
-
+                    @livewire('rrhh.list-of-shifts', 
+                        [
+                            'staffInShift'=>$staffInShift,
+                            'actuallyYear'=>$actuallyYear,
+                            'actuallyMonth'=>$actuallyMonth,
+                            'days'=>$days
+                        ]
+                    )
+                  
+                  
                 </tbody>
             </table>
     </div>
 </div>
-
 </div>
-
+   
 @endsection
 @section('custom_js')
 
+
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
-<script src=https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.1/axios.js></script>
 
 <script type="text/javascript">
 
@@ -303,59 +282,7 @@
     	$('.find-personal-input').select2();
 	});
 
-
-	var obj = {
- 		foo: 'bar',
-      	cargandoPagina:1,
-
-	}
-
-	Object.freeze(obj)
-  		Vue.prototype.$http = axios;
-
-new Vue({
-  el: '#shiftapp',
-  data: obj,
-      methods: {
      
-     		 getUser : function () {
-          		var url = './service.php'; 
-          		axios.post(url,{opc:"3"}).then( ( res ) => {
-                // console.log(res.config.data);
-                // console.log("getUser "+res.data.u.name);
-
-                if (res.data.u!=""){
-                // console.log("getUser "+res.data.u);
-
-                  alert("result from axios");
-                  // this.usuario.uNombre = res.data.u.name;
-                  // this.usuario.uApaterno = res.data.u.lastname1+" "+res.data.u.lastname2;
-                  // this.usuario.uEmpresa = "empresa";
-                  // this.usuario.uEstado = "Habilitado";
-                  // this.usuario.uPhone = res.data.u.phone;
-                  // this.usuario.uEmail = res.data.u.email;
-                  // this.usuario.uFechaDeNac = res.data.u.birth_date;
-                  // this.usuario.uFHabilitacionHasta = res.data.u.habilitado_hasta;
-                  // this.usuario.uToken = res.data.u.usr_tkn;
-
-                }
-          		}).finally( ()=>{
-            		this.getReservas();
-          		}).catch(function (error) {
-                  console.log(error);
-          		});
-          		this.cargandoPagina=0;
-        }
-
-
-      }
-
-})
-
-
-
-  
- 
-       
 </script>
+
 @endsection

@@ -12,7 +12,7 @@ class Commission extends Model
     use softDeletes;
 
     protected $fillable = [
-        'user_id'
+        'user_id', 'job_title'
     ];
 
     public function organizationalUnit() {
@@ -21,6 +21,10 @@ class Commission extends Model
 
     public function user() {
         return $this->belongsTo('App\User');
+    }
+
+    public function technicalEvaluation() {
+        return $this->belongsTo('App\Models\ReplacementStaff\TechnicalEvaluation');
     }
 
     protected $hidden = [
