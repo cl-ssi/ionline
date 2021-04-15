@@ -6,7 +6,7 @@
 
 @include('service_requests.partials.nav')
 
-<form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.compliance') }}">
+<form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.fulfillment-pending',$who) }}">
 
     <div class="form-row">
         <fieldset class="form-group col-12 col-md-2">
@@ -83,7 +83,7 @@
 
 <hr>
 
-<h3 class="mb-3">Cumplimientos pendientes por aprobar</h3>
+<h3 class="mb-3">Cumplimientos pendientes por aprobar de {{$who}}</h3>
 
 <div class="table-responsive">
     <table class="table table-sm table-bordered table-stripped">

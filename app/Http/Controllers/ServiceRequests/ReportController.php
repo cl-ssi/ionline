@@ -303,7 +303,8 @@ class ReportController extends Controller
 				break;
 		}
 
-		$fulfillments = Fulfillment::whereNull($condition)
+		$fulfillments = Fulfillment::Search($request)
+			->whereNull($condition)
 			->whereHas('ServiceRequest')
 			->orderBy('year')
 			->orderBy('month')
