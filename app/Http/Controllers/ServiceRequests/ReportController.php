@@ -305,7 +305,7 @@ class ReportController extends Controller
 				break;
 			case 'finance':
 				$query->whereNotNull('responsable_approbation');
-				$query->whereNull('rrhh_approbation');
+				$query->whereNotNull('rrhh_approbation');
 				$query->whereNull('finances_approbation');
 				break;
 			default:
@@ -313,9 +313,10 @@ class ReportController extends Controller
 		}
 
 		$fulfillments = $query->paginate(100);		
+		
 		$periodo = '';
 		
-		$request->flash();
+		$request->flash(); // envía los inputs de regreso
 
 		return view('service_requests.requests.fulfillments.reports.pending',
 			compact('fulfillments','request','periodo','who')
