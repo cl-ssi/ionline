@@ -163,6 +163,9 @@ class ServiceRequestController extends Controller
   {
     $signatureFlow = SignatureFlow::find($request->signature_flow_id);
     $signatureFlow->responsable_id = $request->user_id;
+    if (User::find($request->user_id)->organizational_unit_id != null) {
+      $signatureFlow->ou_id = User::find($request->user_id)->organizational_unit_id;
+    }
     $signatureFlow->save();
 
     session()->flash('success', 'Se ha modificado el responsable del flujo de firmas.');
