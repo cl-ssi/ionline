@@ -95,7 +95,7 @@
             <th>Periodo</th>
             <th>Tipo</th>
             <th>Tipo de Contrato</th>
-            <th>Pago</th>
+            <th>Hitos</th>
             <th></th>
         </tr>
 
