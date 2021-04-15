@@ -288,29 +288,35 @@ class ReportController extends Controller
   }
 
 	public function pending(Request $request, $who) {
+		$query = Fulfillment::query();
+		
+		$query->Search($request)
+			->whereHas('ServiceRequest')
+			->orderBy('year')
+			->orderBy('month');
+
 		switch($who) {
 			case 'responsable':
-				$condition = 'responsable_approbation';
+				$query->whereNull('responsable_approbation');
 				break;
 			case 'rrhh':
-				$condition = 'rrhh_approbation';
+				$query->whereNotNull('responsable_approbation');
+				$query->whereNull('rrhh_approbation');
 				break;
 			case 'finance':
-				$condition = 'finances_approbation';
+				$query->whereNotNull('responsable_approbation');
+				$query->whereNull('rrhh_approbation');
+				$query->whereNull('finances_approbation');
 				break;
 			default:
-				$condition = '';
 				break;
 		}
 
-		$fulfillments = Fulfillment::Search($request)
-			->whereNull($condition)
-			->whereHas('ServiceRequest')
-			->orderBy('year')
-			->orderBy('month')
-			->paginate(250);
+		$fulfillments = $query->paginate(100);		
 		$periodo = '';
 		
+		$request->flash();
+
 		return view('service_requests.requests.fulfillments.reports.pending',
 			compact('fulfillments','request','periodo','who')
 		);
