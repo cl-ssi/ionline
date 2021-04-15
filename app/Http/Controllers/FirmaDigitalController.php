@@ -174,9 +174,8 @@ class FirmaDigitalController extends Controller
         $yPading = 16;
         $fontSize = 10;
 
-        $actualDate = now();
+        $actualDate = now()->format('d-m-Y H:i:s');
         $fullName = Auth::user()->full_name;
-        $email = Auth::user()->email;
 
         if($signatureType === 'firmante' || $visatorSameAsSignature === true){
             $im = @imagecreate(400, 80) or die("Cannot Initialize new GD image stream");
@@ -190,7 +189,7 @@ class FirmaDigitalController extends Controller
             imagettftext($im, $fontSize + 1, 0, $xAxis, $yPading * 2 + $marginTop + 2,
                 $text_color, $font_bold, $fullName);
             imagettftext($im, $fontSize, 0, $xAxis, $yPading * 3 + $marginTop + 3,
-                $text_color, $font_regular, $email);
+                $text_color, $font_regular, env('APP_SS'));
             imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 4,
                 $text_color, $font_regular, $actualDate . ($signatureType === 'firmante' ? "- ID: $docId - Código: $verificationCode" : ''));
         }
