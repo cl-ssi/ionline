@@ -1136,6 +1136,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::get('/approved', [SuitabilityController::class, 'approved'])->name('approved');
     Route::get('/rejected', [SuitabilityController::class, 'rejected'])->name('rejected');
     Route::patch('/finalresult/{psirequest}/{result}', [SuitabilityController::class, 'finalresult'])->name('finalresult');
+    Route::get('/sendForSignature/{id}', [SuitabilityController::class, 'sendForSignature'])->name('sendForSignature');
 
     Route::prefix('categories')->as('categories.')->middleware('auth')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])->name('index');

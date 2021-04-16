@@ -47,7 +47,7 @@ class SignatureController extends Controller
                 ->get();
 
             $signedSignaturesFlows = SignaturesFlow::where('user_id', Auth::id())
-                ->where('status', 1)
+                ->whereNotNull('status')
                 ->orderByDesc('id')
                 ->get();
 
