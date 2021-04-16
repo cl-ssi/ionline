@@ -13,10 +13,10 @@
         <fieldset class="form-group col-6 col-sm-6 col-md-6 col-lg-6">
             <label for="for_run">Preguntas*</label>
             <select class="form-control" name="question_id" id="question_id" required>
-            <option value="">Seleccionar Pregunta</option>
-            @foreach($questions as $question)
-            <option value="{{ $question->id }}">{{ $question->id }}) {{ $question->question_text }} ({{$question->category->name}})</option>
-            @endforeach
+                <option value="">Seleccionar Pregunta</option>
+                @foreach($questions as $question)
+                <option value="{{ $question->id }}">{{ $question->id }}) {{ $question->question_text }} ({{$question->category->name}})</option>
+                @endforeach
             </select>
         </fieldset>
     </div>
@@ -29,7 +29,14 @@
     </div>
 
     <div class="form-group">
-    <fieldset>
+        <fieldset>
+            <label for="for_alternative">Alternativa</label>
+            <input class="form-control" name="alternative" id="alternative" maxlength="1" autocomplete="off"></input>
+        </fieldset>
+    </div>
+
+    <div class="form-group">
+        <fieldset>
             <label class="required" for="points">Puntos Opción*</label>
             <input type="number" class="form-control" name="points" id="points" required></input>
         </fieldset>

@@ -104,6 +104,23 @@ class FirmaDigitalController extends Controller
      */
     public function signPdfFlow(Request $request, SignaturesFlow $signaturesFlow)
     {
+
+        if ($signaturesFlow->signature->endorse_type === 'Visación en cadena de responsabilidad') {
+            $visationsPendingBefore = $signaturesFlow->signaturesFile->signaturesFlows
+                ->where('type', 'visador')
+                ->whereNull('status')
+                ->where('sign_position' < $signaturesFlow->sign_position);
+
+            if ($visationsPendingBefore->count() > 0) {
+                foreach ($visationsPendingBefore as $visationPendingBefore) {
+                    $strMsg = $visationsPendingBefore['id'];
+                }
+                session()->flash('warning', $strMsg);
+                return redirect()->back();
+            }
+
+        }
+
         if ($signaturesFlow->signaturesFile->signed_file) {
             $pdfbase64 = $signaturesFlow->signaturesFile->signed_file;
         } else {

@@ -57,6 +57,7 @@
                 <th scope="col">Materia de Resolución</th>
                 <th scope="col">Firmar</th>
                 <th scope="col">Doc</th>
+                <th scope="col">Rechazar</th>
             </tr>
             </thead>
             <tbody>
@@ -96,7 +97,52 @@
                             <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
                     </td>
+      {{-- MY BOTON DE RECHAZAR --}}
+                <td>
+                    <button type="button" class="btn btn-sm btn-outline-danger" data-toggle="modal"
+{{--CAMBIAR A REJECT--}}    data-target="#rejectSignature{{$pendingSignaturesFlow->id}}">
+                        <i class="fas fa-times"></i>
+                        </button>
+                    </td>
                 </tr>
+                <div class="modal fade" id="rejectSignature{{$pendingSignaturesFlow->id}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLongTitle">Rechazar Firma</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                          </button>
+                      </div>
+                      <form method="POST" class="form-horizontal"
+                            action="{{route('rejectSignature', $pendingSignaturesFlow->id)}}"
+                            enctype="multipart/form-data">
+                          <div class="modal-body">
+                          @csrf <!-- input hidden contra ataques CSRF -->
+                              @method('POST')
+                              <div class="form-row">
+                                  <div class="form-group col-12">
+                                      <label for="forobservacion">Observación</label>
+                                      <input type="text" class="form-control form-control-sm" id="forobservacion"
+                                             name="observacion" maxlength="255" autocomplete="off" required/>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
+                              </button>
+
+                              <button class="btn btn-primary" type="submit">
+                                  <i class="fas fa-edit"></i> Rechazar
+                              </button>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
+{{--**************************** El pop up up up del OTP**************************************************************--}}
+                
                 <div class="modal fade" id="exampleModalCenter{{$pendingSignaturesFlow->id}}" tabindex="-1" role="dialog"
                           aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
