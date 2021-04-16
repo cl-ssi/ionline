@@ -13,7 +13,8 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th>Preguntas</th>            
+            <th>Preguntas</th>
+            <th>Alternativa</th>
             <th>Respuesta</th>
             <th>Puntos</th>
         </tr>
@@ -21,7 +22,8 @@
     <tbody>
         @foreach($result->questions as $question)        
         <tr>
-            <td>{{$question->id}}) {{ $question->question_text }}</td>            
+            <td>{{$question->id}}) {{ $question->question_text }}</td>
+            <td>{{$question->altertive ?? '' }} </td>
             <td>{{ $question->questionOptions->find($question->pivot->option_id)->option_text }}</td>
             <td>{{ $question->pivot->points }}</td>
         </tr>
