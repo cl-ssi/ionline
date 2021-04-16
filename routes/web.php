@@ -283,6 +283,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     //Route::get('createWord','Agreements\WordTestController@createWordDocx')->name('createWord.index');
     Route::get('/createWord/{agreement}', 'Agreements\WordTestController@createWordDocx')->name('createWord');
     Route::get('/createWordRes/{agreement}', 'Agreements\WordTestController@createResWordDocx')->name('createWordRes');
+    Route::get('/signRes/{agreement}', 'Agreements\AgreementController@signRes')->name('signRes');
 });
 
 //Programación Númerica APS
