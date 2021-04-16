@@ -11,6 +11,7 @@ use Luecano\NumeroALetras\NumeroALetras;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
@@ -288,8 +289,10 @@ class ReportController extends Controller
   }
 
 	public function pending(Request $request, $who) {
+
+    $user_id = Auth::user()->id;
 		$query = Fulfillment::query();
-		
+
 		$query->Search($request)
 			->whereHas('ServiceRequest')
 			->orderBy('year')
@@ -297,7 +300,12 @@ class ReportController extends Controller
 
 		switch($who) {
 			case 'responsable':
-				$query->whereNull('responsable_approbation');
+				$query->whereNull('responsable_approbation')
+              ->whereHas("serviceRequest", function ($subQuery) use ($user_id) {
+                      $subQuery->whereHas("signatureFlows", function ($subQuery) use ($user_id) {
+                                  $subQuery->where('responsable_id',$user_id);
+                                });
+                });
 				break;
 			case 'rrhh':
 				$query->whereNotNull('responsable_approbation');
@@ -312,10 +320,10 @@ class ReportController extends Controller
 				break;
 		}
 
-		$fulfillments = $query->paginate(100);		
-		
+		$fulfillments = $query->paginate(100);
+
 		$periodo = '';
-		
+
 		$request->flash(); // envía los inputs de regreso
 
 		return view('service_requests.requests.fulfillments.reports.pending',
