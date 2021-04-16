@@ -25,6 +25,28 @@
     </li>
     @endcan
 
+    @can('Service Request: fulfillments rrhh')    
+        <li class="nav-item">
+            <a class="nav-link {{ active('rrhh.service-request.report.fulfillment-pending') }}"
+                href="{{ route('rrhh.service-request.report.fulfillment-pending','rrhh') }}"
+                title="Cumplimientos pendientes por aprobar de RRHH">
+                <i class="fas fa-clipboard-check"></i>
+                <i class="fas fa-user-shield"></i> 
+            </a>
+        </li>
+    @endcan
+
+    @can('Service Request: fulfillments finance')    
+        <li class="nav-item">
+            <a class="nav-link {{ active('rrhh.service-request.report.fulfillment-pending') }}"
+                href="{{ route('rrhh.service-request.report.fulfillment-pending','finance') }}"
+                title="Cumplimientos pendientes por aprobar de finanzas">
+                <i class="fas fa-clipboard-check"></i>
+                <i class="fas fa-piggy-bank"></i> 
+            </a>
+        </li>
+    @endcan
+
     @canany(['Service Request: additional data'])
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.service-request.aditional_data_list') }}"

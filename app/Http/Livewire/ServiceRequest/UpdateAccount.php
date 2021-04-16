@@ -22,7 +22,7 @@ class UpdateAccount extends Component
     //
 
     protected $rules = [
-        'account_number' => 'required',
+        'account_number' => 'required|integer',
         'bank_id' => 'required',
         'pay_method' => 'required',
         'phone_number' => 'required',
@@ -36,6 +36,7 @@ class UpdateAccount extends Component
         'phone_number.required' => 'Debe Ingresar su Número Telefónico',
         'email.required' => 'Debe Ingresar un Correo Electrónico',
         'email.email' => 'El Formato del Correo Electrónico no es válido',
+        'account_number.integer' => 'Debe Ingresar solo números ej:123456789',
     ];
 
 

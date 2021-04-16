@@ -287,14 +287,49 @@ class ReportController extends Controller
     return view('service_requests.reports.budget_availability', compact('serviceRequest'));
   }
 
+	public function pending(Request $request, $who) {
+		$query = Fulfillment::query();
+		
+		$query->Search($request)
+			->whereHas('ServiceRequest')
+			->orderBy('year')
+			->orderBy('month');
 
-  public function compliance(Request $request)
-  {
-      //$users = User::getUsersBySearch($request->get('name'))->orderBy('name','Asc')->paginate(150);
-      $fulfillments = Fulfillment::Search($request)->paginate(100);
+		switch($who) {
+			case 'responsable':
+				$query->whereNull('responsable_approbation');
+				break;
+			case 'rrhh':
+				$query->whereNotNull('responsable_approbation');
+				$query->whereNull('rrhh_approbation');
+				break;
+			case 'finance':
+				$query->whereNotNull('responsable_approbation');
+				$query->whereNotNull('rrhh_approbation');
+				$query->whereNull('finances_approbation');
+				break;
+			default:
+				break;
+		}
 
+		$fulfillments = $query->paginate(100);		
+		
+		$periodo = '';
+		
+		$request->flash(); // envía los inputs de regreso
 
-    return view('service_requests.reports.compliance', compact('fulfillments','request'));
-  }
+		return view('service_requests.requests.fulfillments.reports.pending',
+			compact('fulfillments','request','periodo','who')
+		);
+
+	}
+
+	public function compliance(Request $request)
+	{
+		//$users = User::getUsersBySearch($request->get('name'))->orderBy('name','Asc')->paginate(150);
+		$fulfillments = Fulfillment::Search($request)->paginate(100);
+
+		return view('service_requests.requests.fulfillments.reports.compliance', compact('fulfillments','request'));
+	}
 
 }

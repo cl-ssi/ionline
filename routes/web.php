@@ -431,6 +431,10 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/budget-availability/{serviceRequest}', [ReportController::class, 'budgetAvailability'])->name('budget-availability');
             Route::get('/compliance', [ReportController::class, 'compliance'])->name('compliance');
 
+            Route::get('/fulfillment/pending/{who}', [ReportController::class, 'pending'])->name('fulfillment-pending');
+            // Route::get('/fulfillment/rrhh', [ReportController::class, 'pendingRrhh'])->name('pending-rrhh');
+            // Route::get('/fulfillment/finance', [ReportController::class, 'pendingFinance'])->name('pending-finance');
+
             //pasar a reports
             Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
             Route::get('/export-sirh', [ServiceRequestController::class, 'export_sirh'])->name('export_sirh');
