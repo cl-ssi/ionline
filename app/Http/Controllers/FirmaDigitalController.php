@@ -34,7 +34,6 @@ class FirmaDigitalController extends Controller
      */
     public function signPdf(Request $request)
     {
-
         if($request->has('file_path')){
             $filePath = $request->file_path;
 
@@ -64,7 +63,6 @@ class FirmaDigitalController extends Controller
 //            dd($responseBody);
 //            header('Content-Type: application/pdf');
 //            echo base64_decode($pdfbase64);
-
         }
 
         $modo = self::modoAtendidoProduccion;
@@ -104,21 +102,22 @@ class FirmaDigitalController extends Controller
      */
     public function signPdfFlow(Request $request, SignaturesFlow $signaturesFlow)
     {
-
         if ($signaturesFlow->signature->endorse_type === 'Visación en cadena de responsabilidad') {
-            $visationsPendingBefore = $signaturesFlow->signaturesFile->signaturesFlows
+            $visationsPending = $signaturesFlow->signaturesFile->signaturesFlows
                 ->where('type', 'visador')
                 ->whereNull('status')
-                ->where('sign_position' < $signaturesFlow->sign_position);
+                ->when($signaturesFlow->type === 'visador', function ($query) use ($signaturesFlow){
+                    return $query->where('sign_position', '<' ,$signaturesFlow->sign_position);
+                });
 
-            if ($visationsPendingBefore->count() > 0) {
-                foreach ($visationsPendingBefore as $visationPendingBefore) {
-                    $strMsg = $visationsPendingBefore['id'];
+            if ($visationsPending->count() > 0) {
+                $strMsg = '';
+                foreach ($visationsPending as $visationPending) {
+                    $strMsg .= "$visationPending->type {$visationPending->signerName} pendiente para el doc. {$visationPending->signature->id }  <br>" ;
                 }
                 session()->flash('warning', $strMsg);
                 return redirect()->back();
             }
-
         }
 
         if ($signaturesFlow->signaturesFile->signed_file) {
