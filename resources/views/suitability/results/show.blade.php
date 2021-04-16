@@ -23,7 +23,7 @@
         @foreach($result->questions as $question)        
         <tr>
             <td>{{$question->id}}) {{ $question->question_text }}</td>
-            <td>{{$question->alternative ?? '' }} </td>
+            <td>{{$question->questionOptions->find($question->pivot->option_id)->alternative?? '' }} </td>
             <td>{{ $question->questionOptions->find($question->pivot->option_id)->option_text }}</td>
             <td>{{ $question->pivot->points }}</td>
         </tr>
