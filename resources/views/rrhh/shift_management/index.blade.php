@@ -223,6 +223,9 @@
 </div>
 <div class="row  shadow" style=" overflow: auto;white-space: nowrap;">
 	<div class="col-md-2">
+        
+
+        @if($actuallyShift->id != 0)
             <table class="table">
                 <thead class="thead-dark">
                     <th rowspan="2">Personal</th>
@@ -263,6 +266,49 @@
                   
                 </tbody>
             </table>
+        
+        @else
+            @foreach($sTypes as $st)
+                <table class="table">
+                    <thead class="thead-dark">
+                        <th rowspan="2">Personal</th>
+                        <th class="calendar-day" colspan="{{$days}}">
+
+                                @foreach($months AS $index => $month)
+                                    {{ ($index == $actuallyMonth )?$month:"" }}
+                                @endforeach
+
+                                {{$actuallyYear}}
+                                -  
+                                {{$st->name}}
+                        </th> 
+                        <tr>
+                            @for($i = 1; $i <= $days; $i++) 
+                                    @php
+                                         $dateFiltered = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$i, 'Europe/London');  
+                                    @endphp
+                                    <th class="brless dia" style="color:{{ ($dateFiltered->isWeekend() )?'red':'white'}}" >{{$i}}</th>
+                                    <!-- <th class="brless dia">🌞</th> -->
+                                    <!-- <th class="noche">🌒</th> -->
+                            @endfor
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @livewire('rrhh.list-of-shifts', 
+                            [
+                                'staffInShift'=>$staffInShift->where('shift_types_id', $st->id),
+                                'actuallyYear'=>$actuallyYear,
+                                'actuallyMonth'=>$actuallyMonth,
+                                'days'=>$days
+                            ]
+                        )
+                  
+                  
+                    </tbody>
+                </table>
+            @endforeach
+        @endif
     </div>
 </div>
 </div>
