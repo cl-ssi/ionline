@@ -62,7 +62,7 @@ class ShiftManagementController extends Controller
         $actuallyShift=$sTypes->first();
         $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
         
-        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->get();
+        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift)->get();
 
         Session::put('users',$users);
         Session::put('cargos',$cargos);
@@ -99,11 +99,18 @@ class ShiftManagementController extends Controller
         
         
 
-        $actuallyShift=ShiftTypes::find($r->turnFilter);
          
         $actuallyOrgUnit =  OrganizationalUnit::find($r->orgunitFilter);
         $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
-        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->get();
+
+        if($r->turnFilter!=0){
+            $actuallyShift=ShiftTypes::find($r->turnFilter);
+            $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->get();
+        } else {
+             $actuallyShift=  (object) array('id' =>0,'name'=>"Todos" );
+            $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->get();
+        }
+
         // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
         Session::put('cargos',$cargos);
         Session::put('sTypes',$sTypes);
