@@ -122,6 +122,9 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::post('/{signaturesFlow}/firma', 'FirmaDigitalController@signPdfFlow')->name('signPdfFlow');
 Route::post('/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
 
+Route::post('/{idSignaturesFlow}/rechazar', 'Documents\SignatureController@rejectSignature')->name('rejectSignature');
+
+
 
 Route::get('/claveunica', 'ClaveUnicaController@autenticar')->name('claveunica.autenticar');
 Route::get('/claveunica/callback', 'ClaveUnicaController@callback')->name('claveunica.callback');
