@@ -3,12 +3,19 @@
 namespace App\Http\Controllers\Suitability;
 
 use App\Http\Controllers\Controller;
+use App\Models\Documents\Signature;
+use App\Models\Documents\SignaturesFile;
+use App\Models\Documents\SignaturesFlow;
+use App\Models\Suitability\Result;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\User;
 use App\Models\Suitability\PsiRequest;
 use App\Models\Suitability\School;
 use App\Models\UserExternal;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class SuitabilityController extends Controller
 {
@@ -21,16 +28,16 @@ class SuitabilityController extends Controller
 
     public function createExternal(School $school)
     {
-        
+
         return view('external.suitability.create',compact('school'));
     }
 
     public function listOwn($school)
     {
 
-        $psirequests = PsiRequest::where('school_id',$school)->get();        
+        $psirequests = PsiRequest::where('school_id',$school)->get();
         return view('external.suitability.index',compact('psirequests'));
-        
+
 
     }
 
@@ -55,14 +62,14 @@ class SuitabilityController extends Controller
 
     public function finalresult(PsiRequest $psirequest, $result)
     {
-        
+
         $psirequest->status = $result;
         $psirequest->save();
         session()->flash('success', 'Se dio resultado de manera correcta');
         return redirect()->back();
     }
 
-    
+
 
 
 
@@ -86,8 +93,8 @@ class SuitabilityController extends Controller
         // if(!$user)
         // {
         //     return redirect()->route('suitability.create',$request->run);
-            
-            
+
+
         // }
         // else
         // {
@@ -95,14 +102,14 @@ class SuitabilityController extends Controller
         // }
         return redirect()->route('suitability.create',$request->run);
     }
-    
 
 
-    public function create($run)    
+
+    public function create($run)
     {
         $user = User::firstOrNew(['id'=>$run]);
         return view('suitability.create',compact('run','user'));
-        
+
     }
     public function storeSuitabilityExternal(Request $request)
     {
@@ -114,12 +121,12 @@ class SuitabilityController extends Controller
         else
         {
             $userexternal->save();
-        }        
+        }
         $psirequest = new PsiRequest();
         $psirequest->job = $request->input('job');
         $psirequest->country = $request->input('country');
         $psirequest->start_date = $request->input('start_date');
-        $psirequest->disability = $request->input('disability');        
+        $psirequest->disability = $request->input('disability');
         $psirequest->status = "Esperando Test";
         $psirequest->user_external_id = $request->input('id');
         $psirequest->user_creator_id = Auth::guard('external')->user()->id;
@@ -144,12 +151,12 @@ class SuitabilityController extends Controller
         $user->password = bcrypt('123456');
         $user->save();
         }
-        
+
         $psirequest = new PsiRequest();
         $psirequest->job = $request->input('job');
         $psirequest->country = $request->input('country');
         $psirequest->start_date = $request->input('start_date');
-        $psirequest->disability = $request->input('disability');        
+        $psirequest->disability = $request->input('disability');
         $psirequest->status = "Esperando Test";
         $psirequest->user_id = $request->input('id');
         $psirequest->user_creator_id = Auth::id();
@@ -162,5 +169,70 @@ class SuitabilityController extends Controller
 
     }
 
+    /**
+     * @throws Throwable
+     */
+    public function sendForSignature($id)
+    {
+        $result = Result::find($id);
+        $pdf = \PDF::loadView('suitability.results.certificate', compact('result'));
+        $userSigner = User::find(15685508);
+        $userVisator1 = User::find(13480977);
+        $userVisator2 = User::find(13867504);
+
+        DB::beginTransaction();
+
+        try {
+            $signature = new Signature();
+            $signature->user_id = Auth::id();
+            $signature->responsable_id = Auth::id(); // 15685508;
+            $signature->ou_id = Auth::user()->organizational_unit_id; // User::find(15685508)->organizational_unit_id;
+            $signature->request_date = now();
+            $signature->document_type = 'Carta';
+            $signature->subject = 'Informe Idoneidad';
+            $signature->description = "{$result->user->fullname} , Rut: {$result->user->id}-{$result->user->dv} ";
+            $signature->endorse_type = 'Visación opcional';
+            $signature->recipients = $userSigner->email . ',' . $userVisator1->email . ',' . $userVisator2->email; //Variable
+            $signature->distribution = $userSigner->full_name . ',' . $userVisator1->full_name . ',' . $userVisator2->full_name; //Variable
+            $signature->save();
+
+            $signaturesFile = new SignaturesFile();
+            $signaturesFile->file = base64_encode($pdf->output());
+            $signaturesFile->md5_file = md5($pdf->output());
+            $signaturesFile->file_type = 'documento';
+            $signaturesFile->signature_id = $signature->id;
+            $signaturesFile->save();
+
+            $signaturesFlow = new SignaturesFlow();
+            $signaturesFlow->signatures_file_id = $signaturesFile->id;
+            $signaturesFlow->type = 'firmante';
+            $signaturesFlow->user_id = 15685508;
+            $signaturesFlow->ou_id = User::find(15685508)->organizational_unit_id;
+            $signaturesFlow->save();
+
+            $signaturesFlow = new SignaturesFlow();
+            $signaturesFlow->signatures_file_id = $signaturesFile->id;
+            $signaturesFlow->type = 'visador';
+            $signaturesFlow->user_id = 13480977;
+            $signaturesFlow->ou_id = User::find(13480977)->organizational_unit_id;
+            $signaturesFlow->save();
+
+            $signaturesFlow = new SignaturesFlow();
+            $signaturesFlow->signatures_file_id = $signaturesFile->id;
+            $signaturesFlow->type = 'visador';
+            $signaturesFlow->user_id = 13867504;
+            $signaturesFlow->ou_id = User::find(13867504)->organizational_unit_id;
+            $signaturesFlow->save();
+
+            DB::commit();
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        session()->flash('info', 'La solicitud de firma ' . $signature->id . ' ha sido creada. <a href="'. route('documents.signatures.index', ['mis_documentos']) . '"> Ver solicitudes </a>');
+        return redirect()->back();
+    }
 
 }
