@@ -33,7 +33,6 @@ class SignatureController extends Controller
         $mySignatures = null;
         $pendingSignaturesFlows = null;
         $signedSignaturesFlows = null;
-        $rejectSignaturesFlows = null;
 
         if ($tab == 'mis_documentos') {
             $mySignatures = Signature::where('responsable_id', Auth::id())
@@ -52,10 +51,10 @@ class SignatureController extends Controller
                 ->orderByDesc('id')
                 ->get();
 
-            
+
         }
 
-        return view('documents.signatures.index', compact('mySignatures', 'pendingSignaturesFlows', 'signedSignaturesFlows', 'rejectSignaturesFlows', 'tab'));
+        return view('documents.signatures.index', compact('mySignatures', 'pendingSignaturesFlows', 'signedSignaturesFlows', 'tab'));
     }
 
     /**
