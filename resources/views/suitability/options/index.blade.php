@@ -18,6 +18,7 @@
             <th>Pregunta</th>
             <th>Texto de la Opción</th>
             <th>Punto</th>
+            <th>Alternativa</th>
             <th>Editar</th>
         </tr>
     </thead>
@@ -27,6 +28,7 @@
             <td>{{$option->question->id ?? "" }}) {{ $option->question->question_text ?? '' }}</td>
             <td>{{ $option->option_text ?? '' }}</td>
             <td>{{ $option->points ?? '' }}</td>
+            <td>{{ $option->alternative ?? '' }}</td>
             <td>
 				<a href="{{ route('suitability.options.edit', $option) }}" class="btn btn-outline-secondary btn-sm">
 				<span class="fas fa-edit" aria-hidden="true"></span></a>
