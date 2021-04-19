@@ -127,6 +127,7 @@ class FirmaDigitalController extends Controller
         }
         $checksum_pdf = $signaturesFlow->signaturesFile->md5_file;
         $type = $signaturesFlow->type;
+        $visatorAsSignature = $signaturesFlow->signature->visatorAsSignature;
         $otp = $request->otp;
         $modo = self::modoAtendidoProduccion;
         $verificationCode = Str::random(6);
@@ -141,7 +142,7 @@ class FirmaDigitalController extends Controller
         }
 
         $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $type, $docId, $verificationCode,
-            $ct_firmas_visator, $ct_posicion_firmas, false);
+            $ct_firmas_visator, $ct_posicion_firmas, $visatorAsSignature);
 
         if (!$responseArray['statusOk']) {
             session()->flash('warning', "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}");
@@ -171,12 +172,12 @@ class FirmaDigitalController extends Controller
      * @param string $verificationCode
      * @param int|null $ct_firmas Cantidad de firmas de tipo visador
      * @param int|null $posicion_firma
-     * @param bool|null $visatorSameAsSignature Si es true, el template de visador se visualizaran igual a las de las firmas
+     * @param bool|null $visatorAsSignature Si es true, el template de visador se visualizaran igual a las de las firmas
      * @return array
      */
     public function signPdfApi(string $pdfbase64, string $checksum_pdf, $modo, string $otp, string $signatureType,
                                int $docId, string $verificationCode, int $ct_firmas_visator = null, int $posicion_firma = null,
-                                bool $visatorSameAsSignature = null): array
+                                bool $visatorAsSignature = null): array
     {
 
 //        dd($pdfbase64, $checksum_pdf, $modo, $otp, $signatureType);
@@ -193,7 +194,7 @@ class FirmaDigitalController extends Controller
         $actualDate = now()->format('d-m-Y H:i:s');
         $fullName = Auth::user()->full_name;
 
-        if($signatureType === 'firmante' || $visatorSameAsSignature === true){
+        if($signatureType === 'firmante' || $visatorAsSignature === true){
             $im = @imagecreate(400, 80) or die("Cannot Initialize new GD image stream");
             $background_color = imagecolorallocate($im, 204, 204, 204);
             $white = imagecolorallocate($im, 255, 255, 255);
@@ -282,7 +283,7 @@ class FirmaDigitalController extends Controller
 //            $ct_firmas = $signaturesFlow->signature->signaturesFlows->where('type', 'visador')->count();
 //            $pocision_firma = $signaturesFlow->sign_position;
 
-            if($visatorSameAsSignature === true){
+            if($visatorAsSignature === true){
                 $padding = 50;
             }else{
                 $padding = 25;

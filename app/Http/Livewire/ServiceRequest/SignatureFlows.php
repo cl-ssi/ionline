@@ -84,10 +84,16 @@ class SignatureFlows extends Component
           }
         }
       }else{
-        $this->a = "suma";
-        $this->signatureFlows['S.G.D.P Hospital'] = 16390845;
-        $this->signatureFlows['Jefe Finanzas'] = 13866194;
-        $this->signatureFlows['Director Hospital'] = 14101085;
+        if (Auth::user()->organizationalUnit->establishment_id == 1) {
+          $this->a = "suma";
+          $this->signatureFlows['S.G.D.P Hospital'] = 16390845;
+          $this->signatureFlows['Jefe Finanzas'] = 13866194;
+          $this->signatureFlows['Director Hospital'] = 14101085;
+        }else{
+          $this->signatureFlows['Planificación CG RRHH'] = 14112543; // 59 - Planificación y Control de Gestión de Recursos Humanos
+          $this->signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+          $this->signatureFlows['S.D.A SSI'] = 9994426; // 31 - Subdirección de Recursos Físicos y Financieros
+        }
       }
 
         return view('livewire.service-request.signature-flows',compact('users'));
