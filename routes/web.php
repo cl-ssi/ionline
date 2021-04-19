@@ -362,6 +362,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         // Rutas de service request
         Route::get('/home', function () { return view('service_requests.home'); })->name('home');
 
+        Route::match(['get', 'post'],'/user', [ServiceRequestController::class, 'user'])->name('user');
+
         //descomposición del resource
         Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
         Route::get('/create', [ServiceRequestController::class, 'create'])->name('create');

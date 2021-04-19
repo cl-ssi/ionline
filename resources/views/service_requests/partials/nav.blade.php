@@ -7,6 +7,12 @@
         </a>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link {{ active('rrhh.service-request.user') }}"
+            href="{{ route('rrhh.service-request.user') }}">
+            <i class="fas fa-search"></i>
+        </a>
+    </li>
 
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.service-request.index') }}"
