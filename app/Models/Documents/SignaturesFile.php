@@ -29,6 +29,16 @@ class SignaturesFile extends Model
         return $this->belongsTo('App\Models\Documents\Signature', 'signature_id');
     }
 
+    public function getHasSignedFlowAttribute()
+    {
+        return $this->signaturesFlows->where('status', 1)->count() > 0;
+    }
+
+    public function getHasAllFlowsSignedAttribute()
+    {
+        return $this->signaturesFlows->every('status', 1);
+    }
+
 
     protected $table = 'doc_signatures_files';
 }

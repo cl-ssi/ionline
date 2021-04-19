@@ -44,5 +44,9 @@ class Result extends Model
         return $this->belongsToMany(Question::class,'psi_question_result')->withPivot(['option_id', 'points','request_id']);
     }
 
+    public function signedCertificate()
+    {
+        return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signed_certificate_id');
+    }
 
 }
