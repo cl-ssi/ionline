@@ -139,8 +139,7 @@ class Fulfillment extends Model implements Auditable
       $query->where('year', $request->input('year'));
     }
 
-    if ($request->input('month') != "") {
-      dd('entré al month');
+    if ($request->input('month') != "") {      
       $query->where('month', $request->input('month'));
     }
 
