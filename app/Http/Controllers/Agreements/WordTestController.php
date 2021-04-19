@@ -237,11 +237,10 @@ class WordTestController extends Controller
 
         // remove tag containing header, footer, images
         $innerXml = preg_replace('/<w:sectPr>.*<\/w:sectPr>/', '', $innerXml);
-
+        
         //remove signature blocks
-        $lastSectPr = substr($innerXml, strpos($innerXml, '<w:sectPr'));
-        $innerXml = Str::before($innerXml, '<w:p w14:paraId="0B949527"');
-        $innerXml .= $lastSectPr;
+        $innerXml = Str::beforeLast($innerXml, '“Reforzamiento Municipal del Presupuesto del Servicio de Salud Iquique”.</w:t></w:r></w:p>');
+        $innerXml .= '“Reforzamiento Municipal del Presupuesto del Servicio de Salud Iquique”.</w:t></w:r></w:p>';
 
         $mainXmlEnd = $mainTemplateProcessorEnd->tempDocumentMainPart;
 
