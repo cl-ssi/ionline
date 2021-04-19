@@ -338,10 +338,15 @@ class ReportController extends Controller
 		$fulfillments = Fulfillment::Search($request)
       ->whereHas('ServiceRequest')
       ->paginate(200);
+    
+    /* Año actual y año anterior */
+    $years[] = now()->format('Y');
+    $years[] = now()->subYear('1')->format('Y');
 
     $request->flash();
 
-		return view('service_requests.requests.fulfillments.reports.compliance', compact('fulfillments','request'));
+		return view('service_requests.requests.fulfillments.reports.compliance', 
+      compact('years','fulfillments','request'));
 	}
 
 }

@@ -28,8 +28,9 @@
             <label for="for_year">Año</label>
             <select name="year" class="form-control">
                 <option value=""></option>
-                <option value="2020" @if($request->input('year')==2020) selected @endif>2020</option>
-                <option value="2021" @if($request->input('year')==2021) selected @endif>2021</option>
+                @foreach($years as $year)
+                    <option value="{{ $year }}" {{ (old('year')==$year)?'selected':''}}>{{$year}}</option>
+                @endforeach
             </select>
         </fieldset>
 
@@ -159,8 +160,7 @@
             <th>Id Sol.</th>
             <th nowrap>Rut</th>
             <th>Nombre</th>
-            <th>Año</th>
-            <th>Mes</th>
+            <th>Período</th>
             <th>Tipo</th>
             <th>Tipo de Contrato</th>
             <th>Hitos</th>
@@ -174,8 +174,7 @@
             </td>
             <td>{{$fulfillment->servicerequest?$fulfillment->servicerequest->employee->runFormat(): ''}}</td>
             <td class="text-uppercase">{{$fulfillment->servicerequest->employee->fullname?? ''}}</td>
-            <td>{{$fulfillment->year}}</td>
-            <td>{{$fulfillment->month}}</td>
+            <td>{{$fulfillment->year}}-{{$fulfillment->month}}</td>
             <td>{{$fulfillment->servicerequest->type?? ''}}</td>
             <td>{{$fulfillment->servicerequest->program_contract_type?? ''}}</td>
             <td>
