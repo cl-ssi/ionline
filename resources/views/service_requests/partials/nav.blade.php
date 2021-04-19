@@ -31,7 +31,7 @@
                 href="{{ route('rrhh.service-request.report.fulfillment-pending','responsable') }}"
                 title="Cumplimientos pendientes por aprobar de Responsable">
                 <i class="fas fa-clipboard-check"></i>
-                <i class="fas fa-user"></i>
+                <i class="fas fa-chess-king"></i>
             </a>
         </li>
     @endcan
