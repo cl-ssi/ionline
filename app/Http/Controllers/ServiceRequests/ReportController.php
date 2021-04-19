@@ -335,7 +335,11 @@ class ReportController extends Controller
 	public function compliance(Request $request)
 	{
 		//$users = User::getUsersBySearch($request->get('name'))->orderBy('name','Asc')->paginate(150);
-		$fulfillments = Fulfillment::Search($request)->paginate(100);
+		$fulfillments = Fulfillment::Search($request)
+      ->whereHas('ServiceRequest')
+      ->paginate(200);
+
+    $request->flash();
 
 		return view('service_requests.requests.fulfillments.reports.compliance', compact('fulfillments','request'));
 	}

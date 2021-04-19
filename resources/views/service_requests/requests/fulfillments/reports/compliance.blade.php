@@ -12,7 +12,7 @@
         <fieldset class="form-group col-12 col-md-2">
             <label for="for_rut">Rut/Nombre</label>
             <input name="rut" class="form-control" 
-                placeholder="rut, nombre o apellido" @if($request->input('rut')) value="{{$request->input('rut')}}" @endif  aucomplete="off">
+                placeholder="rut, nombre o apellido" value="{{ old('rut') }}" aucomplete="off">
             </input>
         </fieldset>
 
@@ -90,20 +90,20 @@
         <tr>
 
             <th>Id Sol.</th>
-            <th class="small">Id Cump.</th>
             <th nowrap>Rut</th>
             <th>Nombre</th>
             <th>Año</th>
             <th>Mes</th>
             <th>Tipo</th>
             <th>Tipo de Contrato</th>
-            <th>Pago</th>
+            <th>Hitos</th>
             <th></th>
         </tr>
         @foreach($fulfillments as $fulfillment)
         <tr>
-            <td>{{$fulfillment->servicerequest->id?? ''}}</td>
-            <td class="small">{{$fulfillment->id}}</td>
+            <td>{{$fulfillment->servicerequest->id?? ''}}
+                <span class="small">({{$fulfillment->id}})</span>
+            </td>
             <td>{{$fulfillment->servicerequest?$fulfillment->servicerequest->employee->runFormat(): ''}}</td>
             <td>{{$fulfillment->servicerequest->employee->fullname?? ''}}</td>
             <td>{{$fulfillment->year}}</td>
@@ -111,11 +111,14 @@
             <td>{{$fulfillment->servicerequest->type?? ''}}</td>
             <td>{{$fulfillment->servicerequest->program_contract_type?? ''}}</td>
             <td>
-                @if($fulfillment->payment_date)
-                PAGADO
-                @else
-                NO PAGADO
-                @endif
+                <i title="Contrato" class="fas fa-file-signature 
+                    {{ ($fulfillment->serviceRequest->has_resolution_file)?'text-primary':'text-secondary'}}"></i>
+                <i title="Certificado" class="fas fa-certificate 
+                    {{ ($fulfillment->signatures_file_id)?'text-primary':'text-secondary'}}"></i>
+                <i title="Boleta" class="fas fa-file-invoice-dollar 
+                    {{ ($fulfillment->has_invoice_file)?'text-primary':'text-secondary'}}"></i>
+                <i title="Pago" class="fas fa-money-bill 
+                    {{ ($fulfillment->payment_date)?'text-primary':'text-secondary'}}"></i>     
             </td>
             <td>
                 @if($fulfillment->servicerequest)
