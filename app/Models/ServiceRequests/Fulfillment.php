@@ -179,7 +179,21 @@ class Fulfillment extends Model implements Auditable
     }
     else {
       $query->whereNull('payment_date');
-    } 
+    }
+
+    if ($request->has('ok_finanzas')) {
+      $query->whereNotNull('finances_approbation');
+    }
+    else {
+      $query->whereNull('finances_approbation');
+    }
+
+    if ($request->has('ok_rrhh')) {
+      $query->whereNotNull('rrhh_approbation');
+    }
+    else {
+      $query->whereNull('rrhh_approbation');
+    }
 
 
     return $query;
