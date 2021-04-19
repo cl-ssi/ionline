@@ -1,4 +1,5 @@
 <div>
+    <h1>{{$status}}</h1>
     	@foreach($staffInShift as $sis)
 						<tr>
 						   <td class="bless br" >
@@ -20,7 +21,7 @@
                             <td  style="text-align:center;width:54px;height:54px">
                                 <div  class="bbd day" >
                                 	@if(isset($d) && count($d) )
-                                		<button wire:click="editStatusDay({{$d->first()->id }})">
+                                		<button wire:click="editStatusDay()">
                                 			@if($d->first()->working_day!="F")
                                 				{{$d->first()->working_day}}
                                 			@else
