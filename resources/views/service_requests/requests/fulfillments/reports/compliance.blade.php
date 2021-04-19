@@ -9,14 +9,14 @@
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.compliance') }}">
 
     <div class="form-row">
-        <fieldset class="form-group col-12 col-md-2">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_rut">Rut/Nombre</label>
             <input name="rut" class="form-control" 
-                placeholder="rut, nombre o apellido" value="{{ old('rut') }}" aucomplete="off">
+                placeholder="Run o nombre" value="{{ old('rut') }}" aucomplete="off">
             </input>
         </fieldset>
 
-        <fieldset class="form-group col-4 col-md-1">
+        <fieldset class="form-group col-4 col-md-2">
             <label for="for_year">Año</label>
             <select name="year" class="form-control">
                 <option value=""></option>
@@ -64,21 +64,49 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-6 col-md-2">
-            <label for="for_program_contract_type">Pagado/No Pagado</label>
-            <select name="payment_date" class="form-control">
-                <option value=""></option>
-                <option value="P" @if($request->input('payment_date')=='P') selected @endif>Pagado</option>
-                <option value="SP" @if($request->input('payment_date')=='SP')) selected @endif>No Pagado</option>
-            </select>
-        </fieldset>
-
         <fieldset class="form-group col-2 col-md-1">
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
         </fieldset>
-        
     </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-8">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="for_resolution" 
+                    name="resolution" {{ (old('resolution') == true) ? 'checked':'' }}>
+                <label class="form-check-label" for="for_resolution">Resolución</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="for_resolution" 
+                    name="ok_rrhh" {{ (old('resolution') == true) ? 'checked':'' }}>
+                <label class="form-check-label" for="for_resolution">Aprobado RRHH</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="for_resolution" 
+                    name="ok_finanzas" {{ (old('resolution') == true) ? 'checked':'' }}>
+                <label class="form-check-label" for="for_resolution">Aprobado Finanzas</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="for_certificate" 
+                    name="certificate" {{ (old('certificate') == true) ? 'checked':'' }}>
+                <label class="form-check-label" for="for_certificate">Certificado</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="for_invoice" 
+                    name="invoice" {{ (old('invoice') == true) ? 'checked':'' }}>
+                <label class="form-check-label" for="for_invoice">Boleta</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="for_payed" 
+                    name="payed" {{ (old('payed') == true) ? 'checked':'' }}>
+                <label class="form-check-label" for="for_payed">Pagado</label>
+            </div>
+        </div>
+    </div>
+
 </form>
 
 <hr>

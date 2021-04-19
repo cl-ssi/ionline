@@ -97,7 +97,8 @@ class Fulfillment extends Model implements Auditable
   public function scopeSearch($query, Request $request)
   {
 
-/*    if ($request->input('rut') != "") {
+    /*
+      if ($request->input('rut') != "") {
       $query->whereHas('servicerequest', function ($q) use ($request) {
 
         $q->whereHas('employee', function ($q) use($request) {
@@ -134,15 +135,6 @@ class Fulfillment extends Model implements Auditable
       $query->where('month', $request->input('month'));
     }
 
-    if ($request->input('payment_date') != "") {
-      if ($request->input('payment_date') == 'P') {
-        $query->whereNotNull('payment_date');
-      }
-      if ($request->input('payment_date') == 'SP') {
-        $query->whereNull('payment_date');
-      }
-    }
-
 
     if ($request->input('program_contract_type') != "") {
       $query->whereHas('servicerequest', function ($q) use ($request) {
@@ -156,6 +148,39 @@ class Fulfillment extends Model implements Auditable
         $q->Where('type', $request->input('type'));
       });
     }
+
+    if($request->has('resolution')) {
+      $query->whereHas('serviceRequest', function ($q) use ($request) {
+        $q->where('has_resolution_file',1);
+      });
+    }
+    else {
+      $query->whereHas('serviceRequest', function ($q) use ($request) {
+        $q->whereNull('has_resolution_file');
+      });
+    }
+
+    if ($request->has('certificate')) {
+      $query->whereNotNull('signatures_file_id');
+    }
+    else {
+      $query->whereNull('signatures_file_id');
+    }
+
+    if ($request->has('invoice')) {
+      $query->whereNotNull('has_invoice_file');
+    }
+    else {
+      $query->whereNull('has_invoice_file');
+    } 
+
+    if ($request->has('payed')) {
+      $query->whereNotNull('payment_date');
+    }
+    else {
+      $query->whereNull('payment_date');
+    } 
+
 
     return $query;
   }
