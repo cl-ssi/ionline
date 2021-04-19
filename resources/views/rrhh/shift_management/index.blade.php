@@ -96,7 +96,7 @@
 	<!-- <div class="col-lg-12"> -->
 		<h3> Gestión de Turnos 
   
-  <livewire:rrhh.change-shift-day-status />
+
    
         </h3>
 		<form method="POST" class="form-horizontal shadow" action="{{ route('rrhh.shiftManag.index') }}">
@@ -252,16 +252,19 @@
                         </tr>
                 </thead>
                 <tbody>
-
+                <div>
+                    
                   
                     @livewire('rrhh.list-of-shifts', 
                         [
                             'staffInShift'=>$staffInShift,
                             'actuallyYear'=>$actuallyYear,
                             'actuallyMonth'=>$actuallyMonth,
+                         
                             'days'=>$days
                         ]
                     )
+                </div>
                   
                   
                 </tbody>
