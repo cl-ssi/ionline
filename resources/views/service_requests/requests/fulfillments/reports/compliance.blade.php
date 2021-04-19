@@ -9,14 +9,23 @@
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.compliance') }}">
 
     <div class="form-row">
-        <fieldset class="form-group col-12 col-md-3">
+        <fieldset class="form-group col-4 col-md-2">
+            <label for="for_year">Estab</label>
+            <select name="establishment" class="form-control">
+                <option value="1">HETG</option>
+                <option value="12">Reyno</option>
+                <option value="38">SSI</option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-2">
             <label for="for_rut">Rut/Nombre</label>
             <input name="rut" class="form-control" 
                 placeholder="Run o nombre" value="{{ old('rut') }}" aucomplete="off">
             </input>
         </fieldset>
 
-        <fieldset class="form-group col-4 col-md-2">
+        <fieldset class="form-group col-4 col-md-1">
             <label for="for_year">Año</label>
             <select name="year" class="form-control">
                 <option value=""></option>
@@ -133,16 +142,27 @@
                 <span class="small">({{$fulfillment->id}})</span>
             </td>
             <td>{{$fulfillment->servicerequest?$fulfillment->servicerequest->employee->runFormat(): ''}}</td>
-            <td>{{$fulfillment->servicerequest->employee->fullname?? ''}}</td>
+            <td class="text-uppercase">{{$fulfillment->servicerequest->employee->fullname?? ''}}</td>
             <td>{{$fulfillment->year}}</td>
             <td>{{$fulfillment->month}}</td>
             <td>{{$fulfillment->servicerequest->type?? ''}}</td>
             <td>{{$fulfillment->servicerequest->program_contract_type?? ''}}</td>
             <td>
-                <i title="Contrato" class="fas fa-file-signature 
+                <i title="Resolución" class="fas fa-file-signature 
                     {{ ($fulfillment->serviceRequest->has_resolution_file)?'text-primary':'text-secondary'}}"></i>
+                
                 <i title="Certificado" class="fas fa-certificate 
                     {{ ($fulfillment->signatures_file_id)?'text-primary':'text-secondary'}}"></i>
+                
+                <i title="Aprobado Responsable" class="fas fa-chess-king 
+                    {{ ($fulfillment->responsable_approbation)?'text-primary':'text-secondary'}}"></i>
+                
+                <i title="Aprobado RRHH" class="fas fa-user-shield 
+                    {{ ($fulfillment->rrhh_approbation)?'text-primary':'text-secondary'}}"></i>
+                
+                <i title="Aprobado Finanzas" class="fas fa-piggy-bank 
+                    {{ ($fulfillment->finances_approbation)?'text-primary':'text-secondary'}}"></i>
+
                 <i title="Boleta" class="fas fa-file-invoice-dollar 
                     {{ ($fulfillment->has_invoice_file)?'text-primary':'text-secondary'}}"></i>
                 <i title="Pago" class="fas fa-money-bill 
