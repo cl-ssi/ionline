@@ -108,7 +108,7 @@ class ShiftManagementController extends Controller
             $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->get();
         } else {
              $actuallyShift=  (object) array('id' =>0,'name'=>"Todos" );
-            $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnitnit->id )->get();
+            $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->get();
         }
 
         // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
