@@ -88,14 +88,14 @@
             </div>
 
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="for_resolution" 
-                    name="ok_rrhh" {{ (old('resolution') == true) ? 'checked':'' }}>
-                <label class="form-check-label" for="for_resolution">Aprobado RRHH</label>
+                <input class="form-check-input" type="checkbox" id="for_ok_rrhh" 
+                    name="ok_rrhh" {{ (old('ok_rrhh') == true) ? 'checked':'' }}>
+                <label class="form-check-label" for="for_ok_rrhh">Aprobado RRHH</label>
             </div>
             <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="for_resolution" 
-                    name="ok_finanzas" {{ (old('resolution') == true) ? 'checked':'' }}>
-                <label class="form-check-label" for="for_resolution">Aprobado Finanzas</label>
+                <input class="form-check-input" type="checkbox" id="for_ok_finanzas" 
+                    name="ok_finanzas" {{ (old('ok_finanzas') == true) ? 'checked':'' }}>
+                <label class="form-check-label" for="for_ok_finanzas">Aprobado Finanzas</label>
             </div>
 
             <div class="form-check form-check-inline">
