@@ -113,54 +113,59 @@
 
   <br>
 
-  <div class="border border-info rounded">
-  <div class="row ml-1 mr-1">
+  <div class="card border border-danger">
+    <div class="card-body">
+      <div class="form-row">
 
-    <fieldset class="form-group col-8 col-md-3">
-		    <label for="for_rut">Rut</label>
-		    <input type="text" class="form-control" id="for_rut" placeholder="" name="rut" required="required" value="{{ $serviceRequest->employee->id }}" disabled>
-		</fieldset>
+        <fieldset class="form-group col-8 col-md-2">
+            <label for="for_rut">Rut</label>
+            <input type="text" class="form-control" id="for_rut" required="required" 
+              value="{{ $serviceRequest->employee->id }}" disabled>
+        </fieldset>
 
-    <fieldset class="form-group col-1">
-        <label for="for_dv">Digito</label>
-        <input type="text" class="form-control" id="for_dv" name="dv" readonly value="{{ $serviceRequest->employee->dv }}">
-    </fieldset>
+        <fieldset class="form-group col-4 col-md-1">
+            <label for="for_dv">Digito</label>
+            <input type="text" class="form-control" id="for_dv" disabled 
+              value="{{ $serviceRequest->employee->dv }}">
+        </fieldset>
 
-    <fieldset class="form-group col col-md">
-		    <label for="for_name">Nombre completo</label>
-		    <input type="text" class="form-control" id="for_name" placeholder="" name="name" required="required" value="{{ $serviceRequest->employee->getFullNameAttribute() }}" disabled>
-		</fieldset>
+        <fieldset class="form-group col-12 col-md-9">
+            <label for="for_name">Nombre completo</label>
+            <input type="text" class="form-control" id="for_name" required="required" 
+              value="{{ $serviceRequest->employee->getFullNameAttribute() }}" disabled>
+        </fieldset>
 
-  </div>
+      </div>
 
-	<div class="row ml-1 mr-1">
+      <div class="form-row">
 
-    <fieldset class="form-group col col-md">
-        <label for="for_nationality">Nacionalidad</label>
-        <select name="nationality" class="form-control" disabled>
-          <option value=""></option>
-          @foreach($countries as $key => $country)
-            <option value="{{$country->id}}" @if($serviceRequest->employee->country_id == $country->id) selected @endif>{{$country->name}}</option>
-          @endforeach
-        </select>
-    </fieldset>
+        <fieldset class="form-group col col-md-2">
+            <label for="for_nationality">Nacionalidad</label>
+            <select name="nationality" class="form-control" disabled>
+              <option value=""></option>
+              @foreach($countries as $key => $country)
+                <option value="{{$country->id}}" @if($serviceRequest->employee->country_id == $country->id) selected @endif>{{$country->name}}</option>
+              @endforeach
+            </select>
+        </fieldset>
 
-    <fieldset class="form-group col col-md">
-		    <label for="for_address">Dirección</label>
-		    <input type="text" class="form-control" id="foraddress" name="address" value="{{$serviceRequest->address}}">
-		</fieldset>
+        <fieldset class="form-group col col-md-5">
+            <label for="for_address">Dirección</label>
+            <input type="text" class="form-control" id="foraddress" name="address" value="{{$serviceRequest->address}}">
+        </fieldset>
 
-    <fieldset class="form-group col col-md">
-		    <label for="for_phone_number">Número telefónico</label>
-		    <input type="text" class="form-control" id="for_phone_number" name="phone_number" value="{{$serviceRequest->phone_number}}">
-		</fieldset>
+        <fieldset class="form-group col col-md-2">
+            <label for="for_phone_number">Número telefónico</label>
+            <input type="text" class="form-control" id="for_phone_number" name="phone_number" value="{{$serviceRequest->phone_number}}">
+        </fieldset>
 
-		<fieldset class="form-group col col-md">
-		    <label for="for_email">Correo electrónico</label>
-		    <input type="text" class="form-control" id="for_email" name="email" value="{{$serviceRequest->email}}">
-		</fieldset>
+        <fieldset class="form-group col col-md-3">
+            <label for="for_email">Correo electrónico</label>
+            <input type="text" class="form-control" id="for_email" name="email" value="{{$serviceRequest->email}}">
+        </fieldset>
 
-  </div>
+      </div>
+    </div>
   </div>
 
   <br>
@@ -430,7 +435,7 @@
 
   </div>
 
-  <div class="row">
+  <div class="form-row">
     <fieldset class="form-group col-3 col-md-3">
         <label for="for_rrhh_team">Equipo RRHH</label>
         <select name="rrhh_team" class="form-control">
