@@ -12,6 +12,7 @@
         <fieldset class="form-group col-4 col-md-2">
             <label for="for_year">Estab</label>
             <select name="establishment" class="form-control">
+                <option value=""></option>
                 <option value="1">HETG</option>
                 <option value="12">Reyno</option>
                 <option value="38">SSI</option>
@@ -80,7 +81,7 @@
     </div>
 
     <div class="form-row">
-        <div class="form-group col-md-8">
+        <div class="form-group col-md-12">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="for_resolution" 
                     name="resolution" {{ (old('resolution') == true) ? 'checked':'' }}>
@@ -88,21 +89,29 @@
             </div>
 
             <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="for_certificate" 
+                    name="certificate" {{ (old('certificate') == true) ? 'checked':'' }}>
+                <label class="form-check-label" for="for_certificate">Certificado</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="for_ok_responsable" 
+                    name="ok_responsable" {{ (old('ok_responsable') == true) ? 'checked':'' }}>
+                <label class="form-check-label" for="for_ok_responsable">Aprobado Responsable</label>
+            </div>
+
+            <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="for_ok_rrhh" 
                     name="ok_rrhh" {{ (old('ok_rrhh') == true) ? 'checked':'' }}>
                 <label class="form-check-label" for="for_ok_rrhh">Aprobado RRHH</label>
             </div>
+
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="for_ok_finanzas" 
                     name="ok_finanzas" {{ (old('ok_finanzas') == true) ? 'checked':'' }}>
                 <label class="form-check-label" for="for_ok_finanzas">Aprobado Finanzas</label>
             </div>
 
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="for_certificate" 
-                    name="certificate" {{ (old('certificate') == true) ? 'checked':'' }}>
-                <label class="form-check-label" for="for_certificate">Certificado</label>
-            </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="checkbox" id="for_invoice" 
                     name="invoice" {{ (old('invoice') == true) ? 'checked':'' }}>
