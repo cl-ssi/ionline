@@ -10,10 +10,12 @@ class ListOfShifts extends Component
 	public $actuallyYear;
 	public $actuallyMonth;
 	public $days;
-	 public function editStatusDay($id)
+    public $status=0;
+	 public function editStatusDay()
 
     {
-    	$this->days=2;
+        // $this->days=2;
+    	$this->status=2;
     }
     public function render()
     {
