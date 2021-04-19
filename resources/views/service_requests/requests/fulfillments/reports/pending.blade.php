@@ -17,7 +17,7 @@
         <fieldset class="form-group col-12 col-md-2">
             <label for="for_rut">Rut/Nombre</label>
             <input name="rut" class="form-control" 
-                placeholder="Run, nombre o apellido" value="{{ old('rut') }}" aucomplete="off">
+                placeholder="Run o nombre" value="{{ old('rut') }}" aucomplete="off">
             </input>
         </fieldset>
 
