@@ -17,6 +17,7 @@
             <th>Estado</th>
             <th>Ver Test</th>
             <th>Ver Certificado (Aprobados)</th>
+            @can('be god')  <th>Enviar a Firma</th> @endcan
             <th>Descargar PDF (Aprobados)</th>
             <!-- <th>Enviar por Mail </th> -->
         </tr>
@@ -40,6 +41,14 @@
                     <span class="fas fa-stamp" aria-hidden="true"></span></a>
                 @endif
             </td>
+            @can('be god')
+            <td>
+                @if($result->psirequest && $result->psirequest->status =="Aprobado")
+                    <a href="{{ route('suitability.sendForSignature', $result->id) }}" class="btn btn-outline-primary">
+                        <span class="fas fa-signature" aria-hidden="true"></span></a>
+                @endif
+            </td>
+            @endcan
             <td>@if($result->psirequest && $result->psirequest->status =="Aprobado")
                 <a href="{{ route('suitability.results.certificatepdf', $result->id) }}" class="btn btn-outline-primary">
                     <span class="fas fa-file-pdf" aria-hidden="true"></span></a>

@@ -93,6 +93,10 @@
 		</fieldset>
 	</div>
 
+		<div class="form-group d-inline">
+			@livewire('rrhh.update-user-bank-account' , ['bankaccount' => $bankaccount->last(), 'user'=>$user])
+		</div>
+
 	<div class="form-group d-inline">
 		<button type="submit" class="btn btn-sm btn-primary">
 		<span class="fas fa-save" aria-hidden="true"></span> Actualizar</button>

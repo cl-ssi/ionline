@@ -165,18 +165,15 @@
 			            <tr>
 			                <th>Select</th>
 			                <th>Entrada</th>
-			                <th>Hora</th>
+			                <th>H.Entrada</th>
 											<th>Salida</th>
-											<th>Hora</th>
+											<th>H.Salida</th>
+											<th>Horas</th>
 											<th>Observación</th>
 			            </tr>
 			        </thead>
 			        <tbody>
-			            <!-- <tr>
-			                <td><input type="checkbox" name="record"></td>
-			                <td>Peter Parker</td>
-			                <td>peterparker@mail.com</td>
-			            </tr> -->
+
 			        </tbody>
 			    </table>
 					<button type="button" class="btn btn-primary delete-row">Eliminar filas</button>
@@ -590,6 +587,7 @@
 			$("#programm_name option[value='Covid19-APS Médicos']").hide();
 			$("#programm_name option[value='Covid19 No Médicos']").hide();
 			$("#programm_name option[value='Covid19 Médicos']").hide();
+			$('#digera_strategy').attr('disabled', 'disabled');
 
 			if ({{Auth::user()->organizationalUnit->establishment_id}} == 1) {
 				$("#programm_name option[value='PRAPS']").hide();
@@ -635,6 +633,7 @@
 			$("#programm_name option[value='Covid19-APS Médicos']").show();
 			$("#programm_name option[value='Covid19 No Médicos']").show();
 			$("#programm_name option[value='Covid19 Médicos']").show();
+			$('#digera_strategy').removeAttr('disabled');
 
 			$("#programm_name option[value='PRAPS']").hide();
 			$("#programm_name option[value='PESPI']").hide();
@@ -717,8 +716,19 @@
       var start_hour = $("#start_hour").val();
 			var shift_end_date = $("#shift_end_date").val();
 			var end_hour = $("#end_hour").val();
+
+			var start_date = new Date(shift_start_date + ' ' + start_hour);
+			var end_date = new Date(shift_end_date + ' ' + end_hour);
+
+			if (start_date > end_date) {
+				alert("La fecha de salida es menor a la fecha de inicio, revise la información.");
+				return;
+			}
+
+			const diffTime = Math.abs(start_date - end_date); //diffTime/3600000
+
 			var observation = $("#observation").val();
-      var markup = "<tr><td><input type='checkbox' name='record'></td><td> <input type='hidden' class='form-control' name='shift_start_date[]' id='shift_start_date' value='"+ shift_start_date +"'>"+ shift_start_date +"</td><td> <input type='hidden' class='form-control' name='shift_start_hour[]' id='start_hour' value='"+ start_hour +"'>" + start_hour + "</td><td> <input type='hidden' class='form-control' name='shift_end_date[]' id='shift_end_date' value='"+ shift_end_date +"'>"+ shift_end_date +"</td><td> <input type='hidden' class='form-control' name='shift_end_hour[]' id='end_hour' value='"+ end_hour +"'>" + end_hour + "</td><td> <input type='hidden' class='form-control' name='shift_observation[]' id='observation' value='"+ observation +"'>" + observation + "</td></tr>";
+      var markup = "<tr><td><input type='checkbox' name='record'></td><td> <input type='hidden' class='form-control' name='shift_start_date[]' id='shift_start_date' value='"+ shift_start_date +"'>"+ shift_start_date +"</td><td> <input type='hidden' class='form-control' name='shift_start_hour[]' id='start_hour' value='"+ start_hour +"'>" + start_hour + "</td><td> <input type='hidden' class='form-control' name='shift_end_date[]' id='shift_end_date' value='"+ shift_end_date +"'>"+ shift_end_date +"</td><td> <input type='hidden' class='form-control' name='shift_end_hour[]' id='end_hour' value='"+ end_hour +"'>" + end_hour + "</td><td>" + diffTime/3600000 + "</td><td> <input type='hidden' class='form-control' name='shift_observation[]' id='observation' value='"+ observation +"'>" + observation + "</td></tr>";
       $("table tbody").append(markup);
   });
 

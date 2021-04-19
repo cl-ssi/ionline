@@ -228,20 +228,22 @@
 			</fieldset>
 			<fieldset class="form-group col-md-6 text-right">
 				@can('Service Request: fulfillments responsable')
-					@if($fulfillment->responsable_approver_id == NULL)
-					<a type="button"
-						class="btn btn-danger" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');"
-						href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}" >
-						Rechazar
-					</a>
-					<a type="button" class="btn btn-success"
-						onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');"
-						href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}" >
-						Confirmar
-					</a>
-					@else
-						<button type="submit" class="btn btn-danger" disabled>Rechazar</button>
-						<button type="submit" class="btn btn-success" disabled>Confirmar</button>
+					@if(Auth::user()->id == $serviceRequest->signatureFlows->where('sign_position',2)->first()->responsable_id)
+						@if($fulfillment->responsable_approver_id == NULL)
+							<a type="button"
+								class="btn btn-danger" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');"
+								href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}" >
+								Rechazar
+							</a>
+							<a type="button" class="btn btn-success"
+								onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');"
+								href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}" >
+								Confirmar
+							</a>
+						@else
+							<button type="submit" class="btn btn-danger" disabled>Rechazar</button>
+							<button type="submit" class="btn btn-success" disabled>Confirmar</button>
+						@endif
 					@endif
 				@endcan
 			</fieldset>
