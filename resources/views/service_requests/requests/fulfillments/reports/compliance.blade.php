@@ -7,15 +7,14 @@
 @include('service_requests.partials.nav')
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.compliance') }}">
-
     <div class="form-row">
         <fieldset class="form-group col-4 col-md-2">
             <label for="for_year">Estab</label>
             <select name="establishment" class="form-control">
                 <option value=""></option>
-                <option value="1">HETG</option>
-                <option value="12">Reyno</option>
-                <option value="38">SSI</option>
+                <option value="1" {{ (old('establishment')==1)?'selected':'' }}>HETG</option>
+                <option value="12" {{ (old('establishment')==12)?'selected':'' }}>Reyno</option>
+                <option value="38" {{ (old('establishment')==38)?'selected':'' }}>SSI</option>
             </select>
         </fieldset>
 
