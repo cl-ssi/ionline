@@ -185,15 +185,16 @@ class SuitabilityController extends Controller
         try {
             $signature = new Signature();
             $signature->user_id = Auth::id();
-            $signature->responsable_id = Auth::id(); // 15685508;
-            $signature->ou_id = Auth::user()->organizational_unit_id; // User::find(15685508)->organizational_unit_id;
+            $signature->responsable_id = Auth::id();
+            $signature->ou_id = Auth::user()->organizational_unit_id;
             $signature->request_date = now();
             $signature->document_type = 'Carta';
             $signature->subject = 'Informe Idoneidad';
             $signature->description = "{$result->user->fullname} , Rut: {$result->user->id}-{$result->user->dv} ";
             $signature->endorse_type = 'Visación opcional';
-            $signature->recipients = $userSigner->email . ',' . $userVisator1->email . ',' . $userVisator2->email; //Variable
-            $signature->distribution = $userSigner->full_name . ',' . $userVisator1->full_name . ',' . $userVisator2->full_name; //Variable
+            $signature->recipients = $userSigner->email . ',' . $userVisator1->email . ',' . $userVisator2->email;
+            $signature->distribution = $userSigner->full_name . ',' . $userVisator1->full_name . ',' . $userVisator2->full_name;
+            $signature->visatorAsSignature = true;
             $signature->save();
 
             $signaturesFile = new SignaturesFile();
@@ -223,6 +224,9 @@ class SuitabilityController extends Controller
             $signaturesFlow->user_id = 13867504;
             $signaturesFlow->ou_id = User::find(13867504)->organizational_unit_id;
             $signaturesFlow->save();
+
+            $result->signed_certificate_id = $signaturesFile->id;
+            $result->save();
 
             DB::commit();
 
