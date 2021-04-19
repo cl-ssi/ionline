@@ -301,11 +301,11 @@ class ReportController extends Controller
 		switch($who) {
 			case 'responsable':
 				$query->whereNull('responsable_approbation')
-              ->whereHas("serviceRequest", function ($subQuery) use ($user_id) {
-                      $subQuery->whereHas("signatureFlows", function ($subQuery) use ($user_id) {
-                                  $subQuery->where('responsable_id',$user_id);
-                                });
-                });
+          ->whereHas("serviceRequest", function ($subQuery) use ($user_id) {
+            $subQuery->whereHas("signatureFlows", function ($subQuery) use ($user_id) {
+            $subQuery->where('responsable_id',$user_id);
+          });
+        });
 				break;
 			case 'rrhh':
 				$query->whereNotNull('responsable_approbation');
@@ -335,7 +335,11 @@ class ReportController extends Controller
 	public function compliance(Request $request)
 	{
 		//$users = User::getUsersBySearch($request->get('name'))->orderBy('name','Asc')->paginate(150);
-		$fulfillments = Fulfillment::Search($request)->paginate(100);
+		$fulfillments = Fulfillment::Search($request)
+      ->whereHas('ServiceRequest')
+      ->paginate(200);
+
+    $request->flash();
 
 		return view('service_requests.requests.fulfillments.reports.compliance', compact('fulfillments','request'));
 	}
