@@ -10,7 +10,7 @@
     <h1 class="display-3">Phuqhaña</h1>
     <p class="lead">Bienvenido el sistema de honorarios Phuqhaña, palabra Aymara que significa "Cumplir".</p>
     <p>Si alguna duda, respecto a algún contrato, puedes ponerte en contacto con el área de RRHH a través de  
-    <a href="https://wa.me/message/IBHMJ3XRQZA3P1" data-toggle="tooltip" title="<img src='{{ asset('images/qr_wp_rrhh.svg') }}' />">WhatsApp</a>.</p>
+    <a href="https://wa.me/message/IBHMJ3XRQZA3P1" data-toggle="tooltip" title="<img src='{{ asset('images/qr_wp_rrhh.svg') }}' />">WhatsApp</a>. El horario de atención es de 8:30 a 17:00.</p>
     <hr class="my-2">
     <p>Desarrollado por el Departamento TIC,
     en conjunto con los que trabajan en el proceso cada día,
