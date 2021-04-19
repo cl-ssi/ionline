@@ -207,22 +207,24 @@ class SuitabilityController extends Controller
             $signaturesFlow = new SignaturesFlow();
             $signaturesFlow->signatures_file_id = $signaturesFile->id;
             $signaturesFlow->type = 'firmante';
-            $signaturesFlow->user_id = 15685508;
-            $signaturesFlow->ou_id = User::find(15685508)->organizational_unit_id;
+            $signaturesFlow->user_id = $userSigner->id;
+            $signaturesFlow->ou_id = $userSigner->organizational_unit_id;
             $signaturesFlow->save();
 
             $signaturesFlow = new SignaturesFlow();
             $signaturesFlow->signatures_file_id = $signaturesFile->id;
             $signaturesFlow->type = 'visador';
-            $signaturesFlow->user_id = 13480977;
-            $signaturesFlow->ou_id = User::find(13480977)->organizational_unit_id;
+            $signaturesFlow->user_id = $userVisator1->id;
+            $signaturesFlow->ou_id = $userVisator1->organizational_unit_id;
+            $signaturesFlow->sign_position = 1;
             $signaturesFlow->save();
 
             $signaturesFlow = new SignaturesFlow();
             $signaturesFlow->signatures_file_id = $signaturesFile->id;
             $signaturesFlow->type = 'visador';
-            $signaturesFlow->user_id = 13867504;
-            $signaturesFlow->ou_id = User::find(13867504)->organizational_unit_id;
+            $signaturesFlow->user_id = $userVisator2->id;
+            $signaturesFlow->ou_id = $userVisator2->organizational_unit_id;
+            $signaturesFlow->sign_position = 2;
             $signaturesFlow->save();
 
             $result->signed_certificate_id = $signaturesFile->id;
@@ -239,4 +241,12 @@ class SuitabilityController extends Controller
         return redirect()->back();
     }
 
+    public function signedSuitabilityCertificatePDF($id)
+    {
+        $result = Result::find($id);
+        header('Content-Type: application/pdf');
+        if (isset($result->signedCertificate)) {
+            echo base64_decode($result->signedCertificate->signed_file);
+        }
+    }
 }

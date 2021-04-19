@@ -1191,6 +1191,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/{id}', [ResultsController::class, 'show'])->name('show');
         Route::get('/certificate/{id}', [ResultsController::class, 'certificate'])->name('certificate');
         Route::get('/certificatepdf/{id}', [ResultsController::class, 'certificatepdf'])->name('certificatepdf');
+        Route::get('/signed-suitability-certificate-pdf/{id}', [SuitabilityController::class, 'signedSuitabilityCertificatePDF'])->name('signedSuitabilityCertificate');
         //Route::get('results/{result_id}', 'ResultsController@show')->name('results.show');
         // Route::get('/create', [OptionsController::class, 'create'])->name('create');
         // Route::post('/store', [OptionsController::class, 'store'])->name('store');
