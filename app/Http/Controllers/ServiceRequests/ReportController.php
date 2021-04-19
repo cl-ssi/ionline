@@ -301,11 +301,11 @@ class ReportController extends Controller
 		switch($who) {
 			case 'responsable':
 				$query->whereNull('responsable_approbation')
-              ->whereHas("serviceRequest", function ($subQuery) use ($user_id) {
-                      $subQuery->whereHas("signatureFlows", function ($subQuery) use ($user_id) {
-                                  $subQuery->where('responsable_id',$user_id);
-                                });
-                });
+          ->whereHas("serviceRequest", function ($subQuery) use ($user_id) {
+            $subQuery->whereHas("signatureFlows", function ($subQuery) use ($user_id) {
+            $subQuery->where('responsable_id',$user_id);
+          });
+        });
 				break;
 			case 'rrhh':
 				$query->whereNotNull('responsable_approbation');

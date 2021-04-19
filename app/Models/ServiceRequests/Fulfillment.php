@@ -110,6 +110,16 @@ class Fulfillment extends Model implements Auditable
       });
     }*/
 
+    // $query->whereHas("responsabilityCenter", function($subQuery) use ($establishment_id){
+    //   $subQuery->where('establishment_id', Auth::user()->organizationalUnit->establishment_id);
+    // });
+
+    if ($request->input('establishment') != "") {
+      $query->whereHas('servicerequest', function ($q) use ($request) {
+        $q->where('establishment_id', $request->input('establishment'));
+      });
+    }
+
     if ($request->input('sr_id') != "") {
       $query->whereHas('servicerequest', function ($q) use ($request) {
         $q->Where('id', $request->input('sr_id'));
@@ -124,8 +134,6 @@ class Fulfillment extends Model implements Auditable
         });
       });
     }
-
-
 
     if ($request->input('year') != "") {
       $query->where('year', $request->input('year'));
