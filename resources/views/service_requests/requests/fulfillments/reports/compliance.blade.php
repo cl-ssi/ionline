@@ -20,8 +20,7 @@
 
         <fieldset class="form-group col-12 col-md-2">
             <label for="for_rut">Rut/Nombre</label>
-            <input name="rut" class="form-control" 
-                placeholder="Run o nombre" value="{{ old('rut') }}" aucomplete="off">
+            <input name="rut" class="form-control" placeholder="Run o nombre" value="{{ old('rut') }}" aucomplete="off">
             </input>
         </fieldset>
 
@@ -29,8 +28,9 @@
             <label for="for_year">Año</label>
             <select name="year" class="form-control">
                 <option value=""></option>
-                <option value="2020" @if($request->input('year')==2020) selected @endif>2020</option>
-                <option value="2021" @if($request->input('year')==2021) selected @endif>2021</option>
+                @foreach($years as $year)
+                    <option value="{{ $year }}" {{ (old('year')==$year)?'selected':''}}>{{$year}}</option>
+                @endforeach
             </select>
         </fieldset>
 
@@ -80,48 +80,71 @@
     </div>
 
     <div class="form-row">
-        <div class="form-group col-md-12">
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="for_resolution" 
-                    name="resolution" {{ (old('resolution') == true) ? 'checked':'' }}>
-                <label class="form-check-label" for="for_resolution">Resolución</label>
-            </div>
 
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="for_certificate" 
-                    name="certificate" {{ (old('certificate') == true) ? 'checked':'' }}>
-                <label class="form-check-label" for="for_certificate">Certificado</label>
-            </div>
 
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="for_ok_responsable" 
-                    name="ok_responsable" {{ (old('ok_responsable') == true) ? 'checked':'' }}>
-                <label class="form-check-label" for="for_ok_responsable">Aprobado Responsable</label>
-            </div>
+        <fieldset class="form-group col-6 col-md-1">
+            <label for="for_resolution">Resolución</label>
+            <select name="resolution" class="form-control">
+                <option value=""></option>
+                <option value="Yes" @if($request->input('resolution')=='Yes') selected @endif>Con</option>
+                <option value="No" @if($request->input('resolution')=='No') selected @endif>Sin</option>
+            </select>
+        </fieldset>
 
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="for_ok_rrhh" 
-                    name="ok_rrhh" {{ (old('ok_rrhh') == true) ? 'checked':'' }}>
-                <label class="form-check-label" for="for_ok_rrhh">Aprobado RRHH</label>
-            </div>
+        <fieldset class="form-group col-6 col-md-2">
+            <label for="for_certificate">Certificado</label>
+            <select name="certificate" class="form-control">
+                <option value=""></option>
+                <option value="Yes" @if($request->input('certificate')=='Yes') selected @endif>Con Certificado</option>
+                <option value="No" @if($request->input('certificate')=='No') selected @endif>Sin Certificado</option>
+            </select>
+        </fieldset>
 
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="for_ok_finanzas" 
-                    name="ok_finanzas" {{ (old('ok_finanzas') == true) ? 'checked':'' }}>
-                <label class="form-check-label" for="for_ok_finanzas">Aprobado Finanzas</label>
-            </div>
+        <fieldset class="form-group col-6 col-md-2">
+            <label for="for_ok_responsable">Responsable</label>
+            <select name="ok_responsable" class="form-control">
+                <option value=""></option>
+                <option value="Yes" @if($request->input('ok_responsable')=='Yes') selected @endif>Aprobado</option>
+                <option value="No" @if($request->input('ok_responsable')=='No')) selected @endif>Sin Aprobar</option>
+            </select>
+        </fieldset>
 
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="for_invoice" 
-                    name="invoice" {{ (old('invoice') == true) ? 'checked':'' }}>
-                <label class="form-check-label" for="for_invoice">Boleta</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="for_payed" 
-                    name="payed" {{ (old('payed') == true) ? 'checked':'' }}>
-                <label class="form-check-label" for="for_payed">Pagado</label>
-            </div>
-        </div>
+
+        <fieldset class="form-group col-6 col-md-2">
+            <label for="for_ok_rrhh">RRHH</label>
+            <select name="ok_rrhh" class="form-control">
+                <option value=""></option>
+                <option value="Yes" @if($request->input('ok_rrhh')=='Yes') selected @endif>Aprobado</option>
+                <option value="No" @if($request->input('ok_rrhh')=='No')) selected @endif>Sin Aprobar</option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-6 col-md-2">
+            <label for="for_ok_finances">Finanzas</label>
+            <select name="ok_finances" class="form-control">
+                <option value=""></option>
+                <option value="Yes" @if($request->input('ok_finances')=='Yes') selected @endif>Aprobado</option>
+                <option value="No" @if($request->input('ok_finances')=='No')) selected @endif>Sin Aprobar</option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-6 col-md-1">
+            <label for="for_invoice">Boleta</label>
+            <select name="invoice" class="form-control">
+                <option value=""></option>
+                <option value="Yes" @if($request->input('invoice')=='Yes') selected @endif>Con</option>
+                <option value="No" @if($request->input('invoice')=='No')) selected @endif>Sin</option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-6 col-md-2">
+            <label for="for_payment_date">Pago</label>
+            <select name="payment_date" class="form-control">
+                <option value=""></option>
+                <option value="P" @if($request->input('payment_date')=='P') selected @endif>Pagado</option>
+                <option value="SP" @if($request->input('payment_date')=='SP')) selected @endif>No Pagado</option>
+            </select>
+        </fieldset>
     </div>
 
 </form>
@@ -137,8 +160,7 @@
             <th>Id Sol.</th>
             <th nowrap>Rut</th>
             <th>Nombre</th>
-            <th>Año</th>
-            <th>Mes</th>
+            <th>Período</th>
             <th>Tipo</th>
             <th>Tipo de Contrato</th>
             <th>Hitos</th>
@@ -152,30 +174,29 @@
             </td>
             <td>{{$fulfillment->servicerequest?$fulfillment->servicerequest->employee->runFormat(): ''}}</td>
             <td class="text-uppercase">{{$fulfillment->servicerequest->employee->fullname?? ''}}</td>
-            <td>{{$fulfillment->year}}</td>
-            <td>{{$fulfillment->month}}</td>
+            <td>{{$fulfillment->year}}-{{$fulfillment->month}}</td>
             <td>{{$fulfillment->servicerequest->type?? ''}}</td>
             <td>{{$fulfillment->servicerequest->program_contract_type?? ''}}</td>
             <td>
                 <i title="Resolución" class="fas fa-file-signature 
                     {{ ($fulfillment->serviceRequest->has_resolution_file)?'text-primary':'text-secondary'}}"></i>
-                
+
                 <i title="Certificado" class="fas fa-certificate 
                     {{ ($fulfillment->signatures_file_id)?'text-primary':'text-secondary'}}"></i>
-                
+
                 <i title="Aprobado Responsable" class="fas fa-chess-king 
                     {{ ($fulfillment->responsable_approbation)?'text-primary':'text-secondary'}}"></i>
-                
+
                 <i title="Aprobado RRHH" class="fas fa-user-shield 
                     {{ ($fulfillment->rrhh_approbation)?'text-primary':'text-secondary'}}"></i>
-                
+
                 <i title="Aprobado Finanzas" class="fas fa-piggy-bank 
                     {{ ($fulfillment->finances_approbation)?'text-primary':'text-secondary'}}"></i>
 
                 <i title="Boleta" class="fas fa-file-invoice-dollar 
                     {{ ($fulfillment->has_invoice_file)?'text-primary':'text-secondary'}}"></i>
                 <i title="Pago" class="fas fa-money-bill 
-                    {{ ($fulfillment->payment_date)?'text-primary':'text-secondary'}}"></i>     
+                    {{ ($fulfillment->payment_date)?'text-primary':'text-secondary'}}"></i>
             </td>
             <td>
                 @if($fulfillment->servicerequest)
