@@ -288,7 +288,7 @@ class SignatureController extends Controller
         $idSigFlow=SignaturesFlow::find($idSignatureFlow);
         $idSigFlow->update(['status'=>2, 'observation'=>$request->observacion]);
         session()->flash('success', "La solicitud ha sido rechazada");
-        return redirect()->route('documents.signatures.index', ['mis_documentos']);
+        return redirect()->route('documents.signatures.index', ['pendientes']);
 
     }
 }
