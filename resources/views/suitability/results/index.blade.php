@@ -43,7 +43,7 @@
             </td>
             @can('be god')
             <td>
-                @if($result->psirequest && $result->psirequest->status =="Aprobado")
+                @if($result->psirequest && $result->psirequest->status =="Aprobado" && $result->signed_certificate_id === null)
                     <a href="{{ route('suitability.sendForSignature', $result->id) }}" class="btn btn-outline-primary">
                         <span class="fas fa-signature" aria-hidden="true"></span></a>
                 @endif
