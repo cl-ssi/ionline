@@ -253,8 +253,8 @@ class WordTestController extends Controller
         // inject internal xml inside main template 
         $mainXml = $mainTemplateProcessor->tempDocumentMainPart;
  
-        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br w:type="page" /><w:lastRenderedPageBreak/></w:r></w:p>' . $innerXml . '</w:body>', $mainXml);
-        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br w:type="page" /><w:lastRenderedPageBreak/></w:r></w:p>' . $mainXmlEnd . '</w:body>', $mainXml);
+        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br/></w:r></w:p>' . $innerXml . '</w:body>', $mainXml);
+        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br/></w:r></w:p>' . $mainXmlEnd . '</w:body>', $mainXml);
 
         $mainTemplateProcessor->__set('tempDocumentMainPart', $mainXml);
 
