@@ -134,7 +134,7 @@
 <div class="table-responsive">
     <table class="table table-sm table-bordered table-stripped">
         <tr>
-
+            <th>Ct.</th>
             <th>Id Sol.</th>
             <th nowrap>Rut</th>
             <th>Nombre</th>
@@ -145,8 +145,9 @@
             <th>Hitos</th>
             <th></th>
         </tr>
-        @foreach($fulfillments as $fulfillment)
+        @foreach($fulfillments as $key => $fulfillment)
         <tr>
+            <td>{{ ++$key }}</td>
             <td>{{$fulfillment->servicerequest->id?? ''}}
                 <span class="small">({{$fulfillment->id}})</span>
             </td>
