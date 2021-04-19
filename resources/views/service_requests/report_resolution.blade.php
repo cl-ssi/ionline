@@ -443,18 +443,22 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
           DIURNA de lunes a viernes de 08:00 a 16:48 hrs.
           @break
         @case('TERCER TURNO')
-        @case('TERCER TURNO - MODIFICADO')
           de turnos rotativos, en TERCER TURNO, 2 largo de 08:00 a 20:00 hrs, 2 noche de 20:00 a 08:00 hrs y 2 días libres.
           @break
+        @case('TERCER TURNO - MODIFICADO')
+          de turnos rotativos, en TERCER TURNO, modificado por necesidades del servicio.
+          @break
         @case('CUARTO TURNO')
-        @case('CUARTO TURNO - MODIFICADO')
           de turnos rotativos, en CUARTO TURNO, 1 largo de 08:00 a 20:00 hrs, 1 noche de 20:00 a 08:00 hrs y 2 días libres.
+          @break
+        @case('CUARTO TURNO - MODIFICADO')
+          de turnos rotativos, en CUARTO TURNO, modificado por necesidades del servicio.
           @break
       @endswitch
 
       Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador,
-      se indica con el fin de verificar la realización de éstos,
-      sin que altere la naturaleza jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R.,
+      se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza 
+      jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R.,
       los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente,
       como también los días de inasistencia, los cuales deberán quedar informados en el respectivo
       informe de prestaciones mensual. Los reiterados atrasos e inasistencias deberán ser amonestados.
