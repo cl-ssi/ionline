@@ -4,16 +4,22 @@ namespace App\Models\WebService;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use SopaClient;
+//use SopaClient;
 
 class Fonasa extends Model
 {
     use HasFactory;
 
-    public static function find($rut, $dv) {
+    public static function find($rut) {
+	$run = intval($rut);
+	$s=1;
+	for($m=0;$run!=0;$run/=10)
+	    $s=($s+$run%10*(9-$m++%6))%11;
+	$dv = chr($s?$s+47:75); 
+
         if($rut AND $dv) {
             $wsdl = asset('ws/fonasa/CertificadorPrevisionalSoap.wsdl');
-            $client = new SoapClient($wsdl,array('trace'=>TRUE));
+            $client = new \SoapClient($wsdl,array('trace'=>TRUE));
             $parameters = array(
                 "query" => array(
                     "queryTO" => array(
@@ -42,7 +48,7 @@ class Fonasa extends Model
                     $certificado          = $result->getCertificadoPrevisionalResult;
                     $beneficiario         = $certificado->beneficiarioTO;
                     $afiliado             = $certificado->afiliadoTO;
-                    $user                 = new stdClass();
+                    $user                 = new \stdClass();
                     $user->run            = $beneficiario->rutbenef;
                     $user->dv             = $beneficiario->dgvbenef;
                     $user->name           = $beneficiario->nombres;
