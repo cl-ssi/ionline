@@ -7,8 +7,8 @@
 		<form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$fulfillment) }}" enctype="multipart/form-data">
 			@csrf
 			@method('PUT')
-			<div class="row">
-				<fieldset class="form-group col">
+			<div class="form-row">
+				<fieldset class="form-group col-12 col-md">
 					<label for="for_type">Período</label>
 					<select name="type" class="form-control" required>
 						<option value=""></option>
@@ -16,15 +16,15 @@
 						<option value="Parcial" @if($fulfillment->type == "Parcial") selected @endif>Parcial</option>
 					</select>
 				</fieldset>
-				<fieldset class="form-group col-3">
+				<fieldset class="form-group col-6 col-md-3">
 					<label for="for_estate">Inicio</label>
 					<input type="date" class="form-control" name="start_date" value="{{$fulfillment->start_date->format('Y-m-d')}}" required>
 				</fieldset>
-				<fieldset class="form-group col-3">
+				<fieldset class="form-group col-6 col-md-3">
 					<label for="for_estate">Término</label>
 					<input type="date" class="form-control" name="end_date" value="{{$fulfillment->end_date->format('Y-m-d')}}" required>
 				</fieldset>
-				<fieldset class="form-group col">
+				<fieldset class="form-group col-12 col-md">
 					<label for="for_estate">Observación</label>
 					<input type="text" class="form-control" name="observation" value="{{$fulfillment->observation}}">
 				</fieldset>
@@ -78,9 +78,9 @@
 		<h4>Inasistencias</h4>
 		<form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.store') }}" enctype="multipart/form-data">
 			@csrf
-			<div class="row">
+			<div class="form-row">
 				<input type="hidden" name="fulfillment_id" value="{{$fulfillment->id}}">
-				<fieldset class="form-group col">
+				<fieldset class="form-group col-12 col-md">
 					<label for="for_type">Tipo</label>
 					<select name="type" class="form-control for_type" required>
 						<option value=""></option>
@@ -91,7 +91,7 @@
 						<option value="Abandono de funciones">ABANDONO DE FUNCIONES</option>
 					</select>
 				</fieldset>
-				<fieldset class="form-group col">
+				<fieldset class="form-group col-12 col-md">
 					<label for="for_estate">Observación</label>
 					<input type="text" class="form-control" name="observation">
 				</fieldset>
@@ -100,20 +100,20 @@
 			$ano = \Carbon\Carbon::now()->format('Y');
 			$anopasado = $ano-1;
 			@endphp
-			<div class="row">
-				<fieldset class="form-group col-3">
+			<div class="form-row">
+				<fieldset class="form-group col-6 col-md-3">
 					<label for="for_estate">Entrada</label>
 					<input type="date" class="form-control start_date" name="start_date" min="{{$anopasado}}-01-01" max="{{$ano}}-12-31"  required>
 				</fieldset>
-				<fieldset class="form-group col">
+				<fieldset class="form-group col-6 col-md">
 					<label for="for_estate">Hora</label>
 					<input type="time" class="form-control start_hour" name="start_hour" required>
 				</fieldset>
-				<fieldset class="form-group col-3">
+				<fieldset class="form-group col-6 col-md-3">
 					<label for="for_estate">Salida</label>
 					<input type="date" class="form-control end_date" name="end_date" min="{{$anopasado}}-01-01" max="{{$ano}}-12-31" required>
 				</fieldset>
-				<fieldset class="form-group col">
+				<fieldset class="form-group col-6 col-md">
 					<label for="for_estate">Hora</label>
 					<input type="time" class="form-control end_hour" name="end_hour" required>
 				</fieldset>
@@ -245,7 +245,7 @@
 
 			</fieldset>
 		</div>
-		<div class="row">
+		<div class="form-row">
 			<div class="col-12 col-md-6">
 				<strong>Valor de la boleta</strong>
 				<div>
@@ -276,11 +276,11 @@
 							<label for="for_resolution_date">Fecha Resolución</label>
 							<input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
 						</fieldset>
-						<fieldset class="form-group col col-md-2">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_total_hours_paid">Total hrs. a pagar</label>
 							<input type="text" class="form-control" name="total_hours_to_pay" value="{{$fulfillment->total_hours_to_pay}}">
 						</fieldset>
-						<fieldset class="form-group col col-md-2">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_total_paid">Total a pagar</label>
 							<input type="text" class="form-control" name="total_to_pay" value="{{$fulfillment->total_to_pay}}">
 						</fieldset>
@@ -312,7 +312,7 @@
 							No se ha ingresado el "Total a pagar".
 							@endif
 						</div>
-						<div class="col-3 text-right">
+						<div class="col-12 col-md-3 text-right">
 							@if($fulfillment->rrhh_approver_id == NULL)
 							<a type="button" class="btn btn-danger"
 								onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');"
@@ -364,23 +364,23 @@
 						</fieldset>
 					</div>
 					<div class="form-row">
-						<fieldset class="form-group col col-md-2">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_bill_number">N° Boleta</label>
 							<input type="text" class="form-control" name="bill_number" value="{{$fulfillment->bill_number}}">
 						</fieldset>
-						<fieldset class="form-group col col-md-2">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
 							<input type="text" class="form-control" name="total_hours_paid" value="{{$fulfillment->total_hours_paid}}">
 						</fieldset>
-						<fieldset class="form-group col col-md-2">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_total_paid">Total pagado</label>
 							<input type="text" class="form-control" name="total_paid" value="{{$fulfillment->total_paid}}">
 						</fieldset>
-						<fieldset class="form-group col col-md-3">
+						<fieldset class="form-group col-6 col-md-3">
 							<label for="for_payment_date">Fecha pago</label>
 							<input type="date" class="form-control" name="payment_date" required @if($fulfillment->payment_date) value="{{$fulfillment->payment_date->format('Y-m-d')}}" @endif>
 						</fieldset>
-						<fieldset class="form-group col col-md-2">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_contable_month">Mes contable pago</label>
 							<select name="contable_month" class="form-control" required>
 								<option value=""></option>
@@ -400,17 +400,17 @@
 						</fieldset>
 					</div>
 					<div class="form-row">
-						<div class="col-2">
+						<div class="col col-md-2">
 							<button type="submit" class="btn btn-primary">Guardar</button>
 						</div>
-						<div class="col-7">
+						<div class="col-12 col-md-7">
 							@if($fulfillment->total_to_pay)
 								@livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment])
 							@else
 								No se ha ingresado el "Total a pagar".
 							@endif
 						</div>
-						<div class="col-3 text-right">
+						<div class="col-12 col-md-3 text-right">
 							@can('Service Request: fulfillments finance')
 							@if($fulfillment->finances_approver_id == NULL)
 							<a type="button"
