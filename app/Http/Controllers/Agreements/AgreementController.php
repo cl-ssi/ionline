@@ -15,7 +15,13 @@ use App\Rrhh\Authority;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Documents\Signature;
+use App\Models\Documents\SignaturesFile;
+use App\Models\Documents\SignaturesFlow;
+use App\Rrhh\OrganizationalUnit;
+use App\User;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AgreementController extends Controller
 {
@@ -42,30 +48,19 @@ class AgreementController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->period){
-            $agreements = Agreement::where('period', $request->period)->latest()->paginate(50);
-        } else {
-            $agreements = Agreement::where('period', date('Y'))->latest()->paginate(50);
-        }
-
-        return view('agreements/agreements/index')->withAgreements($agreements);
+        $agreements = Agreement::with('commune','program','agreement_amounts.program_component')->where('period', $request->period ? $request->period : date('Y'))->latest()->paginate(50);
+        
+        return view('agreements/agreements/index', compact('agreements'));
     }
 
     public function indexTracking(Request $request)
     {
-        if($request->commune){
-            $agreements = Agreement::where('commune_id',$request->commune)->where('period', $request->period)->latest()->paginate(50);
-        }elseif($request->period){
-            $agreements = Agreement::where('period', $request->period)->latest()->paginate(50);
-        } else {
-            $agreements = Agreement::where('period', date('Y'))->latest()->paginate(50);
-        }
-        $communes = Commune::All()->SortBy('name');
-        $stages = Stage::All();
+        $agreements = Agreement::with('program','stages','agreement_amounts.program_component','addendums','commune')
+                               ->when($request->commune, function($q) use ($request){ return $q->where('commune_id', $request->commune); })
+                               ->where('period', $request->period ? $request->period : date('Y'))->latest()->paginate(50);
 
-        //$agreements =  Agreement::with('Stages')->get();
-        //dd($agreements);
-        return view('agreements/agreements/trackingIndicator')->withAgreements($agreements)->withStages($stages)->withCommunes($communes);
+        $communes = Commune::All()->SortBy('name');
+        return view('agreements/agreements/trackingIndicator', compact('agreements', 'communes'));
     }
 
     /**
@@ -77,8 +72,9 @@ class AgreementController extends Controller
     {
         $programs = Program::All()->SortBy('name');
         $communes = Commune::All()->SortBy('name');
+        $referrers = User::all()->sortBy('name');
         $quota_options = $this->getQuotaOptions();
-        return view('agreements/agreements/create', compact('programs', 'communes', 'quota_options'));
+        return view('agreements/agreements/create', compact('programs', 'communes', 'referrers', 'quota_options'));
     }
 
     /**
@@ -136,10 +132,11 @@ class AgreementController extends Controller
      */
     public function show(Agreement $agreement)
     {
-        $agreement->load('authority.user', 'commune.establishments');
+        $agreement->load('authority.user', 'commune.establishments', 'referrer');
         $municipality = Municipality::where('commune_id', $agreement->commune->id)->first();
         $establishment_list = unserialize($agreement->establishment_list);
-        return view('agreements/agreements/show', compact('agreement', 'municipality', 'establishment_list'));
+        $referrers = User::all()->sortBy('name');
+        return view('agreements/agreements/show', compact('agreement', 'municipality', 'establishment_list', 'referrers'));
     }
 
     /**
@@ -200,7 +197,7 @@ class AgreementController extends Controller
             $Agreement->fileResEnd = $request->file('fileResEnd')->store('resolutions');
         }
 
-        $Agreement->referente = $request->referente;
+        $Agreement->referrer_id = $request->referrer_id;
         // $Agreement->authority_id = $request->authority_id;
         $Agreement->authority_id = Authority::getAuthorityFromDate(1, $request->date, 'manager')->id;
         $Agreement->save();
@@ -330,5 +327,66 @@ class AgreementController extends Controller
     public function downloadRes(Agreement $file)
     {
         return Storage::response($file->fileResEnd, mb_convert_encoding($file->name,'ASCII'));
+    }
+
+    public function signRes(Agreement $agreement)
+    {
+        $agreement->load('program','commune.municipality','referrer');
+        $municipio = (!Str::contains($agreement->commune->municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre ' : '').'Municipalidad de '.$agreement->commune->name;
+        
+        $signature = new Signature();
+        $signature->request_date = Carbon::now();
+        $signature->document_type = 'Resoluciones';
+        $signature->subject = 'Resolución exenta del convenio programa '.$agreement->program->name. ' año '.$agreement->period;
+        $signature->description = 'Documento que aprueba el convenio de ejecución del programa '.$agreement->program->name. ' año '.$agreement->period;
+        $signature->endorse_type = 'Visación opcional';
+        $signature->recipients = $agreement->commune->municipality->email_municipality.',sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$agreement->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
+        $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;
+
+        $signaturesFile = new SignaturesFile();
+        // $documentFile = $request->file('document');
+        // $signaturesFile->file = base64_encode(file_get_contents($documentFile->getRealPath()));
+        $signaturesFile->file_type = 'documento';
+        // $signaturesFile->md5_file = md5_file($documentFile);
+        
+        $director_signature = Authority::getAuthorityFromDate(1, Carbon::now()->toDateTimeString(), 'manager');
+        
+        $signaturesFlow = new SignaturesFlow();
+        $signaturesFlow->type = 'firmante';
+        $signaturesFlow->ou_id = $director_signature->organizational_unit_id;
+        $signaturesFlow->user_id = $director_signature->user_id;
+        $signaturesFile->signaturesFlows->add($signaturesFlow);
+
+        //visadores deptos.
+        // $visadores = collect([
+        //                 ['ou_id' => 2, 'user_id' => 14104369], // SUBDIRECCION GESTION ASISTENCIAL - CARLOS CALVO
+        //                 ['ou_id' => 61, 'user_id' => 6811637], // DEPTO.ASESORIA JURIDICA  - CARMEN HENRIQUEZ OLIVARES (CHO)
+        //                 ['ou_id' => 31, 'user_id' => 9994426], // DEPTO.GESTION FINANCIERA (40) - JAIME ABARZUA CONSTANZO (JAC)
+        //                 ['ou_id' => 12, 'user_id' => 15683706] // DEPTO. ATENCION PRIMARIA DE SALUD - JORGE CRUZ TERRAZAS (JCT)
+        //             ]);
+        $visadores = collect([14104369, 6811637, 9994426, 15683706]);
+
+        foreach($visadores as $key => $value){
+            $signaturesFlow = new SignaturesFlow();
+            $signaturesFlow->type = 'visador';
+            $signaturesFlow->ou_id = User::find($value)->organizational_unit_id;
+            $signaturesFlow->user_id = $value;
+            $signaturesFlow->sign_position = $key;
+            $signaturesFile->signaturesFlows->add($signaturesFlow);
+        }
+        
+        //visador referente tecnico
+        $signaturesFlow = new SignaturesFlow();
+        $signaturesFlow->type = 'visador';
+        $signaturesFlow->ou_id = $agreement->referrer->organizational_unit_id;
+        $signaturesFlow->user_id = $agreement->referrer->id;
+        $signaturesFlow->sign_position = $visadores->count() + 1;
+        $signaturesFile->signaturesFlows->add($signaturesFlow);
+
+        $signature->signaturesFiles->add($signaturesFile);
+        
+        $users = User::orderBy('name', 'ASC')->get();
+        $organizationalUnits = OrganizationalUnit::orderBy('id', 'asc')->get();
+        return view('documents.signatures.create', compact('signature', 'users', 'organizationalUnits'));
     }
 }

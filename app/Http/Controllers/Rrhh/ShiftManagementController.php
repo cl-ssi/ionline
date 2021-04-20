@@ -62,7 +62,7 @@ class ShiftManagementController extends Controller
         $actuallyShift=$sTypes->first();
         $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
         
-        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->get();
+        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift)->get();
 
         Session::put('users',$users);
         Session::put('cargos',$cargos);
@@ -99,11 +99,18 @@ class ShiftManagementController extends Controller
         
         
 
-        $actuallyShift=ShiftTypes::find($r->turnFilter);
          
         $actuallyOrgUnit =  OrganizationalUnit::find($r->orgunitFilter);
         $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
-        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->get();
+
+        if($r->turnFilter!=0){
+            $actuallyShift=ShiftTypes::find($r->turnFilter);
+            $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->get();
+        } else {
+             $actuallyShift=  (object) array('id' =>0,'name'=>"Todos" );
+            $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->get();
+        }
+
         // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
         Session::put('cargos',$cargos);
         Session::put('sTypes',$sTypes);
@@ -181,14 +188,40 @@ class ShiftManagementController extends Controller
         $currentSeries =  explode(",", $actuallyShift->day_series); 
         $i = 0;
         foreach ($ranges as $date) {
-            $nShiftD = new ShiftUserDay;
-            $nShiftD->day = $date->format('Y-m-d');
-            $nShiftD->status = 1;//assgined
-            $nShiftD->working_day = $currentSeries[$i]; 
-            $nShiftD->commentary = "// Automatically added by the shift ".$nShift->id."//"; 
-            $nShiftD->shift_user_id = $nShift->id;
-            $nShiftD->save();
-            // echo $date->format('Y-m-d');
+
+
+                $nShiftD = new ShiftUserDay;
+                $nShiftD->day = $date->format('Y-m-d');
+                $nShiftD->status = 1;//assgined
+               
+
+                if(isset($currentSeries[$i]) && $currentSeries[$i] != ""){
+                    $nShiftD->working_day = $currentSeries[$i]; 
+                    echo "if";
+
+                }
+                else{
+                    echo "else";
+                    while( !isset($currentSeries[$i])  ||  (isset($currentSeries[$i]) && $currentSeries[$i] == "") ){
+                        echo "currentSeries[i]:".$currentSeries[$i]."<br>";
+                        if(isset($currentSeries[$i]) && $currentSeries[$i] != "")
+                            $previous = $currentSeries[$i];
+                        if( $i <  ( sizeof($currentSeries) - 1) ){
+                            $i++;
+                        }else{
+                            $i=0;
+                        }
+                    }
+                    if(isset($currentSeries[$i]) && $currentSeries[$i] != "")
+                        $nShiftD->working_day = $currentSeries[$i]; 
+                    else
+                         $nShiftD->working_day =$previous;
+
+                }
+                $nShiftD->commentary = "// Automatically added by the shift ".$nShift->id."//"; 
+                $nShiftD->shift_user_id = $nShift->id;
+                $nShiftD->save();
+           
             if( $i <  ( sizeof($currentSeries) - 1) ){
                 $i++;
             }else{

@@ -47,9 +47,11 @@ class SignatureController extends Controller
                 ->get();
 
             $signedSignaturesFlows = SignaturesFlow::where('user_id', Auth::id())
-                ->where('status', 1)
+                ->whereNotNull('status')
                 ->orderByDesc('id')
                 ->get();
+
+
         }
 
         return view('documents.signatures.index', compact('mySignatures', 'pendingSignaturesFlows', 'signedSignaturesFlows', 'tab'));
@@ -278,5 +280,15 @@ class SignatureController extends Controller
         // echo base64_decode($signaturesFile->signed_file);
         session()->flash('success', $message);
         return redirect()->route('rrhh.service-request.fulfillment.edit', $fulfillment->serviceRequest->id);
+    }
+
+    public function rejectSignature(Request $request, $idSignatureFlow){
+       // dd($request);
+       // dd($idsignatureFlow);
+        $idSigFlow=SignaturesFlow::find($idSignatureFlow);
+        $idSigFlow->update(['status'=>2, 'observation'=>$request->observacion]);
+        session()->flash('success', "La solicitud ha sido rechazada");
+        return redirect()->route('documents.signatures.index', ['pendientes']);
+
     }
 }

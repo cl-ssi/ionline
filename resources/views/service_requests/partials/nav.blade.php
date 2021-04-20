@@ -7,6 +7,12 @@
         </a>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link {{ active('rrhh.service-request.user') }}"
+            href="{{ route('rrhh.service-request.user') }}">
+            <i class="fas fa-search"></i>
+        </a>
+    </li>
 
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.service-request.index') }}"
@@ -23,6 +29,39 @@
             <i class="fas fa-clipboard-check"></i> Cumplimientos
         </a>
     </li>
+    @endcan
+
+    @can('Service Request: fulfillments responsable')
+        <li class="nav-item">
+            <a class="nav-link {{ active('rrhh.service-request.report.fulfillment-pending') }}"
+                href="{{ route('rrhh.service-request.report.fulfillment-pending','responsable') }}"
+                title="Cumplimientos pendientes por aprobar de Responsable">
+                <i class="fas fa-clipboard-check"></i>
+                <i class="fas fa-chess-king"></i>
+            </a>
+        </li>
+    @endcan
+
+    @can('Service Request: fulfillments rrhh')
+        <li class="nav-item">
+            <a class="nav-link {{ active('rrhh.service-request.report.fulfillment-pending') }}"
+                href="{{ route('rrhh.service-request.report.fulfillment-pending','rrhh') }}"
+                title="Cumplimientos pendientes por aprobar de RRHH">
+                <i class="fas fa-clipboard-check"></i>
+                <i class="fas fa-user-shield"></i>
+            </a>
+        </li>
+    @endcan
+
+    @can('Service Request: fulfillments finance')
+        <li class="nav-item">
+            <a class="nav-link {{ active('rrhh.service-request.report.fulfillment-pending') }}"
+                href="{{ route('rrhh.service-request.report.fulfillment-pending','finance') }}"
+                title="Cumplimientos pendientes por aprobar de finanzas">
+                <i class="fas fa-clipboard-check"></i>
+                <i class="fas fa-piggy-bank"></i>
+            </a>
+        </li>
     @endcan
 
     @canany(['Service Request: additional data'])
@@ -93,13 +132,13 @@
             </a>
             @endcan
 
-            @canany(['Service Request: fulfillments rrhh','Service Request: fulfillments finance'])            
+            @canany(['Service Request: fulfillments rrhh','Service Request: fulfillments finance'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.compliance') }}"
                 href="{{ route('rrhh.service-request.report.compliance') }}">
                 <i class="fas fa-flag-checkered"></i> Reporte de cumplimientos
             </a>
             @endcan
-            
+
 
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.pay-rejected') }}"

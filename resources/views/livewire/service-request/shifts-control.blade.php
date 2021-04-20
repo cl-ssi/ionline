@@ -47,15 +47,17 @@
                 <tr>
                     <th>Entrada</th>
                     <th>Salida</th>
+                    <th>Horas</th>
                     <th>Observación</th>
                 </tr>
             </thead>
             <tbody>
-              @foreach($fulfillment->shiftControls as $key => $shiftControl)
+              @foreach($fulfillment->shiftControls->sortBy('start_date') as $key => $shiftControl)
                 <tr>
 
                   <td>{{$shiftControl->start_date->format('Y-m-d H:i')}}</td>
                   <td>{{$shiftControl->end_date->format('Y-m-d H:i')}}</td>
+                  <td>{{$shiftControl->end_date->diffInHours($shiftControl->start_date)}}</td>
                   <td>{{$shiftControl->observation}}</td>
                   <td>
 

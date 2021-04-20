@@ -123,6 +123,9 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::post('/{signaturesFlow}/firma', 'FirmaDigitalController@signPdfFlow')->name('signPdfFlow');
 Route::post('/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
 
+Route::post('/{idSignaturesFlow}/rechazar', 'Documents\SignatureController@rejectSignature')->name('rejectSignature');
+
+
 
 Route::get('/claveunica', 'ClaveUnicaController@autenticar')->name('claveunica.autenticar');
 Route::get('/claveunica/callback', 'ClaveUnicaController@callback')->name('claveunica.callback');
@@ -285,6 +288,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     //Route::get('createWord','Agreements\WordTestController@createWordDocx')->name('createWord.index');
     Route::get('/createWord/{agreement}', 'Agreements\WordTestController@createWordDocx')->name('createWord');
     Route::get('/createWordRes/{agreement}', 'Agreements\WordTestController@createResWordDocx')->name('createWordRes');
+    Route::get('/signRes/{agreement}', 'Agreements\AgreementController@signRes')->name('signRes');
 });
 
 //Programación Númerica APS
@@ -363,6 +367,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         // Rutas de service request
         Route::get('/home', function () { return view('service_requests.home'); })->name('home');
 
+        Route::match(['get', 'post'],'/user', [ServiceRequestController::class, 'user'])->name('user');
+
         //descomposición del resource
         Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
         Route::get('/create', [ServiceRequestController::class, 'create'])->name('create');
@@ -432,6 +438,10 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/without-resolution-file', [ReportController::class, 'indexWithoutResolutionFile'])->name('without-resolution-file');
             Route::get('/budget-availability/{serviceRequest}', [ReportController::class, 'budgetAvailability'])->name('budget-availability');
             Route::get('/compliance', [ReportController::class, 'compliance'])->name('compliance');
+
+            Route::get('/fulfillment/pending/{who}', [ReportController::class, 'pending'])->name('fulfillment-pending');
+            // Route::get('/fulfillment/rrhh', [ReportController::class, 'pendingRrhh'])->name('pending-rrhh');
+            // Route::get('/fulfillment/finance', [ReportController::class, 'pendingFinance'])->name('pending-finance');
 
             //pasar a reports
             Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
@@ -1134,6 +1144,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::get('/approved', [SuitabilityController::class, 'approved'])->name('approved');
     Route::get('/rejected', [SuitabilityController::class, 'rejected'])->name('rejected');
     Route::patch('/finalresult/{psirequest}/{result}', [SuitabilityController::class, 'finalresult'])->name('finalresult');
+    Route::get('/sendForSignature/{id}', [SuitabilityController::class, 'sendForSignature'])->name('sendForSignature');
 
     Route::prefix('categories')->as('categories.')->middleware('auth')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])->name('index');
@@ -1187,6 +1198,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/{id}', [ResultsController::class, 'show'])->name('show');
         Route::get('/certificate/{id}', [ResultsController::class, 'certificate'])->name('certificate');
         Route::get('/certificatepdf/{id}', [ResultsController::class, 'certificatepdf'])->name('certificatepdf');
+        Route::get('/signed-suitability-certificate-pdf/{id}', [SuitabilityController::class, 'signedSuitabilityCertificatePDF'])->name('signedSuitabilityCertificate');
         //Route::get('results/{result_id}', 'ResultsController@show')->name('results.show');
         // Route::get('/create', [OptionsController::class, 'create'])->name('create');
         // Route::post('/store', [OptionsController::class, 'store'])->name('store');

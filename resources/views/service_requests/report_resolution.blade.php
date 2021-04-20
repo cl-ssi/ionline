@@ -387,7 +387,13 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
       @endif
       en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
     <br>
-    Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+    Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del
+    @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+      Hospital Dr. Ernesto Torres Galdames de Iquique,
+    @else
+      Servicio de salud Iquique,
+    @endif
+    el cual debe venir con las debidas observaciones de la Jefatura directa.
   </p>
 @elseif($ServiceRequest->program_contract_type == "Horas")
   @if($ServiceRequest->estate == "Profesional Médico")
@@ -396,7 +402,13 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
         <br><br>
       	El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
         <br><br>
-        Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Unidad de Honorarios Covid del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+        Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Unidad de Honorarios Covid del
+        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+          Hospital Dr. Ernesto Torres Galdames de Iquique,
+        @else
+          Servicio de salud Iquique,
+        @endif
+        el cual debe venir con las debidas observaciones de la Jefatura directa.
         <br>
     </p>
   @else
@@ -424,27 +436,31 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
 
 @if($ServiceRequest->program_contract_type == "Mensual")
   <p class="justify">
-      <strong>DÉCIMO:</strong> El prestador cumplirá una jornada 
-      
+      <strong>DÉCIMO:</strong> El prestador cumplirá una jornada
+
       @switch($ServiceRequest->working_day_type)
         @case('DIURNO')
           DIURNA de lunes a viernes de 08:00 a 16:48 hrs.
           @break
         @case('TERCER TURNO')
-        @case('TERCER TURNO - MODIFICADO')
           de turnos rotativos, en TERCER TURNO, 2 largo de 08:00 a 20:00 hrs, 2 noche de 20:00 a 08:00 hrs y 2 días libres.
           @break
+        @case('TERCER TURNO - MODIFICADO')
+          de turnos rotativos, en TERCER TURNO, modificado por necesidades del servicio.
+          @break
         @case('CUARTO TURNO')
-        @case('CUARTO TURNO - MODIFICADO')
           de turnos rotativos, en CUARTO TURNO, 1 largo de 08:00 a 20:00 hrs, 1 noche de 20:00 a 08:00 hrs y 2 días libres.
+          @break
+        @case('CUARTO TURNO - MODIFICADO')
+          de turnos rotativos, en CUARTO TURNO, modificado por necesidades del servicio.
           @break
       @endswitch
 
-      Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador, 
-      se indica con el fin de verificar la realización de éstos, 
-      sin que altere la naturaleza jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R., 
-      los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente, 
-      como también los días de inasistencia, los cuales deberán quedar informados en el respectivo 
+      Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador,
+      se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza 
+      jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R.,
+      los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente,
+      como también los días de inasistencia, los cuales deberán quedar informados en el respectivo
       informe de prestaciones mensual. Los reiterados atrasos e inasistencias deberán ser amonestados.
   </p>
 @elseif($ServiceRequest->program_contract_type == "Horas")
@@ -490,12 +506,31 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
 
 @if($ServiceRequest->program_contract_type == "Mensual")
   <p class="justify">
-      <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que el prestador tendrá derecho a presentar licencias médicas de todo tipo, la cual sólo justificará los días de inasistencia, no procediendo el pago de éstos, además deberá dejar copia de licencia médica en la Subdirección de Recursos Humanos. Las ausencias por esta causa serán descontadas de la cuota mensual.
+      <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que el prestador tendrá derecho a presentar
+      @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+        licencias médicas de todo tipo,
+      @else
+        licencias médicas,
+      @endif
+      la cual sólo justificará los días de inasistencia, no procediendo el pago de éstos, además deberá dejar copia de licencia médica en la Subdirección de
+      @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+        Recursos Humanos.
+      @else
+        Gestión y Desarrollo de las Personas.
+      @endif
+      Las ausencias por esta causa serán descontadas de la cuota mensual.
       <br><br>
-      A contar del 01 de enero del 2019 el personal a honorarios estará obligado a imponer, tanto en salud como en AFP, de manera personal, como lo indica la Ley N°20.894, por lo tanto, deberá realizar el cobro del subsidio de salud directamente en la institución correspondiente, ya sea Fonasa o Isapre.
+      @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+        A contar del 01 de enero del 2019 el personal a honorarios estará obligado a imponer, tanto en salud como en AFP, de manera personal, como lo indica la Ley N°20.894, por lo tanto, deberá realizar el cobro del subsidio de salud directamente en la institución correspondiente, ya sea Fonasa o Isapre.
+      @endif
   </p>
   <p class="justify">
-      <strong>DECIMO TERCERO:</strong> En caso que el prestador tenga contacto con un contagiado de COVID-19, o en su defecto, deba realizar cuarentena obligatoria por ser positivo de COVID-19, el Director de Servicio o establecimiento podrá disponer la autorización de permiso preventivo, el cual no será causal de descuento. De considerarse contacto estrecho, se podrá establecer un sistema de teletrabajo en aquellas funciones que lo permitan.
+      <strong>DECIMO TERCERO:</strong> En caso que el prestador tenga contacto con un contagiado de COVID-19, o en su defecto, deba realizar cuarentena obligatoria por ser positivo de COVID-19, el Director de Servicio o establecimiento podrá disponer la autorización de permiso preventivo, el cual no será causal de descuento. De considerarse contacto estrecho, se podrá establecer un sistema de teletrabajo en aquellas
+      @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+        funciones que lo permitan.
+      @else
+        prestaciones que lo permitan.
+      @endif
   </p>
   <p class="justify">
       <strong>DECIMO CUARTO:</strong>
@@ -510,7 +545,9 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
     <p class="justify">
         <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que el presente convenio de honorarios covid, el prestador no dará derecho a beneficios de feriados legales, permisos administrativos y otro tipo de permisos contemplados y/o asimilados a funciones estatutarias, complementariamente con respecto al ausentismo por licencias médicas.
         <br><br>
-        A contar del 01 de enero del 2019 el personal a honorarios estará obligado a imponer, tanto en salud como en AFP, de manera personal, como lo indica la Ley N°20.894, por lo tanto, deberá realizar el cobro del subsidio de salud directamente en la institución correspondiente, ya sea Fonasa o Isapre.
+        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+          A contar del 01 de enero del 2019 el personal a honorarios estará obligado a imponer, tanto en salud como en AFP, de manera personal, como lo indica la Ley N°20.894, por lo tanto, deberá realizar el cobro del subsidio de salud directamente en la institución correspondiente, ya sea Fonasa o Isapre.
+        @endif
     </p>
     <p class="justify">
         <strong>DECIMO TERCERO:</strong>
