@@ -35,22 +35,22 @@
 
 <div class="form-row">
 
-  <fieldset class="form-group col-3 col-md-3">
+  <fieldset class="form-group col-6 col-md-3">
       <label for="for_start_date">Fecha de Inicio</label>
       <input type="text" class="form-control" value="{{$serviceRequest->start_date->format('Y-m-d')}}" disabled>
   </fieldset>
 
-  <fieldset class="form-group col-3 col-md-3">
+  <fieldset class="form-group col-6 col-md-3">
       <label for="for_end_date">Fecha de Término</label>
       <input type="text" class="form-control" value="{{$serviceRequest->end_date->format('Y-m-d')}}" disabled>
   </fieldset>
 
-  <fieldset class="form-group col-3 col-md-3">
+  <fieldset class="form-group col-6 col-md-3">
       <label for="for_end_date">Tipo de contrato</label>
       <input type="text" class="form-control" value="{{$serviceRequest->program_contract_type}}" disabled>
   </fieldset>
 
-  <fieldset class="form-group col-3 col-md-3">
+  <fieldset class="form-group col-6 col-md-3">
       <label for="for_end_date">Jornada de trabajo</label>
       <input type="text" class="form-control" value="{{$serviceRequest->working_day_type}}" disabled>
   </fieldset>
@@ -59,17 +59,17 @@
 
 <div class="form-row">
 
-  <fieldset class="form-group col-3 col-md-3">
+  <fieldset class="form-group col-6 col-md-3">
       <label for="for_request_date">Rut</label>
       <input type="text" class="form-control" value="{{$serviceRequest->employee->runNotFormat()}}" disabled>
   </fieldset>
 
-  <fieldset class="form-group col-3 col-md-6">
+  <fieldset class="form-group col-12 col-md-6">
       <label for="for_start_date">Funcionario</label>
       <input type="text" class="form-control" value="{{$serviceRequest->employee->getFullNameAttribute()}}" disabled>
   </fieldset>
 
-  <fieldset class="form-group col-3 col-md-3">
+  <fieldset class="form-group col-12 col-md-3">
       <label for="for_end_date">Estamento</label>
       <input type="text" class="form-control" value="{{$serviceRequest->estate}}" disabled>
   </fieldset>
