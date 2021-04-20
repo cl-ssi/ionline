@@ -3,9 +3,14 @@
         <fieldset class="form-group col-4">
             <label for="for_endorse_type">Tipo de visación</label>
             <select class="form-control" name="endorse_type" required="">
-                <option value="No requiere visación">No requiere visación</option>
+                <option value="">Seleccione tipo</option>
+                @php($endorseTypes = array('No requiere visación','Visación opcional','Visación en cadena de responsabilidad'))
+                @foreach($endorseTypes as $endorseType)
+                <option value="{{$endorseType}}" @if(isset($signature) && $signature->endorse_type == $endorseType) selected @endif>{{$endorseType}}</option>
+                @endforeach
+                <!-- <option value="No requiere visación">No requiere visación</option>
                 <option value="Visación opcional">Visación opcional</option>
-                <option value="Visación en cadena de responsabilidad">Visación en cadena de responsabilidad</option>
+                <option value="Visación en cadena de responsabilidad">Visación en cadena de responsabilidad</option> -->
             </select>
         </fieldset>
 

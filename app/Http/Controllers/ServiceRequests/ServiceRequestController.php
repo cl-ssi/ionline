@@ -99,6 +99,26 @@ class ServiceRequestController extends Controller
     return view('service_requests.requests.index', compact('serviceRequestsMyPendings', 'serviceRequestsOthersPendings', 'serviceRequestsRejected', 'serviceRequestsAnswered', 'serviceRequestsCreated', 'users'));
   }
 
+  public function user(Request $request) {
+    $fulfillments = array();
+    $user = null;
+
+    if($request->input('run')) {
+      $user = User::find($request->input('run'));
+
+      if($user) {
+        $fulfillments = Fulfillment::whereHas('ServiceRequest', function($query) use ($user) { 
+          $query->where('user_id',$user->id);}
+          )->orderBy('payment_date')->get();
+      }
+
+      
+    }
+    $request->flash();
+
+    return view('service_requests.requests.user', compact('user','fulfillments'));
+  }
+
   public function aditional_data_list(Request $request)
   {
 
@@ -163,6 +183,9 @@ class ServiceRequestController extends Controller
   {
     $signatureFlow = SignatureFlow::find($request->signature_flow_id);
     $signatureFlow->responsable_id = $request->user_id;
+    if (User::find($request->user_id)->organizational_unit_id != null) {
+      $signatureFlow->ou_id = User::find($request->user_id)->organizational_unit_id;
+    }
     $signatureFlow->save();
 
     session()->flash('success', 'Se ha modificado el responsable del flujo de firmas.');

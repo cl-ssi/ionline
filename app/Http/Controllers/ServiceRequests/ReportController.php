@@ -11,6 +11,7 @@ use Luecano\NumeroALetras\NumeroALetras;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Support\Facades\Auth;
 
 class ReportController extends Controller
 {
@@ -287,14 +288,65 @@ class ReportController extends Controller
     return view('service_requests.reports.budget_availability', compact('serviceRequest'));
   }
 
+	public function pending(Request $request, $who) {
 
-  public function compliance(Request $request)
-  {
-      //$users = User::getUsersBySearch($request->get('name'))->orderBy('name','Asc')->paginate(150);
-      $fulfillments = Fulfillment::Search($request)->paginate(100);
+    $user_id = Auth::user()->id;
+		$query = Fulfillment::query();
 
+		$query->Search($request)
+			->whereHas('ServiceRequest')
+			->orderBy('year')
+			->orderBy('month');
 
-    return view('service_requests.reports.compliance', compact('fulfillments','request'));
-  }
+		switch($who) {
+			case 'responsable':
+				$query->whereNull('responsable_approbation')
+          ->whereHas("serviceRequest", function ($subQuery) use ($user_id) {
+            $subQuery->whereHas("signatureFlows", function ($subQuery) use ($user_id) {
+            $subQuery->where('responsable_id',$user_id);
+          });
+        });
+				break;
+			case 'rrhh':
+				$query->whereNotNull('responsable_approbation');
+				$query->whereNull('rrhh_approbation');
+				break;
+			case 'finance':
+				$query->whereNotNull('responsable_approbation');
+				$query->whereNotNull('rrhh_approbation');
+				$query->whereNull('finances_approbation');
+				break;
+			default:
+				break;
+		}
+
+		$fulfillments = $query->paginate(100);
+
+		$periodo = '';
+
+		$request->flash(); // envía los inputs de regreso
+
+		return view('service_requests.requests.fulfillments.reports.pending',
+			compact('fulfillments','request','periodo','who')
+		);
+
+	}
+
+	public function compliance(Request $request)
+	{
+		//$users = User::getUsersBySearch($request->get('name'))->orderBy('name','Asc')->paginate(150);
+		$fulfillments = Fulfillment::Search($request)
+      ->whereHas('ServiceRequest')
+      ->paginate(200);
+    
+    /* Año actual y año anterior */
+    $years[] = now()->format('Y');
+    $years[] = now()->subYear('1')->format('Y');
+
+    $request->flash();
+
+		return view('service_requests.requests.fulfillments.reports.compliance', 
+      compact('years','fulfillments','request'));
+	}
 
 }

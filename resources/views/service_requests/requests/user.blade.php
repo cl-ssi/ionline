@@ -1,25 +1,31 @@
-@extends('layouts.guest')
+@extends('layouts.app')
 
 @section('title', 'Boleta de Honorario')
 
 @section('content')
 
-@if(empty($fulfillments))
-<div class="alert alert-danger">
-	<h4 class="alert-heading">No Posee Solicitudes de Pago de Honorario con este RUT.</h4>
+@include('service_requests.partials.nav')
+
+<h3 class="mb-3">Historial por usuario</h3>
+
+<form method="post" action="{{ route('rrhh.service-request.user')}}">
+    @csrf
+    <div class="form-row">
+        <fieldset class="col-md-4">
+            @livewire('calcular-dv')
+        </fieldset>
+    </div>
+</form>
+
+@if(count($fulfillments) < 1)
+<div class="alert alert-info mt-3">
+	<h4 class="alert-heading">El funcionario {{ optional($user)->fullName }} 
+        no posee dolicitudes de Honorarios.</h4>
 </div>
 @else
 
-
-@livewire('service-request.update-account' , ['bankaccount' => $bankaccount->last()])
-
-<hr>
-
-<h4 class="mt-3 mb-3">Información de sus contratos de honorarios</h4>
-<p>Si tiene alguna duda, respecto a algún contrato, puedes ponerte en contacto con el área de RRHH a través de  
-<a href="https://wa.me/message/IBHMJ3XRQZA3P1" data-toggle="tooltip" title="<img src='{{ asset('images/qr_wp_rrhh.svg') }}' />">WhatsApp</a>. El horario de atención es de 8:30 a 17:00.</p>
-
-
+<h4 class="mt-3 mb-3">Información de contratos de honorarios de 
+    {{ optional($user)->fullName }}</h4>
 
 @foreach($fulfillments as $fullfillment)
 
@@ -109,31 +115,31 @@
 			</li>
 			<li class="list-group-item">
 				@if($fullfillment->total_to_pay)
-				@if($fullfillment->has_invoice_file)
-				<i class="fas fa-circle text-success"></i>
-				@livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])
-				@else
-				<i class="fas fa-circle text-secondary"></i>
-				@livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])
-				@endif
-				@else
-				<i class="fas fa-circle text-secondary"></i> No es posible cargar boleta.
+                    @if($fullfillment->has_invoice_file)
+                        <i class="fas fa-circle text-success"></i>
+                        Boleta cargada
+				    @else
+                        <i class="fas fa-circle text-secondary"></i>
+                        Pendiente cargar la boleta
+                    @endif
+                @else
+                    <i class="fas fa-circle text-secondary"></i> No es posible cargar boleta.
 				@endif
 			</li>
 			<li class="list-group-item">
 				@if($fullfillment->payment_date)
-				<i class="fas fa-circle text-success"></i>
-				Pagado realizado el {{ optional($fullfillment->payment_date)->format('d-m-Y')}}
+                    <i class="fas fa-circle text-success"></i>
+                    Pagado realizado el {{ optional($fullfillment->payment_date)->format('d-m-Y')}}
 				@else
-				<i class="fas fa-circle text-secondary"></i>
-				Pago pendiente.
-				@if($fullfillment->payment_rejection_detail)
-				<a href="#" data-toggle="collapse" data-target="#rechazo{{$fullfillment->id}}"> 
-					<i class="fas fa-chevron-down"></i> </a>
-				<div id="rechazo{{$fullfillment->id}}" class="collapse" aria-labelledby="headingOne">
-					{!! $fullfillment->payment_rejection_detail !!}
-				</div>
-				@endif
+                    <i class="fas fa-circle text-secondary"></i>
+                    Pago pendiente.
+                    @if($fullfillment->payment_rejection_detail)
+                    <a href="#" data-toggle="collapse" data-target="#rechazo{{$fullfillment->id}}"> 
+                        <i class="fas fa-chevron-down"></i> </a>
+                    <div id="rechazo{{$fullfillment->id}}" class="collapse" aria-labelledby="headingOne">
+                        {!! $fullfillment->payment_rejection_detail !!}
+                    </div>
+                    @endif
 				@endif
 			</li>
 		</ul>

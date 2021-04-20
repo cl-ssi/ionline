@@ -14,7 +14,7 @@ class AddSignatureIdToDocSignaturesFilesTable extends Migration
     public function up()
     {
         Schema::table('doc_signatures_files', function (Blueprint $table) {
-            $table->foreignId('signature_id')->nullable();
+            $table->foreignId('signature_id')->nullable()->after('md5_signed_file');
             $table->foreign('signature_id')->references('id')->on('doc_signatures');
         });
     }
