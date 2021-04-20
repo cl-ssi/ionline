@@ -1,5 +1,4 @@
 <div>
-    <h1>{{$statusx}}</h1>
     @if(isset($staffInShift)&&count($staffInShift)>0&&$staffInShift!="")
 
     	@foreach($staffInShift as $sis)
@@ -18,20 +17,14 @@
 						$date =explode(" ",$date);
                         $d = $sis->days->where('day',$date[0]);
 					@endphp
-                    <td  style="text-align:center;width:54px;height:54px">
-                        <div  class="bbd day" >
+                    <td class="bbd day"  style="text-align:center;width:54px;height:54px">
+                            {{ $d->first()->id}}
                         	@if(isset($d) && count($d) )
-                                <button type="button" wire:click="editStatusDay({{$staffInShift}},{{$actuallyYear}},{{$actuallyMonth}},{{$days}})">
-                                    @if($d->first()->working_day!="F")
-                                    	{{$d->first()->working_day}}
-                                    @else
-                                    	-
-                                    @endif
-                                </button>
+                               @livewire('rrhh.change-shift-day-status',['shiftDay'=>$d->first()])
                             @else
                                 N/A
                             @endif
-                        </div>
+                        
                     </td>
                 @endfor    
 			</tr>	
@@ -40,5 +33,6 @@
         @else                           
             <td style="text-align:  center;" colspan="{{$days}}">SIN PERSONAL ASIGNADO</td>
         @endif
+
 
 </div>
