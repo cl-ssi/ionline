@@ -136,7 +136,7 @@
 				<div class="input-group">
             	
             		<label for="for_name">AÑO </label>
-            		<select class="form-control" id="for_turnFilter" name="yearFilter">
+            		<select class="form-control" id="for_yearFilter" name="yearFilter">
             			@for($i = $actuallyYear; $i< (intval($actuallyYear) + 4); $i++)
             				<option value="{{$i}}"> {{$i}}</option>
             				
@@ -148,7 +148,7 @@
 				<div class="input-group">
             	
             		<label for="for_name">MES </label>
-            		<select class="form-control" id="for_turnFilter" name="monthFilter">
+            		<select class="form-control" id="for_monthFilter" name="monthFilter">
             			
             			@foreach($months AS $index => $month)
             				<option value="{{ $index }}" {{ ($index == $actuallyMonth )?"selected":"" }}>{{$loop->iteration}} - {{$month}} </option>
@@ -298,15 +298,6 @@
                     </thead>
                     <tbody>
 
-                        @livewire('rrhh.list-of-shifts', 
-                            [
-                                'staffInShift'=>$staffInShift->where('shift_types_id', $st->id),
-                                'actuallyYear'=>$actuallyYear,
-                                'actuallyMonth'=>$actuallyMonth,
-                                'days'=>$days
-                            ]
-                        )
-                  
                   
                     </tbody>
                 </table>
