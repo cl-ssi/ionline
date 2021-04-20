@@ -273,7 +273,8 @@
           @livewire('service-request.show-total-hours', ['fulfillment' => $fulfillment,
                                                          'forCertificate' => true])
 
-          <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
+          <br><br>Se extiende el presente certificado para ser presentado en recursos humanos, para que éste acredite la asistencia del funcionario. 
+          Para posteriormente finanzas y contabilidad realice la gestión de pago.
       </div>
   </div>
 
