@@ -76,7 +76,8 @@
 		<hr>
 
 		<h4>Inasistencias</h4>
-		<form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.store') }}" enctype="multipart/form-data">
+		@livewire('service-request.fulfillment-absences', ['fulfillment' => $fulfillment])
+		<!-- <form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.store') }}" enctype="multipart/form-data">
 			@csrf
 			<div class="form-row">
 				<input type="hidden" name="fulfillment_id" value="{{$fulfillment->id}}">
@@ -143,19 +144,6 @@
 					</fieldset>
 					@endif
 				@endcan
-				<!-- @can('Service Request: fulfillments finance')
-				@if($fulfillment->finances_approver_id == NULL)
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary">Guardar</button>
-				</fieldset>
-				@else
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary" disabled>Guardar</button>
-				</fieldset>
-				@endif
-				@endcan -->
 			</div>
 		</form>
 		<table class="table table-sm">
@@ -191,7 +179,7 @@
 				</tr>
 				@endforeach
 			</tbody>
-		</table>
+		</table> -->
 
 		<div class="form-row">
 			<fieldset class="form-group col">
