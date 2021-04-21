@@ -25,11 +25,13 @@
         <a class="nav-link text-secondary" href="{{ route('agreements.createWordRes', $agreement) }}"><i class="fas fa-eye"></i> Previsualizar Resolución</a>
     </li>
     @endif
+    @canany(['Documents: signatures and distribution'])
     @if($agreement->file != null)
     <li class="nav-item">
         <a class="nav-link text-secondary" href="{{ route('agreements.signRes', $agreement) }}"><i class="fas fa-file-signature"></i> Solicitar firma Resolución</a>
     </li>
     @endif
+    @endcan
 </ol>
 <p>
 {{-- $municipality --}}

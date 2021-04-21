@@ -53,7 +53,7 @@ class CommissionController extends Controller
         }
 
         session()->flash('success', 'Integrantes de Comisión ha/n sido correctamente ingresado/s.');
-        return redirect()->back();
+        return redirect()->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#commission');
     }
 
     /**

@@ -7,6 +7,12 @@
         </a>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link {{ active('rrhh.service-request.user') }}"
+            href="{{ route('rrhh.service-request.user') }}">
+            <i class="fas fa-search"></i>
+        </a>
+    </li>
 
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.service-request.index') }}"
@@ -31,7 +37,7 @@
                 href="{{ route('rrhh.service-request.report.fulfillment-pending','responsable') }}"
                 title="Cumplimientos pendientes por aprobar de Responsable">
                 <i class="fas fa-clipboard-check"></i>
-                <i class="fas fa-user"></i>
+                <i class="fas fa-chess-king"></i>
             </a>
         </li>
     @endcan

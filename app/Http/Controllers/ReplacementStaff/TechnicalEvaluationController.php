@@ -4,11 +4,15 @@ namespace App\Http\Controllers\ReplacementStaff;
 
 use App\Models\ReplacementStaff\TechnicalEvaluation;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
+use App\Models\ReplacementStaff\ReplacementStaff;
+use App\Models\ReplacementStaff\ProfessionManage;
+use App\Models\ReplacementStaff\ProfileManage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\User;
+use Illuminate\Support\Facades\Redirect;
 
 class TechnicalEvaluationController extends Controller
 {
@@ -70,10 +74,28 @@ class TechnicalEvaluationController extends Controller
      * @param  \App\Models\TechnicalEvaluation  $technicalEvaluation
      * @return \Illuminate\Http\Response
      */
-    public function edit(TechnicalEvaluation $technicalEvaluation)
+    public function edit(Request $request, TechnicalEvaluation $technicalEvaluation)
     {
         $users = User::orderBy('name', 'ASC')->get();
-        return view('replacement_staff.request.technical_evaluation.edit', compact('technicalEvaluation', 'users'));
+
+        $replacementStaff = ReplacementStaff::search($request->input('search'),
+                                                     $request->input('profile_search'),
+                                                     $request->input('profession_search'))
+            ->paginate(15);
+
+        $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
+        $profileManage = ProfileManage::orderBy('name', 'ASC')->get();
+
+        if($request->search != NULL || $request->profile_search != 0 || $request->profession_search != 0){
+            return view('replacement_staff.request.technical_evaluation.edit',
+                compact('technicalEvaluation', 'users', 'request', 'replacementStaff',
+                        'professionManage', 'profileManage'));
+        }
+        else{
+            return view('replacement_staff.request.technical_evaluation.edit',
+                compact('technicalEvaluation', 'users', 'request', 'replacementStaff',
+                        'professionManage', 'profileManage'));
+        }
     }
 
     /**

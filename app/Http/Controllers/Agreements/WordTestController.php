@@ -234,15 +234,15 @@ class WordTestController extends Controller
         // extract internal xml from template that will be merged inside main template
         $innerXml = $midTemplateProcessor->tempDocumentMainPart;
         $innerXml = preg_replace('/^[\s\S]*<w:body>(.*)<\/w:body>.*/', '$1', $innerXml);
-
+        
         // remove tag containing header, footer, images
-        $innerXml = preg_replace('/<w:sectPr>.*<\/w:sectPr>/', '', $innerXml);
-
+        // $innerXml = preg_replace('/<w:sectPr>.*<\/w:sectPr>/', '', $innerXml);
+        
         //remove signature blocks
-        $lastSectPr = substr($innerXml, strpos($innerXml, '<w:sectPr'));
-        $innerXml = Str::before($innerXml, '<w:p w14:paraId="0B949527"');
-        $innerXml .= $lastSectPr;
-
+        $innerXml = Str::beforeLast($innerXml, 'Reforzamiento Municipal del Presupuesto del Servicio de Salud Iquique');
+        // dd($innerXml);
+        $innerXml .= 'Reforzamiento Municipal del Presupuesto del Servicio de Salud Iquique”.</w:t></w:r></w:p>';
+        
         $mainXmlEnd = $mainTemplateProcessorEnd->tempDocumentMainPart;
 
         $mainXmlEnd = preg_replace('/^[\s\S]*<w:body>(.*)<\/w:body>.*/', '$1', $mainXmlEnd);
@@ -253,8 +253,8 @@ class WordTestController extends Controller
         // inject internal xml inside main template 
         $mainXml = $mainTemplateProcessor->tempDocumentMainPart;
  
-        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br w:type="page" /><w:lastRenderedPageBreak/></w:r></w:p>' . $innerXml . '</w:body>', $mainXml);
-        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br w:type="page" /><w:lastRenderedPageBreak/></w:r></w:p>' . $mainXmlEnd . '</w:body>', $mainXml);
+        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br/></w:r></w:p>' . $innerXml . '</w:body>', $mainXml);
+        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br/></w:r></w:p>' . $mainXmlEnd . '</w:body>', $mainXml);
 
         $mainTemplateProcessor->__set('tempDocumentMainPart', $mainXml);
 
