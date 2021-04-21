@@ -23,7 +23,7 @@ class ServiceRequest extends Model implements Auditable
         'type', 'request_date', 'start_date', 'end_date', 'contract_type','contractual_condition',
         'service_description', 'programm_name', 'other', 'normal_hour_payment', 'amount',
         'program_contract_type', 'weekly_hours', 'daily_hours', 'nightly_hours', 'estate',
-        'estate_other', 'working_day_type', 'working_day_type_other', 'subdirection_id',
+        'estate_other', 'working_day_type','schedule_detail', 'working_day_type_other', 'subdirection_id',
         'responsability_center_id','budget_cdp_number', 'budget_item', 'budget_amount',
         'budget_date', 'contract_number','month_of_payment','establishment_id',
         'digera_strategy','rrhh_team','gross_amount', 'net_amount','sirh_contract_registration',
