@@ -353,7 +353,7 @@ class AgreementController extends Controller
         $signature->document_type = 'Resoluciones';
         $signature->subject = 'Resolución exenta del convenio programa '.$agreement->program->name. ' año '.$agreement->period;
         $signature->description = 'Documento que aprueba el convenio de ejecución del programa '.$agreement->program->name. ' año '.$agreement->period;
-        $signature->endorse_type = 'Visación opcional';
+        $signature->endorse_type = 'Visación en cadena de responsabilidad';
         $signature->recipients = $agreement->commune->municipality->email_municipality.',sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$agreement->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
         $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;
 
