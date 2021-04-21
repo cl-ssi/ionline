@@ -29,7 +29,7 @@
 
         <fieldset class="form-group col-12 col-md-4">
             <label>E-mail</label>
-            <input type="email" wire:model="email" class="form-control" required>
+            <input type="email" wire:model.lazy="email" class="form-control" required>
             @error('email') <span class="text-danger">{{ $message }}</span> @enderror
         </fieldset>
     </div>
