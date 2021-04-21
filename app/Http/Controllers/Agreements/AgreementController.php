@@ -224,37 +224,51 @@ class AgreementController extends Controller
 
     public function updateAutomaticQuota(Request $request, $id)
     {
-        $AgreementQuota = AgreementQuota::where('agreement_id', $id)->get();
-        $agreements = Agreement::with('Program','Commune','agreement_amounts')->where('id', $id)->first();
+        $agreement = Agreement::with('Program','Commune','agreement_amounts','agreement_quotas')->where('id', $id)->first();
 
-        $agreementTotal = $agreements->agreement_amounts->sum('amount');
-        //  SI TIENE 2 CUOTAS CALCULA EL PORCENTAJE 70% 30%
-       if($agreements->quotas == 2){
-            foreach ($AgreementQuota as $key => $quota) {
-                $datas =  AgreementQuota::find($quota->id);
-                $datas->amount = round((($quota->percentage*$agreementTotal)/100),0);
-                $datas->agreement_id = $id;
-                $datas->save();
-             }
-       }
-       //  SI TIENE 3 CUOTAS CALCULA EL PORCENTAJE 50% y 2 de 25%
-       else if($agreements->quotas == 3){
-            foreach ($AgreementQuota as $key => $quota) {
-                $datas =  AgreementQuota::find($quota->id);
-                $datas->amount = round((($quota->percentage*$agreementTotal)/100),0);
-                $datas->agreement_id = $id;
-                $datas->save();
-             }
-       }
-       //  DE LO CONTRARIO DIVIDE POR LA CANTIDAD DE CUOTAS
-       else{
-            foreach ($AgreementQuota as $key => $quota) {
-                $datas =  AgreementQuota::find($quota->id);
-                $datas->amount = round(($agreementTotal/$agreements->quotas),-1);
-                $datas->agreement_id = $id;
-                $datas->save();
-             }
-       }
+        $agreementTotal = $agreement->agreement_amounts()->sum('amount');
+
+        if($agreement->quotas == 1){
+            $quota = $agreement->agreement_quotas->first()->update(['amount' => $agreementTotal]);
+        }elseif($agreement->quotas == 12){
+            $amountPerQuota = round($agreementTotal/$agreement->quotas);
+            $diff = $agreementTotal - $amountPerQuota * $agreement->quotas; //residuo
+            foreach ($agreement->agreement_quotas as $quota) {
+                $quota->amount = $amountPerQuota;
+                if($diff != 0){
+                    ($diff > 0) ? $quota->amount++ : $quota->amount--;
+                    ($diff > 0) ? $diff-- : $diff++;
+                }
+                $quota->save();
+            }
+        } else {
+            $quotasWithDecimal = collect();
+            foreach ($agreement->agreement_quotas as $quota) {
+                $quota->amount = ($quota->percentage * $agreementTotal)/100;
+                if(is_float($quota->amount)) $quotasWithDecimal->add($quota);
+                $quota->save();
+            }
+
+            $diff = $agreementTotal - $agreement->agreement_quotas()->sum('amount'); //residuo
+        
+            foreach($quotasWithDecimal as $quota){
+                $fraction = $quota->amount - floor($quota->amount);
+                if($diff != 0)
+                    if($diff > 0){ //falta para completar el total agreement
+                        if($fraction >= 0.5){ // revisar si está demás esta condición o no
+                            $quota->amount++;
+                            $diff--;
+                            $quota->save();
+                        }
+                    }else{ //quedé debiendo
+                        if($fraction >= 0.5){
+                            $quota->amount--;
+                            $diff++;
+                            $quota->save();
+                        }
+                    }
+            }
+        }
         return redirect()->back();
     }
 
@@ -339,7 +353,7 @@ class AgreementController extends Controller
         $signature->document_type = 'Resoluciones';
         $signature->subject = 'Resolución exenta del convenio programa '.$agreement->program->name. ' año '.$agreement->period;
         $signature->description = 'Documento que aprueba el convenio de ejecución del programa '.$agreement->program->name. ' año '.$agreement->period;
-        $signature->endorse_type = 'Visación opcional';
+        $signature->endorse_type = 'Visación en cadena de responsabilidad';
         $signature->recipients = $agreement->commune->municipality->email_municipality.',sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$agreement->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
         $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;
 

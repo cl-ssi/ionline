@@ -62,7 +62,7 @@ class ShiftManagementController extends Controller
         $actuallyShift=$sTypes->first();
         $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
         
-        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift)->get();
+        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->get();
 
         Session::put('users',$users);
         Session::put('cargos',$cargos);
