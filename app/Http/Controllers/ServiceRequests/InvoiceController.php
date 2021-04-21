@@ -8,6 +8,7 @@ use App\Models\Rrhh\UserBankAccount;
 use Illuminate\Support\Facades\Http;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Fulfillment;
+use App\User;
 
 
 class InvoiceController extends Controller
@@ -55,8 +56,10 @@ class InvoiceController extends Controller
 
         $bankaccount = UserBankAccount::where('user_id',$user_id)->get();
 
+        $user = User::find($user_id);
+
         
-        return view('service_requests.invoice.show', compact('fulfillments','bankaccount'));
+        return view('service_requests.invoice.show', compact('fulfillments','bankaccount','user'));
     }
 
 

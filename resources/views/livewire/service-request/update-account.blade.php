@@ -18,7 +18,7 @@
         <fieldset class="col-12 col-md-4">
             <label>Nombre</label>
             <p class="form-control">
-                <strong>{{ $this->bankaccount->user->fullname?? '' }}</strong></p>
+                <strong>{{ $this->user->fullname?? '' }}</strong></p>
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
