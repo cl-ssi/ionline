@@ -18,7 +18,7 @@
                         $d = $sis->days->where('day',$date[0]);
 					@endphp
                     <td class="bbd day"  style="text-align:center;width:54px;height:54px">
-                            {{ $d->first()->id}}
+                         
                         	@if(isset($d) && count($d) )
                                @livewire('rrhh.change-shift-day-status',['shiftDay'=>$d->first()])
                             @else

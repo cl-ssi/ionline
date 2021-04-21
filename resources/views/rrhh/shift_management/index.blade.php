@@ -298,6 +298,15 @@
                     </thead>
                     <tbody>
 
+                        @livewire('rrhh.list-of-shifts', 
+                            [
+                                'staffInShift'=>$staffInShift->where('shift_types_id', $st->id),
+                                'actuallyYear'=>$actuallyYear,
+                                'actuallyMonth'=>$actuallyMonth,
+                                'days'=>$days
+                            ]
+                        )
+                  
                   
                     </tbody>
                 </table>
@@ -306,8 +315,10 @@
     </div>
 </div>
 </div>
-   
+    @livewire("rrhh.modal-edit-shift-user-day")
 @endsection
+
+
 @section('custom_js')
 
 
