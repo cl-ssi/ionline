@@ -32,7 +32,7 @@ class ChangeShiftDayStatus extends Component
     public function editShiftDay(){
     	// $this->shiftDay = ShiftUserDay::find($id);
         // $this->count++;
-    	dd($this->shiftDay);
+    	// dd($this->shiftDay);
     }
     public function render()
     {
