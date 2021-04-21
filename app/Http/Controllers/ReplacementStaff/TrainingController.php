@@ -46,13 +46,12 @@ class TrainingController extends Controller
             $training = new Training();
             $now = Carbon::now()->format('Y_m_d_H_i_s');
             $file_name = $now.'_'.$i.'_'.$replacementStaff->run;
-            $training->file = $file->storeAs('replacement_staff/training_docs', $file_name.'.'.$file->extension());
+            $training->file = $file->storeAs('/ionline/replacement_staff/training_docs/', $file_name.'.'.$file->extension(), 'gcs');
             $i++;
             foreach ($request->training_name as $req) {
                 $training->training_name = $request->input('training_name.'.$key_file.'');
                 $training->hours_training = $request->input('hours_training.'.$key_file.'');
                 $training->replacement_staff()->associate($replacementStaff);
-                //$profile->replacement_staff()->associate(Auth::user());
                 $training->save();
             }
         }
@@ -105,7 +104,7 @@ class TrainingController extends Controller
     public function destroy(Training $training)
     {
         $training->delete();
-        Storage::delete($training->file);
+        Storage::disk('gcs')->delete($training->file);
 
         session()->flash('danger', 'Su Capacitación ha sido eliminada.');
         return redirect()->back();
@@ -113,11 +112,11 @@ class TrainingController extends Controller
 
     public function download(Training $training)
     {
-        return Storage::download($training->file);
+        return Storage::disk('gcs')->download($training->file);
     }
 
     public function show_file(Training $training)
     {
-        return Storage::response($training->file);
+        return Storage::disk('gcs')->response($training->file);
     }
 }

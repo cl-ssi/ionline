@@ -96,7 +96,7 @@ class MonthlyValue extends Component
                     switch($fulfillment->serviceRequest->weekly_hours)
                     {
                         case '33': $valor_mensual = $valor_mensual * 0.75; break;
-                        case '28': $valor_mensual = $valor_mensual * 0.636363; break;
+                        //case '28': $valor_mensual = $valor_mensual * 0.636363; break;
                         case '22': $valor_mensual = $valor_mensual * 0.5; break;
                         case '11': $valor_mensual = $valor_mensual * 0.25; break;
                     }

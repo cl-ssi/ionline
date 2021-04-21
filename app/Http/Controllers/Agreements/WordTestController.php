@@ -195,13 +195,12 @@ class WordTestController extends Controller
         $emailMunicipality = $municipality->email_municipality;
         $comuna = $agreements->Commune->name; 
         $programa = $agreements->Program->name;
-        //Decreto director asociado al convenio
-        $directorDecreto = $agreements->authority->decree;
-
+        
         //Director ssi quien firma a la fecha de hoy
         $director_signature = Authority::getAuthorityFromDate(1, Carbon::now()->toDateTimeString(), 'manager');
         $first_name = explode(' ',trim($director_signature->user->name))[0];
         $director = mb_strtoupper($first_name . ' ' . $director_signature->user->fathers_family . ' ' . $director_signature->user->mothers_family);
+        $directorDecreto = $director_signature->decree;
         $directorApelativo = mb_strtoupper($director_signature->position);
 
         //email referente
