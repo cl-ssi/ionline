@@ -191,7 +191,8 @@ class SuitabilityController extends Controller
             $signature->document_type = 'Carta';
             $signature->subject = 'Informe Idoneidad';
             $signature->description = "{$result->user->fullname} , Rut: {$result->user->id}-{$result->user->dv} ";
-            $signature->endorse_type = 'Visación opcional';
+//            $signature->endorse_type = 'Visación opcional';
+            $signature->endorse_type = 'Visación en cadena de responsabilidad';
             $signature->recipients = $userSigner->email . ',' . $userVisator1->email . ',' . $userVisator2->email;
             $signature->distribution = $userSigner->full_name . ',' . $userVisator1->full_name . ',' . $userVisator2->full_name;
             $signature->visatorAsSignature = true;
