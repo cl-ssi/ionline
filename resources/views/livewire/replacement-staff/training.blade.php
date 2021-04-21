@@ -13,12 +13,12 @@
             <div class="form-row">
                 <fieldset class="form-group col-md-5">
                     <label for="for_training_name">Nombre Capacitación</label>
-                    <input type="text" class="form-control" name="training_name[]" placeholder="">
+                    <input type="text" class="form-control" name="training_name[]" placeholder="" required>
                 </fieldset>
 
                 <fieldset class="form-group col-md-2">
                     <label for="for_hours_training">N° de horas</label>
-                    <input type="number" min="1" class="form-control" name="hours_training[]" placeholder="">
+                    <input type="number" min="1" class="form-control" name="hours_training[]" placeholder="" required>
                 </fieldset>
 
                 <fieldset class="form-group col mt">

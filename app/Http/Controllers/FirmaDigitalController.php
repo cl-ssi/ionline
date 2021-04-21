@@ -101,23 +101,38 @@ class FirmaDigitalController extends Controller
      */
     public function signPdfFlow(Request $request, SignaturesFlow $signaturesFlow)
     {
+        //Valida visación en cadena
         if ($signaturesFlow->signature->endorse_type === 'Visación en cadena de responsabilidad') {
-            $visationsPending = $signaturesFlow->signaturesFile->signaturesFlows
+            $signaturesFlowsPending = $signaturesFlow->signaturesFile->signaturesFlows
                 ->where('type', 'visador')
                 ->whereNull('status')
                 ->when($signaturesFlow->type === 'visador', function ($query) use ($signaturesFlow) {
                     return $query->where('sign_position', '<', $signaturesFlow->sign_position);
                 });
 
-            if ($visationsPending->count() > 0) {
+//            $signaturesFlowsRejected = $signaturesFlow->signaturesFile->signaturesFlows
+//                ->whereNotNull('status')
+//                ->where('status', false);
+//
+//            $strMsg = '';
+//
+//            if ($signaturesFlowsRejected->count() > 0) {
+//
+//            }
+
+            if ($signaturesFlowsPending->count() > 0) {
                 $strMsg = '';
-                foreach ($visationsPending as $visationPending) {
-                    $strMsg .= "$visationPending->type {$visationPending->signerName} pendiente para el doc. {$visationPending->signature->id }  <br>";
+                foreach ($signaturesFlowsPending as $signatureFlowPending) {
+                    $strMsg .= "$signatureFlowPending->type {$signatureFlowPending->signerName} pendiente para el doc. {$signatureFlowPending->signature->id }  <br>";
                 }
                 session()->flash('warning', $strMsg);
                 return redirect()->back();
             }
         }
+
+//        if ($signaturesFlow->signature->endorse_type === 'Visación opcional') {
+//
+//        }
 
         if ($signaturesFlow->signaturesFile->signed_file) {
             $pdfbase64 = $signaturesFlow->signaturesFile->signed_file;
