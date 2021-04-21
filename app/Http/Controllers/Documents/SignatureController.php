@@ -41,7 +41,6 @@ class SignatureController extends Controller
         }
 
         if ($tab == 'pendientes') {
-
             $pendingSignaturesFlows = SignaturesFlow::where('user_id', Auth::id())
                 ->where('status', null)
                 ->get();
@@ -50,8 +49,6 @@ class SignatureController extends Controller
                 ->whereNotNull('status')
                 ->orderByDesc('id')
                 ->get();
-
-
         }
 
         return view('documents.signatures.index', compact('mySignatures', 'pendingSignaturesFlows', 'signedSignaturesFlows', 'tab'));
@@ -282,13 +279,20 @@ class SignatureController extends Controller
         return redirect()->route('rrhh.service-request.fulfillment.edit', $fulfillment->serviceRequest->id);
     }
 
-    public function rejectSignature(Request $request, $idSignatureFlow){
-       // dd($request);
-       // dd($idsignatureFlow);
-        $idSigFlow=SignaturesFlow::find($idSignatureFlow);
-        $idSigFlow->update(['status'=>2, 'observation'=>$request->observacion]);
+    public function rejectSignature(Request $request, $idSignatureFlow)
+    {
+        //TODO verificar orden de firmas
+        //TODO Al rechazar un flow en responsabilidad en cadena deberian rechazarse todos los siguientes flows
+
+        $idSigFlow = SignaturesFlow::find($idSignatureFlow);
+        $idSigFlow->update(['status' => 0, 'observation' => $request->observacion]);
         session()->flash('success', "La solicitud ha sido rechazada");
         return redirect()->route('documents.signatures.index', ['pendientes']);
+    }
 
+    public function signatureFlows($signatureID)
+    {
+        $signatureFlowsModal = Signature::find($signatureID)->signaturesFlows;
+        return view('documents.signatures.partials.flows_modal_body', compact('signatureFlowsModal'));
     }
 }
