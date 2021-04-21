@@ -215,7 +215,7 @@ class FirmaDigitalController extends Controller
             imagefilledrectangle($im, 0, 0, 400, 40, $white);
             $text_color = imagecolorallocate($im, 0, 0, 0);
             imagettftext($im, $fontSize, 0, $xAxis, $yPading * 1 + $marginTop,
-                $text_color, $font_light, Str::upper(Auth::user()->initials));
+                $text_color, $font_light, Str::upper(Auth::user()->initials) . ' - ' . Str::upper(Auth::user()->organizationalUnit->initials));
         }
 
 
