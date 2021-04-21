@@ -127,7 +127,7 @@
 
 <br>
 
-<div class="card">
+<div class="card" id="commission">
     <div class="card-header">
         <h6>Integrantes Comisión</h6>
     </div>
@@ -164,9 +164,196 @@
         @livewire('replacement-staff.commission', ['users' => $users,
                                                    'technicalEvaluation' => $technicalEvaluation])
     </div>
-
     <br>
+</div>
 
+<br>
+
+<div class="card applicant" id="applicant">
+    <div class="card-header">
+        <h6>Busqueda de Postulantes </h6>
+    </div>
+    <div class="card-body">
+      <table class="table table-sm table-striped">
+          <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Calificación</th>
+                <th>Observaciones</th>
+                <th></th>
+              </tr>
+          </thead>
+          <tbody>
+              @foreach($technicalEvaluation->applicant as $applicant)
+              <tr>
+                  <td>{{ $applicant->user->FullName }}</td>
+                  <td></td>
+                  <td></td>
+                  <td style="width: 4%">
+                      <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.commission.destroy', $commission) }}">
+                          @csrf
+                          @method('DELETE')
+                              <button type="submit" class="btn btn-outline-danger btn-sm"
+                                  onclick="return confirm('¿Está seguro que desea eliminar el Integrante de Comisión?')">
+                                  <i class="fas fa-trash"></i>
+                              </button>
+                      </form>
+                  </td>
+                  <td style="width: 4%">
+                      <!-- Button trigger modal -->
+                      <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#exampleModal-applicant">
+                          <i class="far fa-check-circle"></i>
+                      </button>
+
+                      <!-- Modal -->
+                      <div class="modal fade" id="exampleModal-applicant" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              ...
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                  </td>
+              </tr>
+              @endforeach
+          </tbody>
+      </table>
+
+      <br>
+        <!-- <a class="btn btn-primary" data-toggle="collapse" href="#collapseSearch" role="button" aria-expanded="false" aria-controls="collapseExample">
+            <i class="fas fa-filter"></i> Filtros
+        </a>
+
+        <br>
+
+        <div class="collapse" id="collapseSearch">
+          <br> -->
+          <div class="card card-body">
+              <form method="GET" class="form-horizontal"
+                  action="{{ route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation) }}">
+                  <div class="form-row">
+                      <fieldset class="form-group col-4">
+                          <label for="for_name">Nombres</label>
+                          <input class="form-control" type="text" name="search" autocomplete="off" style="text-transform: uppercase;" placeholder="RUN (sin dígito verificador) / NOMBRE" value="{{$request->search}}">
+                      </fieldset>
+
+                      <fieldset class="form-group col-4">
+                          <label for="for_profile_search">Estamento</label>
+                          <select name="profile_search" class="form-control">
+                              <option value="0">Seleccione...</option>
+                                  @foreach($profileManage as $profile)
+
+                                      <option value="{{ $profile->id }}" {{ ($request->profile_search == $profile->id)?'selected':'' }}>{{ $profile->Name }}</option>
+                                  @endforeach
+                          </select>
+                      </fieldset>
+
+                      <fieldset class="form-group col-4">
+                          <label for="for_profession_search">Profesión</label>
+                          <select name="profession_search" class="form-control">
+                              <option value="0">Seleccione...</option>
+                                  @foreach($professionManage as $profession)
+                                      <option value="{{ $profession->id }}" {{ ($request->profession_search == $profession->id)?'selected':'' }}>{{ $profession->Name }}</option>
+                                  @endforeach
+                          </select>
+                      </fieldset>
+
+                      <button type="submit" class="btn btn-primary float-right">
+                          <i class="fas fa-search"></i> Buscar
+                      </button>
+                  </div>
+              </form>
+          </div>
+        <!-- </div> -->
+
+        <br>
+
+        <table class="table small table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre Completo</th>
+                    <th>Run</th>
+                    <th>Estamento</th>
+                    <th>Título</th>
+                    <th>Fecha Titulación</th>
+                    <th>Años Exp.</th>
+                    <th>Estado</th>
+                    <th style="width: 10%"></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.store', $technicalEvaluation) }}">
+                @csrf
+                @method('POST')
+
+                @foreach($replacementStaff as $staff)
+                <tr>
+                    <td>{{ $staff->FullName }}</td>
+                    <td>{{ $staff->Identifier }}</td>
+                    <td>
+                        @foreach($staff->profiles as $title)
+                            <h6><span class="badge rounded-pill bg-light">{{ $title->profile_manage->name }}</span></h6>
+                        @endforeach
+                    </td>
+                    <td>
+                        @foreach($staff->profiles as $title)
+                            <h6><span class="badge rounded-pill bg-light">{{ $title->profession_manage->name }}</span></h6>
+                        @endforeach
+                    </td>
+                    <td>
+                        @foreach($staff->profiles as $title)
+                            <h6><span class="badge rounded-pill bg-light">{{ Carbon\Carbon::parse($title->degree_date)->format('d-m-Y') }}</span></h6>
+                        @endforeach
+                    </td>
+                    <td>
+                        @foreach($staff->profiles as $title)
+                            <h6><span class="badge rounded-pill bg-light">{{ $title->YearsOfDegree }}</span></h6>
+                        @endforeach
+                    </td>
+                    <td>{{ $staff->StatusValue }}</td>
+                    <td>
+                        <a href="{{ route('replacement_staff.show_replacement_staff', $staff) }}"
+                          class="btn btn-outline-secondary btn-sm"
+                          title="Ir"
+                          target="_blank"> <i class="far fa-eye"></i></a>
+                        <a href="{{ route('replacement_staff.show_file', $staff) }}"
+                          class="btn btn-outline-secondary btn-sm"
+                          title="Ir"
+                          target="_blank"> <i class="far fa-file-pdf"></i></a>
+                    </td>
+                    <td>
+                        <fieldset class="form-group">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="user_id[]"
+                                    id="for_user_id" value="{{ $staff->run }}">
+                            </div>
+                        </fieldset>
+                    </td>
+                </tr>
+                @endforeach
+
+            </tbody>
+        </table>
+
+        <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Seleccionar</button>
+        </form>
+
+        {{ $replacementStaff->links() }}
+    </div>
+    <br>
 </div>
 
 @endsection

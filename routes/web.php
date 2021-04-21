@@ -33,6 +33,7 @@ use App\Http\Controllers\ReplacementStaff\Manage\ProfessionManageController;
 use App\Http\Controllers\ReplacementStaff\Manage\ProfileManageController;
 use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationController;
 use App\Http\Controllers\ReplacementStaff\CommissionController;
+use App\Http\Controllers\ReplacementStaff\ApplicantController;
 
 
 use App\Http\Controllers\VaccinationController;
@@ -161,6 +162,10 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
             Route::prefix('commission')->name('commission.')->group(function(){
                 Route::post('/store/{technicalEvaluation}', [CommissionController::class, 'store'])->name('store');
                 Route::delete('{commission}/destroy', [CommissionController::class, 'destroy'])->name('destroy');
+            });
+            Route::prefix('applicant')->name('applicant.')->group(function(){
+                Route::post('/store/{technicalEvaluation}', [ApplicantController::class, 'store'])->name('store');
+                Route::delete('{applicant}/destroy', [ApplicantController::class, 'destroy'])->name('destroy');
             });
         });
 
@@ -361,6 +366,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
         // Rutas de service request
         Route::get('/home', function () { return view('service_requests.home'); })->name('home');
+
+        Route::match(['get', 'post'],'/user', [ServiceRequestController::class, 'user'])->name('user');
 
         //descomposición del resource
         Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
@@ -1191,6 +1198,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/{id}', [ResultsController::class, 'show'])->name('show');
         Route::get('/certificate/{id}', [ResultsController::class, 'certificate'])->name('certificate');
         Route::get('/certificatepdf/{id}', [ResultsController::class, 'certificatepdf'])->name('certificatepdf');
+        Route::get('/signed-suitability-certificate-pdf/{id}', [SuitabilityController::class, 'signedSuitabilityCertificatePDF'])->name('signedSuitabilityCertificate');
         //Route::get('results/{result_id}', 'ResultsController@show')->name('results.show');
         // Route::get('/create', [OptionsController::class, 'create'])->name('create');
         // Route::post('/store', [OptionsController::class, 'store'])->name('store');

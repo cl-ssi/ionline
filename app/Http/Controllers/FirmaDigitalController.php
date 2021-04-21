@@ -34,7 +34,7 @@ class FirmaDigitalController extends Controller
      */
     public function signPdf(Request $request)
     {
-        if($request->has('file_path')){
+        if ($request->has('file_path')) {
             $filePath = $request->file_path;
 
             if (Storage::disk('local')->exists($filePath)) {
@@ -42,16 +42,15 @@ class FirmaDigitalController extends Controller
                 $checksum_pdf = md5_file(Storage::disk('local')->path($filePath));
             } else
                 return 'no existe archivo';
-        }
-        else{
+        } else {
             $route = $request->route;
 
             $req = Request::create($route,
                 'GET',
-            [],
-            [],
-            [],
-            $_SERVER);
+                [],
+                [],
+                [],
+                $_SERVER);
 
             $res = app()->handle($req);
             $responseBody = $res->getContent();
@@ -71,8 +70,8 @@ class FirmaDigitalController extends Controller
         $signatureType = 'firmante';
         $callbackRoute = $request->callback_route;
 
-        $id=DB::select("SHOW TABLE STATUS LIKE 'doc_signatures_files'");
-        $docId=$id[0]->Auto_increment;
+        $id = DB::select("SHOW TABLE STATUS LIKE 'doc_signatures_files'");
+        $docId = $id[0]->Auto_increment;
         $verificationCode = Str::random(6);
 
         $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $signatureType, $docId, $verificationCode);
@@ -106,14 +105,14 @@ class FirmaDigitalController extends Controller
             $visationsPending = $signaturesFlow->signaturesFile->signaturesFlows
                 ->where('type', 'visador')
                 ->whereNull('status')
-                ->when($signaturesFlow->type === 'visador', function ($query) use ($signaturesFlow){
-                    return $query->where('sign_position', '<' ,$signaturesFlow->sign_position);
+                ->when($signaturesFlow->type === 'visador', function ($query) use ($signaturesFlow) {
+                    return $query->where('sign_position', '<', $signaturesFlow->sign_position);
                 });
 
             if ($visationsPending->count() > 0) {
                 $strMsg = '';
                 foreach ($visationsPending as $visationPending) {
-                    $strMsg .= "$visationPending->type {$visationPending->signerName} pendiente para el doc. {$visationPending->signature->id }  <br>" ;
+                    $strMsg .= "$visationPending->type {$visationPending->signerName} pendiente para el doc. {$visationPending->signature->id }  <br>";
                 }
                 session()->flash('warning', $strMsg);
                 return redirect()->back();
@@ -127,11 +126,12 @@ class FirmaDigitalController extends Controller
         }
         $checksum_pdf = $signaturesFlow->signaturesFile->md5_file;
         $type = $signaturesFlow->type;
+        $visatorAsSignature = $signaturesFlow->signature->visatorAsSignature;
         $otp = $request->otp;
         $modo = self::modoAtendidoProduccion;
         $verificationCode = Str::random(6);
-        $id=DB::select("SHOW TABLE STATUS LIKE 'doc_signatures_files'");
-        $docId=$id[0]->Auto_increment;
+        $id = DB::select("SHOW TABLE STATUS LIKE 'doc_signatures_files'");
+        $docId = $id[0]->Auto_increment;
 
         $ct_firmas_visator = null;
         $ct_posicion_firmas = null;
@@ -141,7 +141,7 @@ class FirmaDigitalController extends Controller
         }
 
         $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $type, $docId, $verificationCode,
-            $ct_firmas_visator, $ct_posicion_firmas, false);
+            $ct_firmas_visator, $ct_posicion_firmas, $visatorAsSignature);
 
         if (!$responseArray['statusOk']) {
             session()->flash('warning', "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}");
@@ -153,7 +153,7 @@ class FirmaDigitalController extends Controller
         $signaturesFlow->save();
 
         $signaturesFlow->signaturesFile->signed_file = $responseArray['content'];
-        if($type === 'firmante') $signaturesFlow->signaturesFile->verification_code = $verificationCode;
+        if ($type === 'firmante') $signaturesFlow->signaturesFile->verification_code = $verificationCode;
         $signaturesFlow->signaturesFile->save();
 
         session()->flash('info', "El documento {$signaturesFlow->signature->id} se ha firmado correctamente.");
@@ -171,12 +171,12 @@ class FirmaDigitalController extends Controller
      * @param string $verificationCode
      * @param int|null $ct_firmas Cantidad de firmas de tipo visador
      * @param int|null $posicion_firma
-     * @param bool|null $visatorSameAsSignature Si es true, el template de visador se visualizaran igual a las de las firmas
+     * @param bool|null $visatorAsSignature Si es true, el template de visador se visualizaran igual a las de las firmas
      * @return array
      */
     public function signPdfApi(string $pdfbase64, string $checksum_pdf, $modo, string $otp, string $signatureType,
                                int $docId, string $verificationCode, int $ct_firmas_visator = null, int $posicion_firma = null,
-                                bool $visatorSameAsSignature = null): array
+                               bool $visatorAsSignature = null): array
     {
 
 //        dd($pdfbase64, $checksum_pdf, $modo, $otp, $signatureType);
@@ -193,7 +193,7 @@ class FirmaDigitalController extends Controller
         $actualDate = now()->format('d-m-Y H:i:s');
         $fullName = Auth::user()->full_name;
 
-        if($signatureType === 'firmante' || $visatorSameAsSignature === true){
+        if ($signatureType === 'firmante' || $visatorAsSignature === true) {
             $im = @imagecreate(400, 80) or die("Cannot Initialize new GD image stream");
             $background_color = imagecolorallocate($im, 204, 204, 204);
             $white = imagecolorallocate($im, 255, 255, 255);
@@ -208,8 +208,7 @@ class FirmaDigitalController extends Controller
                 $text_color, $font_regular, env('APP_SS'));
             imagettftext($im, $fontSize, 0, $xAxis, $yPading * 4 + $marginTop + 4,
                 $text_color, $font_regular, $actualDate . ($signatureType === 'firmante' ? "- ID: $docId - Código: $verificationCode" : ''));
-        }
-        else{
+        } else {
             $im = @imagecreate(400, 40) or die("Cannot Initialize new GD image stream");
 //            $background_color = imagecolorallocate($im, 204, 204, 204);
             $white = imagecolorallocate($im, 255, 255, 255);
@@ -218,8 +217,6 @@ class FirmaDigitalController extends Controller
             imagettftext($im, $fontSize, 0, $xAxis, $yPading * 1 + $marginTop,
                 $text_color, $font_light, Str::upper(Auth::user()->initials));
         }
-
-
 
 
         /* Obtener Imagen de firma en variable $firma */
@@ -282,20 +279,21 @@ class FirmaDigitalController extends Controller
 //            $ct_firmas = $signaturesFlow->signature->signaturesFlows->where('type', 'visador')->count();
 //            $pocision_firma = $signaturesFlow->sign_position;
 
-            if($visatorSameAsSignature === true){
+            if ($visatorAsSignature === true) {
                 $padding = 50;
-            }else{
+                $alto = 55;
+            } else {
                 $padding = 25;
+                $alto = 26;
             }
             $coordenada_x = 65;
             $coordenada_y = 50 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
             $ancho = 170 * 1.4;
-            $alto = 50 * 1.4;
         } else if ($signatureType == 'firmante') {
             $coordenada_x = 310;
             $coordenada_y = 49;
             $ancho = 170 * 1.4;
-            $alto = 50 * 1.4;
+            $alto = 55;
         }
 
         $data = [
@@ -362,7 +360,7 @@ class FirmaDigitalController extends Controller
                     'content' => '',
                     'errorMsg' => $json['error'],
                 ];
-            }else{
+            } else {
                 return ['statusOk' => false,
                     'content' => '',
                     'errorMsg' => $json['files'][0]['status'],

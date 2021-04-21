@@ -97,7 +97,8 @@ class Fulfillment extends Model implements Auditable
   public function scopeSearch($query, Request $request)
   {
 
-/*    if ($request->input('rut') != "") {
+    /*
+      if ($request->input('rut') != "") {
       $query->whereHas('servicerequest', function ($q) use ($request) {
 
         $q->whereHas('employee', function ($q) use($request) {
@@ -109,38 +110,37 @@ class Fulfillment extends Model implements Auditable
       });
     }*/
 
+    // $query->whereHas("responsabilityCenter", function($subQuery) use ($establishment_id){
+    //   $subQuery->where('establishment_id', Auth::user()->organizationalUnit->establishment_id);
+    // });
+
+    if ($request->input('establishment') != "") {
+      $query->whereHas('servicerequest', function ($q) use ($request) {
+        $q->where('establishment_id', $request->input('establishment'));
+      });
+    }
+
     if ($request->input('sr_id') != "") {
       $query->whereHas('servicerequest', function ($q) use ($request) {
         $q->Where('id', $request->input('sr_id'));
       });
     }
 
-    if ($request->input('rut') != ""){
+    if ($request->input('rut') != "") {
       $query->whereHas('servicerequest', function ($q) use ($request) {
-        $q->whereHas('employee', function ($q) use($request) {
+        $q->whereHas('employee', function ($q) use ($request) {
           $users = User::getUsersBySearch($request->input('rut'));
           $q->whereIn('id', $users->get('id'));
         });
       });
     }
 
-
-
     if ($request->input('year') != "") {
       $query->where('year', $request->input('year'));
     }
 
-    if ($request->input('month') != "") {
+    if ($request->input('month') != "") {      
       $query->where('month', $request->input('month'));
-    }
-
-    if ($request->input('payment_date') != "") {
-      if ($request->input('payment_date') == 'P') {
-        $query->whereNotNull('payment_date');
-      }
-      if ($request->input('payment_date') == 'SP') {
-        $query->whereNull('payment_date');
-      }
     }
 
 
@@ -156,6 +156,108 @@ class Fulfillment extends Model implements Auditable
         $q->Where('type', $request->input('type'));
       });
     }
+
+    if ($request->input('resolution') != "") {      
+      if ($request->input('resolution') == 'Yes') {
+        $query->whereHas('serviceRequest', function ($q) use ($request) {
+          $q->where('has_resolution_file', 1);
+        });
+        if ($request->input('resolution') == 'No') {
+          $query->whereHas('serviceRequest', function ($q) use ($request) {
+            $q->whereNull('has_resolution_file');
+          });
+        }
+      }
+    }
+
+
+    if ($request->input('payment_date') != "") {      
+      if ($request->input('payment_date') == 'P') {        
+        $query->whereNotNull('payment_date');
+      }
+      if ($request->input('payment_date') == 'SP') {        
+        $query->whereNull('payment_date');
+      }
+    }
+
+    if ($request->input('certificate') != "") {      
+      if ($request->input('certificate') == 'Yes') {
+        $query->whereNotNull('signatures_file_id');
+      }
+      if ($request->input('certificate') == 'No') {        
+        $query->whereNull('signatures_file_id');
+      }
+    }
+
+    if ($request->input('ok_responsable') != "") {      
+      if ($request->input('ok_responsable') == 'Yes') {
+        $query->whereNotNull('responsable_approbation');
+      }
+      if ($request->input('ok_responsable') == 'No') {         
+        $query->whereNull('responsable_approbation');
+      }
+    }
+
+    if ($request->input('ok_rrhh') != "") {      
+      if ($request->input('ok_rrhh') == 'Yes') {
+        $query->whereNotNull('rrhh_approbation');
+      }
+      if ($request->input('ok_rrhh') == 'No') {         
+        $query->whereNull('rrhh_approbation');
+      }
+    }
+
+
+    if ($request->input('ok_finances') != "") {      
+      if ($request->input('ok_finances') == 'Yes') {
+        $query->whereNotNull('finances_approbation');
+      }
+      if ($request->input('ok_finances') == 'No') {         
+        $query->whereNull('finances_approbation');
+      }
+    }
+
+    if ($request->input('invoice') != "") {      
+      if ($request->input('invoice') == 'Yes') {
+        $query->whereNotNull('has_invoice_file');
+      }
+      if ($request->input('invoice') == 'No') {         
+        $query->whereNull('has_invoice_file');
+      }
+    }
+
+    // if ($request->has('certificate')) {
+    //   $query->whereNotNull('signatures_file_id');
+    // } else {
+    //   $query->whereNull('signatures_file_id');
+    // }
+
+    // if ($request->has('invoice')) {
+    //   $query->whereNotNull('has_invoice_file');
+    // } else {
+    //   $query->whereNull('has_invoice_file');
+    // }
+
+    // if ($request->has('payed')) {
+    //   $query->whereNotNull('payment_date');
+    // } else {
+    //   $query->whereNull('payment_date');
+    // }
+
+    // if ($request->has('ok_responsable')) {
+    //   $query->whereNotNull('responsable_approbation');
+    // } else {
+    //   $query->whereNull('responsable_approbation');
+    // }
+
+    
+
+    // if ($request->has('ok_finanzas')) {
+    //   $query->whereNotNull('finances_approbation');
+    // } else {
+    //   $query->whereNull('finances_approbation');
+    // }
+
 
     return $query;
   }
