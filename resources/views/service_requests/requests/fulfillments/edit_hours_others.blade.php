@@ -4,6 +4,13 @@
     </div>
     <div class="card-body">
         <!-- @livewire('service-request.shifts-control', ['fulfillment' => $serviceRequest->fulfillments->first()]) -->
+
+        <h4>Inasistencias</h4>
+        @if($serviceRequest->working_day_type == "DIURNO PASADO A TURNO")
+          @livewire('service-request.fulfillment-absences', ['fulfillment' => $serviceRequest->Fulfillments->first()])
+        @endif
+        <br><br><hr>
+
         @livewire('service-request.show-total-hours', ['fulfillment' => $serviceRequest->fulfillments->first()])
         <div class="form-row">
             <fieldset class="form-group col-12 col-md-6">

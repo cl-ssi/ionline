@@ -1,5 +1,9 @@
-<div style="text-align: center">
-    <button wire:click="increment()">+</button>
-    <h1>{{ $count }}</h1>
+<div>
+	<button type="button" wire:click="editShiftDay">
+	    @if($shiftDay->working_day!="F")
+	        {{$shiftDay->working_day}}
+	    @else
+	        -
+	     @endif
+	</button>
 </div>
-
