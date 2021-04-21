@@ -12,7 +12,7 @@ class TechnicalEvaluation extends Model
     use softDeletes;
 
     protected $fillable = [
-        'end_date'
+        'date_end'
     ];
 
     public function user() {
@@ -47,6 +47,10 @@ class TechnicalEvaluation extends Model
 
     protected $hidden = [
         'created_at', 'updated_at'
+    ];
+
+    protected $dates = [
+      'date_end'
     ];
 
     protected $table = 'rst_technical_evaluations';

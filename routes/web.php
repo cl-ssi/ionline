@@ -99,6 +99,9 @@ Route::group(['middleware' => 'auth:external'], function () {
         Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
         Route::post('/store', [ReplacementStaffController::class, 'store'])->name('store');
         Route::get('/{replacement_staff}/edit', [ReplacementStaffController::class, 'edit'])->name('edit');
+        Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
+        Route::get('/show_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('show_file');
+        Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
         Route::prefix('profile')->name('profile.')->group(function(){
             Route::post('/{replacementStaff}/store', [ProfileController::class, 'store'])->name('store');
             Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
@@ -139,9 +142,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')->group(function(){
     Route::get('/', [ReplacementStaffController::class, 'index'])->name('index');
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
-    Route::get('/show_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('show_file');
-    Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
-    Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
+    // Route::get('/show_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('show_file');
+    // Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
+    // Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
 
     Route::prefix('request')->name('request.')->group(function(){
         Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index');
@@ -165,6 +168,8 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
             });
             Route::prefix('applicant')->name('applicant.')->group(function(){
                 Route::post('/store/{technicalEvaluation}', [ApplicantController::class, 'store'])->name('store');
+                Route::put('/{applicant}/update', [ApplicantController::class, 'update'])->name('update');
+                Route::put('/{applicant}/update_to_select', [ApplicantController::class, 'update_to_select'])->name('update_to_select');
                 Route::delete('{applicant}/destroy', [ApplicantController::class, 'destroy'])->name('destroy');
             });
         });
@@ -173,8 +178,8 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
 
     Route::prefix('profile')->name('profile.')->group(function(){
         // Route::post('/{replacementStaff}/store', [ProfileController::class, 'store'])->name('store');
-        Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
-        Route::get('/show_file/{profile}', [ProfileController::class, 'show_file'])->name('show_file');
+        // Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
+        // Route::get('/show_file/{profile}', [ProfileController::class, 'show_file'])->name('show_file');
         //Route::delete('{profile}/destroy', [ProfileController::class, 'destroy'])->name('destroy');
     });
 
