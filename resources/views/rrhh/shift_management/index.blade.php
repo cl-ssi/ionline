@@ -96,7 +96,7 @@
 	<!-- <div class="col-lg-12"> -->
 		<h3> Gestión de Turnos 
   
-  <livewire:rrhh.change-shift-day-status />
+
    
         </h3>
 		<form method="POST" class="form-horizontal shadow" action="{{ route('rrhh.shiftManag.index') }}">
@@ -136,7 +136,7 @@
 				<div class="input-group">
             	
             		<label for="for_name">AÑO </label>
-            		<select class="form-control" id="for_turnFilter" name="yearFilter">
+            		<select class="form-control" id="for_yearFilter" name="yearFilter">
             			@for($i = $actuallyYear; $i< (intval($actuallyYear) + 4); $i++)
             				<option value="{{$i}}"> {{$i}}</option>
             				
@@ -148,7 +148,7 @@
 				<div class="input-group">
             	
             		<label for="for_name">MES </label>
-            		<select class="form-control" id="for_turnFilter" name="monthFilter">
+            		<select class="form-control" id="for_monthFilter" name="monthFilter">
             			
             			@foreach($months AS $index => $month)
             				<option value="{{ $index }}" {{ ($index == $actuallyMonth )?"selected":"" }}>{{$loop->iteration}} - {{$month}} </option>
@@ -252,16 +252,19 @@
                         </tr>
                 </thead>
                 <tbody>
-
+                <div>
+                    
                   
                     @livewire('rrhh.list-of-shifts', 
                         [
                             'staffInShift'=>$staffInShift,
                             'actuallyYear'=>$actuallyYear,
                             'actuallyMonth'=>$actuallyMonth,
+                         
                             'days'=>$days
                         ]
                     )
+                </div>
                   
                   
                 </tbody>
@@ -312,8 +315,10 @@
     </div>
 </div>
 </div>
-   
+    @livewire("rrhh.modal-edit-shift-user-day")
 @endsection
+
+
 @section('custom_js')
 
 
