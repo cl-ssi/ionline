@@ -11,11 +11,11 @@ class Fonasa extends Model
     use HasFactory;
 
     public static function find($rut) {
-	$run = intval($rut);
-	$s=1;
-	for($m=0;$run!=0;$run/=10)
-	    $s=($s+$run%10*(9-$m++%6))%11;
-	$dv = chr($s?$s+47:75); 
+        $run = intval($rut);
+        $s=1;
+        for($m=0;$run!=0;$run/=10)
+            $s=($s+$run%10*(9-$m++%6))%11;
+        $dv = chr($s?$s+47:75); 
 
         if($rut AND $dv) {
             $wsdl = asset('ws/fonasa/CertificadorPrevisionalSoap.wsdl');
@@ -37,8 +37,7 @@ class Fonasa extends Model
 
             if ($result === false) {
                 /* No se conecta con el WS */
-                $error = array("error" => "No se pudo conectar a FONASA");
-                return $error;
+                return array("error" => "No se pudo conectar a FONASA");
             }
             else {
                 /* Si se conectó al WS */
@@ -71,8 +70,7 @@ class Fonasa extends Model
                 }
                 else {
                     /* Error */
-                    $error = array("error" => $result->getCertificadoPrevisionalResult->replyTO->errorM);
-                    return $error;
+                    return array("error" => $result->getCertificadoPrevisionalResult->replyTO->errorM);
                 }
             }
         }

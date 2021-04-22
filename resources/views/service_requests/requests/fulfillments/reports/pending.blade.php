@@ -8,16 +8,26 @@
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.fulfillment-pending',$who) }}">
 
-    <div class="form-row">
+    <div class="form-row">     
+
         <fieldset class="form-group col-6 col-md-1">
             <label for="for_program_contract_type">ID</label>
             <input class="form-control" type="text" name="sr_id" value="{{ old('sr_id') }}">
         </fieldset>
 
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_establishment_id">Establecimiento*</label>
+            <select name="establishment" class="form-control" id="for_establishment_id">
+                <option value="">Seleccionar</option>
+                @foreach($establishments as $establishment)
+                <option value="{{$establishment->id}}" @if(old('establishment') == $establishment->id) selected @endif >{{$establishment->name}}</option>
+                @endforeach
+            </select>
+        </fieldset>
+
         <fieldset class="form-group col-12 col-md-2">
             <label for="for_rut">Rut/Nombre</label>
-            <input name="rut" class="form-control" 
-                placeholder="Run o nombre" value="{{ old('rut') }}" aucomplete="off">
+            <input name="rut" class="form-control" placeholder="Run o nombre" value="{{ old('rut') }}" aucomplete="off">
             </input>
         </fieldset>
 
@@ -73,7 +83,7 @@
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
         </fieldset>
-        
+
     </div>
 </form>
 
@@ -86,6 +96,7 @@
         <tr>
 
             <th>Id Sol.</th>
+            <th>Establecimiento</th>
             <th nowrap>Rut</th>
             <th>Nombre</th>
             <th>Periodo</th>
@@ -96,17 +107,19 @@
         </tr>
 
         @foreach($fulfillments as $fulfillment)
-            @if($periodo != $fulfillment->month.'-'.$fulfillment->year)
-                @php $periodo= $fulfillment->month.'-'.$fulfillment->year; @endphp
-                <tr>
-                    <td colspan="11">
-                    <h3>Periodo {{ $periodo }}</h3>
-                    </td>
-                </tr>
-            @endif
+        @if($periodo != $fulfillment->month.'-'.$fulfillment->year)
+        @php $periodo= $fulfillment->month.'-'.$fulfillment->year; @endphp
+        <tr>
+            <td colspan="11">
+                <h3>Periodo {{ $periodo }}</h3>
+            </td>
+        </tr>
+        @endif
         <tr>
             <td>{{$fulfillment->servicerequest->id?? ''}}
-            <span class="small">({{$fulfillment->id}})</span></td>
+                <span class="small">({{$fulfillment->id}})</span>
+            </td>
+            <td>{{$fulfillment->servicerequest->establishment->name?? ''}}
             <td>{{$fulfillment->servicerequest?$fulfillment->servicerequest->employee->runFormat(): ''}}</td>
             <td>{{$fulfillment->servicerequest->employee->fullname?? ''}}</td>
             <td>{{$fulfillment->year}} - {{$fulfillment->month}}</td>
@@ -120,7 +133,7 @@
                 <i title="Boleta" class="fas fa-file-invoice-dollar 
                     {{ ($fulfillment->has_invoice_file)?'text-primary':'text-secondary'}}"></i>
                 <i title="Pago" class="fas fa-money-bill 
-                    {{ ($fulfillment->payment_date)?'text-primary':'text-secondary'}}"></i>     
+                    {{ ($fulfillment->payment_date)?'text-primary':'text-secondary'}}"></i>
             </td>
             <td>
                 @if($fulfillment->servicerequest)

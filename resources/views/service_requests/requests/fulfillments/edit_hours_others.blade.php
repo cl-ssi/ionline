@@ -211,36 +211,52 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow) @if($SignatureFlow->status === null)
-						<tr class="bg-light">
-							@elseif($SignatureFlow->status === 0)
-						</tr>
+                  <tr>
+                    <td>{{$serviceRequest->created_at}}</td>
+                    <td>{{$serviceRequest->creator->organizationalUnit->name}}</td>
+                    <td>{{$serviceRequest->creator->position}}</td>
+                    <td>{{$serviceRequest->creator->getFullNameAttribute()}}</td>
+                    <td>Creador</td>
+                    <td>Creada</td>
+                    <td></td>
+                  </tr>
+                  @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
+                    @if($SignatureFlow->status === null)
+                      <tr class="bg-light">
+                    @elseif($SignatureFlow->status === 0)
+                      <tr class="bg-danger">
+                    @elseif($SignatureFlow->status === 1)
+                      <tr>
+                    @elseif($SignatureFlow->status === 2)
+                      <tr class="bg-warning">
+                    @endif
 
-						<tr class="bg-danger">
-							@elseif($SignatureFlow->status === 1)
-						</tr>
+          							<td>{{ $SignatureFlow->signature_date}}</td>
+          							<td>{{ $SignatureFlow->organizationalUnit->name}}</td>
+          							<td>{{ $SignatureFlow->employee }}</td>
+          							<td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
+          							<!-- <td>{{ $SignatureFlow->type }}</td> -->
+                        @if($SignatureFlow->sign_position == 1)
+                         <td>Responsable</td>
+                        @elseif($SignatureFlow->sign_position == 2)
+                         <td>Supervisor</td>
+                        @else
+                         <td>{{ $SignatureFlow->type }}</td>
+                        @endif
+          							<td>
+          								@if($SignatureFlow->status === null)
+          								@elseif($SignatureFlow->status === 1) Aceptada
+          								@elseif($SignatureFlow->status === 0) Rechazada
+          								@endif
+          							</td>
+          						</tr>
 
-						<tr>
-							@endif
-							<td>{{ $SignatureFlow->signature_date}}</td>
-							<td>{{ $SignatureFlow->organizationalUnit->name}}</td>
-							<td>{{ $SignatureFlow->employee }}</td>
-							<td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
-							<td>{{ $SignatureFlow->type }}</td>
-							<td>
-								@if($SignatureFlow->status === null)
-								@elseif($SignatureFlow->status === 1) Aceptada
-								@elseif($SignatureFlow->status === 0) Rechazada
-								@endif
-							</td>
-						</tr>
-
-						@if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
-						<tr>
-							<td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
-						</tr>
-						@endif
-					@endforeach
+          						@if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
+          						<tr>
+          							<td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
+          						</tr>
+          						@endif
+        					@endforeach
                 </tbody>
             </table>
         </div>
