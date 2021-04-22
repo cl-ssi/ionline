@@ -13,8 +13,20 @@
     @method('POST')
 
     <div class="row">
+
         <fieldset class="form-group col-12 col-md-3">
-            <label for="for_contract_type" >Tipo de Contrato*</label>
+            <label for="for_establishment_id">Establecimiento*</label>
+            <select name="establishment_id" class="form-control" id="for_establishment_id" required>
+                <option value="">Seleccionar</option>
+                @foreach($establishments as $establishment)
+                <option value="{{$establishment->id}}">{{$establishment->name}}</option>
+                @endforeach                
+            </select>
+        </fieldset>
+
+
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_contract_type">Tipo de Contrato*</label>
             <select name="contract_type" class="form-control" id="for_contract_type" required>
                 <option value="">Seleccionar</option>
                 <option value="Mensual">Mensual</option>
@@ -23,7 +35,7 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
-            <label for="for_type" >Tipo</label>
+            <label for="for_type">Tipo</label>
             <select name="type" class="form-control" required>
                 <option value="">Seleccionar</option>
                 <option value="Covid">Honorarios - Covid</option>
@@ -32,9 +44,9 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_guard_name">Jornada</label>
-            <select id="for_work_type" name="work_type"  class="form-control" required>
+            <select id="for_work_type" name="work_type" class="form-control" required>
                 <option value="">Seleccionar</option>
-                <option value="DIURNO"  >DIURNO</option>
+                <option value="DIURNO">DIURNO</option>
                 <option value="TERCER TURNO">TERCER TURNO</option>
                 <option value="TERCER TURNO - MODIFICADO">TERCER TURNO - MODIFICADO</option>
                 <option value="CUARTO TURNO">CUARTO TURNO</option>
@@ -82,33 +94,33 @@
 @endsection
 
 @section('custom_js')
-    <script type="text/javascript">
-        $(document).ready(function (){
-           $('#for_contract_type').on('change', function (){
-               if(this.value === 'Horas'){
-                   $("#for_work_type option[value='DIURNO']").hide();
-                   $("#for_work_type option[value='TERCER TURNO']").hide();
-                   $("#for_work_type option[value='TERCER TURNO - MODIFICADO']").hide();
-                   $("#for_work_type option[value='CUARTO TURNO']").hide();
-                   $("#for_work_type option[value='CUARTO TURNO - MODIFICADO']").hide();
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#for_contract_type').on('change', function() {
+            if (this.value === 'Horas') {
+                $("#for_work_type option[value='DIURNO']").hide();
+                $("#for_work_type option[value='TERCER TURNO']").hide();
+                $("#for_work_type option[value='TERCER TURNO - MODIFICADO']").hide();
+                $("#for_work_type option[value='CUARTO TURNO']").hide();
+                $("#for_work_type option[value='CUARTO TURNO - MODIFICADO']").hide();
 
-                   $("#for_work_type option[value='DIURNO PASADO A TURNO']").show();
-                   $("#for_work_type option[value='HORA MÉDICA']").show();
-                   $("#for_work_type option[value='HORA EXTRA']").show();
-                   $("#for_work_type option[value='TURNO EXTRA']").show();
-               }else {
-                   $("#for_work_type option[value='DIURNO']").show();
-                   $("#for_work_type option[value='TERCER TURNO']").show();
-                   $("#for_work_type option[value='TERCER TURNO - MODIFICADO']").show();
-                   $("#for_work_type option[value='CUARTO TURNO']").show();
-                   $("#for_work_type option[value='CUARTO TURNO - MODIFICADO']").show();
+                $("#for_work_type option[value='DIURNO PASADO A TURNO']").show();
+                $("#for_work_type option[value='HORA MÉDICA']").show();
+                $("#for_work_type option[value='HORA EXTRA']").show();
+                $("#for_work_type option[value='TURNO EXTRA']").show();
+            } else {
+                $("#for_work_type option[value='DIURNO']").show();
+                $("#for_work_type option[value='TERCER TURNO']").show();
+                $("#for_work_type option[value='TERCER TURNO - MODIFICADO']").show();
+                $("#for_work_type option[value='CUARTO TURNO']").show();
+                $("#for_work_type option[value='CUARTO TURNO - MODIFICADO']").show();
 
-                   $("#for_work_type option[value='DIURNO PASADO A TURNO']").hide();
-                   $("#for_work_type option[value='HORA MÉDICA']").hide();
-                   $("#for_work_type option[value='HORA EXTRA']").hide();
-                   $("#for_work_type option[value='TURNO EXTRA']").hide();
-               }
-           })
+                $("#for_work_type option[value='DIURNO PASADO A TURNO']").hide();
+                $("#for_work_type option[value='HORA MÉDICA']").hide();
+                $("#for_work_type option[value='HORA EXTRA']").hide();
+                $("#for_work_type option[value='TURNO EXTRA']").hide();
+            }
         })
-    </script>
+    })
+</script>
 @endsection

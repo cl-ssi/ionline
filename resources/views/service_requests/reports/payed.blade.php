@@ -21,7 +21,7 @@
 				<option value="">Todos</option>
 				<option value="1" @if($request->establishment_id == 1) selected @endif>Hospital Ernesto Torres Galdames</option>
 				<option value="12" @if($request->establishment_id == 12) selected @endif>Dr. Héctor Reyno G.</option>
-				<option value="38" @if($request->establishment_id === 0) selected @endif>Dirección SSI</option>
+				<option value="0" @if($request->establishment_id === 0) selected @endif>Dirección SSI</option>
 			</select>
 			<div class="input-group-append">
 				<button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
@@ -47,6 +47,7 @@
 				<th></th>
         <th>Id</th>
         <th>Establecimiento</th>
+				<th>Unidad</th>
         <th>Tipo/Jornada</th>
         <th>Nombre</th>
         <th nowrap>Rut</th>
@@ -67,6 +68,7 @@
 					<td class="small">{{$key+1}}</td>
           <td class="small">{{$fulfillment->serviceRequest->id}}</td>
           <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
+					<td class="small">{{$fulfillment->serviceRequest->responsabilityCenter->name}}</td>
           <td class="small">
             {{$fulfillment->serviceRequest->program_contract_type}}
             <br>
@@ -97,7 +99,7 @@
           </td>
           <td class="small">
             @if($fulfillment->has_invoice_file)
-              <a href="{{route('rrhh.service-request.fulfillment.download_invoice', $fulfillment)}}"
+              <a href="{{route('rrhh.service-request.fulfillment.download_invoice', [$fulfillment, time()])}}"
                  target="_blank" title="Boleta" >
                  <i class="fas fa-paperclip"></i>
               </a>

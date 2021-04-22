@@ -32,48 +32,75 @@
 <br>
 
 <div class="col">
-  <table class="table table-sm table-striped">
-      <thead>
-          <tr>
-              <th>#</th>
-              <th>Cargo</th>
-              <th>Grado</th>
-              <th>Calidad Jurídica</th>
-              <th>Desde</th>
-              <th>Hasta</th>
-              <th>Fundamento</th>
-              <th>Solicitante</th>
-              <th></th>
-          </tr>
-      </thead>
-      <tbody>
-          @foreach($requests as $request)
-          <tr>
-              <td>{{ $request->id }}</td>
-              <td>{{ $request->name }}</td>
-              <td>{{ $request->degree }}</td>
-              <td>{{ $request->LegalQualityValue }}</td>
-              <td>{{ Carbon\Carbon::parse($request->start_date)->format('d-m-Y') }}</td>
-              <td>{{ Carbon\Carbon::parse($request->end_date)->format('d-m-Y') }}</td>
-              <td>{{ $request->FundamentValue }}</td>
-              <td>{{ $request->user->FullName }}<br>
-                  {{ $request->organizationalUnit->name }}
-              </td>
-              <td>
-                  <!-- <button type="submit" class="btn btn-sm btn-outline-secondary">
-                      <i class="fas fa-edit" title="Editar"></i>
-                  </button> -->
-                  <a href="{{ route('replacement_staff.request.to_select', $request) }}"
-                      class="btn btn-outline-secondary btn-sm" title="Selección">
-                      <i class="fas fa-list-ol"></i></a>
-              </td>
-          </tr>
-          @endforeach
-      </tbody>
-  </table>
+    <table class="table small table-striped table-bordered">
+        <thead class="text-center">
+            <tr>
+                <th>#</th>
+                <th>Cargo</th>
+                <th>Grado</th>
+                <th>Calidad Jurídica</th>
+                <th>Periodo</th>
+                <th>Fundamento</th>
+                <th>Solicitante</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+          @if($requestReplacementStaff != NULL)
+            @foreach($requestReplacementStaff as $request)
+            <tr>
+                <td>{{ $request->id }}</td>
+                <td>{{ $request->name }}</td>
+                <td class="text-center">{{ $request->degree }}</td>
+                <td class="text-center">{{ $request->LegalQualityValue }}</td>
+                <td>{{ Carbon\Carbon::parse($request->start_date)->format('d-m-Y') }} <br>
+                    {{ Carbon\Carbon::parse($request->end_date)->format('d-m-Y') }}
+                </td>
+                <td>{{ $request->FundamentValue }}</td>
+                <td>{{ $request->user->FullName }}<br>
+                    {{ $request->organizationalUnit->name }}
+                </td>
+                <td class="text-center">
+                    @foreach($request->RequestSign as $sign)
+                        @if($sign->request_status == 'pending' || $sign->request_status == NULL)
+                            <i class="fas fa-clock fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                        @endif
+                        @if($sign->request_status == 'accepted')
+                            <i class="fas fa-check-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                        @endif
+                        @if($sign->request_status == 'rejected')
+                            <i class="fas fa-times-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                        @endif
+                    @endforeach
+                </td>
+                <td>
+                    @foreach($request->RequestSign as $sign)
+                        @if($sign->position == 3 && $sign->request_status == "accepted" && !$request->technicalEvaluation)
+                            <a href="{{ route('replacement_staff.request.technical_evaluation.store', $request) }}"
+                                onclick="return confirm('¿Está seguro de iniciar el proceso de selección?')"
+                                class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
+                        @elseif($sign->position == 3 && $sign->request_status == "accepted" && $request->technicalEvaluation)
+                            <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $request->technicalEvaluation) }}"
+                                class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
+                        @endif
+                    @endforeach
+                </td>
+            </tr>
+            @endforeach
+          @else
+            <tr>
+                <td>Hola
+                  <div class="alert alert-secondary" role="alert">
+                    A simple secondary alert—check it out!
+                  </div>
+                </td>
+            </tr>
+          @endif
+        </tbody>
+    </table>
 
-  {{ $requests->links() }}
-
+    {{ $requestReplacementStaff->links() }}
 </div>
 @endsection
 

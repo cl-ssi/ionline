@@ -7,8 +7,8 @@
 		<form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$fulfillment) }}" enctype="multipart/form-data">
 			@csrf
 			@method('PUT')
-			<div class="row">
-				<fieldset class="form-group col">
+			<div class="form-row">
+				<fieldset class="form-group col-12 col-md">
 					<label for="for_type">Período</label>
 					<select name="type" class="form-control" required>
 						<option value=""></option>
@@ -16,48 +16,48 @@
 						<option value="Parcial" @if($fulfillment->type == "Parcial") selected @endif>Parcial</option>
 					</select>
 				</fieldset>
-				<fieldset class="form-group col-3">
+				<fieldset class="form-group col-6 col-md-3">
 					<label for="for_estate">Inicio</label>
 					<input type="date" class="form-control" name="start_date" value="{{$fulfillment->start_date->format('Y-m-d')}}" required>
 				</fieldset>
-				<fieldset class="form-group col-3">
+				<fieldset class="form-group col-6 col-md-3">
 					<label for="for_estate">Término</label>
 					<input type="date" class="form-control" name="end_date" value="{{$fulfillment->end_date->format('Y-m-d')}}" required>
 				</fieldset>
-				<fieldset class="form-group col">
+				<fieldset class="form-group col-12 col-md">
 					<label for="for_estate">Observación</label>
 					<input type="text" class="form-control" name="observation" value="{{$fulfillment->observation}}">
 				</fieldset>
 
-				@can('Service Request: fulfillments responsable')
-				@if($fulfillment->responsable_approver_id == NULL)
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary form-control">Guardar</button>
-				</fieldset>
-				@else
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary form-control" disabled>Guardar</button>
-				</fieldset>
+				<!-- @can('Service Request: fulfillments responsable')
+					@if($fulfillment->responsable_approver_id == NULL)
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn btn-primary form-control">Guardar</button>
+					</fieldset>
+					@else
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn btn-primary form-control" disabled>Guardar</button>
+					</fieldset>
 				@endif
 				@endcan
 
 				@can('Service Request: fulfillments rrhh')
-				@if($fulfillment->rrhh_approver_id == NULL)
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary form-control">Guardar</button>
-				</fieldset>
-				@else
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary form-control" disabled>Guardar</button>
-				</fieldset>
-				@endif
+					@if($fulfillment->rrhh_approver_id == NULL)
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn btn-primary form-control">Guardar</button>
+					</fieldset>
+					@else
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn btn-primary form-control" disabled>Guardar</button>
+					</fieldset>
+					@endif
 				@endcan
 
-				@can('Service Request: fulfillments finance')
+				 @can('Service Request: fulfillments finance')
 				@if($fulfillment->finances_approver_id == NULL)
 				<fieldset class="form-group col">
 					<label for="for_estate"><br/></label>
@@ -69,18 +69,19 @@
 					<button type="submit" class="btn btn-primary form-control" disabled>Guardar</button>
 				</fieldset>
 				@endif
-				@endcan
+				@endcan -->
 			</div>
 		</form>
 
 		<hr>
 
 		<h4>Inasistencias</h4>
-		<form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.store') }}" enctype="multipart/form-data">
+		@livewire('service-request.fulfillment-absences', ['fulfillment' => $fulfillment])
+		<!-- <form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.store') }}" enctype="multipart/form-data">
 			@csrf
-			<div class="row">
+			<div class="form-row">
 				<input type="hidden" name="fulfillment_id" value="{{$fulfillment->id}}">
-				<fieldset class="form-group col">
+				<fieldset class="form-group col-12 col-md">
 					<label for="for_type">Tipo</label>
 					<select name="type" class="form-control for_type" required>
 						<option value=""></option>
@@ -91,66 +92,57 @@
 						<option value="Abandono de funciones">ABANDONO DE FUNCIONES</option>
 					</select>
 				</fieldset>
-				<fieldset class="form-group col">
+				<fieldset class="form-group col-12 col-md">
 					<label for="for_estate">Observación</label>
 					<input type="text" class="form-control" name="observation">
 				</fieldset>
 			</div>
-			<div class="row">
-				<fieldset class="form-group col-3">
+			@php
+			$ano = \Carbon\Carbon::now()->format('Y');
+			$anopasado = $ano-1;
+			@endphp
+			<div class="form-row">
+				<fieldset class="form-group col-6 col-md-3">
 					<label for="for_estate">Entrada</label>
-					<input type="date" class="form-control start_date" name="start_date" required>
+					<input type="date" class="form-control start_date" name="start_date" min="{{$anopasado}}-01-01" max="{{$ano}}-12-31"  required>
 				</fieldset>
-				<fieldset class="form-group col">
+				<fieldset class="form-group col-6 col-md">
 					<label for="for_estate">Hora</label>
 					<input type="time" class="form-control start_hour" name="start_hour" required>
 				</fieldset>
-				<fieldset class="form-group col-3">
+				<fieldset class="form-group col-6 col-md-3">
 					<label for="for_estate">Salida</label>
-					<input type="date" class="form-control end_date" name="end_date" required>
+					<input type="date" class="form-control end_date" name="end_date" min="{{$anopasado}}-01-01" max="{{$ano}}-12-31" required>
 				</fieldset>
-				<fieldset class="form-group col">
+				<fieldset class="form-group col-6 col-md">
 					<label for="for_estate">Hora</label>
 					<input type="time" class="form-control end_hour" name="end_hour" required>
 				</fieldset>
 				@can('Service Request: fulfillments responsable')
-				@if($fulfillment->responsable_approver_id == NULL)
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary">Guardar</button>
-				</fieldset>
-				@else
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary" disabled>Guardar</button>
-				</fieldset>
-				@endif
+					@if($fulfillment->responsable_approver_id == NULL)
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn form-control btn-primary">Guardar</button>
+					</fieldset>
+					@else
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn form-control btn-primary" disabled>Guardar</button>
+					</fieldset>
+					@endif
 				@endcan
 				@can('Service Request: fulfillments rrhh')
-				@if($fulfillment->rrhh_approver_id == NULL)
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary">Guardar</button>
-				</fieldset>
-				@else
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary" disabled>Guardar</button>
-				</fieldset>
-				@endif
-				@endcan
-				@can('Service Request: fulfillments finance')
-				@if($fulfillment->finances_approver_id == NULL)
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary">Guardar</button>
-				</fieldset>
-				@else
-				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary" disabled>Guardar</button>
-				</fieldset>
-				@endif
+					@if($fulfillment->rrhh_approver_id == NULL)
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn form-control btn-primary">Guardar</button>
+					</fieldset>
+					@else
+					<fieldset class="form-group col">
+						<label for="for_estate"><br/></label>
+						<button type="submit" class="btn form-control btn-primary" disabled>Guardar</button>
+					</fieldset>
+					@endif
 				@endcan
 			</div>
 		</form>
@@ -187,7 +179,7 @@
 				</tr>
 				@endforeach
 			</tbody>
-		</table>
+		</table> -->
 
 		<div class="form-row">
 			<fieldset class="form-group col">
@@ -206,11 +198,11 @@
 				@php
 				$idModelModal = $fulfillment->id;
 				$routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal/".auth()->id();
-				$returnUrlSignModal = "rrhh.service-request.fulfillment.edit";
+                $routeCallbackSignModal = 'documents.callbackFirma';
 				@endphp
 				@include('documents.signatures.partials.sign_file')
 				<button type="button" data-toggle="modal" class="btn btn-outline-info"
-					data-target="#signPdfModal{{$idModelModal}}" title="Firmar"> 
+					data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
 				Firmar certificado <i class="fas fa-signature"></i>
 				</button>
 				@endif
@@ -218,28 +210,30 @@
 			</fieldset>
 			<fieldset class="form-group col text-right">
 				@can('Service Request: fulfillments responsable')
-				@if($fulfillment->responsable_approver_id == NULL)
-				<a type="button"
-					class="btn btn-danger"
-					onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');"
-					href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}" >
-				Rechazar
-				</a>
-				<a type="button"
-					class="btn btn-success"
-					onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');"
-					href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}" >
-				Confirmar
-				</a>
-				@else
-				<button type="submit" class="btn btn-danger" disabled>Rechazar</button>
-				<button type="submit" class="btn btn-success" disabled>Confirmar</button>
-				@endif
+					@if(Auth::user()->id == $serviceRequest->signatureFlows->where('sign_position',2)->first()->responsable_id)
+						@if($fulfillment->responsable_approver_id == NULL)
+							<a type="button"
+								class="btn btn-danger"
+								onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');"
+								href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}" >
+							Rechazar
+							</a>
+							<a type="button"
+								class="btn btn-success"
+								onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de confirmar?');"
+								href="{{ route('rrhh.service-request.fulfillment.confirm-Fulfillment',$fulfillment) }}" >
+							Confirmar
+							</a>
+						@else
+							<button type="submit" class="btn btn-danger" disabled>Rechazar</button>
+							<button type="submit" class="btn btn-success" disabled>Confirmar</button>
+						@endif
+					@endif
 				@endcan
 
 			</fieldset>
 		</div>
-		<div class="row">
+		<div class="form-row">
 			<div class="col-12 col-md-6">
 				<strong>Valor de la boleta</strong>
 				<div>
@@ -266,39 +260,33 @@
 							<label for="for_resolution_number">N° Resolución</label>
 							<input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
 						</fieldset>
-						<fieldset class="form-group col-7 col-md-3">
+						<fieldset class="form-group col-7 col-md-2">
 							<label for="for_resolution_date">Fecha Resolución</label>
 							<input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
 						</fieldset>
-						<!-- @if($fulfillment->year == 2021 && $fulfillment->month == 1 && $fulfillment->total_to_pay != NULL)
-							<fieldset class="form-group col col-md">
-							    <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
-							    <input type="text" class="form-control" name="total_hours_to_pay" disabled value="{{$serviceRequest->weekly_hours}}">
-							</fieldset>
-							
-							<fieldset class="form-group col col-md">
-							    <label for="for_total_paid">Total a pagar</label>
-							    <input type="text" class="form-control" name="total_to_pay" disabled value="{{$serviceRequest->net_amount}}">
-							</fieldset>
-							@else
-							<fieldset class="form-group col col-md">
-							    <label for="for_total_hours_paid">Total hrs. a pagar per.</label>
-							    <input type="text" class="form-control" name="total_hours_to_pay" value="{{$fulfillment->total_hours_to_pay}}">
-							</fieldset>
-							
-							<fieldset class="form-group col col-md">
-							    <label for="for_total_paid">Total a pagar</label>
-							    <input type="text" class="form-control" name="total_to_pay" value="{{$fulfillment->total_to_pay}}">
-							</fieldset>
-							@endif -->
-						<fieldset class="form-group col col-md-3">
-							<label for="for_total_hours_paid">Total hrs. a pagar per.</label>
+						<fieldset class="form-group col-6 col-md-2">
+							<label for="for_total_hours_paid">Total hrs. a pagar</label>
 							<input type="text" class="form-control" name="total_hours_to_pay" value="{{$fulfillment->total_hours_to_pay}}">
 						</fieldset>
-						<fieldset class="form-group col col-md-3">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_total_paid">Total a pagar</label>
 							<input type="text" class="form-control" name="total_to_pay" value="{{$fulfillment->total_to_pay}}">
 						</fieldset>
+						<div class="form-check form-check-inline">
+							<input type="hidden" name="illness_leave" value="0">
+							<input class="form-check-input" type="checkbox" name="illness_leave"  value="1" {{ ( $fulfillment->illness_leave== '1' ) ? 'checked="checked"' : null }} >
+							<label class="form-check-label" for="for_illness_leave">Licencias</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input type="hidden" name="leave_of_absence" value="0">
+							<input class="form-check-input" type="checkbox" id="permisos" name="leave_of_absence" value="1" {{ ( $fulfillment->leave_of_absence== '1' ) ? 'checked="checked"' : null }} >
+							<label class="form-check-label" for="permisos">Permisos</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input type="hidden" name="assistance" value="0">
+							<input class="form-check-input" type="checkbox"  name="assistance" value="1" {{ ( $fulfillment->assistance== '1' ) ? 'checked="checked"' : null }} >
+							<label class="form-check-label" for="asistencia">Asistencia</label>
+						</div>
 					</div>
 
 					<div class="form-row">
@@ -312,7 +300,7 @@
 							No se ha ingresado el "Total a pagar".
 							@endif
 						</div>
-						<div class="col-3 text-right">
+						<div class="col-12 col-md-3 text-right">
 							@if($fulfillment->rrhh_approver_id == NULL)
 							<a type="button" class="btn btn-danger"
 								onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');"
@@ -364,23 +352,23 @@
 						</fieldset>
 					</div>
 					<div class="form-row">
-						<fieldset class="form-group col col-md-2">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_bill_number">N° Boleta</label>
 							<input type="text" class="form-control" name="bill_number" value="{{$fulfillment->bill_number}}">
 						</fieldset>
-						<fieldset class="form-group col col-md-2">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
 							<input type="text" class="form-control" name="total_hours_paid" value="{{$fulfillment->total_hours_paid}}">
 						</fieldset>
-						<fieldset class="form-group col col-md-2">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_total_paid">Total pagado</label>
 							<input type="text" class="form-control" name="total_paid" value="{{$fulfillment->total_paid}}">
 						</fieldset>
-						<fieldset class="form-group col col-md-3">
+						<fieldset class="form-group col-6 col-md-3">
 							<label for="for_payment_date">Fecha pago</label>
 							<input type="date" class="form-control" name="payment_date" required @if($fulfillment->payment_date) value="{{$fulfillment->payment_date->format('Y-m-d')}}" @endif>
 						</fieldset>
-						<fieldset class="form-group col col-md-2">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_contable_month">Mes contable pago</label>
 							<select name="contable_month" class="form-control" required>
 								<option value=""></option>
@@ -400,17 +388,17 @@
 						</fieldset>
 					</div>
 					<div class="form-row">
-						<div class="col-2">
+						<div class="col col-md-2">
 							<button type="submit" class="btn btn-primary">Guardar</button>
 						</div>
-						<div class="col-7">
+						<div class="col-12 col-md-7">
 							@if($fulfillment->total_to_pay)
 								@livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment])
 							@else
 								No se ha ingresado el "Total a pagar".
 							@endif
 						</div>
-						<div class="col-3 text-right">
+						<div class="col-12 col-md-3 text-right">
 							@can('Service Request: fulfillments finance')
 							@if($fulfillment->finances_approver_id == NULL)
 							<a type="button"
@@ -432,13 +420,13 @@
 							@endcan
 						</div>
 					</div>
-	
+
 				</div>
 			</div>
 		</form>
 		@endcan
 
-		
+
 		@if($fulfillment->responsable_approver_id != NULL)
 		<h5>Visaciones</h5>
 		<table class="table table-sm small">

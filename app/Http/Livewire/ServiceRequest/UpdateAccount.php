@@ -15,13 +15,15 @@ class UpdateAccount extends Component
     public $account_number;
     public $pay_method;
     public $serviceRequest;
+    public $bankaccount;
+    public $user;
 
     public $phone_number;
     public $email;
     //
 
     protected $rules = [
-        'account_number' => 'required',
+        'account_number' => 'required|integer',
         'bank_id' => 'required',
         'pay_method' => 'required',
         'phone_number' => 'required',
@@ -35,6 +37,7 @@ class UpdateAccount extends Component
         'phone_number.required' => 'Debe Ingresar su Número Telefónico',
         'email.required' => 'Debe Ingresar un Correo Electrónico',
         'email.email' => 'El Formato del Correo Electrónico no es válido',
+        'account_number.integer' => 'Debe Ingresar solo números ej:123456789',
     ];
 
 
@@ -52,50 +55,54 @@ class UpdateAccount extends Component
 
         //devuelve user o lo crea
         $userBankAccount = UserBankAccount::updateOrCreate(
-            ['user_id' => $this->serviceRequest->employee->id],
+            ['user_id' => $this->user->id],
             ['bank_id' => $this->bank_id,
              'number' => $this->account_number,
              'type' => $this->pay_method]
         );
 
         $user = User::updateOrCreate(
-            ['id' => $this->serviceRequest->employee->id],
+            ['id' => $this->user->id],
             ['phone_number' => $this->phone_number,
              'email' => $this->email]
         );
 
         // $this->serviceRequest->employee->phone_number = $this->phone_number;
         // $this->serviceRequest->employee->email = $this->email;
-        $this->serviceRequest->phone_number = $this->phone_number;
-        $this->serviceRequest->email = $this->email;
+        //$this->serviceRequest->phone_number = $this->phone_number;
+        //$this->serviceRequest->email = $this->email;
 
-        $this->serviceRequest->save();
+        //$this->user->save();
+
+        //$this->userBankAccount->save();
+        //$this->serviceRequest->save();
         session()->flash('message', 'Información Bancaria Actualizada Exitosamente');
     }
 
     public function mount()
     {
-        if($this->serviceRequest){
-        if ($this->serviceRequest->employee->bankAccount) {
-          $this->bank_id = $this->serviceRequest->employee->bankAccount->bank_id;
-          $this->account_number = $this->serviceRequest->employee->bankAccount->number;
-          $this->pay_method = $this->serviceRequest->employee->bankAccount->type;
+        if($this->bankaccount){
+        if ($this->bankaccount->bank) {
+          $this->bank_id = $this->bankaccount->bank_id;
+          $this->account_number = $this->bankaccount->number;
+          $this->pay_method = $this->bankaccount->type;
         }
-
-        $this->phone_number = $this->serviceRequest->employee->phone_number;
-        $this->email = $this->serviceRequest->employee->email;
     }
+
+        $this->phone_number = $this->user->phone_number;
+        $this->email = $this->user->email;
+    
     }
 
     public function render()
     {
-        if($this->serviceRequest){
+        //if($this->bankaccount){
         $this->banks = Bank::all();
         return view('livewire.service-request.update-account');
-        }
-        else{
-            return view('livewire.service-request.update-account-empty');
-        }
+        //}
+        // else{
+        //     return view('livewire.service-request.update-account-empty');
+        // }
         
     }
 

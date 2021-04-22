@@ -22,10 +22,10 @@ class RequestReplacementStaffController extends Controller
      */
     public function index()
     {
-        $requests = RequestReplacementStaff::orderBy('id', 'DESC')
+        $requestReplacementStaff = RequestReplacementStaff::orderBy('id', 'DESC')
             ->paginate(10);
 
-        return view('replacement_staff.request.index', compact('requests'));
+        return view('replacement_staff.request.index', compact('requestReplacementStaff'));
     }
 
     public function own_index()
@@ -44,11 +44,6 @@ class RequestReplacementStaffController extends Controller
             ->paginate(10);
 
         return view('replacement_staff.request.ou_index', compact('ou_request'));
-    }
-
-    public function to_select(RequestReplacementStaff $requestReplacementStaff)
-    {
-        return view('replacement_staff.request.to_select', compact('requestReplacementStaff'));
     }
 
     public function to_sign(RequestReplacementStaff $requestReplacementStaff)

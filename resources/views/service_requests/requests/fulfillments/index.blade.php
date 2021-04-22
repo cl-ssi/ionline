@@ -42,13 +42,22 @@
       <option value="Auxiliar" @if($request->estate == "Auxiliar") selected @endif>Auxiliar</option>
     </select>
     <div class="input-group-prepend">
+      <span class="input-group-text">Estab.</span>
+    </div>
+    <select class="form-control selectpicker" data-live-search="true" name="establishment_id" data-size="5">
+      <option value="">Todos</option>
+      <option value="1" @if($request->establishment_id == "1") selected @endif>Hospital Ernesto Torres Galdames</option>
+      <option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option>
+      <option value="0" @if($request->establishment_id == "0") selected @endif>Dirección SSI</option>
+    </select>
+    <div class="input-group-prepend">
       <span class="input-group-text">Id</span>
     </div>
-    <input type="text" name="id" value="{{$request->id}}">
+    <input type="text" class="form-control " name="id" value="{{$request->id}}">
     <div class="input-group-prepend">
       <span class="input-group-text">Profesional</span>
     </div>
-    <input type="text" name="name" value="{{$request->name}}">
+    <input type="text" class="form-control " name="name" value="{{$request->name}}">
     <div class="input-group-append">
         <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
     </div>
@@ -70,12 +79,13 @@
           <th scope="col">Nro.Res.</th>
     			<th scope="col">Tipo</th>
           <th scope="col">T.Contrato</th>
+          <th scope="col">C.Responsabilidad</th>
     			<th scope="col">F. Solicitud</th>
     			<th scope="col">Rut</th>
     			<th scope="col">Funcionario</th>
     			<th scope="col">F. Inicio</th>
     			<th scope="col">F. Término</th>
-    			<th scope="col">Estado Solicitud</th>
+    			<!-- <th scope="col">Estado Solicitud</th> -->
     			<th scope="col">Acción</th>
           <th scope="col">Resp.</th>
           <th scope="col">RRHH</th>
@@ -89,14 +99,15 @@
           <td>{{ $serviceRequest->resolution_number }}</td>
     			<td>{{ $serviceRequest->type }}</td>
           <td>{{ $serviceRequest->program_contract_type }}</td>
+          <td>{{ $serviceRequest->responsabilityCenter->name }}</td>
     			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
     			<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
     			<td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
     			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
     			<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
-    			<td>@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
+    			<!-- <td>@if($serviceRequest->SignatureFlows->where('status','===',0)->count() > 0) Rechazada
               @elseif($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
-              @else Finalizada @endif</td>
+              @else Finalizada @endif</td> -->
     			<td nowrap class="text-center">
           @if($serviceRequest->program_contract_type == "Mensual")
     				<a href="{{ route('rrhh.service-request.fulfillment.edit',[$serviceRequest]) }}"
@@ -114,7 +125,7 @@
                 <i class="fas fa-file" style="color:#B9B9B9"></i></a>
 
               @else
-                <a href="{{ route('rrhh.service-request.certificate-pdf', $serviceRequest) }}"
+
                   class="btn btn-outline-secondary btn-sm" target="_blank">
                 <span class="fas fa-file" aria-hidden="true"></span></a>
               @endif -->

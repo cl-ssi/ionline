@@ -13,6 +13,7 @@ class PaymentReadyToggle extends Component
     public $rejection_detail;
     public $rejection_detail_input;
     public $bg_color;
+    public $payment_ready_text;
 
     public function mount()
     {
@@ -25,7 +26,7 @@ class PaymentReadyToggle extends Component
         if ($this->rejection_detail_input) {
             $rejection_detail = $this->fulfillment->payment_rejection_detail . "<br><br>" . "(" . Carbon::now() . " - " . Auth::user()->initials . ")" . ":" . $this->rejection_detail_input;
         } else {
-            if($this->payment_ready == 1)            
+            if($this->payment_ready == 1)
             {
                 $rejection_detail = $this->fulfillment->payment_rejection_detail . "<br><br>" . "(" . Carbon::now() . " - " . Auth::user()->initials . ")" . ": Pago Aceptado" ;
             }
@@ -33,7 +34,7 @@ class PaymentReadyToggle extends Component
             {
                 $rejection_detail = $this->fulfillment->payment_rejection_detail . "<br><br>" . "(" . Carbon::now() . " - " . Auth::user()->initials . ")" . ": Pago Rechazado" ;
             }
-            
+
         }
 
 
@@ -44,17 +45,22 @@ class PaymentReadyToggle extends Component
         $this->payment_ready = $this->fulfillment->payment_ready;
     }
 
+
+
     public function render()
     {
         switch ($this->payment_ready) {
             case '0':
                 $this->bg_color = 'bg-danger text-white';
+                $this->payment_ready_text="Rechazado";
                 break;
             case '1':
                 $this->bg_color = 'bg-success text-white';
+                $this->payment_ready_text="Aceptado";
                 break;
             case null:
                 $this->bg_color = 'bg-light';
+                $this->payment_ready_text="Indeterminado";
                 break;
         }
         return view('livewire.service-request.payment-ready-toggle');

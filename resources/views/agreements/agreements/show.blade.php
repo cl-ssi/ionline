@@ -20,9 +20,20 @@
     <li class="nav-item">
         <a class="nav-link text-secondary" href="{{ route('agreements.createWord', $agreement) }}"><i class="fas fa-eye"></i> Previsualizar Convenio</a>
     </li>
+    @if($agreement->file != null)
+    <li class="nav-item">
+        <a class="nav-link text-secondary" href="{{ route('agreements.createWordRes', $agreement) }}"><i class="fas fa-eye"></i> Previsualizar Resolución</a>
+    </li>
+    @endif
+    {{--@canany(['Documents: signatures and distribution'])
+    @if($agreement->file != null)
+    <li class="nav-item">
+        <a class="nav-link text-secondary" href="{{ route('agreements.signRes', $agreement) }}"><i class="fas fa-file-signature"></i> Solicitar firma Resolución</a>
+    </li>
+    @endif
+    @endcan--}}
 </ol>
 <p>
-{{-- $municipality --}}
 
 <div id="accordion" class="small">
   <div class="card">
@@ -77,7 +88,12 @@
 
                 <fieldset class="form-group col-4">
                     <label for="forreferente">Referente</label>
-                    <input type="text" name="referente" class="form-control" id="forreferente" value="{{ $agreement->referente }}" >
+                    <!-- <input type="text" name="referente" class="form-control" id="forreferente" value="{{ $agreement->referente }}" > -->
+                    <select name="referrer_id" class="form-control selectpicker" data-live-search="true" title="Seleccione referente" required>
+                        @foreach($referrers as $referrer)
+                        <option value="{{$referrer->id}}" @if(isset($agreement->referrer->id) && $referrer->id == $agreement->referrer->id) selected @endif>{{$referrer->fullName}}</option>
+                        @endforeach
+                    </select>
                 </fieldset>
 
                 <fieldset class="form-group col-5">
@@ -162,19 +178,6 @@
                 </fieldset>
 
                 <fieldset class="form-group col-3">
-                    <label for="fornumber">Número Resolución Exenta del Convenio</label>
-                    <input type="integer" name="res_exempt_number" class="form-control" id="fornumber" value="{{ $agreement->res_exempt_number }}" >
-                    <small class="form-text text-muted">* Nro. Resolución Exenta, se puede agregar al final.</small>
-                </fieldset>
-
-                <fieldset class="form-group col-3">
-                    <label for="fordate">Fecha Resolución Exenta del Convenio</label>
-                    <input type="date" name="res_exempt_date" class="form-control" id="fordate" value="{{ $agreement->res_exempt_date }}" >
-                </fieldset>
-            </div>
-            <hr class="mt-2 mb-3"/>
-            <div class="form-row">
-                <fieldset class="form-group col-3">
                     <label for="fornumber">Número Resolución Distribuye Recursos</label>
                     <input type="integer" name="res_resource_number" class="form-control" id="fornumber" value="{{ $agreement->res_resource_number }}" >
                     <small class="form-text text-muted">* Nro. Resolución, se puede agregar al final.</small>
@@ -184,7 +187,9 @@
                     <label for="fordate">Fecha Resolución Distribuye Recursos</label>
                     <input type="date" name="res_resource_date" class="form-control" id="fordate" value="{{ $agreement->res_resource_date }}" >
                 </fieldset>
-
+            </div>
+            <hr class="mt-2 mb-3"/>
+            <div class="form-row">
                 <!-- <fieldset class="form-group col-3">
                     <label for="for">Archivo Convenio PDF
                         @if($agreement->fileAgreeEnd != null)  
@@ -199,6 +204,17 @@
                      <small class="form-text text-muted">* Adjuntar versión final de Covenio</small>
                     </div>
                 </fieldset> -->
+                <fieldset class="form-group col-3">
+                    <label for="fornumber">Número Resolución Exenta del Convenio</label>
+                    <input type="integer" name="res_exempt_number" class="form-control" id="fornumber" value="{{ $agreement->res_exempt_number }}" >
+                    <small class="form-text text-muted">* Nro. Resolución Exenta, se puede agregar al final.</small>
+                </fieldset>
+
+                <fieldset class="form-group col-3">
+                    <label for="fordate">Fecha Resolución Exenta del Convenio</label>
+                    <input type="date" name="res_exempt_date" class="form-control" id="fordate" value="{{ $agreement->res_exempt_date }}" >
+                </fieldset>
+
                 <fieldset class="form-group col-3">
                     <label for="for">Archivo Resolución Final PDF SSI
                          @if($agreement->fileResEnd != null)  

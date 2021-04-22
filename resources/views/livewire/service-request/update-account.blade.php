@@ -18,7 +18,7 @@
         <fieldset class="col-12 col-md-4">
             <label>Nombre</label>
             <p class="form-control">
-                <strong>{{ $this->serviceRequest->employee->fullName }}</strong></p>
+                <strong>{{ $this->user->fullname?? '' }}</strong></p>
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
@@ -29,7 +29,7 @@
 
         <fieldset class="form-group col-12 col-md-4">
             <label>E-mail</label>
-            <input type="email" wire:model="email" class="form-control" required>
+            <input type="email" wire:model.lazy="email" class="form-control" required>
             @error('email') <span class="text-danger">{{ $message }}</span> @enderror
         </fieldset>
     </div>

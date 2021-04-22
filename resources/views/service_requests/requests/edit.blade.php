@@ -34,7 +34,7 @@
 
 	<div class="form-row">
 
-    <fieldset class="form-group col col-md">
+    <fieldset class="form-group col-6 col-md">
 		    <label for="for_program_contract_type">Tipo</label>
 		    <select name="program_contract_type" id="program_contract_type" class="form-control" required>
           <!-- <option value="Semanal" @if($serviceRequest->program_contract_type == 'Semanal') selected @endif >Semanal</option> -->
@@ -44,7 +44,7 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col col-md">
+    <fieldset class="form-group col-6 col-md">
 		    <label for="for_name">Tipo</label>
 		    <select name="type" class="form-control" required>
           <option value="Covid" @if($serviceRequest->type == 'Covid') selected @endif>Honorarios - Covid</option>
@@ -53,7 +53,7 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col col-md">
+    <fieldset class="form-group col-6 col-md">
 		    <label for="for_subdirection_ou_id">Subdirección</label>
 				<select class="form-control selectpicker" data-live-search="true" name="subdirection_ou_id" required="" data-size="5">
           @foreach($subdirections as $key => $subdirection)
@@ -61,7 +61,7 @@
           @endforeach
         </select>
 		</fieldset>
-    <fieldset class="form-group col col-md">
+    <fieldset class="form-group col-6 col-md">
 		    <label for="for_responsability_center_ou_id">Centro de Responsabilidad</label>
 				<select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" required="" data-size="5" id="responsability_center_ou_id">
           @foreach($responsabilityCenters as $key => $responsabilityCenter)
@@ -74,7 +74,7 @@
 
   <div class="form-row">
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md">
 				<label for="for_users">Responsable</label>
 				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
           @foreach($users as $key => $user)
@@ -83,7 +83,7 @@
 				</select>
 		</fieldset>
 
-		<fieldset class="form-group col">
+		<fieldset class="form-group col-12 col-md">
 				<label for="for_users">Supervisor</label>
 				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
@@ -113,61 +113,66 @@
 
   <br>
 
-  <div class="border border-info rounded">
-  <div class="row ml-1 mr-1">
+  <div class="card border border-danger">
+    <div class="card-body">
+      <div class="form-row">
 
-    <fieldset class="form-group col-8 col-md-3">
-		    <label for="for_rut">Rut</label>
-		    <input type="text" class="form-control" id="for_rut" placeholder="" name="rut" required="required" value="{{ $serviceRequest->employee->id }}" disabled>
-		</fieldset>
+        <fieldset class="form-group col-8 col-md-2">
+            <label for="for_rut">Rut</label>
+            <input type="text" class="form-control" id="for_rut" required="required"
+              value="{{ $serviceRequest->employee->id }}" disabled>
+        </fieldset>
 
-    <fieldset class="form-group col-1">
-        <label for="for_dv">Digito</label>
-        <input type="text" class="form-control" id="for_dv" name="dv" readonly value="{{ $serviceRequest->employee->dv }}">
-    </fieldset>
+        <fieldset class="form-group col-4 col-md-1">
+            <label for="for_dv">Digito</label>
+            <input type="text" class="form-control" id="for_dv" disabled
+              value="{{ $serviceRequest->employee->dv }}">
+        </fieldset>
 
-    <fieldset class="form-group col col-md">
-		    <label for="for_name">Nombre completo</label>
-		    <input type="text" class="form-control" id="for_name" placeholder="" name="name" required="required" value="{{ $serviceRequest->employee->getFullNameAttribute() }}" disabled>
-		</fieldset>
+        <fieldset class="form-group col-12 col-md-9">
+            <label for="for_name">Nombre completo</label>
+            <input type="text" class="form-control" id="for_name" required="required"
+              value="{{ $serviceRequest->employee->getFullNameAttribute() }}" disabled>
+        </fieldset>
 
-  </div>
+      </div>
 
-	<div class="row ml-1 mr-1">
+      <div class="form-row">
 
-    <fieldset class="form-group col col-md">
-        <label for="for_nationality">Nacionalidad</label>
-        <select name="nationality" class="form-control" disabled>
-          <option value=""></option>
-          @foreach($countries as $key => $country)
-            <option value="{{$country->id}}" @if($serviceRequest->employee->country_id == $country->id) selected @endif>{{$country->name}}</option>
-          @endforeach
-        </select>
-    </fieldset>
+        <fieldset class="form-group col-12 col-md-2">
+            <label for="for_nationality">Nacionalidad</label>
+            <select name="nationality" class="form-control" disabled>
+              <option value=""></option>
+              @foreach($countries as $key => $country)
+                <option value="{{$country->id}}" @if($serviceRequest->employee->country_id == $country->id) selected @endif>{{$country->name}}</option>
+              @endforeach
+            </select>
+        </fieldset>
 
-    <fieldset class="form-group col col-md">
-		    <label for="for_address">Dirección</label>
-		    <input type="text" class="form-control" id="foraddress" name="address" value="{{$serviceRequest->address}}">
-		</fieldset>
+        <fieldset class="form-group col-12 col-md-5">
+            <label for="for_address">Dirección</label>
+            <input type="text" class="form-control" id="foraddress" name="address" value="{{$serviceRequest->address}}">
+        </fieldset>
 
-    <fieldset class="form-group col col-md">
-		    <label for="for_phone_number">Número telefónico</label>
-		    <input type="text" class="form-control" id="for_phone_number" name="phone_number" value="{{$serviceRequest->phone_number}}">
-		</fieldset>
+        <fieldset class="form-group col-12 col-md-2">
+            <label for="for_phone_number">Número telefónico</label>
+            <input type="text" class="form-control" id="for_phone_number" name="phone_number" value="{{$serviceRequest->phone_number}}">
+        </fieldset>
 
-		<fieldset class="form-group col col-md">
-		    <label for="for_email">Correo electrónico</label>
-		    <input type="text" class="form-control" id="for_email" name="email" value="{{$serviceRequest->email}}">
-		</fieldset>
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_email">Correo electrónico</label>
+            <input type="text" class="form-control" id="for_email" name="email" value="{{$serviceRequest->email}}">
+        </fieldset>
 
-  </div>
+      </div>
+    </div>
   </div>
 
   <br>
 
   <div class="form-row">
 
-    <fieldset class="form-group col col-md-3">
+    <fieldset class="form-group col-6 col-md-3">
 		    <label for="for_name">Tipo de Contrato</label>
 		    <select name="contract_type" class="form-control" required>
           <option value="NUEVO" @if($serviceRequest->contract_type == 'NUEVO') selected @endif >Nuevo</option>
@@ -177,19 +182,19 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col col-md-3">
+    <fieldset class="form-group col-6 col-md-3">
 		    <label for="for_request_date">Fecha Solicitud</label>
-		    <input type="date" class="form-control" id="for_request_date" name="request_date" required value="{{\Carbon\Carbon::parse($serviceRequest->request_date)->format('Y-m-d')}}">
+		    <input type="date" class="form-control" id="for_request_date" name="request_date" required value="{{\Carbon\Carbon::parse($serviceRequest->request_date)->format('Y-m-d')}}" min="2020-01-01" max="2022-12-31">
 		</fieldset>
 
-    <fieldset class="form-group col col-md-3">
+    <fieldset class="form-group col-6 col-md-3">
 		    <label for="for_start_date">F.Inicio de Contrato</label>
-		    <input type="date" class="form-control" id="for_start_date" name="start_date" required value="{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}">
+		    <input type="date" class="form-control" id="for_start_date" name="start_date" required value="{{\Carbon\Carbon::parse($serviceRequest->start_date)->format('Y-m-d')}}" min="2020-01-01" max="2022-12-31">
 		</fieldset>
 
-    <fieldset class="form-group col col-md-3">
+    <fieldset class="form-group col-6 col-md-3">
 		    <label for="for_end_date">F.Término de Contrato</label>
-		    <input type="date" class="form-control" id="for_end_date" name="end_date" required value="{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}">
+		    <input type="date" class="form-control" id="for_end_date" name="end_date" required value="{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}" min="2020-01-01" max="2022-12-31">
 		</fieldset>
 
   </div>
@@ -205,7 +210,7 @@
 
   </div>
 
-  <div class="card" id="control_turnos">
+  <!-- <div class="card" id="control_turnos">
     <div class="card-header">
       Control de Turnos
     </div>
@@ -241,9 +246,7 @@
 
               @else
 
-                <!-- solo tiene acceso la persona que crea la solicitud -->
                 @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-                  <!-- si existe una firma, no se deja modificar solicitud -->
                   @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
                     <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
                   @else
@@ -289,9 +292,7 @@
 
         @else
 
-          <!-- solo tiene acceso la persona que crea la solicitud -->
           @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-            <!-- si existe una firma, no se deja modificar solicitud -->
             @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
               <button type="button" class="btn btn-danger delete-row" disabled>Eliminar filas</button>
             @else
@@ -305,25 +306,29 @@
 
       </li>
     </ul>
-  </div>
+  </div> -->
+
+@if($serviceRequest->fulfillments->count()>0)
+  @livewire('service-request.shifts-control', ['fulfillment' => $serviceRequest->fulfillments->first()])
+@endif
 
   <br>
 
   <div class="form-row">
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-6 col-md">
 		    <label for="for_contractual_condition">Calidad Contractual</label>
         <select name="contractual_condition" class="form-control">
           <option value=""></option>
           <option value="SUPLENTE" @if($serviceRequest->contractual_condition == 'SUPLENTE') selected @endif >SUPLENTE</option>
           <option value="CONTRATA" @if($serviceRequest->contractual_condition == 'CONTRATA') selected @endif>CONTRATA</option>
           <option value="TITULAR" @if($serviceRequest->contractual_condition == 'TITULAR') selected @endif>TITULAR</option>
-          <option value="HONORARIO COVID" @if($serviceRequest->contractual_condition == 'HONORARIO COVID') selected @endif>HONORARIO COVID</option>
-          <option value="SUMA ALZADA" @if($serviceRequest->contractual_condition == 'SUMA ALZADA') selected @endif>SUMA ALZADA</option>
+          <!-- <option value="HONORARIO COVID" @if($serviceRequest->contractual_condition == 'HONORARIO COVID') selected @endif>HONORARIO COVID</option>
+          <option value="SUMA ALZADA" @if($serviceRequest->contractual_condition == 'SUMA ALZADA') selected @endif>SUMA ALZADA</option> -->
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col col-md">
+    <fieldset class="form-group col-6 col-md">
 		    <label for="for_estate">Estamento al que corresponde CS</label>
 		    <select name="estate" class="form-control" required>
           <option value="Profesional Médico" @if($serviceRequest->estate == 'Profesional Médico') selected @endif >Profesional Médico</option>
@@ -338,7 +343,7 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col col-md">
+    <fieldset class="form-group col-6 col-md">
 		    <label for="for_weekly_hours">Hrs.Semanales</label>
 		    <select name="weekly_hours" class="form-control" id="for_weekly_hours" required>
 					<option value=""></option>
@@ -350,7 +355,7 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col col-md">
+    <fieldset class="form-group col-6 col-md">
         <label for="for_establishment_id">Establecimiento</label>
         <select name="establishment_id" class="form-control" required>
           <option value=""></option>
@@ -364,7 +369,7 @@
 
   <div class="form-row">
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12 col-md">
 		    <label for="for_programm_name">Nombre del programa</label>
 		    <!-- <input type="text" class="form-control" id="for_programm_name" placeholder="" name="programm_name" value="{{ $serviceRequest->programm_name }}"> -->
         <select name="programm_name" class="form-control">
@@ -373,6 +378,26 @@
           <option value="Covid19-APS Médicos" @if($serviceRequest->programm_name == 'Covid19-APS Médicos') selected @endif>Covid19-APS Médicos</option>
           <option value="Covid19 No Médicos" @if($serviceRequest->programm_name == 'Covid19 No Médicos') selected @endif>Covid19 No Médicos</option>
           <option value="Covid19 Médicos" @if($serviceRequest->programm_name == 'Covid19 Médicos') selected @endif>Covid19 Médicos</option>
+
+          @if(Auth::user()->organizationalUnit->establishment_id == 1)
+						<option value="CONSULTORIO DE LLAMADA" @if($serviceRequest->programm_name == 'CONSULTORIO DE LLAMADA') selected @endif>CONSULTORIO DE LLAMADA</option>
+						<option value="33 MIL HORAS" @if($serviceRequest->programm_name == '33 MIL HORAS') selected @endif>33 MIL HORAS</option>
+						<option value="DFL" @if($serviceRequest->programm_name == 'DFL') selected @endif>DFL</option>
+						<option value="TURNOS VACANTES" @if($serviceRequest->programm_name == 'TURNOS VACANTES') selected @endif>TURNOS VACANTES</option>
+						<option value="OTROS PROGRAMAS HETG" @if($serviceRequest->programm_name == 'OTROS PROGRAMAS HETG') selected @endif>OTROS PROGRAMAS HETG</option>
+						<option value="CAMPAÑA INVIERNO" @if($serviceRequest->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
+						<option value="PABELLON TARDE" @if($serviceRequest->programm_name == 'PABELLON TARDE') selected @endif>PABELLON TARDE</option>
+						<option value="PABELLON GINE" @if($serviceRequest->programm_name == 'PABELLON GINE') selected @endif>PABELLON GINE</option>
+						<option value="TURNO DE RESIDENCIA" @if($serviceRequest->programm_name == 'TURNO DE RESIDENCIA') selected @endif>TURNO DE RESIDENCIA</option>
+					@else
+						<option value="PRAPS" @if($serviceRequest->programm_name == 'PRAPS') selected @endif>PRAPS</option>
+						<option value="PESPI" @if($serviceRequest->programm_name == 'PESPI') selected @endif>PESPI</option>
+						<option value="CHILE CRECE CONTIGO" @if($serviceRequest->programm_name == 'CHILE CRECE CONTIGO') selected @endif>CHILE CRECE CONTIGO</option>
+						<option value="OTROS PROGRAMAS SSI" @if($serviceRequest->programm_name == 'OTROS PROGRAMAS SSI') selected @endif>OTROS PROGRAMAS SSI</option>
+						<option value="LISTA ESPERA" @if($serviceRequest->programm_name == 'LISTA ESPERA') selected @endif>LISTA ESPERA</option>
+						<option value="CAMPAÑA INVIERNO" @if($serviceRequest->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
+					@endif
+
         </select>
 		</fieldset>
 
@@ -383,7 +408,7 @@
 
     <fieldset class="form-group col-6 col-md-3">
 		    <label for="for_working_day_type">Jornada de Trabajo</label>
-		    <select name="working_day_type" class="form-control" required>
+		    <select name="working_day_type" class="form-control" id="working_day_type" required>
           <!-- <option value="08:00 a 16:48 hrs (L-M-M-J-V)" @if($serviceRequest->working_day_type == '08:00 a 16:48 hrs (L-M-M-J-V)') selected @endif >08:00 a 16:48 hrs (L-M-M-J-V)</option> -->
           <option value="DIURNO" @if($serviceRequest->working_day_type == 'DIURNO') selected @endif >DIURNO</option>
           <option value="TERCER TURNO" @if($serviceRequest->working_day_type == 'TERCER TURNO') selected @endif >TERCER TURNO</option>
@@ -396,7 +421,7 @@
           <option value="HORA EXTRA" @if($serviceRequest->working_day_type == 'HORA EXTRA') selected @endif>HORA EXTRA</option>
 					<option value="TURNO EXTRA" @if($serviceRequest->working_day_type == 'TURNO EXTRA') selected @endif>TURNO EXTRA</option>
 
-          <option value="TURNO DE LLAMADO" @if($serviceRequest->working_day_type == 'TURNO DE LLAMADO') selected @endif>TURNO DE LLAMADO</option>
+          <option value="TURNO DE REEMPLAZO" @if($serviceRequest->working_day_type == 'TURNO DE REEMPLAZO') selected @endif>TURNO DE REEMPLAZO</option>
 
           <option value="OTRO" @if($serviceRequest->working_day_type == 'OTRO') selected @endif >OTRO</option>
         </select>
@@ -410,8 +435,8 @@
 
   </div>
 
-  <div class="row">
-    <fieldset class="form-group col-3 col-md-3">
+  <div class="form-row">
+    <fieldset class="form-group col-12 col-md-3">
         <label for="for_rrhh_team">Equipo RRHH</label>
         <select name="rrhh_team" class="form-control">
 
@@ -451,7 +476,7 @@
         </select>
     </fieldset>
 
-    <fieldset class="form-group col-3 col-md-3">
+    <fieldset class="form-group col-12 col-md-3">
         <label for="for_digera_strategy">Estrategia Digera Covid</label>
         <select name="digera_strategy" class="form-control" id="digera_strategy">
           <option value=""></option>
@@ -470,28 +495,41 @@
         </select>
     </fieldset>
 
-    <fieldset class="form-group col-3 col-md-3">
+    <fieldset class="form-group col-3">
+			<label for="for_schedule_detail">Detalle de horario</label>
+			<select name="schedule_detail" class="form-control" required id="schedule_detail">
+				<option value=""></option>
+				<option value="DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)" @if($serviceRequest->schedule_detail == "DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)") selected @endif>DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)</option>
+				<option value="DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)" @if($serviceRequest->schedule_detail == "DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)") selected @endif>DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)</option>
+				<option value="FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)" @if($serviceRequest->schedule_detail == "FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)") selected @endif>FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)</option>
+			</select>
+		</fieldset>
+
+    <fieldset class="form-group col-12 col-md-2">
         <label for="for_digera_strategy">Observaciones</label>
         <input type="text" class="form-control" name="observation" value="{{$serviceRequest->observation}}">
     </fieldset>
 
-    <fieldset class="form-group col-3 col-md-3">
+    <fieldset class="form-group col-12 col-md-1">
         <label for="for_digera_strategy"><br></label>
+        <div>
+
         @can('Service Request: additional data rrhh')
-          <button type="submit" class="form-control btn btn-primary">Guardar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
         @else
           <!-- solo el creador de la solicitud puede editar  -->
           @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
             <!-- si existe una firma, no se deja modificar solicitud -->
             @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-              <button type="submit" class="form-control btn btn-primary" disabled>Guardar</button>
+              <button type="submit" class="btn btn-primary" disabled>Guardar</button>
             @else
-              <button type="submit" class="form-control btn btn-primary">Guardar</button>
+              <button type="submit" class="btn btn-primary">Guardar</button>
             @endif
           @else
-            <button type="submit" class="form-control btn btn-primary" disabled>Guardar</button>
+            <button type="submit" class="btn btn-primary" disabled>Guardar</button>
           @endif
         @endcan
+        </div>
     </fieldset>
 
   </div>
@@ -532,22 +570,25 @@
 
         <div class="form-row">
 
-          <fieldset class="form-group col col-md-3">
+          <fieldset class="form-group col-6 col-md-3">
 					    <label for="for_name">N°Contrato</label>
-              <input type="text" class="form-control" name="contract_number" value="{{$serviceRequest->contract_number}}">
+              <input type="text" class="form-control" name="contract_number"
+                value="{{$serviceRequest->contract_number}}">
 					</fieldset>
 
-          <fieldset class="form-group col col-md-3">
+          <fieldset class="form-group col-6 col-md-3">
 					    <label for="for_resolution_number">N° Resolución</label>
-              <input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
+              <input type="text" class="form-control" name="resolution_number"
+                value="{{$serviceRequest->resolution_number}}">
 					</fieldset>
 
-          <fieldset class="form-group col col-md-3">
+          <fieldset class="form-group col-6 col-md-3">
               <label for="for_resolution_date">Fecha Resolución</label>
-              <input type="date" class="form-control" id="for_resolution_date" name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
+              <input type="date" class="form-control" id="for_resolution_date"
+                name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
           </fieldset>
 
-          <fieldset class="form-group col col-md-2">
+          <fieldset class="form-group col-6 col-md-2">
             <label for="for_sirh_contract_registration">&nbsp;</label>
             <div>
               <a href="{{ route('rrhh.service-request.report.resolution-pdf', $serviceRequest) }}"
@@ -560,17 +601,17 @@
 
         <div class="form-row">
 
-          <fieldset class="form-group col col-md-3">
+          <fieldset class="form-group col-6 col-md-3">
 					    <label for="for_net_amount">Monto Neto</label>
               <input type="text" class="form-control" name="net_amount" value="{{$serviceRequest->net_amount}}">
 					</fieldset>
 
-          <fieldset class="form-group col col-md-3">
+          <fieldset class="form-group col-6 col-md-3">
 					    <label for="for_gross_amount">Monto Bruto</label>
               <input type="text" class="form-control" name="gross_amount" value="{{$serviceRequest->gross_amount}}">
 					</fieldset>
 
-          <fieldset class="form-group col col-md-3">
+          <fieldset class="form-group col-6 col-md-2">
               <label for="for_sirh_contract_registration">Registrado en SIRH</label>
               <select name="sirh_contract_registration" class="form-control">
                 <option value=""></option>
@@ -579,15 +620,14 @@
               </select>
           </fieldset>
 
+          <fieldset class="form-group col">
+            <label for="">&nbsp;</label>
+            <div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </fieldset>
+
         </div>
-
-        <button type="submit" class="btn btn-primary mb-3">Guardar</button>
-
-        @if($serviceRequest->program_contract_type == 'Mensual')
-            @livewire('service-request.monthly-quotes', ['serviceRequest' => $serviceRequest, 'resultadoEnNumero' => true])
-        @else
-            @livewire('service-request.show-total-hours', ['serviceRequest' => $serviceRequest])
-        @endif
 
 
 
@@ -599,8 +639,8 @@
   </form>
   @endcan
 
-
-  <!-- @canany(['Service Request: additional data finanzas'])
+  <!--
+  @canany(['Service Request: additional data finanzas'])
   <form method="POST" action="{{ route('rrhh.service-request.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
   @csrf
   @method('PUT')
@@ -611,7 +651,7 @@
     </div>
       <div class="card-body">
 
-        <div class="row">
+        <div class="form-row">
           <fieldset class="form-group col-5 col-md-2">
 					    <label for="for_resolution_number">N° Resolución</label>
               <input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
@@ -645,9 +685,16 @@
               <input type="date" class="form-control" id="for_payment_date" name="payment_date" required @if($serviceRequest->payment_date) value="{{$serviceRequest->payment_date->format('Y-m-d')}}" @endif>
           </fieldset>
 
+          <fieldset class="form-group col-6 col-md-3">
+            <label for="">&nbsp;</label>
+            <div>
+              <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </fieldset>
+
         </div>
 
-        <button type="submit" class="btn btn-info">Guardar</button>
+
 
       </div>
 
@@ -655,8 +702,8 @@
 
   <br>
   </form>
-  @endcan -->
-
+  @endcan
+  -->
 
 
   @canany(['Service Request: additional data oficina partes'])
@@ -672,22 +719,24 @@
 
         <div class="form-row">
 
-          <fieldset class="form-group col col-md">
+          <fieldset class="form-group col-5 col-md-2">
 					    <label for="for_resolution_number">N° Resolución</label>
               <input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
 					</fieldset>
 
-          <fieldset class="form-group col col-md">
+          <fieldset class="form-group col-7 col-md-3">
               <label for="for_resolution_date">Fecha Resolución</label>
               <input type="date" class="form-control" id="for_resolution_date" name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
           </fieldset>
 
+          <fieldset class="form-group col-5 col-md-2">
+            <label for="">&nbsp;</label>
+            <div>
+            <button type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+          </fieldset>
         </div>
-
-        <button type="submit" class="btn btn-primary">Guardar</button>
-
       </div>
-
   </div>
 
   </form>
@@ -786,13 +835,14 @@
           </tbody>
       </table>
       </div>
+
       <div class="form-row">
-        <fieldset class="form-group col col-md-3">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_name">Tipo</label>
             <input type="text" class="form-control" name="employee" value="{{$employee}}" readonly="readonly">
             <input type="hidden" class="form-control" name="service_request_id" value="{{$serviceRequest->id}}">
         </fieldset>
-        <fieldset class="form-group col col-md-3">
+        <fieldset class="form-group col-12 col-md-3">
             <label for="for_name">Estado Solicitud</label>
             <select name="status" class="form-control">
               <option value="">Seleccionar una opción</option>
@@ -801,13 +851,15 @@
               <option value="2">Devolver</option>
             </select>
         </fieldset>
-        <fieldset class="form-group col col-md-5">
+        <fieldset class="form-group col-12 col-md-4">
             <label for="for_observation">Observación</label>
             <input type="text" class="form-control" id="for_observation" placeholder="" name="observation">
         </fieldset>
-        <fieldset class="form-group col col-md-1">
-            <label for="for_button"><br></label>
-            <button type="submit" id="for_button" class="form-control btn btn-primary">Guardar</button>
+        <fieldset class="form-group col-12 col-md-2">
+          <label for="for_button"><br></label>
+            <div>
+            <button type="submit" id="for_button" class="btn btn-primary">Guardar</button>
+          </div>
         </fieldset>
     </div>
   </div>
@@ -824,16 +876,19 @@
       @method('POST')
       <input type="hidden" name="id" value="{{$serviceRequest->id}}">
 
-      <div class="form-group row">
-        <div class="col-sm-3">
+      <div class="form-row">
+        <div class="form-group col-12 col-sm-6">
+          <div>
+            <input type="text" class="form-control" name="observation" placeholder="Observación">
+          </div>
         </div>
-        <div class="col-sm-6">
-          <input type="text" class="form-control" name="observation" placeholder="Observación">
-        </div>
-        <div class="col-sm-3">
-          <button type="submit" class="form-control btn btn-danger">Eliminar solicitud</button>
+        <div class="form-group col-6 col-sm-3">
+          <div>
+            <button type="submit" class="btn btn-danger">Eliminar solicitud</button>
+          </div>
         </div>
       </div>
+
   </form>
 @endcan
 
@@ -910,45 +965,167 @@
     }
 
 
-		$('#program_contract_type').on('change', function() {
+		// $('#program_contract_type').on('change', function() {
+		// 	if (this.value == "Horas") {
+		// 		$('#for_daily_hours').val("");
+		// 		$('#for_nightly_hours').val("");
+		// 		$('#for_daily_hours').attr('readonly', true);
+		// 		$('#for_nightly_hours').attr('readonly', true);
+    //     $('#for_weekly_hours').attr('disabled', 'disabled');
+		// 		$("#control_turnos").show();
+		// 	}else{
+		// 		$('#for_daily_hours').attr('readonly', false);
+		// 		$('#for_nightly_hours').attr('readonly', false);
+    //     $('#for_weekly_hours').removeAttr('disabled');
+		// 		$("#control_turnos").hide();
+		// 	}
+		// });
+
+  	// $(".add-row").click(function(){
+    //     var shift_start_date = $("#shift_start_date").val();
+    //     var start_hour = $("#start_hour").val();
+    //     var shift_end_date = $("#shift_end_date").val();
+    //     var end_hour = $("#end_hour").val();
+  	// 		var observation = $("#observation").val();
+    //     var markup = "<tr><td><input type='checkbox' name='record'></td><td> <input type='hidden' class='form-control' name='shift_start_date[]' id='shift_start_date' value='"+ shift_start_date +"'>"+ shift_start_date +"</td><td> <input type='hidden' class='form-control' name='shift_start_hour[]' id='start_hour' value='"+ start_hour +"'>" + start_hour + "</td><td> <input type='hidden' class='form-control' name='shift_end_date[]' id='shift_end_date' value='"+ shift_end_date +"'>"+ shift_end_date +"</td><td> <input type='hidden' class='form-control' name='shift_end_hour[]' id='end_hour' value='"+ end_hour +"'>" + end_hour + "</td><td> <input type='hidden' class='form-control' name='shift_observation[]' id='observation' value='"+ observation +"'>" + observation + "</td></tr>";
+    //     $("table tbody").append(markup);
+    // });
+    //
+  	// // Find and remove selected table rows
+    // $(".delete-row").click(function(){
+    //     $("table tbody").find('input[name="record"]').each(function(){
+    //     	if($(this).is(":checked")){
+    //             $(this).parents("tr").remove();
+    //         }
+    //     });
+    // });
+
+    $('#program_contract_type').on('change', function() {
+
 			if (this.value == "Horas") {
 				$('#for_daily_hours').val("");
 				$('#for_nightly_hours').val("");
 				$('#for_daily_hours').attr('readonly', true);
 				$('#for_nightly_hours').attr('readonly', true);
-        $('#for_weekly_hours').attr('disabled', 'disabled');
+				$('#for_weekly_hours').attr('disabled', 'disabled');
 				$("#control_turnos").show();
+
+				$("#working_day_type option[value='DIURNO']").hide();
+				$("#working_day_type option[value='TERCER TURNO']").hide();
+				$("#working_day_type option[value='TERCER TURNO - MODIFICADO']").hide();
+				$("#working_day_type option[value='CUARTO TURNO']").hide();
+				$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").hide();
+
+				$("#working_day_type option[value='DIURNO PASADO A TURNO']").show();
+				$("#working_day_type option[value='HORA MÉDICA']").show();
+				$("#working_day_type option[value='HORA EXTRA']").show();
+				$("#working_day_type option[value='TURNO EXTRA']").show();
+
+				$("#contractual_condition").prop('required',true);
+
 			}else{
 				$('#for_daily_hours').attr('readonly', false);
 				$('#for_nightly_hours').attr('readonly', false);
-        $('#for_weekly_hours').removeAttr('disabled');
+				$('#for_weekly_hours').removeAttr('disabled');
 				$("#control_turnos").hide();
+
+				$("#working_day_type option[value='DIURNO']").show();
+				$("#working_day_type option[value='TERCER TURNO']").show();
+				$("#working_day_type option[value='TERCER TURNO - MODIFICADO']").show();
+				$("#working_day_type option[value='CUARTO TURNO']").show();
+				$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").show();
+
+				$("#working_day_type option[value='DIURNO PASADO A TURNO']").hide();
+				$("#working_day_type option[value='HORA MÉDICA']").hide();
+				$("#working_day_type option[value='HORA EXTRA']").hide();
+				$("#working_day_type option[value='TURNO EXTRA']").hide();
+
+				$("#contractual_condition").prop('required',false);
 			}
 		});
 
-  	$(".add-row").click(function(){
-        var shift_start_date = $("#shift_start_date").val();
-        var start_hour = $("#start_hour").val();
-        var shift_end_date = $("#shift_end_date").val();
-        var end_hour = $("#end_hour").val();
-  			var observation = $("#observation").val();
-        var markup = "<tr><td><input type='checkbox' name='record'></td><td> <input type='hidden' class='form-control' name='shift_start_date[]' id='shift_start_date' value='"+ shift_start_date +"'>"+ shift_start_date +"</td><td> <input type='hidden' class='form-control' name='shift_start_hour[]' id='start_hour' value='"+ start_hour +"'>" + start_hour + "</td><td> <input type='hidden' class='form-control' name='shift_end_date[]' id='shift_end_date' value='"+ shift_end_date +"'>"+ shift_end_date +"</td><td> <input type='hidden' class='form-control' name='shift_end_hour[]' id='end_hour' value='"+ end_hour +"'>" + end_hour + "</td><td> <input type='hidden' class='form-control' name='shift_observation[]' id='observation' value='"+ observation +"'>" + observation + "</td></tr>";
-        $("table tbody").append(markup);
+		$('#estate').on('change', function() {
+			if (this.value == "Profesional" || this.value == "Técnico" || this.value == "Administrativo" || this.value == "Auxiliar") {
+				$('#programm_name').val('Covid19 No Médicos');
+				$('#programm_name').selectpicker('refresh');
+			}
+			if (this.value == "Profesional Médico" || this.value == "Farmaceutico" || this.value == "Odontólogo" || this.value == "Bioquímico") {
+				$('#programm_name').val('Covid19 Médicos');
+				$('#programm_name').selectpicker('refresh');
+			}
+		});
 
-  			// $("#shift_date").val("");
-        // $("#start_hour").val("");
-  			// $("#end_hour").val("");
-  			// $("#observation").val("");
-    });
+		$('#working_day_type').on('change', function() {
+			$('#schedule_detail').attr('disabled', 'disabled');
+			if (this.value == "HORA MÉDICA") {
+				$('#rrhh_team').val('Residencia Médica');
+				$('#rrhh_team').selectpicker('refresh');
+			}
+			if (this.value == "DIURNO PASADO A TURNO") {
+				if ($('#program_contract_type').val() == "Horas") {
+					$('#contractual_condition').removeAttr('disabled');
+				}else{
+					$('#contractual_condition').attr('disabled', 'disabled');
+				}
+			}else{
+				$('#contractual_condition').attr('disabled', 'disabled');
+			}
+			if (this.value == "DIURNO") {
+				$('#schedule_detail').removeAttr('disabled');
+			}
+		});
 
-  	// Find and remove selected table rows
-    $(".delete-row").click(function(){
-        $("table tbody").find('input[name="record"]').each(function(){
-        	if($(this).is(":checked")){
-                $(this).parents("tr").remove();
-            }
-        });
-    });
+		$('#responsability_center_ou_id').on('change', function() {
+			if ($("#responsability_center_ou_id option:selected").text() == "Departamento de Salud Ocupacional" ||
+		      $("#responsability_center_ou_id option:selected").text() == "Extensión Hospital -Estadio" ||
+					$("#responsability_center_ou_id option:selected").text() == "Sección Administrativa Honorarios Covid" ||
+					$("#responsability_center_ou_id option:selected").text() == "Servicio de Cirugía" ||
+					$("#responsability_center_ou_id option:selected").text() == "Servicio de Ginecología y Obstetricia" ||
+					$("#responsability_center_ou_id option:selected").text() == "Servicio de Medicina" ||
+					$("#responsability_center_ou_id option:selected").text() == "Unidad de Alimentación y Nutrición" ||
+					$("#responsability_center_ou_id option:selected").text() == "Unidad de Gestión de Camas" ||
+					$("#responsability_center_ou_id option:selected").text() == "Unidad de Ginecología" ||
+					$("#responsability_center_ou_id option:selected").text() == "Unidad de Medicina Física y Rehabilitación" ||
+					$("#responsability_center_ou_id option:selected").text() == "Unidad de Movilización" ||
+					$("#responsability_center_ou_id option:selected").text() == "Unidad de Salud Ocupacional" ||
+					$("#responsability_center_ou_id option:selected").text() == "Unidad Imagenología") {
+				$('#digera_strategy').val('Camas MEDIAS Complejizadas');
+				$('#digera_strategy').selectpicker('refresh');
+			}
+			if ($("#responsability_center_ou_id option:selected").text() == "Servicio de Anestesia y Pabellones" ||
+		      $("#responsability_center_ou_id option:selected").text() == "Servicio Unidad Paciente Crítico Adulto" ||
+					$("#responsability_center_ou_id option:selected").text() == "Servicio Unidad Paciente Crítico Pediatrico") {
+				$('#digera_strategy').val('Camas UCI Complejizadas');
+				$('#digera_strategy').selectpicker('refresh');
+			}
+			if ($("#responsability_center_ou_id option:selected").text() == "Unidad de Hospitalización Domiciliaria" ) {
+				$('#digera_strategy').val('Cupos Hosp. Domiciliaria');
+				$('#digera_strategy').selectpicker('refresh');
+			}
+			if ($("#responsability_center_ou_id option:selected").text() == "Subdirección de Gestion Asistencial / Subdirección Médica" ||
+		      $("#responsability_center_ou_id option:selected").text() == "Unidad Laboratorio Clínico") {
+				$('#digera_strategy').val('Refuerzo Laboratorio');
+				$('#digera_strategy').selectpicker('refresh');
+			}
+			if ($("#responsability_center_ou_id option:selected").text() == "Establecimientos de Red de Urgencias" ) {
+				$('#digera_strategy').val('Refuerzo SAMU');
+				$('#digera_strategy').selectpicker('refresh');
+			}
+			if ($("#responsability_center_ou_id option:selected").text() == "Consultorio General Urbano Dr. Hector Reyno" ||
+		      $("#responsability_center_ou_id option:selected").text() == "Servicio de Emergencia Hospitalaria" ||
+					$("#responsability_center_ou_id option:selected").text() == "Servicio Urgencia Ginecoobstetricia") {
+				$('#digera_strategy').val('Refuerzo UEH');
+				$('#digera_strategy').selectpicker('refresh');
+			}
+			if ($("#responsability_center_ou_id option:selected").text() == "Departamento Operaciones" ) {
+				$('#digera_strategy').val('Camas MEDIAS Complejizadas');
+				$('#digera_strategy').selectpicker('refresh');
+			}
+			if ($("#responsability_center_ou_id option:selected").text() == "Unidad Farmacia" ) {
+				$('#digera_strategy').val('Camas MEDIAS Complejizadas');
+				$('#digera_strategy').selectpicker('refresh');
+			}
+		});
 
   });
 </script>
