@@ -567,6 +567,15 @@ class ServiceRequestController extends Controller
   public function destroy_with_parameters(Request $request)
   {
     $serviceRequest = ServiceRequest::find($request->id);
+
+    // validación
+    foreach ($serviceRequest->fulfillments as $key => $fulfillment) {
+      if ($fulfillment->total_paid != NULL) {
+        session()->flash('success', 'No se puede eliminar la solicitud porque ya tiene información de pago asociada.');
+        return redirect()->back();
+      }
+    }
+
     $serviceRequest->observation = $request->observation;
     $serviceRequest->save();
 
