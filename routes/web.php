@@ -1034,12 +1034,15 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::put('/update', [RequestFormController::class, 'update'])->name('update');
     Route::get('/my_request_inbox', [RequestFormController::class, 'myRequestInbox'])->name('my_request_inbox');
     Route::get('/authorize_inbox', [RequestFormController::class, 'authorizeInbox'])->name('authorize_inbox');
+    Route::get('/finance_inbox', [RequestFormController::class, 'financeInbox'])->name('finance_inbox');
+    Route::get('/create', [RequestFormController::class, 'create'])->name('create');
     //Route::get('/own', [RequestFormController::class, 'indexOwn'])->name('own');
     //Route::get('/validaterequest', [RequestFormController::class, 'validaterequest'])->name('validaterequest');
-    Route::get('/create', [RequestFormController::class, 'create'])->name('create');
+
 
     Route::prefix('passages')->as('passages.')->middleware('auth')->group(function () {
         Route::get('/', [PassageController::class, 'index'])->name('index');
+        Route::get('/create', [PassageController::class, 'create'])->name('create');
         //Route::get('/create', [CategoriesController::class, 'create'])->name('create');
         //Route::post('/store', [CategoriesController::class, 'store'])->name('store');
     });
