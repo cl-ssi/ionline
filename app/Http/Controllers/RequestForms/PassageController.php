@@ -30,8 +30,8 @@ class PassageController extends Controller
      */
     public function create()
     {
-        $user = User::where('id', Auth::user()->id);
-        return  view('request_form.passage.create', compact('user'));
+        //$user = User::where('id', Auth::user()->id);
+        return  view('request_form.passage.create');
     }
 
     /**
