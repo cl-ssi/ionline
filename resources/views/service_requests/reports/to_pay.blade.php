@@ -3,16 +3,16 @@
 @section('title', 'Reporte para pagos')
 
 @section('content')
-
+<div class="d-print-none">
 @include('service_requests.partials.nav')
-
+</div>
 <h4 class="mb-3">Pendientes de pago</h4>
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.to-pay') }}">
 
 <div class="form-row">
 
-	<div class="col-10">
+	<div class="col-10 d-print-none">
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<span class="input-group-text">Establecimiento</span>
@@ -52,7 +52,7 @@
         <th nowrap>Rut</th>
         <th>Banco - N° Cuenta</th>
         <th>Telefono</th>
-        <th>Hitos</th>
+        <th class="d-print-none">Hitos</th>
         @canany(['Service Request: fulfillments finance'])
           <th width="250" >Aprobación de pago </th>
         @endcanany
@@ -82,7 +82,7 @@
 
           <td class="small">{{$fulfillment->serviceRequest->employee->bankAccount->bank->name ?? ''}} - {{$fulfillment->serviceRequest->employee->bankAccount->number?? ''}}</td>
           <td>{{$fulfillment->serviceRequest->phone_number ?? ''}}</td>
-          <td nowrap>
+          <td nowrap class="d-print-none">
             @if($fulfillment->serviceRequest->has_resolution_file)
               <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fulfillment->serviceRequest)}}"
                  target="_blank" title="Resolución">
