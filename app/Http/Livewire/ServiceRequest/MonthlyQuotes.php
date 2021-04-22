@@ -44,6 +44,7 @@ class MonthlyQuotes extends Component
                     Value::orderBy('validity_from', 'desc')
                         ->where('contract_type', 'Mensual')
                         ->where('type', 'covid')
+                        ->where('establishment_id', $serviceRequest->establishment_id)
                         ->where('estate', $estate)
                         ->where('work_type', $serviceRequest->working_day_type)
                         ->first()
@@ -55,11 +56,13 @@ class MonthlyQuotes extends Component
             case 'Odontólogo':
             case 'Bioquímico':
             case 'Auxiliar':
+                
 
                 $valor_mensual = optional(
                     Value::orderBy('validity_from', 'desc')
                         ->where('contract_type', 'Mensual')
-                        ->where('type', 'covid')
+                        ->where('type', 'covid')                        
+                        ->where('establishment_id', $serviceRequest->establishment_id)
                         ->where('estate', $serviceRequest->estate)
                         ->where('work_type', $serviceRequest->working_day_type)
                         ->first()
