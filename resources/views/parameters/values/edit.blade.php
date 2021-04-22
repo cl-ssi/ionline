@@ -17,8 +17,9 @@
             <label for="for_establishment_id">Establecimiento*</label>
             <select name="establishment_id" class="form-control" id="for_establishment_id" required>
                 <option value="">Seleccionar</option>
-                <option value="1" @if($value->establishment_id == '1') selected @endif>Hospital Ernesto Torres Galdames</option>
-                <option value="38" @if($value->establishment_id == '38') selected @endif>Servicio de Salud Iquique</option>
+                @foreach($establishments as $establishment)
+                <option value="{{$establishment->id}}" @if($value->establishment_id == $establishment->id) selected @endif>{{$establishment->name}}</option>
+                @endforeach                
             </select>
         </fieldset>
 
