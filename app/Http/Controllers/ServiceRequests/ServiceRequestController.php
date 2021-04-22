@@ -107,12 +107,12 @@ class ServiceRequestController extends Controller
       $user = User::find($request->input('run'));
 
       if($user) {
-        $fulfillments = Fulfillment::whereHas('ServiceRequest', function($query) use ($user) { 
+        $fulfillments = Fulfillment::whereHas('ServiceRequest', function($query) use ($user) {
           $query->where('user_id',$user->id);}
           )->orderBy('payment_date')->get();
       }
 
-      
+
     }
     $request->flash();
 
@@ -126,9 +126,11 @@ class ServiceRequestController extends Controller
     $responsability_center_ou_id = $request->responsability_center_ou_id;
     $program_contract_type = $request->program_contract_type;
     $name = $request->name;
+    $estate = $request->estate;
     $id = $request->id;
 
-    $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+    // $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+    $establishment_id = $request->establishment_id;
 
     // dd($responsability_center_ou_id);
     $serviceRequests = ServiceRequest::when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
@@ -137,6 +139,9 @@ class ServiceRequestController extends Controller
                                       ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
                                         return $q->where('program_contract_type', $program_contract_type);
                                       })
+                                      ->when($estate != NULL, function ($q) use ($estate) {
+                                            return $q->where('estate',$estate);
+                                           })
                                       ->when(($name != NULL), function ($q) use ($name) {
                                         return $q->whereHas("employee", function ($subQuery) use ($name) {
                                           $subQuery->where('name', 'LIKE', '%' . $name . '%');
@@ -147,9 +152,12 @@ class ServiceRequestController extends Controller
                                       ->when($id != NULL, function ($q) use ($id) {
                                         return $q->where('id', $id);
                                       })
-                                      ->whereHas("responsabilityCenter", function($subQuery) use ($establishment_id){
-                                               $subQuery->where('establishment_id',$establishment_id);
-                                           })
+                                      ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+                                        return $q->where('establishment_id', $establishment_id);
+                                      })
+                                      ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+                                        return $q->whereNotIn('establishment_id',[1,12]);
+                                      })
                                       ->orderBy('id', 'asc')
                                       ->paginate(100);
     // ->get();
@@ -569,18 +577,22 @@ class ServiceRequestController extends Controller
 
   public function consolidated_data(Request $request)
   {
-    $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+    // $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+    $establishment_id = $request->establishment_id;
 
     //solicitudes activas
     $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function ($subQuery) {
                                         $subQuery->where('status', 0);
                                       })
-                                      ->whereHas("responsabilityCenter", function($subQuery) use ($establishment_id){
-                                           $subQuery->where('establishment_id',$establishment_id);
-                                       })
-                                       // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
-                                       ->orderBy('request_date', 'asc')
-                                       ->get();
+                                      ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+                                        return $q->where('establishment_id', $establishment_id);
+                                      })
+                                      ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+                                        return $q->whereNotIn('establishment_id',[1,12]);
+                                      })
+                                      // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+                                      ->orderBy('request_date', 'asc')
+                                      ->get();
 
     foreach ($serviceRequests as $key => $serviceRequest) {
       foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
@@ -595,7 +607,12 @@ class ServiceRequestController extends Controller
     $serviceRequestsRejected = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) {
       $subQuery->where('status', 0);
     })
-      // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+    ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+      return $q->where('establishment_id', $establishment_id);
+    })
+    ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+      return $q->whereNotIn('establishment_id',[1,12]);
+    })
       ->orderBy('request_date', 'asc')->get();
 
     foreach ($serviceRequestsRejected as $key => $serviceRequest) {
@@ -607,7 +624,7 @@ class ServiceRequestController extends Controller
       }
     }
 
-    return view('service_requests.requests.consolidated_data', compact('serviceRequests', 'serviceRequestsRejected'));
+    return view('service_requests.requests.consolidated_data', compact('serviceRequests', 'serviceRequestsRejected','request'));
   }
 
   public function export_sirh()
