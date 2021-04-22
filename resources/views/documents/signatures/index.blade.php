@@ -55,8 +55,9 @@
                 <th scope="col">Materia de Resolución</th>
                 <th scope="col">Descripción</th>
                 <th scope="col">Firmar</th>
-                <th scope="col">Rechazo</th>
-                <th scope="col">Doc</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -71,19 +72,25 @@
                     <td>{{ $pendingSignaturesFlow->signature->description }}</td>
                     <td>
                         <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
-                                data-target="#exampleModalCenter{{$pendingSignaturesFlow->id}}">
+                                data-target="#exampleModalCenter{{$pendingSignaturesFlow->id}}" title="Firmar documento">
                             <i class="fas fa-edit"></i>
                         </button>
                     </td>
                     <td>
                         <button type="button" class="btn btn-sm btn-outline-danger" data-toggle="modal"
-                                data-target="#rejectSignature{{$pendingSignaturesFlow->id}}">
-                            <i class="fas fa-times"></i>
+                                data-target="#rejectSignature{{$pendingSignaturesFlow->id}}" title="Rechazar documento">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
+                                onclick="getSignatureFlowsModal({{$pendingSignaturesFlow->signature->id}})" title="Ver circuito de firmas"
+                        ><i class="fas fa-search"></i>
                         </button>
                     </td>
                     <td>
                         <a href="{{ route('documents.signatures.showPdf', $pendingSignaturesFlow->signaturesFile->id) }}"
-                           class="btn btn-sm btn-outline-secondary" target="_blank">
+                           class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">
                             <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
                     </td>
@@ -181,6 +188,7 @@
                 <th scope="col">Descripción</th>
                 <th scope="col">Estado Solicitud</th>
                 <th scope="col"></th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -200,8 +208,14 @@
                         @else Pendiente @endif
                     </td>
                     <td>
+                        <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
+                                onclick="getSignatureFlowsModal({{$signedSignaturesFlow->signature->id}})" title="Ver circuito de firmas"
+                        ><i class="fas fa-search"></i>
+                        </button>
+                    </td>
+                    <td>
                         <a href="{{ route('documents.signatures.showPdf', $signedSignaturesFlow->signaturesFile->id) }}"
-                           class="btn btn-sm btn-outline-secondary" target="_blank">
+                           class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">
                             <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
                     </td>
@@ -222,7 +236,7 @@
                 <th scope="col">Descripción</th>
                 <th scope="col">Fecha de Solicitud</th>
                 <th scope="col">Estado Solicitud</th>
-                <th scope="col">Flujo</th>
+                <th scope="col"></th>
                 <th scope="col"></th>
             </tr>
             </thead>
@@ -241,57 +255,50 @@
                         @else Pendiente</p>  @endif
                     </td>
                     <td>
-                        <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary" onclick="getSignatureFlowsModal({{$signature->id}})"
-                                >F
+                        <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
+                                onclick="getSignatureFlowsModal({{$signature->id}})" title="Ver circuito de firmas"
+                        ><i class="fas fa-search"></i>
                         </button>
                     </td>
                     <td>
                         <a href="{{ route('documents.signatures.edit', $signature) }}"
-                           class="btn btn-sm btn-outline-secondary">
+                           class="btn btn-sm btn-outline-secondary" title="Ver documento">
                             <span class="fas fa-edit" aria-hidden="true"></span>
                         </a>
                     </td>
                 </tr>
-
             @endforeach
-
-
             </tbody>
         </table>
+    @endif
 
-        {{--Modal flujo de firmas--}}
-        <div class="modal fade" id="flowModal" tabindex="-1" role="dialog"
-             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Flujo Firmas</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+    {{--Modal flujo de firmas--}}
+    <div class="modal fade" id="flowModal" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Flujo Firmas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
 
-                    <div id="flowsModalBody" >
+                <div id="flowsModalBody">
 
-                    </div>
+                </div>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar
-                        </button>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar
+                    </button>
                 </div>
             </div>
         </div>
-    @endif
-
-
-
-
+    </div>
 @endsection
 
 @section('custom_js')
-
-    <script src={{ asset('js/app.js')}}></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         function getSignatureFlowsModal(idSignature) {
             axios.get('/documents/signatures/signatureFlows/' + idSignature, {responseType: 'html'})
@@ -299,7 +306,7 @@
                     const contentdiv = document.getElementById("flowsModalBody");
                     contentdiv.innerHTML = response.data;
                 })
-                .then(function (){
+                .then(function () {
                     $("#flowModal").modal();
                 })
                 .catch(function (error) {
@@ -307,26 +314,5 @@
                     console.log(error);
                 });
         }
-
-        // $('#flowModal').on('show.bs.modal', function (event) {
-
-            // const button = $(event.relatedTarget); // Button that triggered the modal
-            // const modal = $(this);
-            //
-            // modal.find('.modal-title').text('Flujo firmas' + button.data('service_request_id'))
-            // modal.find('input[name="fulfillment_id"]').val(button.data('fulfillment_id'))
-            // modal.find('input[name="bill_number"]').val(button.data('bill_number'))
-            // modal.find('input[name="total_hours_paid"]').val(button.data('total_hours_paid'))
-            // modal.find('input[name="total_paid"]').val(button.data('total_paid'))
-            // modal.find('input[name="payment_date"]').val(button.data('payment_date'))
-            // modal.find('select[name="contable_month"]').val(button.data('contable_month'))
-            //
-            // const formaction = button.data('formaction');
-            // modal.find("#form-edit").attr('action', formaction)
-        // })
-
-
-
     </script>
-
 @endsection
