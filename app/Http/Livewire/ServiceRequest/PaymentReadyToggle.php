@@ -23,20 +23,22 @@ class PaymentReadyToggle extends Component
     public function save()
     {
         if ($this->rejection_detail_input) {
-            $rejection_detail = $this->fulfillment->payment_rejection_detail . "<br><br>" . "(" . Carbon::now() . " - " . Auth::user()->initials . ")" . ":" . $this->rejection_detail_input;
+            $rejection_detail = $this->fulfillment->payment_rejection_detail . 
+                "<hr>" . Auth::user()->initials . "-" . Carbon::now() . ":<br>" . 
+                $this->rejection_detail_input;
         } else {
             if($this->payment_ready == 1)            
             {
-                $rejection_detail = $this->fulfillment->payment_rejection_detail . "<br><br>" . "(" . Carbon::now() . " - " . Auth::user()->initials . ")" . ": Pago Aceptado" ;
+                $rejection_detail = $this->fulfillment->payment_rejection_detail . 
+                    "<hr>" . Auth::user()->initials . "-" . Carbon::now() . ":<br> Pago Aceptado" ;
             }
             else
             {
-                $rejection_detail = $this->fulfillment->payment_rejection_detail . "<br><br>" . "(" . Carbon::now() . " - " . Auth::user()->initials . ")" . ": Pago Rechazado" ;
+                $rejection_detail = $this->fulfillment->payment_rejection_detail . 
+                    "<hr>" . Auth::user()->initials . "-" . Carbon::now() . ":<br> Pago Rechazado" ;
             }
             
         }
-
-
 
         $this->fulfillment->update(['payment_ready' => $this->payment_ready == 'null' ? null : $this->payment_ready]);
         $this->fulfillment->update(['payment_rejection_detail' => $rejection_detail]);

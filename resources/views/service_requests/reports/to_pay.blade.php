@@ -17,7 +17,7 @@
 			<div class="input-group-prepend">
 				<span class="input-group-text">Establecimiento</span>
     		</div>
-			<select class="form-control selectpicker" data-live-search="true" name="establishment_id" data-size="5">
+			<select class="form-control selectpicker border border-secondary" data-live-search="true" name="establishment_id" data-size="5">
 				<option value="">Todos</option>
 				<option value="1" @if($request->establishment_id == 1) selected @endif>Hospital Ernesto Torres Galdames</option>
 				<option value="12" @if($request->establishment_id == 12) selected @endif>Dr. Héctor Reyno G.</option>
@@ -45,33 +45,26 @@
   <table class="table table-sm table-bordered table-stripped">
     <tr>
         <th>Id</th>
-        <th>Establecimiento</th>
+        <th>Estab</th>
+        <th>Periodo</th>
         <th>Tipo/Jornada</th>
         <th>Nombre</th>
         <th nowrap>Rut</th>
-        <th>Periodo</th>
         <th>Banco - N° Cuenta</th>
         <th>Telefono</th>
-        <th>Cer.</th>
-        <th>Bol.</th>
-        <th>Res.</th>
-        <th></th>
-        <th></th>
+        <th>Hitos</th>
         @canany(['Service Request: fulfillments finance'])
-          <th nowrap style="width: 21%"  >Aprobación de pago </th>
+          <th width="250" >Aprobación de pago </th>
         @endcanany
     </tr>
     @foreach($topay_fulfillments as $key => $fulfillment)
       <tr>
-          <td>{{$fulfillment->serviceRequest->id}}</td>
-          <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
-          <td>
-            {{$fulfillment->serviceRequest->program_contract_type}}
-            <br>
-            {{$fulfillment->serviceRequest->working_day_type}}
+          <td>{{$fulfillment->serviceRequest->id}}
+          <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}" title="Editar">
+      					<span class="fas fa-edit" aria-hidden="true"></span>
+      				</a>
           </td>
-          <td>{{$fulfillment->serviceRequest->employee->fullName}}</td>
-          <td nowrap>{{$fulfillment->serviceRequest->employee->runFormat()}}</td>
+          <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
           <td>
             @if($fulfillment->year)
               {{ $fulfillment->year }}-{{ $fulfillment->month }}
@@ -79,41 +72,40 @@
               {{ $fulfillment->start_date->format('Y-m') }}
             @endif
           </td>
+          <td>
+            {{$fulfillment->serviceRequest->program_contract_type}}
+            <br>
+            {{$fulfillment->serviceRequest->working_day_type}}
+          </td>
+          <td>{{$fulfillment->serviceRequest->employee->fullName}}</td>
+          <td nowrap>{{$fulfillment->serviceRequest->employee->runFormat()}}</td>
+
           <td class="small">{{$fulfillment->serviceRequest->employee->bankAccount->bank->name ?? ''}} - {{$fulfillment->serviceRequest->employee->bankAccount->number?? ''}}</td>
           <td>{{$fulfillment->serviceRequest->phone_number ?? ''}}</td>
-          <td>
-              @if($fulfillment->signatures_file_id)
-                <a href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
-                  <i class="fas fa-signature"></i>
-                </a>
-              @else
-                <a href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
-                  <i class="fas fa-paperclip"></i>
-                </a>
-              @endif
-          </td>
-          <td>
-            @if($fulfillment->has_invoice_file)
-              <a href="{{route('rrhh.service-request.fulfillment.download_invoice', [$fulfillment, time()])}}"
-                 target="_blank" title="Boleta" >
-                 <i class="fas fa-paperclip"></i>
-              </a>
-            @endif
-          </td>
-          <td>
+          <td nowrap>
             @if($fulfillment->serviceRequest->has_resolution_file)
               <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fulfillment->serviceRequest)}}"
                  target="_blank" title="Resolución">
-                 <i class="fas fa-paperclip"></i>
+                 <i class="fas fa-file-signature"></i>
               </a>
             @endif
-          </td>
-          <td>
-              <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}" title="Editar">
-      					<span class="fas fa-edit" aria-hidden="true"></span>
-      				</a>
-          </td>
-          <td>
+            @if($fulfillment->signatures_file_id)
+              <a href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
+                <i class="fas fa-certificate"></i>
+              </a>
+            @else
+              <a href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
+                <i class="fas fa-paperclip"></i>
+              </a>
+            @endif
+
+            @if($fulfillment->has_invoice_file)
+              <a href="{{route('rrhh.service-request.fulfillment.download_invoice', [$fulfillment, time()])}}"
+                 target="_blank" title="Boleta" >
+                 <i class="fas fa-file-invoice-dollar"></i>
+              </a>
+            @endif
+
               <button class="btn btn-link pt-0" title="Editar Pago" data-toggle="modal"
                       data-target="#editModal"
                       data-fulfillment_id="{{ $fulfillment->id }}"
@@ -124,7 +116,8 @@
                       data-payment_date = "{{ ($fulfillment->payment_date) ? $fulfillment->payment_date->format('Y-m-d') : ''}}"
                       data-contable_month = "{{$fulfillment->contable_month}}"
                       data-formaction="{{ route('rrhh.service-request.fulfillment.update-paid-values')}}">
-                  <i class="fas fa-dollar-sign"></i></button>
+                  <i class="fas fa-dollar-sign text-success"></i>
+                </button>
 
           </td>
           @canany(['Service Request: fulfillments finance'])
