@@ -3,16 +3,16 @@
 @section('title', 'Reporte para pagos')
 
 @section('content')
-
+<div class="d-print-none">
 @include('service_requests.partials.nav')
-
+</div>
 <h4 class="mb-3">Pendientes de pago</h4>
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.to-pay') }}">
 
 <div class="form-row">
 
-	<div class="col-10">
+	<div class="col-10 d-print-none">
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<span class="input-group-text">Establecimiento</span>
@@ -52,11 +52,11 @@
         <th>Periodo</th>
         <th>Banco - N° Cuenta</th>
         <th>Telefono</th>
-        <th>Cer.</th>
-        <th>Bol.</th>
-        <th>Res.</th>
-        <th></th>
-        <th></th>
+        <th class="d-print-none">Cer.</th>
+        <th class="d-print-none">Bol.</th>
+        <th class="d-print-none">Res.</th>
+        <th class="d-print-none"></th>
+        <th class="d-print-none"></th>
         @canany(['Service Request: fulfillments finance'])
           <th nowrap style="width: 21%"  >Aprobación de pago </th>
         @endcanany
@@ -81,7 +81,7 @@
           </td>
           <td class="small">{{$fulfillment->serviceRequest->employee->bankAccount->bank->name ?? ''}} - {{$fulfillment->serviceRequest->employee->bankAccount->number?? ''}}</td>
           <td>{{$fulfillment->serviceRequest->phone_number ?? ''}}</td>
-          <td>
+          <td class="d-print-none">
               @if($fulfillment->signatures_file_id)
                 <a href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
                   <i class="fas fa-signature"></i>
@@ -92,7 +92,7 @@
                 </a>
               @endif
           </td>
-          <td>
+          <td class="d-print-none">
             @if($fulfillment->has_invoice_file)
               <a href="{{route('rrhh.service-request.fulfillment.download_invoice', [$fulfillment, time()])}}"
                  target="_blank" title="Boleta" >
@@ -100,7 +100,7 @@
               </a>
             @endif
           </td>
-          <td>
+          <td class="d-print-none">
             @if($fulfillment->serviceRequest->has_resolution_file)
               <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fulfillment->serviceRequest)}}"
                  target="_blank" title="Resolución">
@@ -108,12 +108,12 @@
               </a>
             @endif
           </td>
-          <td>
+          <td class="d-print-none">
               <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}" title="Editar">
       					<span class="fas fa-edit" aria-hidden="true"></span>
       				</a>
           </td>
-          <td>
+          <td class="d-print-none">
               <button class="btn btn-link pt-0" title="Editar Pago" data-toggle="modal"
                       data-target="#editModal"
                       data-fulfillment_id="{{ $fulfillment->id }}"
