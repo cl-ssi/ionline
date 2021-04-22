@@ -394,7 +394,7 @@ class ServiceRequestController extends Controller
     $SignatureFlow->user_id = Auth::id();
     $SignatureFlow->ou_id = $ou_id;
     $SignatureFlow->service_request_id = $serviceRequest->id;
-    $SignatureFlow->type = "creador";
+    $SignatureFlow->type = "Responsable";
     $SignatureFlow->employee = $employee;
     $SignatureFlow->signature_date = Carbon::now();
     $SignatureFlow->status = 1;
@@ -421,7 +421,11 @@ class ServiceRequestController extends Controller
         $SignatureFlow->responsable_id = User::find($user)->id;
         $SignatureFlow->user_id = Auth::id(); //User::find($user)->id;
         $SignatureFlow->service_request_id = $serviceRequest->id;
-        $SignatureFlow->type = "visador";
+        if ($sign_position == 2) {
+          $SignatureFlow->type = "Supervisor";
+        }else{
+          $SignatureFlow->type = "visador";
+        }
         $SignatureFlow->employee = $employee;
         $SignatureFlow->sign_position = $sign_position;
         $SignatureFlow->save();
