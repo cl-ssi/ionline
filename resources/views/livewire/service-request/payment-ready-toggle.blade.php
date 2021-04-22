@@ -1,5 +1,5 @@
 <div>
-    <div class="form-row">
+    <div class="form-row d-print-none">
         <div class="col-10">
             <select class="form-control {{ $bg_color }}" name="payment_ready" wire:model="payment_ready">
                 <option value="1">Aceptado</option>
@@ -14,7 +14,11 @@
         </div>
     </div>
 
-    <div class="form-row"{{ $payment_ready == '1' ? 'hidden' : '' }}>
+    <div class="form-row d-none d-print-block">
+      <h5>{{$payment_ready_text}}</h5>
+    </div>
+
+    <div class="form-row d-print-none"{{ $payment_ready == '1' ? 'hidden' : '' }}>
         <div class="col-12">
             <input class="form-control" type="text" name="rejection_detail" wire:model.lazy="rejection_detail_input" placeholder="Ingrese motivo">
         </div>
