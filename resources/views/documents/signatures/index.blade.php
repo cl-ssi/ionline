@@ -72,8 +72,9 @@
                     <td>{{ $pendingSignaturesFlow->signature->description }}</td>
                     <td>
                         <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
-                                data-target="#exampleModalCenter{{$pendingSignaturesFlow->id}}" title="Firmar documento">
-                            <i class="fas fa-edit"></i>
+                                data-target="#exampleModalCenter{{$pendingSignaturesFlow->id}}"
+                                title="Firmar documento">
+                            <i class="fas fa-file-signature"></i>
                         </button>
                     </td>
                     <td>
@@ -84,7 +85,8 @@
                     </td>
                     <td>
                         <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
-                                onclick="getSignatureFlowsModal({{$pendingSignaturesFlow->signature->id}})" title="Ver circuito de firmas"
+                                onclick="getSignatureFlowsModal({{$pendingSignaturesFlow->signature->id}})"
+                                title="Ver circuito de firmas"
                         ><i class="fas fa-search"></i>
                         </button>
                     </td>
@@ -95,6 +97,7 @@
                         </a>
                     </td>
                 </tr>
+                {{--Modal rechazo--}}
                 <div class="modal fade" id="rejectSignature{{$pendingSignaturesFlow->id}}" tabindex="-1" role="dialog"
                      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -123,7 +126,7 @@
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
                                     </button>
 
-                                    <button class="btn btn-primary" type="submit">
+                                    <button class="btn btn-danger" type="submit">
                                         <i class="fas fa-edit"></i> Rechazar
                                     </button>
                                 </div>
@@ -132,7 +135,6 @@
                     </div>
                 </div>
                 {{--**************************** El pop up up up del OTP**************************************************************--}}
-
                 <div class="modal fade" id="exampleModalCenter{{$pendingSignaturesFlow->id}}" tabindex="-1"
                      role="dialog"
                      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -209,7 +211,8 @@
                     </td>
                     <td>
                         <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
-                                onclick="getSignatureFlowsModal({{$signedSignaturesFlow->signature->id}})" title="Ver circuito de firmas"
+                                onclick="getSignatureFlowsModal({{$signedSignaturesFlow->signature->id}})"
+                                title="Ver circuito de firmas"
                         ><i class="fas fa-search"></i>
                         </button>
                     </td>
@@ -238,6 +241,7 @@
                 <th scope="col">Estado Solicitud</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
@@ -262,11 +266,47 @@
                     </td>
                     <td>
                         <a href="{{ route('documents.signatures.edit', $signature) }}"
-                           class="btn btn-sm btn-outline-secondary" title="Ver documento">
+                           class="btn btn-sm btn-outline-secondary" title="Editar solicitud">
                             <span class="fas fa-edit" aria-hidden="true"></span>
                         </a>
                     </td>
+                    <td>
+                        <a  class="btn btn-sm btn-outline-danger" title="Eliminar solicitud"
+                            data-toggle = "modal"
+                            data-target="#rejectSignature{{$signature->id}}">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
                 </tr>
+                {{--Modal eliminar--}}
+                <div class="modal fade" id="rejectSignature{{$signature->id}}" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">¿Desea eliminar la solicitud?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form method="POST" class="form-horizontal"
+                                  action="{{route('documents.signatures.rejectSignature', $signature->id)}}"
+                                  enctype="multipart/form-data">
+                                @csrf <!-- input hidden contra ataques CSRF -->
+                                    @method('POST')
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
+                                    </button>
+
+                                    <button class="btn btn-danger" type="submit">
+                                        <i class="fas fa-edit"></i> Eliminar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             @endforeach
             </tbody>
         </table>
