@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Establishment;
 
 class ReportController extends Controller
 {
@@ -290,6 +291,7 @@ class ReportController extends Controller
 
 	public function pending(Request $request, $who) {
 
+    $establishments = Establishment::all();
     $user_id = Auth::user()->id;
 		$query = Fulfillment::query();
 
@@ -327,7 +329,7 @@ class ReportController extends Controller
 		$request->flash(); // envía los inputs de regreso
 
 		return view('service_requests.requests.fulfillments.reports.pending',
-			compact('fulfillments','request','periodo','who')
+			compact('fulfillments','request','periodo','who','establishments')
 		);
 
 	}
