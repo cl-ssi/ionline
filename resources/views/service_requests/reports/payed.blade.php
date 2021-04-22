@@ -21,7 +21,7 @@
 				<option value="">Todos</option>
 				<option value="1" @if($request->establishment_id == 1) selected @endif>Hospital Ernesto Torres Galdames</option>
 				<option value="12" @if($request->establishment_id == 12) selected @endif>Dr. Héctor Reyno G.</option>
-				<option value="38" @if($request->establishment_id === 0) selected @endif>Dirección SSI</option>
+				<option value="0" @if($request->establishment_id === 0) selected @endif>Dirección SSI</option>
 			</select>
 			<div class="input-group-append">
 				<button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
