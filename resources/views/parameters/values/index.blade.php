@@ -15,6 +15,7 @@
     <thead>
         <tr>
             <th>ID</th>
+            <th>Establecimiento</th>
             <th>Tipo de Contrato</th>
             <th>Jornada</th>
             <th>Estamento</th>
@@ -25,8 +26,9 @@
     </thead>
     <tbody>
         @forelse($values as $value)
-        <tr>
+        <tr>            
             <td>{{ $value->id }}</td>
+            <td>{{ $value->establishment->name?? '' }}</td>
             <td>{{ $value->contract_type }}</td>
             <td>{{ $value->work_type }}</td>
             <td>{{ $value->estate }}</td>

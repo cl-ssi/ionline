@@ -16,6 +16,7 @@ use App\Municipality;
 use App\Establishment;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
+use App\Rrhh\Authority;
 use Luecano\NumeroALetras\NumeroALetras;
 use PhpOffice\PhpWord\Settings;
 use PhpOffice;
@@ -31,19 +32,16 @@ class WordTestController extends Controller
     	// SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
     	$agreements     = Agreement::with('Program','Commune','agreement_amounts','authority')->where('id', $id)->first();
     	$stage          = Stage::where('agreement_id', $id)->first();
-    	$components     = ProgramComponent::where('program_id', $agreements->program_id)->get();
+    	// $components     = ProgramComponent::where('program_id', $agreements->program_id)->get();
     	$amounts        = AgreementAmount::with('program_component')->Where('agreement_id', $id)->get();
         $quotas         = AgreementQuota::Where('agreement_id', $id)->get();
         $municipality   = Municipality::where('commune_id', $agreements->Commune->id)->first();
-        //dd($municipality);
-        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-
-
+        $meses          = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 
         // AL MOMENTO DE PREVISUALIZAR EL DOCUMENTO INICIA AUTOMATICAMENTE LA PRIMERA ETAPA
         if(is_null($stage)){
-        $agreements->stages()->create(['agreement_id' => $id,'group' => 'CON','type' => 'RTP', 'date' => Carbon::now()->toDateTimeString()]);
-         }
+            $agreements->stages()->create(['agreement_id' => $id,'group' => 'CON','type' => 'RTP', 'date' => Carbon::now()->toDateTimeString()]);
+        }
 
         // SE OBTIENE LAS INSTITUCIONES DE SALUD PERO SÓLO LAS QUE SE HAN SELECCIONADO
         $establishment_list = unserialize($agreements->establishment_list) == null ? [] : unserialize($agreements->establishment_list);
@@ -63,9 +61,8 @@ class WordTestController extends Controller
                                              ,'establecimiento' => ucwords(mb_strtolower($establishment->type))." ".$establishment->name
                                          );
             }
-                $arrayEstablishmentConcat = implode(", ",array_column($arrayEstablishment, 'establecimiento',));
+            $arrayEstablishmentConcat = implode(", ",array_column($arrayEstablishment, 'establecimiento',));
         }
-
 
     	// ARRAY PARA OBTENER LOS COMPONENTES ASOCIADOS AL CONVENIO
     	foreach ($amounts as $key => $amount) {
@@ -87,24 +84,22 @@ class WordTestController extends Controller
                                       ,'cuotaLetra' => $cuotaConvenioLetras);
              } 
 
-             //dd($arrayQuota);
         $totalQuotas = mb_strtolower($formatter->toMoney(count($quotas),0));
 
     	$templateProcesor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/convenio2021.docx'));
 
     	$periodoConvenio = $agreements->period;
-    	$fechaConvenio = $agreements->date;
-        $fechaConvenio = date('j', strtotime($fechaConvenio)).' de '.$meses[date('n', strtotime($fechaConvenio))-1].' '.date('Y', strtotime($fechaConvenio));
+    	// $fechaConvenio = $agreements->date;
+        $fechaConvenio = date('j', strtotime($agreements->date)).' de '.$meses[date('n', strtotime($agreements->date))-1].' '.date('Y', strtotime($agreements->date));
     	$numResolucion = $agreements->number;
         $fechaResolucion = $agreements->resolution_date;
         $fechaResolucion = $fechaResolucion != NULL ? date('j', strtotime($fechaResolucion)).' de '.$meses[date('n', strtotime($fechaResolucion))-1].' '.date('Y', strtotime($fechaResolucion)) : '';
-    	$referente = $agreements->referente;
+    	// $referente = $agreements->referente;
         $alcaldeApelativo = $agreements->representative_appelative;
         $alcalde = $agreements->representative;
         $alcaldeDecreto = $agreements->representative_decree;
     	$municipalidad = $municipality->name_municipality;
     	$ilustre = !Str::contains($municipality->name_municipality, 'ALTO HOSPICIO') ? 'ILUSTRE': null;
-        //dd($municipalidad);
     	$municipalidadDirec = $agreements->municipality_adress;
     	$comunaRut = $agreements->municipality_rut;
     	$alcaldeRut = $agreements->representative_rut;
@@ -159,7 +154,6 @@ class WordTestController extends Controller
 
         $templateProcesor->setValue('establecimientosListado',$arrayEstablishmentConcat);
 
-    	$filename = "archivo";
     	$templateProcesor->saveAs(storage_path('app/public/Prev-Conv.docx')); //'Prev-RESOL'.$numResolucion.'.docx'
 
     	return response()->download(storage_path('app/public/Prev-Conv.docx'))->deleteFileAfterSend(true);
@@ -168,145 +162,103 @@ class WordTestController extends Controller
     public function createResWordDocx($id)
     {
         // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
-        $agreements     = Agreement::with('Program','Commune','agreement_amounts')->where('id', $id)->first();
-        $stage          = Stage::where('agreement_id', $id)->first();
-        $components     = ProgramComponent::where('program_id', $agreements->program_id)->get();
-        $amounts        = AgreementAmount::with('program_component')->Where('agreement_id', $id)->get();
-        $quotas         = AgreementQuota::Where('agreement_id', $id)->get();
+        $agreements     = Agreement::with('Program','Commune','agreement_amounts','authority', 'referrer')->where('id', $id)->first();
+        // $stage          = Stage::where('agreement_id', $id)->first();
+        // $components     = ProgramComponent::where('program_id', $agreements->program_id)->get();
+        // $amounts        = AgreementAmount::with('program_component')->Where('agreement_id', $id)->get();
+        // $quotas         = AgreementQuota::Where('agreement_id', $id)->get();
         $municipality   = Municipality::where('commune_id', $agreements->Commune->id)->first();
-        $file = $agreements->file;
-        $file = Storage::disk('')->path($agreements->file);
-
-        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-        // SE OBTIENE LAS INSTITUCIONES DE SALUD PERO SÓLO LAS QUE SE HAN SELECCIONADO
-        $establishment_list = unserialize($agreements->establishment_list) == null ? [] : unserialize($agreements->establishment_list);
-        $establishments = Establishment::where('commune_id', $agreements->Commune->id)
-                                       ->whereIn('id', $establishment_list)->get();
-
-        // ARRAY PARA OBTNER LAS INSTITUCIONES ASOCIADAS AL CONVENIO
-        // SI EL ARRAY DE INSTITUCIONES VIENE VACIO
-        if($establishments->isEmpty()){
-            $arrayEstablishmentConcat = '';
-        }
-        else { 
-            foreach ($establishments as $key => $establishment) {
-                $arrayEstablishment[] = array('index' => $key+1
-                                             ,'establecimientoTipo' => $establishment->type
-                                             ,'establecimientoNombre' => $establishment->name
-                                             ,'establecimiento' => ucwords(mb_strtolower($establishment->type))." ".$establishment->name
-                                         );
-            }
-                $arrayEstablishmentConcat = implode(", ",array_column($arrayEstablishment, 'establecimiento',));
-        }
-
-
-        // ARRAY PARA OBTENER LOS COMPONENTES ASOCIADOS AL CONVENIO
-        foreach ($amounts as $key => $amount) {
-            $arrayComponent[] = array('index' => $key+1, 'componenteNombre' => $amount->program_component->name);
-        }
+        $file           = Storage::disk('')->path($agreements->file);
+        $meses          = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 
         // SE CONVIERTE EL VALOR TOTAL DEL CONVENIO EN PALABRAS
         $formatter = new NumeroALetras;
+        $formatter->apocope = true;
         $totalConvenio = $agreements->agreement_amounts->sum('amount');
-        $totalConvenioLetras = $formatter->toMoney($totalConvenio,0, 'pesos','');
- 
-        // ARRAY PARA OBTENER LAS CUOTAS ASOCIADAS AL TOTAL DEL CONVENIO
-        foreach ($quotas as $key => $quota) {
-                $cuotaConvenioLetras = $formatter->toMoney($quota->amount,0, 'pesos','');
-                $arrayQuota[] = array('index' => ($this->ordinal($key+1))
-                                      ,'cuotaDescripcion' => $quota->description
-                                      ,'cuotaMonto' => number_format($quota->amount,0,",",".")
-                                      ,'cuotaLetra' => $cuotaConvenioLetras);
-             } 
-
-             //dd($arrayQuota);
+        $totalConvenioLetras = $this->correctAmountText($formatter->toMoney($totalConvenio, 0, 'pesos',''));
         
-        // TEMPLATE EXAMPLE INNER MERGE
+        // Se abren los archivos doc para unirlos en uno solo en el orden en que se lista a continuacion
+        $mainTemplateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionhead.docx'));
+        $midTemplateProcessor = new OpenTemplateProcessor($file); //convenio doc
+        $mainTemplateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionfooter.docx'));
 
-            $mainTemplateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionhead.docx'));
-
-            $midTemplateProcessor = new OpenTemplateProcessor($file);
-
-
-            $mainTemplateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionfooter.docx'));
-
-        
-            //dd($midTemplateProcessor);
-            //$mainTemplateProcessor ->setValue('var_name', $value);
+        // Parametros a imprimir en los archivos abiertos
         $periodoConvenio = $agreements->period;
-        $fechaConvenio = $agreements->date;
-        $fechaConvenio = date('j', strtotime($fechaConvenio)).' de '.$meses[date('n', strtotime($fechaConvenio))-1].' '.date('Y', strtotime($fechaConvenio));
-        $numResolucion = $agreements->number;
-        $fechaResolucion = $agreements->resolution_date;
-        $fechaResolucion = $fechaResolucion != "" ? date('j', strtotime($fechaResolucion)).' de '.$meses[date('n', strtotime($fechaResolucion))-1].' '.date('Y', strtotime($fechaResolucion)) : '';
-        $referente = $agreements->referente;
-        $alcaldeApelativo = $agreements->representative_appelative;
-        $alcalde = $agreements->representative;
-        $alcaldeDecreto = $agreements->representative_decree;
-        $municipalidad = $municipality->name_municipality;
-        //dd($municipalidad);
-        $municipalidadDirec = $agreements->municipality_adress;
-        $comunaRut = $agreements->municipality_rut;
-        $alcaldeRut = $agreements->representative_rut;
-
+        $fechaConvenio = date('j', strtotime($agreements->date)).' de '.$meses[date('n', strtotime($agreements->date))-1].' del '.date('Y', strtotime($agreements->date));
+    	$numResolucion = $agreements->number;
+        $yearResolucion = $agreements->resolution_date != NULL ? date('Y', strtotime($agreements->resolution_date)) : '';
+        $fechaResolucion = $agreements->resolution_date != NULL ? date('j', strtotime($agreements->resolution_date)).' de '.$meses[date('n', strtotime($agreements->resolution_date))-1].' del '.date('Y', strtotime($agreements->resolution_date)) : '';
+        $numResourceResolucion = $agreements->res_resource_number;
+        $yearResourceResolucion = $agreements->res_resource_date != NULL ? date('Y', strtotime($agreements->res_resource_date)) : '';
+        $fechaResourceResolucion = $agreements->res_resource_date != NULL ? date('j', strtotime($agreements->res_resource_date)).' de '.$meses[date('n', strtotime($agreements->res_resource_date))-1].' del '.date('Y', strtotime($agreements->res_resource_date)) : '';
+    	$ilustre = !Str::contains($municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre': null;
+        $emailMunicipality = $municipality->email_municipality;
         $comuna = $agreements->Commune->name; 
         $programa = $agreements->Program->name;
+        
+        //Director ssi quien firma a la fecha de hoy
+        $director_signature = Authority::getAuthorityFromDate(1, Carbon::now()->toDateTimeString(), 'manager');
+        $first_name = explode(' ',trim($director_signature->user->name))[0];
+        $director = mb_strtoupper($first_name . ' ' . $director_signature->user->fathers_family . ' ' . $director_signature->user->mothers_family);
+        $directorDecreto = $director_signature->decree;
+        $directorApelativo = mb_strtoupper($director_signature->position);
 
-        $mainTemplateProcessor->setValue('programa',$programa);
-        $mainTemplateProcessor->setValue('periodoConvenio',$periodoConvenio);
-        $mainTemplateProcessor->setValue('fechaConvenio',$fechaConvenio); // Cambiar formato d de m y
+        //email referente
+        $emailReferrer = $agreements->referrer != null ? $agreements->referrer->email : '';
+
+        $mainTemplateProcessor->setValue('directorDecreto',$directorDecreto);
         $mainTemplateProcessor->setValue('numResolucion',$numResolucion);
+        $mainTemplateProcessor->setValue('yearResolucion',$yearResolucion);
+        $mainTemplateProcessor->setValue('programa',$programa);
+        $mainTemplateProcessor->setValue('numResourceResolucion',$numResourceResolucion);
+        $mainTemplateProcessor->setValue('yearResourceResolucion',$yearResourceResolucion);
+        $mainTemplateProcessor->setValue('fechaResolucion',$fechaResolucion);
+        $mainTemplateProcessor->setValue('fechaResourceResolucion',$fechaResourceResolucion);
+        $mainTemplateProcessor->setValue('fechaConvenio',$fechaConvenio); // Cambiar formato d de m y
+        $mainTemplateProcessor->setValue('ilustreTitulo',$ilustre);
+        $mainTemplateProcessor->setValue('comuna',$comuna);
         $mainTemplateProcessor->setValue('totalConvenio',number_format($totalConvenio,0,",","."));
         $mainTemplateProcessor->setValue('totalConvenioLetras',$totalConvenioLetras);
-        $mainTemplateProcessor->setValue('fechaResolucion',$fechaResolucion);
-        $mainTemplateProcessor->setValue('comuna',$comuna);
-        $mainTemplateProcessor->setValue('comunaRut',$comunaRut);
-        $mainTemplateProcessor->setValue('municipalidad',$municipalidad);
-        $mainTemplateProcessor->setValue('municipalidadDirec',$municipalidadDirec);
-        $mainTemplateProcessor->setValue('alcaldeApelativo',$alcaldeApelativo);
-        $mainTemplateProcessor->setValue('alcalde',$alcalde);
-        $mainTemplateProcessor->setValue('alcaldeRut',$alcaldeRut);
-        $mainTemplateProcessor->setValue('alcaldeDecreto',$alcaldeDecreto);
 
-
+        $mainTemplateProcessorEnd->setValue('programa',$programa);
+        $mainTemplateProcessorEnd->setValue('periodoConvenio',$periodoConvenio);
+        $mainTemplateProcessorEnd->setValue('ilustreTitulo',$ilustre);
         $mainTemplateProcessorEnd->setValue('comuna',$comuna);
+        $mainTemplateProcessorEnd->setValue('director',$director);
+        $mainTemplateProcessorEnd->setValue('directorApelativo',$directorApelativo);
+        $mainTemplateProcessorEnd->setValue('emailMunicipality',$emailMunicipality);
+        $mainTemplateProcessorEnd->setValue('emailReferrer',$emailReferrer);
        
         // TEMPLATE MERGE
-        //$innerTemplateProcessor = new OpenTemplateProcessor('path/to/other_file');
-        //$innerTemplateProcessor->setValue('var2_name', $value2);
-
         // extract internal xml from template that will be merged inside main template
         $innerXml = $midTemplateProcessor->tempDocumentMainPart;
         $innerXml = preg_replace('/^[\s\S]*<w:body>(.*)<\/w:body>.*/', '$1', $innerXml);
-
+        
         // remove tag containing header, footer, images
-        $innerXml = preg_replace('/<w:sectPr>.*<\/w:sectPr>/', '', $innerXml);
-        //dd($midTemplateProcessor->tempDocumentMainPart);
-
+        // $innerXml = preg_replace('/<w:sectPr>.*<\/w:sectPr>/', '', $innerXml);
+        
+        //remove signature blocks
+        $innerXml = Str::beforeLast($innerXml, 'Reforzamiento Municipal del Presupuesto del Servicio de Salud Iquique');
+        // dd($innerXml);
+        $innerXml .= 'Reforzamiento Municipal del Presupuesto del Servicio de Salud Iquique”.</w:t></w:r></w:p>';
+        
         $mainXmlEnd = $mainTemplateProcessorEnd->tempDocumentMainPart;
 
         $mainXmlEnd = preg_replace('/^[\s\S]*<w:body>(.*)<\/w:body>.*/', '$1', $mainXmlEnd);
 
         // remove tag containing header, footer, images
-        $mainXmlEnd = preg_replace('/<w:sectPr>.*<\/w:sectPr>/', '', $mainXmlEnd);
+        // $mainXmlEnd = preg_replace('/<w:sectPr>.*<\/w:sectPr>/', '', $mainXmlEnd);
 
         // inject internal xml inside main template 
         $mainXml = $mainTemplateProcessor->tempDocumentMainPart;
-        
-
-           // dd($mainXml);
-
-        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br w:type="page" /><w:lastRenderedPageBreak/></w:r></w:p>' . $innerXml . '</w:body>', $mainXml);
-        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br w:type="page" /><w:lastRenderedPageBreak/></w:r></w:p>' . $mainXmlEnd . '</w:body>', $mainXml);
-
+ 
+        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br/></w:r></w:p>' . $innerXml . '</w:body>', $mainXml);
+        $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br/></w:r></w:p>' . $mainXmlEnd . '</w:body>', $mainXml);
 
         $mainTemplateProcessor->__set('tempDocumentMainPart', $mainXml);
 
         // END TEMPLATE MERGE
-
-        $filename = "archivo";
         $mainTemplateProcessor->saveAs(storage_path('app/public/Prev-Resolucion.docx')); //'Prev-RESOL'.$numResolucion.'.docx'
-       
 
         return response()->download(storage_path('app/public/Prev-Resolucion.docx'))->deleteFileAfterSend(true);
     }

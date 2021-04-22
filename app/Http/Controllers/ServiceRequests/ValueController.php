@@ -4,6 +4,7 @@ namespace App\Http\Controllers\ServiceRequests;
 
 use App\Http\Controllers\Controller;
 use App\Models\ServiceRequests\Value;
+use App\Establishment;
 use Illuminate\Http\Request;
 
 class ValueController extends Controller
@@ -29,7 +30,8 @@ class ValueController extends Controller
     public function create()
     {
         //
-        return view('parameters.values.create');
+        $establishments = Establishment::all();
+        return view('parameters.values.create',compact('establishments'));
     }
 
     /**
@@ -67,8 +69,8 @@ class ValueController extends Controller
     public function edit(Value $value)
     {
         //
-
-        return view('parameters.values.edit', compact('value'));
+        $establishments = Establishment::all();
+        return view('parameters.values.edit', compact('value','establishments'));
     }
 
     /**

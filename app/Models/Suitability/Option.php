@@ -20,6 +20,7 @@ class Option extends Model
     protected $fillable = [
         'question_id',
         'option_text',
+        'alternative',
         'points'
         
     ];

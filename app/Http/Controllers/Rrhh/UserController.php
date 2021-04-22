@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Rrhh\UserBankAccount;
 
 class UserController extends Controller
 {
@@ -22,7 +23,8 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $users = User::Search($request->get('name'))->orderBy('name','Asc')->paginate(500);
+        //$users = User::Search($request->get('name'))->orderBy('name','Asc')->paginate(50);
+        $users = User::getUsersBySearch($request->get('name'))->orderBy('name','Asc')->paginate(150);
         return view('rrhh.index', compact('users'));
     }
 
@@ -116,9 +118,12 @@ class UserController extends Controller
     public function edit(User $user)
     {
         //$ouRoot = OrganizationalUnit::find(1);
+        $user_id=$user->id;
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        $bankaccount = UserBankAccount::where('user_id',$user_id)->get();
         return view('rrhh.edit')
             ->withUser($user)
+            ->withBankaccount($bankaccount)
             ->withouRoots($ouRoots);
     }
 

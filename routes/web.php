@@ -31,6 +31,11 @@ use App\Http\Controllers\ReplacementStaff\TrainingController;
 use App\Http\Controllers\ReplacementStaff\LanguageController;
 use App\Http\Controllers\ReplacementStaff\Manage\ProfessionManageController;
 use App\Http\Controllers\ReplacementStaff\Manage\ProfileManageController;
+use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationController;
+use App\Http\Controllers\ReplacementStaff\CommissionController;
+use App\Http\Controllers\ReplacementStaff\ApplicantController;
+
+
 use App\Http\Controllers\VaccinationController;
 
 use App\Http\Controllers\ServiceRequests\InvoiceController;
@@ -94,6 +99,9 @@ Route::group(['middleware' => 'auth:external'], function () {
         Route::get('/create', [ReplacementStaffController::class, 'create'])->name('create');
         Route::post('/store', [ReplacementStaffController::class, 'store'])->name('store');
         Route::get('/{replacement_staff}/edit', [ReplacementStaffController::class, 'edit'])->name('edit');
+        Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
+        Route::get('/show_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('show_file');
+        Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
         Route::prefix('profile')->name('profile.')->group(function(){
             Route::post('/{replacementStaff}/store', [ProfileController::class, 'store'])->name('store');
             Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
@@ -119,6 +127,7 @@ Route::post('/{signaturesFlow}/firma', 'FirmaDigitalController@signPdfFlow')->na
 Route::post('/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
 
 
+
 Route::get('/claveunica', 'ClaveUnicaController@autenticar')->name('claveunica.autenticar');
 Route::get('/claveunica/callback', 'ClaveUnicaController@callback')->name('claveunica.callback');
 Route::get('/claveunica/callback-testing', 'ClaveUnicaController@callback');
@@ -131,9 +140,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')->group(function(){
     Route::get('/', [ReplacementStaffController::class, 'index'])->name('index');
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
-    Route::get('/show_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('show_file');
-    Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
-    Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
+    // Route::get('/show_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('show_file');
+    // Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
+    // Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
 
     Route::prefix('request')->name('request.')->group(function(){
         Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index');
@@ -148,12 +157,27 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::prefix('sign')->name('sign.')->group(function(){
             Route::put('/{requestSign}/{status}/update', [RequestSignController::class, 'update'])->name('update');
         });
+        Route::prefix('technical_evaluation')->name('technical_evaluation.')->group(function(){
+            Route::get('/{technicalEvaluation}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
+            Route::get('/store/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'store'])->name('store');
+            Route::prefix('commission')->name('commission.')->group(function(){
+                Route::post('/store/{technicalEvaluation}', [CommissionController::class, 'store'])->name('store');
+                Route::delete('{commission}/destroy', [CommissionController::class, 'destroy'])->name('destroy');
+            });
+            Route::prefix('applicant')->name('applicant.')->group(function(){
+                Route::post('/store/{technicalEvaluation}', [ApplicantController::class, 'store'])->name('store');
+                Route::put('/{applicant}/update', [ApplicantController::class, 'update'])->name('update');
+                Route::put('/{applicant}/update_to_select', [ApplicantController::class, 'update_to_select'])->name('update_to_select');
+                Route::delete('{applicant}/destroy', [ApplicantController::class, 'destroy'])->name('destroy');
+            });
+        });
+
     });
 
     Route::prefix('profile')->name('profile.')->group(function(){
         // Route::post('/{replacementStaff}/store', [ProfileController::class, 'store'])->name('store');
-        Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
-        Route::get('/show_file/{profile}', [ProfileController::class, 'show_file'])->name('show_file');
+        // Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
+        // Route::get('/show_file/{profile}', [ProfileController::class, 'show_file'])->name('show_file');
         //Route::delete('{profile}/destroy', [ProfileController::class, 'destroy'])->name('destroy');
     });
 
@@ -267,6 +291,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     //Route::get('createWord','Agreements\WordTestController@createWordDocx')->name('createWord.index');
     Route::get('/createWord/{agreement}', 'Agreements\WordTestController@createWordDocx')->name('createWord');
     Route::get('/createWordRes/{agreement}', 'Agreements\WordTestController@createResWordDocx')->name('createWordRes');
+    Route::get('/signRes/{agreement}', 'Agreements\AgreementController@signRes')->name('signRes');
 });
 
 //Programación Númerica APS
@@ -323,7 +348,9 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::prefix('shiftManagement')->group(function () {
         Route::get('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftManag.index')->middleware('auth');
         Route::post('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'indexfiltered'])->name('shiftManag.index')->middleware('auth');
-        Route::post('/storeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.index')->middleware('auth');
+        Route::post('/assign', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'assignStaff'])->name('shiftsTypes.assign')->middleware('auth');
+        Route::post('/deleteassign', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'assignStaff'])->name('shiftsTypes.deleteassign')->middleware('auth');
+         Route::get('/downloadShiftInXls', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'downloadShiftInXls'])->name('shiftsTypes.downloadShiftInXls')->middleware('auth');
 
         Route::get('/shiftstypes', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftstypesindex'])->name('shiftsTypes.index')->middleware('auth');
         Route::get('/newshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftsTypes.new')->middleware('auth');
@@ -343,6 +370,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         // Rutas de service request
         Route::get('/home', function () { return view('service_requests.home'); })->name('home');
 
+        Route::match(['get', 'post'],'/user', [ServiceRequestController::class, 'user'])->name('user');
+
         //descomposición del resource
         Route::get('/', [ServiceRequestController::class, 'index'])->name('index');
         Route::get('/create', [ServiceRequestController::class, 'create'])->name('create');
@@ -353,6 +382,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         //fin descomposicion
 
         Route::get('/transfer-requests', [ServiceRequestController::class, 'transfer_requests'])->name('transfer_requests');
+        Route::get('/change_signature_flow_view', [ServiceRequestController::class, 'change_signature_flow_view'])->name('change_signature_flow_view');
+        Route::post('/change-signature-flow', [ServiceRequestController::class, 'change_signature_flow'])->name('change_signature_flow');
         Route::post('/derive', [ServiceRequestController::class, 'derive'])->name('derive');
 
         Route::post('/destroy-with-parameters', [ServiceRequestController::class, 'destroy_with_parameters'])->name('destroy-with-parameters');
@@ -360,7 +391,9 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
         Route::get('/aditional-data-list', [ServiceRequestController::class, 'aditional_data_list'])->name('aditional_data_list');
         Route::put('/update-aditional-data/{serviceRequest}', [ServiceRequestController::class, 'update_aditional_data'])->name('update_aditional_data');
-        Route::get('/certificate-pdf/{serviceRequest}', [ServiceRequestController::class, 'certificatePDF'])->name('certificate-pdf');
+
+        Route::get('/signed-budget-availability-pdf/{serviceRequest}', [ServiceRequestController::class, 'signedBudgetAvailabilityPDF'])->name('signed-budget_availability-pdf');
+        Route::get('/callback-firma-budget-availability/{message}/{modelId}/{signaturesFile?}', [ServiceRequestController::class, 'callbackFirmaBudgetAvailability'])->name('callbackFirmaBudgetAvailability');
 
 
         Route::prefix('fulfillment')->name('fulfillment.')->group(function () {
@@ -373,7 +406,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/edit/{serviceRequest}', [FulfillmentController::class, 'edit_fulfillment'])->name('edit');
             Route::get('/save-approbed-fulfillment/{serviceRequest}', [FulfillmentController::class, 'save_approbed_fulfillment'])->name('save_approbed_fulfillment');
             Route::get('/confirm-fulfillment-by-sign-position/{Fulfillment}/{approbed?}', [FulfillmentController::class, 'confirmFulfillmentBySignPosition'])->name('confirm_Fulfillment_By_SignPosition');
-            Route::get('/download-invoice/{fulfillment}', [FulfillmentController::class, 'downloadInvoice'])->name('download_invoice');
+            Route::get('/download-invoice/{fulfillment}/{timestamp?}', [FulfillmentController::class, 'downloadInvoice'])->name('download_invoice');
             Route::get('/download-resolution/{serviceRequest}', [FulfillmentController::class, 'downloadResolution'])->name('download_resolution');
             Route::get('/certificate-pdf/{fulfillment}/{user?}', [FulfillmentController::class, 'certificatePDF'])->name('certificate-pdf');
             Route::get('/signed-certificate-pdf/{fulfillment}', [FulfillmentController::class, 'signedCertificatePDF'])->name('signed-certificate-pdf');
@@ -406,6 +439,12 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/bank-payment-file/{establishment_id?}', [ReportController::class, 'bankPaymentFile'])->name('bank-payment-file');
             Route::get('/with-resolution-file', [ReportController::class, 'indexWithResolutionFile'])->name('with-resolution-file');
             Route::get('/without-resolution-file', [ReportController::class, 'indexWithoutResolutionFile'])->name('without-resolution-file');
+            Route::get('/budget-availability/{serviceRequest}', [ReportController::class, 'budgetAvailability'])->name('budget-availability');
+            Route::get('/compliance', [ReportController::class, 'compliance'])->name('compliance');
+
+            Route::get('/fulfillment/pending/{who}', [ReportController::class, 'pending'])->name('fulfillment-pending');
+            // Route::get('/fulfillment/rrhh', [ReportController::class, 'pendingRrhh'])->name('pending-rrhh');
+            // Route::get('/fulfillment/finance', [ReportController::class, 'pendingFinance'])->name('pending-finance');
 
             //pasar a reports
             Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
@@ -596,10 +635,11 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('signatures/verify', 'Documents\SignatureController@verify')->name('signatures.verify');
     Route::get('signatures/index/{tab}', 'Documents\SignatureController@index')->name('signatures.index');
     Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
-    Route::get('/showPdf/{signaturesFile}', 'Documents\SignatureController@showPdf')->name('showPdf');
-    Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('showPdfAnexo');
-    Route::get('/callback_firma/{message}/{modelId}/{returnUrl}/{signaturesFile?}', 'Documents\SignatureController@callbackFirma')->name('callbackFirma');
-
+    Route::get('/showPdf/{signaturesFile}', 'Documents\SignatureController@showPdf')->name('signatures.showPdf');
+    Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('signatures.showPdfAnexo');
+    Route::post('/{idSignaturesFlow}/rechazar', 'Documents\SignatureController@rejectSignature')->name('signatures.rejectSignature');
+    Route::get('signatures/signatureFlows/{signatureId}', 'Documents\SignatureController@signatureFlows')->name('signatures.signatureFlows');
+    Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', 'Documents\SignatureController@callbackFirma')->name('callbackFirma');
 });
 Route::resource('documents', 'Documents\DocumentController')->middleware('auth');
 
@@ -652,6 +692,12 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::prefix('programming_aps')->as('programming_aps.')->group(function () {
         Route::get('/', 'Indicators\ProgramApsController@index')->name('index');
         Route::get('/{year}/{commune}', 'Indicators\ProgramApsController@show')->name('show');
+    });
+
+    Route::prefix('iaps')->as('iaps.')->group(function () {
+        Route::get('/', 'Indicators\ApsController@index')->name('index');
+        Route::get('/{year}', 'Indicators\ApsController@list')->name('list');
+        Route::get('/{year}/{slug}/{establishment_type}', 'Indicators\ApsController@show')->name('show');
     });
 
     Route::prefix('19813')->as('19813.')->group(function () {
@@ -1119,6 +1165,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::get('/approved', [SuitabilityController::class, 'approved'])->name('approved');
     Route::get('/rejected', [SuitabilityController::class, 'rejected'])->name('rejected');
     Route::patch('/finalresult/{psirequest}/{result}', [SuitabilityController::class, 'finalresult'])->name('finalresult');
+    Route::get('/sendForSignature/{id}', [SuitabilityController::class, 'sendForSignature'])->name('sendForSignature');
 
     Route::prefix('categories')->as('categories.')->middleware('auth')->group(function () {
         Route::get('/', [CategoriesController::class, 'index'])->name('index');
@@ -1172,6 +1219,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::get('/{id}', [ResultsController::class, 'show'])->name('show');
         Route::get('/certificate/{id}', [ResultsController::class, 'certificate'])->name('certificate');
         Route::get('/certificatepdf/{id}', [ResultsController::class, 'certificatepdf'])->name('certificatepdf');
+        Route::get('/signed-suitability-certificate-pdf/{id}', [SuitabilityController::class, 'signedSuitabilityCertificatePDF'])->name('signedSuitabilityCertificate');
         //Route::get('results/{result_id}', 'ResultsController@show')->name('results.show');
         // Route::get('/create', [OptionsController::class, 'create'])->name('create');
         // Route::post('/store', [OptionsController::class, 'store'])->name('store');

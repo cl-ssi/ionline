@@ -41,13 +41,10 @@ class ReplacementStaffController extends Controller
      */
     public function create()
     {
-
-        //$replacementStaff = ReplacementStaff::where('run',$user_cu->RolUnico->numero)->first();
         $replacementStaff = ReplacementStaff::where('run',Auth::guard('external')->user()->id)->first();
         if($replacementStaff == null)
         {
             $userexternal = UserExternal::where('id',Auth::guard('external')->user()->id)->first();
-
             return view('replacement_staff.create',compact('userexternal'));
 
         }
@@ -70,9 +67,8 @@ class ReplacementStaffController extends Controller
             $now = Carbon::now()->format('Y_m_d_H_i_s');
             $file_name = $now.'_cv_'.$replacementStaff->run;
             $file = $request->file('cv_file');
-            // dd($file);
-            //$upload = $request->file('arquivo')->storeAs('products', 'novonomeaffffff.jpg');
-            $replacementStaff->cv_file = $file->storeAs('replacement_staff/cv_docs', $file_name.'.'.$file->extension());
+            $replacementStaff->cv_file = $file->storeAs('/ionline/replacement_staff/cv_docs/', $file_name.'.'.$file->extension(), 'gcs');
+            // $fileModel->file = $file->store('ionline/documents/partes',['disk' => 'gcs']);
             $replacementStaff->save();
         }
 
@@ -96,14 +92,16 @@ class ReplacementStaffController extends Controller
 
     public function update(Request $request, ReplacementStaff $replacementStaff)
     {
-
         if($request->hasFile('cv_file'))
         {
+            //DELETE LAST CV
+            Storage::disk('gcs')->delete($replacementStaff->cv_file);
+
             $replacementStaff->fill($request->all());
             $now = Carbon::now()->format('Y_m_d_H_i_s');
             $file_name = $now.'_cv_'.$replacementStaff->run;
             $file = $request->file('cv_file');
-            $replacementStaff->cv_file = $file->storeAs('replacement_staff/cv_docs', $file_name.'.'.$file->extension());
+            $replacementStaff->cv_file = $file->storeAs('/ionline/replacement_staff/cv_docs/', $file_name.'.'.$file->extension(), 'gcs');
             $replacementStaff->save();
         }
         else{
@@ -121,12 +119,12 @@ class ReplacementStaffController extends Controller
 
     public function show_file(ReplacementStaff $replacementStaff)
     {
-        return Storage::response($replacementStaff->cv_file);
+        return Storage::disk('gcs')->response($replacementStaff->cv_file);
     }
 
     public function download(ReplacementStaff $replacementStaff)
     {
-        return Storage::download($replacementStaff->cv_file);
+        return Storage::disk('gcs')->download($replacementStaff->cv_file);
     }
 
     public function show_replacement_staff(ReplacementStaff $replacementStaff){

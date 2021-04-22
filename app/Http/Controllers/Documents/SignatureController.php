@@ -41,13 +41,12 @@ class SignatureController extends Controller
         }
 
         if ($tab == 'pendientes') {
-
             $pendingSignaturesFlows = SignaturesFlow::where('user_id', Auth::id())
                 ->where('status', null)
                 ->get();
 
             $signedSignaturesFlows = SignaturesFlow::where('user_id', Auth::id())
-                ->where('status', 1)
+                ->whereNotNull('status')
                 ->orderByDesc('id')
                 ->get();
         }
@@ -263,13 +262,13 @@ class SignatureController extends Controller
         }
     }
 
-    public function callbackFirma($message, $modelId, $returnUrl, SignaturesFile $signaturesFile = null)
+    public function callbackFirma($message, $modelId, SignaturesFile $signaturesFile = null)
     {
         $fulfillment = Fulfillment::find($modelId);
 
         if (!$signaturesFile) {
             session()->flash('danger', $message);
-            return redirect()->route($returnUrl, $fulfillment->serviceRequest->id);
+            return redirect()->route('rrhh.service-request.fulfillment.edit', $fulfillment->serviceRequest->id);
         }
 
         $fulfillment->signatures_file_id = $signaturesFile->id;
@@ -277,6 +276,23 @@ class SignatureController extends Controller
         // header('Content-Type: application/pdf');
         // echo base64_decode($signaturesFile->signed_file);
         session()->flash('success', $message);
-        return redirect()->route($returnUrl, $fulfillment->serviceRequest->id);
+        return redirect()->route('rrhh.service-request.fulfillment.edit', $fulfillment->serviceRequest->id);
+    }
+
+    public function rejectSignature(Request $request, $idSignatureFlow)
+    {
+        //TODO verificar orden de firmas
+        //TODO Al rechazar un flow en responsabilidad en cadena deberian rechazarse todos los siguientes flows
+
+        $idSigFlow = SignaturesFlow::find($idSignatureFlow);
+        $idSigFlow->update(['status' => 0, 'observation' => $request->observacion]);
+        session()->flash('success', "La solicitud ha sido rechazada");
+        return redirect()->route('documents.signatures.index', ['pendientes']);
+    }
+
+    public function signatureFlows($signatureID)
+    {
+        $signatureFlowsModal = Signature::find($signatureID)->signaturesFlows;
+        return view('documents.signatures.partials.flows_modal_body', compact('signatureFlowsModal'));
     }
 }

@@ -42,6 +42,26 @@ class OrganizationalUnit extends Model
         return $this->belongsTo('\App\Establishment', 'establishment_id');
     }
 
+    public function getInitialsAttribute()
+    {
+        $words = explode(' ', $this->name);
+        $initials = '';
+        foreach ($words as $word) {
+            if ($word != 'de' && $word != 'y' && $word != 'la' && $word != 'e' && $word != 'las' && $word != 'del'
+                && $word != 'al' && $word != 'en' && $word != 'el') {
+                if ($word === 'Subdirección') {
+                    $initials .= 'SD';
+                } elseif ($word === 'S.A.M.U.' || $word === 'P.E.S.P.I.' || $word === 'P.R.A.I.S.' || $word === 'O.I.R.S.' ||
+                    $word === 'GES/PPV') {
+                    $initials .= $word;
+                } else {
+                    $initials .= $word[0];
+                }
+            }
+        }
+        return $initials;
+    }
+
     /**
      * The attributes that should be mutated to dates.
      *

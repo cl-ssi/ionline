@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\ServiceRequests;
 
+use App\Models\Documents\SignaturesFile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\ServiceRequests\ServiceRequest;
+use App\Models\ServiceRequests\Fulfillment;
 use App\Models\ServiceRequests\Subdirection;
 use App\Models\ServiceRequests\ResponsabilityCenter;
 use App\Models\Parameters\Bank;
@@ -27,6 +29,10 @@ use App\Rrhh\Authority;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+
+use DateTime;
+use DatePeriod;
+use DateInterval;
 
 class ServiceRequestController extends Controller
 
@@ -93,6 +99,26 @@ class ServiceRequestController extends Controller
     return view('service_requests.requests.index', compact('serviceRequestsMyPendings', 'serviceRequestsOthersPendings', 'serviceRequestsRejected', 'serviceRequestsAnswered', 'serviceRequestsCreated', 'users'));
   }
 
+  public function user(Request $request) {
+    $fulfillments = array();
+    $user = null;
+
+    if($request->input('run')) {
+      $user = User::find($request->input('run'));
+
+      if($user) {
+        $fulfillments = Fulfillment::whereHas('ServiceRequest', function($query) use ($user) {
+          $query->where('user_id',$user->id);}
+          )->orderBy('payment_date')->get();
+      }
+
+
+    }
+    $request->flash();
+
+    return view('service_requests.requests.user', compact('user','fulfillments'));
+  }
+
   public function aditional_data_list(Request $request)
   {
 
@@ -100,9 +126,11 @@ class ServiceRequestController extends Controller
     $responsability_center_ou_id = $request->responsability_center_ou_id;
     $program_contract_type = $request->program_contract_type;
     $name = $request->name;
+    $estate = $request->estate;
     $id = $request->id;
 
-    $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+    // $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+    $establishment_id = $request->establishment_id;
 
     // dd($responsability_center_ou_id);
     $serviceRequests = ServiceRequest::when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
@@ -111,6 +139,9 @@ class ServiceRequestController extends Controller
                                       ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
                                         return $q->where('program_contract_type', $program_contract_type);
                                       })
+                                      ->when($estate != NULL, function ($q) use ($estate) {
+                                            return $q->where('estate',$estate);
+                                           })
                                       ->when(($name != NULL), function ($q) use ($name) {
                                         return $q->whereHas("employee", function ($subQuery) use ($name) {
                                           $subQuery->where('name', 'LIKE', '%' . $name . '%');
@@ -121,9 +152,12 @@ class ServiceRequestController extends Controller
                                       ->when($id != NULL, function ($q) use ($id) {
                                         return $q->where('id', $id);
                                       })
-                                      ->whereHas("responsabilityCenter", function($subQuery) use ($establishment_id){
-                                               $subQuery->where('establishment_id',$establishment_id);
-                                           })
+                                      ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+                                        return $q->where('establishment_id', $establishment_id);
+                                      })
+                                      ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+                                        return $q->whereNotIn('establishment_id',[1,12]);
+                                      })
                                       ->orderBy('id', 'asc')
                                       ->paginate(100);
     // ->get();
@@ -145,6 +179,28 @@ class ServiceRequestController extends Controller
     $responsabilityCenters = OrganizationalUnit::where('establishment_id', 1)->orderBy('name', 'ASC')->get();
     return view('service_requests.requests.transfer_requests', compact('serviceRequests', 'responsabilityCenters', 'users'));
   }
+
+  public function change_signature_flow_view(Request $request)
+  {
+    $users = User::orderBy('name', 'ASC')->get();
+    $serviceRequests = ServiceRequest::find($request->id);
+    return view('service_requests.requests.change_signature_flow',compact('users','request','serviceRequests'));
+  }
+
+  public function change_signature_flow(Request $request)
+  {
+    $signatureFlow = SignatureFlow::find($request->signature_flow_id);
+    $signatureFlow->responsable_id = $request->user_id;
+    if (User::find($request->user_id)->organizational_unit_id != null) {
+      $signatureFlow->ou_id = User::find($request->user_id)->organizational_unit_id;
+    }
+    $signatureFlow->save();
+
+    session()->flash('success', 'Se ha modificado el responsable del flujo de firmas.');
+    return redirect()->back();
+  }
+
+
 
   /**
    * Show the form for creating a new resource.
@@ -186,16 +242,18 @@ class ServiceRequestController extends Controller
   public function store(Request $request)
   {
     //validation existence
-    $serviceRequest = ServiceRequest::where('user_id', $request->user_id)
-      ->where('program_contract_type', $request->program_contract_type)
-      ->where('start_date', $request->start_date)
-      ->where('end_date', $request->end_date)
-      ->where('responsability_center_ou_id', $request->responsability_center_ou_id)
-      ->where('working_day_type', $request->working_day_type)
-      ->get();
-    if ($serviceRequest->count() > 0) {
-      session()->flash('info', 'Ya existe una solicitud ingresada para este funcionario (Solicitud nro <b>' . $serviceRequest->first()->id . '</b> )');
-      return redirect()->back();
+    if ($request->type != "Suma alzada") {
+      $serviceRequest = ServiceRequest::where('user_id', $request->user_id)
+        ->where('program_contract_type', $request->program_contract_type)
+        ->where('start_date', $request->start_date)
+        ->where('end_date', $request->end_date)
+        ->where('responsability_center_ou_id', $request->responsability_center_ou_id)
+        ->where('working_day_type', $request->working_day_type)
+        ->get();
+      if ($serviceRequest->count() > 0) {
+        session()->flash('info', 'Ya existe una solicitud ingresada para este funcionario (Solicitud nro <b>' . $serviceRequest->first()->id . '</b> )');
+        return redirect()->back();
+      }
     }
 
 
@@ -227,23 +285,93 @@ class ServiceRequestController extends Controller
       $request->All()
     );
 
-    //devuelve UserBankAccount o crea
-    // $userBankAccount = UserBankAccount::updateOrCreate(
-    //   ['user_id' => $request->user_id],
-    //   $request->All()
-    // );
-
     //crea service request
     $serviceRequest = new ServiceRequest($request->All());
     $serviceRequest->user_id = $user->id;
     $serviceRequest->creator_id = Auth::id();
     $serviceRequest->save();
 
+
+
+
+
+    //############ guarda cumplimiento ##############
+
+    $start    = new DateTime($serviceRequest->start_date);
+    $start->modify('first day of this month');
+    $end      = new DateTime($serviceRequest->end_date);
+    $end->modify('first day of next month');
+    $interval = DateInterval::createFromDateString('1 month');
+    $periods   = new DatePeriod($start, $interval, $end);
+    $cont_periods = iterator_count($periods);
+
+    // crea de forma automática las cabeceras
+    if ($serviceRequest->program_contract_type == "Mensual" || ($serviceRequest->program_contract_type == "Horas" && $serviceRequest->working_day_type == "HORA MÉDICA")) {
+      if ($serviceRequest->fulfillments->count() == 0) {
+        foreach ($periods as $key => $period) {
+          $program_contract_type = "Mensual";
+          $start_date_period = $period->format("d-m-Y");
+          $end_date_period = Carbon::createFromFormat('d-m-Y', $period->format("d-m-Y"))->endOfMonth()->format("d-m-Y");
+          if($key == 0){
+            $start_date_period = $serviceRequest->start_date->format("d-m-Y");
+          }
+          if (($cont_periods - 1) == $key) {
+            $end_date_period = $serviceRequest->end_date->format("d-m-Y");
+            $program_contract_type = "Parcial";
+          }
+
+          $fulfillment = new Fulfillment();
+          $fulfillment->service_request_id = $serviceRequest->id;
+          if ($serviceRequest->program_contract_type == "Mensual") {
+            $fulfillment->year = $period->format("Y");
+            $fulfillment->month = $period->format("m");
+          }else{
+            $program_contract_type = "Horas Médicas";
+            $fulfillment->year = $period->format("Y");
+            $fulfillment->month = $period->format("m");
+          }
+          $fulfillment->type = $program_contract_type;
+          $fulfillment->start_date = $start_date_period;
+          $fulfillment->end_date = $end_date_period;
+          $fulfillment->user_id = Auth::user()->id;
+          $fulfillment->save();
+        }
+      }
+    }
+
+    elseif($serviceRequest->program_contract_type == "Horas"){
+      if ($serviceRequest->fulfillments->count() == 0) {
+        $fulfillment = new Fulfillment();
+        $fulfillment->service_request_id = $serviceRequest->id;
+        $fulfillment->type = "Horas No Médicas";
+        $fulfillment->year = $serviceRequest->start_date->format("Y");
+        $fulfillment->month = $serviceRequest->start_date->format("m");
+        $fulfillment->start_date = $serviceRequest->start_date;
+        $fulfillment->end_date = $serviceRequest->end_date;
+        $fulfillment->user_id = Auth::user()->id;
+        $fulfillment->save();
+      }else {
+        $fulfillment = $serviceRequest->fulfillments->first();
+      }
+    }
+
+    // ################### fin guarda cumplimiento #######################
+
+
+
+
+
+
+
+
+
+
     //guarda control de turnos
     if ($request->shift_start_date != null) {
       foreach ($request->shift_start_date as $key => $shift_start_date) {
         $shiftControl = new ShiftControl($request->All());
-        $shiftControl->service_request_id = $serviceRequest->id;
+        // $shiftControl->service_request_id = $serviceRequest->id;
+        $shiftControl->fulfillment_id = $fulfillment->id;
         $shiftControl->start_date = $shift_start_date . " " . $request->shift_start_hour[$key];
         $shiftControl->end_date = $request->shift_end_date[$key] . " " . $request->shift_end_hour[$key];
         $shiftControl->observation = $request->shift_observation[$key];
@@ -266,7 +394,7 @@ class ServiceRequestController extends Controller
     $SignatureFlow->user_id = Auth::id();
     $SignatureFlow->ou_id = $ou_id;
     $SignatureFlow->service_request_id = $serviceRequest->id;
-    $SignatureFlow->type = "creador";
+    $SignatureFlow->type = "Responsable";
     $SignatureFlow->employee = $employee;
     $SignatureFlow->signature_date = Carbon::now();
     $SignatureFlow->status = 1;
@@ -293,7 +421,11 @@ class ServiceRequestController extends Controller
         $SignatureFlow->responsable_id = User::find($user)->id;
         $SignatureFlow->user_id = Auth::id(); //User::find($user)->id;
         $SignatureFlow->service_request_id = $serviceRequest->id;
-        $SignatureFlow->type = "visador";
+        if ($sign_position == 2) {
+          $SignatureFlow->type = "Supervisor";
+        }else{
+          $SignatureFlow->type = "visador";
+        }
         $SignatureFlow->employee = $employee;
         $SignatureFlow->sign_position = $sign_position;
         $SignatureFlow->save();
@@ -439,6 +571,15 @@ class ServiceRequestController extends Controller
   public function destroy_with_parameters(Request $request)
   {
     $serviceRequest = ServiceRequest::find($request->id);
+
+    // validación
+    foreach ($serviceRequest->fulfillments as $key => $fulfillment) {
+      if ($fulfillment->total_paid != NULL) {
+        session()->flash('success', 'No se puede eliminar la solicitud porque ya tiene información de pago asociada.');
+        return redirect()->back();
+      }
+    }
+
     $serviceRequest->observation = $request->observation;
     $serviceRequest->save();
 
@@ -449,13 +590,22 @@ class ServiceRequestController extends Controller
 
   public function consolidated_data(Request $request)
   {
+    // $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+    $establishment_id = $request->establishment_id;
 
     //solicitudes activas
     $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function ($subQuery) {
-      $subQuery->where('status', 0);
-    })
-      // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
-      ->orderBy('request_date', 'asc')->get();
+                                        $subQuery->where('status', 0);
+                                      })
+                                      ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+                                        return $q->where('establishment_id', $establishment_id);
+                                      })
+                                      ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+                                        return $q->whereNotIn('establishment_id',[1,12]);
+                                      })
+                                      // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+                                      ->orderBy('request_date', 'asc')
+                                      ->get();
 
     foreach ($serviceRequests as $key => $serviceRequest) {
       foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
@@ -470,7 +620,12 @@ class ServiceRequestController extends Controller
     $serviceRequestsRejected = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) {
       $subQuery->where('status', 0);
     })
-      // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+    ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+      return $q->where('establishment_id', $establishment_id);
+    })
+    ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+      return $q->whereNotIn('establishment_id',[1,12]);
+    })
       ->orderBy('request_date', 'asc')->get();
 
     foreach ($serviceRequestsRejected as $key => $serviceRequest) {
@@ -482,7 +637,7 @@ class ServiceRequestController extends Controller
       }
     }
 
-    return view('service_requests.requests.consolidated_data', compact('serviceRequests', 'serviceRequestsRejected'));
+    return view('service_requests.requests.consolidated_data', compact('serviceRequests', 'serviceRequestsRejected','request'));
   }
 
   public function export_sirh()
@@ -1083,11 +1238,37 @@ class ServiceRequestController extends Controller
     return view('service_requests.requests.pending_requests', compact('array', 'hoja_ruta_falta_aprobar', 'fulfillments_missing', 'cumplimiento_falta_ingresar'));
   }
 
-  public function certificatePDF(ServiceRequest $serviceRequest)
-  {
-    $pdf = app('dompdf.wrapper');
-    $pdf->loadView('service_requests.requests.report_certificate', compact('serviceRequest'));
+  // public function certificatePDF(ServiceRequest $serviceRequest)
+  // {
+  //   $pdf = app('dompdf.wrapper');
+  //   $pdf->loadView('service_requests.requests.report_certificate', compact('serviceRequest'));
 
-    return $pdf->stream('mi-archivo.pdf');
-  }
+  //   return $pdf->stream('mi-archivo.pdf');
+  // }
+
+    public function callbackFirmaBudgetAvailability($message, $modelId, SignaturesFile $signaturesFile = null)
+    {
+        $serviceRequest = ServiceRequest::find($modelId);
+
+        if (!$signaturesFile) {
+            session()->flash('danger', $message);
+            return redirect()->route('rrhh.service-request.fulfillment.edit', $serviceRequest->id);
+        }
+
+        $serviceRequest->signed_budget_availability_cert_id = $signaturesFile->id;
+        $serviceRequest->save();
+        // header('Content-Type: application/pdf');
+        // echo base64_decode($signaturesFile->signed_file);
+        session()->flash('success', $message);
+        return redirect()->route('rrhh.service-request.fulfillment.edit', $serviceRequest->id);
+    }
+
+    public function signedBudgetAvailabilityPDF(ServiceRequest $serviceRequest)
+    {
+        header('Content-Type: application/pdf');
+        if (isset($serviceRequest->signedBudgetAvailabilityCert)) {
+            echo base64_decode($serviceRequest->signedBudgetAvailabilityCert->signed_file);
+        }
+    }
+
 }
