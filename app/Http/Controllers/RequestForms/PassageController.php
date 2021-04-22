@@ -8,6 +8,7 @@ use App\RequestForms\RequestFormItemCode;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PassageController extends Controller
 {
@@ -18,7 +19,12 @@ class PassageController extends Controller
      */
     public function index()
     {
-        //
+        //$myRequestForms = RequestForm::with(['items','passages', 'requestformfiles', 'requestformevents'])
+        //  ->where('user_id', Auth::user()->id)->get();
+        //$user = Auth::user()->get();
+        $user = User::where('id', Auth::user()->id)->get();
+        //return redirect()->route('request_forms.passages.index', compact('user'));
+        return view('request_form.passage.index', compact('user'));
     }
 
     /**
