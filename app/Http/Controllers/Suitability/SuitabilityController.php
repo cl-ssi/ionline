@@ -180,6 +180,10 @@ class SuitabilityController extends Controller
         $userVisator1 = User::find(13480977);
         $userVisator2 = User::find(13867504);
 
+//        $userSigner = User::find(16351236);
+//        $userVisator1 = User::find(16351236);
+//        $userVisator2 = User::find(16351236);
+
         DB::beginTransaction();
 
         try {
