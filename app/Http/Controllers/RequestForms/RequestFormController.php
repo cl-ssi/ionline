@@ -43,8 +43,13 @@ class RequestFormController extends Controller
      */
     public function create()
     {
-        $users = User::all()->sortBy('fathers_family');
-        return view('request_form.create', compact('users'));
+        //$users = User::all()->sortBy('fathers_family');
+        //return view('request_form.create', compact('users'));
+        //$user = auth()->user();
+        //$user = User::find(auth()->user())
+        //$user = User::where('id', Auth::user()->id);
+        //return  view('request_form.create', compact('user'));
+        return  view('request_form.create');      
     }
 
     /**
