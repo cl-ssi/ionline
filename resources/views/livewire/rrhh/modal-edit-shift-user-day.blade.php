@@ -1,3 +1,4 @@
+
 <div   wire:ignore.self class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
     <div class="modal-dialog" role="document" >
@@ -43,8 +44,8 @@
                             <tr>
                                 <th style="text-align: left;">Tipo de jornada</th>
                                 <td>
-                                      @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser ) 
-                                        {{$shiftUserDay->working_day}} 
+                                    @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser ) 
+                                        {{$shiftUserDay->working_day}} - {{strtoupper($tiposJornada[$shiftUserDay->working_day])}}
                                     @else
                                     
                                         <i class="fas fa-spinner fa-pulse"></i>
@@ -67,7 +68,7 @@
                             <tr>
                                 <th style="text-align: left;">Estado  </th>
                                 <td> @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser ) 
-                                        {{$shiftUserDay->status}} 
+                                        {{$shiftUserDay->status}} - {{strtoupper($estados[$shiftUserDay->status])}}
                                     @else
                                     
                                         <i class="fas fa-spinner fa-pulse"></i>
@@ -96,23 +97,26 @@
                         <label for="exampleFormControlInput1">Accion <i class="fa fa-cog"></i></label>
 
                       
-                        <select class="form-control" name="slcAction">
-                            <option value="0"> <b> </b>1 - Cambiar Turno con </option>
-                            <option value="0"> <b> </b>2 - Marcar como Licencia Medica </option>
-                            <option value="0"> 3 - <b style="color:">Marcar como Fuero Gremial</b> </option>
-                            <option value="0"> 4 - <b style="color:">Marcar como Feriado Legal</b> </option>
-                            <option value="0"> 5 - <b style="color:">Marcar como Permiso Excepcional</b> </option>
+                        <select class="form-control" name="slcAction" wire:model="action" wire:change="changeAction">
+                            <option value="0"> <b> </b> - - - </option>
+                            <option value="1"> <b> </b>1 - Cambiar Turno con </option>
+                            <option value="2"> <b> </b>2 - Marcar como Cumplido </option>
+                            <option value="3"> <b> </b>3 - Marcar como Licencia Medica </option>
+                            <option value="4"> 4 - <b style="color:">Marcar como Fuero Gremial</b> </option>
+                            <option value="5"> 6 - <b style="color:">Marcar como Feriado Legal</b> </option>
+                            <option value="6"> 7 - <b style="color:">Marcar como Permiso Excepcional</b> </option>
                         </select>
-                       
+                      
                        
                         <span class="text-danger"></span>
 
                     </div>
-                    <div class="form-group {{$usersSelect}}">
+                    <div       class="form-group {{$usersSelect}}">
 
                         <label for="exampleFormControlInput1">Personal <i class="fa fa-user"></i></label>
-                         <select class="form-control" name="slcAction">
-                            <option value="0" >1 - Persona uno </option>
+                         <select class="form-control" wire:model="userId" name="slcAction">
+                            <option value="0" >0 - Dejar disponible </option>
+                            <option value="1" >1 - Persona uno </option>
                         </select>
 
                     </div>
@@ -122,10 +126,16 @@
                         <input type="hidden" wire:model="user_id">
 
                         <label for="exampleFormControlInput1">Historial de modificaciones <i class="fa fa-cog"></i></label>
-                            <p> <i>
-                                
-                              >> 2021/04/21 - Se a creado el dia </i>  </p>
-                        <input type="text" class="form-control" wire:model="name" id="exampleFormControlInput1" placeholder="Enter Name">
+                            <p>
+                            @if( isset($shiftUserDay) && $shiftUserDay->ShiftUser )
+                             <i>
+                              >> {{  $shiftUserDay->created_at }} - La jornada ha sido creada </i> 
+
+                             </p>
+                            @else
+                            --
+                            @endif
+
                         
                     </div>
                 </form>
