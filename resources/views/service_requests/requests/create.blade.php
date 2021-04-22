@@ -86,19 +86,19 @@
 
 		<fieldset class="form-group col-6 col-md-3">
 		    <label for="for_request_date">Fecha Solicitud</label>
-		    <input type="date" class="form-control" id="for_request_date" 
+		    <input type="date" class="form-control" id="for_request_date"
 				name="request_date" max="2022-12-31" required>
 		</fieldset>
 
     	<fieldset class="form-group col-6 col-md-3">
 		    <label for="for_start_date">F.Inicio de Contrato</label>
-		    <input type="date" class="form-control" id="for_start_date" 
+		    <input type="date" class="form-control" id="for_start_date"
 				name="start_date" min="2020-01-01" max="2022-12-31" required>
 		</fieldset>
 
     	<fieldset class="form-group col-6 col-md-3">
 		    <label for="for_end_date">F.Término de Contrato</label>
-		    <input type="date" class="form-control" id="for_end_date" 
+		    <input type="date" class="form-control" id="for_end_date"
 				name="end_date" min="2020-01-01" max="2022-12-31" required>
 		</fieldset>
 
@@ -195,9 +195,9 @@
 		<option value="SUPLENTE" >SUPLENTE</option>
 		<option value="CONTRATA" >CONTRATA</option>
 		<option value="TITULAR" >TITULAR</option>
-		<!-- 
+		<!--
 		<option value="HONORARIO COVID" >HONORARIO COVID</option>
-		<option value="SUMA ALZADA" >SUMA ALZADA</option> 
+		<option value="SUMA ALZADA" >SUMA ALZADA</option>
 		-->
 		</select>
 	</fieldset>
@@ -214,8 +214,8 @@
 			<option value="Odontólogo">Odontólogo</option>
 			<option value="Bioquímico">Bioquímico</option>
 			<option value="Auxiliar">Auxiliar</option>
-			<!-- 
-			<option value="Otro (justificar)">Otro (justificar)</option> 
+			<!--
+			<option value="Otro (justificar)">Otro (justificar)</option>
 			-->
 		</select>
 	</fieldset>
@@ -365,6 +365,16 @@
 				@endif
 			</select>
 		</fieldset>
+
+		<fieldset class="form-group col-3">
+			<label for="for_schedule_detail">Detalle de horario</label>
+			<select name="schedule_detail" class="form-control" required id="schedule_detail" disabled>
+				<option value=""></option>
+				<option value="DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)">DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)</option>
+				<option value="DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)">DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)</option>
+				<option value="FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)">FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)</option>
+			</select>
+		</fieldset>
 	</div>
 
 	<button type="submit" id="principal_form" class="btn btn-primary">Crear</button>
@@ -411,15 +421,6 @@
 				$('#for_weekly_hours').attr('disabled', 'disabled');
 				$("#control_turnos").show();
 
-				// $("#div_mensual :input").attr("disabled", true);
-				// $("#div_mensual").hide();
-				//
-				// $("#div_suma_alzada :input").attr("disabled", true);
-				// $("#div_suma_alzada").hide();
-				//
-				// $("#div_turno :input").attr("disabled", false);
-				// $("#div_turno").show();
-
 				$("#working_day_type option[value='DIURNO']").hide();
 				$("#working_day_type option[value='TERCER TURNO']").hide();
 				$("#working_day_type option[value='TERCER TURNO - MODIFICADO']").hide();
@@ -438,15 +439,6 @@
 				$('#for_nightly_hours').attr('readonly', false);
 				$('#for_weekly_hours').removeAttr('disabled');
 				$("#control_turnos").hide();
-
-				// $("#div_mensual :input").attr("disabled", false);
-				// $("#div_mensual").show();
-				//
-				// $("#div_suma_alzada :input").attr("disabled", true);
-				// $("#div_suma_alzada").hide();
-				//
-				// $("#div_turno :input").attr("disabled", true);
-				// $("#div_turno").hide();
 
 				$("#working_day_type option[value='DIURNO']").show();
 				$("#working_day_type option[value='TERCER TURNO']").show();
@@ -475,6 +467,7 @@
 		});
 
 		$('#working_day_type').on('change', function() {
+			$('#schedule_detail').attr('disabled', 'disabled');
 			if (this.value == "HORA MÉDICA") {
 				$('#rrhh_team').val('Residencia Médica');
 				$('#rrhh_team').selectpicker('refresh');
@@ -487,6 +480,9 @@
 				}
 			}else{
 				$('#contractual_condition').attr('disabled', 'disabled');
+			}
+			if (this.value == "DIURNO") {
+				$('#schedule_detail').removeAttr('disabled');
 			}
 		});
 
