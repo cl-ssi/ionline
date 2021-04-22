@@ -767,6 +767,15 @@
             </tr>
           </thead>
           <tbody>
+            <tr>
+              <td>{{$serviceRequest->created_at}}</td>
+              <td>{{$serviceRequest->creator->organizationalUnit->name}}</td>
+              <td>{{$serviceRequest->creator->position}}</td>
+              <td>{{$serviceRequest->creator->getFullNameAttribute()}}</td>
+              <td>Creador</td>
+              <td>Creada</td>
+              <td></td>
+            </tr>
             <!-- aceptado o rechazado -->
             @if($serviceRequest->SignatureFlows->where('status',2)->count()==0)
               @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
@@ -783,7 +792,13 @@
                    <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
                    <td>{{ $SignatureFlow->employee }}</td>
                    <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
-                   <td>{{ $SignatureFlow->type }}</td>
+                   @if($SignatureFlow->sign_position == 1)
+                    <td>Responsable</td>
+                   @elseif($SignatureFlow->sign_position == 2)
+                    <td>Supervisor</td>
+                   @else
+                    <td>{{ $SignatureFlow->type }}</td>
+                   @endif
                    <td>@if($SignatureFlow->status === null)
                        @elseif($SignatureFlow->status === 1) Aceptada
                        @elseif($SignatureFlow->status === 0) Rechazada
