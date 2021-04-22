@@ -19,11 +19,7 @@ class PassageController extends Controller
      */
     public function index()
     {
-        //$myRequestForms = RequestForm::with(['items','passages', 'requestformfiles', 'requestformevents'])
-        //  ->where('user_id', Auth::user()->id)->get();
-        //$user = Auth::user()->get();
-        $user = User::where('id', Auth::user()->id)->get();
-        //return redirect()->route('request_forms.passages.index', compact('user'));
+        $user = User::where('id', Auth::user()->id);
         return view('request_form.passage.index', compact('user'));
     }
 
@@ -34,7 +30,8 @@ class PassageController extends Controller
      */
     public function create()
     {
-        return  view('request_form.passage.create');
+        $user = User::where('id', Auth::user()->id);
+        return  view('request_form.passage.create', compact('user'));
     }
 
     /**
