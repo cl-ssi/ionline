@@ -17,7 +17,7 @@
       <i class="fas fa-plane"></i> Pasajes Aéreos
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-      <a class="dropdown-item" href="{{ route('request_forms.passages.index') }}"><i class="fas fa-ticket-alt"></i> Solicitud de Cotización Pasajes Aéreos</a>
+      <a class="dropdown-item" href="{{ route('request_forms.passages.create') }}"><i class="fas fa-ticket-alt"></i> Solicitud de Cotización Pasajes Aéreos</a>
       <a class="dropdown-item" href="{{ route('request_forms.passages.index') }}"><i class="fas fa-archive"></i> Selección de Pasajes Aéreos</a>
     </div>
   </li>
@@ -28,7 +28,7 @@
       <i class="fas fa-inbox"></i> Solicitudes Pendientes
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-      <a class="dropdown-item" href="{{ route('request_forms.passages.index') }}"><i class="fas fa-ticket-alt"></i> Bienes y/o Servicios</a>
+      <a class="dropdown-item" href="{{ route('request_forms.index') }}"><i class="fas fa-ticket-alt"></i> Bienes y/o Servicios</a>
       <a class="dropdown-item" href="{{ route('request_forms.passages.index') }}"><i class="fas fa-archive"></i> Cotización de Pasajes Aéreos</a>
       <a class="dropdown-item" href="{{ route('request_forms.passages.index') }}"><i class="fas fa-archive"></i> Compra de Pasajes Aéreos</a>
     </div>
