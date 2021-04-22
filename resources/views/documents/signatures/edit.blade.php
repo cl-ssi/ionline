@@ -60,7 +60,7 @@
                 <input type="file" class="form-control" id="for_document" name="document">
 
                 {{--                <a href="{{ route('lab.suspect_cases.download', $suspectCase->id) }}"--}}
-                <a href="{{route('documents.showPdf', $signature->signaturesFlowSigner->signaturesFile)}}"
+                <a href="{{route('documents.signatures.showPdf', $signature->signaturesFlowSigner->signaturesFile)}}"
                    target="_blank" data-toggle="tooltip" data-placement="top"
                    data-original-title="">Documento <i
                         {{--                        data-original-title="{{ $suspectCase->id . 'pdf' }}">Resultado <i--}}
@@ -74,7 +74,7 @@
                 <input type="file" class="form-control" id="for_annexed" name="annexed[]" multiple>
 
                 @foreach($signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
-                    <a href="{{route('documents.showPdfAnexo', $anexo)}}"
+                    <a href="{{route('documents.signatures.showPdfAnexo', $anexo)}}"
                        target="_blank" data-toggle="tooltip" data-placement="top"
                        data-original-title="">Anexo <i
                             {{--                        data-original-title="{{ $suspectCase->id . 'pdf' }}">Resultado <i--}}
