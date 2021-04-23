@@ -105,6 +105,7 @@
                             <option value="4"> 4 - <b style="color:">Marcar como Fuero Gremial</b> </option>
                             <option value="5"> 6 - <b style="color:">Marcar como Feriado Legal</b> </option>
                             <option value="6"> 7 - <b style="color:">Marcar como Permiso Excepcional</b> </option>
+                            <option value="7"> 8 - <b style="color:">Cambiar Tipo de Jornada Por</b> </option>
                         </select>
                       
                        
