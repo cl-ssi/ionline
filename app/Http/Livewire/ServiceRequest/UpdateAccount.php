@@ -16,6 +16,7 @@ class UpdateAccount extends Component
     public $pay_method;
     public $serviceRequest;
     public $bankaccount;
+    public $user;
 
     public $phone_number;
     public $email;
@@ -54,14 +55,14 @@ class UpdateAccount extends Component
 
         //devuelve user o lo crea
         $userBankAccount = UserBankAccount::updateOrCreate(
-            ['user_id' => $this->bankaccount->user->id],
+            ['user_id' => $this->user->id],
             ['bank_id' => $this->bank_id,
              'number' => $this->account_number,
              'type' => $this->pay_method]
         );
 
         $user = User::updateOrCreate(
-            ['id' => $this->bankaccount->user->id],
+            ['id' => $this->user->id],
             ['phone_number' => $this->phone_number,
              'email' => $this->email]
         );
@@ -71,7 +72,9 @@ class UpdateAccount extends Component
         //$this->serviceRequest->phone_number = $this->phone_number;
         //$this->serviceRequest->email = $this->email;
 
-        $this->bankaccount->save();
+        //$this->user->save();
+
+        //$this->userBankAccount->save();
         //$this->serviceRequest->save();
         session()->flash('message', 'Información Bancaria Actualizada Exitosamente');
     }
@@ -84,10 +87,11 @@ class UpdateAccount extends Component
           $this->account_number = $this->bankaccount->number;
           $this->pay_method = $this->bankaccount->type;
         }
-
-        $this->phone_number = $this->bankaccount->user->phone_number;
-        $this->email = $this->bankaccount->user->email;
     }
+
+        $this->phone_number = $this->user->phone_number;
+        $this->email = $this->user->email;
+    
     }
 
     public function render()

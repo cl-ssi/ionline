@@ -44,7 +44,8 @@ class FulfillmentController extends Controller
           $array[] = $authority->organizational_unit_id;
         }
 
-        $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+        // $establishment_id = Auth::user()->organizationalUnit->establishment_id;
+        $establishment_id = $request->establishment_id;
 
         if (Auth::user()->can('Service Request: fulfillments responsable')) {
           $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user, $array){
@@ -72,9 +73,12 @@ class FulfillmentController extends Controller
                                           ->when($id != NULL, function ($q) use ($id) {
                                                  return $q->where('id',$id);
                                                })
-                                          ->whereHas("responsabilityCenter", function($subQuery) use ($establishment_id){
-                                                   $subQuery->where('establishment_id',$establishment_id);
-                                               })
+                                           ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+                                             return $q->where('establishment_id', $establishment_id);
+                                           })
+                                           ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+                                             return $q->whereNotIn('establishment_id',[1,12]);
+                                           })
                                            ->orderBy('id','asc')
                                            ->paginate(100);
                                            // ->get();
@@ -101,9 +105,12 @@ class FulfillmentController extends Controller
                                           ->when($id != NULL, function ($q) use ($id) {
                                                 return $q->where('id',$id);
                                                })
-                                          ->whereHas("responsabilityCenter", function($subQuery) use ($establishment_id){
-                                                    $subQuery->where('establishment_id',$establishment_id);
-                                               })
+                                           ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+                                             return $q->where('establishment_id', $establishment_id);
+                                           })
+                                           ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+                                             return $q->whereNotIn('establishment_id',[1,12]);
+                                           })
                                            // ->where('program_contract_type','Mensual')
                                            ->paginate(100);
                                            // ->get();

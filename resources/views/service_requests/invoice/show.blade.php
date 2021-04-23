@@ -11,7 +11,7 @@
 @else
 
 
-@livewire('service-request.update-account' , ['bankaccount' => $bankaccount->last()])
+@livewire('service-request.update-account' , ['bankaccount' => $bankaccount->last(), 'user' => $user])
 
 <hr>
 

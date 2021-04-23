@@ -167,7 +167,7 @@
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-outline-danger btn-sm"
-                                    onclick="return confirm('¿Está seguro que desea eliminar su perfil : {{$profile->profession}}? ' )">
+                                    onclick="return confirm('¿Está seguro que desea eliminar su perfil: {{ $profile->profile_manage->name }} - {{ $profile->profession_manage->name }}? ' )">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </form>
