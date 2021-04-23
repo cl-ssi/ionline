@@ -661,6 +661,8 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
 });
 Route::resource('requirements', 'Requirements\RequirementController');
 
+Route::view('calendars', 'calendars.index')->name('calendars');
+
 Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::get('/', function () {
         return view('indicators.index');
