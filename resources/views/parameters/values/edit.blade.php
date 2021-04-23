@@ -11,10 +11,21 @@
 <form method="POST" class="form-horizontal" action="{{ route('parameters.values.update', $value) }}">
     @csrf
     @method('PUT')
-
     <div class="row">
+
         <fieldset class="form-group col-12 col-md-3">
-            <label for="for_contract_type" >Tipo de Contrato*</label>
+            <label for="for_establishment_id">Establecimiento*</label>
+            <select name="establishment_id" class="form-control" id="for_establishment_id" required>
+                <option value="">Seleccionar</option>
+                @foreach($establishments as $establishment)
+                <option value="{{$establishment->id}}" @if($value->establishment_id == $establishment->id) selected @endif>{{$establishment->name}}</option>
+                @endforeach                
+            </select>
+        </fieldset>
+
+
+        <fieldset class="form-group col-12 col-md-3">
+            <label for="for_contract_type">Tipo de Contrato*</label>
             <select name="contract_type" class="form-control" required>
                 <option value="">Seleccionar</option>
                 <option value="Mensual" @if($value->contract_type == 'Mensual') selected @endif>Mensual</option>
@@ -23,7 +34,7 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
-            <label for="for_type" >Tipo</label>
+            <label for="for_type">Tipo</label>
             <select name="type" class="form-control" required>
                 <option value="">Seleccionar</option>
                 <option value="Covid" @if($value->type == 'Covid') selected @endif >Honorarios - Covid</option>
@@ -32,7 +43,7 @@
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_guard_name">Jornada</label>
-            <select id="for_work_type" name="work_type"  class="form-control" required>
+            <select id="for_work_type" name="work_type" class="form-control" required>
                 <option value="">Seleccionar</option>
                 <option value="DIURNO" @if($value->work_type == 'DIURNO') selected @endif >DIURNO</option>
                 <option value="TERCER TURNO" @if($value->work_type == 'TERCER TURNO') selected @endif>TERCER TURNO</option>

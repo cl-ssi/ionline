@@ -42,13 +42,22 @@
       <option value="Auxiliar" @if($request->estate == "Auxiliar") selected @endif>Auxiliar</option>
     </select>
     <div class="input-group-prepend">
+      <span class="input-group-text">Estab.</span>
+    </div>
+    <select class="form-control selectpicker" data-live-search="true" name="establishment_id" data-size="5">
+      <option value="">Todos</option>
+      <option value="1" @if($request->establishment_id == "1") selected @endif>Hospital Ernesto Torres Galdames</option>
+      <option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option>
+      <option value="0" @if($request->establishment_id == "0") selected @endif>Dirección SSI</option>
+    </select>
+    <div class="input-group-prepend">
       <span class="input-group-text">Id</span>
     </div>
-    <input type="text" name="id" value="{{$request->id}}">
+    <input type="text" class="form-control " name="id" value="{{$request->id}}">
     <div class="input-group-prepend">
       <span class="input-group-text">Profesional</span>
     </div>
-    <input type="text" name="name" value="{{$request->name}}">
+    <input type="text" class="form-control " name="name" value="{{$request->name}}">
     <div class="input-group-append">
         <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
     </div>
@@ -116,7 +125,7 @@
                 <i class="fas fa-file" style="color:#B9B9B9"></i></a>
 
               @else
-                
+
                   class="btn btn-outline-secondary btn-sm" target="_blank">
                 <span class="fas fa-file" aria-hidden="true"></span></a>
               @endif -->

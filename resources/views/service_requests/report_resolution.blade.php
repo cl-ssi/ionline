@@ -440,7 +440,8 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
 
       @switch($ServiceRequest->working_day_type)
         @case('DIURNO')
-          DIURNA de lunes a viernes de 08:00 a 16:48 hrs.
+          <!-- DIURNA de lunes a viernes de 08:00 a 16:48 hrs. -->
+          {{$ServiceRequest->schedule_detail}}.
           @break
         @case('TERCER TURNO')
           de turnos rotativos, en TERCER TURNO, 2 largo de 08:00 a 20:00 hrs, 2 noche de 20:00 a 08:00 hrs y 2 días libres.
@@ -457,7 +458,7 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
       @endswitch
 
       Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador,
-      se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza 
+      se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza
       jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R.,
       los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente,
       como también los días de inasistencia, los cuales deberán quedar informados en el respectivo

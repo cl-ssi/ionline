@@ -1,4 +1,4 @@
-<ul class="nav nav-tabs mb-3">
+<ul class="nav nav-tabs mb-3 d-print-none">
 
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.service-request.home') }}"

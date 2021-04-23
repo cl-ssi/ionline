@@ -4,6 +4,9 @@ namespace App\Http\Controllers\ServiceRequests;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Fulfillment;
 use App\Rrhh\Authority;
@@ -12,6 +15,7 @@ use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\Auth;
+use App\Establishment;
 
 class ReportController extends Controller
 {
@@ -98,6 +102,8 @@ class ReportController extends Controller
       ->get();
 
     $payed_fulfillments = $payed_fulfillments1->merge($payed_fulfillments2);
+    //$payed_fulfillments = $payed_fulfillments->paginate(100);
+    $payed_fulfillments = $this->paginate($payed_fulfillments);
 
     return view('service_requests.reports.payed', compact('payed_fulfillments', 'request'));
   }
@@ -290,6 +296,7 @@ class ReportController extends Controller
 
 	public function pending(Request $request, $who) {
 
+    $establishments = Establishment::all();
     $user_id = Auth::user()->id;
 		$query = Fulfillment::query();
 
@@ -327,7 +334,7 @@ class ReportController extends Controller
 		$request->flash(); // envía los inputs de regreso
 
 		return view('service_requests.requests.fulfillments.reports.pending',
-			compact('fulfillments','request','periodo','who')
+			compact('fulfillments','request','periodo','who','establishments')
 		);
 
 	}
@@ -348,5 +355,15 @@ class ReportController extends Controller
 		return view('service_requests.requests.fulfillments.reports.compliance', 
       compact('years','fulfillments','request'));
 	}
+
+
+  //public function paginate($items, $perPage = 5, $page = null, $options = [])
+  public function paginate($items, $perPage = 100, $page = null, $options = ["path" => "payed"])
+  {
+      $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+      //$currentPage = LengthAwarePaginator::resolveCurrentPage();
+      $items = $items instanceof Collection ? $items : Collection::make($items);
+      return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+  }
 
 }
