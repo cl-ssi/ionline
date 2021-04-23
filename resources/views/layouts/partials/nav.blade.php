@@ -38,6 +38,11 @@
                 </li>
                 @endcan
 
+                <li class="nav-item {{ active('calendars') }}">
+                    <a class="nav-link" href="{{ route('calendars') }}">
+                        <i class="fas fa-calendar-alt"></i> Calendarios
+                    </a>
+                </li>
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
