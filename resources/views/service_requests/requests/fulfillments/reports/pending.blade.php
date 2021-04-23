@@ -10,25 +10,14 @@
 
     <div class="form-row">     
 
-        <fieldset class="form-group col-6 col-md-1">
-            <label for="for_program_contract_type">ID</label>
-            <input class="form-control" type="text" name="sr_id" value="{{ old('sr_id') }}">
-        </fieldset>
-
-        <fieldset class="form-group col-12 col-md-3">
-            <label for="for_establishment_id">Establecimiento*</label>
+        <fieldset class="form-group col-12 col-md-4">
+            <label for="for_establishment_id">Establecimiento</label>
             <select name="establishment" class="form-control" id="for_establishment_id">
                 <option value="">Seleccionar</option>
                 @foreach($establishments as $establishment)
                 <option value="{{$establishment->id}}" @if(old('establishment') == $establishment->id) selected @endif >{{$establishment->name}}</option>
                 @endforeach
             </select>
-        </fieldset>
-
-        <fieldset class="form-group col-12 col-md-2">
-            <label for="for_rut">Rut/Nombre</label>
-            <input name="rut" class="form-control" placeholder="Run o nombre" value="{{ old('rut') }}" aucomplete="off">
-            </input>
         </fieldset>
 
         <fieldset class="form-group col-4 col-md-1">
@@ -79,6 +68,20 @@
             </select>
         </fieldset>
 
+        </div>
+        <div class="form-row">
+
+        <fieldset class="form-group col-6 col-md-1">
+            <label for="for_program_contract_type">ID</label>
+            <input class="form-control" type="text" name="sr_id" value="{{ old('sr_id') }}">
+        </fieldset>
+        
+        <fieldset class="form-group col-12 col-md-4">
+            <label for="for_rut">Rut (sin dv) o nombre</label>
+            <input name="rut" class="form-control" placeholder="Run o nombre" value="{{ old('rut') }}" aucomplete="off">
+            </input>
+        </fieldset>
+
         <fieldset class="form-group col-2 col-md-1">
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
@@ -96,7 +99,6 @@
         <tr>
 
             <th>Id Sol.</th>
-            <th>Establecimiento</th>
             <th nowrap>Rut</th>
             <th>Nombre</th>
             <th>Periodo</th>
@@ -119,7 +121,6 @@
             <td>{{$fulfillment->servicerequest->id?? ''}}
                 <span class="small">({{$fulfillment->id}})</span>
             </td>
-            <td>{{$fulfillment->servicerequest->establishment->name?? ''}}
             <td>{{$fulfillment->servicerequest?$fulfillment->servicerequest->employee->runFormat(): ''}}</td>
             <td>{{$fulfillment->servicerequest->employee->fullname?? ''}}</td>
             <td>{{$fulfillment->year}} - {{$fulfillment->month}}</td>
