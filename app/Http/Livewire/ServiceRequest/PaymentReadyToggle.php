@@ -25,18 +25,17 @@ class PaymentReadyToggle extends Component
     {
         if ($this->rejection_detail_input) {
             $rejection_detail = $this->fulfillment->payment_rejection_detail . 
-                "<hr>" . Auth::user()->initials . "-" . Carbon::now() . ":<br>" . 
-                $this->rejection_detail_input;
+                "<hr>" . Auth::user()->initials . " " . Carbon::now() . ":<br>" . $this->rejection_detail_input;
         } else {
             if($this->payment_ready == 1)
             {
                 $rejection_detail = $this->fulfillment->payment_rejection_detail . 
-                    "<hr>" . Auth::user()->initials . "-" . Carbon::now() . ":<br> Pago Aceptado" ;
+                    "<hr>" . Auth::user()->initials . " " . Carbon::now() . ":<br> Pago Aceptado" ;
             }
             else
             {
                 $rejection_detail = $this->fulfillment->payment_rejection_detail . 
-                    "<hr>" . Auth::user()->initials . "-" . Carbon::now() . ":<br> Pago Rechazado" ;
+                    "<hr>" . Auth::user()->initials . " " . Carbon::now() . ":<br> Pago Rechazado" ;
             }
 
         }
