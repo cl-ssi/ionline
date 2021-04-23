@@ -69,7 +69,7 @@
                                 <th style="text-align: left;">Estado  </th>
                                 <td> @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser ) 
                                         {{$shiftUserDay->status}} - {{strtoupper($estados[$shiftUserDay->status])}}
-                                        <i class="fa fa-circle {{$shiftUserDay->status}}"></i>
+                                        <i class="fa fa-circle " style="color:{{$statusColors[$shiftUserDay->status]}}"></i>
                                     @else
                                     
                                         <i class="fas fa-spinner fa-pulse"></i>

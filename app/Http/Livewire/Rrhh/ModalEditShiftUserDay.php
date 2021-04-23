@@ -33,6 +33,16 @@ class ModalEditShiftUserDay extends Component
             7 => "Feriado Legal",
             8 => "Permiso Excepcional",
     );
+    private $colors = array(
+            1 => "lightblue",
+            2 => "blue",
+            3 => "green",
+            4 => "orange",
+            5 => "red",
+            6 => "purple",
+            7 => "yellow",
+            8 => "gray",
+    );
     protected $listeners = ['setshiftUserDay','clearModal','ChangeWorkingDay'=>'enableChangeTypeOfWorkingDay'];
     public function mount(){
 		
@@ -118,7 +128,7 @@ class ModalEditShiftUserDay extends Component
 	}
     public function render()
     {
-        return view('livewire.rrhh.modal-edit-shift-user-day',["tiposJornada"=>$this->tiposJornada,"estados"=>$this->estados]);
+        return view('livewire.rrhh.modal-edit-shift-user-day',["tiposJornada"=>$this->tiposJornada,"estados"=>$this->estados,"statusColors"=>$this->colors]);
     }
 
 }
