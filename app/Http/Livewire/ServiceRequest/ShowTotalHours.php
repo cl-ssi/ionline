@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ServiceRequests\Fulfillment;
+use App\Models\ServiceRequests\FulfillmentItem;
 use Livewire\Component;
 
 class ShowTotalHours extends Component
@@ -22,12 +23,12 @@ class ShowTotalHours extends Component
     public $hoursDetailArray = array();
     public $forCertificate = false;
 
-//    protected $listeners = ['listener_shift_control'];
-//
-//    public function listener_shift_control()
-//    {
-//      $this->fulfillment = Fulfillment::find($this->fulfillment->id);
-//    }
+    //    protected $listeners = ['listener_shift_control'];
+    //
+    //    public function listener_shift_control()
+    //    {
+    //      $this->fulfillment = Fulfillment::find($this->fulfillment->id);
+    //    }
 
     public function render()
     {
@@ -60,25 +61,29 @@ class ShowTotalHours extends Component
                             if (in_array($date->hour, [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]))
                                 return true;
                             else return false;
-                        }, $shiftControl->end_date);
+                        },
+                        $shiftControl->end_date
+                    );
 
                     $hoursNightString = $shiftControl->start_date->diffInHoursFiltered(
                         function ($date) {
                             if (in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7]))
                                 return true;
                             else return false;
-                        }, $shiftControl->end_date);
+                        },
+                        $shiftControl->end_date
+                    );
 
-//                    if (Auth::user()->can('be god')) {
-//                        dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia: $hoursDayString | Noche: $hoursNightString");
-//                    }
+                    //                    if (Auth::user()->can('be god')) {
+                    //                        dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia: $hoursDayString | Noche: $hoursNightString");
+                    //                    }
 
-//                    $this->hoursDetailArray[$keyFulfillment]['type'] = $fulfillmentItem->type;
-//                    $this->hoursDetailArray[$keyFulfillment]['start_date'] = $fulfillmentItem->start_date->format('d-m-Y H:i');
-//                    $this->hoursDetailArray[$keyFulfillment]['end_date'] = $fulfillmentItem->end_date->format('d-m-Y H:i');
-//                    $this->hoursDetailArray[$keyFulfillment]['hours_day'] = $hoursDayString;
-//                    $this->hoursDetailArray[$keyFulfillment]['hours_night'] = $hoursNightString;
-//                    $this->hoursDetailArray[$keyFulfillment]['observation'] = $fulfillmentItem->observation;
+                    //                    $this->hoursDetailArray[$keyFulfillment]['type'] = $fulfillmentItem->type;
+                    //                    $this->hoursDetailArray[$keyFulfillment]['start_date'] = $fulfillmentItem->start_date->format('d-m-Y H:i');
+                    //                    $this->hoursDetailArray[$keyFulfillment]['end_date'] = $fulfillmentItem->end_date->format('d-m-Y H:i');
+                    //                    $this->hoursDetailArray[$keyFulfillment]['hours_day'] = $hoursDayString;
+                    //                    $this->hoursDetailArray[$keyFulfillment]['hours_night'] = $hoursNightString;
+                    //                    $this->hoursDetailArray[$keyFulfillment]['observation'] = $fulfillmentItem->observation;
 
                     $this->totalHoursDay = $this->totalHoursDay + $hoursDayString;
                     $this->totalHoursNight = $this->totalHoursNight + $hoursNightString;
@@ -155,15 +160,21 @@ class ShowTotalHours extends Component
                             if (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray))
                                 return true;
                             else return false;
-                        }, $shiftControl->end_date);
+                        },
+                        $shiftControl->end_date
+                    );
 
                     $hoursNight = $shiftControl->start_date->diffInHoursFiltered(
                         function ($date) use ($holidaysArray) {
-                            if (in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]) ||
-                                (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && ($date->dayOfWeek == 6 || $date->dayOfWeek == 0 || in_array($date->toDateString(), $holidaysArray))))
+                            if (
+                                in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]) ||
+                                (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && ($date->dayOfWeek == 6 || $date->dayOfWeek == 0 || in_array($date->toDateString(), $holidaysArray)))
+                            )
                                 return true;
                             else return false;
-                        }, $shiftControl->end_date);
+                        },
+                        $shiftControl->end_date
+                    );
 
                     $this->hoursDetailArray[$keyShiftControl]['start_date'] = $shiftControl->start_date->format('d-m-Y H:i');
                     $this->hoursDetailArray[$keyShiftControl]['end_date'] = $shiftControl->end_date->format('d-m-Y H:i');
@@ -180,8 +191,16 @@ class ShowTotalHours extends Component
                 $businessDays = $this->fulfillment->serviceRequest->start_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
                     return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
                 }, $this->fulfillment->serviceRequest->end_date);
+               
 
-                $workingHoursInMonth = $businessDays * 8.8;
+                $fulfilmentitems = FulfillmentItem::where('fulfillment_id',$this->fulfillment->id)->get();                
+                $daysnotworking = 2;
+                foreach($fulfilmentitems as $fulfilmentitem){
+                    $daysnotworking = $daysnotworking+$fulfilmentitem->start_date->diffInDays($fulfilmentitem->end_date);
+                }
+                
+
+                $workingHoursInMonth = ($businessDays-$daysnotworking) * 8.8;
                 $this->refundHours = round(($workingHoursInMonth - $this->totalHoursDay), 0);
                 $this->totalHours = $this->refundHours + $this->totalHoursNight;
                 $totalAmountNight = $this->totalHoursNight * ($value->amount * 1.5);
