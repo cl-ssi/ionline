@@ -140,15 +140,18 @@
 
                         <input type="hidden" wire:model="user_id">
 
-                        <label for="exampleFormControlInput1">Historial de modificaciones <i class="fa fa-cog"></i></label>
-                            <p>
+                        <label for="exampleFormControlInput1">Historial de modificaciones <i class="fa fa-history "></i></label>
                             @if( isset($shiftUserDay) && $shiftUserDay->ShiftUser )
+                            <p>
                              <i>
                               >> {{  $shiftUserDay->created_at }} - La jornada ha sido creada </i> 
 
                              </p>
+                                @foreach($shiftUserDay->shiftUserDayLog as $log)
+                                      <p><i>  >> {{$log->created_at}} - {{$log->commentary}} </i></p>
+                                @endforeach
                             @else
-                            --
+                            <p>  -- </p>
                             @endif
 
                         
