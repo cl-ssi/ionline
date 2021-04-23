@@ -106,12 +106,57 @@
 
         </div>
 
-        <button type="submit" class="btn btn-primary" @if($signature->signaturesFlows->where('status', 1)->count() > 0 or $signature->responsable_id != Auth::id()) disabled @endif >Guardar</button>
-        <button type="submit" class="btn btn-danger float-right" form="delete_form">Eliminar</button>
+
+        @if($signature->hasSignedOrRejectedFlow)
+            <button type="button" class="btn btn-primary" @if($signature->responsable_id != Auth::id()) disabled @endif
+                data-toggle="modal"
+                data-target="#editSignature"
+            >Guardar
+            </button>
+
+            <div class="modal fade" id="editSignature" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Editar solicitud</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-row">
+                                <div class="form-group col-12">
+                                   <span>Esta solicitud ya tiene firmas o rechazo. Los usuarios que hayan firmado deberán firmar nuevamente.</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
+                            </button>
+
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-edit"></i> Guardar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        @else
+            <button type="submit" class="btn btn-primary"
+                    @if($signature->responsable_id != Auth::id()) disabled @endif >Guardar
+            </button>
+        @endif
+
+        <button type="submit" class="btn btn-danger float-right" @if($signature->responsable_id != Auth::id()) disabled
+                @endif form="delete_form">Eliminar
+        </button>
 
     </form>
 
-    <form method="POST" id="delete_form" action="{{route('documents.signatures.destroy', $signature)}}" enctype="multipart/form-data">
+    <form method="POST" id="delete_form" action="{{route('documents.signatures.destroy', $signature)}}"
+          enctype="multipart/form-data">
         @csrf
         @method('DELETE')
     </form>
