@@ -69,6 +69,7 @@
                                 <th style="text-align: left;">Estado  </th>
                                 <td> @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser ) 
                                         {{$shiftUserDay->status}} - {{strtoupper($estados[$shiftUserDay->status])}}
+                                        <i class="fa fa-circle {{$shiftUserDay->status}}"></i>
                                     @else
                                     
                                         <i class="fas fa-spinner fa-pulse"></i>
@@ -112,16 +113,29 @@
                         <span class="text-danger"></span>
 
                     </div>
-                    <div       class="form-group {{$usersSelect}}">
+                    <div class="form-group " style="display: {{$usersSelect}}">
 
                         <label for="exampleFormControlInput1">Personal <i class="fa fa-user"></i></label>
-                         <select class="form-control" wire:model="userId" name="slcAction">
+                         <select class="form-control" wire:model="userIdtoChange" name="slcAction">
                             <option value="0" >0 - Dejar disponible </option>
                             <option value="1" >1 - Persona uno </option>
                         </select>
 
                     </div>
+                     <div class="form-group" style="display: {{$changeDayType}}">
 
+                        <label for="exampleFormControlInput1">Tipo de Jornada <i class="fa fa-user"></i></label>
+                         <select class="form-control" wire:model="newWorkingDay" name="slcAction">
+                            @foreach( $tiposJornada as $index=>$tj )
+                                <option value="{{$index}}" {{
+                                 ( 
+                                    ( isset($shiftUserDay) && $shiftUserDay->ShiftUser) ?  ( ($index == $shiftUserDay->working_day )?"selected":"") : "" ) }}>{{$index}} - {{strtoupper($tj)}} </option>
+                            @endforeach
+                      
+
+                        </select>
+
+                    </div>
                     <div class="form-group">
 
                         <input type="hidden" wire:model="user_id">
