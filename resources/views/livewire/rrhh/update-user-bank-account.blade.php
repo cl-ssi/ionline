@@ -6,7 +6,7 @@
               {{ session('message') }}
           </div>
       @endif
-  </div>  
+  </div>
 
   <div class="card"><!--Start Card -->
         <div class="card-header h5">
@@ -18,7 +18,7 @@
         <div class="form-row"> <!--Start Row -->
             <fieldset class="form-group col-12 col-md-5">
                 <label>Banco</label>
-                <select wire:model.lazy="bank_id" class="form-control" required>
+                <select wire:model.lazy="bank_id" class="form-control">
                 <option value="">Seleccionar Banco</option>
                 @foreach($banks as $bank)
                 <option value="{{$bank->id}}">{{$bank->name}}</option>
@@ -29,7 +29,7 @@
 
             <fieldset class="form-group col-12 col-md-3">
                 <label>Número de Cuenta</label>
-                <input type="number" wire:model.lazy="account_number" class="form-control" required>
+                <input type="number" wire:model.lazy="account_number" class="form-control">
                 @error('account_number') <span class="text-danger">{{ $message }}</span> @enderror
             </fieldset>
 
