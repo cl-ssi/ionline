@@ -61,7 +61,6 @@
             </tr>
             </thead>
             <tbody>
-            {{--            @foreach($pendingSignatures as $signature)--}}
             @foreach($pendingSignaturesFlows as $pendingSignaturesFlow)
                 <tr>
                     <td>{{ $pendingSignaturesFlow->signature->id}}</td>
@@ -72,7 +71,7 @@
                     <td>{{ $pendingSignaturesFlow->signature->description }}</td>
                     <td>
                         <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
-                                data-target="#exampleModalCenter{{$pendingSignaturesFlow->id}}"
+                                data-target="#signModal{{$pendingSignaturesFlow->id}}"
                                 title="Firmar documento">
                             <i class="fas fa-file-signature"></i>
                         </button>
@@ -135,13 +134,13 @@
                     </div>
                 </div>
                 {{--**************************** El pop up up up del OTP**************************************************************--}}
-                <div class="modal fade" id="exampleModalCenter{{$pendingSignaturesFlow->id}}" tabindex="-1"
+                <div class="modal fade" id="signModal{{$pendingSignaturesFlow->id}}" tabindex="-1"
                      role="dialog"
                      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle">Nro. OTP</h5>
+                                <h5 class="modal-title" id="exampleModalLongTitle"> @if(count($pendingSignaturesFlow->validationMessages) === 0) Nro. OTP @else No es posible firmar aún @endif</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -154,9 +153,19 @@
                                     @method('POST')
                                     <div class="form-row">
                                         <div class="form-group col-12">
-                                            <label for="forotp">Ingrese número OTP.</label>
-                                            <input type="text" class="form-control form-control-sm" id="forotp"
-                                                   name="otp" maxlength="6" autocomplete="off" required/>
+                                            @if( count($pendingSignaturesFlow->validationMessages) === 0 )
+                                                <label for="forotp">Ingrese número OTP.</label>
+                                                <input type="text" class="form-control form-control-sm" id="forotp"
+                                                       name="otp" maxlength="6" autocomplete="off" required/>
+                                            @else
+                                                <ul class="list-group">
+                                                    @foreach($pendingSignaturesFlow->validationMessages as $validationMessage)
+                                                        <li class="list-group-item list-group-item-warning">
+                                                             {{$validationMessage}}
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -164,9 +173,11 @@
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
                                     </button>
 
-                                    <button class="btn btn-primary" type="submit">
-                                        <i class="fas fa-edit"></i> Firmar
-                                    </button>
+                                    @if(count($pendingSignaturesFlow->validationMessages) === 0)
+                                        <button class="btn btn-primary" type="submit">
+                                            <i class="fas fa-edit"></i> Firmar
+                                        </button>
+                                    @endif
                                 </div>
                             </form>
                         </div>
@@ -271,15 +282,16 @@
                         </a>
                     </td>
                     <td>
-                        <a  class="btn btn-sm btn-outline-danger" title="Eliminar solicitud"
-                            data-toggle = "modal"
-                            data-target="#rejectSignature{{$signature->id}}">
+                        <a class="btn btn-sm btn-outline-danger" title="Eliminar solicitud"
+                           @if($signature->responsable_id != Auth::id()) disabled @endif
+                           data-toggle="modal"
+                           data-target="#deleteSignature{{$signature->id}}">
                             <i class="fas fa-trash"></i>
                         </a>
                     </td>
                 </tr>
                 {{--Modal eliminar--}}
-                <div class="modal fade" id="rejectSignature{{$signature->id}}" tabindex="-1" role="dialog"
+                <div class="modal fade" id="deleteSignature{{$signature->id}}" tabindex="-1" role="dialog"
                      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
@@ -292,8 +304,8 @@
                             <form method="POST" class="form-horizontal"
                                   action="{{route('documents.signatures.destroy', $signature)}}"
                                   enctype="multipart/form-data">
-                                @csrf <!-- input hidden contra ataques CSRF -->
-                                    @method('DELETE')
+                            @csrf <!-- input hidden contra ataques CSRF -->
+                                @method('DELETE')
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar

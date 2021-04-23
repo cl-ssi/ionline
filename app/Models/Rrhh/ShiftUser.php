@@ -14,7 +14,7 @@ class ShiftUser extends Model
 
 	public function assignmentUser()
 	{
-    	return $this->belongsTo(\App\User::class, 'user_id');
+    	return $this->belongsTo(\App\User::class, 'asigned_by');
 	}
 	public function user()
 	{
