@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Suitability;
 
 use App\Models\Suitability\Result;
+use App\Models\Suitability\Question;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -51,7 +52,8 @@ class ResultsController extends Controller
     {
         //
         $result = Result::find($id);
-        return view('suitability.results.show', compact('result'));
+        $questions = Question::all();
+        return view('suitability.results.show', compact('result','questions'));
     }
 
     /**
