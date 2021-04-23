@@ -14,7 +14,7 @@ class FulfillmentAbsences extends Component
     public $fulfillment;
 
     public $type;
-    public $start_date;
+    public $start_date = '00:00:00';
     public $start_hour;
     public $end_date;
     public $end_hour;
@@ -36,24 +36,24 @@ class FulfillmentAbsences extends Component
         return;
       }
 
-      //validation
-      if (Auth::user()->can('Service Request: fulfillments rrhh')) {
-        if (Fulfillment::where('id',$this->fulfillment->id)->first()->responsable_approver_id == NULL) {
-          // session()->flash('danger', 'No es posible registrar, puesto que falta aprobación de Responsable.');
-          // return redirect()->back();
-          $this->msg = "No es posible registrar, puesto que falta aprobación de Responsable.";
-          return;
-        }
-      }
+      // //validation
+      // if (Auth::user()->can('Service Request: fulfillments rrhh')) {
+      //   if (Fulfillment::where('id',$this->fulfillment->id)->first()->responsable_approver_id == NULL) {
+      //     // session()->flash('danger', 'No es posible registrar, puesto que falta aprobación de Responsable.');
+      //     // return redirect()->back();
+      //     $this->msg = "No es posible registrar, puesto que falta aprobación de Responsable.";
+      //     return;
+      //   }
+      // }
 
-      if (Auth::user()->can('Service Request: fulfillments finance')) {
-        if (Fulfillment::where('id',$this->fulfillment->id)->first()->rrhh_approver_id == NULL) {
-          // session()->flash('danger', 'No es posible registrar, puesto que falta aprobación de RRHH.');
-          // return redirect()->back();
-          $this->msg = "No es posible registrar, puesto que falta aprobación de RRHH.";
-          return;
-        }
-      }
+      // if (Auth::user()->can('Service Request: fulfillments finance')) {
+      //   if (Fulfillment::where('id',$this->fulfillment->id)->first()->rrhh_approver_id == NULL) {
+      //     // session()->flash('danger', 'No es posible registrar, puesto que falta aprobación de RRHH.');
+      //     // return redirect()->back();
+      //     $this->msg = "No es posible registrar, puesto que falta aprobación de RRHH.";
+      //     return;
+      //   }
+      // }
 
       $start = Carbon::parse($this->start_date . " " .$this->start_hour);
       $end = Carbon::parse($this->end_date . " " .$this->end_hour);
@@ -68,27 +68,24 @@ class FulfillmentAbsences extends Component
       $fulfillmentItem = new FulfillmentItem();
       $fulfillmentItem->fulfillment_id = $this->fulfillment->id;
       $fulfillmentItem->type = $this->type;
-      if ($this->type == "Inasistencia Injustificada") {
-        $fulfillmentItem->start_date = $this->start_date . " " .$this->start_hour;
-        $fulfillmentItem->end_date = $this->end_date . " " .$this->end_hour;
-      }
-      if ($this->type == "Licencia médica") {
-        $fulfillmentItem->start_date = $this->start_date;
-        $fulfillmentItem->end_date = $this->end_date;
-      }
-      if ($this->type == "Licencia no covid") {
-        $fulfillmentItem->start_date = $this->start_date;
-        $fulfillmentItem->end_date = $this->end_date;
-      }
-      if ($this->type == "Renuncia voluntaria") {
-        $fulfillmentItem->end_date = $this->end_date;
-      }
-      if ($this->type == "Abandono de funciones") {
-        $fulfillmentItem->end_date = $this->end_date;
-      }
-      if ($this->type == "Turno") {
-        $fulfillmentItem->start_date = $this->start_date . " " .$this->start_hour;
-        $fulfillmentItem->end_date = $this->end_date . " " .$this->end_hour;
+      switch($this->type) {
+        case 'Inasistencia Injustificada':
+        case 'Turno':
+          $fulfillmentItem->start_date = $this->start_date . " " .$this->start_hour;
+          $fulfillmentItem->end_date = $this->end_date . " " .$this->end_hour;
+          break;
+        case 'Licencia médica':
+        case 'Licencia no covid':
+        case 'Permiso':
+        case 'Feriado':
+          $fulfillmentItem->start_date = $this->start_date;
+          $fulfillmentItem->end_date = $this->end_date;
+          break;
+        case 'Renuncia voluntaria':
+        case 'Abandono de funciones':
+          $fulfillmentItem->end_date = $this->end_date;
+          break;
+        
       }
 
       if (Auth::user()->can('Service Request: fulfillments responsable')) {
@@ -126,26 +123,23 @@ class FulfillmentAbsences extends Component
         $this->select_end_date = '';
         $this->select_end_hour = '';
         $this->select_observation = '';
-        if ($this->type == "Inasistencia Injustificada") {
 
-        }
-        if ($this->type == "Licencia médica") {
-          $this->select_start_hour = 'disabled';
-          $this->select_end_hour = 'disabled';
-        }
-        if ($this->type == "Licencia no covid") {
-          $this->select_start_hour = 'disabled';
-          $this->select_end_hour = 'disabled';
-        }
-        if ($this->type == "Renuncia voluntaria") {
-          $this->select_start_date = 'disabled';
-          $this->select_start_hour = 'disabled';
-          $this->select_end_hour = 'disabled';
-        }
-        if ($this->type == "Abandono de funciones") {
-          $this->select_start_date = 'disabled';
-          $this->select_start_hour = 'disabled';
-          $this->select_end_hour = 'disabled';
+        switch($this->type) {
+          case 'Licencia médica':
+          case 'Licencia no covid':
+          case 'Permiso':
+          case 'Feriado':
+            $this->select_start_hour = 'disabled';
+            $this->select_end_hour = 'disabled';
+            break;
+          case 'Renuncia voluntaria':
+          case 'Abandono de funciones':
+            $this->select_start_date = 'disabled';
+            $this->select_start_hour = 'disabled';
+            $this->select_end_hour = 'disabled';
+            break;
+          default: 
+            break;
         }
 
         return view('livewire.service-request.fulfillment-absences');
