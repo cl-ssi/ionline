@@ -290,10 +290,10 @@
                                 </button>
                             </div>
                             <form method="POST" class="form-horizontal"
-                                  action="{{route('documents.signatures.rejectSignature', $signature->id)}}"
+                                  action="{{route('documents.signatures.destroy', $signature)}}"
                                   enctype="multipart/form-data">
                                 @csrf <!-- input hidden contra ataques CSRF -->
-                                    @method('POST')
+                                    @method('DELETE')
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
