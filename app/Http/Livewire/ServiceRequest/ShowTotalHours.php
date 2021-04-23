@@ -194,7 +194,7 @@ class ShowTotalHours extends Component
                
 
                 $fulfilmentitems = FulfillmentItem::where('fulfillment_id',$this->fulfillment->id)->get();                
-                $daysnotworking = 2;
+                $daysnotworking = 0;
                 foreach($fulfilmentitems as $fulfilmentitem){
                     $daysnotworking = $daysnotworking+$fulfilmentitem->start_date->diffInDays($fulfilmentitem->end_date);
                 }
