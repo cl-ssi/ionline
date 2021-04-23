@@ -272,14 +272,15 @@
                     </td>
                     <td>
                         <a  class="btn btn-sm btn-outline-danger" title="Eliminar solicitud"
+                            @if($signature->responsable_id != Auth::id()) disabled @endif
                             data-toggle = "modal"
-                            data-target="#rejectSignature{{$signature->id}}">
+                            data-target="#deleteSignature{{$signature->id}}">
                             <i class="fas fa-trash"></i>
                         </a>
                     </td>
                 </tr>
                 {{--Modal eliminar--}}
-                <div class="modal fade" id="rejectSignature{{$signature->id}}" tabindex="-1" role="dialog"
+                <div class="modal fade" id="deleteSignature{{$signature->id}}" tabindex="-1" role="dialog"
                      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
@@ -290,10 +291,10 @@
                                 </button>
                             </div>
                             <form method="POST" class="form-horizontal"
-                                  action="{{route('documents.signatures.rejectSignature', $signature->id)}}"
+                                  action="{{route('documents.signatures.destroy', $signature)}}"
                                   enctype="multipart/form-data">
                                 @csrf <!-- input hidden contra ataques CSRF -->
-                                    @method('POST')
+                                    @method('DELETE')
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
