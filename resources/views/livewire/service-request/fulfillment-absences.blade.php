@@ -2,7 +2,7 @@
   <!-- <form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.store') }}" enctype="multipart/form-data"> -->
     <!-- @csrf -->
     <div class="form-row">
-      <fieldset class="form-group col-12 col-md">
+      <fieldset class="form-group col-12 col-md-4">
         <label for="for_type">Tipo</label>
         <select name="type" wire:model="type" class="form-control for_type" required>
           <option value=""></option>
@@ -11,6 +11,8 @@
           <option value="Licencia no covid">LICENCIA MÉDICA - NO COVID</option>
           <option value="Renuncia voluntaria">RENUNCIA VOLUNTARIA</option>
           <option value="Abandono de funciones">ABANDONO DE FUNCIONES</option>
+          <option value="Permiso">PERMISO</option>
+          <option value="Feriado">FERIADO</option>
         </select>
       </fieldset>
       <fieldset class="form-group col-12 col-md">
@@ -40,7 +42,7 @@
         <input type="time" class="form-control end_hour" name="end_hour" {{$select_end_hour}} wire:model="end_hour" required>
       </fieldset>
 
-      @can('Service Request: fulfillments responsable')
+      @canany(['Service Request: fulfillments responsable','Service Request: fulfillments rrhh'])
         @if($fulfillment->responsable_approver_id == NULL)
         <fieldset class="form-group col">
           <label for="for_estate"><br/></label>
@@ -49,20 +51,7 @@
         @else
         <fieldset class="form-group col">
           <label for="for_estate"><br/></label>
-          <button type="submit" class="btn form-control btn-primary" disabled>Guardar</button>
-        </fieldset>
-        @endif
-      @endcan
-      @can('Service Request: fulfillments rrhh')
-        @if($fulfillment->rrhh_approver_id == NULL)
-        <fieldset class="form-group col">
-          <label for="for_estate"><br/></label>
-          <button type="submit" class="btn form-control btn-primary" wire:click="save()">Guardar</button>
-        </fieldset>
-        @else
-        <fieldset class="form-group col">
-          <label for="for_estate"><br/></label>
-          <button type="submit" class="btn form-control btn-primary" disabled>Guardar</button>
+          Ya está aprobada por el responsable
         </fieldset>
         @endif
       @endcan
