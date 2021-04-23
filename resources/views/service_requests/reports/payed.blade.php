@@ -8,7 +8,7 @@
 
 <h4 class="mb-3">Pagados</h4>
 
-<form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.to-pay') }}">
+<form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.payed') }}">
 
 <div class="form-row">
 
@@ -126,6 +126,8 @@
       </tr>
     @endforeach
 </table>
+
+{{ $payed_fulfillments->appends(request()->query())->links() }}
 
 @endsection
 
