@@ -282,6 +282,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('/addendum/{file}', 'Agreements\AddendumController@download')->name('addendum.download');
     Route::resource('programs', 'Agreements\ProgramController');
     Route::resource('municipalities', 'MunicipalityController');
+    Route::resource('signers', 'Agreements\SignerController');
     Route::put('/amount/{agreement_amount}', 'Agreements\AgreementController@updateAmount')->name('amount.update');
     Route::delete('/amount/{agreement_amount}', 'Agreements\AgreementController@destroyAmount')->name('amount.destroy');
     Route::put('/quota/{agreement_quota}', 'Agreements\AgreementController@updateQuota')->name('quota.update');
@@ -290,7 +291,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('tracking', 'Agreements\AgreementController@indexTracking')->name('tracking.index');
     //Route::get('createWord','Agreements\WordTestController@createWordDocx')->name('createWord.index');
     Route::get('/createWord/{agreement}', 'Agreements\WordTestController@createWordDocx')->name('createWord');
-    Route::get('/createWordRes/{agreement}', 'Agreements\WordTestController@createResWordDocx')->name('createWordRes');
+    Route::post('/createWordRes/{agreement}', 'Agreements\WordTestController@createResWordDocx')->name('createWordRes');
     Route::get('/signRes/{agreement}', 'Agreements\AgreementController@signRes')->name('signRes');
 });
 
