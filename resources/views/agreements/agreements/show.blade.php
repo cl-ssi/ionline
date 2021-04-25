@@ -22,7 +22,11 @@
     </li>
     @if($agreement->file != null)
     <li class="nav-item">
-        <a class="nav-link text-secondary" href="{{ route('agreements.createWordRes', $agreement) }}"><i class="fas fa-eye"></i> Previsualizar Resolución</a>
+        {{--<a class="nav-link text-secondary" href="{{ route('agreements.createWordRes', $agreement) }}"><i class="fas fa-eye"></i> Previsualizar Resolución</a>--}}
+        <a href="#" class="nav-link text-secondary" data-toggle="modal"
+                        data-target="#selectSignerRes"
+                        data-formaction="{{ route('agreements.createWordRes', $agreement )}}">
+                        <i class="fas fa-eye"></i> Previsualizar Resolución</a>
     </li>
     @endif
     {{--@canany(['Documents: signatures and distribution'])
@@ -642,6 +646,7 @@
     @include('agreements/agreements/modal_edit_amount')
     @include('agreements/agreements/modal_edit_quota')
     @include('agreements/agreements/modal_edit_addendum')
+    @include('agreements/agreements/modal_select_signer_res')
 
 @endsection
 
@@ -698,6 +703,16 @@
         modal.find('input[name="date"]').val(button.data('date'))
 
         modal.find("#form-edit").attr('action', button.data('formaction'))
+    })
+
+    $('#selectSignerRes').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var modal  = $(this)
+        modal.find("#form-edit").attr('action', button.data('formaction'))
+    })
+
+    $('#SubmitSignerSelected').click(function() {
+        $('#selectSignerRes').modal('hide');
     })
 
     // $('#authority_id').on('change', function(e){
