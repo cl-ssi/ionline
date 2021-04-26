@@ -32,7 +32,7 @@ class ShowTotalHours extends Component
 
     public function render()
     {
-        //TODO HORA MÉDICA ya no obtiene el valor hora de value
+        //HORA MÉDICA no obtiene el valor hora de Value
         $value = Value::where('contract_type', $this->fulfillment->serviceRequest->program_contract_type)
             ->where('work_type', $this->fulfillment->serviceRequest->working_day_type)
             ->where('type', $this->fulfillment->serviceRequest->type)
@@ -191,14 +191,14 @@ class ShowTotalHours extends Component
                 $businessDays = $this->fulfillment->serviceRequest->start_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
                     return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
                 }, $this->fulfillment->serviceRequest->end_date);
-               
 
-                $fulfilmentitems = FulfillmentItem::where('fulfillment_id',$this->fulfillment->id)->get();                
+
+                $fulfilmentitems = FulfillmentItem::where('fulfillment_id',$this->fulfillment->id)->get();
                 $daysnotworking = 0;
                 foreach($fulfilmentitems as $fulfilmentitem){
                     $daysnotworking = $daysnotworking+$fulfilmentitem->start_date->diffInDays($fulfilmentitem->end_date);
                 }
-                
+
 
                 $workingHoursInMonth = ($businessDays-$daysnotworking) * 8.8;
                 $this->refundHours = round(($workingHoursInMonth - $this->totalHoursDay), 0);
