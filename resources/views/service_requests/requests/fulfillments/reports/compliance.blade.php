@@ -36,21 +36,13 @@
 
         <fieldset class="form-group col-4 col-md-2">
             <label for="for_month">Mes</label>
-            <select name="month" class="form-control">
+            <select name="month" class="form-control text-capitalize">
                 <option value=""></option>
-                <option value="1" @if($request->input('month')==1) selected @endif>Enero</option>
-                <option value="2" @if($request->input('month')==2) selected @endif>Febrero</option>
-                <option value="3" @if($request->input('month')==3) selected @endif>Marzo</option>
-                <option value="4" @if($request->input('month')==4) selected @endif>Abril</option>
-                <option value="5" @if($request->input('month')==5) selected @endif>Mayo</option>
-                <option value="6" @if($request->input('month')==6) selected @endif>Junio</option>
-                <option value="7" @if($request->input('month')==7) selected @endif>Julio</option>
-                <option value="8" @if($request->input('month')==8) selected @endif>Agosto</option>
-                <option value="9" @if($request->input('month')==9) selected @endif>Septiembre</option>
-                <option value="10" @if($request->input('month')==10) selected @endif>Octubre</option>
-                <option value="11" @if($request->input('month')==11) selected @endif>Noviembre</option>
-                <option value="12" @if($request->input('month')==12) selected @endif>Diciembre</option>
-
+                @for($i = 1; $i <= 12; $i++)
+                    <option value="{{ $i }}" {{ old('month')==$i ? 'selected':'' }}>
+                        {{ Carbon\Carbon::parse("0000-$i-1")->monthName }}
+                    </option>
+                @endfor
             </select>
         </fieldset>
 

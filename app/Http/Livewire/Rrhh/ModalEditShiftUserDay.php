@@ -116,7 +116,7 @@ class ModalEditShiftUserDay extends Component
 
 
 			$nHistory = new ShiftDayHistoryOfChanges;
-			$nHistory->commentary = Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family." ha modificado el estado de ".$this->previousStatus." a ".$this->newStatus;
+			$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family."\" ha modificado el estado de \"".$this->previousStatus." - ".$this->estados[$this->previousStatus]."\" a \"".$this->newStatus." - ".$this->estados[$this->newStatus]."\"";
 			$nHistory->shift_user_day_id = $this->shiftUserDay->id;
 			$nHistory->modified_by = Auth()->user()->id;
 			$nHistory->change_type = 1;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
