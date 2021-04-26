@@ -15,7 +15,7 @@ class ProfessionManageController extends Controller
      */
     public function index()
     {
-        $professionManage = ProfessionManage::all();
+        $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
         return view('replacement_staff.manage.profession.index', compact('professionManage'));
     }
 

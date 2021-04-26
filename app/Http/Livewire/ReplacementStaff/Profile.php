@@ -11,6 +11,7 @@ class Profile extends Component
     public $replacementStaff;
     public $professionManage;
     public $profileManage;
+    public $estado = '';
 
     public function add($i)
     {
@@ -29,6 +30,10 @@ class Profile extends Component
         $this->replacementStaff = $replacementStaff;
         $this->professionManage = $professionManage;
         $this->profileManage = $profileManage;
+    }
+
+    public function updateSelectedProfile(){
+
     }
 
     public function render()

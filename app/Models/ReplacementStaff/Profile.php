@@ -13,7 +13,7 @@ class Profile extends Model
     use softDeletes;
 
     protected $fillable = [
-        'profile_manage_id','profession_manage_id', 'file', 'degree_date','replacement_staff_id'
+        'profile_manage_id','profession_manage_id', 'experience', 'file', 'degree_date','replacement_staff_id'
     ];
 
     public function replacement_staff() {
@@ -35,6 +35,10 @@ class Profile extends Model
 
     protected $hidden = [
         'created_at', 'updated_at'
+    ];
+
+    protected $dates = [
+      'degree_date'
     ];
 
     protected $table = 'rst_profiles';
