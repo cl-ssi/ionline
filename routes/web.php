@@ -282,6 +282,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('/addendum/{file}', 'Agreements\AddendumController@download')->name('addendum.download');
     Route::resource('programs', 'Agreements\ProgramController');
     Route::resource('municipalities', 'MunicipalityController');
+    Route::resource('signers', 'Agreements\SignerController');
     Route::put('/amount/{agreement_amount}', 'Agreements\AgreementController@updateAmount')->name('amount.update');
     Route::delete('/amount/{agreement_amount}', 'Agreements\AgreementController@destroyAmount')->name('amount.destroy');
     Route::put('/quota/{agreement_quota}', 'Agreements\AgreementController@updateQuota')->name('quota.update');
@@ -290,7 +291,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('tracking', 'Agreements\AgreementController@indexTracking')->name('tracking.index');
     //Route::get('createWord','Agreements\WordTestController@createWordDocx')->name('createWord.index');
     Route::get('/createWord/{agreement}', 'Agreements\WordTestController@createWordDocx')->name('createWord');
-    Route::get('/createWordRes/{agreement}', 'Agreements\WordTestController@createResWordDocx')->name('createWordRes');
+    Route::post('/createWordRes/{agreement}', 'Agreements\WordTestController@createResWordDocx')->name('createWordRes');
     Route::get('/signRes/{agreement}', 'Agreements\AgreementController@signRes')->name('signRes');
 });
 
@@ -639,6 +640,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('signatures.showPdfAnexo');
     Route::post('/{idSignaturesFlow}/rechazar', 'Documents\SignatureController@rejectSignature')->name('signatures.rejectSignature');
     Route::get('signatures/signatureFlows/{signatureId}', 'Documents\SignatureController@signatureFlows')->name('signatures.signatureFlows');
+    Route::get('signatures/signModal/{pendingSignaturesFlowId}', 'Documents\SignatureController@signModal')->name('signatures.signModal');
     Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', 'Documents\SignatureController@callbackFirma')->name('callbackFirma');
 });
 Route::resource('documents', 'Documents\DocumentController')->middleware('auth');
@@ -660,6 +662,8 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
     // Route::get('report_reqs_by_org', 'Requirements\RequirementController@report_reqs_by_org')->name('report_reqs_by_org');
 });
 Route::resource('requirements', 'Requirements\RequirementController');
+
+Route::view('calendars', 'calendars.index')->name('calendars');
 
 Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::get('/', function () {

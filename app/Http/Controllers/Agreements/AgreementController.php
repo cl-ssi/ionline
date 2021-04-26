@@ -8,6 +8,7 @@ use App\Agreements\Stage;
 use App\Agreements\AgreementAmount;
 use App\Agreements\AgreementQuota;
 use App\Agreements\Addendum;
+use App\Agreements\Signer;
 use App\Establishment;
 use App\Models\Commune;
 use App\Municipality;
@@ -136,7 +137,8 @@ class AgreementController extends Controller
         $municipality = Municipality::where('commune_id', $agreement->commune->id)->first();
         $establishment_list = unserialize($agreement->establishment_list);
         $referrers = User::all()->sortBy('name');
-        return view('agreements/agreements/show', compact('agreement', 'municipality', 'establishment_list', 'referrers'));
+        $signers = Signer::with('user')->get();
+        return view('agreements/agreements/show', compact('agreement', 'municipality', 'establishment_list', 'referrers', 'signers'));
     }
 
     /**
@@ -354,7 +356,7 @@ class AgreementController extends Controller
         $signature->subject = 'Resolución exenta del convenio programa '.$agreement->program->name. ' año '.$agreement->period;
         $signature->description = 'Documento que aprueba el convenio de ejecución del programa '.$agreement->program->name. ' año '.$agreement->period;
         $signature->endorse_type = 'Visación en cadena de responsabilidad';
-        $signature->recipients = $agreement->commune->municipality->email_municipality.',sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$agreement->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
+        $signature->recipients = $agreement->commune->municipality->email_municipality.',sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$agreement->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,jaime.abarzua@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
         $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;
 
         $signaturesFile = new SignaturesFile();

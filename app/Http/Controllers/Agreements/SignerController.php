@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Suitability;
+namespace App\Http\Controllers\Agreements;
 
-use App\Models\Suitability\Result;
-use App\Models\Suitability\Question;
+use App\Agreements\Signer;
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 
-class ResultsController extends Controller
+class SignerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,9 +16,8 @@ class ResultsController extends Controller
      */
     public function index()
     {
-        //
-        $results = Result::all();        
-        return view('suitability.results.index', compact('results'));
+        $signers = Signer::with('user')->get();
+        return view('agreements.signers.index', compact('signers'));
     }
 
     /**
@@ -45,64 +44,47 @@ class ResultsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Signer  $signer
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Signer $signer)
     {
         //
-        $result = Result::find($id);
-        $questions = Question::all();
-        return view('suitability.results.show', compact('result','questions'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Signer  $signer
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Signer $signer)
     {
-        //
+        $users = User::all();
+        return view('agreements.signers.edit', compact('signer', 'users'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Signer  $signer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Signer $signer)
     {
-        //
+        $signer->update($request->all());
+        return redirect()->route('agreements.signers.index')->with('success', 'Se han guardado los cambios del firmante');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Signer  $signer
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Signer $signer)
     {
         //
-    }
-
-
-    public function certificate($id)
-    {
-        //
-        $result = Result::find($id);
-        return view('suitability.results.certificate', compact('result'));
-    }
-
-    public function certificatepdf($id)
-    {
-        //
-        $result = Result::find($id);
-        $pdf = \PDF::loadView('suitability.results.certificate', compact('result'));
-        return $pdf->download('Certificado de Idoneidad '.$result->user->fullName.'.pdf');
     }
 }
