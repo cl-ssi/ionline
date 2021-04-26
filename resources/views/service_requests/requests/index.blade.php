@@ -43,11 +43,13 @@
 						<tr>
 							<th scope="col">Id</th>
 							<!-- <th scope="col">Tipo</th> -->
-							<th scope="col">F. Solicitud</th>
+							<th scope="col">T.Contrato</th>
+		          <th scope="col">C.Responsabilidad</th>
+							<th scope="col">F.Solicitud</th>
 							<th scope="col">Rut</th>
 							<th scope="col">Funcionario</th>
-							<th scope="col">F. Inicio</th>
-							<th scope="col">F. Término</th>
+							<th scope="col">F.Inicio</th>
+							<th scope="col">F.Término</th>
 							<th scope="col">Estado Solicitud</th>
 							<!-- <th scope="col">Creador</th> -->
 							<th scope="col"></th>
@@ -58,9 +60,11 @@
 						<tr>
 							<td>{{ $serviceRequest->id }}</td>
 							<!-- <td>{{ $serviceRequest->type }}</td> -->
+							<td >{{ $serviceRequest->program_contract_type }}</td>
+		          <td >{{ $serviceRequest->responsabilityCenter->name }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
 							<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
-		    			<td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
+		    			<td>{{ $serviceRequest->employee->getShortNameAttribute() }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 							<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
@@ -98,11 +102,13 @@
 						<tr>
 							<th scope="col">Id</th>
 							<!-- <th scope="col">Tipo</th> -->
-							<th scope="col">F. Solicitud</th>
+							<th scope="col">T.Contrato</th>
+		          <th scope="col">C.Responsabilidad</th>
+							<th scope="col">F.Solicitud</th>
 							<th scope="col">Rut</th>
 							<th scope="col">Funcionario</th>
-							<th scope="col">F. Inicio</th>
-							<th scope="col">F. Término</th>
+							<th scope="col">F.Inicio</th>
+							<th scope="col">F.Término</th>
 							<th scope="col">Estado Solicitud</th>
 							<!-- <th scope="col">Creador</th> -->
 							<th scope="col"></th>
@@ -113,9 +119,11 @@
 						<tr>
 							<td>{{ $serviceRequest->id }}</td>
 							<!-- <td>{{ $serviceRequest->type }}</td> -->
+							<td >{{ $serviceRequest->program_contract_type }}</td>
+		          <td >{{ $serviceRequest->responsabilityCenter->name }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
 							<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
-		    			<td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
+		    			<td >{{ $serviceRequest->employee->getShortNameAttribute() }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 							<td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
@@ -154,11 +162,12 @@
 							<th scope="col">Id</th>
 							<!-- <th scope="col">Tipo</th> -->
 							<th scope="col">T.Contrato</th>
-							<th scope="col">F. Solicitud</th>
+		          <th scope="col">C.Responsabilidad</th>
+							<th scope="col">F.Solicitud</th>
 							<th scope="col">Rut</th>
 							<th scope="col">Funcionario</th>
-							<th scope="col">F. Inicio</th>
-							<th scope="col">F. Término</th>
+							<th scope="col">F.Inicio</th>
+							<th scope="col">F.Término</th>
 							<th scope="col">Estado Solicitud</th>
 							<!-- <th scope="col">Creador</th> -->
 							<th scope="col"></th>
@@ -169,10 +178,11 @@
 						<tr>
 							<td>{{ $serviceRequest->id }}</td>
 							<!-- <td>{{ $serviceRequest->type }}</td> -->
-							<td>{{ $serviceRequest->program_contract_type }}</td>
+							<td >{{ $serviceRequest->program_contract_type }}</td>
+		          <td >{{ $serviceRequest->responsabilityCenter->name }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
 							<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
-		    			<td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
+		    			<td >{{ $serviceRequest->employee->getShortNameAttribute() }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 							<td>
@@ -186,7 +196,7 @@
 								</a>
 
 								<!-- @if($serviceRequest->program_contract_type == "Horas")
-									
+
 										class="btn btn-outline-secondary btn-sm" target="_blank">
 									<span class="fas fa-file" aria-hidden="true"></span></a>
 								@else
@@ -242,11 +252,13 @@
 						<tr>
 							<th scope="col">Id</th>
 							<!-- <th scope="col">Tipo</th> -->
-							<th scope="col">F. Solicitud</th>
+							<th scope="col">T.Contrato</th>
+		          <th scope="col">C.Responsabilidad</th>
+							<th scope="col">F.Solicitud</th>
 							<th scope="col">Rut</th>
 							<th scope="col">Funcionario</th>
-							<th scope="col">F. Inicio</th>
-							<th scope="col">F. Término</th>
+							<th scope="col">F.Inicio</th>
+							<th scope="col">F.Término</th>
 							<th scope="col">Estado Solicitud</th>
 							<!-- <th scope="col">Creador</th> -->
 							<th scope="col"></th>
@@ -257,9 +269,11 @@
 						<tr>
 							<td>{{ $serviceRequest->id }}</td>
 							<!-- <td>{{ $serviceRequest->type }}</td> -->
+							<td >{{ $serviceRequest->program_contract_type }}</td>
+		          <td >{{ $serviceRequest->responsabilityCenter->name }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
 							<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
-		    			<td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
+		    			<td >{{ $serviceRequest->employee->getShortNameAttribute() }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 							<td>
@@ -321,11 +335,13 @@
 						<tr>
 							<th scope="col">Id</th>
 							<!-- <th scope="col">Tipo</th> -->
-							<th scope="col">F. Solicitud</th>
+							<th scope="col">T.Contrato</th>
+		          <th scope="col">C.Responsabilidad</th>
+							<th scope="col">F.Solicitud</th>
 							<th scope="col">Rut</th>
 							<th scope="col">Funcionario</th>
-							<th scope="col">F. Inicio</th>
-							<th scope="col">F. Término</th>
+							<th scope="col">F.Inicio</th>
+							<th scope="col">F.Término</th>
 							<th scope="col">Estado Solicitud</th>
 							<th scope="col"></th>
 						</tr>
@@ -335,9 +351,11 @@
 						<tr>
 							<td>{{ $serviceRequest->id }}</td>
 							<!-- <td>{{ $serviceRequest->type }}</td> -->
+							<td >{{ $serviceRequest->program_contract_type }}</td>
+		          <td >{{ $serviceRequest->responsabilityCenter->name }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
 							<td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
-		    			<td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
+		    			<td >{{ $serviceRequest->employee->getShortNameAttribute() }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
 							<td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
 							<td>
@@ -417,7 +435,7 @@
 							<select name="derive_user_id" id="derive_user_id" class="form-control selectpicker" data-live-search="true" data-size="5" required>
 								<option value=""></option>
 								@foreach($users as $key => $user)
-									<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
+									<option value="{{$user->id}}">{{$user->getShortNameAttribute()}}</option>
 								@endforeach
 							</select>
 					</fieldset>
