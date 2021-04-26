@@ -281,7 +281,9 @@
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
 
-            <div id="signModalContent">
+            <div class="modal-content">
+                <div id="signModalContent">
+                </div>
             </div>
 
         </div>
