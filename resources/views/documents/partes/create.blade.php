@@ -6,7 +6,7 @@
 
 @include('documents.partes.partials.nav')
 
-<h3 class="mb-3">Ingreso Documentos</h3>
+<h3 class="mb-3">Ingreso Parte</h3>
 
 <form method="POST" class="form" action="{{ route('documents.partes.store')}}" enctype="multipart/form-data">
     @csrf
@@ -56,7 +56,6 @@
                 </div>
             </div>
         </fieldset>
-
     </div>
 
 
@@ -68,7 +67,7 @@
 
     <fieldset class="form-group">
         <label for="for_subject">Asunto</label>
-        <input type="text" class="form-control" id="for_subject" name="subject">
+        <input type="text" class="form-control" id="for_subject" name="subject" required>
     </fieldset>
 
 
@@ -82,12 +81,25 @@
             </div>
         </fieldset>
 
+
+        <fieldset class="form-group col">
+            <label for="for_physical_format">&nbsp;</label>
+            <div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="physical_format" id="for_physical_format" value="1">
+                    <label class="form-check-label" for="for_physical_format">Físico</label>
+                </div>
+            </div>
+        </fieldset>
+
         <fieldset class="form-group col-5">
             <label for="for_file">&nbsp;</label>
             <div>
                 <button type="submit" class="btn btn-primary">Ingresar</button>
             </div>
         </fieldset>
+
+        
 
     </div>
 
