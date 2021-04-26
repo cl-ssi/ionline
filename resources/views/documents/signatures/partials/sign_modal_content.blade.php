@@ -1,4 +1,4 @@
-<div class="modal-content">
+<div>
     <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLongTitle"> @if(count($pendingSignaturesFlow->validationMessages) === 0)
                 Nro. OTP @else No es posible firmar aún @endif</h5>
