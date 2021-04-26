@@ -95,7 +95,7 @@
             <div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" name="physical_format" id="for_physical_format" value="1" @if ($parte->physical_format) checked @endif>
-                    <label class="form-check-label" for="for_physical_format">Físico</label>
+                    <label class="form-check-label" for="for_physical_format">Requiere documento físico al derivar</label>
                 </div>
             </div>
         </fieldset>
