@@ -25,7 +25,7 @@
 
                         <input type="hidden" wire:model="user_id">
 
-                        <label for="exampleFormControlInput1">Información <i class="fa fa-info"></i></label>
+                        <label for="exampleFormControlInput1"><i class="fa fa-info"></i> INFORMACIÓN </label>
                         <table class="table"> 
                         <thead> 
                             <tr>
@@ -95,7 +95,7 @@
 
                         <input type="hidden" wire:model="user_id">
 
-                        <label for="exampleFormControlInput1">Accion <i class="fa fa-cog"></i></label>
+                        <label for="exampleFormControlInput1"><i class="fa fa-cog"></i> ACCION </label>
 
                       
                         <select class="form-control" name="slcAction" wire:model="action" wire:change="changeAction">
@@ -115,7 +115,7 @@
                     </div>
                     <div class="form-group " style="display: {{$usersSelect}}">
 
-                        <label for="exampleFormControlInput1">Personal <i class="fa fa-user"></i></label>
+                        <label for="exampleFormControlInput1"><i class="fa fa-user"></i> PERSONAL </label>
                          <select class="form-control" wire:model="userIdtoChange" name="slcAction">
                             <option value="0" >0 - Dejar disponible </option>
                             <option value="1" >1 - Persona uno </option>
@@ -124,12 +124,13 @@
                     </div>
                      <div class="form-group" style="display: {{$changeDayType}}">
 
-                        <label for="exampleFormControlInput1">Tipo de Jornada <i class="fa fa-user"></i></label>
+                        <label for="exampleFormControlInput1"><i class="fa fa-sun-o"></i> Tipo de Jornada </label>
                          <select class="form-control" wire:model="newWorkingDay" name="slcAction">
+
                             @foreach( $tiposJornada as $index=>$tj )
-                                <option value="{{$index}}" {{
-                                 ( 
-                                    ( isset($shiftUserDay) && $shiftUserDay->ShiftUser) ?  ( ($index == $shiftUserDay->working_day )?"selected":"") : "" ) }}>{{$index}} - {{strtoupper($tj)}} </option>
+                                <option value="{{$index}}">
+                                {{$index}} - {{strtoupper($tj)}} 
+                                </option>
                             @endforeach
                       
 
@@ -140,7 +141,7 @@
 
                         <input type="hidden" wire:model="user_id">
 
-                        <label for="exampleFormControlInput1">Historial de modificaciones <i class="fa fa-history "></i></label>
+                        <label for="exampleFormControlInput1"><i class="fa fa-history "></i> HISTORIAL DE MODIFICACIONES </label>
                             @if( isset($shiftUserDay) && $shiftUserDay->ShiftUser )
                             <p>
                              <i>
@@ -148,10 +149,11 @@
 
                              </p>
                                 @foreach($shiftUserDay->shiftUserDayLog as $log)
-                                      <p><i>  >> {{$log->created_at}} - {{$log->commentary}} </i></p>
+                                      <p><i>  >> {{$log->created_at}} - {!!$log->commentary!!} </i></p>
                                 @endforeach
                             @else
-                            <p>  -- </p>
+                                 <p>         <i class="fas fa-spinner fa-pulse"></i>
+                             </p>
                             @endif
 
                         
