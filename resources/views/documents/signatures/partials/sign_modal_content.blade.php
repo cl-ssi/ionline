@@ -16,6 +16,9 @@
                 <div class="form-group col-12">
                     @if( count($pendingSignaturesFlow->validationMessages) === 0 )
                         <label for="forotp">Ingrese número OTP.</label>
+
+<!--                        TODO si queda solo un solo flow por firmar, mostrar emails donde se enviara doc-->
+
                         <input type="text" class="form-control form-control-sm" id="forotp"
                                name="otp" maxlength="6" autocomplete="off" required/>
                     @else
