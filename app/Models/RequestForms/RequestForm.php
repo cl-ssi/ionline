@@ -1,6 +1,6 @@
 <?php
 
-namespace App\RequestForms;
+namespace app\Models\RequestForms;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
@@ -8,26 +8,13 @@ use Carbon\Carbon;
 class RequestForm extends Model
 {
     protected $fillable = [
-        'estimated_expense', 'program', 'justification', 'type_form', 'previous_request_form_id', 'bidding_number'
+        'estimated_expense', 'program', 'justification', 'type_form', 'previous_request_form_id', 'bidding_number',
+        'purchaseMechanism'
     ];
 
     public function getFormatEstimatedExpenseAttribute()
     {
         return number_format($this->estimated_expense,0,",",".");
-    }
-
-    public function getTypeNameAttribute()
-    {
-      switch ($this->type_form) {
-
-        case 'item':
-          return "artículos";
-          break;
-
-        case 'passage':
-          return "pasajes";
-          break;
-      }
     }
 
     public function getApproveWhoRequestAttribute()
@@ -106,11 +93,7 @@ class RequestForm extends Model
     }
 
     public function items() {
-        return $this->hasMany('\App\RequestForms\Item');
-    }
-
-    public function passages() {
-        return $this->hasMany('\App\RequestForms\Passage');
+        return $this->hasMany('\app\Models\RequestForms\Item');
     }
 
     public function requestformfiles() {
