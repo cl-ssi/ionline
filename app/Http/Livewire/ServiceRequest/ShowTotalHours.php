@@ -196,10 +196,10 @@ class ShowTotalHours extends Component
                 $fulfilmentitems = FulfillmentItem::where('fulfillment_id',$this->fulfillment->id)->get();                
                 $daysnotworking = 0;
                 foreach($fulfilmentitems as $fulfilmentitem){
-                    $daysnotworking = $daysnotworking+$fulfilmentitem->start_date->diffInDays($fulfilmentitem->end_date);
+                    $daysnotworking = ($daysnotworking+$fulfilmentitem->start_date->diffInDays($fulfilmentitem->end_date)+1);
                 }
                 
-
+                //dd($daysnotworking);
                 $workingHoursInMonth = ($businessDays-$daysnotworking) * 8.8;
                 $this->refundHours = round(($workingHoursInMonth - $this->totalHoursDay), 0);
                 $this->totalHours = $this->refundHours + $this->totalHoursNight;
