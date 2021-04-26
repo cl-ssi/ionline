@@ -55,7 +55,7 @@
             <label for="for_important">&nbsp;</label>
             <div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="important" id="for_important" value="1">
+                    <input class="form-check-input" type="checkbox" name="important" id="for_important" value="1" @if ($parte->important) checked @endif > 
                     <label class="form-check-label" for="for_important">Importante</label>
                 </div>
             </div>
@@ -88,6 +88,21 @@
               <input type="file" class="form-control-file" id="forfile" name="forfile[]" multiple>
             </div>
         </fieldset>
+
+
+        <fieldset class="form-group col">
+            <label for="for_physical_format">&nbsp;</label>
+            <div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="physical_format" id="for_physical_format" value="1" @if ($parte->physical_format) checked @endif>
+                    <label class="form-check-label" for="for_physical_format">Físico</label>
+                </div>
+            </div>
+        </fieldset>
+
+
+
+
 
         <fieldset class="form-group col-2">
             <label for="for_file">&nbsp;</label>
