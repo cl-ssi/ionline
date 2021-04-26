@@ -70,8 +70,8 @@
                     <td>{{ $pendingSignaturesFlow->signature->subject }}</td>
                     <td>{{ $pendingSignaturesFlow->signature->description }}</td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
-                                data-target="#signModal{{$pendingSignaturesFlow->id}}"
+                        <button type="button" class="btn btn-sm btn-outline-primary"
+                                onclick="getSignModalContent({{$pendingSignaturesFlow->id}})"
                                 title="Firmar documento">
                             <i class="fas fa-file-signature"></i>
                         </button>
@@ -133,56 +133,7 @@
                         </div>
                     </div>
                 </div>
-                {{--**************************** El pop up up up del OTP**************************************************************--}}
-                <div class="modal fade" id="signModal{{$pendingSignaturesFlow->id}}" tabindex="-1"
-                     role="dialog"
-                     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle"> @if(count($pendingSignaturesFlow->validationMessages) === 0) Nro. OTP @else No es posible firmar aún @endif</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <form method="POST" class="form-horizontal"
-                                  action="{{route('signPdfFlow', $pendingSignaturesFlow->id)}}"
-                                  enctype="multipart/form-data">
-                                <div class="modal-body">
-                                @csrf <!-- input hidden contra ataques CSRF -->
-                                    @method('POST')
-                                    <div class="form-row">
-                                        <div class="form-group col-12">
-                                            @if( count($pendingSignaturesFlow->validationMessages) === 0 )
-                                                <label for="forotp">Ingrese número OTP.</label>
-                                                <input type="text" class="form-control form-control-sm" id="forotp"
-                                                       name="otp" maxlength="6" autocomplete="off" required/>
-                                            @else
-                                                <ul class="list-group">
-                                                    @foreach($pendingSignaturesFlow->validationMessages as $validationMessage)
-                                                        <li class="list-group-item list-group-item-warning">
-                                                             {{$validationMessage}}
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            @endif
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
-                                    </button>
 
-                                    @if(count($pendingSignaturesFlow->validationMessages) === 0)
-                                        <button class="btn btn-primary" type="submit">
-                                            <i class="fas fa-edit"></i> Firmar
-                                        </button>
-                                    @endif
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
             @endforeach
 
             </tbody>
@@ -324,6 +275,18 @@
         </table>
     @endif
 
+    {{--**************************** El pop up up up del OTP**************************************************************--}}
+    <div class="modal fade" id="signModal" tabindex="-1"
+         role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+
+            <div id="signModalContent">
+            </div>
+
+        </div>
+    </div>
+
     {{--Modal flujo de firmas--}}
     <div class="modal fade" id="flowModal" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -360,6 +323,21 @@
                 })
                 .then(function () {
                     $("#flowModal").modal();
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                });
+        }
+        function getSignModalContent(idPendingSignaturesFlow) {
+            axios.get('/documents/signatures/signModal/' + idPendingSignaturesFlow, {responseType: 'html'})
+                .then(function (response) {
+                    const contentdiv = document.getElementById("signModalContent");
+                    console.log(response.data);
+                    contentdiv.innerHTML = response.data;
+                })
+                .then(function () {
+                    $("#signModal").modal();
                 })
                 .catch(function (error) {
                     // handle error
