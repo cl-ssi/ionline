@@ -15,7 +15,7 @@ class ProfileManageController extends Controller
      */
     public function index()
     {
-        $profileManage = ProfileManage::all();
+        $profileManage = ProfileManage::orderBy('name', 'ASC')->get();
         return view('replacement_staff.manage.profile.index', compact('profileManage'));
     }
 

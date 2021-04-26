@@ -16,6 +16,9 @@ class ShiftUserDay extends Model
 	{
     	return $this->belongsTo(ShiftUser::class, 'shift_user_id');
 	}
-
+	public function shiftUserDayLog()
+	{
+    	return $this->hasMany(ShiftDayHistoryOfChanges::class, 'shift_user_day_id');
+	}
 
 }

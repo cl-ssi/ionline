@@ -61,7 +61,6 @@
             </tr>
             </thead>
             <tbody>
-            {{--            @foreach($pendingSignatures as $signature)--}}
             @foreach($pendingSignaturesFlows as $pendingSignaturesFlow)
                 <tr>
                     <td>{{ $pendingSignaturesFlow->signature->id}}</td>
@@ -71,8 +70,8 @@
                     <td>{{ $pendingSignaturesFlow->signature->subject }}</td>
                     <td>{{ $pendingSignaturesFlow->signature->description }}</td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-outline-primary" data-toggle="modal"
-                                data-target="#exampleModalCenter{{$pendingSignaturesFlow->id}}"
+                        <button type="button" class="btn btn-sm btn-outline-primary"
+                                onclick="getSignModalContent({{$pendingSignaturesFlow->id}})"
                                 title="Firmar documento">
                             <i class="fas fa-file-signature"></i>
                         </button>
@@ -134,44 +133,7 @@
                         </div>
                     </div>
                 </div>
-                {{--**************************** El pop up up up del OTP**************************************************************--}}
-                <div class="modal fade" id="exampleModalCenter{{$pendingSignaturesFlow->id}}" tabindex="-1"
-                     role="dialog"
-                     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle">Nro. OTP</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <form method="POST" class="form-horizontal"
-                                  action="{{route('signPdfFlow', $pendingSignaturesFlow->id)}}"
-                                  enctype="multipart/form-data">
-                                <div class="modal-body">
-                                @csrf <!-- input hidden contra ataques CSRF -->
-                                    @method('POST')
-                                    <div class="form-row">
-                                        <div class="form-group col-12">
-                                            <label for="forotp">Ingrese número OTP.</label>
-                                            <input type="text" class="form-control form-control-sm" id="forotp"
-                                                   name="otp" maxlength="6" autocomplete="off" required/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
-                                    </button>
 
-                                    <button class="btn btn-primary" type="submit">
-                                        <i class="fas fa-edit"></i> Firmar
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
             @endforeach
 
             </tbody>
@@ -271,15 +233,16 @@
                         </a>
                     </td>
                     <td>
-                        <a  class="btn btn-sm btn-outline-danger" title="Eliminar solicitud"
-                            data-toggle = "modal"
-                            data-target="#rejectSignature{{$signature->id}}">
+                        <a class="btn btn-sm btn-outline-danger" title="Eliminar solicitud"
+                           @if($signature->responsable_id != Auth::id()) disabled @endif
+                           data-toggle="modal"
+                           data-target="#deleteSignature{{$signature->id}}">
                             <i class="fas fa-trash"></i>
                         </a>
                     </td>
                 </tr>
                 {{--Modal eliminar--}}
-                <div class="modal fade" id="rejectSignature{{$signature->id}}" tabindex="-1" role="dialog"
+                <div class="modal fade" id="deleteSignature{{$signature->id}}" tabindex="-1" role="dialog"
                      aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
@@ -290,10 +253,10 @@
                                 </button>
                             </div>
                             <form method="POST" class="form-horizontal"
-                                  action="{{route('documents.signatures.rejectSignature', $signature->id)}}"
+                                  action="{{route('documents.signatures.destroy', $signature)}}"
                                   enctype="multipart/form-data">
-                                @csrf <!-- input hidden contra ataques CSRF -->
-                                    @method('POST')
+                            @csrf <!-- input hidden contra ataques CSRF -->
+                                @method('DELETE')
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
@@ -311,6 +274,20 @@
             </tbody>
         </table>
     @endif
+
+    {{--**************************** El pop up up up del OTP**************************************************************--}}
+    <div class="modal fade" id="signModal" tabindex="-1"
+         role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+
+            <div class="modal-content">
+                <div id="signModalContent">
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     {{--Modal flujo de firmas--}}
     <div class="modal fade" id="flowModal" tabindex="-1" role="dialog"
@@ -348,6 +325,21 @@
                 })
                 .then(function () {
                     $("#flowModal").modal();
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                });
+        }
+        function getSignModalContent(idPendingSignaturesFlow) {
+            axios.get('/documents/signatures/signModal/' + idPendingSignaturesFlow, {responseType: 'html'})
+                .then(function (response) {
+                    const contentdiv = document.getElementById("signModalContent");
+                    console.log(response.data);
+                    contentdiv.innerHTML = response.data;
+                })
+                .then(function () {
+                    $("#signModal").modal();
                 })
                 .catch(function (error) {
                     // handle error

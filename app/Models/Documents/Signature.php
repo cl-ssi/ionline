@@ -56,6 +56,7 @@ class Signature extends Model implements Auditable
     }
 
     /**
+     * Obtiene flows para el archivo tipo documento
      * @return mixed
      */
     public function getSignaturesFlowsAttribute(){
@@ -63,7 +64,15 @@ class Signature extends Model implements Auditable
             ->signaturesFlows;
     }
 
-
+    /**
+     * Verifica si tiene algún flow firmado o rechazado
+     * @return bool
+     */
+    public function getHasSignedOrRejectedFlowAttribute()
+    {
+        return $this->signaturesFiles->where('file_type', 'documento')->first()
+                ->signaturesFlows->whereNotNull('status')->count() > 0;
+    }
 
     protected $table = 'doc_signatures';
 

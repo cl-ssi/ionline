@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
 use App\Models\ServiceRequests\Fulfillment;
+use App\Models\ServiceRequests\SignatureFlow;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -110,7 +111,6 @@ class SignatureController extends Controller
             $signaturesFlow->type = 'firmante';
             $signaturesFlow->ou_id = $request->ou_id_signer;
             $signaturesFlow->user_id = $request->user_signer;
-//            $signaturesFlow->status = false;
             $signaturesFlow->save();
 
             if ($request->has('ou_id_visator')) {
@@ -170,6 +170,10 @@ class SignatureController extends Controller
     {
         $signature->fill($request->all());
         $signature->save();
+
+        if ($signature->hasSignedOrRejectedFlow) {
+            $signature->signaturesFlows->toQuery()->update(['status' => null]);
+        }
 
         if ($request->hasFile('document')) {
             $signatureFileDocumento = $signature->signaturesFiles->where('file_type', 'documento')->first();
@@ -232,8 +236,6 @@ class SignatureController extends Controller
         } else {
             echo base64_decode($signaturesFile->file);
         }
-
-
     }
 
     public function showPdfAnexo(SignaturesFile $anexo)
@@ -245,19 +247,18 @@ class SignatureController extends Controller
 
     public function verify(Request $request)
     {
-        if($request->id && $request->verification_code){
+        if ($request->id && $request->verification_code) {
             //TODO verificar que exista algun signaturesFile
             $signaturesFile = SignaturesFile::find($request->id);
             if ($signaturesFile->verification_code == $request->verification_code) {
-                 header('Content-Type: application/pdf');
-                 echo base64_decode($signaturesFile->signed_file);
-            }
-            else{
+                header('Content-Type: application/pdf');
+                echo base64_decode($signaturesFile->signed_file);
+            } else {
                 session()->flash('warning', 'El código de verificación no corresponde con el documento.');
                 return view('documents.signatures.verify');
             }
 
-        }else{
+        } else {
             return view('documents.signatures.verify');
         }
     }
@@ -273,8 +274,6 @@ class SignatureController extends Controller
 
         $fulfillment->signatures_file_id = $signaturesFile->id;
         $fulfillment->save();
-        // header('Content-Type: application/pdf');
-        // echo base64_decode($signaturesFile->signed_file);
         session()->flash('success', $message);
         return redirect()->route('rrhh.service-request.fulfillment.edit', $fulfillment->serviceRequest->id);
     }
@@ -282,8 +281,6 @@ class SignatureController extends Controller
     public function rejectSignature(Request $request, $idSignatureFlow)
     {
         //TODO verificar orden de firmas
-        //TODO Al rechazar un flow en responsabilidad en cadena deberian rechazarse todos los siguientes flows
-
         $idSigFlow = SignaturesFlow::find($idSignatureFlow);
         $idSigFlow->update(['status' => 0, 'observation' => $request->observacion]);
         session()->flash('success', "La solicitud ha sido rechazada");
@@ -295,4 +292,11 @@ class SignatureController extends Controller
         $signatureFlowsModal = Signature::find($signatureID)->signaturesFlows;
         return view('documents.signatures.partials.flows_modal_body', compact('signatureFlowsModal'));
     }
+
+    public function signModal($pendingSignaturesFlowId)
+    {
+        $pendingSignaturesFlow = SignaturesFlow::find($pendingSignaturesFlowId);
+        return view('documents.signatures.partials.sign_modal_content', compact('pendingSignaturesFlow'));
+    }
+
 }
