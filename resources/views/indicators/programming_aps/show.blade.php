@@ -123,7 +123,7 @@
                 <td>{{ $tracer->level }}</td>
                 <td>{{ $tracer->name }}</td>
                 <td>{{ $tracer->population }}</td>
-                <td class="text-right">{{ $tracer->getValuesAcum2('denominador', $comuna, null) }}</td>
+                <td class="text-right">{{ $tracer->getValuesAcum2('denominador', null, $establishment) }}</td>
                 <td>{{ $tracer->numerator_source }}</td>
                 <td>{{ $tracer->professional }}</td>
                 @foreach($months as $number => $month)

@@ -82,36 +82,32 @@ class ProgramApsController extends Controller
                 }
             }
 
-            // Consultamos si existen en el denominador asignamos valores manuales por comuna y establecimiento
+            // Consultamos si existen en el denominador asignación de valores manuales por comuna
             if($tracer->denominator_values_by_commune != null){
                 $values = array_map('trim', explode(',', $tracer->denominator_values_by_commune));
                 if($commune_id == 0){ //RESUMEN denominador
-                    foreach($values as $index => $value){
-                        $value = new Value(['month' => 12, 'factor' => 'denominador', 'value' => (int)$value]);
+                    foreach($values as $value){
+                        if(!empty($value)){ //valores distinto a 0 los procesamos
+                            $value = new Value(['month' => 12, 'factor' => 'denominador', 'value' => (int)$value]);
+                            $tracer->values->add($value);
+                        }
+                    }
+                } else {
+                    // seteo valor denominador para comuna
+                    if(!empty($values[$commune_id-1])){ //valor distinto a 0 lo procesamos
+                        $value = new Value(['month' => 12, 'factor' => 'denominador', 'value' => (int)$values[$commune_id-1]]);
+                        $value->commune = $communes[$commune_id];
                         $tracer->values->add($value);
                     }
-                }else {
-                    foreach($values as $index => $value){
-                        // Seteamos valores nuevos segun comuna y factor denominador
-                        if($commune_id == $index+1){
-                            $value = new Value(['month' => 12, 'factor' => 'denominador', 'value' => (int)$value]);
-                            $value->commune = $communes[$commune_id];
-                            $tracer->values->add($value);
-                            break;
-                        }
-                    }
 
+                    // seteo mismo valor comuna denominador para sus establecimientos
                     foreach($establishments->unique() as $establishment){
-                        foreach($values as $index => $value){
-                            // Seteamos los mismos valores segun comuna para los establecimientos
-                            if($commune_id == $index+1){
-                                $value = new Value(['month' => 12, 'factor' => 'denominador', 'value' => (int)$value]);
-                                $value->establishment = $establishment;
-                                $establishments_filter[] = $establishment; // Necesario para luego filtrar por establecimiento en la vista
-                                $tracer->values->add($value);
-                                break;
-                            }
+                        if(!empty($values[$commune_id-1])){ //valor distinto a 0 lo procesamos
+                            $value = new Value(['month' => 12, 'factor' => 'denominador', 'value' => (int)$values[$commune_id-1]]);
+                            $value->establishment = $establishment;
+                            $tracer->values->add($value);
                         }
+                        $establishments_filter[] = $establishment; // Necesario para luego filtrar por establecimiento en la vista
                     }
                 }
             }
