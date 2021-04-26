@@ -6,7 +6,7 @@
 
 <?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
 
-<div>
+<!-- <div>
     <div style="width: 49%; display: inline-block;">
         <div class="siete" style="padding-top: 3px;">
             Droguería - {{ config('app.ss') }}
@@ -25,7 +25,59 @@
     <div class="right" style="width: 49%; display: inline-block;">
         Iquique {{ $receiving->date->formatLocalized('%d de %B del %Y') }}<br>
     </div>
-</div>
+</div> -->
+
+@canany(['Pharmacy: SSI (id:1)', 'Pharmacy: REYNO (id:2)'])
+    <div>
+        <div style="width: 49%; display: inline-block;">
+            <div class="siete" style="padding-top: 3px;">
+                Droguería - {{ config('app.ss') }}
+            </div>
+            <div class="siete" style="padding-top: 3px;">
+                <i>fernando.molina@redsalud.gob.cl</i>
+            </div>
+        </div>
+        <div class="right" style="width: 49%; display: inline-block;">
+            Iquique {{ $dispatch->date->formatLocalized('%d de %B del %Y') }}<br>
+        </div>
+    </div>
+@endcan
+@can('Pharmacy: APS (id:3)')
+    <div>
+        <div style="width: 49%; display: inline-block;">
+            <div class="siete" style="padding-top: 3px;">
+                Bodega APS - {{ config('app.ss') }}
+            </div>
+            <div class="siete" style="padding-top: 3px;">
+                <i>bodega.ssi@redsalud.gov.cl</i>
+            </div>
+            <div class="siete" style="padding-top: 3px;">
+                <i>N* minsal 576975 teléfono 572406975</i>
+            </div>
+        </div>
+        <div class="right" style="width: 49%; display: inline-block;">
+            Iquique {{ $dispatch->date->formatLocalized('%d de %B del %Y') }}<br>
+        </div>
+    </div>
+@endcan
+@can('Pharmacy: Servicios generales (id:4)')
+    <div>
+        <div style="width: 49%; display: inline-block;">
+            <div class="siete" style="padding-top: 3px;">
+                Bodega Servicios Generales - {{ config('app.ss') }}
+            </div>
+            <div class="siete" style="padding-top: 3px;">
+                <i>bodega.ssi@redsalud.gov.cl</i>
+            </div>
+            <div class="siete" style="padding-top: 3px;">
+                <i>N* minsal 576975 teléfono 572406975</i>
+            </div>
+        </div>
+        <div class="right" style="width: 49%; display: inline-block;">
+            Iquique {{ $dispatch->date->formatLocalized('%d de %B del %Y') }}<br>
+        </div>
+    </div>
+@endcan
 
 <div class="titulo">ACTA DE INGRESO N° {{ $receiving->id }}</div>
 
