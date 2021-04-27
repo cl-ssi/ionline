@@ -94,6 +94,7 @@ class ModalEditShiftUserDay extends Component
 	public function changeAction(){
 		/* they can be 1:assigned;2:completed,3:extra shift,4:shift change 5: medical license,6: union jurisdiction,7: legal holiday,8: exceptional permit or did not belong to the service.*/
 		if( $this->action ==1 ){ // Cambiar turno con
+			$this->newStatus = 4;
 			$this->usersSelect="visible";
 			$this->changeDayType ="none";
 		}elseif($this->action ==2 ){ //cumplido
@@ -165,8 +166,42 @@ class ModalEditShiftUserDay extends Component
 			$nHistory->previous_value = $this->previousStatus;
 			$nHistory->current_value = $this->newStatus;
 			$nHistory->save();
+		}elseif($this->action == 1 &&  isset($this->shiftUserDay) ){ // Asignar dia laboral a otro usuario
+			$this->shiftUserDay->status =$this->newStatus;
+			$this->shiftUserDay->update();
+			if($userIdtoChange != 0){ // si el id es ditinto a 0 = dejar dia laboral disponible
+				// $chgUsr = User::find( $userIdtoChange );
+				// $bTurno = ShiftUser::where()->first();
+				$from = date('2018-01-01');
+				$to = date('2018-05-02');
+				// $bTurno = ShiftUser::whereBetween('reservation_from', [$from, $to])->get();
+				$bTurno = ShiftUser::where("user_id",$userIdtoChange)->andWhere("date_from","<=",$this->shiftUserDay->day)->andWhere("date_up",">=",$this->shiftUserDay->day)->first(); 
+				if(!isset($bTurno)||count($bTurno) < 1){
+					 // si no tiene ningun turno asociado a ese rango, se le crea
+					$bTurno = new ShiftUser;
+					$bTurno->date_from = $from;
+					$bTurno->date_up = $to;
+					$bTurno->asigned_by = Auth::id();
+					$bTurno->user_id = $userIdtoChange;
+					$bTurno->shift_types_id = $this->shiftUserDay->ShiftUser->shift_types_id;
+					$bTurno->organizational_units_id = $this->shiftUserDay->ShiftUser->organizational_units_id;
+					$bTurno->save();
+				}
+				$nDay = new ShiftUserDay;
+				$nDay->day = $this->shiftUserDay->day;
+				$nDay->commentary = "Dia extra agregado, perteneciente al usuario ".$this->shiftUserDay->ShiftUser->user_id;
+				$nDay->status = 3;
+				$nDay->shift_user_id = $bTurno->id;
+				$nDay->working_day = $this->shiftUserDay->working_day;
+				$nDay->save();
+				
+				
+				//si tiene turno creado para ese mes y ese tipo de turno
+
+			}
 		}
 	}	
+
     public function render()
     {
         return view('livewire.rrhh.modal-edit-shift-user-day',["tiposJornada"=>$this->tiposJornada,"estados"=>$this->estados,"statusColors"=>$this->colors]);
