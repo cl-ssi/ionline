@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\SignedDocument;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
 use Auth;
@@ -9,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Firebase\JWT\JWT;
+use Illuminate\Support\Facades\Mail;
 use SimpleSoftwareIO\QrCode\Generator;
 
 /* No se si son necesarias, las puse para el try catch */
@@ -101,11 +103,11 @@ class FirmaDigitalController extends Controller
      */
     public function signPdfFlow(Request $request, SignaturesFlow $signaturesFlow)
     {
-        if ($signaturesFlow->signaturesFile->signed_file) {
+        if ($signaturesFlow->signaturesFile->signed_file)
             $pdfbase64 = $signaturesFlow->signaturesFile->signed_file;
-        } else {
+         else
             $pdfbase64 = $signaturesFlow->signaturesFile->file;
-        }
+
         $checksum_pdf = $signaturesFlow->signaturesFile->md5_file;
         $type = $signaturesFlow->type;
         $visatorAsSignature = $signaturesFlow->signature->visatorAsSignature;
@@ -137,6 +139,14 @@ class FirmaDigitalController extends Controller
         $signaturesFlow->signaturesFile->signed_file = $responseArray['content'];
         if ($type === 'firmante') $signaturesFlow->signaturesFile->verification_code = $verificationCode;
         $signaturesFlow->signaturesFile->save();
+
+
+        //Si ya firmaron todos se envía por correo a destinatarios del doc
+        if ($signaturesFlow->signaturesFile->hasAllFlowsSigned) {
+            preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $signaturesFlow->signature->recipients, $emails);
+            Mail::to($emails[0])
+                ->send(new SignedDocument($signaturesFlow->signature));
+        }
 
         session()->flash('info', "El documento {$signaturesFlow->signature->id} se ha firmado correctamente.");
         return redirect()->route('documents.signatures.index', ['pendientes']);

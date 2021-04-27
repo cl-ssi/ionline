@@ -11,6 +11,7 @@ use App\Agreements\AgreementAmount;
 use App\Agreements\AgreementQuota;
 use App\Agreements\OpenTemplateProcessor;
 use App\Agreements\MyClass;
+use App\Agreements\Signer;
 use App\Models\Commune;
 use App\Municipality;
 use App\Establishment;
@@ -159,7 +160,7 @@ class WordTestController extends Controller
     	return response()->download(storage_path('app/public/Prev-Conv.docx'))->deleteFileAfterSend(true);
     }
 
-    public function createResWordDocx($id)
+    public function createResWordDocx(Request $request, $id)
     {
         // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
         $agreements     = Agreement::with('Program','Commune','agreement_amounts','authority', 'referrer')->where('id', $id)->first();
@@ -197,11 +198,12 @@ class WordTestController extends Controller
         $programa = $agreements->Program->name;
         
         //Director ssi quien firma a la fecha de hoy
-        $director_signature = Authority::getAuthorityFromDate(1, Carbon::now()->toDateTimeString(), 'manager');
+        // $director_signature = Authority::getAuthorityFromDate(1, Carbon::now()->toDateTimeString(), 'manager');
+        $director_signature = Signer::find($request->signer_id);
         $first_name = explode(' ',trim($director_signature->user->name))[0];
         $director = mb_strtoupper($first_name . ' ' . $director_signature->user->fathers_family . ' ' . $director_signature->user->mothers_family);
         $directorDecreto = $director_signature->decree;
-        $directorApelativo = mb_strtoupper($director_signature->position);
+        $directorApelativo = mb_strtoupper($director_signature->appellative);
 
         //email referente
         $emailReferrer = $agreements->referrer != null ? $agreements->referrer->email : '';

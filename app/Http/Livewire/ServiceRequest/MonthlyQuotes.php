@@ -49,6 +49,7 @@ class MonthlyQuotes extends Component
                         ->where('work_type', $serviceRequest->working_day_type)
                         ->first()
                 )->amount;
+                //dd($valor_mensual);
                 break;
             case 'Profesional':
             case 'Técnico':
@@ -71,18 +72,18 @@ class MonthlyQuotes extends Component
         //dd($serviceRequest->estate);
         //dd($valor_mensual);
 
-        switch ($serviceRequest->weekly_hours) {
-            case '33':
-                $valor_mensual = $valor_mensual * 0.75;
-                break;
-                //case '28': $valor_mensual = $valor_mensual * 0.636363; break;
-            case '22':
-                $valor_mensual = $valor_mensual * 0.5;
-                break;
-            case '11':
-                $valor_mensual = $valor_mensual * 0.25;
-                break;
-        }
+        // switch ($serviceRequest->weekly_hours) {
+        //     case '33':
+        //         $valor_mensual = $valor_mensual * 0.75;
+        //         break;
+        //         //case '28': $valor_mensual = $valor_mensual * 0.636363; break;
+        //     case '22':
+        //         $valor_mensual = $valor_mensual * 0.5;
+        //         break;
+        //     case '11':
+        //         $valor_mensual = $valor_mensual * 0.25;
+        //         break;
+        // }
 
         //echo $valor_mensual;
 
