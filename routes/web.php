@@ -34,6 +34,7 @@ use App\Http\Controllers\ReplacementStaff\Manage\ProfileManageController;
 use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationController;
 use App\Http\Controllers\ReplacementStaff\CommissionController;
 use App\Http\Controllers\ReplacementStaff\ApplicantController;
+use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationFileController;
 
 
 use App\Http\Controllers\VaccinationController;
@@ -169,6 +170,12 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
                 Route::put('/{applicant}/update', [ApplicantController::class, 'update'])->name('update');
                 Route::put('/{applicant}/update_to_select', [ApplicantController::class, 'update_to_select'])->name('update_to_select');
                 Route::delete('{applicant}/destroy', [ApplicantController::class, 'destroy'])->name('destroy');
+            });
+            Route::prefix('file')->name('file.')->group(function(){
+                Route::post('/store/{technicalEvaluation}', [TechnicalEvaluationFileController::class, 'store'])->name('store');
+                Route::delete('{technicalEvaluationFile}/destroy', [TechnicalEvaluationFileController::class, 'destroy'])->name('destroy');
+                Route::get('/show_file/{technicalEvaluationFile}', [TechnicalEvaluationFileController::class, 'show_file'])->name('show_file');
+                Route::get('/download/{technicalEvaluationFile}', [TechnicalEvaluationFileController::class, 'download'])->name('download');
             });
         });
 
