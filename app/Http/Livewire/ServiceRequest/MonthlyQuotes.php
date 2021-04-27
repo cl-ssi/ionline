@@ -144,7 +144,7 @@ class MonthlyQuotes extends Component
         else {            ///son cuotas iguales
             if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
                 $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
-                $valor_mensual = ($serviceRequest->gross_amount) / $nroCuotas;
+                $valor_mensual = $serviceRequest->net_amount;
                 $string = $nroCuotas . " cuotas,";
                 $interval = DateInterval::createFromDateString('1 month');
                 $periods   = new DatePeriod($serviceRequest->start_date, $interval, $serviceRequest->end_date);
@@ -161,8 +161,27 @@ class MonthlyQuotes extends Component
             } else
             //son cuotas valores diferentes
             {
-
-                dd('soy cuotas diferentes');
+                //la persona no comienza a trabjar el 1ero del mes
+                if ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d')) {
+                    $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
+                    //$valor_mensual = ($serviceRequest->gross_amount) / $nroCuotas;
+                    $valor_mensual = $serviceRequest->net_amount;
+                    $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
+                    $valor_diferente = round($dias_trabajados * round(($valor_mensual / 30)));
+                    $string = $nroCuotas . " cuotas,";
+                    $interval = DateInterval::createFromDateString('1 month');
+                    $periods   = new DatePeriod($serviceRequest->start_date, $interval, $serviceRequest->end_date);
+                    $periods = iterator_to_array($periods);
+                    foreach ($periods as $key => $period) {
+                        if ($key === array_key_first($periods)) {
+                            $string .= " una de $" . number_format($valor_diferente) . " el mes de " . $period->monthName;
+                        } else if ($key === array_key_last($periods)) {
+                            $string .= " y una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName . ";";
+                        } else {
+                            $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
+                        }
+                    }
+                }
             }
 
             $this->valores = $string;
