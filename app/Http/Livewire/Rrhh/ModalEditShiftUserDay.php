@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\Rrhh\ShiftUserDay;
 use App\User;
 use App\Models\Rrhh\ShiftUser;
-
+use Illuminate\Support\Facades\Auth;
 use App\Models\Rrhh\ShiftDayHistoryOfChanges;	
 class ModalEditShiftUserDay extends Component
 {	
@@ -73,9 +73,9 @@ class ModalEditShiftUserDay extends Component
 			// if( ShiftUser::where("user_id",$u->id)->get() ){
 				if( isset($shiftUser) && count($shiftUser) > 0){
 
-					foreach ($shiftsUser as  $suser) {
+					foreach ($shiftUser as  $suser) {
 					
-						if ( $suser->ShiftUserDay->where("day","2021-04-27") != null  ){
+						if ( isset($suser->ShiftUserDay) && $suser->ShiftUserDay->where("day","2021-04-27") != null  ){
 							$this->users->forget($index);
 						}
 
@@ -144,9 +144,9 @@ class ModalEditShiftUserDay extends Component
 
 
 			$nHistory = new ShiftDayHistoryOfChanges;
-			$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family."\" ha modificado el <b>estado</b> de \"".$this->previousStatus." - ".$this->estados[$this->previousStatus]."\" a \"".$this->newStatus." - ".$this->estados[$this->newStatus]."\"";
+			$nHistory->commentary = "El usuario \"".Auth::user()->name." ". Auth::user()->fathers_family." ". Auth::user()->mothers_family."\" ha modificado el <b>estado</b> de \"".$this->previousStatus." - ".$this->estados[$this->previousStatus]."\" a \"".$this->newStatus." - ".$this->estados[$this->newStatusid]."\"";
 			$nHistory->shift_user_day_id = $this->shiftUserDay->id;
-			$nHistory->modified_by = Auth()->user()->id;
+			$nHistory->modified_by = Auth::user()->id;
 			$nHistory->change_type = 1;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
 			$nHistory->day =  $this->shiftUserDay->day;
 			$nHistory->previous_value = $this->previousStatus;
@@ -169,20 +169,20 @@ class ModalEditShiftUserDay extends Component
 		}elseif($this->action == 1 &&  isset($this->shiftUserDay) ){ // Asignar dia laboral a otro usuario
 			$this->shiftUserDay->status =$this->newStatus;
 			$this->shiftUserDay->update();
-			if($userIdtoChange != 0){ // si el id es ditinto a 0 = dejar dia laboral disponible
+			if($this->userIdtoChange != 0){ // si el id es ditinto a 0 = dejar dia laboral disponible
 				// $chgUsr = User::find( $userIdtoChange );
 				// $bTurno = ShiftUser::where()->first();
 				$from = date('2018-01-01');
 				$to = date('2018-05-02');
 				// $bTurno = ShiftUser::whereBetween('reservation_from', [$from, $to])->get();
-				$bTurno = ShiftUser::where("user_id",$userIdtoChange)->andWhere("date_from","<=",$this->shiftUserDay->day)->andWhere("date_up",">=",$this->shiftUserDay->day)->first(); 
+				$bTurno = ShiftUser::where("user_id",$this->userIdtoChange)->where("date_from","<=",$this->shiftUserDay->day)->where("date_up",">=",$this->shiftUserDay->day)->first(); 
 				if(!isset($bTurno)||count($bTurno) < 1){
 					 // si no tiene ningun turno asociado a ese rango, se le crea
 					$bTurno = new ShiftUser;
 					$bTurno->date_from = $from;
 					$bTurno->date_up = $to;
-					$bTurno->asigned_by = Auth::id();
-					$bTurno->user_id = $userIdtoChange;
+					$bTurno->asigned_by = Auth::user()->id;
+					$bTurno->user_id = $this->userIdtoChange;
 					$bTurno->shift_types_id = $this->shiftUserDay->ShiftUser->shift_types_id;
 					$bTurno->organizational_units_id = $this->shiftUserDay->ShiftUser->organizational_units_id;
 					$bTurno->save();
