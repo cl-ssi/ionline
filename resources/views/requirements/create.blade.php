@@ -24,11 +24,13 @@
 
 <div class="row">
     <div class="col-8">
+    @if($parte->files != null)
         <object type="application/pdf"
-                data="{{route('documents.partes.download', $parte->id)}}"
+                data="{{route('documents.partes.download', $parte->files->first()->id)}}"
                 width="100%"
                 height="100%">
         </object>
+    @endif
     </div>
     <div class="col-4">
 
