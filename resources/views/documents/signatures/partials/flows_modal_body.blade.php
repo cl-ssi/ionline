@@ -7,8 +7,8 @@
                         Firmado por @else Visado por @endif {{$signatureFlow->signerName}}
                     el {{$signatureFlow->signature_date}} </li>
             @elseif($signatureFlow->status === 0)
-                <li class="list-group-item list-group-item-danger">@if($signatureFlow->type == 'firmante')
-                        Rechazado por @endif{{$signatureFlow->signerName}}</li>
+                <li class="list-group-item list-group-item-danger">
+                        Rechazado por {{$signatureFlow->signerName}}</li>
             @else
                 <li class="list-group-item list-group-item-warning">@if($signatureFlow->type == 'firmante')
                         Pendiente firma por @else Pendiente visación

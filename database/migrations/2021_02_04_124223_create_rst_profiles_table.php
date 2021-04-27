@@ -18,6 +18,7 @@ class CreateRstProfilesTable extends Migration
 
             $table->date('degree_date');
             $table->string('file');
+            $table->string('experience');
 
             $table->foreignId('profile_manage_id');
             $table->foreignId('profession_manage_id');
