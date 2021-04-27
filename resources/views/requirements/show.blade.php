@@ -166,7 +166,6 @@ bottom: 5px;
                 <strong>{{$cc}}</strong>
             </footer>
             @endif
-
         </div>
 
         <div class="card-footer text-muted">
@@ -188,9 +187,28 @@ bottom: 5px;
             @endforeach
             </span>
         </div>
-
     </div>
+
+    @if($groupedRequirements != null && $groupedRequirements->count() != 0 && $loop->last)
+        <div class="card mb-3">
+            <div class="card-body">
+                <footer class="blockquote-footer">
+                    Enviado también a
+                    <ul>
+                           @foreach($groupedRequirements as $groupedRequirement)
+                               @foreach($groupedRequirement->events as $event)
+                                   @if($event->status == "creado")
+                                    <li> <strong> {{$event->to_user->getFullNameAttribute() }} </strong> </li>
+                                   @endif
+                               @endforeach
+                           @endforeach
+                    </ul>
+                </footer>
+            </div>
+        </div>
     @endif
+
+  @endif
 
 @endforeach
 <div id="page-loader" style="display: none">
