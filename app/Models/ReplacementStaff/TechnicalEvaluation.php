@@ -23,12 +23,16 @@ class TechnicalEvaluation extends Model
         return $this->belongsTo('App\Models\ReplacementStaff\RequestReplacementStaff');
     }
 
-    public function commission() {
+    public function commissions() {
         return $this->hasMany('App\Models\ReplacementStaff\Commission');
     }
 
-    public function applicant() {
+    public function applicants() {
         return $this->hasMany('App\Models\ReplacementStaff\Applicant');
+    }
+
+    public function technical_evaluation_files() {
+        return $this->hasMany('App\Models\ReplacementStaff\TechnicalEvaluationFile');
     }
 
     public function getStatusValueAttribute() {
