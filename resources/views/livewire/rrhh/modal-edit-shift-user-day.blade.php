@@ -118,7 +118,13 @@
                         <label for="exampleFormControlInput1"><i class="fa fa-user"></i> PERSONAL </label>
                          <select class="form-control" wire:model="userIdtoChange" name="slcAction">
                             <option value="0" >0 - Dejar disponible </option>
-                            <option value="1" >1 - Persona uno </option>
+                            @if( isset($users) )
+                                @foreach($users as $u)
+                                
+                                    <option value="1" >{{$u->id}} - {{$u->name}} {{ $u->fathers_family }} {{ $u->mothers_family }} </option>
+
+                                @endforeach
+                            @endif
                         </select>
 
                     </div>
