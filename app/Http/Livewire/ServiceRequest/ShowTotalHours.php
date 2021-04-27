@@ -191,21 +191,47 @@ class ShowTotalHours extends Component
                 $businessDays = $this->fulfillment->serviceRequest->start_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
                     return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
                 }, $this->fulfillment->serviceRequest->end_date);
-               
 
-                $fulfilmentitems = FulfillmentItem::where('fulfillment_id',$this->fulfillment->id)->get();                
+                $daysInMonth = $this->fulfillment->serviceRequest->start_date->daysInMonth;
+
+
+                $fulfilmentitems = FulfillmentItem::where('fulfillment_id', $this->fulfillment->id)->get();
                 $daysnotworking = 0;
-                foreach($fulfilmentitems as $fulfilmentitem){
-                    $daysnotworking = ($daysnotworking+$fulfilmentitem->start_date->diffInDays($fulfilmentitem->end_date)+1);
+                foreach ($fulfilmentitems as $fulfilmentitem) {
+                    $daysnotworking = ($daysnotworking + $fulfilmentitem->start_date->diffInDays($fulfilmentitem->end_date) + 1);
+                }
+
+
+
+                if (!$fulfilmentitems->isEmpty()) {
+                    //dd('no soy vacio');
+                    $daysavgpart1 = $this->fulfillment->serviceRequest->start_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
+                        return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
+                    }, $fulfilmentitem->start_date);
+
+                    $daysavgpart2 = $fulfilmentitem->end_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
+                        return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
+                    }, $this->fulfillment->serviceRequest->end_date);
+
+                    $daysavg = $daysavgpart1 + $daysavgpart2;
+                }
+
+                $workingHoursInMonth = 0;
+
+                if (isset($daysavg)) {
+                    $workingHoursInMonth = $daysavg * 8.8;
+                } else {
+                    $workingHoursInMonth = $businessDays * 8.8;
                 }
                 
-                //dd($daysnotworking);
-                $workingHoursInMonth = ($businessDays-$daysnotworking) * 8.8;
+
                 $this->refundHours = round(($workingHoursInMonth - $this->totalHoursDay), 0);
                 $this->totalHours = $this->refundHours + $this->totalHoursNight;
+                // dd($this->totalHoursNight);
+                //dd($value->amount);
                 $totalAmountNight = $this->totalHoursNight * ($value->amount * 1.5);
                 $totalAmountDayRefund = $this->refundHours * $value->amount;
-                $this->totalAmount = $totalAmountNight - $totalAmountDayRefund;
+                $this->totalAmount = $totalAmountNight - $totalAmountDayRefund;                
                 break;
         }
         return view('livewire.service-request.show-total-hours');
