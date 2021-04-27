@@ -4,6 +4,9 @@ namespace App\Http\Livewire\Rrhh;
 
 use Livewire\Component;
 use App\Models\Rrhh\ShiftUserDay;
+use App\User;
+use App\Models\Rrhh\ShiftUser;
+
 use App\Models\Rrhh\ShiftDayHistoryOfChanges;	
 class ModalEditShiftUserDay extends Component
 {	
@@ -55,7 +58,6 @@ class ModalEditShiftUserDay extends Component
     	// unset($this->shiftUserDay);
     	 $this->reset();
 		// $this->emit('setshiftUserDay', $this->shiftDay->id);
-
     }
 	public function setshiftUserDay($sUDId){
 		$this->shiftUserDay = ShiftUserDay::find($sUDId);
@@ -64,6 +66,25 @@ class ModalEditShiftUserDay extends Component
 		$this->previousWorkingDay = $this->shiftUserDay->working_day;
 		$this->newWorkingDay = $this->previousWorkingDay;
 
+		// $this->users = $this->shiftUserDay->where
+		$this->users  = User::where('organizational_unit_id', $this->shiftUserDay->ShiftUser->organizational_unit_id)->get();
+		foreach ($this->users as $index => $u) {
+			$shiftUser = ShiftUser::where("user_id",$u->id)->get();
+			// if( ShiftUser::where("user_id",$u->id)->get() ){
+				if( isset($shiftUser) && count($shiftUser) > 0){
+
+					foreach ($shiftsUser as  $suser) {
+					
+						if ( $suser->ShiftUserDay->where("day","2021-04-27") != null  ){
+							$this->users->forget($index);
+						}
+
+					}
+				}
+		}
+// 		$users = User::whereHas('posts', function($q){
+//     		$q->where('created_at', '>=', '2015-01-01 00:00:00');
+// })->get();
 
 	}
 	public function cancel(){
