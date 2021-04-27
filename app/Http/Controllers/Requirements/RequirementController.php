@@ -294,8 +294,9 @@ class RequirementController extends Controller
       $documents = Document::all()->sortBy('id');
       $parte = new Parte;
       $ous = OrganizationalUnit::all()->sortBy('name');
-      $organizationalUnit = OrganizationalUnit::Find(1);
-      return view('requirements.create', compact('ous','organizationalUnit','parte','documents'));
+//      $organizationalUnit = OrganizationalUnit::Find(1);
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+      return view('requirements.create', compact('ous','ouRoots','parte','documents'));
     }
 
     public function archive_requirement(Requirement $requirement)
@@ -386,6 +387,9 @@ class RequirementController extends Controller
           $users = array_unique($users_req); //distinct
           $flag = 0;
 
+          //obtiene nro para agrupar requerimientos
+//            $group_number = Requirement::latest('group')->first() + 1;
+
           //$requerimientos = '';
           foreach ($users as $key => $user) {
 
@@ -395,6 +399,7 @@ class RequirementController extends Controller
             //se crea requerimiento
             $requirement = new Requirement($req);
             $requirement->user()->associate(Auth::user());
+//            $requirement->group = $group_number;
             $requirement->save();
 
             //se ingresa una sola vez: se guardan posibles usuarios en copia. Se agregan primero que otros eventos del requerimiento, para que no queden como "last()"
