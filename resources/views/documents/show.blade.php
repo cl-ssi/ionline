@@ -7,7 +7,7 @@
         <meta charset="utf-8">
         <title>Intranet {{ $document->number }} - {{ $document->subject }}</title>
         <meta name="description" content="Documento">
-        <meta name="author" content="Alvaro Torres F. <alvaro.torres@redsalud.gob.cl>">
+        <meta name="author" content="Sistemas SSI <sistemas.ssi@redsalud.gob.cl>">
 
         <style>
             body, table {
@@ -110,12 +110,16 @@
                 {!! $document->contentHtml !!}
             </div>
 
-
+            <div style="padding-top: 20px">
+            {{--
             <div class="firma center" style="padding-top: 68px; text-transform: uppercase; padding-bottom: 8px;">
                 <div style="padding-bottom: 4px;">___________________________________</div>
                 <div style="padding-bottom: 4px;">{!! $document->fromHtmlSign !!}</div>
                 <div>{{ env('APP_SS') }}</div>
             </div>
+            --}}
+            </div>
+
 
 
             <div class="firma seis" style="padding-top: 6px; padding-bottom: 8px; display: inline-block; vertical-align:top; width: 49%;">
@@ -123,7 +127,7 @@
                 <div style="padding-bottom: 4px;">{!! $document->distributionHtml !!}</div>
             </div>
 
-            <div style="padding-bottom: 8px; display: inline-block; vertical-align:top; width: 49%; text-align: right">
+            <div style="padding-bottom: 6px; display: inline-block; vertical-align:top; width: 49%; text-align: right">
 
                 @if($document->responsible != null)
                 <table class="siete" style="margin-right: 0; margin-left: auto;">
@@ -131,7 +135,11 @@
                         <td colspan="3"><strong>RESPONSABLES:</strong></td>
                     </tr>
                     @foreach($document->responsiblesArray as $responsable)
-                        <tr><td class="seis">{{ $responsable }}</td><td class="center"> _ _ _ </td><td>_______</td></tr>
+                        <tr><td class="seis">{{ $responsable }}</td>
+                        {{--
+                        <td class="center"> _ _ _ </td><td>_______</td>
+                        --}}
+                        </tr>
                     @endforeach
                 </table>
                 @endif

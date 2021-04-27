@@ -18,13 +18,16 @@
     <p>No existen o no se han definido aún indicadores APS para el presente año</p>
 @else
     @foreach($iaps as $item)
-    <p>
         {{$item->number}}. {{$item->name}} 
-        <a class="badge badge-primary" href="{{ route('indicators.iaps.show', [$year, $item->slug, 'aps']) }}">APS</a> 
-        @if($item->reyno_active)<a class="badge badge-primary" href="{{ route('indicators.iaps.show', [$year, $item->slug, 'reyno']) }}">CGU Dr. Hector Reyno</a> @endif
-        @if($item->hospital_active)<a class="badge badge-primary" href="{{ route('indicators.iaps.show', [$year, $item->slug, 'hospital']) }}">Hospital Dr. Ernesto Torres G.</a> @endif
-        @if($item->ssi_active)<a class="badge badge-primary" href="{{ route('indicators.iaps.show', [$year, $item->slug, 'ssi']) }}">Dirección Servicio de Salud</a> @endif
-    </p>
+        <ol>
+            <li>  <a href="{{ route('indicators.iaps.show', [$year, $item->slug, 'aps']) }}">APS</a> </li>
+            @if($item->reyno_active)<li><a href="{{ route('indicators.iaps.show', [$year, $item->slug, 'reyno']) }}">CGU Dr. Hector Reyno</a></li>  @endif
+            @if($item->hospital_active)<li><a href="{{ route('indicators.iaps.show', [$year, $item->slug, 'hospital']) }}">Hospital Dr. Ernesto Torres G.</a></li> @endif
+            @if($item->ssi_active)<li><a href="{{ route('indicators.iaps.show', [$year, $item->slug, 'ssi']) }}">Dirección Servicio de Salud</a> @endif
+        </ol>
+      
+       
+    
     @endforeach
 @endif
 @endsection

@@ -15,7 +15,7 @@ class Parte extends Model
      * @var array
      */
     protected $fillable = [
-        'date', 'type', 'number', 'origin', 'subject', 'important', 'entered_at', 'viewed_at'
+        'date', 'type', 'number', 'origin', 'subject', 'important', 'entered_at', 'viewed_at','physical_format','received_by_id','reception_date'
     ];
 
     public function getCreationParteDateAttribute()

@@ -74,6 +74,11 @@ class Signature extends Model implements Auditable
                 ->signaturesFlows->whereNotNull('status')->count() > 0;
     }
 
+    public function getSignaturesFileDocumentAttribute()
+    {
+        return $this->signaturesFiles->where('file_type', 'documento')->first();
+    }
+
     protected $table = 'doc_signatures';
 
     protected $dates = ['request_date'];

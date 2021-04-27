@@ -647,6 +647,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('signatures.showPdfAnexo');
     Route::post('/{idSignaturesFlow}/rechazar', 'Documents\SignatureController@rejectSignature')->name('signatures.rejectSignature');
     Route::get('signatures/signatureFlows/{signatureId}', 'Documents\SignatureController@signatureFlows')->name('signatures.signatureFlows');
+    Route::get('signatures/signModal/{pendingSignaturesFlowId}', 'Documents\SignatureController@signModal')->name('signatures.signModal');
     Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', 'Documents\SignatureController@callbackFirma')->name('callbackFirma');
 });
 Route::resource('documents', 'Documents\DocumentController')->middleware('auth');
