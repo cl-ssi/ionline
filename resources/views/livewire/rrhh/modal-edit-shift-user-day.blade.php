@@ -26,6 +26,9 @@
                         <input type="hidden" wire:model="user_id">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-info"></i> INFORMACIÓN </label>
+                       <div  class="table-responsive">
+                           
+                       
                         <table class="table"> 
                         <thead> 
                             <tr>
@@ -89,6 +92,9 @@
                         </thead>
                          
                         </table>
+                        
+
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -121,7 +127,7 @@
                             @if( isset($users) )
                                 @foreach($users as $u)
                                 
-                                    <option value="1" >{{$u->id}} - {{$u->name}} {{ $u->fathers_family }} {{ $u->mothers_family }} </option>
+                                    <option value="{{$u->id}}" >{{$u->id}} - {{$u->name}} {{ $u->fathers_family }} {{ $u->mothers_family }} </option>
 
                                 @endforeach
                             @endif
