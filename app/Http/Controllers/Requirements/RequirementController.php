@@ -388,7 +388,14 @@ class RequirementController extends Controller
           $flag = 0;
 
           //obtiene nro para agrupar requerimientos
-//            $group_number = Requirement::latest('group')->first() + 1;
+            if (Requirement::whereNotNull('group_number')->count() === 0) {
+                $group_number = 1;
+            }else{
+                $group_number = Requirement::whereNotNull('group_number')
+                        ->latest()
+                        ->first()
+                        ->group_number + 1;
+            }
 
           //$requerimientos = '';
           foreach ($users as $key => $user) {
@@ -399,7 +406,7 @@ class RequirementController extends Controller
             //se crea requerimiento
             $requirement = new Requirement($req);
             $requirement->user()->associate(Auth::user());
-//            $requirement->group = $group_number;
+            $requirement->group_number = $group_number;
             $requirement->save();
 
             //se ingresa una sola vez: se guardan posibles usuarios en copia. Se agregan primero que otros eventos del requerimiento, para que no queden como "last()"
@@ -534,7 +541,17 @@ class RequirementController extends Controller
           }
         }
 
-        return view('requirements.show', compact('ous','organizationalUnit','requirement','categories','requirementCategories','lastEvent','firstEvent','documents'));
+        //Se busca requerimientos agrupados, estos corresponden a los req. de los otros destinatarios de la misma solicitud de req.
+        $groupedRequirements = null;
+        if ($requirement->group_number != null) {
+            $groupedRequirements = Requirement::query()
+                ->where('group_number', $requirement->group_number)
+                ->where('id', '<>', $requirement->id)
+                ->get();
+        }
+
+
+        return view('requirements.show', compact('ous', 'organizationalUnit', 'requirement', 'categories', 'requirementCategories', 'lastEvent', 'firstEvent', 'documents', 'groupedRequirements'));
     }
 
     public function report1(Request $request)

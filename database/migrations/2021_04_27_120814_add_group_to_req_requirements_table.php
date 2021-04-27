@@ -14,7 +14,7 @@ class AddGroupToReqRequirementsTable extends Migration
     public function up()
     {
         Schema::table('req_requirements', function (Blueprint $table) {
-            $table->integer('group')->after('parte_id')->nullable();
+            $table->integer('group_number')->after('parte_id')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class AddGroupToReqRequirementsTable extends Migration
     public function down()
     {
         Schema::table('req_requirements', function (Blueprint $table) {
-            $table->dropColumn('group');
+            $table->dropColumn('group_number');
         });
     }
 }
