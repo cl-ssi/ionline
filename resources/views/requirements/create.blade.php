@@ -41,36 +41,75 @@
             <input type="hidden" class="form-control" id="for_parte_id" name="parte_id" value="{{$parte->id}}" >
 
             <div class="row">
+{{--                <fieldset class="form-group col-12">--}}
+{{--                    <label for="for_date">Unidad Organizacional</label>--}}
+{{--                    <select name="to_ou_id" id="ou" class="form-control" required="">--}}
+{{--                        <option value="{{ $organizationalUnit->id }}">--}}
+{{--                            {{ $organizationalUnit->name }}--}}
+{{--                        </option>--}}
+{{--                        @foreach($organizationalUnit->childs as $child_level_1)--}}
+{{--                            @if($child_level_1->name != 'Externos')--}}
+{{--                                <option value="{{ $child_level_1->id }}">--}}
+{{--                                    &nbsp;&nbsp;&nbsp;--}}
+{{--                                    {{ $child_level_1->name }}--}}
+{{--                                </option>--}}
+{{--                                @foreach($child_level_1->childs as $child_level_2)--}}
+{{--                                    <option value="{{ $child_level_2->id }}">--}}
+{{--                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--}}
+{{--                                        {{ $child_level_2->name }}--}}
+{{--                                    </option>--}}
+{{--                                    @foreach($child_level_2->childs as $child_level_3)--}}
+{{--                                        <option value="{{ $child_level_3->id }}">--}}
+{{--                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--}}
+{{--                                            {{ $child_level_3->name }}--}}
+{{--                                        </option>--}}
+{{--                                    @endforeach--}}
+{{--                                @endforeach--}}
+{{--                            @endif--}}
+{{--                        @endforeach--}}
+{{--                    </select>--}}
+{{--                </fieldset>--}}
 
-                <fieldset class="form-group col-12">
-                    <label for="for_date">Unidad Organizacional</label>
-                    <select name="to_ou_id" id="ou" class="form-control" required="">
-                        <option value="{{ $organizationalUnit->id }}">
-                            {{ $organizationalUnit->name }}
-                        </option>
-                        @foreach($organizationalUnit->childs as $child_level_1)
-                            @if($child_level_1->name != 'Externos')
-                                <option value="{{ $child_level_1->id }}">
-                                    &nbsp;&nbsp;&nbsp;
-                                    {{ $child_level_1->name }}
+                <fieldset class="form-group col-md-12">
+                    <label for="ou">Unidad Organizacional</label>
+                    <!-- <select class="custom-select" id="forOrganizationalUnit" name="organizationalunit"> -->
+                    <select class="form-control selectpicker" data-live-search="true" id="ou" name="to_ou_id" required
+                            data-size="5">
+                        <option></option>
+                        @foreach($ouRoots as $ouRoot)
+                            @if($ouRoot->name != 'Externos')
+                                <option value="{{ $ouRoot->id }}">
+                                    {{ $ouRoot->name }}
                                 </option>
-                                @foreach($child_level_1->childs as $child_level_2)
-                                    <option value="{{ $child_level_2->id }}">
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        {{ $child_level_2->name }}
+                                @foreach($ouRoot->childs as $child_level_1)
+
+                                    <option value="{{ $child_level_1->id }}">
+                                        &nbsp;&nbsp;&nbsp;
+                                        {{ $child_level_1->name }}
                                     </option>
-                                    @foreach($child_level_2->childs as $child_level_3)
-                                        <option value="{{ $child_level_3->id }}">
-                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            {{ $child_level_3->name }}
+                                    @foreach($child_level_1->childs as $child_level_2)
+                                        <option value="{{ $child_level_2->id }}">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            {{ $child_level_2->name }}
                                         </option>
+                                        @foreach($child_level_2->childs as $child_level_3)
+                                            <option value="{{ $child_level_3->id }}">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                {{ $child_level_3->name }}
+                                            </option>
+                                            @foreach($child_level_3->childs as $child_level_4)
+                                                <option value="{{ $child_level_4->id }}">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    {{ $child_level_4->name }}
+                                                </option>
+                                            @endforeach
+                                        @endforeach
                                     @endforeach
                                 @endforeach
                             @endif
                         @endforeach
                     </select>
                 </fieldset>
-
 
                 <fieldset class="form-group col-12">
                     <label for="for_origin">Destinatario</label>
