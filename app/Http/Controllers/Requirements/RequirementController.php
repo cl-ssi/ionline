@@ -282,10 +282,11 @@ class RequirementController extends Controller
      */
     public function create_requirement(Parte $parte)
     {
-      $documents = Document::all()->sortBy('id');
-      $ous = OrganizationalUnit::all()->sortBy('name');
-      $organizationalUnit = OrganizationalUnit::Find(1);
-      return view('requirements.create', compact('ous','organizationalUnit','parte','documents'));
+        $documents = Document::all()->sortBy('id');
+        $ous = OrganizationalUnit::all()->sortBy('name');
+//        $organizationalUnit = OrganizationalUnit::Find(1);
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        return view('requirements.create', compact('ous', 'ouRoots', 'parte', 'documents'));
     }
 
     public function create_requirement_sin_parte()
