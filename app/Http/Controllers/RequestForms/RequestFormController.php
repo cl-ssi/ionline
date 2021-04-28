@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\RequestForms;
 
-use App\RequestForms\RequestForm;
-use App\RequestForms\Item;
+use App\Models\RequestForms\RequestForm;
+use App\Models\RequestForms\Item;
 use App\RequestForms\Passage;
 use App\RequestForms\RequestFormEvent;
 use App\RequestForms\RequestFormItemCode;
@@ -49,7 +49,7 @@ class RequestFormController extends Controller
         //$user = User::find(auth()->user())
         //$user = User::where('id', Auth::user()->id);
         //return  view('request_form.create', compact('user'));
-        return  view('request_form.create');      
+        return  view('request_form.create');
     }
 
     /**

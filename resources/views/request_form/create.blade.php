@@ -59,7 +59,8 @@
     </div><!-- CARD BODY -->
 </div><!-- CARD -->
 <br>
-<livewire:items.request-type />
+
+<livewire:request-form.request-type />
 </div><!-- CONTENEDOR -->
 
 @endsection
