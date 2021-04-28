@@ -104,7 +104,7 @@
 
                 <div class="form-check form-check-inline col">
                     <input class="form-check-input" name="sendMail" type="checkbox"
-                        id="for_sendMail" value="true" checked>
+                        id="for_sendMail" value="true" checked disabled>
                     <label class="form-check-label" for="for_sendMail">Enviar mail a distribución</label>
                 </div>
             </div>
