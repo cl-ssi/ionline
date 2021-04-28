@@ -184,8 +184,7 @@ class ModalEditShiftUserDay extends Component
 				// $bTurno = ShiftUser::whereBetween('reservation_from', [$from, $to])->get();
 				// $bTurno = ShiftUser::where("user_id",$this->userIdtoChange)->where("date_from","<=",$this->shiftUserDay->day)->where("date_up",">=",$this->shiftUserDay->day)->first(); 
 				$bTurno = ShiftUser::where("user_id",$this->userIdtoChange)->where("date_from","<=",$from)->where("date_up",">=",$to)->first(); 
-				if( !isset($bTurno) || $bTurno == ""){
-					 // si no tiene ningun turno asociado a ese rango, se le crea
+				if( !isset($bTurno) || $bTurno == ""){ // si no tiene ningun turno asociado a ese rango, se le crea
 					$bTurno = new ShiftUser;
 					$bTurno->date_from = $from;
 					$bTurno->date_up = $to;	
@@ -201,6 +200,7 @@ class ModalEditShiftUserDay extends Component
 				$nDay->status = 3;
 				$nDay->shift_user_id = $bTurno->id;
 				$nDay->working_day = $this->shiftUserDay->working_day;
+				$nDay->derived_from = $this->shiftUserDay->id;
 				$nDay->save();	
 				//si tiene turno creado para ese mes y ese tipo de turno
 				$nHistory = new ShiftDayHistoryOfChanges;
@@ -213,8 +213,8 @@ class ModalEditShiftUserDay extends Component
 				$nHistory->current_value = $this->newStatus;
 				$nHistory->save();
 			}
-
 		}
+		$this->emit('refreshListOfShifts');
 	}	
 
     public function render()
