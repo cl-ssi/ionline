@@ -5,7 +5,7 @@
     -->
     <head>
         <meta charset="utf-8">
-        <title>Intranet {{ $document->number }} - {{ $document->subject }}</title>
+        <title>{{ $document->subject }}</title>
         <meta name="description" content="Documento">
         <meta name="author" content="Sistemas SSI <sistemas.ssi@redsalud.gob.cl>">
 
@@ -29,6 +29,7 @@
                 /*border: 1px solid #F2F2F2;*/
                 width: 704px;
                 height: 13px;
+                padding-left: 180px;
                 position: fixed;
                 bottom: 0;
             }
@@ -68,12 +69,15 @@
     <body>
 
         <div class="content">
-            <img src="{{ asset('images/logo_pluma.jpg') }}" width="120" alt="Logo servicio de salud"><br>
-            <!--div class="siete" style="padding-bottom: 4px;">{{ $document->user->organizationalUnit->name }}</div-->
-            <div class="left seis" style="padding-bottom: 6px; color: #999">Código interno: {{ $document->id }}</div>
-
-            <div class="right" style="float: right; width: 300px;">
-                <div class="left" style="padding-bottom: 6px; font-size: 15px; "><strong>{{ $document->type }} N°:</strong> {{ $document->number }}</div>
+            <div class="left" style="float: left;">
+                <img src="{{ asset('images/logo_pluma.jpg') }}" width="120" alt="Logo servicio de salud"><br>
+                <!--div class="siete" style="padding-bottom: 4px;">{{ $document->user->organizationalUnit->name }}</div-->
+                <div class="left seis" style="padding-bottom: 6px; color: #999">Código interno: {{ $document->id }}</div>
+            </div>
+            
+            <div class="right" style="float: right; width: 300px; padding-top: 64px;">
+                <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;"><strong>{{ $document->type }} N°:</strong> </div>
+                <div style="padding-top:26px"></div>
                 <div class="left" style="padding-bottom: 6px;"><strong>ANT:</strong> {{ $document->antecedent }}</div>
                 <div class="left" style="padding-bottom: 8px;"><strong>MAT:</strong> {{ $document->subject }}</div>
                 <div class="left" style="padding-bottom: 2px;">Iquique, {{ $document->date ? $document->date->formatLocalized('%d %B del %Y'): '' }}</div>
@@ -146,7 +150,7 @@
             </div>
 
 
-            <div class="pie_pagina seis center">
+            <div class="pie_pagina center seis">
                 <!--{{ config('app.ss') }}<br-->
                 {{ env('APP_SS_ADDRESS') }} - Fono: {{ env('APP_SS_TELEPHONE') }} - {{ env('APP_SS_WEBSITE') }}
             </div>
