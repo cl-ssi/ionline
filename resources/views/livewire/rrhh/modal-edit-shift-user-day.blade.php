@@ -9,7 +9,7 @@
 
                 <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar"></i> Modificar día de personal </h5>
 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" wire:click.prevent="cancel()" aria-label="Close">
 
                     <span aria-hidden="true">×</span>
 
