@@ -106,12 +106,14 @@ class SignatureController extends Controller
                 }
             }
 
-            $signaturesFlow = new SignaturesFlow();
-            $signaturesFlow->signatures_file_id = $signaturesFileDocumentId;
-            $signaturesFlow->type = 'firmante';
-            $signaturesFlow->ou_id = $request->ou_id_signer;
-            $signaturesFlow->user_id = $request->user_signer;
-            $signaturesFlow->save();
+            if ($request->ou_id_signer != null) {
+                $signaturesFlow = new SignaturesFlow();
+                $signaturesFlow->signatures_file_id = $signaturesFileDocumentId;
+                $signaturesFlow->type = 'firmante';
+                $signaturesFlow->ou_id = $request->ou_id_signer;
+                $signaturesFlow->user_id = $request->user_signer;
+                $signaturesFlow->save();
+            }
 
             if ($request->has('ou_id_visator')) {
                 foreach ($request->ou_id_visator as $key => $ou_id_visator) {
