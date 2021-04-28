@@ -65,7 +65,6 @@
             }
         </style>
     </head>
-    <?php setlocale(LC_ALL, 'es'); ?>
     <body>
 
         <div class="content">
@@ -78,11 +77,20 @@
             <div class="right" style="float: right; width: 300px; padding-top: 64px;">
                 <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;"><strong>{{ $document->type }} N°:</strong> </div>
                 <div style="padding-top:26px"></div>
-                <div class="left" style="padding-bottom: 6px;"><strong>ANT:</strong> {{ $document->antecedent }}</div>
-                <div class="left" style="padding-bottom: 8px;"><strong>MAT:</strong> {{ $document->subject }}</div>
-                <div class="left" style="padding-bottom: 2px;">Iquique, {{ $document->date ? $document->date->formatLocalized('%d %B del %Y'): '' }}</div>
-
+                <div class="left" style="padding-bottom: 6px;">
+                    <strong>ANT:</strong> {{ $document->antecedent }}
+                </div>
+                <div class="left" style="padding-bottom: 8px;">
+                    <strong>MAT:</strong> {{ $document->subject }}
+                </div>
+                <div class="left" style="padding-bottom: 2px;">
+                    Iquique, {{ $document->date ? 
+                        $document->date->day .' de '. 
+                        $document->date->monthName . ' de '.
+                        $document->date->year : '' }}
+                </div>
             </div>
+
             <div style="clear: both; padding-bottom: 10px"></div>
 
             @switch($document->greater_hierarchy)
