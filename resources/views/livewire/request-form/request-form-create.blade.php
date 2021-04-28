@@ -194,13 +194,6 @@
             </div>
          </div>
         @endif
-
-        <div class="row justify-content-around mt-0">
-           <div class="alert alert-danger col-6 mt-1">
-            <p>{{$saveMessage}}</p>
-           </div>
-        </div>
-
        </div><!-- CARD PRINCIPAL-->
 
  </div><!-- LIVEWIRE -->

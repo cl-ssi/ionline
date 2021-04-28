@@ -12,11 +12,10 @@ use Illuminate\Support\Facades\Auth;
 class RequestFormCreate extends Component
 {
     use WithFileUploads;
-    //public $requestType, $option;
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity,
     $unitValue, $taxes, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
     public $purchaseMechanism, $messagePM, $program, $justify, $totalDocument;
-    public $items, $saveMessage;
+    public $items;
 
     protected $rules = [
         'unitValue'           =>  'required|numeric|min:1',
@@ -174,6 +173,7 @@ class RequestFormCreate extends Component
       foreach ($this->items as $item) {
         $this->saveItem($item, $req->id);
       }
+
     }
 
     private function saveItem($item, $id){
@@ -184,7 +184,7 @@ class RequestFormCreate extends Component
             'specification'         =>      $item['technicalSpecifications'],
             'quantity'              =>      $item['quantity'],
             'unit_value'            =>      $item['unitValue'],
-            'tax'                 =>        $item['taxes'],
+            'tax'                   =>      $item['taxes'],
             'expense'               =>      $item['totalValue']
       ]);
     }
