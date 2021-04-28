@@ -102,24 +102,6 @@ class RequestFormCreate extends Component
       $this->article=$this->technicalSpecifications=$this->quantity=$this->unitValue="";
       $this->taxes=$this->unitOfMeasurement="";
     }
-/*
-    public function filter(){
-      switch ($this->option) {
-          case "service":
-              $this->requestType = "Bienes y/o Servicios";
-              break;
-          case "ticket":
-              $this->requestType = "Pasaje Aéreo";
-              break;
-          case "payment":
-              $this->requestType = "Pago de Servicios";
-              break;
-          case "supply":
-              $this->requestType = "Suministros";
-              break;
-      }
-    }
-*/
 
    public function messageMechanism(){
       $this->messagePM = array();
@@ -188,20 +170,27 @@ class RequestFormCreate extends Component
           'purchase_mechanism'    =>  $this->purchaseMechanism,
           'program'               =>  $this->program,
       ]);
-      //session()->flash('info', 'Requerimiento Nro: '.$req->id.' ha sido creado.');
-      //$this->saveMessage = 'Requerimiento Nro: '.$req->id.' ha sido creado.';
+
       foreach ($this->items as $item) {
-        $this->saveItem($item);
+        $this->saveItem($item, $req->id);
       }
     }
 
-    private function saveItem($item, $requestId){
-
+    private function saveItem($item, $id){
+        $req = Item::create([
+            'request_form_id'       =>      $id,
+            'article'               =>      $item['article'],
+            'unit_of_measurement'   =>      $item['unitOfMeasurement'],
+            'specification'         =>      $item['technicalSpecifications'],
+            'quantity'              =>      $item['quantity'],
+            'unit_value'            =>      $item['unitValue'],
+            'tax'                 =>        $item['taxes'],
+            'expense'               =>      $item['totalValue']
+      ]);
     }
 
     public function render(){
         $this->messageMechanism();
-        //$this->filter();
         return view('livewire.request-form.request-form-create');
     }
 }

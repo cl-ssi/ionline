@@ -9,7 +9,7 @@ class Item extends Model
     public $table = "arq_items";
 
     protected $fillable = [
-        'article', 'unitOfMeasurement', 'quantity', 'unitValue', 'specification', 'tax', 'item_estimated_expense',
+        'article', 'unit_of_measurement', 'quantity', 'unit_value', 'specification', 'tax', 'item_estimated_expense',
         'expense', 'request_form_id', 'request_form_item_codes_id'
     ];
 
