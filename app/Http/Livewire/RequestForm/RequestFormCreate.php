@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 
-class RequestType extends Component
+class RequestFormCreate extends Component
 {
     use WithFileUploads;
     //public $requestType, $option;
@@ -194,7 +194,7 @@ class RequestType extends Component
         $this->saveItem($item);
       }
     }
-    
+
     private function saveItem($item, $requestId){
 
     }
@@ -202,6 +202,6 @@ class RequestType extends Component
     public function render(){
         $this->messageMechanism();
         //$this->filter();
-        return view('livewire.request-form.request-type');
+        return view('livewire.request-form.request-form-create');
     }
 }

@@ -60,7 +60,7 @@
 </div><!-- CARD -->
 <br>
 
-<livewire:request-form.request-type />
+<livewire:request-form.request-form-create />
 </div><!-- CONTENEDOR -->
 
 @endsection
