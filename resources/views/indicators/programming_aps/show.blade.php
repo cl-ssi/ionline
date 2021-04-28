@@ -83,13 +83,13 @@
                 <td>{{ $tracer->level }}</td>
                 <td>{{ $tracer->name }}</td>
                 <td>{{ $tracer->population }}</td>
-                <td class="text-right">{{ $tracer->getValuesAcum2('denominador', $comuna, null) }}</td>
+                <td class="text-right">{{ number_format($tracer->getValuesAcum2('denominador', $comuna, null), 0, ',', '.') }}</td>
                 <td>{{ $tracer->numerator_source }}</td>
                 <td>{{ $tracer->professional }}</td>
                 @foreach($months as $number => $month)
                 <td class="text-right">{{ $tracer->getValueByFactorAndMonth2('numerador', $number, $comuna, null) != null ? number_format($tracer->getValueByFactorAndMonth2('numerador', $number, $comuna, null), 0, ',', '.') : ''}}</td>
                 @endforeach
-                <td class="text-right">{{ $tracer->getValuesAcum2('numerador', $comuna, null) }}</td>
+                <td class="text-right">{{ number_format($tracer->getValuesAcum2('numerador', $comuna, null), 0, ',', '.') }}</td>
                 <td class="text-right">{{ number_format($tracer->getCompliance2($comuna, null), 1, ',', '.')}}% </td>
             </tr>
         @endforeach
@@ -123,13 +123,13 @@
                 <td>{{ $tracer->level }}</td>
                 <td>{{ $tracer->name }}</td>
                 <td>{{ $tracer->population }}</td>
-                <td class="text-right">{{ $tracer->getValuesAcum2('denominador', null, $establishment) }}</td>
+                <td class="text-right">{{ number_format($tracer->getValuesAcum2('denominador', null, $establishment), 0, ',', '.') }}</td>
                 <td>{{ $tracer->numerator_source }}</td>
                 <td>{{ $tracer->professional }}</td>
                 @foreach($months as $number => $month)
                 <td class="text-right">{{ $tracer->getValueByFactorAndMonth2('numerador', $number, null, $establishment) != null ? number_format($tracer->getValueByFactorAndMonth2('numerador', $number, null, $establishment), 0, ',', '.') : ''}}</td>
                 @endforeach
-                <td class="text-right">{{ $tracer->getValuesAcum2('numerador', null, $establishment) }}</td>
+                <td class="text-right">{{ number_format($tracer->getValuesAcum2('numerador', null, $establishment), 0, ',', '.') }}</td>
                 <td class="text-right">{{ number_format($tracer->getCompliance2(null, $establishment), 1, ',', '.')}}% </td>
             </tr>
         @endforeach
@@ -173,13 +173,13 @@
                 <td>{{ $tracer->level }}</td>
                 <td>{{ $tracer->name }}</td>
                 <td>{{ $tracer->population }}</td>
-                <td class="text-right">{{ $tracer->getValuesAcum('denominador') }}</td>
+                <td class="text-right">{{ number_format($tracer->getValuesAcum('denominador'), 0, ',', '.') }}</td>
                 <td>{{ $tracer->numerator_source }}</td>
                 <td>{{ $tracer->professional }}</td>
                 @foreach($months as $number => $month)
-                <td class="text-right">{{ $tracer->getValueByFactorAndMonth('numerador', $number) != null ? number_format($tracer->getValueByFactorAndMonth('numerador', $number), 0, ',', '.') : ''}}</td>
+                <td class="text-right">{{ $tracer->getValueByFactorAndMonth2('numerador', $number, null, null) != null ? number_format($tracer->getValueByFactorAndMonth2('numerador', $number, null, null), 0, ',', '.') : ''}}</td>
                 @endforeach
-                <td class="text-right">{{ $tracer->getValuesAcum('numerador', null) }}</td>
+                <td class="text-right">{{ number_format($tracer->getValuesAcum('numerador', null), 0, ',', '.') }}</td>
                 <td class="text-right">{{ number_format($tracer->getCompliance(), 1, ',', '.')}}% </td>
             </tr>
         @endforeach
