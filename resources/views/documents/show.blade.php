@@ -73,7 +73,7 @@
             <div class="left seis" style="padding-bottom: 6px; color: #999">Código interno: {{ $document->id }}</div>
 
             <div class="right" style="float: right; width: 300px;">
-                <div class="left" style="padding-bottom: 6px; font-size: 15px; "><strong>{{ $document->type }} N°:</strong> {{ $document->number }}</div>
+                <div class="left" style="padding-bottom: 6px; font-size: 15px; "><strong>{{ $document->type }} N°:</strong> </div>
                 <div class="left" style="padding-bottom: 6px;"><strong>ANT:</strong> {{ $document->antecedent }}</div>
                 <div class="left" style="padding-bottom: 8px;"><strong>MAT:</strong> {{ $document->subject }}</div>
                 <div class="left" style="padding-bottom: 2px;">Iquique, {{ $document->date ? $document->date->formatLocalized('%d %B del %Y'): '' }}</div>
