@@ -43,6 +43,7 @@
                 <option value="Reservado" @if($document->type == 'Reservado') selected @endif>Reservado</option>
                 <option value="Circular" @if($document->type == 'Circular') selected @endif>Circular</option>
                 <option value="Acta de recepción" @if($document->type == 'Acta de recepción') selected @endif>Acta de recepción</option>
+                <option value="Oficio" @if($document->type == 'oficio') selected @endif>Oficio</option>                
             </select>
         </div>
         <div class="form-group col">
