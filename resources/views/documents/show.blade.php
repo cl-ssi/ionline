@@ -29,6 +29,7 @@
                 /*border: 1px solid #F2F2F2;*/
                 width: 704px;
                 height: 13px;
+                padding-left: 180px;
                 position: fixed;
                 bottom: 0;
             }
