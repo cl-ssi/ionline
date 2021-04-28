@@ -472,6 +472,7 @@
 					<option value="Prevencionista de Riesgo" @if($serviceRequest->rrhh_team == "Prevencionista de Riesgo") selected @endif>Prevencionista de Riesgo</option>
 
           <option value="Nutricionista turno" @if($serviceRequest->rrhh_team == "Nutricionista turno") selected @endif>Nutricionista turno</option>
+          <option value="Informático" @if($serviceRequest->rrhh_team == "Informático") selected @endif>Informático</option>
 
         </select>
     </fieldset>
@@ -602,8 +603,8 @@
         <div class="form-row">
 
           <fieldset class="form-group col-6 col-md-3">
-					    <label for="for_net_amount">Monto Neto</label>
-              <input type="text" class="form-control" name="net_amount" value="{{$serviceRequest->net_amount}}">
+					    <label for="for_net_amount">Monto Mensualizado</label>
+              <input type="text" class="form-control" name="net_amount" value="{{$serviceRequest->net_amount}}" required>
 					</fieldset>
 
           <fieldset class="form-group col-6 col-md-3">

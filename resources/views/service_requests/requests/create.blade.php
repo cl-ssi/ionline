@@ -342,6 +342,7 @@
 				<option value="Nutricionista Diurno" >Nutricionista Diurno</option>
 				<option value="Prevencionista de Riesgo" >Prevencionista de Riesgo</option>
 				<option value="Nutricionista turno" >Nutricionista turno</option>
+				<option value="Informático">Informático</option>
 			</select>
 		</fieldset>
 
