@@ -23,6 +23,7 @@ class ModalEditShiftUserDay extends Component
 	public $newStatus;
 	public $newWorkingDay;
 	public $previousWorkingDay;
+	public $varLog;
     private $tiposJornada = array(
             'F' => "Libre",
             'D' => "Dia",
@@ -62,6 +63,7 @@ class ModalEditShiftUserDay extends Component
 		// $this->emit('setshiftUserDay', $this->shiftDay->id);
     }
 	public function setshiftUserDay($sUDId){
+		// echo "setshiftUserDay";
 		$this->shiftUserDay = ShiftUserDay::find($sUDId);
 		$this->previousStatus = $this->shiftUserDay->status;
 		$this->newStatus = $this->previousStatus ;
@@ -69,29 +71,43 @@ class ModalEditShiftUserDay extends Component
 		$this->newWorkingDay = $this->previousWorkingDay;
 
 		// $this->users = $this->shiftUserDay->where
-		$this->users  = User::where('organizational_unit_id', $this->shiftUserDay->ShiftUser->organizational_unit_id)->get();
+		$this->users  = User::where('organizational_unit_id', $this->shiftUserDay->ShiftUser->organizational_units_id)->get();
+		$this->varLog = "";		
+		// $this->varLog ="Users Prev: ".json_encode($this->users)."<br>";
 		foreach ($this->users as $index => $u) {
+			// $this->varLog .= ">> foreach( Index:".$index."; U:".json_encode($u).")  <br>"; 
 			$shiftUser = ShiftUser::where("user_id",$u->id)->get();
 			// if( ShiftUser::where("user_id",$u->id)->get() ){
+			$this->varLog .=">> shiftUser day: " .$this->shiftUserDay->day."<br>";
 				if( isset($shiftUser) && count($shiftUser) > 0){
 
 					foreach ($shiftUser as  $suser) {
-					
-						if ( isset($suser->ShiftUserDay) && $suser->ShiftUserDay->where("day","2021-04-27") != null  ){
-							$this->users->forget($index);
+						// $this->varLog .=" >> foreach  shiftUser <br> ".">> uShiftDays:".json_encode($suser)."<br>";
+						if ( isset($suser->days) && $suser->days->where("day",$this->shiftUserDay->day) != null){
+							$sUDay = $suser->days->where("day",$this->shiftUserDay->day)->first();
+							$this->varLog .=" >> foreach:"."<p align='center'>"." suser : ".$sUDay['working_day']."</p><br>" ;
+
+							if($sUDay['working_day'] !="F" && $sUDay['working_day'] != "" ){
+								$this->varLog .="<p align='center'>"." IF UNSET  : ".$index."".$u->id."</p><br>" ;
+
+								$this->users->forget($index);
+							}
+
+						}else{
+							$this->varLog .=" >> foreach --> else"."<br>";
+
 						}
 
 					}
 				}
 		}
-// 		$users = User::whereHas('posts', function($q){
-//     		$q->where('created_at', '>=', '2015-01-01 00:00:00');
-// })->get();
-
+		// 		$users = User::whereHas('posts', function($q){
+		//     		$q->where('created_at', '>=', '2015-01-01 00:00:00');
+		// })->get();//seteo el dia para obtener la info
 	}
 	public function cancel(){
-		$this->emit('clearModal');
 
+		$this->emit('clearModal');
 	}
 	public function changeAction(){
 		/* they can be 1:assigned;2:completed,3:extra shift,4:shift change 5: medical license,6: union jurisdiction,7: legal holiday,8: exceptional permit or did not belong to the service.*/
@@ -134,8 +150,8 @@ class ModalEditShiftUserDay extends Component
 		// habilitar aqui campos para crear el anuncio de dia de turno disponble
 	}
 	public function enableChangeTypeOfWorkingDay(){
-			$this->changeDayType ="visible";
 
+			$this->changeDayType ="visible";
 	}
 	public function update(){
 		if( ($this->action != 1 && $this->action != 7) &&  isset($this->shiftUserDay) ){
@@ -145,7 +161,7 @@ class ModalEditShiftUserDay extends Component
 
 
 			$nHistory = new ShiftDayHistoryOfChanges;
-			$nHistory->commentary = "El usuario \"".Auth::user()->name." ". Auth::user()->fathers_family." ". Auth::user()->mothers_family."\" ha modificado el <b>estado</b> de \"".$this->previousStatus." - ".$this->estados[$this->previousStatus]."\" a \"".$this->newStatus." - ".$this->estados[$this->newStatusid]."\"";
+			$nHistory->commentary = "El usuario \"".Auth::user()->name." ". Auth::user()->fathers_family." ". Auth::user()->mothers_family."\" ha modificado el <b>estado</b> de \"".$this->previousStatus." - ".$this->estados[$this->previousStatus]."\" a \"".$this->newStatus." - ".$this->estados[$this->newStatus]."\"";
 			$nHistory->shift_user_day_id = $this->shiftUserDay->id;
 			$nHistory->modified_by = Auth::user()->id;
 			$nHistory->change_type = 1;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
@@ -216,7 +232,6 @@ class ModalEditShiftUserDay extends Component
 		}
 		$this->emit('refreshListOfShifts');
 	}	
-
     public function render()
     {
         return view('livewire.rrhh.modal-edit-shift-user-day',["tiposJornada"=>$this->tiposJornada,"estados"=>$this->estados,"statusColors"=>$this->colors]);
