@@ -248,7 +248,6 @@ class SignatureController extends Controller
     public function verify(Request $request)
     {
         if ($request->id && $request->verification_code) {
-            //TODO verificar que exista algun signaturesFile
             $signaturesFile = SignaturesFile::find($request->id);
             if ($signaturesFile->verification_code == $request->verification_code) {
                 header('Content-Type: application/pdf');
@@ -280,7 +279,6 @@ class SignatureController extends Controller
 
     public function rejectSignature(Request $request, $idSignatureFlow)
     {
-        //TODO verificar orden de firmas
         $idSigFlow = SignaturesFlow::find($idSignatureFlow);
         $idSigFlow->update(['status' => 0, 'observation' => $request->observacion]);
         session()->flash('success', "La solicitud ha sido rechazada");

@@ -14,7 +14,23 @@
             @method('POST')
             <div class="form-row">
                 <div class="form-group col-12">
-                    @if( count($pendingSignaturesFlow->validationMessages) === 0 )
+                @if( count($pendingSignaturesFlow->validationMessages) === 0 )
+                        @if($pendingSignaturesFlow->signaturesFile->hasOnePendingFlow)
+                            @php
+                                preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $pendingSignaturesFlow->signature->recipients, $emails)
+                            @endphp
+                            <div class="alert alert-info mb-2">Una vez firmado se enviará un correo con el documento a
+                                las
+                                siguientes direcciones:
+
+                                <ul>
+                                    @foreach($emails[0] as $email)
+                                        <li> {{$email}} </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <label for="forotp">Ingrese número OTP.</label>
                         <input type="text" class="form-control form-control-sm" id="forotp"
                                name="otp" maxlength="6" autocomplete="off" required/>

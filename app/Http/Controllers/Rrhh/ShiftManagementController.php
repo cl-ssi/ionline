@@ -10,6 +10,7 @@ use App\User;
 use App\Models\Rrhh\ShiftTypes;
 use App\Models\Rrhh\ShiftUser;
 use App\Models\Rrhh\ShiftUserDay;
+use App\Models\Rrhh\ShiftDayHistoryOfChanges;   
 use App\Rrhh\OrganizationalUnit;
 use App\Programmings\Professional;
 use Spatie\Permission\Models\Role;
@@ -182,7 +183,7 @@ class ShiftManagementController extends Controller
         $nShift->organizational_units_id = $r->orgUnitId;
         $nShift->save();
         echo "staff assigned to shift";
-
+        $nUser = User::find($nShift->user_id);
         $ranges = CarbonPeriod::create($nShift->date_from, $nShift->date_up);
         $actuallyShift = ShiftTypes::find( $r->shiftId );
         $currentSeries =  explode(",", $actuallyShift->day_series); 
@@ -221,6 +222,16 @@ class ShiftManagementController extends Controller
                 $nShiftD->commentary = "// Automatically added by the shift ".$nShift->id."//"; 
                 $nShiftD->shift_user_id = $nShift->id;
                 $nShiftD->save();
+
+                $nHistory = new ShiftDayHistoryOfChanges;
+                $nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family."\" ha <b>asignado la jornada</b> del \"".$date->format('Y-m-d')."\" de tipo  \"".$nShiftD->working_day."\" al usuario ID: \"". $nUser->runFormat ."\" - ".$nUser->name." ".$nUser->fathers_family." ".$nUser->mothers_family;
+                $nHistory->shift_user_day_id = $nShiftD->id;
+                $nHistory->modified_by = Auth()->user()->id;
+                $nHistory->change_type = 0;//0_asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+                $nHistory->day =  $date->format('Y-m-d');
+                $nHistory->previous_value = "";
+                $nHistory->current_value = "1";
+                $nHistory->save();
            
             if( $i <  ( sizeof($currentSeries) - 1) ){
                 $i++;
