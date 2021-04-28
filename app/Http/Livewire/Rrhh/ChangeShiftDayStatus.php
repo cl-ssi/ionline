@@ -12,7 +12,7 @@ class ChangeShiftDayStatus extends Component
 	public $shiftDay;
 	// public $id;
 
-    protected $listeners = ['editShiftDay'];
+    protected $listeners = ['editShiftDay','refreshListOfShifts' => '$refresh'];
    	private $colors = array(
             1 => "lightblue",
             2 => "blue",
