@@ -155,11 +155,19 @@
 
                         <label for="exampleFormControlInput1"><i class="fa fa-history "></i> HISTORIAL DE MODIFICACIONES </label>
                             @if( isset($shiftUserDay) && $shiftUserDay->ShiftUser )
-                            <p>
-                             <i>
-                              >> {{  $shiftUserDay->created_at }} - La jornada ha sido creada </i> 
+                                @if($shiftUserDay->derived_from != "" && $shiftUserDay->derived_from > 0)
+                                    
+                                    <p><i>  >> {{  $shiftUserDay->DerivatedShift->created_at }} - La jornada ha sido creada </i></p>
 
-                             </p>
+                                    @foreach($shiftUserDay->DerivatedShift->shiftUserDayLog as $sDerivatedLog)
+                                      <p><i>  >> {{$sDerivatedLog->created_at}} - {!!$sDerivatedLog->commentary!!} </i></p> 
+                                    @endforeach
+
+                                    <p><i>  >> {{  $shiftUserDay->created_at }} - La jornada ha sido asginada </i></p>
+
+                                @else
+                                    <p><i>  >> {{  $shiftUserDay->created_at }} - La jornada ha sido creada </i></p>
+                                @endif
                                 @foreach($shiftUserDay->shiftUserDayLog as $log)
                                       <p><i>  >> {{$log->created_at}} - {!!$log->commentary!!} </i></p>
                                 @endforeach
