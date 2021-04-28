@@ -9,22 +9,13 @@ class RequestForm extends Model
 {
     protected $fillable = [
         'estimated_expense', 'program', 'justification', 'type_form', 'previous_request_form_id', 'bidding_number',
-        'purchaseMechanism'
+        'finance_program', 'purchase_mechanism', 'folio_sigfe', 'folio_sigfe_id_oc', 'finance_expense', 'available_balance',
+        'program_balance', 'oc_number', 'creator_id'
     ];
 
     public function getFormatEstimatedExpenseAttribute()
     {
         return number_format($this->estimated_expense,0,",",".");
-    }
-
-    public function getApproveWhoRequestAttribute()
-    {
-      if($this->whorequest_date == null){
-          return '';
-      }
-      else{
-          return Carbon::parse($this->whorequest_date)->format('d-m-Y H:i:s');
-      }
     }
 
     public function getCreationDateAttribute()
@@ -84,18 +75,14 @@ class RequestForm extends Model
       return number_format($this->available_balance, 0, ',', '.');
     }
 
-    public function user() {
-        return $this->belongsTo('App\User');
-    }
-
-    public function admin() {
-        return $this->belongsTo('App\User', 'admin_id');
+    public function creator() {
+        return $this->belongsTo('App\User', 'creator_id');
     }
 
     public function items() {
         return $this->hasMany('\app\Models\RequestForms\Item');
     }
-
+/*
     public function requestformfiles() {
         return $this->hasMany('\App\RequestForms\RequestFormFile');
     }
@@ -123,6 +110,7 @@ class RequestForm extends Model
     public function whoauthorize_finance() {
         return $this->belongsTo('App\User', 'finance_id');
     }
+*/
 
     /**
     * The table associated with the model.

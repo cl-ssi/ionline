@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Livewire\Items;
+namespace App\Http\Livewire\RequestForm;
 use Livewire\Component;
-use App\Models\RequestFormDocuments\RequestService;
-use App\Models\RequestFormDocuments\RequestFormDocument;
+use App\Models\RequestForms\RequestForm;
+use App\Models\RequestForms\Item;
 use App\Models\Parameters\UnitOfMeasurement;
 use Illuminate\Support\Collection;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Auth;
 
 class RequestType extends Component
 {
@@ -15,7 +16,7 @@ class RequestType extends Component
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity,
     $unitValue, $taxes, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
     public $purchaseMechanism, $messagePM, $program, $justify, $totalDocument;
-    public $items;
+    public $items, $saveMessage;
 
     protected $rules = [
         'unitValue'           =>  'required|numeric|min:1',
@@ -179,11 +180,28 @@ class RequestType extends Component
           'items.required'               =>  'Debe agregar al menos un Item para Bien y/o Servicio'
         ],
       );
+
+      $req = RequestForm::create([
+          'justification'         =>  $this->justify,
+          'type_form'             =>  '1',
+          'creator_id'            =>  Auth()->user()->id,
+          'purchase_mechanism'    =>  $this->purchaseMechanism,
+          'program'               =>  $this->program,
+      ]);
+      //session()->flash('info', 'Requerimiento Nro: '.$req->id.' ha sido creado.');
+      //$this->saveMessage = 'Requerimiento Nro: '.$req->id.' ha sido creado.';
+      foreach ($this->items as $item) {
+        $this->saveItem($item);
+      }
+    }
+    
+    private function saveItem($item, $requestId){
+
     }
 
     public function render(){
         $this->messageMechanism();
         //$this->filter();
-        return view('livewire.items.request-type');
+        return view('livewire.request-form.request-type');
     }
 }
