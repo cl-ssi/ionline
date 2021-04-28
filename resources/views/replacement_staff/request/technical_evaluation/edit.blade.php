@@ -147,7 +147,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($technicalEvaluation->commission as $commission)
+                    @foreach($technicalEvaluation->commissions as $commission)
                     <tr>
                         <td>{{ $commission->user->FullName }}</td>
                         <td>{{ $commission->user->organizationalUnit->name }}</td>
@@ -202,7 +202,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($technicalEvaluation->applicant->sortByDesc('score') as $applicant)
+                    @foreach($technicalEvaluation->applicants->sortByDesc('score') as $applicant)
                     <tr class="{{ ($applicant->selected == 1)?'table-success':''}}">
                         <td>{{ $applicant->replacement_staff->FullName }}</td>
                         <td>{{ $applicant->score }}</td>
@@ -366,6 +366,67 @@
             {{ $replacementStaff->links() }}
             @endif
         </div>
+    </div>
+    <br>
+</div>
+
+<br>
+
+<div class="card applicant" id="file">
+    <div class="card-header">
+        <h6>Adjuntos </h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped">
+                <thead>
+                    <tr>
+                      <th>Nombre Archivo</th>
+                      <th>Cargado por</th>
+                      <th>Fecha</th>
+                      <th colspan="2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                  @foreach($technicalEvaluation->technical_evaluation_files->sortByDesc('created_at') as $technicalEvaluationFiles)
+                    <tr>
+                      <td>{{ $technicalEvaluationFiles->name }}</td>
+                      <td>{{ $technicalEvaluationFiles->user->FullName }}</td>
+                      <td>{{ $technicalEvaluationFiles->created_at->format('d-m-Y H:i:s') }}</td>
+                      <td style="width: 4%">
+                          <a href="{{ route('replacement_staff.request.technical_evaluation.file.show_file', $technicalEvaluationFiles) }}"
+                            class="btn btn-outline-secondary btn-sm"
+                            title="Ir"
+                            target="_blank"> <i class="far fa-eye"></i></a>
+                      </td>
+                      <td style="width: 4%">
+                          @if($technicalEvaluation->technical_evaluation_status == 'pending')
+                          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.destroy', $applicant) }}">
+                              @csrf
+                              @method('DELETE')
+                                  <button type="submit" class="btn btn-outline-danger btn-sm"
+                                      onclick="return confirm('¿Está seguro que desea eliminar el Postulante?')">
+                                      <i class="fas fa-trash"></i>
+                                  </button>
+                          </form>
+                          @else
+                          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.destroy', $applicant) }}">
+                              @csrf
+                              @method('DELETE')
+                                  <button type="submit" class="btn btn-outline-danger btn-sm"
+                                      onclick="return confirm('¿Está seguro que desea eliminar el Postulante?')" disabled>
+                                      <i class="fas fa-trash"></i>
+                                  </button>
+                          </form>
+                          @endif
+                      </td>
+                    </tr>
+                  @endforeach
+                </tbody>
+            </table>
+        </div>
+        @livewire('replacement-staff.files', ['users' => $users,
+                  'technicalEvaluation' => $technicalEvaluation])
     </div>
     <br>
 </div>

@@ -45,5 +45,10 @@ class SignaturesFile extends Model
         return $this->signaturesFlows->every('status', 1);
     }
 
+    public function getHasOnePendingFlowAttribute()
+    {
+        return $this->signaturesFlows->whereNull('status')->count() === 1;
+    }
+
     protected $table = 'doc_signatures_files';
 }

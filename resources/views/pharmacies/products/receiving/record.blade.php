@@ -38,7 +38,7 @@
             </div>
         </div>
         <div class="right" style="width: 49%; display: inline-block;">
-            Iquique {{ $dispatch->date->formatLocalized('%d de %B del %Y') }}<br>
+            Iquique {{ $receiving->date->formatLocalized('%d de %B del %Y') }}<br>
         </div>
     </div>
 @endcan
@@ -56,7 +56,7 @@
             </div>
         </div>
         <div class="right" style="width: 49%; display: inline-block;">
-            Iquique {{ $dispatch->date->formatLocalized('%d de %B del %Y') }}<br>
+            Iquique {{ $receiving->date->formatLocalized('%d de %B del %Y') }}<br>
         </div>
     </div>
 @endcan
@@ -74,7 +74,7 @@
             </div>
         </div>
         <div class="right" style="width: 49%; display: inline-block;">
-            Iquique {{ $dispatch->date->formatLocalized('%d de %B del %Y') }}<br>
+            Iquique {{ $receiving->date->formatLocalized('%d de %B del %Y') }}<br>
         </div>
     </div>
 @endcan
