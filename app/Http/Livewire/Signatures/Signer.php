@@ -8,18 +8,20 @@ use App\Rrhh\OrganizationalUnit;
 class Signer extends Component
 {
     public $organizationalUnit;
-    public $users=[];
+    public $users = [];
     public $user;
     public $signaturesFlowSigner;
+    public $userRequired;
 
     public function render()
     {
+        ($this->organizationalUnit) ? $this->userRequired = 'required' : $this->userRequired = '';
 
         if ($this->signaturesFlowSigner) {
             $this->organizationalUnit = $this->signaturesFlowSigner->ou_id;
         }
 
-        if(!empty($this->organizationalUnit)) {
+        if (!empty($this->organizationalUnit)) {
             $this->users = OrganizationalUnit::find($this->organizationalUnit)->users;
             if ($this->signaturesFlowSigner) {
                 $this->user = $this->signaturesFlowSigner->user_id;
