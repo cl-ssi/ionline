@@ -9,7 +9,7 @@
 
                 <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar"></i> Modificar día de personal </h5>
 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" wire:click.prevent="cancel()" aria-label="Close">
 
                     <span aria-hidden="true">×</span>
 
@@ -26,6 +26,9 @@
                         <input type="hidden" wire:model="user_id">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-info"></i> INFORMACIÓN </label>
+                       <div  class="table-responsive">
+                           
+                       
                         <table class="table"> 
                         <thead> 
                             <tr>
@@ -89,6 +92,9 @@
                         </thead>
                          
                         </table>
+                        
+
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -121,7 +127,7 @@
                             @if( isset($users) )
                                 @foreach($users as $u)
                                 
-                                    <option value="1" >{{$u->id}} - {{$u->name}} {{ $u->fathers_family }} {{ $u->mothers_family }} </option>
+                                    <option value="{{$u->id}}" >{{$u->id}} - {{$u->name}} {{ $u->fathers_family }} {{ $u->mothers_family }} </option>
 
                                 @endforeach
                             @endif
@@ -149,11 +155,19 @@
 
                         <label for="exampleFormControlInput1"><i class="fa fa-history "></i> HISTORIAL DE MODIFICACIONES </label>
                             @if( isset($shiftUserDay) && $shiftUserDay->ShiftUser )
-                            <p>
-                             <i>
-                              >> {{  $shiftUserDay->created_at }} - La jornada ha sido creada </i> 
+                                @if($shiftUserDay->derived_from != "" && $shiftUserDay->derived_from > 0)
+                                    
+                                    <p><i>  >> {{  $shiftUserDay->DerivatedShift->created_at }} - La jornada ha sido creada </i></p>
 
-                             </p>
+                                    @foreach($shiftUserDay->DerivatedShift->shiftUserDayLog as $sDerivatedLog)
+                                      <p><i>  >> {{$sDerivatedLog->created_at}} - {!!$sDerivatedLog->commentary!!} </i></p> 
+                                    @endforeach
+
+                                    <p><i>  >> {{  $shiftUserDay->created_at }} - La jornada ha sido asginada </i></p>
+
+                                @else
+                                    <p><i>  >> {{  $shiftUserDay->created_at }} - La jornada ha sido creada </i></p>
+                                @endif
                                 @foreach($shiftUserDay->shiftUserDayLog as $log)
                                       <p><i>  >> {{$log->created_at}} - {!!$log->commentary!!} </i></p>
                                 @endforeach
