@@ -365,13 +365,13 @@ class AgreementController extends Controller
         $signaturesFile->file_type = 'documento';
         // $signaturesFile->md5_file = md5_file($documentFile);
         
-        $director_signature = Authority::getAuthorityFromDate(1, Carbon::now()->toDateTimeString(), 'manager');
+        // $director_signature = Authority::getAuthorityFromDate(1, Carbon::now()->toDateTimeString(), 'manager');
         
-        $signaturesFlow = new SignaturesFlow();
-        $signaturesFlow->type = 'firmante';
-        $signaturesFlow->ou_id = $director_signature->organizational_unit_id;
-        $signaturesFlow->user_id = $director_signature->user_id;
-        $signaturesFile->signaturesFlows->add($signaturesFlow);
+        // $signaturesFlow = new SignaturesFlow();
+        // $signaturesFlow->type = 'firmante';
+        // $signaturesFlow->ou_id = $director_signature->organizational_unit_id;
+        // $signaturesFlow->user_id = $director_signature->user_id;
+        // $signaturesFile->signaturesFlows->add($signaturesFlow);
 
         //visadores deptos.
         // $visadores = collect([
