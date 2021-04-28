@@ -58,16 +58,12 @@
             <fieldset class="form-group col">
                 <label for="for_document">Documento a distribuir</label>
                 <input type="file" class="form-control" id="for_document" name="document">
-
-                {{--                <a href="{{ route('lab.suspect_cases.download', $suspectCase->id) }}"--}}
-                <a href="{{route('documents.signatures.showPdf', $signature->signaturesFlowSigner->signaturesFile)}}"
+                <a href="{{route('documents.signatures.showPdf', $signature->signaturesFileDocument)}}"
                    target="_blank" data-toggle="tooltip" data-placement="top"
                    data-original-title="">Documento <i
-                        {{--                        data-original-title="{{ $suspectCase->id . 'pdf' }}">Resultado <i--}}
                         class="fas fa-paperclip"></i>&nbsp
                 </a>
             </fieldset>
-
 
             <fieldset class="form-group col">
                 <label for="for_annexed">Anexos</label>
