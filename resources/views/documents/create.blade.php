@@ -32,18 +32,18 @@
         </div>
         <div class="form-group col-2">
             <label for="forDate">Fecha</label>
-            <input type="date" class="form-control" id="forDate" disabled>
+            <input type="date" class="form-control" id="forDate" name="date" value="{{\Carbon\Carbon::now()->toDateString()}}">
         </div>
         <div class="form-group col-2">
             <label for="forType">Tipo*</label>
             <select name="type" id="formType" class="form-control" required>
                 <option value="">Seleccione tipo</option>
                 <option value="Memo" @if($document->type == 'Memo') selected @endif>Memo</option>
+                <option value="Oficio" @if($document->type == 'Oficio') selected @endif>Oficio</option>             
                 <option value="Ordinario" @if($document->type == 'Ordinario') selected @endif>Ordinario</option>
                 <option value="Reservado" @if($document->type == 'Reservado') selected @endif>Reservado</option>
                 <option value="Circular" @if($document->type == 'Circular') selected @endif>Circular</option>
                 <option value="Acta de recepción" @if($document->type == 'Acta de recepción') selected @endif>Acta de recepción</option>
-                <option value="Oficio" @if($document->type == 'oficio') selected @endif>Oficio</option>
             </select>
         </div>
         <div class="form-group col">
