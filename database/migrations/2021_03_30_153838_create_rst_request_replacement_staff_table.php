@@ -16,7 +16,7 @@ class CreateRstRequestReplacementStaffTable extends Migration
         Schema::create('rst_request_replacement_staff', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('degree');
+            $table->integer('degree')->nullable();
             $table->enum('legal_quality',['to hire', 'fee']);
             $table->enum('work_day',['diurnal', 'third shift', 'fourth shift', 'other']);
             $table->string('other_work_day')->nullable();
