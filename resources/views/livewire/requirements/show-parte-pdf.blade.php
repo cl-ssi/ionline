@@ -3,7 +3,7 @@
 
         @if($parte->files->count() > 1)
 
-            <select name="files" id="for_files" wire:model="selectedKey">
+            <select name="files" id="for_files" wire:model="selectedKey" class="form-control-sm">
                 @foreach($parte->files as $key => $file)
                     <option value={{$key}}>{{$file->name}}</option>
                 @endforeach
