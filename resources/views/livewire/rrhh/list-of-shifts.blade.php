@@ -1,15 +1,13 @@
 <div>
     @if(isset($staffInShift)&&count($staffInShift)>0&&$staffInShift!="")
-@livewire( 'rrhh.see-shift-control-form')
     	@foreach($staffInShift as $sis)
 			<tr>
 				<td class="bless br" >
                     
-                        
+                    @livewire( 'rrhh.see-shift-control-form')
 
                          {{ $sis->user->runFormat()}} - {{$sis->user->name}}
-
-                    
+      
                 </td>
                 @for($j = 1; $j <= $days; $j++) 
                     @php
