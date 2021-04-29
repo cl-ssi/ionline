@@ -24,7 +24,17 @@
 
 <div class="row">
     @if($parte->id <> 0)
-           @livewire('requirements.show-parte-pdf', compact('parte'))
+        <div class="col-8">
+            @if($parte->files->first() != null)
+                @foreach($parte->files as $file)
+                    <object type="application/pdf"
+                            data="{{route('documents.partes.download', $file->id)}}"
+                            width="100%"
+                            height="700">
+                    </object>
+                @endforeach
+            @endif
+        </div>
     @endif
     <div class= @if($parte->id <> 0 ) "col-4" @else "col-12" @endif >
         <form method="POST" class="form-horizontal" action="{{ route('requirements.store') }}" enctype="multipart/form-data">
@@ -72,7 +82,7 @@
                         @foreach($ouRoots as $ouRoot)
                             @if($ouRoot->name != 'Externos')
                                 <option value="{{ $ouRoot->id }}">
-                                {{($ouRoot->establishment->alias ?? '')}}-{{ $ouRoot->name }} 
+                                {{($ouRoot->establishment->alias ?? '')}}-{{ $ouRoot->name }}
                                 </option>
                                 @foreach($ouRoot->childs as $child_level_1)
 
