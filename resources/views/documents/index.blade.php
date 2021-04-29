@@ -23,6 +23,7 @@
             <select name="type" id="for_type" class="form-control">
                 <option></option>
                 <option value="Memo">Memo</option>
+                <option value="Oficio">Oficio</option>
                 <option value="Ordinario">Ordinario</option>
                 <option value="Reservado">Reservado</option>
                 <option value="Circular">Circular</option>
