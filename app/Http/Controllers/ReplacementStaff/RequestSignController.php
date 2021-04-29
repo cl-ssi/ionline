@@ -72,7 +72,6 @@ class RequestSignController extends Controller
      */
     public function update(Request $request, RequestSign $requestSign, $status)
     {
-        //$replacementStaff->fill($request->all());
         if($status == 'accepted'){
             $requestSign->user_id = Auth::user()->id;
             $requestSign->request_status = $status;
@@ -85,6 +84,8 @@ class RequestSignController extends Controller
               $nextRequestSign = $requestSign->requestReplacementStaff->requestSign->where('position', $requestSign->position + 1)->first();
               $nextRequestSign->request_status = 'pending';
               $nextRequestSign->save();
+
+              // AQUI ENVIAR NOTIFICACIÓN DE CORREO ELECTRONICO AL NUEVO VISADOR.
 
               session()->flash('success', 'Su la solicitud ha sido Aceptada con exito.');
               return redirect()->route('replacement_staff.request.to_sign');

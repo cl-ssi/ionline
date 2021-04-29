@@ -18,13 +18,15 @@
                   </thead>
                   <tbody>
                       <tr>
-                          <th class="table-active">Por medio del presente, la Subdirección</th>
+                          <th class="table-active">Por medio del presente, la</th>
                           <td colspan="2">
-                              @foreach($modal_request->RequestSign as $sing)
-                                  @if($sing->ou_alias == 'sub')
-                                      {{ $sing->organizationalUnit->name }}
-                                  @endif
-                              @endforeach
+                              {{ $modal_request->organizationalUnit->name }}
+                          </td>
+                      </tr>
+                      <tr>
+                          <th class="table-active">Solicita autorizar el llamado a presentar antecedentes al cargo de</th>
+                          <td colspan="2">
+                              {{ $modal_request->name }}
                           </td>
                       </tr>
                       <tr>
@@ -54,7 +56,7 @@
                       </tr>
                       <tr>
                           @foreach($modal_request->RequestSign as $sign)
-                            <td class="table-active">
+                            <td class="table-active text-center">
                                 {{ $sign->organizationalUnit->name }}<br>
                             </td>
                           @endforeach
@@ -81,7 +83,7 @@
                                               @csrf
                                               @method('PUT')
                                               <button type="submit" class="btn btn-danger btn-sm"
-                                                  onclick="return confirm('¿Está seguro que desea Reachazar la solicitud?')"
+                                                  onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
                                                   title="Rechazar">
                                                   <i class="fas fa-times-circle"></i></a>
                                               </button>
