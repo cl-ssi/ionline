@@ -15,6 +15,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Contador</th>
             <th>RBD</th>
             <th>Establecimiento</th>
             <th>Comuna</th>
@@ -26,8 +27,9 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($schools as $school)
+        @foreach($schools as $key => $school)
         <tr>
+            <td>{{ $key+1 }}</td>
             <td>{{ $school->rbd ?? '' }}</td>
             <td>{{ $school->name ?? '' }}</td>
             <td>{{ $school->commune->name ?? '' }}</td>
