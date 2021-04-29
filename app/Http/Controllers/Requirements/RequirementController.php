@@ -288,6 +288,8 @@ class RequirementController extends Controller
         $ous = OrganizationalUnit::all()->sortBy('name');
 //        $organizationalUnit = OrganizationalUnit::Find(1);
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        // $requirementCategories = RequirementCategory::where('requirement_id',$requirement->id)->get();
+        // $categories = Category::where('user_id',Auth::user()->id)->get();
         return view('requirements.create', compact('ous', 'ouRoots', 'parte', 'documents'));
     }
 
@@ -298,7 +300,10 @@ class RequirementController extends Controller
       $ous = OrganizationalUnit::all()->sortBy('name');
 //      $organizationalUnit = OrganizationalUnit::Find(1);
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
-      return view('requirements.create', compact('ous','ouRoots','parte','documents'));
+        $categories = Category::where('user_id',Auth::user()->id)->get();
+        //equirementCategory::where('requirement_id',$requirement->id)->get();
+        
+      return view('requirements.create', compact('ous','ouRoots','parte','documents','categories'));
     }
 
     public function archive_requirement(Requirement $requirement)

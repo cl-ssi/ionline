@@ -65,6 +65,7 @@ class SignatureFlows extends Component
           if (Auth::user()->organizationalUnit->establishment_id == 38) {
             //Hector Reyno (CGU)
             if (Auth::user()->organizationalUnit->id == 24) {
+              $this->signatureFlows['Funcionario'] = 10739552; // 24 - Consultorio General Urbano Dr. Hector Reyno
               $this->signatureFlows['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
               $this->signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
               $this->signatureFlows['S.D.A SSI'] = 9994426; // 31 - Subdirección de Recursos Físicos y Financieros
