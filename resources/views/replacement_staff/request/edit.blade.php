@@ -49,12 +49,12 @@
                           <label class="form-check-label" for="for_work_day_diurnal">Diurno</label>
                         </div>
                         <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="work_day" id="for_work_day_third_shift" value="third_shift"
+                          <input class="form-check-input" type="radio" name="work_day" id="for_work_day_third_shift" value="third shift"
                               {{ ($requestReplacementStaff->work_day == "third_shift")? "checked" : "" }} required>
                           <label class="form-check-label" for="for_work_day_third_shift">Tercer Turno</label>
                         </div>
                         <div class="form-check form-check-inline">
-                          <input class="form-check-input" type="radio" name="work_day" id="for_work_day_fourth_shift" value="fourth_shift"
+                          <input class="form-check-input" type="radio" name="work_day" id="for_work_day_fourth_shift" value="fourth shift"
                               {{ ($requestReplacementStaff->work_day == "fourth_shift")? "checked" : "" }} required>
                           <label class="form-check-label" for="for_work_day_fourth_shift">Cuarto Turno</label>
                         </div>
@@ -85,7 +85,9 @@
                     <input type="date" class="form-control" name="end_date"
                         id="for_end_date" value="{{ $requestReplacementStaff->end_date }}" required>
                 </fieldset>
+            </div>
 
+            <div class="form-row">
                 <fieldset class="form-group col-3">
                     <label for="for_fundament">Fundamento</label>
                     <select name="fundament" id="for_fundament" class="form-control">
@@ -105,7 +107,9 @@
                     <input type="text" class="form-control" name="name_to_replace"
                         id="for_name_to_replace" placeholder="Nombre de Reemplazo"
                         value="{{ $requestReplacementStaff->name_to_replace }}">
+                </fieldset>
 
+                <fieldset class="form-group col-6">
                     <label for="for_other_fundament">&nbsp;</label>
                     <input type="text" class="form-control" name="other_fundament"
                         id="for_other_fundament" placeholder="Otro fundamento..."
@@ -124,18 +128,16 @@
 @section('custom_js')
 
 <script type="text/javascript">
-    // ID campo oculto
-    $("#for_other_work_day").hide();
+    document.getElementById('for_other_work_day').readOnly = true;
+
     // NAME Option
     $("input[name=work_day]").click(function() {
         switch(this.value){
             case "other":
-                // ID campo oculto
-                $("#for_other_work_day").show("slow");
+                document.getElementById('for_other_work_day').readOnly = false;
                 break;
             default:
-                // ID campo oculto
-                $("#for_other_work_day").hide("slow");
+                document.getElementById('for_other_work_day').readOnly = true;
                 document.getElementById('for_other_work_day').value = '';
                 break;
         }
@@ -143,40 +145,44 @@
 </script>
 
 <script type="text/javascript">
-    $("#for_name_to_replace").hide();
-    $("#for_other_fundament").hide();
+
+    document.getElementById('for_name_to_replace').readOnly = true;
+    document.getElementById('for_other_fundament').readOnly = true;
+
     jQuery('select[name=fundament]').change(function(){
-        //var fieldsetName = $(this).val();
+        var fieldsetName = $(this).val();
         switch(this.value){
             case "replacement":
-                // ID campo oculto
-                $("#for_name_to_replace").show();
-                $("#for_other_fundament").hide();
+                document.getElementById('for_name_to_replace').readOnly = false;
+
+                document.getElementById('for_other_fundament').readOnly = true;
                 document.getElementById('for_other_fundament').value = '';
                 break;
             case "quit":
-                // ID campo oculto
-                $("#for_name_to_replace").show();
-                $("#for_other_fundament").hide();
+                document.getElementById('for_name_to_replace').readOnly = false;
+
+                document.getElementById('for_other_fundament').readOnly = true;
                 document.getElementById('for_other_fundament').value = '';
                 break;
+
             case "allowance without payment":
-                // ID campo oculto
-                $("#for_name_to_replace").show();
-                $("#for_other_fundament").hide();
+                document.getElementById('for_name_to_replace').readOnly = false;
+
+                document.getElementById('for_other_fundament').readOnly = true;
                 document.getElementById('for_other_fundament').value = '';
                 break;
+
             case "other":
-                // ID campo oculto
-                $("#for_other_fundament").show();
-                $("#for_name_to_replace").hide();
+                document.getElementById('for_name_to_replace').readOnly = true;
                 document.getElementById('for_name_to_replace').value = '';
+
+                document.getElementById('for_other_fundament').readOnly = false;
                 break;
             default:
-                // ID campo oculto
-                $("#for_name_to_replace").hide();
+                document.getElementById('for_name_to_replace').readOnly = true;
                 document.getElementById('for_name_to_replace').value = '';
-                $("#for_other_fundament").hide();
+
+                document.getElementById('for_other_fundament').readOnly = true;
                 document.getElementById('for_other_fundament').value = '';
                 break;
         }
