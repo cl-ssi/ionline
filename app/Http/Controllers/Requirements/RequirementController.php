@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Requirements;
 
 use App\Documents\Parte;
 use App\Documents\Document;
+use App\Mail\RequirementNotification;
 use App\Requirements\Requirement;
 use App\Requirements\Event;
 use App\Requirements\EventStatus;
@@ -19,6 +20,7 @@ use App\Rrhh\Authority;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Redirect;
 
 class RequirementController extends Controller
@@ -367,6 +369,10 @@ class RequirementController extends Controller
 
           $requirement->events()->save($firstEvent);
 
+            preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $firstEvent->to_user->email, $emails);
+            Mail::to($emails[0])
+                ->send(new RequirementNotification($requirement));
+
           session()->flash('info', 'El requerimiento '.$requirement->id.' ha sido creado.');
         }
         else{
@@ -398,6 +404,7 @@ class RequirementController extends Controller
             }
 
           //$requerimientos = '';
+          $usersEmail = '';
           foreach ($users as $key => $user) {
 
             $req = $request->All();
@@ -440,6 +447,9 @@ class RequirementController extends Controller
             $firstEvent->requirement()->associate($requirement);
             $firstEvent->save();
 
+            //Obtiene emails
+            $usersEmail .= $user_aux->first()->email . ',';
+
             //asocia evento con documentos
             if($request->documents <> null){
               foreach ($request->documents as $key => $document_aux) {
@@ -463,6 +473,10 @@ class RequirementController extends Controller
             $requirement->events()->save($firstEvent);
             //$requerimientos = $requerimientos + $firstEvent->id + ",";
           }
+
+            preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $usersEmail, $emails);
+            Mail::to($emails[0])
+                ->send(new RequirementNotification($requirement));
 
           session()->flash('info', 'Los requerimientos han sido creados.');
         }
