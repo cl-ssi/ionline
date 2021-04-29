@@ -122,7 +122,7 @@
 
             		<label for="for_name" class="input-group-addon">TURNOS </label>
             
-            		<select class="form-control" id="for_turnFilter" name="turnFilter">
+            		<select class="form-control" id="for_turnFilter" name="turnFilter" >
             			<option value="0">0 - Todos</option>
             			@foreach($sTypes as $st)
             				<option value="{{$st->id}}" {{($st->id==$actuallyShift->id)?'selected':''}}>{{$loop->iteration}} - Solo {{$st->name}}</option>
