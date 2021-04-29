@@ -13,7 +13,7 @@ class Item extends Model
         'expense', 'request_form_id', 'request_form_item_codes_id'
     ];
 
-    public function request_form() {
+    public function requestForm() {
         return $this->belongsTo('app\Model\RequestForms\RequestForm');
     }
 
