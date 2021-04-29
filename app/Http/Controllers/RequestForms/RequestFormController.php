@@ -29,8 +29,8 @@ class RequestFormController extends Controller
     public function index()
     {
         //MIS FORMULARIOS DE REQUERIMIENTO
-        $myRequestForms = RequestForm::with(['items','passages', 'requestformfiles', 'requestformevents'])
-            ->where('user_id', Auth::user()->id)->get();
+        $myRequestForms = RequestForm::with('items')
+            ->where('user_id', auth()->user()->id)->get();
         return view('request_form.index', compact('myRequestForms'));
     }
 
