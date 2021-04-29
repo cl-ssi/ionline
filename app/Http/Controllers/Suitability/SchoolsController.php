@@ -94,8 +94,12 @@ class SchoolsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($school)
     {
         //
+        $school = School::find($school);
+        $school->delete();
+        session()->flash('success', 'Colegio eliminado exitosamente');        
+        return redirect()->route('suitability.schools.index');
     }
 }
