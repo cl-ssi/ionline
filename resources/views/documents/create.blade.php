@@ -32,7 +32,7 @@
         </div>
         <div class="form-group col-2">
             <label for="forDate">Fecha</label>
-            <input type="date" class="form-control" id="forDate" value="{{\Carbon\Carbon::now()->toDateString()}}">
+            <input type="date" class="form-control" id="forDate" name="date" value="{{\Carbon\Carbon::now()->toDateString()}}">
         </div>
         <div class="form-group col-2">
             <label for="forType">Tipo*</label>
