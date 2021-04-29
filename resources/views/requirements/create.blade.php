@@ -24,15 +24,7 @@
 
 <div class="row">
     @if($parte->id <> 0)
-        <div class="col-8">
-            @if($parte->files->first() != null)
-                <object type="application/pdf"
-                        data="{{route('documents.partes.download', $parte->files->first()->id)}}"
-                        width="100%"
-                        height="100%">
-                </object>
-            @endif
-        </div>
+           @livewire('requirements.show-parte-pdf', compact('parte'))
     @endif
     <div class= @if($parte->id <> 0 ) "col-4" @else "col-12" @endif >
         <form method="POST" class="form-horizontal" action="{{ route('requirements.store') }}" enctype="multipart/form-data">
