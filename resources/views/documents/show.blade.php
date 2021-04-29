@@ -83,12 +83,7 @@
                 <div class="left" style="padding-bottom: 8px;">
                     <strong>MAT:</strong> {{ $document->subject }}
                 </div>
-                <div class="left" style="padding-bottom: 2px;">
-                    Iquique, {{ $document->date ?
-                        $document->date->day .' de '.
-                        $document->date->monthName . ' de '.
-                        $document->date->year : '' }}
-                </div>
+                <div><br><p></div>
             </div>
 
             <div style="clear: both; padding-bottom: 10px"></div>
