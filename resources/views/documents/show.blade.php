@@ -69,11 +69,11 @@
 
         <div class="content">
             <div class="left" style="float: left;">
-                <img src="{{ asset('images/logo_pluma.jpg') }}" width="120" alt="Logo servicio de salud"><br>
+                <img src="{{ asset('images/logo_rgb.png') }}" width="120" alt="Logo servicio de salud"><br>
                 <!--div class="siete" style="padding-bottom: 4px;">{{ $document->user->organizationalUnit->name }}</div-->
                 <div class="left seis" style="padding-bottom: 6px; color: #999">Código interno: {{ $document->id }}</div>
             </div>
-            
+
             <div class="right" style="float: right; width: 300px; padding-top: 64px;">
                 <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;"><strong>{{ $document->type }} N°:</strong> </div>
                 <div style="padding-top:26px"></div>
@@ -84,8 +84,8 @@
                     <strong>MAT:</strong> {{ $document->subject }}
                 </div>
                 <div class="left" style="padding-bottom: 2px;">
-                    Iquique, {{ $document->date ? 
-                        $document->date->day .' de '. 
+                    Iquique, {{ $document->date ?
+                        $document->date->day .' de '.
                         $document->date->monthName . ' de '.
                         $document->date->year : '' }}
                 </div>
