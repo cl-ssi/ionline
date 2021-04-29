@@ -2,7 +2,7 @@
     <div class="form-row">
         <fieldset class="form-group col-4">
             <label for="for_endorse_type">Tipo de visación</label>
-            <select class="form-control" name="endorse_type" required="">
+            <select class="form-control" name="endorse_type" wire:model="endorseType">
                 <option value="">Seleccione tipo</option>
                 @php($endorseTypes = array('No requiere visación','Visación opcional','Visación en cadena de responsabilidad'))
                 @foreach($endorseTypes as $endorseType)

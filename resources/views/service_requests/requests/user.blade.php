@@ -19,12 +19,12 @@
 
 @if(count($fulfillments) < 1)
 <div class="alert alert-info mt-3">
-	<h4 class="alert-heading">El funcionario {{ optional($user)->fullName }} 
-        no posee dolicitudes de Honorarios.</h4>
+	<h4 class="alert-heading">El funcionario {{ optional($user)->fullName }}
+        no posee solicitudes de Honorarios.</h4>
 </div>
 @else
 
-<h4 class="mt-3 mb-3">Información de contratos de honorarios de 
+<h4 class="mt-3 mb-3">Información de contratos de honorarios de
     {{ optional($user)->fullName }}</h4>
 
 @foreach($fulfillments as $fullfillment)
@@ -134,7 +134,7 @@
                     <i class="fas fa-circle text-secondary"></i>
                     Pago pendiente.
                     @if($fullfillment->payment_rejection_detail)
-                    <a href="#" data-toggle="collapse" data-target="#rechazo{{$fullfillment->id}}"> 
+                    <a href="#" data-toggle="collapse" data-target="#rechazo{{$fullfillment->id}}">
                         <i class="fas fa-chevron-down"></i> </a>
                     <div id="rechazo{{$fullfillment->id}}" class="collapse" aria-labelledby="headingOne">
                         {!! $fullfillment->payment_rejection_detail !!}
@@ -146,7 +146,7 @@
 		@if($fullfillment->payment_date)
 	</div>
 	@endif
-	
+
 
 </div>
 

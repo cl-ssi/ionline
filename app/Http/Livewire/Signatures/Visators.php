@@ -15,6 +15,12 @@ class Visators extends Component
     public $i = 0;
     public $user;
     public $signature;
+    public $endorseType;
+
+//    protected $rules = [
+//
+//    ];
+
 
     public function add($i)
     {
