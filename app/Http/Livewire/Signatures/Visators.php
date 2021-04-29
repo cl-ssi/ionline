@@ -15,6 +15,9 @@ class Visators extends Component
     public $i = 0;
     public $user;
     public $signature;
+//    public $endorseType;
+//    public $requiredVisator;
+//    public $disabledAddButton = 'disabled';
 
     public function add($i)
     {
@@ -26,11 +29,34 @@ class Visators extends Component
     public function remove($i)
     {
         unset($this->inputs[$i]);
+//        $this->i--;
+//        if ($this->i === 0) {
+//            $this->endorseType = '';
+//        }
     }
+
+//    public function changeEndorseType()
+//    {
+//        if ($this->endorseType === 'No requiere visación' || $this->endorseType == '') {
+//            $this->disabledAddButton = 'disabled';
+//            $this->requiredVisator = '';
+//            for ($i = 0; $i <= $this->i; $i++) {
+//                $this->remove($i);
+//            }
+//            $this->i = 0;
+//
+//        } elseif($this->endorseType === 'Visación opcional' || $this->endorseType === 'Visación en cadena de responsabilidad'){
+//            $this->disabledAddButton = '';
+//            if ($this->i == 0) {
+//                $this->add($this->i);
+//            }
+//            $this->requiredVisator = 'required';
+//        }
+//    }
+
 
     public function render()
     {
-
         //Agrega inputs según cantidad de flows de visator al editar
         if ($this->signature && $this->signature->signaturesFlowVisator->count() > 0) {
             for ($i = 0; $i < $this->signature->signaturesFlowVisator->count(); $i++) {

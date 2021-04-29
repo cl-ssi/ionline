@@ -93,52 +93,172 @@ class RequestReplacementStaffController extends Controller
         $request_replacement->organizational_unit_id = Auth::user()->organizationalUnit->id;
         $request_replacement->save();
 
-        for ($i = 1; $i <= 3; $i++) {
-            $request_sing = new RequestSign();
-            if($i == 1){
-                $request_sing->position = '1';
-                $request_sing->ou_alias = 'leadership';
-                $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
-                $request_sing->request_status = 'pending';
-            }
-            if ($i == 2) {
-                $request_sing->position = '2';
-                $request_sing->ou_alias = 'sub';
+        $uo_request = OrganizationalUnit::where('id', $request_replacement->organizational_unit_id)
+            ->get()
+            ->last();
 
-                //SUB
-                $direct_sub = OrganizationalUnit::where('id', $request_replacement->organizational_unit_id)
-                    ->get()
-                    ->last();
+        // UO Nivel 1  Director
+        if($uo_request->level == 1){
 
-                // dd($direct_sub);
+            for ($i = 1; $i <= 2; $i++) {
 
-                switch ($direct_sub->level) {
-                    case 2:
-                        $request_sing->organizational_unit_id = $direct_sub->id;
-                        break;
-                    case 3:
-                        $request_sing->organizational_unit_id = $direct_sub->father->id;
-                        break;
-                    case 4:
-                        $request_sing->organizational_unit_id = $direct_sub->father->father->id;
-                        break;
-                    case 5:
-                        $request_sing->organizational_unit_id = $direct_sub->father->father->father->id;
-                        break;
+                $request_sing = new RequestSign();
+
+                $date = Carbon::now()->format('Y_m_d_H_i_s');
+                $type = 'manager';
+                $user_id = Auth::user()->id;
+
+                $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
+
+                if(!empty($iam_authority)){
+                    if ($i == 1) {
+                        $request_sing->position = '1';
+                        $request_sing->ou_alias = 'sub_rrhh';
+                        $request_sing->organizational_unit_id = 44;
+                        $request_sing->request_status = 'pending';
+                    }
+
+                    if ($i == 2) {
+                        $request_sing->position = '2';
+                        $request_sing->ou_alias = 'dir';
+                        $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
+                        $request_sing->request_status = 'accepted';
+                    }
                 }
+                else{
+                  if ($i == 1) {
+                      $request_sing->position = '1';
+                      $request_sing->ou_alias = 'sub_rrhh';
+                      $request_sing->organizational_unit_id = 44;
+                      $request_sing->request_status = 'pending';
+                  }
 
+                  if ($i == 2) {
+                      $request_sing->position = '2';
+                      $request_sing->ou_alias = 'dir';
+                      $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
+                      $request_sing->request_status = 'pending';
+                  }
+                }
+                $request_sing->request_replacement_staff_id = $request_replacement->id;
+                $request_sing->save();
             }
-            if ($i == 3) {
-                $request_sing->position = '3';
-                $request_sing->ou_alias = 'sub_rrhh';
-                $request_sing->organizational_unit_id = 44;
+        }
+
+        //UO Nivel 2 SUB Direcciones - Deptos.
+        if($uo_request->level == 2){
+
+            for ($i = 1; $i <= 3; $i++) {
+                $request_sing = new RequestSign();
+
+                $date = Carbon::now()->format('Y_m_d_H_i_s');
+                $type = 'manager';
+                $user_id = Auth::user()->id;
+
+                $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
+
+                if(!empty($iam_authority)){
+                    if($i == 1){
+                        $request_sing->position = '1';
+                        $request_sing->ou_alias = 'leadership';
+                        $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
+                        $request_sing->request_status = 'accepted';
+                    }
+                    if ($i == 2) {
+                        $request_sing->position = '2';
+                        $request_sing->ou_alias = 'sub_rrhh';
+                        $request_sing->organizational_unit_id = 44;
+                        $request_sing->request_status = 'pending';
+                    }
+
+                    if ($i == 3) {
+                        $request_sing->position = '2';
+                        $request_sing->ou_alias = 'dir';
+                        $request_sing->organizational_unit_id = $uo_request->father->id;
+                    }
+                }
+                else{
+                    if($i == 1){
+                        $request_sing->position = '1';
+                        $request_sing->ou_alias = 'leadership';
+                        $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
+                        $request_sing->request_status = 'pending';
+                    }
+                    if ($i == 2) {
+                        $request_sing->position = '2';
+                        $request_sing->ou_alias = 'sub_rrhh';
+                        $request_sing->organizational_unit_id = 44;
+                    }
+
+                    if ($i == 3) {
+                        $request_sing->position = '2';
+                        $request_sing->ou_alias = 'dir';
+                        $request_sing->organizational_unit_id = $uo_request->father->id;
+                    }
+                }
+                $request_sing->request_replacement_staff_id = $request_replacement->id;
+                $request_sing->save();
             }
-            $request_sing->request_replacement_staff_id = $request_replacement->id;
-            $request_sing->save();
+        }
+
+        //UO Nivel 3 Deptos. bajo SUB Direcciones.
+        if($uo_request->level == 3){
+
+            for ($i = 1; $i <= 3; $i++) {
+                $request_sing = new RequestSign();
+
+                $date = Carbon::now()->format('Y_m_d_H_i_s');
+                $type = 'manager';
+                $user_id = Auth::user()->id;
+
+                $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
+
+                if(!empty($iam_authority)){
+                    if($i == 1){
+                        $request_sing->position = '1';
+                        $request_sing->ou_alias = 'leadership';
+                        $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
+                        $request_sing->request_status = 'accepted';
+                    }
+                    if ($i == 2) {
+                      $request_sing->position = '2';
+                      $request_sing->ou_alias = 'sub';
+                      $request_sing->organizational_unit_id = $uo_request->father->id;
+                    }
+
+                    if ($i == 3) {
+                        $request_sing->position = '2';
+                        $request_sing->ou_alias = 'sub_rrhh';
+                        $request_sing->organizational_unit_id = 44;
+                    }
+                }
+                else{
+
+                    if($i == 1){
+                        $request_sing->position = '1';
+                        $request_sing->ou_alias = 'leadership';
+                        $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
+                        $request_sing->request_status = 'pending';
+                    }
+                    if ($i == 2) {
+                      $request_sing->position = '2';
+                      $request_sing->ou_alias = 'sub';
+                      $request_sing->organizational_unit_id = $uo_request->father->id;
+                    }
+
+                    if ($i == 3) {
+                        $request_sing->position = '2';
+                        $request_sing->ou_alias = 'sub_rrhh';
+                        $request_sing->organizational_unit_id = 44;
+                    }
+                }
+                $request_sing->request_replacement_staff_id = $request_replacement->id;
+                $request_sing->save();
+            }
         }
 
         session()->flash('success', 'Se ha creado la Solicitud Exitosamente');
-        return redirect()->route('replacement_staff.request.index');
+        return redirect()->route('replacement_staff.request.own_index');
     }
 
     /**
@@ -172,7 +292,10 @@ class RequestReplacementStaffController extends Controller
      */
     public function update(Request $request, RequestReplacementStaff $requestReplacementStaff)
     {
-        //
+        $requestReplacementStaff->fill($request->all());
+        $requestReplacementStaff->save();
+        session()->flash('success', 'Su solicitud ha sido sido correctamente actualizada.');
+        return redirect()->route('replacement_staff.edit', $requestReplacementStaff);
     }
 
     /**

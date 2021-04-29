@@ -2,7 +2,8 @@
     <div class="form-row">
         <fieldset class="form-group col-4">
             <label for="for_endorse_type">Tipo de visación</label>
-            <select class="form-control" name="endorse_type" required="">
+{{--            <select class="form-control" name="endorse_type" wire:model="endorseType" wire:click.prevent="changeEndorseType()" required>--}}
+                <select class="form-control" name="endorse_type" required>
                 <option value="">Seleccione tipo</option>
                 @php($endorseTypes = array('No requiere visación','Visación opcional','Visación en cadena de responsabilidad'))
                 @foreach($endorseTypes as $endorseType)
@@ -13,10 +14,10 @@
                 <option value="Visación en cadena de responsabilidad">Visación en cadena de responsabilidad</option> -->
             </select>
         </fieldset>
-
         <fieldset class="form-group col-2">
             <label for="">&nbsp;</label>
             <button class="btn text-white btn-info btn-block" wire:click.prevent="add({{$i}})">Agregar</button>
+{{--            <button class="btn text-white btn-info btn-block" wire:click.prevent="add({{$i}})" {{$disabledAddButton}}>Agregar</button>--}}
         </fieldset>
     </div>
     <div class="form-row">
@@ -30,7 +31,8 @@
     @foreach($inputs as $key => $value)
         <div class="form-row">
             <fieldset class="form-group col-5">
-                <select name="ou_id_visator[]" wire:model="organizationalUnit.{{ $value }}" class="form-control">
+{{--                <select name="ou_id_visator[]" wire:model="organizationalUnit.{{ $value }}" class="form-control" {{$requiredVisator}} >--}}
+                    <select name="ou_id_visator[]" wire:model="organizationalUnit.{{ $value }}" class="form-control"  >
                     <option value=''></option>
 
                     @foreach($ouRoots as $ouRoot)
@@ -67,7 +69,8 @@
             </fieldset>
             <fieldset class="form-group col-5">
                 @if(array_key_exists($value,$users))
-                    <select name="user_visator[]" wire:model="user.{{$value}}" class="form-control">
+{{--                    <select name="user_visator[]" wire:model="user.{{$value}}" class="form-control" {{$requiredVisator}}>--}}
+                        <select name="user_visator[]" wire:model="user.{{$value}}" class="form-control">
                         <option value=''></option>
                         @foreach($users[$value] as $user)
                             <option value={{ $user->id }}>{{ $user->fullName }}</option>

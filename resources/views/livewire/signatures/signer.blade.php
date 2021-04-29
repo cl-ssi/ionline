@@ -39,7 +39,7 @@
     @if(count($users) > 0)
         <fieldset class="form-group col-6">
             <label>Usuario</label>
-            <select name="user_signer" id="for_user_signer" wire:model="user" class="form-control" >
+            <select name="user_signer" id="for_user_signer" wire:model="user" class="form-control" {{$userRequired}} >
                 <option value=''></option>
                 @foreach($users as $user)
                     <option value={{ $user->id }}>{{ $user->fullName }}</option>
