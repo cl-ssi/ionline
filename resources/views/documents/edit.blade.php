@@ -27,13 +27,13 @@
         <div class="form-group col-2">
             <label for="forDate">Fecha</label>
             <input type="date" class="form-control" id="forDate" name="date"
-                value="{{ $document->date ? $document->date->format('Y-m-d') : '' }}"
-                disabled>
+                value="{{ $document->date ? $document->date->format('Y-m-d') : '' }}">
         </div>
         <div class="form-group col-2">
             <label for="forType">Tipo*</label>
             <select name="type" id="formType" class="form-control" required>
                 <option value="Memo" {{ $document->type === 'Memo' ? 'selected' : '' }}>Memo</option>
+                <option value="Oficio" {{ $document->type === 'Oficio' ? 'selected' : '' }}>Oficio</option>
                 <option value="Ordinario" {{ $document->type === 'Ordinario' ? 'selected' : '' }} >Ordinario</option>
                 <option value="Reservado" {{ $document->type === 'Reservado' ? 'selected' : '' }}>Reservado</option>
                 <option value="Circular" {{ $document->type === 'Circular' ? 'selected' : '' }}>Circular</option>
@@ -117,14 +117,14 @@
 @section('custom_js')
 
 <script type="text/javascript">
-var typeVal = $('#formType').val(); 
+var typeVal = $('#formType').val();
 $('#formType').change(
     function() {
         if(!confirm('Con este cambio se reemplazará el número actual que tiene asignado el documento por uno nuevo según el tipo de documento que seleccionaste, ¿Está seguro/a de realizar esto al momento de guardar los cambios?')){
             $(this).val(typeVal);
             return;
         }
-        
+
         $("#forNumber").val(null);
         // if("Memo" === this.value) {
         //     $("#forNumber").prop('disabled', false);
