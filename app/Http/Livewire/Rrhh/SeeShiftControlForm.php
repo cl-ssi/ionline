@@ -14,8 +14,11 @@ class SeeShiftControlForm extends Component
 	}
 	public function setJsFunc(){
 
-		$this->emit('jsLiveWireTest');
+		// $this->emit('jsLiveWireTest');
 
+	}
+	public function cancel(){
+		
 	}
     public function render()
     {
