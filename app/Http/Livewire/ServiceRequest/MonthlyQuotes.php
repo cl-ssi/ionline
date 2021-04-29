@@ -56,6 +56,31 @@ class MonthlyQuotes extends Component
                     //dd($valor_mensual);
                     break;
                 case 'Profesional':
+
+                    $valor_mensual = optional(
+                        Value::orderBy('validity_from', 'desc')
+                            ->where('contract_type', 'Mensual')
+                            ->where('type', 'covid')
+                            ->where('establishment_id', $serviceRequest->establishment_id)
+                            ->where('estate', $serviceRequest->estate)
+                            ->where('work_type', $serviceRequest->working_day_type)
+                            ->first()
+                    )->amount;
+
+                    switch ($serviceRequest->weekly_hours) {
+                        // case '33':
+                        //     $valor_mensual = $valor_mensual * 0.75;
+                        //     break;
+                        //     //case '28': $valor_mensual = $valor_mensual * 0.636363; break;
+                        case '22':
+                            $valor_mensual = $valor_mensual * 0.5;
+                            break;
+                        // case '11':
+                        //     $valor_mensual = $valor_mensual * 0.25;
+                        //     break;
+                    }
+                    break;
+
                 case 'Técnico':
                 case 'Administrativo':
                 case 'Odontólogo':
@@ -162,16 +187,16 @@ class MonthlyQuotes extends Component
             //son cuotas valores diferentes
             {
 
-                if ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') != $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {                    
+                if ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') != $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
                     $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 2;
                     $valor_mensual = $serviceRequest->net_amount;
                     $string = $nroCuotas . " cuotas,";
                     $interval = DateInterval::createFromDateString('1 month');
                     $periods   = new DatePeriod($serviceRequest->start_date, $interval, $serviceRequest->end_date->addMonth());
                     $periods = iterator_to_array($periods);
-                    $dias_trabajados1 = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;                    
+                    $dias_trabajados1 = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
                     $valor_diferente1 = round($dias_trabajados1 * round(($valor_mensual / 30)));
-                    $dias_trabajados2 = $serviceRequest->end_date->firstOfMonth()->diff($serviceRequest->end_date)->days + 1;                    
+                    $dias_trabajados2 = $serviceRequest->end_date->firstOfMonth()->diff($serviceRequest->end_date)->days + 1;
                     $valor_diferente2 = round($dias_trabajados2 * round(($valor_mensual / 30)));
 
 
@@ -208,7 +233,7 @@ class MonthlyQuotes extends Component
                             }
                         }
                     }
-                
+
             }
 
             $this->valores = $string;
