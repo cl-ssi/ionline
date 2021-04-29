@@ -1190,6 +1190,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::post('/store', [SchoolsController::class, 'store'])->name('store');
         Route::get('{school}/edit', [SchoolsController::class, 'edit'])->name('edit');
         Route::put('{school}/update', [SchoolsController::class, 'update'])->name('update');
+        Route::delete('/{school}/destroy', [SchoolsController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('users')->as('users.')->middleware('auth')->group(function () {

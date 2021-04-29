@@ -22,7 +22,7 @@
     <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_school_id">Colegios</label>
-            <select name="school_id" id="for_school_id" class="form-control" required>
+            <select name="school_id" id="for_school_id" class="form-control selectpicker" data-live-search="true" title="Seleccione Colegio" required>
                 <option value="">Seleccionar Colegio</option>
                 @foreach($schools as $school)
                 <option value="{{ $school->id }}">{{ $school->name }}</option>
@@ -32,7 +32,7 @@
 
         <fieldset class="form-group col">
             <label for="for_user_id">Usuarios Externos</label>
-            <select name="user_external_id" id="for_user_external_id" class="form-control" required>
+            <select name="user_external_id" id="for_user_external_id" class="form-control selectpicker" data-live-search="true" title="Seleccione Usuario" required>
                 <option value="">Seleccionar Usuario</option>
                 @foreach($users as $user)
                 <option value="{{ $user->id }}">{{ $user->fullname }}</option>
