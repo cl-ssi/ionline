@@ -54,8 +54,8 @@
                 <td>{{ $request->name }}</td>
                 <td class="text-center">{{ $request->degree }}</td>
                 <td class="text-center">{{ $request->LegalQualityValue }}</td>
-                <td>{{ Carbon\Carbon::parse($request->start_date)->format('d-m-Y') }} <br>
-                    {{ Carbon\Carbon::parse($request->end_date)->format('d-m-Y') }}
+                <td>{{ $request->start_date->format('d-m-Y') }} <br>
+                    {{ $request->end_date->format('d-m-Y') }}
                 </td>
                 <td>{{ $request->FundamentValue }}</td>
                 <td>{{ $request->user->FullName }}<br>
