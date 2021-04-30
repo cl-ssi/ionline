@@ -97,8 +97,8 @@
 
     <div class="form-row">
         <div class="form-group col">
-            <label for="forDistribution">Distribución (separado por salto de línea)*</label>
-            <textarea class="form-control" id="forDistribution" rows="6" name="distribution" required>{!! $document->distribution ? $document->distribution : '' !!}</textarea>
+            <label for="forDistribution">Distribución (separado por salto de línea)</label>
+            <textarea class="form-control" id="forDistribution" rows="6" name="distribution">{!! $document->distribution ?? '' !!}</textarea>
         </div>
 
         <div class="form-group col">
