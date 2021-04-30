@@ -24,29 +24,42 @@
 
 
 
-
-{{--    TODAVIA NO LO TERMINO --}}
-{{--    <div class="row">--}}
-{{--<div class="col-12">--}}
-{{--                <label for="asignarCategoria" class="sr-only">Asignar categoría</label>--}}
-{{--                <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">--}}
-{{--                <div class="form-group mx-sm-3 mb-2">--}}
-{{--                <label for="category_id" class="sr-only">Categorias</label>--}}
-{{--                <select name="category_id[]" id="category_id" class="selectpicker input-sm"--}}
-{{--                    multiple title="Elige tus categorías" >--}}
-{{--                    @foreach($categories as $key => $category)                 --}}
-{{--                        <option value="{{$category->id}}"--}}
-{{--                            data-content="<span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>"--}}
-{{--                            >--}}
-{{--                        </option>--}}
-{{--                    @endforeach--}}
-{{--                </select>--}}
-{{--            </div>--}}
-{{--</div>--}}
+   
+                
 
 
-{{--</div>--}}
-{{--<hr> --}}
+                
+
+
+
+
+
+
+
+<!-- <div class="row">
+<div class="col-12">
+
+                <label for="asignarCategoria" class="sr-only">Asignar categoría</label>
+                <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">                
+                <label for="category_id" class="sr-only">Categorias</label>
+                <select name="category_id" id="category_id" class="selectpicker input-sm"
+                    multiple title="Elige tus categorías" >
+                    @foreach($categories as $key => $category)
+                    <option value="{{$category->id}}" 
+                    data-content="<span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>">
+                    
+                    
+                    
+                    </option>
+                    @endforeach
+                    </select>
+                
+
+</div>
+
+</div>
+
+<hr> -->
 
 <div class="row">
     @if($parte->id <> 0)
@@ -71,33 +84,30 @@
 
             <div class="row">
 
-{{--                <fieldset class="form-group col-12">--}}
-{{--                    <label for="for_date">Unidad Organizacional</label>--}}
-{{--                    <select name="to_ou_id" id="ou" class="form-control" required="">--}}
-{{--                        <option value="{{ $organizationalUnit->id }}">--}}
-{{--                            {{ $organizationalUnit->name }}--}}
-{{--                        </option>--}}
-{{--                        @foreach($organizationalUnit->childs as $child_level_1)--}}
-{{--                            @if($child_level_1->name != 'Externos')--}}
-{{--                                <option value="{{ $child_level_1->id }}">--}}
-{{--                                    &nbsp;&nbsp;&nbsp;--}} {{--                                    {{ $child_level_1->name }}--}}
-{{--                                </option>--}}
-{{--                                @foreach($child_level_1->childs as $child_level_2)--}}
-{{--                                    <option value="{{ $child_level_2->id }}">--}}
-{{--                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--}}
-{{--                                        {{ $child_level_2->name }}--}}
-{{--                                    </option>--}}
-{{--                                    @foreach($child_level_2->childs as $child_level_3)--}}
-{{--                                        <option value="{{ $child_level_3->id }}">--}}
-{{--                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--}}
-{{--                                            {{ $child_level_3->name }}--}}
-{{--                                        </option>--}}
-{{--                                    @endforeach--}}
-{{--                                @endforeach--}}
-{{--                            @endif--}}
-{{--                        @endforeach--}}
-{{--                    </select>--}}
-{{--                </fieldset>--}}
+
+
+<div class="col-12">
+
+                <label for="asignarCategoria" class="sr-only">Asignar categoría</label>
+                <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">                
+                <label for="category_id" class="sr-only">Categorias</label>
+                <select name="category_id[]" id="category_id" class="selectpicker input-sm"
+                    multiple title="Elige tus categorías" >
+                    @foreach($categories as $key => $category)
+                    <option value="{{$category->id}}" 
+                    data-content="<span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>">
+                    
+                    
+                    </option>
+                    @endforeach
+                    </select>
+                
+
+</div>
+
+<br><br>
+
+<br>
 
                 <fieldset class="form-group @if($parte->id <> 0) col-12 @else col-6 @endif">
                     <label for="ou">Unidad Organizacional</label>
