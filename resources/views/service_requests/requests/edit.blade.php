@@ -436,10 +436,19 @@
   </div>
 
   <div class="form-row">
+    <fieldset class="form-group col">
+      <label for="for_profession_id">Profesión</label>
+      <select name="profession_id" class="form-control" required id="profession_id">
+        <option value=""></option>
+        @foreach($professions as $profession)
+          <option value="{{$profession->id}}" @if($serviceRequest->profession_id == $profession->id) selected @endif>{{$profession->name}}</option>
+        @endforeach
+      </select>
+    </fieldset>
+
     <fieldset class="form-group col-12 col-md-3">
         <label for="for_rrhh_team">Equipo RRHH</label>
         <select name="rrhh_team" class="form-control">
-
           <option value=""></option>
           <option value="Residencia Médica" @if($serviceRequest->rrhh_team == "Residencia Médica") selected @endif>Residencia Médica</option>
           <option value="Médico Diurno" @if($serviceRequest->rrhh_team == "Médico Diurno") selected @endif>Médico Diurno</option>
@@ -506,6 +515,34 @@
 			</select>
 		</fieldset>
 
+  </div>
+
+  <div class="form-row">
+		<fieldset class="form-group col">
+				<label for="for_estate">Objetivos</label>
+				<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50">{{ $serviceRequest->objectives }}</textarea>
+		</fieldset>
+	</div>
+
+	<div class="form-row">
+		<fieldset class="form-group col">
+				<label for="for_estate">Resuelvo</label>
+				<textarea id="resolve" name="resolve" class="form-control" rows="4" cols="50">{{ $serviceRequest->resolve }}</textarea>
+		</fieldset>
+	</div>
+
+  <div class="form-row">
+		<fieldset class="form-group col">
+				<label for="for_estate">Beneficios adicionales</label>
+				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50">{{ $serviceRequest->additional_benefits }}</textarea>
+		</fieldset>
+	</div>
+
+  <div class="form-row">
+    <fieldset class="form-group col-12 col-md-9">
+
+    </fieldset>
+
     <fieldset class="form-group col-12 col-md-2">
         <label for="for_digera_strategy">Observaciones</label>
         <input type="text" class="form-control" name="observation" value="{{$serviceRequest->observation}}">
@@ -532,7 +569,6 @@
         @endcan
         </div>
     </fieldset>
-
   </div>
 
 
@@ -1142,6 +1178,114 @@
 				$('#digera_strategy').selectpicker('refresh');
 			}
 		});
+
+    $('#subdirection_ou_id').on('change', function() {
+  		var value = this.value;
+
+  		//subdirección gestión del cuidado al paciente
+  		if (value == 85) {
+  			$("#Subdirector option[value=13835321]").removeAttr('disabled');
+  			$('#Subdirector').val(13835321);
+  			$('#Subdirector').selectpicker('refresh');
+
+  			$("#SubdirectorTurnos option[value=13835321]").removeAttr('disabled');
+  			$('#SubdirectorTurnos').val(13835321);
+  			$('#SubdirectorTurnos').selectpicker('refresh');
+  		}
+  		if (value != 85) {
+  			$('#Subdirector').val(9882506); //PERDRO IRIONDO: 9882506
+  			$('#Subdirector').selectpicker('refresh');
+
+  			$('#SubdirectorTurnos').val(9882506); //PERDRO IRIONDO: 9882506
+  			$('#SubdirectorTurnos').selectpicker('refresh');
+  		}
+  	});
+
+  	$('#type').on('change', function() {
+  		var value = this.value;
+  		if (value == "Suma alzada") {
+
+  			$("#programm_name option[value='Covid19-APS No Médicos']").hide();
+  			$("#programm_name option[value='Covid19-APS Médicos']").hide();
+  			$("#programm_name option[value='Covid19 No Médicos']").hide();
+  			$("#programm_name option[value='Covid19 Médicos']").hide();
+  			$('#digera_strategy').attr('disabled', 'disabled');
+
+  			$('#objectives').removeAttr('disabled');
+  			$('#resolve').removeAttr('disabled');
+        $('#additional_benefits').removeAttr('disabled');
+
+
+  			if ({{Auth::user()->organizationalUnit->establishment_id}} == 1) {
+  				$("#programm_name option[value='PRAPS']").hide();
+  				$("#programm_name option[value='PESPI']").hide();
+  				$("#programm_name option[value='CHILE CRECE CONTIGO']").hide();
+  				$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
+  				$("#programm_name option[value='LISTA ESPERA']").hide();
+  				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+
+  				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").show();
+  				$("#programm_name option[value='33 MIL HORAS']").show();
+  				$("#programm_name option[value='DFL']").show();
+  				$("#programm_name option[value='TURNOS VACANTES']").show();
+  				$("#programm_name option[value='OTROS PROGRAMAS HETG']").show();
+  				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+  				$("#programm_name option[value='PABELLON TARDE']").show();
+  				$("#programm_name option[value='PABELLON GINE']").show();
+  				$("#programm_name option[value='TURNO DE RESIDENCIA']").show();
+
+
+  			}else{
+  				$("#programm_name option[value='PRAPS']").show();
+  				$("#programm_name option[value='PESPI']").show();
+  				$("#programm_name option[value='CHILE CRECE CONTIGO']").show();
+  				$("#programm_name option[value='OTROS PROGRAMAS SSI']").show();
+  				$("#programm_name option[value='LISTA ESPERA']").show();
+  				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+
+  				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
+  				$("#programm_name option[value='33 MIL HORAS']").hide();
+  				$("#programm_name option[value='DFL']").hide();
+  				$("#programm_name option[value='TURNOS VACANTES']").hide();
+  				$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
+  				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+  				$("#programm_name option[value='PABELLON TARDE']").hide();
+  				$("#programm_name option[value='PABELLON GINE']").hide();
+  				$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+  			}
+  		}
+  		else
+  		{
+  			$("#programm_name option[value='Covid19-APS No Médicos']").show();
+  			$("#programm_name option[value='Covid19-APS Médicos']").show();
+  			$("#programm_name option[value='Covid19 No Médicos']").show();
+  			$("#programm_name option[value='Covid19 Médicos']").show();
+  			$('#digera_strategy').removeAttr('disabled');
+
+  			$('#objectives').attr('disabled', 'disabled');
+  			$('#resolve').attr('disabled', 'disabled');
+        $('#additional_benefits').attr('disabled', 'disabled');
+
+
+  			$("#programm_name option[value='PRAPS']").hide();
+  			$("#programm_name option[value='PESPI']").hide();
+  			$("#programm_name option[value='CHILE CRECE CONTIGO']").hide();
+  			$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
+  			$("#programm_name option[value='LISTA ESPERA']").hide();
+  			$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+
+  			$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
+  			$("#programm_name option[value='33 MIL HORAS']").hide();
+  			$("#programm_name option[value='DFL']").hide();
+  			$("#programm_name option[value='TURNOS VACANTES']").hide();
+  			$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
+  			$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+  			$("#programm_name option[value='PABELLON TARDE']").hide();
+  			$("#programm_name option[value='PABELLON GINE']").hide();
+  			$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+  		}
+  	});
+
 
   });
 </script>
