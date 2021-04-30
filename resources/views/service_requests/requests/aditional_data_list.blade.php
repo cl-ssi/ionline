@@ -90,8 +90,8 @@
       <!-- <td>{{ $serviceRequest->type }}</td> -->
       <td>{{ $serviceRequest->program_contract_type }}</td>
       <td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
-      <td nowrap>{{ $serviceRequest->employee->runNotFormat() }}</td>
-      <td nowrap>{{ $serviceRequest->employee->getFullNameAttribute() }}</td>
+      <td nowrap>@if($serviceRequest->employee){{ $serviceRequest->employee->runNotFormat() }}@endif</td>
+      <td nowrap>@if($serviceRequest->employee){{ $serviceRequest->employee->getFullNameAttribute() }}@endif</td>
       <td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->start_date)->format('d-m-Y') }}</td>
       <td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->end_date)->format('d-m-Y') }}</td>
       <td>@if($serviceRequest->SignatureFlows->whereNull('status')->count() > 0) Pendiente
@@ -103,25 +103,8 @@
         </a>
       </td>
       <td>
-        @if($serviceRequest->program_contract_type == "Horas" && $serviceRequest->working_day_type == "HORA MÉDICA")
-          @if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
-            <a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
-            <i class="fas fa-file" style="color:#B9B9B9"></i></a>
-          @else
-            @if($serviceRequest->SignatureFlows->where('status',0)->count() > 0)
-              <a data-toggle="modal" 	class="btn btn-outline-secondary btn-sm" id="a_modal_flow_rejected">
-              <i class="fas fa-file" style="color:#B9B9B9"></i></a>
-            @else
-              <!-- <a href="#"
-                class="btn btn-outline-secondary btn-sm" target="_blank">
-              <span class="fas fa-plus" aria-hidden="true"></span></a> -->
-
-              <a href="{{ route('rrhh.service-request.report.resolution-pdf', $serviceRequest) }}"
-                class="btn btn-outline-secondary btn-sm" target="_blank">
-              <span class="fas fa-file" aria-hidden="true"></span></a>
-            @endif
-          @endif
-          @elseif($serviceRequest->program_contract_type == "Mensual")
+        @if($serviceRequest->type == "Covid")
+          @if($serviceRequest->program_contract_type == "Horas" && $serviceRequest->working_day_type == "HORA MÉDICA")
             @if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
               <a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
               <i class="fas fa-file" style="color:#B9B9B9"></i></a>
@@ -139,6 +122,29 @@
                 <span class="fas fa-file" aria-hidden="true"></span></a>
               @endif
             @endif
+            @elseif($serviceRequest->program_contract_type == "Mensual")
+              @if($serviceRequest->SignatureFlows->whereNull('status')->count() > 1)
+                <a data-toggle="modal" class="btn btn-outline-secondary btn-sm" id="a_modal_flow_incomplete">
+                <i class="fas fa-file" style="color:#B9B9B9"></i></a>
+              @else
+                @if($serviceRequest->SignatureFlows->where('status',0)->count() > 0)
+                  <a data-toggle="modal" 	class="btn btn-outline-secondary btn-sm" id="a_modal_flow_rejected">
+                  <i class="fas fa-file" style="color:#B9B9B9"></i></a>
+                @else
+                  <!-- <a href="#"
+                    class="btn btn-outline-secondary btn-sm" target="_blank">
+                  <span class="fas fa-plus" aria-hidden="true"></span></a> -->
+
+                  <a href="{{ route('rrhh.service-request.report.resolution-pdf', $serviceRequest) }}"
+                    class="btn btn-outline-secondary btn-sm" target="_blank">
+                  <span class="fas fa-file" aria-hidden="true"></span></a>
+                @endif
+              @endif
+          @endif
+        @else
+          aaa<a href="{{ route('rrhh.service-request.report.resolution-pdf-hsa', $serviceRequest) }}"
+            class="btn btn-outline-secondary btn-sm" target="_blank">
+          <span class="fas fa-file" aria-hidden="true"></span></a>
         @endif
       </td>
     </tr>
