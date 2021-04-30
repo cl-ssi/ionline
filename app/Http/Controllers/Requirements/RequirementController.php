@@ -285,10 +285,11 @@ class RequirementController extends Controller
     $documents = Document::all()->sortBy('id');
     $ous = OrganizationalUnit::all()->sortBy('name');
     //        $organizationalUnit = OrganizationalUnit::Find(1);
+    $categories = Category::where('user_id', Auth::user()->id)->get();
     $ouRoots = OrganizationalUnit::where('level', 1)->get();
     // $requirementCategories = RequirementCategory::where('requirement_id',$requirement->id)->get();
     // $categories = Category::where('user_id',Auth::user()->id)->get();
-    return view('requirements.create', compact('ous', 'ouRoots', 'parte', 'documents'));
+    return view('requirements.create', compact('ous', 'ouRoots', 'parte', 'documents','categories'));
   }
 
   public function create_requirement_sin_parte()
