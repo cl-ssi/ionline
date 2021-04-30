@@ -38,6 +38,7 @@
                 <option value="Reservado" {{ $document->type === 'Reservado' ? 'selected' : '' }}>Reservado</option>
                 <option value="Circular" {{ $document->type === 'Circular' ? 'selected' : '' }}>Circular</option>
                 <option value="Acta de recepción" {{ $document->type === 'Acta de recepción' ? 'selected' : '' }}>Acta de recepción</option>
+                <option value="Resolución" @if($document->type == 'Resolución') selected @endif>Resolución</option>
             </select>
         </div>
         <div class="form-group col">
@@ -56,18 +57,19 @@
         </div>
     </div>
 
+<div id="collapse">
     <div class="form-row">
         <div class="form-group col-7">
             <div class="form-group ">
                 <label for="forFrom">De:*</label>
                 <input type="text" class="form-control" id="forFrom"
                     value="{{ $document->from }}" name="from"
-                    placeholder="Nombre/Funcion" required>
+                    placeholder="Nombre/Funcion" >
             </div>
             <div class="form-group ">
                 <label for="forFor">Para:*</label>
                 <input type="text" class="form-control" id="forFor" name="for"
-                    value="{{ $document->for }}" placeholder="Nombre/Funcion" required>
+                    value="{{ $document->for }}" placeholder="Nombre/Funcion">
             </div>
             <div class="form-group">
                 Mayor jerarquía:
@@ -86,6 +88,7 @@
             </div>
         </div>
     </div>
+</div>
 
     <div class="form-group pt-1" style="width: 940px;">
         <label for="contenido">Contenido*</label>
@@ -125,6 +128,15 @@ $('#formType').change(
             return;
         }
 
+        if("Resolución" === this.value) {
+            $("#forFrom").removeAttr( "required" );
+            $("#forFor").removeAttr( "required" );
+            $("#collapse").hide();
+            
+        }
+
+
+
         $("#forNumber").val(null);
         // if("Memo" === this.value) {
         //     $("#forNumber").prop('disabled', false);
@@ -141,6 +153,9 @@ $('#formType').change(
         //     $("#forNumber").prop('disabled', false);
         // }
     }
+
+
+
 );
 </script>
 
