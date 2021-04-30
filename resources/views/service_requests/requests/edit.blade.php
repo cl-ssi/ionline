@@ -46,7 +46,7 @@
 
     <fieldset class="form-group col-6 col-md">
 		    <label for="for_name">Tipo</label>
-		    <select name="type" class="form-control" required>
+		    <select name="type" class="form-control" id="type" required>
           <option value="Covid" @if($serviceRequest->type == 'Covid') selected @endif>Honorarios - Covid</option>
           <option value="Suma alzada" @if($serviceRequest->type == 'Suma alzada') selected @endif>Suma alzada</option>
           <!-- <option value="Genérico" @if($serviceRequest->type == 'Genérico') selected @endif >Honorarios - Genérico</option> -->
@@ -55,7 +55,7 @@
 
     <fieldset class="form-group col-6 col-md">
 		    <label for="for_subdirection_ou_id">Subdirección</label>
-				<select class="form-control selectpicker" data-live-search="true" name="subdirection_ou_id" required="" data-size="5">
+				<select class="form-control selectpicker" data-live-search="true" name="subdirection_ou_id" required="" data-size="5" id="subdirection_ou_id">
           @foreach($subdirections as $key => $subdirection)
             <option value="{{$subdirection->id}}" @if($serviceRequest->subdirection_ou_id == $subdirection->id) selected @endif >{{$subdirection->name}}</option>
           @endforeach
@@ -517,24 +517,30 @@
 
   </div>
 
-  <div class="form-row">
+  <div class="form-row" id="div_objectives" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Objetivos</label>
 				<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50">{{ $serviceRequest->objectives }}</textarea>
 		</fieldset>
 	</div>
 
-	<div class="form-row">
+	<div class="form-row" id="div_resolve" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Resuelvo</label>
 				<textarea id="resolve" name="resolve" class="form-control" rows="4" cols="50">{{ $serviceRequest->resolve }}</textarea>
 		</fieldset>
 	</div>
 
-  <div class="form-row">
+  <div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Beneficios adicionales</label>
 				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50">{{ $serviceRequest->additional_benefits }}</textarea>
+
+        <button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanzo</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
 		</fieldset>
 	</div>
 
@@ -1053,7 +1059,6 @@
     // });
 
     $('#program_contract_type').on('change', function() {
-
 			if (this.value == "Horas") {
 				$('#for_daily_hours').val("");
 				$('#for_nightly_hours').val("");
@@ -1211,9 +1216,12 @@
   			$("#programm_name option[value='Covid19 Médicos']").hide();
   			$('#digera_strategy').attr('disabled', 'disabled');
 
-  			$('#objectives').removeAttr('disabled');
+        $('#objectives').removeAttr('disabled');
   			$('#resolve').removeAttr('disabled');
-        $('#additional_benefits').removeAttr('disabled');
+  			$('#additional_benefits').removeAttr('disabled');
+  			$("#div_objectives").show();
+  			$("#div_resolve").show();
+  			$("#div_additional_benefits").show();
 
 
   			if ({{Auth::user()->organizationalUnit->establishment_id}} == 1) {
@@ -1262,9 +1270,12 @@
   			$("#programm_name option[value='Covid19 Médicos']").show();
   			$('#digera_strategy').removeAttr('disabled');
 
-  			$('#objectives').attr('disabled', 'disabled');
+        $('#objectives').attr('disabled', 'disabled');
   			$('#resolve').attr('disabled', 'disabled');
-        $('#additional_benefits').attr('disabled', 'disabled');
+  			$('#additional_benefits').attr('disabled', 'disabled');
+  			$("#div_objectives").hide();
+  			$("#div_resolve").hide();
+  			$("#div_additional_benefits").hide();
 
 
   			$("#programm_name option[value='PRAPS']").hide();
@@ -1284,6 +1295,22 @@
   			$("#programm_name option[value='PABELLON GINE']").hide();
   			$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
   		}
+  	});
+
+    $("#alias_dias_descanzo").click(function(){
+  		$('#additional_benefits').append("Derecho a días de descanso, correspondiente a 20 días hábiles, después de un año de prestación de servicio continúo en calidad de honorario, sin opción de acumulación.\n\n");
+  	});
+  	$("#alias_ausentarse_motivos_particulares").click(function(){
+  		$('#additional_benefits').append("Permisos para ausentarse de sus labores por motivos particulares hasta por seis días hábiles en el año, con goce de honorarios. Estos permisos podrán fraccionarse por días o medios días y serán resueltos por la Coordinadora del área correspondiente.\n\n");
+  	});
+  	$("#alias_capacitacion").click(function(){
+  		$('#additional_benefits').append("Acceso a aquellos programas de capacitación que no signifique un costo para el Servicio de Salud, siempre y cuando éstos sean atingentes a su área de desempeño. Las capacitaciones se deben enmarcar en curso, talleres, seminarios, etc., excluyéndose los cursos de perfeccionamiento. Además, se debe establecer la obligación de devolución y replica de los cursos.\n\n");
+  	});
+  	$("#alias_fiestas_patrias").click(function(){
+  		$('#additional_benefits').append("Aguinaldo de fiestas Patrias, homologado al monto establecido en la ley de reajuste vigente en el mes de pago (septiembre).\n\n");
+  	});
+  	$("#alias_navidad").click(function(){
+  		$('#additional_benefits').append("Aguinaldo de Navidad, homologado al monto establecido en la ley de reajuste vigente en el mes de pago (diciembre).\n\n");
   	});
 
 
