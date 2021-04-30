@@ -388,21 +388,21 @@
 		</fieldset>
 	</div>
 
-	<div class="form-row">
+	<div class="form-row" id="div_objectives" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Objetivos</label>
 				<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50" disabled></textarea>
 		</fieldset>
 	</div>
 
-	<div class="form-row">
+	<div class="form-row" id="div_resolve" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Resuelvo</label>
 				<textarea id="resolve" name="resolve" class="form-control" rows="4" cols="50" disabled></textarea>
 		</fieldset>
 	</div>
 
-	<div class="form-row">
+	<div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Beneficios adicionales</label>
 				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50" disabled></textarea>
@@ -623,6 +623,9 @@
 			$('#objectives').removeAttr('disabled');
 			$('#resolve').removeAttr('disabled');
 			$('#additional_benefits').removeAttr('disabled');
+			$("#div_objectives").show();
+			$("#div_resolve").show();
+			$("#div_additional_benefits").show();
 
 
 			if ({{Auth::user()->organizationalUnit->establishment_id}} == 1) {
@@ -674,6 +677,9 @@
 			$('#objectives').attr('disabled', 'disabled');
 			$('#resolve').attr('disabled', 'disabled');
 			$('#additional_benefits').attr('disabled', 'disabled');
+			$("#div_objectives").hide();
+			$("#div_resolve").hide();
+			$("#div_additional_benefits").hide();
 
 			$("#programm_name option[value='PRAPS']").hide();
 			$("#programm_name option[value='PESPI']").hide();
