@@ -10,7 +10,7 @@
     <table class="table table-sm table-bordered">
         <thead>
             <tr class="table-active">
-              <th colspan="3">Formulario Solicitud Contratación de Personal</th>
+                <th colspan="3">Formulario Solicitud Contratación de Personal</th>
             </tr>
         </thead>
         <tbody>
@@ -64,26 +64,26 @@
                           <div class="row">
                               <div class="col-sm">
                                   <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'accepted']) }}">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="btn btn-success btn-sm"
-                                            onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
-                                            title="Aceptar">
-                                            <i class="fas fa-check-circle"></i></a>
-                                        </button>
+                                      @csrf
+                                      @method('PUT')
+                                      <button type="submit" class="btn btn-success btn-sm"
+                                          onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
+                                          title="Aceptar">
+                                          <i class="fas fa-check-circle"></i></a>
+                                      </button>
                                   </form>
-                            </div>
-                            <div class="col-sm">
-                                <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'rejected']) }}">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('¿Está seguro que desea Reachazar la solicitud?')"
-                                        title="Rechazar">
-                                        <i class="fas fa-times-circle"></i></a>
-                                    </button>
-                                </form>
-                            </div>
+                              </div>
+                              <div class="col-sm">
+                                  <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'rejected']) }}">
+                                      @csrf
+                                      @method('PUT')
+                                      <button type="submit" class="btn btn-danger btn-sm"
+                                          onclick="return confirm('¿Está seguro que desea Reachazar la solicitud?')"
+                                          title="Rechazar">
+                                          <i class="fas fa-times-circle"></i></a>
+                                      </button>
+                                  </form>
+                              </div>
                           </div>
                       @elseif($requestSign->request_status == 'accepted' || $requestSign->request_status == 'rejected')
                           <i class="fas fa-check-circle"></i> {{ $requestSign->StatusValue }} <br>
@@ -109,7 +109,7 @@
     <table class="table table-sm table-bordered">
         <thead>
             <tr class="table-active">
-              <th colspan="6">Evaluación Técnica</th>
+                <th colspan="6">Evaluación Técnica</th>
             </tr>
         </thead>
         <tbody>
@@ -163,14 +163,14 @@
                                     </button>
                             </form>
                           @else
-                          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.commission.destroy', $commission) }}">
-                              @csrf
-                              @method('DELETE')
-                                  <button type="submit" class="btn btn-outline-danger btn-sm"
-                                      onclick="return confirm('¿Está seguro que desea eliminar el Integrante de Comisión?')" disabled>
-                                      <i class="fas fa-trash"></i>
-                                  </button>
-                          </form>
+                            <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.commission.destroy', $commission) }}">
+                                @csrf
+                                @method('DELETE')
+                                    <button type="submit" class="btn btn-outline-danger btn-sm"
+                                        onclick="return confirm('¿Está seguro que desea eliminar el Integrante de Comisión?')" disabled>
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                            </form>
                           @endif
                         </td>
                     </tr>
@@ -367,7 +367,6 @@
             @endif
         </div>
     </div>
-    <br>
 </div>
 
 <br>
