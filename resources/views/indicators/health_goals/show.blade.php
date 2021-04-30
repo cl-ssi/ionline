@@ -63,7 +63,7 @@
                 <!-- numerador comuna -->
                     <tr class="text-center">
                         <td class="text-left glosa">{{$indicator->numerator}}.</span></td>
-                        <td rowspan="2" class="text-center align-middle">{{$goals[$index]}}</td>
+                        <td rowspan="2" class="text-center align-middle">{{$goals[$index] ?? ''}}</td>
                         <td rowspan="2" class="text-center align-middle">{{number_format($indicator->getCompliance2($commune, null), 2, ',', '.')}}%</td>
                         <td class="text-center">{{number_format(isset($indicator->isNumRemP) ? $indicator->getLastValueByFactor2('numerador', $commune, null) : $indicator->getValuesAcum2('numerador', $commune, null), 0, ',', '.')}}</td>
                         @foreach($months as $number => $month)
@@ -100,7 +100,7 @@
                     <!-- numerador establecimiento -->
                         <tr class="text-center">
                             <td class="text-left glosa">{{$indicator->numerator}}.</span></td>
-                            <td rowspan="2" class="text-center align-middle">{{$goals[$index]}}</td>
+                            <td rowspan="2" class="text-center align-middle">{{$goals[$index] ?? ''}}</td>
                             <td rowspan="2" class="text-center align-middle">{{number_format($indicator->getCompliance2(null, $establishment->alias_estab), 2, ',', '.')}}%</td>
                             <td class="text-center">{{number_format(isset($indicator->isNumRemP) ? $indicator->getLastValueByFactor2('numerador', null, $establishment->alias_estab) : $indicator->getValuesAcum2('numerador', null, $establishment->alias_estab), 0, ',', '.')}}</td>
                             @foreach($months as $number => $month)
