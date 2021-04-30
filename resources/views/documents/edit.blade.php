@@ -97,7 +97,7 @@
         <div class="form-group col">
             <label for="forDistribution">Distribución (separado por salto de línea)*</label>
             <textarea class="form-control" id="forDistribution" rows="5"
-                name="distribution" required>{{ $document->distribution }}</textarea>
+                name="distribution">{{ $document->distribution }}</textarea>
         </div>
         <div class="form-group col">
             <label for="forResponsible">Responsables (separado por salto de línea)</label>
