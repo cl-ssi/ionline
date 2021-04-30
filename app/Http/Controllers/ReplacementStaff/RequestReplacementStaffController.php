@@ -59,11 +59,19 @@ class RequestReplacementStaffController extends Controller
 
                 $request_to_sign = RequestReplacementStaff::latest()
                     ->whereHas('requestSign', function($q) use ($authority){
-                        $q->Where('organizational_unit_id', $authority->organizational_unit_id);
+                        $q->Where('organizational_unit_id', $authority->organizational_unit_id)
+                        ->Where('request_status', 'pending');
+                    })
+                    ->get();
+
+                $request_to_sign_accepted = RequestReplacementStaff::latest()
+                    ->whereHas('requestSign', function($q) use ($authority){
+                        $q->Where('organizational_unit_id', $authority->organizational_unit_id)
+                        ->Where('request_status', 'accepted');
                     })
                     ->paginate(10);
             }
-            return view('replacement_staff.request.to_sign', compact('request_to_sign'));
+            return view('replacement_staff.request.to_sign', compact('request_to_sign', 'request_to_sign_accepted'));
         }
 
         session()->flash('danger', 'Estimado Usuario/a: Usted no dispone de solicitudes para aprobación.');
@@ -191,7 +199,7 @@ class RequestReplacementStaffController extends Controller
                     }
 
                     if ($i == 3) {
-                        $request_sing->position = '2';
+                        $request_sing->position = '3';
                         $request_sing->ou_alias = 'dir';
                         $request_sing->organizational_unit_id = $uo_request->father->id;
                     }
@@ -247,7 +255,7 @@ class RequestReplacementStaffController extends Controller
                     }
 
                     if ($i == 3) {
-                        $request_sing->position = '2';
+                        $request_sing->position = '3';
                         $request_sing->ou_alias = 'sub_rrhh';
                         $request_sing->organizational_unit_id = 44;
                     }
