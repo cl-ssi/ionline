@@ -112,7 +112,7 @@ class ApplicantController extends Controller
         $applicant->save();
 
         $technicalEvaluation = TechnicalEvaluation::Find($applicant->technical_evaluation)->first();
-        $now = Carbon::now()->format('Y_m_d_H_i_s');
+        $now = Carbon::now();
         $technicalEvaluation->date_end = $now;
         $technicalEvaluation->technical_evaluation_status = 'complete';
         $technicalEvaluation->save();
