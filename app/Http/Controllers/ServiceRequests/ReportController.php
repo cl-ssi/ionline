@@ -268,6 +268,26 @@ class ReportController extends Controller
     // return $pdf->stream();
   }
 
+  public function resolutionPDFhsa(ServiceRequest $ServiceRequest)
+  {
+    $formatter = new NumeroALetras();
+    $ServiceRequest->gross_amount_description = $formatter->toWords($ServiceRequest->gross_amount, 0);
+
+    if ($ServiceRequest->fulfillments) {
+      foreach ($ServiceRequest->fulfillments as $key => $fulfillment) {
+        $fulfillment->total_to_pay_description = $formatter->toWords($fulfillment->total_to_pay, 0);
+      }
+    }
+
+    $pdf = app('dompdf.wrapper');
+    $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+
+    return $pdf->stream('mi-archivo.pdf');
+    // return view('service_requests.report_resolution', compact('serviceRequest'));
+    // $pdf = \PDF::loadView('service_requests.report_resolution');
+    // return $pdf->stream();
+  }
+
   public function payRejected()
   {
     $fulfillments = Fulfillment::where('payment_ready', 0)->orderByDesc('id')->get();
@@ -345,14 +365,14 @@ class ReportController extends Controller
 		$fulfillments = Fulfillment::Search($request)
       ->whereHas('ServiceRequest')
       ->paginate(200);
-    
+
     /* Año actual y año anterior */
     $years[] = now()->format('Y');
     $years[] = now()->subYear('1')->format('Y');
 
     $request->flash();
 
-		return view('service_requests.requests.fulfillments.reports.compliance', 
+		return view('service_requests.requests.fulfillments.reports.compliance',
       compact('years','fulfillments','request'));
 	}
 

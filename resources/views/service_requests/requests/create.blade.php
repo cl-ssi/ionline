@@ -309,6 +309,16 @@
   	</div>
 
 	<div class="form-row">
+		<fieldset class="form-group col">
+			<label for="for_profession_id">Profesión</label>
+			<select name="profession_id" class="form-control" required id="profession_id">
+				<option value=""></option>
+				@foreach($professions as $profession)
+					<option value="{{$profession->id}}">{{$profession->name}}</option>
+				@endforeach
+			</select>
+		</fieldset>
+
 		<fieldset class="form-group col-3 col-md-3">
 			<label for="for_rrhh_team">Equipo RRHH*</label>
 			<select name="rrhh_team" class="form-control" id="rrhh_team" required>
@@ -378,6 +388,36 @@
 		</fieldset>
 	</div>
 
+	<div class="form-row">
+		<fieldset class="form-group col">
+				<label for="for_estate">Objetivos</label>
+				<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50" disabled></textarea>
+		</fieldset>
+	</div>
+
+	<div class="form-row">
+		<fieldset class="form-group col">
+				<label for="for_estate">Resuelvo</label>
+				<textarea id="resolve" name="resolve" class="form-control" rows="4" cols="50" disabled></textarea>
+		</fieldset>
+	</div>
+
+	<div class="form-row">
+		<fieldset class="form-group col">
+				<label for="for_estate">Beneficios adicionales</label>
+				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50" disabled></textarea>
+
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanzo</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
+		</fieldset>
+	</div>
+
+
+
+	<br>
 	<button type="submit" id="principal_form" class="btn btn-primary">Crear</button>
 
 </form>
@@ -580,6 +620,11 @@
 			$("#programm_name option[value='Covid19 Médicos']").hide();
 			$('#digera_strategy').attr('disabled', 'disabled');
 
+			$('#objectives').removeAttr('disabled');
+			$('#resolve').removeAttr('disabled');
+			$('#additional_benefits').removeAttr('disabled');
+
+
 			if ({{Auth::user()->organizationalUnit->establishment_id}} == 1) {
 				$("#programm_name option[value='PRAPS']").hide();
 				$("#programm_name option[value='PESPI']").hide();
@@ -625,6 +670,10 @@
 			$("#programm_name option[value='Covid19 No Médicos']").show();
 			$("#programm_name option[value='Covid19 Médicos']").show();
 			$('#digera_strategy').removeAttr('disabled');
+
+			$('#objectives').attr('disabled', 'disabled');
+			$('#resolve').attr('disabled', 'disabled');
+			$('#additional_benefits').attr('disabled', 'disabled');
 
 			$("#programm_name option[value='PRAPS']").hide();
 			$("#programm_name option[value='PESPI']").hide();
@@ -766,6 +815,22 @@
 		$('#service_description').val("Prestará servicios de psicología realizando las funciones descritas en el Manual de Organización interno, en el contexto de pandemia Covid.");
 	});
 
+
+	$("#alias_dias_descanzo").click(function(){
+		$('#additional_benefits').append("Derecho a días de descanso, correspondiente a 20 días hábiles, después de un año de prestación de servicio continúo en calidad de honorario, sin opción de acumulación.\n\n");
+	});
+	$("#alias_ausentarse_motivos_particulares").click(function(){
+		$('#additional_benefits').append("Permisos para ausentarse de sus labores por motivos particulares hasta por seis días hábiles en el año, con goce de honorarios. Estos permisos podrán fraccionarse por días o medios días y serán resueltos por la Coordinadora del área correspondiente.\n\n");
+	});
+	$("#alias_capacitacion").click(function(){
+		$('#additional_benefits').append("Acceso a aquellos programas de capacitación que no signifique un costo para el Servicio de Salud, siempre y cuando éstos sean atingentes a su área de desempeño. Las capacitaciones se deben enmarcar en curso, talleres, seminarios, etc., excluyéndose los cursos de perfeccionamiento. Además, se debe establecer la obligación de devolución y replica de los cursos.\n\n");
+	});
+	$("#alias_fiestas_patrias").click(function(){
+		$('#additional_benefits').append("Aguinaldo de fiestas Patrias, homologado al monto establecido en la ley de reajuste vigente en el mes de pago (septiembre).\n\n");
+	});
+	$("#alias_navidad").click(function(){
+		$('#additional_benefits').append("Aguinaldo de Navidad, homologado al monto establecido en la ley de reajuste vigente en el mes de pago (diciembre).\n\n");
+	});
 
 </script>
 @endsection
