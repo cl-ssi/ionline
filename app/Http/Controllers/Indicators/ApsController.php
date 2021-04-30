@@ -42,17 +42,29 @@ class ApsController extends Controller
         $establishment_type_names = ['aps' => 'APS', 'reyno' => 'CGU Dr. Hector Reyno', 'hospital' => 'Hospital Dr. Ernesto Torres G.', 'ssi' => 'Dirección Servicio de Salud'];
         $iaps->establishment_type = $establishment_type_names[$establishment_type];
         $iaps->establishments = collect();
+        $last_month_rem = Rem::year($year)->max('Mes');
+
         foreach($iaps->indicators as $indicator){
             foreach(array('numerador', 'denominador') as $factor){
                 $factor_cods = $factor == 'numerador' ? $indicator->numerator_cods : $indicator->denominator_cods;
                 $factor_cols = $factor == 'numerador' ? $indicator->numerator_cols : $indicator->denominator_cols;
                 $factor_source = $factor == 'numerador' ? $indicator->numerator_source : $indicator->denominator_source;
+                $factor_name = $factor == 'numerador' ? $indicator->numerator : $indicator->denominator;
+                //Es otro año en vez de $year?
+                $last_year = null;
+                foreach(array_map('trim', explode(' ',$factor_name)) as $item){
+                    if(is_numeric($item) && $item < $year && $item >= 2015){
+                        $last_year = $item;
+                        break;
+                    }
+                }
+
                 $establishment_cods = null;
 
                 if($establishment_type == 'aps'){
                     $establishment_cods = array_map('trim', explode(',',$indicator->establishment_cods));
                     $establishment_cods = array_diff($establishment_cods, array("102307", "102100", "102010")); //descartar reyno, hospital y ssi
-                    $establishments = Establecimiento::year($year)->whereIn('Codigo', $establishment_cods)->get(['id_establecimiento','alias_estab','comuna']);
+                    $establishments = Establecimiento::year($last_year ?? $year)->whereIn('Codigo', $establishment_cods)->get(['id_establecimiento','alias_estab','comuna']);
                     foreach($establishments as $item) $iaps->establishments->add($item);
                 }
 
@@ -65,7 +77,7 @@ class ApsController extends Controller
                         $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
                     $raws .= ' AS valor, IdEstablecimiento, Mes';
     
-                    $result = Rem::year($year)->selectRaw($raws)
+                    $result = Rem::year($last_year ?? $year)->selectRaw($raws)
                                 ->when($establishment_type == 'aps', function($query) use ($establishment_cods){ 
                                     return $query->with('establecimiento')->whereIn('IdEstablecimiento', $establishment_cods); 
                                 })
@@ -81,6 +93,9 @@ class ApsController extends Controller
                                 ->when($factor_source == 'REM P', function($query){
                                     return $query->whereIn('Mes', [6,12]);
                                 })
+                                ->when($last_year, function($query) use ($last_month_rem){
+                                    return $query->where('Mes', '<=', $last_month_rem);
+                                })
                                 ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
     
                     foreach($result as $item){
@@ -94,7 +109,7 @@ class ApsController extends Controller
         }
         
         if($establishment_type == 'aps'){
-            $iaps->establishments = $iaps->establishments->unique();
+            $iaps->establishments = $iaps->establishments->unique('alias_estab');
             $iaps->communes = $iaps->establishments->unique('comuna')->pluck('comuna')->sort();
         }
     }
