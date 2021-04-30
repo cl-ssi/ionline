@@ -156,9 +156,7 @@ En estos antecedentes, según lo dispuesto según inciso final del Art. 2º y 3�
 </p>
 
 <p class="justify">
-<strong>CONSIDERANDO:</strong>
-
-{{$ServiceRequest->objectives}}.<br><br>
+<strong>CONSIDERANDO:</strong>{{$ServiceRequest->objectives}}.<br><br>
 
 <b>Que</b>, esta labor no puede cumplirse con los recursos humanos propios de la institución no por carecer de ellos, sino porque éstos tienen relación con labores accidentales y no habituales de la Institución, de tal forma de encuadrarse en el Art. 11 Ley N°18.834, sobre Estatuto Administrativo. <br><br>
 
@@ -168,7 +166,7 @@ En estos antecedentes, según lo dispuesto según inciso final del Art. 2º y 3�
 </p>
 
 <p class="justify">
-<strong>RESUELVO:</strong><br><br>
+<strong>RESUELVO:</strong>{{$ServiceRequest->resolve}}<br><br>
 
 <strong>1.CONTRÁTESE</strong> a honorarios a suma alzada en el Servicio de Salud Iquique, a la persona que más abajo se individualiza de acuerdo a su área de competencia,
 
