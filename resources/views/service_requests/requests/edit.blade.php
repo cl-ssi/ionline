@@ -18,7 +18,7 @@
       <form method="POST" action="{{ route('rrhh.service-request.update', $serviceRequest) }}" enctype="multipart/form-data">
     @else
       <!-- si existe una firma, no se deja modificar solicitud -->
-      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->where('type','!=','Responsable')->whereNotNull('status')->count() > 0)
         <form>
       @else
         <form method="POST" action="{{ route('rrhh.service-request.update', $serviceRequest) }}" enctype="multipart/form-data">
@@ -507,7 +507,7 @@
 
     <fieldset class="form-group col-3">
 			<label for="for_schedule_detail">Detalle de horario</label>
-			<select name="schedule_detail" class="form-control" required id="schedule_detail">
+			<select name="schedule_detail" class="form-control" id="schedule_detail">
 				<option value=""></option>
 				<option value="DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)" @if($serviceRequest->schedule_detail == "DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)") selected @endif>DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)</option>
 				<option value="DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)" @if($serviceRequest->schedule_detail == "DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)") selected @endif>DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)</option>
@@ -517,21 +517,21 @@
 
   </div>
 
-  <div class="form-row" id="div_objectives" style="display: none">
+  <div class="form-row" id="div_objectives">
 		<fieldset class="form-group col">
 				<label for="for_estate">Objetivos</label>
 				<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50">{{ $serviceRequest->objectives }}</textarea>
 		</fieldset>
 	</div>
 
-	<div class="form-row" id="div_resolve" style="display: none">
+	<div class="form-row" id="div_resolve">
 		<fieldset class="form-group col">
 				<label for="for_estate">Resuelvo</label>
 				<textarea id="resolve" name="resolve" class="form-control" rows="4" cols="50">{{ $serviceRequest->resolve }}</textarea>
 		</fieldset>
 	</div>
 
-  <div class="form-row" id="div_additional_benefits" style="display: none">
+  <div class="form-row" id="div_additional_benefits">
 		<fieldset class="form-group col">
 				<label for="for_estate">Beneficios adicionales</label>
 				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50">{{ $serviceRequest->additional_benefits }}</textarea>
@@ -564,7 +564,7 @@
           <!-- solo el creador de la solicitud puede editar  -->
           @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
             <!-- si existe una firma, no se deja modificar solicitud -->
-            @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+            @if($serviceRequest->SignatureFlows->where('type','!=','creador')->where('type','!=','Responsable')->whereNotNull('status')->count() > 0)
               <button type="submit" class="btn btn-primary" disabled>Guardar</button>
             @else
               <button type="submit" class="btn btn-primary">Guardar</button>
@@ -584,7 +584,7 @@
     <!-- solo el creador de la solicitud puede editar  -->
     @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
       <!-- si existe una firma, no se deja modificar solicitud -->
-      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->where('type','!=','Responsable')->whereNotNull('status')->count() > 0)
         <div class="alert alert-warning" role="alert">
           No se puede modificar hoja de ruta ya que existen visaciones realizadas.
         </div>
