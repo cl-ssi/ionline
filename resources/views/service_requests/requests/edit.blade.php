@@ -18,7 +18,7 @@
       <form method="POST" action="{{ route('rrhh.service-request.update', $serviceRequest) }}" enctype="multipart/form-data">
     @else
       <!-- si existe una firma, no se deja modificar solicitud -->
-      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->where('type','!=','responsable')->whereNotNull('status')->count() > 0)
+      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->where('type','!=','Responsable')->whereNotNull('status')->count() > 0)
         <form>
       @else
         <form method="POST" action="{{ route('rrhh.service-request.update', $serviceRequest) }}" enctype="multipart/form-data">
@@ -564,7 +564,7 @@
           <!-- solo el creador de la solicitud puede editar  -->
           @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
             <!-- si existe una firma, no se deja modificar solicitud -->
-            @if($serviceRequest->SignatureFlows->where('type','!=','creador')->where('type','!=','responsable')->whereNotNull('status')->count() > 0)
+            @if($serviceRequest->SignatureFlows->where('type','!=','creador')->where('type','!=','Responsable')->whereNotNull('status')->count() > 0)
               <button type="submit" class="btn btn-primary" disabled>Guardar</button>
             @else
               <button type="submit" class="btn btn-primary">Guardar</button>
@@ -584,7 +584,7 @@
     <!-- solo el creador de la solicitud puede editar  -->
     @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
       <!-- si existe una firma, no se deja modificar solicitud -->
-      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->where('type','!=','responsable')->whereNotNull('status')->count() > 0)
+      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->where('type','!=','Responsable')->whereNotNull('status')->count() > 0)
         <div class="alert alert-warning" role="alert">
           No se puede modificar hoja de ruta ya que existen visaciones realizadas.
         </div>
