@@ -517,21 +517,21 @@
 
   </div>
 
-  <div class="form-row" id="div_objectives" style="display: none">
+  <div class="form-row" id="div_objectives">
 		<fieldset class="form-group col">
 				<label for="for_estate">Objetivos</label>
 				<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50">{{ $serviceRequest->objectives }}</textarea>
 		</fieldset>
 	</div>
 
-	<div class="form-row" id="div_resolve" style="display: none">
+	<div class="form-row" id="div_resolve">
 		<fieldset class="form-group col">
 				<label for="for_estate">Resuelvo</label>
 				<textarea id="resolve" name="resolve" class="form-control" rows="4" cols="50">{{ $serviceRequest->resolve }}</textarea>
 		</fieldset>
 	</div>
 
-  <div class="form-row" id="div_additional_benefits" style="display: none">
+  <div class="form-row" id="div_additional_benefits">
 		<fieldset class="form-group col">
 				<label for="for_estate">Beneficios adicionales</label>
 				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50">{{ $serviceRequest->additional_benefits }}</textarea>
