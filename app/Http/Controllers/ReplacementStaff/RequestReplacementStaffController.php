@@ -31,22 +31,21 @@ class RequestReplacementStaffController extends Controller
     public function own_index()
     {
         $my_pending_requests = RequestReplacementStaff::latest()
+            // ->doesntHave('technicalEvaluation')
+            // ->OrWhereHas('technicalEvaluation', function($q){
+            //     $q->Where('technical_evaluation_status', 'pending');
+            // })
             ->where('user_id', Auth::user()->id)
-            ->doesntHave('technicalEvaluation')
-            ->OrWhereHas('technicalEvaluation', function($q){
-                $q->Where('technical_evaluation_status', 'pending');
+            ->where(function ($q){
+              	$q->doesntHave('technicalEvaluation')
+                ->orWhereHas('technicalEvaluation', function( $query ) {
+                    $query->where('technical_evaluation_status','pending');
+                });
+                // ->orWhereHas('technicalEvaluation.technical_evaluation_status', '=','pending');
             })
-            ->paginate(10);
+            ->get();
 
-            // $my_pending_requests = RequestReplacementStaff::latest()
-            //     ->where('user_id', Auth::user()->id)
-            //     ->whereHas('requestSign', function($q){
-            //         $q->Where('request_status', '!=', 'accepted');
-            //     })
-            //     // ->OrwhereHas('technicalEvaluation', function($q){
-            //     //     $q->Where('technical_evaluation_status', 'pending');
-            //     // })
-            //     ->paginate(10);
+        // dd($my_pending_requests)
 
         $my_request = RequestReplacementStaff::latest()
             ->where('user_id', Auth::user()->id)
@@ -55,14 +54,6 @@ class RequestReplacementStaffController extends Controller
                 ->OrWhere('technical_evaluation_status', 'rejected');
             })
             ->get();
-
-            // $my_request = RequestReplacementStaff::latest()
-            //     ->where('user_id', Auth::user()->id)
-            //     ->whereHas('requestSign', function($q){
-            //         $q->Where('request_status', 'pending')
-            //         ->OrWhereNotNull('request_status');
-            //     })
-            //     ->get();
 
         return view('replacement_staff.request.own_index', compact('my_request', 'my_pending_requests'));
     }
