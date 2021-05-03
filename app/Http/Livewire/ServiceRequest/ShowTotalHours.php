@@ -22,6 +22,7 @@ class ShowTotalHours extends Component
     public $refundHours;
     public $hoursDetailArray = array();
     public $forCertificate = false;
+    public $flag = null;
 
     //    protected $listeners = ['listener_shift_control'];
     //
@@ -67,12 +68,19 @@ class ShowTotalHours extends Component
 
                     $hoursNightString = $shiftControl->start_date->diffInHoursFiltered(
                         function ($date) {
-                            if (in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7]))
-                                return true;
+                            if (in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7])) {
+                                if($this->flag != $date->hour) {
+                                    $this->flag = $date->hour;
+                                    return true;
+                                }
+                            }
+                                
                             else return false;
                         },
                         $shiftControl->end_date
                     );
+
+                    
 
                     //                    if (Auth::user()->can('be god')) {
                     //                        dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia: $hoursDayString | Noche: $hoursNightString");
