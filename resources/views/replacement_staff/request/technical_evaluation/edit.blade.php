@@ -6,6 +6,7 @@
 
 @include('replacement_staff.nav')
 
+
 <div class="table-responsive">
     <table class="table table-sm table-bordered">
         <thead>
@@ -69,7 +70,7 @@
                                       <button type="submit" class="btn btn-success btn-sm"
                                           onclick="return confirm('¿Está seguro que desea Aceptar la solicitud?')"
                                           title="Aceptar">
-                                          <i class="fas fa-check-circle"></i></a>
+                                          <i class="fas fa-check-circle"></i>
                                       </button>
                                   </form>
                               </div>
@@ -80,7 +81,7 @@
                                       <button type="submit" class="btn btn-danger btn-sm"
                                           onclick="return confirm('¿Está seguro que desea Reachazar la solicitud?')"
                                           title="Rechazar">
-                                          <i class="fas fa-times-circle"></i></a>
+                                          <i class="fas fa-times-circle"></i>
                                       </button>
                                   </form>
                               </div>
@@ -186,11 +187,12 @@
 
 <br>
 
-<div class="card applicant" id="applicant">
+<div class="card" id="applicant">
     <div class="card-header">
         <h6>Postulantes </h6>
     </div>
     <div class="card-body">
+        @if($technicalEvaluation->applicants->count() > 0)
         <div class="table-responsive">
             <table class="table table-sm table-striped">
                 <thead>
@@ -230,19 +232,18 @@
                         </td>
                         <td style="width: 4%">
                             <!-- Button trigger modal -->
-                        @if($technicalEvaluation->technical_evaluation_status == 'pending')
+                          @if($technicalEvaluation->technical_evaluation_status == 'pending')
                             <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
                               data-target="#exampleModal-applicant-{{ $applicant->id }}">
-                                <i class="fas fa-edit"></i></i>
+                                <i class="fas fa-edit"></i>
                             </button>
-                        @else
+                          @else
                             <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
                               data-target="#exampleModal-applicant-{{ $applicant->id }}" disabled>
-                                <i class="fas fa-edit"></i></i>
+                                <i class="fas fa-edit"></i>
                             </button>
-                        @endif
-
-                            @include('replacement_staff.modals.modal_to_select_applicant')
+                          @endif
+                          @include('replacement_staff.modals.modal_to_select_applicant')
                         </td>
                     </tr>
                     @endforeach
@@ -250,6 +251,7 @@
             </table>
         </div>
 
+        @endif
         <br>
 
         @if($technicalEvaluation->technical_evaluation_status == 'pending')
@@ -350,7 +352,7 @@
                             <fieldset class="form-group">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="replacement_staff_id[]"
-                                        id="for_user_id" value="{{ $staff->id }}">
+                                        value="{{ $staff->id }}">
                                 </div>
                             </fieldset>
                         </td>
@@ -367,8 +369,6 @@
             @endif
         </div>
     </div>
-</div>
-
 <br>
 
 <div class="card applicant" id="file">

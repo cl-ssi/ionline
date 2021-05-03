@@ -29,7 +29,7 @@
 
 <br>
 
-<h5>Solicitudes pendientes de aprobación</h5>
+<h5><i class="fas fa-inbox"></i> Solicitudes pendientes de aprobación</h5>
 
 <div class="table-responsive">
     <table class="table small table-striped table-bordered">
@@ -98,7 +98,7 @@
 <br>
 <hr>
 
-<h5>Solicitudes Aprobadas</h5>
+<h5><i class="fas fa-inbox"></i> Solicitudes Aprobadas</h5>
 
 <div class="table-responsive">
     <table class="table small table-striped table-bordered">
@@ -111,7 +111,7 @@
                 <th>Periodo</th>
                 <th>Fundamento</th>
                 <th>Solicitante</th>
-                <th>Estado</th>
+                <th>Aprobación</th>
                 <th></th>
             </tr>
         </thead>
