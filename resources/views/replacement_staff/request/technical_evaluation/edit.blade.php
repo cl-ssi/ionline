@@ -369,9 +369,11 @@
             @endif
         </div>
     </div>
+</div>
+
 <br>
 
-<div class="card applicant" id="file">
+<div class="card" id="file">
     <div class="card-header">
         <h6>Adjuntos </h6>
     </div>
