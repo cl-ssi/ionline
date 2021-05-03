@@ -30,11 +30,41 @@ class RequestReplacementStaffController extends Controller
 
     public function own_index()
     {
-        $my_request = RequestReplacementStaff::where('user_id', Auth::user()->id)
-            ->orderBy('id', 'DESC')
+        $my_pending_requests = RequestReplacementStaff::latest()
+            ->where('user_id', Auth::user()->id)
+            ->doesntHave('technicalEvaluation')
+            ->OrWhereHas('technicalEvaluation', function($q){
+                $q->Where('technical_evaluation_status', 'pending');
+            })
             ->paginate(10);
 
-        return view('replacement_staff.request.own_index', compact('my_request'));
+            // $my_pending_requests = RequestReplacementStaff::latest()
+            //     ->where('user_id', Auth::user()->id)
+            //     ->whereHas('requestSign', function($q){
+            //         $q->Where('request_status', '!=', 'accepted');
+            //     })
+            //     // ->OrwhereHas('technicalEvaluation', function($q){
+            //     //     $q->Where('technical_evaluation_status', 'pending');
+            //     // })
+            //     ->paginate(10);
+
+        $my_request = RequestReplacementStaff::latest()
+            ->where('user_id', Auth::user()->id)
+            ->whereHas('technicalEvaluation', function($q){
+                $q->Where('technical_evaluation_status', 'complete')
+                ->OrWhere('technical_evaluation_status', 'rejected');
+            })
+            ->get();
+
+            // $my_request = RequestReplacementStaff::latest()
+            //     ->where('user_id', Auth::user()->id)
+            //     ->whereHas('requestSign', function($q){
+            //         $q->Where('request_status', 'pending')
+            //         ->OrWhereNotNull('request_status');
+            //     })
+            //     ->get();
+
+        return view('replacement_staff.request.own_index', compact('my_request', 'my_pending_requests'));
     }
 
     public function ou_index()
