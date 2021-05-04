@@ -396,6 +396,13 @@
 						<option value="OTROS PROGRAMAS SSI" @if($serviceRequest->programm_name == 'OTROS PROGRAMAS SSI') selected @endif>OTROS PROGRAMAS SSI</option>
 						<option value="LISTA ESPERA" @if($serviceRequest->programm_name == 'LISTA ESPERA') selected @endif>LISTA ESPERA</option>
 						<option value="CAMPAÑA INVIERNO" @if($serviceRequest->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
+
+            <option value="SENDA" @if($serviceRequest->programm_name == 'SENDA') selected @endif>SENDA</option>
+  					<option value="SENDA LEY ALCOHOLES" @if($serviceRequest->programm_name == 'SENDA LEY ALCOHOLES') selected @endif>SENDA LEY ALCOHOLES</option>
+  					<option value="SENDA UHCIP" @if($serviceRequest->programm_name == 'SENDA UHCIP') selected @endif>SENDA UHCIP</option>
+  					<option value="SENDA PSIQUIATRIA ADULTO" @if($serviceRequest->programm_name == 'SENDA PSIQUIATRIA ADULTO') selected @endif>SENDA PSIQUIATRIA ADULTO</option>
+  					<option value="SENADIS" @if($serviceRequest->programm_name == 'SENADIS') selected @endif>SENADIS</option>
+  					<option value="SUBT.31" @if($serviceRequest->programm_name == 'SUBT.31') selected @endif>SUBT.31</option>
 					@endif
 
         </select>
@@ -1232,6 +1239,13 @@
   				$("#programm_name option[value='LISTA ESPERA']").hide();
   				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
 
+          $("#programm_name option[value='SENDA']").hide();
+          $("#programm_name option[value='SENDA LEY ALCOHOLES']").hide();
+          $("#programm_name option[value='SENDA UHCIP']").hide();
+          $("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
+          $("#programm_name option[value='SENADIS']").hide();
+          $("#programm_name option[value='SUBT.31']").hide();
+
   				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").show();
   				$("#programm_name option[value='33 MIL HORAS']").show();
   				$("#programm_name option[value='DFL']").show();
@@ -1241,15 +1255,22 @@
   				$("#programm_name option[value='PABELLON TARDE']").show();
   				$("#programm_name option[value='PABELLON GINE']").show();
   				$("#programm_name option[value='TURNO DE RESIDENCIA']").show();
-
-
-  			}else{
+  			}
+        else
+        {
   				$("#programm_name option[value='PRAPS']").show();
   				$("#programm_name option[value='PESPI']").show();
   				$("#programm_name option[value='CHILE CRECE CONTIGO']").show();
   				$("#programm_name option[value='OTROS PROGRAMAS SSI']").show();
   				$("#programm_name option[value='LISTA ESPERA']").show();
   				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+
+          $("#programm_name option[value='SENDA']").show();
+          $("#programm_name option[value='SENDA LEY ALCOHOLES']").show();
+          $("#programm_name option[value='SENDA UHCIP']").show();
+          $("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").show();
+          $("#programm_name option[value='SENADIS']").show();
+          $("#programm_name option[value='SUBT.31']").show();
 
   				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
   				$("#programm_name option[value='33 MIL HORAS']").hide();
