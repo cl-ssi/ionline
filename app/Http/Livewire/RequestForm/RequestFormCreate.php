@@ -169,11 +169,11 @@ class RequestFormCreate extends Component
           'purchase_mechanism'    =>  $this->purchaseMechanism,
           'program'               =>  $this->program,
       ]);
-
       foreach ($this->items as $item) {
         $this->saveItem($item, $req->id);
       }
-
+      session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue ingresado con exito.');
+      return redirect()->to('/request_forms');
     }
 
     private function saveItem($item, $id){

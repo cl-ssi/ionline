@@ -18,9 +18,7 @@
       <th>Nro.</th>
       <th>Tipo</th>
       <th>Usuario Gestor</th>
-      <th>Admin. Contrato</th>
       <th>Justificación</th>
-      <th>Estado</th>
       <th>Fecha Creación</th>
       <th>Días de espera</th>
       <th>Fecha Cierre</th>
@@ -29,18 +27,11 @@
   </thead>
   <tbody>
       @foreach($myRequestForms as $myRequestForm)
-        @foreach($myRequestForm->requestformevents as $event)
-          @if($event->type == 'status' && ($event->StatusName == 'Nuevo' || $event->StatusName == 'Aprobado por solicitante' ||
-                                            $event->StatusName == 'Aprobado por jefatura' || $event->StatusName == 'Aprobado por finanzas') ||
-              $event->type == 'message' && $event->StatusName == 'Creado')
-            @if($loop->last)
             <tr>
                 <td>{{ $myRequestForm->id }}</td>
-                <td>{{ $myRequestForm->TypeName }}</td>
-                <td>{{ $myRequestForm->user ? $myRequestForm->user->FullName : 'Usuario eliminado' }}</td>
-                <td>{{ $myRequestForm->admin_id ? $myRequestForm->admin->FullName : 'Usuario eliminado' }}</td>
+                <td>{{ $myRequestForm->type_form }}</td>
+                <td>{{ $myRequestForm->creator ? $myRequestForm->creator->FullName : 'Usuario eliminado' }}</td>
                 <td>{{ $myRequestForm->justification }}</td>
-                <td>{{ $event->StatusName }}</td>
                 <td>{{ $myRequestForm->CreationDate }}</td>
                 <td>{{ $myRequestForm->ElapsedTime }}</td>
                 <td>{{ $myRequestForm->EndDate }}</td>
@@ -49,14 +40,11 @@
                   <span class="fas fa-edit" aria-hidden="true"></span></a>
                 </td>
                 <td>
-                  <a href="{{ route('request_forms.record', $myRequestForm->id) }}"
+                  <a href="#"
                     class="btn btn-outline-secondary btn-sm" target="_blank">
                   <span class="fas fa-file" aria-hidden="true"></span></a>
                 </td>
             </tr>
-            @endif
-          @endif
-        @endforeach
       @endforeach
   </tbody>
 </table>
@@ -83,53 +71,6 @@
         </div>
     </div>
 </fieldset>
-
-<table class="table table-condensed table-hover table-bordered table-sm small">
-  <thead>
-    <tr>
-      <th>Nro.</th>
-      <th>Tipo</th>
-      <th>Usuario Gestor</th>
-      <th>Admin. Contrato</th>
-      <th>Justificación</th>
-      <th>Estado</th>
-      <th>Fecha Creación</th>
-      <th>Días de espera</th>
-      <th>Fecha Cierre</th>
-      <th colspan="2">Seleccione</th>
-    </tr>
-  </thead>
-  <tbody>
-      @foreach($myRequestForms as $myRequestForm)
-        @foreach($myRequestForm->requestformevents as $event)
-          @if($event->type == 'status' && ($event->StatusName == 'Cerrado' || $event->StatusName == 'Rechazado'))
-            @if($loop->last)
-            <tr>
-                <td>{{ $myRequestForm->id }}</td>
-                <td>{{ $myRequestForm->TypeName }}</td>
-                <td>{{ $myRequestForm->user ? $myRequestForm->user->FullName : 'Usuario eliminado' }}</td>
-                <td>{{ $myRequestForm->admin_id ? $myRequestForm->admin->FullName : 'Usuario eliminado' }}</td>
-                <td>{{ $myRequestForm->justification }}</td>
-                <td>{{ $event->StatusName }}</td>
-                <td>{{ $myRequestForm->CreationDate }}</td>
-                <td>{{ $myRequestForm->ElapsedTime }}</td>
-                <td>{{ $myRequestForm->EndDate }}</td>
-                <td>
-                  <a href="{{ route('request_forms.edit', $myRequestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Ir">
-                  <span class="fas fa-edit" aria-hidden="true"></span></a>
-                </td>
-                <td>
-                  <a href="{{ route('request_forms.record', $myRequestForm->id) }}"
-                    class="btn btn-outline-secondary btn-sm" target="_blank">
-                  <span class="fas fa-file" aria-hidden="true"></span></a>
-                </td>
-            </tr>
-            @endif
-          @endif
-        @endforeach
-      @endforeach
-  </tbody>
-</table>
 
 
 @endsection
