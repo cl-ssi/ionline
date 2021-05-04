@@ -9,60 +9,78 @@ class MonthlyValue extends Component
 {
     public $fulfillment;
 
-    public function value($fulfillment) {
+    public function value($fulfillment)
+    {
         /* Si es tipo Mensual y tipo Covid */
-        if($fulfillment->serviceRequest->program_contract_type == 'Mensual'
-            AND $fulfillment->serviceRequest->type = 'Covid') {
+        //$mes_completo = true;
+        //$mes_completo = true;
+        if (            
+            $fulfillment->serviceRequest->program_contract_type == 'Mensual'
+            and $fulfillment->serviceRequest->type = 'Covid'
+        ) {
+           
+            $mes_completo = true;
 
             /* si tiene una "Renuncia voluntaria", el termino del contrato es ahí */
-            if($renuncia = $fulfillment->fulfillmentItems->where('type','Renuncia voluntaria')->first()){
+            if ($renuncia = $fulfillment->fulfillmentItems->where('type', 'Renuncia voluntaria')->first()) {
                 $fulfillment->end_date = $renuncia->end_date;
             }
 
             /* si inicio de contrato coincide con inicio de mes y término de contrato coincide con fin de mes */
-            if($fulfillment->start_date->toDateString() == $fulfillment->start_date->startOfMonth()->toDateString()
-                AND $fulfillment->end_date->toDateString() == $fulfillment->end_date->endOfMonth()->toDateString() ) {
-
+            if ($fulfillment->start_date and $fulfillment->end_date) {
                 $total_dias_trabajados = 30;
-                $mes_completo = true;
+                if (
+                    $fulfillment->start_date->toDateString() == $fulfillment->start_date->startOfMonth()->toDateString()
+                    and $fulfillment->end_date->toDateString() == $fulfillment->end_date->endOfMonth()->toDateString()
+                ) {
+                    
+                    $total_dias_trabajados = 30;
+                    $mes_completo = true;
+                }
             }
-            /* De lo contrario es la diferencia entre el primer y último día */
-            else {
+            /* De lo contrario es la diferencia entre el primer y último día */ else {
                 $total_dias_trabajados = $fulfillment->start_date->diff($fulfillment->end_date)->days + 1;
                 $mes_completo = false;
             }
 
             /* Restar las ausencias */
             $dias_descuento = 0;
+            $dias_trabajado_antes_retiro = 0;
 
-            foreach($fulfillment->fulfillmentItems as $item)
-            {
-                switch($item->type)
-                {
-                    case 'Inasistencia Injustificada':
+            foreach ($fulfillment->fulfillmentItems as $item) {
+                switch ($item->type) {
+                    case 'Inasistencia Injustificada':                        
                     case 'Licencia no covid':
                     case 'Abandono de funciones':
+                        $mes_completo = false;
                         $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
+                        $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
+
                         break;
                     case 'Renuncia voluntaria':
                         $dias_descuento += 1;
                         break;
                 }
-
             }
 
+            
             $total_dias_trabajados -= $dias_descuento;
 
+
             /* Obtener de sr_values el valor mensual */
-            switch($fulfillment->serviceRequest->estate)
-            {
+            switch ($fulfillment->serviceRequest->estate) {
                 case 'Profesional Médico':
                 case 'Farmaceutico':
-                    switch($fulfillment->serviceRequest->weekly_hours)
-                    {
-                        case '44': $estate = 'Médico 44'; break;
-                        case '28': $estate = 'Médico 28'; break;
-                        case '22': $estate = 'Médico 22'; break;
+                    switch ($fulfillment->serviceRequest->weekly_hours) {
+                        case '44':
+                            $estate = 'Médico 44';
+                            break;
+                        case '28':
+                            $estate = 'Médico 28';
+                            break;
+                        case '22':
+                            $estate = 'Médico 22';
+                            break;
                         default:
                             /* TODO: No sé que hacer acá */
                             $estate = null;
@@ -70,12 +88,13 @@ class MonthlyValue extends Component
                     }
                     /* Calcular total de la boleta */
                     $valor_mensual = optional(
-                        Value::orderBy('validity_from','desc')
-                        ->where('contract_type','Mensual')
-                        ->where('type','covid')
-                        ->where('estate', $estate)
-                        ->where('work_type', $fulfillment->serviceRequest->working_day_type)
-                        ->first()
+                        Value::orderBy('validity_from', 'desc')
+                            ->where('contract_type', 'Mensual')
+                            ->where('type', 'covid')
+                            ->where('estate', $estate)
+                            ->where('work_type', $fulfillment->serviceRequest->working_day_type)
+                            ->where('establishment_id', $fulfillment->serviceRequest->establishment_id)
+                            ->first()
                     )->amount;
                     break;
                 case 'Profesional':
@@ -85,20 +104,26 @@ class MonthlyValue extends Component
                 case 'Bioquímico':
                 case 'Auxiliar':
                     $valor_mensual = optional(
-                        Value::orderBy('validity_from','desc')
-                        ->where('contract_type','Mensual')
-                        ->where('type','covid')
-                        ->where('estate', $fulfillment->serviceRequest->estate)
-                        ->where('work_type', $fulfillment->serviceRequest->working_day_type)
-                        ->first()
+                        Value::orderBy('validity_from', 'desc')
+                            ->where('contract_type', 'Mensual')
+                            ->where('type', 'covid')
+                            ->where('estate', $fulfillment->serviceRequest->estate)
+                            ->where('work_type', $fulfillment->serviceRequest->working_day_type)
+                            ->where('establishment_id', $fulfillment->serviceRequest->establishment_id)
+                            ->first()
                     )->amount;
 
-                    switch($fulfillment->serviceRequest->weekly_hours)
-                    {
-                        case '33': $valor_mensual = $valor_mensual * 0.75; break;
-                        //case '28': $valor_mensual = $valor_mensual * 0.636363; break;
-                        case '22': $valor_mensual = $valor_mensual * 0.5; break;
-                        case '11': $valor_mensual = $valor_mensual * 0.25; break;
+                    switch ($fulfillment->serviceRequest->weekly_hours) {
+                        case '33':
+                            $valor_mensual = $valor_mensual * 0.75;
+                            break;
+                            //case '28': $valor_mensual = $valor_mensual * 0.636363; break;
+                        case '22':
+                            $valor_mensual = $valor_mensual * 0.5;
+                            break;
+                        case '11':
+                            $valor_mensual = $valor_mensual * 0.25;
+                            break;
                     }
                     break;
                 case 'Otro (justificar)':
@@ -109,16 +134,17 @@ class MonthlyValue extends Component
                     /* TODO: No se que se hace acá */
                     $valor_mensual = 0;
                     break;
-
             }
 
-            if($mes_completo) {
-                $total = $valor_mensual - ($dias_descuento * ($valor_mensual / 30) ) ;
-            }
-            else {
+            if ($mes_completo) {
+                $total = $valor_mensual - ($dias_descuento * ($valor_mensual / 30));
+            } else {
+                if ($dias_trabajado_antes_retiro != 0) {
+
+                    $total_dias_trabajados = $dias_trabajado_antes_retiro;
+                };
                 $total = $total_dias_trabajados * ($valor_mensual / 30);
             }
-
         }
 
         return number_format(round($total), 0, ',', '.');
@@ -182,6 +208,7 @@ class MonthlyValue extends Component
 
     public function render()
     {
+
         $invoice_value = $this->value($this->fulfillment);
         return view('livewire.service-request.monthly-value', ['invoice' => $invoice_value]);
     }
