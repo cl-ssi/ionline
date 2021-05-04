@@ -130,7 +130,7 @@
                 </div><!-- End FILA -->
 
                 <div class="row justify-content-md-end mt-0"><!-- FILA Botones-->
-                  <div class="col-1">
+                  <div class="col-2">
                     @if($edit)
                     <button type="button" wire:click="updateTicket" class="btn btn-primary btn-sm float-right">Editar Item</button>
                     @else
@@ -214,7 +214,7 @@
 
         <div class="row mx-1 mb-4 mt-0 pt-0 px-0">
             <div class="col">
-                <a wire:click="cleanTicket" class="btn btn-outline-secondary float-right">Cancelar</a>
+                <a wire:click="cleanTicket" class="btn btn-secondary float-right">Cancelar</a>
                 <button  wire:click="saveTicketRequest"  class="btn btn-primary float-right mr-3" type="button"><i class="fas fa-save"></i> Enviar</button>
             </div>
         </div>
