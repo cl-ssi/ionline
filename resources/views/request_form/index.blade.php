@@ -50,15 +50,6 @@
 </table>
 
 
-<livewire:items.item />
-
-<fieldset class="form-group">
-  <div class="input-group mb-3">
-      @livewire('counter.test-counter')
-      <livewire:counter.test-counter />
-  </div>
-</fieldset>
-
 <h5 class="mb-3">Formularios Cerrados o Rechazados.</h5>
 <fieldset class="form-group">
     <div class="input-group mb-3">
