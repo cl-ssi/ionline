@@ -152,6 +152,7 @@
             <th class="small">Creador</th>
             <th nowrap></th>
             <th nowrap></th>
+            <th nowrap></th>
         </tr>
     </thead>
     <tbody>
@@ -184,6 +185,19 @@
                             <i class="fas fa-upload"></i>
                         </button>
                     </form>
+                @endif
+            </td>
+            <td nowrap>
+                @if($doc->file_to_sign_id === null)
+                    <a href="{{ route('documents.sendForSignature', $doc) }}" class="btn btn-sm btn-outline-primary">
+                        <span class="fas fa-signature" aria-hidden="true" title="Enviar a firma"></span></a>
+                @endif
+
+                @if($doc->fileToSign && $doc->fileToSign->hasSignedFlow)
+                    <a href="{{ route('documents.signedDocumentPdf', $doc->id) }}"
+                       class="btn btn-sm @if($doc->fileToSign->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif"
+                       target="_blank">
+                        <span class="fas fa-file-contract" aria-hidden="true"></span></a>
                 @endif
             </td>
         </tr>
