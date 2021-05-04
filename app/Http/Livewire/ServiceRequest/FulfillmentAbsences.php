@@ -55,14 +55,15 @@ class FulfillmentAbsences extends Component
       //   }
       // }
 
-      $start = Carbon::parse($this->start_date . " " .$this->start_hour);
-      $end = Carbon::parse($this->end_date . " " .$this->end_hour);
-			if ($start > $end) {
-				// alert("La fecha de salida es menor a la fecha de inicio, revise la información.");
-        $this->msg = "La fecha de salida es menor a la fecha de inicio, revise la información.";
-				return;
-			}
-
+      if ($this->type != "Renuncia voluntaria" && $this->type != "Abandono de funciones") {
+        $start = Carbon::parse($this->start_date . " " .$this->start_hour);
+        $end = Carbon::parse($this->end_date . " " .$this->end_hour);
+  			if ($start > $end) {
+  				// alert("La fecha de salida es menor a la fecha de inicio, revise la información.");
+          $this->msg = "La fecha de salida es menor a la fecha de inicio, revise la información.";
+  				return;
+  			}
+      }
 
       //save
       $fulfillmentItem = new FulfillmentItem();
@@ -85,7 +86,7 @@ class FulfillmentAbsences extends Component
         case 'Abandono de funciones':
           $fulfillmentItem->end_date = $this->end_date;
           break;
-        
+
       }
 
       if (Auth::user()->can('Service Request: fulfillments responsable')) {
@@ -138,7 +139,7 @@ class FulfillmentAbsences extends Component
             $this->select_start_hour = 'disabled';
             $this->select_end_hour = 'disabled';
             break;
-          default: 
+          default:
             break;
         }
 

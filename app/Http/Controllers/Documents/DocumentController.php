@@ -91,6 +91,9 @@ class DocumentController extends Controller
         if($document->type == 'Acta de recepción') {
             return view('documents.reception')->withDocument($document);
         }
+        else if($document->type == 'Resolución') {
+            return view('documents.resolution')->withDocument($document);
+        }
         else {
             return view('documents.show')->withDocument($document);
         }

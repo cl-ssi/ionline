@@ -39,7 +39,7 @@
 		@foreach($users as $user)
 		<tr>
 			<th scope="row" nowrap>{{ $user->runFormat() }}</td>
-			<td nowrap>{{ $user->name }} {{ $user->fathers_family }} {{ $user->mothers_family }}</td>
+			<td nowrap>{{ $user->fullName }}</td>
 			<td class="small">{{ @$user->organizationalunit->name ?: ''}}</td>
 			<td class="small">{{ $user->position }}</td>
 			<td nowrap>

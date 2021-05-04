@@ -127,11 +127,11 @@ $psirequests = App\Models\Suitability\PsiRequest::where('user_external_id',Auth:
 </h6>
 
 <ul class="nav flex-column">
-    @foreach($psirequests as $psirequest)    
+    @foreach($psirequests as $psirequest)
     <li class="nav-item">
     <form action="{{ route('idoneidad.updateStatus', $psirequest) }}" method="POST">
         @csrf
-        @method('PATCH')        
+        @method('PATCH')
         <button type="submit" class="btn btn-danger float-left"><i  onclick="return confirm('Al momento de apretar en aceptar, usted tendrá 45 minutos para poder realizar el Test de Idoneidad, no tendrá más oportunidades, luego de realizado este test. Por favor asegurarse que posea buena conexión a internet. ¿Está seguro que desea rendir el test?')">Realizar test para cargo <br>{{$psirequest->job}} ({{$psirequest->school->name}})</i></button>
     </form>
     </li>

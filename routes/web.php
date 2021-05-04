@@ -444,6 +444,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/without-bank-details', [ReportController::class, 'withoutBankDetails'])->name('without-bank-details');
             Route::get('/pending-resolutions', [ReportController::class, 'pendingResolutions'])->name('pending-resolutions');
             Route::get('/resolution-pdf/{ServiceRequest}', [ReportController::class, 'resolutionPDF'])->name('resolution-pdf');
+            Route::get('/resolution-pdf-hsa/{ServiceRequest}', [ReportController::class, 'resolutionPDFhsa'])->name('resolution-pdf-hsa');
             Route::get('/bank-payment-file/{establishment_id?}', [ReportController::class, 'bankPaymentFile'])->name('bank-payment-file');
             Route::get('/with-resolution-file', [ReportController::class, 'indexWithResolutionFile'])->name('with-resolution-file');
             Route::get('/without-resolution-file', [ReportController::class, 'indexWithoutResolutionFile'])->name('without-resolution-file');
@@ -1207,6 +1208,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::post('/store', [SchoolsController::class, 'store'])->name('store');
         Route::get('{school}/edit', [SchoolsController::class, 'edit'])->name('edit');
         Route::put('{school}/update', [SchoolsController::class, 'update'])->name('update');
+        Route::delete('/{school}/destroy', [SchoolsController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('users')->as('users.')->middleware('auth')->group(function () {
