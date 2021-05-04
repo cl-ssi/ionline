@@ -12,10 +12,14 @@ class MonthlyValue extends Component
     public function value($fulfillment)
     {
         /* Si es tipo Mensual y tipo Covid */
-        if (
+        //$mes_completo = true;
+        //$mes_completo = true;
+        if (            
             $fulfillment->serviceRequest->program_contract_type == 'Mensual'
             and $fulfillment->serviceRequest->type = 'Covid'
         ) {
+           
+            $mes_completo = true;
 
             /* si tiene una "Renuncia voluntaria", el termino del contrato es ahí */
             if ($renuncia = $fulfillment->fulfillmentItems->where('type', 'Renuncia voluntaria')->first()) {
@@ -24,6 +28,7 @@ class MonthlyValue extends Component
 
             /* si inicio de contrato coincide con inicio de mes y término de contrato coincide con fin de mes */
             if ($fulfillment->start_date and $fulfillment->end_date) {
+                $total_dias_trabajados = 30;
                 if (
                     $fulfillment->start_date->toDateString() == $fulfillment->start_date->startOfMonth()->toDateString()
                     and $fulfillment->end_date->toDateString() == $fulfillment->end_date->endOfMonth()->toDateString()
@@ -44,7 +49,7 @@ class MonthlyValue extends Component
 
             foreach ($fulfillment->fulfillmentItems as $item) {
                 switch ($item->type) {
-                    case 'Inasistencia Injustificada':
+                    case 'Inasistencia Injustificada':                        
                     case 'Licencia no covid':
                     case 'Abandono de funciones':
                         $mes_completo = false;
@@ -58,7 +63,7 @@ class MonthlyValue extends Component
                 }
             }
 
-
+            
             $total_dias_trabajados -= $dias_descuento;
 
 
