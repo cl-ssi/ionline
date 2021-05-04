@@ -88,17 +88,17 @@ class User extends Authenticatable
 
     public function getFullNameAttribute()
     {
-        return "{$this->name} {$this->fathers_family} {$this->mothers_family}";
+        return ucwords(mb_strtolower("{$this->name} {$this->fathers_family} {$this->mothers_family}"));
     }
 
     public function getShortNameAttribute()
     {
-        return "{$this->name} {$this->fathers_family}";
+        return ucwords(strtolower("{$this->name} {$this->fathers_family}"));
     }
 
     public function getFirstNameAttribute() {
         $names = explode(' ',trim($this->name));
-        return "{$names[0]}";
+        return ucwords(strtolower("{$names[0]}"));
     }
 
     public function getInitialsAttribute()

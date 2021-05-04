@@ -15,6 +15,7 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Contador</th>
             <th>RBD</th>
             <th>Establecimiento</th>
             <th>Comuna</th>
@@ -22,11 +23,13 @@
             <th>Calidad Juridica</th>
             <th>Sostenedor</th>
             <th>Editar</th>
+            <th>Eliminar</th>
         </tr>
     </thead>
     <tbody>
-        @foreach($schools as $school)
+        @foreach($schools as $key => $school)
         <tr>
+            <td>{{ $key+1 }}</td>
             <td>{{ $school->rbd ?? '' }}</td>
             <td>{{ $school->name ?? '' }}</td>
             <td>{{ $school->commune->name ?? '' }}</td>
@@ -37,6 +40,13 @@
                 <a href="{{ route('suitability.schools.edit', $school->id) }}" class="btn btn-outline-secondary btn-sm">
                     <span class="fas fa-edit" aria-hidden="true"></span>
                 </a>
+            </td>
+            <td>
+                <form method="POST" class="form-horizontal" action="{{ route('suitability.schools.destroy', $school) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger float-left" onclick="return confirm('¿Está seguro que desea eliminar el colegio {{ $school->name }}? ' )"><i class="fas fa-trash-alt"></i></button>
+                </form>
             </td>
         </tr>
         @endforeach

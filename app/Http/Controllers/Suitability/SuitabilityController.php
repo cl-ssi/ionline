@@ -132,7 +132,7 @@ class SuitabilityController extends Controller
         $psirequest->user_creator_id = Auth::guard('external')->user()->id;
         $psirequest->school_id = $request->input('school_id');
         $psirequest->save();
-        session()->flash('success', 'Solicitud Creada Exitosamente');
+        session()->flash('success', 'Solicitud Creada Exitosamente, ahora el asistente puede ingresar a este mismo sitio con los datos de clave única a realizar la prueba');
         return redirect()->route('external');
     }
 

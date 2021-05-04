@@ -30,11 +30,32 @@ class RequestReplacementStaffController extends Controller
 
     public function own_index()
     {
-        $my_request = RequestReplacementStaff::where('user_id', Auth::user()->id)
-            ->orderBy('id', 'DESC')
-            ->paginate(10);
+        $my_pending_requests = RequestReplacementStaff::latest()
+            // ->doesntHave('technicalEvaluation')
+            // ->OrWhereHas('technicalEvaluation', function($q){
+            //     $q->Where('technical_evaluation_status', 'pending');
+            // })
+            ->where('user_id', Auth::user()->id)
+            ->where(function ($q){
+              	$q->doesntHave('technicalEvaluation')
+                ->orWhereHas('technicalEvaluation', function( $query ) {
+                    $query->where('technical_evaluation_status','pending');
+                });
+                // ->orWhereHas('technicalEvaluation.technical_evaluation_status', '=','pending');
+            })
+            ->get();
 
-        return view('replacement_staff.request.own_index', compact('my_request'));
+        // dd($my_pending_requests)
+
+        $my_request = RequestReplacementStaff::latest()
+            ->where('user_id', Auth::user()->id)
+            ->whereHas('technicalEvaluation', function($q){
+                $q->Where('technical_evaluation_status', 'complete')
+                ->OrWhere('technical_evaluation_status', 'rejected');
+            })
+            ->get();
+
+        return view('replacement_staff.request.own_index', compact('my_request', 'my_pending_requests'));
     }
 
     public function ou_index()
@@ -59,11 +80,19 @@ class RequestReplacementStaffController extends Controller
 
                 $request_to_sign = RequestReplacementStaff::latest()
                     ->whereHas('requestSign', function($q) use ($authority){
-                        $q->Where('organizational_unit_id', $authority->organizational_unit_id);
+                        $q->Where('organizational_unit_id', $authority->organizational_unit_id)
+                        ->Where('request_status', 'pending');
+                    })
+                    ->get();
+
+                $request_to_sign_accepted = RequestReplacementStaff::latest()
+                    ->whereHas('requestSign', function($q) use ($authority){
+                        $q->Where('organizational_unit_id', $authority->organizational_unit_id)
+                        ->Where('request_status', 'accepted');
                     })
                     ->paginate(10);
             }
-            return view('replacement_staff.request.to_sign', compact('request_to_sign'));
+            return view('replacement_staff.request.to_sign', compact('request_to_sign', 'request_to_sign_accepted'));
         }
 
         session()->flash('danger', 'Estimado Usuario/a: Usted no dispone de solicitudes para aprobación.');
@@ -191,7 +220,7 @@ class RequestReplacementStaffController extends Controller
                     }
 
                     if ($i == 3) {
-                        $request_sing->position = '2';
+                        $request_sing->position = '3';
                         $request_sing->ou_alias = 'dir';
                         $request_sing->organizational_unit_id = $uo_request->father->id;
                     }
@@ -247,7 +276,7 @@ class RequestReplacementStaffController extends Controller
                     }
 
                     if ($i == 3) {
-                        $request_sing->position = '2';
+                        $request_sing->position = '3';
                         $request_sing->ou_alias = 'sub_rrhh';
                         $request_sing->organizational_unit_id = 44;
                     }

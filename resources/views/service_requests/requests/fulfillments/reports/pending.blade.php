@@ -122,7 +122,7 @@
                 <span class="small">({{$fulfillment->id}})</span>
             </td>
             <td>{{$fulfillment->servicerequest?$fulfillment->servicerequest->employee->runFormat(): ''}}</td>
-            <td>{{$fulfillment->servicerequest->employee->fullname?? ''}}</td>
+            <td>{{$fulfillment->servicerequest->employee->fullName ?? ''}}</td>
             <td>{{$fulfillment->year}} - {{$fulfillment->month}}</td>
             <td>{{$fulfillment->servicerequest->type?? ''}}</td>
             <td>{{$fulfillment->servicerequest->program_contract_type?? ''}}</td>

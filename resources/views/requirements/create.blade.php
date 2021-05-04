@@ -22,15 +22,56 @@
     @endif
 </h3>
 
+
+
+   
+                
+
+
+                
+
+
+
+
+
+
+
+<!-- <div class="row">
+<div class="col-12">
+
+                <label for="asignarCategoria" class="sr-only">Asignar categoría</label>
+                <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">                
+                <label for="category_id" class="sr-only">Categorias</label>
+                <select name="category_id" id="category_id" class="selectpicker input-sm"
+                    multiple title="Elige tus categorías" >
+                    @foreach($categories as $key => $category)
+                    <option value="{{$category->id}}" 
+                    data-content="<span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>">
+                    
+                    
+                    
+                    </option>
+                    @endforeach
+                    </select>
+                
+
+</div>
+
+</div>
+
+<hr> -->
+
 <div class="row">
     @if($parte->id <> 0)
         <div class="col-8">
             @if($parte->files->first() != null)
-                <object type="application/pdf"
-                        data="{{route('documents.partes.download', $parte->files->first()->id)}}"
-                        width="100%"
-                        height="100%">
-                </object>
+                @foreach($parte->files as $file)
+                    <object type="application/pdf"
+                            data="{{route('documents.partes.download', $file->id)}}"
+                            width="100%"
+                            height="700">
+                    </object>
+                @endforeach
             @endif
         </div>
     @endif
@@ -43,33 +84,30 @@
 
             <div class="row">
 
-{{--                <fieldset class="form-group col-12">--}}
-{{--                    <label for="for_date">Unidad Organizacional</label>--}}
-{{--                    <select name="to_ou_id" id="ou" class="form-control" required="">--}}
-{{--                        <option value="{{ $organizationalUnit->id }}">--}}
-{{--                            {{ $organizationalUnit->name }}--}}
-{{--                        </option>--}}
-{{--                        @foreach($organizationalUnit->childs as $child_level_1)--}}
-{{--                            @if($child_level_1->name != 'Externos')--}}
-{{--                                <option value="{{ $child_level_1->id }}">--}}
-{{--                                    &nbsp;&nbsp;&nbsp;--}} {{--                                    {{ $child_level_1->name }}--}}
-{{--                                </option>--}}
-{{--                                @foreach($child_level_1->childs as $child_level_2)--}}
-{{--                                    <option value="{{ $child_level_2->id }}">--}}
-{{--                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--}}
-{{--                                        {{ $child_level_2->name }}--}}
-{{--                                    </option>--}}
-{{--                                    @foreach($child_level_2->childs as $child_level_3)--}}
-{{--                                        <option value="{{ $child_level_3->id }}">--}}
-{{--                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--}}
-{{--                                            {{ $child_level_3->name }}--}}
-{{--                                        </option>--}}
-{{--                                    @endforeach--}}
-{{--                                @endforeach--}}
-{{--                            @endif--}}
-{{--                        @endforeach--}}
-{{--                    </select>--}}
-{{--                </fieldset>--}}
+
+
+<div class="col-12">
+
+                <label for="asignarCategoria" class="sr-only">Asignar categoría</label>
+                <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">                
+                <label for="category_id" class="sr-only">Categorias</label>
+                <select name="category_id[]" id="category_id" class="selectpicker input-sm"
+                    multiple title="Elige tus categorías" >
+                    @foreach($categories as $key => $category)
+                    <option value="{{$category->id}}" 
+                    data-content="<span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>">
+                    
+                    
+                    </option>
+                    @endforeach
+                    </select>
+                
+
+</div>
+
+<br><br>
+
+<br>
 
                 <fieldset class="form-group @if($parte->id <> 0) col-12 @else col-6 @endif">
                     <label for="ou">Unidad Organizacional</label>
@@ -80,28 +118,28 @@
                         @foreach($ouRoots as $ouRoot)
                             @if($ouRoot->name != 'Externos')
                                 <option value="{{ $ouRoot->id }}">
-                                    {{ $ouRoot->name }} ({{($ouRoot->establishment->name)}})
+                                {{($ouRoot->establishment->alias ?? '')}}-{{ $ouRoot->name }}
                                 </option>
                                 @foreach($ouRoot->childs as $child_level_1)
 
                                     <option value="{{ $child_level_1->id }}">
                                         &nbsp;&nbsp;&nbsp;
-                                        {{ $child_level_1->name }} ({{($child_level_1->establishment->name)}})
+                                        {{($child_level_1->establishment->alias ?? '')}}-{{ $child_level_1->name }}
                                     </option>
                                     @foreach($child_level_1->childs as $child_level_2)
                                         <option value="{{ $child_level_2->id }}">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            {{ $child_level_2->name }} ({{($child_level_2->establishment->name)}})
+                                            {{($child_level_2->establishment->alias ?? '')}}-{{ $child_level_2->name }}
                                         </option>
                                         @foreach($child_level_2->childs as $child_level_3)
                                             <option value="{{ $child_level_3->id }}">
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                {{ $child_level_3->name }} ({{($child_level_3->establishment->name)}})
+                                                {{($child_level_3->establishment->alias ?? '')}}-{{ $child_level_3->name }}
                                             </option>
                                             @foreach($child_level_3->childs as $child_level_4)
                                                 <option value="{{ $child_level_4->id }}">
                                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                    {{ $child_level_4->name }} ({{($child_level_4->establishment->name)}})
+                                                    {{($child_level_4->establishment->alias ?? '')}}-{{ $child_level_4->name }}
                                                 </option>
                                             @endforeach
                                         @endforeach
