@@ -75,6 +75,7 @@ class MonthlyValue extends Component
                         ->where('type','covid')
                         ->where('estate', $estate)
                         ->where('work_type', $fulfillment->serviceRequest->working_day_type)
+                        ->where('establishment_id',$fulfillment->serviceRequest->establishment_id)
                         ->first()
                     )->amount;
                     break;
@@ -90,6 +91,7 @@ class MonthlyValue extends Component
                         ->where('type','covid')
                         ->where('estate', $fulfillment->serviceRequest->estate)
                         ->where('work_type', $fulfillment->serviceRequest->working_day_type)
+                        ->where('establishment_id',$fulfillment->serviceRequest->establishment_id)
                         ->first()
                     )->amount;
 
