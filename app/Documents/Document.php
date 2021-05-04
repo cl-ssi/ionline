@@ -15,7 +15,8 @@ class Document extends Model
      */
     protected $fillable = [
         'number', 'date', 'type', 'antecedent', 'responsible', 'subject',
-        'from', 'for', 'greater_hierarchy', 'distribution', 'content'
+        'from', 'for', 'greater_hierarchy', 'distribution', 'content', 'file_to_sign_id',
+
     ];
 
     public function getFromHtmlAttribute()
@@ -118,6 +119,11 @@ class Document extends Model
 
     public function reqEvents() {
         return $this->belongsToMany('App\Requirements\Event','req_documents_events');
+    }
+
+    public function fileToSign()
+    {
+        return $this->belongsTo('App\Models\Documents\SignaturesFile', 'file_to_sign_id');
     }
 
     use SoftDeletes;
