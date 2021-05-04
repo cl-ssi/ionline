@@ -84,6 +84,13 @@
                     </a>
                     @endcan
 
+                    @canany(['Documents: signatures and distribution'])
+                      <a class="dropdown-item"
+                          href="{{ route('documents.signatures.index', ['pendientes']) }}">
+                          <i class="fas fa-signature"></i> Solicitud de firmas
+                      </a>
+                    @endcan
+
                     @canany(['Partes: oficina','Partes: user','Partes: director'])
                     <a class="dropdown-item"
                         href="{{ route('documents.partes.index') }}">
@@ -109,12 +116,7 @@
                         <i class="fas fa-file-powerpoint"></i> Planes Comunales
                     </a>
 
-                    @canany(['Documents: signatures and distribution'])
-                      <a class="dropdown-item"
-                          href="{{ route('documents.signatures.index', ['pendientes']) }}">
-                          <i class="fas fa-signature"></i> Solicitud de firmas
-                      </a>
-                    @endcan
+                    
 
                     </div>
                 </li>
