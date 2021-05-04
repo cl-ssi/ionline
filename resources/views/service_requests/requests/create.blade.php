@@ -11,9 +11,11 @@
 <form method="POST" enctype="multipart/form-data" action="{{ route('rrhh.service-request.store') }}">
 	@csrf
 
-	<div class="form-row">
+@livewire('service-request.create-types',['subdirections' => $subdirections,
+                                          'responsabilityCenters' => $responsabilityCenters])
+	<!--<div class="form-row">
 
-		<div class="form-group col-6">
+		 <div class="form-group col-6">
 			@livewire('service-request.create-types')
 		</div>
 
@@ -37,9 +39,9 @@
         </select>
 		</fieldset>
 
-	</div>
+	</div>-->
 
-	<div class="form-row">
+	<!-- <div class="form-row">
 
 		<fieldset class="form-group col">
 			<label for="for_users">Responsable</label>
@@ -63,7 +65,7 @@
 
 	</div>
 
-	@livewire('service-request.signature-flows')
+	@livewire('service-request.signature-flows') -->
 
 	<br>
 
