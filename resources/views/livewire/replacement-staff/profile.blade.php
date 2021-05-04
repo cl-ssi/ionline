@@ -67,4 +67,22 @@
 
         <button type="submit" class="btn btn-primary float-right">Guardar</button>
     </form>
+
+    <script>
+        document.addEventListener('livewire:load', function () {
+            jQuery('select[name=experience').change(function(){
+                var fieldsetName = $(this).val();
+                alert(fieldsetName);
+                switch(this.value){
+                    case "replacement":
+                        document.getElementById('for_name_to_replace').readOnly = false;
+
+                        document.getElementById('for_other_fundament').readOnly = true;
+                        document.getElementById('for_other_fundament').value = '';
+                        break;
+                }
+            });
+        })
+    </script>
+
 </div>
