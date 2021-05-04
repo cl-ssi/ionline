@@ -79,7 +79,7 @@
         </div>
 
         <hr>
-        @livewire('signatures.visators', ['signature' => (isset($signature) && $signature->signaturesFlowSigner != null) ? $signature : null])
+        @livewire('signatures.visators', ['signature' => (isset($signature) && $signature->signaturesFlowVisator != null) ? $signature : null])
         <hr>
         @livewire('signatures.signer', ['signaturesFlowSigner' => (isset($signature) && $signature->signaturesFlowSigner != null) ? $signature->signaturesFlowSigner : null])
 
