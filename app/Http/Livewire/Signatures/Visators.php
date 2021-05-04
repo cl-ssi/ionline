@@ -10,7 +10,6 @@ class Visators extends Component
 {
     public $organizationalUnit;
     public $users = [];
-    public $ouUsers;
     public $inputs = [];
     public $i = 0;
     public $user;
@@ -54,8 +53,7 @@ class Visators extends Component
 //        }
 //    }
 
-
-    public function render()
+    public function mount()
     {
         //Agrega inputs según cantidad de flows de visator al editar
         if ($this->signature && $this->signature->signaturesFlowVisator->count() > 0) {
@@ -80,6 +78,16 @@ class Visators extends Component
                     $this->user[$value] = $this->signature->signaturesFlowVisator->slice($key, 1)->first()->user_id;
                 }
 
+            }
+        }
+    }
+
+    public function render()
+    {
+        //Agrega los usuarios según unidad organizacional
+        foreach ($this->inputs as $key => $value) {
+            if (!empty($this->organizationalUnit[$value])) {
+                $this->users[$value] = OrganizationalUnit::find($this->organizationalUnit[$value])->users;
             }
         }
 

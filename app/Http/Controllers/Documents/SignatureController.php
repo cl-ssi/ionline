@@ -63,9 +63,10 @@ class SignatureController extends Controller
      */
     public function create()
     {
-        $users = User::orderBy('name', 'ASC')->get();
-        $organizationalUnits = OrganizationalUnit::orderBy('id', 'asc')->get();
-        return view('documents.signatures.create', compact('users', 'organizationalUnits'));
+//        $users = User::orderBy('name', 'ASC')->get();
+//        $organizationalUnits = OrganizationalUnit::orderBy('id', 'asc')->get();
+        return view('documents.signatures.create');
+//        return view('documents.signatures.create', compact('users', 'organizationalUnits'));
     }
 
     /**
