@@ -89,6 +89,7 @@ Route::group(['middleware' => 'auth:external'], function () {
     Route::view('/external', 'external')->name('external');
     //Route::view('/external', 'external')->name('external');
     Route::prefix('idoneidad')->as('idoneidad.')->group(function(){
+    Route::get('/manual-usuario', [SuitabilityController::class, 'downloadManualUser'])->name('downloadManualUser');
     Route::get('/create/{school}', [SuitabilityController::class, 'createExternal'])->name('createExternal');
     Route::post('/', [SuitabilityController::class, 'storeSuitabilityExternal'])->name('storeSuitabilityExternal');
     Route::get('/list/{school}', [SuitabilityController::class, 'listOwn'])->name('listOwn');
