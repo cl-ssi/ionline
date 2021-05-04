@@ -88,7 +88,7 @@ class User extends Authenticatable
 
     public function getFullNameAttribute()
     {
-        return ucwords(strtolower("{$this->name} {$this->fathers_family} {$this->mothers_family}"));
+        return ucwords(mb_strtolower("{$this->name} {$this->fathers_family} {$this->mothers_family}"));
     }
 
     public function getShortNameAttribute()
