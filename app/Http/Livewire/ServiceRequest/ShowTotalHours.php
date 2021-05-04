@@ -69,18 +69,16 @@ class ShowTotalHours extends Component
                     $hoursNightString = $shiftControl->start_date->diffInHoursFiltered(
                         function ($date) {
                             if (in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6, 7])) {
-                                if($this->flag != $date->hour) {
+                                if ($this->flag != $date->hour) {
                                     $this->flag = $date->hour;
                                     return true;
                                 }
-                            }
-                                
-                            else return false;
+                            } else return false;
                         },
                         $shiftControl->end_date
                     );
 
-                    
+
 
                     //                    if (Auth::user()->can('be god')) {
                     //                        dump("{$shiftControl->start_date} - {$shiftControl->end_date} | dia: $hoursDayString | Noche: $hoursNightString");
@@ -209,20 +207,58 @@ class ShowTotalHours extends Component
                     $daysnotworking = ($daysnotworking + $fulfilmentitem->start_date->diffInDays($fulfilmentitem->end_date) + 1);
                 }
 
+                $totalpermisos = $fulfilmentitems->count();
+
+
+
 
 
                 if (!$fulfilmentitems->isEmpty()) {
                     //dd('no soy vacio');
-                    $daysavgpart1 = $this->fulfillment->serviceRequest->start_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
-                        return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
-                    }, $fulfilmentitem->start_date);
+                    $daysavg = 0;
+                    if ($totalpermisos == 1)
+                    {
 
-                    $daysavgpart2 = $fulfilmentitem->end_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
-                        return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
-                    }, $this->fulfillment->serviceRequest->end_date);
+                        $daysavgpart1 = $this->fulfillment->serviceRequest->start_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
+                            return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
+                        }, $fulfilmentitem->start_date);
 
-                    $daysavg = $daysavgpart1 + $daysavgpart2;
+                        $daysavgpart2 = $fulfilmentitem->end_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
+                            return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
+                        }, $this->fulfillment->serviceRequest->end_date);
+
+                        $daysavg = $daysavgpart1 + $daysavgpart2;
+                    
+                    }
+                    else if ($totalpermisos == 2)
+                    {                        
+                        $daysavgpart1 = $this->fulfillment->serviceRequest->start_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
+                            return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
+                        }, $fulfilmentitems[0]->start_date);
+
+                        $daymiddle = $fulfilmentitems[0]->end_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
+                            return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
+                        }, $fulfilmentitems[1]->start_date);
+
+                        $daysavgpart2 = $fulfilmentitems[1]->end_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
+                            return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
+                        }, $this->fulfillment->serviceRequest->end_date);
+                        
+                        
+                        
+                        //siempre se le resta 1 ya que finalizar en las 00:00 en vez de las 23:59
+                        $daysavgpart2 = $daysavgpart2-1;
+
+                        $daysavg = $daysavgpart1+ $daymiddle + $daysavgpart2;
+                        //dd($daysavg);
+                        
+                        
+                        
+                    }
                 }
+
+                
+                
 
                 $workingHoursInMonth = 0;
 
@@ -231,7 +267,7 @@ class ShowTotalHours extends Component
                 } else {
                     $workingHoursInMonth = $businessDays * 8.8;
                 }
-                
+
 
                 $this->refundHours = round(($workingHoursInMonth - $this->totalHoursDay), 0);
                 $this->totalHours = $this->refundHours + $this->totalHoursNight;
@@ -239,7 +275,7 @@ class ShowTotalHours extends Component
                 //dd($value->amount);
                 $totalAmountNight = $this->totalHoursNight * ($value->amount * 1.5);
                 $totalAmountDayRefund = $this->refundHours * $value->amount;
-                $this->totalAmount = $totalAmountNight - $totalAmountDayRefund;                
+                $this->totalAmount = $totalAmountNight - $totalAmountDayRefund;
                 break;
         }
         return view('livewire.service-request.show-total-hours');
