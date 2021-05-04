@@ -236,3 +236,24 @@
 
 @endsection
 
+<<<<<<< HEAD
+@section('custom_js')
+
+<script type="text/javascript">
+    jQuery('select[name=experience[]]').change(function(){
+        var fieldsetName = $(this).val();
+        alert(fieldsetName);
+        switch(this.value){
+            case "replacement":
+                document.getElementById('for_name_to_replace').readOnly = false;
+
+                document.getElementById('for_other_fundament').readOnly = true;
+                document.getElementById('for_other_fundament').value = '';
+                break;
+        }
+    });
+</script>
+
+@endsection
+=======
+>>>>>>> 4a22d6a237b975475130832cb94a28b3b90b7d93
