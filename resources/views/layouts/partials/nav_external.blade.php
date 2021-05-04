@@ -90,6 +90,7 @@
 @php
 $schools = App\Models\Suitability\SchoolUser::where('user_external_id',Auth::guard('external')->user()->id)->get();
 @endphp
+<a class="nav-link" href="{{ route('idoneidad.downloadManualAdministrator') }}" target="_blank">Descargar Manual Administrador</a>
 @foreach($schools as $school)
 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
     <span>{{ $school->school->name}}</span>
