@@ -34,6 +34,7 @@ class MonthlyValue extends Component
 
             /* Restar las ausencias */
             $dias_descuento = 0;
+            $dias_trabajado_antes_retiro = 0;
 
             foreach($fulfillment->fulfillmentItems as $item)
             {
@@ -42,7 +43,10 @@ class MonthlyValue extends Component
                     case 'Inasistencia Injustificada':
                     case 'Licencia no covid':
                     case 'Abandono de funciones':
+                        $mes_completo = false;
                         $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
+                        $dias_trabajado_antes_retiro = (int)$item->end_date->format("d")-1;
+                        
                         break;
                     case 'Renuncia voluntaria':
                         $dias_descuento += 1;
@@ -51,7 +55,9 @@ class MonthlyValue extends Component
 
             }
 
+            
             $total_dias_trabajados -= $dias_descuento;
+
 
             /* Obtener de sr_values el valor mensual */
             switch($fulfillment->serviceRequest->estate)
@@ -114,11 +120,21 @@ class MonthlyValue extends Component
 
             }
 
-            if($mes_completo) {
+            if($mes_completo) {                
                 $total = $valor_mensual - ($dias_descuento * ($valor_mensual / 30) ) ;
             }
             else {
-                $total = $total_dias_trabajados * ($valor_mensual / 30);
+                if($dias_trabajado_antes_retiro != 0)
+                {
+                    
+                    $total_dias_trabajados = $dias_trabajado_antes_retiro;
+                    
+                }
+                
+                    ;
+                    $total = $total_dias_trabajados * ($valor_mensual / 30);
+                
+                
             }
 
         }
