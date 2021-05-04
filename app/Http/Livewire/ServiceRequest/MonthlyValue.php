@@ -28,7 +28,7 @@ class MonthlyValue extends Component
                     $fulfillment->start_date->toDateString() == $fulfillment->start_date->startOfMonth()->toDateString()
                     and $fulfillment->end_date->toDateString() == $fulfillment->end_date->endOfMonth()->toDateString()
                 ) {
-                    var_dump($fulfillment->end_date->toDateString());
+                    
                     $total_dias_trabajados = 30;
                     $mes_completo = true;
                 }
