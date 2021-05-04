@@ -27,12 +27,27 @@
                       </div>
                       <input wire:model.defer="run" type="text" class="form-control" name="run">
                     </div>
-                    <div class="input-group input-group-sm mb-3 col-2">
+                    <div class="input-group input-group-sm mb-3 col-4">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroup-sizing-sm">DV</span>
                       </div>
                       <input wire:model.defer="dv" type="text" class="form-control" name="dv">
                     </div>
+
+                    <div class="input-group input-group-sm mb-3 col-4">
+                      <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Pasajero</label>
+                      </div>
+                      <select wire:model.defer="trip" class="custom-select custom-select-sm" id="inputGroupSelect01">
+                        <option value="" selected>Seleccione...</option>
+                        <option value="Ida y Vuelta">SSI</option>
+                        <option value="Solo Ida">Externo</option>
+                      </select>
+                    </div>
+
+
+
+
               </div><!-- End FILA -->
 
               <div class="row justify-content-md-center mb-0"><!-- FILA  -->
