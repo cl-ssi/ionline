@@ -257,8 +257,13 @@ class SuitabilityController extends Controller
 
     public function downloadManualUser()
     {                
-        $myFile = public_path("/manuales/idoneidad/Manual de Usuario Idoneidad Docente. Perfil Usuario.pdf");
-        //$headers = ['Content-Type: application/pdf'];
+        $myFile = public_path("/manuales/idoneidad/Manual de Usuario Idoneidad Docente. Perfil Usuario.pdf");        
+    	return response()->download($myFile);
+    }
+
+    public function downloadManualAdministrator()
+    {                
+        $myFile = public_path("/manuales/idoneidad/Manual de Usuario Idoneidad Docente. Perfil Administrador.pdf");        
     	return response()->download($myFile);
     }
 }
