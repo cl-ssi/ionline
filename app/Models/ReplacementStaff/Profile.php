@@ -30,7 +30,30 @@ class Profile extends Model
 
     public function getYearsOfDegreeAttribute()
     {
-        return Carbon::createFromDate($this->degree_date)->age;
+        $degreeDate = Carbon::parse($this->degree_date);
+        $diff = $degreeDate->diffInYears(Carbon::now()->toDateString());
+
+        return $diff;
+    }
+
+    public function getExperienceValueAttribute(){
+        switch ($this->experience) {
+            case 'managerial':
+              return 'Directivo';
+              break;
+            case 'administrative management':
+              return 'Gestión Administrativa';
+              break;
+            case 'healthcare':
+              return 'Asistencial (clínica u hospitalaria)';
+              break;
+            case 'operations':
+              return 'Operaciones';
+              break;
+            default:
+              return '';
+              break;
+        }
     }
 
     protected $hidden = [

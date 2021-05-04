@@ -2,7 +2,7 @@
     <div class="form-row">
         <fieldset class="form-group">
             <label for="">&nbsp;</label>
-            <button class="btn text-white btn-info float-right" wire:click.prevent="add({{$i}})">Agregar <i class="fas fa-plus"></i></button>
+            <button class="btn text-white btn-info float-right" wire:click.prevent="add({{$i}})" @if($count>0) disabled @endif>Agregar <i class="fas fa-plus"></i></button>
         </fieldset>
     </div>
 
@@ -13,7 +13,7 @@
             <div class="form-row">
                 <fieldset class="form-group col mt">
                     <label for="for_profile">Estamento</label>
-                    <select name="profile[]" class="form-control" wire:model="profileSelected">
+                    <select name="profile" class="form-control" wire:model="profileSelected" required>
                         <option value="">Seleccione</option>
                         @foreach($profileManage as $profile)
                             <option value="{{ $profile->id }}">{{ $profile->Name }}</option>
@@ -23,8 +23,8 @@
 
                 <fieldset class="form-group col mt">
                     <label for="for_profession">Profesión</label>
-                    <select name="profession[]" class="form-control" {{$selectstate}}>
-                        <option value="">Seleccione</option>
+                    <select name="profession" class="form-control" required {{ $selectstate }}>
+                        <option value="" {{ ($selectstate == '')?'selected':'' }}>Seleccione</option>
                         @foreach($professionManage as $profession)
                             <option value="{{ $profession->id }}">{{ $profession->Name }}</option>
                         @endforeach
@@ -33,8 +33,8 @@
 
                 <fieldset class="form-group col mt">
                     <label for="for_profession">Experiencia</label>
-                    <select name="experience[]" class="form-control" {{$selectstate}} >
-                        <option value="">Seleccione</option>
+                    <select name="experience" class="form-control" required {{ $selectstate }}>
+                        <option value="" {{ ($selectstate == '')?'selected':'' }}>Seleccione</option>
                         <option value="managerial">Directivo</option>
                         <option value="administrative management">Gestión administrativa</option>
                         <option value="healthcare">Asistencial(clínica u hospitalaria)</option>
@@ -47,13 +47,14 @@
                 <fieldset class="form-group col-sm-3">
                     <label for="for_degree_date">Fecha de Titulación</label>
                     <input type="date" class="form-control" min="1900-01-01" max="{{Carbon\Carbon::now()->toDateString()}}"
-                        name="degree_date[]" required>
+                        name="degree_date" {{ $selectstate }} required>
                 </fieldset>
 
                 <fieldset class="form-group col mt">
                     <div class="mb-3">
                       <label for="forFile" class="form-label"><br></label>
-                      <input class="form-control" type="file" name="file[]" accept="application/pdf" required>
+                      <input class="form-control" type="file" name="file"
+                          accept="application/pdf" required>
                     </div>
                 </fieldset>
 
@@ -67,22 +68,4 @@
 
         <button type="submit" class="btn btn-primary float-right">Guardar</button>
     </form>
-
-    <script>
-        document.addEventListener('livewire:load', function () {
-            jQuery('select[name=experience').change(function(){
-                var fieldsetName = $(this).val();
-                alert(fieldsetName);
-                switch(this.value){
-                    case "replacement":
-                        document.getElementById('for_name_to_replace').readOnly = false;
-
-                        document.getElementById('for_other_fundament').readOnly = true;
-                        document.getElementById('for_other_fundament').value = '';
-                        break;
-                }
-            });
-        })
-    </script>
-
 </div>
