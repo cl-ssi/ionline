@@ -13,7 +13,7 @@
             <div class="form-row">
                 <fieldset class="form-group col mt">
                     <label for="for_profile">Estamento</label>
-                    <select name="profile[]" class="form-control">
+                    <select name="profile[]" class="form-control" wire:model="profileSelected">
                         <option value="">Seleccione</option>
                         @foreach($profileManage as $profile)
                             <option value="{{ $profile->id }}">{{ $profile->Name }}</option>
@@ -23,7 +23,7 @@
 
                 <fieldset class="form-group col mt">
                     <label for="for_profession">Profesión</label>
-                    <select name="profession[]" class="form-control">
+                    <select name="profession[]" class="form-control" {{$selectstate}}>
                         <option value="">Seleccione</option>
                         @foreach($professionManage as $profession)
                             <option value="{{ $profession->id }}">{{ $profession->Name }}</option>
@@ -33,7 +33,7 @@
 
                 <fieldset class="form-group col mt">
                     <label for="for_profession">Experiencia</label>
-                    <select name="experience[]" class="form-control" required>
+                    <select name="experience[]" class="form-control" {{$selectstate}} >
                         <option value="">Seleccione</option>
                         <option value="managerial">Directivo</option>
                         <option value="administrative management">Gestión administrativa</option>
