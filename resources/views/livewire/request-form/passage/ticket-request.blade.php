@@ -38,10 +38,10 @@
                       <div class="input-group-prepend">
                         <label class="input-group-text" for="inputGroupSelect01">Pasajero</label>
                       </div>
-                      <select wire:model.defer="trip" class="custom-select custom-select-sm" id="inputGroupSelect01">
+                      <select wire:model.defer="passengerType" class="custom-select custom-select-sm" id="inputGroupSelect01">
                         <option value="" selected>Seleccione...</option>
-                        <option value="Ida y Vuelta">SSI</option>
-                        <option value="Solo Ida">Externo</option>
+                        <option value="SSI">SSI</option>
+                        <option value="Externo">Externo</option>
                       </select>
                     </div>
 
