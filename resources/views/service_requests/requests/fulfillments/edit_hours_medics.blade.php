@@ -1,7 +1,7 @@
 @foreach($serviceRequest->fulfillments as $fulfillment)
 <div class="card border-dark">
 	<div class="card-header">
-		<h4>Información del período: {{$fulfillment->year}}-{{$fulfillment->month}} <span class="small text-muted float-right">{{ $fulfillment->id}}</span> </h4>
+		<h4>Información del período: {{$fulfillment->year}}-{{$fulfillment->month}} ({{Carbon\Carbon::parse($fulfillment->year . "-" . $fulfillment->month)->monthName}}) <span class="small text-muted float-right">{{ $fulfillment->id}}</span> </h4>
 	</div>
 	<div class="card-body">
 		<form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$fulfillment) }}" enctype="multipart/form-data">
