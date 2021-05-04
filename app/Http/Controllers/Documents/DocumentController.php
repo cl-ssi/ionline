@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Documents;
 
 use App\Documents\Document;
+use App\Models\Documents\Signature;
+use App\Models\Documents\SignaturesFile;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -242,5 +246,55 @@ class DocumentController extends Controller
         $ous = OrganizationalUnit::has('documents')->get();
         return view('documents.report', compact('users','ct','ous'));
     }
+
+    public function sendForSignature(Document $document)
+    {
+        $signature = new Signature();
+        $signature->request_date = Carbon::now();
+//        $signature->document_type = 'Memorando'; //TODO variable
+        $signature->subject = $document->subject;
+        $signature->description = $document->antecedent;
+//        $signature->endorse_type = 'Visación en cadena de responsabilidad';
+        $signature->recipients = $document->distribution;
+//        $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;
+
+
+        if($document->type == 'Acta de recepción') {
+//            return view('documents.reception')->withDocument($document);
+            $documentFile = \PDF::loadView('documents.reception', compact('document'));
+        }
+        else if($document->type == 'Resolución') {
+//            return view('documents.resolution')->withDocument($document);
+            $documentFile = \PDF::loadView('documents.resolution', compact('document'));
+        }
+        else {
+//            return view('documents.show')->withDocument($document);
+            $documentFile = \PDF::loadView('documents.show', compact('document'));
+        }
+
+        $signaturesFile = new SignaturesFile();
+        $signaturesFile->file = base64_encode($documentFile->output());
+        $signaturesFile->file_type = 'documento';
+        $signaturesFile->md5_file = md5($documentFile->output());
+
+        $signature->signaturesFiles->add($signaturesFile);
+        $documentId = $document->id;
+//        dd($signature);
+
+        return view('documents.signatures.create', compact('signature', 'documentId' ));
+
+    }
+
+    public function signedDocumentPdf($id)
+    {
+        $document = Document::find($id);
+        header('Content-Type: application/pdf');
+        if (isset($document->fileToSign)) {
+            echo base64_decode($document->fileToSign->signed_file);
+        }
+    }
+
+
+
 
 }
