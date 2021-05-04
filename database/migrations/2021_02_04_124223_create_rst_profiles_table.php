@@ -16,7 +16,7 @@ class CreateRstProfilesTable extends Migration
         Schema::create('rst_profiles', function (Blueprint $table) {
             $table->id();
 
-            $table->date('degree_date');
+            $table->date('degree_date')->nullable();
             $table->string('file');
             $table->string('experience')->nullable();
 

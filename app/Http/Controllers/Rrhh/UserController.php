@@ -35,17 +35,19 @@ class UserController extends Controller
      */
     public function directory(Request $request)
     {
-        $users = User::getUsersBySearch($request->name)->has('telephones')->orderBy('name','Asc')->paginate(20);
-/*
+        //$users = User::getUsersBySearch($request->name)->has('telephones')->orderBy('name','Asc')->paginate(20);
+
         if ($request->get('ou')) {
+            $users = User::getUsersBySearch($request->name)->has('telephones')->where('organizational_unit_id',$request->get('ou'))->orderBy('name')->paginate(20);
             //$users = User::has('telephones')->where('organizational_unit_id',$request->get('ou'))->orderBy('name')->paginate(20);
-            $users = $users->has('telephones')->where('organizational_unit_id',$request->get('ou'))->orderBy('name')->paginate(20);
+            //$users = $users->has('telephones')->where('organizational_unit_id',$request->get('ou'))->orderBy('name')->paginate(20);
         }
         else {
             //$users = User::has('telephones')->Search($request->get('name'))->orderBy('name','Asc')->paginate(20);
-            $users = $users->has('telephones')->Search($request->get('name'))->orderBy('name','Asc')->paginate(20);
+            //$users = $users->has('telephones')->Search($request->get('name'))->orderBy('name','Asc')->paginate(20);
+            $users = User::getUsersBySearch($request->name)->has('telephones')->orderBy('name','Asc')->paginate(20);
         }
-*/
+
         /* Devuelve sólo Dirección, ya que de él dependen todas las unidades organizacionales hacia abajo */
         $organizationalUnit = OrganizationalUnit::Find(1);
         return view('rrhh.directory')->withUsers($users)->withOrganizationalUnit($organizationalUnit);
