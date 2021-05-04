@@ -25,13 +25,13 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroup-sizing-sm">Run</span>
                       </div>
-                      <input wire:model.defer="run" type="text" class="form-control" name="run">
+                      <input wire:model.debounce.500ms="run" type="text" class="form-control" name="run">
                     </div>
                     <div class="input-group input-group-sm mb-3 col-4">
                       <div class="input-group-prepend">
                         <span class="input-group-text" id="inputGroup-sizing-sm">DV</span>
                       </div>
-                      <input wire:model.defer="dv" type="text" class="form-control" name="dv">
+                      <input wire:model.defer="dv" type="text" class="form-control" name="dv" readonly>
                     </div>
 
                     <div class="input-group input-group-sm mb-3 col-4">
@@ -175,6 +175,7 @@
 
         <div class="mx-3 mb-3 mt-3 pt-0"> <!-- DIV para TABLA-->
           <h5 class="card-subtitle mt-0 mb-2 text-muted">Pasajes Aéreos:</h5>
+          <div class="table-responsive">
           <table class="table table-condensed table-hover table-bordered table-sm small">
             <thead>
               <tr>
@@ -225,6 +226,7 @@
               </tr>
             </tfoot>
           </table>
+        </div><!-- DIV Table Responsive -->
         </div><!-- DIV para TABLA-->
 
         <div class="row mx-1 mb-4 mt-0 pt-0 px-0">

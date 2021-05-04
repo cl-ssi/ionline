@@ -3,12 +3,15 @@
 namespace App\Http\Livewire\RequestForm\Passage;
 
 use Livewire\Component;
+use App\User;
 
 class TicketRequest extends Component
 {
     public $edit, $tittle;
     public $items, $key;
-    public $program, $justification, $run, $dv, $names, $fathersName, $mothersName, $birthDay, $telephoneNumber, $email, $trip, $origin, $destiny, $departureDate, $fromDate, $baggage;
+    public $program, $justification, $run, $dv, $names, $fathersName, $mothersName, $birthDay,
+           $telephoneNumber, $email, $trip, $origin, $destiny, $departureDate, $fromDate,
+           $baggage, $passengerType;
 
     protected $rules = [
         'run'             =>  'required|integer|min:1',
@@ -24,6 +27,7 @@ class TicketRequest extends Component
         'departureDate'   =>  'required',
         'fromDate'        =>  'required',
         'baggage'         =>  'required',
+        'passengerType'   =>  'required',
     ];
 
     protected $messages = [
@@ -46,12 +50,18 @@ class TicketRequest extends Component
         'departureDate.required'    => 'Campo Fecha de Ida es requerido.',
         'fromDate.required'         => 'Campo Fecha de Regreso es requerido.',
         'baggage.required'          => 'Seleccione tipo de equipaje.',
+        'passengerType.required'    => 'Seleccione tipo de Pasajero.',
     ];
 
     public function mount(){
       $this->items                  = array();
       $this->tittle                 = "Agregar Ticket";
       $this->edit                   = false;
+      $this->dv                     = "";
+      $this->run                    = "";
+      if(old('run')) {
+          $this->run = old('run');
+      }
     }
 
     public function addTicket(){
@@ -71,6 +81,7 @@ class TicketRequest extends Component
             'departureDate'         => $this->departureDate,
             'fromDate'              => $this->fromDate,
             'baggage'               => $this->baggage,
+            'passengerType'         => $this->passengerType,
     ];
       $this->cleanTicket();
     }
@@ -98,6 +109,7 @@ class TicketRequest extends Component
       $this->departureDate                =   $this->items[$key]['departureDate'];
       $this->fromDate                     =   $this->items[$key]['fromDate'];
       $this->baggage                      =   $this->items[$key]['baggage'];
+      $this->passengerType                =   $this->items[$key]['passengerType'];
       $this->key                          =   $key;
     }
 
@@ -117,6 +129,7 @@ class TicketRequest extends Component
       $this->items[$this->key]['departureDate']     =     $this->departureDate;
       $this->items[$this->key]['fromDate']          =     $this->fromDate;
       $this->items[$this->key]['baggage']           =     $this->baggage;
+      $this->items[$this->key]['passengerType']     =     $this->passengerType;
       $this->cleanTicket();
     }
 
@@ -125,7 +138,7 @@ class TicketRequest extends Component
       $this->edit  = false;
       $this->resetErrorBag();
       $this->run=$this->dv=$this->names=$this->fathersName=$this->mothersName=$this->birthDay=$this->telephoneNumber=$this->email=$this->trip=
-      $this->origin=$this->destiny=$this->departureDate=$this->fromDate=$this->baggage="";
+      $this->origin=$this->destiny=$this->departureDate=$this->fromDate=$this->passengerType=$this->baggage="";
     }
 
     public function saveTicketRequest(){
@@ -146,6 +159,7 @@ class TicketRequest extends Component
 
     public function render()
     {
+        $this->dv = User::dvCalculate($this->run);
         return view('livewire.request-form.passage.ticket-request');
     }
 }

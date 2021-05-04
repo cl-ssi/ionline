@@ -300,6 +300,19 @@ class User extends Authenticatable
         }// End getPatientsBySearch
 
 
+    public static function dvCalculate($num){
+        if(is_numeric($num)){
+          $run = intval($num);
+          $s=1;
+          for($m=0;$run!=0;$run/=10)
+              $s=($s+$run%10*(9-$m++%6))%11;
+          $dv = chr($s?$s+47:75);
+          return $dv;
+        }
+          else{
+            return "Run no Válido";
+          }
+    }
 
 
     /**computers
