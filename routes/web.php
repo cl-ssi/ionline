@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Documents\DocumentController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -629,6 +630,8 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('/add_number', 'Documents\DocumentController@addNumber')->name('add_number');
     Route::post('/find', 'Documents\DocumentController@find')->name('find');
     Route::get('/report', 'Documents\DocumentController@report')->name('report');
+    Route::get('/{document}/sendForSignature/', 'Documents\DocumentController@sendForSignature')->name('sendForSignature');
+    Route::get('/signed-document-pdf/{id}', [DocumentController::class, 'signedDocumentPdf'])->name('signedDocumentPdf');
 
     Route::prefix('partes')->as('partes.')->group(function () {
         Route::get('outbox', 'Documents\ParteController@outbox')->name('outbox');
@@ -645,6 +648,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('signatures/index/{tab}', 'Documents\SignatureController@index')->name('signatures.index');
     Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
     Route::get('/showPdf/{signaturesFile}', 'Documents\SignatureController@showPdf')->name('signatures.showPdf');
+    Route::post('/showPdfFromFile', 'Documents\SignatureController@showPdfFromFile')->name('signatures.showPdfFromFile');
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('signatures.showPdfAnexo');
     Route::post('/{idSignaturesFlow}/rechazar', 'Documents\SignatureController@rejectSignature')->name('signatures.rejectSignature');
     Route::get('signatures/signatureFlows/{signatureId}', 'Documents\SignatureController@signatureFlows')->name('signatures.signatureFlows');

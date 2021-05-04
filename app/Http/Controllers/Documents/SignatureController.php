@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Documents;
 
+use App\Documents\Document;
 use App\Http\Controllers\Controller;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
@@ -87,10 +88,17 @@ class SignatureController extends Controller
 
             $signaturesFile = new SignaturesFile();
             $signaturesFile->signature_id = $signature->id;
-            $documentFile = $request->file('document');
-            $signaturesFile->file = base64_encode(file_get_contents($documentFile->getRealPath()));
+
+            if ($request->file_base_64) {
+                $signaturesFile->file = $request->file_base_64;
+                $signaturesFile->md5_file = $request->md5_file;
+            } else {
+                $documentFile = $request->file('document');
+                $signaturesFile->file = base64_encode(file_get_contents($documentFile->getRealPath()));
+                $signaturesFile->md5_file = md5_file($documentFile);
+            }
+
             $signaturesFile->file_type = 'documento';
-            $signaturesFile->md5_file = md5_file($documentFile);
             $signaturesFile->save();
             $signaturesFileDocumentId = $signaturesFile->id;
 
@@ -126,6 +134,12 @@ class SignatureController extends Controller
 //                    $signaturesFlow->status = false;
                     $signaturesFlow->save();
                 }
+            }
+
+            if ($request->has('document_id')) {
+                $document = Document::find($request->document_id);
+                $document->update(['file_to_sign_id' => $signaturesFileDocumentId,
+                ]);
             }
 
             DB::commit();
@@ -238,6 +252,12 @@ class SignatureController extends Controller
         } else {
             echo base64_decode($signaturesFile->file);
         }
+    }
+
+    public function showPdfFromFile(Request $request)
+    {
+        header('Content-Type: application/pdf');
+        echo base64_decode($request->file_base_64);
     }
 
     public function showPdfAnexo(SignaturesFile $anexo)
