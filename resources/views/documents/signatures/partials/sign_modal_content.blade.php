@@ -17,7 +17,8 @@
                 @if( count($pendingSignaturesFlow->validationMessages) === 0 )
                         @if($pendingSignaturesFlow->signaturesFile->hasOnePendingFlow)
                             @php
-                                preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $pendingSignaturesFlow->signature->recipients, $emails)
+                                $allMails = $pendingSignaturesFlow->signature->recipients . ',' . $pendingSignaturesFlow->signature->distribution;
+                                preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allMails, $emails)
                             @endphp
                             <div class="alert alert-info mb-2">Una vez firmado se enviará un correo con el documento a
                                 las
