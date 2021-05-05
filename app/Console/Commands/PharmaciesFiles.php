@@ -44,9 +44,9 @@ class PharmaciesFiles extends Command
             foreach ($dispatch->files as $file) {
                 list($folder,$name) = explode('/',$file->file);
                 echo $name."\n";
-                $file->update(['file' => 'ionline/pharmacies/'.$name]);
+                //$file->update(['file' => 'ionline/pharmacies/'.$name]);
                 $file = Storage::disk('local')->get($file->file);
-                Storage::disk('gcs')->put('ionline/pharmacies/'.$name, $file);      
+                Storage::disk('gcs')->put('ionline/pharmacies/'.$name, $file);
             }
         }
 
