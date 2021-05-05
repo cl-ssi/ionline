@@ -47,27 +47,27 @@ class MigrateProgrammings extends Command
               if(!empty($communefile->file_a)){
               list($folder,$name) = explode('/',$communefile->file_a);
               echo $name." file a\n";
-              $communefile->update(['file_a' => 'ionline/programmings/'.$name]);
+              //$communefile->update(['file_a' => 'ionline/programmings/'.$name]);
+              $file = Storage::disk('local')->get($communefile->file_a);
+              Storage::disk('gcs')->put('ionline/programmings/'.$name, $file);
             }
-
               if(!empty($communefile->file_b)){
               list($folder,$name) = explode('/',$communefile->file_b);
               echo $name." file b\n";
-              $communefile->update(['file_b' => 'ionline/programmings/'.$name]);
+              //$communefile->update(['file_b' => 'ionline/programmings/'.$name]);
+              $file = Storage::disk('local')->get($communefile->file_b);
+              Storage::disk('gcs')->put('ionline/programmings/'.$name, $file);
             }
-
               if(!empty($communefile->file_c)){
               list($folder,$name) = explode('/',$communefile->file_c);
               echo $name." file c\n";
-              $communefile->update(['file_c' => 'ionline/programmings/'.$name]);
+              //$communefile->update(['file_c' => 'ionline/programmings/'.$name]);
+              $file = Storage::disk('local')->get($communefile->file_c);
+              Storage::disk('gcs')->put('ionline/programmings/'.$name, $file);
             }
-              //$file->update(['file' => 'ionline/programmings/'.$name]);
-              //$file = Storage::disk('local')->get($file->file);
-              //Storage::disk('gcs')->put('ionline/pharmacies/'.$name, $file);
           }
               echo "\n";
       }
-
       return 0;
     }
 }
