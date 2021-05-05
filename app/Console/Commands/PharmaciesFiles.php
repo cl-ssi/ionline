@@ -46,8 +46,7 @@ class PharmaciesFiles extends Command
                 echo $name."\n";
                 $file->update(['file' => 'ionline/pharmacies/'.$name]);
                 $file = Storage::disk('local')->get($file->file);
-                Storage::disk('gcs')->put('ionline/pharmacies'.$name, $file);               
-                
+                Storage::disk('gcs')->put('ionline/pharmacies'.$name, $file);                
             }
         }
 
