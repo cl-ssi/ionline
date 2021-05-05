@@ -14,11 +14,11 @@ class MonthlyValue extends Component
         /* Si es tipo Mensual y tipo Covid */
         //$mes_completo = true;
         //$mes_completo = true;
-        if (            
+        if (
             $fulfillment->serviceRequest->program_contract_type == 'Mensual'
             and $fulfillment->serviceRequest->type = 'Covid'
         ) {
-           
+
             $mes_completo = true;
 
             /* si tiene una "Renuncia voluntaria", el termino del contrato es ahí */
@@ -33,14 +33,15 @@ class MonthlyValue extends Component
                     $fulfillment->start_date->toDateString() == $fulfillment->start_date->startOfMonth()->toDateString()
                     and $fulfillment->end_date->toDateString() == $fulfillment->end_date->endOfMonth()->toDateString()
                 ) {
-                    
+
                     $total_dias_trabajados = 30;
                     $mes_completo = true;
                 }
-            }
-            /* De lo contrario es la diferencia entre el primer y último día */ else {
-                $total_dias_trabajados = $fulfillment->start_date->diff($fulfillment->end_date)->days + 1;
-                $mes_completo = false;
+
+                /* De lo contrario es la diferencia entre el primer y último día */ else {                    
+                    $total_dias_trabajados = $fulfillment->start_date->diff($fulfillment->end_date)->days + 1;
+                    $mes_completo = false;
+                }
             }
 
             /* Restar las ausencias */
@@ -51,7 +52,7 @@ class MonthlyValue extends Component
                 switch ($item->type) {
                     case 'Inasistencia Injustificada':
                         $mes_completo = false;
-                        $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;                        
+                        $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
                         break;
                     case 'Licencia no covid':
                     case 'Abandono de funciones':
@@ -66,7 +67,7 @@ class MonthlyValue extends Component
                 }
             }
 
-            
+
             $total_dias_trabajados -= $dias_descuento;
 
 
