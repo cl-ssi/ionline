@@ -396,6 +396,14 @@
 						<option value="OTROS PROGRAMAS SSI" @if($serviceRequest->programm_name == 'OTROS PROGRAMAS SSI') selected @endif>OTROS PROGRAMAS SSI</option>
 						<option value="LISTA ESPERA" @if($serviceRequest->programm_name == 'LISTA ESPERA') selected @endif>LISTA ESPERA</option>
 						<option value="CAMPAÑA INVIERNO" @if($serviceRequest->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
+
+            <option value="ADP DIRECTOR" @if($serviceRequest->programm_name == 'ADP DIRECTOR') selected @endif>ADP DIRECTOR</option>
+            <option value="SENDA" @if($serviceRequest->programm_name == 'SENDA') selected @endif>SENDA</option>
+  					<option value="SENDA LEY ALCOHOLES" @if($serviceRequest->programm_name == 'SENDA LEY ALCOHOLES') selected @endif>SENDA LEY ALCOHOLES</option>
+  					<option value="SENDA UHCIP" @if($serviceRequest->programm_name == 'SENDA UHCIP') selected @endif>SENDA UHCIP</option>
+  					<option value="SENDA PSIQUIATRIA ADULTO" @if($serviceRequest->programm_name == 'SENDA PSIQUIATRIA ADULTO') selected @endif>SENDA PSIQUIATRIA ADULTO</option>
+  					<option value="SENADIS" @if($serviceRequest->programm_name == 'SENADIS') selected @endif>SENADIS</option>
+  					<option value="SUBT.31" @if($serviceRequest->programm_name == 'SUBT.31') selected @endif>SUBT.31</option>
 					@endif
 
         </select>
@@ -517,21 +525,21 @@
 
   </div>
 
-  <div class="form-row" id="div_objectives">
+  <div class="form-row" id="div_objectives" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Objetivos</label>
 				<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50">{{ $serviceRequest->objectives }}</textarea>
 		</fieldset>
 	</div>
 
-	<div class="form-row" id="div_resolve">
+	<!-- <div class="form-row" id="div_resolve">
 		<fieldset class="form-group col">
 				<label for="for_estate">Resuelvo</label>
 				<textarea id="resolve" name="resolve" class="form-control" rows="4" cols="50">{{ $serviceRequest->resolve }}</textarea>
 		</fieldset>
-	</div>
+	</div> -->
 
-  <div class="form-row" id="div_additional_benefits">
+  <div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Beneficios adicionales</label>
 				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50">{{ $serviceRequest->additional_benefits }}</textarea>
@@ -964,6 +972,10 @@
 
 	$( document ).ready(function() {
 
+    if ($('select[id=type] option').filter(':selected').text() == "Suma alzada"){
+      $("#type").trigger("click");
+    }
+
     //temporal, solicitado por eduardo
     if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Departamento de Salud Ocupacional" ||
         $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Extensión Hospital -Estadio" ||
@@ -1217,10 +1229,10 @@
   			$('#digera_strategy').attr('disabled', 'disabled');
 
         $('#objectives').removeAttr('disabled');
-  			$('#resolve').removeAttr('disabled');
+  			// $('#resolve').removeAttr('disabled');
   			$('#additional_benefits').removeAttr('disabled');
   			$("#div_objectives").show();
-  			$("#div_resolve").show();
+  			// $("#div_resolve").show();
   			$("#div_additional_benefits").show();
 
 
@@ -1232,6 +1244,14 @@
   				$("#programm_name option[value='LISTA ESPERA']").hide();
   				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
 
+          $("#programm_name option[value='ADP DIRECTOR']").hide();
+          $("#programm_name option[value='SENDA']").hide();
+          $("#programm_name option[value='SENDA LEY ALCOHOLES']").hide();
+          $("#programm_name option[value='SENDA UHCIP']").hide();
+          $("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
+          $("#programm_name option[value='SENADIS']").hide();
+          $("#programm_name option[value='SUBT.31']").hide();
+
   				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").show();
   				$("#programm_name option[value='33 MIL HORAS']").show();
   				$("#programm_name option[value='DFL']").show();
@@ -1241,15 +1261,23 @@
   				$("#programm_name option[value='PABELLON TARDE']").show();
   				$("#programm_name option[value='PABELLON GINE']").show();
   				$("#programm_name option[value='TURNO DE RESIDENCIA']").show();
-
-
-  			}else{
+  			}
+        else
+        {
   				$("#programm_name option[value='PRAPS']").show();
   				$("#programm_name option[value='PESPI']").show();
   				$("#programm_name option[value='CHILE CRECE CONTIGO']").show();
   				$("#programm_name option[value='OTROS PROGRAMAS SSI']").show();
   				$("#programm_name option[value='LISTA ESPERA']").show();
   				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+
+          $("#programm_name option[value='ADP DIRECTOR']").show();
+          $("#programm_name option[value='SENDA']").show();
+          $("#programm_name option[value='SENDA LEY ALCOHOLES']").show();
+          $("#programm_name option[value='SENDA UHCIP']").show();
+          $("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").show();
+          $("#programm_name option[value='SENADIS']").show();
+          $("#programm_name option[value='SUBT.31']").show();
 
   				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
   				$("#programm_name option[value='33 MIL HORAS']").hide();
@@ -1271,10 +1299,10 @@
   			$('#digera_strategy').removeAttr('disabled');
 
         $('#objectives').attr('disabled', 'disabled');
-  			$('#resolve').attr('disabled', 'disabled');
+  			// $('#resolve').attr('disabled', 'disabled');
   			$('#additional_benefits').attr('disabled', 'disabled');
   			$("#div_objectives").hide();
-  			$("#div_resolve").hide();
+  			// $("#div_resolve").hide();
   			$("#div_additional_benefits").hide();
 
 
