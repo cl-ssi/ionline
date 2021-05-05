@@ -260,22 +260,29 @@
 				<option value="Covid19 Médicos">Covid19 Médicos</option>
 
 				@if(Auth::user()->organizationalUnit->establishment_id == 1)
-				<option value="CONSULTORIO DE LLAMADA">CONSULTORIO DE LLAMADA</option>
-				<option value="33 MIL HORAS">33 MIL HORAS</option>
-				<option value="DFL">DFL</option>
-				<option value="TURNOS VACANTES">TURNOS VACANTES</option>
-				<option value="OTROS PROGRAMAS HETG">OTROS PROGRAMAS HETG</option>
-				<option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option>
-				<option value="PABELLON TARDE">PABELLON TARDE</option>
-				<option value="PABELLON GINE">PABELLON GINE</option>
-				<option value="TURNO DE RESIDENCIA">TURNO DE RESIDENCIA</option>
+					<option value="CONSULTORIO DE LLAMADA">CONSULTORIO DE LLAMADA</option>
+					<option value="33 MIL HORAS">33 MIL HORAS</option>
+					<option value="DFL">DFL</option>
+					<option value="TURNOS VACANTES">TURNOS VACANTES</option>
+					<option value="OTROS PROGRAMAS HETG">OTROS PROGRAMAS HETG</option>
+					<option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option>
+					<option value="PABELLON TARDE">PABELLON TARDE</option>
+					<option value="PABELLON GINE">PABELLON GINE</option>
+					<option value="TURNO DE RESIDENCIA">TURNO DE RESIDENCIA</option>
 				@else
-				<option value="PRAPS">PRAPS</option>
-				<option value="PESPI">PESPI</option>
-				<option value="CHILE CRECE CONTIGO">CHILE CRECE CONTIGO</option>
-				<option value="OTROS PROGRAMAS SSI">OTROS PROGRAMAS SSI</option>
-				<option value="LISTA ESPERA">LISTA ESPERA</option>
-				<option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option>
+					<option value="PRAPS">PRAPS</option>
+					<option value="PESPI">PESPI</option>
+					<option value="CHILE CRECE CONTIGO">CHILE CRECE CONTIGO</option>
+					<option value="OTROS PROGRAMAS SSI">OTROS PROGRAMAS SSI</option>
+					<option value="LISTA ESPERA">LISTA ESPERA</option>
+					<option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option>
+
+					<option value="SENDA">SENDA</option>
+					<option value="SENDA LEY ALCOHOLES">SENDA LEY ALCOHOLES</option>
+					<option value="SENDA UHCIP">SENDA UHCIP</option>
+					<option value="SENDA PSIQUIATRIA ADULTO">SENDA PSIQUIATRIA ADULTO</option>
+					<option value="SENADIS">SENADIS</option>
+					<option value="SUBT.31">SUBT.31</option>
 				@endif
 			</select>
 		</fieldset>
@@ -381,7 +388,7 @@
 
 		<fieldset class="form-group col-3">
 			<label for="for_schedule_detail">Detalle de horario</label>
-			<select name="schedule_detail" class="form-control" id="schedule_detail" disabled>
+			<select name="schedule_detail" class="form-control" id="schedule_detail">
 				<option value=""></option>
 				<option value="DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)">DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)</option>
 				<option value="DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)">DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)</option>

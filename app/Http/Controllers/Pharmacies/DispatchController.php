@@ -380,7 +380,8 @@ class DispatchController extends Controller
           $file = $request->file('filename'.$dispatch->id);
           $filename = $file->getClientOriginalName();
           $fileModel = New File();
-          $fileModel->file = $file->store('pharmacies');
+          //$fileModel->file = $file->store('pharmacies');
+          $fileModel->file = $file->store('ionline/pharmacies',['disk' => 'gcs']);
           $fileModel->name = $filename;
           $fileModel->dispatch_id = $dispatch->id;
           $fileModel->save();
