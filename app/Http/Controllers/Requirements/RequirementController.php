@@ -344,10 +344,10 @@ class RequirementController extends Controller
 
       $requirement = new Requirement($req);
       $requirement->user()->associate(Auth::user());
-      
+
       $requirement->save();
-      $requirement->categories()->attach($request->input('category_id'));     
-      
+      $requirement->categories()->attach($request->input('category_id'));
+
 
 
       //se guarda evento

@@ -166,7 +166,8 @@ En estos antecedentes, según lo dispuesto según inciso final del Art. 2º y 3�
 </p>
 
 <p class="justify">
-<strong>RESUELVO:</strong>{{$ServiceRequest->resolve}}<br><br>
+<strong>RESUELVO:</strong><br><br>
+<!-- {{$ServiceRequest->resolve}}<br><br> -->
 
 <strong>1.CONTRÁTESE</strong> a honorarios a suma alzada en el Servicio de Salud Iquique, a la persona que más abajo se individualiza de acuerdo a su área de competencia,
 
@@ -377,7 +378,30 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
 </p>
 
 <p class="">
-    <strong>3.</strong> el gasto correspondiente al ítem 1140504 SENDA 1 (Fondos extra presupuestarios) asociados al Convenio SENDA – MINSAL Honorario Suma Alzada.
+    <strong>3.</strong> El gasto correspondiente al ítem
+    @if($ServiceRequest->programm_name == "OTROS PROGRAMAS SSI" || $ServiceRequest->programm_name == "LISTA ESPERA" || $ServiceRequest->programm_name == "ADP DIRECTOR")
+      21-03-001-001-02
+    @elseif($ServiceRequest->programm_name == "SENDA")
+      1140504
+    @elseif($ServiceRequest->programm_name == "SENDA UHCIP")
+      11450602
+    @elseif($ServiceRequest->programm_name == "SENDA LEY ALCOHOLES")
+      114050601
+    @elseif($ServiceRequest->programm_name == "SENDA PSIQUIATRIA ADULTO")
+      11450602
+    @else
+      1140504 SENDA 1 (Fondos extra presupuestarios) asociados al Convenio SENDA – MINSAL Honorario Suma Alzada
+    @endif
+     Honorario Suma Alzada.
+
+
+
+
+
+
+
+
+
 </p>
 
 <p class="center">
@@ -395,20 +419,27 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
           DIRECTOR<br>
           HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
           </strong>
+
+          <br style="padding-bottom: 4px;">
+          Lo que me permito transcribe a usted para su conocimiento y fines consiguientes.
+
+          <br><br><br>
+          <br style="padding-bottom: 4px;">
+          MINISTRO DE FE
         @else
-          <strong>
+          <!-- <strong>
           <span class="uppercase">JORGE GALLEGUILLOS MOLLER</span><br>
           DIRECTOR<br>
           SERVICIO DE SALUD IQUIQUE<br>
           </strong>
+
+          <br style="padding-bottom: 4px;">
+          Lo que me permito transcribe a usted para su conocimiento y fines consiguientes.
+
+          <br><br><br>
+          <br style="padding-bottom: 4px;">
+          MINISTRO DE FE-->
         @endif
-
-        <br style="padding-bottom: 4px;">
-        Lo que me permito transcribe a usted para su conocimiento y fines consiguientes.
-
-        <br><br><br>
-        <br style="padding-bottom: 4px;">
-        MINISTRO DE FE
     </div>
 </div>
 <br style="padding-bottom: 4px;">
