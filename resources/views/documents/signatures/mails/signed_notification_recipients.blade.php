@@ -7,7 +7,7 @@
         <p>Adjunto documento indicado para conocimiento y fines.</p>
         <p> <strong>Tipo:</strong> {{ $signature->document_type }}</p>
         <p> <strong>Número:</strong> {{ $signature->signaturesFileDocument->id }}</p>
-        <p> <strong>Firma del documento: </strong> {{ $signature->signaturesFlowSigner->signature_date->format('d-m-Y') }} </p>
+{{--        <p> <strong>Firma del documento: </strong> {{ $signature->signaturesFlowSigner->signature_date->format('d-m-Y') }} </p>--}}
 {{--        <p> <strong>Archivo:</strong> SSI_{{ $document->type }}_{{ $document->number }}.pdf</p>--}}
         <br>
         Saludos cordiales.
