@@ -378,7 +378,13 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
 </p>
 
 <p class="">
-    <strong>3.</strong> el gasto correspondiente al ítem 1140504 SENDA 1 (Fondos extra presupuestarios) asociados al Convenio SENDA – MINSAL Honorario Suma Alzada.
+    <strong>3.</strong> El gasto correspondiente al ítem
+    @if($ServiceRequest->programm_name == "OTROS PROGRAMAS SSI" || $ServiceRequest->programm_name == "LISTA ESPERA" || $ServiceRequest->programm_name == "LISTA ESPERA")
+      21-03-001-001-02
+    @else
+      1140504 SENDA 1 (Fondos extra presupuestarios) asociados al Convenio SENDA – MINSAL Honorario Suma Alzada
+    @endif
+     Honorario Suma Alzada.
 </p>
 
 <p class="center">
