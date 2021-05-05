@@ -3,24 +3,24 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Pharmacies\Dispatch;
+use App\Requirements\Event;
 use Illuminate\Support\Facades\Storage;
 
-class PharmaciesFiles extends Command
+class RequerimentsFiles extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'pharmacies:files';
+    protected $signature = 'requeriments:files';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Update files from local frm_files to GCS';
+    protected $description = 'Migra los archivos de requerimientos a GCS';
 
     /**
      * Create a new command instance.
@@ -39,17 +39,20 @@ class PharmaciesFiles extends Command
      */
     public function handle()
     {
-        $dispatchs = Dispatch::whereHas('files')->get();
-        foreach ($dispatchs as $dispatch) {
-            foreach ($dispatch->files as $file) {
+        //echo'funciono';
+        $events = Event::whereHas('files')->get();
+        foreach ($events as $event) {
+            foreach ($event->files as $file) {
                 list($folder,$name) = explode('/',$file->file);
                 echo $name."\n";
-                $file->update(['file' => 'ionline/pharmacies/'.$name]);
+                $file->update(['file' => 'ionline/requirements/'.$name]);
                 $file = Storage::disk('local')->get($file->file);
-                Storage::disk('gcs')->put('ionline/pharmacies/'.$name, $file);
-            }
-        }
+                Storage::disk('gcs')->put('ionline/requirements/'.$name, $file);
 
+            }
+
+        }
+        
         return 0;
     }
 }
