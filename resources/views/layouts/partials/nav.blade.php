@@ -17,27 +17,6 @@
                     </a>
                 </li>
 
-                @can('Programming: view')
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-calculator"></i> Programación APS
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-                        <a class="dropdown-item"
-                           href="{{ route('programmings.index') }}">
-                            <i class="fas fa-calculator"></i> Programación Numérica
-                        </a>
-
-                        <a class="dropdown-item"
-                           href="{{ route('communefiles.index') }}">
-                            <i class="fas fa-file-alt"></i> Documentos Comunales
-                        </a>
-                    </div>
-                </li>
-                @endcan
-
                 <li class="nav-item {{ active('calendars') }}">
                     <a class="nav-link" href="{{ route('calendars') }}">
                         <i class="fas fa-calendar-alt"></i> Calendarios
@@ -56,6 +35,19 @@
                            href="{{ route('indicators.index') }}">
                             <i class="fas fa-desktop fa-fw"></i> Indicadores - REM
                         </a>
+
+                        @can('Programming: view')
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item"
+                           href="{{ route('programmings.index') }}">
+                            <i class="fas fa-calculator"></i> Programación Numérica
+                        </a>
+
+                        <a class="dropdown-item"
+                           href="{{ route('communefiles.index') }}">
+                            <i class="fas fa-file-alt"></i> Documentos Comunales
+                        </a>
+                        @endcan
 
                         {{--@auth
                             @canany(['LE Extra Plan: Carga','LE Extra Plan: Monitoreo'])
