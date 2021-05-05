@@ -49,7 +49,10 @@ class MonthlyValue extends Component
 
             foreach ($fulfillment->fulfillmentItems as $item) {
                 switch ($item->type) {
-                    case 'Inasistencia Injustificada':                        
+                    case 'Inasistencia Injustificada':
+                        $mes_completo = false;
+                        $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;                        
+                        break;
                     case 'Licencia no covid':
                     case 'Abandono de funciones':
                         $mes_completo = false;
