@@ -75,7 +75,7 @@
             </div>
 
             <div class="right" style="float: right; width: 300px; padding-top: 64px;">
-                <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;"><strong>{{ $document->type }} N°:</strong> </div>
+                <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;"><strong>{{ $document->type }} N°:</strong> {{ $document->number }}</div>
                 <div style="padding-top:26px"></div>
                 <div class="left" style="padding-bottom: 6px;">
                     <strong>ANT:</strong> {{ $document->antecedent }}
