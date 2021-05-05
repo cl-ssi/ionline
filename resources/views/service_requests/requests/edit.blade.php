@@ -524,21 +524,21 @@
 
   </div>
 
-  <div class="form-row" id="div_objectives">
+  <div class="form-row" id="div_objectives" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Objetivos</label>
 				<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50">{{ $serviceRequest->objectives }}</textarea>
 		</fieldset>
 	</div>
 
-	<div class="form-row" id="div_resolve">
+	<!-- <div class="form-row" id="div_resolve">
 		<fieldset class="form-group col">
 				<label for="for_estate">Resuelvo</label>
 				<textarea id="resolve" name="resolve" class="form-control" rows="4" cols="50">{{ $serviceRequest->resolve }}</textarea>
 		</fieldset>
-	</div>
+	</div> -->
 
-  <div class="form-row" id="div_additional_benefits">
+  <div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Beneficios adicionales</label>
 				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50">{{ $serviceRequest->additional_benefits }}</textarea>
@@ -971,6 +971,10 @@
 
 	$( document ).ready(function() {
 
+    if ($('select[id=type] option').filter(':selected').text() == "Suma alzada"){
+      $("#type").trigger("click");
+    }
+
     //temporal, solicitado por eduardo
     if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Departamento de Salud Ocupacional" ||
         $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Extensión Hospital -Estadio" ||
@@ -1224,10 +1228,10 @@
   			$('#digera_strategy').attr('disabled', 'disabled');
 
         $('#objectives').removeAttr('disabled');
-  			$('#resolve').removeAttr('disabled');
+  			// $('#resolve').removeAttr('disabled');
   			$('#additional_benefits').removeAttr('disabled');
   			$("#div_objectives").show();
-  			$("#div_resolve").show();
+  			// $("#div_resolve").show();
   			$("#div_additional_benefits").show();
 
 
@@ -1292,10 +1296,10 @@
   			$('#digera_strategy').removeAttr('disabled');
 
         $('#objectives').attr('disabled', 'disabled');
-  			$('#resolve').attr('disabled', 'disabled');
+  			// $('#resolve').attr('disabled', 'disabled');
   			$('#additional_benefits').attr('disabled', 'disabled');
   			$("#div_objectives").hide();
-  			$("#div_resolve").hide();
+  			// $("#div_resolve").hide();
   			$("#div_additional_benefits").hide();
 
 

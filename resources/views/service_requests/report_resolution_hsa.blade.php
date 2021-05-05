@@ -166,7 +166,8 @@ En estos antecedentes, según lo dispuesto según inciso final del Art. 2º y 3�
 </p>
 
 <p class="justify">
-<strong>RESUELVO:</strong>{{$ServiceRequest->resolve}}<br><br>
+<strong>RESUELVO:</strong><br><br>
+<!-- {{$ServiceRequest->resolve}}<br><br> -->
 
 <strong>1.CONTRÁTESE</strong> a honorarios a suma alzada en el Servicio de Salud Iquique, a la persona que más abajo se individualiza de acuerdo a su área de competencia,
 
@@ -395,20 +396,27 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
           DIRECTOR<br>
           HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
           </strong>
+
+          <br style="padding-bottom: 4px;">
+          Lo que me permito transcribe a usted para su conocimiento y fines consiguientes.
+
+          <br><br><br>
+          <br style="padding-bottom: 4px;">
+          MINISTRO DE FE
         @else
-          <strong>
+          <!-- <strong>
           <span class="uppercase">JORGE GALLEGUILLOS MOLLER</span><br>
           DIRECTOR<br>
           SERVICIO DE SALUD IQUIQUE<br>
           </strong>
+
+          <br style="padding-bottom: 4px;">
+          Lo que me permito transcribe a usted para su conocimiento y fines consiguientes.
+
+          <br><br><br>
+          <br style="padding-bottom: 4px;">
+          MINISTRO DE FE-->
         @endif
-
-        <br style="padding-bottom: 4px;">
-        Lo que me permito transcribe a usted para su conocimiento y fines consiguientes.
-
-        <br><br><br>
-        <br style="padding-bottom: 4px;">
-        MINISTRO DE FE
     </div>
 </div>
 <br style="padding-bottom: 4px;">
