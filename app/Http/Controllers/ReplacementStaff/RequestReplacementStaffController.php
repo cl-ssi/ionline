@@ -31,27 +31,28 @@ class RequestReplacementStaffController extends Controller
     public function own_index()
     {
         $my_pending_requests = RequestReplacementStaff::latest()
-            // ->doesntHave('technicalEvaluation')
-            // ->OrWhereHas('technicalEvaluation', function($q){
-            //     $q->Where('technical_evaluation_status', 'pending');
-            // })
             ->where('user_id', Auth::user()->id)
             ->where(function ($q){
               	$q->doesntHave('technicalEvaluation')
                 ->orWhereHas('technicalEvaluation', function( $query ) {
-                    $query->where('technical_evaluation_status','pending');
+                  $query->where('technical_evaluation_status','pending');
                 });
-                // ->orWhereHas('technicalEvaluation.technical_evaluation_status', '=','pending');
+            })
+            ->WhereHas('requestSign', function($j) {
+              $j->Where('request_status', 'pending');
             })
             ->get();
 
-        // dd($my_pending_requests)
-
         $my_request = RequestReplacementStaff::latest()
             ->where('user_id', Auth::user()->id)
-            ->whereHas('technicalEvaluation', function($q){
-                $q->Where('technical_evaluation_status', 'complete')
-                ->OrWhere('technical_evaluation_status', 'rejected');
+            ->where(function ($q){
+              $q->whereHas('requestSign', function($j) {
+                $j->Where('request_status', 'rejected');
+              })
+              ->orWhereHas('technicalEvaluation', function($y){
+                  $y->Where('technical_evaluation_status', 'complete')
+                  ->OrWhere('technical_evaluation_status', 'rejected');
+              });
             })
             ->get();
 
@@ -88,7 +89,8 @@ class RequestReplacementStaffController extends Controller
                 $request_to_sign_accepted = RequestReplacementStaff::latest()
                     ->whereHas('requestSign', function($q) use ($authority){
                         $q->Where('organizational_unit_id', $authority->organizational_unit_id)
-                        ->Where('request_status', 'accepted');
+                        ->Where('request_status', 'accepted')
+                        ->OrWhere('request_status', 'rejected');
                     })
                     ->paginate(10);
             }
