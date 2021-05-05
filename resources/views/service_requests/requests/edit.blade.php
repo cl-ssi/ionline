@@ -397,6 +397,7 @@
 						<option value="LISTA ESPERA" @if($serviceRequest->programm_name == 'LISTA ESPERA') selected @endif>LISTA ESPERA</option>
 						<option value="CAMPAÑA INVIERNO" @if($serviceRequest->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
 
+            <option value="ADP DIRECTOR" @if($serviceRequest->programm_name == 'ADP DIRECTOR') selected @endif>ADP DIRECTOR</option>
             <option value="SENDA" @if($serviceRequest->programm_name == 'SENDA') selected @endif>SENDA</option>
   					<option value="SENDA LEY ALCOHOLES" @if($serviceRequest->programm_name == 'SENDA LEY ALCOHOLES') selected @endif>SENDA LEY ALCOHOLES</option>
   					<option value="SENDA UHCIP" @if($serviceRequest->programm_name == 'SENDA UHCIP') selected @endif>SENDA UHCIP</option>
@@ -1243,6 +1244,7 @@
   				$("#programm_name option[value='LISTA ESPERA']").hide();
   				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
 
+          $("#programm_name option[value='ADP DIRECTOR']").hide();
           $("#programm_name option[value='SENDA']").hide();
           $("#programm_name option[value='SENDA LEY ALCOHOLES']").hide();
           $("#programm_name option[value='SENDA UHCIP']").hide();
@@ -1269,6 +1271,7 @@
   				$("#programm_name option[value='LISTA ESPERA']").show();
   				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
 
+          $("#programm_name option[value='ADP DIRECTOR']").show();
           $("#programm_name option[value='SENDA']").show();
           $("#programm_name option[value='SENDA LEY ALCOHOLES']").show();
           $("#programm_name option[value='SENDA UHCIP']").show();

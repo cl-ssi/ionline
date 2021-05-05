@@ -37,6 +37,9 @@ class RequestSign extends Model
           case 'accepted':
             return 'Aceptada';
             break;
+          case 'rejected':
+            return 'Rechazada';
+            break;
         }
     }
 

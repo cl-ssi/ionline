@@ -107,12 +107,12 @@
       </fieldset> -->
       <div class="col">
         <p>Curriculum Vitae</p>
-        <a href="{{ route('replacement_staff.show_file', $replacementStaff) }}"
+        <a href="{{ route('replacement_staff.view_file', $replacementStaff) }}"
             class="btn btn-outline-secondary btn-sm"
             title="Ir"
             target="_blank"> <i class="far fa-eye"></i></a>
         <a class="btn btn-outline-secondary btn-sm"
-            href="{{ route('replacement_staff.download', $replacementStaff) }}"
+            href="{{ route('replacement_staff.download_file', $replacementStaff) }}"
             target="_blank"><i class="fas fa-download"></i>
         </a>
       </div>
@@ -132,50 +132,36 @@
     </div>
     <div class="card-body">
         @if($replacementStaff->profiles->count() > 0)
-        <table class="table small table-striped ">
-            <thead class="text-center">
-                <tr>
-                    <th style="width: 11%">Fecha Registro</th>
-                    <th>Estamento</th>
-                    <th>Título</th>
-                    <th>Fecha Titulación</th>
-                    <th>Años Exp.</th>
-                    <th style="width: 10%"></th>
-                    <th style="width: 2%"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($replacementStaff->profiles as $profile)
-                <tr>
-                    <td>{{ $profile->updated_at->format('d-m-Y H:i:s') }}</td>
-                    <td>{{ $profile->profile_manage->name }}</td>
-                    <td>{{ $profile->profession_manage->name }}</td>
-                    <td>{{ Carbon\Carbon::parse($profile->degree_date)->format('d-m-Y') }}</td>
-                    <td align="center">{{ $profile->YearsOfDegree }}</td>
-                    <td>
-                        <a href="{{ route('replacement_staff.profile.show_file', $profile) }}"
-                            class="btn btn-outline-secondary btn-sm"
-                            title="Ir"
-                            target="_blank"> <i class="far fa-eye"></i></a>
-                        <a class="btn btn-outline-secondary btn-sm"
-                            href="{{ route('replacement_staff.profile.download', $profile) }}"
-                            target="_blank"><i class="fas fa-download"></i>
-                        </a>
-                    </td>
-                    <td>
-                        <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.profile.destroy', $profile) }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger btn-sm"
-                                    onclick="return confirm('¿Está seguro que desea eliminar su perfil : {{$profile->profession}}? ' )" disabled>
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+            <table class="table small table-striped table-bordered">
+                <thead class="text-center">
+                    <tr>
+                        <th style="width: 11%">Fecha Registro</th>
+                        <th>Estamento</th>
+                        <th>Título</th>
+                        <th>Experiencia</th>
+                        <th>Fecha Titulación</th>
+                        <th>Años Exp.</th>
+                        <th style="width: 10%"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($replacementStaff->profiles as $profile)
+                    <tr>
+                        <td>{{ $profile->updated_at->format('d-m-Y H:i:s') }}</td>
+                        <td>{{ $profile->profile_manage->name }}</td>
+                        <td>{{ ($profile->profession_manage) ? $profile->profession_manage->name : ''  }}</td>
+                        <td>{{ $profile->ExperienceValue }}</td>
+                        <td align="center">{{ ($profile->degree_date) ? $profile->degree_date->format('d-m-Y') : '' }}</td>
+                        <td align="center">{{ $profile->YearsOfDegree }}</td>
+                        <td>
+                            <a href="{{ route('replacement_staff.view_profile.show_file', $profile) }}" class="btn btn-outline-secondary btn-sm" title="Ir" target="_blank"> <i class="far fa-eye"></i></a>
+                            <a class="btn btn-outline-secondary btn-sm" href="{{ route('replacement_staff.view_profile.download', $profile) }}" target="_blank"><i class="fas fa-download"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         @endif
     </div>
 </div>
@@ -188,15 +174,14 @@
     </div>
     <div class="card-body">
         @if($replacementStaff->trainings->count() > 0)
-            <table class="table small table-striped ">
-                <thead>
+            <table class="table small table-striped table-bordered">
+                <thead class="text-center">
                     <tr>
-                        <td style="width: 11%">Fecha Registro</td>
+                        <th style="width: 11%">Fecha Registro</th>
                         <th>Nombre de Capacitación</th>
                         <th>N° de Horas Realizadas</th>
                         <th>Archivo</th>
                         <th style="width: 10%"></th>
-                        <th style="width: 2%"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -204,31 +189,16 @@
                     <tr>
                         <td>{{ $training->updated_at->format('d-m-Y H:i:s') }}</td>
                         <td>{{ $training->training_name }}</td>
-                        <td>{{ $training->hours_training }}</td>
-                        <td>
+                        <td class="text-center">{{ $training->hours_training }}</td>
+                        <td class="text-center">
                             @if(pathinfo($training->file, PATHINFO_EXTENSION) == 'pdf')
-                                <i class="fas fa-file-pdf fa-2x"></i>
+                            <i class="fas fa-file-pdf fa-2x"></i>
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('replacement_staff.training.show_file', $training) }}"
-                                class="btn btn-outline-secondary btn-sm"
-                                title="Ir"
-                                target="_blank"> <i class="far fa-eye"></i></a>
-                            <a class="btn btn-outline-secondary btn-sm"
-                                href="{{ route('replacement_staff.training.download', $training) }}"
-                                target="_blank"><i class="fas fa-download"></i>
+                            <a href="{{ route('replacement_staff.view_training.show_file', $training) }}" class="btn btn-outline-secondary btn-sm" title="Ir" target="_blank"> <i class="far fa-eye"></i></a>
+                            <a class="btn btn-outline-secondary btn-sm" href="{{ route('replacement_staff.view_training.download', $training) }}" target="_blank"><i class="fas fa-download"></i>
                             </a>
-                        </td>
-                        <td>
-                          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.training.destroy', $training) }}">
-                              @csrf
-                              @method('DELETE')
-                              <button type="submit" class="btn btn-outline-danger btn-sm"
-                                  onclick="return confirm('¿Está seguro que desea eliminar su Capacitación?')" disabled>
-                                  <i class="fas fa-trash"></i>
-                              </button>
-                          </form>
                         </td>
                     </tr>
                     @endforeach
@@ -236,9 +206,6 @@
             </table>
         @endif
     </div>
-
-    <br>
-
 </div>
 
 @endsection
