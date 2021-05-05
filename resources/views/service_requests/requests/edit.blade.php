@@ -524,7 +524,7 @@
 
   </div>
 
-  <div class="form-row" id="div_objectives">
+  <div class="form-row" id="div_objectives" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Objetivos</label>
 				<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50">{{ $serviceRequest->objectives }}</textarea>
@@ -538,7 +538,7 @@
 		</fieldset>
 	</div> -->
 
-  <div class="form-row" id="div_additional_benefits">
+  <div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Beneficios adicionales</label>
 				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50">{{ $serviceRequest->additional_benefits }}</textarea>
@@ -970,6 +970,10 @@
 <script type="text/javascript">
 
 	$( document ).ready(function() {
+
+    if ($('select[id=type] option').filter(':selected').text() == "Suma alzada"){
+      $("#type").trigger("click");
+    }
 
     //temporal, solicitado por eduardo
     if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Departamento de Salud Ocupacional" ||
