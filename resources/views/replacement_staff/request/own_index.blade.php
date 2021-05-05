@@ -80,20 +80,27 @@
                           <i class="fas fa-clock fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
                       @endif
                       @if($sign->request_status == 'accepted')
-                          <i class="fas fa-check-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                          <span style="color: green;">
+                              <i class="fas fa-check-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                          </span>
                       @endif
                       @if($sign->request_status == 'rejected')
-                          <i class="fas fa-times-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                          <span style="color: Tomato;">
+                              <i class="fas fa-times-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                          </span>
                       @endif
                   @endforeach
               </td>
               <td>
-                  @if($request->RequestSign->first()->request_status != 'pending')
-                  <a href="{{ route('replacement_staff.request.edit', $request) }}"
-                      class="btn btn-outline-secondary btn-sm disabled" title="Selección"><i class="fas fa-edit"></i></a>
-                  @else
+                  @if($request->RequestSign->first()->request_status == 'pending')
                   <a href="{{ route('replacement_staff.request.edit', $request) }}"
                       class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
+                  @else
+                  <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                      data-target="#exampleModalCenter-req-{{ $request->id }}">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  @include('replacement_staff.modals.modal_to_view_request')
                   @endif
               </td>
           </tr>
@@ -125,12 +132,14 @@
           @foreach($my_request as $request)
           <tr>
               <td>{{ $request->id }} <br>
+                @if($request->TechnicalEvaluation)
                   @if($request->TechnicalEvaluation->technical_evaluation_status == 'complete')
                       <i class="fas fa-check-circle" title="Evaluación Técnica: {{ $request->TechnicalEvaluation->StatusValue }}"></i>
                   @endif
                   @if($request->TechnicalEvaluation->technical_evaluation_status == 'rejected')
                       <i class="fas fa-times-circle" title="Evaluación Técnica: {{ $request->TechnicalEvaluation->StatusValue }}"></i>
                   @endif
+                @endif
               </td>
               <td>{{ $request->name }}</td>
               <td class="text-center">{{ $request->degree }}</td>
@@ -148,10 +157,14 @@
                           <i class="fas fa-clock fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
                       @endif
                       @if($sign->request_status == 'accepted')
-                          <i class="fas fa-check-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                          <span style="color: green;">
+                              <i class="fas fa-check-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                          </span>
                       @endif
                       @if($sign->request_status == 'rejected')
-                          <i class="fas fa-times-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                          <span style="color: Tomato;">
+                            <i class="fas fa-times-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                          </span>
                       @endif
                   @endforeach
               </td>

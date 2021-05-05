@@ -140,12 +140,18 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 /* Nuevas rutas, Laravel 8.0 */
 Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')->group(function(){
-    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index');
+    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware(['role:Replacement Staff: admin']);
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
-    // Route::get('/show_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('show_file');
-    // Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
-    // Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
-
+    Route::get('/download_file/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download_file');
+    Route::get('/view_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('view_file');
+    Route::prefix('view_profile')->name('view_profile.')->group(function(){
+        Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
+        Route::get('/show_file/{profile}', [ProfileController::class, 'show_file'])->name('show_file');
+    });
+    Route::prefix('view_training')->name('view_training.')->group(function(){
+        Route::get('/download/{training}', [TrainingController::class, 'download'])->name('download');
+        Route::get('/show_file/{training}', [TrainingController::class, 'show_file'])->name('show_file');
+    });
     Route::prefix('request')->name('request.')->group(function(){
         Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index');
         Route::get('/own_index', [RequestReplacementStaffController::class, 'own_index'])->name('own_index');
