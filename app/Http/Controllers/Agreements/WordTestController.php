@@ -80,7 +80,7 @@ class WordTestController extends Controller
         foreach ($quotas as $key => $quota) {
                 $cuotaConvenioLetras = $this->correctAmountText($formatter->toMoney($quota->amount,0, 'pesos',''));
                 $arrayQuota[] = array('index' => ($this->ordinal($key+1))
-                                      ,'cuotaDescripcion' => $quota->description . ($key+1 == 1 ? ' del total de los recursos del convenio una vez aprobada la resolución exenta que aprueba el presente instrumento y recibidos los recursos del Ministerio de Salud.' : ' restante del total de recursos y se enviará en el mes de octubre, según resultados obtenidos en la primera evaluación definida en la cláusula anterior. Así también, dependerá de la recepción de dichos recursos desde Ministerio de Salud y existencia de rendición financiera según lo establece la resolución N°30/2015 que fija normas sobre procedimiento de rendición de cuentas de la Contraloría General de la Republica, por parte de la “MUNICIPALIDAD”.')
+                                      ,'cuotaDescripcion' => $quota->description . ($key+1 == 1 ? ' del total de los recursos del convenio una vez aprobada la resolución exenta que aprueba el presente instrumento y recibidos los recursos del Ministerio de Salud.' : ' restante del total de recursos y se enviará en el mes de octubre, según resultados obtenidos en la primera evaluación definida en la cláusula anterior. Así también, dependerá de la recepción de dichos recursos desde Ministerio de Salud y existencia de rendición financiera según lo establece la resolución N°30 del año 2015, de la Contraloría General de la República que fija normas sobre procedimiento de rendición de cuentas de la Contraloría General de la Republica, por parte de la “MUNICIPALIDAD”.')
                                       ,'cuotaMonto' => number_format($quota->amount,0,",",".")
                                       ,'cuotaLetra' => $cuotaConvenioLetras);
              } 
@@ -91,10 +91,10 @@ class WordTestController extends Controller
 
     	$periodoConvenio = $agreements->period;
     	// $fechaConvenio = $agreements->date;
-        $fechaConvenio = date('j', strtotime($agreements->date)).' de '.$meses[date('n', strtotime($agreements->date))-1].' '.date('Y', strtotime($agreements->date));
+        $fechaConvenio = date('j', strtotime($agreements->date)).' de '.$meses[date('n', strtotime($agreements->date))-1].' del año '.date('Y', strtotime($agreements->date));
     	$numResolucion = $agreements->number;
         $fechaResolucion = $agreements->resolution_date;
-        $fechaResolucion = $fechaResolucion != NULL ? date('j', strtotime($fechaResolucion)).' de '.$meses[date('n', strtotime($fechaResolucion))-1].' '.date('Y', strtotime($fechaResolucion)) : '';
+        $fechaResolucion = $fechaResolucion != NULL ? date('j', strtotime($fechaResolucion)).' de '.$meses[date('n', strtotime($fechaResolucion))-1].' del año '.date('Y', strtotime($fechaResolucion)) : '';
     	// $referente = $agreements->referente;
         $alcaldeApelativo = $agreements->representative_appelative;
         $alcalde = $agreements->representative;
@@ -105,8 +105,9 @@ class WordTestController extends Controller
     	$comunaRut = $agreements->municipality_rut;
     	$alcaldeRut = $agreements->representative_rut;
 
-    	$comuna = $agreements->Commune->name; 
-        $programa = $agreements->Program->name;
+    	$comuna = $agreements->Commune->name;
+        $first_word = explode(' ',trim($agreements->Program->name))[0];
+        $programa = $first_word == 'Programa' ? substr(strstr($agreements->Program->name," "), 1) : $agreements->Program->name;
 
         $totalEjemplares = Str::contains($municipality->name_municipality, 'IQUIQUE') ? 'cuatro': 'tres';
         $addEjemplar = Str::contains($municipality->name_municipality, 'IQUIQUE') ? 'un ejemplar para CORMUDESI': null;
@@ -120,7 +121,7 @@ class WordTestController extends Controller
         $directorDecreto = $agreements->authority->decree;
         $directorNationality = Str::contains($agreements->authority->position, 'a') ? 'chilena' : 'chileno';
 
-		$templateProcesor->setValue('programa',$programa);
+		$templateProcesor->setValue('programa',$agreements->Program->name);
 		$templateProcesor->setValue('programaTitulo',mb_strtoupper($programa));
 		$templateProcesor->setValue('periodoConvenio',$periodoConvenio);
 		$templateProcesor->setValue('fechaConvenio',$fechaConvenio); // Cambiar formato d de m y
@@ -195,7 +196,8 @@ class WordTestController extends Controller
     	$ilustre = !Str::contains($municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre': null;
         $emailMunicipality = $municipality->email_municipality;
         $comuna = $agreements->Commune->name; 
-        $programa = $agreements->Program->name;
+        $first_word = explode(' ',trim($agreements->Program->name))[0];
+        $programa = $first_word == 'Programa' ? substr(strstr($agreements->Program->name," "), 1) : $agreements->Program->name;
         
         //Director ssi quien firma a la fecha de hoy
         // $director_signature = Authority::getAuthorityFromDate(1, Carbon::now()->toDateTimeString(), 'manager');
@@ -240,9 +242,9 @@ class WordTestController extends Controller
         // $innerXml = preg_replace('/<w:sectPr>.*<\/w:sectPr>/', '', $innerXml);
         
         //remove signature blocks
-        $innerXml = Str::beforeLast($innerXml, 'Reforzamiento Municipal del Presupuesto del Servicio de Salud Iquique');
+        $innerXml = Str::beforeLast($innerXml, 'Reforzamiento Municipal del Presupuesto');
         // dd($innerXml);
-        $innerXml .= 'Reforzamiento Municipal del Presupuesto del Servicio de Salud Iquique”.</w:t></w:r></w:p>';
+        $innerXml .= 'Reforzamiento Municipal del Presupuesto vigente del Servicio de Salud Iquique año 2021”.</w:t></w:r></w:p>';
         
         $mainXmlEnd = $mainTemplateProcessorEnd->tempDocumentMainPart;
 
