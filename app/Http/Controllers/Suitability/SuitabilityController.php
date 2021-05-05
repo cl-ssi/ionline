@@ -254,4 +254,16 @@ class SuitabilityController extends Controller
             echo base64_decode($result->signedCertificate->signed_file);
         }
     }
+
+    public function downloadManualUser()
+    {                
+        $myFile = public_path("/manuales/idoneidad/Manual de Usuario Idoneidad Docente. Perfil Usuario.pdf");        
+    	return response()->download($myFile);
+    }
+
+    public function downloadManualAdministrator()
+    {                
+        $myFile = public_path("/manuales/idoneidad/Manual de Usuario Idoneidad Docente. Perfil Administrador.pdf");        
+    	return response()->download($myFile);
+    }
 }
