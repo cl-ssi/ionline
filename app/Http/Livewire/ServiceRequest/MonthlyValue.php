@@ -55,6 +55,9 @@ class MonthlyValue extends Component
                         $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
                         break;
                     case 'Licencia no covid':
+                        $mes_completo = false;
+                        $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
+                        break;
                     case 'Abandono de funciones':
                         $mes_completo = false;
                         $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
