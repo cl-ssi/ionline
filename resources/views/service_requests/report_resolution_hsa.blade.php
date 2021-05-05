@@ -379,12 +379,29 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
 
 <p class="">
     <strong>3.</strong> El gasto correspondiente al ítem
-    @if($ServiceRequest->programm_name == "OTROS PROGRAMAS SSI" || $ServiceRequest->programm_name == "LISTA ESPERA" || $ServiceRequest->programm_name == "LISTA ESPERA")
+    @if($ServiceRequest->programm_name == "OTROS PROGRAMAS SSI" || $ServiceRequest->programm_name == "LISTA ESPERA" || $ServiceRequest->programm_name == "ADP DIRECTOR")
       21-03-001-001-02
+    @elseif($ServiceRequest->programm_name == "SENDA")
+      1140504
+    @elseif($ServiceRequest->programm_name == "SENDA UHCIP")
+      11450602
+    @elseif($ServiceRequest->programm_name == "SENDA LEY ALCOHOLES")
+      114050601
+    @elseif($ServiceRequest->programm_name == "SENDA PSIQUIATRIA ADULTO")
+      11450602
     @else
       1140504 SENDA 1 (Fondos extra presupuestarios) asociados al Convenio SENDA – MINSAL Honorario Suma Alzada
     @endif
      Honorario Suma Alzada.
+
+
+
+
+
+
+
+
+
 </p>
 
 <p class="center">
