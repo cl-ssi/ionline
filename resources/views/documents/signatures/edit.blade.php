@@ -35,6 +35,9 @@
                     <option value="Resoluciones" @if($signature->document_type == 'Resoluciones') selected @endif>
                         Resoluciones
                     </option>
+                    <option value="Acta" @if($signature->document_type == 'Acta') selected @endif>
+                        Acta
+                    </option>
                 </select>
             </fieldset>
 

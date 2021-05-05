@@ -27,7 +27,7 @@
             <fieldset class="form-group col-3">
                 <label for="for_document_type">Tipo de Documento</label>
                 <select class="form-control" name="document_type" required>
-                    @php($docTypes = array('Carta', 'Circular', 'Convenios', 'Memorando', 'Oficio', 'Resoluciones'))
+                    @php($docTypes = array('Carta', 'Circular', 'Convenios', 'Memorando', 'Oficio', 'Resoluciones', 'Acta'))
                     <option value="">Seleccione tipo</option>
                     @foreach($docTypes as $docType)
                         <option value="{{$docType}}"
