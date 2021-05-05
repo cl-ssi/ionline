@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Commune;
 use App\Models\Programmings\CommuneFile;
+use Illuminate\Support\Facades\Storage;
 
 class MigrateProgrammings extends Command
 {
