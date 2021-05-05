@@ -27,6 +27,7 @@ class ProfileController extends Controller
         }
         else{
             $profile = new Profile();
+            $profile->degree_date = $request->degree_date;
             $profile->profile_manage_id = $request->profile;
             $profile->profession_manage_id = $request->profession;
             $profile->experience = $request->experience;

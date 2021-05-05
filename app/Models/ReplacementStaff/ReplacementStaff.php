@@ -25,10 +25,6 @@ class ReplacementStaff extends Model
      * @var array
      */
 
-    protected $hidden = [
-        'created_at', 'updated_at'
-    ];
-
     public function getFullNameAttribute()
     {
         return strtoupper("{$this->name} {$this->fathers_family} {$this->mothers_family}");
@@ -95,6 +91,14 @@ class ReplacementStaff extends Model
               }
           }
     }
+
+    protected $dates = [
+        'birthday'
+    ];
+
+    protected $hidden = [
+        'created_at', 'updated_at'
+    ];
 
     protected $table = 'rst_replacement_staff';
 }

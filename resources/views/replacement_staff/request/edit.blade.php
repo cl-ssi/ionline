@@ -77,13 +77,13 @@
                 <fieldset class="form-group col-3">
                     <label for="for_start_date">Desde</label>
                     <input type="date" class="form-control" name="start_date"
-                        id="for_start_date" value="{{ $requestReplacementStaff->start_date }}" required>
+                        id="for_start_date" value="{{ $requestReplacementStaff->start_date->format('Y-m-d')  }}" required>
                 </fieldset>
 
                 <fieldset class="form-group col-3">
                     <label for="for_end_date">Hasta</label>
                     <input type="date" class="form-control" name="end_date"
-                        id="for_end_date" value="{{ $requestReplacementStaff->end_date }}" required>
+                        id="for_end_date" value="{{ $requestReplacementStaff->end_date->format('Y-m-d')  }}" required>
                 </fieldset>
             </div>
 
