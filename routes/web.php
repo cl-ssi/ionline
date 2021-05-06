@@ -465,9 +465,14 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             // Route::get('/fulfillment/finance', [ReportController::class, 'pendingFinance'])->name('pending-finance');
 
             //pasar a reports
+            // Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
+            // Route::get('/export-sirh', [ServiceRequestController::class, 'export_sirh'])->name('export_sirh');
+            // Route::get('/export-sirh-txt', [ServiceRequestController::class, 'export_sirh_txt'])->name('export-sirh-txt');
+            //pasar a reports
             Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
-            Route::get('/export-sirh', [ServiceRequestController::class, 'export_sirh'])->name('export_sirh');
-            Route::get('/export-sirh-txt', [ServiceRequestController::class, 'export_sirh_txt'])->name('export-sirh-txt');
+            // Route::get('/export-sirh', [ServiceRequestController::class, 'export_sirh'])->name('export_sirh');
+            Route::get('/export-sirh', [ReportController::class, 'export_sirh'])->name('export_sirh');
+            Route::get('/export-sirh-txt', [ReportController::class, 'export_sirh_txt'])->name('export-sirh-txt');
         });
 
         Route::prefix('signature-flow')->name('signature-flow.')->group(function () {
