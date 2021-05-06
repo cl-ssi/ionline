@@ -140,6 +140,7 @@ class FirmaDigitalController extends Controller
         if ($type === 'firmante') $signaturesFlow->signaturesFile->verification_code = $verificationCode;
         $signaturesFlow->signaturesFile->save();
 
+        $signaturesFlow = SignaturesFlow::find($signaturesFlow->id);
 
         //Si ya firmaron todos se envía por correo a destinatarios del doc
         if ($signaturesFlow->signaturesFile->hasAllFlowsSigned) {

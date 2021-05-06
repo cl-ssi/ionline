@@ -12,6 +12,7 @@ use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Models\Documents\Signature;
@@ -20,6 +21,7 @@ use App\Rrhh\OrganizationalUnit;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class SignatureController extends Controller
@@ -95,8 +97,13 @@ class SignatureController extends Controller
                 $signaturesFile->md5_file = $request->md5_file;
             } else {
                 $documentFile = $request->file('document');
-                $signaturesFile->file = base64_encode(file_get_contents($documentFile->getRealPath()));
                 $signaturesFile->md5_file = md5_file($documentFile);
+                $signaturesFile->file = base64_encode(file_get_contents($documentFile->getRealPath()));
+
+//                $documentFile = file_get_contents($request->file('document')->getRealPath());
+//                $filePath = 'ionline/signatures/original/' . '1.pdf';
+//                Storage::disk('gcs')->put($filePath, $documentFile);
+
             }
 
             $signaturesFile->file_type = 'documento';
@@ -188,9 +195,9 @@ class SignatureController extends Controller
         $signature->fill($request->all());
         $signature->save();
 
-        if ($signature->hasSignedOrRejectedFlow) {
-            $signature->signaturesFlows->toQuery()->update(['status' => null]);
-        }
+//        if ($signature->hasSignedOrRejectedFlow) {
+//            $signature->signaturesFlows->toQuery()->update(['status' => null]);
+//        }
 
         if ($request->hasFile('document')) {
             $signatureFileDocumento = $signature->signaturesFiles->where('file_type', 'documento')->first();
@@ -215,6 +222,35 @@ class SignatureController extends Controller
                 $signaturesFile->save();
             }
         }
+
+        //borrar y crea nuevos flows
+        $signatureFileDocumento = $signature->signaturesFiles->where('file_type', 'documento')->first();
+        $signatureFileDocumento->signaturesFlows()->delete();
+
+        if ($request->ou_id_signer != null) {
+            $signaturesFlow = new SignaturesFlow();
+            $signaturesFlow->signatures_file_id = $signatureFileDocumento->id;
+            $signaturesFlow->type = 'firmante';
+            $signaturesFlow->ou_id = $request->ou_id_signer;
+            $signaturesFlow->user_id = $request->user_signer;
+            $signaturesFlow->save();
+        }
+
+        if ($request->has('ou_id_visator')) {
+            foreach ($request->ou_id_visator as $key => $ou_id_visator) {
+                $signaturesFlow = new SignaturesFlow();
+                $signaturesFlow->signatures_file_id = $signatureFileDocumento->id;
+                $signaturesFlow->type = 'visador';
+                $signaturesFlow->ou_id = $ou_id_visator;
+                $signaturesFlow->user_id = $request->user_visator[$key];
+                $signaturesFlow->sign_position = $key + 1;
+//                    $signaturesFlow->status = false;
+                $signaturesFlow->save();
+            }
+        }
+
+        $signatureFileDocumento->update(['signed_file' => null,
+        ]);
 
         session()->flash('info', "Los datos de la firma $signature->id han sido actualizados.");
         return redirect()->route('documents.signatures.index', ['mis_documentos']);

@@ -27,6 +27,8 @@
   </div>
 </div> -->
 
+</div>
+
 <br>
 
 <h5><i class="fas fa-inbox"></i> Solicitudes pendientes de aprobación</h5>
@@ -67,10 +69,14 @@
                       <i class="fas fa-clock fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
                     @endif
                     @if($sign->request_status == 'accepted')
-                        <i class="fas fa-check-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                        <span style="color: green;">
+                            <i class="fas fa-check-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                        </span>
                     @endif
                     @if($sign->request_status == 'rejected')
-                        <i class="fas fa-times-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                        <span style="color: Tomato;">
+                            <i class="fas fa-times-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                        </span>
                     @endif
                   @endforeach
                 </td>
@@ -136,10 +142,14 @@
                       <i class="fas fa-clock fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
                     @endif
                     @if($sign->request_status == 'accepted')
-                        <i class="fas fa-check-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                        <span style="color: green;">
+                            <i class="fas fa-check-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                        </span>
                     @endif
                     @if($sign->request_status == 'rejected')
-                        <i class="fas fa-times-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                        <span style="color: Tomato;">
+                            <i class="fas fa-times-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                        </span>
                     @endif
                   @endforeach
                 </td>
