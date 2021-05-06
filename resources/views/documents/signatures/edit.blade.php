@@ -93,12 +93,12 @@
 
             <fieldset class="form-group col">
                 <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
-                <textarea class="form-control" id="for_recipients" name="recipients">{{$signature->recipients}}</textarea>
+                <textarea class="form-control" id="for_recipients" name="recipients" rows="6">{{$signature->recipients}}</textarea>
             </fieldset>
 
             <fieldset class="form-group col">
                 <label for="for_distribution">Distribución del documento (separados por coma)</label>
-                <textarea class="form-control" id="for_distribution" name="distribution">{{$signature->distribution}}</textarea>
+                <textarea class="form-control" id="for_distribution" name="distribution" rows="6">{{$signature->distribution}}</textarea>
             </fieldset>
 
         </div>
