@@ -324,7 +324,7 @@
                         </td>
                         <td>
                             @foreach($staff->profiles as $title)
-                                <h6><span class="badge rounded-pill bg-light">{{ $title->profession_manage->name }}</span></h6>
+                                <h6><span class="badge rounded-pill bg-light">{{ ($title->profession_manage) ? $title->profession_manage->name : '' }}</span></h6>
                             @endforeach
                         </td>
                         <td>

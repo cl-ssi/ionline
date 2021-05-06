@@ -52,7 +52,7 @@
         <div class="form-group col">
             <label for="forSubject">Materia*</label>
             <input type="text" class="form-control" id="forSubject"
-                value="{{ $document->subject }}" name="subject"
+                value="{{ $document->subject }}" name="subject" maxlength="255"
                 placeholder="Descripción del contenido del documento" required>
         </div>
     </div>

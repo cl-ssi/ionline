@@ -47,19 +47,22 @@
   </div>
 </div>
 
+</div>
+
 <br>
 
-<table class="table small table-striped">
-    <thead>
+<table class="table small table-striped table-bordered">
+    <thead class="text-center">
         <tr>
             <th>Nombre Completo</th>
             <th>Run</th>
             <th>Estamento</th>
             <th>Título</th>
+            <th>Experiencia</th>
             <th>Fecha Titulación</th>
             <th>Años Exp.</th>
             <th>Estado</th>
-            <th style="width: 10%"></th>
+            <th style="width: 8%"></th>
         </tr>
     </thead>
     <tbody>
@@ -74,15 +77,22 @@
             </td>
             <td>
                 @foreach($staff->profiles as $title)
-                    <h6><span class="badge rounded-pill bg-light">{{ $title->profession_manage->name }}</span></h6>
+                    <h6><span class="badge rounded-pill bg-light">{{ ($title->profession_manage) ? $title->profession_manage->name : '' }}</span></h6>
                 @endforeach
             </td>
             <td>
                 @foreach($staff->profiles as $title)
-                    <h6><span class="badge rounded-pill bg-light">{{ Carbon\Carbon::parse($title->degree_date)->format('d-m-Y') }}</span></h6>
+                    <h6><span class="badge rounded-pill bg-light">{{ $title->ExperienceValue }}</span></h6>
                 @endforeach
             </td>
-            <td>
+            <td class="text-center">
+                @foreach($staff->profiles as $title)
+                    <h6><span class="badge rounded-pill bg-light">
+                        {{ ($title->degree_date) ? $title->degree_date->format('d-m-Y') : ''}}
+                    </span></h6>
+                @endforeach
+            </td>
+            <td class="text-center">
                 @foreach($staff->profiles as $title)
                     <h6><span class="badge rounded-pill bg-light">{{ $title->YearsOfDegree }}</span></h6>
                 @endforeach
@@ -92,7 +102,7 @@
                 <a href="{{ route('replacement_staff.show_replacement_staff', $staff) }}"
                   class="btn btn-outline-secondary btn-sm"
                   title="Ir"> <i class="far fa-eye"></i></a>
-                <a href="{{ route('replacement_staff.show_file', $staff) }}"
+                <a href="{{ route('replacement_staff.view_file', $staff) }}"
                   class="btn btn-outline-secondary btn-sm"
                   title="Ir"
                   target="_blank"> <i class="far fa-file-pdf"></i></a>

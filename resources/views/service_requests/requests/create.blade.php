@@ -277,6 +277,7 @@
 					<option value="LISTA ESPERA">LISTA ESPERA</option>
 					<option value="CAMPAÑA INVIERNO">CAMPAÑA INVIERNO</option>
 
+					<option value="ADP DIRECTOR">ADP DIRECTOR</option>
 					<option value="SENDA">SENDA</option>
 					<option value="SENDA LEY ALCOHOLES">SENDA LEY ALCOHOLES</option>
 					<option value="SENDA UHCIP">SENDA UHCIP</option>
@@ -449,6 +450,15 @@
 		$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
 		$("#programm_name option[value='LISTA ESPERA']").hide();
 		$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+
+		$("#programm_name option[value='ADP DIRECTOR']").hide();
+		$("#programm_name option[value='SENDA']").hide();
+		$("#programm_name option[value='SENDA LEY ALCOHOLES']").hide();
+		$("#programm_name option[value='SENDA UHCIP']").hide();
+		$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
+		$("#programm_name option[value='SENADIS']").hide();
+		$("#programm_name option[value='SUBT.31']").hide();
+
 		$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
 		$("#programm_name option[value='33 MIL HORAS']").hide();
 		$("#programm_name option[value='DFL']").hide();
@@ -645,6 +655,14 @@
 				$("#programm_name option[value='LISTA ESPERA']").hide();
 				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
 
+				$("#programm_name option[value='ADP DIRECTOR']").hide();
+				$("#programm_name option[value='SENDA']").hide();
+				$("#programm_name option[value='SENDA LEY ALCOHOLES']").hide();
+				$("#programm_name option[value='SENDA UHCIP']").hide();
+				$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
+				$("#programm_name option[value='SENADIS']").hide();
+				$("#programm_name option[value='SUBT.31']").hide();
+
 				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").show();
 				$("#programm_name option[value='33 MIL HORAS']").show();
 				$("#programm_name option[value='DFL']").show();
@@ -663,6 +681,14 @@
 				$("#programm_name option[value='OTROS PROGRAMAS SSI']").show();
 				$("#programm_name option[value='LISTA ESPERA']").show();
 				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+
+				$("#programm_name option[value='ADP DIRECTOR']").show();
+				$("#programm_name option[value='SENDA']").show();
+				$("#programm_name option[value='SENDA LEY ALCOHOLES']").show();
+				$("#programm_name option[value='SENDA UHCIP']").show();
+				$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").show();
+				$("#programm_name option[value='SENADIS']").show();
+				$("#programm_name option[value='SUBT.31']").show();
 
 				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
 				$("#programm_name option[value='33 MIL HORAS']").hide();
@@ -696,6 +722,14 @@
 			$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
 			$("#programm_name option[value='LISTA ESPERA']").hide();
 			$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+
+			$("#programm_name option[value='ADP DIRECTOR']").hide();
+			$("#programm_name option[value='SENDA']").hide();
+			$("#programm_name option[value='SENDA LEY ALCOHOLES']").hide();
+			$("#programm_name option[value='SENDA UHCIP']").hide();
+			$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
+			$("#programm_name option[value='SENADIS']").hide();
+			$("#programm_name option[value='SUBT.31']").hide();
 
 			$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
 			$("#programm_name option[value='33 MIL HORAS']").hide();

@@ -58,7 +58,7 @@
         <div class="form-group col">
             <label for="forSubject">Materia*</label>
             <input type="text" class="form-control" id="forSubject" name="subject"
-                placeholder="Descripción del contenido del documento" required
+                placeholder="Descripción del contenido del documento" required maxlength="255"
                 {!! $document->subject ? 'value="' . $document->subject .'"' : '' !!}>
         </div>
     </div>

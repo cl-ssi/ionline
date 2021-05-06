@@ -20,19 +20,30 @@
     <li class="nav-item">
         <a class="nav-link text-secondary" href="{{ route('agreements.createWord', $agreement) }}"><i class="fas fa-eye"></i> Previsualizar Convenio</a>
     </li>
+
+    @canany(['Documents: signatures and distribution'])
+    <li class="nav-item">
+        <a class="nav-link text-secondary" href="{{ route('agreements.sign', [$agreement, 'visators']) }}"><i class="fas fa-file-signature"></i> Solicitar visación Convenio</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link text-secondary" href="{{ route('agreements.sign', [$agreement, 'signer']) }}"><i class="fas fa-file-signature"></i> Solicitar firma Convenio</a>
+    </li>
+    @endcan
+
     @if($agreement->file != null)
     <li class="nav-item">
-        {{--<a class="nav-link text-secondary" href="{{ route('agreements.createWordRes', $agreement) }}"><i class="fas fa-eye"></i> Previsualizar Resolución</a>--}}
         <a href="#" class="nav-link text-secondary" data-toggle="modal"
                         data-target="#selectSignerRes"
                         data-formaction="{{ route('agreements.createWordRes', $agreement )}}">
                         <i class="fas fa-eye"></i> Previsualizar Resolución</a>
     </li>
     @endif
+
     @canany(['Documents: signatures and distribution'])
     @if($agreement->file != null)
     <li class="nav-item">
-        <a class="nav-link text-secondary" href="{{ route('agreements.signRes', $agreement) }}"><i class="fas fa-file-signature"></i> Solicitar firma Resolución</a>
+        <a class="nav-link text-secondary" target="blank" href="https://doc.digital.gob.cl/fed/inbox#/nueva/solicitud/"><i class="fas fa-file-signature"></i> Solicitar firma Resolución</a>
     </li>
     @endif
     @endcan
