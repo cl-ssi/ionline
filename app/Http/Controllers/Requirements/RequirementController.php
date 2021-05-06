@@ -531,9 +531,16 @@ class RequirementController extends Controller
    */
   public function show(Requirement $requirement)
   {
+    
     $documents = Document::all()->sortBy('id');
     $ous = OrganizationalUnit::all()->sortBy('name');
-    $organizationalUnit = OrganizationalUnit::Find(1);
+    //$ous = OrganizationalUnit::all()->sortBy('name');
+    //$organizationalUnit = OrganizationalUnit::where('level', 1)->get();
+    //$organizationalUnit = OrganizationalUnit::Find(1);
+    $ouRoots = OrganizationalUnit::where('level', 1)->get();
+    
+    
+
     $requirement = Requirement::find($requirement->id);
     //$requirement=$requirement->events()->orderBy('id','DESC')->get();
     //dd($requirement);
@@ -580,8 +587,8 @@ class RequirementController extends Controller
         ->get();
     }
 
-
-    return view('requirements.show', compact('ous', 'organizationalUnit', 'requirement', 'categories', 'requirementCategories', 'lastEvent', 'firstEvent', 'documents', 'groupedRequirements'));
+    //dd('entro aca');
+    return view('requirements.show', compact('ous', 'ouRoots' , 'requirement', 'categories', 'requirementCategories', 'lastEvent', 'firstEvent', 'documents', 'groupedRequirements'));
   }
 
   public function report1(Request $request)
