@@ -17,34 +17,46 @@
                 <option value="cerrado">Cerrar</option>
                 @endif
             </select>
-        </fieldset>
-
+        </fieldset>        
+        
         <fieldset class="form-group col-5" id="div_ou">
             <label for="for_date">Unidad Organizacional</label>
-            <select id="ou" name="to_ou_id" class="form-control" required="">
-            <option value="{{ $organizationalUnit->id }}">
-            {{ $organizationalUnit->name }}
-            </option>
-            @foreach($organizationalUnit->childs as $child_level_1)
-            @if($child_level_1->name != 'Externos')
-                <option value="{{ $child_level_1->id }}">
-                &nbsp;&nbsp;&nbsp;
-                {{ $child_level_1->name }}
-                </option>
-                @foreach($child_level_1->childs as $child_level_2)
-                    <option value="{{ $child_level_2->id }}">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    {{ $child_level_2->name }}
-                    </option>
-                    @foreach($child_level_2->childs as $child_level_3)
-                        <option value="{{ $child_level_3->id }}">
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            {{ $child_level_3->name }}
-                        </option>
-                    @endforeach
-                @endforeach
-                @endif
-            @endforeach
+            <select id="ou" name="to_ou_id" class="form-control" required="">            
+            @foreach($ouRoots as $ouRoot)
+            <option value="{{ $ouRoot->id }}" {{ (Auth::user()->organizationalunit == $ouRoot)?'selected':''}}>
+				{{ $ouRoot->name }} ({{$ouRoot->establishment->name}})
+				</option>
+                            @if($ouRoot->name != 'Externos')
+                                <option value="{{ $ouRoot->id }}">
+                                {{($ouRoot->establishment->alias ?? '')}}-{{ $ouRoot->name }}
+                                </option>
+                                @foreach($ouRoot->childs as $child_level_1)
+
+                                    <option value="{{ $child_level_1->id }}">
+                                        &nbsp;&nbsp;&nbsp;
+                                        {{($child_level_1->establishment->alias ?? '')}}-{{ $child_level_1->name }}
+                                    </option>
+                                    @foreach($child_level_1->childs as $child_level_2)
+                                        <option value="{{ $child_level_2->id }}">
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            {{($child_level_2->establishment->alias ?? '')}}-{{ $child_level_2->name }}
+                                        </option>
+                                        @foreach($child_level_2->childs as $child_level_3)
+                                            <option value="{{ $child_level_3->id }}">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                {{($child_level_3->establishment->alias ?? '')}}-{{ $child_level_3->name }}
+                                            </option>
+                                            @foreach($child_level_3->childs as $child_level_4)
+                                                <option value="{{ $child_level_4->id }}">
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    {{($child_level_4->establishment->alias ?? '')}}-{{ $child_level_4->name }}
+                                                </option>
+                                            @endforeach
+                                        @endforeach
+                                    @endforeach
+                                @endforeach
+                            @endif
+                        @endforeach
             </select>
         </fieldset>
 
