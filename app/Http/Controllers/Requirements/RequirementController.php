@@ -536,7 +536,7 @@ class RequirementController extends Controller
     $ous = OrganizationalUnit::all()->sortBy('name');
     //$ous = OrganizationalUnit::all()->sortBy('name');
     //$organizationalUnit = OrganizationalUnit::where('level', 1)->get();
-    $organizationalUnit = OrganizationalUnit::Find(1);
+//    $organizationalUnit = OrganizationalUnit::Find(1);
     $ouRoots = OrganizationalUnit::where('level', 1)->get();
     
     
@@ -588,7 +588,7 @@ class RequirementController extends Controller
     }
 
     //dd('entro aca');
-    return view('requirements.show', compact('organizationalUnit','ous', 'ouRoots' , 'requirement', 'categories', 'requirementCategories', 'lastEvent', 'firstEvent', 'documents', 'groupedRequirements'));
+    return view('requirements.show', compact('ous', 'ouRoots' , 'requirement', 'categories', 'requirementCategories', 'lastEvent', 'firstEvent', 'documents', 'groupedRequirements'));
   }
 
   public function report1(Request $request)
