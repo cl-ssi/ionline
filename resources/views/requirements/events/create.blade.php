@@ -17,11 +17,12 @@
                 <option value="cerrado">Cerrar</option>
                 @endif
             </select>
-        </fieldset>        
-        
+        </fieldset>
+
+
         <fieldset class="form-group col-5" id="div_ou">
-            <label for="for_date">Unidad Organizacional</label>
-            <select id="ou" name="to_ou_id" class="form-control" required="">            
+            <label for="ou">Unidad Organizacional</label>
+            <select id="ou" name="to_ou_id" class="form-control selectpicker" data-live-search="true" required data-size="5">
             @foreach($ouRoots as $ouRoot)
             <option value="{{ $ouRoot->id }}" {{ (Auth::user()->organizationalunit == $ouRoot)?'selected':''}}>
 				{{ $ouRoot->name }} ({{$ouRoot->establishment->name}})

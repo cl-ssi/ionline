@@ -536,7 +536,7 @@ class RequirementController extends Controller
     $ous = OrganizationalUnit::all()->sortBy('name');
     //$ous = OrganizationalUnit::all()->sortBy('name');
     //$organizationalUnit = OrganizationalUnit::where('level', 1)->get();
-    //$organizationalUnit = OrganizationalUnit::Find(1);
+//    $organizationalUnit = OrganizationalUnit::Find(1);
     $ouRoots = OrganizationalUnit::where('level', 1)->get();
     
     

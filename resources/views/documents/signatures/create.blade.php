@@ -78,10 +78,21 @@
             </fieldset>
         </div>
 
-        <hr>
-        @livewire('signatures.visators', ['signature' => (isset($signature) && $signature->signaturesFlowVisator != null) ? $signature : null])
-        <hr>
-        @livewire('signatures.signer', ['signaturesFlowSigner' => (isset($signature) && $signature->signaturesFlowSigner != null) ? $signature->signaturesFlowSigner : null])
+        @if(isset($signature))
+            <hr>
+            @if($signature->type == 'visators')
+                @livewire('signatures.visators', ['signature' => $signature])
+            @else
+                @livewire('signatures.signer', ['signaturesFlowSigner' => $signature->signaturesFlowSigner])
+            @endif
+            <hr>
+        @else
+            <hr>    
+            @livewire('signatures.visators')
+            <hr>
+            @livewire('signatures.signer')
+            <hr>
+        @endif
 
         <div class="form-row">
 
