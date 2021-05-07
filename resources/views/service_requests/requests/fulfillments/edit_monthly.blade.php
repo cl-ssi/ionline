@@ -191,7 +191,7 @@
 				<i class="fas fa-file"></i>
 				</a>
 				@if($fulfillment->signatures_file_id)
-				<a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
+				<a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',[$fulfillment, time()]) }}" target="_blank" title="Certificado">
 				Certificado firmado <i class="fas fa-signature"></i>
 				</a>
 				@else
