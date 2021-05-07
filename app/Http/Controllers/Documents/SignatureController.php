@@ -22,6 +22,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Rrhh\Authority;
 use Throwable;
 
 class SignatureController extends Controller
@@ -37,19 +38,26 @@ class SignatureController extends Controller
         $mySignatures = null;
         $pendingSignaturesFlows = null;
         $signedSignaturesFlows = null;
+        //dd(Auth::user()->id);
+        $users[0] = Auth::user()->id;
+
+        $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'), 'secretary', Auth::user()->id);
+        foreach ($ous_secretary as $secretary) {
+            $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
+        }
 
         if ($tab == 'mis_documentos') {
-            $mySignatures = Signature::where('responsable_id', Auth::id())
+            $mySignatures = Signature::whereIn('responsable_id', $users)
                 ->orderByDesc('id')
                 ->get();
         }
 
         if ($tab == 'pendientes') {
-            $pendingSignaturesFlows = SignaturesFlow::where('user_id', Auth::id())
+            $pendingSignaturesFlows = SignaturesFlow::whereIn('user_id', $users)
                 ->where('status', null)
                 ->get();
 
-            $signedSignaturesFlows = SignaturesFlow::where('user_id', Auth::id())
+            $signedSignaturesFlows = SignaturesFlow::whereIn('user_id', $users)
                 ->whereNotNull('status')
                 ->orderByDesc('id')
                 ->get();
