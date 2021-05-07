@@ -32,7 +32,8 @@
     El equipo de combate en terreno está formado por 
     Yeannett, Adriana, Cristian y Álvaro (si, hay tres Álvaros en el departamento).
     <br>
-    Nuestro jefe de departamento es el glorioso Don José Don Oso.
+    Nuestro jefe de departamento es el glorioso Don José Don Oso. <br>
+    Y una mención especial a nuestra ex .... secretaría que aún nos apoya, Pamela.
 
     <hr>
 
