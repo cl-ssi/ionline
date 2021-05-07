@@ -49,7 +49,6 @@ class SignaturesFiles extends Command
             $originalSignaturesFile->file = $filePath;
             $originalSignaturesFile->save();
             echo $originalSignaturesFile->file . "\n";
-            break; //TODO ELIMINAR PARA CARGAR TODOS
         }
 
         foreach ($signedSignaturesFiles as $signedSignaturesFile) {
@@ -59,7 +58,6 @@ class SignaturesFiles extends Command
             $signedSignaturesFile->signed_file = $filePath;
             $signedSignaturesFile->save();
             echo $signedSignaturesFile->signed_file . "\n";
-            break; //TODO ELIMINAR PARA CARGAR TODOS
         }
 
         return 0;
