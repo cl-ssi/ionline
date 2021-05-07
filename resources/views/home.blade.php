@@ -23,13 +23,16 @@
 </div>
 
 <div class="alert alert-light" style="display: none" role="alert" id="developers">
-    Hola {{ auth()->user()->name }} soy el sistema <i class="fas fa-cog fa-spin fa-2x" style="color:green"></i>
-    , quiero contarte que fui desarrollado por <a href="mailto:alvaro.torres@redsalud.gob.cl">Alvaro Torres</a> y
-    <a href="mailto:jorge.mirandal@redsalud.gob.cl">Jorge Miranda</a> del Servicio de Salud Iquique.
+    Hola {{ auth()->user()->firstName }}, soy el sistema <i class="fas fa-cog fa-spin fa-2x" style="color:green"></i>
+    , quiero contarte que fui desarrollado el año 2018 por <a href="mailto:alvaro.torres@redsalud.gob.cl">
+    Alvaro Torres</a> y <a href="mailto:jorge.mirandal@redsalud.gob.cl">Jorge Miranda</a> 
+    y hoy día soy mantenido por excelente equipo de desarrollo del Departamento TIC 
+    del Servicio de Salud Iquique, cuyo jefe es José Donoso. 
+    Dónde se incorporó a al equipo a los Estebanes (Rojas + Miranda), Germán Zuñiga, Álvaro Lupa y Oscar Zavala.
 
     <hr>
 
-    <pre></pre>
+    <pre>{{ $phrase ? $phrase->phrase : '' }}</pre>
 </div>
 @endsection
 
