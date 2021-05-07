@@ -78,7 +78,7 @@
             </fieldset>
         </div>
 
-        @if(isset($signature))
+        @if(isset($signature) && isset($signature->type))
             <hr>
             @if($signature->type == 'visators')
                 @livewire('signatures.visators', ['signature' => $signature])
@@ -87,7 +87,7 @@
             @endif
             <hr>
         @else
-            <hr>    
+            <hr>
             @livewire('signatures.visators')
             <hr>
             @livewire('signatures.signer')
