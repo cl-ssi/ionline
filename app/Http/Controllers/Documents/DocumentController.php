@@ -77,7 +77,10 @@ class DocumentController extends Controller
         $document->user()->associate(Auth::user());
         $document->organizationalUnit()->associate(Auth::user()->organizationalUnit);
         /* Si no viene con número agrega uno desde el correlativo */
-        if($request->type != 'Ordinario' and $request->type != 'Reservado' and $request->type != 'Oficio') {
+        if($request->type != 'Ordinario' and 
+           $request->type != 'Reservado' and 
+           $request->type != 'Oficio' and
+           $request->type != 'Resolución') {
             $document->number = Correlative::getCorrelativeFromType($request->type);
         }
         $document->save();
