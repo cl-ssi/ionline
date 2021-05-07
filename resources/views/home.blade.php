@@ -27,8 +27,12 @@
     , quiero contarte que fui desarrollado el año 2018 por <a href="mailto:alvaro.torres@redsalud.gob.cl">
     Alvaro Torres</a> y <a href="mailto:jorge.mirandal@redsalud.gob.cl">Jorge Miranda</a> 
     y hoy día soy mantenido por un excelente equipo de desarrollo del Departamento TIC,
-    dónde se incorporó a los Estebanes (Rojas + Miranda), Germán Zuñiga, Álvaro Lupa y Oscar Zavala.
-    Nuestro jefe de departamento es Don José Don Oso. 
+    dónde se incorporó los Estebanes (Rojas + Miranda), Germán Zuñiga, Álvaro Lupa y Oscar Zavala.
+    <br>
+    El equipo de combate en terreno está formado por 
+    Yeannett, Adriana, Cristian y Álvaro (si, hay tres Álvaros en el departamento).
+    <br>
+    Nuestro jefe de departamento es el glorioso Don José Don Oso.
 
     <hr>
 

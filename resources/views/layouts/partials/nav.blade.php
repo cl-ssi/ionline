@@ -13,13 +13,13 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('rrhh.users.directory') }}">
-                        <i class="fas fa-address-book"></i> Telefonos
+                        <i class="fas fa-address-book" title="Teléfonos"></i> Tel. 
                     </a>
                 </li>
 
                 <li class="nav-item {{ active('calendars') }}">
                     <a class="nav-link" href="{{ route('calendars') }}">
-                        <i class="fas fa-calendar-alt"></i> Calendarios
+                        <i class="fas fa-calendar-alt" title="Calendarios"></i> Cal.
                     </a>
                 </li>
 
@@ -64,7 +64,7 @@
                 <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-file-alt"></i> Documentos
+                    <i class="fas fa-file-alt"></i> Docs
                 </a>
 
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
