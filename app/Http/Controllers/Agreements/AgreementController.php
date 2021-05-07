@@ -357,6 +357,7 @@ class AgreementController extends Controller
         $signature = new Signature();
         $signature->request_date = $agreement->date;
         $signature->document_type = 'Convenios';
+        $signature->type = $type;
         $signature->subject = 'Convenio programa '.$programa;
         $signature->description = 'Documento convenio de ejecución del programa '.$programa.' año '.$agreement->period;
         $signature->endorse_type = 'Visación en cadena de responsabilidad';
@@ -376,33 +377,27 @@ class AgreementController extends Controller
             $signaturesFile->signaturesFlows->add($signaturesFlow);
         }
 
-        // if($type == 'visators'){
-            //visadores deptos.
+        if($type == 'visators'){
+            //visadores por cadena de responsabilidad en orden parte primero por el referente tecnico
             // $visadores = collect([
-            //                 ['ou_id' => 2, 'user_id' => 14104369], // SUBDIRECCION GESTION ASISTENCIAL - CARLOS CALVO
+            //                 ['ou_id' => 12, 'user_id' => 15683706] // DEPTO. ATENCION PRIMARIA DE SALUD - JORGE CRUZ TERRAZAS (JCT)
             //                 ['ou_id' => 61, 'user_id' => 6811637], // DEPTO.ASESORIA JURIDICA  - CARMEN HENRIQUEZ OLIVARES (CHO)
             //                 ['ou_id' => 31, 'user_id' => 9994426], // DEPTO.GESTION FINANCIERA (40) - JAIME ABARZUA CONSTANZO (JAC)
-            //                 ['ou_id' => 12, 'user_id' => 15683706] // DEPTO. ATENCION PRIMARIA DE SALUD - JORGE CRUZ TERRAZAS (JCT)
+            //                 ['ou_id' => 2, 'user_id' => 14104369], // SUBDIRECCION GESTION ASISTENCIAL - CARLOS CALVO
             //             ]);
-            $visadores = collect([14104369, 6811637, 9994426, 15683706]);
-
-            foreach($visadores as $key => $value){
+            $visadores = collect([$agreement->referrer]); //referente tecnico
+            foreach(array(15683706, 6811637, 9994426, 14104369) as $user_id) //resto de visadores por cadena de responsabilidad
+                $visadores->add(User::find($user_id));
+            
+            foreach($visadores as $key => $visador){
                 $signaturesFlow = new SignaturesFlow();
                 $signaturesFlow->type = 'visador';
-                $signaturesFlow->ou_id = User::find($value)->organizational_unit_id;
-                $signaturesFlow->user_id = $value;
+                $signaturesFlow->ou_id = $visador->organizational_unit_id;
+                $signaturesFlow->user_id = $visador->id;
                 $signaturesFlow->sign_position = $key;
                 $signaturesFile->signaturesFlows->add($signaturesFlow);
             }
-            
-            //visador referente tecnico
-            $signaturesFlow = new SignaturesFlow();
-            $signaturesFlow->type = 'visador';
-            $signaturesFlow->ou_id = $agreement->referrer->organizational_unit_id;
-            $signaturesFlow->user_id = $agreement->referrer->id;
-            $signaturesFlow->sign_position = $visadores->count() + 1;
-            $signaturesFile->signaturesFlows->add($signaturesFlow);
-        // }
+        }
 
         $signature->signaturesFiles->add($signaturesFile);
         
