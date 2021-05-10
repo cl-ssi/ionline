@@ -140,10 +140,13 @@ class FirmaDigitalController extends Controller
         if ($type === 'firmante') $signaturesFlow->signaturesFile->verification_code = $verificationCode;
         $signaturesFlow->signaturesFile->save();
 
+        $signaturesFlow = SignaturesFlow::find($signaturesFlow->id);
 
         //Si ya firmaron todos se envía por correo a destinatarios del doc
         if ($signaturesFlow->signaturesFile->hasAllFlowsSigned) {
-            preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $signaturesFlow->signature->recipients, $emails);
+            $allEmails = $signaturesFlow->signature->recipients . ',' . $signaturesFlow->signature->distribution;
+
+            preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $emails);
             Mail::to($emails[0])
                 ->send(new SignedDocument($signaturesFlow->signature));
         }

@@ -251,6 +251,9 @@ class RequirementController extends Controller
       } else {
         $req->status_view = "sin revisar";
       }
+      if($req->status == 'creado' && $req->user_id == auth()->user()->id){
+        $req->status_view = "visto";
+      }
     }
 
 
@@ -268,6 +271,9 @@ class RequirementController extends Controller
         $req->status_view = "visto";
       } else {
         $req->status_view = "sin revisar";
+      }
+      if($req->status == 'creado' && $req->user_id == auth()->user()->id){
+        $req->status_view = "visto";
       }
     }
 
@@ -344,10 +350,10 @@ class RequirementController extends Controller
 
       $requirement = new Requirement($req);
       $requirement->user()->associate(Auth::user());
-      
+
       $requirement->save();
-      $requirement->categories()->attach($request->input('category_id'));     
-      
+      $requirement->categories()->attach($request->input('category_id'));
+
 
 
       //se guarda evento
@@ -531,9 +537,16 @@ class RequirementController extends Controller
    */
   public function show(Requirement $requirement)
   {
+
     $documents = Document::all()->sortBy('id');
     $ous = OrganizationalUnit::all()->sortBy('name');
-    $organizationalUnit = OrganizationalUnit::Find(1);
+    //$ous = OrganizationalUnit::all()->sortBy('name');
+    //$organizationalUnit = OrganizationalUnit::where('level', 1)->get();
+//    $organizationalUnit = OrganizationalUnit::Find(1);
+    $ouRoots = OrganizationalUnit::where('level', 1)->get();
+
+
+
     $requirement = Requirement::find($requirement->id);
     //$requirement=$requirement->events()->orderBy('id','DESC')->get();
     //dd($requirement);
@@ -580,8 +593,8 @@ class RequirementController extends Controller
         ->get();
     }
 
-
-    return view('requirements.show', compact('ous', 'organizationalUnit', 'requirement', 'categories', 'requirementCategories', 'lastEvent', 'firstEvent', 'documents', 'groupedRequirements'));
+    //dd('entro aca');
+    return view('requirements.show', compact('ous', 'ouRoots' , 'requirement', 'categories', 'requirementCategories', 'lastEvent', 'firstEvent', 'documents', 'groupedRequirements'));
   }
 
   public function report1(Request $request)

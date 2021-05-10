@@ -74,8 +74,8 @@
                 <div class="left seis" style="padding-bottom: 6px; color: #999">Código interno: {{ $document->id }}</div>
             </div>
 
-            <div class="right" style="float: right; width: 300px; padding-top: 64px;">
-                <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;"><strong>{{ $document->type }} N°:</strong> </div>
+            <div class="right" style="float: right; width: 300px; padding-top: 76px;">
+                <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;"><strong>{{ $document->type }} N°:</strong> {{ $document->number }}</div>
                 <div style="padding-top:26px"></div>
                 <div class="left" style="padding-bottom: 6px;">
                     <strong>ANT:</strong> {{ $document->antecedent }}

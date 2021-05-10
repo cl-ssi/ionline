@@ -76,8 +76,12 @@ class DocumentController extends Controller
         $document = new Document($request->All());
         $document->user()->associate(Auth::user());
         $document->organizationalUnit()->associate(Auth::user()->organizationalUnit);
-        /* Si no viene con número agrega uno desde el correlativo */
-        if($request->type != 'Ordinario' and $request->type != 'Reservado') {
+
+        /* Agrega uno desde el correlativo */
+        if($request->type == 'Memo' OR 
+            $request->type == 'Acta de recepción' OR 
+            $request->type == 'Circular') {
+
             $document->number = Correlative::getCorrelativeFromType($request->type);
         }
         $document->save();
@@ -114,7 +118,7 @@ class DocumentController extends Controller
     {
         /* Si tiene número de parte entonces devuelve al index */
         if($document->file) {
-            session()->flash('danger', 'Lo siento mi amor, el documento ya tiene un archivo adjunto');
+            session()->flash('danger', 'Lo siento, el documento ya tiene un archivo adjunto');
             return redirect()->route('documents.index');
         }
         /* De lo contrario retorna para editar el documento */
@@ -251,24 +255,43 @@ class DocumentController extends Controller
     {
         $signature = new Signature();
         $signature->request_date = Carbon::now();
-//        $signature->document_type = 'Memorando'; //TODO variable
         $signature->subject = $document->subject;
         $signature->description = $document->antecedent;
-//        $signature->endorse_type = 'Visación en cadena de responsabilidad';
         $signature->recipients = $document->distribution;
+
+        switch ($document->type) {
+            case 'Memo':
+                $signature->document_type = 'Memorando';
+                break;
+            case 'Ordinario':
+            case 'Reservado':
+            case 'Oficio':
+                $signature->document_type = 'Oficio';
+                break;
+            case 'Circular':
+                $signature->document_type = 'Circular';
+                break;
+            case 'Acta de recepción':
+                $signature->document_type = 'Acta';
+                break;
+            case 'Resolución':
+                $signature->document_type = 'Resoluciones';
+                break;
+        }
+
+        if($signature->document_type = 'Memorando')
+
+//        $signature->endorse_type = 'Visación en cadena de responsabilidad';
 //        $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;
 
 
         if($document->type == 'Acta de recepción') {
-//            return view('documents.reception')->withDocument($document);
             $documentFile = \PDF::loadView('documents.reception', compact('document'));
         }
         else if($document->type == 'Resolución') {
-//            return view('documents.resolution')->withDocument($document);
             $documentFile = \PDF::loadView('documents.resolution', compact('document'));
         }
         else {
-//            return view('documents.show')->withDocument($document);
             $documentFile = \PDF::loadView('documents.show', compact('document'));
         }
 
@@ -279,10 +302,8 @@ class DocumentController extends Controller
 
         $signature->signaturesFiles->add($signaturesFile);
         $documentId = $document->id;
-//        dd($signature);
 
         return view('documents.signatures.create', compact('signature', 'documentId' ));
-
     }
 
     public function signedDocumentPdf($id)

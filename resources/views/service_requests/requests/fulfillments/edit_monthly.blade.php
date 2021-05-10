@@ -1,7 +1,7 @@
 @foreach($serviceRequest->fulfillments as $fulfillment)
 <div class="card border-dark">
 	<div class="card-header">
-		<h4>Información del período: {{$fulfillment->year}}-{{$fulfillment->month}} <span class="small text-muted float-right">{{ $fulfillment->id}}</span></h4>
+		<h4>Información del período: {{$fulfillment->year}}-{{$fulfillment->month}} ({{Carbon\Carbon::parse($fulfillment->year . "-" . $fulfillment->month)->monthName}}) <span class="small text-muted float-right">{{ $fulfillment->id}}</span></h4>
 	</div>
 	<div class="card-body">
 		<form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$fulfillment) }}" enctype="multipart/form-data">
@@ -191,7 +191,7 @@
 				<i class="fas fa-file"></i>
 				</a>
 				@if($fulfillment->signatures_file_id)
-				<a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$fulfillment) }}" target="_blank" title="Certificado">
+				<a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',[$fulfillment, time()]) }}" target="_blank" title="Certificado">
 				Certificado firmado <i class="fas fa-signature"></i>
 				</a>
 				@else

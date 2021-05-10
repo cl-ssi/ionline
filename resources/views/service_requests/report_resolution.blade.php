@@ -132,7 +132,7 @@
     SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
 </div>
 <div class="seis" style="padding-top: 4px;">
-    N.I. {{$ServiceRequest->id}} - {{\Carbon\Carbon::now()->format('d/m/Y')}}
+    N.I.PHUQHAÑA. {{$ServiceRequest->id}} - {{\Carbon\Carbon::now()->format('d/m/Y')}}
 </div>
 
 
@@ -298,7 +298,13 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
 </p>
 
 <p class="justify">
-    <strong>TERCERO:</strong> El prestador recibirá los lineamientos por parte del Jefe del {{$ServiceRequest->responsabilityCenter->name}}, del
+    <strong>TERCERO:</strong> El prestador recibirá los lineamientos por parte del
+    @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+      Supervisor
+    @else
+      Jefe
+    @endif
+     del {{$ServiceRequest->responsabilityCenter->name}}, del
     @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       Hospital Regional de Iquique,
     @else
@@ -371,7 +377,7 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
 @else
   <p class="justify">
       <strong>SÉPTIMO:</strong>
-      En este caso, La Dirección del Servicio de Salud Iquique, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
+      El Servicio de Salud Iquique, cancelará a la persona en referencia sólo hasta la mensualidad correspondiente al período efectivamente prestado.
   </p>
 @endif
 
@@ -379,7 +385,12 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
 
 @if($ServiceRequest->program_contract_type == "Mensual")
   <p class="justify">
-      <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}),  impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en @livewire('service-request.monthly-quotes', ['serviceRequest' => $ServiceRequest]) se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
+      <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}),  impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en @livewire('service-request.monthly-quotes', ['serviceRequest' => $ServiceRequest]) se deberá acreditar contra presentación de certificado extendido por el
+      @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+        Supervisor
+      @else
+        Jefe
+      @endif del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         Hospital Regional de Iquique,
       @else
@@ -398,7 +409,12 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
 @elseif($ServiceRequest->program_contract_type == "Horas")
   @if($ServiceRequest->estate == "Profesional Médico")
     <p class="justify">
-        <strong>OCTAVO:</strong> El “valor por hora” será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago, cada final de mes el Jefe del {{$ServiceRequest->responsabilityCenter->name}} o por la jefatura inmediatamente superior, deberá certificar las horas realizadas por el profesional médico de manera presencial (no es aceptable la suplantación de personas). Debiendo, además, adjuntar el registro de asistencia efectuado en el respectivo servicio, los cuales serán indispensables para su cancelación, sin perjuicio de las funciones de control de la Subdirección de Gestión y Desarrollo de las Personas del Hospital de Iquique,
+        <strong>OCTAVO:</strong> El “valor por hora” será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago, cada final de mes el
+        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+          Supervisor
+        @else
+          Jefe
+        @endif del {{$ServiceRequest->responsabilityCenter->name}} o por la jefatura inmediatamente superior, deberá certificar las horas realizadas por el profesional médico de manera presencial (no es aceptable la suplantación de personas). Debiendo, además, adjuntar el registro de asistencia efectuado en el respectivo servicio, los cuales serán indispensables para su cancelación, sin perjuicio de las funciones de control de la Subdirección de Gestión y Desarrollo de las Personas del Hospital de Iquique,
         <br><br>
       	El pago será efectuado el día 05 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
         <br><br>
@@ -615,20 +631,27 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
           DIRECTOR<br>
           HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
           </strong>
+
+          <br style="padding-bottom: 4px;">
+          Lo que me permito transcribe a usted para su conocimiento y fines consiguientes.
+
+          <br><br><br>
+          <br style="padding-bottom: 4px;">
+          MINISTRO DE FE
         @else
-          <strong>
+          <!-- <strong>
           <span class="uppercase">JORGE GALLEGUILLOS MOLLER</span><br>
           DIRECTOR<br>
           SERVICIO DE SALUD IQUIQUE<br>
           </strong>
+
+          <br style="padding-bottom: 4px;">
+          Lo que me permito transcribe a usted para su conocimiento y fines consiguientes.
+
+          <br><br><br>
+          <br style="padding-bottom: 4px;">
+          MINISTRO DE FE-->
         @endif
-
-        <br style="padding-bottom: 4px;">
-        Lo que me permito transcribe a usted para su conocimiento y fines consiguientes.
-
-        <br><br><br>
-        <br style="padding-bottom: 4px;">
-        MINISTRO DE FE
     </div>
 </div>
 <br style="padding-bottom: 4px;">
