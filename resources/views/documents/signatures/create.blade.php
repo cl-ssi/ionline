@@ -27,7 +27,7 @@
             <fieldset class="form-group col-3">
                 <label for="for_document_type">Tipo de Documento</label>
                 <select class="form-control" name="document_type" required>
-                    @php($docTypes = array('Carta', 'Circular', 'Convenios', 'Memorando', 'Oficio', 'Resoluciones'))
+                    @php($docTypes = array('Carta', 'Circular', 'Convenios', 'Memorando', 'Oficio', 'Resoluciones', 'Acta'))
                     <option value="">Seleccione tipo</option>
                     @foreach($docTypes as $docType)
                         <option value="{{$docType}}"
@@ -78,10 +78,21 @@
             </fieldset>
         </div>
 
-        <hr>
-        @livewire('signatures.visators', ['signature' => (isset($signature) && $signature->signaturesFlowSigner != null) ? $signature : null])
-        <hr>
-        @livewire('signatures.signer', ['signaturesFlowSigner' => (isset($signature) && $signature->signaturesFlowSigner != null) ? $signature->signaturesFlowSigner : null])
+        @if(isset($signature) && isset($signature->type))
+            <hr>
+            @if($signature->type == 'visators')
+                @livewire('signatures.visators', ['signature' => $signature])
+            @else
+                @livewire('signatures.signer', ['signaturesFlowSigner' => $signature->signaturesFlowSigner])
+            @endif
+            <hr>
+        @else
+            <hr>
+            @livewire('signatures.visators')
+            <hr>
+            @livewire('signatures.signer')
+            <hr>
+        @endif
 
         <div class="form-row">
 
@@ -93,7 +104,7 @@
             <fieldset class="form-group col">
                 <label for="for_distribution">Distribución del documento (separados por coma)</label>
                 <textarea class="form-control" id="for_distribution" name="distribution"
-                          rows="6">{{isset($signature) ? $signature->recipients : ''}}</textarea>
+                          rows="6">{{  isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : ''}}</textarea>
             </fieldset>
 
         </div>

@@ -12,30 +12,39 @@
     @can('Agreement: delete')
 		<form method="POST" action="{{ route('agreements.destroy', $agreement->id) }}" class="d-inline">
 			{{ method_field('DELETE') }} {{ csrf_field() }}
-			<button class="btn btn-sm btn-danger"><span class="fas                                                                                                                                                                                    fa-trash" aria-hidden="true"></span> Eliminar</button>
+			<button class="btn btn-sm btn-danger"><span class="fas fa-trash" aria-hidden="true"></span> Eliminar</button>
 		</form>
 	@endcan
 
 <ol class="breadcrumb bg-light justify-content-end small">
     <li class="nav-item">
-        <a class="nav-link text-secondary" href="{{ route('agreements.createWord', $agreement) }}"><i class="fas fa-eye"></i> Previsualizar Convenio</a>
+        <a class="nav-link text-secondary" href="{{ route('agreements.createWord', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
     </li>
+
+    @if($agreement->file != null)
+    <li>
+        <a class="nav-link text-secondary" href="{{ route('agreements.download', $agreement->id) }}"><i class="fas fa-eye"></i> Previsualizar el convenio</a>
+    </li>
+    @endif
+
+    @canany(['Documents: signatures and distribution'])
+    <li class="nav-item">
+        <a class="nav-link text-secondary" href="{{ route('agreements.sign', [$agreement, 'visators']) }}"><i class="fas fa-file-signature"></i> Solicitar visación Convenio</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link text-secondary" href="{{ route('agreements.sign', [$agreement, 'signer']) }}"><i class="fas fa-file-signature"></i> Solicitar firma Convenio</a>
+    </li>
+    @endcan
+
     @if($agreement->file != null)
     <li class="nav-item">
-        {{--<a class="nav-link text-secondary" href="{{ route('agreements.createWordRes', $agreement) }}"><i class="fas fa-eye"></i> Previsualizar Resolución</a>--}}
         <a href="#" class="nav-link text-secondary" data-toggle="modal"
                         data-target="#selectSignerRes"
                         data-formaction="{{ route('agreements.createWordRes', $agreement )}}">
-                        <i class="fas fa-eye"></i> Previsualizar Resolución</a>
+                        <i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
     </li>
     @endif
-    @canany(['Documents: signatures and distribution'])
-    @if($agreement->file != null)
-    <li class="nav-item">
-        <a class="nav-link text-secondary" href="{{ route('agreements.signRes', $agreement) }}"><i class="fas fa-file-signature"></i> Solicitar firma Resolución</a>
-    </li>
-    @endif
-    @endcan
 </ol>
 <p>
 

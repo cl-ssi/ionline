@@ -25,7 +25,7 @@
 
         <fieldset class="form-group col-sm-3">
             <label for="for_birthday">Fecha Nacimiento</label>
-            <input type="date" class="form-control" id="for_birthday" name="birthday" value="{{ $replacementStaff->birthday }}" required>
+            <input type="date" class="form-control" id="for_birthday" name="birthday" value="{{ $replacementStaff->birthday->format('Y-m-d')  }}" required>
         </fieldset>
     </div>
 
@@ -127,12 +127,13 @@
     </div>
     <div class="card-body">
         @if($replacementStaff->profiles->count() > 0)
-        <table class="table small table-striped ">
+        <table class="table small table-striped table-bordered">
             <thead class="text-center">
                 <tr>
                     <th style="width: 11%">Fecha Registro</th>
                     <th>Estamento</th>
                     <th>Título</th>
+                    <th>Experiencia</th>
                     <th>Fecha Titulación</th>
                     <th>Años Exp.</th>
                     <th style="width: 10%"></th>
@@ -144,8 +145,9 @@
                 <tr>
                     <td>{{ $profile->updated_at->format('d-m-Y H:i:s') }}</td>
                     <td>{{ $profile->profile_manage->name }}</td>
-                    <td>{{ $profile->profession_manage->name }}</td>
-                    <td>{{ Carbon\Carbon::parse($profile->degree_date)->format('d-m-Y') }}</td>
+                    <td>{{ ($profile->profession_manage) ? $profile->profession_manage->name : ''  }}</td>
+                    <td>{{ $profile->ExperienceValue }}</td>
+                    <td>{{ ($profile->degree_date) ? $profile->degree_date->format('d-m-Y') : '' }}</td>
                     <td align="center">{{ $profile->YearsOfDegree }}</td>
                     <td>
                         <a href="{{ route('replacement_staff.profile.show_file', $profile) }}" class="btn btn-outline-secondary btn-sm" title="Ir" target="_blank"> <i class="far fa-eye"></i></a>
@@ -156,7 +158,7 @@
                         <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.profile.destroy', $profile) }}">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro que desea eliminar su perfil: {{ $profile->profile_manage->name }} - {{ $profile->profession_manage->name }}? ' )">
+                            <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro que desea eliminar su perfil: {{ $profile->profile_manage->name }} - {{ ($profile->profession_manage) ? $profile->profession_manage->name:'' }}? ' )">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </form>
@@ -171,7 +173,7 @@
         'professionManage' => $professionManage,
         'profileManage' => $profileManage,
         'usersSelect' => 'readonly'
-        
+
         ])
 
     </div>
@@ -185,8 +187,8 @@
     </div>
     <div class="card-body">
         @if($replacementStaff->trainings->count() > 0)
-        <table class="table small table-striped ">
-            <thead>
+        <table class="table small table-striped table-bordered">
+            <thead class="text-center">
                 <tr>
                     <td style="width: 11%">Fecha Registro</td>
                     <th>Nombre de Capacitación</th>
@@ -201,8 +203,8 @@
                 <tr>
                     <td>{{ $training->updated_at->format('d-m-Y H:i:s') }}</td>
                     <td>{{ $training->training_name }}</td>
-                    <td>{{ $training->hours_training }}</td>
-                    <td>
+                    <td class="text-center">{{ $training->hours_training }}</td>
+                    <td class="text-center">
                         @if(pathinfo($training->file, PATHINFO_EXTENSION) == 'pdf')
                         <i class="fas fa-file-pdf fa-2x"></i>
                         @endif
@@ -235,25 +237,3 @@
 </div>
 
 @endsection
-
-<<<<<<< HEAD
-@section('custom_js')
-
-<script type="text/javascript">
-    jQuery('select[name=experience[]]').change(function(){
-        var fieldsetName = $(this).val();
-        alert(fieldsetName);
-        switch(this.value){
-            case "replacement":
-                document.getElementById('for_name_to_replace').readOnly = false;
-
-                document.getElementById('for_other_fundament').readOnly = true;
-                document.getElementById('for_other_fundament').value = '';
-                break;
-        }
-    });
-</script>
-
-@endsection
-=======
->>>>>>> 4a22d6a237b975475130832cb94a28b3b90b7d93

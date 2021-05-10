@@ -35,6 +35,9 @@
                     <option value="Resoluciones" @if($signature->document_type == 'Resoluciones') selected @endif>
                         Resoluciones
                     </option>
+                    <option value="Acta" @if($signature->document_type == 'Acta') selected @endif>
+                        Acta
+                    </option>
                 </select>
             </fieldset>
 
@@ -90,24 +93,21 @@
 
             <fieldset class="form-group col">
                 <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
-                <input type="text" class="form-control" id="for_recipients" name="recipients"
-                       value="{{$signature->recipients}}">
+                <textarea class="form-control" id="for_recipients" name="recipients" rows="6">{{$signature->recipients}}</textarea>
             </fieldset>
 
             <fieldset class="form-group col">
                 <label for="for_distribution">Distribución del documento (separados por coma)</label>
-                <input type="text" class="form-control" id="for_distribution" name="distribution"
-                       value="{{$signature->distribution}}">
+                <textarea class="form-control" id="for_distribution" name="distribution" rows="6">{{$signature->distribution}}</textarea>
             </fieldset>
 
         </div>
 
 
         @if($signature->hasSignedOrRejectedFlow)
-            <button type="button" class="btn btn-primary" @if($signature->responsable_id != Auth::id()) disabled @endif
-                data-toggle="modal"
-                data-target="#editSignature"
-            >Guardar
+            <button type="button" class="btn btn-primary" 
+                @if($signature->responsable_id != Auth::id()) disabled @endif
+                data-toggle="modal" data-target="#editSignature">Guardar
             </button>
 
             <div class="modal fade" id="editSignature" tabindex="-1" role="dialog"
