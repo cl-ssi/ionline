@@ -340,10 +340,8 @@ class AgreementController extends Controller
 
     public function preview(Agreement $agreement)
     {
-        $filename = 'tmp_files/'.$agreement->file;
-        if(!Storage::disk('public')->exists($filename))
-            Storage::disk('public')->put($filename, Storage::disk('local')->get($agreement->file));
-        return Redirect::to('https://view.officeapps.live.com/op/embed.aspx?src='.asset('storage/'.$filename));
+        Storage::disk('public')->put('previewAgree.docx', Storage::disk('local')->get($agreement->file));
+        return Redirect::to('https://view.officeapps.live.com/op/embed.aspx?src='.asset('storage/previewAgree.docx'));
     }
 
     public function downloadAgree(Agreement $file)
