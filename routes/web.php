@@ -294,6 +294,8 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('/downloadAgree/{file}', 'Agreements\AgreementController@downloadAgree')->name('downloadAgree');
     Route::get('/downloadRes/{file}', 'Agreements\AgreementController@downloadRes')->name('downloadRes');
 
+    Route::get('/preview/{agreement}', 'Agreements\AgreementController@preview')->name('preview');
+
     Route::resource('addendums', 'Agreements\AddendumController');
     Route::get('/addendum/{file}', 'Agreements\AddendumController@download')->name('addendum.download');
     Route::resource('programs', 'Agreements\ProgramController');
