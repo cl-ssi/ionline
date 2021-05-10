@@ -135,6 +135,10 @@ $('#formType').change(
         if("Memo" === this.value) {
             $("#forNumber").prop('disabled', false);
         }
+        if("Oficio" === this.value) {
+            $("#forNumber").prop('disabled', true);
+            $("#forNumber").val(null);
+        }
         if("Ordinario" === this.value) {
             $("#forNumber").prop('disabled', true);
             $("#forNumber").val(null);
@@ -153,8 +157,9 @@ $('#formType').change(
         if("Resolución" === this.value) {
             $("#forFrom").removeAttr( "required" );
             $("#forFor").removeAttr( "required" );
+            $("#forNumber").prop('disabled', true);
             $("#collapse").hide();
-            
+            $("#forSubject").val('Exenta');
         }
     }
 );

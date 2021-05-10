@@ -121,6 +121,11 @@
 
 <script type="text/javascript">
 var typeVal = $('#formType').val();
+    if(typeVal == "Resolución") {
+        $("#forFrom").removeAttr( "required" );
+        $("#forFor").removeAttr( "required" );
+        $("#collapse").hide(); 
+    }
 $('#formType').change(
     function() {
         if(!confirm('Con este cambio se reemplazará el número actual que tiene asignado el documento por uno nuevo según el tipo de documento que seleccionaste, ¿Está seguro/a de realizar esto al momento de guardar los cambios?')){
@@ -132,7 +137,6 @@ $('#formType').change(
             $("#forFrom").removeAttr( "required" );
             $("#forFor").removeAttr( "required" );
             $("#collapse").hide();
-            
         }
 
 
