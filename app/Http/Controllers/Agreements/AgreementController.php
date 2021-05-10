@@ -341,7 +341,7 @@ class AgreementController extends Controller
     public function preview(Agreement $agreement)
     {
         $filename = 'previewAgree.docx';
-        if (Storage::disk('public')->exists($filename)) Storage::delete($filename);
+        if (Storage::disk('public')->exists($filename)) Storage::disk('public')->delete($filename);
         Storage::disk('public')->put('previewAgree.docx', Storage::disk('local')->get($agreement->file));
         return Redirect::to('https://view.officeapps.live.com/op/embed.aspx?src='.asset('storage/previewAgree.docx'));
     }
