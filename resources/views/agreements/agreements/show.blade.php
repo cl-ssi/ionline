@@ -23,7 +23,7 @@
 
     @if($agreement->file != null)
     <li>
-        <a class="nav-link text-secondary" href="{{ route('agreements.download', $agreement->id) }}"><i class="fas fa-eye"></i> Previsualizar el convenio</a>
+        <a class="nav-link text-secondary" href="{{ route('agreements.preview', $agreement->id) }}" target="blank"><i class="fas fa-eye"></i> Previsualizar el convenio</a>
     </li>
     @endif
 
