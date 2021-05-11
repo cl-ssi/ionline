@@ -39,6 +39,7 @@ class CleanTempDirectory extends Command
     public function handle()
     {
         $file = new Filesystem;
-        $file->cleanDirectory('storage/app/public/tmp_files');
+        $result = $file->cleanDirectory('storage/app/public/tmp_files');
+        return $result ? $this->info('Se ejecutó correctamente comando clean:tempDir') : $this->error('Oops! algo ocurrió al momento de ejecutar el comando clean:tempDir');
     }
 }
