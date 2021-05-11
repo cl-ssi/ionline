@@ -78,8 +78,8 @@ class DocumentController extends Controller
         $document->organizationalUnit()->associate(Auth::user()->organizationalUnit);
 
         /* Agrega uno desde el correlativo */
-        if($request->type == 'Memo' OR 
-            $request->type == 'Acta de recepción' OR 
+        if($request->type == 'Memo' OR
+            $request->type == 'Acta de recepción' OR
             $request->type == 'Circular') {
 
             $document->number = Correlative::getCorrelativeFromType($request->type);
@@ -309,10 +309,11 @@ class DocumentController extends Controller
     public function signedDocumentPdf($id)
     {
         $document = Document::find($id);
-        header('Content-Type: application/pdf');
-        if (isset($document->fileToSign)) {
-            echo base64_decode($document->fileToSign->signed_file);
-        }
+        return Storage::disk('gcs')->response($document->fileToSign->signed_file);
+//        header('Content-Type: application/pdf');
+//        if (isset($document->fileToSign)) {
+//            echo base64_decode($document->fileToSign->signed_file);
+//        }
     }
 
 

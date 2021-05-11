@@ -16,6 +16,7 @@ use App\Models\ServiceRequests\ShiftControl;
 use App\Models\Country;
 use App\Models\Parameters\Profession;
 use App\Models\Rrhh\UserBankAccount;
+use Illuminate\Support\Facades\Storage;
 use Luecano\NumeroALetras\NumeroALetras;
 use App\Mail\ServiceRequestNotification;
 use App\Mail\DerivationNotification;
@@ -1269,10 +1270,11 @@ class ServiceRequestController extends Controller
 
     public function signedBudgetAvailabilityPDF(ServiceRequest $serviceRequest)
     {
-        header('Content-Type: application/pdf');
-        if (isset($serviceRequest->signedBudgetAvailabilityCert)) {
-            echo base64_decode($serviceRequest->signedBudgetAvailabilityCert->signed_file);
-        }
+        return Storage::disk('gcs')->response($serviceRequest->signedBudgetAvailabilityCert->signed_file);
+//        header('Content-Type: application/pdf');
+//        if (isset($serviceRequest->signedBudgetAvailabilityCert)) {
+//            echo base64_decode($serviceRequest->signedBudgetAvailabilityCert->signed_file);
+//        }
     }
 
 }

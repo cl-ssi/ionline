@@ -362,5 +362,14 @@
                     console.log(error);
                 });
         }
+
+
+        function disableButton(form) {
+            form.signBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Firmando...';
+            form.signBtn.disabled = true;
+            form.cancelSignBtn.disabled = true;
+            return true;
+        }
+
     </script>
 @endsection

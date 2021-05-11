@@ -60,7 +60,7 @@
         <div class="form-row">
             <fieldset class="form-group col">
                 <label for="for_document">Documento a distribuir</label>
-                <input type="file" class="form-control" id="for_document" name="document">
+                <input type="file" class="form-control" id="for_document" accept="application/pdf" name="document">
                 <a href="{{route('documents.signatures.showPdf', $signature->signaturesFileDocument)}}"
                    target="_blank" data-toggle="tooltip" data-placement="top"
                    data-original-title="">Documento <i
@@ -105,7 +105,7 @@
 
 
         @if($signature->hasSignedOrRejectedFlow)
-            <button type="button" class="btn btn-primary" 
+            <button type="button" class="btn btn-primary"
                 @if($signature->responsable_id != Auth::id()) disabled @endif
                 data-toggle="modal" data-target="#editSignature">Guardar
             </button>

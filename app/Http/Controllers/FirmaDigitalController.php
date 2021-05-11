@@ -84,11 +84,16 @@ class FirmaDigitalController extends Controller
         }
 
         $signaturesFile = SignaturesFile::create();
-        $signaturesFile->signed_file = $responseArray['content'];
+//        $signaturesFile->signed_file = $responseArray['content'];
         $signaturesFile->md5_file = $checksum_pdf;
         $signaturesFile->signer_id = Auth::id();
         $signaturesFile->verification_code = $verificationCode;
         $signaturesFile->save();
+
+        //Se guarda en gcs
+        $filePath = 'ionline/signatures/signed/' . $signaturesFile->id . '.pdf';
+        $signaturesFile->update(['signed_file' => $filePath]);
+        Storage::disk('gcs')->put($filePath, base64_decode($responseArray['content']));
 
         return redirect()->route($callbackRoute, ['message' => "El documento $signaturesFile->id se ha firmado correctamente.",
             'modelId' => $modelId,
@@ -100,13 +105,19 @@ class FirmaDigitalController extends Controller
      * @param Request $request
      * @param SignaturesFlow $signaturesFlow
      * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function signPdfFlow(Request $request, SignaturesFlow $signaturesFlow)
     {
+//        if ($signaturesFlow->signaturesFile->signed_file)
+//            $pdfbase64 = $signaturesFlow->signaturesFile->signed_file;
+//         else
+//            $pdfbase64 = $signaturesFlow->signaturesFile->file;
+
         if ($signaturesFlow->signaturesFile->signed_file)
-            $pdfbase64 = $signaturesFlow->signaturesFile->signed_file;
-         else
-            $pdfbase64 = $signaturesFlow->signaturesFile->file;
+            $pdfbase64 = base64_encode(Storage::disk('gcs')->get($signaturesFlow->signaturesFile->signed_file));
+        else
+            $pdfbase64 = base64_encode(Storage::disk('gcs')->get($signaturesFlow->signaturesFile->file));
 
         $checksum_pdf = $signaturesFlow->signaturesFile->md5_file;
         $type = $signaturesFlow->type;
@@ -136,7 +147,19 @@ class FirmaDigitalController extends Controller
         $signaturesFlow->signature_date = now();
         $signaturesFlow->save();
 
-        $signaturesFlow->signaturesFile->signed_file = $responseArray['content'];
+//        $signaturesFlow->signaturesFile->signed_file = $responseArray['content'];
+
+        if ($signaturesFlow->signaturesFile->signed_file) {
+            $filePath = $signaturesFlow->signaturesFile->signed_file;
+            Storage::disk('gcs')->put($filePath, base64_decode($responseArray['content']));
+        }else {
+            $filePath = 'ionline/signatures/signed/' . $signaturesFlow->signaturesFile->id . '.pdf';
+            $signaturesFlow->signaturesFile->signed_file = $filePath;
+            Storage::disk('gcs')->put($filePath, base64_decode($responseArray['content']));
+        }
+
+//        $signaturesFlow->signaturesFile->signed_file = $responseArray['content'];
+
         if ($type === 'firmante') $signaturesFlow->signaturesFile->verification_code = $verificationCode;
         $signaturesFlow->signaturesFile->save();
 
