@@ -662,7 +662,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('signatures/verify', 'Documents\SignatureController@verify')->name('signatures.verify');
     Route::get('signatures/index/{tab}', 'Documents\SignatureController@index')->name('signatures.index');
     Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
-    Route::get('/showPdf/{signaturesFile}', 'Documents\SignatureController@showPdf')->name('signatures.showPdf');
+    Route::get('/showPdf/{signaturesFile}/{timestamp?}', 'Documents\SignatureController@showPdf')->name('signatures.showPdf');
     Route::post('/showPdfFromFile', 'Documents\SignatureController@showPdfFromFile')->name('signatures.showPdfFromFile');
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('signatures.showPdfAnexo');
     Route::post('/{idSignaturesFlow}/rechazar', 'Documents\SignatureController@rejectSignature')->name('signatures.rejectSignature');
