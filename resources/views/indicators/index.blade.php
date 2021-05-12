@@ -100,7 +100,7 @@
                 <strong>Serie D</strong>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item text-muted">{{--<a href="{{ route('indicators.rem.index', [2021, 'D']) }}">2021</a>--}} 2021</li>
+                <li class="list-group-item text-muted"><a href="{{ route('indicators.rem.index', [2021, 'D']) }}">2021</a> 2021</li>
                 <li class="list-group-item"><a href="{{ route('indicators.rems.year.serie.index', [2020, 'serie_d']) }}">2020</a></li>
                 <li class="list-group-item text-muted"><a href="{{ route('indicators.rems.year.serie.index', [2019, 'serie_d']) }}">2019</a></li>
                 <!-- <li class="list-group-item"><a href="{{ route('indicators.rems.index') }}">Años anteriores</a> <span class="badge badge-warning">En Desarrollo</span></li> -->
