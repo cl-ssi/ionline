@@ -75,99 +75,99 @@
         }
     }
 
-    function jsCambiaSelect(selectObject)
-    {
-      var value = selectObject.value;
-      @foreach ($products as $key => $product)
-        if ({{$product->id}} == value) {
-          document.getElementById("for_barcode").value = {{$product->barcode}};
-          document.getElementById("for_unity").value = "{{$product->unit}}";
-          document.getElementById("for_quantity").focus();
-        }
-      @endforeach
-    }
+    // function jsCambiaSelect(selectObject)
+    // {
+    //   var value = selectObject.value;
+    //   @foreach ($products as $key => $product)
+    //     if ({{$product->id}} == value) {
+    //       document.getElementById("for_barcode").value = {{$product->barcode}};
+    //       document.getElementById("for_unity").value = "{{$product->unit}}";
+    //       document.getElementById("for_quantity").focus();
+    //     }
+    //   @endforeach
+    // }
+    //
+    // function funcionDeferred(){
+    //     var deferred = $.Deferred();
+    //     var product_id = document.getElementById("for_product").value;
+    //     $.get('{{ route('pharmacies.products.dispatch.product.due_date')}}/'+product_id, function(data) {
+    //         console.log(data);
+    //         $('#for_due_date').empty();
+    //         $.each(data, function(index,date){
+    //             let today = new Date(date);
+    //             var dd = today.getDate();
+    //             var mm = today.getMonth() + 1; //January is 0!
+    //             var yyyy = today.getFullYear();
+    //
+    //             if (dd < 10) {dd = '0' + dd;}
+    //             if (mm < 10) {mm = '0' + mm;}
+    //             var today_ = dd + '/' + mm + '/' + yyyy;
+    //
+    //             $('#for_due_date').append('<option value="'+date+'">'+today_+'</option>');
+    //         });
+    //         deferred.resolve();
+    //     });
+    //     return deferred;
+    // }
 
-    function funcionDeferred(){
-        var deferred = $.Deferred();
-        var product_id = document.getElementById("for_product").value;
-        $.get('{{ route('pharmacies.products.dispatch.product.due_date')}}/'+product_id, function(data) {
-            console.log(data);
-            $('#for_due_date').empty();
-            $.each(data, function(index,date){
-                let today = new Date(date);
-                var dd = today.getDate();
-                var mm = today.getMonth() + 1; //January is 0!
-                var yyyy = today.getFullYear();
-
-                if (dd < 10) {dd = '0' + dd;}
-                if (mm < 10) {mm = '0' + mm;}
-                var today_ = dd + '/' + mm + '/' + yyyy;
-
-                $('#for_due_date').append('<option value="'+date+'">'+today_+'</option>');
-            });
-            deferred.resolve();
-        });
-        return deferred;
-    }
-
-    $('#for_product').on('change', function(e){
-      console.log(e);
-      //limpia datos, previo consulta js
-      $('#for_due_date').empty();
-      $('#for_batch').empty();
-      document.getElementById("for_count").value = 0;
-      //se comienza consulta asincrona
-      funcionDeferred().done(function() {
-        $("#for_due_date").selectindex = 0;
-        $("#for_due_date").trigger("change");
-      });
-    });
-
-    //función que permite funcionalidad asincrona (permite que termine la ejecución procedural del código antes de partir con el resto)
-     function funcionDeferred2(){
-         var deferred = $.Deferred();
-         var product_id = document.getElementById("for_product").value;
-         var due_date = document.getElementById("for_due_date").value;
-         $.get('{{ route('pharmacies.products.dispatch.product.batch')}}/'+product_id+'/'+due_date, function(data) {
-             console.log(data);
-             $('#for_batch').empty();
-             $.each(data, function(index,batch){
-                 $('#for_batch').append('<option value="'+batch+'">'+batch+'</option>');
-             });
-             deferred.resolve();
-         });
-         return deferred;
-     }
-
-    $('#for_due_date').on('change', function(e){
-      console.log(e);
-      funcionDeferred2().done(function() {
-        $("#for_batch").selectedIndex = 0;
-        $("#for_batch").trigger("change");
-
-        //se obtiene contador del producto (consideando f.venc y lote)
-        var product_id = document.getElementById("for_product").value;
-        var due_date = document.getElementById("for_due_date").value;
-        var batch = document.getElementById("for_batch").value;
-        document.getElementById("for_count").value = 0;
-        $.get('{{ route('pharmacies.products.dispatch.product.count')}}/'+product_id+'/'+due_date+'/'+batch.replace("/","*"), function(data) {
-            console.log(data);
-            document.getElementById("for_count").value = data;
-        });
-      });
-      });
-
-    $('#for_batch').on('change', function(e){
-      //se obtiene contador del producto (consideando f.venc y lote)
-      var product_id = document.getElementById("for_product").value;
-      var due_date = document.getElementById("for_due_date").value;
-      var batch = document.getElementById("for_batch").value;
-      document.getElementById("for_count").value = 0;
-      $.get('{{ route('pharmacies.products.dispatch.product.count')}}/'+product_id+'/'+due_date+'/'+batch.replace("/","*"), function(data) {
-          console.log(data);
-          document.getElementById("for_count").value = data;
-      });
-    });
+    // $('#for_product').on('change', function(e){
+    //   console.log(e);
+    //   //limpia datos, previo consulta js
+    //   $('#for_due_date').empty();
+    //   $('#for_batch').empty();
+    //   document.getElementById("for_count").value = 0;
+    //   //se comienza consulta asincrona
+    //   funcionDeferred().done(function() {
+    //     $("#for_due_date").selectindex = 0;
+    //     $("#for_due_date").trigger("change");
+    //   });
+    // });
+    //
+    // //función que permite funcionalidad asincrona (permite que termine la ejecución procedural del código antes de partir con el resto)
+    //  function funcionDeferred2(){
+    //      var deferred = $.Deferred();
+    //      var product_id = document.getElementById("for_product").value;
+    //      var due_date = document.getElementById("for_due_date").value;
+    //      $.get('{{ route('pharmacies.products.dispatch.product.batch')}}/'+product_id+'/'+due_date, function(data) {
+    //          console.log(data);
+    //          $('#for_batch').empty();
+    //          $.each(data, function(index,batch){
+    //              $('#for_batch').append('<option value="'+batch+'">'+batch+'</option>');
+    //          });
+    //          deferred.resolve();
+    //      });
+    //      return deferred;
+    //  }
+    //
+    // $('#for_due_date').on('change', function(e){
+    //   console.log(e);
+    //   funcionDeferred2().done(function() {
+    //     $("#for_batch").selectedIndex = 0;
+    //     $("#for_batch").trigger("change");
+    //
+    //     //se obtiene contador del producto (consideando f.venc y lote)
+    //     var product_id = document.getElementById("for_product").value;
+    //     var due_date = document.getElementById("for_due_date").value;
+    //     var batch = document.getElementById("for_batch").value;
+    //     document.getElementById("for_count").value = 0;
+    //     $.get('{{ route('pharmacies.products.dispatch.product.count')}}/'+product_id+'/'+due_date+'/'+batch.replace("/","*"), function(data) {
+    //         console.log(data);
+    //         document.getElementById("for_count").value = data;
+    //     });
+    //   });
+    //   });
+    //
+    // $('#for_batch').on('change', function(e){
+    //   //se obtiene contador del producto (consideando f.venc y lote)
+    //   var product_id = document.getElementById("for_product").value;
+    //   var due_date = document.getElementById("for_due_date").value;
+    //   var batch = document.getElementById("for_batch").value;
+    //   document.getElementById("for_count").value = 0;
+    //   $.get('{{ route('pharmacies.products.dispatch.product.count')}}/'+product_id+'/'+due_date+'/'+batch.replace("/","*"), function(data) {
+    //       console.log(data);
+    //       document.getElementById("for_count").value = data;
+    //   });
+    // });
 
   </script>
 
