@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\RequestForms\ItemRequestForm;
+use App\Models\RequestForms\EventRequestForm;
 
 class RequestForm extends Model
 {
@@ -35,7 +36,9 @@ class RequestForm extends Model
         return $this->hasMany(ItemRequestForm::class);
     }
 
-
+    public function eventRequestForms() {
+        return $this->hasMany(EventRequestForm::class);
+    }
 
 /*
     public function getFormatEstimatedExpenseAttribute()
