@@ -34,23 +34,23 @@ class ProductDuedateBatchStock extends Component
           $this->count = "";
 
           foreach ($product->purchaseItems as $key1 => $purchaseItem) {
-            $this->array[$purchaseItem->due_date . " - " . $purchaseItem->batch] = 0;
+            $this->array[$purchaseItem->due_date->format('d-m-Y') . " - " . $purchaseItem->batch] = 0;
           }
           foreach ($product->receivingItems as $key2 => $receivingItems) {
-            $this->array[$receivingItems->due_date . " - " . $receivingItems->batch] = 0;
+            $this->array[$receivingItems->due_date->format('d-m-Y') . " - " . $receivingItems->batch] = 0;
           }
           foreach ($product->dispatchItems as $key3 => $dispatchItems) {
-            $this->array[$dispatchItems->due_date . " - " . $dispatchItems->batch] = 0;
+            $this->array[$dispatchItems->due_date->format('d-m-Y') . " - " . $dispatchItems->batch] = 0;
           }
 
           foreach ($product->purchaseItems as $key1 => $purchaseItem) {
-            $this->array[$purchaseItem->due_date . " - " . $purchaseItem->batch] += $purchaseItem->amount;
+            $this->array[$purchaseItem->due_date->format('d-m-Y') . " - " . $purchaseItem->batch] += $purchaseItem->amount;
           }
           foreach ($product->receivingItems as $key2 => $receivingItems) {
-            $this->array[$receivingItems->due_date . " - " . $receivingItems->batch] += $receivingItems->amount;
+            $this->array[$receivingItems->due_date->format('d-m-Y') . " - " . $receivingItems->batch] += $receivingItems->amount;
           }
           foreach ($product->dispatchItems as $key3 => $dispatchItems) {
-            $this->array[$dispatchItems->due_date . " - " . $dispatchItems->batch] -= $dispatchItems->amount;
+            $this->array[$dispatchItems->due_date->format('d-m-Y') . " - " . $dispatchItems->batch] -= $dispatchItems->amount;
           }
 
           foreach ($this->array as $key1 => $value) {

@@ -30,4 +30,11 @@ class ReceivingItem extends Model
     return $this->belongsTo('App\Pharmacies\Product','product_id')->withTrashed();
   }
 
+  /**
+   * The attributes that should be mutated to dates.
+   *
+   * @var array
+   */
+  protected $dates = ['due_date'];
+
 }
