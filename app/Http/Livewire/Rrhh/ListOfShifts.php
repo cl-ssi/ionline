@@ -14,8 +14,17 @@ class ListOfShifts extends Component
     // public $actuallyOrgUnit;
 	public $days;
     public $statusx;
-
-     public function editShiftDay($id)
+        private $colors = array(
+            1 => "lightblue",
+            2 => "#2471a3",
+            3 => " #52be80 ",
+            4 => "orange",
+            5 => "#ec7063",
+            6 => "#af7ac5",
+            7 => "#f4d03f",
+            8 => "gray",
+    );
+     public function editShiftDayX($id)
 
     {   
         $this->statusx++;
@@ -26,7 +35,7 @@ class ListOfShifts extends Component
 
         public function render()
     {
-        return view('livewire.rrhh.list-of-shifts');
+        return view('livewire.rrhh.list-of-shifts',["statusColors"=>$this->colors]);
         // return view('livewire.rrhh.list-of-shifts',[compact($this- >staffInShift,$this->days),'actuallyMonth'=>$this->actuallyMonth,'actuallyYear'=>$this->actuallyYear]);
     }
 
@@ -40,24 +49,19 @@ class ListOfShifts extends Component
         $this->statusx=0;
 
     }
-    // public function mount()
-    // {
-    //     //  $users = Session::get('users');
-    //     // $cargos = Session::get('cargos');
-    //     // $sTypes = Session::get('sTypes');
-    //     $this->days = Session::get('days');
-    //     $this->actuallyMonth = Session::get('actuallyMonth');
-    //      // $this->actuallyDay = Session::get('actuallyDay');
-    //     $this->actuallyYear = Session::get('actuallyYear');
-    //     // $months = $this->months;
-    //     //$actuallyOrgUnit = Session::get('actuallyOrgUnit');
-    //     //$staff = Session::get('staff');
-    //     $this->actuallyShift = Session::get('actuallyShift');
-    //     $this->staffInShift = Session::get('staffInShift');
-    //     $this->statusx=0;
-
-    // }
    
+    public function editShiftDay($id){
+
+        // $this->emit('clearModal', $this->shiftDay->id);
+        $this->filered ="on"; 
+        // $this->emit('setshiftUserDay', $this->shiftDay->id);
+        $this->emit('setshiftUserDay', $id);
+
+
+        // $this->shiftDay = ShiftUserDay::find($id);
+        // $this->count++;
+        // dd($this->shiftDay);
+    }
 
  
 }

@@ -355,7 +355,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
     Route::prefix('shiftManagement')->group(function () {
         Route::get('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftManag.index')->middleware('auth');
-        Route::post('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'indexfiltered'])->name('shiftManag.index')->middleware('auth');
+        Route::post('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'indexfiltered'])->name('shiftManag.indexF')->middleware('auth');
         Route::post('/assign', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'assignStaff'])->name('shiftsTypes.assign')->middleware('auth');
         Route::post('/deleteassign', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'assignStaff'])->name('shiftsTypes.deleteassign')->middleware('auth');
          Route::get('/downloadShiftInXls', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'downloadShiftInXls'])->name('shiftsTypes.downloadShiftInXls')->middleware('auth');
@@ -1218,6 +1218,11 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         // Route::get('/create', [OptionsController::class, 'create'])->name('create');
         // Route::post('/store', [OptionsController::class, 'store'])->name('store');
     });
+    
+    Route::post('/livewire/message/rrhh.change-shift-day-status', [\App\Http\Livewire\Rrhh\ChangeShiftDayStatus::class]);
+    Route::post('/livewire/message/rrhh/change-shift-day-status', [\App\Http\Livewire\Rrhh\ChangeShiftDayStatus::class]);
+    // Route::post('livewire/message/rrhh.change-shift-day-status', [\App\Livewire\Rrhh\ChangeShiftDayStatus::class]);+
+    
 
 
 });
