@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Suitability\Result;
 use App\Models\RequestForms\RequestForm;
 use App\Models\ServiceRequests\ServiceRequest;
+use App\Models\RequestForms\EventRequestForm;
 
 class User extends Authenticatable
 {
@@ -70,16 +71,20 @@ class User extends Authenticatable
         return $this->hasOne('\App\Models\Rrhh\UserBankAccount','user_id');
     }
 
-    public function creatorRequestForm(){
+    public function creatorRequestForms(){
       return $this->hasMany(RequestForm::class, 'creator_user_id');
     }
 
-    public function applicantRequestForm(){
+    public function applicantRequestForms(){
       return $this->hasMany(RequestForm::class, 'applicant_user_id');
     }
 
-    public function supervisorRequestForm(){
+    public function supervisorRequestForms(){
       return $this->hasMany(RequestForm::class, 'supervisor_user_id');
+    }
+
+    public function eventRequestForms(){
+      return $this->hasMany(EventRequestForm::class, 'signer_user_id');
     }
 
     public function scopeSearch($query, $name) {
