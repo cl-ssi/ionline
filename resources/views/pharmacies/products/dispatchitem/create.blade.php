@@ -1,7 +1,9 @@
 <form method="POST" class="form-horizontal" action="{{ route('pharmacies.products.dispatch_item.store') }}">
     @csrf
 
-    <div class="row">
+    @livewire('pharmacies.product-duedate-batch-stock',['dispatch' => $dispatch,
+                                                        'products'  => $products])
+    <!-- <div class="row">
         <fieldset class="form-group col-2">
             <label for="for_barcode">Código de Barra</label>
             <input type="number" class="form-control" id="for_barcode" placeholder="" name="barcode">
@@ -50,7 +52,7 @@
             <input type="text" id="for_count" name="count" class="form-control" disabled>
         </fieldset>
 
-    </div>
+    </div> -->
 
     <button type="submit" class="btn btn-primary">Crear</button>
 </form>

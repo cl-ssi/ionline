@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <h4>Información del período: {{ $serviceRequest->Fulfillments->first()->year }}-{{ $serviceRequest->Fulfillments->first()->month }} <span class="small text-muted float-right">{{ $serviceRequest->Fulfillments->first()->id }} </span> </h4>
+        <h4>Información del período: {{ $serviceRequest->Fulfillments->first()->year }}-{{ $serviceRequest->Fulfillments->first()->month }} ({{Carbon\Carbon::parse($serviceRequest->Fulfillments->first()->year . "-" . $serviceRequest->Fulfillments->first()->month)->monthName}}) <span class="small text-muted float-right">{{ $serviceRequest->Fulfillments->first()->id }} </span> </h4>
     </div>
     <div class="card-body">
         <!-- @livewire('service-request.shifts-control', ['fulfillment' => $serviceRequest->fulfillments->first()]) -->
@@ -17,7 +17,7 @@
                 <a type="button" class="btn btn-outline-primary" href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank"> Ver certificado <i class="fas fa-file"></i> </a>
 
                 @if($serviceRequest->Fulfillments->first()->signatures_file_id)
-					<a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank" title="Certificado">
+					<a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',[$serviceRequest->Fulfillments->first(), time()]) }}" target="_blank" title="Certificado">
 						Certificado firmado<i class="fas fa-signature"></i>
 					</a>
                 @else

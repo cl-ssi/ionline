@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Documents\DocumentController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\LoginController;
@@ -88,6 +89,8 @@ Route::group(['middleware' => 'auth:external'], function () {
     Route::view('/external', 'external')->name('external');
     //Route::view('/external', 'external')->name('external');
     Route::prefix('idoneidad')->as('idoneidad.')->group(function(){
+    Route::get('/manual-usuario', [SuitabilityController::class, 'downloadManualUser'])->name('downloadManualUser');
+    Route::get('/manual-administrador', [SuitabilityController::class, 'downloadManualAdministrator'])->name('downloadManualAdministrator');
     Route::get('/create/{school}', [SuitabilityController::class, 'createExternal'])->name('createExternal');
     Route::post('/', [SuitabilityController::class, 'storeSuitabilityExternal'])->name('storeSuitabilityExternal');
     Route::get('/list/{school}', [SuitabilityController::class, 'listOwn'])->name('listOwn');
@@ -139,12 +142,18 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 /* Nuevas rutas, Laravel 8.0 */
 Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')->group(function(){
-    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index');
+    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware(['role:Replacement Staff: admin']);
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
-    // Route::get('/show_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('show_file');
-    // Route::get('/download/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download');
-    // Route::put('/{replacement_staff}/update', [ReplacementStaffController::class, 'update'])->name('update');
-
+    Route::get('/download_file/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download_file');
+    Route::get('/view_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('view_file');
+    Route::prefix('view_profile')->name('view_profile.')->group(function(){
+        Route::get('/download/{profile}', [ProfileController::class, 'download'])->name('download');
+        Route::get('/show_file/{profile}', [ProfileController::class, 'show_file'])->name('show_file');
+    });
+    Route::prefix('view_training')->name('view_training.')->group(function(){
+        Route::get('/download/{training}', [TrainingController::class, 'download'])->name('download');
+        Route::get('/show_file/{training}', [TrainingController::class, 'show_file'])->name('show_file');
+    });
     Route::prefix('request')->name('request.')->group(function(){
         Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index');
         Route::get('/own_index', [RequestReplacementStaffController::class, 'own_index'])->name('own_index');
@@ -285,6 +294,8 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('/downloadAgree/{file}', 'Agreements\AgreementController@downloadAgree')->name('downloadAgree');
     Route::get('/downloadRes/{file}', 'Agreements\AgreementController@downloadRes')->name('downloadRes');
 
+    Route::get('/preview/{agreement}', 'Agreements\AgreementController@preview')->name('preview');
+
     Route::resource('addendums', 'Agreements\AddendumController');
     Route::get('/addendum/{file}', 'Agreements\AddendumController@download')->name('addendum.download');
     Route::resource('programs', 'Agreements\ProgramController');
@@ -299,7 +310,7 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     //Route::get('createWord','Agreements\WordTestController@createWordDocx')->name('createWord.index');
     Route::get('/createWord/{agreement}', 'Agreements\WordTestController@createWordDocx')->name('createWord');
     Route::post('/createWordRes/{agreement}', 'Agreements\WordTestController@createResWordDocx')->name('createWordRes');
-    Route::get('/signRes/{agreement}', 'Agreements\AgreementController@signRes')->name('signRes');
+    Route::get('/sign/{agreement}/type/{type}', 'Agreements\AgreementController@sign')->name('sign');
 });
 
 //Programación Númerica APS
@@ -417,7 +428,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/download-invoice/{fulfillment}/{timestamp?}', [FulfillmentController::class, 'downloadInvoice'])->name('download_invoice');
             Route::get('/download-resolution/{serviceRequest}', [FulfillmentController::class, 'downloadResolution'])->name('download_resolution');
             Route::get('/certificate-pdf/{fulfillment}/{user?}', [FulfillmentController::class, 'certificatePDF'])->name('certificate-pdf');
-            Route::get('/signed-certificate-pdf/{fulfillment}', [FulfillmentController::class, 'signedCertificatePDF'])->name('signed-certificate-pdf');
+            Route::get('/signed-certificate-pdf/{fulfillment}/{timestamp?}', [FulfillmentController::class, 'signedCertificatePDF'])->name('signed-certificate-pdf');
             //eliminar palabra fulfiment en URL y en metodo
             Route::get('/confirm-fulfillment/{fulfillment}', [FulfillmentController::class, 'confirmFulfillment'])->name('confirm-Fulfillment');
             Route::get('/refuse-fulfillment/{fulfillment}', [FulfillmentController::class, 'refuseFulfillment'])->name('refuse-Fulfillment');
@@ -444,6 +455,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/without-bank-details', [ReportController::class, 'withoutBankDetails'])->name('without-bank-details');
             Route::get('/pending-resolutions', [ReportController::class, 'pendingResolutions'])->name('pending-resolutions');
             Route::get('/resolution-pdf/{ServiceRequest}', [ReportController::class, 'resolutionPDF'])->name('resolution-pdf');
+            Route::get('/resolution-pdf-hsa/{ServiceRequest}', [ReportController::class, 'resolutionPDFhsa'])->name('resolution-pdf-hsa');
             Route::get('/bank-payment-file/{establishment_id?}', [ReportController::class, 'bankPaymentFile'])->name('bank-payment-file');
             Route::get('/with-resolution-file', [ReportController::class, 'indexWithResolutionFile'])->name('with-resolution-file');
             Route::get('/without-resolution-file', [ReportController::class, 'indexWithoutResolutionFile'])->name('without-resolution-file');
@@ -455,9 +467,14 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             // Route::get('/fulfillment/finance', [ReportController::class, 'pendingFinance'])->name('pending-finance');
 
             //pasar a reports
+            // Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
+            // Route::get('/export-sirh', [ServiceRequestController::class, 'export_sirh'])->name('export_sirh');
+            // Route::get('/export-sirh-txt', [ServiceRequestController::class, 'export_sirh_txt'])->name('export-sirh-txt');
+            //pasar a reports
             Route::get('/consolidated-data', [ServiceRequestController::class, 'consolidated_data'])->name('consolidated_data');
-            Route::get('/export-sirh', [ServiceRequestController::class, 'export_sirh'])->name('export_sirh');
-            Route::get('/export-sirh-txt', [ServiceRequestController::class, 'export_sirh_txt'])->name('export-sirh-txt');
+            // Route::get('/export-sirh', [ServiceRequestController::class, 'export_sirh'])->name('export_sirh');
+            Route::get('/export-sirh', [ReportController::class, 'export_sirh'])->name('export_sirh');
+            Route::get('/export-sirh-txt', [ReportController::class, 'export_sirh_txt'])->name('export-sirh-txt');
         });
 
         Route::prefix('signature-flow')->name('signature-flow.')->group(function () {
@@ -628,6 +645,8 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('/add_number', 'Documents\DocumentController@addNumber')->name('add_number');
     Route::post('/find', 'Documents\DocumentController@find')->name('find');
     Route::get('/report', 'Documents\DocumentController@report')->name('report');
+    Route::get('/{document}/sendForSignature/', 'Documents\DocumentController@sendForSignature')->name('sendForSignature');
+    Route::get('/signed-document-pdf/{id}', [DocumentController::class, 'signedDocumentPdf'])->name('signedDocumentPdf');
 
     Route::prefix('partes')->as('partes.')->group(function () {
         Route::get('outbox', 'Documents\ParteController@outbox')->name('outbox');
@@ -644,6 +663,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::get('signatures/index/{tab}', 'Documents\SignatureController@index')->name('signatures.index');
     Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
     Route::get('/showPdf/{signaturesFile}', 'Documents\SignatureController@showPdf')->name('signatures.showPdf');
+    Route::post('/showPdfFromFile', 'Documents\SignatureController@showPdfFromFile')->name('signatures.showPdfFromFile');
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('signatures.showPdfAnexo');
     Route::post('/{idSignaturesFlow}/rechazar', 'Documents\SignatureController@rejectSignature')->name('signatures.rejectSignature');
     Route::get('signatures/signatureFlows/{signatureId}', 'Documents\SignatureController@signatureFlows')->name('signatures.signatureFlows');
@@ -1190,6 +1210,7 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         Route::post('/store', [SchoolsController::class, 'store'])->name('store');
         Route::get('{school}/edit', [SchoolsController::class, 'edit'])->name('edit');
         Route::put('{school}/update', [SchoolsController::class, 'update'])->name('update');
+        Route::delete('/{school}/destroy', [SchoolsController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('users')->as('users.')->middleware('auth')->group(function () {

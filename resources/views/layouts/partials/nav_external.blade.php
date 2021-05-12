@@ -90,6 +90,7 @@
 @php
 $schools = App\Models\Suitability\SchoolUser::where('user_external_id',Auth::guard('external')->user()->id)->get();
 @endphp
+<a class="nav-link" href="{{ route('idoneidad.downloadManualAdministrator') }}" target="_blank">Descargar Manual Administrador</a>
 @foreach($schools as $school)
 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
     <span>{{ $school->school->name}}</span>
@@ -120,6 +121,7 @@ $psirequests = App\Models\Suitability\PsiRequest::where('user_external_id',Auth:
 @endphp
 
 @if($psirequests->isNotEmpty())
+<a class="nav-link" href="{{ route('idoneidad.downloadManualUser') }}" target="_blank">Descargar Manual Usuario</a>
 
 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-1 mb-1 text-muted">
     <span>Test de Idoneidad</span>
@@ -127,11 +129,11 @@ $psirequests = App\Models\Suitability\PsiRequest::where('user_external_id',Auth:
 </h6>
 
 <ul class="nav flex-column">
-    @foreach($psirequests as $psirequest)    
+    @foreach($psirequests as $psirequest)
     <li class="nav-item">
     <form action="{{ route('idoneidad.updateStatus', $psirequest) }}" method="POST">
         @csrf
-        @method('PATCH')        
+        @method('PATCH')
         <button type="submit" class="btn btn-danger float-left"><i  onclick="return confirm('Al momento de apretar en aceptar, usted tendrá 45 minutos para poder realizar el Test de Idoneidad, no tendrá más oportunidades, luego de realizado este test. Por favor asegurarse que posea buena conexión a internet. ¿Está seguro que desea rendir el test?')">Realizar test para cargo <br>{{$psirequest->job}} ({{$psirequest->school->name}})</i></button>
     </form>
     </li>

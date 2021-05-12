@@ -14,7 +14,9 @@ use App\Models\Parameters\Bank;
 use App\Models\ServiceRequests\SignatureFlow;
 use App\Models\ServiceRequests\ShiftControl;
 use App\Models\Country;
+use App\Models\Parameters\Profession;
 use App\Models\Rrhh\UserBankAccount;
+use Illuminate\Support\Facades\Storage;
 use Luecano\NumeroALetras\NumeroALetras;
 use App\Mail\ServiceRequestNotification;
 use App\Mail\DerivationNotification;
@@ -211,6 +213,7 @@ class ServiceRequestController extends Controller
   {
     $users = User::orderBy('name', 'ASC')->get();
     $establishments = Establishment::orderBy('name', 'ASC')->get();
+    $professions = Profession::orderBy('name','ASC')->get();
 
     //signature flow
     if (Auth::user()->organizationalUnit->establishment_id == 38) {
@@ -230,7 +233,7 @@ class ServiceRequestController extends Controller
       return redirect()->back();
     }
 
-    return view('service_requests.requests.create', compact('subdirections', 'responsabilityCenters', 'users', 'establishments'));
+    return view('service_requests.requests.create', compact('subdirections', 'responsabilityCenters', 'users', 'establishments','professions'));
   }
 
   /**
@@ -478,6 +481,7 @@ class ServiceRequestController extends Controller
 
     $users = User::orderBy('name', 'ASC')->get();
     $establishments = Establishment::orderBy('name', 'ASC')->get();
+    $professions = Profession::orderBy('name','ASC')->get();
 
     $subdirections = OrganizationalUnit::where('name', 'LIKE', '%subdirec%')->orderBy('name', 'ASC')->get();
     $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
@@ -503,7 +507,8 @@ class ServiceRequestController extends Controller
       'SignatureFlow',
       'employee',
       'banks',
-      'countries'
+      'countries',
+      'professions'
     ));
   }
 
@@ -1265,10 +1270,11 @@ class ServiceRequestController extends Controller
 
     public function signedBudgetAvailabilityPDF(ServiceRequest $serviceRequest)
     {
-        header('Content-Type: application/pdf');
-        if (isset($serviceRequest->signedBudgetAvailabilityCert)) {
-            echo base64_decode($serviceRequest->signedBudgetAvailabilityCert->signed_file);
-        }
+        return Storage::disk('gcs')->response($serviceRequest->signedBudgetAvailabilityCert->signed_file);
+//        header('Content-Type: application/pdf');
+//        if (isset($serviceRequest->signedBudgetAvailabilityCert)) {
+//            echo base64_decode($serviceRequest->signedBudgetAvailabilityCert->signed_file);
+//        }
     }
 
 }

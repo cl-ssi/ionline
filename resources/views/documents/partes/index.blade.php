@@ -172,6 +172,9 @@
                         </a>
                     @endforeach
                 @endif
+                @if($parte->physical_format)
+                <i class="fas fa-folder" title="Parte requiere documento físico al derivar"></i>
+                @endif
             </td>
         </tr>
         @endforeach

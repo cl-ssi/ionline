@@ -74,8 +74,8 @@
                 <div class="left seis" style="padding-bottom: 6px; color: #999">Código interno: {{ $document->id }}</div>
             </div>
 
-            <div class="right" style="float: right; width: 300px; padding-top: 64px;">
-                <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;"><strong>{{ $document->type }} N°:</strong> </div>
+            <div class="right" style="float: right; width: 300px; padding-top: 76px;">
+                <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;"><strong>{{ $document->type }} N°:</strong> {{ $document->number }}</div>
                 <div style="padding-top:26px"></div>
                 <div class="left" style="padding-bottom: 6px;">
                     <strong>ANT:</strong> {{ $document->antecedent }}
@@ -128,11 +128,12 @@
             </div>
 
 
-
+            @if($document->distributionHtml != null)
             <div class="firma seis" style="padding-top: 6px; padding-bottom: 8px; display: inline-block; vertical-align:top; width: 49%;">
                 <div style="padding-bottom: 4px;"><strong>DISTRIBUCIÓN:</strong></div>
                 <div style="padding-bottom: 4px;">{!! $document->distributionHtml !!}</div>
             </div>
+            @endif
 
             <div style="padding-bottom: 6px; display: inline-block; vertical-align:top; width: 49%; text-align: right">
 

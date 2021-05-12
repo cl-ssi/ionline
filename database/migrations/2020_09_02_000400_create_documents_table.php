@@ -24,7 +24,7 @@ class CreateDocumentsTable extends Migration
             $table->string('from');
             $table->string('for');
             $table->enum('greater_hierarchy',['from','for']);
-            $table->text('distribution');
+            $table->text('distribution')->nullable();
             $table->longtext('content');
             $table->string('file')->nullable();
             $table->unsignedBigInteger('user_id');

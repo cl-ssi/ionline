@@ -15,6 +15,7 @@ use App\Models\Suitability\School;
 use App\Models\UserExternal;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class SuitabilityController extends Controller
@@ -132,7 +133,7 @@ class SuitabilityController extends Controller
         $psirequest->user_creator_id = Auth::guard('external')->user()->id;
         $psirequest->school_id = $request->input('school_id');
         $psirequest->save();
-        session()->flash('success', 'Solicitud Creada Exitosamente');
+        session()->flash('success', 'Solicitud Creada Exitosamente, ahora el asistente puede ingresar a este mismo sitio con los datos de clave única a realizar la prueba');
         return redirect()->route('external');
     }
 
@@ -197,17 +198,22 @@ class SuitabilityController extends Controller
             $signature->description = "{$result->user->fullname} , Rut: {$result->user->id}-{$result->user->dv} ";
 //            $signature->endorse_type = 'Visación opcional';
             $signature->endorse_type = 'Visación en cadena de responsabilidad';
-            $signature->recipients = $userSigner->email . ',' . $userVisator1->email . ',' . $userVisator2->email;
-            $signature->distribution = $userSigner->full_name . ',' . $userVisator1->full_name . ',' . $userVisator2->full_name;
+//            $signature->recipients = $userSigner->email . ',' . $userVisator1->email . ',' . $userVisator2->email;
+            $signature->distribution = $userSigner->email . ',' . $userVisator1->email . ',' . $userVisator2->email;
             $signature->visatorAsSignature = true;
             $signature->save();
 
             $signaturesFile = new SignaturesFile();
-            $signaturesFile->file = base64_encode($pdf->output());
+//            $signaturesFile->file = base64_encode($pdf->output());
             $signaturesFile->md5_file = md5($pdf->output());
             $signaturesFile->file_type = 'documento';
             $signaturesFile->signature_id = $signature->id;
             $signaturesFile->save();
+
+            //Se guarda en gcs
+            $filePath = 'ionline/signatures/original/' . $signaturesFile->id . '.pdf';
+            $signaturesFile->update(['file' => $filePath]);
+            Storage::disk('gcs')->put($filePath, $pdf->output());
 
             $signaturesFlow = new SignaturesFlow();
             $signaturesFlow->signatures_file_id = $signaturesFile->id;
@@ -249,9 +255,22 @@ class SuitabilityController extends Controller
     public function signedSuitabilityCertificatePDF($id)
     {
         $result = Result::find($id);
-        header('Content-Type: application/pdf');
-        if (isset($result->signedCertificate)) {
-            echo base64_decode($result->signedCertificate->signed_file);
-        }
+        return Storage::disk('gcs')->response($result->signedCertificate->signed_file);
+//        header('Content-Type: application/pdf');
+//        if (isset($result->signedCertificate)) {
+//            echo base64_decode($result->signedCertificate->signed_file);
+//        }
+    }
+
+    public function downloadManualUser()
+    {
+        $myFile = public_path("/manuales/idoneidad/Manual de Usuario Idoneidad Docente. Perfil Usuario.pdf");
+    	return response()->download($myFile);
+    }
+
+    public function downloadManualAdministrator()
+    {
+        $myFile = public_path("/manuales/idoneidad/Manual de Usuario Idoneidad Docente. Perfil Administrador.pdf");
+    	return response()->download($myFile);
     }
 }

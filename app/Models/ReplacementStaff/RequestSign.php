@@ -13,7 +13,7 @@ class RequestSign extends Model
 
     protected $fillable = [
         'position', 'ou_alias', 'organizational_unit_id', 'request_id',
-        'request_status', 'observation', 'date_sing',
+        'request_status', 'observation', 'date_sign',
         'request_replacement_staff_id'
     ];
 
@@ -37,11 +37,18 @@ class RequestSign extends Model
           case 'accepted':
             return 'Aceptada';
             break;
+          case 'rejected':
+            return 'Rechazada';
+            break;
         }
     }
 
     protected $hidden = [
         'created_at', 'updated_at'
+    ];
+
+    protected $dates = [
+        'date_sign'
     ];
 
     protected $table = 'rst_request_signs';

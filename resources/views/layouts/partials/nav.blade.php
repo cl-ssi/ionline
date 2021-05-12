@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-dark shadow-sm bg-nav-gobierno">
     <div class="container">
-        <a class="navbar-brand" href="{{ url('/') }}">
+        <a class="navbar-brand" href="{{ route('home') }}">
             {{ config('app.name', 'Laravel') }}
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -13,34 +13,13 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('rrhh.users.directory') }}">
-                        <i class="fas fa-address-book"></i> Telefonos
+                        <i class="fas fa-address-book" title="Teléfonos"></i> Tel. 
                     </a>
                 </li>
-
-                @can('Programming: view')
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <i class="fas fa-calculator"></i> Programación APS
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-                        <a class="dropdown-item"
-                           href="{{ route('programmings.index') }}">
-                            <i class="fas fa-calculator"></i> Programación Numérica
-                        </a>
-
-                        <a class="dropdown-item"
-                           href="{{ route('communefiles.index') }}">
-                            <i class="fas fa-file-alt"></i> Documentos Comunales
-                        </a>
-                    </div>
-                </li>
-                @endcan
 
                 <li class="nav-item {{ active('calendars') }}">
                     <a class="nav-link" href="{{ route('calendars') }}">
-                        <i class="fas fa-calendar-alt"></i> Calendarios
+                        <i class="fas fa-calendar-alt" title="Calendarios"></i> Cal.
                     </a>
                 </li>
 
@@ -57,6 +36,19 @@
                             <i class="fas fa-desktop fa-fw"></i> Indicadores - REM
                         </a>
 
+                        @can('Programming: view')
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item"
+                           href="{{ route('programmings.index') }}">
+                            <i class="fas fa-calculator"></i> Programación Numérica
+                        </a>
+
+                        <a class="dropdown-item"
+                           href="{{ route('communefiles.index') }}">
+                            <i class="fas fa-file-alt"></i> Documentos Comunales
+                        </a>
+                        @endcan
+
                         {{--@auth
                             @canany(['LE Extra Plan: Carga','LE Extra Plan: Monitoreo'])
                                 <a class="dropdown-item"
@@ -72,7 +64,7 @@
                 <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-file-alt"></i> Documentos
+                    <i class="fas fa-file-alt"></i> Docs
                 </a>
 
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -82,6 +74,13 @@
                         href="{{ route('documents.index') }}">
                         <i class="fas fa-pen"></i> Generador de documentos
                     </a>
+                    @endcan
+
+                    @canany(['Documents: signatures and distribution'])
+                      <a class="dropdown-item"
+                          href="{{ route('documents.signatures.index', ['pendientes']) }}">
+                          <i class="fas fa-signature"></i> Solicitud de firmas
+                      </a>
                     @endcan
 
                     @canany(['Partes: oficina','Partes: user','Partes: director'])
@@ -109,12 +108,7 @@
                         <i class="fas fa-file-powerpoint"></i> Planes Comunales
                     </a>
 
-                    @canany(['Documents: signatures and distribution'])
-                      <a class="dropdown-item"
-                          href="{{ route('documents.signatures.index', ['pendientes']) }}">
-                          <i class="fas fa-signature"></i> Solicitud de firmas
-                      </a>
-                    @endcan
+                    
 
                     </div>
                 </li>
@@ -208,6 +202,9 @@
                             <a class="dropdown-item @active('replacement_staff.request.index')"
                                href="{{ route('replacement_staff.request.own_index') }}">
                                 <i class="far fa-id-card"></i> Staff de Reemplazos
+                                @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
+                                    <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span>
+                                @endif
                             </a>
                         @endrole
 
