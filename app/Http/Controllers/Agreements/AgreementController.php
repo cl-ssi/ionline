@@ -21,6 +21,7 @@ use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
 use App\Rrhh\OrganizationalUnit;
 use App\User;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -336,68 +337,78 @@ class AgreementController extends Controller
     {
         return Storage::response($file->file, mb_convert_encoding($file->name,'ASCII'));
     }
+
+    public function preview(Agreement $agreement)
+    {
+        $filename = 'tmp_files/'.$agreement->file;
+        if(!Storage::disk('public')->exists($filename))
+            Storage::disk('public')->put($filename, Storage::disk('local')->get($agreement->file));
+        return Redirect::away('https://view.officeapps.live.com/op/embed.aspx?src='.asset('storage/'.$filename));
+    }
+
     public function downloadAgree(Agreement $file)
     {
         return Storage::response($file->fileAgreeEnd, mb_convert_encoding($file->name,'ASCII'));
     }
+
     public function downloadRes(Agreement $file)
     {
         return Storage::response($file->fileResEnd, mb_convert_encoding($file->name,'ASCII'));
     }
 
-    public function signRes(Agreement $agreement)
+    public function sign(Agreement $agreement, $type)
     {
+        if(!in_array($type, array('visators', 'signer'))) abort(404);
+
         $agreement->load('program','commune.municipality','referrer');
         $municipio = (!Str::contains($agreement->commune->municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre ' : '').'Municipalidad de '.$agreement->commune->name;
-        
+        $first_word = explode(' ',trim($agreement->program->name))[0];
+        $programa = $first_word == 'Programa' ? substr(strstr($agreement->program->name," "), 1) : $agreement->program->name;
+
         $signature = new Signature();
-        $signature->request_date = Carbon::now();
-        $signature->document_type = 'Resoluciones';
-        $signature->subject = 'Resolución exenta del convenio programa '.$agreement->program->name. ' año '.$agreement->period;
-        $signature->description = 'Documento que aprueba el convenio de ejecución del programa '.$agreement->program->name. ' año '.$agreement->period;
+        $signature->request_date = $agreement->date;
+        $signature->document_type = 'Convenios';
+        $signature->type = $type;
+        $signature->subject = 'Convenio programa '.$programa;
+        $signature->description = 'Documento convenio de ejecución del programa '.$programa.' año '.$agreement->period;
         $signature->endorse_type = 'Visación en cadena de responsabilidad';
-        $signature->recipients = $agreement->commune->municipality->email_municipality.',sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$agreement->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,jaime.abarzua@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
+        $signature->recipients = 'sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$agreement->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,jaime.abarzua@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
         $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;
 
         $signaturesFile = new SignaturesFile();
-        // $documentFile = $request->file('document');
-        // $signaturesFile->file = base64_encode(file_get_contents($documentFile->getRealPath()));
         $signaturesFile->file_type = 'documento';
-        // $signaturesFile->md5_file = md5_file($documentFile);
-        
-        // $director_signature = Authority::getAuthorityFromDate(1, Carbon::now()->toDateTimeString(), 'manager');
-        
-        // $signaturesFlow = new SignaturesFlow();
-        // $signaturesFlow->type = 'firmante';
-        // $signaturesFlow->ou_id = $director_signature->organizational_unit_id;
-        // $signaturesFlow->user_id = $director_signature->user_id;
-        // $signaturesFile->signaturesFlows->add($signaturesFlow);
 
-        //visadores deptos.
-        // $visadores = collect([
-        //                 ['ou_id' => 2, 'user_id' => 14104369], // SUBDIRECCION GESTION ASISTENCIAL - CARLOS CALVO
-        //                 ['ou_id' => 61, 'user_id' => 6811637], // DEPTO.ASESORIA JURIDICA  - CARMEN HENRIQUEZ OLIVARES (CHO)
-        //                 ['ou_id' => 31, 'user_id' => 9994426], // DEPTO.GESTION FINANCIERA (40) - JAIME ABARZUA CONSTANZO (JAC)
-        //                 ['ou_id' => 12, 'user_id' => 15683706] // DEPTO. ATENCION PRIMARIA DE SALUD - JORGE CRUZ TERRAZAS (JCT)
-        //             ]);
-        $visadores = collect([14104369, 6811637, 9994426, 15683706]);
+        $agreement->load('authority');
 
-        foreach($visadores as $key => $value){
+        if($type == 'signer'){
             $signaturesFlow = new SignaturesFlow();
-            $signaturesFlow->type = 'visador';
-            $signaturesFlow->ou_id = User::find($value)->organizational_unit_id;
-            $signaturesFlow->user_id = $value;
-            $signaturesFlow->sign_position = $key;
+            $signaturesFlow->type = 'firmante';
+            $signaturesFlow->ou_id = $agreement->authority->organizational_unit_id;
+            $signaturesFlow->user_id = $agreement->authority->user_id;
             $signaturesFile->signaturesFlows->add($signaturesFlow);
         }
-        
-        //visador referente tecnico
-        $signaturesFlow = new SignaturesFlow();
-        $signaturesFlow->type = 'visador';
-        $signaturesFlow->ou_id = $agreement->referrer->organizational_unit_id;
-        $signaturesFlow->user_id = $agreement->referrer->id;
-        $signaturesFlow->sign_position = $visadores->count() + 1;
-        $signaturesFile->signaturesFlows->add($signaturesFlow);
+
+        if($type == 'visators'){
+            //visadores por cadena de responsabilidad en orden parte primero por el referente tecnico
+            // $visadores = collect([
+            //                 ['ou_id' => 12, 'user_id' => 15683706] // DEPTO. ATENCION PRIMARIA DE SALUD - JORGE CRUZ TERRAZAS (JCT)
+            //                 ['ou_id' => 61, 'user_id' => 6811637], // DEPTO.ASESORIA JURIDICA  - CARMEN HENRIQUEZ OLIVARES (CHO)
+            //                 ['ou_id' => 31, 'user_id' => 9994426], // DEPTO.GESTION FINANCIERA (40) - JAIME ABARZUA CONSTANZO (JAC)
+            //                 ['ou_id' => 2, 'user_id' => 14104369], // SUBDIRECCION GESTION ASISTENCIAL - CARLOS CALVO
+            //             ]);
+            $visadores = collect([$agreement->referrer]); //referente tecnico
+            foreach(array(15683706, 6811637, 9994426, 14104369) as $user_id) //resto de visadores por cadena de responsabilidad
+                $visadores->add(User::find($user_id));
+            
+            foreach($visadores as $key => $visador){
+                $signaturesFlow = new SignaturesFlow();
+                $signaturesFlow->type = 'visador';
+                $signaturesFlow->ou_id = $visador->organizational_unit_id;
+                $signaturesFlow->user_id = $visador->id;
+                $signaturesFlow->sign_position = $key;
+                $signaturesFile->signaturesFlows->add($signaturesFlow);
+            }
+        }
 
         $signature->signaturesFiles->add($signaturesFile);
         

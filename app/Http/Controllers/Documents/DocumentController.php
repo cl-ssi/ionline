@@ -76,9 +76,15 @@ class DocumentController extends Controller
         $document = new Document($request->All());
         $document->user()->associate(Auth::user());
         $document->organizationalUnit()->associate(Auth::user()->organizationalUnit);
-        /* Si no viene con número agrega uno desde el correlativo */
-        if($request->type != 'Ordinario' and $request->type != 'Reservado') {
-            $document->number = Correlative::getCorrelativeFromType($request->type);
+
+        /* Agrega uno desde el correlativo */
+        if(!$request->number) {
+            if($request->type == 'Memo' OR
+                $request->type == 'Acta de recepción' OR
+                $request->type == 'Circular') {
+        
+                $document->number = Correlative::getCorrelativeFromType($request->type);
+            }
         }
         $document->save();
         return redirect()->route('documents.index');
@@ -114,7 +120,7 @@ class DocumentController extends Controller
     {
         /* Si tiene número de parte entonces devuelve al index */
         if($document->file) {
-            session()->flash('danger', 'Lo siento mi amor, el documento ya tiene un archivo adjunto');
+            session()->flash('danger', 'Lo siento, el documento ya tiene un archivo adjunto');
             return redirect()->route('documents.index');
         }
         /* De lo contrario retorna para editar el documento */
@@ -133,10 +139,19 @@ class DocumentController extends Controller
     public function update(Request $request, Document $document)
     {
         $document->fill($request->all());
-        /* Si no viene con número agrega uno desde el correlativo */
-        if(!$request->number and $request->type != 'Ordinario') {
-            $document->number = Correlative::getCorrelativeFromType($request->type);
+        /* Agrega uno desde el correlativo */
+        if(!$request->number) {
+            if($request->type == 'Memo' OR
+                $request->type == 'Acta de recepción' OR
+                $request->type == 'Circular') {
+        
+                $document->number = Correlative::getCorrelativeFromType($request->type);
+            }
         }
+        /* Si no viene con número agrega uno desde el correlativo */
+        //if(!$request->number and $request->type != 'Ordinario') {
+        //    $document->number = Correlative::getCorrelativeFromType($request->type);
+        //}
         $document->save();
 
         session()->flash('info', 'El documento ha sido actualizado.
@@ -305,10 +320,11 @@ class DocumentController extends Controller
     public function signedDocumentPdf($id)
     {
         $document = Document::find($id);
-        header('Content-Type: application/pdf');
-        if (isset($document->fileToSign)) {
-            echo base64_decode($document->fileToSign->signed_file);
-        }
+        return Storage::disk('gcs')->response($document->fileToSign->signed_file);
+//        header('Content-Type: application/pdf');
+//        if (isset($document->fileToSign)) {
+//            echo base64_decode($document->fileToSign->signed_file);
+//        }
     }
 
 

@@ -8,8 +8,8 @@
 
 <link href="{{ asset('css/animate.css') }}" rel="stylesheet">
 
-<form class="form-inline float-right" method="GET" action="{{ route('requirements.outbox') }}">
-	<div class="input-group mb-4">
+<form class="form-inline mb-4" method="GET" action="{{ route('requirements.outbox') }}">
+	<div class="input-group">
 		<input type="text" name="request_req" class="form-control" placeholder="N°, Asunto.">
 		<input type="text" name="request_cat" class="form-control" placeholder="Categorías">
 		<input type="text" name="request_usu" class="form-control" placeholder="Usuario involucrado">
@@ -21,10 +21,10 @@
 	</div>
 </form>
 
-<br><br>
 
-<div class="alert alert-warning alert-dismissible fade show" role="alert">
-  <strong>¡Es importante que cierres tus requerimientos!</strong> <br /> Requerimientos abiertos producen demoras en tus tiempos productivos.
+
+<div class="alert alert-info alert-dismissible fade show" role="alert">
+  <strong>¡Es importante que cierres tus requerimientos!</strong> Requerimientos abiertos producen demoras en tus tiempos productivos.
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>

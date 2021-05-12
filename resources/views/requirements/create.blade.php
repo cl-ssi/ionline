@@ -24,11 +24,11 @@
 
 
 
-   
-                
 
 
-                
+
+
+
 
 
 
@@ -40,20 +40,20 @@
 <div class="col-12">
 
                 <label for="asignarCategoria" class="sr-only">Asignar categoría</label>
-                <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">                
+                <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">
                 <label for="category_id" class="sr-only">Categorias</label>
                 <select name="category_id" id="category_id" class="selectpicker input-sm"
                     multiple title="Elige tus categorías" >
                     @foreach($categories as $key => $category)
-                    <option value="{{$category->id}}" 
+                    <option value="{{$category->id}}"
                     data-content="<span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>">
-                    
-                    
-                    
+
+
+
                     </option>
                     @endforeach
                     </select>
-                
+
 
 </div>
 
@@ -89,19 +89,19 @@
 <div class="col-12">
 
                 <label for="asignarCategoria" class="sr-only">Asignar categoría</label>
-                <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">                
+                <input type="text" readonly class="form-control-plaintext" id="asignarCategoria" value="Asignar categoría:">
                 <label for="category_id" class="sr-only">Categorias</label>
                 <select name="category_id[]" id="category_id" class="selectpicker input-sm"
                     multiple title="Elige tus categorías" >
                     @foreach($categories as $key => $category)
-                    <option value="{{$category->id}}" 
+                    <option value="{{$category->id}}"
                     data-content="<span class='badge badge-primary' style='background-color: #{{$category->color}};'>{{$category->name}}</span>">
-                    
-                    
+
+
                     </option>
                     @endforeach
                     </select>
-                
+
 
 </div>
 
@@ -114,7 +114,6 @@
                     <!-- <select class="custom-select" id="forOrganizationalUnit" name="organizationalunit"> -->
                     <select class="form-control selectpicker" data-live-search="true" id="ou" name="to_ou_id" required
                             data-size="5">
-                        <option></option>
                         @foreach($ouRoots as $ouRoot)
                             @if($ouRoot->name != 'Externos')
                                 <option value="{{ $ouRoot->id }}">
