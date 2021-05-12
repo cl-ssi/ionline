@@ -47,7 +47,7 @@
         
         @if(isset($request->establishment))
         <div class="float-right">
-        <a type="button" class="btn btn-success" target="_blank"  href="{{ route('rrhh.service-request.report.export-sirh-txt', ['establishment' => $establishment, 'sirh' => $request->sirh, 'from' => $request->from, 'to' => $request->to       ]  ) }}">Formato SIRH (<small>Prueba</small>) <i class="far fa-file-excel"></i>
+        <a type="button" class="btn btn-success" target="_blank"  href="{{ route('rrhh.service-request.report.export-sirh-txt', ['establishment' => $request->establishment, 'sirh' => $request->sirh, 'from' => $request->from, 'to' => $request->to       ]  ) }}">Formato SIRH (<small>Prueba</small>) <i class="far fa-file-excel"></i>
         </a>
         </div>
         @endif
@@ -61,6 +61,7 @@
 <table class="table table-sm table-bordered table-responsive small text-uppercase" id="tabla_sirh">
     <thead>
         <tr>
+            <th>ID Service Request</th>
             <th>Run</th>
             <th>DV</th>            
             <th>Fecha inicio contrato</th>
@@ -69,8 +70,9 @@
             <th>Cargado SIRH</th>
         </tr>
     </thead>
-    @forelse($filas?: [] as $fila)    
+    @forelse($filitas?: [] as $fila)    
     <tr>
+    <td>{{$fila->id}}</td>
     <td>{{$fila->employee->id}}</td>
     <td>{{$fila->employee->dv}}</td>
     <td>{{$fila->start_date->format('d/m/Y')}}</td>

@@ -78,11 +78,13 @@ class DocumentController extends Controller
         $document->organizationalUnit()->associate(Auth::user()->organizationalUnit);
 
         /* Agrega uno desde el correlativo */
-        if($request->type == 'Memo' OR
-            $request->type == 'Acta de recepción' OR
-            $request->type == 'Circular') {
-
-            $document->number = Correlative::getCorrelativeFromType($request->type);
+        if(!$request->number) {
+            if($request->type == 'Memo' OR
+                $request->type == 'Acta de recepción' OR
+                $request->type == 'Circular') {
+        
+                $document->number = Correlative::getCorrelativeFromType($request->type);
+            }
         }
         $document->save();
         return redirect()->route('documents.index');
@@ -137,10 +139,19 @@ class DocumentController extends Controller
     public function update(Request $request, Document $document)
     {
         $document->fill($request->all());
-        /* Si no viene con número agrega uno desde el correlativo */
-        if(!$request->number and $request->type != 'Ordinario') {
-            $document->number = Correlative::getCorrelativeFromType($request->type);
+        /* Agrega uno desde el correlativo */
+        if(!$request->number) {
+            if($request->type == 'Memo' OR
+                $request->type == 'Acta de recepción' OR
+                $request->type == 'Circular') {
+        
+                $document->number = Correlative::getCorrelativeFromType($request->type);
+            }
         }
+        /* Si no viene con número agrega uno desde el correlativo */
+        //if(!$request->number and $request->type != 'Ordinario') {
+        //    $document->number = Correlative::getCorrelativeFromType($request->type);
+        //}
         $document->save();
 
         session()->flash('info', 'El documento ha sido actualizado.
