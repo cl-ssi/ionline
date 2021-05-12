@@ -89,8 +89,10 @@ class RequestReplacementStaffController extends Controller
                 $request_to_sign_accepted = RequestReplacementStaff::latest()
                     ->whereHas('requestSign', function($q) use ($authority){
                         $q->Where('organizational_unit_id', $authority->organizational_unit_id)
-                        ->Where('request_status', 'accepted')
-                        ->OrWhere('request_status', 'rejected');
+                        ->Where(function ($j){
+                          $j->Where('request_status', 'accepted')
+                          ->OrWhere('request_status', 'rejected');
+                        });
                     })
                     ->paginate(10);
             }
