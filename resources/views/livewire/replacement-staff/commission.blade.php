@@ -3,7 +3,9 @@
       @if($technicalEvaluation->technical_evaluation_status == 'pending')
       <fieldset class="form-group">
           <label for="">&nbsp;</label>
-          <button class="btn text-white btn-info float-right" wire:click.prevent="add({{$i}})">Agregar <i class="fas fa-plus"></i></button>
+          <button class="btn text-white btn-info float-right" wire:click.prevent="add({{$i}})">
+              Agregar <i class="fas fa-plus"></i>
+          </button>
       </fieldset>
       @endif
   </div>
@@ -38,6 +40,8 @@
           </div>
       @endforeach
 
+      @if($count>0)
       <button type="submit" class="btn btn-primary float-right">Guardar</button>
+      @endif
   </form>
 </div>

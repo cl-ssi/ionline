@@ -16,6 +16,7 @@ class CreateEstablishmentsTable extends Migration
         Schema::create('establishments', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->string('alias')->nullable();
             $table->enum('type',['HOSPITAL','CESFAM','CECOSF','PSR','CGR','SAPU','COSAM','PRAIS']);
             $table->string('deis');
             $table->unsignedInteger('commune_id');

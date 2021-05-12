@@ -50,12 +50,26 @@
           @if($requestReplacementStaff != NULL)
             @foreach($requestReplacementStaff as $request)
             <tr>
-                <td>{{ $request->id }}</td>
+                <td>
+                    {{ $request->id }} <br>
+                    @if($request->TechnicalEvaluation)
+                      @if($request->TechnicalEvaluation->technical_evaluation_status == 'complete')
+                        <span style="color: green;">
+                          <i class="fas fa-check-circle " title="Evaluación Técnica: {{ $request->TechnicalEvaluation->StatusValue }}"></i>
+                        </span>
+                      @else
+                        <i class="fas fa-clock" title="Evaluación Técnica: Pendiente"></i>
+                      @endif
+                    @else
+                        <i class="fas fa-clock" title="Evaluación Técnica: Pendiente"></i>
+                    @endif
+
+                </td>
                 <td>{{ $request->name }}</td>
                 <td class="text-center">{{ $request->degree }}</td>
                 <td class="text-center">{{ $request->LegalQualityValue }}</td>
-                <td>{{ Carbon\Carbon::parse($request->start_date)->format('d-m-Y') }} <br>
-                    {{ Carbon\Carbon::parse($request->end_date)->format('d-m-Y') }}
+                <td>{{ $request->start_date->format('d-m-Y') }} <br>
+                    {{ $request->end_date->format('d-m-Y') }}
                 </td>
                 <td>{{ $request->FundamentValue }}</td>
                 <td>{{ $request->user->FullName }}<br>
@@ -67,10 +81,14 @@
                             <i class="fas fa-clock fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
                         @endif
                         @if($sign->request_status == 'accepted')
+                          <span style="color: green;">
                             <i class="fas fa-check-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                          </span>
                         @endif
                         @if($sign->request_status == 'rejected')
+                          <span style="color: Tomato;">
                             <i class="fas fa-times-circle fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
+                          </span>
                         @endif
                     @endforeach
                 </td>

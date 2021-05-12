@@ -29,6 +29,17 @@ class SignaturesFile extends Model
         return $this->belongsTo('App\Models\Documents\Signature', 'signature_id');
     }
 
+    public function document()
+    {
+        return $this->hasOne('App\Documents\Document', 'file_to_sign_id');
+    }
+
+    public function suitabilityResult()
+    {
+        return $this->hasOne('App\Models\Suitability\Result', 'signed_certificate_id');
+    }
+
+
     /**
      * @return bool
      */

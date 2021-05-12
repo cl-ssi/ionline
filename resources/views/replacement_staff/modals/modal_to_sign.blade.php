@@ -9,6 +9,7 @@
         </button>
       </div>
       <div class="modal-body">
+          @if(!$request_to_sign->Where('id', $request->id)->isEmpty())
           @foreach($request_to_sign->Where('id', $request->id) as $modal_request)
               <table class="table table-sm table-bordered">
                   <thead>
@@ -90,10 +91,12 @@
                                           </form>
                                       </div>
                                     </div>
-                                @elseif($requestSign->request_status == 'accepted' || $requestSign->request_status == 'rejected')
-                                    <i class="fas fa-check-circle"></i> {{ $requestSign->StatusValue }} <br>
+                                @elseif($requestSign->request_status == 'accepted')
+                                    <span style="color: green;">
+                                      <i class="fas fa-check-circle"></i> {{ $requestSign->StatusValue }}
+                                    </span> <br>
                                     <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
-                                    <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($requestSign->date_sign)->format('d-m-Y H:i:s') }}<br>
+                                    <i class="fas fa-calendar-alt"></i> {{ $requestSign->date_sign->format('d-m-Y H:i:s') }}<br>
                                 @else
                                     @if($requestSign->request_status == NULL)
                                         <i class="fas fa-ban"></i> No disponible para Aprobación.<br>
@@ -107,6 +110,7 @@
                   </tbody>
               </table>
           @endforeach
+          @endif
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

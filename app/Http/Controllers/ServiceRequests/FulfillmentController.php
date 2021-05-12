@@ -668,10 +668,11 @@ class FulfillmentController extends Controller
 
     public function signedCertificatePDF(Fulfillment $fulfillment)
     {
-        header('Content-Type: application/pdf');
-        if (isset($fulfillment->signedCertificate)) {
-            echo base64_decode($fulfillment->signedCertificate->signed_file);
-        }
+        return Storage::disk('gcs')->response($fulfillment->signedCertificate->signed_file);
+//        header('Content-Type: application/pdf');
+//        if (isset($fulfillment->signedCertificate)) {
+//            echo base64_decode($fulfillment->signedCertificate->signed_file);
+//        }
     }
 
     public function updatePaidValues(Request $request)

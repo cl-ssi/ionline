@@ -18,7 +18,7 @@
       <form method="POST" action="{{ route('rrhh.service-request.update', $serviceRequest) }}" enctype="multipart/form-data">
     @else
       <!-- si existe una firma, no se deja modificar solicitud -->
-      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->where('type','!=','Responsable')->whereNotNull('status')->count() > 0)
         <form>
       @else
         <form method="POST" action="{{ route('rrhh.service-request.update', $serviceRequest) }}" enctype="multipart/form-data">
@@ -46,7 +46,7 @@
 
     <fieldset class="form-group col-6 col-md">
 		    <label for="for_name">Tipo</label>
-		    <select name="type" class="form-control" required>
+		    <select name="type" class="form-control" id="type" required>
           <option value="Covid" @if($serviceRequest->type == 'Covid') selected @endif>Honorarios - Covid</option>
           <option value="Suma alzada" @if($serviceRequest->type == 'Suma alzada') selected @endif>Suma alzada</option>
           <!-- <option value="Genérico" @if($serviceRequest->type == 'Genérico') selected @endif >Honorarios - Genérico</option> -->
@@ -55,7 +55,7 @@
 
     <fieldset class="form-group col-6 col-md">
 		    <label for="for_subdirection_ou_id">Subdirección</label>
-				<select class="form-control selectpicker" data-live-search="true" name="subdirection_ou_id" required="" data-size="5">
+				<select class="form-control selectpicker" data-live-search="true" name="subdirection_ou_id" required="" data-size="5" id="subdirection_ou_id">
           @foreach($subdirections as $key => $subdirection)
             <option value="{{$subdirection->id}}" @if($serviceRequest->subdirection_ou_id == $subdirection->id) selected @endif >{{$subdirection->name}}</option>
           @endforeach
@@ -396,6 +396,14 @@
 						<option value="OTROS PROGRAMAS SSI" @if($serviceRequest->programm_name == 'OTROS PROGRAMAS SSI') selected @endif>OTROS PROGRAMAS SSI</option>
 						<option value="LISTA ESPERA" @if($serviceRequest->programm_name == 'LISTA ESPERA') selected @endif>LISTA ESPERA</option>
 						<option value="CAMPAÑA INVIERNO" @if($serviceRequest->programm_name == 'CAMPAÑA INVIERNO') selected @endif>CAMPAÑA INVIERNO</option>
+
+            <option value="ADP DIRECTOR" @if($serviceRequest->programm_name == 'ADP DIRECTOR') selected @endif>ADP DIRECTOR</option>
+            <option value="SENDA" @if($serviceRequest->programm_name == 'SENDA') selected @endif>SENDA</option>
+  					<option value="SENDA LEY ALCOHOLES" @if($serviceRequest->programm_name == 'SENDA LEY ALCOHOLES') selected @endif>SENDA LEY ALCOHOLES</option>
+  					<option value="SENDA UHCIP" @if($serviceRequest->programm_name == 'SENDA UHCIP') selected @endif>SENDA UHCIP</option>
+  					<option value="SENDA PSIQUIATRIA ADULTO" @if($serviceRequest->programm_name == 'SENDA PSIQUIATRIA ADULTO') selected @endif>SENDA PSIQUIATRIA ADULTO</option>
+  					<option value="SENADIS" @if($serviceRequest->programm_name == 'SENADIS') selected @endif>SENADIS</option>
+  					<option value="SUBT.31" @if($serviceRequest->programm_name == 'SUBT.31') selected @endif>SUBT.31</option>
 					@endif
 
         </select>
@@ -436,10 +444,19 @@
   </div>
 
   <div class="form-row">
+    <fieldset class="form-group col">
+      <label for="for_profession_id">Profesión</label>
+      <select name="profession_id" class="form-control" required id="profession_id">
+        <option value=""></option>
+        @foreach($professions as $profession)
+          <option value="{{$profession->id}}" @if($serviceRequest->profession_id == $profession->id) selected @endif>{{$profession->name}}</option>
+        @endforeach
+      </select>
+    </fieldset>
+
     <fieldset class="form-group col-12 col-md-3">
         <label for="for_rrhh_team">Equipo RRHH</label>
         <select name="rrhh_team" class="form-control">
-
           <option value=""></option>
           <option value="Residencia Médica" @if($serviceRequest->rrhh_team == "Residencia Médica") selected @endif>Residencia Médica</option>
           <option value="Médico Diurno" @if($serviceRequest->rrhh_team == "Médico Diurno") selected @endif>Médico Diurno</option>
@@ -498,13 +515,47 @@
 
     <fieldset class="form-group col-3">
 			<label for="for_schedule_detail">Detalle de horario</label>
-			<select name="schedule_detail" class="form-control" required id="schedule_detail">
+			<select name="schedule_detail" class="form-control" id="schedule_detail">
 				<option value=""></option>
 				<option value="DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)" @if($serviceRequest->schedule_detail == "DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)") selected @endif>DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)</option>
 				<option value="DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)" @if($serviceRequest->schedule_detail == "DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)") selected @endif>DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)</option>
 				<option value="FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)" @if($serviceRequest->schedule_detail == "FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)") selected @endif>FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)</option>
 			</select>
 		</fieldset>
+
+  </div>
+
+  <div class="form-row" id="div_objectives" style="display: none">
+		<fieldset class="form-group col">
+				<label for="for_estate">Objetivos</label>
+				<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50">{{ $serviceRequest->objectives }}</textarea>
+		</fieldset>
+	</div>
+
+	<!-- <div class="form-row" id="div_resolve">
+		<fieldset class="form-group col">
+				<label for="for_estate">Resuelvo</label>
+				<textarea id="resolve" name="resolve" class="form-control" rows="4" cols="50">{{ $serviceRequest->resolve }}</textarea>
+		</fieldset>
+	</div> -->
+
+  <div class="form-row" id="div_additional_benefits" style="display: none">
+		<fieldset class="form-group col">
+				<label for="for_estate">Beneficios adicionales</label>
+				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50">{{ $serviceRequest->additional_benefits }}</textarea>
+
+        <button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanzo</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
+		</fieldset>
+	</div>
+
+  <div class="form-row">
+    <fieldset class="form-group col-12 col-md-9">
+
+    </fieldset>
 
     <fieldset class="form-group col-12 col-md-2">
         <label for="for_digera_strategy">Observaciones</label>
@@ -521,7 +572,7 @@
           <!-- solo el creador de la solicitud puede editar  -->
           @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
             <!-- si existe una firma, no se deja modificar solicitud -->
-            @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+            @if($serviceRequest->SignatureFlows->where('type','!=','creador')->where('type','!=','Responsable')->whereNotNull('status')->count() > 0)
               <button type="submit" class="btn btn-primary" disabled>Guardar</button>
             @else
               <button type="submit" class="btn btn-primary">Guardar</button>
@@ -532,7 +583,6 @@
         @endcan
         </div>
     </fieldset>
-
   </div>
 
 
@@ -542,7 +592,7 @@
     <!-- solo el creador de la solicitud puede editar  -->
     @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
       <!-- si existe una firma, no se deja modificar solicitud -->
-      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
+      @if($serviceRequest->SignatureFlows->where('type','!=','creador')->where('type','!=','Responsable')->whereNotNull('status')->count() > 0)
         <div class="alert alert-warning" role="alert">
           No se puede modificar hoja de ruta ya que existen visaciones realizadas.
         </div>
@@ -922,6 +972,10 @@
 
 	$( document ).ready(function() {
 
+    if ($('select[id=type] option').filter(':selected').text() == "Suma alzada"){
+      $("#type").trigger("click");
+    }
+
     //temporal, solicitado por eduardo
     if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Departamento de Salud Ocupacional" ||
         $('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Extensión Hospital -Estadio" ||
@@ -1017,7 +1071,6 @@
     // });
 
     $('#program_contract_type').on('change', function() {
-
 			if (this.value == "Horas") {
 				$('#for_daily_hours').val("");
 				$('#for_nightly_hours').val("");
@@ -1142,6 +1195,152 @@
 				$('#digera_strategy').selectpicker('refresh');
 			}
 		});
+
+    $('#subdirection_ou_id').on('change', function() {
+  		var value = this.value;
+
+  		//subdirección gestión del cuidado al paciente
+  		if (value == 85) {
+  			$("#Subdirector option[value=13835321]").removeAttr('disabled');
+  			$('#Subdirector').val(13835321);
+  			$('#Subdirector').selectpicker('refresh');
+
+  			$("#SubdirectorTurnos option[value=13835321]").removeAttr('disabled');
+  			$('#SubdirectorTurnos').val(13835321);
+  			$('#SubdirectorTurnos').selectpicker('refresh');
+  		}
+  		if (value != 85) {
+  			$('#Subdirector').val(9882506); //PERDRO IRIONDO: 9882506
+  			$('#Subdirector').selectpicker('refresh');
+
+  			$('#SubdirectorTurnos').val(9882506); //PERDRO IRIONDO: 9882506
+  			$('#SubdirectorTurnos').selectpicker('refresh');
+  		}
+  	});
+
+  	$('#type').on('change', function() {
+  		var value = this.value;
+  		if (value == "Suma alzada") {
+
+  			$("#programm_name option[value='Covid19-APS No Médicos']").hide();
+  			$("#programm_name option[value='Covid19-APS Médicos']").hide();
+  			$("#programm_name option[value='Covid19 No Médicos']").hide();
+  			$("#programm_name option[value='Covid19 Médicos']").hide();
+  			$('#digera_strategy').attr('disabled', 'disabled');
+
+        $('#objectives').removeAttr('disabled');
+  			// $('#resolve').removeAttr('disabled');
+  			$('#additional_benefits').removeAttr('disabled');
+  			$("#div_objectives").show();
+  			// $("#div_resolve").show();
+  			$("#div_additional_benefits").show();
+
+
+  			if ({{Auth::user()->organizationalUnit->establishment_id}} == 1) {
+  				$("#programm_name option[value='PRAPS']").hide();
+  				$("#programm_name option[value='PESPI']").hide();
+  				$("#programm_name option[value='CHILE CRECE CONTIGO']").hide();
+  				$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
+  				$("#programm_name option[value='LISTA ESPERA']").hide();
+  				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+
+          $("#programm_name option[value='ADP DIRECTOR']").hide();
+          $("#programm_name option[value='SENDA']").hide();
+          $("#programm_name option[value='SENDA LEY ALCOHOLES']").hide();
+          $("#programm_name option[value='SENDA UHCIP']").hide();
+          $("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
+          $("#programm_name option[value='SENADIS']").hide();
+          $("#programm_name option[value='SUBT.31']").hide();
+
+  				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").show();
+  				$("#programm_name option[value='33 MIL HORAS']").show();
+  				$("#programm_name option[value='DFL']").show();
+  				$("#programm_name option[value='TURNOS VACANTES']").show();
+  				$("#programm_name option[value='OTROS PROGRAMAS HETG']").show();
+  				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+  				$("#programm_name option[value='PABELLON TARDE']").show();
+  				$("#programm_name option[value='PABELLON GINE']").show();
+  				$("#programm_name option[value='TURNO DE RESIDENCIA']").show();
+  			}
+        else
+        {
+  				$("#programm_name option[value='PRAPS']").show();
+  				$("#programm_name option[value='PESPI']").show();
+  				$("#programm_name option[value='CHILE CRECE CONTIGO']").show();
+  				$("#programm_name option[value='OTROS PROGRAMAS SSI']").show();
+  				$("#programm_name option[value='LISTA ESPERA']").show();
+  				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+
+          $("#programm_name option[value='ADP DIRECTOR']").show();
+          $("#programm_name option[value='SENDA']").show();
+          $("#programm_name option[value='SENDA LEY ALCOHOLES']").show();
+          $("#programm_name option[value='SENDA UHCIP']").show();
+          $("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").show();
+          $("#programm_name option[value='SENADIS']").show();
+          $("#programm_name option[value='SUBT.31']").show();
+
+  				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
+  				$("#programm_name option[value='33 MIL HORAS']").hide();
+  				$("#programm_name option[value='DFL']").hide();
+  				$("#programm_name option[value='TURNOS VACANTES']").hide();
+  				$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
+  				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+  				$("#programm_name option[value='PABELLON TARDE']").hide();
+  				$("#programm_name option[value='PABELLON GINE']").hide();
+  				$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+  			}
+  		}
+  		else
+  		{
+  			$("#programm_name option[value='Covid19-APS No Médicos']").show();
+  			$("#programm_name option[value='Covid19-APS Médicos']").show();
+  			$("#programm_name option[value='Covid19 No Médicos']").show();
+  			$("#programm_name option[value='Covid19 Médicos']").show();
+  			$('#digera_strategy').removeAttr('disabled');
+
+        $('#objectives').attr('disabled', 'disabled');
+  			// $('#resolve').attr('disabled', 'disabled');
+  			$('#additional_benefits').attr('disabled', 'disabled');
+  			$("#div_objectives").hide();
+  			// $("#div_resolve").hide();
+  			$("#div_additional_benefits").hide();
+
+
+  			$("#programm_name option[value='PRAPS']").hide();
+  			$("#programm_name option[value='PESPI']").hide();
+  			$("#programm_name option[value='CHILE CRECE CONTIGO']").hide();
+  			$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
+  			$("#programm_name option[value='LISTA ESPERA']").hide();
+  			$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+
+  			$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
+  			$("#programm_name option[value='33 MIL HORAS']").hide();
+  			$("#programm_name option[value='DFL']").hide();
+  			$("#programm_name option[value='TURNOS VACANTES']").hide();
+  			$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
+  			$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+  			$("#programm_name option[value='PABELLON TARDE']").hide();
+  			$("#programm_name option[value='PABELLON GINE']").hide();
+  			$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+  		}
+  	});
+
+    $("#alias_dias_descanzo").click(function(){
+  		$('#additional_benefits').append("Derecho a días de descanso, correspondiente a 20 días hábiles, después de un año de prestación de servicio continúo en calidad de honorario, sin opción de acumulación.\n\n");
+  	});
+  	$("#alias_ausentarse_motivos_particulares").click(function(){
+  		$('#additional_benefits').append("Permisos para ausentarse de sus labores por motivos particulares hasta por seis días hábiles en el año, con goce de honorarios. Estos permisos podrán fraccionarse por días o medios días y serán resueltos por la Coordinadora del área correspondiente.\n\n");
+  	});
+  	$("#alias_capacitacion").click(function(){
+  		$('#additional_benefits').append("Acceso a aquellos programas de capacitación que no signifique un costo para el Servicio de Salud, siempre y cuando éstos sean atingentes a su área de desempeño. Las capacitaciones se deben enmarcar en curso, talleres, seminarios, etc., excluyéndose los cursos de perfeccionamiento. Además, se debe establecer la obligación de devolución y replica de los cursos.\n\n");
+  	});
+  	$("#alias_fiestas_patrias").click(function(){
+  		$('#additional_benefits').append("Aguinaldo de fiestas Patrias, homologado al monto establecido en la ley de reajuste vigente en el mes de pago (septiembre).\n\n");
+  	});
+  	$("#alias_navidad").click(function(){
+  		$('#additional_benefits').append("Aguinaldo de Navidad, homologado al monto establecido en la ley de reajuste vigente en el mes de pago (diciembre).\n\n");
+  	});
+
 
   });
 </script>
