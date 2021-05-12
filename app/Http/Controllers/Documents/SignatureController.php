@@ -302,6 +302,17 @@ class SignatureController extends Controller
     public function destroy(Signature $signature): RedirectResponse
     {
         foreach ($signature->signaturesFiles as $signaturesFile) {
+
+            if ($signaturesFile->document) {
+                $signaturesFile->document->update(['file_to_sign_id' => null,
+                ]);
+            }
+
+            if ($signaturesFile->suitabilityResult) {
+                $signaturesFile->suitabilityResult->update(['signed_certificate_id' => null,
+                ]);
+            }
+
             foreach ($signaturesFile->signaturesFlows as $signaturesFlow) {
                 $signaturesFlow->delete();
             }
