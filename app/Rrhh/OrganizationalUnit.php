@@ -4,6 +4,7 @@ namespace App\Rrhh;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Users;
 
 class OrganizationalUnit extends Model
 {
@@ -40,6 +41,10 @@ class OrganizationalUnit extends Model
 
     public function establishment() {
         return $this->belongsTo('\App\Establishment', 'establishment_id');
+    }
+
+    public function requestForms(){
+      return $this->hasMany(RequestForm::class, 'applicant_ou_id');
     }
 
     public function getInitialsAttribute()

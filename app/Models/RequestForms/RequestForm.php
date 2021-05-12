@@ -4,40 +4,65 @@ namespace app\Models\RequestForms;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use App\User;
+use App\Rrhh\OrganizationalUnit;
+use App\Models\RequestForms\ItemRequestForm;
 
 class RequestForm extends Model
 {
     protected $fillable = [
-        'estimated_expense', 'program', 'justification', 'type_form', 'previous_request_form_id', 'bidding_number',
-        'finance_program', 'purchase_mechanism', 'folio_sigfe', 'folio_sigfe_id_oc', 'finance_expense', 'available_balance',
-        'program_balance', 'oc_number', 'creator_id'
+        'applicant_position', 'estimated_expense', 'program', 'justification', 'type_form', 'bidding_number','purchase_mechanism', 'creator_user_id',
+        'supervisor_user_id', 'applicant_user_id', 'applicant_ou_id'
     ];
 
+    public function creator() {
+        return $this->belongsTo(User::class, 'creator_user_id');
+    }
+
+    public function applicant(){
+      return $this->belongsTo(User::class, 'applicant_user_id');
+    }
+
+    public function supervisor(){
+      return $this->belongsTo(User::class, 'supervisor_user_id');
+    }
+
+    public function organizationalUnit(){
+      return $this->belongsTo(OrganizationalUnit::class, 'applicant_ou_id');
+    }
+
+    public function itemRequestForms() {
+        return $this->hasMany(ItemRequestForm::class);
+    }
+
+
+
+/*
     public function getFormatEstimatedExpenseAttribute()
     {
-        return number_format($this->estimated_expense,0,",",".");
+        //return number_format($this->estimated_expense,0,",",".");
     }
 
     public function getCreationDateAttribute()
     {
-      return $this->created_at->format('d-m-Y H:i:s');
+      //return $this->created_at->format('d-m-Y H:i:s');
     }
 
     /*  DETERMINAR FECHA DE VENCIMIENTO */
     public function getEndDateAttribute()
     {
-      if($this->status == "closed"){
+/*      if($this->status == "closed"){
         return $this->updated_at->format('d-m-Y H:i:s');
       }
       else{
         return null;
-      }
+      }*/
     }
 
     /* TIEMPO TRANSCURRIDO DEL TICKET */
     public function getElapsedTimeAttribute()
     {
-      if($this->status == "closed"){
+/*      if($this->status == "closed"){
         $startDate= Carbon::parse($this->created_at);
         $endDate = Carbon::parse($this->updated_at);
 
@@ -47,41 +72,34 @@ class RequestForm extends Model
       else{
         $now = new \Carbon\Carbon();
         return $now->diffInDays($this->created_at);
-      }
+      }*/
     }
 
     public function getFormRequestNumberAttribute()
     {
-      return $this->id;
+      //return $this->id;
     }
 
     public function getEstimatedExpenseFormatAttribute()
     {
-      return number_format($this->estimated_expense, 0, ',', '.');
+      //return number_format($this->estimated_expense, 0, ',', '.');
     }
 
     public function getEstimatedFinanceExpenseFormatAttribute()
     {
-      return number_format($this->finance_expense, 0, ',', '.');
+      //return number_format($this->finance_expense, 0, ',', '.');
     }
 
     public function getProgramBalanceFormatAttribute()
     {
-      return number_format($this->program_balance, 0, ',', '.');
+      //return number_format($this->program_balance, 0, ',', '.');
     }
 
     public function getAvailableBalanceFormatAttribute()
     {
-      return number_format($this->available_balance, 0, ',', '.');
+      //return number_format($this->available_balance, 0, ',', '.');
     }
 
-    public function creator() {
-        return $this->belongsTo('App\User', 'creator_id');
-    }
-
-    public function items() {
-        return $this->hasMany('\app\Models\RequestForms\Item');
-    }
 /*
     public function requestformfiles() {
         return $this->hasMany('\App\RequestForms\RequestFormFile');
