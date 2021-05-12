@@ -3,6 +3,8 @@
 namespace App\Indicators;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+
 
 class Indicator extends Model
 {
@@ -109,6 +111,7 @@ class Indicator extends Model
 
     public function getContribution()
     {
+        if(Str::contains(str_replace('≤', '<=', $this->goal), '<=')) return $this->getCompliance() <= preg_replace('/[^0-9.]/', '', $this->goal) ? $this->weighting : 0;
         $result = ($this->getCompliance() * $this->weighting) / preg_replace('/[^0-9.]/', '', $this->goal);
         return $result > $this->weighting ? $this->weighting : $result;
     }
