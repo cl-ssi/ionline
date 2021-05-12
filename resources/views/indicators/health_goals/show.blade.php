@@ -132,7 +132,7 @@
         <p>No existen indicadores o no se han definido aún para la meta sanitaria actual.</p>
     @else
         @foreach($healthGoal->indicators as $indicator)
-            <h5 class="mb-3">{{$indicator->number}} {{$indicator->name}}. @can('Indicators: manager')<small><a href="{{route('indicators.health_goals.ind.edit', [$healthGoal->law, $healthGoal->year, $healthGoal->number, $indicator])}}"><span class="fa fa-edit"></span></a></small> @endcan</h5>
+            <h5 class="mb-3">{{$indicator->number}}. {{$indicator->name}}. @can('Indicators: manager')<small><a href="{{route('indicators.health_goals.ind.edit', [$healthGoal->law, $healthGoal->year, $healthGoal->number, $indicator])}}"><span class="fa fa-edit"></span></a></small> @endcan</h5>
             <!-- print indicador -->
                 <div class="table-responsive">
                     <table class="table table-sm table-bordered small mb-4">
