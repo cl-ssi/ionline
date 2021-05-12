@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\RequestForm;
 use Livewire\Component;
 use App\Models\RequestForms\RequestForm;
-use App\Models\RequestForms\Item;
+use App\Models\RequestForms\ItemRequestForm;
 use App\Models\Parameters\UnitOfMeasurement;
 use Illuminate\Support\Collection;
 use Livewire\WithFileUploads;
@@ -165,7 +165,12 @@ class RequestFormCreate extends Component
       $req = RequestForm::create([
           'justification'         =>  $this->justify,
           'type_form'             =>  '1',
-          'creator_id'            =>  Auth()->user()->id,
+          'creator_user_id'       =>  Auth()->user()->id,
+          'applicant_user_id'     =>  Auth()->user()->id,
+          //'supervisor_user_id'    =>  Auth()->user()->id,
+          'applicant_ou_id'       =>  Auth()->user()->organizational_unit_id,
+          'applicant_position'    =>  Auth()->user()->position,
+          'estimated_expense'     =>  $this->totalDocument,
           'purchase_mechanism'    =>  $this->purchaseMechanism,
           'program'               =>  $this->program,
       ]);
@@ -177,7 +182,7 @@ class RequestFormCreate extends Component
     }
 
     private function saveItem($item, $id){
-        $req = Item::create([
+        $req = ItemRequestForm::create([
             'request_form_id'       =>      $id,
             'article'               =>      $item['article'],
             'unit_of_measurement'   =>      $item['unitOfMeasurement'],

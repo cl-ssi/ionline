@@ -8,6 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Suitability\Result;
+use App\Models\RequestForms\RequestForm;
 use App\Models\ServiceRequests\ServiceRequest;
 
 class User extends Authenticatable
@@ -69,6 +70,17 @@ class User extends Authenticatable
         return $this->hasOne('\App\Models\Rrhh\UserBankAccount','user_id');
     }
 
+    public function creatorRequestForm(){
+      return $this->hasMany(RequestForm::class, 'creator_user_id');
+    }
+
+    public function applicantRequestForm(){
+      return $this->hasMany(RequestForm::class, 'applicant_user_id');
+    }
+
+    public function supervisorRequestForm(){
+      return $this->hasMany(RequestForm::class, 'supervisor_user_id');
+    }
 
     public function scopeSearch($query, $name) {
         if($name != "") {
