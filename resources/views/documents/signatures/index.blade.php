@@ -58,6 +58,7 @@
                 <th scope="col"></th>
                 <th scope="col"></th>
                 <th scope="col"></th>
+                <th scope="col"> <div class="mx-4"></div> </th>
             </tr>
             </thead>
             <tbody>
@@ -94,6 +95,13 @@
                            class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">
                             <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
+                    </td>
+                    <td>
+                        @foreach($pendingSignaturesFlow->signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
+                            <a href="{{route('documents.signatures.showPdfAnexo', $anexo)}}"
+                               target="_blank"><i class="fas fa-paperclip" title="anexo"></i>&nbsp
+                            </a>
+                        @endforeach
                     </td>
                 </tr>
                 {{--Modal rechazo--}}
@@ -153,6 +161,7 @@
                 <th scope="col">Estado Solicitud</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
+                <th scope="col"><div class="mx-4"></div></th>
             </tr>
             </thead>
             <tbody>
@@ -183,6 +192,13 @@
                            class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">
                             <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
+                    </td>
+                   <td>
+                        @foreach($signedSignaturesFlow->signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
+                            <a href="{{route('documents.signatures.showPdfAnexo', $anexo)}}"
+                               target="_blank"><i class="fas fa-paperclip" title="anexo"></i>&nbsp
+                            </a>
+                        @endforeach
                     </td>
                 </tr>
             @endforeach
@@ -346,5 +362,14 @@
                     console.log(error);
                 });
         }
+
+
+        function disableButton(form) {
+            form.signBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Firmando...';
+            form.signBtn.disabled = true;
+            form.cancelSignBtn.disabled = true;
+            return true;
+        }
+
     </script>
 @endsection

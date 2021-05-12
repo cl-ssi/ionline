@@ -3,13 +3,16 @@
 @section('content')
 
     <div style="text-align: justify;">
-        <p>Junto con saludar cordialmente.</p>
-        <p>Adjunto documento indicado para conocimiento y fines.</p>
-        <p> <strong>Tipo:</strong> {{ $signature->document_type }}</p>
-        <p> <strong>Asunto:</strong> {{ $signature->subject }}</p>
+{{--        <p>Junto con saludar cordialmente.</p>--}}
+        <p>Se encuentra disponible un nuevo documento para su firma en iOnline.</p>
+        <p> <strong>Tipo:</strong> {{ $signaturesFlow->signature->document_type }}</p>
+        <p> <strong>Número Solicitud:</strong> {{ $signaturesFlow->signature->id }}</p>
+
+        <a href="{{route('documents.signatures.index', 'pendientes')}}">Ir a firmar</a>
+
 {{--        <p> <strong>Firma del documento: </strong> {{ $signature->signaturesFlowSigner->signature_date->format('d-m-Y') }} </p>--}}
 {{--        <p> <strong>Archivo:</strong> SSI_{{ $document->type }}_{{ $document->number }}.pdf</p>--}}
-        <br>
+        <br><br>
         Saludos cordiales.
     </div>
 

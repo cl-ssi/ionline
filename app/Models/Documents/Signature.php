@@ -79,6 +79,11 @@ class Signature extends Model implements Auditable
         return $this->signaturesFiles->where('file_type', 'documento')->first();
     }
 
+    public function getSignaturesFileAnexosAttribute()
+    {
+        return $this->signaturesFiles->where('file_type', 'anexo');
+    }
+
     protected $table = 'doc_signatures';
 
     protected $dates = ['request_date'];

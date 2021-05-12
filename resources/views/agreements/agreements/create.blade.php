@@ -25,8 +25,7 @@
         </div>
         <div class="form-group col-md-9">
             <label for="forprogram">Programa</label>
-            <select name="program_id" id="formprogram" class="form-control" required>
-                <option value="">Seleccione programa</option>
+            <select name="program_id" id="formprogram" class="form-control selectpicker" data-live-search="true" title="Seleccione programa" required>
                 @foreach($programs as $program)
                     <option value="{{ $program->id }}">{{ $program->name }}</option>
                 @endforeach

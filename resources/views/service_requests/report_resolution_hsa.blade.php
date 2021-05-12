@@ -132,7 +132,7 @@
     SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
 </div>
 <div class="seis" style="padding-top: 4px;">
-    N.I. {{$ServiceRequest->id}} - {{\Carbon\Carbon::now()->format('d/m/Y')}}
+    N.I.PHUQHAÑA. {{$ServiceRequest->id}} - {{\Carbon\Carbon::now()->format('d/m/Y')}}
 </div>
 
 
@@ -268,13 +268,11 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
 
 <p class="justify">
     <strong>SÉPTIMO:</strong>
-    En este caso, el
     @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-      Hospital “Dr. Ernesto Torres Galdames” de Iquique,
+      En este caso, el Hospital “Dr. Ernesto Torres Galdames” de Iquique, pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
     @else
-      Servicio de Salud Iquique,
+      El Servicio de Salud Iquique, cancelará a la persona en referencia sólo hasta la mensualidad correspondiente al período efectivamente prestado.
     @endif
-    pagará a la persona en referencia sólo hasta el porcentaje de la mensualidad correspondiente al período efectivamente prestado.
 </p>
 
 

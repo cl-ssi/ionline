@@ -6,7 +6,7 @@
 
     <h3>Nueva solicitud de firmas y distribución</h3>
 
-    <form method="POST" action="{{ route('documents.signatures.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('documents.signatures.store') }}" enctype="multipart/form-data" onsubmit="disableButton(this)">
         @csrf
 
         @if(isset($documentId))
@@ -67,7 +67,7 @@
                     <input type="hidden" name="md5_file" value="{{$signature->signaturesFileDocument->md5_file}}">
                 @else
                     <label for="for_document">Documento a distribuir</label>
-                    <input type="file" class="form-control" id="for_document" name="document" required>
+                    <input type="file" class="form-control" id="for_document" name="document" accept="application/pdf" required>
                 @endif
 
             </fieldset>
@@ -78,10 +78,21 @@
             </fieldset>
         </div>
 
-        <hr>
-        @livewire('signatures.visators', ['signature' => (isset($signature) && $signature->signaturesFlowVisator != null) ? $signature : null])
-        <hr>
-        @livewire('signatures.signer', ['signaturesFlowSigner' => (isset($signature) && $signature->signaturesFlowSigner != null) ? $signature->signaturesFlowSigner : null])
+        @if(isset($signature) && isset($signature->type))
+            <hr>
+            @if($signature->type == 'visators')
+                @livewire('signatures.visators', ['signature' => $signature])
+            @else
+                @livewire('signatures.signer', ['signaturesFlowSigner' => $signature->signaturesFlowSigner])
+            @endif
+            <hr>
+        @else
+            <hr>
+            @livewire('signatures.visators')
+            <hr>
+            @livewire('signatures.signer')
+            <hr>
+        @endif
 
         <div class="form-row">
 
@@ -98,7 +109,7 @@
 
         </div>
 
-        <button type="submit" class="btn btn-primary">Crear</button>
+        <button type="submit" id="submitBtn" class="btn btn-primary" onclick="disableButton(this)">Crear</button>
 
     </form>
 
@@ -110,5 +121,13 @@
 @endsection
 
 @section('custom_js')
+
+    <script type="text/javascript">
+        function disableButton(form) {
+            form.submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Creando...';
+            form.submitBtn.disabled = true;
+            return true;
+        }
+    </script>
 
 @endsection

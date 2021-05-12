@@ -7,6 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Storage;
 
 class SignedDocument extends Mailable
 {
@@ -32,11 +33,21 @@ class SignedDocument extends Mailable
     public function build()
     {
         $subject = "{$this->signature->document_type} - {$this->signature->subject}";
-        $file = base64_decode($this->signature->signaturesFileDocument->signed_file);
-        return $this->view('documents.signatures.mails.signed_notification_recipients')
+        $file = Storage::disk('gcs')->get($this->signature->signaturesFileDocument->signed_file);
+//        $file = base64_decode($this->signature->signaturesFileDocument->signed_file);
+
+        $email = $this->view('documents.signatures.mails.signed_notification_recipients')
             ->subject($subject)
             ->attachData($file,
-                "{$this->signature->document_type}-{$this->signature->signaturesFileDocument->id}.pdf",
+                "{$this->signature->document_type}.pdf",
                 ['mime' => 'application/pdf']);
+
+        foreach ($this->signature->signaturesFileAnexos as $key => $signaturesFileAnexo) {
+            $email->attachFromStorageDisk('gcs', $signaturesFileAnexo->file, 'anexo_' . $key . '.pdf',
+                ['mime' => 'application/pdf']);
+        }
+
+        return $email;
+
     }
 }

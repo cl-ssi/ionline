@@ -51,7 +51,7 @@ class SchoolUserController extends Controller
         $user = UserExternal::find($request->user_external_id);
         $user->givePermissionTo('Suitability: admin');
 
-        session()->flash('success', 'Se Asigno al Usuario Externo como Adminitrador al colegio');
+        session()->flash('success', 'Se Asigno al Usuario Externo como Administrador al colegio');
         return redirect()->back();
     }
 
@@ -59,12 +59,20 @@ class SchoolUserController extends Controller
     {
         //
         //$user = new User($request->All());
+        $buscador = UserExternal::find($request->id);
+        if ($buscador)
+        {
+            session()->flash('danger', 'Usuario ya se encontraba ingresado como Usuario Externo');
+        }
+        else
+        {
         $user = new UserExternal($request->All());
         //$user->email_personal = $request->email;
         //$user->external = 1;
         //$user->givePermissionTo('Suitability: admin');
         $user->save();
-        session()->flash('success', 'Se Asigno al Usuario al colegio');        
+        session()->flash('success', 'Se Asigno al Usuario al colegio');
+        }
         return redirect()->route('suitability.users.index');
     }
 

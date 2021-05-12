@@ -12,7 +12,7 @@
 
 <form method="GET" class="form-horizontal" action="{{ route('documents.index') }}">
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-1">
             <label for="for_id">Cód Int</label>
             <input type="text" class="form-control" id="for_id" name="id">
