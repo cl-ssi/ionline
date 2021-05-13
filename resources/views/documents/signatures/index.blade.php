@@ -193,12 +193,16 @@
                         </button>
                     </td>
                     <td>
-                        <a href="{{ route('documents.signatures.showPdf',                         
+                        <!-- <a href="{{ route('documents.signatures.showPdf',                         
                         [$signedSignaturesFlow->signaturesFile->id, time()]
                         ) 
                         }}"
                            class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">
                             <span class="fas fa-file" aria-hidden="true"></span>
+                        </a> -->
+                        
+                        <a href="https://storage.googleapis.com/saludiquique-storage/{{$signedSignaturesFlow->signaturesFile->signed_file}}" class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">
+                        <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
                     </td>
                    <td>
