@@ -108,7 +108,7 @@
 				@endif
 			</li>
 			<li class="list-group-item">
-				@if($fullfillment->total_to_pay)
+				@if($fullfillment->total_to_pay and $fullfillment->serviceRequest->has_resolution_file)
 				@if($fullfillment->has_invoice_file)
 				<i class="fas fa-circle text-success"></i>
 				@livewire('service-request.upload-invoice', ['fulfillment' => $fullfillment])
