@@ -61,7 +61,8 @@
             <fieldset class="form-group col">
                 <label for="for_document">Documento a distribuir</label>
                 <input type="file" class="form-control" id="for_document" accept="application/pdf" name="document">
-                <a href="{{route('documents.signatures.showPdf', $signature->signaturesFileDocument)}}"
+                <a href="{{route('documents.signatures.showPdf', [$signature->signaturesFileDocument, time()]           
+                )}}"
                    target="_blank" data-toggle="tooltip" data-placement="top"
                    data-original-title="">Documento <i
                         class="fas fa-paperclip"></i>&nbsp

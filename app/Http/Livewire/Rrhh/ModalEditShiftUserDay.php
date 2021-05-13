@@ -12,7 +12,7 @@ use Carbon\Carbon;
 
 class ModalEditShiftUserDay extends Component
 {	
-	public $visibility = "xx";
+
 	public $action = 0;
 	public $users;
 	public $userIdtoChange =0;
@@ -51,8 +51,11 @@ class ModalEditShiftUserDay extends Component
             8 => "gray",
     );
     protected $listeners = ['setshiftUserDay','clearModal','ChangeWorkingDay'=>'enableChangeTypeOfWorkingDay'];
+    // public function mount(array $headers){
     public function mount(){
 		
+		// $this->headers = old('http_client_headers', $headers);
+
 		$this->usersSelect ="none";
 		$this->changeDayType = "none";
 		// $this->newWorkingDay = "F";
@@ -63,6 +66,8 @@ class ModalEditShiftUserDay extends Component
 		// $this->emit('setshiftUserDay', $this->shiftDay->id);
     }
 	public function setshiftUserDay($sUDId){
+    	 // $this->reset();//
+
 		// echo "setshiftUserDay";
 		$this->shiftUserDay = ShiftUserDay::find($sUDId);
 		$this->previousStatus = $this->shiftUserDay->status;
@@ -104,10 +109,12 @@ class ModalEditShiftUserDay extends Component
 		// 		$users = User::whereHas('posts', function($q){
 		//     		$q->where('created_at', '>=', '2015-01-01 00:00:00');
 		// })->get();//seteo el dia para obtener la info
+		// $this->render();
 	}
 	public function cancel(){
-
-		$this->emit('clearModal');
+    	 $this->reset();
+		// 
+		// $this->emit('clearModal');
 	}
 	public function changeAction(){
 		/* they can be 1:assigned;2:completed,3:extra shift,4:shift change 5: medical license,6: union jurisdiction,7: legal holiday,8: exceptional permit or did not belong to the service.*/
@@ -198,8 +205,8 @@ class ModalEditShiftUserDay extends Component
         		$days = $daysOfMonth->daysInMonth;
 
 				// $bTurno = ShiftUser::whereBetween('reservation_from', [$from, $to])->get();
-				// $bTurno = ShiftUser::where("user_id",$this->userIdtoChange)->where("date_from","<=",$this->shiftUserDay->day)->where("date_up",">=",$this->shiftUserDay->day)->first(); 
-				$bTurno = ShiftUser::where("user_id",$this->userIdtoChange)->where("date_from","<=",$from)->where("date_up",">=",$to)->first(); 
+				// $bTurno = ShiftUser::where("user_id",$this->userIdtoChange)->where("date_from","<=",$this->shiftUserDay->day)->where("date_up",">=",$this->shiftUserDay->day)->first(); 05/04/21 30/04/21  2021/04/01 
+				$bTurno = ShiftUser::where("user_id",$this->userIdtoChange)->where("date_from",">=",$from)->where("date_up","<=",$to)->first(); 
 				if( !isset($bTurno) || $bTurno == ""){ // si no tiene ningun turno asociado a ese rango, se le crea
 					$bTurno = new ShiftUser;
 					$bTurno->date_from = $from;
@@ -230,6 +237,7 @@ class ModalEditShiftUserDay extends Component
 				$nHistory->save();
 			}
 		}
+		 $this->reset();
 		$this->emit('refreshListOfShifts');
 	}	
     public function render()
