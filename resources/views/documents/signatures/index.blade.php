@@ -91,7 +91,7 @@
                         </button>
                     </td>
                     <td>
-                        <a href="{{ route('documents.signatures.9', 
+                        <a href="{{ route('documents.signatures.showPdf', 
                         
                             [$pendingSignaturesFlow->signaturesFile->id, time()]
                         
