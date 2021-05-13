@@ -325,6 +325,7 @@
     que al celda sea clickeable completamente
     abajo te dejé un ejemplo
     -->
+    
 <style>
     td {
         overflow:hidden;
@@ -350,8 +351,8 @@
             <th>Nombre</th>
             <th>1</th>
             <th>2</th>
-            <th>3</th>
-            <th>4</th>
+            <th class="text-danger">3</th>
+            <th class="text-danger">4</th>
             <th>5</th>
             <th>6</th>
             <th>7</th>
