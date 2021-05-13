@@ -10,17 +10,18 @@ class ChangeShiftDayStatus extends Component
 
 	public $count = 0;
 	public $shiftDay;
+	public $filered="off";
 	// public $id;
 
-    protected $listeners = ['editShiftDay','refreshListOfShifts' => '$refresh'];
+    protected $listeners = ['refreshListOfShifts' => '$refresh'];
    	private $colors = array(
             1 => "lightblue",
-            2 => "blue",
-            3 => "green",
+            2 => "#2471a3",
+            3 => " #52be80 ",
             4 => "orange",
-            5 => "red",
-            6 => "purple",
-            7 => "yellow",
+            5 => "#ec7063",
+            6 => "#af7ac5",
+            7 => "#f4d03f",
             8 => "gray",
     );
     // public function postAdded(Post $post)
@@ -33,6 +34,7 @@ class ChangeShiftDayStatus extends Component
         // $this->id = $id;
         // $this->shiftDay = ShiftUserDay::find($id);
         $this->shiftDay =$shiftDay;
+        $this->filered = "off";
     }
     public function increment()
     {
@@ -41,7 +43,7 @@ class ChangeShiftDayStatus extends Component
     public function editShiftDay(){
 
 		// $this->emit('clearModal', $this->shiftDay->id);
-
+    	$this->filered ="on"; 
 		$this->emit('setshiftUserDay', $this->shiftDay->id);
 
 

@@ -17,7 +17,7 @@
       </fieldset>
       <fieldset class="form-group col-12 col-md">
         <label for="for_estate">Observación</label>
-        <input type="text" class="form-control" name="observation" wire:model="observation">
+        <input type="text" class="form-control" name="observation" wire:model.lazy="observation">
       </fieldset>
     </div>
     @php
@@ -27,19 +27,19 @@
     <div class="form-row">
       <fieldset class="form-group col-6 col-md-3">
         <label for="for_estate">Entrada</label>
-        <input type="date" class="form-control start_date" name="start_date" {{$select_start_date}} wire:model="start_date" min="{{$anopasado}}-01-01" max="{{$ano}}-12-31"  required>
+        <input type="date" class="form-control start_date" name="start_date" {{$select_start_date}} wire:model.lazy="start_date" min="{{$anopasado}}-01-01" max="{{$ano}}-12-31"  required>
       </fieldset>
       <fieldset class="form-group col-6 col-md">
         <label for="for_estate">Hora</label>
-        <input type="time" class="form-control start_hour" {{$select_start_hour}} name="start_hour" wire:model="start_hour" required>
+        <input type="time" class="form-control start_hour" {{$select_start_hour}} name="start_hour" wire:model.lazy="start_hour" required>
       </fieldset>
       <fieldset class="form-group col-6 col-md-3">
         <label for="for_estate">Salida</label>
-        <input type="date" class="form-control end_date" name="end_date" {{$select_end_date}} wire:model="end_date" min="{{$anopasado}}-01-01" max="{{$ano}}-12-31" required>
+        <input type="date" class="form-control end_date" name="end_date" {{$select_end_date}} wire:model.lazy="end_date" min="{{$anopasado}}-01-01" max="{{$ano}}-12-31" required>
       </fieldset>
       <fieldset class="form-group col-6 col-md">
         <label for="for_estate">Hora</label>
-        <input type="time" class="form-control end_hour" name="end_hour" {{$select_end_hour}} wire:model="end_hour" required>
+        <input type="time" class="form-control end_hour" name="end_hour" {{$select_end_hour}} wire:model.lazy="end_hour" required>
       </fieldset>
 
       @canany(['Service Request: fulfillments responsable','Service Request: fulfillments rrhh'])
