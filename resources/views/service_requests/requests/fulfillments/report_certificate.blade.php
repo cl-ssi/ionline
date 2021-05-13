@@ -176,6 +176,12 @@
               Junto con saludar, se adjunta renuncia voluntaria a honorarios de funcionario <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b>,
               a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->add(1, 'day')->format('d/m/Y')}}</b>.
             @endif
+          @elseif($fulfillment->FulfillmentItems->where('type','Abandono de funciones')->count() > 0)
+            @if($fulfillment->FulfillmentItems->where('type','!=','Abandono de funciones')->count() > 0)
+              El prestador de servicios Honorario Suma Alzada , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo.. Además se registraron las siguientes ausencias:
+            @else
+              El prestador de servicios Honorario Suma Alzada , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo.
+            @endif
           @else
             Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
             en su convenio de prestación de servicios con el
@@ -197,41 +203,60 @@
 
     <br><br>
 
-    <table class="siete">
-      <thead>
-        <tr>
-          <th>Tipo</th>
-          <th>Inicio</th>
-          <th>Término</th>
-          <th>Observación</th>
-        </tr>
-      </thead>
-      <tbody>
-        @if($fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->count() > 0)
-          @if($fulfillment->FulfillmentItems->where('type','!=','Renuncia voluntaria')->count() > 0)
-            @foreach($fulfillment->FulfillmentItems->where('type','!=','Renuncia voluntaria') as $key =>$FulfillmentItem)
-            <tr>
-                <td style="text-align:center">{{$FulfillmentItem->type}}</td>
-                <td style="text-align:center">{{$FulfillmentItem->start_date->format('d-m-Y H:i')}}</td>
-                <td style="text-align:center">{{$FulfillmentItem->end_date->format('d-m-Y H:i')}}</td>
-                <td style="text-align:center">{{$FulfillmentItem->observation}}</td>
-            </tr>
+
+        @if($fulfillment->FulfillmentItems->whereIn('type',['Renuncia voluntaria','Abandono de funciones'])->count() > 0)
+          @if($fulfillment->FulfillmentItems->whereNotIn('type',['Renuncia voluntaria','Abandono de funciones'])->count() > 0)
+            @foreach($fulfillment->FulfillmentItems->whereNotIn('type',['Renuncia voluntaria','Abandono de funciones']) as $key =>$FulfillmentItem)
+            <table class="siete">
+              <thead>
+                <tr>
+                  <th>Tipo</th>
+                  <th>Inicio</th>
+                  <th>Término</th>
+                  <th>Observación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <td style="text-align:center">{{$FulfillmentItem->type}}</td>
+                    <td style="text-align:center">{{$FulfillmentItem->start_date->format('d-m-Y H:i')}}</td>
+                    <td style="text-align:center">{{$FulfillmentItem->end_date->format('d-m-Y H:i')}}</td>
+                    <td style="text-align:center">{{$FulfillmentItem->observation}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <br>
             @endforeach
           @endif
         @else
           @foreach($fulfillment->FulfillmentItems as $key =>$FulfillmentItem)
-          <tr>
-              <td style="text-align:center">{{$FulfillmentItem->type}}</td>
-              <td style="text-align:center">{{$FulfillmentItem->start_date->format('d-m-Y H:i')}}</td>
-              <td style="text-align:center">{{$FulfillmentItem->end_date->format('d-m-Y H:i')}}</td>
-              <td style="text-align:center">{{$FulfillmentItem->observation}}</td>
-          </tr>
+          <table class="siete">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Inicio</th>
+                <th>Término</th>
+                <th>Observación</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                  <td style="text-align:center">{{$FulfillmentItem->type}}</td>
+                  <td style="text-align:center">{{$FulfillmentItem->start_date->format('d-m-Y H:i')}}</td>
+                  <td style="text-align:center">{{$FulfillmentItem->end_date->format('d-m-Y H:i')}}</td>
+                  <td style="text-align:center">{{$FulfillmentItem->observation}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <br>
           @endforeach
         @endif
 
-    </table>
-
-    <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
+    <div class="nueve">
+        <div class="justify" style="width: 100%;">
+          Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
+        </div>
+    </div>
   @endif
 @else
 
@@ -273,7 +298,7 @@
           @livewire('service-request.show-total-hours', ['fulfillment' => $fulfillment,
                                                          'forCertificate' => true])
 
-          <br><br>Se extiende el presente certificado para ser presentado en recursos humanos, para que éste acredite la asistencia del funcionario. 
+          <br><br>Se extiende el presente certificado para ser presentado en recursos humanos, para que éste acredite la asistencia del funcionario.
           Para posteriormente finanzas y contabilidad realice la gestión de pago.
       </div>
   </div>
