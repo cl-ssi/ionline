@@ -292,6 +292,10 @@ class ServiceRequestController extends Controller
     $serviceRequest = new ServiceRequest($request->All());
     $serviceRequest->user_id = $user->id;
     $serviceRequest->creator_id = Auth::id();
+    if(isset($request->hsa_schedule_detail))
+    {      
+      $serviceRequest->schedule_detail = $request->hsa_schedule_detail;
+    }
     $serviceRequest->save();
 
 
@@ -523,6 +527,11 @@ class ServiceRequestController extends Controller
   {
     //se guarda información de la solicitud
     $serviceRequest->fill($request->all());
+    if(isset($request->hsa_schedule_detail))
+    {      
+      $serviceRequest->schedule_detail = $request->hsa_schedule_detail;
+    }    
+
     $serviceRequest->save();
 
     //guarda control de turnos
