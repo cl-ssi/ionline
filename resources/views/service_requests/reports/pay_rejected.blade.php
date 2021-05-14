@@ -6,7 +6,11 @@
 
 @include('service_requests.partials.nav')
 
-<h3 class="mb-3">Pagos rechazados</h3>
+<h3 class="mb-3">Pagos rechazados 
+@canany(['Service Request: report excel'])
+<a class="btn btn-outline-success btn-sm mb-3" id="downloadLink" onclick="exportF(this)">Descargar en excel Resultado Busqueda</a>
+@endcan
+</h3>
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.pay-rejected') }}">
   <div class="input-group mb-3">
     <div class="input-group-prepend">
@@ -39,12 +43,14 @@
         <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
     </div>
 
+    
+
   </div>
 
 </form>
 
 
-<table class="table table-sm table-bordered table-stripped">
+<table class="table table-sm table-bordered table-stripped" id="tabla_rechazado">
   <tr>
     <th></th>
     <th>Id</th>
@@ -125,6 +131,25 @@
 @endsection
 
 @section('custom_js')
+
+<script type="text/javascript">
+let date = new Date()
+let day = date.getDate()
+let month = date.getMonth() + 1
+let year = date.getFullYear()
+let hour = date.getHours()
+let minute = date.getMinutes()
+    function exportF(elem) {
+        var table = document.getElementById("tabla_rechazado");
+        var html = table.outerHTML;
+        var html_no_links = html.replace(/<a[^>]*>|<\/a>/g, ""); //remove if u want links in your table
+        var url = 'data:application/vnd.ms-excel,' + escape(html_no_links); // Set your html table into url
+        elem.setAttribute("href", url);
+        elem.setAttribute("download", "tabla_rechazado.xls"); // Choose the file name
+        return false;
+    }
+</script>
+
 
 
 @endsection
