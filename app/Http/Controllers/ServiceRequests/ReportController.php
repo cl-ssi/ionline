@@ -288,10 +288,35 @@ class ReportController extends Controller
     // return $pdf->stream();
   }
 
-  public function payRejected()
+  public function payRejected(Request $request)
   {
-    $fulfillments = Fulfillment::where('payment_ready', 0)->orderByDesc('id')->get();
-    return view('service_requests.reports.pay_rejected', compact('fulfillments'));
+
+    $program_contract_type = $request->program_contract_type;
+    $working_day_type = $request->working_day_type;
+
+    $fulfillments = Fulfillment::where('payment_ready', 0)
+    ->when($program_contract_type != null, function ($q) use ($program_contract_type) {
+      return $q->whereHas("ServiceRequest", function ($subQuery) use ($program_contract_type) {
+        $subQuery->where('program_contract_type', $program_contract_type);
+      });
+    })
+    ->when($working_day_type != null, function ($q) use ($working_day_type) {
+      return $q->whereHas("ServiceRequest", function ($subQuery) use ($working_day_type) {
+        $subQuery->where('working_day_type', $working_day_type);
+      });
+    })
+
+    ->orderByDesc('id')
+    ->get();
+    
+    // if(isset($program_contract_type))
+    // {
+    //   $fulfillments = $fulfillments::with('ServiceRequest')->whereHas("ServiceRequest", function ($subQuery) use ($program_contract_type) {
+    //     $subQuery->where('program_contract_type', $program_contract_type);
+    //   })->get();
+      
+    // }
+    return view('service_requests.reports.pay_rejected', compact('fulfillments','request'));
   }
 
   public function budgetAvailability(ServiceRequest $serviceRequest)
