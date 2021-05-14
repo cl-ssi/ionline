@@ -66,8 +66,8 @@ class ModalEditShiftUserDay extends Component
 		// $this->emit('setshiftUserDay', $this->shiftDay->id);
     }
 	public function setshiftUserDay($sUDId){
-    	 // $this->reset();//
 
+    	// $this->reset();//
 		// echo "setshiftUserDay";
 		$this->shiftUserDay = ShiftUserDay::find($sUDId);
 		$this->previousStatus = $this->shiftUserDay->status;
@@ -111,11 +111,14 @@ class ModalEditShiftUserDay extends Component
 		// })->get();//seteo el dia para obtener la info
 		// $this->render();
 	}
+
 	public function cancel(){
-    	 $this->reset();
+    
+    	$this->reset();
 		// 
 		// $this->emit('clearModal');
 	}
+
 	public function changeAction(){
 		/* they can be 1:assigned;2:completed,3:extra shift,4:shift change 5: medical license,6: union jurisdiction,7: legal holiday,8: exceptional permit or did not belong to the service.*/
 		if( $this->action ==1 ){ // Cambiar turno con
@@ -237,8 +240,11 @@ class ModalEditShiftUserDay extends Component
 				$nHistory->save();
 			}
 		}
+		$this->emitUp('refreshListOfShifts');
+		// $this->emitSelf('renderShiftDay');
+		$this->emitSelf('changeColor',["color"=>$this->colors[$this->shiftUserDay->status]]);
 		 $this->reset();
-		$this->emit('refreshListOfShifts');
+		    return redirect('/rrhh/shiftManagement');
 	}	
     public function render()
     {
