@@ -28,6 +28,14 @@
       <option value="Horas" @if($request->program_contract_type == "Horas") selected @endif>Horas</option>
     </select>
     <div class="input-group-prepend">
+      <span class="input-group-text">Covid/HSA</span>
+    </div>
+    <select class="form-control selectpicker" data-live-search="true" name="type" data-size="5">
+      <option value="">Todos</option>
+      <option value="Covid" @if($request->type == "Covid") selected @endif>Covid</option>
+      <option value="Suma Alzada" @if($request->type == "Suma Alzada") selected @endif>Suma Alzada</option>
+    </select>
+    <div class="input-group-prepend">
       <span class="input-group-text">Estam.</span>
     </div>
     <select class="form-control selectpicker" data-live-search="true" name="estate" data-size="5">
@@ -73,6 +81,7 @@
       <th scope="col">Id</th>
       <!-- <th scope="col">Tipo</th> -->
       <th scope="col">T.Contrato</th>
+      <th scope="col">Tipo</th>
       <th scope="col">F. Solicitud</th>
       <th scope="col">Rut</th>
       <th scope="col">Funcionario</th>
@@ -89,6 +98,7 @@
       <td>{{ $serviceRequest->id }}</td>
       <!-- <td>{{ $serviceRequest->type }}</td> -->
       <td>{{ $serviceRequest->program_contract_type }}</td>
+      <td>{{ $serviceRequest->type }}</td>
       <td nowrap>{{ \Carbon\Carbon::parse($serviceRequest->request_date)->format('d-m-Y') }}</td>
       <td nowrap>@if($serviceRequest->employee){{ $serviceRequest->employee->runNotFormat() }}@endif</td>
       <td nowrap>@if($serviceRequest->employee){{ $serviceRequest->employee->getFullNameAttribute() }}@endif</td>

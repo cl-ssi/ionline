@@ -34,7 +34,7 @@
         <input type="time" class="form-control start_hour" {{$select_start_hour}} name="start_hour" wire:model.lazy="start_hour" required>
       </fieldset>
       <fieldset class="form-group col-6 col-md-3">
-        <label for="for_estate">Salida</label>
+        <label class="salida" id="id_salida">Salida</label>
         <input type="date" class="form-control end_date" name="end_date" {{$select_end_date}} wire:model.lazy="end_date" min="{{$anopasado}}-01-01" max="{{$ano}}-12-31" required>
       </fieldset>
       <fieldset class="form-group col-6 col-md">
