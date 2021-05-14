@@ -64,14 +64,18 @@ class MonthlyValue extends Component
                         $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
 
                         break;
-                    case 'Renuncia voluntaria':
+                    case 'Renuncia voluntaria':                        
+                        $mes_completo = false;
+                        $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
                         $dias_descuento += 1;
                         break;
                 }
             }
 
-
+            // dd($dias_trabajado_antes_retiro);
             $total_dias_trabajados -= $dias_descuento;
+
+            
 
 
             /* Obtener de sr_values el valor mensual */
