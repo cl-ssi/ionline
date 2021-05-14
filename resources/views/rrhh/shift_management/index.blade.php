@@ -96,13 +96,39 @@
     .btn-light { 
         border: 1px solid #ced4da; 
     }
+     td {
+        overflow:hidden;
+    }
+    .cellbutton {
+        width: 30px;
+        font-weight: bold;
+    }
+    .btn-full {
+        display: block;
+        width: 100%;
+        height: 100%;
+        margin:-1000px;
+        padding: 1000px;
+        font-weight: bold;
+    }
 </style>
 
-<!-- TODO: Que hace este esto? -->
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
 <!--Menu de Filtros  -->
-
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="{{ route('rrhh.shiftManag.index') }}">Gestión de Turnos</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link"  href="{{ route('rrhh.shiftsTypes.index') }}">Tipos de Turnos</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#">Mi Turno</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Turnos Disponibles</a>
+  </li>
+</ul>
 <!-- TODO: Que hace este div? -->
 <div id="shiftapp">
 
@@ -256,15 +282,7 @@
                     </thead>
                     <tbody>
                         <div>   
-                            @livewire('rrhh.list-of-shifts', 
-                                [
-                                    'staffInShift'=>$staffInShift,
-                                    'actuallyYear'=>$actuallyYear,
-                                    'actuallyMonth'=>$actuallyMonth,
-                                    'days'=>$days
-                                ]
-                            
-                            )
+                            @livewire('rrhh.list-of-shifts')
                         </div>
                     </tbody>
                 </table>
@@ -300,13 +318,7 @@
                         </thead>
                         <tbody>
 
-                            @livewire('rrhh.list-of-shifts', 
-                                [
-                                    'staffInShift'=>$staffInShift->where('shift_types_id', $st->id),
-                                    'actuallyYear'=>$actuallyYear,
-                                    'actuallyMonth'=>$actuallyMonth,
-                                    'days'=>$days
-                                ]
+                            @livewire('rrhh.list-of-shifts'
                             )
 
                         </tbody>
@@ -533,12 +545,6 @@
 @section('custom_js')
 
 <!-- TODO: que hace esto? -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<script type="text/javascript">
-	$(document).ready(function() {
-    	$('.find-personal-input').select2();
-	});
-</script>
 
 @endsection
