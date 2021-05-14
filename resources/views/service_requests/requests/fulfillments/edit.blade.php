@@ -141,7 +141,7 @@
   //     });
   // });
 
-  $('.for_type').on('change', function() {
+  $('.for_type').on('change', function() {    
     $('.start_date').attr('readonly', false);
     $(".start_date").val('');
     $('.start_hour').attr('readonly', false);
@@ -150,17 +150,20 @@
     $(".end_date").val('');
     $('.end_hour').attr('readonly', false);
     $('.end_hour').val('');
-    if (this.value == "Inasistencia Injustificada") {
-
+    if (this.value == "Inasistencia Injustificada") {      
     }
     if (this.value == "Licencia no covid") {
       $('.start_hour').attr('readonly', true);
       $('.end_hour').attr('readonly', true);
+      $('.texto_renuncia').hide();
     }
     if (this.value == "Renuncia voluntaria") {
       $('.start_date').attr('readonly', true);
       $('.start_hour').attr('readonly', true);
-      $('.end_hour').attr('readonly', true);
+      $('.end_hour').attr('readonly', true);            
+      $('.salida').append(' (último día trabajado)');
+      
+      
     }
     if (this.value == "Abandono de funciones") {
       $('.start_date').attr('readonly', true);
