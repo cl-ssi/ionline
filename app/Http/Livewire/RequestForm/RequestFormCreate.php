@@ -173,6 +173,7 @@ class RequestFormCreate extends Component
           'estimated_expense'     =>  $this->totalDocument,
           'purchase_mechanism'    =>  $this->purchaseMechanism,
           'program'               =>  $this->program,
+          'status'                =>  'created'
       ]);
       foreach ($this->items as $item) {
         $this->saveItem($item, $req->id);

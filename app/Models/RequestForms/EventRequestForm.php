@@ -19,9 +19,11 @@ class EventRequestForm extends Model
         return $this->belongsTo(User::class, 'signer_user_id');
     }
 
-    public function eventRequestForm() {
+    public function requestForm() {
         return $this->belongsTo(RequestForm::class, 'request_form_id');
     }
+
+    public function
 
     protected $table = 'arq_event_request_forms';
 }
