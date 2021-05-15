@@ -30,7 +30,7 @@ class RequestFormController extends Controller
     {
         //MIS FORMULARIOS DE REQUERIMIENTO
         //$myRequestForms = RequestForm::where('creator_user_id', auth()->user()->id)->get();
-        $myRequestForms = auth()->user()->applicantRequestForms()->get();
+        $myRequestForms = auth()->user()->applicantRequestForms()->where('status', 'created')->get();
         return view('request_form.index', compact('myRequestForms'));
     }
 
