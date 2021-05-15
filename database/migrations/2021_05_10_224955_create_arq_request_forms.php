@@ -26,6 +26,7 @@ class CreateArqRequestForms extends Migration
             $table->string('type_form');
             $table->string('bidding_number')->nullable();//id nro. de licitación.
             $table->string('purchase_mechanism');
+            $table->enum('status', ['approved', 'rejected', 'created']);
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('creator_user_id')->references('id')->on('users');

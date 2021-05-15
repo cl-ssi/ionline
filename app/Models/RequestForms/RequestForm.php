@@ -13,7 +13,7 @@ class RequestForm extends Model
 {
     protected $fillable = [
         'applicant_position', 'estimated_expense', 'program', 'justification', 'type_form', 'bidding_number','purchase_mechanism', 'creator_user_id',
-        'supervisor_user_id', 'applicant_user_id', 'applicant_ou_id'
+        'supervisor_user_id', 'applicant_user_id', 'applicant_ou_id', 'status'
     ];
 
     public function creator() {
