@@ -99,7 +99,7 @@ class RequestFormController extends Controller
      */
     public function edit(RequestForm $requestForm)
     {
-        $users = User::all()->sortBy('fathers_family');
+/*      $users = User::all()->sortBy('fathers_family');
         $item_codes = RequestFormItemCode::all();
         $flag_finance = 0;
 
@@ -117,6 +117,9 @@ class RequestFormController extends Controller
         else {
           return view('request_form.edit', compact('requestForm', 'users', 'item_codes', 'flag_finance'));
         }
+*/
+
+        return view('request_form.edit', compact('requestForm'));
     }
 
     /**
