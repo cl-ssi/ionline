@@ -40,6 +40,27 @@ class RequestForm extends Model
         return $this->hasMany(EventRequestForm::class);
     }
 
+    public function getPurchaseMechanism(){
+      switch ($this->purchase_mechanism) {
+          case "cm<1000":
+              return 'Convenio Marco < 1000 UTM';
+              break;
+          case "cm>1000":
+              return 'Convenio Marco > 1000 UTM';
+              break;
+          case "lp":
+              return 'Licitación Pública';
+              break;
+          case "td":
+              return 'Trato Directo';
+              break;
+          case "ca":
+              return 'Compra Ágil';
+              break;
+              case "":
+              break;
+      }
+    }
 /*
     public function getFormatEstimatedExpenseAttribute()
     {
