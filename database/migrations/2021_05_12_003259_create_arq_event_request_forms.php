@@ -15,7 +15,7 @@ class CreateArqEventRequestForms extends Migration
     {
         Schema::create('arq_event_request_forms', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('signer_user_id');
+            $table->foreignId('signer_user_id')->nullable();
             $table->foreignId('request_form_id');
             $table->integer('ou_signer_user');
             $table->string('position_signer_user');

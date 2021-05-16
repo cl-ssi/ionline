@@ -23,16 +23,19 @@ class EventRequestForm extends Model
         return $this->belongsTo(RequestForm::class, 'request_form_id');
     }
 
-    public function createLeadershipEvent(){
+    public static function createLeadershipEvent($requestForm){
+        $this->request_form_id      =   $requestForm->id;
+        $this->ou_signer_user       =   $requestForm->applicant->organizationalUnit->id;
+        $this->status               =   'created';
+        
+    }
+
+    public static function createFinanceEvent($requestForm){
 
     }
 
-    public function createFinanceEvent(){
+    public static function createSupplyEvent($requestForm){
 
-    }
-
-    public function createSupplyEvent(){
-      
     }
 
     public function create
