@@ -23,7 +23,19 @@ class EventRequestForm extends Model
         return $this->belongsTo(RequestForm::class, 'request_form_id');
     }
 
-    public function
+    public function createLeadershipEvent(){
+
+    }
+
+    public function createFinanceEvent(){
+
+    }
+
+    public function createSupplyEvent(){
+      
+    }
+
+    public function create
 
     protected $table = 'arq_event_request_forms';
 }
