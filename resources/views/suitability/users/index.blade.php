@@ -52,6 +52,7 @@
 <table class="table table-sm table-bordered">
     <thead>
         <tr>
+            <th>Contador</th>
             <th>Usuario</th>
             <th>Colegio</th>
             <th>Eliminar</th>
@@ -59,9 +60,9 @@
     </thead>
     <tbody>
 
-        @foreach($schoolusers as $schooluser)
+        @foreach($schoolusers as $key => $schooluser)
         <tr>
-
+            <td>{{ $key+1 }}</td>
             <td>{{ $schooluser->user->fullname??'' }}</td>
             <td>{{ $schooluser->school->name??'' }}</td>
             <td>
