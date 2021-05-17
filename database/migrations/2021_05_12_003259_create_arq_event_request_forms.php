@@ -18,7 +18,7 @@ class CreateArqEventRequestForms extends Migration
             $table->foreignId('signer_user_id')->nullable();
             $table->foreignId('request_form_id');
             $table->integer('ou_signer_user');
-            $table->string('position_signer_user');
+            $table->string('position_signer_user')->nullable();
             $table->unsignedInteger('cardinal_number')->nullable();
             $table->enum('status', ['approved', 'rejected', 'created']);
             $table->longText('comment')->nullable();

@@ -68,6 +68,7 @@
             <th>Valor U.</th>
             <th>Impuestos</th>
             <th>Total Item</th>
+            <th colspan="2">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -83,22 +84,37 @@
                       <td>{{$item->unit_value}}</td>
                       <td>{{$item->tax}}</td>
                       <td>{{$item->expense}}</td>
+                      <td align="center">
+                        <a class="btn btn-outline-secondary btn-sm" title="Editar" wire:click="editRequestService({{ $key }})"><i class="fas fa-pencil-alt"></i></a>
+                      </td>
+                      <td align="center">
+                        <a class="btn btn-outline-secondary btn-sm" title="Eliminar" wire:click="deleteRequestService({{ $key }})"><i class="far fa-trash-alt"></i></a>
+                      </td>
                   </tr>
           @endforeach
         </tbody>
         <tfoot>
           <tr>
             <td colspan="5" rowspan="2"></td>
-            <td colspan="3">Cantidad de Items</td>
-            <td colspan="3">{{count($requestForm->itemRequestForms)}}</td>
+            <td colspan="4">Cantidad de Items</td>
+            <td colspan="4">{{count($requestForm->itemRequestForms)}}</td>
           </tr>
           <tr>
-            <td colspan="3">Valor Total</td>
-            <td colspan="3">{{$requestForm->estimated_expense}}</td>
+            <td colspan="4">Valor Total</td>
+            <td colspan="4">{{$requestForm->estimated_expense}}</td>
           </tr>
         </tfoot>
       </table>
     </div><!-- DIV para TABLA-->
+
+    <div class="row mx-1 mb-4 mt-0 pt-0 px-0">
+        <div class="col">
+            <a href="#" class="btn btn-secondary float-right">Eliminar</a>
+            <button class="btn btn-primary float-right mr-3" type="button">
+                <i class="fas fa-save"></i> Editar
+            </button>
+        </div>
+    </div>
 
   </div><!-- card-body -->
 </div><!-- card-principal -->
