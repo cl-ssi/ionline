@@ -212,7 +212,7 @@ class FirmaDigitalController extends Controller
         $fullName = Auth::user()->full_name;
 
         if ($signatureType === 'firmante' || $visatorAsSignature === true) {
-            $im = @imagecreate(480, 80) or die("Cannot Initialize new GD image stream");
+            $im = @imagecreate(400, 80) or die("Cannot Initialize new GD image stream");
             $background_color = imagecolorallocate($im, 204, 204, 204);
             $white = imagecolorallocate($im, 255, 255, 255);
             imagefilledrectangle($im, 1, 1, 398, 78, $white);
@@ -236,9 +236,6 @@ class FirmaDigitalController extends Controller
                 $text_color, $font_light, Str::upper(Auth::user()->initials) . ' - ' . Str::upper(Auth::user()->organizationalUnit->initials));
         }
 
-        $firma_gob = imagecreatefrompng(public_path('images/firma_gobierno_80.png'));
-        //( $dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct )
-        imagecopymerge($im, $firma_gob, 400, 0, 0, 0, 80, 84, 100);
 
         /* Obtener Imagen de firma en variable $firma */
         ob_start();
@@ -307,13 +304,13 @@ class FirmaDigitalController extends Controller
                 $padding = 25;
                 $alto = 26;
             }
-            $coordenada_x = 35;
+            $coordenada_x = 65;
             $coordenada_y = 50 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
             $ancho = 170 * 1.4;
         } else if ($signatureType == 'firmante') {
-            $coordenada_x = 280;
-            $coordenada_y = 65;
-            $ancho = 200 * 1.4;
+            $coordenada_x = 310;
+            $coordenada_y = 49;
+            $ancho = 170 * 1.4;
             $alto = 55;
         }
 
