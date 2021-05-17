@@ -129,6 +129,7 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::post('/{signaturesFlow}/firma', 'FirmaDigitalController@signPdfFlow')->name('signPdfFlow');
 Route::post('/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
+Route::get('/test-firma/{otp}', 'FirmaDigitalController@test');
 
 
 
