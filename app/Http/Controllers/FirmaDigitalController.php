@@ -400,11 +400,11 @@ class FirmaDigitalController extends Controller
         $pdf            = 'samples/samp.pdf';
         $pdfbase64      = base64_encode(file_get_contents(public_path($pdf)));
         $checksum_pdf   = md5_file(public_path($pdf));
-        $signatureType  = 'firmante';
+        $signatureType  = 'visador';
         $docId          = 1;
         $verificationCode = 'asaasf';
         $visatorAsSignature = false;
-        $ct_firmas_visator  = 2;
+        $ct_firmas_visator  = 3;
         $posicion_firma     = 1;
 
 
