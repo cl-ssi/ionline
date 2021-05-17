@@ -26,12 +26,20 @@ class RequestFormController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //MIS FORMULARIOS DE REQUERIMIENTO
-        //$myRequestForms = RequestForm::where('creator_user_id', auth()->user()->id)->get();
+    public function index(){
         $myRequestForms = auth()->user()->applicantRequestForms()->where('status', 'created')->get();
         return view('request_form.index', compact('myRequestForms'));
+    }
+
+    public function leadershipIndex(){
+        $ou = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->user()->id);
+        if(empty($ou)){
+          session()->flash('danger', 'Usuario no es Autoridad!');
+          return redirect()->route('request_forms.index');
+        }
+        else
+          $requestForms = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->get();
+        return view('request_form.leadership_index', compact('requestForms'));
     }
 
     /**

@@ -52,7 +52,7 @@
     </li>
     <li class="nav-item">
         <a class="nav-link"
-            href="{{ route('request_forms.authorize_inbox') }}">
+            href="{{ route('request_forms.leadership_index') }}">
             <i class="fas fa-inbox"></i> Autorizar
             <span class="badge badge-secondary">{{ App\Utilities::getPendingSignatureAuthorize() }}</span></a>
         </a>
