@@ -23,6 +23,7 @@ class CreateArqEventRequestForms extends Migration
             $table->enum('status', ['approved', 'rejected', 'created']);
             $table->longText('comment')->nullable();
             $table->dateTime('signature_date', $precision = 0)->nullable();
+            $table->string('event_type');
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('signer_user_id')->references('id')->on('users');

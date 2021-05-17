@@ -31,8 +31,12 @@
               <td>{{ $requestForm->organizationalUnit->name}}</td>
           </tr>
           <tr>
+              <th scope="row">Jefatura para Aprobación</th>
+              <td>{{ $manager }}</td>
+          </tr>
+          <tr>
               <th scope="row">Mecanismo de Compra</th>
-              <td>{{ $requestForm->getPurchaseMechanism() }}</td>
+              <td>{{ $requestForm->getPurchaseMechanism()}}</td>
           </tr>
           <tr>
               <th scope="row">Programa Asociado</th>
@@ -95,8 +99,6 @@
         </tfoot>
       </table>
     </div><!-- DIV para TABLA-->
-
-
 
   </div><!-- card-body -->
 </div><!-- card-principal -->

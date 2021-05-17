@@ -87,6 +87,14 @@ class User extends Authenticatable
       return $this->hasMany(EventRequestForm::class, 'signer_user_id');
     }
 
+    public function getPosition(){
+      if(is_null($this->position)){
+        return "";}
+      else{
+        return $this->position;}
+      }
+
+
     public function scopeSearch($query, $name) {
         if($name != "") {
             return $query->where('name', 'LIKE', '%'.$name.'%')

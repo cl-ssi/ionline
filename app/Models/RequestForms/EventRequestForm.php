@@ -11,7 +11,8 @@ class EventRequestForm extends Model
     use HasFactory;
 
     protected $fillable = [
-        'signer_user_id', 'request_form_id', 'ou_signer_user', 'position_signer_user', 'cardinal_number', 'status', 'comment', 'signature_date'
+        'signer_user_id', 'request_form_id', 'ou_signer_user', 'position_signer_user', 'cardinal_number', 'status',
+        'comment', 'signature_date', 'event_type',
     ];
 
 
@@ -24,10 +25,13 @@ class EventRequestForm extends Model
     }
 
     public static function createLeadershipEvent($requestForm){
-        $this->request_form_id      =   $requestForm->id;
-        $this->ou_signer_user       =   $requestForm->applicant->organizationalUnit->id;
-        $this->status               =   'created';
-        
+        $event                      =   new EventRequestForm();
+        $event->ou_signer_user      =   $requestForm->applicant->organizationalUnit->id;
+        $event->cardinal_number     =   '10';
+        $event->status              =   'created';
+        $event->event_type           =   'leader_ship_event';
+        $event->requestForm()->associate($requestForm);
+        $event->save();
     }
 
     public static function createFinanceEvent($requestForm){
@@ -37,8 +41,6 @@ class EventRequestForm extends Model
     public static function createSupplyEvent($requestForm){
 
     }
-
-    public function create
 
     protected $table = 'arq_event_request_forms';
 }
