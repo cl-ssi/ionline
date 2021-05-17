@@ -6,7 +6,7 @@
 
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
 
-<h3 class="mb-3">Formulario de Requerimiento N°1.</h3>
+<h3 class="mb-3">Formularios de Requerimiento - Inbox Jefatura</h3>
 
 @include('request_form.nav')
 

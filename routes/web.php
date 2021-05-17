@@ -1104,9 +1104,18 @@ Route::prefix('request_forms')->name('request_forms.')->group(function () {
 
 Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(function () {
     Route::get('/', [RequestFormController::class, 'index'])->name('index');
-    Route::get('/leadership_index', [RequestFormController::class, 'leadershipIndex'])->name('leadership_index');
     Route::get('/{requestForm}/edit', [RequestFormController::class, 'edit'])->name('edit');
+
+    Route::get('/leadership_index', [RequestFormController::class, 'leadershipIndex'])->name('leadership_index');
     Route::get('/{requestForm}/leadership_sign', [RequestFormController::class, 'leadershipSign'])->name('leadership_sign');
+
+    Route::get('/finance_index', [RequestFormController::class, 'financeIndex'])->name('finance_index');
+    Route::get('/{requestForm}/finance_sign', [RequestFormController::class, 'financeSign'])->name('finance_sign');
+
+    Route::get('/supply_index', [RequestFormController::class, 'supplyIndex'])->name('supply_index');
+    Route::get('/{requestForm}/supply_sign', [RequestFormController::class, 'supplySign'])->name('supply_sign');
+
+
     Route::post('/store', [RequestFormController::class, 'store'])->name('store');
     Route::put('/update', [RequestFormController::class, 'update'])->name('update');
     Route::get('/my_request_inbox', [RequestFormController::class, 'myRequestInbox'])->name('my_request_inbox');

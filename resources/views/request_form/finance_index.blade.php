@@ -6,7 +6,7 @@
 
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
 
-<h3 class="mb-3">Mis Formularios de Requerimiento - Inbox</h3>
+<h3 class="mb-3">Formularios de Requerimiento - Inbox Finanzas</h3>
 
 @include('request_form.nav')
 
@@ -26,17 +26,17 @@
     </tr>
   </thead>
   <tbody>
-      @foreach($myRequestForms as $myRequestForm)
+      @foreach($requestForms as $requestForm)
             <tr>
-                <td>{{ $myRequestForm->id }}</td>
-                <td>{{ $myRequestForm->type_form }}</td>
-                <td>{{ $myRequestForm->creator ? $myRequestForm->creator->FullName : 'Usuario eliminado' }}</td>
-                <td>{{ $myRequestForm->justification }}</td>
-                <td>{{ $myRequestForm->CreationDate }}</td>
-                <td>{{ $myRequestForm->ElapsedTime }}</td>
-                <td>{{ $myRequestForm->EndDate }}</td>
+                <td>{{ $requestForm->id }}</td>
+                <td>{{ $requestForm->type_form }}</td>
+                <td>{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
+                <td>{{ $requestForm->justification }}</td>
+                <td>{{ $requestForm->CreationDate }}</td>
+                <td>{{ $requestForm->ElapsedTime }}</td>
+                <td>{{ $requestForm->EndDate }}</td>
                 <td>
-                  <a href="{{ route('request_forms.edit', $myRequestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Ir">
+                  <a href="{{ route('request_forms.finance_sign', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Ir">
                   <span class="fas fa-edit" aria-hidden="true"></span></a>
                 </td>
                 <td>

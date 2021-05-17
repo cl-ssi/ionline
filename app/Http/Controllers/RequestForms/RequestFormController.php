@@ -21,11 +21,6 @@ use App\User;
 
 class RequestFormController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(){
         $myRequestForms = auth()->user()->applicantRequestForms()->where('status', 'created')->get();
         return view('request_form.index', compact('myRequestForms'));
@@ -52,6 +47,31 @@ class RequestFormController extends Controller
     }
 
     public function leadershipSign(RequestForm $requestForm){
+        $manager              = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
+        $position             = $manager->position;
+        $organizationalUnit   = $manager->organizationalUnit->name;
+        if(is_null($manager))
+            $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
+        else
+            $manager = $manager->user->getFullNameAttribute();
+        return view('request_form.leadership_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit'));
+    }
+
+    public function financeIndex(){
+        $ou = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->user()->id);
+        if(empty($ou)){
+            session()->flash('danger', 'Usuario no es Autoridad!');
+            return redirect()->route('request_forms.index');
+        }elseif($ou[0]->organizational_unit_id != '40' ){
+            session()->flash('danger', 'Usuario no pertenece a Finanzas!');
+            return redirect()->route('request_forms.index');
+        }else{
+            $requestForms = RequestForm::all();
+        }
+        return view('request_form.finance_index', compact('requestForms'));
+    }
+
+    public function financeSign(RequestForm $requestForm){
       $manager              = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
       $position             = $manager->position;
       $organizationalUnit   = $manager->organizationalUnit->name;
@@ -59,31 +79,39 @@ class RequestFormController extends Controller
           $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
       else
           $manager = $manager->user->getFullNameAttribute();
+      return view('request_form.finance_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit'));
 
-      return view('request_form.leadership_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit'));
     }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //$users = User::all()->sortBy('fathers_family');
-        //return view('request_form.create', compact('users'));
-        //$user = auth()->user();
-        //$user = User::find(auth()->user())
-        //$user = User::where('id', Auth::user()->id);
-        //return  view('request_form.create', compact('user'));
+
+    public function supplyIndex(){
+        $ou = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->user()->id);
+        if(empty($ou)){
+          session()->flash('danger', 'Usuario no es Autoridad!');
+          return redirect()->route('request_forms.index');
+        }
+        else
+          $requestForms = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->get();
+        return view('request_form.supply_index', compact('requestForms'));
+    }
+
+    public function supplySign(RequestForm $requestForm){
+        $manager              = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
+        $position             = $manager->position;
+        $organizationalUnit   = $manager->organizationalUnit->name;
+        if(is_null($manager))
+            $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
+        else
+            $manager = $manager->user->getFullNameAttribute();
+        return view('request_form.supply_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit'));
+    }
+
+
+
+    public function create(){
         return  view('request_form.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
         $requestForm = new RequestForm($request->All());
@@ -108,26 +136,11 @@ class RequestFormController extends Controller
         return redirect()->route('request_forms.edit', compact('requestForm'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\RequestForm  $requestForm
-     * @return \Illuminate\Http\Response
-     */
     public function show(RequestForm $requestForm)
     {
         //
     }
 
-
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\RequestForm  $requestForm
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, RequestForm $requestForm)
     {
         //ASIGNAR UO DE QUIEN SOLICITA.
@@ -213,22 +226,11 @@ class RequestFormController extends Controller
         return redirect()->route('request_forms.edit', compact('id'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\RequestForm  $requestForm
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(RequestForm $requestForm)
     {
         //
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function myRequestInbox()
     {
         $myRequestForms = RequestForm::with(['items','passages', 'requestformfiles', 'requestformevents'])
