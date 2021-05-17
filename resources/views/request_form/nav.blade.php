@@ -22,7 +22,7 @@
     </div>
   </li>
 
-
+<!--
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-inbox"></i> Solicitudes Pendientes
@@ -33,7 +33,7 @@
       <a class="dropdown-item" href="{{ route('request_forms.passages.index') }}"><i class="fas fa-archive"></i> Compra de Pasajes Aéreos</a>
     </div>
   </li>
-
+-->
 
 
 
@@ -43,6 +43,7 @@
             <i class="fas fa-inbox"></i> Mis Formularios
         </a>
     </li>
+    <!--
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('request_forms.my_request_inbox') }}">
@@ -50,10 +51,11 @@
             <span class="badge badge-secondary">{{ App\Utilities::getPendingSignature() }}</span></a>
         </a>
     </li>
+  -->
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('request_forms.leadership_index') }}">
-            <i class="fas fa-inbox"></i> Autorizar
+            <i class="fas fa-inbox"></i> Jefatura
             <span class="badge badge-secondary">{{ App\Utilities::getPendingSignatureAuthorize() }}</span></a>
         </a>
     </li>
@@ -75,7 +77,6 @@
         </a>
     </li>
     @endcan
-    @can('Request Forms: supplying')
     <li class="nav-item">
         <a class="nav-link"
             href="">
@@ -83,5 +84,4 @@
             <span class="badge badge-secondary"></span></a>
         </a>
     </li>
-    @endcan
 </ul>

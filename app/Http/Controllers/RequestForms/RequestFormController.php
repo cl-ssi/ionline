@@ -31,6 +31,15 @@ class RequestFormController extends Controller
         return view('request_form.index', compact('myRequestForms'));
     }
 
+    public function edit(RequestForm $requestForm){
+        $manager = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
+        if(is_null($manager))
+            $manager= 'No se ha registrado una Autoridad en el módulo correspondiente!';
+        else
+            $manager = $manager->user->getFullNameAttribute();
+        return view('request_form.edit', compact('requestForm', 'manager'));
+    }
+
     public function leadershipIndex(){
         $ou = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->user()->id);
         if(empty($ou)){
@@ -42,6 +51,17 @@ class RequestFormController extends Controller
         return view('request_form.leadership_index', compact('requestForms'));
     }
 
+    public function leadershipSign(RequestForm $requestForm){
+      $manager              = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
+      $position             = $manager->position;
+      $organizationalUnit   = $manager->organizationalUnit->name;
+      if(is_null($manager))
+          $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
+      else
+          $manager = $manager->user->getFullNameAttribute();
+
+      return view('request_form.leadership_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit'));
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -99,39 +119,7 @@ class RequestFormController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\RequestForm  $requestForm
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(RequestForm $requestForm)
-    {
-/*      $users = User::all()->sortBy('fathers_family');
-        $item_codes = RequestFormItemCode::all();
-        $flag_finance = 0;
 
-        if($requestForm->type_form == 'item'){
-          foreach($requestForm->requestformevents as $key => $event){
-            if($event->type == 'status' && $event->StatusName == 'Aprobado por jefatura'){
-              $flag_finance = 1;
-            }
-            if($event->type == 'message' && $event->status == 'item_record'){
-              $flag_finance = 2;
-            }
-          }
-        return view('request_form.edit', compact('requestForm', 'users', 'item_codes', 'flag_finance'));
-        }
-        else {
-          return view('request_form.edit', compact('requestForm', 'users', 'item_codes', 'flag_finance'));
-        }*/
-        $manager = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
-        if(is_null($manager))
-            $manager= 'No se ha registrado una Autoridad en el módulo correspondiente!';
-        else
-            $manager = $manager->user->getFullNameAttribute();
-        return view('request_form.edit', compact('requestForm', 'manager'));
-    }
 
     /**
      * Update the specified resource in storage.

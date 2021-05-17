@@ -36,7 +36,7 @@
                 <td>{{ $requestForm->ElapsedTime }}</td>
                 <td>{{ $requestForm->EndDate }}</td>
                 <td>
-                  <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Ir">
+                  <a href="{{ route('request_forms.leadership_sign', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Ir">
                   <span class="fas fa-edit" aria-hidden="true"></span></a>
                 </td>
                 <td>
