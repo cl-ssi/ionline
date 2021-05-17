@@ -116,10 +116,13 @@ class RequestFormController extends Controller
         }
         else {
           return view('request_form.edit', compact('requestForm', 'users', 'item_codes', 'flag_finance'));
-        }
-*/
-
-        return view('request_form.edit', compact('requestForm'));
+        }*/
+        $manager = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
+        if(is_null($manager))
+            $manager= 'No se ha registrado una Autoridad en el módulo correspondiente!';
+        else
+            $manager = $manager->user->getFullNameAttribute();
+        return view('request_form.edit', compact('requestForm', 'manager'));
     }
 
     /**
