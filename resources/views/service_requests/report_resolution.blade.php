@@ -604,7 +604,14 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
 
 @if($ServiceRequest->program_contract_type == "Mensual")
   <p class="">
-      <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del
+
+      <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal
+      @if($ServiceRequest->estate == "Profesional Médico")
+        Médico, 
+      @else
+        No Médico,
+      @endif
+      del presupuesto del
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         Hospital “Dr. Ernesto Torres Galdames” de Iquique.
       @else
