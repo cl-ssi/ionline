@@ -4,6 +4,7 @@ namespace App\Http\Livewire\RequestForm;
 use Livewire\Component;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\ItemRequestForm;
+use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\UnitOfMeasurement;
 use Illuminate\Support\Collection;
 use Livewire\WithFileUploads;
@@ -168,7 +169,7 @@ class RequestFormCreate extends Component
           'creator_user_id'       =>  Auth()->user()->id,
           'applicant_user_id'     =>  Auth()->user()->id,
           //'supervisor_user_id'    =>  Auth()->user()->id,
-          'applicant_ou_id'       =>  Auth()->user()->organizationalUnit(),
+          'applicant_ou_id'       =>  Auth()->user()->organizationalUnit->id,
           'applicant_position'    =>  Auth()->user()->getPosition(),
           'estimated_expense'     =>  $this->totalDocument,
           'purchase_mechanism'    =>  $this->purchaseMechanism,
@@ -178,6 +179,9 @@ class RequestFormCreate extends Component
       foreach ($this->items as $item) {
         $this->saveItem($item, $req->id);
       }
+      EventRequestform::createLeadershipEvent($req);
+      EventRequestform::createFinanceEvent($req);
+      EventRequestform::createSupplyEvent($req);
       session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue ingresado con exito.');
       return redirect()->to('/request_forms');
     }

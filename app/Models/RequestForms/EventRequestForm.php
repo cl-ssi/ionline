@@ -4,6 +4,7 @@ namespace App\Models\RequestForms;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\RequestForms\RequestForm;
 use App\User;
 
 class EventRequestForm extends Model
@@ -24,22 +25,37 @@ class EventRequestForm extends Model
         return $this->belongsTo(RequestForm::class, 'request_form_id');
     }
 
-    public static function createLeadershipEvent($requestForm){
+    public static function createLeadershipEvent(RequestForm $requestForm){
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   $requestForm->applicant->organizationalUnit->id;
         $event->cardinal_number     =   '10';
         $event->status              =   'created';
-        $event->event_type           =   'leader_ship_event';
+        $event->event_type          =   'leader_ship_event';
         $event->requestForm()->associate($requestForm);
         $event->save();
+        return true;
     }
 
-    public static function createFinanceEvent($requestForm){
-
+    public static function createFinanceEvent(RequestForm $requestForm){
+        $event                      =   new EventRequestForm();
+        $event->ou_signer_user      =   '40';
+        $event->cardinal_number     =   '20';
+        $event->status              =   'created';
+        $event->event_type          =   'finance_event';
+        $event->requestForm()->associate($requestForm);
+        $event->save();
+        return true;
     }
 
-    public static function createSupplyEvent($requestForm){
-
+    public static function createSupplyEvent(RequestForm $requestForm){
+        $event                      =   new EventRequestForm();
+        $event->ou_signer_user      =   '37';
+        $event->cardinal_number     =   '30';
+        $event->status              =   'created';
+        $event->event_type          =   'supply_event';
+        $event->requestForm()->associate($requestForm);
+        $event->save();
+        return true;
     }
 
     protected $table = 'arq_event_request_forms';
