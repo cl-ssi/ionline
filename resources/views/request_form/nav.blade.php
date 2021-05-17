@@ -68,18 +68,18 @@
         </a>
     </li>
     @endif
-    @can('Request Forms: Finance add item code')
+
     <li class="nav-item">
         <a class="nav-link"
-            href="{{ route('request_forms.finance_inbox') }}">
+            href="{{ route('request_forms.finance_index') }}">
             <i class="fas fa-inbox"></i> Finanzas
             <span class="badge badge-secondary">{{ App\Utilities::getPendingDirectorAuthorize() }}</span></a>
         </a>
     </li>
-    @endcan
+
     <li class="nav-item">
         <a class="nav-link"
-            href="">
+            href="{{ route('request_forms.supply_index') }}">
             <i class="fas fa-inbox"></i> Abastecimiento
             <span class="badge badge-secondary"></span></a>
         </a>

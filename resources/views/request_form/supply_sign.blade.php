@@ -8,7 +8,7 @@
 <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('css/steps.css') }}" rel="stylesheet" type="text/css"/>
 
-<h3 class="mb-3">Autorización Jefatura</h3>
+<h3 class="mb-3">Autorización Abastecimiento</h3>
 
 @include('request_form.nav')
 
@@ -98,7 +98,7 @@
 
 
     <div class="card mx-3 mb-3 mt-0 pt-0">
-      <h6 class="card-header bg-primary text-white">Autorización Jefatura</h6>
+      <h6 class="card-header bg-primary text-white">Autorización Abastecimiento</h6>
       <div class="card-body mb-1">
           <div class="row justify-content-md-center"><!-- FILA 2 -->
            <div class="form-group col-5">
