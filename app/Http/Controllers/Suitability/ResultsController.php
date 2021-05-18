@@ -17,7 +17,10 @@ class ResultsController extends Controller
     public function index()
     {
         //
+        //$results = Result::orderBy("request_id", "asc")->get();
         $results = Result::orderBy("request_id", "asc")->get();
+        //$results = Result::with("psirequest", "asc")->get();
+        //$results = Result::with("psirequest")->orderBy("Result.psirequest.school_id", "asc")->get();
         return view('suitability.results.index', compact('results'));
     }
 
