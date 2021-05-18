@@ -513,7 +513,14 @@
         </select>
     </fieldset>
 
-    <fieldset class="form-group col-3">
+    @if(
+    $serviceRequest->schedule_detail == 'DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)'
+    or
+    $serviceRequest->schedule_detail == 'DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)'
+    or
+    $serviceRequest->schedule_detail == 'FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)'
+    )
+    <fieldset class="form-group col-3" id="div_covid_schedule">
 			<label for="for_schedule_detail">Detalle de horario</label>
 			<select name="schedule_detail" class="form-control" id="schedule_detail">
 				<option value=""></option>
@@ -522,6 +529,13 @@
 				<option value="FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)" @if($serviceRequest->schedule_detail == "FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)") selected @endif>FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)</option>
 			</select>
 		</fieldset>
+
+    @else    
+    <fieldset class="form-group col-3" id="div_hsa_schedule">
+			<label for="for_hsa_schedule_detail">Detalle de Horario HSA</label>
+			<input type="text" class="form-control" id="for_hsa_schedule_detail" value="{{$serviceRequest->schedule_detail}}" name="hsa_schedule_detail">
+		</fieldset>
+    @endif
 
   </div>
 
@@ -1228,6 +1242,10 @@
   			$("#programm_name option[value='Covid19 Médicos']").hide();
   			$('#digera_strategy').attr('disabled', 'disabled');
 
+
+        $("#div_hsa_schedule").show();
+			  $("#div_covid_schedule").hide();
+
         $('#objectives').removeAttr('disabled');
   			// $('#resolve').removeAttr('disabled');
   			$('#additional_benefits').removeAttr('disabled');
@@ -1292,7 +1310,9 @@
   		}
   		else
   		{
-  			$("#programm_name option[value='Covid19-APS No Médicos']").show();
+        $("#div_hsa_schedule").hide();
+			  $("#div_covid_schedule").show();
+        $("#programm_name option[value='Covid19-APS No Médicos']").show();
   			$("#programm_name option[value='Covid19-APS Médicos']").show();
   			$("#programm_name option[value='Covid19 No Médicos']").show();
   			$("#programm_name option[value='Covid19 Médicos']").show();

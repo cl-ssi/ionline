@@ -169,13 +169,11 @@
                   @endforeach
               </td>
               <td>
-                  @if($request->RequestSign->first()->request_status != 'pending')
-                  <a href="{{ route('replacement_staff.request.edit', $request) }}"
-                      class="btn btn-outline-secondary btn-sm disabled" title="Selección"><i class="fas fa-edit"></i></a>
-                  @else
-                  <a href="{{ route('replacement_staff.request.edit', $request) }}"
-                      class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-                  @endif
+                  <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                      data-target="#exampleModalCenter-req-{{ $request->id }}">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  @include('replacement_staff.modals.modal_to_view_request')
               </td>
           </tr>
           @endforeach

@@ -288,10 +288,35 @@ class ReportController extends Controller
     // return $pdf->stream();
   }
 
-  public function payRejected()
+  public function payRejected(Request $request)
   {
-    $fulfillments = Fulfillment::where('payment_ready', 0)->orderByDesc('id')->get();
-    return view('service_requests.reports.pay_rejected', compact('fulfillments'));
+
+    $program_contract_type = $request->program_contract_type;
+    $working_day_type = $request->working_day_type;
+
+    $fulfillments = Fulfillment::where('payment_ready', 0)
+    ->when($program_contract_type != null, function ($q) use ($program_contract_type) {
+      return $q->whereHas("ServiceRequest", function ($subQuery) use ($program_contract_type) {
+        $subQuery->where('program_contract_type', $program_contract_type);
+      });
+    })
+    ->when($working_day_type != null, function ($q) use ($working_day_type) {
+      return $q->whereHas("ServiceRequest", function ($subQuery) use ($working_day_type) {
+        $subQuery->where('working_day_type', $working_day_type);
+      });
+    })
+
+    ->orderByDesc('id')
+    ->get();
+    
+    // if(isset($program_contract_type))
+    // {
+    //   $fulfillments = $fulfillments::with('ServiceRequest')->whereHas("ServiceRequest", function ($subQuery) use ($program_contract_type) {
+    //     $subQuery->where('program_contract_type', $program_contract_type);
+    //   })->get();
+      
+    // }
+    return view('service_requests.reports.pay_rejected', compact('fulfillments','request'));
   }
 
   public function budgetAvailability(ServiceRequest $serviceRequest)
@@ -392,10 +417,10 @@ class ReportController extends Controller
   {
 
     $establishments = Establishment::all();
-    $filas = null;
+    $filitas = null;
     if ($request->has('from')) {
       
-      $filas = ServiceRequest::where('establishment_id', $request->establishment)
+      $filitas = ServiceRequest::where('establishment_id', $request->establishment)
         ->where('sirh_contract_registration', $request->sirh)        
         ->whereDate('start_date', '>=', $request->from)
         ->where(function($q){
@@ -404,20 +429,32 @@ class ReportController extends Controller
       })
 
         ->get();
-        //dd($filas);
+        // dd($filitas);
     }
 
 
-    return view('service_requests.export_sirh', compact('request', 'establishments', 'filas'));
+    return view('service_requests.export_sirh', compact('request', 'establishments', 'filitas'));
   }
 
   public function export_sirh_txt(Request $request)
   {
     
+    // $filas = ServiceRequest::where('establishment_id', $request->establishment)
+    //   ->where('sirh_contract_registration', $request->sirh)
+    //   ->whereDate('start_date', '>=', $request->from)
+    //   ->get(); 
+    // dd($request->establishment);
     $filas = ServiceRequest::where('establishment_id', $request->establishment)
-      ->where('sirh_contract_registration', $request->sirh)
-      ->whereDate('start_date', '>=', $request->from)
-      ->get();    
+        ->where('sirh_contract_registration', $request->sirh)
+        ->whereDate('start_date', '>=', $request->from)
+        ->where(function($q){
+        	$q->whereNotNull('resolution_number')
+              ->orwhereNotNull('resolution_date');
+      })
+
+        ->get();
+        // dd($filas);
+    
 
     $txt =
       'RUN|' .
@@ -458,8 +495,7 @@ class ReportController extends Controller
       ' Tipo  de  función |' .
       ' Afecto  a  sistema  de  turno' . "\r\n";
 
-    foreach ($filas as $fila) {
-      if (!$fila->resolution_number or !$fila->resolution_date) {
+    foreach ($filas as $fila) {      
         $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
         switch ($fila->program_contract_type) {
           case 'Horas':
@@ -797,9 +833,8 @@ class ReportController extends Controller
           "\r\n";
 
         $txt = mb_convert_encoding($txt, 'utf-8');
-      } // if de sólo sin numero de resolucion
-      // dd($filas);
     }
+    //dd($fila);
 
     $response = new StreamedResponse();
     $response->setCallBack(function () use ($txt) {
@@ -808,6 +843,7 @@ class ReportController extends Controller
     $response->headers->set('Content-Type', 'text/plain; charset=utf-8');
     $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, "export_sirh.txt");
     $response->headers->set('Content-Disposition', $disposition);
+    // dd($fila);
     return $response;
   }
 }

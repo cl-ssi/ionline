@@ -7,14 +7,35 @@
 @include('agreements/nav')
 
 
-<h3 class="mb-3">Ver detalle de Convenio</h3> 
-    
+<h3 class="mb-3">Ver detalle de Convenio
     @can('Agreement: delete')
-		<form method="POST" action="{{ route('agreements.destroy', $agreement->id) }}" class="d-inline">
+		<form method="POST" action="{{ route('agreements.destroy', $agreement->id) }}" onclick="return confirm('¿Está seguro/a de eliminar este convenio?');" class="d-inline">
 			{{ method_field('DELETE') }} {{ csrf_field() }}
 			<button class="btn btn-sm btn-danger"><span class="fas fa-trash" aria-hidden="true"></span> Eliminar</button>
 		</form>
 	@endcan
+</h3>
+
+<div class="card">
+  <div class="card-header">
+    Flujo de firmas
+  </div>
+  <div class="card-body">
+    <!-- <h5 class="card-title">Special title treatment</h5> -->
+    <ul class="list-group list-group-horizontal justify-content-center">
+        <li class="list-group-item list-group-item-{{$agreement->endorseState}}">1. Visación convenio</li>
+        <li class="list-group-item list-group-item-{{$agreement->signState}}">2. Firma convenio</li>
+        <li class="list-group-item list-group-item-{{$agreement->resSignState}}">3. Firma resolución</li>
+    </ul>
+    <br>
+    <ul class="list-group list-group-horizontal-sm justify-content-end">
+        <li class="list-group-item py-0 list-group-item-success"><small>Aprobada</small></li>
+        <li class="list-group-item py-0 list-group-item-warning"><small>Actual</small></li>
+        <li class="list-group-item py-0 list-group-item-danger"><small>Rechazada</small></li>
+        <li class="list-group-item py-0 list-group-item-secondary"><small>En espera</small></li>
+    </ul>
+  </div>
+</div>
 
 <ol class="breadcrumb bg-light justify-content-end small">
     <li class="nav-item">
@@ -23,7 +44,7 @@
 
     @if($agreement->file != null)
     <li>
-        <a class="nav-link text-secondary" href="{{ route('agreements.download', $agreement->id) }}"><i class="fas fa-eye"></i> Previsualizar el convenio</a>
+        <a class="nav-link text-secondary" href="{{ route('agreements.preview', $agreement->id) }}" target="blank"><i class="fas fa-eye"></i> Previsualizar el convenio</a>
     </li>
     @endif
 
@@ -32,12 +53,21 @@
         <a class="nav-link text-secondary" href="{{ route('agreements.sign', [$agreement, 'visators']) }}"><i class="fas fa-file-signature"></i> Solicitar visación Convenio</a>
     </li>
 
+    @if($agreement->fileToEndorse && $agreement->fileToEndorse->HasAllFlowsSigned)
+    <li class="nav-item">
+        <a class="nav-link text-secondary" href="{{route('documents.signatures.showPdf', [$agreement->file_to_endorse_id, time()])}}" target="blank"><i class="fas fa-eye"></i> Ver convenio visado</a>
+    </li>
+    
     <li class="nav-item">
         <a class="nav-link text-secondary" href="{{ route('agreements.sign', [$agreement, 'signer']) }}"><i class="fas fa-file-signature"></i> Solicitar firma Convenio</a>
     </li>
-    @endcan
+    @endif
 
-    @if($agreement->file != null)
+    @if($agreement->fileToSign && $agreement->fileToSign->HasAllFlowsSigned)
+    <li class="nav-item">
+        <a class="nav-link text-secondary" href="{{route('documents.signatures.showPdf', [$agreement->file_to_sign_id, time()])}}" target="blank"><i class="fas fa-eye"></i> Ver convenio firmado</a>
+    </li>
+
     <li class="nav-item">
         <a href="#" class="nav-link text-secondary" data-toggle="modal"
                         data-target="#selectSignerRes"
@@ -45,6 +75,14 @@
                         <i class="fas fa-file-download"></i> Descargar borrador Resolución</a>
     </li>
     @endif
+
+    @if($agreement->fileResEnd != null)
+    <li class="nav-item">
+        <a class="nav-link text-secondary" href="{{ route('agreements.downloadRes', $agreement->id) }}" target="blank"><i class="fas fa-eye"></i> Ver resolución firmada</a>
+    </li>
+    @endif
+
+    @endcan
 </ol>
 <p>
 

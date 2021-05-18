@@ -28,6 +28,11 @@ class SignaturesFlow extends Model Implements Auditable
         return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signatures_file_id');
     }
 
+    public function userSigner()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }
+
     public function signature(){
         return $this->signaturesFile->signature();
     }
