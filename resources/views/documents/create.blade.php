@@ -40,7 +40,7 @@
                 <option value="">Seleccione tipo</option>
                 <option value="Memo" @if($document->type == 'Memo') selected @endif>Memo</option>
                 <option value="Oficio" @if($document->type == 'Oficio') selected @endif>Oficio</option>             
-                <option value="Ordinario" @if($document->type == 'Ordinario') selected @endif>Ordinario</option>
+                <!-- <option value="Ordinario" @if($document->type == 'Ordinario') selected @endif>Ordinario</option> -->
                 <option value="Reservado" @if($document->type == 'Reservado') selected @endif>Reservado</option>
                 <option value="Circular" @if($document->type == 'Circular') selected @endif>Circular</option>
                 <option value="Acta de recepción" @if($document->type == 'Acta de recepción') selected @endif>Acta de recepción</option>
