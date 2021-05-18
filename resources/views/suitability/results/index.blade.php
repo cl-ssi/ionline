@@ -8,7 +8,8 @@
 <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
+            <!-- <th>ID</th> -->
+            <th>Solicitud N°</th>            
             <th>Nombre</th>
             <th>Colegio</th>
             <th>Cargo</th>
@@ -25,7 +26,8 @@
     <tbody>
         @foreach($results as $result)
         <tr>
-            <td>{{ $result->id ?? '' }}</td>
+            <!-- <td>{{ $result->id ?? '' }}</td> -->
+            <td>{{ $result->request_id ?? '' }}</td>
             <td>{{ $result->user->fullName ?? ''  }}</td>
             <td>{{ $result->psirequest->school->name ?? ''  }}</td>
             <td>{{ $result->psirequest->job ?? ''  }}</td>
