@@ -80,7 +80,6 @@ class RequestFormController extends Controller
       else
           $manager = $manager->user->getFullNameAttribute();
       return view('request_form.finance_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit'));
-
     }
 
     public function supplyIndex(){
