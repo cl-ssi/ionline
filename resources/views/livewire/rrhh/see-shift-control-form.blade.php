@@ -192,15 +192,40 @@
 										<th></th>
 									</tr>
 								</thead>
+                                                @php
+                                                    $total = 0;
+                                                @endphp
+
                 				<tbody>
                         			@if($days > 0)	
                         				@for($i = 1; $i < ($days+1); $i++ )
                         					<tr>
                         						<td>{{$i}}	</td>
-                        						<td></td>
-                        						<td></td>
-                        						<td></td>
-                        						<td></td>
+                        						<td>
+                                                    @php
+                                                        $date2 = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYears."-".$actuallyMonth."-".$i);  
+                                                        $date =explode(" ",$date2);
+                                                        $d = $shifsUsr->days->where('day',$date[0]);
+                                                        $d = $d->first();
+                                                    @endphp
+                                                     {{ ($d["working_day"]!="F")?$d["working_day"]:"-"  }}                    
+                                                </td>
+                                                @if($date2->isPast())
+                                                    <td>{{ (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["from"]:"nan"  }}</td>
+                        						    <td>{{  (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["to"]:"nan" }}</td>
+                                                    <td>{{  ( isset($timePerDay[$d["working_day"]]) )?$shiftStatus[$d["status"]]:"" }}</td>
+                                                    @php
+                                                      $total+=   (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["time"]:0  ;
+                                                    @endphp
+
+
+
+                                                @else
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+
+                                                @endif
                         					</tr>
                         				@endfor
                         			@else
@@ -213,7 +238,7 @@
                         			@endif
                         			<tr>
                         				<th>TOTAL</th>	
-                        				<td></td>	
+                        				<td>{{$total}}</td>	
                         				<td></td>	
                         				<td></td>	
                         				<td></td>	

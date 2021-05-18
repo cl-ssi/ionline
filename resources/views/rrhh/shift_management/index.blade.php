@@ -111,6 +111,7 @@
         padding: 1000px;
         font-weight: bold;
     }
+  
 </style>
 
 
@@ -317,8 +318,8 @@
                             </tr>
                         </thead>
                         <tbody>
-
-                            @livewire('rrhh.list-of-shifts'
+                            {{$staffInShift}}
+                            @livewire('rrhh.list-of-shifts',["actuallyShift"=>$st]
                             )
 
                         </tbody>
@@ -354,9 +355,10 @@
         padding: 1000px;
         font-weight: bold;
     }
+
 </style>
 
-
+<!-- 
 <table class="table table-sm table-bordered mt-4">
     <thead>
         <tr>
@@ -538,7 +540,7 @@
             </td>
         </tr>
     </tbody>
-</table>
+</table> -->
 @endsection
 
 
