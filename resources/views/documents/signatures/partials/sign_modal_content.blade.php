@@ -8,6 +8,7 @@
     </div>
     <form method="POST" class="form-horizontal"
           action="{{route('signPdfFlow', $pendingSignaturesFlow->id)}}"
+          onsubmit="disableButton(this);"
           enctype="multipart/form-data">
         <div class="modal-body">
         @csrf <!-- input hidden contra ataques CSRF -->
@@ -48,11 +49,11 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
+            <button type="button" id="cancelSignBtn" class="btn btn-secondary" data-dismiss="modal">Cancelar
             </button>
 
             @if(count($pendingSignaturesFlow->validationMessages) === 0)
-                <button class="btn btn-primary" type="submit">
+                <button class="btn btn-primary" id="signBtn" type="submit">
                     <i class="fas fa-edit"></i> Firmar
                 </button>
             @endif

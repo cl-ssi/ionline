@@ -46,25 +46,72 @@ class ShiftManagementController extends Controller
             'N' => "Noche"
     );
 
-     public function index(Request $r)
+    public function index(Request $r)
     {
     	// echo "Shift Management";
         $months = (object) $this->months;
 
+        if(Session::has('days') && Session::get('days') != "")
+            $days = Session::get('days');
+        else
+    	   $days = Carbon::now()->daysInMonth;
 
-    	$days = Carbon::now()->daysInMonth;
-        $actuallyMonth = Carbon::now()->format('m');
-        $actuallyDay = Carbon::now()->format('d');
-        $actuallyYear = Carbon::now()->format('Y');
-        $sTypes = ShiftTypes::all(); 
-    	$users = User::Search($r->get('name'))->orderBy('name','Asc')->paginate(500);
-    	$cargos = OrganizationalUnit::all();
-        $actuallyOrgUnit = $cargos->first();
-        $actuallyShift=$sTypes->first();
-        $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
+        if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
+            $actuallyMonth = Session::get('actuallyMonth');
+        else
+            $actuallyMonth = Carbon::now()->format('m');
+
+        if(Session::has('actuallyDay') && Session::get('actuallyDay') != "")
+            $actuallyDay = Session::get('actuallyDay');
+        else
+            $actuallyDay = Carbon::now()->format('d');
         
-        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->get();
+        if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
+            $actuallyYear = Session::get('actuallyYear');
+        else
+            $actuallyYear = Carbon::now()->format('Y');
 
+        if(Session::has('sTypes') && Session::get('sTypes') != "")
+            $sTypes = Session::get('sTypes');
+        else
+            $sTypes = ShiftTypes::all(); 
+
+        if(Session::has('users') && Session::get('users') != "")
+            $users = Session::get('users');
+        else
+    	   $users = User::Search($r->get('name'))->orderBy('name','Asc')->paginate(500);
+
+        if(Session::has('cargos') && Session::get('cargos') != "")
+            $cargos = Session::get('cargos');
+        else
+    	   $cargos = OrganizationalUnit::all();
+        
+        if(Session::has('actuallyOrgUnit') && Session::get('actuallyOrgUnit') != "")
+            $actuallyOrgUnit = Session::get('actuallyOrgUnit');
+        else    
+            $actuallyOrgUnit = $cargos->first();
+
+        if(Session::has('actuallyShift') && Session::get('actuallyShift') != "")
+            $actuallyShift = Session::get('actuallyShift');
+        else
+            $actuallyShift=$sTypes->first();
+
+        // if(Session::has('staff') && Session::get('staff') != "")
+        //     $staff = Session::get('staff');
+        // else
+            $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
+
+        // if(Session::has('staffInShift') && Session::get('staffInShift') != "")
+        //     $staffInShift = Session::get('staffInShift');
+        // else
+            $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
+
+        // echo "SISH: ". $staffInShift;
+        
+        $months = $this->months;
+
+        
+        $filter ="";
         Session::put('users',$users);
         Session::put('cargos',$cargos);
         Session::put('sTypes',$sTypes);
@@ -80,17 +127,18 @@ class ShiftManagementController extends Controller
 
         // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
 
-        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift'));
+        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter'));
     }
+
  	public function indexfiltered(Request $r){
         
      
-
+        // echo "filteresd";
         $months = (object) $this->months;
         $actuallyDay = Carbon::now()->format('d');
         $sTypes = ShiftTypes::all(); 
         $cargos = OrganizationalUnit::all();
-
+        $filter = "on";
 
         $dateFiltered = Carbon::createFromFormat('Y-m-d',  $r->yearFilter."-".$r->monthFilter."-".$actuallyDay, 'Europe/London');
 
@@ -124,10 +172,13 @@ class ShiftManagementController extends Controller
         Session::put('staff',$staff);
         Session::put('actuallyShift',$actuallyShift);
         Session::put('staffInShift',$staffInShift);
+        
+        return redirect()->route('rrhh.shiftManag.index');
 
-        return view('rrhh.shift_management.index', compact('cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift'));
 
+        // return view('rrhh.shift_management.index', compact('cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter'));
  	}
+
  	public function shiftstypesindex()
     {
         // return view('rrhh.shift_management.shiftstypes', compact('users'));
@@ -135,21 +186,23 @@ class ShiftManagementController extends Controller
         // $sTypes = 1;
         return view('rrhh.shift_management.shiftstypes', compact('sTypes'));
     }
+
     public function editshifttype(Request $r)
     {	
 
     	$tiposJornada =   $this->tiposJornada;
         $sType = ShiftTypes::findOrFail($r->id); 
         return view('rrhh.shift_management.editshiftstype', compact('sType','tiposJornada'));
-
     }
+
+
     public function newshifttype(){
     	// echo "create";
         $tiposJornada =   $this->tiposJornada;
     	
         return view('rrhh.shift_management.createshifttype', compact('tiposJornada'));
-
     }
+
     public function storenewshift(Request $r){
 
         $nSType = new ShiftTypes; 
@@ -224,7 +277,7 @@ class ShiftManagementController extends Controller
                 $nShiftD->save();
 
                 $nHistory = new ShiftDayHistoryOfChanges;
-                $nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family."\" ha <b>asignado la jornada</b> del \"".$date->format('Y-m-d')."\" de tipo  \"".$nShiftD->working_day."\" al usuario ID: \"". $nUser->runFormat ."\" - ".$nUser->name." ".$nUser->fathers_family." ".$nUser->mothers_family;
+                $nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family."\" ha <b>asignado la jornada</b> del \"".$date->format('Y-m-d')."\" de tipo  \"".$nShiftD->working_day."\" al usuario ID: \"". $nUser->runFormat() ."\" - ".$nUser->name." ".$nUser->fathers_family." ".$nUser->mothers_family;
                 $nHistory->shift_user_day_id = $nShiftD->id;
                 $nHistory->modified_by = Auth()->user()->id;
                 $nHistory->change_type = 0;//0_asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
@@ -239,6 +292,7 @@ class ShiftManagementController extends Controller
                 $i=0;
             }
         }
+            return redirect('/rrhh/shiftManagement');
     }
 
     public function downloadShiftInXls(Request $r){

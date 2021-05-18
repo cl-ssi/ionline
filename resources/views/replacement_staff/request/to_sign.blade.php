@@ -158,7 +158,7 @@
                         data-target="#exampleModalCenter-req-{{ $request->id }}">
                       <i class="fas fa-eye"></i>
                     </button>
-                    @include('replacement_staff.modals.modal_to_sign')
+                    @include('replacement_staff.modals.modal_to_view_request')
                 </td>
             </tr>
             @endforeach

@@ -16,6 +16,7 @@ use App\Models\ServiceRequests\ShiftControl;
 use App\Models\Country;
 use App\Models\Parameters\Profession;
 use App\Models\Rrhh\UserBankAccount;
+use Illuminate\Support\Facades\Storage;
 use Luecano\NumeroALetras\NumeroALetras;
 use App\Mail\ServiceRequestNotification;
 use App\Mail\DerivationNotification;
@@ -129,6 +130,7 @@ class ServiceRequestController extends Controller
     $name = $request->name;
     $estate = $request->estate;
     $id = $request->id;
+    $type = $request->type;
 
     // $establishment_id = Auth::user()->organizationalUnit->establishment_id;
     $establishment_id = $request->establishment_id;
@@ -139,6 +141,9 @@ class ServiceRequestController extends Controller
                                        })
                                       ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
                                         return $q->where('program_contract_type', $program_contract_type);
+                                      })
+                                      ->when($type != NULL, function ($q) use ($type) {
+                                        return $q->where('type', $type);
                                       })
                                       ->when($estate != NULL, function ($q) use ($estate) {
                                             return $q->where('estate',$estate);
@@ -291,6 +296,10 @@ class ServiceRequestController extends Controller
     $serviceRequest = new ServiceRequest($request->All());
     $serviceRequest->user_id = $user->id;
     $serviceRequest->creator_id = Auth::id();
+    if(isset($request->hsa_schedule_detail))
+    {      
+      $serviceRequest->schedule_detail = $request->hsa_schedule_detail;
+    }
     $serviceRequest->save();
 
 
@@ -522,6 +531,11 @@ class ServiceRequestController extends Controller
   {
     //se guarda información de la solicitud
     $serviceRequest->fill($request->all());
+    if(isset($request->hsa_schedule_detail))
+    {      
+      $serviceRequest->schedule_detail = $request->hsa_schedule_detail;
+    }    
+
     $serviceRequest->save();
 
     //guarda control de turnos
@@ -1269,10 +1283,11 @@ class ServiceRequestController extends Controller
 
     public function signedBudgetAvailabilityPDF(ServiceRequest $serviceRequest)
     {
-        header('Content-Type: application/pdf');
-        if (isset($serviceRequest->signedBudgetAvailabilityCert)) {
-            echo base64_decode($serviceRequest->signedBudgetAvailabilityCert->signed_file);
-        }
+        return Storage::disk('gcs')->response($serviceRequest->signedBudgetAvailabilityCert->signed_file);
+//        header('Content-Type: application/pdf');
+//        if (isset($serviceRequest->signedBudgetAvailabilityCert)) {
+//            echo base64_decode($serviceRequest->signedBudgetAvailabilityCert->signed_file);
+//        }
     }
 
 }

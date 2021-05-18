@@ -43,7 +43,12 @@ class DispatchItemController extends Controller
           'amount' => 'required|numeric'
       ]);
 
+      // obtiene valores
+      $values = explode(" - ", $request->due_date_batch);
+
       $DispatchItem = new DispatchItem($request->all());
+      $DispatchItem->due_date = $values[0];
+      $DispatchItem->batch = $values[1];
       $DispatchItem->save();
 
       $product = Product::find($request->product_id);

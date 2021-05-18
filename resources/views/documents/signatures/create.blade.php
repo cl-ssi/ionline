@@ -6,11 +6,16 @@
 
     <h3>Nueva solicitud de firmas y distribución</h3>
 
-    <form method="POST" action="{{ route('documents.signatures.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('documents.signatures.store') }}" enctype="multipart/form-data" onsubmit="disableButton(this)">
         @csrf
 
         @if(isset($documentId))
             <input type="hidden" name="document_id" value="{{$documentId}}">
+        @endif
+
+        @if(isset($signature->agreement_id))
+            <input type="hidden" name="agreement_id" value="{{$signature->agreement_id}}">
+            <input type="hidden" name="signature_type" value="{{$signature->type}}">
         @endif
 
         <div class="form-row">
@@ -67,7 +72,7 @@
                     <input type="hidden" name="md5_file" value="{{$signature->signaturesFileDocument->md5_file}}">
                 @else
                     <label for="for_document">Documento a distribuir</label>
-                    <input type="file" class="form-control" id="for_document" name="document" required>
+                    <input type="file" class="form-control" id="for_document" name="document" accept="application/pdf" required>
                 @endif
 
             </fieldset>
@@ -109,7 +114,7 @@
 
         </div>
 
-        <button type="submit" class="btn btn-primary">Crear</button>
+        <button type="submit" id="submitBtn" class="btn btn-primary" onclick="disableButton(this)">Crear</button>
 
     </form>
 
@@ -121,5 +126,13 @@
 @endsection
 
 @section('custom_js')
+
+    <script type="text/javascript">
+        function disableButton(form) {
+            form.submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Creando...';
+            form.submitBtn.disabled = true;
+            return true;
+        }
+    </script>
 
 @endsection

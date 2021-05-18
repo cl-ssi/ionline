@@ -66,6 +66,8 @@
             <hr>
         @endforeach
 
+        @if($count>0)
         <button type="submit" class="btn btn-primary float-right">Guardar</button>
+        @endif
     </form>
 </div>

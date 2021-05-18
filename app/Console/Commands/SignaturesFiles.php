@@ -39,8 +39,18 @@ class SignaturesFiles extends Command
      */
     public function handle()
     {
-        $originalSignaturesFiles = SignaturesFile::whereNotNull('file')->get();
-        $signedSignaturesFiles = SignaturesFile::whereNotNull('signed_file')->get();
+        // $original = SignaturesFile::find($this->argument('id'));
+        // $file = base64_decode($original->file);
+        // $filePath = 'ionline/signatures/original/' . $original->id . '.pdf';
+        // Storage::disk('gcs')->put($filePath, $file);
+        // $original->file = $filePath;
+        // $original->save();
+        // echo $original->file . "\n";
+
+        
+
+        $originalSignaturesFiles = SignaturesFile::onlyTrashed()->whereNotNull('file')->get();
+        $signedSignaturesFiles = SignaturesFile::onlyTrashed()->whereNotNull('signed_file')->get();
 
         foreach ($originalSignaturesFiles as $originalSignaturesFile) {
             $file = base64_decode($originalSignaturesFile->file);
@@ -59,7 +69,7 @@ class SignaturesFiles extends Command
             $signedSignaturesFile->save();
             echo $signedSignaturesFile->signed_file . "\n";
         }
-
+        
         return 0;
     }
 }

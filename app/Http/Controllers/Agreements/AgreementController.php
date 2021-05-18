@@ -21,6 +21,7 @@ use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
 use App\Rrhh\OrganizationalUnit;
 use App\User;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -133,7 +134,7 @@ class AgreementController extends Controller
      */
     public function show(Agreement $agreement)
     {
-        $agreement->load('authority.user', 'commune.establishments', 'referrer');
+        $agreement->load('authority.user', 'commune.establishments', 'referrer', 'fileToEndorse', 'fileToSign');
         $municipality = Municipality::where('commune_id', $agreement->commune->id)->first();
         $establishment_list = unserialize($agreement->establishment_list);
         $referrers = User::all()->sortBy('name');
@@ -336,10 +337,20 @@ class AgreementController extends Controller
     {
         return Storage::response($file->file, mb_convert_encoding($file->name,'ASCII'));
     }
+
+    public function preview(Agreement $agreement)
+    {
+        $filename = 'tmp_files/'.$agreement->file;
+        if(!Storage::disk('public')->exists($filename))
+            Storage::disk('public')->put($filename, Storage::disk('local')->get($agreement->file));
+        return Redirect::away('https://view.officeapps.live.com/op/embed.aspx?src='.asset('storage/'.$filename));
+    }
+
     public function downloadAgree(Agreement $file)
     {
         return Storage::response($file->fileAgreeEnd, mb_convert_encoding($file->name,'ASCII'));
     }
+
     public function downloadRes(Agreement $file)
     {
         return Storage::response($file->fileResEnd, mb_convert_encoding($file->name,'ASCII'));
@@ -358,6 +369,7 @@ class AgreementController extends Controller
         $signature->request_date = $agreement->date;
         $signature->document_type = 'Convenios';
         $signature->type = $type;
+        $signature->agreement_id = $agreement->id;
         $signature->subject = 'Convenio programa '.$programa;
         $signature->description = 'Documento convenio de ejecución del programa '.$programa.' año '.$agreement->period;
         $signature->endorse_type = 'Visación en cadena de responsabilidad';

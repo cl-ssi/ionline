@@ -36,14 +36,16 @@ class HealthGoalController extends Controller
             $healthGoal = HealthGoal::where('law', $law)->where('year', $year)->where('number', $health_goal)->firstOrFail();
             // $healthGoal->indicators()->with('values')->orderBy('number')->get();
             $healthGoal->load('indicators.values');
-            $this->loadValuesWithRemSource($year, $healthGoal);
+            $this->loadValuesWithRemSource($law, $year, $healthGoal);
         }
         return view('indicators.health_goals.show', compact($law == '19813' ? 'indicator' : 'healthGoal'));
     }
 
-    private function loadValuesWithRemSource($year, $healthGoal)
+    private function loadValuesWithRemSource($law, $year, $healthGoal)
     {
         foreach($healthGoal->indicators as $indicator){
+            $establishment_cods = $indicator->establishment_cods != null ? array_map('trim', explode(',',$indicator->establishment_cods)) : null; //para el filtrado especial de algunas metas
+
             foreach(array('numerador', 'denominador') as $factor){
                 $factor_cods = $factor == 'numerador' ? $indicator->numerator_cods : $indicator->denominator_cods;
                 $factor_cols = $factor == 'numerador' ? $indicator->numerator_cols : $indicator->denominator_cols;
@@ -60,29 +62,38 @@ class HealthGoalController extends Controller
                     //Es rem P la consulta?
                     $isRemP = Rem::year($year-1)->select('Mes')
                                 ->when($healthGoal->name == 'Hospital Dr. Ernesto Torres Galdames', function($query){
-                                    return $query->whereHas('establecimiento',function($q){
-                                        return $q->where('meta_san_18834_hosp', 1);
-                                    });
+                                    return $query->where('IdEstablecimiento', 102100);
                                 })
                                 ->when($healthGoal->name == 'Consultorio General Urbano Dr. Héctor Reyno Gutiérrez', function($query){
                                     return $query->where('IdEstablecimiento', 102307);
+                                })
+                                ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && Str::contains($indicator->name, 'UEH'), function($query){
+                                    return $query->where('IdEstablecimiento', 102100);
+                                })
+                                ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && $law == '19664' && $establishment_cods == null, function($query){
+                                    return $query->where('IdEstablecimiento','!=', 102100);
+                                })
+                                ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && $law == '19664' && $establishment_cods != null, function($query) use ($establishment_cods){
+                                    return $query->whereIn('IdEstablecimiento', $establishment_cods);
                                 })
                                 ->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->get()->count() == 2;
                     
                     if($isRemP){
                         $acum_last_year = Rem::year($year-1)
                         ->when($healthGoal->name == 'Hospital Dr. Ernesto Torres Galdames', function($query){
-                            return $query->whereHas('establecimiento', function($q){
-                                return $q->where('meta_san_18834_hosp', 1);
-                            });
+                            return $query->where('IdEstablecimiento', 102100);
                         })
                         ->when($healthGoal->name == 'Consultorio General Urbano Dr. Héctor Reyno Gutiérrez', function($query){
                             return $query->where('IdEstablecimiento', 102307);
                         })
                         ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && Str::contains($indicator->name, 'UEH'), function($query){
-                            return $query->whereHas('establecimiento', function($q){
-                                return $q->where('meta_san_18834_hosp', 1);
-                            });
+                            return $query->where('IdEstablecimiento', 102100);
+                        })
+                        ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && $law == '19664' && $establishment_cods == null, function($query){
+                            return $query->where('IdEstablecimiento','!=', 102100);
+                        })
+                        ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && $law == '19664' && $establishment_cods != null, function($query) use ($establishment_cods){
+                            return $query->whereIn('IdEstablecimiento', $establishment_cods);
                         })
                         ->where('Mes', 12)->whereIn('CodigoPrestacion', $cods)->sum(reset($cols));
 
@@ -91,20 +102,22 @@ class HealthGoalController extends Controller
     
                     $result = Rem::year($year)->selectRaw($raws)
                                 ->when($healthGoal->name == 'Hospital Dr. Ernesto Torres Galdames', function($query){
-                                    return $query->whereHas('establecimiento', function($q){
-                                        return $q->where('meta_san_18834_hosp', 1);
-                                    });
+                                    return $query->where('IdEstablecimiento', 102100);
                                 })
                                 ->when($healthGoal->name == 'Consultorio General Urbano Dr. Héctor Reyno Gutiérrez', function($query){
                                     return $query->where('IdEstablecimiento', 102307);
                                 })
+                                ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && Str::contains($indicator->name, 'UEH'), function($query){
+                                    return $query->where('IdEstablecimiento', 102100);
+                                })
+                                ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && $law == '19664' && $establishment_cods == null, function($query){
+                                    return $query->where('IdEstablecimiento','!=', 102100);
+                                })
+                                ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && $law == '19664' && $establishment_cods != null, function($query) use ($establishment_cods){
+                                    return $query->whereIn('IdEstablecimiento', $establishment_cods);
+                                })
                                 ->when($isRemP, function($query){
                                     return $query->whereIn('Mes', [6,12]);
-                                })
-                                ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && Str::contains($indicator->name, 'UEH'), function($query){
-                                    return $query->whereHas('establecimiento', function($q){
-                                        return $q->where('meta_san_18834_hosp', 1);
-                                    });
                                 })
                                 ->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->orderBy('Mes')->get();
     
@@ -295,7 +308,7 @@ class HealthGoalController extends Controller
         $healthGoal = $indicator->indicatorable;
         // $indicators = $healthGoal->indicators()->with('values')->orderBy('number')->get();
         $indicators = $healthGoal->load('indicators.values');
-        $this->loadValuesWithRemSource($year, $healthGoal, $indicators);
+        $this->loadValuesWithRemSource($law, $year, $healthGoal, $indicators);
 
         return view('indicators.health_goals.show', compact('indicators', 'healthGoal'))->with('success', 'Registros actualizados satisfactoriamente');
     }

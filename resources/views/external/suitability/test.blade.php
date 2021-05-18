@@ -7,7 +7,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Test de Idoneidad</div>
+                <div class="card-header">Test de Idoneidad (Todas las preguntas deben ser Respondidas)</div>
 
                 Tiempo <div id="display">
 
@@ -44,7 +44,7 @@
                                         <input type="hidden" name="questions[{{ $question->id }}]" value="">
                                         @foreach($question->questionOptions as $option)
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="questions[{{ $question->id }}]" id="option-{{ $option->id }}" value="{{ $option->id }}" @if(old("questions.$question->id") == $option->id) checked @endif>
+                                            <input required class="form-check-input" type="radio" name="questions[{{ $question->id }}]" id="option-{{ $option->id }}" value="{{ $option->id }}" @if(old("questions.$question->id") == $option->id) checked @endif>
                                             <label class="form-check-label" for="option-{{ $option->id }}">
                                                 {{ $option->option_text }}
                                             </label>
