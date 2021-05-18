@@ -633,6 +633,23 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::put('/update/{phrase}', 'Parameters\PhraseOfTheDayController@update')->name('update');
         Route::post('/store', 'Parameters\PhraseOfTheDayController@store')->name('store');
     });
+
+    Route::prefix('measurements')->as('measurements.')->group(function () {
+        Route::get('/', 'Parameters\UnitOfMeasurementController@index')->name('index');
+        Route::get('/create', 'Parameters\UnitOfMeasurementController@create')->name('create');
+        Route::get('/edit/{measurement}', 'Parameters\UnitOfMeasurementController@edit')->name('edit');
+        Route::put('/update/{measurement}', 'Parameters\UnitOfMeasurementController@update')->name('update');
+        Route::post('/store', 'Parameters\UnitOfMeasurementController@store')->name('store');
+    });
+
+    Route::prefix('budgetitems')->as('budgetitems.')->group(function () {
+        Route::get('/', 'Parameters\BudgetItemController@index')->name('index');
+        Route::get('/create', 'Parameters\BudgetItemController@create')->name('create');
+        Route::get('/edit/{budgetItem}', 'Parameters\BudgetItemController@edit')->name('edit');
+        Route::put('/update/{budgetItem}', 'Parameters\BudgetItemController@update')->name('update');
+        Route::post('/store', 'Parameters\BudgetItemController@store')->name('store');
+    });
+
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {
