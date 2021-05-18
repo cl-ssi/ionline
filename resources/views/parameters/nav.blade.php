@@ -59,6 +59,18 @@
             <i class="fas fa-external-link-alt"></i> Profesiones</a>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('parameters.budgetitems.index') }}">
+            <i class="fas fa-file-invoice-dollar"></i> Item Presupuestario</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('parameters.measurements.index') }}">
+            <i class="fas fa-ruler-combined"></i> Unidades de Medida</a>
+    </li>
+
 
     <!-- <li class="nav-item">
         <a class="nav-link"
