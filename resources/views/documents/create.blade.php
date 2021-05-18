@@ -149,6 +149,10 @@ $('#formType').change(
         }
         if("Circular" === this.value) {
             $("#forNumber").prop('disabled', false);
+            $("#forFrom").removeAttr( "required" );
+            $("#forFor").removeAttr( "required" );
+            $("#forNumber").prop('disabled', true);
+            $("#collapse").hide();
         }
         if("Acta de recepción" === this.value) {
             var contenido = '<h1 style="text-align: center; text-decoration: underline;">ACTA DE RECEPCIÓN</h1> <p><strong>Datos de ubicación</strong></p> <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="2"> <tbody> <tr> <td style="width: 30%; height: 30px;">Establecimiento</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Dirección</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Unidad Organizacional</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Ubicación (oficina)</td> <td></td> </tr> </tbody> </table> <p><strong>Características de la especie</strong></p> <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="2"> <tbody> <tr> <td style="width: 30%; height: 30px;">Inventario SSI</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Tipo de equipo</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Marca</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Modelo</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Número de serie</td> <td></td> </tr> </tbody> </table> <p><strong>Responsable</strong></p> <table style="width: 100%; border-collapse: collapse;" border="1" cellpadding="2"> <tbody> <tr> <td style="width: 30%; height: 30px;">Nombre completo</td> <td></td> </tr> <tr> <td style="width: 30%; height: 30px;">Función / cargo</td> <td></td> </tr> </tbody> </table>';
