@@ -104,7 +104,10 @@ class ShiftManagementController extends Controller
         // if(Session::has('staffInShift') && Session::get('staffInShift') != "")
         //     $staffInShift = Session::get('staffInShift');
         // else
+        if($actuallyShift->id != 0)
             $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
+        else
+           $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
 
         // echo "SISH: ". $staffInShift;
         

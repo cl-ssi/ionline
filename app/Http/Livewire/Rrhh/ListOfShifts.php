@@ -17,7 +17,7 @@ class ListOfShifts extends Component
     public $actuallyOrgUnit;
 	public $days;
     public $statusx;
-    public $actuallyShift;
+    private  $actuallyShift;
     private $colors = array(
         1 => "lightblue",
         2 => "#2471a3",
@@ -48,11 +48,11 @@ class ListOfShifts extends Component
 
         public function render()
     {
-        return view('livewire.rrhh.list-of-shifts',["statusColors"=>$this->colors]);
+        return view('livewire.rrhh.list-of-shifts',["statusColors"=>$this->colors,"actuallyShift"=>$this->actuallyShift]);
         // return view('livewire.rrhh.list-of-shifts',[compact($this- >staffInShift,$this->days),'actuallyMonth'=>$this->actuallyMonth,'actuallyYear'=>$this->actuallyYear]);
     }
 
-    public function mount()
+    public function mount($actuallyShift=null)
     {
         // $this->staffInShift = $staffInShift;
         // $this->actuallyYear = $actuallyYear;
@@ -96,7 +96,13 @@ class ListOfShifts extends Component
         else
             $this->actuallyShift=$sTypes->first();
 
-        $this->staffInShift = ShiftUser::where('organizational_units_id', $this->actuallyOrgUnit->id )->where('shift_types_id',$this->actuallyShift->id)->where('date_up','>=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->where('date_from','<=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->get();
+        if($actuallyShift)
+            $this->actuallyShift = $actuallyShift;
+        if($this->actuallyShift->id != 0)
+            $this->staffInShift = ShiftUser::where('organizational_units_id', $this->actuallyOrgUnit->id )->where('shift_types_id',$this->actuallyShift->id)->where('date_up','>=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->where('date_from','<=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->get();
+        // else
+        //     $this->staffInShift = ShiftUser::where('organizational_units_id', $this->actuallyOrgUnit->id )->where('date_up','>=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->where('date_from','<=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->get();
+
 
     }
    

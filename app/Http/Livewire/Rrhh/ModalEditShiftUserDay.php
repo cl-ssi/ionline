@@ -244,7 +244,7 @@ class ModalEditShiftUserDay extends Component
 		// $this->emitSelf('renderShiftDay');
 		$this->emitSelf('changeColor',["color"=>$this->colors[$this->shiftUserDay->status]]);
 		 $this->reset();
-		    return redirect('/rrhh/shiftManagement');
+		    // return redirect('/rrhh/shiftManagement');
 	}	
     public function render()
     {

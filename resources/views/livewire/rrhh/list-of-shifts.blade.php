@@ -5,7 +5,7 @@
         </div>
     @if(isset($staffInShift)&&count($staffInShift)>0&&$staffInShift!="")
         @foreach($staffInShift as $sis)
-            <tr  wire:key="{{ $loop->index}}" >
+            <tr>
                 <td class="bless br cellbutton" >
                     
                     @livewire( 'rrhh.see-shift-control-form', ['usr'=>$sis->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth] , key($sis->user->id))
@@ -21,7 +21,7 @@
                     @endphp
                     <td class="bbd day cellbutton"  style="text-align:center;width:54px;height:54px">
                             @if(isset($d) && count($d) )
-                               @livewire('rrhh.change-shift-day-status',[key($d->first()),'shiftDay'=>$d->first()])
+                               @livewire('rrhh.change-shift-day-status',['shiftDay'=>$d->first()],key($d->first()->id) )
                             @else
                                
                                <i data-toggle="modal" data-target="#newDatModal"  data-keyboard= "false" data-backdrop= "static"  style="color:green;font-weight: bold;font-size:20px" class="fa fa-plus btnShiftDay">
