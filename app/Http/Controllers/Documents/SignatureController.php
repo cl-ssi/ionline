@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Documents;
 
+use App\Agreements\Agreement;
 use App\Documents\Document;
 use App\Http\Controllers\Controller;
 use App\Mail\NewSignatureRequest;
@@ -164,6 +165,11 @@ class SignatureController extends Controller
                 $document = Document::find($request->document_id);
                 $document->update(['file_to_sign_id' => $signaturesFileDocumentId,
                 ]);
+            }
+
+            if ($request->has('agreement_id')) {
+                $agreement = Agreement::find($request->agreement_id);
+                $request->signature_type == 'visators' ? $agreement->update(['file_to_endorse_id' => $signaturesFileDocumentId, 'file_to_sign_id' => null]) : $agreement->update(['file_to_sign_id' => $signaturesFileDocumentId]);
             }
 
             foreach ($signature->signaturesFlows as $signaturesFlow) {
