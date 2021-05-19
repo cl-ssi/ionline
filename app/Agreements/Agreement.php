@@ -13,7 +13,7 @@ class Agreement extends Model
      * @var array
      */
     protected $fillable = [
-        'number', 'date', 'period', 'file', 'commune_id', 'program_id', 'quotas', 'referente', 'authority_id', 'referrer_id'
+        'number', 'date', 'period', 'file', 'commune_id', 'program_id', 'quotas', 'referente', 'authority_id', 'referrer_id', 'file_to_endorse_id', 'file_to_sign_id'
     ];
 
     protected $casts = [
@@ -62,6 +62,26 @@ class Agreement extends Model
 
     public function authority(){
         return $this->belongsTo('App\Rrhh\Authority');
+    }
+
+    public function fileToEndorse() {
+        return $this->belongsTo('App\Models\Documents\SignaturesFile', 'file_to_endorse_id');
+    }
+
+    public function fileToSign() {
+        return $this->belongsTo('App\Models\Documents\SignaturesFile', 'file_to_sign_id');
+    }
+
+    public function getEndorseStateAttribute(){
+        return (!$this->fileToEndorse) ? 'secondary' : ( ($this->fileToEndorse->hasRejectedFlow) ? 'danger' : ( ($this->fileToEndorse->hasAllFlowsSigned) ? 'success' : 'warning' ) );
+    }
+
+    public function getSignStateAttribute(){
+        return (!$this->fileToSign) ? 'secondary' : ( ($this->fileToSign->hasRejectedFlow) ? 'danger' : ( ($this->fileToSign->hasAllFlowsSigned) ? 'success' : 'warning' ) );
+    }
+
+    public function getResSignStateAttribute(){
+        return ($this->fileToSign && $this->fileToSign->hasAllFlowsSigned && $this->fileResEnd) ? 'success' : ( ($this->fileToSign && $this->fileToSign->hasAllFlowsSigned && !$this->fileResEnd) ? 'warning' : 'secondary' );
     }
     
 

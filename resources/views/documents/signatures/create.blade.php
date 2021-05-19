@@ -13,6 +13,11 @@
             <input type="hidden" name="document_id" value="{{$documentId}}">
         @endif
 
+        @if(isset($signature->agreement_id))
+            <input type="hidden" name="agreement_id" value="{{$signature->agreement_id}}">
+            <input type="hidden" name="signature_type" value="{{$signature->type}}">
+        @endif
+
         <div class="form-row">
 
             <fieldset class="form-group col-3">

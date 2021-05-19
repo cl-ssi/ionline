@@ -8,9 +8,11 @@
 <table class="table">
     <thead>
         <tr>
+            <th>Contador</th>
             <th>ID</th>
-            <th>Nombre</th>
             <th>Colegio</th>
+            <th>Solicitud N°</th>            
+            <th>Nombre</th>            
             <th>Cargo</th>
             <th>Total de Puntos</th>
             <th>Hora de Termino de Test</th>
@@ -23,11 +25,13 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($results as $result)
+        @foreach($results as $key => $result)
         <tr>
+            <td>{{ $key+1 }}</td>
             <td>{{ $result->id ?? '' }}</td>
-            <td>{{ $result->user->fullName ?? ''  }}</td>
             <td>{{ $result->psirequest->school->name ?? ''  }}</td>
+            <td>{{ $result->request_id ?? '' }}</td>
+            <td>{{ $result->user->fullName ?? ''  }}</td>            
             <td>{{ $result->psirequest->job ?? ''  }}</td>
             <td>{{ $result->total_points ?? '' }}</td>
             <td>{{ $result->created_at ?? '' }}</td>
