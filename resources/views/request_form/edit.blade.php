@@ -77,7 +77,7 @@
                   <tr>
                       <td>{{$key+1}}</td>
                       <td>{{$item->id}}</td>
-                      <td>{{$item->budget_item_id}}</td>
+                      <td>{{$item->budgetItem->code.' - '.$item->budgetItem->name}}</td>
                       <td>{{$item->article}}</td>
                       <td>{{$item->unit_of_measurement}}</td>
                       <td>{{$item->specification}}</td>
