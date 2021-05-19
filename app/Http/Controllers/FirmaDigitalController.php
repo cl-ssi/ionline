@@ -151,11 +151,11 @@ class FirmaDigitalController extends Controller
 
         if ($signaturesFlow->signaturesFile->signed_file) {
             $filePath = $signaturesFlow->signaturesFile->signed_file;
-            Storage::disk('gcs')->put($filePath, base64_decode($responseArray['content']));
+            Storage::disk('gcs')->getDriver()->put($filePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
         }else {
             $filePath = 'ionline/signatures/signed/' . $signaturesFlow->signaturesFile->id . '.pdf';
             $signaturesFlow->signaturesFile->signed_file = $filePath;
-            Storage::disk('gcs')->put($filePath, base64_decode($responseArray['content']));
+            Storage::disk('gcs')->getDriver()->put($filePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
         }
 
 //        $signaturesFlow->signaturesFile->signed_file = $responseArray['content'];
