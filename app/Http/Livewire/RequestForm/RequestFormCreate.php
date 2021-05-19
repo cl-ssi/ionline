@@ -6,6 +6,7 @@ use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\ItemRequestForm;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\UnitOfMeasurement;
+use App\Models\Parameters\BudgetItem;
 use Illuminate\Support\Collection;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ class RequestFormCreate extends Component
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity,
     $unitValue, $taxes, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
     public $purchaseMechanism, $messagePM, $program, $justify, $totalDocument;
-    public $items;
+    public $items, $lstBudgetItem, $budget_item_id;
 
     protected $rules = [
         'unitValue'           =>  'required|numeric|min:1',
@@ -24,6 +25,7 @@ class RequestFormCreate extends Component
         'article'             =>  'required',
         'unitOfMeasurement'   =>  'required',
         'taxes'               =>  'required',
+        'budget_item_id'      =>  'required',
     ];
 
     protected $messages = [
@@ -36,6 +38,7 @@ class RequestFormCreate extends Component
         'article.required'            => 'Debe ingresar un Artículo.',
         'unitOfMeasurement.required'  => 'Debe seleccionar una Unidad de Medida',
         'taxes.required'              => 'Debe seleccionar un Tipo de Impuesto.',
+        'budget_item_id.required'     => 'Debe seleccionar un Item Presupuestario',
     ];
 
     public function mount(){
@@ -45,6 +48,7 @@ class RequestFormCreate extends Component
       $this->title                  = "Agregar Item";
       $this->edit                   = false;
       $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
+      $this->lstBudgetItem          = BudgetItem::all();
     }
 
     public function deleteRequestService($key){
@@ -63,6 +67,7 @@ class RequestFormCreate extends Component
       $this->quantity                 = $this->items[$key]['quantity'];
       $this->unitValue                = $this->items[$key]['unitValue'];
       $this->taxes                    = $this->items[$key]['taxes'];
+      $this->budget_item_id           = $this->items[$key]['budget_item_id'];
       $this->key                      = $key;
     }
 
@@ -75,6 +80,7 @@ class RequestFormCreate extends Component
       $this->items[$this->key]['quantity']                = $this->quantity;
       $this->items[$this->key]['unitValue']               = $this->unitValue;
       $this->items[$this->key]['taxes']                   = $this->taxes;
+      $this->items[$this->key]['budget_item_id']          = $this->budget_item_id;
       $this->items[$this->key]['totalValue']              = $this->quantity * $this->unitValue;
       $this->totalForm();
       $this->cancelRequestService();
@@ -89,6 +95,7 @@ class RequestFormCreate extends Component
             'quantity'                 => $this->quantity,
             'unitValue'                => $this->unitValue,
             'taxes'                    => $this->taxes,
+            'budget_item_id'           => $this->budget_item_id,
             'totalValue'               => $this->quantity * $this->unitValue,
     ];
       $this->totalForm();
@@ -100,7 +107,7 @@ class RequestFormCreate extends Component
       $this->edit  = false;
       $this->resetErrorBag();
       $this->article=$this->technicalSpecifications=$this->quantity=$this->unitValue="";
-      $this->taxes=$this->unitOfMeasurement="";
+      $this->taxes=$this->budget_item_id=$this->unitOfMeasurement="";
     }
 
    public function messageMechanism(){
@@ -195,6 +202,7 @@ class RequestFormCreate extends Component
             'quantity'              =>      $item['quantity'],
             'unit_value'            =>      $item['unitValue'],
             'tax'                   =>      $item['taxes'],
+            'budget_item_id'        =>      $item['budget_item_id'],
             'expense'               =>      $item['totalValue']
       ]);
     }

@@ -60,6 +60,7 @@
           <tr>
             <th>Item</th>
             <th>ID</th>
+            <th>Cod. Pres.</th>
             <th>Artículo</th>
             <th>UM</th>
             <th>Especificaciones Técnicas</th>
@@ -76,6 +77,7 @@
                   <tr>
                       <td>{{$key+1}}</td>
                       <td>{{$item->id}}</td>
+                      <td>{{$item->budget_item_id}}</td>
                       <td>{{$item->article}}</td>
                       <td>{{$item->unit_of_measurement}}</td>
                       <td>{{$item->specification}}</td>

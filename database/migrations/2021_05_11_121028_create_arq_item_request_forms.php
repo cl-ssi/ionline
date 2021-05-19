@@ -16,6 +16,7 @@ class CreateArqItemRequestForms extends Migration
         Schema::create('arq_item_request_forms', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('request_form_id');
+            $table->foreignId('budget_item_id');
             $table->string('article');
             $table->string('unit_of_measurement');
             $table->unsignedInteger('quantity');
@@ -26,6 +27,7 @@ class CreateArqItemRequestForms extends Migration
             $table->softDeletes();
             $table->timestamps();
             $table->foreign('request_form_id')->references('id')->on('arq_request_forms');
+            $table->foreign('budget_item_id')->references('id')->on('arq_budget_items');
         });
     }
     /**
