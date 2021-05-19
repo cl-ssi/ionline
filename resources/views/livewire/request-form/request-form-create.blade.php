@@ -141,6 +141,7 @@
             <thead>
               <tr>
                 <th>Item</th>
+                <th>Item Pres.</th>
                 <th>Artículo</th>
                 <th>UM</th>
                 <th>Especificaciones Técnicas</th>
@@ -156,6 +157,7 @@
               @foreach($items as $key => $item)
                       <tr>
                           <td>{{$key+1}}</td>
+                          <td>{{$lstBudgetItem->find($item['budget_item_id'])->code.' - '.$lstBudgetItem->find($item['budget_item_id'])->name}}</td>
                           <td>{{$item['article']}}</td>
                           <td>{{$item['unitOfMeasurement']}}</td>
                           <td>{{$item['technicalSpecifications']}}</td>

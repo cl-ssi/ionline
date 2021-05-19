@@ -3,8 +3,8 @@
 namespace app\Models\RequestForms;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Model\RequestForms\RequestForm;
-use App\Model\RequestForms\BudgetItem;
+use App\Models\RequestForms\RequestForm;
+use App\Models\Parameters\BudgetItem;
 
 class ItemRequestForm extends Model
 {
@@ -16,11 +16,11 @@ class ItemRequestForm extends Model
     ];
 
     public function requestForm() {
-        return $this->belongsTo(RequestForm::class, 'request_form_id');
+        return $this->belongsTo(RequestForm::class);
     }
 
     public function budgetItem() {
-        return $this->belongsTo(BudgetItem::class, 'budget_item_id');
+        return $this->belongsTo(BudgetItem::class);
     }
 
 }

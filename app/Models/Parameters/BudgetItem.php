@@ -13,7 +13,7 @@ class BudgetItem extends Model
     protected $fillable = ['id', 'code', 'name'];
 
     public function itemRequestForms() {
-        return $this->hasMany(ItemRequestForm::class);
+        return $this->hasMany(ItemRequestForm::class, 'budget_item_id');
     }
 
 
