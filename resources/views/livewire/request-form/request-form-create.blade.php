@@ -92,7 +92,23 @@
                     <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model.defer="fileItem" name="fileItem">
                   </div>
                </div><!-- FILA 3 -->
-               <div class="row justify-content-md-end mt-0"><!-- FILA 4 -->
+
+               <div class="row justify-content-md-start mb-0"><!-- FILA 4 -->
+                 <div class="form-group col-5">
+                   <label>Item Presupuestario:</label><br>
+                   <select wire:model.defer="budget_item_id" name="budget_item_id" class="form-control form-control-sm" required>
+                     <option value="">Seleccione...</option>
+                     @foreach($lstBudgetItem as $val)
+                       <option value="{{$val->id}}">{{$val->code.' - '.$val->name}}</option>
+                     @endforeach
+                   </select>
+                 </div>
+               </div>
+
+
+
+
+               <div class="row justify-content-md-end mt-0"><!-- FILA 5 -->
                  <div class="col-2">
                    @if($edit)
                    <button type="button" wire:click="updateRequestService" class="btn btn-primary btn-sm float-right">Editar Item</button>
@@ -103,7 +119,7 @@
                  <div class="col-1">
                    <button type="button" wire:click="cancelRequestService" class="btn btn-secondary btn-sm float-right">Cancelar</button>
                  </div>
-               </div><!-- FILA 4 --><!--Valida la variable error para que solo contenga validación de los Items-->
+               </div><!-- FILA 5 --><!--Valida la variable error para que solo contenga validación de los Items-->
                @if (count($errors) > 0 and !$errors->has('program') and !$errors->has('justify') and !$errors->has('purchaseMechanism') and !$errors->has('items'))
                 <div class="row justify-content-around mt-0">
                    <div class="alert alert-danger col-6 mt-1">
