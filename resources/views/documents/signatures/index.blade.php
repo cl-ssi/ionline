@@ -251,7 +251,7 @@
                     </td>
                     <td>
 
-                        <a href="https://storage.googleapis.com/saludiquique-storage/{{$signature->signaturesFileDocument->file ?? $signature->signaturesFileDocument->signed_file }}" class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">
+                        <a href="https://storage.googleapis.com/saludiquique-storage/{{$signature->signaturesFileDocument->signed_file ?? $signature->signaturesFileDocument->file}}" class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">
                             <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
                     </td>
