@@ -32,7 +32,7 @@ class RequestFormController extends Controller{
     public function edit(RequestForm $requestForm){
         $manager = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
         if(is_null($manager))
-            $manager= 'No se ha registrado una Autoridad en el módulo correspondiente!';
+            $manager= '<h6 class="text-danger">'.$requestForm->organizationalUnit->name.', no registra una Autoridad.</h6>';
         else
             $manager = $manager->user->getFullNameAttribute();
         return view('request_form.edit', compact('requestForm', 'manager'));
@@ -45,7 +45,8 @@ class RequestFormController extends Controller{
           return redirect()->route('request_forms.index');
         }
         else
-          $requestForms = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->get();
+          $requestForms = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->
+                                       Where('status','created')->get();
         return view('request_form.leadership_index', compact('requestForms'));
     }
 
