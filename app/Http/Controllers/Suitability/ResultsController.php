@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Suitability;
 
 use App\Models\Suitability\Result;
+use App\Models\Suitability\School;
 use App\Models\Suitability\Question;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -14,11 +15,24 @@ class ResultsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        $results = Result::all();        
-        return view('suitability.results.index', compact('results'));
+        
+        $school_id = $request->colegio;
+
+        $results = Result::when($school_id != null, function ($q) use ($school_id) 
+        {
+            return $q->whereHas("psirequest", function ($subQuery) use ($school_id) {
+                $subQuery->where('school_id', $school_id);
+              });
+
+        })
+        ->get();
+        
+        $schools = School::orderBy("name", "asc")->get();
+        
+
+        return view('suitability.results.index', compact('results','schools','school_id'));
     }
 
     /**
