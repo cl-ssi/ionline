@@ -14,7 +14,7 @@ class AddGroupnameToRrhhShiftUsersTable extends Migration
     public function up()
     {
         Schema::table('rrhh_shift_users', function (Blueprint $table) {
-            $table->string('groupname')->after('organizational_units_id');
+            $table->string('groupname')->after('organizational_units_id')->nullable();
                     });
         
     }
