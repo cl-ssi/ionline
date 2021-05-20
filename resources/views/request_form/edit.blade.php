@@ -20,35 +20,35 @@
       <table class="table table-sm">
           <tr>
               <th scope="row">Gasto Estimado</th>
-              <td>${{ $requestForm->estimated_expense }}</td>
+              <td class="align-middle">${{ $requestForm->estimated_expense }}</td>
           </tr>
           <tr>
               <th scope="row">Nombre del Solicitante</th>
-              <td>{{ $requestForm->creator->getFullNameAttribute()}}</td>
+              <td class="align-middle">{{ $requestForm->creator->getFullNameAttribute()}}</td>
           </tr>
           <tr>
               <th scope="row">Unidad Organizacional</th>
-              <td>{{ $requestForm->organizationalUnit->name}}</td>
+              <td class="align-middle">{{ $requestForm->organizationalUnit->name}}</td>
           </tr>
           <tr>
               <th scope="row">Jefatura para Aprobación</th>
-              <td>{{ $manager }}</td>
+              <td class="align-middle">{!! $manager !!}</td>
           </tr>
           <tr>
               <th scope="row">Mecanismo de Compra</th>
-              <td>{{ $requestForm->getPurchaseMechanism()}}</td>
+              <td class="align-middle">{{ $requestForm->getPurchaseMechanism()}}</td>
           </tr>
           <tr>
               <th scope="row">Programa Asociado</th>
-              <td>{{ $requestForm->program }}</td>
+              <td class="align-middle">{{ $requestForm->program }}</td>
           </tr>
           <tr>
               <th scope="row">Justificación de Adquisición</th>
-              <td>{{ $requestForm->justification }}</td>
+              <td class="align-middle">{{ $requestForm->justification }}</td>
           </tr>
           <tr>
               <th scope="row">Archivos</th>
-              <td>FILE01 - FILE02 - FILE03 - FILE04</td>
+              <td class="align-middle">FILE01 - FILE02 - FILE03 - FILE04</td>
           </tr>
       </table>
     </div><!-- div para TABLA -->
