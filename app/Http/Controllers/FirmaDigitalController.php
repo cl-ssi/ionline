@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NewSignatureRequest;
 use App\Mail\SignedDocument;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
@@ -150,22 +151,31 @@ class FirmaDigitalController extends Controller
 //        $signaturesFlow->signaturesFile->signed_file = $responseArray['content'];
 
         if ($signaturesFlow->signaturesFile->signed_file) {
-            $filePath = $signaturesFlow->signaturesFile->signed_file;
-            Storage::disk('gcs')->put($filePath, base64_decode($responseArray['content']));
+            $oldFilePath = $signaturesFlow->signaturesFile->signed_file;
+            $filePathWithoutSignatureNumber = explode('_', $oldFilePath)[0];
+            $signatureNumber = Str::between($oldFilePath, '_', '.');
+            $newSignatureNumber = $signatureNumber + 1;
+            $newFilePath = $filePathWithoutSignatureNumber . '_' . ($newSignatureNumber) . '.pdf';
+            $signaturesFlow->signaturesFile->signed_file = $newFilePath;
+            $signaturesFlow->signaturesFile->save();
+            Storage::disk('gcs')->getDriver()->put($newFilePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
+            Storage::disk('gcs')->delete($oldFilePath);
         }else {
-            $filePath = 'ionline/signatures/signed/' . $signaturesFlow->signaturesFile->id . '.pdf';
+            $filePath = 'ionline/signatures/signed/' . $signaturesFlow->signaturesFile->id . '_1' . '.pdf';
             $signaturesFlow->signaturesFile->signed_file = $filePath;
-            Storage::disk('gcs')->put($filePath, base64_decode($responseArray['content']));
+            $signaturesFlow->signaturesFile->save();
+            Storage::disk('gcs')->getDriver()->put($filePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
         }
 
 //        $signaturesFlow->signaturesFile->signed_file = $responseArray['content'];
 
-        if ($type === 'firmante') $signaturesFlow->signaturesFile->verification_code = $verificationCode;
+        if ($type === 'firmante') {
+            $signaturesFlow->signaturesFile->verification_code = $verificationCode;
+        }
         $signaturesFlow->signaturesFile->save();
 
-        $signaturesFlow = SignaturesFlow::find($signaturesFlow->id);
-
         //Si ya firmaron todos se envía por correo a destinatarios del doc
+        $signaturesFlow = SignaturesFlow::find($signaturesFlow->id);
         if ($signaturesFlow->signaturesFile->hasAllFlowsSigned) {
             $allEmails = $signaturesFlow->signature->recipients . ',' . $signaturesFlow->signature->distribution;
 
@@ -173,6 +183,21 @@ class FirmaDigitalController extends Controller
             Mail::to($emails[0])
                 ->send(new SignedDocument($signaturesFlow->signature));
         }
+
+        //Si es visación en cadena, se envía notificación por correo al siguiente firmador
+//        if ($signaturesFlow->signature()->endorse_type === 'Visación en cadena de responsabilidad') {
+//            $nextSignaturesFlowVisation = SignaturesFlow::query()
+//                ->where('signatures_file_id', $signaturesFlow->signatures_file_id)
+//                ->where('sign_position', $signaturesFlow->sign_position + 1);
+//
+//            if ($nextSignaturesFlowVisation->count() > 0) {
+//                Mail::to($nextSignaturesFlowVisation->userSigner->email)
+//                    ->send(new NewSignatureRequest($signaturesFlow));
+//            }elseif( $signaturesFlow->signature()->signaturesFlowSigner){
+//                Mail::to($signaturesFlow->signature()->signaturesFlowSigner->userSigner->email)
+//                    ->send(new NewSignatureRequest($signaturesFlow));
+//            }
+//        }
 
         session()->flash('info', "El documento {$signaturesFlow->signature->id} se ha firmado correctamente.");
         return redirect()->route('documents.signatures.index', ['pendientes']);

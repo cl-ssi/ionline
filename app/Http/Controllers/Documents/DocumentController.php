@@ -104,6 +104,10 @@ class DocumentController extends Controller
         else if($document->type == 'Resolución') {
             return view('documents.resolution')->withDocument($document);
         }
+        else if($document->type == 'Circular') {
+            //centrada la materia en negrita y sin de para
+            return view('documents.circular')->withDocument($document);
+        }
         else {
             return view('documents.show')->withDocument($document);
         }
