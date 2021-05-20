@@ -68,7 +68,9 @@ class ModalShiftControlForm extends Component
   		//    		fn () => print($pdfContent),
   		//    		"filename.pdf"
 		// );
-		$this->log ="enter";
+		// $this->log ="enter";
+            return redirect('/rrhh/shift-management/shift-control-form/download');
+        
      //    $pdf = PDF::loadView('rrhh.shift_management.shift_control_form');
     	// return response()->streamDownload(function () use ($pdf) {
      //    	echo $pdf->stream();

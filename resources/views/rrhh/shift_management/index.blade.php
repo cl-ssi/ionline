@@ -124,7 +124,7 @@
     <a class="nav-link"  href="{{ route('rrhh.shiftsTypes.index') }}">Tipos de Turnos</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#">Mi Turno</a>
+    <a class="nav-link"  href="{{ route('rrhh.shiftManag.myshift') }}">Mi Turno</a>
   </li>
   <li class="nav-item">
     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Turnos Disponibles</a>
@@ -214,7 +214,7 @@
         <input hidden name="orgUnitId" value="{{$actuallyOrgUnit->id}}">
                 
         <div class="form-row"> 	
-            <div class="col-md-5">
+            <div class="col-md-4">
                 <label>Personal de"{{$actuallyOrgUnit->name}}"</label>
                 <select class="selectpicker form-control" data-live-search="true" name="slcStaff">
                     <option> - </option>
@@ -225,7 +225,25 @@
                     @endforeach
                 </select>
             </div>
+            <div class="col-md-2">
+                <label>Grupo</label>
+                <input type="text" class="form-control" name="groupname" 
+                    value="{{$groupname}}" placeholder="Sin grupo">
+            </div>
 
+             <div class="col-md-1">
+                <label>Iniciar en</label>
+                <select class="form-control">
+                    @php $currentSeries =  explode(",", $actuallyShift->day_series); @endphp
+                    @for(  $i=0;$i< sizeof($currentSeries);$i++  )
+                        
+                       @if($currentSeries[$i]!="") 
+                            <option value="{{$i}}">{{intval($i+1)}} - {{$currentSeries[$i]}}</option>
+                        @endif
+                    @endfor
+                  
+                </select>
+            </div>
             <div class="col-md-2">
                 <label>De</label>
                 <input type="date" class="form-control" name="dateFromAssign" 
@@ -258,6 +276,9 @@
                         <tr>
                             <th rowspan="2">Personal</th>
                             <th class="calendar-day" colspan="{{$days}}">
+
+                                <a href="{{route('rrhh.shiftManag.prevMonth')}}"><-</a>
+
                                 @foreach($months AS $index => $month)
                                     {{ ($index == $actuallyMonth )?$month:"" }}
                                 @endforeach
@@ -265,6 +286,8 @@
                                 {{$actuallyYear}}
                                 -  
                                 {{$actuallyShift->name}}
+
+                                <a href=" {{route('rrhh.shiftManag.nextMonth')}}"  ">-></a>        
                             </th> 
                         </tr>
                         <tr>

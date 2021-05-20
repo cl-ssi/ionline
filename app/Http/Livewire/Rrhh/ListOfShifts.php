@@ -31,10 +31,8 @@ class ListOfShifts extends Component
         
     protected $listeners = ['refreshListOfShifts' => '$refreh'];
 
-     public function ref()
-
-    {   
-
+    public function ref()  {   
+        
          // $this->reset();
         $this->emit("renderShiftDay");
         // $this->statusx++;  
@@ -46,7 +44,7 @@ class ListOfShifts extends Component
     }
 
 
-        public function render()
+    public function render()
     {
         return view('livewire.rrhh.list-of-shifts',["statusColors"=>$this->colors,"actuallyShift"=>$this->actuallyShift]);
         // return view('livewire.rrhh.list-of-shifts',[compact($this- >staffInShift,$this->days),'actuallyMonth'=>$this->actuallyMonth,'actuallyYear'=>$this->actuallyYear]);
@@ -102,16 +100,16 @@ class ListOfShifts extends Component
             $this->staffInShift = ShiftUser::where('organizational_units_id', $this->actuallyOrgUnit->id )->where('shift_types_id',$this->actuallyShift->id)->where('date_up','>=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->where('date_from','<=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->get();
         // else
         //     $this->staffInShift = ShiftUser::where('organizational_units_id', $this->actuallyOrgUnit->id )->where('date_up','>=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->where('date_from','<=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->get();
-
-
     }
+
+
    
     public function editShiftDay($id){
 
         // $this->emit('clearModal', $this->shiftDay->id);
         $this->filered ="on"; 
         // $this->emit('setshiftUserDay', $this->shiftDay->id);
-        $this->emit('setshiftUserDay', $id);
+        // $this->emit('setshiftUserDay', $id);
 
 
         // $this->shiftDay = ShiftUserDay::find($id);

@@ -21,7 +21,7 @@ class SeeShiftControlForm extends Component
 
         'L' => array("from"=>"08:00","to"=>"20:00","time"=>12),
         'N' => array("from"=>"20:00","to"=>"08:00","time"=>12),
-        'D' => array("from"=>"","to"=>"","time"=>8),
+        'D' => array("from"=>"08:00","to"=>"17:00","time"=>8),
         'F' => array("from"=>"","to"=>"","time"=>0),
 
      );
@@ -53,7 +53,7 @@ class SeeShiftControlForm extends Component
     );
 	public function mount(){
 		$this->days=0;
-		// $this->log.="mounted";
+		$this->log.="mounted";
 		$dateFiltered = Carbon::createFromFormat('Y-m-d',  $this->actuallyYears."-".$this->actuallyMonth."-01", 'Europe/London');
 		$this->usr2 = User::find($this->usr->id);
         $this->days = $dateFiltered->daysInMonth;
@@ -67,7 +67,8 @@ class SeeShiftControlForm extends Component
         $dateFiltered = Carbon::createFromFormat('Y-m-d',  $this->actuallyYears."-".$this->actuallyMonth."-01", 'Europe/London');
 
         $this->days = $dateFiltered->daysInMonth;
-
+        $this->log .="setValues";
+        // $this->reset;
     //    $this->emit("setValueToShiftForm",["actuallyYears"=>$this->actuallyYears,"actuallyMonth"=>$this->actuallyMonth,"usr"=>$this->usr->id,"days"=> $this->days]);
 
 		// $this->emit('jsLiveWireTest');
@@ -79,6 +80,7 @@ class SeeShiftControlForm extends Component
 	}
 	public function downloadShiftControlForm(){
 		$this->log ="brn";
+         return redirect('/rrhh/shift-management/shift-control-form/download');
 	}
 
     public function render()

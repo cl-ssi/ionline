@@ -1,4 +1,4 @@
-<div>
+
     <div   wire:ignore.self class="modal fade" id="shiftcontrolformmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
     <div class="modal-dialog" role="document" >
@@ -218,7 +218,7 @@
 
                 <button type="button" wire:click.prevent="cancel()" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
-                <button type="button" wire:click="downloadShiftControlForm" class="btn btn-primary" >Descargar <i class="fa fa-download "></i>
+                <button type="button" wire:click.prevent="downloadShiftControlForm" class="btn btn-primary" >Descargar <i class="fa fa-download "></i>
                 </button>
             </div>
 
@@ -226,5 +226,4 @@
 
     </div>
 
-</div>
 </div>

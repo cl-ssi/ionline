@@ -47,7 +47,7 @@ class ChangeShiftDayStatus extends Component
     public function editShiftDay(){
 
 		// $this->emit('clearModal', $this->shiftDay->id);
-    	$this->filered ="on"; 
+    	// $this->filered ="on"; 
 		$this->emit('setshiftUserDay', $this->shiftDay->id);
 
 

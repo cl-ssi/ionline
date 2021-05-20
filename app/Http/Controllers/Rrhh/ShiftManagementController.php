@@ -46,8 +46,7 @@ class ShiftManagementController extends Controller
             'N' => "Noche"
     );
 
-    public function index(Request $r)
-    {
+    public function index(Request $r){
     	// echo "Shift Management";
         $months = (object) $this->months;
 
@@ -129,8 +128,8 @@ class ShiftManagementController extends Controller
         Session::put('staffInShift',$staffInShift);
 
         // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
-
-        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter'));
+        $groupname ="";
+        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter','groupname'));
     }
 
  	public function indexfiltered(Request $r){
@@ -182,16 +181,14 @@ class ShiftManagementController extends Controller
         // return view('rrhh.shift_management.index', compact('cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter'));
  	}
 
- 	public function shiftstypesindex()
-    {
+ 	public function shiftstypesindex(){
         // return view('rrhh.shift_management.shiftstypes', compact('users'));
         $sTypes = ShiftTypes::all(); 
         // $sTypes = 1;
         return view('rrhh.shift_management.shiftstypes', compact('sTypes'));
     }
 
-    public function editshifttype(Request $r)
-    {	
+    public function editshifttype(Request $r){	
 
     	$tiposJornada =   $this->tiposJornada;
         $sType = ShiftTypes::findOrFail($r->id); 
@@ -405,4 +402,86 @@ class ShiftManagementController extends Controller
         $writer->save('php://output');
 
     }
+    public function goToNextMonth(){
+
+        if(Session::get('actuallyMonth')){
+            if(Session::get("actuallyMonth") != 12){
+
+                $nMonth  = intval(Session::get('actuallyMonth')) + 1;
+                
+                
+            }else{
+                $nMonth = 1;
+            }
+                $dateFormat = Carbon::createFromFormat('Y-m-d',  "2021-".$nMonth."-01", 'Europe/London');
+                $nMonth = $dateFormat->format('m');
+                Session::put('actuallyMonth',$nMonth);
+                
+
+        }
+        return redirect()->route('rrhh.shiftManag.index');
+
+    }
+    public function goToPreviousMonth(){
+        
+        if(Session::get('actuallyMonth')){
+            if(Session::get("actuallyMonth") != 1 ) {  
+
+                $pMonth  = intval(Session::get('actuallyMonth')) - 1;
+            }else{
+                
+                $pMonth = 12;
+            }
+            $dateFormat = Carbon::createFromFormat('Y-m-d',  "2021-".$pMonth."-01", 'Europe/London');
+            $pMonth = $dateFormat->format('m');
+            Session::put('actuallyMonth',$pMonth);
+
+        }
+                
+        return redirect()->route('rrhh.shiftManag.index');
+    }
+
+    public function downloadShiftControlInPdf(){
+        return view('rrhh.shift_control.form');
+
+    }
+
+    public function myShift(){
+        // echo "myShift";
+
+        if(Session::has('days') && Session::get('days') != "")
+            $days = Session::get('days');
+        else
+           $days = Carbon::now()->daysInMonth;
+
+        if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
+            $actuallyMonth = Session::get('actuallyMonth');
+        else
+            $actuallyMonth = Carbon::now()->format('m');
+
+        if(Session::has('actuallyDay') && Session::get('actuallyDay') != "")
+            $actuallyDay = Session::get('actuallyDay');
+        else
+            $actuallyDay = Carbon::now()->format('d');
+        
+        if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
+            $actuallyYear = Session::get('actuallyYear');
+        else
+            $actuallyYear = Carbon::now()->format('Y');
+
+        if(Session::has('sTypes') && Session::get('sTypes') != "")
+            $sTypes = Session::get('sTypes');
+        else
+            $sTypes = ShiftTypes::all(); 
+
+        if(Session::has('users') && Session::get('users') != "")
+            $users = Session::get('users');
+        else
+           $users = User::Search($r->get('name'))->orderBy('name','Asc')->paginate(500);
+
+        $months = $this->months;
+
+         return view('rrhh.shift_management.my-shift',compact('days','actuallyMonth','actuallyDay','actuallyYear','sTypes','users','months'));
+    }
+
 }
