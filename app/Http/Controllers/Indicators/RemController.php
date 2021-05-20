@@ -20,7 +20,7 @@ class RemController extends Controller
     public function index($year, $serie)
     {
         if(!Prestacion::exists($year) OR !Seccion::exists($year)) abort(404);
-        $Nseries = Prestacion::year($year)->select('descripcion', 'Nserie')->where('serie', $serie)->get();
+        $Nseries = Prestacion::year($year)->select('descripcion', 'Nserie')->where('serie', $serie)->orderBy('Nserie', 'ASC')->orderBy('id_prestacion', 'ASC')->get();
         if($Nseries->isEmpty()) abort(404);
         $Nseries = $Nseries->unique('Nserie');
         foreach($Nseries as $nserie) $nserie->active = Seccion::year($year)->where('serie', $serie)->where('Nserie', $nserie->Nserie)->exists();
