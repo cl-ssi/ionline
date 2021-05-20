@@ -1248,3 +1248,6 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 
 
 });
+
+
+Route::view('/some', 'some');
