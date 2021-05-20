@@ -656,9 +656,15 @@
           <fieldset class="form-group col-6 col-md-2">
             <label for="for_sirh_contract_registration">&nbsp;</label>
             <div>
+            @if($serviceRequest->type == 'Suma alzada'))
+            <a href="{{ route('rrhh.service-request.report.resolution-pdf-hsa, $serviceRequest) }}"
+                class="btn btn-outline-secondary" target="_blank" title="Resolución">
+              <span class="fas fa-file-pdf" aria-hidden="true"></span></a>              
+              @else
               <a href="{{ route('rrhh.service-request.report.resolution-pdf', $serviceRequest) }}"
                 class="btn btn-outline-secondary" target="_blank" title="Resolución">
               <span class="fas fa-file-pdf" aria-hidden="true"></span></a>
+            @endif
             </div>
           </fieldset>
 
