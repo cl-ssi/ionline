@@ -25,7 +25,7 @@
 
                         <input type="hidden" wire:model="user_id">
 
-                        <label for="exampleFormControlInput1"><i class="fa fa-info"></i> INFORMACIÓN </label>
+                        <label for="exampleFormControlInput1"><i class="fa fa-info"></i> INFORMACIÓN {{--$varLog--}} </label>
                        <div  class="table-responsive">
                            
                        
