@@ -22,9 +22,16 @@ use App\User;
 class RequestFormController extends Controller
 {
     public function index(){
-        $myRequestForms = auth()->user()->applicantRequestForms()->where('status', 'created')->get();
-        return view('request_form.index', compact('myRequestForms'));
+        $createdRequestForms    = auth()->user()->applicantRequestForms()->where('status', 'created')->get();
+        $inProgresRequestForms  = auth()->user()->applicantRequestForms()->where('status', 'in_progress')->get();
+        $approvedRequestForms   = auth()->user()->applicantRequestForms()->where('status', 'approved')->get();
+        $rejectedRequestForms   = auth()->user()->applicantRequestForms()->where('status', 'rejected')->
+                                  orWhere('status', 'closed')->get();
+
+        return view('request_form.index', compact('createdRequestForms', 'inProgresRequestForms', 'rejectedRequestForms','approvedRequestForms'));                                  
+
     }
+
 
     public function edit(RequestForm $requestForm){
         $manager = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
