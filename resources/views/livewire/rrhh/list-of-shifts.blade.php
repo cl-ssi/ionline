@@ -1,5 +1,5 @@
 
-<div>here:{{Session::get('groupname')}}
+<div>
    <div wire:loading>
               <i class="fas fa-spinner fa-pulse"></i>
         </div>
