@@ -19,17 +19,13 @@ use Illuminate\Database\Eloquent\Builder;
 
 use App\User;
 
-class RequestFormController extends Controller
-{
+class RequestFormController extends Controller{
     public function index(){
         $createdRequestForms    = auth()->user()->applicantRequestForms()->where('status', 'created')->get();
         $inProgresRequestForms  = auth()->user()->applicantRequestForms()->where('status', 'in_progress')->get();
         $approvedRequestForms   = auth()->user()->applicantRequestForms()->where('status', 'approved')->get();
-        $rejectedRequestForms   = auth()->user()->applicantRequestForms()->where('status', 'rejected')->
-                                  orWhere('status', 'closed')->get();
-
-        return view('request_form.index', compact('createdRequestForms', 'inProgresRequestForms', 'rejectedRequestForms','approvedRequestForms'));                                  
-
+        $rejectedRequestForms   = auth()->user()->applicantRequestForms()->where('status', 'rejected')->orWhere('status', 'closed')->get();
+        return view('request_form.index', compact('createdRequestForms', 'inProgresRequestForms', 'rejectedRequestForms','approvedRequestForms'));
     }
 
 
@@ -72,10 +68,8 @@ class RequestFormController extends Controller
         }elseif($ou[0]->organizational_unit_id != '40' ){
             session()->flash('danger', 'Usuario no pertenece a Finanzas!');
             return redirect()->route('request_forms.index');
-        }else{
-            $requestForms = RequestForm::all();
-        }
-        return view('request_form.finance_index', compact('requestForms'));
+        }else{$requestForms = RequestForm::all();}
+            return view('request_form.finance_index', compact('requestForms'));
     }
 
     public function financeSign(RequestForm $requestForm){
