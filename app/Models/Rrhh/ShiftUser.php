@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ShiftUser extends Model
 {
     use HasFactory;
-    protected $fillable = [ 'date_from', 'date_up', 'asigned_by', 'user_id','shift_types_id', 'organizational_units_id' ];
+    protected $fillable = [ 'date_from', 'date_up', 'asigned_by', 'user_id','shift_types_id', 'organizational_units_id' , 'groupname'];
 
 	protected $table = 'rrhh_shift_users';
 
