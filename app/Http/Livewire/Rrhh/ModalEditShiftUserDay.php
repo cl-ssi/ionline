@@ -55,6 +55,7 @@ class ModalEditShiftUserDay extends Component
     public function mount(){
 		
 		// $this->headers = old('http_client_headers', $headers);
+		$this->varLog = "mont";		
 
 		$this->usersSelect ="none";
 		$this->changeDayType = "none";
@@ -77,7 +78,7 @@ class ModalEditShiftUserDay extends Component
 
 		// $this->users = $this->shiftUserDay->where
 		$this->users  = User::where('organizational_unit_id', $this->shiftUserDay->ShiftUser->organizational_units_id)->get();
-		$this->varLog = "";		
+		$this->varLog = "X";		
 		// $this->varLog ="Users Prev: ".json_encode($this->users)."<br>";
 		foreach ($this->users as $index => $u) {
 			// $this->varLog .= ">> foreach( Index:".$index."; U:".json_encode($u).")  <br>"; 
@@ -244,7 +245,7 @@ class ModalEditShiftUserDay extends Component
 		// $this->emitSelf('renderShiftDay');
 		$this->emitSelf('changeColor',["color"=>$this->colors[$this->shiftUserDay->status]]);
 		 $this->reset();
-		    // return redirect('/rrhh/shiftManagement');
+		    return redirect('/rrhh/shift-management');
 	}	
     public function render()
     {

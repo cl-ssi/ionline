@@ -9,17 +9,21 @@
 	.tblShiftControlForm td, .tblShiftControlForm th {
 		font-size: 10px;
 	}
-	
+	.table-wrapper {
+        max-height: 150px;
+        overflow: auto;
+        display:inline-block;
+    }
 </style>
 <div style=" display: inline;">
 @if( isset($usr) && $usr != "" )
-    <button class="only-icon seeBtn" wire:click="setValues({{$usr->id}})"data-toggle="modal" data-target="#shiftcontrolformmodal"  data-keyboard= "false" data-backdrop= "static" >
-    	<i class="fa fa-eye seeBtn" ></i>
+    <button class="only-icon seeBtn"  data-toggle="modal" data-target="#shiftcontrolformmodal{{$usr->id}}"    data-backdrop= "static" >
+    	<i class="fa fa-eye seeBtn" wire:click.prevent="setValues({{$usr->id}})"></i>
 	</button> 
 @endif
 </div>
 
-<div   wire:ignore.self class="modal fade" id="shiftcontrolformmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div   wire:ignore.self class="modal fade" id="shiftcontrolformmodal{{$usr->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
     <div class="modal-dialog" role="document" >
 
@@ -39,7 +43,7 @@
 
             <div class="modal-body">
                 
-                  <table class="table tblShiftControlForm table-striped"> 
+                    <table class="table tblShiftControlForm table-striped"> 
                         <thead> 
 
                         	<tr>
@@ -50,19 +54,15 @@
                                     @else
                                         <i class="fas fa-spinner fa-pulse"></i>
                                     @endif
-                                    
-
-                                 </td>
+                                </td>
                                 <th style="text-align: left;">CARGO</th>
                                 <td>
     								@if( isset( $usr ) )
                                     	N/A
                                     @else
-                           actuallyMonth             <i class="fas fa-spinner fa-pulse"></i>
+                                        <i class="fas fa-spinner fa-pulse"></i>
                                     @endif
-                                                                	
                                 </td>
-
                             </tr>
                             <tr>
                                 <th style="text-align: left;">MES</th>
@@ -86,7 +86,6 @@
                                     @endif
                                 	
                                 </td>
-
                             </tr>
                             <tr>
                                 <th style="text-align: left;">SERVICIO</th>
@@ -112,7 +111,6 @@
                                     @endif
                                 	
                                 </td>
-
                             </tr>
                             <tr>
                                 <th style="text-align: left;">TURNO  </th>
@@ -137,7 +135,6 @@
                                        
                                 	
                                 </td>
-
                             </tr>
                             <tr>
                                 <th style="text-align: left;">APELLIDOS  </th>
@@ -164,17 +161,15 @@
                                     @endif
                                 	
                                 </td>
-
                             </tr>
-                        	</tr>
                         	<tr>
+                        	</tr>
                      
                         </thead>
                         <tbody>
-                        	
-                        </tbody> 
-                        </table>
-                        <div class="table-responsive">
+                        </tbody>     	
+                    </table>
+                        <div class="table-responsive table-wrapper">
                         	
  							<table class="table tblShiftControlForm"> 
                 				<thead> 
@@ -211,8 +206,8 @@
                                                      {{ ($d["working_day"]!="F")?$d["working_day"]:"-"  }}                    
                                                 </td>
                                                 @if($date2->isPast())
-                                                    <td>{{ (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["from"]:"nan"  }}</td>
-                        						    <td>{{  (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["to"]:"nan" }}</td>
+                                                    <td>{{ (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["from"]:""  }}</td>
+                        						    <td>{{  (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["to"]:"" }}</td>
                                                     <td>{{  ( isset($timePerDay[$d["working_day"]]) )?$shiftStatus[$d["status"]]:"" }}</td>
                                                     @php
                                                       $total+=   (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["time"]:0  ;
