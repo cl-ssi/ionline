@@ -93,7 +93,7 @@
     		</tr>
     	</thead>
     	<tbody>
-    	@foreach($serviceRequests as $serviceRequest)
+    	@foreach($serviceRequests->SortByDesc('id') as $serviceRequest)
     		<tr>
     			<td>{{ $serviceRequest->id }}</td>
           <td>{{ $serviceRequest->resolution_number }}</td>
