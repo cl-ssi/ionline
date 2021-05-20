@@ -172,10 +172,21 @@ class SignatureController extends Controller
                 $request->signature_type == 'visators' ? $agreement->update(['file_to_endorse_id' => $signaturesFileDocumentId, 'file_to_sign_id' => null]) : $agreement->update(['file_to_sign_id' => $signaturesFileDocumentId]);
             }
 
-            foreach ($signature->signaturesFlows as $signaturesFlow) {
-                Mail::to($signaturesFlow->userSigner->email)
-                    ->send(new NewSignatureRequest($signaturesFlow));
+            //Envía los correos correspondientes
+            if ($request->endorse_type != 'Visación en cadena de responsabilidad') {
+                foreach ($signature->signaturesFlows as $signaturesFlow) {
+                    Mail::to($signaturesFlow->userSigner->email)
+                        ->send(new NewSignatureRequest($signaturesFlow));
+                }
+            }elseif($signature->signaturesFlowVisator->where('sign_position',1)->count() === 1){
+                $firstVisatorFlow = $signature->signaturesFlowVisator->where('sign_position', 1)->first();
+                Mail::to($firstVisatorFlow->userSigner->email)
+                    ->send(new NewSignatureRequest($firstVisatorFlow));
+            } elseif ($signature->signaturesFlowSigner) {
+                Mail::to($signature->signaturesFlowSigner->userSigner->email)
+                    ->send(new NewSignatureRequest($signature->signaturesFlowSigner));
             }
+
 
             DB::commit();
 

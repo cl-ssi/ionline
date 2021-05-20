@@ -185,19 +185,22 @@ class FirmaDigitalController extends Controller
         }
 
         //Si es visación en cadena, se envía notificación por correo al siguiente firmador
-//        if ($signaturesFlow->signature()->endorse_type === 'Visación en cadena de responsabilidad') {
-//            $nextSignaturesFlowVisation = SignaturesFlow::query()
-//                ->where('signatures_file_id', $signaturesFlow->signatures_file_id)
-//                ->where('sign_position', $signaturesFlow->sign_position + 1);
-//
-//            if ($nextSignaturesFlowVisation->count() > 0) {
-//                Mail::to($nextSignaturesFlowVisation->userSigner->email)
-//                    ->send(new NewSignatureRequest($signaturesFlow));
-//            }elseif( $signaturesFlow->signature()->signaturesFlowSigner){
-//                Mail::to($signaturesFlow->signature()->signaturesFlowSigner->userSigner->email)
-//                    ->send(new NewSignatureRequest($signaturesFlow));
-//            }
-//        }
+        if ($signaturesFlow->signature->endorse_type === 'Visación en cadena de responsabilidad') {
+            if ($signaturesFlow->type === 'visador') {
+                $nextSignaturesFlowVisation = SignaturesFlow::query()
+                    ->where('signatures_file_id', $signaturesFlow->signatures_file_id)
+                    ->where('sign_position', $signaturesFlow->sign_position + 1)
+                    ->first();
+
+                if ($nextSignaturesFlowVisation) {
+                    Mail::to($nextSignaturesFlowVisation->userSigner->email)
+                        ->send(new NewSignatureRequest($signaturesFlow));
+                }elseif($signaturesFlow->signature->signaturesFlowSigner && $signaturesFlow->signature->signaturesFlowSigner->status === null){
+                    Mail::to($signaturesFlow->signature->signaturesFlowSigner->userSigner->email)
+                        ->send(new NewSignatureRequest($signaturesFlow));
+                }
+            }
+        }
 
         session()->flash('info', "El documento {$signaturesFlow->signature->id} se ha firmado correctamente.");
         return redirect()->route('documents.signatures.index', ['pendientes']);
