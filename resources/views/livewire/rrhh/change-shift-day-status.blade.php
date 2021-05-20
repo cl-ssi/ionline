@@ -3,7 +3,7 @@
 	@if(isset($shiftDay) && $shiftDay!="")
 	
 		
-		<button type="button" data-toggle="modal" data-target="#updateModal"  data-keyboard= "false" data-backdrop= "static" wire:click.prevent="editShiftDay"  id="{{$shiftDay->id}}"  wire:key="{{$shiftDay->id}}" style="color:white;font-weight: bold;background-color:{{ $statusColors[$shiftDay->status] }}" class="btnShiftDay  btn-full">
+		<button type="button" data-toggle="modal" data-target="#updateModal"  data-keyboard= "false" data-backdrop= "static" wire:click.prevent="editShiftDay"  id="{{$shiftDay->id}}"  style="color:white;font-weight: bold;background-color:{{ $statusColors[$shiftDay->status] }}" class="btnShiftDay  btn-full">
 	    	@if($shiftDay->working_day!="F")
 	        	{{$shiftDay->working_day}}
 	    	@else
@@ -11,6 +11,9 @@
 	    	 @endif
 		</button>
 		<div wire:loading wire:target="editShiftDay">
+        	  <i class="fas fa-spinner fa-pulse"></i>
+    	</div>
+    	<div wire:loading wire:target="actuallyColor">
         	  <i class="fas fa-spinner fa-pulse"></i>
     	</div>
 		
