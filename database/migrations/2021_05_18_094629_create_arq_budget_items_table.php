@@ -29,6 +29,6 @@ class CreateArqBudgetItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('budget_items');
+        Schema::dropIfExists('arq_budget_items');
     }
 }
