@@ -7,7 +7,7 @@
         <select name="type" wire:model="type" class="form-control for_type" required>
           <option value=""></option>
           <option value="Inasistencia Injustificada">INASISTENCIA INJUSTIFICADA</option>
-          <option value="Licencia médica">LICENCIA MÉDICA</option>
+          <option value="Licencia médica">LICENCIA MÉDICA COVID</option>
           <option value="Licencia no covid">LICENCIA MÉDICA - NO COVID</option>
           <option value="Renuncia voluntaria">RENUNCIA VOLUNTARIA (EFECTIVA DESDE)</option>
           <option value="Abandono de funciones">ABANDONO DE FUNCIONES</option>
