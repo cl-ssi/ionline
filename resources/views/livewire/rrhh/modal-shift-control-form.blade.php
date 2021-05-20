@@ -1,4 +1,4 @@
-<div>
+
     <div   wire:ignore.self class="modal fade" id="shiftcontrolformmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
     <div class="modal-dialog" role="document" >
@@ -7,7 +7,7 @@
 
             <div class="modal-header" style="background-color:#006cb7;color:white   ">
 
-                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-clock"></i> Control de Turnos de personal L:{{ $log }}</h5>
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-clock"></i> Control de Turnos de personal {{ $log }}</h5>
 
                 <button type="button" class="close" data-dismiss="modal" wire:click.prevent="cancel()" aria-label="Close">
 
@@ -159,7 +159,7 @@
  							<table class="table tblShiftControlForm"> 
                 				<thead> 
                 					<tr>
-                						<th>FECHA</th>
+                						<th>FECHAx</th>
                 						<th>DÍA</th>
                 						<th  colspan="2">HORARIO</th>
                 						<th>OBSERVACION DE DATOS OBLIGATORIOS</th>
@@ -173,11 +173,21 @@
 									</tr>
 								</thead>
                 				<tbody>
+                      
                         			@if($days > 0)	
                         				@for($i = 1; $i < ($days+1); $i++ )
+                                          
                         					<tr>
                         						<td>{{$i}}	</td>
-                        						<td></td>
+                        						<td>
+                                                    @php
+                                                        $date = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$j);  
+                                                        $date =explode(" ",$date);
+                                                        $d = $shifsUsr->days->where('day',$date[0]);
+                                                        $d = $d->first();
+                                                    @endphp
+                                                  $date {{$date}}; actuallyYear {{$actuallyYear}} ; d {{ $d}} ; {{$d->working_day}} ; 
+                                                </td>
                         						<td></td>
                         						<td></td>
                         						<td></td>
@@ -208,7 +218,7 @@
 
                 <button type="button" wire:click.prevent="cancel()" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
-                <button type="button" wire:click="downloadShiftControlForm" class="btn btn-primary" >Descargar <i class="fa fa-download "></i>
+                <button type="button" wire:click.prevent="downloadShiftControlForm" class="btn btn-primary" >Descargar <i class="fa fa-download "></i>
                 </button>
             </div>
 
@@ -216,5 +226,4 @@
 
     </div>
 
-</div>
 </div>

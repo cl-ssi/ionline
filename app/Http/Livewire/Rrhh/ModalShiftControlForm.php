@@ -5,6 +5,10 @@ namespace App\Http\Livewire\Rrhh;
 use Livewire\Component;
 use Carbon\Carbon;
 use App\User;
+use App\Models\Rrhh\ShiftUser;
+use App\Models\Rrhh\ShiftUserDay;
+use App\Models\Rrhh\ShiftDayHistoryOfChanges;   
+
 class ModalShiftControlForm extends Component
 {	
 	public $userModal;
@@ -12,6 +16,7 @@ class ModalShiftControlForm extends Component
 	public $actuallyYears;
 	public $days;
 	public $log;
+    public $shifsUsr;
     public $months = array(
 
         '01'=>'Enero',
@@ -27,6 +32,17 @@ class ModalShiftControlForm extends Component
         '11'=>'Noviembre',
         '12'=>'Diciembre',
     );
+    public $timePerDay = array(
+
+        'L' => array("from"=>"08:00","to"=>"20:00","time"=>12),
+        'N' => array("from"=>"20:00","to"=>"08:00","time"=>12),
+        'D' => array("from"=>"","to"=>"","time"=>8),
+        'F' => array("from"=>"","to"=>"","time"=>0),
+
+     );
+    public 
+
+     
  	public $listeners = ["setValueToShiftForm"=>"setModalValue"];
     public function mount(){
 
@@ -52,7 +68,9 @@ class ModalShiftControlForm extends Component
   		//    		fn () => print($pdfContent),
   		//    		"filename.pdf"
 		// );
-		$this->log ="enter";
+		// $this->log ="enter";
+            return redirect('/rrhh/shift-management/shift-control-form/download');
+        
      //    $pdf = PDF::loadView('rrhh.shift_management.shift_control_form');
     	// return response()->streamDownload(function () use ($pdf) {
      //    	echo $pdf->stream();
@@ -69,6 +87,8 @@ class ModalShiftControlForm extends Component
 		$dateFiltered = Carbon::createFromFormat('Y-m-d',  $this->actuallyYears."-".$this->actuallyMonth."-01", 'Europe/London');
 		$this->userModal = User::find($this->userModal);
         $this->days = $dateFiltered->daysInMonth;
+
+        $this->shifsUsr = ShiftUser::where('organizational_units_id', $this->actuallyOrgUnit->id )->where('shift_types_id',$this->actuallyShift->id)->where('date_up','>=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->where('date_from','<=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->where("user_id",$this->userModal->id)->first();
 	}
 	public function cancel(){
 		$this->days = 0;
@@ -79,3 +99,5 @@ class ModalShiftControlForm extends Component
         return view('livewire.rrhh.modal-shift-control-form');
     }
 }
+
+ 
