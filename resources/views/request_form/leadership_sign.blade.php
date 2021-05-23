@@ -96,7 +96,7 @@
       </table>
     </div><!-- DIV para TABLA-->
 
-<livewire:request-form.authorization :requestForm="$requestForm">
+    <livewire:request-form.authorization :requestForm="$requestForm">
 
   </div><!-- card-body -->
 </div><!-- card-principal -->

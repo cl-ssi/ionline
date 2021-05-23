@@ -6,11 +6,11 @@
           <div class="row justify-content-md-center"><!-- FILA 2 -->
            <div class="form-group col-5">
              <label for="forRut">Responsable:</label>
-             <input name="responsable" class="form-control form-control-sm" type="text" value="" readonly>
+             <input wire:model="userAuthority" name="userAuthority" class="form-control form-control-sm" type="text" readonly>
            </div>
            <div class="form-group col-2">
              <label>Cargo:</label><br>
-             <input name="position" class="form-control form-control-sm" type="text" value="" readonly>
+             <input wire:model="position" name="position" class="form-control form-control-sm" type="text" readonly>
            </div>
            <div class="form-group col-5">
              <label for="forRut">Unidad Organizacional:</label>
@@ -19,7 +19,7 @@
         </div><!-- FILA 2 -->
         <div class="row justify-content-md-end mt-0"><!-- FILA 4 -->
           <div class="col-2">
-            <button type="button" wire:click="updateRequestService" class="btn btn-primary btn-sm float-right">Autorizar</button>
+            <button type="button" wire:click="acceptRequestForm" class="btn btn-primary btn-sm float-right">Autorizar</button>
           </div>
           <div class="col-1">
             <button type="button" wire:click="cancelRequestService" class="btn btn-secondary btn-sm float-right">Rechazar</button>
