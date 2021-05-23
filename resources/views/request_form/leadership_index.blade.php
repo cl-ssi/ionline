@@ -26,7 +26,7 @@
     </tr>
   </thead>
   <tbody>
-      @foreach($requestForms as $requestForm)
+      @foreach($createdRequestForms as $requestForm)
             <tr>
                 <td>{{ $requestForm->id }}</td>
                 <td>{{ $requestForm->type_form }}</td>

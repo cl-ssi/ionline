@@ -28,7 +28,6 @@ class RequestFormController extends Controller{
         return view('request_form.index', compact('createdRequestForms', 'inProgresRequestForms', 'rejectedRequestForms','approvedRequestForms'));
     }
 
-
     public function edit(RequestForm $requestForm){
         $manager = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
         if(is_null($manager))
@@ -39,15 +38,19 @@ class RequestFormController extends Controller{
     }
 
     public function leadershipIndex(){
-        $ou = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->user()->id);
+        $ou = Authority::getAmIAuthorityFromOu(Carbon::now(),'manager',auth()->user()->id);
         if(empty($ou)){
-          session()->flash('danger', 'Usuario no es Autoridad!');
-          return redirect()->route('request_forms.index');
+            session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().', no es Autoridad!');
+            return redirect()->route('request_forms.index');
         }
-        else
-          $requestForms = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->
-                                       Where('status','created')->get();
-        return view('request_form.leadership_index', compact('requestForms'));
+        else{
+            $createdRequestForms   = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','created')->get();
+            $inProgresRequestForms = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','in_progress')->get();
+            $approvedRequestForms  = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','approved')->get();
+            $rejectedRequestForms  = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','rejected')
+                                                ->orWhere('status','closed')->get();
+        }
+        return view('request_form.leadership_index', compact('createdRequestForms', 'inProgresRequestForms', 'approvedRequestForms', 'rejectedRequestForms'));
     }
 
     public function leadershipSign(RequestForm $requestForm){
