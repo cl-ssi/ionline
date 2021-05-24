@@ -40,7 +40,7 @@ class ModalShiftControlForm extends Component
         'F' => array("from"=>"","to"=>"","time"=>0),
 
      );
-    public 
+     
 
      
  	public $listeners = ["setValueToShiftForm"=>"setModalValue"];
