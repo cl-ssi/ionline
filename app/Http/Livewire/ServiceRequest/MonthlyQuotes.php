@@ -13,6 +13,7 @@ class MonthlyQuotes extends Component
     public $serviceRequest;
     public $valores;
     public $resultadoEnNumero = false;
+    public $string;
 
     public function render()
     {
