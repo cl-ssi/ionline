@@ -25,11 +25,11 @@ class Authorization extends Component
                                ->where('event_type', 'leader_ship_event')
                                ->where('status', 'created')->first();
       if(!is_null($event)){
-        $this->requestForm->status = 'in_progress';
+        $this->requestForm->status    = 'in_progress';
         $this->requestForm->save();
-        $event->signature_date = Carbon::now();
-        $event->position_signer_user = $this->position;
-        $event->status = 'approved';
+        $event->signature_date        = Carbon::now();
+        $event->position_signer_user  = $this->position;
+        $event->status                = 'approved';
         $event->signerUser()->associate(auth()->user());
         $event->save();
         session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' AUTORIZADO correctamente!');
