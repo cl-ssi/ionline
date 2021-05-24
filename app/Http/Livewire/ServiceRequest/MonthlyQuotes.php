@@ -13,6 +13,7 @@ class MonthlyQuotes extends Component
     public $serviceRequest;
     public $valores;
     public $resultadoEnNumero = false;
+    public $string;
 
     public function render()
     {
@@ -167,7 +168,10 @@ class MonthlyQuotes extends Component
         }
         ////es HONORARIO SUMA ALZADA
         else {            ///son cuotas iguales
+            // dd('entre aca');
+
             if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
+                // dd('entre aca');
                 $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
                 $valor_mensual = $serviceRequest->net_amount;
                 $string = $nroCuotas . " cuotas,";
@@ -183,9 +187,12 @@ class MonthlyQuotes extends Component
                         $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
                     }
                 }
-            } else
+            } 
+            
+            else
             //son cuotas valores diferentes
             {
+                //dd('entre aca');
 
                 if ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') != $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
                     $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 2;
@@ -214,6 +221,7 @@ class MonthlyQuotes extends Component
 
 
                     elseif ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d')) {
+                        
                         //La Persona no parte a trabajar en un mes cerrado
                         $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
                         $valor_mensual = $serviceRequest->net_amount;
@@ -233,8 +241,42 @@ class MonthlyQuotes extends Component
                             }
                         }
                     }
+                    //la persona termina de trabajar en un día que no es fin de mes
+                    elseif ($serviceRequest->end_date->format('Y-m-d') != $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
+                        //dd('entra aca');
+                        $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
+                        $valor_mensual = $serviceRequest->net_amount;
+                        $string = $nroCuotas . " cuotas,";
+                        $interval = DateInterval::createFromDateString('1 month');
+                        $periods   = new DatePeriod($serviceRequest->start_date, $interval, $serviceRequest->end_date);
+                        $periods = iterator_to_array($periods);
+                        // $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
+                        //$dias_trabajados = $serviceRequest->end_date->lastOfMonth()->diff($serviceRequest->end_date)->days + 1;
+                        $dias_trabajados = (int)$serviceRequest->end_date->format('d');
+                        //dd($dias_trabajados);
+                        $valor_diferente = round($dias_trabajados * round(($valor_mensual / 30)));
+                        //dd($valor_diferente);
+
+                        foreach ($periods as $key => $period) {
+                            if ($key === array_key_first($periods)) {
+                                $string .= " una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
+                            } else if ($key === array_key_last($periods)) {
+                                $string .= " y una de $" . number_format($valor_diferente) . " el mes de " . $period->monthName . ";";
+                            } else {
+                                $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
+                            }
+                        }
+
+                        
+                        
+                    }
 
             }
+
+
+
+
+
 
             $this->valores = $string;
         }
