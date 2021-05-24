@@ -95,19 +95,13 @@ class RequestForm extends Model
     }
 
     /* TIEMPO TRANSCURRIDO DEL TICKET */
-    public function getElapsedTimeAttribute()
+    public function getElapsedTime()
     {
-/*      if($this->status == "closed"){
-        $startDate= Carbon::parse($this->created_at);
-        $endDate = Carbon::parse($this->updated_at);
-
-        $dateDiff = new \Carbon\Carbon();
-        return $dateDiff=$startDate->diffInDays($endDate);
-      }
-      else{
-        $now = new \Carbon\Carbon();
-        return $now->diffInDays($this->created_at);
-      }*/
+      $day = Carbon::now()->diffInDays($this->created_at);
+      if($day<=1)
+        return $day.' día.';
+      else
+        return $day.' días.';
     }
 
     public function getFormRequestNumberAttribute()
