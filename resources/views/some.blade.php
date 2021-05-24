@@ -89,6 +89,72 @@
     	
 	</div>
 
+	
+	<div class="form-group">
+    	<div class="form-check">
+      		<input class="form-check-input" type="checkbox" id="gridCheck">
+      		<label class="form-check-label" for="gridCheck">
+      			  Proxima Fecha Disponible
+      	    </label>
+    	</div>
+  	</div>
+
+
+
+	<div class="form-row">
+
+		<div class="form-group col-md-5">
+			<label for="inputEmail4">Desde</label>
+			<input type="email" class="form-control" id="inputEmail4" placeholder="Fecha inicio">
+		</div>
+
+		<div class="form-group col-md-5">
+		  	<label for="inputEmail4">Hasta</label>
+		   	<input type="email" class="form-control" id="inputEmail4" placeholder="Fecha fin">
+		</div>
+		<div class="form-group col-md-2">
+			<label for="inputEmail4">&nbsp;</label>
+			<button type="button" class="btn btn-primary form-control">Buscar</button>
+		</div>
+	</div>
+
+	<table class="table table-striped">
+  		<thead>
+    		<tr>
+      			<th scope="col">Profesional</th>
+      			<th scope="col">Hora</th>
+      			<th scope="col">Cupo</th>
+      			<th scope="col">Sobre Cupo</th>
+	  			<th scope="col">Estado</th>
+    		</tr>
+  		</thead>
+  		<tbody>
+   			<tr>
+     			<th scope="row">Esteban Rojas</th>
+      			<td>10:30</td>
+      			<td>3</td>
+      			<td>2</td>
+				<td>Disponible</td>
+    		</tr>
+
+			<tr>
+     			<th scope="row">Maria Perez</th>
+      			<td>11:30</td>
+      			<td>2</td>
+      			<td>0</td>
+				<td>Disponible</td>
+    		</tr>
+
+			<tr>
+     			<th scope="row">Juan Zavala</th>
+      			<td>8:00</td>
+      			<td>1</td>
+      			<td>0</td>
+				<td>Disponible</td>
+    		</tr>
+    
+ 		 </tbody>
+	</table>
 
 
 
