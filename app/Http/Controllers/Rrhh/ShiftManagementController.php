@@ -190,9 +190,10 @@ class ShiftManagementController extends Controller
         Session::put('actuallyShift',$actuallyShift);
         Session::put('staffInShift',$staffInShift);
         
-        return redirect()->route('rrhh.shiftManag.index');
+        return redirect()->route('rrhh.shiftManag.index',["groupname"=>Session::get('groupname')]);
 
-
+            // return redirect('/rrhh/shift-management/'.Session::get('groupname'));
+        
         // return view('rrhh.shift_management.index', compact('cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter'));
  	}
 
