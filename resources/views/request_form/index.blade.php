@@ -29,12 +29,11 @@
                   <th scope="col">Usuario Gestor</th>
                   <th scope="col">Justificación</th>
                   <th scope="col">Fecha Creación</th>
-                  <th scope="col">Días de espera</th>
-                  <th scope="col">Fecha Cierre</th>
-                  <th scope="col">J</th>
-                  <th scope="col">F</th>
-                  <th scope="col">A</th>
-                  <th scope="col" colspan="2">Seleccione</th>
+                  <th scope="col">Espera</th>
+                  <th scope="col" class="text-center">J</th>
+                  <th scope="col" class="text-center">F</th>
+                  <th scope="col" class="text-center">A</th>
+                  <th scope="col" colspan="2" class="text-center">Opciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -43,20 +42,18 @@
                             <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
                             <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
                             <td class="align-middle">{{ $requestForm->justification }}</td>
-                            <td class="align-middle">{{ $requestForm->CreationDate }}</td>
-                            <td class="align-middle">{{ $requestForm->ElapsedTime }}</td>
-                            <td class="align-middle">{{ $requestForm->EndDate }}</td>
-                            <td class="align-middle">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                            <td class="align-middle">{!! $requestForm->eventSign('finance_event') !!}</td>
-                            <td class="align-middle">{!! $requestForm->eventSign('supply_event') !!}</td>
-                            <td class="align-middle">
-                              <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Ir">
-                              <span class="fas fa-edit" aria-hidden="true"></span></a>
+                            <td class="align-middle">{{ $requestForm->created_at }}</td>
+                            <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
+                            <td class="text-center align-middle">
+                              <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="text-primary" title="Editar">
+                              <i class="far fa-edit"></i></a>
                             </td>
-                            <td class="align-middle">
-                              <a href="#"
-                                class="btn btn-outline-secondary btn-sm" target="_blank">
-                              <span class="fas fa-file" aria-hidden="true"></span></a>
+                            <td class="text-center align-middle">
+                              <a href="#" class="text-danger" title="Eliminar">
+                              <i class="far fa-trash-alt"></i></a>
                             </td>
                         </tr>
                   @endforeach
@@ -75,12 +72,11 @@
                   <th scope="col">Usuario Gestor</th>
                   <th scope="col">Justificación</th>
                   <th scope="col">Fecha Creación</th>
-                  <th scope="col">Días de espera</th>
-                  <th scope="col">Fecha Cierre</th>
-                  <th scope="col">J</th>
-                  <th scope="col">F</th>
-                  <th scope="col">A</th>
-                  <th scope="col" colspan="2">Seleccione</th>
+                  <th scope="col">Espera</th>
+                  <th scope="col">Última Actualziación</th>
+                  <th scope="col" class="text-center">J</th>
+                  <th scope="col" class="text-center">F</th>
+                  <th scope="col" class="text-center">A</th>
                 </tr>
               </thead>
               <tbody>
@@ -89,21 +85,12 @@
                             <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
                             <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
                             <td class="align-middle">{{ $requestForm->justification }}</td>
-                            <td class="align-middle">{{ $requestForm->CreationDate }}</td>
-                            <td class="align-middle">{{ $requestForm->ElapsedTime }}</td>
-                            <td class="align-middle">{{ $requestForm->EndDate }}</td>
-                            <td class="align-middle">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                            <td class="align-middle">{!! $requestForm->eventSign('finance_event') !!}</td>
-                            <td class="align-middle">{!! $requestForm->eventSign('supply_event') !!}</td>
-                            <td class="align-middle">
-                              <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Ir">
-                              <span class="fas fa-edit" aria-hidden="true"></span></a>
-                            </td>
-                            <td class="align-middle">
-                              <a href="#"
-                                class="btn btn-outline-secondary btn-sm" target="_blank">
-                              <span class="fas fa-file" aria-hidden="true"></span></a>
-                            </td>
+                            <td class="align-middle">{{ $requestForm->created_at }}</td>
+                            <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
+                            <td class="align-middle">{{ $requestForm->updated_at }}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
                         </tr>
                   @endforeach
               </tbody>
@@ -112,7 +99,7 @@
         </div>
 
         <div class="card border border-muted text-black bg-light mb-5">
-          <div class="card-header text-primary h6"><i class="far fa-thumbs-up"></i> Formularios Aprovados</div>
+          <div class="card-header text-primary h6"><i class="far fa-thumbs-up"></i> Formularios Aprobados</div>
           <div class="card-body">
             <table class="table table-striped table-sm small">
               <thead>
@@ -121,12 +108,10 @@
                   <th scope="col">Usuario Gestor</th>
                   <th scope="col">Justificación</th>
                   <th scope="col">Fecha Creación</th>
-                  <th scope="col">Días de espera</th>
-                  <th scope="col">Fecha Cierre</th>
-                  <th scope="col">J</th>
-                  <th scope="col">F</th>
-                  <th scope="col">A</th>
-                  <th scope="col" colspan="2">Seleccione</th>
+                  <th scope="col">Espera</th>
+                  <th scope="col" class="text-center">J</th>
+                  <th scope="col" class="text-center">F</th>
+                  <th scope="col" class="text-center">A</th>
                 </tr>
               </thead>
               <tbody>
@@ -135,21 +120,11 @@
                             <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
                             <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
                             <td class="align-middle">{{ $requestForm->justification }}</td>
-                            <td class="align-middle">{{ $requestForm->CreationDate }}</td>
-                            <td class="align-middle">{{ $requestForm->ElapsedTime }}</td>
-                            <td class="align-middle">{{ $requestForm->EndDate }}</td>
-                            <td class="align-middle">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                            <td class="align-middle">{!! $requestForm->eventSign('finance_event') !!}</td>
-                            <td class="align-middle">{!! $requestForm->eventSign('supply_event') !!}</td>
-                            <td class="align-middle">
-                              <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Ir">
-                              <span class="fas fa-edit" aria-hidden="true"></span></a>
-                            </td>
-                            <td class="align-middle">
-                              <a href="#"
-                                class="btn btn-outline-secondary btn-sm" target="_blank">
-                              <span class="fas fa-file" aria-hidden="true"></span></a>
-                            </td>
+                            <td class="align-middle">{{ $requestForm->created_at }}</td>
+                            <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
                         </tr>
                   @endforeach
               </tbody>
@@ -167,12 +142,12 @@
                   <th scope="col">Usuario Gestor</th>
                   <th scope="col">Justificación</th>
                   <th scope="col">Fecha Creación</th>
-                  <th scope="col">Días de espera</th>
+                  <th scope="col">Espera</th>
+                  <th scope="col">Fecha de Rechazo</th>
                   <th scope="col">Fecha Cierre</th>
-                  <th scope="col">J</th>
-                  <th scope="col">F</th>
-                  <th scope="col">A</th>
-                  <th scope="col" colspan="2">Seleccione</th>
+                  <th scope="col" class="text-center">J</th>
+                  <th scope="col" class="text-center">F</th>
+                  <th scope="col" class="text-center">A</th>
                 </tr>
               </thead>
               <tbody>
@@ -181,21 +156,13 @@
                             <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
                             <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
                             <td class="align-middle">{{ $requestForm->justification }}</td>
-                            <td class="align-middle">{{ $requestForm->CreationDate }}</td>
-                            <td class="align-middle">{{ $requestForm->ElapsedTime }}</td>
+                            <td class="align-middle">{{ $requestForm->created_at }}</td>
+                            <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
                             <td class="align-middle">{{ $requestForm->EndDate }}</td>
-                            <td class="align-middle">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                            <td class="align-middle">{!! $requestForm->eventSign('finance_event') !!}</td>
-                            <td class="align-middle">{!! $requestForm->eventSign('supply_event') !!}</td>
-                            <td class="align-middle">
-                              <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="btn btn-outline-secondary btn-sm" title="Ir">
-                              <span class="fas fa-edit" aria-hidden="true"></span></a>
-                            </td>
-                            <td class="align-middle">
-                              <a href="#"
-                                class="btn btn-outline-secondary btn-sm" target="_blank">
-                              <span class="fas fa-file" aria-hidden="true"></span></a>
-                            </td>
+                            <td class="align-middle">{{ $requestForm->EndDate }}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
                         </tr>
                   @endforeach
               </tbody>
