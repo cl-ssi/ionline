@@ -701,7 +701,7 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
     Route::get('report1', 'Requirements\RequirementController@report1')->name('report1');
     // Route::get('report_reqs_by_org', 'Requirements\RequirementController@report_reqs_by_org')->name('report_reqs_by_org');
 });
-Route::resource('requirements', 'Requirements\RequirementController');
+Route::resource('requirements', 'Requirements\RequirementController')->middleware('auth');
 
 Route::view('calendars', 'calendars.index')->name('calendars');
 
