@@ -180,7 +180,7 @@
                         </a>
                         @endcan
 
-                        @canany(['shift-management-view'])
+                        @canany(['Shift Management: view'])
                         <a class="dropdown-item @active('rrhh.users.index')"
                             href="{{ route('rrhh.shiftManag.index') }}">
                             <i class="fa fa-calendar fa-fw"></i> Modulo Turnos
