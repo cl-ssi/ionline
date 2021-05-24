@@ -38,6 +38,6 @@
             <td style="text-align:  center;" colspan="{{$days}}">SIN PERSONAL ASIGNADO</td>
         @endif
 
-
-
 </div>
+
+
