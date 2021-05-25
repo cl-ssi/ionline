@@ -3,6 +3,7 @@
    <div wire:loading>
               <i class="fas fa-spinner fa-pulse"></i>
         </div>
+
     @if(isset($staffInShift)&&count($staffInShift)>0&&$staffInShift!="")
         @foreach($staffInShift as $sis)
             <tr>
