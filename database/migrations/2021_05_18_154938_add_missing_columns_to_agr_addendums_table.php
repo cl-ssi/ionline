@@ -14,11 +14,11 @@ class AddMissingColumnsToAgrAddendumsTable extends Migration
     public function up()
     {
         Schema::table('agr_addendums', function (Blueprint $table) {
+            $table->integer('number')->nullable()->change();
+            $table->date('date')->nullable()->change();
             $table->renameColumn('file', 'res_file');
             $table->renameColumn('number', 'res_number');
             $table->renameColumn('date', 'res_date');
-            $table->integer('res_number')->nullable()->change();
-            $table->date('res_date')->nullable()->change();
             $table->date('date')->after('id')->nullable();
             $table->string('file')->after('date')->nullable();
             $table->foreignId('file_to_endorse_id')->after('agreement_id')->nullable();
