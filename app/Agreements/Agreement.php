@@ -53,7 +53,7 @@ class Agreement extends Model
     }
 
     public function addendums() {
-        return $this->hasMany('App\Agreements\Addendum');
+        return $this->hasMany('App\Agreements\Addendum')->orderBy('created_at','desc');
     }
 
     public function stages() {
@@ -81,6 +81,7 @@ class Agreement extends Model
     }
 
     public function getResSignStateAttribute(){
+        if($this->fileResEnd) return 'success';
         return ($this->fileToSign && $this->fileToSign->hasAllFlowsSigned && $this->fileResEnd) ? 'success' : ( ($this->fileToSign && $this->fileToSign->hasAllFlowsSigned && !$this->fileResEnd) ? 'warning' : 'secondary' );
     }
     
