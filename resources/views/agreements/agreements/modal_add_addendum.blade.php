@@ -39,7 +39,7 @@
                         <label for="forrepresentative">Representante alcalde</label>
                         <select id="representative" class="selectpicker" name="representative" title="Seleccione..." data-width="100%" required>
                             <option value="{{ $municipality->name_representative }}">{{ $municipality->appellative_representative }} {{ $municipality->name_representative }}, {{ $municipality->decree_representative }}</option>
-                            @if($municipality->name_representative_surrogate != null) <option value="{{ $municipality->name_representative_surrogate }}">{{ $municipality->appellative_representative }} {{ $municipality->name_representative_surrogate }}, {{ $municipality->decree_representative_surrogate }}</option> @endif
+                            @if($municipality->name_representative_surrogate != null) <option value="{{ $municipality->name_representative_surrogate }}">{{ $municipality->appellative_representative_surrogate }} {{ $municipality->name_representative_surrogate }}, {{ $municipality->decree_representative_surrogate }}</option> @endif
                         </select>
                     </div>
 
