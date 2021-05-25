@@ -23,16 +23,25 @@ use App\User;
 class RequestFormController extends Controller{
     public function index(){
         $createdRequestForms    = auth()->user()->applicantRequestForms()->where('status', 'created')->get();
-        $inProgresRequestForms  = auth()->user()->applicantRequestForms()->where('status', 'in_progress')->get();
+        $inProgressRequestForms = auth()->user()->applicantRequestForms()->where('status', 'in_progress')->get();
         $approvedRequestForms   = auth()->user()->applicantRequestForms()->where('status', 'approved')->get();
         $rejectedRequestForms   = auth()->user()->applicantRequestForms()->where('status', 'rejected')->orWhere('status', 'closed')->get();
-        return view('request_form.index', compact('createdRequestForms', 'inProgresRequestForms', 'rejectedRequestForms','approvedRequestForms'));
+        return view('request_form.index', compact('createdRequestForms', 'inProgressRequestForms', 'rejectedRequestForms','approvedRequestForms'));
     }
 
     public function edit(RequestForm $requestForm){
-        $manager = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
+        if($requestForm->applicant_user_id != auth()->user()->id){
+          session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO pertenece a Usuario: '.auth()->user()->getFullNameAttribute());
+          return redirect()->route('request_forms.index');
+        }
+        if($requestForm->status != 'created'){
+          session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO puede ser Modificado!');
+          return redirect()->route('request_forms.index');
+        }
+        //Obtiene la Autoridad de la Unidad Organizacional del usuario registrado, en la fecha actual.
+        $manager = Authority::getAuthorityFromDate(auth()->user()->organizationalUnit->id, Carbon::now(), 'manager');
         if(is_null($manager))
-            $manager= '<h6 class="text-danger">'.$requestForm->organizationalUnit->name.', no registra una Autoridad.</h6>';
+            $manager= '<h6 class="text-danger">'.auth()->user()->organizationalUnit->name.', no registra una Autoridad.</h6>';
         else
             $manager = $manager->user->getFullNameAttribute();
         return view('request_form.edit', compact('requestForm', 'manager'));
