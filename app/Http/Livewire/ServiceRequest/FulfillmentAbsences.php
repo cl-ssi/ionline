@@ -84,6 +84,7 @@ class FulfillmentAbsences extends Component
           break;
         case 'Renuncia voluntaria':
         case 'Abandono de funciones':
+        case 'Término de contrato anticipado':
           $fulfillmentItem->end_date = $this->end_date;
           break;
 
