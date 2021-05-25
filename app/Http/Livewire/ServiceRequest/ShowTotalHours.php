@@ -116,7 +116,8 @@ class ShowTotalHours extends Component
                     $minutesNight = 0;
                     foreach ($period as $key => $minute) {
                         if ($key != 0) {
-                            if ($minute->format('H:i:s') >= '08:00:00' && $minute->format('H:i:s') <= '20:59:00') {
+                            //if ($minute->format('H:i:s') >= '08:00:00' && $minute->format('H:i:s') <= '21:00:00') {
+                            if ($minute->format('H:i') >= '08:01' && $minute->format('H:i') <= '21:00') {
                                 $minutesDay = $minutesDay + 1;
                             } else {
                                 $minutesNight = $minutesNight + 1;

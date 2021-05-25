@@ -298,7 +298,10 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('/preview/{agreement}', 'Agreements\AgreementController@preview')->name('preview');
 
     Route::resource('addendums', 'Agreements\AddendumController');
-    Route::get('/addendum/{file}', 'Agreements\AddendumController@download')->name('addendum.download');
+    Route::post('/addendum/createWord/{addendum}/type/{type}', 'Agreements\WordTestController@createWordDocxAddendum')->name('addendum.createWord');
+    Route::get('/addendum/downloadRes/{addendum}', 'Agreements\AddendumController@downloadRes')->name('addendum.downloadRes');
+    Route::get('/addendum/sign/{addendum}/type/{type}', 'Agreements\AddendumController@sign')->name('addendum.sign');
+    Route::get('/addendum/preview/{addendum}', 'Agreements\AddendumController@preview')->name('addendum.preview');
     Route::resource('programs', 'Agreements\ProgramController');
     Route::resource('municipalities', 'MunicipalityController');
     Route::resource('signers', 'Agreements\SignerController');
