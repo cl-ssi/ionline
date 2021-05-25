@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Documents;
 
+use App\Agreements\Addendum;
 use App\Agreements\Agreement;
 use App\Documents\Document;
 use App\Http\Controllers\Controller;
@@ -170,6 +171,11 @@ class SignatureController extends Controller
             if ($request->has('agreement_id')) {
                 $agreement = Agreement::find($request->agreement_id);
                 $request->signature_type == 'visators' ? $agreement->update(['file_to_endorse_id' => $signaturesFileDocumentId, 'file_to_sign_id' => null]) : $agreement->update(['file_to_sign_id' => $signaturesFileDocumentId]);
+            }
+
+            if ($request->has('addendum_id')) {
+                $addendum = Addendum::find($request->addendum_id);
+                $request->signature_type == 'visators' ? $addendum->update(['file_to_endorse_id' => $signaturesFileDocumentId, 'file_to_sign_id' => null]) : $addendum->update(['file_to_sign_id' => $signaturesFileDocumentId]);
             }
 
             //Envía los correos correspondientes

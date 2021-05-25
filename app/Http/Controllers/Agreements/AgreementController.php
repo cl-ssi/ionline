@@ -134,7 +134,7 @@ class AgreementController extends Controller
      */
     public function show(Agreement $agreement)
     {
-        $agreement->load('authority.user', 'commune.establishments', 'referrer', 'fileToEndorse', 'fileToSign');
+        $agreement->load('authority.user', 'commune.establishments', 'referrer', 'fileToEndorse', 'fileToSign', 'addendums');
         $municipality = Municipality::where('commune_id', $agreement->commune->id)->first();
         $establishment_list = unserialize($agreement->establishment_list);
         $referrers = User::all()->sortBy('name');
@@ -370,8 +370,8 @@ class AgreementController extends Controller
         $signature->document_type = 'Convenios';
         $signature->type = $type;
         $signature->agreement_id = $agreement->id;
-        $signature->subject = 'Convenio programa '.$programa;
-        $signature->description = 'Documento convenio de ejecución del programa '.$programa.' año '.$agreement->period;
+        $signature->subject = 'Convenio programa '.$programa.' comuna de '.$agreement->commune->name;
+        $signature->description = 'Documento convenio de ejecución del programa '.$programa.' año '.$agreement->period.' comuna de '.$agreement->commune->name;
         $signature->endorse_type = 'Visación en cadena de responsabilidad';
         $signature->recipients = 'sdga.ssi@redsalud.gov.cl,jurídica.ssi@redsalud.gov.cl,cxhenriquez@gmail.com,'.$agreement->referrer->email.',natalia.rivera.a@redsalud.gob.cl,apoyo.convenioaps@redsalud.gob.cl,pablo.morenor@redsalud.gob.cl,finanzas.ssi@redsalud.gov.cl,jaime.abarzua@redsalud.gov.cl,aps.ssi@redsalud.gob.cl';
         $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;

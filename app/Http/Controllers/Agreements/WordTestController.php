@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Agreements;
 
+use App\Agreements\Addendum;
 use Illuminate\Http\Request;
 use App\Agreements\Agreement;
 use App\Agreements\Program;
@@ -165,10 +166,6 @@ class WordTestController extends Controller
     {
         // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
         $agreements     = Agreement::with('Program','Commune','agreement_amounts','authority', 'referrer')->where('id', $id)->first();
-        // $stage          = Stage::where('agreement_id', $id)->first();
-        // $components     = ProgramComponent::where('program_id', $agreements->program_id)->get();
-        // $amounts        = AgreementAmount::with('program_component')->Where('agreement_id', $id)->get();
-        // $quotas         = AgreementQuota::Where('agreement_id', $id)->get();
         $municipality   = Municipality::where('commune_id', $agreements->Commune->id)->first();
         $file           = Storage::disk('')->path($agreements->file);
         $meses          = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -267,6 +264,105 @@ class WordTestController extends Controller
         return response()->download(storage_path('app/public/Prev-Resolucion.docx'))->deleteFileAfterSend(true);
     }
 
+    public function createWordDocxAddendum(Request $request, Addendum $addendum, $type)
+    {
+        $addendum->load('agreement.program','agreement.commune', 'referrer', 'director');
+        $municipality   = Municipality::where('commune_id', $addendum->agreement->commune->id)->first();
+
+        if($type == 'addendum'){
+    	    $templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/addendum2021.docx'));
+        } else { // Resolucion Addedum
+            // Se abren los archivos doc para unirlos en uno solo en el orden en que se lista a continuacion
+            $templateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionaddendumhead.docx'));
+            $midTemplateProcessor = new OpenTemplateProcessor(Storage::disk('')->path($addendum->file)); //addendum doc
+            $templateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionaddendumfooter.docx'));
+            // Se asigna director quien firma la resolución, no necesariamente tiene que ser el mismo quien firmó el addendum
+            $signer = Signer::find($request->signer_id);
+            $addendum->director = $signer->user;
+            $addendum->director_appellative = $signer->appellative;
+            $addendum->director_decree = $signer->decree;
+            // No se guarda los cambios en el addendum ya que es solo para efectos de generar el documento
+        }
+
+        $first_word = explode(' ',trim($addendum->agreement->program->name))[0];
+        $programa = $first_word == 'Programa' ? substr(strstr($addendum->agreement->program->name," "), 1) : $addendum->agreement->program->name;
+        $ilustre = !Str::contains($municipality->name_municipality, 'ALTO HOSPICIO') ? 'ILUSTRE': null;
+        $municipalidad = $municipality->name_municipality;
+        $fechaAddendum = $this->formatDate($addendum->date);
+        $fechaConvenio = $this->formatDate($addendum->agreement->date);
+        $fechaResolucionConvenio = $this->formatDate($addendum->agreement->res_exempt_date);
+        $directorApelativo = $addendum->director_appellative;
+        //construir nombre director
+        $first_name = explode(' ',trim($addendum->director->name))[0];
+        $director = mb_strtoupper($first_name . ' ' . $addendum->director->fathers_family . ' ' . $addendum->director->mothers_family);
+        $directorNationality = Str::contains($addendum->director_appellative, 'a') ? 'chilena' : 'chileno';
+
+        $alcaldeNationality = Str::endsWith($addendum->representative_appellative, 'a') ? 'chilena' : 'chileno';
+
+		$templateProcessor->setValue('programaTitulo', mb_strtoupper($programa));
+		$templateProcessor->setValue('programa', $programa);
+		$templateProcessor->setValue('periodoConvenio', $addendum->agreement->period);
+        $templateProcessor->setValue('ilustreTitulo', $ilustre);
+        $templateProcessor->setValue('municipalidad', $municipalidad);
+        $templateProcessor->setValue('municipalidadDirec', $addendum->agreement->municipality_adress);
+        $templateProcessor->setValue('fechaAddendum', $fechaAddendum);
+        $templateProcessor->setValue('fechaConvenio', $fechaConvenio); // Cambiar formato d de m y
+        $templateProcessor->setValue('numResolucionConvenio', $addendum->agreement->res_exempt_number);
+        $templateProcessor->setValue('fechaResolucionConvenio', $fechaResolucionConvenio);
+        $templateProcessor->setValue('directorApelativo', $directorApelativo);
+        $templateProcessor->setValue('director', $director);
+        $templateProcessor->setValue('directorNationality', $directorNationality);
+        $templateProcessor->setValue('directorRut', mb_strtoupper($addendum->director->runFormat()));
+        $templateProcessor->setValue('directorDecreto', $addendum->director_decree);
+        $templateProcessor->setValue('comuna', $addendum->agreement->commune->name);
+        $templateProcessor->setValue('comunaRut', $municipality->rut_municipality);
+        $templateProcessor->setValue('ilustre', ucfirst(mb_strtolower($ilustre)));
+        $templateProcessor->setValue('alcaldeApelativo', $addendum->representative_appellative);
+        $templateProcessor->setValue('alcalde', mb_strtoupper($addendum->representative));
+        $templateProcessor->setValue('alcaldeNationality', $alcaldeNationality);
+        $templateProcessor->setValue('alcaldeRut', $addendum->representative_rut);
+        $templateProcessor->setValue('alcaldeDecreto', $addendum->representative_decree);
+
+        $templateProcessor->setValue('numResolucion', $addendum->agreement->number);
+        $templateProcessor->setValue('yearResolucion', $addendum->agreement->resolution_date != NULL ? date('Y', strtotime($addendum->agreement->resolution_date)) : '');
+        $templateProcessor->setValue('fechaResolucion', $this->formatDate($addendum->agreement->resolution_date));
+        $templateProcessor->setValue('numResourceResolucion', $addendum->agreement->res_resource_number);
+        $templateProcessor->setValue('yearResourceResolucion', $addendum->agreement->res_resource_date != NULL ? date('Y', strtotime($addendum->agreement->res_resource_date)) : '');
+        $templateProcessor->setValue('fechaResourceResolucion', $this->formatDate($addendum->agreement->res_resource_date));
+
+        if($type != 'addendum'){ //resolucion addendum
+            // TEMPLATE MERGE
+            // extract internal xml from template that will be merged inside main template
+            $innerXml = $midTemplateProcessor->tempDocumentMainPart; //contenido addendum
+            $innerXml = preg_replace('/^[\s\S]*<w:body>(.*)<\/w:body>.*/', '$1', $innerXml);
+            
+            //remove signature blocks
+            $innerXml = Str::beforeLast($innerXml, 'addendum');
+            $innerXml .= 'addendum.</w:t></w:r></w:p>';
+            // dd($innerXml);
+            $templateProcessorEnd->setValue('ilustre', ucfirst(mb_strtolower($ilustre)));
+            $templateProcessorEnd->setValue('comuna', $addendum->agreement->commune->name);
+            $templateProcessorEnd->setValue('emailReferrer', $addendum->referrer != null ? $addendum->referrer->email : '');
+            $mainXmlEnd = $templateProcessorEnd->tempDocumentMainPart;
+            $mainXmlEnd = preg_replace('/^[\s\S]*<w:body>(.*)<\/w:body>.*/', '$1', $mainXmlEnd);
+
+            // remove tag containing header, footer, images
+            // $mainXmlEnd = preg_replace('/<w:sectPr>.*<\/w:sectPr>/', '', $mainXmlEnd);
+
+            // inject internal xml inside main template 
+            $mainXml = $templateProcessor->tempDocumentMainPart;
+    
+            $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br/></w:r></w:p>' . $innerXml . '</w:body>', $mainXml);
+            $mainXml = preg_replace('/<\/w:body>/', '<w:p><w:r><w:br/></w:r></w:p>' . $mainXmlEnd . '</w:body>', $mainXml);
+
+            $templateProcessor->__set('tempDocumentMainPart', $mainXml);
+        }
+        
+        $download_path = 'app/public/Prev-'. ($type != 'addendum' ? 'Resolucion-' : '') .'Addendum.docx';
+        $templateProcessor->saveAs(storage_path($download_path));
+        return response()->download(storage_path($download_path))->deleteFileAfterSend(true);
+    }
+
 
     public function ordinal($n){
         $ordinales = array('primera','segunda','tercera','cuarta','quinta','sexta','septima','octava','novena','decima','onceava','doceava');
@@ -283,6 +379,12 @@ class WordTestController extends Controller
         // verificamos si antes de cerrar en pesos la ultima palabra termina en Millón o Millones, de ser así se agregar "de" antes de cerrar con pesos
         $words_amount = explode(' ',trim($amount_text));
         return ($words_amount[count($words_amount) - 2] == 'Millon' || $words_amount[count($words_amount) - 2] == 'Millones') ? substr_replace($amount_text, 'de ', (strlen($amount_text) - 5), 0) : $amount_text;
+    }
+
+    public function formatDate($date)
+    {
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+        return date('j', strtotime($date)).' de '.$meses[date('n', strtotime($date))-1].' del año '.date('Y', strtotime($date));
     }
 
 }
