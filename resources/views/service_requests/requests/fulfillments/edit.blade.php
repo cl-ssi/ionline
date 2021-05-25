@@ -160,8 +160,7 @@
     if (this.value == "Renuncia voluntaria") {
       $('.start_date').attr('readonly', true);
       $('.start_hour').attr('readonly', true);
-      $('.end_hour').attr('readonly', true);            
-      $('.salida').append(' (último día trabajado)');
+      $('.end_hour').attr('readonly', true);                 
       
       
     }
@@ -169,6 +168,15 @@
       $('.start_date').attr('readonly', true);
       $('.start_hour').attr('readonly', true);
       $('.end_hour').attr('readonly', true);
+    }
+
+    if (this.value == "Término de contrato anticipado") {
+      $('.start_date').attr('readonly', true);
+      $('.start_hour').attr('readonly', true);
+      $('.end_hour').attr('readonly', true);
+      
+      
+      
     }
 
     // start_date
