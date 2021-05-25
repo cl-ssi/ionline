@@ -4,7 +4,7 @@
     <div class="form-row">
       <fieldset class="form-group col-12 col-md-4">
         <label for="for_type">Tipo</label>
-        <select name="type" wire:model="type" class="form-control for_type" required>
+        <select name="type" wire:model.lazy="type" class="form-control for_type" required>
           <option value=""></option>
           <option value="Inasistencia Injustificada">INASISTENCIA INJUSTIFICADA</option>
           <option value="Licencia médica">LICENCIA MÉDICA COVID</option>
