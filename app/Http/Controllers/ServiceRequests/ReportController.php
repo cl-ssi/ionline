@@ -71,6 +71,7 @@ class ReportController extends Controller
   public function payed(Request $request)
   {
     $establishment_id = $request->establishment_id;
+    $service_request_id = $request->service_request_id;
 
     $payed_fulfillments1 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
       $subQuery->where('has_resolution_file', 1);
@@ -78,6 +79,11 @@ class ReportController extends Controller
       ->when($establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
           $subQuery->where('establishment_id', $establishment_id);
+        });
+      })
+      ->when($service_request_id != null, function ($q) use ($service_request_id) {
+        return $q->whereHas("ServiceRequest", function ($subQuery) use ($service_request_id) {
+          $subQuery->where('id', $service_request_id);
         });
       })
       ->where('has_invoice_file', 1)
@@ -94,6 +100,11 @@ class ReportController extends Controller
       ->when($request->establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
           $subQuery->where('establishment_id', $establishment_id);
+        });
+      })
+      ->when($service_request_id != null, function ($q) use ($service_request_id) {
+        return $q->whereHas("ServiceRequest", function ($subQuery) use ($service_request_id) {
+          $subQuery->where('id', $service_request_id);
         });
       })
       ->where('has_invoice_file', 1)
