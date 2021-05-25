@@ -80,7 +80,7 @@
                 </tr>
               </thead>
               <tbody>
-                  @foreach($inProgresRequestForms as $requestForm)
+                  @foreach($inProgressRequestForms as $requestForm)
                         <tr>
                             <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
                             <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
