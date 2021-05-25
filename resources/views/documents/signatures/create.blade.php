@@ -18,6 +18,11 @@
             <input type="hidden" name="signature_type" value="{{$signature->type}}">
         @endif
 
+        @if(isset($signature->addendum_id))
+            <input type="hidden" name="addendum_id" value="{{$signature->addendum_id}}">
+            <input type="hidden" name="signature_type" value="{{$signature->type}}">
+        @endif
+
         <div class="form-row">
 
             <fieldset class="form-group col-3">
