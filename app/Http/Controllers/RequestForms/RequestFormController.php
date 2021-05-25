@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use App\Mail\RequestFormDirectorNotification;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -40,7 +41,7 @@ class RequestFormController extends Controller{
     public function leadershipIndex(){
         $ou = Authority::getAmIAuthorityFromOu(Carbon::now(),'manager',auth()->user()->id);
         if(empty($ou)){
-            session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().', no es Autoridad!');
+            session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no es Autoridad en su U.O. ('.auth()->user()->organizationalUnit->name.')');
             return redirect()->route('request_forms.index');
         }
         else{
@@ -61,19 +62,34 @@ class RequestFormController extends Controller{
             $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
         else
             $manager = $manager->user->getFullNameAttribute();
-        return view('request_form.leadership_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit'));
+        $eventType = 'leader_ship_event';
+        return view('request_form.leadership_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit', 'eventType'));
     }
 
     public function financeIndex(){
         $ou = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->user()->id);
         if(empty($ou)){
-            session()->flash('danger', 'Usuario no es Autoridad!');
+            session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('40').'.');
             return redirect()->route('request_forms.index');
         }elseif($ou[0]->organizational_unit_id != '40' ){
             session()->flash('danger', 'Usuario no pertenece a Finanzas!');
             return redirect()->route('request_forms.index');
-        }else{$requestForms = RequestForm::all();}
-            return view('request_form.finance_index', compact('requestForms'));
+        }else{
+            $inProgressrequestForms = RequestForm::where('status', 'in_progress')
+                                       ->whereHas('eventRequestForms', function ($q) {
+                                                    $q->where('event_type','leader_ship_event')
+                                                      ->where('status', 'approved');
+                                                    })->get();
+            $rejectedRequestForms   = RequestForm::where('status', 'rejected')->get();
+
+            $financeAprovedRequestForms    = RequestForm::where('status', 'in_progress')
+                                       ->whereHas('eventRequestForms', function ($q) {
+                                                    $q->where('event_type','finance_event')
+                                                      ->where('status', 'approved');
+                                                    })->get();
+
+            return view('request_form.finance_index', compact('inProgressrequestForms', 'rejectedRequestForms', 'financeAprovedRequestForms'));
+          }
     }
 
     public function financeSign(RequestForm $requestForm){
@@ -84,7 +100,8 @@ class RequestFormController extends Controller{
           $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
       else
           $manager = $manager->user->getFullNameAttribute();
-      return view('request_form.finance_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit'));
+      $eventType = 'finance_event';
+      return view('request_form.finance_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit', 'eventType'));
     }
 
     public function supplyIndex(){

@@ -177,7 +177,7 @@
             </tbody>
             <tfoot>
               <tr>
-                <td colspan="5" rowspan="2"></td>
+                <td colspan="6" rowspan="2"></td>
                 <td colspan="3">Cantidad de Items</td>
                 <td colspan="3">{{count($items)}}</td>
               </tr>

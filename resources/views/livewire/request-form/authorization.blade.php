@@ -22,7 +22,7 @@
             <button type="button" wire:click="acceptRequestForm" class="btn btn-primary btn-sm float-right">Autorizar</button>
           </div>
           <div class="col-1">
-            <button type="button" wire:click="cancelRequestService" class="btn btn-secondary btn-sm float-right">Rechazar</button>
+            <button type="button" wire:click="rejectRequestForm" class="btn btn-secondary btn-sm float-right">Rechazar</button>
           </div>
         </div><!-- FILA 4 --><!--Valida la variable error para que solo contenga validación de los Items-->
 </div>

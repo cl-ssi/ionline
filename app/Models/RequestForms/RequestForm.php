@@ -67,10 +67,20 @@ class RequestForm extends Model
       if(!is_null($this->eventRequestForms()->where('status', 'approved')->where('event_type',$event_type)->first()))
         return '<i class="text-success fas fa-check"></i>';//aprovado
       elseif(!is_null($this->eventRequestForms()->where('status', 'rejected')->where('event_type',$event_type)->first()))
-        return '<i class="text-danger .fas fa-exclamation"></i>';//rechazado
+        return '<i class="text-danger fas fa-ban"></i>';//rechazado
       else
         return '<i class="text-primary fas fa-hourglass-half"></i>';//en espera
     }
+
+    public function eventSingStatus($event_type){
+      if(!is_null($this->eventRequestForms()->where('status', 'approved')->where('event_type',$event_type)->first()))
+        return 'approved';//aprovado
+      elseif(!is_null($this->eventRequestForms()->where('status', 'rejected')->where('event_type',$event_type)->first()))
+        return 'rejected';//rechazado
+      else
+        return 'created';//en espera
+    }
+
 
     /*
     public function getFormatEstimatedExpenseAttribute()

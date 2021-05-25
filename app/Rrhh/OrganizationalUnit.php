@@ -67,6 +67,10 @@ class OrganizationalUnit extends Model
         return $initials;
     }
 
+    public static function getName($id){
+      return OrganizationalUnit::where('id', $id)->first()->name;
+    }
+
     /**
      * The attributes that should be mutated to dates.
      *
