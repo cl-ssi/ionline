@@ -490,6 +490,8 @@
 
           <option value="Nutricionista turno" @if($serviceRequest->rrhh_team == "Nutricionista turno") selected @endif>Nutricionista turno</option>
           <option value="Informático" @if($serviceRequest->rrhh_team == "Informático") selected @endif>Informático</option>
+          <option value="Ingeniero" @if($serviceRequest->rrhh_team == "Ingeniero") selected @endif>Ingeniero</option>
+          
 
         </select>
     </fieldset>
