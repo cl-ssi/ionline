@@ -129,6 +129,7 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 Route::post('/{signaturesFlow}/firma', 'FirmaDigitalController@signPdfFlow')->name('signPdfFlow');
 Route::post('/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
+Route::get('/validador', 'Documents\SignatureController@verify')->name('verifyDocument');
 Route::get('/test-firma/{otp}', 'FirmaDigitalController@test');
 
 
@@ -376,11 +377,11 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
            Route::get('/myshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShift'])->name('shiftManag.myshift')->middleware('auth');
         Route::post('/myshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShift'])->name('shiftManag.myshiftfiltered')->middleware('auth');
 
-        
+
 
         Route::get('/shift-control-form/download', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'downloadShiftControlInPdf'])->name('shiftManag.downloadform')->middleware('auth');
-        
-     
+
+
         Route::post('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'indexfiltered'])->name('shiftManag.indexF')->middleware('auth');
         Route::post('/assign', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'assignStaff'])->name('shiftsTypes.assign')->middleware('auth');
         Route::post('/deleteassign', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'assignStaff'])->name('shiftsTypes.deleteassign')->middleware('auth');
@@ -392,9 +393,9 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/editshifttype/{id}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'editshifttype'])->name('shiftsTypes.edit')->middleware('auth');
         Route::post('/updateshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'updateshifttype'])->name('shiftsTypes.update')->middleware('auth');
         Route::post('/storeshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'storenewshift'])->name('shiftsTypes.store')->middleware('auth');
-        
 
-        
+
+
         Route::get('/{groupname?}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftManag.index')->middleware('auth');
     });
 
@@ -678,7 +679,6 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     });
     Route::resource('partes', 'Documents\ParteController');
 
-    Route::get('signatures/verify', 'Documents\SignatureController@verify')->name('signatures.verify');
     Route::get('signatures/index/{tab}', 'Documents\SignatureController@index')->name('signatures.index');
     Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
     Route::get('/showPdf/{signaturesFile}/{timestamp?}', 'Documents\SignatureController@showPdf')->name('signatures.showPdf');
@@ -1258,11 +1258,11 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         // Route::get('/create', [OptionsController::class, 'create'])->name('create');
         // Route::post('/store', [OptionsController::class, 'store'])->name('store');
     });
-    
+
     Route::post('/livewire/message/rrhh.change-shift-day-status', [\App\Http\Livewire\Rrhh\ChangeShiftDayStatus::class]);
     Route::post('/livewire/message/rrhh/change-shift-day-status', [\App\Http\Livewire\Rrhh\ChangeShiftDayStatus::class]);
     // Route::post('livewire/message/rrhh.change-shift-day-status', [\App\Livewire\Rrhh\ChangeShiftDayStatus::class]);+
-    
+
 
 
 });
