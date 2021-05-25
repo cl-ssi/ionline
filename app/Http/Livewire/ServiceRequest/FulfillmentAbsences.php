@@ -139,6 +139,11 @@ class FulfillmentAbsences extends Component
             $this->select_start_hour = 'disabled';
             $this->select_end_hour = 'disabled';
             break;
+          case 'Término de contrato anticipado':
+            $this->select_start_date = 'disabled';
+            $this->select_start_hour = 'disabled';
+            $this->select_end_hour = 'disabled';
+            break;
           default:
             break;
         }
