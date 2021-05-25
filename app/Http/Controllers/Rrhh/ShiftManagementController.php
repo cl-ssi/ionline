@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use App\User;
+use App\Holiday;
 use App\Models\Rrhh\ShiftTypes;
 use App\Models\Rrhh\ShiftUser;
 use App\Models\Rrhh\ShiftUserDay;
@@ -121,10 +122,12 @@ class ShiftManagementController extends Controller
         // echo "SISH: ". $staffInShift;
         
         $months = $this->months;
-
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        $holidays = Holiday::all();
         
         $filter ="";
         Session::put('users',$users);
+        Session::put('ouRoots',$ouRoots);
         Session::put('cargos',$cargos);
         Session::put('sTypes',$sTypes);
         Session::put('days',$days);
@@ -143,7 +146,7 @@ class ShiftManagementController extends Controller
         if(!isset($groupname) || $groupname =="")
             $groupname = $this->groupsnames[0];
         $groupsnames =$this->groupsnames;
-        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter','groupname','groupsnames'));
+        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter','groupname','groupsnames','ouRoots','holidays'));
     }
 
  	public function indexfiltered(Request $r){
@@ -193,7 +196,7 @@ class ShiftManagementController extends Controller
         return redirect()->route('rrhh.shiftManag.index',["groupname"=>Session::get('groupname')]);
 
             // return redirect('/rrhh/shift-management/'.Session::get('groupname'));
-        
+
         // return view('rrhh.shift_management.index', compact('cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter'));
  	}
 
