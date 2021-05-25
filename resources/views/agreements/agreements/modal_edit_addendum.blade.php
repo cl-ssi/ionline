@@ -8,21 +8,34 @@
             <form method="post" id="form-edit" enctype="multipart/form-data">
                 <div class="modal-body">
                     {{ method_field('PUT') }} {{ csrf_field() }}
-
-                    <div class="form-group">
-                        <label for="number" class="col-form-label">Numero:</label>
-                        <input type="text" class="form-control" name="number">
-                    </div>
                     
                     <div class="form-group">
-                        <label for="date" class="col-form-label">Date:</label>
-                        <input type="date" class="form-control" name="date">
+                        <label for="date" class="col-form-label">Fecha</label>
+                        <input type="date" class="form-control" name="date" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="for">Archivo</label>
+                        <label for="for">Archivo Addendum Final formato Wordx</label>
                         <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="forfile" name="file" placeholder="Seleccionar Archivo">
+                          <input type="file" class="custom-file-input" id="forfile" name="file" placeholder="Seleccionar Archivo" accept=".doc, .docx">
+                          <label class="custom-file-label" for="forfile">Seleccionar Archivo</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="number" class="col-form-label">Fecha Resolución Exenta del Addendum</label>
+                        <input type="date" class="form-control" name="res_date">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="number" class="col-form-label">Número Resolución Exenta del Addendum</label>
+                        <input type="number" class="form-control" name="res_number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="for">Archivo Resolución Final PDF SSI</label>
+                        <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="forfile" name="res_file" placeholder="Seleccionar Archivo" accept="application/pdf">
                           <label class="custom-file-label" for="forfile">Seleccionar Archivo</label>
                         </div>
                     </div>

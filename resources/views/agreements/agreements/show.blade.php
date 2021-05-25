@@ -7,7 +7,7 @@
 @include('agreements/nav')
 
 
-<h3 class="mb-3">Ver detalle de Convenio
+<h3 class="mb-3">Ver detalle de Convenio #{{$agreement->id}}
     @can('Agreement: delete')
 		<form method="POST" action="{{ route('agreements.destroy', $agreement->id) }}" onclick="return confirm('¿Está seguro/a de eliminar este convenio?');" class="d-inline">
 			{{ method_field('DELETE') }} {{ csrf_field() }}
@@ -44,7 +44,7 @@
 
     @if($agreement->file != null)
     <li>
-        <a class="nav-link text-secondary" href="{{ route('agreements.preview', $agreement->id) }}" target="blank"><i class="fas fa-eye"></i> Previsualizar el convenio</a>
+        <a class="nav-link text-secondary" href="{{ route('agreements.preview', $agreement->id) }}" target="blank"><i class="fas fa-eye"></i> Previsualizar convenio</a>
     </li>
     @endif
 
@@ -241,20 +241,6 @@
             </div>
             <hr class="mt-2 mb-3"/>
             <div class="form-row">
-                <!-- <fieldset class="form-group col-3">
-                    <label for="for">Archivo Convenio PDF
-                        @if($agreement->fileAgreeEnd != null)  
-                            <a class="text-info" href="{{ route('agreements.downloadAgree', $agreement->id) }}" target="_blank">
-                                <i class="fas fa-paperclip"></i> adjunto
-                            </a>
-                        @endif
-                    </label>
-                    <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="forfile" name="fileAgreeEnd">
-                      <label class="custom-file-label" for="forfile">Seleccionar Archivo </label>
-                     <small class="form-text text-muted">* Adjuntar versión final de Covenio</small>
-                    </div>
-                </fieldset> -->
                 <fieldset class="form-group col-3">
                     <label for="fornumber">Número Resolución Exenta del Convenio</label>
                     <input type="integer" name="res_exempt_number" class="form-control" id="fornumber" value="{{ $agreement->res_exempt_number }}" >
@@ -558,14 +544,11 @@
     </div>
 
     <div class="card mt-3 small">
-        <div class="card-header">
-            <form method="POST" action="{{ route('agreements.quotaAutomatic.update', $agreement->id) }}" class="d-inline float-right">
+        <div class="card-body">
+            <h5>Cuotas <form method="POST" action="{{ route('agreements.quotaAutomatic.update', $agreement->id) }}" class="d-inline float-right small">
                 {{ method_field('PUT') }} {{ csrf_field() }}
                 <button class="btn btn-sm btn-outline-primary" onclick="return confirm('¿Desea realmente calcular las cuotas automaticamente?')"><i class="fas fa-sync"></i> Calculo Automático</button></button> <!-- onclick="return confirm('¿Desea eliminar el componente realmente?')-->
-            </form>
-        </div>
-        <div class="card-body">
-            <h5>Cuotas</h5>
+            </form></h5>
 
             <table class="table table-sm table-hover">
                 <thead>
@@ -606,20 +589,26 @@
     </div>
 
 
-@foreach($agreement->stages as $stage)
-    @if($stage->type == 'OfParte' AND $stage->group == 'RES' AND $stage->dateEnd != null)
+
+    @if($agreement->fileResEnd != null)
     <div class="card mt-3 small">
         <div class="card-body">
-            <h5>Addendum</h5>
+            <h5>Addendums
+            <button class="btn btn-sm btn-outline-primary float-right" data-toggle="modal"
+                                data-target="#addModalAddendum"
+                                data-formaction="{{ route('agreements.addendums.store' )}}">
+                            <i class="fas fa-plus"></i> Nuevo Addendum</button></h5>
 
             <table class="table table-sm table-hover">
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Número</th>
                         <th>Fecha</th>
-                        <th>Ingresado</th>
-                        <th>Archivo Addeundum</th>
+                        <th>Referente</th>
+                        <th>Director/a a cargo</th>
+                        <th>Representante alcalde</th>
+                        <th>Fecha Res.</th>
+                        <th>N° Res.</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -627,71 +616,60 @@
                     @foreach($agreement->addendums as $addendum)
                     <tr>
                         <td>{{ $addendum->id }}</td>
-                        <td>{{ $addendum->number }}</td>
-                        <td>{{ $addendum->date->format('d-m-Y') }}</td>
-                        <td>{{ $addendum->created_at->format('d-m-Y H:i') }}</td>
-                        <td>
-                             <a class="text-info" href="{{ route('agreements.addendum.download', $addendum->id) }}" target="_blank">
-                                <i class="fas fa-paperclip"></i> Adjunto
+                        <td>{{ $addendum->date ? $addendum->date->format('d-m-Y') : '' }}</td>
+                        <td>{{ $addendum->referrer->fullName ?? ''}}</td>
+                        <td>{{ $addendum->director->fullName ?? '' }}</td>
+                        <td>{{ $addendum->representative }}</td>
+                        <td>{{ $addendum->res_date ? $addendum->res_date->format('d-m-Y') : '' }}</td>
+                        <td>{{ $addendum->res_number }}
+                            @if($addendum->res_file)
+                             <a class="text-info" href="{{ route('agreements.addendum.downloadRes', $addendum) }}" target="_blank">
+                                <i class="fas fa-paperclip"></i>
                             </a>
+                            @endif
                         </td>
                         <td class="text-right">
                             <button class="btn btn-sm btn-outline-secondary" data-toggle="modal"
                                 data-target="#editModalAddendum"
-                                data-number="{{ $addendum->number }}"
-                                data-date="{{ $addendum->date->format('Y-m-d') }}"
-                                data-formaction="{{ route('agreements.addendums.update', $addendum->id )}}">
+                                data-date="{{ $addendum->date ? $addendum->date->format('Y-m-d') : '' }}"
+                                data-res_number="{{ $addendum->res_number }}"
+                                data-res_date="{{ $addendum->res_date ? $addendum->res_date->format('Y-m-d') : '' }}"
+                                data-formaction="{{ route('agreements.addendums.update', $addendum )}}">
                             <i class="fas fa-edit"></i></button>
+                            <a class="btn btn-sm btn-outline-secondary" href="#" data-toggle="tooltip" data-placement="top" title="Descargar borrador Addendum"
+                                onclick="event.preventDefault(); document.getElementById('submit-form-addendum-{{$addendum->id}}').submit();"><i class="fas fa-file-download"></i></a>
+                            <form id="submit-form-addendum-{{$addendum->id}}" action="{{ route('agreements.addendum.createWord', [$addendum, 'addendum']) }}" method="POST" hidden>@csrf</form>
+                            @if($addendum->file != null)
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.preview', $addendum) }}" target="blank" data-toggle="tooltip" data-placement="top" title="Previsualizar Addendum"><i class="fas fa-eye"></i></a>
+                            @endif
+                            @canany(['Documents: signatures and distribution'])
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.sign', [$addendum, 'visators']) }}" data-toggle="tooltip" data-placement="top" title="Solicitar visación Addendum"><i class="fas fa-file-signature"></i></a>
+                            @if($addendum->fileToEndorse && $addendum->fileToEndorse->HasAllFlowsSigned)
+                            <a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$addendum->file_to_endorse_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver addendum visado"><i class="fas fa-eye"></i></a> 
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.sign', [$addendum, 'signer']) }}" data-toggle="tooltip" data-placement="top" title="Solicitar firma Addendum"><i class="fas fa-file-signature"></i></a> 
+                            @endif
+                            @if($addendum->fileToSign && $addendum->fileToSign->HasAllFlowsSigned)
+                            <a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$addendum->file_to_sign_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver addendum firmado"><i class="fas fa-eye"></i></a> 
+                            <span data-toggle="modal" data-target="#selectSignerRes" data-formaction="{{ route('agreements.addendum.createWord', [$addendum, 'res'] )}}">
+                                <a href="#" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Descargar borrador Resolución Addendum"><i class="fas fa-file-download"></i></a>
+                            </span>
+                            @endif
+                            @endcan
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-
-            @if ($agreement->addendums->isEmpty())
-            <form method="POST" class="form-horizontal" action="{{ route('agreements.addendums.store') }}" enctype="multipart/form-data">
-                <div class="form-row">
-
-                    @csrf
-                    @method('POST')
-                    <input type="hidden" name="agreement_id" value="{{$agreement->id}}">
-
-                    <fieldset class="form-group col-3">
-                        <label for="fornumber">Número</label>
-                        <input type="integer" class="form-control" id="fornumber" placeholder="Número de resolución" name="number" required="required">
-                    </fieldset>
-
-                    <fieldset class="form-group col-3">
-                        <label for="fordate">Fecha</label>
-                        <input type="date" class="form-control" id="fordate" name="date" required="required">
-                    </fieldset>
-
-                    <fieldset class="form-group col-6">
-                        <label for="fordate">Archivo</label>
-                        <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="customFile" name="file">
-                          <label class="custom-file-label" for="customFile">Addendum</label>
-                        </div>
-                    </fieldset>
-
-                </div>
-
-                <button type="submit" class="btn btn-primary">Agregar</button>
-
-            </form>
-           
         </div>
-         @endif
 
         
     </div>
     
     @endif
-    
-@endforeach
 
     @include('agreements/agreements/modal_edit_amount')
     @include('agreements/agreements/modal_edit_quota')
+    @include('agreements/agreements/modal_add_addendum')
     @include('agreements/agreements/modal_edit_addendum')
     @include('agreements/agreements/modal_select_signer_res')
 
@@ -702,6 +680,7 @@
 <script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
 <script type="text/javascript">
     $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
         //var jobs = JSON.parse("{{!! json_encode($establishment_list) !!}}");
         var jobs =  @json($establishment_list);
         //console.log(jobs);
@@ -742,12 +721,20 @@
         modal.find("#form-edit").attr('action', button.data('formaction'))
     })
 
+    $('#addModalAddendum').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var modal  = $(this)
+
+        modal.find("#form-add").attr('action', button.data('formaction'))
+    })
+
     $('#editModalAddendum').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var modal  = $(this)
 
-        modal.find('input[name="number"]').val(button.data('number'))
         modal.find('input[name="date"]').val(button.data('date'))
+        modal.find('input[name="res_number"]').val(button.data('res_number'))
+        modal.find('input[name="res_date"]').val(button.data('res_date'))
 
         modal.find("#form-edit").attr('action', button.data('formaction'))
     })
