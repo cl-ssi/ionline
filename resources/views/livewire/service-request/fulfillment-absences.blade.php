@@ -13,6 +13,7 @@
           <option value="Abandono de funciones">ABANDONO DE FUNCIONES</option>
           <option value="Permiso">PERMISO</option>
           <option value="Feriado">FERIADO</option>
+          <option value="Término de contrato anticipado">TÉRMINO DE CONTRATO ANTICIPADO</option>
         </select>
       </fieldset>
       <fieldset class="form-group col-12 col-md">
