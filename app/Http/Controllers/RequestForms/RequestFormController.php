@@ -44,7 +44,8 @@ class RequestFormController extends Controller{
             $manager= '<h6 class="text-danger">'.auth()->user()->organizationalUnit->name.', no registra una Autoridad.</h6>';
         else
             $manager = $manager->user->getFullNameAttribute();
-        return view('request_form.edit', compact('requestForm', 'manager'));
+        $requestForms = RequestForm::all();
+        return view('request_form.edit', compact('requestForm', 'manager', 'requestForms'));
     }
 
     public function leadershipIndex(){
@@ -138,7 +139,8 @@ class RequestFormController extends Controller{
 
 
     public function create(){
-        return  view('request_form.create');
+        $requestForm=null;
+        return  view('request_form.create', compact('requestForm'));
     }
 
 
