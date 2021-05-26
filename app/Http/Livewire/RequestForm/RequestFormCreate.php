@@ -17,7 +17,7 @@ class RequestFormCreate extends Component
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity,
     $unitValue, $taxes, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
     public $purchaseMechanism, $messagePM, $program, $justify, $totalDocument;
-    public $items, $lstBudgetItem, $budget_item_id, $requestForm, $editRF, $deletedItems;
+    public $items, $lstBudgetItem, $budget_item_id, $requestForm, $editRF, $deletedItems, $idRF;
 
     protected $rules = [
         'unitValue'           =>  'required|numeric|min:1',
@@ -62,12 +62,12 @@ class RequestFormCreate extends Component
       $this->justify            =   $this->requestForm->justification;
       $this->purchaseMechanism  =   $this->requestForm->purchase_mechanism;
       $this->editRF             =   true;
+      $this->idRF               =   $this->requestForm->id;
       foreach($this->requestForm->itemRequestForms as $item)
         $this->setRequestService($item);
     }
 
     private function setRequestService($item){
-      //$this->validate();
       $this->items[]=[
             'id'                       => $item->id,
             'article'                  => $item->article,
@@ -210,7 +210,11 @@ class RequestFormCreate extends Component
         ],
       );
 
-      $req = RequestForm::create([
+      $req = RequestForm::updateOrCreate(
+        [
+          'id'                    =>  $this->idRF,
+        ],
+        [
           'justification'         =>  $this->justify,
           'type_form'             =>  '1',
           'creator_user_id'       =>  Auth()->user()->id,
@@ -223,6 +227,7 @@ class RequestFormCreate extends Component
           'program'               =>  $this->program,
           'status'                =>  'created'
       ]);
+      if(true){
       foreach ($this->items as $item) {
         $this->saveItem($item, $req->id);
       }
@@ -230,7 +235,7 @@ class RequestFormCreate extends Component
       EventRequestform::createFinanceEvent($req);
       EventRequestform::createSupplyEvent($req);
       session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue ingresado con exito.');
-      return redirect()->to('/request_forms');
+      return redirect()->to('/request_forms');}
     }
 
     private function saveItem($item, $id){
