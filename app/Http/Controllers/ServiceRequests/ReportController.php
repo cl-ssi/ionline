@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Fulfillment;
+use App\Models\Rrhh\UserBankAccount;
 use App\Rrhh\Authority;
 use Luecano\NumeroALetras\NumeroALetras;
 use Carbon\Carbon;
@@ -238,6 +239,14 @@ class ReportController extends Controller
       ->get();
 
     return view('service_requests.reports.without_bank_details', compact('servicerequests'));
+  }
+
+  public function withBankDetails()
+  {
+
+    $userbankaccounts = UserBankAccount::all();    
+
+    return view('service_requests.reports.with_bank_details', compact('userbankaccounts'));
   }
 
   public function indexWithResolutionFile()

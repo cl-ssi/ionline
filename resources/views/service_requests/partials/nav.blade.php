@@ -153,6 +153,14 @@
                 <i class="fas fa-piggy-bank"></i> Sin Cuentas Bancarias
             </a>
             @endcan -->
+            
+
+            @canany(['Service Request: pending requests'])
+            <a class="dropdown-item {{ active('rrhh.service-request.report.with-bank-details') }}"
+                href="{{ route('rrhh.service-request.report.with-bank-details') }}">
+                <i class="fas fa-money-check-alt"></i> Cuentas Bancarias Honorarios
+            </a>
+            @endcan
 
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.pending-resolutions') }}"
