@@ -83,12 +83,6 @@ class RequestFormCreate extends Component
       $this->cancelRequestService();
     }
 
-
-
-
-
-
-
     public function deleteRequestService($key){
       if($this->editRF && array_key_exists('id',$this->items[$key]))
         $this->deletedItems[]=$this->items[$key]['id'];
@@ -209,7 +203,6 @@ class RequestFormCreate extends Component
           'items.required'               =>  'Debe agregar al menos un Item para Bien y/o Servicio'
         ],
       );
-
       $req = RequestForm::updateOrCreate(
         [
           'id'                    =>  $this->idRF,
@@ -227,19 +220,24 @@ class RequestFormCreate extends Component
           'program'               =>  $this->program,
           'status'                =>  'created'
       ]);
-      if(true){
-      foreach ($this->items as $item) {
+      foreach($this->items as $item){
         $this->saveItem($item, $req->id);
       }
-      EventRequestform::createLeadershipEvent($req);
-      EventRequestform::createFinanceEvent($req);
-      EventRequestform::createSupplyEvent($req);
-      session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue ingresado con exito.');
-      return redirect()->to('/request_forms');}
+      if($editRF){
+        ItemRequestForm::destroy($this->deletedItems[]);
+        session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue editado con exito.');
+      }
+      else{
+        EventRequestform::createLeadershipEvent($req);
+        EventRequestform::createFinanceEvent($req);
+        EventRequestform::createSupplyEvent($req);
+        session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue creado con exito.');
+      }
+      return redirect()->to('/request_forms');
     }
 
     private function saveItem($item, $id){
-        $req = ItemRequestForm::create([
+        $req = ItemRequestForm::updateOrCreate([
             'request_form_id'       =>      $id,
             'article'               =>      $item['article'],
             'unit_of_measurement'   =>      $item['unitOfMeasurement'],
