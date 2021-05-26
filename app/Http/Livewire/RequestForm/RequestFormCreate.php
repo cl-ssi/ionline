@@ -17,7 +17,7 @@ class RequestFormCreate extends Component
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity,
     $unitValue, $taxes, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
     public $purchaseMechanism, $messagePM, $program, $justify, $totalDocument;
-    public $items, $lstBudgetItem, $budget_item_id;
+    public $items, $lstBudgetItem, $budget_item_id, $requestForm, $editRF, $deletedItems;
 
     protected $rules = [
         'unitValue'           =>  'required|numeric|min:1',
@@ -41,17 +41,57 @@ class RequestFormCreate extends Component
         'budget_item_id.required'     => 'Debe seleccionar un Item Presupuestario',
     ];
 
-    public function mount(){
+    public function mount($requestForm){
       $this->purchaseMechanism      = "";
       $this->totalDocument          = 0;
       $this->items                  = array();
+      $this->deletedItems           = array();
       $this->title                  = "Agregar Item";
       $this->edit                   = false;
+      $this->editRF                 = false;
       $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
       $this->lstBudgetItem          = BudgetItem::all();
+      if(!is_null($requestForm)){
+        $this->requestForm = $requestForm;
+        $this->setRequestForm();
+      }
     }
 
+    private function setRequestForm(){
+      $this->program            =   $this->requestForm->program;
+      $this->justify            =   $this->requestForm->justification;
+      $this->purchaseMechanism  =   $this->requestForm->purchase_mechanism;
+      $this->editRF             =   true;
+      foreach($this->requestForm->itemRequestForms as $item)
+        $this->setRequestService($item);
+    }
+
+    private function setRequestService($item){
+      //$this->validate();
+      $this->items[]=[
+            'id'                       => $item->id,
+            'article'                  => $item->article,
+            'unitOfMeasurement'        => $item->unit_of_measurement,
+            'technicalSpecifications'  => $item->specification,
+            'quantity'                 => $item->quantity,
+            'unitValue'                => $item->unit_value,
+            'taxes'                    => $item->tax,
+            'budget_item_id'           => $item->budget_item_id,
+            'totalValue'               => $item->quantity * $item->unit_value,
+    ];
+      $this->totalForm();
+      $this->cancelRequestService();
+    }
+
+
+
+
+
+
+
     public function deleteRequestService($key){
+      if($this->editRF && array_key_exists('id',$this->items[$key]))
+        $this->deletedItems[]=$this->items[$key]['id'];
       unset($this->items[$key]);
       $this->totalForm();
       $this->cancelRequestService();

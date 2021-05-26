@@ -60,11 +60,10 @@
 </div><!-- CARD -->
 <br>
 
-<livewire:request-form.request-form-create />
+<livewire:request-form.request-form-create :requestForm="$requestForm">
+
 </div><!-- CONTENEDOR -->
 
 @endsection
-
 @section('custom_js_head')
-
 @endsection

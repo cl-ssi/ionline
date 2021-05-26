@@ -1,7 +1,11 @@
 <div><!-- LIVEWIRE -->
 
       <div class="card mx-0">
-        <h5 class="card-header text-muted">Formulario de Requerimientos</h5>
+        @if($editRF)
+        <div class="card-header text-primary h6"><i class="far fa-edit"></i> Edición - Formulario de Requerimientos N° {{$requestForm->id}} </div>
+        @else
+        <h6 class="card-header text-primary">Formulario de Requerimientos</h6>
+        @endif
         <div class="card-body mx-0 px-0">
           <div class="row justify-content-md-center mx-0 my-2"><!-- FILA 1 -->
             <div class="form-group col-4">
@@ -47,7 +51,7 @@
 
            <div class="card mx-3 mb-3 mt-0 pt-0">
              <div class="card-body mb-1">
-                 <h5 class="card-subtitle mt-0 mb-2 text-muted">{{$title}}:</h5>
+                 <h6 class="card-subtitle mt-0 mb-2 text-primary">{{$title}}:</h6>
                  <div class="row justify-content-md-center"><!-- FILA 2 -->
                   <div class="form-group col-5">
                     <label for="forRut">Artículo:</label>
@@ -136,7 +140,7 @@
           </div><!-- CARD -->
 
         <div class="mx-3 mb-3 mt-3 pt-0"> <!-- DIV para TABLA-->
-          <h5 class="card-subtitle mt-0 mb-2 text-muted">Bienes y/o Servicios:</h5>
+          <h6 class="card-subtitle mt-0 mb-2 text-primary">Items - Bienes y/o Servicios:</h6>
           <table class="table table-condensed table-hover table-bordered table-sm small">
             <thead>
               <tr>
@@ -167,10 +171,10 @@
                           <td>{{$item['taxes']}}</td>
                           <td>{{$item['totalValue']}}</td>
                           <td align="center">
-                            <a class="btn btn-outline-secondary btn-sm" title="Editar" wire:click="editRequestService({{ $key }})"><i class="fas fa-pencil-alt"></i></a>
+                            <a class="btn btn-outline-primary btn-sm" title="Editar" wire:click="editRequestService({{ $key }})"><i class="fas fa-pencil-alt"></i></a>
                           </td>
                           <td align="center">
-                            <a class="btn btn-outline-secondary btn-sm" title="Eliminar" wire:click="deleteRequestService({{ $key }})"><i class="far fa-trash-alt"></i></a>
+                            <a class="btn btn-outline-danger btn-sm" title="Eliminar" wire:click="deleteRequestService({{ $key }})"><i class="far fa-trash-alt"></i></a>
                           </td>
                       </tr>
               @endforeach
