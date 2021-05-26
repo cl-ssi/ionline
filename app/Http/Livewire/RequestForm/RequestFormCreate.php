@@ -123,6 +123,7 @@ class RequestFormCreate extends Component
     public function addRequestService(){
       $this->validate();
       $this->items[]=[
+            'id'                       => null,
             'article'                  => $this->article,
             'unitOfMeasurement'        => $this->unitOfMeasurement,
             'technicalSpecifications'  => $this->technicalSpecifications,
@@ -223,8 +224,8 @@ class RequestFormCreate extends Component
       foreach($this->items as $item){
         $this->saveItem($item, $req->id);
       }
-      if($editRF){
-        ItemRequestForm::destroy($this->deletedItems[]);
+      if($this->editRF){
+        ItemRequestForm::destroy($this->deletedItems);
         session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue editado con exito.');
       }
       else{
@@ -237,7 +238,11 @@ class RequestFormCreate extends Component
     }
 
     private function saveItem($item, $id){
-        $req = ItemRequestForm::updateOrCreate([
+        $req = ItemRequestForm::updateOrCreate(
+          [
+            'id'                    =>      $item['id'],
+          ],
+          [
             'request_form_id'       =>      $id,
             'article'               =>      $item['article'],
             'unit_of_measurement'   =>      $item['unitOfMeasurement'],
