@@ -473,6 +473,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/payed', [ReportController::class, 'payed'])->name('payed');
             Route::get('/pay-rejected', [ReportController::class, 'payRejected'])->name('pay-rejected');
             Route::get('/without-bank-details', [ReportController::class, 'withoutBankDetails'])->name('without-bank-details');
+            Route::get('/with-bank-details', [ReportController::class, 'withBankDetails'])->name('with-bank-details');
             Route::get('/pending-resolutions', [ReportController::class, 'pendingResolutions'])->name('pending-resolutions');
             Route::get('/resolution-pdf/{ServiceRequest}', [ReportController::class, 'resolutionPDF'])->name('resolution-pdf');
             Route::get('/resolution-pdf-hsa/{ServiceRequest}', [ReportController::class, 'resolutionPDFhsa'])->name('resolution-pdf-hsa');
