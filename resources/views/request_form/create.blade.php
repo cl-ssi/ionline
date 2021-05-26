@@ -18,7 +18,7 @@
 
 <div class="card bg-light">
   <div class="card-body">
-     <h5 class="card-title mb-2 text-muted">Datos del Solicitante:</h5>
+     <h6 class="card-title mb-2 text-primary"><i class="far fa-user"></i> Datos del Solicitante:</h6>
      <div class="row justify-content-md-center"><!-- FILA 1 -->
        <div class="my-2 col-3">
            <label for="forRut" class="form-label">Rut:</label>
