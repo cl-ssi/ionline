@@ -497,11 +497,59 @@ class ShiftManagementController extends Controller
         if(Session::has('users') && Session::get('users') != "")
             $users = Session::get('users');
         else
-           $users = User::Search($r->get('name'))->orderBy('name','Asc')->paginate(500);
+           $users = "";//User::Search($r->get('name'))->orderBy('name','Asc')->paginate(500);
 
+        $status = 4;    
+        $userId = Auth()->user()->id;
+        // echo "aut: ". Auth()->user()->id;
+        //v1
+        /* $myConfirmationEarrings = ShiftUserDay::where("shift_user_id",Auth()->user()->id)->whereHas("shiftUserDayLog", function($q) use($status){
+                                           $q->where('change_type',$status);
+                                         })->get(); */
+        //v2
+       /* $myConfirmationEarrings = ShiftUserDay::where("shift_user_id",Auth()->user()->id)->whereHas("ShiftUser",  function($q) use($userId){
+                $q->where('shift_user_id',$userId);
+            })->whereHas("shiftUserDayLog",  function($q) use($status){
+                $q->where('change_type',$status);
+            })->get();*/
+        $myConfirmationEarrings = ShiftUserDay::where("status",3)->whereHas("ShiftUser",  function($q) use($userId){
+                $q->where('user_id',$userId);
+            })->whereHas("shiftUserDayLog",  function($q) use($status){
+                $q->without('change_type,"4');
+            })->get();
+        
+        $myConfirmationEarrings = ShiftUserDay::where("status",3)->whereHas("ShiftUser",  function($q) use($userId){
+                $q->where('user_id',$userId);
+            })->get();
+
+        $myConfirmationEarrings = array();
+        foreach (ShiftUserDay::where("status",3)->whereHas("ShiftUser",  function($q) use($userId){
+                $q->where('user_id',$userId);
+            })->get() as $myChangeDay) 
+            {
+            // if(  $myChangeDay->whereHas("shiftUserDayLog",  function($q) use($status){
+            //     $q->where('change_type',4);
+            //         })   ){
+
+            //    echo   json_encode( $myChangeDay->whereHas("shiftUserDayLog",  function($q) use($status){
+            //     $q->where('change_type',1);
+            //         }) );
+
+            //     array_push($myConfirmationEarrings, $myChangeDay) ;
+            // }
+                // echo json_encode($myChangeDay->shiftUserDayLog);
+                $confirmed= false;
+                foreach ($myChangeDay->shiftUserDayLog as $history) {
+                   if($history->change_type == 4 || $history->change_type == 5 )
+                        $confirmed= true;
+                }
+                if(!$confirmed)
+                    array_push($myConfirmationEarrings, $myChangeDay) ;
+            }
+            $myConfirmationEarrings = (object) $myConfirmationEarrings;
         $months = $this->months;
 
-         return view('rrhh.shift_management.my-shift',compact('days','actuallyMonth','actuallyDay','actuallyYear','sTypes','users','months'));
+         return view('rrhh.shift_management.my-shift',compact('days','actuallyMonth','actuallyDay','actuallyYear','sTypes','users','months','myConfirmationEarrings'));
     }
 
 }

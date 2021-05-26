@@ -34,7 +34,7 @@
   		<strong>Ninguna</strong> confirmación pendiente!.
 	</div>
 
-    <div class="card ">
+    <div class="card ">{{json_encode($myConfirmationEarrings)}}
   		<div class="card-body">
     		<h5 class="card-title">Día Agregado</h5>
     		<p class="card-text" style="margin-left: 101px"> 
