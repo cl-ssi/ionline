@@ -47,7 +47,7 @@
 
         <fieldset class="form-group col-2">
             <label for="for_rut">Apelativo</label>
-            <select name="appellative_representative" class="form-control selectpicker" data-live-search="true" title="Seleccione..." required>
+            <select name="appellative_representative" class="form-control selectpicker" title="Seleccione..." required>
                 @php($appellativeOptions = array('Alcalde Don', 'Alcaldesa Doña'))
                 @foreach($appellativeOptions as $option)
                 <option value="{{$option}}" @if($municipality->appellative_representative == $option) selected @endif>{{$option}}</option>
@@ -73,8 +73,8 @@
 
         <fieldset class="form-group col-2">
             <label for="for_rut">Apelativo</label>
-            <select name="appellative_representative_surrogate" class="form-control selectpicker" data-live-search="true" title="Seleccione..." required>
-                @php($appellativeOptions = array('Alcalde (S) Don', 'Alcaldesa (S) Doña'))
+            <select name="appellative_representative_surrogate" class="form-control selectpicker" title="Seleccione..." required>
+                @php($appellativeOptions = array('Alcalde Subrogante Don', 'Alcaldesa Subrogante Doña'))
                 @foreach($appellativeOptions as $option)
                 <option value="{{$option}}" @if($municipality->appellative_representative_surrogate == $option) selected @endif>{{$option}}</option>
                 @endforeach
