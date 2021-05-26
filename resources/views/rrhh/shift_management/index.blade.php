@@ -159,28 +159,28 @@
                         @foreach($ouRoots as $ouRoot)
                             @if($ouRoot->name != 'Externos')
                                 <option value="{{ $ouRoot->id }}"  {{($ouRoot->id==$actuallyOrgUnit->id)?'selected':''}}> 
-                                {{($ouRoot->establishment->alias ?? '')}}-{{ $ouRoot->name }}
+                                {{($ouRoot->id ?? '')}}-{{ $ouRoot->name }}
                                 </option>
                                 @foreach($ouRoot->childs as $child_level_1)
 
-                                    <option value="{{ $child_level_1->id }}" {{($ouRoot->id==$actuallyOrgUnit->id)?'selected':''}}>
+                                    <option value="{{ $child_level_1->id }}" {{($child_level_1->id==$actuallyOrgUnit->id)?'selected':''}}>
                                         &nbsp;&nbsp;&nbsp;
-                                        {{($child_level_1->establishment->alias ?? '')}}-{{ $child_level_1->name }}
+                                        {{($child_level_1->id ?? '')}}-{{ $child_level_1->name }}
                                     </option>
                                     @foreach($child_level_1->childs as $child_level_2)
-                                        <option value="{{ $child_level_2->id }}" {{($ouRoot->id==$actuallyOrgUnit->id)?'selected':''}}>
+                                        <option value="{{ $child_level_2->id }}" {{($child_level_2->id==$actuallyOrgUnit->id)?'selected':''}}>
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            {{($child_level_2->establishment->alias ?? '')}}-{{ $child_level_2->name }}
+                                            {{($child_level_2->id ?? '')}}-{{ $child_level_2->name }}
                                         </option>
                                         @foreach($child_level_2->childs as $child_level_3)
-                                            <option value="{{ $child_level_3->id }}" {{($ouRoot->id==$actuallyOrgUnit->id)?'selected':''}}>
+                                            <option value="{{ $child_level_3->id }}" {{($child_level_3->id==$actuallyOrgUnit->id)?'selected':''}}>
                                                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                {{($child_level_3->establishment->alias ?? '')}}-{{ $child_level_3->name }}
+                                                {{($child_level_3->id ?? '')}}-{{ $child_level_3->name }}
                                             </option>
                                             @foreach($child_level_3->childs as $child_level_4)
-                                                <option value="{{ $child_level_4->id }}" {{($ouRoot->id==$actuallyOrgUnit->id)?'selected':''}}>
+                                                <option value="{{ $child_level_4->id }}" {{($child_level_4->id==$actuallyOrgUnit->id)?'selected':''}}>
                                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                    {{($child_level_4->establishment->alias ?? '')}}-{{ $child_level_4->name }}
+                                                    {{($child_level_4->id ?? '')}}-{{ $child_level_4->name }}
                                                 </option>
                                             @endforeach
                                         @endforeach
@@ -329,7 +329,7 @@
                                 <th class="brless dia" 
                                     style="color:{{ ( ($dateFiltered->isWeekend() )?'red':( ( sizeof($holidays->where('date',$actuallyYear.'-'.$actuallyMonth.'-'.$i)) > 0 ) ? 'red':'white' ))}}" >
                                     <p style="font-size: 10px">{{$i}}</p>
-                                </th>
+                                </th>   
                                 <!-- <th class="brless dia">🌞</th> -->
                                 <!-- <th class="noche">🌒</th> -->
                             @endfor
