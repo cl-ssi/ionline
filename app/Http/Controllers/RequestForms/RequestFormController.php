@@ -260,7 +260,7 @@ class RequestFormController extends Controller{
 
     public function destroy(RequestForm $requestForm)
     {
-        //
+        //Implementar Eliminar request form pasado por  argumento.... usar pop.up de confiración...
     }
 
     public function myRequestInbox()
