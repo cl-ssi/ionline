@@ -141,10 +141,10 @@
                   <th scope="col">Id</th>
                   <th scope="col">Usuario Gestor</th>
                   <th scope="col">Justificación</th>
-                  <th scope="col">Fecha Creación</th>
-                  <th scope="col">Espera</th>
-                  <th scope="col">Fecha de Rechazo</th>
-                  <th scope="col">Fecha Cierre</th>
+                  <th scope="col">Creación</th>
+                  <th scope="col">Rechazo</th>
+                  <th scope="col">Usuario Rechazo</th>
+                  <th scope="col">Comentario</th>
                   <th scope="col" class="text-center">J</th>
                   <th scope="col" class="text-center">F</th>
                   <th scope="col" class="text-center">A</th>
@@ -154,12 +154,12 @@
                   @foreach($rejectedRequestForms as $requestForm)
                         <tr>
                             <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
-                            <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
+                            <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->tinnyName() : 'Usuario eliminado' }}</td>
                             <td class="align-middle">{{ $requestForm->justification }}</td>
-                            <td class="align-middle">{{ $requestForm->created_at }}</td>
-                            <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
-                            <td class="align-middle">{{ $requestForm->EndDate }}</td>
-                            <td class="align-middle">{{ $requestForm->EndDate }}</td>
+                            <td class="align-middle">{{ $requestForm->createdDate() }}</td>
+                            <td class="align-middle">{{ $requestForm->rejectedTime() }}</td>
+                            <td class="align-middle">{{ $requestForm->rejectedName() }}</td>
+                            <td class="align-middle">{{ $requestForm->rejectedComment() }}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>

@@ -122,7 +122,8 @@ class User extends Authenticatable
     }
 
     public function tinnyName() {
-        return $this->name.' '.$this->fathers_family;
+        $name = explode(" ", $this->name)[0];
+        return $name.' '.$this->fathers_family;
     }
 
     public function getFirstNameAttribute() {

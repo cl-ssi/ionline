@@ -83,8 +83,15 @@ class RequestForm extends Model
 
     public function rejectedTime() {
       $event = $this->eventRequestForms()->where('status', 'rejected')->first();
-      if(!is_null($event))
-        return $event->signature_date;
+      if(!is_null($event)){
+        $date = new Carbon($event->signature_date);
+        return $date->format('d-m-Y');
+      }
+    }
+
+    public function createdDate() {
+      $date = new Carbon($this->created_at);
+      return $date->format('d-m-Y');
     }
 
     public function rejectedName() {
