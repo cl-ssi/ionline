@@ -50,7 +50,7 @@
 </div>
 
 <div class="card border border-muted text-black bg-light mb-5">
-  <div class="card-header text-primary h6"><i class="far fa-paper-plane"></i> Formularios Aprobados por Finanzas</div>
+  <div class="card-header text-primary h6"><i class="far fa-paper-plane"></i> Formularios Aprobados por Pre-Finanzas</div>
   <div class="card-body">
     <table class="table table-striped table-sm small">
       <thead>
