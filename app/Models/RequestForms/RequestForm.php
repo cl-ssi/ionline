@@ -63,7 +63,7 @@ class RequestForm extends Model
     }
 
     /*Regresa estado de firma de Eventos*/
-    public function eventSign($event_type){
+    public function eventSign($event_type) {
       if(!is_null($this->eventRequestForms()->where('status', 'approved')->where('event_type',$event_type)->first()))
         return '<i class="text-success fas fa-check"></i>';//aprovado
       elseif(!is_null($this->eventRequestForms()->where('status', 'rejected')->where('event_type',$event_type)->first()))
@@ -72,13 +72,31 @@ class RequestForm extends Model
         return '<i class="text-info far fa-hourglass"></i>';//en espera
     }
 
-    public function eventSingStatus($event_type){
+    public function eventSingStatus($event_type) {
       if(!is_null($this->eventRequestForms()->where('status', 'approved')->where('event_type',$event_type)->first()))
         return 'approved';//aprovado
       elseif(!is_null($this->eventRequestForms()->where('status', 'rejected')->where('event_type',$event_type)->first()))
         return 'rejected';//rechazado
       else
         return 'created';//en espera
+    }
+
+    public function rejectedTime() {
+      $event = $this->eventRequestForms()->where('status', 'rejected')->first();
+      if(!is_null($event))
+        return $event->signature_date;
+    }
+
+    public function rejectedName() {
+      $event = $this->eventRequestForms()->where('status', 'rejected')->first();
+      if(!is_null($event))
+        return $event->signerUser->tinnyName();
+    }
+
+    public function rejectedComment() {
+      $event = $this->eventRequestForms()->where('status', 'rejected')->first();
+      if(!is_null($event))
+        return $event->comment;
     }
 
 
