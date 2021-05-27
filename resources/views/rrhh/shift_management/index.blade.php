@@ -101,7 +101,7 @@
     }
     .cellbutton {
         width: 30px;
-        font-weight: bold;
+       font-size: 13px;
     }
     .btn-full {
         display: block;
@@ -411,8 +411,8 @@
         overflow:hidden;
     }
     .cellbutton {
-        width: 30px;
-        font-weight: bold;
+         width: 30px;
+       font-size: 13px;
     }
     .btn-full {
         display: block;

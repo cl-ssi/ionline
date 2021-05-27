@@ -30,33 +30,49 @@
           <h3> Mi de Turno </h3>
      </div>
 <div class="scroll">
+    @if(!$myConfirmationEarrings)
 	<div class="alert alert-info">
   		<strong>Ninguna</strong> confirmación pendiente!.
 	</div>
-
-    <div class="card ">{{json_encode($myConfirmationEarrings)}}
+    @else
+{{--json_encode($myConfirmationEarrings)--}}
+@foreach($myConfirmationEarrings as $day)
+	<div class="card ">
   		<div class="card-body">
     		<h5 class="card-title">Día Agregado</h5>
     		<p class="card-text" style="margin-left: 101px"> 
     			<i>
     			<i class="fa fa-user"></i> <i class="fa fa-arrow-right"></i> 
     			<i class="fa fa-user"></i> 
-    			El usuario 1111111-1 te asigno el día 20/05/21 
-    			<b style="background-color: yellow;color:gray"> L </b> .  <i style="color:red">Ese día tienes asignado N - Noche</i></p>
+    			El usuario {{ ($day->derived_from && $day->derived_from != "") ?  $day->DerivatedShift->ShiftUser->user->id : "" }} te asigno el día {{$day->day}}
+    			<b style="background-color: yellow;color:gray"> {{$day->working_day}} </b> .  
+                @if(  App\Models\Rrhh\ShiftUserDay::where("id","<>",$day->id)->where("day",$day->day)->whereHas("ShiftUser",  function($q){
+                        $q->where('user_id',Auth::user()->id);
+                    })->get() )
+
+                    @php  
+
+                        $dayInTheSame = App\Models\Rrhh\ShiftUserDay::where("day",$day->day)->whereHas("ShiftUser",  function($q){
+                            $q->where('user_id',Auth::user()->id);
+                        })->get();
+                         $dayInTheSame =  $dayInTheSame[0];
+                    @endphp
+                  <i style="color:{{ ($dayInTheSame->working_day == 'F') ? 'green' :'red' }}"> Ese día tienes asignado {{$dayInTheSame->working_day}} - {{$tiposJornada[$dayInTheSame->working_day]}} </i>
+                @else
+                    Ese día tienes asignado N/A 
+
+                @endif
+                </p>
     		</i>
     		<div class="pull-right"><a href="#" class="btn btn-primary ">Confirmar <i class="fa fa-check"></i></a>
     		<a href="#" class="btn btn-danger pull-right"><b>X</b> </a></div>
   		</div>
 	</div>
- <div class="card ">
-  		<div class="card-body">
-    		<h5 class="card-title">Día Agregado</h5>
-    		<p class="card-text" style="margin-left: 101px"> <i class="fa fa-user"></i> <i class="fa fa-arrow-right"></i> <i class="fa fa-user"></i> El usuario 1111111-1 te asigno el día 21/05/21 <b style="background-color: yellow;color:gray">N</b> . <i style="color:green">Ese día tienes asignado F - LIBRE</i></p>
-    		<div class="pull-right"><a href="#" class="btn btn-primary ">Confirmar <i class="fa fa-check"></i></a>
-    		<a href="#" class="btn btn-danger pull-right"><b>X</b> </a></div>
-  		</div>
-	</div>
-</div>
+@endforeach
+@endif
+
+    
+
 <br>
 <br>
 	<form method="post" action="{{ route('rrhh.shiftManag.myshiftfiltered') }}" >
