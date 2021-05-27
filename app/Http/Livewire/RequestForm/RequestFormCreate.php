@@ -230,6 +230,7 @@ class RequestFormCreate extends Component
       }
       else{
         EventRequestform::createLeadershipEvent($req);
+        EventRequestform::createPreFinanceEvent($req);
         EventRequestform::createFinanceEvent($req);
         EventRequestform::createSupplyEvent($req);
         session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue creado con exito.');

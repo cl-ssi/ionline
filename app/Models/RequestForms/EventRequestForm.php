@@ -36,6 +36,17 @@ class EventRequestForm extends Model
         return true;
     }
 
+    public static function createPreFinanceEvent(RequestForm $requestForm){
+        $event                      =   new EventRequestForm();
+        $event->ou_signer_user      =   '40';
+        $event->cardinal_number     =   '15';
+        $event->status              =   'created';
+        $event->event_type          =   'pre_finance_event';
+        $event->requestForm()->associate($requestForm);
+        $event->save();
+        return true;
+    }
+
     public static function createFinanceEvent(RequestForm $requestForm){
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   '40';
