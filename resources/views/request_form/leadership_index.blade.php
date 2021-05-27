@@ -131,6 +131,8 @@
 <div class="card border border-muted text-black bg-light mb-5">
   <div class="card-header text-primary h6"><i class="fas fa-archive"></i> Formularios Cerrados o Rechazados</div>
   <div class="card-body">
+
+    <div class="table-responsive">
     <table class="table table-striped table-sm small">
       <thead>
         <tr>
@@ -150,9 +152,9 @@
           @foreach($rejectedRequestForms as $requestForm)
                 <tr>
                     <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
-                    <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
+                    <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->tinnyName() : 'Usuario eliminado' }}</td>
                     <td class="align-middle">{{ $requestForm->justification }}</td>
-                    <td class="align-middle">{{ $requestForm->created_at }}</td>
+                    <td class="align-middle">{{ $requestForm->createdDate() }}</td>
                     <td class="align-middle">{{ $requestForm->rejectedTime() }}</td>
                     <td class="align-middle">{{ $requestForm->rejectedName() }}</td>
                     <td class="align-middle">{{ $requestForm->rejectedComment() }}</td>
@@ -163,6 +165,8 @@
           @endforeach
       </tbody>
     </table>
+  </div>
+
   </div>
 </div>
 
