@@ -3,7 +3,7 @@
 @section('content')
 
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
-<h4 class="mb-3">Formulario de Requerimiento - Bandeja de Entrada Jefatura</h4>
+<h4 class="mb-3">Formularios de Requerimiento - Bandeja de Entrada Jefatura</h4>
 
 @include('request_form.nav')
 
@@ -20,7 +20,7 @@
 </fieldset>
 
 <div class="card border border-muted text-black bg-light mb-5">
-  <div class="card-header text-primary h6"><i class="fas fa-list"></i> Formularios sin Aprobaciones</div>
+  <div class="card-header text-primary h6"><i class="fas fa-list"></i> Formularios no Revisados</div>
   <div class="card-body">
     <table class="table table-striped table-sm small">
       <thead>

@@ -20,8 +20,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 use App\User;
 
-class RequestFormController extends Controller{
-    public function index(){
+class RequestFormController extends Controller {
+
+    public function index() {
         $createdRequestForms    = auth()->user()->applicantRequestForms()->where('status', 'created')->get();
         $inProgressRequestForms = auth()->user()->applicantRequestForms()->where('status', 'in_progress')->get();
         $approvedRequestForms   = auth()->user()->applicantRequestForms()->where('status', 'approved')->get();
@@ -29,7 +30,7 @@ class RequestFormController extends Controller{
         return view('request_form.index', compact('createdRequestForms', 'inProgressRequestForms', 'rejectedRequestForms','approvedRequestForms'));
     }
 
-    public function edit(RequestForm $requestForm){
+    public function edit(RequestForm $requestForm) {
         if($requestForm->applicant_user_id != auth()->user()->id){
           session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO pertenece a Usuario: '.auth()->user()->getFullNameAttribute());
           return redirect()->route('request_forms.index');
@@ -48,23 +49,22 @@ class RequestFormController extends Controller{
         return view('request_form.edit', compact('requestForm', 'manager', 'requestForms'));
     }
 
-    public function leadershipIndex(){
+    public function leadershipIndex() {
         $ou = Authority::getAmIAuthorityFromOu(Carbon::now(),'manager',auth()->user()->id);
-        if(empty($ou)){
+        if(empty($ou)) {
             session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no es Autoridad en su U.O. ('.auth()->user()->organizationalUnit->name.')');
             return redirect()->route('request_forms.index');
-        }
-        else{
-            $createdRequestForms   = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','created')->get();
-            $inProgresRequestForms = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','in_progress')->get();
-            $approvedRequestForms  = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','approved')->get();
-            $rejectedRequestForms  = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','rejected')
-                                                ->orWhere('status','closed')->get();
+        } else {
+              $createdRequestForms   = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','created')->get();
+              $inProgresRequestForms = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','in_progress')->get();
+              $approvedRequestForms  = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','approved')->get();
+              $rejectedRequestForms  = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','rejected')
+                                                  ->orWhere('status','closed')->get();
         }
         return view('request_form.leadership_index', compact('createdRequestForms', 'inProgresRequestForms', 'approvedRequestForms', 'rejectedRequestForms'));
     }
 
-    public function leadershipSign(RequestForm $requestForm){
+    public function leadershipSign(RequestForm $requestForm) {
         $manager              = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
         $position             = $manager->position;
         $organizationalUnit   = $manager->organizationalUnit->name;
@@ -79,26 +79,34 @@ class RequestFormController extends Controller{
     public function financeIndex(){
         $ou = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->user()->id);
         if(empty($ou)){
-            session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('40').'.');
+            session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no es autoridad.');
             return redirect()->route('request_forms.index');
         }elseif($ou[0]->organizational_unit_id != '40' ){
-            session()->flash('danger', 'Usuario no pertenece a Finanzas!');
+            session()->flash('danger', 'Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('40').'.');
             return redirect()->route('request_forms.index');
         }else{
-            $inProgressrequestForms = RequestForm::where('status', 'in_progress')
+            $waitingRequestForms = RequestForm::where('status', 'in_progress')
                                        ->whereHas('eventRequestForms', function ($q) {
                                                     $q->where('event_type','leader_ship_event')
-                                                      ->where('status', 'approved');
-                                                    })->get();
-            $rejectedRequestForms   = RequestForm::where('status', 'rejected')->get();
+                                                      ->where('status', 'approved');})
 
-            $financeAprovedRequestForms    = RequestForm::where('status', 'in_progress')
+                                       ->whereDoesntHave('eventRequestForms', function ($f) {
+                                                  $f->where('event_type','finance_event')
+                                                  ->where('status', 'approved');
+
+                                                    })->get();
+
+            $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
+
+            $createdRequestForms     = RequestForm::all();
+
+            $approvedRequestForms    = RequestForm::where('status', 'in_progress')
                                        ->whereHas('eventRequestForms', function ($q) {
                                                     $q->where('event_type','finance_event')
                                                       ->where('status', 'approved');
                                                     })->get();
 
-            return view('request_form.finance_index', compact('inProgressrequestForms', 'rejectedRequestForms', 'financeAprovedRequestForms'));
+            return view('request_form.finance_index', compact('waitingRequestForms', 'rejectedRequestForms', 'approvedRequestForms', 'createdRequestForms'));
           }
     }
 
