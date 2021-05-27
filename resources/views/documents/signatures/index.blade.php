@@ -91,15 +91,20 @@
                         </button>
                     </td>
                     <td>
-                        <a href="{{ route('documents.signatures.showPdf',
+{{--                        <a href="{{ route('documents.signatures.showPdf',--}}
 
-                            [$pendingSignaturesFlow->signaturesFile->id, time()]
+{{--                            [$pendingSignaturesFlow->signaturesFile->id, time()]--}}
 
 
-                        ) }}"
-                           class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">
+{{--                        ) }}"--}}
+{{--                           class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">--}}
+{{--                            <span class="fas fa-file" aria-hidden="true"></span>--}}
+{{--                        </a>--}}
+
+                        <a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{ $pendingSignaturesFlow->signaturesFile->signed_file ?? $pendingSignaturesFlow->signaturesFile->file }}" class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver documento">
                             <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
+
                     </td>
                     <td>
                         @foreach($pendingSignaturesFlow->signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
