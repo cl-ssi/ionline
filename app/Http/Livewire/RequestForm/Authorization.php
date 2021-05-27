@@ -11,18 +11,28 @@ use Carbon\Carbon;
 
 class Authorization extends Component
 {
-    public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType;
+    public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $rejectedComment;
 
-    public function mount(RequestForm $requestForm, $eventType){
+    protected $rules = [
+        'rejectedComment' => 'required|min:6',
+    ];
+
+    protected $messages = [
+        'rejectedComment.required'  => 'Debe ingresar un comentario antes de rechazar Formulario.',
+        'rejectedComment.min'       => 'Mínimo 6 caracteres.',
+    ];
+
+    public function mount(RequestForm $requestForm, $eventType) {
       $this->eventType          = $eventType;
       $this->requestForm        = $requestForm;
+      $this->rejectedComment    = '';
       //$this->organizationalUnit = $requestForm->organizationalUnit->name;
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
       $this->position           = Authority::getAmIAuthorityFromOu(Carbon::now(),'manager',auth()->user()->id)[0]->position;
     }
 
-    public function acceptRequestForm(){
+    public function acceptRequestForm() {
       $event = EventRequestForm::where('request_form_id', $this->requestForm->id)
                                ->where('event_type', $this->eventType)
                                ->where('status', 'created')->first();
@@ -41,7 +51,8 @@ class Authorization extends Component
       return redirect()->route('request_forms.leadership_index');
     }
 
-    public function rejectRequestForm(){
+    public function rejectRequestForm() {
+      $this->validate();
       $event = EventRequestForm::where('request_form_id', $this->requestForm->id)
                                ->where('event_type', $this->eventType)
                                ->where('status', 'created')->first();
@@ -49,6 +60,7 @@ class Authorization extends Component
            $this->requestForm->status = 'rejected';
            $this->requestForm->save();
            $event->signature_date = Carbon::now();
+           $event->comment = $this->rejectedComment;
            $event->position_signer_user = $this->position;
            $event->status = 'rejected';
            $event->signerUser()->associate(auth()->user());
@@ -60,7 +72,7 @@ class Authorization extends Component
       return redirect()->route('request_forms.leadership_index');
     }
 
-    public function render(){
+    public function render() {
         return view('livewire.request-form.authorization');
     }
 }

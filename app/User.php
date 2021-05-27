@@ -121,6 +121,10 @@ class User extends Authenticatable
         return ucwords(strtolower("{$this->name} {$this->fathers_family}"));
     }
 
+    public function tinnyName() {
+        return $this->name.' '.$this->fathers_family;
+    }
+
     public function getFirstNameAttribute() {
         $names = explode(' ',trim($this->name));
         return ucwords(strtolower("{$names[0]}"));
