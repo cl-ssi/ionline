@@ -4,7 +4,7 @@
         @if($editRF)
         <div class="card-header text-primary h6"><i class="far fa-edit"></i> Edición - Formulario de Requerimientos N° {{$requestForm->id}} </div>
         @else
-        <h6 class="card-header text-primary">Formulario de Requerimientos</h6>
+        <h6 class="card-header text-primary"><i class="far fa-folder"></i> Nuevo - Formulario de Requerimiento</h6>
         @endif
         <div class="card-body mx-0 px-0">
           <div class="row justify-content-md-center mx-0 my-2"><!-- FILA 1 -->
