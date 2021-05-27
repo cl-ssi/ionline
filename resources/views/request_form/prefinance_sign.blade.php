@@ -53,54 +53,8 @@
       </table>
     </div><!-- div para TABLA -->
 
-    <div class="row mx-3 mb-3 mt-3 pt-0"> <!-- DIV para TABLA-->
-      <h6 class="card-subtitle mt-0 mb-2 text-primary">Lista de Bienes y/o Servicios:</h6>
-      <table class="table table-condensed table-hover table-bordered table-sm small">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>ID</th>
-            <th>Artículo</th>
-            <th>UM</th>
-            <th>Especificaciones Técnicas</th>
-            <th>Archivo</th>
-            <th>Cantidad</th>
-            <th>Valor U.</th>
-            <th>Impuestos</th>
-            <th>Total Item</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach($requestForm->itemRequestForms as $key => $item)
-                  <tr>
-                      <td>{{$key+1}}</td>
-                      <td>{{$item->id}}</td>
-                      <td>{{$item->article}}</td>
-                      <td>{{$item->unit_of_measurement}}</td>
-                      <td>{{$item->specification}}</td>
-                      <td>FILE</td>
-                      <td>{{$item->quantity}}</td>
-                      <td>{{$item->unit_value}}</td>
-                      <td>{{$item->tax}}</td>
-                      <td>{{$item->expense}}</td>
-                  </tr>
-          @endforeach
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan="5" rowspan="2"></td>
-            <td colspan="3">Cantidad de Items</td>
-            <td colspan="3">{{count($requestForm->itemRequestForms)}}</td>
-          </tr>
-          <tr>
-            <td colspan="3">Valor Total</td>
-            <td colspan="3">{{$requestForm->estimated_expense}}</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div><!-- DIV para TABLA-->
 
-      <livewire:request-form.authorization :requestForm="$requestForm" :eventType="$eventType" >
+      <livewire:request-form.prefinance-authorization :requestForm="$requestForm" :eventType="$eventType" >
 
   </div><!-- card-body -->
 </div><!-- card-principal -->

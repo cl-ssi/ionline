@@ -6,7 +6,7 @@ use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\ItemRequestForm;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\UnitOfMeasurement;
-use App\Models\Parameters\BudgetItem;
+//use App\Models\Parameters\BudgetItem;
 use Illuminate\Support\Collection;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +25,7 @@ class RequestFormCreate extends Component
         'article'             =>  'required',
         'unitOfMeasurement'   =>  'required',
         'taxes'               =>  'required',
-        'budget_item_id'      =>  'required',
+        //'budget_item_id'      =>  'required',
     ];
 
     protected $messages = [
@@ -38,7 +38,7 @@ class RequestFormCreate extends Component
         'article.required'            => 'Debe ingresar un Artículo.',
         'unitOfMeasurement.required'  => 'Debe seleccionar una Unidad de Medida',
         'taxes.required'              => 'Debe seleccionar un Tipo de Impuesto.',
-        'budget_item_id.required'     => 'Debe seleccionar un Item Presupuestario',
+        //'budget_item_id.required'     => 'Debe seleccionar un Item Presupuestario',
     ];
 
     public function mount($requestForm){
@@ -50,7 +50,7 @@ class RequestFormCreate extends Component
       $this->edit                   = false;
       $this->editRF                 = false;
       $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
-      $this->lstBudgetItem          = BudgetItem::all();
+      //$this->lstBudgetItem          = BudgetItem::all();
       if(!is_null($requestForm)){
         $this->requestForm = $requestForm;
         $this->setRequestForm();
@@ -251,7 +251,7 @@ class RequestFormCreate extends Component
             'quantity'              =>      $item['quantity'],
             'unit_value'            =>      $item['unitValue'],
             'tax'                   =>      $item['taxes'],
-            'budget_item_id'        =>      $item['budget_item_id'],
+            'budget_item_id'        =>      '1',
             'expense'               =>      $item['totalValue']
       ]);
     }

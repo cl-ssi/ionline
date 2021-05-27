@@ -97,17 +97,7 @@
                   </div>
                </div><!-- FILA 3 -->
 
-               <div class="row justify-content-md-start mb-0"><!-- FILA 4 -->
-                 <div class="form-group col-5">
-                   <label>Item Presupuestario:</label><br>
-                   <select wire:model.defer="budget_item_id" name="budget_item_id" class="form-control form-control-sm" required>
-                     <option value="">Seleccione...</option>
-                     @foreach($lstBudgetItem as $val)
-                       <option value="{{$val->id}}">{{$val->code.' - '.$val->name}}</option>
-                     @endforeach
-                   </select>
-                 </div>
-               </div>
+
 
                <div class="row justify-content-md-end mt-0"><!-- FILA 5 -->
                  <div class="col-2">
@@ -142,7 +132,7 @@
             <thead>
               <tr>
                 <th>Item</th>
-                <th>Item Pres.</th>
+
                 <th>Artículo</th>
                 <th>UM</th>
                 <th>Especificaciones Técnicas</th>
@@ -158,7 +148,7 @@
               @foreach($items as $key => $item)
                       <tr>
                           <td>{{$key+1}}</td>
-                          <td>{{$lstBudgetItem->find($item['budget_item_id'])->code.' - '.$lstBudgetItem->find($item['budget_item_id'])->name}}</td>
+                          
                           <td>{{$item['article']}}</td>
                           <td>{{$item['unitOfMeasurement']}}</td>
                           <td>{{$item['technicalSpecifications']}}</td>
