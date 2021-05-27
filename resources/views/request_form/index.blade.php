@@ -31,7 +31,8 @@
                   <th scope="col">Fecha Creación</th>
                   <th scope="col">Espera</th>
                   <th scope="col" class="text-center">J</th>
-                  <th scope="col" class="text-center">F</th>
+                  <th scope="col" class="text-center">F1</th>
+                  <th scope="col" class="text-center">F2</th>
                   <th scope="col" class="text-center">A</th>
                   <th scope="col" colspan="2" class="text-center">Opciones</th>
                 </tr>
@@ -46,6 +47,7 @@
                             <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
                             <td class="text-center align-middle">
                               <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="text-primary" title="Editar">
@@ -75,7 +77,8 @@
                   <th scope="col">Espera</th>
                   <th scope="col">Última Actualziación</th>
                   <th scope="col" class="text-center">J</th>
-                  <th scope="col" class="text-center">F</th>
+                  <th scope="col" class="text-center">F1</th>
+                  <th scope="col" class="text-center">F2</th>
                   <th scope="col" class="text-center">A</th>
                 </tr>
               </thead>
@@ -89,6 +92,7 @@
                             <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
                             <td class="align-middle">{{ $requestForm->updated_at }}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
                         </tr>
@@ -110,7 +114,8 @@
                   <th scope="col">Fecha Creación</th>
                   <th scope="col">Espera</th>
                   <th scope="col" class="text-center">J</th>
-                  <th scope="col" class="text-center">F</th>
+                  <th scope="col" class="text-center">F1</th>
+                  <th scope="col" class="text-center">F2</th>
                   <th scope="col" class="text-center">A</th>
                 </tr>
               </thead>
@@ -123,6 +128,7 @@
                             <td class="align-middle">{{ $requestForm->created_at }}</td>
                             <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
                         </tr>
@@ -146,7 +152,8 @@
                   <th scope="col">Usuario Rechazo</th>
                   <th scope="col">Comentario</th>
                   <th scope="col" class="text-center">J</th>
-                  <th scope="col" class="text-center">F</th>
+                  <th scope="col" class="text-center">F1</th>
+                  <th scope="col" class="text-center">F2</th>
                   <th scope="col" class="text-center">A</th>
                 </tr>
               </thead>
@@ -161,6 +168,7 @@
                             <td class="align-middle">{{ $requestForm->rejectedName() }}</td>
                             <td class="align-middle">{{ $requestForm->rejectedComment() }}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
                         </tr>

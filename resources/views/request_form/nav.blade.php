@@ -71,6 +71,16 @@
 
     <li class="nav-item">
         <a class="nav-link"
+            href="{{ route('request_forms.prefinance_index') }}">
+            <i class="fas fa-inbox"></i> Pre-Finanzas
+            <span class="badge badge-secondary">{{ App\Utilities::getPendingDirectorAuthorize() }}</span></a>
+        </a>
+    </li>
+
+
+
+    <li class="nav-item">
+        <a class="nav-link"
             href="{{ route('request_forms.finance_index') }}">
             <i class="fas fa-inbox"></i> Finanzas
             <span class="badge badge-secondary">{{ App\Utilities::getPendingDirectorAuthorize() }}</span></a>

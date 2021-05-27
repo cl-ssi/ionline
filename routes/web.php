@@ -1132,6 +1132,9 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/finance_index', [RequestFormController::class, 'financeIndex'])->name('finance_index');
     Route::get('/{requestForm}/finance_sign', [RequestFormController::class, 'financeSign'])->name('finance_sign');
 
+    Route::get('/prefinance_index', [RequestFormController::class, 'prefinanceIndex'])->name('prefinance_index');
+    Route::get('/{requestForm}/prefinance_sign', [RequestFormController::class, 'prefinanceSign'])->name('prefinance_sign');
+
     Route::get('/supply_index', [RequestFormController::class, 'supplyIndex'])->name('supply_index');
     Route::get('/{requestForm}/supply_sign', [RequestFormController::class, 'supplySign'])->name('supply_sign');
 
@@ -1286,11 +1289,11 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
         // Route::get('/create', [OptionsController::class, 'create'])->name('create');
         // Route::post('/store', [OptionsController::class, 'store'])->name('store');
     });
-    
+
     Route::post('/livewire/message/rrhh.change-shift-day-status', [\App\Http\Livewire\Rrhh\ChangeShiftDayStatus::class]);
     Route::post('/livewire/message/rrhh/change-shift-day-status', [\App\Http\Livewire\Rrhh\ChangeShiftDayStatus::class]);
     // Route::post('livewire/message/rrhh.change-shift-day-status', [\App\Livewire\Rrhh\ChangeShiftDayStatus::class]);+
-    
+
 
 
 });
