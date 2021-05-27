@@ -164,7 +164,7 @@ class ModalEditShiftUserDay extends Component
 
 			$this->changeDayType ="visible";
 	}
-	public function update(){
+	public function update(){//funcion que actualiza la informacion segun el estado elegido en el modal
 		if( ($this->action != 1 && $this->action != 7) &&  isset($this->shiftUserDay) ){
 
 			$this->shiftUserDay->status =$this->newStatus;
@@ -219,6 +219,7 @@ class ModalEditShiftUserDay extends Component
 					$bTurno->user_id = $this->userIdtoChange;
 					$bTurno->shift_types_id = $this->shiftUserDay->ShiftUser->shift_types_id;
 					$bTurno->organizational_units_id = $this->shiftUserDay->ShiftUser->organizational_units_id;
+					$bTurno->groupname ="";
 					$bTurno->save();
 				}
 				$nDay = new ShiftUserDay;

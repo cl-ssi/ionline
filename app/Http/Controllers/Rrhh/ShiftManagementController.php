@@ -104,6 +104,12 @@ class ShiftManagementController extends Controller
             $actuallyShift = Session::get('actuallyShift');
         else
             $actuallyShift=$sTypes->first();
+        // Inicio groupname dinamico
+        // $this->groupsnames = array(); 
+        // foreach(ShiftUser::groupBy("groupname")->get() as $g){
+        //     array_push($this->groupsnames, $g);
+        // }
+        // Fin groupname dinamico
 
         // if(Session::has('staff') && Session::get('staff') != "")
         //     $staff = Session::get('staff');
@@ -113,7 +119,7 @@ class ShiftManagementController extends Controller
         // if(Session::has('staffInShift') && Session::get('staffInShift') != "")
         //     $staffInShift = Session::get('staffInShift');
         // else
-            // echo "H:".htmlentities($groupname);
+            // echo "H:".htmlentities($groupname);$this->groupsnames
         if($actuallyShift->id != 0) // 
             $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->where('groupname',htmlentities($groupname))->get();
         else // Todos los turnos
@@ -548,8 +554,8 @@ class ShiftManagementController extends Controller
             }
             $myConfirmationEarrings = (object) $myConfirmationEarrings;
         $months = $this->months;
-
-         return view('rrhh.shift_management.my-shift',compact('days','actuallyMonth','actuallyDay','actuallyYear','sTypes','users','months','myConfirmationEarrings'));
+        $tiposJornada = $this->tiposJornada;
+         return view('rrhh.shift_management.my-shift',compact('days','actuallyMonth','actuallyDay','actuallyYear','sTypes','users','months','myConfirmationEarrings','tiposJornada'));
     }
 
 }

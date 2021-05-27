@@ -11,7 +11,7 @@
                     
                     @livewire( 'rrhh.see-shift-control-form', ['usr'=>$sis->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth], key($loop->index) )
 
-                   {{ $sis->user->runFormat()}} - {{$sis->user->name}} {{$sis->user->fathers_family}} 
+                 <i class="fa fa-minus"></i>  {{ $sis->user->runFormat()}} - {{$sis->user->name}} {{$sis->user->fathers_family}} 
       
                 </td>
                 @for($j = 1; $j <= $days; $j++) 
@@ -20,7 +20,7 @@
                         $date =explode(" ",$date);
                         $d = $sis->days->where('day',$date[0]);
                     @endphp
-                    <td class="bbd day cellbutton"  style="text-align:center;width:54px;height:54px">
+                    <td class="bbd day "  style="text-align:center;width:54px;height:54px">
                             @if(isset($d) && count($d) )
                                @livewire('rrhh.change-shift-day-status',['shiftDay'=>$d->first()],key($d->first()->id) )
                             @else
