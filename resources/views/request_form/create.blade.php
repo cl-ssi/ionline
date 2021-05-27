@@ -6,7 +6,7 @@
 
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
 
-<h3 class="mb-3">Formulario de Requerimiento - Bienes y/o Servicios (Ejecución Inmediata)</h3>
+<h4 class="mb-3">Formulario de Requerimiento - Bienes y/o Servicios (Ejecución Inmediata)</h4>
 
 @include('request_form.nav')
 
