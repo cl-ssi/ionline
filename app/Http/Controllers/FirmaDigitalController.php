@@ -60,11 +60,6 @@ class FirmaDigitalController extends Controller
 
             $pdfbase64 = base64_encode($responseBody);
             $checksum_pdf = md5($responseBody);
-
-//            Log::info($checksum_pdf);
-//            dd($responseBody);
-//            header('Content-Type: application/pdf');
-//            echo base64_decode($pdfbase64);
         }
 
         $modo = self::modoAtendidoProduccion;
@@ -110,11 +105,6 @@ class FirmaDigitalController extends Controller
      */
     public function signPdfFlow(Request $request, SignaturesFlow $signaturesFlow)
     {
-//        if ($signaturesFlow->signaturesFile->signed_file)
-//            $pdfbase64 = $signaturesFlow->signaturesFile->signed_file;
-//         else
-//            $pdfbase64 = $signaturesFlow->signaturesFile->file;
-
         if ($signaturesFlow->signaturesFile->signed_file)
             $pdfbase64 = base64_encode(Storage::disk('gcs')->get($signaturesFlow->signaturesFile->signed_file));
         else
@@ -126,8 +116,7 @@ class FirmaDigitalController extends Controller
         $otp = $request->otp;
         $modo = self::modoAtendidoProduccion;
         $verificationCode = Str::random(6);
-        $id = DB::select("SHOW TABLE STATUS LIKE 'doc_signatures_files'");
-        $docId = $id[0]->Auto_increment;
+        $docId = $signaturesFlow->signaturesFile->id;
 
         $ct_firmas_visator = null;
         $ct_posicion_firmas = null;
@@ -148,8 +137,6 @@ class FirmaDigitalController extends Controller
         $signaturesFlow->signature_date = now();
         $signaturesFlow->save();
 
-//        $signaturesFlow->signaturesFile->signed_file = $responseArray['content'];
-
         if ($signaturesFlow->signaturesFile->signed_file) {
             $oldFilePath = $signaturesFlow->signaturesFile->signed_file;
             $filePathWithoutSignatureNumber = explode('_', $oldFilePath)[0];
@@ -166,8 +153,6 @@ class FirmaDigitalController extends Controller
             $signaturesFlow->signaturesFile->save();
             Storage::disk('gcs')->getDriver()->put($filePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
         }
-
-//        $signaturesFlow->signaturesFile->signed_file = $responseArray['content'];
 
         if ($type === 'firmante') {
             $signaturesFlow->signaturesFile->verification_code = $verificationCode;

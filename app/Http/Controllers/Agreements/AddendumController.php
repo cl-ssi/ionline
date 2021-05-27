@@ -86,11 +86,32 @@ class AddendumController extends Controller
         //     'body' => 'required',
         // ]);
         $addendum->update($request->All());
+        $signer = Signer::findOrFail($request->signer_id);
+        $addendum->director_id = $signer->user_id;
+        $addendum->director_appellative = $signer->appellative;
+        $addendum->director_decree = $signer->decree;
+        $municipality = Municipality::where('name_representative', $request->representative)->first();
+        if($municipality != null){ // es alcalde
+            $addendum->representative = $municipality->name_representative;
+            $addendum->representative_appellative = $municipality->appellative_representative;
+            $addendum->representative_rut = $municipality->rut_representative;
+            $addendum->representative_decree = $municipality->decree_representative;
+        }
+        $municipality = Municipality::where('name_representative_surrogate', $request->representative)->first();
+        if($municipality != null){ // es alcalde subrogante
+            $addendum->representative = $municipality->name_representative_surrogate;
+            $addendum->representative_appellative = $municipality->appellative_representative_surrogate;
+            $addendum->representative_rut = $municipality->rut_representative_surrogate;
+            $addendum->representative_decree = $municipality->decree_representative_surrogate;
+        }
+        $addendum->save();
+        
         if($request->hasFile('file')){
             Storage::delete($addendum->file);
             $addendum->file = $request->file('file')->store('resolutions');
             $addendum->save();
         }
+
         if($request->hasFile('res_file')){
             Storage::delete($addendum->res_file);
             $addendum->res_file = $request->file('file_res')->store('resolutions');
