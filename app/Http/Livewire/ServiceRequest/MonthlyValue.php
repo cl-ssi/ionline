@@ -69,6 +69,11 @@ class MonthlyValue extends Component
                         $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
                         $dias_descuento += 1;
                         break;
+                    case 'Término de contrato anticipado':
+                            $mes_completo = false;
+                            $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
+                            $dias_descuento += 1;
+                            break;
                 }
             }
 
@@ -151,6 +156,7 @@ class MonthlyValue extends Component
                 $total = $valor_mensual - ($dias_descuento * ($valor_mensual / 30));
             } else {
                 if ($dias_trabajado_antes_retiro != 0) {
+                    //dd($total_dias_trabajados);
 
                     $total_dias_trabajados = $dias_trabajado_antes_retiro;
                 };

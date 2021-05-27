@@ -73,10 +73,12 @@ class Agreement extends Model
     }
 
     public function getEndorseStateAttribute(){
+        if($this->fileResEnd) return 'success';
         return (!$this->fileToEndorse) ? 'secondary' : ( ($this->fileToEndorse->hasRejectedFlow) ? 'danger' : ( ($this->fileToEndorse->hasAllFlowsSigned) ? 'success' : 'warning' ) );
     }
 
     public function getSignStateAttribute(){
+        if($this->fileResEnd) return 'success';
         return (!$this->fileToSign) ? 'secondary' : ( ($this->fileToSign->hasRejectedFlow) ? 'danger' : ( ($this->fileToSign->hasAllFlowsSigned) ? 'success' : 'warning' ) );
     }
 

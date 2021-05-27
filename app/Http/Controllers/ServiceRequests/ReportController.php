@@ -9,6 +9,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Fulfillment;
+use App\Models\Rrhh\UserBankAccount;
 use App\Rrhh\Authority;
 use Luecano\NumeroALetras\NumeroALetras;
 use Carbon\Carbon;
@@ -71,6 +72,7 @@ class ReportController extends Controller
   public function payed(Request $request)
   {
     $establishment_id = $request->establishment_id;
+    $service_request_id = $request->service_request_id;
 
     $payed_fulfillments1 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
       $subQuery->where('has_resolution_file', 1);
@@ -78,6 +80,11 @@ class ReportController extends Controller
       ->when($establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
           $subQuery->where('establishment_id', $establishment_id);
+        });
+      })
+      ->when($service_request_id != null, function ($q) use ($service_request_id) {
+        return $q->whereHas("ServiceRequest", function ($subQuery) use ($service_request_id) {
+          $subQuery->where('id', $service_request_id);
         });
       })
       ->where('has_invoice_file', 1)
@@ -94,6 +101,11 @@ class ReportController extends Controller
       ->when($request->establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
           $subQuery->where('establishment_id', $establishment_id);
+        });
+      })
+      ->when($service_request_id != null, function ($q) use ($service_request_id) {
+        return $q->whereHas("ServiceRequest", function ($subQuery) use ($service_request_id) {
+          $subQuery->where('id', $service_request_id);
         });
       })
       ->where('has_invoice_file', 1)
@@ -227,6 +239,14 @@ class ReportController extends Controller
       ->get();
 
     return view('service_requests.reports.without_bank_details', compact('servicerequests'));
+  }
+
+  public function withBankDetails()
+  {
+
+    $userbankaccounts = UserBankAccount::all();    
+
+    return view('service_requests.reports.with_bank_details', compact('userbankaccounts'));
   }
 
   public function indexWithResolutionFile()

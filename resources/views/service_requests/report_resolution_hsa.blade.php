@@ -387,6 +387,8 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
       114050601
     @elseif($ServiceRequest->programm_name == "SENDA PSIQUIATRIA ADULTO")
       11450602
+    @elseif($ServiceRequest->programm_name == "PESPI")
+      21-03-001-001-04 PESPI ( Programa Especial de Salud Pueblos Indígenas) 
     @else
       1140504 SENDA 1 (Fondos extra presupuestarios) asociados al Convenio SENDA – MINSAL Honorario Suma Alzada
     @endif

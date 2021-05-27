@@ -491,7 +491,7 @@
           <option value="Nutricionista turno" @if($serviceRequest->rrhh_team == "Nutricionista turno") selected @endif>Nutricionista turno</option>
           <option value="Informático" @if($serviceRequest->rrhh_team == "Informático") selected @endif>Informático</option>
           <option value="Ingeniero" @if($serviceRequest->rrhh_team == "Ingeniero") selected @endif>Ingeniero</option>
-          
+
 
         </select>
     </fieldset>
@@ -532,7 +532,7 @@
 			</select>
 		</fieldset>
 
-    @else    
+    @else
     <fieldset class="form-group col-3" id="div_hsa_schedule">
 			<label for="for_hsa_schedule_detail">Detalle de Horario HSA</label>
 			<input type="text" class="form-control" id="for_hsa_schedule_detail" value="{{$serviceRequest->schedule_detail}}" name="hsa_schedule_detail">
@@ -565,6 +565,8 @@
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" id="alias_viaticos">Viaticos</button>
+
 		</fieldset>
 	</div>
 
@@ -657,10 +659,16 @@
 
           <fieldset class="form-group col-6 col-md-2">
             <label for="for_sirh_contract_registration">&nbsp;</label>
-            <div>            
-              <a href="{{ route('rrhh.service-request.report.resolution-pdf', $serviceRequest) }}"
-                class="btn btn-outline-secondary" target="_blank" title="Resolución">
-              <span class="fas fa-file-pdf" aria-hidden="true"></span></a>            
+            <div>
+              @if($serviceRequest->type == "Covid")
+                <a href="{{ route('rrhh.service-request.report.resolution-pdf', $serviceRequest) }}"
+                  class="btn btn-outline-secondary" target="_blank" title="Resolución">
+                <span class="fas fa-file-pdf" aria-hidden="true"></span></a>
+              @else
+                <a href="{{ route('rrhh.service-request.report.resolution-pdf-hsa', $serviceRequest) }}"
+                  class="btn btn-outline-secondary btn-sm" target="_blank">
+                <span class="fas fa-file" aria-hidden="true"></span></a>
+              @endif
             </div>
           </fieldset>
 
@@ -988,8 +996,18 @@
 
 	$( document ).ready(function() {
 
-    if ($('select[id=type] option').filter(':selected').text() == "Suma alzada"){
-      $("#type").trigger("click");
+    // if ($('select[id=type] option').filter(':selected').text() == "Suma alzada"){
+    //   // alert($("#type").val());
+    //   // alert($("#type").val());
+    //   // $('#type').selectpicker('refresh');
+    //   // $("#type").val('Suma alzada');
+    //   $("#type").trigger("change");
+    // }
+
+    if ($('#type').val() == "Suma alzada") {
+      // $("#type").trigger('click');
+      // $('#type').val('Suma alzada').trigger('change');
+      $('#type').find('Suma alzada').trigger('change');
     }
 
     //temporal, solicitado por eduardo
@@ -1235,6 +1253,7 @@
   	});
 
   	$('#type').on('change', function() {
+      alert("");
   		var value = this.value;
   		if (value == "Suma alzada") {
 
@@ -1362,6 +1381,10 @@
   	$("#alias_navidad").click(function(){
   		$('#additional_benefits').append("Aguinaldo de Navidad, homologado al monto establecido en la ley de reajuste vigente en el mes de pago (diciembre).\n\n");
   	});
+    $("#alias_viaticos").click(function(){
+  		$('#additional_benefits').append("El profesional tendrá derecho al pago de un honorario adicional cuando para el desarrollo de sus prestaciones deba ausentarse del lugar de desempeño, autorizado por la Dirección del Servicio de Salud Iquique.\n\n");
+  	});
+
 
 
   });

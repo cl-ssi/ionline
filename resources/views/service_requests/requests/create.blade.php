@@ -430,6 +430,8 @@
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_viaticos">Viaticos</button>
+
 		</fieldset>
 	</div>
 
@@ -647,7 +649,7 @@
 			$("#programm_name option[value='Covid19 Médicos']").hide();
 			$('#digera_strategy').attr('disabled', 'disabled');
 
-			
+
 			$("#div_hsa_schedule").show();
 			$("#div_covid_schedule").hide();
 
@@ -893,6 +895,9 @@
 	});
 	$("#alias_navidad").click(function(){
 		$('#additional_benefits').append("Aguinaldo de Navidad, homologado al monto establecido en la ley de reajuste vigente en el mes de pago (diciembre).\n\n");
+	});
+	$("#alias_viaticos").click(function(){
+		$('#additional_benefits').append("El profesional tendrá derecho al pago de un honorario adicional cuando para el desarrollo de sus prestaciones deba ausentarse del lugar de desempeño, autorizado por la Dirección del Servicio de Salud Iquique.\n\n");
 	});
 
 </script>
