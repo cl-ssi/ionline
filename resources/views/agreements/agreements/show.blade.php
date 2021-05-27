@@ -631,6 +631,9 @@
                         <td class="text-right">
                             <button class="btn btn-sm btn-outline-secondary" data-toggle="modal"
                                 data-target="#editModalAddendum"
+                                data-referrer_id="{{$addendum->referrer->id}}"
+                                data-director="{{$addendum->director->fullName}}"
+                                data-representative="{{$addendum->representative}}"
                                 data-date="{{ $addendum->date ? $addendum->date->format('Y-m-d') : '' }}"
                                 data-res_number="{{ $addendum->res_number }}"
                                 data-res_date="{{ $addendum->res_date ? $addendum->res_date->format('Y-m-d') : '' }}"
@@ -676,8 +679,12 @@
 @endsection
 
 @section('custom_js')
-<link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
-<script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
+<!-- <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
+<script src="{{ asset('js/bootstrap-select.min.js') }}"></script> -->
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 <script type="text/javascript">
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
@@ -731,12 +738,18 @@
     $('#editModalAddendum').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var modal  = $(this)
+        var selectedID
 
         modal.find('input[name="date"]').val(button.data('date'))
+        modal.find('select[name="referrer_id"]').val(button.data('referrer_id'))
+        $("#signer_id").find("option:contains('" + button.data('director') +"')").each(function (){ selectedID = $(this).val() })
+        modal.find('select[name="signer_id"]').val(selectedID)
+        modal.find('select[name="representative"]').val(button.data('representative'))
         modal.find('input[name="res_number"]').val(button.data('res_number'))
         modal.find('input[name="res_date"]').val(button.data('res_date'))
-
+        
         modal.find("#form-edit").attr('action', button.data('formaction'))
+        modal.find('.selectpicker').selectpicker('refresh')
     })
 
     $('#selectSignerRes').on('show.bs.modal', function (event) {

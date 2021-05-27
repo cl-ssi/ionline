@@ -15,6 +15,33 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="forreferente">Referente</label>
+                        <!-- <input type="text" name="referente" class="form-control" id="forreferente" value="{{ $agreement->referente }}" > -->
+                        <select name="referrer_id" class="form-control selectpicker" data-live-search="true" title="Seleccione referente" required>
+                            @foreach($referrers as $referrer)
+                            <option value="{{$referrer->id}}">{{$referrer->fullName}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="forrepresentative">Director/a a cargo</label>
+                        <select name="signer_id" id="signer_id" class="form-control selectpicker" title="Seleccione..." required>
+                            @foreach($signers as $signer)
+                            <option value="{{$signer->id}}">{{$signer->appellative}} {{$signer->user->fullName}}, {{$signer->decree}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="forrepresentative">Representante alcalde</label>
+                        <select id="representative" class="selectpicker" name="representative" title="Seleccione..." data-width="100%" required>
+                            <option value="{{ $municipality->name_representative }}">{{ $municipality->appellative_representative }} {{ $municipality->name_representative }}, {{ $municipality->decree_representative }}</option>
+                            @if($municipality->name_representative_surrogate != null) <option value="{{ $municipality->name_representative_surrogate }}">{{ $municipality->appellative_representative_surrogate }} {{ $municipality->name_representative_surrogate }}, {{ $municipality->decree_representative_surrogate }}</option> @endif
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <label for="for">Archivo Addendum Final formato Wordx</label>
                         <div class="custom-file">
                           <input type="file" class="custom-file-input" id="forfile" name="file" placeholder="Seleccionar Archivo" accept=".doc, .docx">
