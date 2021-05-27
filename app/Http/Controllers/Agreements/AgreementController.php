@@ -57,10 +57,10 @@ class AgreementController extends Controller
 
     public function indexTracking(Request $request)
     {
-        $agreements = Agreement::with('program','stages','agreement_amounts.program_component','addendums','commune')
+        $agreements = Agreement::with('program','stages','agreement_amounts.program_component','addendums','commune', 'fileToEndorse.signaturesFlows')
                                ->when($request->commune, function($q) use ($request){ return $q->where('commune_id', $request->commune); })
                                ->where('period', $request->period ? $request->period : date('Y'))->latest()->paginate(50);
-
+        // return $agreements;
         $communes = Commune::All()->SortBy('name');
         return view('agreements/agreements/trackingIndicator', compact('agreements', 'communes'));
     }
