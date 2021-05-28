@@ -16,7 +16,7 @@ class CreateArqItemRequestForms extends Migration
         Schema::create('arq_item_request_forms', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('request_form_id');
-            $table->foreignId('budget_item_id');
+            $table->foreignId('budget_item_id')->nullable();
             $table->string('article');
             $table->string('unit_of_measurement');
             $table->unsignedInteger('quantity');
