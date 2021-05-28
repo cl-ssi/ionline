@@ -13,7 +13,7 @@
             <th>Cargo</th>
             <th>Correo</th>
             <th>Estado</th>
-            <th>Descargar Certificado <small>En caso que esté aprobado y no salga para descargar, significa que está en proceso de firma electrónica</small></th>
+            <th>Descargar Certificado<br> <small>(En caso que estado sea "aprobado" y no salga para descargar, significa que está en proceso de firma electrónica)</small></th>
         </tr>
     </thead>
     <tbody>
