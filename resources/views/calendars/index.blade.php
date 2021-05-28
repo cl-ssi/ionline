@@ -20,6 +20,14 @@
   <li class="nav-item">
     <a class="nav-link" id="zoom-tab" data-toggle="tab" href="#zoom" role="tab" aria-controls="zoom" aria-selected="false">Zoom</a>
   </li>
+
+  @can('Calendar: aps')
+  <li class="nav-item">
+    <a class="nav-link" id="zoom-tab" data-toggle="tab" href="#aps" role="tab" aria-controls="aps" aria-selected="false">Aps</a>
+  </li>
+  @endcan
+
+
 </ul>
 
 <!-- Tab panes -->
@@ -36,6 +44,11 @@
     <div class="tab-pane" id="zoom" role="tabpanel" aria-labelledby="zoom-tab">
         <iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=2&amp;bgcolor=%23ffffff&amp;ctz=America%2FSantiago&amp;src=Z3BhaDdlbjZzYW40dm82bzBsdGR1cGdqZTRAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&amp;color=%23F4511E&amp;mode=WEEK" style="border:solid 1px #777" width="1100" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
+    
+    <div class="tab-pane" id="aps" role="tabpanel" aria-labelledby="zoom-tab">
+        <iframe src="https://calendar.google.com/calendar/embed?src=pcqg722u69hendclsjjvgtqgb8%40group.calendar.google.com&ctz=America%2FSantiago" width="1100" height="600" frameborder="0" scrolling="no"></iframe>
+    </div>
+    
 </div>
 
 
