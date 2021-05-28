@@ -114,7 +114,7 @@ class AddendumController extends Controller
 
         if($request->hasFile('res_file')){
             Storage::delete($addendum->res_file);
-            $addendum->res_file = $request->file('file_res')->store('resolutions');
+            $addendum->res_file = $request->file('res_file')->store('resolutions');
             $addendum->save();
         }
 
