@@ -17,6 +17,8 @@ class MonthlyQuotes extends Component
 
     public function render()
     {
+
+        //dd('entre aca');
         $serviceRequest = $this->serviceRequest;
 
         $first_month = $serviceRequest->start_date->month;
@@ -169,7 +171,7 @@ class MonthlyQuotes extends Component
         }
         ////es HONORARIO SUMA ALZADA
         else {            ///son cuotas iguales
-            //dd('en HSA');
+            // dd('en HSA');
             $aguinaldo = $this->aguinaldopatrias($serviceRequest);
 
             if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
@@ -285,10 +287,11 @@ class MonthlyQuotes extends Component
     public function aguinaldopatrias($serviceRequest)
     {
         //$aguinaldo;
+        // dd('entre a aguinaldo');
 
         $startDate = $serviceRequest->start_date;
         $endDate = $serviceRequest->end_date;
-        $septiembre = \Carbon\Carbon::createFromFormat('Y-m-d', '2021-04-1');
+        $septiembre = \Carbon\Carbon::createFromFormat('Y-m-d', '2021-09-1');
         //dd(\Carbon\Carbon::now());
         $check = $septiembre->between($startDate, $endDate);
 
@@ -306,6 +309,7 @@ class MonthlyQuotes extends Component
 
                         switch ($serviceRequest->estate) {
                             case 'Profesional':
+                                // dd('entre aca csm');
                                 return (" en la cuota de Septiembre percibirá un aguinaldo de $53.124");
 
                                 break;
