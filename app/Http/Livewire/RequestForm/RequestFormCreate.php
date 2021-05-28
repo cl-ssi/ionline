@@ -17,7 +17,8 @@ class RequestFormCreate extends Component
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity,
     $unitValue, $taxes, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
     public $purchaseMechanism, $messagePM, $program, $justify, $totalDocument;
-    public $items, $lstBudgetItem, $budget_item_id, $requestForm, $editRF, $deletedItems, $idRF;
+    public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF;
+    public $budget_item_id;
 
     protected $rules = [
         'unitValue'           =>  'required|numeric|min:1',
@@ -76,7 +77,7 @@ class RequestFormCreate extends Component
             'quantity'                 => $item->quantity,
             'unitValue'                => $item->unit_value,
             'taxes'                    => $item->tax,
-            'budget_item_id'           => $item->budget_item_id,
+            //'budget_item_id'           => $item->budget_item_id,
             'totalValue'               => $item->quantity * $item->unit_value,
     ];
       $this->totalForm();
@@ -101,7 +102,7 @@ class RequestFormCreate extends Component
       $this->quantity                 = $this->items[$key]['quantity'];
       $this->unitValue                = $this->items[$key]['unitValue'];
       $this->taxes                    = $this->items[$key]['taxes'];
-      $this->budget_item_id           = $this->items[$key]['budget_item_id'];
+      //$this->budget_item_id           = $this->items[$key]['budget_item_id'];
       $this->key                      = $key;
     }
 
@@ -114,7 +115,7 @@ class RequestFormCreate extends Component
       $this->items[$this->key]['quantity']                = $this->quantity;
       $this->items[$this->key]['unitValue']               = $this->unitValue;
       $this->items[$this->key]['taxes']                   = $this->taxes;
-      $this->items[$this->key]['budget_item_id']          = $this->budget_item_id;
+      //$this->items[$this->key]['budget_item_id']          = $this->budget_item_id;
       $this->items[$this->key]['totalValue']              = $this->quantity * $this->unitValue;
       $this->totalForm();
       $this->cancelRequestService();
@@ -130,7 +131,7 @@ class RequestFormCreate extends Component
             'quantity'                 => $this->quantity,
             'unitValue'                => $this->unitValue,
             'taxes'                    => $this->taxes,
-            'budget_item_id'           => $this->budget_item_id,
+            //'budget_item_id'           => $this->budget_item_id,
             'totalValue'               => $this->quantity * $this->unitValue,
     ];
       $this->totalForm();
@@ -251,7 +252,7 @@ class RequestFormCreate extends Component
             'quantity'              =>      $item['quantity'],
             'unit_value'            =>      $item['unitValue'],
             'tax'                   =>      $item['taxes'],
-            'budget_item_id'        =>      '1',
+            //'budget_item_id'        =>      '1',
             'expense'               =>      $item['totalValue']
       ]);
     }
