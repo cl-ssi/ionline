@@ -40,9 +40,9 @@
                 <th>Hora de Termino de Test</th>
                 <th>Estado</th>
                 <th>Ver Test</th>
-                <th>Ver Certificado (Aprobados)</th>
-                @can('be god') <th>Enviar a Firma</th> @endcan
-                <th>Descargar PDF (Aprobados)</th>
+                <!-- <th>Ver Certificado (Aprobados)</th> -->
+                <th>Enviar a Firmar</th>
+                <!-- <th>Descargar PDF (Aprobados)</th> -->
                 <!-- <th>Enviar por Mail </th> -->
             </tr>
         </thead>
@@ -63,11 +63,11 @@
                     <a href="{{ route('suitability.results.show', $result->id) }}" class="btn btn-outline-primary">
                         <span class="fas fa-edit" aria-hidden="true"></span></a>
                 </td>
-                <td>@if($result->psirequest && $result->psirequest->status =="Aprobado")
+                <!-- <td>@if($result->psirequest && $result->psirequest->status =="Aprobado")
                     <a href="{{ route('suitability.results.certificate', $result->id) }}" class="btn btn-outline-primary">
                         <span class="fas fa-stamp" aria-hidden="true"></span></a>
                     @endif
-                </td>
+                </td> -->
                 @can('be god')
                 <td>
                     @if($result->psirequest && $result->psirequest->status =="Aprobado" && $result->signed_certificate_id === null)
@@ -76,7 +76,7 @@
                     @endif
                 </td>
                 @endcan
-                <td>
+                <!-- <td>
                     @if($result->psirequest && $result->psirequest->status =="Aprobado")
 
                     @if($result->signedCertificate && $result->signedCertificate->hasSignedFlow)
@@ -88,7 +88,7 @@
                         <span class="fas fa-file-pdf" aria-hidden="true"></span></a>
                     @endif
                     @endif
-                </td>
+                </td> -->
                 <!-- <td>
                 Correo
             </td> -->
