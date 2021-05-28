@@ -179,7 +179,7 @@ class SuitabilityController extends Controller
         $pdf = \PDF::loadView('suitability.results.certificate', compact('result'));
         $userSigner = User::find(15685508);
         $userVisator1 = User::find(13480977);
-        $userVisator2 = User::find(13867504);
+        $userVisator2 = User::find(14112543);
 
 //        $userSigner = User::find(16351236);
 //        $userVisator1 = User::find(16351236);
