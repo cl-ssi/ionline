@@ -57,7 +57,7 @@ class AgreementController extends Controller
 
     public function indexTracking(Request $request)
     {
-        $agreements = Agreement::with('program','stages','agreement_amounts.program_component','addendums','commune', 'fileToEndorse.signaturesFlows')
+        $agreements = Agreement::with('program','stages','agreement_amounts.program_component','addendums.fileToEndorse.signaturesFlows','commune', 'fileToEndorse.signaturesFlows')
                                ->when($request->commune, function($q) use ($request){ return $q->where('commune_id', $request->commune); })
                                ->where('period', $request->period ? $request->period : date('Y'))->latest()->paginate(50);
         // return $agreements;

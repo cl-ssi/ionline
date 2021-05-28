@@ -29,6 +29,26 @@ class Addendum extends Model
         return $this->belongsTo('App\User', 'director_id');
     }
 
+    public function getEndorseStateBySignPos($i){
+        foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
+            if($signatureFlow->sign_position == $i)
+                return ($signatureFlow->status === 0) ? 'fa-times text-danger' : ( ($signatureFlow->status === 1) ? 'fa-check text-success' : 'fa-check text-warning' );
+        return 'fa-ellipsis-h';
+    }
+
+    public function getEndorseObservationBySignPos($i){
+        foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
+            if($signatureFlow->sign_position == $i)
+                return ($signatureFlow->status === 0) ? 'Motivo del rechazo: '.$signatureFlow->observation : ( ($signatureFlow->status === 1) ? 'Aceptado el '.$signatureFlow->signature_date->format('d-m-Y H:i') : 'Visación actual' );
+        return 'En espera';
+    }
+
+    public function isEndorsePendingBySignPos($i){
+        foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
+            if($signatureFlow->sign_position == $i) return $signatureFlow->status == null;
+        return false;
+    }
+
     /**
      * The attributes that are mass assignable.
      *
