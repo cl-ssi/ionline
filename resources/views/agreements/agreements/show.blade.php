@@ -618,7 +618,7 @@
                         <td>{{ $addendum->id }}</td>
                         <td>{{ $addendum->date ? $addendum->date->format('d-m-Y') : '' }}</td>
                         <td>{{ $addendum->referrer->fullName ?? ''}}</td>
-                        <td>{{ $addendum->director->fullName ?? '' }}</td>
+                        <td>{{ $addendum->director_signer->user->fullName ?? '' }}</td>
                         <td>{{ $addendum->representative }}</td>
                         <td>{{ $addendum->res_date ? $addendum->res_date->format('d-m-Y') : '' }}</td>
                         <td>{{ $addendum->res_number }}
@@ -631,8 +631,8 @@
                         <td class="text-right">
                             <button class="btn btn-sm btn-outline-secondary" data-toggle="modal"
                                 data-target="#editModalAddendum"
-                                data-referrer_id="{{$addendum->referrer->id}}"
-                                data-director="{{$addendum->director->fullName}}"
+                                data-referrer_id="{{$addendum->referrer_id}}"
+                                data-director_signer_id="{{$addendum->director_signer_id}}"
                                 data-representative="{{$addendum->representative}}"
                                 data-date="{{ $addendum->date ? $addendum->date->format('Y-m-d') : '' }}"
                                 data-res_number="{{ $addendum->res_number }}"
@@ -738,12 +738,10 @@
     $('#editModalAddendum').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var modal  = $(this)
-        var selectedID
 
         modal.find('input[name="date"]').val(button.data('date'))
         modal.find('select[name="referrer_id"]').val(button.data('referrer_id'))
-        $("#signer_id").find("option:contains('" + button.data('director') +"')").each(function (){ selectedID = $(this).val() })
-        modal.find('select[name="signer_id"]').val(selectedID)
+        modal.find('select[name="director_signer_id"]').val(button.data('director_signer_id'))
         modal.find('select[name="representative"]').val(button.data('representative'))
         modal.find('input[name="res_number"]').val(button.data('res_number'))
         modal.find('input[name="res_date"]').val(button.data('res_date'))

@@ -266,7 +266,7 @@ class WordTestController extends Controller
 
     public function createWordDocxAddendum(Request $request, Addendum $addendum, $type)
     {
-        $addendum->load('agreement.program','agreement.commune', 'referrer', 'director');
+        $addendum->load('agreement.program','agreement.commune', 'referrer', 'director_signer.user');
         $municipality   = Municipality::where('commune_id', $addendum->agreement->commune->id)->first();
 
         if($type == 'addendum'){
@@ -276,12 +276,6 @@ class WordTestController extends Controller
             $templateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionaddendumhead.docx'));
             $midTemplateProcessor = new OpenTemplateProcessor(Storage::disk('')->path($addendum->file)); //addendum doc
             $templateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionaddendumfooter.docx'));
-            // Se asigna director quien firma la resolución, no necesariamente tiene que ser el mismo quien firmó el addendum
-            $signer = Signer::find($request->signer_id);
-            $addendum->director = $signer->user;
-            $addendum->director_appellative = $signer->appellative;
-            $addendum->director_decree = $signer->decree;
-            // No se guarda los cambios en el addendum ya que es solo para efectos de generar el documento
         }
 
         $first_word = explode(' ',trim($addendum->agreement->program->name))[0];
@@ -291,11 +285,11 @@ class WordTestController extends Controller
         $fechaAddendum = $this->formatDate($addendum->date);
         $fechaConvenio = $this->formatDate($addendum->agreement->date);
         $fechaResolucionConvenio = $this->formatDate($addendum->agreement->res_exempt_date);
-        $directorApelativo = $addendum->director_appellative;
+        $directorApelativo = $addendum->director_signer->appellative;
         //construir nombre director
-        $first_name = explode(' ',trim($addendum->director->name))[0];
-        $director = mb_strtoupper($first_name . ' ' . $addendum->director->fathers_family . ' ' . $addendum->director->mothers_family);
-        $directorNationality = Str::contains($addendum->director_appellative, 'a') ? 'chilena' : 'chileno';
+        $first_name = explode(' ',trim($addendum->director_signer->user->name))[0];
+        $director = mb_strtoupper($first_name . ' ' . $addendum->director_signer->user->fathers_family . ' ' . $addendum->director_signer->user->mothers_family);
+        $directorNationality = Str::contains($addendum->director_signer->appellative, 'a') ? 'chilena' : 'chileno';
 
         $alcaldeNationality = Str::endsWith($addendum->representative_appellative, 'a') ? 'chilena' : 'chileno';
 
@@ -312,8 +306,8 @@ class WordTestController extends Controller
         $templateProcessor->setValue('directorApelativo', $directorApelativo);
         $templateProcessor->setValue('director', $director);
         $templateProcessor->setValue('directorNationality', $directorNationality);
-        $templateProcessor->setValue('directorRut', mb_strtoupper($addendum->director->runFormat()));
-        $templateProcessor->setValue('directorDecreto', $addendum->director_decree);
+        $templateProcessor->setValue('directorRut', mb_strtoupper($addendum->director_signer->user->runFormat()));
+        $templateProcessor->setValue('directorDecreto', $addendum->director_signer->decree);
         $templateProcessor->setValue('comuna', $addendum->agreement->commune->name);
         $templateProcessor->setValue('comunaRut', $municipality->rut_municipality);
         $templateProcessor->setValue('ilustre', ucfirst(mb_strtolower($ilustre)));
