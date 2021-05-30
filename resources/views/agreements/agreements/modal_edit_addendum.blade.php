@@ -26,7 +26,7 @@
 
                     <div class="form-group">
                         <label for="forrepresentative">Director/a a cargo</label>
-                        <select name="signer_id" id="signer_id" class="form-control selectpicker" title="Seleccione..." required>
+                        <select name="director_signer_id" class="form-control selectpicker" title="Seleccione..." required>
                             @foreach($signers as $signer)
                             <option value="{{$signer->id}}">{{$signer->appellative}} {{$signer->user->fullName}}, {{$signer->decree}}</option>
                             @endforeach
