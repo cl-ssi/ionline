@@ -441,7 +441,7 @@ class ReportController extends Controller
     if ($request->has('from')) {
       
       $filitas = ServiceRequest::where('establishment_id', $request->establishment)
-        ->where('sirh_contract_registration', $request->sirh)        
+        // ->where('sirh_contract_registration', $request->sirh)
         ->whereDate('start_date', '>=', $request->from)
         ->where(function($q){
         	$q->whereNotNull('resolution_number')
@@ -466,7 +466,7 @@ class ReportController extends Controller
     //   ->get(); 
     // dd($request->establishment);
     $filas = ServiceRequest::where('establishment_id', $request->establishment)
-        ->where('sirh_contract_registration', $request->sirh)
+        // ->where('sirh_contract_registration', $request->sirh)
         ->whereDate('start_date', '>=', $request->from)
         ->where(function($q){
         	$q->whereNotNull('resolution_number')
