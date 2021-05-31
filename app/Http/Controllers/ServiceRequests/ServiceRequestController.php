@@ -289,7 +289,18 @@ class ServiceRequestController extends Controller
     //devuelve user o lo crea
     $user = User::updateOrCreate(
       ['id' => $request->user_id],
-      $request->All()
+      ['name' =>  $request->name,
+      'fathers_family' =>  $request->fathers_family,
+      'mothers_family' =>  $request->mothers_family,
+      'country_id' =>  $request->country_id,
+      'address' =>  $request->address,
+      'phone_number' =>  $request->phone_number,
+      'email' =>  $request->email      
+      ]
+      
+
+      //$request->All()
+      
     );
 
     //crea service request
