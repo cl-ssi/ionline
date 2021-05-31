@@ -445,6 +445,7 @@ class ReportController extends Controller
         ->whereDate('start_date', '>=', $request->from)
         ->where(function($q){
         	$q->whereNotNull('resolution_number')
+          ->whereNotNull('gross_amount')
               ->orwhereNotNull('resolution_date');
       })
 
@@ -469,6 +470,7 @@ class ReportController extends Controller
         ->whereDate('start_date', '>=', $request->from)
         ->where(function($q){
         	$q->whereNotNull('resolution_number')
+          ->whereNotNull('gross_amount')
               ->orwhereNotNull('resolution_date');
       })
 
