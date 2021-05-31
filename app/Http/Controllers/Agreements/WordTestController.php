@@ -276,6 +276,9 @@ class WordTestController extends Controller
             $templateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionaddendumhead.docx'));
             $midTemplateProcessor = new OpenTemplateProcessor(Storage::disk('')->path($addendum->file)); //addendum doc
             $templateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionaddendumfooter.docx'));
+            // Se asigna director quien firma la resolución, no necesariamente tiene que ser el mismo quien firmó el addendum
+            $addendum->director_signer = Signer::with('user')->find($request->signer_id);
+            // No se guarda los cambios en el addendum ya que es solo para efectos de generar el documento
         }
 
         $first_word = explode(' ',trim($addendum->agreement->program->name))[0];
