@@ -12,7 +12,6 @@ use App\Agreements\Signer;
 use App\Establishment;
 use App\Models\Commune;
 use App\Municipality;
-use App\Rrhh\Authority;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -75,8 +74,9 @@ class AgreementController extends Controller
         $programs = Program::All()->SortBy('name');
         $communes = Commune::All()->SortBy('name');
         $referrers = User::all()->sortBy('name');
+        $signers = Signer::all();
         $quota_options = $this->getQuotaOptions();
-        return view('agreements/agreements/create', compact('programs', 'communes', 'referrers', 'quota_options'));
+        return view('agreements/agreements/create', compact('programs', 'communes', 'referrers', 'quota_options', 'signers'));
     }
 
     /**
@@ -103,8 +103,6 @@ class AgreementController extends Controller
         $quota_options = $this->getQuotaOptions();
         $quota_option_selected = $quota_options->firstWhere('id', $request->quota_id);
         $agreement->quotas = $quota_option_selected['quotas'];
-        
-        $agreement->authority_id = Authority::getAuthorityFromDate(1, $request->date, 'manager')->id;
         $agreement->save();
         
         foreach($agreement->program->components as $component) {
@@ -134,7 +132,7 @@ class AgreementController extends Controller
      */
     public function show(Agreement $agreement)
     {
-        $agreement->load('authority.user', 'commune.establishments', 'referrer', 'fileToEndorse', 'fileToSign', 'addendums');
+        $agreement->load('director_signer.user', 'commune.establishments', 'referrer', 'fileToEndorse', 'fileToSign', 'addendums');
         $municipality = Municipality::where('commune_id', $agreement->commune->id)->first();
         $establishment_list = unserialize($agreement->establishment_list);
         $referrers = User::all()->sortBy('name');
@@ -162,48 +160,41 @@ class AgreementController extends Controller
      * @param  \App\Agreements\Agreement  $agreement
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Agreement $agreement)
     {
+        $agreement->date                = $request->date;
+        $agreement->period              = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y');
+        $agreement->resolution_date     = $request->resolution_date;
+        $agreement->number              = $request->number;
+        $agreement->res_exempt_number    = $request->res_exempt_number;
+        $agreement->res_exempt_date     = $request->res_exempt_date;
+        $agreement->res_resource_number    = $request->res_resource_number;
+        $agreement->res_resource_date     = $request->res_resource_date;
 
-        // return $request;
-        $Agreement = Agreement::find($id);
-        $stages = Stage::where('agreement_id', $id)->first();
-        //dd($stage->isEmpty());
-        $Agreement->date                = $request->date;
-        $Agreement->period              = Carbon::createFromFormat('Y-m-d', $request->date)->format('Y');
-        $Agreement->resolution_date     = $request->resolution_date;
-        $Agreement->number              = $request->number;
-        $Agreement->res_exempt_number    = $request->res_exempt_number;
-        $Agreement->res_exempt_date     = $request->res_exempt_date;
-        $Agreement->res_resource_number    = $request->res_resource_number;
-        $Agreement->res_resource_date     = $request->res_resource_date;
+        $agreement->representative      = $request->representative;
+        $agreement->representative_rut  = $request->representative_rut;
+        $agreement->representative_appelative = $request->representative_appelative;
+        $agreement->representative_decree = $request->representative_decree;
+        $agreement->municipality_adress = $request->municipality_adress;
+        $agreement->municipality_rut    = $request->municipality_rut;
 
-        $Agreement->representative      = $request->representative;
-        $Agreement->representative_rut  = $request->representative_rut;
-        $Agreement->representative_appelative = $request->representative_appelative;
-        $Agreement->representative_decree = $request->representative_decree;
-        $Agreement->municipality_adress = $request->municipality_adress;
-        $Agreement->municipality_rut    = $request->municipality_rut;
-
-        $Agreement->establishment_list  = serialize($request->establishment);
+        $agreement->establishment_list  = serialize($request->establishment);
         if($request->hasFile('file')){
 
-            Storage::delete($Agreement->file);
-            $Agreement->file = $request->file('file')->store('resolutions');
+            Storage::delete($agreement->file);
+            $agreement->file = $request->file('file')->store('resolutions');
         }
-        // if($request->hasFile('fileAgreeEnd')){
-        //     Storage::delete($Agreement->fileAgreeEnd);
-        //     $Agreement->fileAgreeEnd = $request->file('fileAgreeEnd')->store('resolutions');
-        // }
+ 
         if($request->hasFile('fileResEnd')){
-            Storage::delete($Agreement->fileResEnd);
-            $Agreement->fileResEnd = $request->file('fileResEnd')->store('resolutions');
+            Storage::delete($agreement->fileResEnd);
+            $agreement->fileResEnd = $request->file('fileResEnd')->store('resolutions');
         }
 
-        $Agreement->referrer_id = $request->referrer_id;
-        // $Agreement->authority_id = $request->authority_id;
-        $Agreement->authority_id = Authority::getAuthorityFromDate(1, $request->date, 'manager')->id;
-        $Agreement->save();
+        $agreement->referrer_id = $request->referrer_id;
+        $agreement->director_signer_id = $request->director_signer_id;
+        $agreement->save();
+
+        session()->flash('info', 'El convenio #'.$agreement->id.' ha sido actualizado.');
         return redirect()->back();
     }
 
@@ -379,13 +370,12 @@ class AgreementController extends Controller
         $signaturesFile = new SignaturesFile();
         $signaturesFile->file_type = 'documento';
 
-        $agreement->load('authority');
-
         if($type == 'signer'){
+            $agreement->load('director_signer.user');
             $signaturesFlow = new SignaturesFlow();
             $signaturesFlow->type = 'firmante';
-            $signaturesFlow->ou_id = $agreement->authority->organizational_unit_id;
-            $signaturesFlow->user_id = $agreement->authority->user_id;
+            $signaturesFlow->ou_id = $agreement->director_signer->user->organizational_unit_id;
+            $signaturesFlow->user_id = $agreement->director_signer->user->id;
             $signaturesFile->signaturesFlows->add($signaturesFlow);
         }
 
