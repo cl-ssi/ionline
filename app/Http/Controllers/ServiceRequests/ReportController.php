@@ -520,6 +520,7 @@ class ReportController extends Controller
         switch ($fila->program_contract_type) {
           case 'Horas':
             $por_prestacion = 'S';
+            $fila->weekly_hours = 0;
             $sirh_n_cargo = 6;
             break;
           default:
@@ -561,6 +562,9 @@ class ReportController extends Controller
         switch ($fila->weekly_hours) {
           case 44:
             $type_of_day = 'C';
+            break;
+          case 0:
+              $type_of_day = 'S';
             break;
           default:
             $type_of_day = 'P';
@@ -845,6 +849,7 @@ class ReportController extends Controller
           'A' . '|' .
           $type_of_day . '|' . // calcular en base a las horas semanales y tipo de contratacion
           'N' . '|' .
+          //$fila->weekly_hours . '|' .
           $fila->weekly_hours . '|' .
           '2103001' . '|' . // único para honorarios
           'N' . '|' .
