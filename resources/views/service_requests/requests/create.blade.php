@@ -430,7 +430,8 @@
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_viaticos">Viaticos</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_devolucion">Devolución de tiempo</button>
+
 
 		</fieldset>
 	</div>
@@ -898,6 +899,9 @@
 	});
 	$("#alias_viaticos").click(function(){
 		$('#additional_benefits').append("El profesional tendrá derecho al pago de un honorario adicional cuando para el desarrollo de sus prestaciones deba ausentarse del lugar de desempeño, autorizado por la Dirección del Servicio de Salud Iquique.\n\n");
+	});
+	$("#alias_devolucion").click(function(){
+		$('#additional_benefits').append("El prestador de servicios, podrá solicitar permisos de descansos complementarios para ausentarse de sus labores por motivos particulares, siempre qué por la naturaleza de sus servicios y previa autorización de su Jefatura, deban realizar prestaciones de servicios, fuera de la jornada  que estas estén ajustadas a los procedimientos de programación y autorización de los funcionarios.\n\n");
 	});
 
 </script>

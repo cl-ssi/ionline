@@ -59,6 +59,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Tickets: TI']);
 
         Permission::create(['name' => 'Calendar: view']);
+        Permission::create(['name' => 'Calendar: aps']);
 
         Permission::create(['name' => 'Integrity: manage complaints']);
 

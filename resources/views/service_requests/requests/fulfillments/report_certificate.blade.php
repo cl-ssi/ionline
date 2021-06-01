@@ -248,10 +248,10 @@
             </thead>
             <tbody>
               <tr>
-                  <td style="text-align:center">{{$FulfillmentItem->type}}</td>
-                  <td style="text-align:center">{{$FulfillmentItem->start_date->format('d-m-Y H:i')}}</td>
-                  <td style="text-align:center">{{$FulfillmentItem->end_date->format('d-m-Y H:i')}}</td>
-                  <td style="text-align:center">{{$FulfillmentItem->observation}}</td>
+                  <td style="text-align:center">{{$FulfillmentItem->type ?? ''}}</td>
+                  <td style="text-align:center">{{ $FulfillmentItem->start_date?$FulfillmentItem->start_date->format('d-m-Y H:i'):''}}</td>
+                  <td style="text-align:center">{{$FulfillmentItem->end_date?$FulfillmentItem->end_date->format('d-m-Y H:i'):''}}</td>
+                  <td style="text-align:center">{{$FulfillmentItem->observation ?? ''}}</td>
               </tr>
             </tbody>
           </table>

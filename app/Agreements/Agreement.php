@@ -13,7 +13,7 @@ class Agreement extends Model
      * @var array
      */
     protected $fillable = [
-        'number', 'date', 'period', 'file', 'commune_id', 'program_id', 'quotas', 'referente', 'authority_id', 'referrer_id', 'file_to_endorse_id', 'file_to_sign_id'
+        'number', 'date', 'period', 'file', 'commune_id', 'program_id', 'quotas', 'referente', 'director_signer_id', 'referrer_id', 'file_to_endorse_id', 'file_to_sign_id'
     ];
 
     protected $casts = [
@@ -60,8 +60,8 @@ class Agreement extends Model
         return $this->hasMany('App\Agreements\Stage');
     }
 
-    public function authority(){
-        return $this->belongsTo('App\Rrhh\Authority');
+    public function director_signer(){
+        return $this->belongsTo('App\Agreements\Signer');
     }
 
     public function fileToEndorse() {
@@ -85,6 +85,26 @@ class Agreement extends Model
     public function getResSignStateAttribute(){
         if($this->fileResEnd) return 'success';
         return ($this->fileToSign && $this->fileToSign->hasAllFlowsSigned && $this->fileResEnd) ? 'success' : ( ($this->fileToSign && $this->fileToSign->hasAllFlowsSigned && !$this->fileResEnd) ? 'warning' : 'secondary' );
+    }
+
+    public function getEndorseStateBySignPos($i){
+        foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
+            if($signatureFlow->sign_position == $i)
+                return ($signatureFlow->status === 0) ? 'fa-times text-danger' : ( ($signatureFlow->status === 1) ? 'fa-check text-success' : 'fa-check text-warning' );
+        return 'fa-ellipsis-h';
+    }
+
+    public function getEndorseObservationBySignPos($i){
+        foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
+            if($signatureFlow->sign_position == $i)
+                return ($signatureFlow->status === 0) ? 'Motivo del rechazo: '.$signatureFlow->observation : ( ($signatureFlow->status === 1) ? 'Aceptado el '.$signatureFlow->signature_date->format('d-m-Y H:i') : 'Visación actual' );
+        return 'En espera';
+    }
+
+    public function isEndorsePendingBySignPos($i){
+        foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
+            if($signatureFlow->sign_position == $i) return $signatureFlow->status == null;
+        return false;
     }
     
 

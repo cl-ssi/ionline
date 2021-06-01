@@ -25,8 +25,28 @@ class Addendum extends Model
         return $this->belongsTo('App\User', 'referrer_id');
     }
 
-    public function director() {
-        return $this->belongsTo('App\User', 'director_id');
+    public function director_signer() {
+        return $this->belongsTo('App\Agreements\Signer', 'director_signer_id');
+    }
+
+    public function getEndorseStateBySignPos($i){
+        foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
+            if($signatureFlow->sign_position == $i)
+                return ($signatureFlow->status === 0) ? 'fa-times text-danger' : ( ($signatureFlow->status === 1) ? 'fa-check text-success' : 'fa-check text-warning' );
+        return 'fa-ellipsis-h';
+    }
+
+    public function getEndorseObservationBySignPos($i){
+        foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
+            if($signatureFlow->sign_position == $i)
+                return ($signatureFlow->status === 0) ? 'Motivo del rechazo: '.$signatureFlow->observation : ( ($signatureFlow->status === 1) ? 'Aceptado el '.$signatureFlow->signature_date->format('d-m-Y H:i') : 'Visación actual' );
+        return 'En espera';
+    }
+
+    public function isEndorsePendingBySignPos($i){
+        foreach($this->fileToEndorse->signaturesFlows as $signatureFlow)
+            if($signatureFlow->sign_position == $i) return $signatureFlow->status == null;
+        return false;
     }
 
     /**
@@ -35,7 +55,7 @@ class Addendum extends Model
      * @var array
      */
     protected $fillable = [
-        'date', 'file', 'res_number', 'res_date', 'res_file', 'agreement_id', 'file_to_endorse_id', 'file_to_sign_id', 'referrer_id', 'director_id', 'director_appellative', 'director_decree', 'representative', 'representative_rut', 'representative_appellative', 'representative_decree'
+        'date', 'file', 'res_number', 'res_date', 'res_file', 'agreement_id', 'file_to_endorse_id', 'file_to_sign_id', 'referrer_id', 'director_signer_id', 'representative', 'representative_rut', 'representative_appellative', 'representative_decree'
     ];
 
     /**

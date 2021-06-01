@@ -46,14 +46,7 @@ class AddendumController extends Controller
      */
     public function store(Request $request)
     {
-        $addendum = new Addendum();
-        $addendum->agreement_id = $request->agreement_id;
-        $addendum->date = $request->date;
-        $addendum->referrer_id = $request->referrer_id;
-        $signer = Signer::findOrFail($request->signer_id);
-        $addendum->director_id = $signer->user_id;
-        $addendum->director_appellative = $signer->appellative;
-        $addendum->director_decree = $signer->decree;
+        $addendum = new Addendum($request->all());
         $municipality = Municipality::where('name_representative', $request->representative)->first();
         if($municipality != null){ // es alcalde
             $addendum->representative = $municipality->name_representative;
@@ -86,10 +79,6 @@ class AddendumController extends Controller
         //     'body' => 'required',
         // ]);
         $addendum->update($request->All());
-        $signer = Signer::findOrFail($request->signer_id);
-        $addendum->director_id = $signer->user_id;
-        $addendum->director_appellative = $signer->appellative;
-        $addendum->director_decree = $signer->decree;
         $municipality = Municipality::where('name_representative', $request->representative)->first();
         if($municipality != null){ // es alcalde
             $addendum->representative = $municipality->name_representative;
@@ -104,19 +93,17 @@ class AddendumController extends Controller
             $addendum->representative_rut = $municipality->rut_representative_surrogate;
             $addendum->representative_decree = $municipality->decree_representative_surrogate;
         }
-        $addendum->save();
         
         if($request->hasFile('file')){
             Storage::delete($addendum->file);
             $addendum->file = $request->file('file')->store('resolutions');
-            $addendum->save();
         }
 
         if($request->hasFile('res_file')){
             Storage::delete($addendum->res_file);
-            $addendum->res_file = $request->file('file_res')->store('resolutions');
-            $addendum->save();
+            $addendum->res_file = $request->file('res_file')->store('resolutions');
         }
+        $addendum->save();
 
         session()->flash('info', 'El addendum #'.$addendum->id.' ha sido actualizado.');
         return redirect()->back();
@@ -180,7 +167,7 @@ class AddendumController extends Controller
     {
         if(!in_array($type, array('visators', 'signer'))) abort(404);
 
-        $addendum->load('agreement.commune.municipality','agreement.program','referrer', 'director');
+        $addendum->load('agreement.commune.municipality','agreement.program','referrer', 'director_signer.user');
         $municipio = (!Str::contains($addendum->agreement->commune->municipality->name_municipality, 'ALTO HOSPICIO') ? 'Ilustre ' : '').'Municipalidad de '.$addendum->agreement->commune->name;
         $first_word = explode(' ',trim($addendum->agreement->program->name))[0];
         $programa = $first_word == 'Programa' ? substr(strstr($addendum->agreement->program->name," "), 1) : $addendum->agreement->program->name;
@@ -202,8 +189,8 @@ class AddendumController extends Controller
         if($type == 'signer'){
             $signaturesFlow = new SignaturesFlow();
             $signaturesFlow->type = 'firmante';
-            $signaturesFlow->ou_id = $addendum->director->organizational_unit_id;
-            $signaturesFlow->user_id = $addendum->director_id;
+            $signaturesFlow->ou_id = $addendum->director_signer->user->organizational_unit_id;
+            $signaturesFlow->user_id = $addendum->director_signer->user->id;
             $signaturesFile->signaturesFlows->add($signaturesFlow);
         }
 

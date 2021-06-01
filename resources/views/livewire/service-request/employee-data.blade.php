@@ -49,8 +49,8 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-5">
-            <label for="for_address">Dirección</label>
-            <input type="text" class="form-control" id="foraddress" placeholder="Dirección, comuna"
+            <label for="for_address">Dirección*</label>
+            <input type="text" class="form-control" id="foraddress" placeholder="Dirección, comuna" required
               name="address" @if($user) value="{{$user->address}}" @endif>
         </fieldset>
 
