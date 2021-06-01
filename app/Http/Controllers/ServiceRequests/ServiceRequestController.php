@@ -289,8 +289,8 @@ class ServiceRequestController extends Controller
     }
 
     //devuelve user o lo crea
-    // $user = User::updateOrCreate(
-    //   ['id' => $request->user_id],
+    $user = User::updateOrCreate(
+      ['id' => $request->user_id],
     //   [
     //     'dv' =>  $request->dv,
     //     'name' =>  $request->name,
@@ -303,28 +303,28 @@ class ServiceRequestController extends Controller
     //   ]
 
 
-    //   //$request->All()
+      $request->All()
 
-    // );
+    );
 
 
-    $user = User::find($request->user_id);
+    // $user = User::find($request->user_id);
 
-    if ($user !== null) {
-      //$user->update(['name' => request('name')]);
-    } else {
-      $user = User::create([
-        'id' => $request->user_id,
-        'dv' => $request->dv,
-        'name' => $request->name,
-        'fathers_family' =>  $request->fathers_family,
-        'mothers_family' =>  $request->mothers_family,
-        'country_id' =>  $request->country_id,
-        'address' =>  $request->address,
-        'phone_number' =>  $request->phone_number,
-        'email' =>  $request->email
-      ]);
-    }
+    // if ($user !== null) {
+    //   //$user->update(['name' => request('name')]);
+    // } else {
+    //   $user = User::create([
+    //     'id' => $request->user_id,
+    //     'dv' => $request->dv,
+    //     'name' => $request->name,
+    //     'fathers_family' =>  $request->fathers_family,
+    //     'mothers_family' =>  $request->mothers_family,
+    //     'country_id' =>  $request->country_id,
+    //     'address' =>  $request->address,
+    //     'phone_number' =>  $request->phone_number,
+    //     'email' =>  $request->email
+    //   ]);
+    // }
 
     //crea service request
     $serviceRequest = new ServiceRequest($request->All());
