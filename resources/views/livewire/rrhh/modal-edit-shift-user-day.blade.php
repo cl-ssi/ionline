@@ -8,7 +8,9 @@
             <div class="modal-header" style="background-color:#006cb7;color:white   ">
 
                 <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar"></i> Modificar día de personal </h5>
-
+                @if(isset($this->shiftUser))
+                    {{--json_encode($this->shiftUser->where("day","2021-05-01"))--}}
+                @endif
                 <button type="button" class="close" data-dismiss="modal" wire:click.prevent="cancel()" aria-label="Close">
 
                     <span aria-hidden="true">×</span>
