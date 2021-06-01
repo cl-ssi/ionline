@@ -19,11 +19,13 @@ class ModalEditShiftUserDay extends Component
 	public $shiftUserDay;	
 	public $usersSelect ="none";
 	public $changeDayType ="none";
+	public $repeatAction ="none";
 	public $previousStatus;
 	public $newStatus;
 	public $newWorkingDay;
 	public $previousWorkingDay;
 	public $varLog;
+	public $repeatToDate;
     private $tiposJornada = array(
             'F' => "Libre",
             'D' => "Dia",
@@ -75,7 +77,7 @@ class ModalEditShiftUserDay extends Component
 		$this->newStatus = $this->previousStatus ;
 		$this->previousWorkingDay = $this->shiftUserDay->working_day;
 		$this->newWorkingDay = $this->previousWorkingDay;
-
+		$this->repeatToDate = $this->shiftUserDay->day;
 		// $this->users = $this->shiftUserDay->where
 		$this->users  = User::where('organizational_unit_id', $this->shiftUserDay->ShiftUser->organizational_units_id)->get();
 		$this->varLog = "X";		
@@ -126,33 +128,42 @@ class ModalEditShiftUserDay extends Component
 			$this->newStatus = 4;
 			$this->usersSelect="visible";
 			$this->changeDayType ="none";
+			$this->repeatAction="none";
 		}elseif($this->action ==2 ){ //cumplido
 			$this->newStatus = 2;
 			$this->usersSelect ="none";
 			$this->changeDayType ="none";
+			$this->repeatAction="visible";
 		}elseif($this->action ==3 ){ // licencia
 			$this->newStatus = 5;
 			$this->usersSelect ="none";
 			$this->changeDayType ="none";
+			$this->repeatAction="visible";
+
 		}elseif($this->action ==4 ){ // Fuero gremial
 			$this->newStatus = 6;
 			$this->usersSelect ="none";
+			$this->repeatAction="visible";
 			$this->changeDayType ="none";
 		}elseif($this->action ==5 ){ // Feriado Legal
 			$this->newStatus = 7;
 			$this->usersSelect ="none";
+			$this->repeatAction="visible";
 			$this->changeDayType ="none";
 		}elseif($this->action ==6 ){ // PErmiso excepcional
 			$this->newStatus = 8;
 			$this->usersSelect ="none";
+			$this->repeatAction="visible";
 			$this->changeDayType ="none";
 		}elseif($this->action ==7 ){ // Cambiar tipo de jornada
 			// $this->newStatus = 8;
 			$this->usersSelect ="none";
+			$this->repeatAction="none";
 
 			$this->emit('ChangeWorkingDay');
 		}else{
 			$this->changeDayType ="none";
+			$this->repeatAction="none";
 
 			$this->usersSelect ="none";
 		}
@@ -167,19 +178,26 @@ class ModalEditShiftUserDay extends Component
 	public function update(){//funcion que actualiza la informacion segun el estado elegido en el modal
 		if( ($this->action != 1 && $this->action != 7) &&  isset($this->shiftUserDay) ){
 
-			$this->shiftUserDay->status =$this->newStatus;
-			$this->shiftUserDay->update();
+				if($this->repeatToDate == $this->shiftUserDay->day ){
+
+					$this->shiftUserDay->status =$this->newStatus;
+					$this->shiftUserDay->update();
 
 
-			$nHistory = new ShiftDayHistoryOfChanges;
-			$nHistory->commentary = "El usuario \"".Auth::user()->name." ". Auth::user()->fathers_family." ". Auth::user()->mothers_family."\" ha modificado el <b>estado</b> de \"".$this->previousStatus." - ".$this->estados[$this->previousStatus]."\" a \"".$this->newStatus." - ".$this->estados[$this->newStatus]."\"";
-			$nHistory->shift_user_day_id = $this->shiftUserDay->id;
-			$nHistory->modified_by = Auth::user()->id;
-			$nHistory->change_type = 1;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario, 4 cambio confirmado por usuario, 5 cambio confirmado por administrador
-			$nHistory->day =  $this->shiftUserDay->day;
-			$nHistory->previous_value = $this->previousStatus;
-			$nHistory->current_value = $this->newStatus;
-			$nHistory->save();
+					$nHistory = new ShiftDayHistoryOfChanges;
+					$nHistory->commentary = "El usuario \"".Auth::user()->name." ". Auth::user()->fathers_family." ". Auth::user()->mothers_family."\" ha modificado el <b>estado</b> de \"".$this->previousStatus." - ".$this->estados[$this->previousStatus]."\" a \"".$this->newStatus." - ".$this->estados[$this->newStatus]."\"";
+					$nHistory->shift_user_day_id = $this->shiftUserDay->id;
+					$nHistory->modified_by = Auth::user()->id;
+					$nHistory->change_type = 1;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario, 4 cambio confirmado por usuario, 5 cambio confirmado por administrador
+					$nHistory->day =  $this->shiftUserDay->day;
+					$nHistory->previous_value = $this->previousStatus;
+					$nHistory->current_value = $this->newStatus;
+					$nHistory->save();
+				}else{
+
+				}
+
+
 		}elseif($this->action == 7 &&  isset($this->shiftUserDay) ){ // Cambiar jornada laboral
 			$this->shiftUserDay->working_day =$this->newWorkingDay;
 			$this->shiftUserDay->update();

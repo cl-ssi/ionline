@@ -149,6 +149,12 @@
                         </select>
 
                     </div>
+                    <div class="form-group" style="display: {{$repeatAction}}">
+
+                        <label for="exampleFormControlInput1"><i class="fa fa-calendar"></i> Repetir acción hasta </label>
+                         <input type="date" name="toDate" class="form-control" wire:model="repeatToDate">
+
+                    </div>
                     <div class="form-group">
 
                         <input type="hidden" wire:model="user_id">
