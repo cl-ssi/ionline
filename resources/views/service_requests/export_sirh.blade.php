@@ -20,24 +20,20 @@
                 @endforeach
             </select>
         </div>
-        <div class="form-group ml-4">
+        <!-- <div class="form-group ml-4">
         <label for="for_sirh_id">Cargado*</label>
         <select name="sirh" class="form-control" id="for_sirh" required>
             <option value="">Seleccionar</option>
             <option value="1"{{ (old('sirh')==1)?'selected':'' }} >Sí</option>
             <option value="0" {{ (old('sirh')==0)?'selected':'' }} >No</option>
         </select>
-        </div>
+        </div> -->
     </div>
     <div class="form-row">
         <div class="form-group ml-3">
             <label for="for_from">Fecha Inicio de Contrato Desde</label>
             <input type="datetime-local" class="form-control mx-sm-3" id="for_from" name="from" value="{{old('from') }}" required>
-        </div>
-        <!-- <div class="form-group">
-            <label for="for_to">Fecha Inicio de Contrato Hasta</label>
-            <input type="datetime-local" class="form-control mx-sm-3" id="for_to" name="to" value="{{old('to') }}" required>
-        </div>  -->
+        </div>        
     </div>               
         
         <div class="form-row">

@@ -6,7 +6,7 @@
 
 @include('service_requests.partials.nav')
 
-<h3>Solicitud de Contratación de Servicios</h3>
+<h3>Editar de Contratación de Servicios</h3>
 
   @can('Service Request: additional data rrhh')
 
@@ -566,6 +566,7 @@
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
         <button type="button" class="btn btn-outline-primary btn-sm" id="alias_viaticos">Viaticos</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" id="alias_devolucion">Devolución de tiempo</button>
 
 		</fieldset>
 	</div>
@@ -994,21 +995,9 @@
 @section('custom_js')
 <script type="text/javascript">
 
-	$( document ).ready(function() {
+	$( document ).ready(function() {   
 
-    // if ($('select[id=type] option').filter(':selected').text() == "Suma alzada"){
-    //   // alert($("#type").val());
-    //   // alert($("#type").val());
-    //   // $('#type').selectpicker('refresh');
-    //   // $("#type").val('Suma alzada');
-    //   $("#type").trigger("change");
-    // }
-
-    if ($('#type').val() == "Suma alzada") {
-      // $("#type").trigger('click');
-      // $('#type').val('Suma alzada').trigger('change');
-      $('#type').find('Suma alzada').trigger('change');
-    }
+    
 
     //temporal, solicitado por eduardo
     if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Departamento de Salud Ocupacional" ||
@@ -1253,7 +1242,7 @@
   	});
 
   	$('#type').on('change', function() {
-      alert("");
+      //alert("");
   		var value = this.value;
   		if (value == "Suma alzada") {
 
@@ -1384,6 +1373,15 @@
     $("#alias_viaticos").click(function(){
   		$('#additional_benefits').append("El profesional tendrá derecho al pago de un honorario adicional cuando para el desarrollo de sus prestaciones deba ausentarse del lugar de desempeño, autorizado por la Dirección del Servicio de Salud Iquique.\n\n");
   	});
+    $("#alias_devolucion").click(function(){
+  		$('#additional_benefits').append("El prestador de servicios, podrá solicitar permisos de descansos complementarios para ausentarse de sus labores por motivos particulares, siempre qué por la naturaleza de sus servicios y previa autorización de su Jefatura, deban realizar prestaciones de servicios, fuera de la jornada  que estas estén ajustadas a los procedimientos de programación y autorización de los funcionarios.\n\n");
+  	});
+
+
+    
+    if ($('#type').val() == "Suma alzada") {      
+      $('#type').trigger('change');     
+    }
 
 
 

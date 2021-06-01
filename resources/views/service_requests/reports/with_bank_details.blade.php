@@ -13,8 +13,9 @@
 
 <table class="table table-sm table-bordered" id="tabla_correctora">
     <tr>
+        <th nowrap>Rut</th>
         <th>Nombre</th>
-        <th nowrap>Rut</th>        
+        <th>Dirección</th>
         <th>Teléfono</th>
         <th>Email</th>
         <th>Banco</th>
@@ -23,8 +24,9 @@
     </tr>
     @foreach($userbankaccounts as $userbankaccount)
     <tr>
-        <td>{{ $userbankaccount->user->getFullNameAttribute() ?? '' }}</td>
         <td>{{ $userbankaccount->user->runFormat() ?? '' }}</td>
+        <td>{{ $userbankaccount->user->getFullNameAttribute() ?? '' }}</td>
+        <td>{{ $userbankaccount->user->address ?? '' }}</td>        
         <td>{{ $userbankaccount->user->phone_number ?? '' }}</td>
         <td>{{ $userbankaccount->user->email ?? '' }}</td>
         <td>{{ $userbankaccount->bank->name ?? '' }}</td>
