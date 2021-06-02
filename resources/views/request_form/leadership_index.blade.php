@@ -31,8 +31,8 @@
           <th scope="col">Fecha Creación</th>
           <th scope="col">Espera</th>
           <th scope="col" class="text-center">J</th>
-          <th scope="col" class="text-center">F1</th>
-          <th scope="col" class="text-center">F2</th>
+          <th scope="col" class="text-center">RP</th>
+          <th scope="col" class="text-center">F</th>
           <th scope="col" class="text-center">A</th>
           <th scope="col" class="text-center">Opciones</th>
         </tr>
@@ -73,8 +73,8 @@
           <th scope="col">Espera</th>
           <th scope="col">Última Actualziación</th>
           <th scope="col" class="text-center">J</th>
-          <th scope="col" class="text-center">F1</th>
-          <th scope="col" class="text-center">F2</th>
+          <th scope="col" class="text-center">RP</th>
+          <th scope="col" class="text-center">F</th>
           <th scope="col" class="text-center">A</th>
         </tr>
       </thead>
@@ -110,8 +110,8 @@
           <th scope="col">Fecha Creación</th>
           <th scope="col">Espera</th>
           <th scope="col" class="text-center">J</th>
-          <th scope="col" class="text-center">F1</th>
-          <th scope="col" class="text-center">F2</th>
+          <th scope="col" class="text-center">RP</th>
+          <th scope="col" class="text-center">F</th>
           <th scope="col" class="text-center">A</th>
         </tr>
       </thead>
@@ -150,8 +150,8 @@
           <th scope="col">Rechazado por</th>
           <th scope="col">Comentario</th>
           <th scope="col" class="text-center">J</th>
-          <th scope="col" class="text-center">F1</th>
-          <th scope="col" class="text-center">F2</th>
+          <th scope="col" class="text-center">RP</th>
+          <th scope="col" class="text-center">F</th>
           <th scope="col" class="text-center">A</th>
         </tr>
       </thead>
@@ -177,10 +177,6 @@
 
   </div>
 </div>
-
-
-
-
 
 @endsection
 @section('custom_js')

@@ -4,7 +4,7 @@
       <h6 class="card-header bg-primary text-white"><i class="fas fa-signature"></i></a> Autorización Jefatura</h6>
       <div class="card-body mb-1">
 
-          <div class="row justify-content-md-center"><!-- FILA 2 -->
+        <div class="row justify-content-md-center"><!-- FILA 2 -->
            <div class="form-group col-5">
              <label for="forRut">Responsable:</label>
              <input wire:model="userAuthority" name="userAuthority" class="form-control form-control-sm" type="text" readonly>
@@ -19,8 +19,7 @@
            </div>
         </div><!-- FILA 2 -->
 
-        <div class="row justify-content-md-start mt-0">
-
+        <div class="row justify-content-md-start mt-0"><!-- FILA 3 -->
             <div class="col-7">
               <label for="forRejectedComment">Comentario de Rechazo:</label>
               <textarea wire:model="rejectedComment" name="rejectedComment" class="form-control form-control-sm" rows="3"></textarea>
@@ -37,14 +36,7 @@
               </select>
             </div>
             @endif
-        </div>
-
-
-
-
-
-
-        </div>
+        </div><!-- FILA 3 -->
 
         <div class="row justify-content-md-end mt-0"><!-- FILA 4 -->
           <div class="col-2">
@@ -53,5 +45,7 @@
           <div class="col-1">
             <button type="button" wire:click="rejectRequestForm" class="btn btn-secondary btn-sm float-right">Rechazar</button>
           </div>
-        </div><!-- FILA 4 --><!--Valida la variable error para que solo contenga validación de los Items-->
-</div>
+        </div><!-- FILA 4 -->
+
+      </div>
+    </div>

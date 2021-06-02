@@ -26,12 +26,13 @@ class Authorization extends Component
     public function mount(RequestForm $requestForm, $eventType) {
       $this->eventType          = $eventType;
       $this->requestForm        = $requestForm;
-      $this->lstSupervisorUser = User::where('organizational_unit_id', 37)->get();
       $this->rejectedComment    = '';
       //$this->organizationalUnit = $requestForm->organizationalUnit->name;
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
-      $this->position           = Authority::getAmIAuthorityFromOu(Carbon::now(),'manager',auth()->user()->id)[0]->position;
+      $this->position           = auth()->user()->position;
+      if($eventType!='supply_event')
+        $this->lstSupervisorUser  = User::where('organizational_unit_id', 37)->get();
     }
 
     public function acceptRequestForm() {
