@@ -9,7 +9,7 @@
 
 
 <div class="card border border-muted text-black bg-light mb-5">
-  <div class="card-header text-primary h6"><i class="fas fa-list"></i> Formularios no Revisados</div>
+  <div class="card-header text-primary h6"><i class="fas fa-list"></i> Formularios no Visados</div>
   <div class="card-body">
     <table class="table table-striped table-sm small">
       <thead>
@@ -20,8 +20,8 @@
           <th scope="col">Fecha Creación</th>
           <th scope="col">Espera</th>
           <th scope="col" class="text-center">J</th>
-          <th scope="col" class="text-center">F1</th>
-          <th scope="col" class="text-center">F2</th>
+          <th scope="col" class="text-center">RP</th>
+          <th scope="col" class="text-center">F</th>
           <th scope="col" class="text-center">A</th>
           <th scope="col" class="text-center">Opciones</th>
         </tr>
@@ -50,7 +50,7 @@
 </div>
 
 <div class="card border border-muted text-black bg-light mb-5">
-  <div class="card-header text-primary h6"><i class="far fa-paper-plane"></i> Formularios Aprobados por Pre-Finanzas</div>
+  <div class="card-header text-primary h6"><i class="far fa-paper-plane"></i> Formularios visados por Refrendación Presupuestaria</div>
   <div class="card-body">
     <table class="table table-striped table-sm small">
       <thead>
@@ -62,8 +62,8 @@
           <th scope="col">Espera</th>
           <th scope="col">Última Actualziación</th>
           <th scope="col" class="text-center">J</th>
-          <th scope="col" class="text-center">F1</th>
-          <th scope="col" class="text-center">F2</th>
+          <th scope="col" class="text-center">RP</th>
+          <th scope="col" class="text-center">F</th>
           <th scope="col" class="text-center">A</th>
         </tr>
       </thead>
@@ -103,8 +103,8 @@
           <th scope="col">Rechazado por</th>
           <th scope="col">Comentario</th>
           <th scope="col" class="text-center">J</th>
-          <th scope="col" class="text-center">F1</th>
-          <th scope="col" class="text-center">F2</th>
+          <th scope="col" class="text-center">RP</th>
+          <th scope="col" class="text-center">F</th>
           <th scope="col" class="text-center">A</th>
         </tr>
       </thead>

@@ -1,10 +1,10 @@
 <div>
     {{-- The whole world belongs to you. --}}
     <div class="card mx-3 mb-3 mt-0 pt-0">
-      <h6 class="card-header bg-primary text-white"><i class="fas fa-signature"></i></a> Autorización Pre-Finanzas</h6>
+      <h6 class="card-header bg-primary text-white"><i class="fas fa-signature"></i></a> Autorización Refrendación Presupuestaria</h6>
       <div class="card-body mb-1">
 
-          <div class="row justify-content-md-center"><!-- FILA 2 -->
+          <div class="row justify-content-md-center"><!-- FILA 1 -->
            <div class="form-group col-5">
              <label for="forRut">Responsable:</label>
              <input wire:model="userAuthority" name="userAuthority" class="form-control form-control-sm" type="text" readonly>
@@ -17,10 +17,9 @@
              <label for="forRut">Unidad Organizacional:</label>
              <input wire:model="organizationalUnit" name="organizationalUnit" class="form-control form-control-sm" type="text" readonly>
            </div>
-        </div><!-- FILA 2 -->
+        </div><!-- FILA 1 -->
 
         <div class="row justify-content-md-center"><!-- FILA 2 -->
-
           <div class="form-group col-6">
             <label for="forRut">Folio Requerimiento SIGFE:</label>
             <input wire:model="sigfe" name="sigfe" class="form-control form-control-sm" type="text">
@@ -29,9 +28,6 @@
             <label>Programa Asociado:</label><br>
             <input wire:model="program" name="program" class="form-control form-control-sm" type="text">
           </div>
-
-
-
         </div><!-- FILA 2 -->
 
         <div class="row mx-3 mb-3 mt-3 pt-0"> <!-- DIV para TABLA-->
@@ -58,12 +54,13 @@
                           <td>{{$key+1}}</td>
                           <td>{{$item->id}}</td>
                           <td>
-                          <select  name="budget_item_id[]" class="form-control form-control-sm" required>
+                          <select  class="form-control form-control-sm" required>
                             <option value="">Seleccione...</option>
                             @foreach($lstBudgetItem as $val)
                               <option value="{{$val->id}}">{{$val->code.' - '.$val->name}}</option>
                             @endforeach
                           </select>
+                          <?php $collectItemRequest[$item->id]=$codigo; ?>
                           </td>
                           <td>{{$item->article}}</td>
                           <td>{{$item->unit_of_measurement}}</td>
@@ -90,10 +87,6 @@
           </table>
         </div><!-- DIV para TABLA-->
 
-
-
-
-
         <div class="row justify-content-md-start mt-0">
             <div class="col-7">
               <label for="forRejectedComment">Comentario de Rechazo:</label>
@@ -102,9 +95,7 @@
             </div>
         </div>
 
-
-
-        <div class="row justify-content-md-end mt-0"><!-- FILA 4 -->
+        <div class="row justify-content-md-end mt-0"><!-- FILA BOTONES -->
           <div class="col-2">
             <button type="button" wire:click="acceptRequestForm" class="btn btn-primary btn-sm float-right">Autorizar</button>
           </div>

@@ -8,7 +8,7 @@
 <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" type="text/css"/>
 <link href="{{ asset('css/steps.css') }}" rel="stylesheet" type="text/css"/>
 
-<h4 class="mb-3">Formulario de Requerimiento - Autorización Pre-Finanzas</h4>
+<h4 class="mb-3">Formulario de Requerimiento - Autorización Refrendación Presupuestaria</h4>
 
 @include('request_form.nav')
 
@@ -53,12 +53,9 @@
       </table>
     </div><!-- div para TABLA -->
 
-
       <livewire:request-form.prefinance-authorization :requestForm="$requestForm" :eventType="$eventType" >
 
   </div><!-- card-body -->
 </div><!-- card-principal -->
-
-
 
 @endsection
