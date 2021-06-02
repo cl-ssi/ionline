@@ -24,5 +24,8 @@ class ShiftUserDay extends Model
 	{
     	return $this->hasMany(ShiftDayHistoryOfChanges::class, 'shift_user_day_id');
 	}
+	public function confirmationStatus(){
+
+	}
 
 }

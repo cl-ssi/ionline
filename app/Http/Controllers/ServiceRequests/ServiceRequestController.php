@@ -224,7 +224,7 @@ class ServiceRequestController extends Controller
     //signature flow
     if (Auth::user()->organizationalUnit->establishment_id == 38) {
 
-      $subdirections = OrganizationalUnit::where('name', 'LIKE', '%subdirec%')->where('establishment_id', 38)->orderBy('name', 'ASC')->get();
+      $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id', 38)->orderBy('name', 'ASC')->get();
       $responsabilityCenters = OrganizationalUnit::where('establishment_id', 38)->orderBy('name', 'ASC')->get();
     }
     //hospital
@@ -289,42 +289,43 @@ class ServiceRequestController extends Controller
     }
 
     //devuelve user o lo crea
-    // $user = User::updateOrCreate(
-    //   ['id' => $request->user_id],
-    //   [
-    //     'dv' =>  $request->dv,
-    //     'name' =>  $request->name,
+    $user = User::updateOrCreate(
+      ['id' => $request->user_id],
+      [
+        'dv' =>  $request->dv,
+        'name' =>  $request->name,
+        'fathers_family' =>  $request->fathers_family,
+        'mothers_family' =>  $request->mothers_family,
+        'country_id' =>  $request->country_id,
+        'address' =>  $request->address,
+        'phone_number' =>  $request->phone_number,
+        'email' =>  $request->email,
+        'organizational_unit_id' =>  $request->responsability_center_ou_id
+      ]
+
+
+      //$request->All()
+
+    );
+
+
+    // $user = User::find($request->user_id);
+
+    // if ($user !== null) {
+    //   //$user->update(['name' => request('name')]);
+    // } else {
+    //   $user = User::create([
+    //     'id' => $request->user_id,
+    //     'dv' => $request->dv,
+    //     'name' => $request->name,
     //     'fathers_family' =>  $request->fathers_family,
     //     'mothers_family' =>  $request->mothers_family,
     //     'country_id' =>  $request->country_id,
     //     'address' =>  $request->address,
     //     'phone_number' =>  $request->phone_number,
     //     'email' =>  $request->email
-    //   ]
-
-
-    //   //$request->All()
-
-    // );
-
-
-    $user = User::find($request->user_id);
-
-    if ($user !== null) {
-      //$user->update(['name' => request('name')]);
-    } else {
-      $user = User::create([
-        'id' => $request->user_id,
-        'dv' => $request->dv,
-        'name' => $request->name,
-        'fathers_family' =>  $request->fathers_family,
-        'mothers_family' =>  $request->mothers_family,
-        'country_id' =>  $request->country_id,
-        'address' =>  $request->address,
-        'phone_number' =>  $request->phone_number,
-        'email' =>  $request->email
-      ]);
-    }
+    //   ]);
+    // }
 
     //crea service request
     $serviceRequest = new ServiceRequest($request->All());
@@ -522,7 +523,7 @@ class ServiceRequestController extends Controller
     $establishments = Establishment::orderBy('name', 'ASC')->get();
     $professions = Profession::orderBy('name', 'ASC')->get();
 
-    $subdirections = OrganizationalUnit::where('name', 'LIKE', '%subdirec%')->orderBy('name', 'ASC')->get();
+    $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->orderBy('name', 'ASC')->get();
     $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
     $countries = Country::orderBy('name', 'ASC')->get();
 

@@ -10,40 +10,27 @@
 <form method="get" class="form-inline mb-3" action="{{ route('rrhh.service-request.report.export_sirh') }}">
     <div class="form-row">
         <div class="form-group ml-4">
-            <label for="for_establishment_id">Establecimiento*</label>
-            <select name="establishment" class="form-control" id="for_establishment_id" required>
-                <option value="">Seleccionar</option>
-                @foreach($establishments as $establishment)
-                <option value="{{$establishment->id}}">
-                {{$establishment->name}}
-                </option>
-                @endforeach
-            </select>
-        </div>
-        <div class="form-group ml-4">
-        <label for="for_sirh_id">Cargado*</label>
-        <select name="sirh" class="form-control" id="for_sirh" required>
-            <option value="">Seleccionar</option>
-            <option value="1"{{ (old('sirh')==1)?'selected':'' }} >Sí</option>
-            <option value="0" {{ (old('sirh')==0)?'selected':'' }} >No</option>
-        </select>
-        </div>
+            <label for="for_run">Run</label>
+            <input name="run" class="form-control" id="for_run_id" placeholder="opcional. EJ: 123456">
+            
+        </div>        
     </div>
+    <br>
+    <br>
     <div class="form-row">
         <div class="form-group ml-3">
-            <label for="for_from">Fecha Inicio de Contrato Desde</label>
+            <label for="for_from">Fecha Inicio de Contrato Desde*</label>
             <input type="datetime-local" class="form-control mx-sm-3" id="for_from" name="from" value="{{old('from') }}" required>
         </div>
-        <!-- <div class="form-group">
-            <label for="for_to">Fecha Inicio de Contrato Hasta</label>
+        <div class="form-group ml-3">
+            <label for="for_to">Fecha Inicio de Contrato Hasta*</label>
             <input type="datetime-local" class="form-control mx-sm-3" id="for_to" name="to" value="{{old('to') }}" required>
-        </div>  -->
-    </div>               
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+    </div>
         
         <div class="form-row">
-        <div class="form-group mr-1">
-            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
-        </div>
+        
         
         @if(isset($request->establishment))
         <div class="float-right">
@@ -85,10 +72,14 @@
     @empty
 
 
-    @endforelse
+    @endforelse   
+
+
 
 
 </table>
+
+{{ $filitas->appends(request()->query())->links() }}
 
 
 
