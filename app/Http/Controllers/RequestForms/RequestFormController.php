@@ -100,13 +100,13 @@ class RequestFormController extends Controller {
           $approvedRequestForms = RequestForm::where('status', 'in_progress')
                                  ->whereHas('eventRequestForms', function ($q) {
                                  $q->where('event_type','pre_finance_event')
-                                 ->where('status', 'approved');})
+                                 ->where('status', 'approved');})->get();
 
-                                 ->whereDoesntHave('eventRequestForms', function ($f) {
-                                 $f->where('event_type','finance_event')
-                                 ->where('status', 'approved');
+                                 //->whereDoesntHave('eventRequestForms', function ($f) {
+                                 //$f->where('event_type','finance_event')
+                                 //->where('status', 'approved');
 
-                                 })->get();
+                                 //})->get();
 
           $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
 

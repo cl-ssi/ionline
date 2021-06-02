@@ -13,7 +13,7 @@ use Carbon\Carbon;
 class PrefinanceAuthorization extends Component
 {
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $rejectedComment,
-           $lstBudgetItem, $budget_item_id, $program, $sigfe;
+           $lstBudgetItem, $collectItemRequest, $program, $sigfe, $codigo;
 
     protected $rules = [
         'rejectedComment' => 'required|min:6',
@@ -29,14 +29,14 @@ class PrefinanceAuthorization extends Component
       $this->requestForm        = $requestForm;
       $this->rejectedComment    = '';
       //$this->organizationalUnit = $requestForm->organizationalUnit->name;
-      $this->budget_item_id     = array();
+      $this->collectItemRequest = array();
+      $this->codigo             = '';   
       $this->lstBudgetItem      = BudgetItem::all();
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
       $this->position           = auth()->user()->position;
       $this->program            = $requestForm->program;
       $this->sigfe              = $requestForm->sigfe;
-      //$this->position           = Authority::getAmIAuthorityFromOu(Carbon::now(),'manager',auth()->user()->id)[0]->position;
     }
 
     public function acceptRequestForm()
@@ -83,6 +83,7 @@ class PrefinanceAuthorization extends Component
     }
 
     public function render() {
+        //$this->collectItemRequest->dd();
         return view('livewire.request-form.prefinance-authorization');
     }
 }
