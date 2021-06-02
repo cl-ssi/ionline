@@ -23,11 +23,11 @@
 
           <div class="form-group col-6">
             <label for="forRut">Folio Requerimiento SIGFE:</label>
-            <input name="userAuthority" class="form-control form-control-sm" type="text">
+            <input wire:model="sigfe" name="sigfe" class="form-control form-control-sm" type="text">
           </div>
           <div class="form-group col-6">
             <label>Programa Asociado:</label><br>
-            <input name="position" class="form-control form-control-sm" type="text">
+            <input wire:model="program" name="program" class="form-control form-control-sm" type="text">
           </div>
 
 
@@ -58,7 +58,7 @@
                           <td>{{$key+1}}</td>
                           <td>{{$item->id}}</td>
                           <td>
-                          <select  name="budget_item_id" class="form-control form-control-sm" required>
+                          <select  name="budget_item_id[]" class="form-control form-control-sm" required>
                             <option value="">Seleccione...</option>
                             @foreach($lstBudgetItem as $val)
                               <option value="{{$val->id}}">{{$val->code.' - '.$val->name}}</option>

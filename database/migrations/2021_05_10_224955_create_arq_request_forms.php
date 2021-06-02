@@ -24,6 +24,7 @@ class CreateArqRequestForms extends Migration
             $table->string('program')->nullable();
             $table->longText('justification');
             $table->string('type_form');
+            $table->string('sigfe')->nullable();
             $table->string('bidding_number')->nullable();//id nro. de licitación.
             $table->string('purchase_mechanism');
             $table->enum('status', ['approved', 'rejected', 'created', 'in_progress', 'closed']);

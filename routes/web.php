@@ -1138,6 +1138,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/supply_index', [RequestFormController::class, 'supplyIndex'])->name('supply_index');
     Route::get('/{requestForm}/supply_sign', [RequestFormController::class, 'supplySign'])->name('supply_sign');
 
+    Route::get('/{requestForm}/destroy', [RequestFormController::class, 'destroy'])->name('destroy');
 
     Route::post('/store', [RequestFormController::class, 'store'])->name('store');
     Route::put('/update', [RequestFormController::class, 'update'])->name('update');

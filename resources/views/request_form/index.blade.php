@@ -6,6 +6,7 @@
 <h4 class="mb-3">Formularios de Requerimiento - Bandeja de Entrada</h4>
 
 @include('request_form.nav')
+@if(!$empty)
 
         <fieldset class="form-group">
             <div class="input-group mb-3">
@@ -31,8 +32,8 @@
                   <th scope="col">Fecha Creación</th>
                   <th scope="col">Espera</th>
                   <th scope="col" class="text-center">J</th>
-                  <th scope="col" class="text-center">F1</th>
-                  <th scope="col" class="text-center">F2</th>
+                  <th scope="col" class="text-center">RP</th>
+                  <th scope="col" class="text-center">F</th>
                   <th scope="col" class="text-center">A</th>
                   <th scope="col" colspan="2" class="text-center">Opciones</th>
                 </tr>
@@ -41,7 +42,7 @@
                   @foreach($createdRequestForms as $requestForm)
                         <tr>
                             <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
-                            <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
+                            <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->tinnyName() : 'Usuario eliminado' }}</td>
                             <td class="align-middle">{{ $requestForm->justification }}</td>
                             <td class="align-middle">{{ $requestForm->created_at }}</td>
                             <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
@@ -54,7 +55,7 @@
                               <i class="far fa-edit"></i></a>
                             </td>
                             <td class="text-center align-middle">
-                              <a href="#" class="text-danger" title="Eliminar">
+                              <a href="{{ route('request_forms.destroy', $requestForm->id) }}" class="text-danger" title="Eliminar">
                               <i class="far fa-trash-alt"></i></a>
                             </td>
                         </tr>
@@ -77,8 +78,8 @@
                   <th scope="col">Espera</th>
                   <th scope="col">Última Actualziación</th>
                   <th scope="col" class="text-center">J</th>
-                  <th scope="col" class="text-center">F1</th>
-                  <th scope="col" class="text-center">F2</th>
+                  <th scope="col" class="text-center">RP</th>
+                  <th scope="col" class="text-center">F</th>
                   <th scope="col" class="text-center">A</th>
                 </tr>
               </thead>
@@ -91,42 +92,6 @@
                             <td class="align-middle">{{ $requestForm->created_at }}</td>
                             <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
                             <td class="align-middle">{{ $requestForm->updated_at }}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
-                        </tr>
-                  @endforeach
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="card border border-muted text-black bg-light mb-5">
-          <div class="card-header text-primary h6"><i class="far fa-thumbs-up"></i> Formularios Aprobados</div>
-          <div class="card-body">
-            <table class="table table-striped table-sm small">
-              <thead>
-                <tr>
-                  <th scope="col">Id</th>
-                  <th scope="col">Usuario Gestor</th>
-                  <th scope="col">Justificación</th>
-                  <th scope="col">Fecha Creación</th>
-                  <th scope="col">Espera</th>
-                  <th scope="col" class="text-center">J</th>
-                  <th scope="col" class="text-center">F1</th>
-                  <th scope="col" class="text-center">F2</th>
-                  <th scope="col" class="text-center">A</th>
-                </tr>
-              </thead>
-              <tbody>
-                  @foreach($approvedRequestForms as $requestForm)
-                        <tr>
-                            <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
-                            <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
-                            <td class="align-middle">{{ $requestForm->justification }}</td>
-                            <td class="align-middle">{{ $requestForm->created_at }}</td>
-                            <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
@@ -152,8 +117,8 @@
                   <th scope="col">Usuario Rechazo</th>
                   <th scope="col">Comentario</th>
                   <th scope="col" class="text-center">J</th>
-                  <th scope="col" class="text-center">F1</th>
-                  <th scope="col" class="text-center">F2</th>
+                  <th scope="col" class="text-center">RP</th>
+                  <th scope="col" class="text-center">F</th>
                   <th scope="col" class="text-center">A</th>
                 </tr>
               </thead>
@@ -177,6 +142,42 @@
             </table>
           </div>
         </div>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalCenter">
+          <i class="far fa-trash-alt"></i>
+        </button>
+
+        <a class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" href="http://127.0.0.1:8000/request_forms/28/edit" role="button">Editar</a>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                ...Hola mundo
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+@else
+        <div class="card">
+          <div class="card-body">
+            No hay formularios de requerimiento para mostrar.
+          </div>
+        </div>
+@endif
 
 @endsection
 @section('custom_js')

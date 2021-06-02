@@ -13,7 +13,7 @@ class RequestForm extends Model
 {
     protected $fillable = [
         'applicant_position', 'estimated_expense', 'program', 'justification', 'type_form', 'bidding_number','purchase_mechanism', 'creator_user_id',
-        'supervisor_user_id', 'applicant_user_id', 'applicant_ou_id', 'status'
+        'supervisor_user_id', 'applicant_user_id', 'applicant_ou_id', 'status', 'sigfe'
     ];
 
     public function creator() {
@@ -39,6 +39,26 @@ class RequestForm extends Model
     public function eventRequestForms() {
         return $this->hasMany(EventRequestForm::class);
     }
+
+    public static function boot() {
+        parent::boot();
+
+        static::deleting(function($requestForm) { // before delete() method call this
+             $requestForm->eventRequestForms()->delete();
+             $requestForm->itemRequestForms()->delete();
+             // do the rest of the cleanup...
+        });
+    }
+
+
+
+
+
+
+
+
+
+
 
     public function getPurchaseMechanism(){
       switch ($this->purchase_mechanism) {
