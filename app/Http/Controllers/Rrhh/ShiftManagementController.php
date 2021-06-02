@@ -53,7 +53,8 @@ class ShiftManagementController extends Controller
             'tp4turno',
             'tp3turno',
             'auxiliares',
-            'administrativos'
+            'administrativos',
+            'auxiliar de servicio TA',
     );
     public function index(Request $r, $groupname=null){
     	// echo "Shift Management";

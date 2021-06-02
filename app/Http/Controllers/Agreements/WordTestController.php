@@ -18,7 +18,6 @@ use App\Municipality;
 use App\Establishment;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
-use App\Rrhh\Authority;
 use Luecano\NumeroALetras\NumeroALetras;
 use PhpOffice\PhpWord\Settings;
 use PhpOffice;
@@ -32,7 +31,7 @@ class WordTestController extends Controller
     public function createWordDocx($id)
     {
     	// SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
-    	$agreements     = Agreement::with('Program','Commune','agreement_amounts','authority')->where('id', $id)->first();
+    	$agreements     = Agreement::with('Program','Commune','agreement_amounts','director_signer.user')->where('id', $id)->first();
     	$stage          = Stage::where('agreement_id', $id)->first();
     	// $components     = ProgramComponent::where('program_id', $agreements->program_id)->get();
     	$amounts        = AgreementAmount::with('program_component')->Where('agreement_id', $id)->get();
@@ -115,12 +114,12 @@ class WordTestController extends Controller
 
         //Director
         //construir nombre director
-        $first_name = explode(' ',trim($agreements->authority->user->name))[0];
-        $director = mb_strtoupper($first_name . ' ' . $agreements->authority->user->fathers_family . ' ' . $agreements->authority->user->mothers_family);
-        $directorApelativo = $agreements->authority->position;
-        $directorRut = mb_strtoupper($agreements->authority->user->runFormat());
-        $directorDecreto = $agreements->authority->decree;
-        $directorNationality = Str::contains($agreements->authority->position, 'a') ? 'chilena' : 'chileno';
+        $first_name = explode(' ',trim($agreements->director_signer->user->name))[0];
+        $director = mb_strtoupper($first_name . ' ' . $agreements->director_signer->user->fathers_family . ' ' . $agreements->director_signer->user->mothers_family);
+        $directorApelativo = $agreements->director_signer->appellative;
+        $directorRut = mb_strtoupper($agreements->director_signer->user->runFormat());
+        $directorDecreto = $agreements->director_signer->decree;
+        $directorNationality = Str::contains($agreements->director_signer->appellative, 'a') ? 'chilena' : 'chileno';
 
 		$templateProcesor->setValue('programa',$agreements->Program->name);
 		$templateProcesor->setValue('programaTitulo',mb_strtoupper($programa));
@@ -165,7 +164,7 @@ class WordTestController extends Controller
     public function createResWordDocx(Request $request, $id)
     {
         // SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
-        $agreements     = Agreement::with('Program','Commune','agreement_amounts','authority', 'referrer')->where('id', $id)->first();
+        $agreements     = Agreement::with('Program','Commune','agreement_amounts', 'referrer')->where('id', $id)->first();
         $municipality   = Municipality::where('commune_id', $agreements->Commune->id)->first();
         $file           = Storage::disk('')->path($agreements->file);
         $meses          = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
@@ -197,12 +196,7 @@ class WordTestController extends Controller
         $programa = $first_word == 'Programa' ? substr(strstr($agreements->Program->name," "), 1) : $agreements->Program->name;
         
         //Director ssi quien firma a la fecha de hoy
-        // $director_signature = Authority::getAuthorityFromDate(1, Carbon::now()->toDateTimeString(), 'manager');
-        $director_signature = Signer::find($request->signer_id);
-        $first_name = explode(' ',trim($director_signature->user->name))[0];
-        $director = mb_strtoupper($first_name . ' ' . $director_signature->user->fathers_family . ' ' . $director_signature->user->mothers_family);
-        $directorDecreto = $director_signature->decree;
-        $directorApelativo = mb_strtoupper($director_signature->appellative);
+        $directorDecreto = Signer::find($request->signer_id)->decree;
 
         //email referente
         $emailReferrer = $agreements->referrer != null ? $agreements->referrer->email : '';
@@ -225,8 +219,6 @@ class WordTestController extends Controller
         $mainTemplateProcessorEnd->setValue('periodoConvenio',$periodoConvenio);
         $mainTemplateProcessorEnd->setValue('ilustreTitulo',$ilustre);
         $mainTemplateProcessorEnd->setValue('comuna',$comuna);
-        $mainTemplateProcessorEnd->setValue('director',$director);
-        $mainTemplateProcessorEnd->setValue('directorApelativo',$directorApelativo);
         $mainTemplateProcessorEnd->setValue('emailMunicipality',$emailMunicipality);
         $mainTemplateProcessorEnd->setValue('emailReferrer',$emailReferrer);
        

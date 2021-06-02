@@ -111,7 +111,13 @@
         padding: 1000px;
         font-weight: bold;
     }
-  
+  .deleteButton {
+    color: red;
+  }
+  .deleteButton:hover {
+        opacity: 0.5;
+        filter:  alpha(opacity=50);
+  }
 </style>
 
 
