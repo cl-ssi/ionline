@@ -7,11 +7,12 @@ use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\EventRequestForm;
 use App\Rrhh\Authority;
 use Carbon\Carbon;
-//use App\User;
+use App\User;
 
 class Authorization extends Component
 {
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $rejectedComment;
+    public $lstSupervisorUser, $supervisorUser;
 
     protected $rules = [
         'rejectedComment' => 'required|min:6',
@@ -25,6 +26,7 @@ class Authorization extends Component
     public function mount(RequestForm $requestForm, $eventType) {
       $this->eventType          = $eventType;
       $this->requestForm        = $requestForm;
+      $this->lstSupervisorUser = User::where('organizational_unit_id', 37)->get();
       $this->rejectedComment    = '';
       //$this->organizationalUnit = $requestForm->organizationalUnit->name;
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
