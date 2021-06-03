@@ -93,13 +93,13 @@
         <div class="form-row">
 
             <fieldset class="form-group col">
-                <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
-                <textarea class="form-control" id="for_recipients" name="recipients" rows="6">{{$signature->recipients}}</textarea>
+                <label for="for_distribution">Distribución del documento (separados por coma)</label>
+                <textarea class="form-control" id="for_distribution" name="distribution" rows="6"  placeholder="Se cambió de posición Distribución con Destinario a como estaba antiguamente el generador, para que vea el campo que se está llenando">{{$signature->distribution}}</textarea>
             </fieldset>
 
             <fieldset class="form-group col">
-                <label for="for_distribution">Distribución del documento (separados por coma)</label>
-                <textarea class="form-control" id="for_distribution" name="distribution" rows="6">{{$signature->distribution}}</textarea>
+                <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
+                <textarea class="form-control" id="for_recipients" name="recipients" rows="6">{{$signature->recipients}}</textarea>
             </fieldset>
 
         </div>

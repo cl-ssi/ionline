@@ -364,6 +364,10 @@
 				<option value="Nutricionista turno" >Nutricionista turno</option>
 				<option value="Informático">Informático</option>
 				<option value="Ingeniero">Ingeniero</option>
+				<option value="Constructor civil">Constructor civil</option>
+				<option value="Arquitecto">Arquitecto</option>
+				<option value="Dibujante técnico proyectista">Dibujante técnico proyectista</option>
+
 			</select>
 		</fieldset>
 
