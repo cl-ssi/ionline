@@ -238,8 +238,8 @@ class ShiftManagementController extends Controller
         $nSType->save();
         session()->flash('info', 'El Turno tipo <i>"'.$r->name.'"</i> ha sido creado.');
         return redirect()->route('rrhh.shiftsTypes.index');
-
     }
+
     public function updateshifttype(Request $r){
     	// echo "updateshifttype ".implode(",", $r->day_series); 
 
@@ -250,8 +250,8 @@ class ShiftManagementController extends Controller
 		$fSType->update();
         session()->flash('info', 'El Turno tipo <i>"'.$r->name.'"</i> ha sido modificado.');
         return redirect()->route('rrhh.shiftsTypes.index');
-
     } 
+
     public function assignStaff(Request $r){
         $nShift = new ShiftUser;
         $nShift->date_from = $r->dateFromAssign;
@@ -427,8 +427,8 @@ class ShiftManagementController extends Controller
 
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
-
     }
+
     public function goToNextMonth(){
 
         if(Session::get('actuallyMonth')){
@@ -447,8 +447,8 @@ class ShiftManagementController extends Controller
 
         }
         return redirect()->route('rrhh.shiftManag.index');
-
     }
+
     public function goToPreviousMonth(){
         
         if(Session::get('actuallyMonth')){
@@ -469,9 +469,10 @@ class ShiftManagementController extends Controller
     }
 
     public function downloadShiftControlInPdf(){
-        return view('rrhh.shift_control.form');
 
+        return view('rrhh.shift_control.form');
     }
+
 
     public function myShift(){
         // echo "myShift";
@@ -519,18 +520,18 @@ class ShiftManagementController extends Controller
             })->whereHas("shiftUserDayLog",  function($q) use($status){
                 $q->where('change_type',$status);
             })->get();*/
-        $myConfirmationEarrings = ShiftUserDay::where("status",3)->whereHas("ShiftUser",  function($q) use($userId){
-                $q->where('user_id',$userId);
-            })->whereHas("shiftUserDayLog",  function($q) use($status){
-                $q->without('change_type,"4');
-            })->get();
+        // $myConfirmationEarrings = ShiftUserDay::where("status",3)->whereHas("ShiftUser",  function($q) use($userId){
+        //         $q->where('user_id',$userId);
+        //     })->whereHas("shiftUserDayLog",  function($q) use($status){
+        //         $q->without('change_type,"4');
+        //     })->get();
         
-        $myConfirmationEarrings = ShiftUserDay::where("status",3)->whereHas("ShiftUser",  function($q) use($userId){
-                $q->where('user_id',$userId);
-            })->get();
+        // $myConfirmationEarrings = ShiftUserDay::where("status",3)->whereHas("ShiftUser",  function($q) use($userId){
+        //         $q->where('user_id',$userId);
+        //     })->get();
 
         $myConfirmationEarrings = array();
-        foreach (ShiftUserDay::where("status",3)->whereHas("ShiftUser",  function($q) use($userId){
+        foreach (ShiftUserDay::where("status",3)->whereHas("ShiftUser",  function($q) use($userId){ // Busco todos los dias que esten en estado 3 que es turno extra,  
                 $q->where('user_id',$userId);
             })->get() as $myChangeDay) 
             {
@@ -547,7 +548,7 @@ class ShiftManagementController extends Controller
                 // echo json_encode($myChangeDay->shiftUserDayLog);
                 $confirmed= false;
                 foreach ($myChangeDay->shiftUserDayLog as $history) {
-                   if($history->change_type == 4 || $history->change_type == 5 )
+                   if($history->change_type == 4 || $history->change_type == 5  || $history->change_type == 6) // 4 confirmado por usuario -  confirmado por administrador  - 6 reject
                         $confirmed= true;
                 }
                 if(!$confirmed)
@@ -559,4 +560,59 @@ class ShiftManagementController extends Controller
          return view('rrhh.shift_management.my-shift',compact('days','actuallyMonth','actuallyDay','actuallyYear','sTypes','users','months','myConfirmationEarrings','tiposJornada'));
     }
 
+    public function myShiftConfirm($day){
+
+        $d = ShiftUserDay::find($day);
+        echo "R".json_encode($d); 
+
+        $nHistory = new ShiftDayHistoryOfChanges;
+        $nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family."\" ha <b>confirmado la jornada</b> del \"".$d->day;
+        $nHistory->shift_user_day_id = $d->id;
+        $nHistory->modified_by = Auth()->user()->id;
+        $nHistory->change_type = 4;//0_asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+        $nHistory->day =  $d->day;
+        $nHistory->previous_value = "";
+        $nHistory->current_value = "";
+        $nHistory->save();
+        
+           session()->flash('success', 'Se ha confirmado el turno extra del dia '.$d->day);
+        return redirect()->route('rrhh.shiftManag.myshift');
+      
+    }
+    public function myShiftReject($day){
+        $d = ShiftUserDay::find($day);
+       // echo "C".json_encode($d); 
+
+               $nHistory = new ShiftDayHistoryOfChanges;
+        $nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family."\" ha <b>rechazado la jornada</b> del \"".$d->day;
+        $nHistory->shift_user_day_id = $d->id;
+        $nHistory->modified_by = Auth()->user()->id;
+        $nHistory->change_type = 6;//0_asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+        $nHistory->day =  $d->day;
+        $nHistory->previous_value = "";
+        $nHistory->current_value = "";
+        $nHistory->save();
+        session()->flash('danger', 'Se ha rechazado el turno extra del dia '.$d->day);
+        return redirect()->route('rrhh.shiftManag.myshift');
+
+    }
+
+    public function adminShiftConfirm($day){
+
+        $d = ShiftUserDay::find($day);
+        // echo "R".json_encode($day); 
+
+        $nHistory = new ShiftDayHistoryOfChanges;
+        $nHistory->commentary = "El administrador ha <b>confirmado la jornada</b> del \"".$d->day;
+        $nHistory->shift_user_day_id = $d->id;
+        $nHistory->modified_by = Auth()->user()->id;
+        $nHistory->change_type = 5;//0_asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+        $nHistory->day =  $d->day;
+        $nHistory->previous_value = $d->status;
+        $nHistory->current_value = $d->status;
+        $nHistory->save();
+        
+        return redirect()->route('rrhh.shiftManag.index');
+      
+    }
 }

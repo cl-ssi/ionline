@@ -8,7 +8,8 @@ use App\Models\Rrhh\ShiftUserDay;
 class ChangeShiftDayStatus extends Component
 {	
 
-	public $count = 0;
+    public $count = 0;
+	public $loop;
 	public $shiftDay;
 	public $filered="off";
 	// public $id;
