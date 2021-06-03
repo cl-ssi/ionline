@@ -4,6 +4,7 @@ namespace App\Models\Rrhh;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+// use App\Models\Rrhh\ShiftDayHistoryOfChanges;   
 
 class ShiftUserDay extends Model
 {
@@ -25,6 +26,25 @@ class ShiftUserDay extends Model
     	return $this->hasMany(ShiftDayHistoryOfChanges::class, 'shift_user_day_id');
 	}
 	public function confirmationStatus(){
+		$actuallyStatus = 0;
+		$reject = 0;
+		if($this->status!=3)
+			$actuallyStatus = 1;
+		else
+		{
+			foreach ($this->shiftUserDayLog as $history) {
+                   if($history->change_type == 4 || $history->change_type == 5 ) // 4 confirmado por usuario -  confirmado por administrador 
+                        $actuallyStatus= 1;
+                    elseif($history->change_type == 6) // rechazado
+						$reject = 1;
+
+                }
+		}
+		if($reject == 0)
+			return $actuallyStatus;
+		else
+			return 3;
+			
 
 	}
 

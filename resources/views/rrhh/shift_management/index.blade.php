@@ -334,7 +334,7 @@
                                 @endphp
                                 <th class="brless dia" 
                                     style="color:{{ ( ($dateFiltered->isWeekend() )?'red':( ( sizeof($holidays->where('date',$actuallyYear.'-'.$actuallyMonth.'-'.$i)) > 0 ) ? 'red':'white' ))}}" >
-                                    <p style="font-size: 10px">{{$i}}</p>
+                                    <p style="font-size: 8px">{{$i}}</p>
                                 </th>   
                                 <!-- <th class="brless dia">🌞</th> -->
                                 <!-- <th class="noche">🌒</th> -->
@@ -421,14 +421,21 @@
        font-size: 13px;
     }
     .btn-full {
-        display: block;
+        display: inherit;
         width: 100%;
         height: 100%;
         margin:-1000px;
         padding: 1000px;
         font-weight: bold;
     }
-
+    .btn-full2 {
+        display: inline;
+        width: 100%;
+        height: 100%;
+        margin:-1000px;
+        padding: 10px;
+        font-weight: bold;
+    }
 </style>
 
 <!-- 
