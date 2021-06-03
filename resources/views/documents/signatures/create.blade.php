@@ -104,17 +104,23 @@
             <hr>
         @endif
 
-        <div class="form-row">
-
-            <fieldset class="form-group col">
-                <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
-                <textarea type="text" class="form-control" id="for_recipients" name="recipients" rows="6"></textarea>
-            </fieldset>
+        <div class="form-row">            
 
             <fieldset class="form-group col">
                 <label for="for_distribution">Distribución del documento (separados por coma)</label>
-                <textarea class="form-control" id="for_distribution" name="distribution"
+                <textarea class="form-control red-tooltip" id="for_distribution" name="distribution"
+                data-toggle="tooltip" data-placement="top" title="Se cambio de posición Destinatario y Distribución a como estaba en el sistema antiguamente, favor tenga cuidado de ver el apartado donde está digitando"
+                placeholder="Se cambio de posición Destinatario y Distribución a como estaba en el sistema antiguamente, favor cerciorarse el apartado que está digitando"
                           rows="6">{{  isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : ''}}</textarea>
+            </fieldset>
+
+            <fieldset class="form-group col">
+                <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
+                <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6" 
+                data-toggle="tooltip"  data-placement="top" title="Se cambio de posición Destinatario y Distribución a como estaba en el sistema antiguamente, favor cerciorarse el apartado que está digitando"
+                placeholder="Se cambio de posición Destinatario y Distribución a como estaba en el sistema antiguamente, favor cerciorarse el apartado que está digitando"
+                
+                ></textarea>
             </fieldset>
 
         </div>
