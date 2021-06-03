@@ -70,10 +70,8 @@
     @endif
 
     <li class="nav-item">
-        <a class="nav-link"
-            href="{{ route('request_forms.prefinance_index') }}">
-            <i class="fas fa-inbox"></i> Pre-Finanzas
-            <span class="badge badge-secondary">{{ App\Utilities::getPendingDirectorAuthorize() }}</span></a>
+        <a class="nav-link" href="{{ route('request_forms.prefinance_index') }}">
+          <i class="fas fa-inbox"></i> Refrendación P.
         </a>
     </li>
 

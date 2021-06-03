@@ -121,6 +121,7 @@ class RequestFormController extends Controller {
       //    $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
       //else
       //    $manager = $manager->user->getFullNameAttribute();
+      //$arrayItemRequest = array();
       $eventType = 'pre_finance_event';
       return view('request_form.prefinance_sign', compact('requestForm', 'eventType'));
     }
