@@ -3,7 +3,7 @@
 @section('content')
 
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
-<h4 class="mb-3">Formularios de Requerimiento - Bandeja de Entrada Pre-Finanzas</h4>
+<h4 class="mb-3">Formularios de Requerimiento - Bandeja de Entrada Refrendación Presupuestaria</h4>
 
 @include('request_form.nav')
 

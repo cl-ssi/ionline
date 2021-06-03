@@ -54,7 +54,7 @@
                           <td>{{$key+1}}</td>
                           <td>{{$item->id}}</td>
                           <td>
-                          <select  class="form-control form-control-sm" required>
+                          <select  wire:model.defer="arrayItemRequest.{{ $item->id }}.budgetId"  class="form-control form-control-sm" required>
                             <option value="">Seleccione...</option>
                             @foreach($lstBudgetItem as $val)
                               <option value="{{$val->id}}">{{$val->code.' - '.$val->name}}</option>

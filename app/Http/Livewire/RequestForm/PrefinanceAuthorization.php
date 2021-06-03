@@ -13,7 +13,13 @@ use Carbon\Carbon;
 class PrefinanceAuthorization extends Component
 {
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $rejectedComment,
-           $lstBudgetItem, $collectItemRequest, $program, $sigfe, $codigo;
+           $lstBudgetItem, $program, $sigfe, $codigo;
+    public $arrayItemRequest = [
+            [
+              'budgetId' => ''
+            ]
+    ];
+
 
     protected $rules = [
         'rejectedComment' => 'required|min:6',
@@ -29,8 +35,8 @@ class PrefinanceAuthorization extends Component
       $this->requestForm        = $requestForm;
       $this->rejectedComment    = '';
       //$this->organizationalUnit = $requestForm->organizationalUnit->name;
-      $this->collectItemRequest = array();
-      $this->codigo             = '';   
+      //$this->arrayItemRequest   = array();
+      $this->codigo             = '';
       $this->lstBudgetItem      = BudgetItem::all();
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
@@ -41,6 +47,7 @@ class PrefinanceAuthorization extends Component
 
     public function acceptRequestForm()
     {
+      /*
       $event = EventRequestForm::where('request_form_id', $this->requestForm->id)
                                ->where('event_type', $this->eventType)
                                ->where('status', 'created')->first();
@@ -59,6 +66,22 @@ class PrefinanceAuthorization extends Component
           }
       session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' NO se puede Autorizar!');
       return redirect()->route('request_forms.prefinance_index');
+      */
+      //dd('Oscar');
+
+      $strID = '';
+
+      foreach($this->requestForm->itemRequestForms as $item){
+        $item->budget_item_id = $this->arrayItemRequest[$item->id]['budgetId'];
+      }
+
+      foreach($this->requestForm->itemRequestForms as $item){
+        $strID = $strID.'item id: '.$item->id.' -- budgetID: '.$item->budget_item_id.' ';
+      }
+      dd($strID);
+
+      //$this->arrayItemRequest
+      //dd($this->arrayItemRequest);
     }
 
     public function rejectRequestForm() {
