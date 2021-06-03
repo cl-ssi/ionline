@@ -483,16 +483,13 @@ class FirmaDigitalController extends Controller
 
         $url        = env('FIRMA_URL');
         $api_token  = env('FIRMA_API_TOKEN');
-        $secret     = 'abcd';
-        // $secret     = env('FIRMA_SECRET');
-        // $otp        = $otp;
-        // $run        = Auth::id();
-        $run        = '22222222';
+        $secret     = env('FIRMA_SECRET');
+        $otp        = $otp;
+        $run        = Auth::id();
 
         $purpose    = 'Desatendido';
         // $purpose    = 'Propósito General';
-        // $entity     = 'Servicio de Salud Iquique';
-        $entity     = 'Subsecretaría General de La Presidencia';
+        $entity     = 'Servicio de Salud Iquique';
 
         /* Confección firma en JWT */
         $payload = [
