@@ -27,10 +27,11 @@ class FirmaDigitalController extends Controller
     const modoDesatendidoTest = 0;
     const modoAtendidoTest = 1;
     const modoAtendidoProduccion = 2;
+    const modoDesatendidoProduccion = 3;
 
     /**
-     * Función que recibe pdf a firmar desde url o archivo, lo firma llamando a signPdfApi y guarda NUEVO registro
-     * SignaturesFile.
+     * Se utiliza para firmar docs que no se crean en el modulo de solicitud de firmas. Recibe pdf a firmar desde url o archivo, 
+     * lo firma llamando a signPdfApi y guarda NUEVO registro SignaturesFile.
      * @param Request $request
      * @return string
      * @throws Exception
@@ -124,6 +125,10 @@ class FirmaDigitalController extends Controller
             $ct_firmas_visator = $signaturesFlow->signaturesFile->signaturesFlows->where('type', 'visador')->count();
             $ct_posicion_firmas = $signaturesFlow->sign_position;
         }
+
+        // if($type === 'folio'){
+        //     $modo = self::modoDesatendidoProduccion;
+        // }
 
         $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $type, $docId, $verificationCode,
             $ct_firmas_visator, $ct_posicion_firmas, $visatorAsSignature);
@@ -287,10 +292,18 @@ class FirmaDigitalController extends Controller
             $otp = $otp;
             $run = Auth::id();
 //            $run = 16351236;
-
             $purpose = 'Propósito General';
             $entity = 'Servicio de Salud Iquique';
-        } else {
+        } elseif ($modo == self::modoDesatendidoProduccion) {
+            $url = env('FIRMA_URL');
+            $api_token = env('FIRMA_API_TOKEN');
+            $secret = env('FIRMA_SECRET');
+            $otp = $otp;
+            $run = Auth::id();
+//            $run = 16351236;
+            $purpose = 'Desatendido';
+            $entity = 'Servicio de Salud Iquique';
+        }else {
             session()->flash('warning', 'Modo de firma no seleccionado');
             return redirect()->route('documents.signatures.index', ['pendientes']);
         }
@@ -474,7 +487,8 @@ class FirmaDigitalController extends Controller
         $otp        = $otp;
         $run        = Auth::id();
 
-        $purpose    = 'Propósito General';
+        $purpose    = 'Desatendido';
+        // $purpose    = 'Propósito General';
         $entity     = 'Servicio de Salud Iquique';
 
         /* Confección firma en JWT */
@@ -545,10 +559,34 @@ class FirmaDigitalController extends Controller
         //print_r($data);
         //die();
 
-        $response = Http::withHeaders(['otp' => $otp])->post($url, $data);
+        // $response = Http::withHeaders(['otp' => $otp])->post($url, $data);
+        $response = Http::post($url, $data);
         $json = $response->json();
         //dd($json);
 //        $json['files'][0]['content'];
+
+
+        if (array_key_exists('error', $json)) {
+            return ['statusOk' => false,
+                'content' => '',
+                'errorMsg' => $json['error'],
+            ];
+        }
+
+        if (!array_key_exists('content', $json['files'][0])) {
+            if (array_key_exists('error', $json)) {
+                return ['statusOk' => false,
+                    'content' => '',
+                    'errorMsg' => $json['error'],
+                ];
+            } else {
+                return ['statusOk' => false,
+                    'content' => '',
+                    'errorMsg' => $json['files'][0]['status'],
+                ];
+            }
+
+        }
 
         header('Content-Type: application/pdf');
         echo base64_decode($json['files'][0]['content']);
