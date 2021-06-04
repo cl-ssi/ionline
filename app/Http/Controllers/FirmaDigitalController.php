@@ -423,7 +423,7 @@ class FirmaDigitalController extends Controller
         $pdf            = 'samples/samp.pdf';
         $pdfbase64      = base64_encode(file_get_contents(public_path($pdf)));
         $checksum_pdf   = md5_file(public_path($pdf));
-        $signatureType  = 'visador';
+        $signatureType  = 'firmante';
         $docId          = 1;
         $verificationCode = 'asaasf';
         $visatorAsSignature = false;
@@ -446,7 +446,7 @@ class FirmaDigitalController extends Controller
         $fontSize   = 10;
 
         if ($signatureType === 'firmante' || $visatorAsSignature === true) {
-            $im = @imagecreate(480, 80) or die("Cannot Initialize new GD image stream");
+            $im = @imagecreate(400, 80) or die("Cannot Initialize new GD image stream");
             $background_color = imagecolorallocate($im, 204, 204, 204);
             $white = imagecolorallocate($im, 255, 255, 255);
             imagefilledrectangle($im, 1, 1, 398, 78, $white);
@@ -470,10 +470,10 @@ class FirmaDigitalController extends Controller
                 $text_color, $font_light, Str::upper(Auth::user()->initials) . ' - ' . Str::upper(Auth::user()->organizationalUnit->initials));
         }
 
-        $firma_gob = imagecreatefrompng(public_path('images/firma_gobierno_80.png'));
-        //imagecopyresized($thumb, $origen, 0, 0, 0, 0, $nuevo_ancho, $nuevo_alto, $ancho, $alto);
-        //( $dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct )
-        imagecopymerge($im, $firma_gob, 400, 0, 0, 0, 80, 84, 100);
+        // $firma_gob = imagecreatefrompng(public_path('images/firma_gobierno_80.png'));
+        // //imagecopyresized($thumb, $origen, 0, 0, 0, 0, $nuevo_ancho, $nuevo_alto, $ancho, $alto);
+        // //( $dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct )
+        // imagecopymerge($im, $firma_gob, 400, 0, 0, 0, 80, 84, 100);
 
         /* Obtener Imagen de firma en variable $firma */
         ob_start();
@@ -487,8 +487,8 @@ class FirmaDigitalController extends Controller
         $otp        = $otp;
         $run        = Auth::id();
 
-        $purpose    = 'Desatendido';
-        // $purpose    = 'Propósito General';
+        // $purpose    = 'Desatendido';
+        $purpose    = 'Propósito General';
         $entity     = 'Servicio de Salud Iquique';
 
         /* Confección firma en JWT */
@@ -517,9 +517,9 @@ class FirmaDigitalController extends Controller
             $coordenada_y = 50 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
             $ancho = 170 * 1.4;
         } else if ($signatureType == 'firmante') {
-            $coordenada_x = 280;
-            $coordenada_y = 65;
-            $ancho = 200 * 1.4;
+            $coordenada_x = 185;
+            $coordenada_y = 365;
+            $ancho = 170 * 1.4;
             $alto = 55;
         }
 
@@ -559,8 +559,8 @@ class FirmaDigitalController extends Controller
         //print_r($data);
         //die();
 
-        // $response = Http::withHeaders(['otp' => $otp])->post($url, $data);
-        $response = Http::post($url, $data);
+        $response = Http::withHeaders(['otp' => $otp])->post($url, $data);
+        // $response = Http::post($url, $data);
         $json = $response->json();
         //dd($json);
 //        $json['files'][0]['content'];
