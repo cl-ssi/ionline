@@ -436,7 +436,7 @@ class ReportController extends Controller
   public function export_sirh(Request $request)
   {
 
-    $establishments = Establishment::all();
+    
     $filitas = null;
 
     $filitas = ServiceRequest::where('establishment_id', 1)->paginate(100);
@@ -463,13 +463,19 @@ class ReportController extends Controller
     }
 
 
-    return view('service_requests.export_sirh', compact('request', 'establishments', 'filitas'));
+    return view('service_requests.export_sirh', compact('request', 'filitas'));
   }
 
   public function export_sirh_txt(Request $request)
   {
 
+    $filas = null;
+
+    $filas = ServiceRequest::where('establishment_id', 1)->paginate(100);
+
     $run = $request->run;
+    
+    if ($request->has('from')) {
     $filas = ServiceRequest::where('establishment_id', 1)
       ->when($request->run != null, function ($q) use ($run) {
         return $q->where('user_id', $run);
@@ -480,6 +486,7 @@ class ReportController extends Controller
           ->whereNotNull('gross_amount')
           ->orwhereNotNull('resolution_date');
       })->paginate(100);
+    }
 
 
 

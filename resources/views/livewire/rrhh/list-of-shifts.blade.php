@@ -35,14 +35,18 @@
                        
                     @endphp
                     <td class="bbd day "  style="text-align:center;width:54px;height:54px">
-                            
                             @if( isset($d) && count($d) )  
-                               @livewire('rrhh.change-shift-day-status',['shiftDay'=>$d->first()],key($d->first()->id) )
+                                @foreach($d as $dd)
+                                   
+
+                                    @livewire('rrhh.change-shift-day-status',['shiftDay'=>$dd,'loop'=>$loop->index],key($dd->id) )
+
+                                @endforeach
                             @else
                                
                                <i data-toggle="modal" data-target="#newDatModal"  data-keyboard= "false" data-backdrop= "static"  style="color:green;font-weight: bold;font-size:20px" class="fa fa-plus btnShiftDay">
                                 </i>
-                              
+                                
                             @endif
                         
                     </td>

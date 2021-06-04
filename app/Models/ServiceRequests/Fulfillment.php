@@ -25,7 +25,8 @@ class Fulfillment extends Model implements Auditable
     'rrhh_approbation', 'rrhh_approbation_date', 'rrhh_approver_id', 'payment_ready', 'has_invoice_file',
     'finances_approbation', 'finances_approbation_date', 'finances_approver_id', 'invoice_path', 'user_id',
     'bill_number', 'total_hours_to_pay', 'total_to_pay', 'total_hours_paid', 'total_paid', 'payment_date', 'contable_month',
-    'payment_rejection_detail', 'illness_leave', 'leave_of_absence', 'assistance'
+    'payment_rejection_detail', 'illness_leave', 'leave_of_absence', 'assistance','backup_assistance'
+    
   ];
 
   public function MonthOfPayment()
