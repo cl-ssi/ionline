@@ -34,7 +34,7 @@
         
         
         <div class="float-right">
-        <a type="button" class="btn btn-success" target="_blank"  href="{{ route('rrhh.service-request.report.export-sirh-txt', ['establishment' => $request->establishment, 'sirh' => $request->sirh, 'from' => $request->from, 'to' => $request->to       ]  ) }}">Formato SIRH (Todos los Resultados Busqueda) (<small>{{$filitas->total()}} Registros</small>) <i class="far fa-file-excel"></i>
+        <a type="button" class="btn btn-success" target="_blank"  href="{{ route('rrhh.service-request.report.export-sirh-txt', ['establishment' => $request->establishment, 'sirh' => $request->sirh, 'from' => $request->from, 'to' => $request->to       ]  ) }}">Formato SIRH (Descarga los 100 primeros registros de la primera hoja) <i class="far fa-file-excel"></i>
         </a>
         </div>
         
