@@ -688,7 +688,8 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::resource('partes', 'Documents\ParteController');
 
     Route::get('signatures/index/{tab}', 'Documents\SignatureController@index')->name('signatures.index');
-    Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
+    Route::get('signatures/create/{xAxis?}/{yAxis?}', 'Documents\SignatureController@create')->name('signatures.create');
+    Route::resource('signatures', 'Documents\SignatureController')->except(['index', 'create']);
     Route::get('/showPdf/{signaturesFile}/{timestamp?}', 'Documents\SignatureController@showPdf')->name('signatures.showPdf');
     Route::post('/showPdfFromFile', 'Documents\SignatureController@showPdfFromFile')->name('signatures.showPdfFromFile');
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('signatures.showPdfAnexo');
