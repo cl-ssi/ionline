@@ -23,6 +23,9 @@
             <input type="hidden" name="signature_type" value="{{$signature->type}}">
         @endif
 
+        <input type="hidden" name='custom_x_axis' value="{{$xAxis}}">
+        <input type="hidden" name='custom_y_axis' value="{{$yAxis}}">
+
         <div class="form-row">
 
             <fieldset class="form-group col-3">

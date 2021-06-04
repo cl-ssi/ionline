@@ -118,6 +118,8 @@ class FirmaDigitalController extends Controller
         $modo = self::modoAtendidoProduccion;
         $verificationCode = Str::random(6);
         $docId = $signaturesFlow->signaturesFile->id;
+        $custom_x_axis = $signaturesFlow->custom_x_axis;
+        $custom_y_axis = $signaturesFlow->custom_y_axis;
 
         $ct_firmas_visator = null;
         $ct_posicion_firmas = null;
@@ -131,7 +133,7 @@ class FirmaDigitalController extends Controller
         // }
 
         $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $type, $docId, $verificationCode,
-            $ct_firmas_visator, $ct_posicion_firmas, $visatorAsSignature);
+            $ct_firmas_visator, $ct_posicion_firmas, $visatorAsSignature, $custom_x_axis, $custom_y_axis);
 
         if (!$responseArray['statusOk']) {
             session()->flash('warning', "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}");
@@ -212,7 +214,7 @@ class FirmaDigitalController extends Controller
      */
     public function signPdfApi(string $pdfbase64, string $checksum_pdf, $modo, string $otp, string $signatureType,
                                int $docId, string $verificationCode, int $ct_firmas_visator = null, int $posicion_firma = null,
-                               bool $visatorAsSignature = null): array
+                               bool $visatorAsSignature = null, int $custom_x_axis = null, int $custom_y_axis = null): array
     {
 
 //        dd($pdfbase64, $checksum_pdf, $modo, $otp, $signatureType);
@@ -334,8 +336,10 @@ class FirmaDigitalController extends Controller
             $coordenada_y = 50 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
             $ancho = 170 * 1.4;
         } else if ($signatureType == 'firmante') {
-            $coordenada_x = 310;
-            $coordenada_y = 49;
+            ($custom_x_axis) ? $coordenada_x = $custom_x_axis : $coordenada_x = 310;
+            ($custom_y_axis) ? $coordenada_y = $custom_y_axis : $coordenada_y = 49;
+            // $coordenada_x = 310;
+            // $coordenada_y = 49;
             $ancho = 170 * 1.4;
             $alto = 55;
         }
