@@ -96,74 +96,57 @@
             @if($signature->type == 'visators')
                 @livewire('signatures.visators', ['signature' => $signature])
             @else
-            <label for="for_document">Documento a distribuir</label>
-            <input type="file" class="form-control" id="for_document" name="document" accept="application/pdf" required>
+                @livewire('signatures.signer', ['signaturesFlowSigner' => $signature->signaturesFlowSigner])
             @endif
+            <hr>
+        @else
+            <hr>
+            @livewire('signatures.visators')
+            <hr>
+            @livewire('signatures.signer')
+            <hr>
+        @endif
 
-        </fieldset>
-
-        <fieldset class="form-group col">
-            <label for="for_annexed">Anexos</label>
-            <input type="file" class="form-control" id="for_annexed" name="annexed[]" multiple>
-        </fieldset>
-    </div>
-
-    @if(isset($signature) && isset($signature->type))
-    <hr>
-    @if($signature->type == 'visators')
-    @livewire('signatures.visators', ['signature' => $signature])
-    @else
-    @livewire('signatures.signer', ['signaturesFlowSigner' => $signature->signaturesFlowSigner])
-    @endif
-    <hr>
-    @else
-    <hr>
-    @livewire('signatures.visators')
-    <hr>
-    @livewire('signatures.signer')
-    <hr>
-    @endif
-
-    <div class="form-row">
-
+        <div class="form-row">            
 
         <h5 class="alert alert-info" role="alert">
             Se cambio de posición Destinatario y Distribución a como estaba en el sistema antiguamente, favor cerciorarse el apartado que está digitando
         </h5>
 
+            <fieldset class="form-group col">
+                <label for="for_distribution">Distribución del documento (separados por coma)</label>
+                <textarea class="form-control red-tooltip" id="for_distribution" name="distribution"                
+                          rows="6">{{  isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : ''}}</textarea>
+            </fieldset>
 
+            <fieldset class="form-group col">
+                <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
+                <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6"                 
+                
+                ></textarea>
+            </fieldset>
 
-        <fieldset class="form-group col">
-            <label for="for_distribution">Distribución del documento (separados por coma)</label>
-            <textarea class="form-control red-tooltip" id="for_distribution" name="distribution" rows="6">{{ isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : ''}}</textarea>
-        </fieldset>
+        </div>
 
-        <fieldset class="form-group col">
-            <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
-            <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6"></textarea>
-        </fieldset>
+        <button type="submit" id="submitBtn" class="btn btn-primary" onclick="disableButton(this)">Crear</button>
 
-    </div>
+    </form>
 
-    <button type="submit" id="submitBtn" class="btn btn-primary" onclick="disableButton(this)">Crear</button>
+    <form method="POST" id="showPdf" name="showPdf" action="{{ route('documents.signatures.showPdfFromFile')}}">
+        @csrf
 
-</form>
-
-<form method="POST" id="showPdf" name="showPdf" action="{{ route('documents.signatures.showPdfFromFile')}}">
-    @csrf
-
-</form>
+    </form>
 
 @endsection
 
 @section('custom_js')
 
-<script type="text/javascript">
-    function disableButton(form) {
-        form.submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Creando...';
-        form.submitBtn.disabled = true;
-        return true;
-    }
-</script>
+    <script type="text/javascript">
+        function disableButton(form) {
+            form.submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Creando...';
+            form.submitBtn.disabled = true;
+            return true;
+        }
+    </script>
 
 @endsection
