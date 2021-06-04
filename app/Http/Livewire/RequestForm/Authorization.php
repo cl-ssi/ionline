@@ -12,7 +12,7 @@ use App\User;
 class Authorization extends Component
 {
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $rejectedComment;
-    public $lstSupervisorUser, $supervisorUser;
+    public $lstSupervisorUser, $supervisorUser, $title, $route;
 
     protected $rules = [
         'rejectedComment' => 'required|min:6',
@@ -23,22 +23,43 @@ class Authorization extends Component
         'rejectedComment.min'       => 'Mínimo 6 caracteres.',
     ];
 
+
     public function mount(RequestForm $requestForm, $eventType) {
       $this->eventType          = $eventType;
       $this->requestForm        = $requestForm;
       $this->rejectedComment    = '';
-      //$this->organizationalUnit = $requestForm->organizationalUnit->name;
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
       $this->position           = auth()->user()->position;
-      if($eventType!='supply_event')
+      if($eventType=='supply_event'){
         $this->lstSupervisorUser  = User::where('organizational_unit_id', 37)->get();
+        $this->title = 'Autorización Abastecimiento';
+        $this->route = 'request_forms.supply_index';
+      }elseif($eventType=='finance_event'){
+        $this->title = 'Autorización Finanzas';
+        $this->route = 'request_forms.finance_index';
+      }elseif($eventType=='leader_ship_event'){
+        $this->title = 'Autorización Jefatura';
+        $this->route = 'request_forms.leadership_index';
+      }
     }
 
-    public function acceptRequestForm() {
-      $event = EventRequestForm::where('request_form_id', $this->requestForm->id)
-                               ->where('event_type', $this->eventType)
-                               ->where('status', 'created')->first();
+
+    public function resetError(){
+      $this->resetErrorBag();
+    }
+
+
+    public function acceptRequestForm()
+    {
+      if($this->eventType=='supply_event'){
+        $this->validate(
+          [ 'supervisorUser'  =>  'required' ],
+          [ 'supervisorUser.required'  =>  'Seleccione un Usuario.' ]
+        );
+        $this->requestForm->supervisor_user_id =  $this->supervisorUser;
+      }
+      $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'created')->first();
       if(!is_null($event)){
            $this->requestForm->status = 'in_progress';
            $this->requestForm->save();
@@ -48,17 +69,16 @@ class Authorization extends Component
            $event->signerUser()->associate(auth()->user());
            $event->save();
            session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' AUTORIZADO correctamente!');
-           return redirect()->route('request_forms.leadership_index');
+           return redirect()->route($this->route);
           }
       session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' NO se puede Autorizar!');
-      return redirect()->route('request_forms.leadership_index');
+      return redirect()->route($this->route);
     }
+
 
     public function rejectRequestForm() {
       $this->validate();
-      $event = EventRequestForm::where('request_form_id', $this->requestForm->id)
-                               ->where('event_type', $this->eventType)
-                               ->where('status', 'created')->first();
+      $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'created')->first();
       if(!is_null($event)){
            $this->requestForm->status = 'rejected';
            $this->requestForm->save();
@@ -69,11 +89,12 @@ class Authorization extends Component
            $event->signerUser()->associate(auth()->user());
            $event->save();
            session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' fue RECHAZADO!');
-           return redirect()->route('request_forms.leadership_index');
+           return redirect()->route($this->route);
           }
       session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' NO se puede Rechazar!');
-      return redirect()->route('request_forms.leadership_index');
+      return redirect()->route($this->route);
     }
+
 
     public function render() {
         return view('livewire.request-form.authorization');

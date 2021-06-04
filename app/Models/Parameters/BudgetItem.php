@@ -16,6 +16,9 @@ class BudgetItem extends Model
         return $this->hasMany(ItemRequestForm::class, 'budget_item_id');
     }
 
+    public function fullName(){
+      return $this->code.' '.$this->name;
+    }
 
     protected $table = 'arq_budget_items';
 }

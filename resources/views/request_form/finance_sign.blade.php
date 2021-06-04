@@ -39,6 +39,10 @@
               <td>{{ $requestForm->program }}</td>
           </tr>
           <tr>
+              <th class="text-muted" scope="row">Folio Requerimiento SIGFE</th>
+              <td>{{ $requestForm->sigfe }}</td>
+          </tr>
+          <tr>
               <th class="text-muted" scope="row">Justificación de Adquisición</th>
               <td>{{ $requestForm->justification }}</td>
           </tr>
@@ -60,6 +64,7 @@
           <tr>
             <th>Item</th>
             <th>ID</th>
+            <th>Cod.Presup.</th>
             <th>Artículo</th>
             <th>UM</th>
             <th>Especificaciones Técnicas</th>
@@ -75,6 +80,7 @@
                   <tr>
                       <td>{{$key+1}}</td>
                       <td>{{$item->id}}</td>
+                      <td>{{$item->budgetItem()->first()->fullName()}}</td>
                       <td>{{$item->article}}</td>
                       <td>{{$item->unit_of_measurement}}</td>
                       <td>{{$item->specification}}</td>
