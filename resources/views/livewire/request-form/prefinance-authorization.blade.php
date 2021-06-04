@@ -22,11 +22,13 @@
         <div class="row justify-content-md-center"><!-- FILA 2 -->
           <div class="form-group col-6">
             <label for="forRut">Folio Requerimiento SIGFE:</label>
-            <input wire:model="sigfe" name="sigfe" class="form-control form-control-sm" type="text">
+            <input wire:model="sigfe" name="sigfe" wire:click="resetError" class="form-control form-control-sm" type="text">
+            @error('sigfe') <span class="error text-danger">{{ $message }}</span> @enderror
           </div>
           <div class="form-group col-6">
             <label>Programa Asociado:</label><br>
-            <input wire:model="program" name="program" class="form-control form-control-sm" type="text">
+            <input wire:model="program" name="program" wire:click="resetError" class="form-control form-control-sm" type="text">
+            @error('program') <span class="error text-danger">{{ $message }}</span> @enderror
           </div>
         </div><!-- FILA 2 -->
 
@@ -37,7 +39,7 @@
               <tr>
                 <th>Item</th>
                 <th>ID</th>
-                                <th>Item Pres.</th>
+                <th>Item Pres.</th>
                 <th>Artículo</th>
                 <th>UM</th>
                 <th>Especificaciones Técnicas</th>
@@ -54,13 +56,12 @@
                           <td>{{$key+1}}</td>
                           <td>{{$item->id}}</td>
                           <td>
-                          <select  wire:model.defer="arrayItemRequest.{{ $item->id }}.budgetId"  class="form-control form-control-sm" required>
+                          <select  wire:model.defer="arrayItemRequest.{{ $item->id }}.budgetId"  wire:click="resetError" class="form-control form-control-sm" required>
                             <option value="">Seleccione...</option>
                             @foreach($lstBudgetItem as $val)
                               <option value="{{$val->id}}">{{$val->code.' - '.$val->name}}</option>
                             @endforeach
                           </select>
-                          <?php $collectItemRequest[$item->id]=$codigo; ?>
                           </td>
                           <td>{{$item->article}}</td>
                           <td>{{$item->unit_of_measurement}}</td>
@@ -85,12 +86,12 @@
               </tr>
             </tfoot>
           </table>
+          @error('arrayItemRequest') <span class="error text-danger">{{ $message }}</span> @enderror
         </div><!-- DIV para TABLA-->
-
         <div class="row justify-content-md-start mt-0">
             <div class="col-7">
               <label for="forRejectedComment">Comentario de Rechazo:</label>
-              <textarea wire:model="rejectedComment" name="rejectedComment" class="form-control form-control-sm" rows="3"></textarea>
+              <textarea wire:model="rejectedComment" wire:click="resetError" name="rejectedComment" class="form-control form-control-sm" rows="3"></textarea>
               @error('rejectedComment') <span class="error text-danger">{{ $message }}</span> @enderror
             </div>
         </div>

@@ -30,12 +30,11 @@ class PrefinanceAuthorization extends Component
         'rejectedComment.min'       => 'Mínimo 6 caracteres.',
     ];
 
+
     public function mount(RequestForm $requestForm, $eventType) {
       $this->eventType          = $eventType;
       $this->requestForm        = $requestForm;
       $this->rejectedComment    = '';
-      //$this->organizationalUnit = $requestForm->organizationalUnit->name;
-      //$this->arrayItemRequest   = array();
       $this->codigo             = '';
       $this->lstBudgetItem      = BudgetItem::all();
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
@@ -45,12 +44,30 @@ class PrefinanceAuthorization extends Component
       $this->sigfe              = $requestForm->sigfe;
     }
 
-    public function acceptRequestForm()
-    {
-      /*
-      $event = EventRequestForm::where('request_form_id', $this->requestForm->id)
-                               ->where('event_type', $this->eventType)
-                               ->where('status', 'created')->first();
+
+    public function resetError(){
+      $this->resetErrorBag();
+    }
+
+
+    public function acceptRequestForm() {
+      $this->validate(
+        [
+            'sigfe'                        =>  'required',
+            'program'                      =>  'required',
+            'arrayItemRequest'             =>  'required|min:'.(count($this->requestForm->itemRequestForms)+1)
+        ],
+        [
+            'sigfe.required'               =>  'Infrese valor para  SIGFE.',
+            'program.required'             =>  'Ingrese un Programa Asociado.',
+            'arrayItemRequest.min'         =>  'Debe seleccionar todos los items presupuestario.',
+        ],
+      );
+      foreach($this->requestForm->itemRequestForms as $item){
+        $item->budget_item_id = $this->arrayItemRequest[$item->id]['budgetId'];
+        $item->save();
+      }
+      $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'created')->first();
       if(!is_null($event)){
            $this->requestForm->status = 'in_progress';
            $this->requestForm->program = $this->program;
@@ -66,29 +83,12 @@ class PrefinanceAuthorization extends Component
           }
       session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' NO se puede Autorizar!');
       return redirect()->route('request_forms.prefinance_index');
-      */
-      //dd('Oscar');
-
-      $strID = '';
-
-      foreach($this->requestForm->itemRequestForms as $item){
-        $item->budget_item_id = $this->arrayItemRequest[$item->id]['budgetId'];
-      }
-
-      foreach($this->requestForm->itemRequestForms as $item){
-        $strID = $strID.'item id: '.$item->id.' -- budgetID: '.$item->budget_item_id.' ';
-      }
-      dd($strID);
-
-      //$this->arrayItemRequest
-      //dd($this->arrayItemRequest);
     }
+
 
     public function rejectRequestForm() {
       $this->validate();
-      $event = EventRequestForm::where('request_form_id', $this->requestForm->id)
-                               ->where('event_type', $this->eventType)
-                               ->where('status', 'created')->first();
+      $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'created')->first();
       if(!is_null($event)){
            $this->requestForm->status = 'rejected';
            $this->requestForm->save();
@@ -105,8 +105,8 @@ class PrefinanceAuthorization extends Component
       return redirect()->route('request_forms.prefinance_index');
     }
 
+
     public function render() {
-        //$this->collectItemRequest->dd();
         return view('livewire.request-form.prefinance-authorization');
     }
 }
