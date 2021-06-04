@@ -685,8 +685,9 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
     
       Honorarios Covid<br>
       Oficina de partes<br>
+      {{--
     @else
-    {{--
+    
       @if($ServiceRequest->responsabilityCenter->establishment_id == 12)
         CGU (roxana.penaranda@redsalud.gov.cl, anakena.bravo@redsalud.gov.cl)<br>
         Finanzas (patricia.salinasm@redsalud.gov.cl, finanzas.ssi@redsalud.gov.cl)<br>
@@ -697,8 +698,9 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
         Finanzas (patricia.salinasm@redsalud.gov.cl, finanzas.ssi@redsalud.gov.cl)<br>
         Interesado<br>
         Oficina de Partes<br>
-        --}}
+        
       @endif
+      --}}
     
 </div>
 @endif
