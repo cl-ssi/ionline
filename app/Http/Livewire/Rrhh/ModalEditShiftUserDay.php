@@ -309,6 +309,10 @@ class ModalEditShiftUserDay extends Component
 		 $this->reset();
 		    return redirect('/rrhh/shift-management');
 	}	
+
+	public function confirmExtraDay(){
+		 return redirect()->route('rrhh.shiftManag.confirmDay',[$this->shiftUserDay]);
+	}
     public function render()
     {
         return view('livewire.rrhh.modal-edit-shift-user-day',["tiposJornada"=>$this->tiposJornada,"estados"=>$this->estados,"statusColors"=>$this->colors]);

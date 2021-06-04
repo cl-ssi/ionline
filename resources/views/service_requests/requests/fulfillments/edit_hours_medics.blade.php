@@ -29,6 +29,17 @@
 					<label for="for_estate">Observación</label>
 					<input type="text" class="form-control" name="observation" value="{{$fulfillment->observation}}">
 				</fieldset>
+				</div>
+				<div class="form-row">				
+				<fieldset class="form-group col">
+				<label for="for_backup_assistance">Respaldo de asistencia</label>
+				<input type="file" name="backup_assistance" value="{{$fulfillment->backup_assistance}}">
+				</fieldset>
+				@if($fulfillment->backup_assistance)
+				<a href="https://storage.googleapis.com/{{env('APP_ENV') === 'production' ? 'saludiquique-storage' : 'saludiquique-dev'}}/{{$fulfillment->backup_assistance}}" class="btn btn-sm btn-outline-secondary" target="_blank" title="Ver respaldo asistencia">
+                            <span class="fas fa-file" aria-hidden="true"></span>
+                </a>
+				@endif
 
 				@can('Service Request: fulfillments responsable')
 					@if($fulfillment->responsable_approver_id == NULL)
@@ -78,6 +89,7 @@
 		<hr>
 
 		<h4>Turnos extra</h4>
+		Holitas
 		@livewire('service-request.shifts-control', ['fulfillment' => $fulfillment])
 		<br>
 		<!-- <form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.store') }}" enctype="multipart/form-data">

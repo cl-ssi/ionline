@@ -375,6 +375,13 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/prev', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'goToPreviousMonth'])->name('shiftManag.prevMonth')->middleware('auth');
 
            Route::get('/myshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShift'])->name('shiftManag.myshift')->middleware('auth');
+
+           Route::get('/myshift/confirm/{day}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShiftConfirm'])->name('shiftManag.myshift.confirmDay')->middleware('auth');
+           Route::get('/myshift/reject/{day}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShiftReject'])->name('shiftManag.myshift.rejectDay')->middleware('auth');
+
+           Route::get('/reject/{day}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'adminShiftConfirm'])->name('shiftManag.confirmDay')->middleware('auth');
+           
+
         Route::post('/myshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShift'])->name('shiftManag.myshiftfiltered')->middleware('auth');
 
 

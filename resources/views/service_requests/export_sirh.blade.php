@@ -32,12 +32,15 @@
         <div class="form-row">
         
         
-        @if(isset($request->establishment))
+        
         <div class="float-right">
-        <a type="button" class="btn btn-success" target="_blank"  href="{{ route('rrhh.service-request.report.export-sirh-txt', ['establishment' => $request->establishment, 'sirh' => $request->sirh, 'from' => $request->from, 'to' => $request->to       ]  ) }}">Formato SIRH (<small>Prueba</small>) <i class="far fa-file-excel"></i>
+        <a type="button" class="btn btn-success" target="_blank"  href="{{ route('rrhh.service-request.report.export-sirh-txt', ['establishment' => $request->establishment, 'sirh' => $request->sirh, 'from' => $request->from, 'to' => $request->to       ]  ) }}">Formato SIRH (Descarga los 100 primeros registros de la primera hoja) <i class="far fa-file-excel"></i>
         </a>
         </div>
-        @endif
+        
+        <br>
+        
+        
         </div>
         
         
@@ -57,7 +60,7 @@
             <th>Cargado SIRH</th>
         </tr>
     </thead>
-    @forelse($filitas?: [] as $fila)    
+    @forelse($filitas?: [] as $fila)
     <tr>
     <td>{{$fila->id}}</td>
     <td>{{$fila->employee->id}}</td>
