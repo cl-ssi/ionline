@@ -479,7 +479,7 @@ class ReportController extends Controller
         $q->whereNotNull('resolution_number')
           ->whereNotNull('gross_amount')
           ->orwhereNotNull('resolution_date');
-      })->get();
+      })->paginate(100);
 
 
 
