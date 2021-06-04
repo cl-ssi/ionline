@@ -91,6 +91,14 @@
             </fieldset>
         </div>
 
+        <div class="form-row">
+            <fieldset class="form-group col">
+                <label for="for_url">Link o Url asociado</label>
+                <input type="url" class="form-control" id="for_url" name="url"
+                       value="{{isset($signature) ? $signature->url : ''}}" >
+            </fieldset>
+        </div>
+
         @if(isset($signature) && isset($signature->type))
             <hr>
             @if($signature->type == 'visators')
