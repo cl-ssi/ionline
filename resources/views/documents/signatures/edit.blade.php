@@ -92,9 +92,13 @@
 
         <div class="form-row">
 
+        <h5 class="alert alert-info" role="alert">
+            Se cambio de posición Destinatario y Distribución a como estaba en el sistema antiguamente, favor cerciorarse el apartado que está digitando
+        </h5>
+
             <fieldset class="form-group col">
                 <label for="for_distribution">Distribución del documento (separados por coma)</label>
-                <textarea class="form-control" id="for_distribution" name="distribution" rows="6"  placeholder="Se cambió de posición Distribución con Destinario a como estaba antiguamente el generador, para que vea el campo que se está llenando">{{$signature->distribution}}</textarea>
+                <textarea class="form-control" id="for_distribution" name="distribution" rows="6" >{{$signature->distribution}}</textarea>
             </fieldset>
 
             <fieldset class="form-group col">
