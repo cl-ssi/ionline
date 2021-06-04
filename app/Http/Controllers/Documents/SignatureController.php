@@ -76,12 +76,9 @@ class SignatureController extends Controller
      *
      * @return Application|Factory|View|Response
      */
-    public function create()
+    public function create($xAxis = null, $yAxis = null)
     {
-//        $users = User::orderBy('name', 'ASC')->get();
-//        $organizationalUnits = OrganizationalUnit::orderBy('id', 'asc')->get();
-        return view('documents.signatures.create');
-//        return view('documents.signatures.create', compact('users', 'organizationalUnits'));
+        return view('documents.signatures.create', compact('xAxis', 'yAxis'));
     }
 
     /**
@@ -146,6 +143,8 @@ class SignatureController extends Controller
                 $signaturesFlow->type = 'firmante';
                 $signaturesFlow->ou_id = $request->ou_id_signer;
                 $signaturesFlow->user_id = $request->user_signer;
+                $signaturesFlow->custom_x_axis = $request->custom_x_axis;
+                $signaturesFlow->custom_y_axis = $request->custom_y_axis;
                 $signaturesFlow->save();
             }
 
