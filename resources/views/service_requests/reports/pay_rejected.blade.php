@@ -55,6 +55,7 @@
     <th></th>
     <th>Id</th>
     <th>Establecimiento</th>
+    <th>C.Responsabilidad</th>
     <th>Tipo/Jornada</th>
     <th>Nombre</th>
     <th nowrap>Rut</th>
@@ -78,7 +79,8 @@
 
       @endif
     </td>
-    <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
+    <td class="small">{{$fulfillment->serviceRequest->establishment->name?? ''}}</td>
+    <td class="small">{{$fulfillment->serviceRequest->responsabilityCenter->name?? ''}}</td>    
     <td>
       {{$fulfillment->serviceRequest->program_contract_type}}
       <br>
