@@ -351,6 +351,7 @@
           <option value="33" @if($serviceRequest->weekly_hours == 33) selected @endif>33</option>
 					<option value="28" @if($serviceRequest->weekly_hours == 28) selected @endif>28</option>
 					<option value="22" @if($serviceRequest->weekly_hours == 22) selected @endif>22</option>
+          <option value="15" @if($serviceRequest->weekly_hours == 15) selected @endif>15</option>
           <option value="11" @if($serviceRequest->weekly_hours == 11) selected @endif>11</option>
         </select>
 		</fieldset>
@@ -491,6 +492,13 @@
           <option value="Nutricionista turno" @if($serviceRequest->rrhh_team == "Nutricionista turno") selected @endif>Nutricionista turno</option>
           <option value="Informático" @if($serviceRequest->rrhh_team == "Informático") selected @endif>Informático</option>
           <option value="Ingeniero" @if($serviceRequest->rrhh_team == "Ingeniero") selected @endif>Ingeniero</option>
+
+
+          <option value="Técnico en rehabilitación" @if($serviceRequest->rrhh_team == "Técnico en rehabilitación") selected @endif>Técnico en rehabilitación</option>
+          <option value="Psiquiatra" @if($serviceRequest->rrhh_team == "Psiquiatra") selected @endif>Psiquiatra</option>
+          <option value="Monitor/a" @if($serviceRequest->rrhh_team == "Monitor/a") selected @endif>Monitor/a</option>
+          <option value="Preparador físico" @if($serviceRequest->rrhh_team == "Preparador físico") selected @endif>Preparador físico</option>
+
 
 
         </select>

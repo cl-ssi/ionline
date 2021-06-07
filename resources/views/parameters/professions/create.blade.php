@@ -6,7 +6,7 @@
 
 @include('parameters.nav')
 
-<h3 class="mb-3">Crear Nueva Professión</h3>
+<h3 class="mb-3">Crear Nueva Profesión</h3>
 
 <form method="POST" class="form-horizontal" action="{{ route('parameters.professions.store') }}">
     @csrf

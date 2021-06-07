@@ -230,6 +230,7 @@
 			<option value="33">33</option>
 			<option value="28">28</option>
 			<option value="22">22</option>
+			<option value="15">15</option>
 			<option value="11">11</option>
 		</select>
 	</fieldset>
@@ -367,8 +368,12 @@
 				<option value="Constructor civil">Constructor civil</option>
 				<option value="Arquitecto">Arquitecto</option>
 				<option value="Dibujante técnico proyectista">Dibujante técnico proyectista</option>
+				<option value="Técnico en rehabilitación">Técnico en rehabilitación</option>
+				<option value="Psiquiatra">Psiquiatra</option>
+				<option value="Monitor/a">Monitor/a</option>
+				<option value="Preparador físico">Preparador físico</option>				
 				<option value="Otros técnicos">Otros técnicos</option>
-				<option value="Otros profesionales">Otros profesionales</option>
+				<option value="Otros profesionales">Otros profesionales</option>				
 
 			</select>
 		</fieldset>
