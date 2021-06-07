@@ -31,9 +31,9 @@ class RequestFormController extends Controller {
         if(count($rejectedRequestForms) == 0 && count($createdRequestForms) == 0 && count($inProgressRequestForms) == 0 && count($approvedRequestForms) ==  0){
             $empty=true;
             return view('request_form.index', compact('empty'));}
-
         return view('request_form.index', compact('createdRequestForms', 'inProgressRequestForms', 'rejectedRequestForms','approvedRequestForms', 'empty'));
     }
+
 
     public function edit(RequestForm $requestForm) {
         if($requestForm->applicant_user_id != auth()->user()->id){
@@ -96,35 +96,21 @@ class RequestFormController extends Controller {
                                 ->where('status', 'approved');
 
                                 })->get();
-
           $approvedRequestForms = RequestForm::where('status', 'in_progress')
                                  ->whereHas('eventRequestForms', function ($q) {
                                  $q->where('event_type','pre_finance_event')
                                  ->where('status', 'approved');})->get();
-
-                                 //->whereDoesntHave('eventRequestForms', function ($f) {
-                                 //$f->where('event_type','finance_event')
-                                 //->where('status', 'approved');
-
-                                 //})->get();
-
           $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
 
           return view('request_form.prefinance_index', compact('waitingRequestForms', 'rejectedRequestForms', 'approvedRequestForms'));}
     }
 
+
     public function prefinanceSign(RequestForm $requestForm) {
-      //$manager              = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
-      //$position             = $manager->position;
-      //$organizationalUnit   = $manager->organizationalUnit->name;
-      //if(is_null($manager))
-      //    $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
-      //else
-      //    $manager = $manager->user->getFullNameAttribute();
-      //$arrayItemRequest = array();
       $eventType = 'pre_finance_event';
       return view('request_form.prefinance_sign', compact('requestForm', 'eventType'));
     }
+
 
     public function financeIndex(){
         $ou = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->user()->id);
@@ -139,26 +125,22 @@ class RequestFormController extends Controller {
                                        ->whereHas('eventRequestForms', function ($q) {
                                                     $q->where('event_type','pre_finance_event')
                                                       ->where('status', 'approved');})
-
                                        ->whereDoesntHave('eventRequestForms', function ($f) {
                                                   $f->where('event_type','finance_event')
                                                   ->where('status', 'approved');
 
                                                     })->get();
-
             $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
-
             $createdRequestForms     = RequestForm::all();
-
             $approvedRequestForms    = RequestForm::where('status', 'in_progress')
                                        ->whereHas('eventRequestForms', function ($q) {
                                                     $q->where('event_type','finance_event')
                                                       ->where('status', 'approved');
                                                     })->get();
-
             return view('request_form.finance_index', compact('waitingRequestForms', 'rejectedRequestForms', 'approvedRequestForms', 'createdRequestForms'));
           }
     }
+
 
     public function financeSign(RequestForm $requestForm){
       $manager              = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
@@ -171,6 +153,7 @@ class RequestFormController extends Controller {
       $eventType = 'finance_event';
       return view('request_form.finance_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit', 'eventType'));
     }
+
 
     public function supplyIndex()
     {
@@ -211,12 +194,59 @@ class RequestFormController extends Controller {
     }
 
 
-
     public function create(){
         $requestForm=null;
         return  view('request_form.create', compact('requestForm'));
     }
 
+
+    public function destroy(RequestForm $requestForm)
+    {
+        $id = $requestForm->id;
+        RequestForm::find($requestForm)->first()->delete();
+        //dd($req);
+        session()->flash('info', 'El formulario de requerimiento N°'.$id.' ha sido eliminado correctamente.');
+        return redirect()->route('request_forms.index');
+        //Implementar Eliminar request form pasado por  argumento.... usar pop.up de confiración...
+    }
+
+
+    public function supervisorUserIndex()
+    {
+        if(auth()->user()->organizationalUnit->id != '37' ){
+            session()->flash('danger', 'Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('37').'.');
+            return redirect()->route('request_forms.index');
+        }else
+          {
+            $waitingRequestForms = RequestForm::where('status', 'in_progress')
+                                   ->where('supervisor_user_id', auth()->user()->id)
+                                   ->whereHas('eventRequestForms', function ($q) {
+                                   $q->where('event_type','supply_event')
+                                  ->where('status', 'approved');})
+                                  ->get();
+            $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
+            return view('request_form.supervisor_user_index', compact('waitingRequestForms', 'rejectedRequestForms'));
+          }
+    }
+
+    public function purchasingProcess(RequestForm $requestForm){
+      $eventType = 'supply_event';
+      return view('request_form.purchasing_process', compact('requestForm', 'eventType'));      
+    }
+
+
+
+
+
+
+/************************ CODIGO PACHA *************************************/
+/************************ CODIGO PACHA *************************************/
+/************************ CODIGO PACHA *************************************/
+
+public function show(RequestForm $requestForm)
+{
+    //
+}
 
     public function store(Request $request)
     {
@@ -242,10 +272,6 @@ class RequestFormController extends Controller {
         return redirect()->route('request_forms.edit', compact('requestForm'));
     }
 
-    public function show(RequestForm $requestForm)
-    {
-        //
-    }
 
     public function update(Request $request, RequestForm $requestForm)
     {
@@ -326,15 +352,6 @@ class RequestFormController extends Controller {
         return redirect()->route('request_forms.edit', compact('id'));
     }
 
-    public function destroy(RequestForm $requestForm)
-    {
-        $id = $requestForm->id;
-        RequestForm::find($requestForm)->first()->delete();
-        //dd($req);
-        session()->flash('info', 'El formulario de requerimiento N°'.$id.' ha sido eliminado correctamente.');
-        return redirect()->route('request_forms.index');
-        //Implementar Eliminar request form pasado por  argumento.... usar pop.up de confiración...
-    }
 
     public function myRequestInbox()
     {
@@ -387,7 +404,6 @@ class RequestFormController extends Controller {
         session()->flash('info', 'Su solicitud de formulario de requerimiento fue aprobado con exito, N°: '.$id);
         return redirect()->route('request_forms.edit', compact('id'));
     }
-
 
 
     public function directorPassageInbox()

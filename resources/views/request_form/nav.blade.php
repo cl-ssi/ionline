@@ -92,4 +92,13 @@
             <span class="badge badge-secondary"></span></a>
         </a>
     </li>
+
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('request_forms.supervisor_user_index') }}">
+            <i class="fas fa-inbox"></i> Comprador
+            <span class="badge badge-secondary"></span></a>
+        </a>
+    </li>
+
 </ul>
