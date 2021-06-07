@@ -23,8 +23,10 @@
             <input type="hidden" name="signature_type" value="{{$signature->type}}">
         @endif
 
-        <input type="hidden" name='custom_x_axis' value="{{$xAxis}}">
-        <input type="hidden" name='custom_y_axis' value="{{$yAxis}}">
+        @if(isset($xAxis) && isset($yAxis)){
+            <input type="hidden" name='custom_x_axis' value="{{$xAxis}}">
+            <input type="hidden" name='custom_y_axis' value="{{$yAxis}}">
+        @endif
 
         <div class="form-row">
 
