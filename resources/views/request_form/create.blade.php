@@ -10,10 +10,6 @@
 
 @include('request_form.nav')
 
-<!-- FORM DE INGRESO DE TICKET -->
-<!--<form method="POST" class="form-horizontal" action="{{ route('request_forms.store') }}" enctype="multipart/form-data">-->
-
-
 <div class="container-fluid"><!-- CONTENEDOR -->
 
 <div class="card bg-light">

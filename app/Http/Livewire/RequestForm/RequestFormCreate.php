@@ -239,6 +239,10 @@ class RequestFormCreate extends Component
       return redirect()->to('/request_forms');
     }
 
+    public function btnCancelRequestForm(){
+      return redirect()->to('/request_forms');
+    }
+
     private function saveItem($item, $id){
         $req = ItemRequestForm::updateOrCreate(
           [
