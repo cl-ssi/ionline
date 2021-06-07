@@ -52,17 +52,17 @@ class Indicator extends Model
     public function getCompliance()
     {
         if(isset($this->numerator_acum_last_year)) // REM P
-            return $this->getLastValueByFactor('denominador') != 0 ? $this->getLastValueByFactor('numerador') / $this->getLastValueByFactor('denominador') * 100 : 0;
+            return $this->getLastValueByFactor('denominador') != 0 ? $this->getLastValueByFactor('numerador') / $this->getLastValueByFactor('denominador') * (str_contains($this->goal, '%') ? 100 : 1) : 0;
         else
-            return $this->getValuesAcum('denominador') != 0 ? $this->getValuesAcum('numerador') / $this->getValuesAcum('denominador') * 100 : 0;
+            return $this->getValuesAcum('denominador') != 0 ? $this->getValuesAcum('numerador') / $this->getValuesAcum('denominador') * (str_contains($this->goal, '%') ? 100 : 1) : 0;
     }
 
     public function getCompliance2($commune, $establishment)
     {
         if(isset($this->isNumRemP)) // REM P
-            return $this->getLastValueByFactor2('denominador', $commune, $establishment) != 0 ? $this->getLastValueByFactor2('numerador', $commune, $establishment) / $this->getLastValueByFactor2('denominador', $commune, $establishment) * 100 : 0;
+            return $this->getLastValueByFactor2('denominador', $commune, $establishment) != 0 ? $this->getLastValueByFactor2('numerador', $commune, $establishment) / $this->getLastValueByFactor2('denominador', $commune, $establishment) * (str_contains($this->goal, '%') ? 100 : 1) : 0;
         else
-            return $this->getValuesAcum2('denominador', $commune, $establishment) != 0 ? $this->getValuesAcum2('numerador', $commune, $establishment) / $this->getValuesAcum2('denominador', $commune, $establishment) * 100 : 0;
+            return $this->getValuesAcum2('denominador', $commune, $establishment) != 0 ? $this->getValuesAcum2('numerador', $commune, $establishment) / $this->getValuesAcum2('denominador', $commune, $establishment) * (str_contains($this->goal, '%') ? 100 : 1) : 0;
     }
 
     public function getValueByFactorAndMonth($factor, $month)
