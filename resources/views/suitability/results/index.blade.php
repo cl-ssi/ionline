@@ -68,14 +68,14 @@
                         <span class="fas fa-stamp" aria-hidden="true"></span></a>
                     @endif
                 </td> -->
-                @can('be god')
+                
                 <td>
                     @if($result->psirequest && $result->psirequest->status =="Aprobado" && $result->signed_certificate_id === null)
                     <a href="{{ route('suitability.sendForSignature', $result->id) }}" class="btn btn-outline-primary">
                         <span class="fas fa-signature" aria-hidden="true"></span></a>
                     @endif
                 </td>
-                @endcan
+                
                 <!-- <td>
                     @if($result->psirequest && $result->psirequest->status =="Aprobado")
 
