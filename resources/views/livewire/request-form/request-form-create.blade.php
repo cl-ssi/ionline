@@ -148,7 +148,7 @@
               @foreach($items as $key => $item)
                       <tr>
                           <td>{{$key+1}}</td>
-                          
+
                           <td>{{$item['article']}}</td>
                           <td>{{$item['unitOfMeasurement']}}</td>
                           <td>{{$item['technicalSpecifications']}}</td>
@@ -182,9 +182,7 @@
 
         <div class="row mx-1 mb-4 mt-0 pt-0 px-0">
             <div class="col">
-                <a href="#"
-                    class="btn btn-secondary float-right">Cancelar
-                </a>
+                <a wire:click="btnCancelRequestForm"  class="btn btn-secondary float-right">Cancelar</a>
                 <button  wire:click="saveRequestForm"  class="btn btn-primary float-right mr-3" type="button">
                     <i class="fas fa-save"></i> Enviar
                 </button>
