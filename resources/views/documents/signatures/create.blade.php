@@ -93,6 +93,14 @@
             </fieldset>
         </div>
 
+        <div class="form-row">
+            <fieldset class="form-group col">
+                <label for="for_url">Link o Url asociado</label>
+                <input type="url" class="form-control" id="for_url" name="url"
+                       value="{{isset($signature) ? $signature->url : ''}}" >
+            </fieldset>
+        </div>
+
         @if(isset($signature) && isset($signature->type))
             <hr>
             @if($signature->type == 'visators')
@@ -111,19 +119,19 @@
 
         <div class="form-row">            
 
+        <h5 class="alert alert-info" role="alert">
+            Se cambio de posición Destinatario y Distribución a como estaba en el sistema antiguamente, favor cerciorarse el apartado que está digitando
+        </h5>
+
             <fieldset class="form-group col">
                 <label for="for_distribution">Distribución del documento (separados por coma)</label>
-                <textarea class="form-control red-tooltip" id="for_distribution" name="distribution"
-                data-toggle="tooltip" data-placement="top" title="Se cambio de posición Destinatario y Distribución a como estaba en el sistema antiguamente, favor tenga cuidado de ver el apartado donde está digitando"
-                placeholder="Se cambio de posición Destinatario y Distribución a como estaba en el sistema antiguamente, favor cerciorarse el apartado que está digitando"
+                <textarea class="form-control red-tooltip" id="for_distribution" name="distribution"                
                           rows="6">{{  isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : ''}}</textarea>
             </fieldset>
 
             <fieldset class="form-group col">
                 <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
-                <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6" 
-                data-toggle="tooltip"  data-placement="top" title="Se cambio de posición Destinatario y Distribución a como estaba en el sistema antiguamente, favor cerciorarse el apartado que está digitando"
-                placeholder="Se cambio de posición Destinatario y Distribución a como estaba en el sistema antiguamente, favor cerciorarse el apartado que está digitando"
+                <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6"                 
                 
                 ></textarea>
             </fieldset>
