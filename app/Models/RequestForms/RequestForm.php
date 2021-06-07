@@ -40,24 +40,15 @@ class RequestForm extends Model
         return $this->hasMany(EventRequestForm::class);
     }
 
+    /*****Elimina RequestForm y tablas relacionadas en cadena*****/
     public static function boot() {
         parent::boot();
-
         static::deleting(function($requestForm) { // before delete() method call this
              $requestForm->eventRequestForms()->delete();
              $requestForm->itemRequestForms()->delete();
              // do the rest of the cleanup...
         });
     }
-
-
-
-
-
-
-
-
-
 
 
     public function getPurchaseMechanism(){
@@ -111,7 +102,7 @@ class RequestForm extends Model
 
     public function createdDate() {
       $date = new Carbon($this->created_at);
-      return $date->format('d-m-Y');
+      return $date->format('d-m-Y H:i:s');
     }
 
     public function rejectedName() {
@@ -125,6 +116,26 @@ class RequestForm extends Model
       if(!is_null($event))
         return $event->comment;
     }
+
+
+    public function eventApprovedDate($event_type){
+      $event = $this->eventRequestForms()->where('status', 'approved')->where('event_type',$event_type)->first();
+      if(!is_null($event)){
+        $date = new Carbon($event->signature_date);
+        return $date->format('d-m-Y H:i:s');
+      }
+    }
+
+    /* TIEMPO TRANSCURRIDO DEL TICKET */
+    public function getElapsedTime()
+    {
+      $day = Carbon::now()->diffInDays($this->created_at);
+      if($day<=1)
+        return $day.' día.';
+      else
+        return $day.' días.';
+    }
+
 
 
     /*
@@ -149,15 +160,7 @@ class RequestForm extends Model
       }*/
     }
 
-    /* TIEMPO TRANSCURRIDO DEL TICKET */
-    public function getElapsedTime()
-    {
-      $day = Carbon::now()->diffInDays($this->created_at);
-      if($day<=1)
-        return $day.' día.';
-      else
-        return $day.' días.';
-    }
+
 
     public function getFormRequestNumberAttribute()
     {
