@@ -54,6 +54,8 @@
         <tr>
             <th>Contador</th>
             <th>Usuario</th>
+            <th>Correo</th>
+            <th>Teléfono</th>
             <th>Colegio</th>
             <th>Eliminar</th>
         </tr>
@@ -64,6 +66,8 @@
         <tr>
             <td>{{ $key+1 }}</td>
             <td>{{ $schooluser->user->fullname??'' }}</td>
+            <td>{{ $schooluser->user->email??'' }}</td>
+            <td>{{ $schooluser->user->phone_number??'' }}</td>
             <td>{{ $schooluser->school->name??'' }}</td>
             <td>
                 <form method="POST" class="form-horizontal" action="{{ route('suitability.users.destroy', $schooluser->id) }}">
