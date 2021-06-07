@@ -367,6 +367,8 @@
 				<option value="Constructor civil">Constructor civil</option>
 				<option value="Arquitecto">Arquitecto</option>
 				<option value="Dibujante técnico proyectista">Dibujante técnico proyectista</option>
+				<option value="Otros técnicos">Otros técnicos</option>
+				<option value="Otros profesionales">Otros profesionales</option>
 
 			</select>
 		</fieldset>
