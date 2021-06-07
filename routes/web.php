@@ -759,6 +759,12 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::get('/{year}/{slug}/{establishment_type}', 'Indicators\ApsController@show')->name('show');
     });
 
+    Route::prefix('iiaaps')->as('iiaaps.')->group(function () {
+        Route::get('/', 'Indicators\IaapsController@index')->name('index');
+        Route::get('/{year}', 'Indicators\IaapsController@list')->name('list');
+        Route::get('/{year}/{commune}', 'Indicators\IaapsController@show')->name('show');
+    });
+
     Route::prefix('19813')->as('19813.')->group(function () {
         Route::get('/', function () {
             return view('indicators.19813.index');
