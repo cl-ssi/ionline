@@ -491,44 +491,44 @@ class ReportController extends Controller
 
 
 
-    $txt =
-      'RUN|' .
-      'DV|' .
-      ' N°  cargo |' .
-      ' Fecha  inicio  contrato |' .
-      ' Fecha  fin  contrato |' .
-      'Establecimiento|' .
-      ' Tipo  de  decreto |' .
-      ' Contrato  por  prestación |' .
-      ' Monto  bruto |' .
-      ' Número  de  cuotas |' .
-      'Impuesto|' .
-      ' Día  de  proceso |' .
-      ' Honorario  suma  alzada |' .
-      ' Financiado  proyecto |' .
-      ' Centro  de  costo |' .
-      'Unidad|' .
-      ' Tipo  de  pago |' .
-      ' Código  de  banco |' .
-      ' Cuenta  bancaria |' .
-      'Programa|' .
-      'Glosa|' .
-      'Profesión|' .
-      'Planta|' .
-      'Resolución|' .
-      ' N°  resolución |' .
-      ' Fecha  resolución |' .
-      'Observación|' .
-      'Función|' .
-      ' Descripción  de  la  función  que  cumple |' .
-      ' Estado  tramitación  del  contrato |' .
-      ' Tipo  de  jornada |' .
-      ' Agente  público |' .
-      ' Horas  de  contrato |' .
-      ' Código  por  objetivo |' .
-      ' Función  dotación |' .
-      ' Tipo  de  función |' .
-      ' Afecto  a  sistema  de  turno' . "\r\n";
+    $txt = null;
+      // 'RUN|' .
+      // 'DV|' .
+      // ' N°  cargo |' .
+      // ' Fecha  inicio  contrato |' .
+      // ' Fecha  fin  contrato |' .
+      // 'Establecimiento|' .
+      // ' Tipo  de  decreto |' .
+      // ' Contrato  por  prestación |' .
+      // ' Monto  bruto |' .
+      // ' Número  de  cuotas |' .
+      // 'Impuesto|' .
+      // ' Día  de  proceso |' .
+      // ' Honorario  suma  alzada |' .
+      // ' Financiado  proyecto |' .
+      // ' Centro  de  costo |' .
+      // 'Unidad|' .
+      // ' Tipo  de  pago |' .
+      // ' Código  de  banco |' .
+      // ' Cuenta  bancaria |' .
+      // 'Programa|' .
+      // 'Glosa|' .
+      // 'Profesión|' .
+      // 'Planta|' .
+      // 'Resolución|' .
+      // ' N°  resolución |' .
+      // ' Fecha  resolución |' .
+      // 'Observación|' .
+      // 'Función|' .
+      // ' Descripción  de  la  función  que  cumple |' .
+      // ' Estado  tramitación  del  contrato |' .
+      // ' Tipo  de  jornada |' .
+      // ' Agente  público |' .
+      // ' Horas  de  contrato |' .
+      // ' Código  por  objetivo |' .
+      // ' Función  dotación |' .
+      // ' Tipo  de  función |' .
+      // ' Afecto  a  sistema  de  turno' . "\r\n";
 
     foreach ($filas as $fila) {
       $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
@@ -832,6 +832,7 @@ class ReportController extends Controller
       }
 
       $txt .=
+        '|'.
         $fila->employee->id . '|' .
         $fila->employee->dv . '|' .
         $sirh_n_cargo . '|' . // contrato 5, prestaión u hora extra es 6
