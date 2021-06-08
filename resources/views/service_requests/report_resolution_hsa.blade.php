@@ -327,6 +327,10 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
         --
         @break
     @endswitch
+    @if(($ServiceRequest->working_day_type_other)
+        {{$ServiceRequest->working_day_type_other}}<br>
+    @endif
+
 
     Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador,
     se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza
