@@ -23,4 +23,9 @@ class ItemRequestForm extends Model
         return $this->belongsTo(BudgetItem::class);
     }
 
+    public function formatExpense()
+    {
+      return number_format($this->expense,0,",",".");
+    }
+
 }
