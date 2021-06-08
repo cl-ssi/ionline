@@ -66,7 +66,7 @@
                         <td rowspan="2" class="text-left glosa">{{$indicator->name}}.</td>
                         <td class="text-left glosa">{{$indicator->numerator}}. <span class="badge badge-secondary">{{$indicator->numerator_source}}</span></span></td>
                         <td rowspan="2" class="text-center align-middle">{{$indicator->goal}}</td>
-                        <td rowspan="2" class="text-center align-middle">{{str_contains($indicator->goal, '%') ? number_format($indicator->getCompliance2($iiaaps->commune, null), 2, ',', '.').'%' : number_format($indicator->getCompliance2($iiaaps->commune, null), 2, '.', ',')}}</td>
+                        <td rowspan="2" class="text-center align-middle">{{str_contains($indicator->goal, '%') ? number_format($indicator->getCompliance2($iiaaps->commune, null), 2, ',', '.').'%' : number_format($indicator->getCompliance2($iiaaps->commune, null)/100, 2, '.', ',')}}</td>
                         <td class="text-center">{{number_format($indicator->numerator_source == 'REM P' ? $indicator->getLastValueByFactor2('numerador', $iiaaps->commune, null) : $indicator->getValuesAcum2('numerador', $iiaaps->commune, null), 0, ',', '.')}}</td>
                         @foreach($months as $number => $month)
                         <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('numerador', $number, $iiaaps->commune, null) != null ? number_format($indicator->getValueByFactorAndMonth2('numerador', $number, $iiaaps->commune, null), 0, ',', '.') : ''}}</td>
@@ -114,7 +114,7 @@
                             <td rowspan="2" class="text-left glosa">{{$indicator->name}}.</td>
                             <td class="text-left glosa">{{$indicator->numerator}}.</span></td>
                             <td rowspan="2" class="text-center align-middle">{{$indicator->goal}}</td>
-                            <td rowspan="2" class="text-center align-middle">{{str_contains($indicator->goal, '%') ? number_format($indicator->getCompliance2(null, $establishment->alias_estab), 2, ',', '.').'%' : number_format($indicator->getCompliance2(null, $establishment->alias_estab), 2, '.', ',')}}</td>
+                            <td rowspan="2" class="text-center align-middle">{{str_contains($indicator->goal, '%') ? number_format($indicator->getCompliance2(null, $establishment->alias_estab), 2, ',', '.').'%' : number_format($indicator->getCompliance2(null, $establishment->alias_estab)/100, 2, '.', ',')}}</td>
                             <td class="text-center">{{number_format($indicator->numerator_source == 'REM P' ? $indicator->getLastValueByFactor2('numerador', null, $establishment->alias_estab) : $indicator->getValuesAcum2('numerador', null, $establishment->alias_estab), 0, ',', '.')}}</td>
                             @foreach($months as $number => $month)
                             <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('numerador', $number, null, $establishment->alias_estab) != null ? number_format($indicator->getValueByFactorAndMonth2('numerador', $number, null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
