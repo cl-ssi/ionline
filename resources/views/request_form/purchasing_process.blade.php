@@ -61,6 +61,13 @@
           </tr>
 
           <tr class="d-flex">
+              <th class="text-muted col-3" scope="row">Tipo de Compra</th>
+              <td class="col-3">{{ $requestForm->purchaseType->name }}</td>
+              <th class="text-muted col-3" scope="row">Unidad de Compra</th>
+              <td class="col-3">{{ $requestForm->purchaseUnit->name }}</td>
+          </tr>
+
+          <tr class="d-flex">
               <th class="text-muted col-3" scope="row"></th>
               <td class="col-3"></td>
               <th class="text-muted col-3" scope="row"></th>

@@ -8,12 +8,14 @@ use App\User;
 use App\Rrhh\OrganizationalUnit;
 use App\Models\RequestForms\ItemRequestForm;
 use App\Models\RequestForms\EventRequestForm;
+use App\Models\Parameters\PurchaseType;
+use App\Models\Parameters\PurchaseUnit;
 
 class RequestForm extends Model
 {
     protected $fillable = [
         'applicant_position', 'estimated_expense', 'program', 'justification', 'type_form', 'bidding_number','purchase_mechanism', 'creator_user_id',
-        'supervisor_user_id', 'applicant_user_id', 'applicant_ou_id', 'status', 'sigfe'
+        'supervisor_user_id', 'applicant_user_id', 'applicant_ou_id', 'status', 'sigfe', 'purchase_unit_id', 'purchase_type_id',
     ];
 
     public function creator() {
@@ -26,6 +28,14 @@ class RequestForm extends Model
 
     public function supervisor(){
       return $this->belongsTo(User::class, 'supervisor_user_id');
+    }
+
+    public function purchaseUnit(){
+      return $this->belongsTo(PurchaseUnit::class, 'purchase_unit_id');
+    }
+
+    public function purchaseType(){
+      return $this->belongsTo(PurchaseType::class, 'purchase_type_id');
     }
 
     public function organizationalUnit(){
