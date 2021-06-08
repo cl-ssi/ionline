@@ -61,6 +61,11 @@
             <label for="for_position">Cargo Desempeñado*</label>
             <input type="text" class="form-control" id="for_position" placeholder="" name="position" required>
         </fieldset>
+
+        <fieldset class="form-group col-6">
+            <label for="for_phone_number">Telefono*</label>
+            <input type="text" class="form-control" id="for_phone_number" placeholder="" name="phone_number" required>
+        </fieldset>
     </div>
 
 
