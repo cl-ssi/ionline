@@ -5,6 +5,8 @@ namespace App\Http\Livewire\RequestForm;
 use Livewire\Component;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\EventRequestForm;
+use App\Models\Parameters\PurchaseUnit;
+use App\Models\Parameters\PurchaseType;
 use App\Rrhh\Authority;
 use Carbon\Carbon;
 use App\User;
@@ -13,6 +15,7 @@ class Authorization extends Component
 {
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $rejectedComment;
     public $lstSupervisorUser, $supervisorUser, $title, $route;
+    public $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit;
 
     protected $rules = [
         'rejectedComment' => 'required|min:6',
@@ -32,15 +35,17 @@ class Authorization extends Component
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
       $this->position           = auth()->user()->position;
       if($eventType=='supply_event'){
-        $this->lstSupervisorUser  = User::where('organizational_unit_id', 37)->get();
-        $this->title = 'Autorización Abastecimiento';
-        $this->route = 'request_forms.supply_index';
+          $this->lstSupervisorUser  = User::where('organizational_unit_id', 37)->get();
+          $this->lstPurchaseType   = PurchaseType::all();
+          $this->lstPurchaseUnit   = PurchaseUnit::all();
+          $this->title = 'Autorización Abastecimiento';
+          $this->route = 'request_forms.supply_index';
       }elseif($eventType=='finance_event'){
-        $this->title = 'Autorización Finanzas';
-        $this->route = 'request_forms.finance_index';
+          $this->title = 'Autorización Finanzas';
+          $this->route = 'request_forms.finance_index';
       }elseif($eventType=='leader_ship_event'){
-        $this->title = 'Autorización Jefatura';
-        $this->route = 'request_forms.leadership_index';
+          $this->title = 'Autorización Jefatura';
+          $this->route = 'request_forms.leadership_index';
       }
     }
 
@@ -54,10 +59,18 @@ class Authorization extends Component
     {
       if($this->eventType=='supply_event'){
         $this->validate(
-          [ 'supervisorUser'  =>  'required' ],
-          [ 'supervisorUser.required'  =>  'Seleccione un Usuario.' ]
+          [ 'supervisorUser'  =>  'required',
+            'purchaseUnit'    =>  'required',
+            'purchaseType'    =>  'required',
+         ],
+          [ 'supervisorUser.required'  =>  'Seleccione un Usuario.',
+            'purchaseUnit.required'    =>  'Seleccione una unidad de compra.',
+            'purchaseType.required'    =>  'Seleccione un tipo de compra.',
+         ]
         );
         $this->requestForm->supervisor_user_id =  $this->supervisorUser;
+        $this->requestForm->purchase_unit_id   =  $this->purchaseUnit;
+        $this->requestForm->purchase_type_id   =  $this->purchaseType;
       }
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'created')->first();
       if(!is_null($event)){
