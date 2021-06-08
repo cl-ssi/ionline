@@ -313,7 +313,7 @@
 		</fieldset>
 
 		<fieldset class="form-group col">
-			<label for="for_working_day_type_other">Otro</label>
+			<label for="for_working_day_type_other">Otro<small>(Saldrá en la resolución luego del horario)</small></label>
 			<input type="text" class="form-control" id="for_working_day_type_other" placeholder="" name="working_day_type_other">
 		</fieldset>
 
