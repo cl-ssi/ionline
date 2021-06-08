@@ -126,6 +126,13 @@ class RequestForm extends Model
       }
     }
 
+    public function eventSignerName($event_type){
+      $event = $this->eventRequestForms()->where('status', 'approved')->where('event_type',$event_type)->first();
+      if(!is_null($event)){
+        return $event->signerUser->tinnyName();
+      }
+    }
+
     /* TIEMPO TRANSCURRIDO DEL TICKET */
     public function getElapsedTime()
     {
@@ -137,11 +144,9 @@ class RequestForm extends Model
     }
 
 
-
-    /*
-    public function getFormatEstimatedExpenseAttribute()
+    public function estimatedExpense()
     {
-        //return number_format($this->estimated_expense,0,",",".");
+      return number_format($this->estimated_expense,0,",",".");
     }
 
     public function getCreationDateAttribute()
