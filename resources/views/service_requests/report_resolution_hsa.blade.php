@@ -327,7 +327,7 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
         --
         @break
     @endswitch
-    @if(($ServiceRequest->working_day_type_other)
+    @if($ServiceRequest->working_day_type_other)
         {{$ServiceRequest->working_day_type_other}}<br>
     @endif
 
