@@ -831,8 +831,7 @@ class ReportController extends Controller
           break;
       }
 
-      $txt .=
-        '|'.
+      $txt .=        
         $fila->employee->id . '|' .
         $fila->employee->dv . '|' .
         $sirh_n_cargo . '|' . // contrato 5, prestaión u hora extra es 6
