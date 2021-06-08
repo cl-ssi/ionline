@@ -57,7 +57,7 @@
                 <td nowrap>{{ $result->user->runFormat() ?? ''  }}</td>
                 <td>{{ $result->psirequest->job ?? ''  }}</td>
                 <td>{{ $result->total_points ?? '' }}</td>
-                <td>{{ $result->created_at ?? '' }}</td>
+                <td>{{ $result->updated_at ?? '' }}</td>
                 <td>{{ $result->psirequest->status ?? '' }}</td>
                 <td>
                     <a href="{{ route('suitability.results.show', $result->id) }}" class="btn btn-outline-primary">
