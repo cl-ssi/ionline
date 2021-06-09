@@ -131,7 +131,7 @@
 
             <fieldset class="form-group col">
                 <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
-                <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6"                 
+                <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6"
                 
                 ></textarea>
             </fieldset>

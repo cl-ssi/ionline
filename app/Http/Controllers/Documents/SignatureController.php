@@ -29,6 +29,9 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use App\Rrhh\Authority;
 use Throwable;
+use App\Documents\Parte;
+use App\Documents\ParteFile;
+use Carbon\Carbon;
 
 class SignatureController extends Controller
 {
@@ -199,6 +202,59 @@ class SignatureController extends Controller
             DB::rollBack();
             throw $e;
         }
+
+
+        //se crea documento si va de Destinatarios del documento al director
+        $destinatarios = $request->recipients;
+
+        $dest_vec = array_map('trim', explode(',', $destinatarios));
+
+        foreach($dest_vec as $dest){
+            if($dest== 'director.ssi@redsalud.gob.cl' or $dest=='director.ssi@redsalud.gov.cl' or $dest=='direccion.ssi@redsalud.gov.cl')
+            {
+                $tipo = null;
+                switch($request->document_type)
+                    {
+                        case 'Memorando':
+                            $this->tipo ='Memo';
+                        break;
+                        case 'Resoluciones':
+                            $this->tipo ='Resolución';
+                        break;
+                        default:
+                        $this->tipo = $request->document_type;
+                        break;
+                    }
+
+
+                $parte = Parte::create([                    
+                    'entered_at' => Carbon::today(),           
+                    'type' => $this->tipo,
+                    'date' => $request->request_date,
+                    'subject' => $request->subject,
+                    'origin' => 'Parte generado desde Solicitud de Firma N°'.$signature->id,
+                    
+                ]);                
+
+                ParteFile::create([
+                    'parte_id' => $parte->id,
+                    'file' => 'ionline/signatures/original/'.$signature->id.'.pdf',
+                    'name' => $signature->id.'.pdf',
+                    
+                ]);
+
+            }
+            
+
+        }
+
+        
+
+
+
+
+        
+
 
         session()->flash('info', 'La solicitud de firma ' . $signature->id . ' ha sido creada.');
         return redirect()->route('documents.signatures.index', ['mis_documentos']);
