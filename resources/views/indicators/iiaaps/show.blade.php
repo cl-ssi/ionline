@@ -63,7 +63,7 @@
                 <!-- numerador comuna -->
                     <tr class="text-center">
                         <td rowspan="2" class="align-middle">{{$indicator->number}}</td>
-                        <td rowspan="2" class="text-left glosa">{{$indicator->name}}.</td>
+                        <td rowspan="2" class="text-left align-middle glosa">{{$indicator->name}}.</td>
                         <td class="text-left glosa">{{$indicator->numerator}}. <span class="badge badge-secondary">{{$indicator->numerator_source}}</span></span></td>
                         <td rowspan="2" class="text-center align-middle">{{$indicator->goal}}</td>
                         <td rowspan="2" class="text-center align-middle">{{str_contains($indicator->goal, '%') ? number_format($indicator->getCompliance2($iiaaps->commune, null), 2, ',', '.').'%' : number_format($indicator->getCompliance2($iiaaps->commune, null)/100, 2, '.', ',')}}</td>
@@ -111,7 +111,7 @@
                     <!-- numerador establecimiento -->
                         <tr class="text-center">
                             <td rowspan="2" class="align-middle">{{$indicator->number}}</td>
-                            <td rowspan="2" class="text-left glosa">{{$indicator->name}}.</td>
+                            <td rowspan="2" class="text-left align-middle glosa">{{$indicator->name}}.</td>
                             <td class="text-left glosa">{{$indicator->numerator}}.</span></td>
                             <td rowspan="2" class="text-center align-middle">{{$indicator->goal}}</td>
                             <td rowspan="2" class="text-center align-middle">{{str_contains($indicator->goal, '%') ? number_format($indicator->getCompliance2(null, $establishment->alias_estab), 2, ',', '.').'%' : number_format($indicator->getCompliance2(null, $establishment->alias_estab)/100, 2, '.', ',')}}</td>
