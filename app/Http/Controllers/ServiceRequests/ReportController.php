@@ -444,23 +444,41 @@ class ReportController extends Controller
 
 
     $run = $request->run;
+    $id_from = $request->id_from;
+    $id_to = $request->id_to;
+    $from = $request->from;
+    $to = $request->to;
 
 
 
-    if ($request->has('from')) {
+    
 
       $filitas = ServiceRequest::where('establishment_id', 1)
         ->when($request->run != null, function ($q) use ($run) {
           return $q->where('user_id', $run);
         })
+        ->when($request->id_from != null, function ($q) use ($id_from) {
+          return $q->where('id', '>=', $id_from);
+        })
+        ->when($request->id_to != null, function ($q) use ($id_to) {
+          return $q->where('id', '<=', $id_to);
+        })
+        ->when($request->from != null, function ($q) use ($from) {
+          return $q->where('start_date', '>=', $from);
+        })
+        ->when($request->to != null, function ($q) use ($to) {
+          return $q->where('start_date', '<=', $to);
+        })
 
-        ->whereBetween('start_date', [$request->from, $request->to])
+        //->whereBetween('start_date', [$request->from, $request->to])
         ->where(function ($q) {
           $q->whereNotNull('resolution_number')
             ->whereNotNull('gross_amount')
             ->orwhereNotNull('resolution_date');
         })->paginate(100);
-    }
+
+        $request->flash(); //envia los input de regreso
+    
 
 
     return view('service_requests.export_sirh', compact('request', 'filitas'));
@@ -471,22 +489,40 @@ class ReportController extends Controller
 
     $filas = null;
 
-    $filas = ServiceRequest::where('establishment_id', 1)->paginate(100);
+    $filas = ServiceRequest::where('establishment_id', 1);
+    
 
     $run = $request->run;
+    $id_from = $request->id_from;
+    $id_to = $request->id_to;
+    $from = $request->from;
+    $to = $request->to;
     
-    if ($request->has('from')) {
+    
+    
     $filas = ServiceRequest::where('establishment_id', 1)
       ->when($request->run != null, function ($q) use ($run) {
         return $q->where('user_id', $run);
       })
-      ->whereBetween('start_date', [$request->from, $request->to])
+      ->when($request->id_from != null, function ($q) use ($id_from) {
+        return $q->where('id', '>=', $id_from);
+      })
+      ->when($request->id_to != null, function ($q) use ($id_to) {
+        return $q->where('id', '<=', $id_to);
+      })
+      ->when($request->from != null, function ($q) use ($from) {
+        return $q->where('start_date', '>=', $from);
+      })
+      ->when($request->to != null, function ($q) use ($to) {
+        return $q->where('start_date', '<=', $to);
+      })
+      //->whereBetween('start_date', [$request->from, $request->to])
       ->where(function ($q) {
         $q->whereNotNull('resolution_number')
           ->whereNotNull('gross_amount')
           ->orwhereNotNull('resolution_date');
-      })->paginate(100);
-    }
+      })->get();
+    
 
 
 
