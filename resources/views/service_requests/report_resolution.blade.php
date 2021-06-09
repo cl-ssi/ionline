@@ -425,7 +425,7 @@
         <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en 
         <!-- TODO para salir del caso excepcional de gramático  se debe cambiar-->
         @if($ServiceRequest->id == 4509) 
-        1 cuota de {{$ServiceRequest->net_amount}}
+        1 cuota de ${{number_format($ServiceRequest->net_amount)}}
         @else 
         @livewire('service-request.monthly-quotes', ['serviceRequest' => $ServiceRequest])
         @endif
