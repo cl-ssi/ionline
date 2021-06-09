@@ -64,37 +64,28 @@ class IaapsController extends Controller
                         $source = $factor == 'numerador' ? $indicator->numerator_source : $indicator->denominator_source;
 
                         if($source == 'FONASA'){
-                            $result = Percapita::year($year)->selectRaw('COUNT(*)*'.reset($cols).' AS valor, COD_CENTRO')
-                                                    ->with('establecimiento')
-                                                    ->whereIn('COD_CENTRO', $iiaaps->establishment_cods)
-                                                    ->whereRaw(implode(' AND ', $cods))
-                                                    ->groupBy('COD_CENTRO')->orderBy('COD_CENTRO')->get();
+                            // $result = Percapita::year($year)->selectRaw('COUNT(*)*'.reset($cols).' AS valor, COD_CENTRO')
+                            //                         ->with('establecimiento')
+                            //                         ->whereIn('COD_CENTRO', $iiaaps->establishment_cods)
+                            //                         ->whereRaw(implode(' AND ', $cods))
+                            //                         ->groupBy('COD_CENTRO')->orderBy('COD_CENTRO')->get();
 
-                            foreach($result as $item){
-                                $value = new Value(['month' => 12, 'factor' => $factor, 'value' => $item->valor]);
-                                $value->commune = $item->establecimiento->comuna;
-                                $value->establishment = $item->establecimiento->alias_estab;
-                                $value->fuente = 'FONASA';
-                                $indicator->values->add($value);
-                            }
-
+                            // foreach($result as $item){
+                            //     $value = new Value(['month' => 12, 'factor' => $factor, 'value' => $item->valor]);
+                            //     $value->commune = $item->establecimiento->comuna;
+                            //     $value->establishment = $item->establecimiento->alias_estab;
+                            //     $indicator->values->add($value);
+                            // }
                             // Consultamos si existen en el denominador valores manuales por comuna
                             if($factor == 'denominador' && $indicator->denominator_values_by_commune != null){
                                 $values = array_map('trim', explode(',', $indicator->denominator_values_by_commune));
-                                $communes = array('ALTO HOSPICIO', 'CAMIÑA', 'COLCHANE', 'HUARA', 'IQUIQUE', 'PICA', 'POZO ALMONTE');
+                                $value = $values[array_search($iiaaps->commune, $iiaaps->communes)];
 
-                                foreach($values as $index => $value){
-                                    if(!empty($value)){ //valores distinto a 0 los procesamos
-                                        $commune = $communes[$index]; //obtenemos nombre de comuna segun posicion del value en el array
-                                        //borramos valores previos segun comuna y factor denominador
-                                        $indicator->values = $indicator->values->reject(function($item, $key) use ($factor, $commune){
-                                            return $item->factor == $factor && $item->commune == $commune;
-                                        });
-                                        // Seteamos valores nuevos segun comuna y factor denominador
-                                        $value = new Value(['month' => 12, 'factor' => $factor, 'value' => $value]);
-                                        $value->commune = $commune;
-                                        $indicator->values->add($value);
-                                    }
+                                if(!empty($value)){ //valores distinto a 0 los procesamos
+                                    // Seteamos valores nuevos segun comuna y factor denominador
+                                    $value = new Value(['month' => 12, 'factor' => $factor, 'value' => $value]);
+                                    $value->commune = $iiaaps->commune;
+                                    $indicator->values->add($value);
                                 }
                             }
                         } else { // fuente REM
