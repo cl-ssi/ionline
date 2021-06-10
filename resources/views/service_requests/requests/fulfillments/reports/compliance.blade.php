@@ -139,6 +139,25 @@
         </fieldset>
     </div>
 
+    <div class="form-row">
+    <fieldset class="form-group col-6 col-md-2">
+            <label for="for_working_day_type">Jornada de Trabajo</label>
+            <select name="working_day_type" class="form-control">
+                <option value=""></option>
+                <option value="DIURNO" @if($request->input('working_day_type')=='DIURNO') selected @endif>DIURNO</option>
+				<option value="TERCER TURNO" @if($request->input('working_day_type')=='TERCER TURNO') selected @endif>TERCER TURNO</option>
+				<option value="TERCER TURNO - MODIFICADO" @if($request->input('working_day_type')=='TERCER TURNO - MODIFICADO') selected @endif>TERCER TURNO - MODIFICADO</option>
+				<option value="CUARTO TURNO" @if($request->input('working_day_type')=='CUARTO TURNO') selected @endif>CUARTO TURNO</option>
+				<option value="CUARTO TURNO - MODIFICADO" @if($request->input('working_day_type')=='CUARTO TURNO - MODIFICADO') selected @endif>CUARTO TURNO - MODIFICADO</option>
+				<option value="DIURNO PASADO A TURNO" @if($request->input('working_day_type')=='DIURNO PASADO A TURNO') selected @endif>DIURNO PASADO A TURNO</option>
+				<option value="HORA MÉDICA" @if($request->input('working_day_type')=='HORA MÉDICA') selected @endif>HORA MÉDICA</option>
+				<option value="HORA EXTRA" @if($request->input('working_day_type')=='HORA EXTRA') selected @endif>HORA EXTRA</option>
+				<option value="TURNO EXTRA">TURNO EXTRA</option>
+				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
+            </select>
+        </fieldset>
+    </div>
+
 </form>
 
 <hr>
@@ -155,6 +174,7 @@
             <th>Período</th>
             <th>Tipo</th>
             <th>Tipo de Contrato</th>
+            <th>Tipo de Jornada</th>
             <th>Hitos</th>
             <th></th>
         </tr>
@@ -169,6 +189,7 @@
             <td>{{$fulfillment->year}}-{{$fulfillment->month}}</td>
             <td>{{$fulfillment->servicerequest->type?? ''}}</td>
             <td>{{$fulfillment->servicerequest->program_contract_type?? ''}}</td>
+            <td class="small">{{$fulfillment->servicerequest->working_day_type?? ''}}</td>
             <td>
                 <i title="Resolución" class="fas fa-file-signature 
                     {{ ($fulfillment->serviceRequest->has_resolution_file)?'text-primary':'text-secondary'}}"></i>
