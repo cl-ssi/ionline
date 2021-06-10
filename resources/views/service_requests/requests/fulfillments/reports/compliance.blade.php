@@ -171,7 +171,7 @@
             <th>Id Sol.</th>
             <th nowrap>Rut</th>
             <th>Nombre</th>
-            <th>Unidad (Establecimiento)</th>
+            <th>Unidad</th>
             <th>Período</th>
             <th>Tipo</th>
             <th>Tipo de Contrato</th>
@@ -187,7 +187,7 @@
             </td>
             <td>{{$fulfillment->servicerequest?$fulfillment->servicerequest->employee->runFormat(): ''}}</td>
             <td class="text-uppercase">{{$fulfillment->servicerequest->employee->fullname?? ''}}</td>
-            <td>{{$fulfillment->servicerequest->responsabilityCenter->name??''}}({{$fulfillment->serviceRequest->establishment->name??''}})</td>
+            <td>{{$fulfillment->servicerequest->responsabilityCenter->name??''}}</td>
             <td>{{$fulfillment->year}}-{{$fulfillment->month}}</td>
             <td>{{$fulfillment->servicerequest->type?? ''}}</td>
             <td>{{$fulfillment->servicerequest->program_contract_type?? ''}}</td>
