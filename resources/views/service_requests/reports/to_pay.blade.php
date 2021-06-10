@@ -46,6 +46,7 @@
     <tr>
         <th>Id</th>
         <th>Estab</th>
+        <th>Centro de Resp</th>
         <th>Periodo</th>
         <th>Tipo/Jornada</th>
         <th>Nombre</th>
@@ -65,6 +66,7 @@
       				</a>
           </td>
           <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
+          <td class="small">{{$fulfillment->serviceRequest->responsabilityCenter->name ?? ''}}</td>
           <td>
             @if($fulfillment->year)
               {{ $fulfillment->year }}-{{ $fulfillment->month }}
