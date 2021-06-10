@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Establishment;
+use App\Rrhh\OrganizationalUnit;
 
 class ReportController extends Controller
 {
@@ -319,6 +320,8 @@ class ReportController extends Controller
 
     $program_contract_type = $request->program_contract_type;
     $working_day_type = $request->working_day_type;
+    $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
+    $responsability_center_ou_id = $request->responsability_center_ou_id;
 
     $fulfillments = Fulfillment::where('payment_ready', 0)
       ->when($program_contract_type != null, function ($q) use ($program_contract_type) {
@@ -329,6 +332,11 @@ class ReportController extends Controller
       ->when($working_day_type != null, function ($q) use ($working_day_type) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($working_day_type) {
           $subQuery->where('working_day_type', $working_day_type);
+        });
+      })
+      ->when($responsability_center_ou_id != null, function ($q) use ($responsability_center_ou_id) {
+        return $q->whereHas("ServiceRequest", function ($subQuery) use ($responsability_center_ou_id) {
+          $subQuery->where('responsability_center_ou_id', $responsability_center_ou_id);
         });
       })
 
@@ -342,7 +350,7 @@ class ReportController extends Controller
     //   })->get();
 
     // }
-    return view('service_requests.reports.pay_rejected', compact('fulfillments', 'request'));
+    return view('service_requests.reports.pay_rejected', compact('fulfillments', 'request','responsabilityCenters'));
   }
 
   public function budgetAvailability(ServiceRequest $serviceRequest)
