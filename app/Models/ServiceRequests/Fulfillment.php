@@ -227,6 +227,13 @@ class Fulfillment extends Model implements Auditable
       }
     }
 
+
+    if ($request->input('working_day_type') != "") {
+      $query->whereHas('servicerequest', function ($q) use ($request) {
+        $q->Where('working_day_type', $request->input('working_day_type'));
+      });
+    }
+
     // if ($request->has('certificate')) {
     //   $query->whereNotNull('signatures_file_id');
     // } else {
