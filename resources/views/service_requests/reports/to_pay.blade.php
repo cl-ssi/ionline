@@ -23,6 +23,15 @@
 				<option value="12" @if($request->establishment_id == 12) selected @endif>Dr. Héctor Reyno G.</option>
 				<option value="38" @if($request->establishment_id === 0) selected @endif>Dirección SSI</option>
 			</select>
+      <span class="input-group-text">Tipo de Contrato</span>
+    		
+        <select class="form-control selectpicker border border-secondary"  name="type" data-size="5">
+                <option value=""></option>
+                <option value="Covid" @if($request->input('type')=='Covid') selected @endif>Covid</option>
+                <option value="Suma Alzada" @if($request->input('type')=='Suma Alzada') selected @endif>Suma Alzada</option>
+            </select>
+        
+
 			<div class="input-group-append">
 				<button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
 			</div>
@@ -47,6 +56,7 @@
         <th>Id</th>
         <th>Estab</th>
         <th>Centro de Resp</th>
+        <th>Tipo de Contrato</th>
         <th>Periodo</th>
         <th>Tipo/Jornada</th>
         <th>Nombre</th>
@@ -67,6 +77,7 @@
           </td>
           <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
           <td class="small">{{$fulfillment->serviceRequest->responsabilityCenter->name ?? ''}}</td>
+          <td>{{$fulfillment->serviceRequest->type ?? ''}}</td>
           <td>
             @if($fulfillment->year)
               {{ $fulfillment->year }}-{{ $fulfillment->month }}

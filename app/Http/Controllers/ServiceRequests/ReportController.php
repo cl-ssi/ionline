@@ -23,12 +23,18 @@ class ReportController extends Controller
   public function toPay(Request $request)
   {
     $establishment_id = $request->establishment_id;
+    $type = $request->type;
     $topay_fulfillments1 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
       $subQuery->where('has_resolution_file', 1);
     })
       ->when($establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
           $subQuery->where('establishment_id', $establishment_id);
+        });
+      })
+      ->when($type != null, function ($q) use ($type) {
+        return $q->whereHas("ServiceRequest", function ($subQuery) use ($type) {
+          $subQuery->where('type', $type);
         });
       })
       // ->when($establishment_id == 0, function ($q) use ($establishment_id) {
