@@ -508,17 +508,17 @@
         <label for="for_digera_strategy">Estrategia Digera Covid</label>
         <select name="digera_strategy" class="form-control" id="digera_strategy">
           <option value=""></option>
-          <option value="Apertura / Complejización de Camas" @if($serviceRequest->digera_strategy == "Apertura / Complejización de Camas") selected @endif>Apertura / Complejización de Camas</option>
-          <option value="Hospitalización Domiciliaria" @if($serviceRequest->digera_strategy == "Hospitalización Domiciliaria") selected @endif>Hospitalización Domiciliaria</option>
-          <option value="Urgencia Diferenciada" @if($serviceRequest->digera_strategy == "Urgencia Diferenciada") selected @endif>Urgencia Diferenciada</option>
-          <option value="Atención telemática" @if($serviceRequest->digera_strategy == "Atención telemática") selected @endif>Atención telemática</option>
-          <option value="Entrega de Fármacos a Pacientes" @if($serviceRequest->digera_strategy == "Entrega de Fármacos a Pacientes") selected @endif>Entrega de Fármacos a Pacientes</option>
-          <option value="Laboratorios PCR" @if($serviceRequest->digera_strategy == "Laboratorios PCR") selected @endif>Laboratorios PCR</option>
-          <option value="APS" @if($serviceRequest->digera_strategy == "APS") selected @endif>APS</option>
-          <option value="EPP" @if($serviceRequest->digera_strategy == "EPP") selected @endif>EPP</option>
-          <option value="Traslados Pacientes Covid" @if($serviceRequest->digera_strategy == "Traslados Pacientes Covid") selected @endif>Traslados Pacientes Covid</option>
-          <option value="Actividades Apoyo Covid" @if($serviceRequest->digera_strategy == "Actividades Apoyo Covid") selected @endif>Actividades Apoyo Covid</option>
-          <option value="Descripción Incompleta / No son Covid" @if($serviceRequest->digera_strategy == "Descripción Incompleta / No son Covid") selected @endif>Descripción Incompleta / No son Covid</option>
+          <option value="Camas MEDIAS Aperturadas" @if($serviceRequest->digera_strategy == "Camas MEDIAS Aperturadas") selected @endif>Camas MEDIAS Aperturadas</option>
+          <option value="Camas MEDIAS Complejizadas" @if($serviceRequest->digera_strategy == "Camas MEDIAS Complejizadas") selected @endif>Camas MEDIAS Complejizadas</option>
+          <option value="Camas UCI Aperturadas" @if($serviceRequest->digera_strategy == "Camas UCI Aperturadas") selected @endif>Camas UCI Aperturadas</option>
+          <option value="Camas UCI Complejizadas" @if($serviceRequest->digera_strategy == "Camas UCI Complejizadas") selected @endif>Camas UCI Complejizadas</option>
+          <option value="Camas UTI Aperturadas" @if($serviceRequest->digera_strategy == "Camas UTI Aperturadas") selected @endif>Camas UTI Aperturadas</option>
+          <option value="Camas UTI Complejizadas" @if($serviceRequest->digera_strategy == "Camas UTI Complejizadas") selected @endif>Camas UTI Complejizadas</option>
+          <option value="Cupos Hosp. Domiciliaria" @if($serviceRequest->digera_strategy == "Cupos Hosp. Domiciliaria") selected @endif>Cupos Hosp. Domiciliaria</option>
+          <option value="Refuerzo Anatomía Patologica" @if($serviceRequest->digera_strategy == "Refuerzo Anatomía Patologica") selected @endif>Refuerzo Anatomía Patologica</option>
+          <option value="Refuerzo Laboratorio" @if($serviceRequest->digera_strategy == "Refuerzo Laboratorio") selected @endif>Refuerzo Laboratorio</option>
+          <option value="Refuerzo SAMU" @if($serviceRequest->digera_strategy == "Refuerzo SAMU") selected @endif>Refuerzo SAMU</option>
+          <option value="Refuerzo UEH" @if($serviceRequest->digera_strategy == "Refuerzo UEH") selected @endif>Refuerzo UEH</option>
           <option value="Migración Colchane" @if($serviceRequest->digera_strategy == "Migración Colchane") selected @endif>Migración Colchane</option>
         </select>
     </fieldset>

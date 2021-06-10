@@ -382,17 +382,17 @@
 			<label for="for_digera_strategy">Estrategia Digera Covid</label>
 			<select name="digera_strategy" class="form-control" id="digera_strategy" required>
 				<option value=""></option>
-				<option value="Apertura / Complejización de Camas" >Apertura / Complejización de Camas</option>
-				<option value="Hospitalización Domiciliaria" >Hospitalización Domiciliaria</option>
-				<option value="Urgencia Diferenciada" >Urgencia Diferenciada</option>
-				<option value="Atención telemática" >Atención telemática</option>
-				<option value="Entrega de Fármacos a Pacientes" >Entrega de Fármacos a Pacientes</option>
-				<option value="Laboratorios PCR" >Laboratorios PCR</option>
-				<option value="APS" >APS</option>
-				<option value="EPP" >EPP</option>
-				<option value="Traslados Pacientes Covid" >Traslados Pacientes Covid</option>
-				<option value="Actividades Apoyo Covid" >Actividades Apoyo Covid</option>
-				<option value="Descripción Incompleta / No son Covid" >Descripción Incompleta / No son Covid</option>
+				<option value="Camas MEDIAS Aperturadas" >Camas MEDIAS Aperturadas</option>
+				<option value="Camas MEDIAS Complejizadas" >Camas MEDIAS Complejizadas</option>
+				<option value="Camas UCI Aperturadas" >Camas UCI Aperturadas</option>
+				<option value="Camas UCI Complejizadas" >Camas UCI Complejizadas</option>
+				<option value="Camas UTI Aperturadas" >Camas UTI Aperturadas</option>
+				<option value="Camas UTI Complejizadas" >Camas UTI Complejizadas</option>
+				<option value="Cupos Hosp. Domiciliaria" >Cupos Hosp. Domiciliaria</option>
+				<option value="Refuerzo Anatomía Patologica" >Refuerzo Anatomía Patologica</option>
+				<option value="Refuerzo Laboratorio" >Refuerzo Laboratorio</option>
+				<option value="Refuerzo SAMU" >Refuerzo SAMU</option>
+				<option value="Refuerzo UEH" >Refuerzo UEH</option>
 				@if(Auth::user()->organizationalUnit->establishment_id == 1)
 					<option value="Migración Colchane" >Migración Colchane</option>
 				@endif
@@ -582,8 +582,7 @@
 					$("#responsability_center_ou_id option:selected").text() == "Unidad de Movilización" ||
 					$("#responsability_center_ou_id option:selected").text() == "Unidad de Salud Ocupacional" ||
 					$("#responsability_center_ou_id option:selected").text() == "Unidad Imagenología") {
-				//$('#digera_strategy').val('Camas MEDIAS Complejizadas');
-				$('#digera_strategy').val('Apertura / Complejización de Camas');
+				$('#digera_strategy').val('Camas MEDIAS Complejizadas');
 				$('#digera_strategy').selectpicker('refresh');
 			}
 			if ($("#responsability_center_ou_id option:selected").text() == "Servicio de Anestesia y Pabellones" ||
