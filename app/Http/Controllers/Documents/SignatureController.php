@@ -239,7 +239,7 @@ class SignatureController extends Controller
                 ParteFile::create([
                     'parte_id' => $parte->id,
                     'file' => $filePath,
-                    'name' => $filePath,
+                    'name' => $signaturesFileDocumentId.'.pdf',
                     
                 ]);
 
