@@ -66,7 +66,13 @@ class SuitabilityController extends Controller
 
         $psirequest->status = $result;
         $psirequest->save();
-        session()->flash('success', 'Se dio resultado de manera correcta');
+        if ($result === 'Aprobado') {
+            $signatureId =  $this->sendForSignature($psirequest->result()->first()->id);
+            session()->flash('success', "Se dio resultado de manera correcta y se creó solicitud de firma $signatureId");
+        }
+        else{
+            session()->flash('success', "Se dio resultado de manera correcta.");
+        }
         return redirect()->back();
     }
 
@@ -248,8 +254,7 @@ class SuitabilityController extends Controller
             throw $e;
         }
 
-        session()->flash('info', 'La solicitud de firma ' . $signature->id . ' ha sido creada. <a href="'. route('documents.signatures.index', ['mis_documentos']) . '"> Ver solicitudes </a>');
-        return redirect()->back();
+        return $signature->id;
     }
 
     public function signedSuitabilityCertificatePDF($id)
