@@ -213,6 +213,9 @@ class SignatureController extends Controller
             if($dest== 'director.ssi@redsalud.gob.cl' or $dest=='director.ssi@redsalud.gov.cl' or $dest=='direccion.ssi@redsalud.gov.cl')
             {
                 $tipo = null;
+                $generador = Auth::user()->full_name;
+                $unidad = Auth::user()->organizationalUnit->name;
+                
                 switch($request->document_type)
                     {
                         case 'Memorando':
@@ -232,7 +235,7 @@ class SignatureController extends Controller
                     'type' => $this->tipo,
                     'date' => $request->request_date,
                     'subject' => $request->subject,
-                    'origin' => 'Parte generado desde Solicitud de Firma N°'.$signature->id,
+                    'origin' => $unidad.' (Parte generado desde Solicitud de Firma N°'.$signature->id.' por '.$generador.')',
                     
                 ]);                
 
