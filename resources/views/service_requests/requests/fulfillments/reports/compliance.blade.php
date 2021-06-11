@@ -156,6 +156,15 @@
 				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
             </select>
         </fieldset>
+
+        <div class="col-6 text-right">
+
+        <a type="button" class="btn btn-outline-primary" title="Descargar Excel"
+        id="downloadLink" onclick="exportF(this)">Descargar Excel <small>(Resultado primera hoja)</small> <i class="fas fa-file-excel"></i> </a>
+
+        </div>
+
+
     </div>
 
 </form>
@@ -165,7 +174,7 @@
 <h3 class="mb-3">Reporte de cumplimiento</h3>
 
 <div class="table-responsive">
-    <table class="table table-sm table-bordered table-stripped">
+    <table class="table table-sm table-bordered table-stripped" id="tabla_cumplimiento">
         <tr>
             <th>Ct.</th>
             <th>Id Sol.</th>
@@ -234,6 +243,26 @@
 @endsection
 
 @section('custom_js')
+
+
+<script type="text/javascript">
+  let date = new Date()
+  let day = date.getDate()
+  let month = date.getMonth() + 1
+  let year = date.getFullYear()
+  let hour = date.getHours()
+  let minute = date.getMinutes()
+
+  function exportF(elem) {
+    var table = document.getElementById("tabla_cumplimiento");
+    var html = table.outerHTML;
+    var html_no_links = html.replace(/<a[^>]*>|<\/a>/g, ""); //remove if u want links in your table
+    var url = 'data:application/vnd.ms-excel,' + escape(html_no_links); // Set your html table into url
+    elem.setAttribute("href", url);
+    elem.setAttribute("download", "tabla_cumplimiento.xls"); // Choose the file name
+    return false;
+  }
+</script>
 
 
 @endsection
