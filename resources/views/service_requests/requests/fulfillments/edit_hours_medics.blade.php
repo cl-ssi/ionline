@@ -88,8 +88,7 @@
 
 		<hr>
 
-		<h4>Turnos extra</h4>
-		Holitas
+		<h4>Turnos extra</h4>		
 		@livewire('service-request.shifts-control', ['fulfillment' => $fulfillment])
 		<br>
 		<!-- <form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.store') }}" enctype="multipart/form-data">
