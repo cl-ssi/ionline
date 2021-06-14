@@ -20,6 +20,7 @@
             </div>
         </fieldset>
 
+@if(count($createdRequestForms) > 0)
         <div class="card border border-muted text-black bg-light mb-5">
           <div class="card-header text-primary h6"><i class="fas fa-list"></i> Formularios sin Aprobaciones</div>
           <div class="card-body">
@@ -64,7 +65,15 @@
             </table>
           </div>
         </div>
+@else
+        <div class="card mb-3 bg-light">
+          <div class="card-body">
+            Sus formularios están siendo atendidos.
+          </div>
+        </div>
+@endif
 
+@if(count($inProgressRequestForms) > 0)
         <div class="card border border-muted text-black bg-light mb-5">
           <div class="card-header text-primary h6"><i class="far fa-paper-plane"></i> Formularios en Progreso</div>
           <div class="card-body">
@@ -77,6 +86,7 @@
                   <th scope="col">Fecha Creación</th>
                   <th scope="col">Espera</th>
                   <th scope="col">Última Actualziación</th>
+                  <th scope="col">Comprador Asignado</th>
                   <th scope="col" class="text-center">J</th>
                   <th scope="col" class="text-center">RP</th>
                   <th scope="col" class="text-center">F</th>
@@ -87,11 +97,12 @@
                   @foreach($inProgressRequestForms as $requestForm)
                         <tr>
                             <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
-                            <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
+                            <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->tinnyName() : 'Usuario eliminado' }}</td>
                             <td class="align-middle">{{ $requestForm->justification }}</td>
                             <td class="align-middle">{{ $requestForm->created_at }}</td>
                             <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
                             <td class="align-middle">{{ $requestForm->updated_at }}</td>
+                            <td class="align-middle">{{ $requestForm->supervisor ? $requestForm->supervisor->tinnyName() : '-- --' }}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
@@ -102,7 +113,15 @@
             </table>
           </div>
         </div>
+@else
+        <div class="card mb-3 bg-light">
+          <div class="card-body">
+            No hay formularios de requerimiento en progreso.
+          </div>
+        </div>
+@endif
 
+@if(count($rejectedRequestForms) > 0)
         <div class="card border border-muted text-black bg-light mb-5">
           <div class="card-header text-primary h6"><i class="fas fa-archive"></i> Formularios Cerrados o Rechazados</div>
           <div class="card-body">
@@ -142,6 +161,13 @@
             </table>
           </div>
         </div>
+@else
+        <div class="card mb-3 bg-light">
+          <div class="card-body">
+            No hay formularios de requerimiento finalizados o rechazados.
+          </div>
+        </div>
+@endif
 
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalCenter">

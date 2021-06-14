@@ -19,7 +19,8 @@
     </div>
 </fieldset>
 
-<div class="card border border-muted text-black bg-light mb-5">
+@if(count($createdRequestForms) > 0)
+<div class="card border border-muted text-black bg-light mb-3">
   <div class="card-header text-primary h6"><i class="fas fa-list"></i> Formularios no Revisados</div>
   <div class="card-body">
     <table class="table table-striped table-sm small">
@@ -41,7 +42,7 @@
           @foreach($createdRequestForms as $requestForm)
                 <tr>
                     <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
-                    <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
+                    <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->tinnyName() : 'Usuario eliminado' }}</td>
                     <td class="align-middle">{{ $requestForm->justification }}</td>
                     <td class="align-middle">{{ $requestForm->created_at }}</td>
                     <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
@@ -59,8 +60,17 @@
     </table>
   </div>
 </div>
+@else
+        <div class="card mb-3 bg-light">
+          <div class="card-body">
+            No hay formularios de requerimiento por visar.
+          </div>
+        </div>
+@endif
 
-<div class="card border border-muted text-black bg-light mb-5">
+
+@if(count($inProgresRequestForms) > 0)
+<div class="card border border-muted text-black bg-light mb-3">
   <div class="card-header text-primary h6"><i class="far fa-paper-plane"></i> Formularios en Progreso</div>
   <div class="card-body">
     <table class="table table-striped table-sm small">
@@ -72,6 +82,7 @@
           <th scope="col">Fecha Creación</th>
           <th scope="col">Espera</th>
           <th scope="col">Última Actualziación</th>
+          <th scope="col">Comprador Asignado</th>
           <th scope="col" class="text-center">J</th>
           <th scope="col" class="text-center">RP</th>
           <th scope="col" class="text-center">F</th>
@@ -82,11 +93,12 @@
           @foreach($inProgresRequestForms as $requestForm)
                 <tr>
                     <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
-                    <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
+                    <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->tinnyName() : 'Usuario eliminado' }}</td>
                     <td class="align-middle">{{ $requestForm->justification }}</td>
                     <td class="align-middle">{{ $requestForm->created_at }}</td>
                     <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
                     <td class="align-middle">{{ $requestForm->updated_at }}</td>
+                    <td class="align-middle">{{ $requestForm->supervisor ? $requestForm->supervisor->tinnyName() : '-- --' }}</td>
                     <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
                     <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
                     <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
@@ -97,44 +109,17 @@
     </table>
   </div>
 </div>
+@else
+        <div class="card mb-3 bg-light">
+          <div class="card-body">
+            No hay formularios de requerimiento en progreso.
+          </div>
+        </div>
+@endif
 
-<div class="card border border-muted text-black bg-light mb-5">
-  <div class="card-header text-primary h6"><i class="far fa-thumbs-up"></i> Formularios Aprobados</div>
-  <div class="card-body">
-    <table class="table table-striped table-sm small">
-      <thead>
-        <tr>
-          <th scope="col">Id</th>
-          <th scope="col">Usuario Gestor</th>
-          <th scope="col">Justificación</th>
-          <th scope="col">Fecha Creación</th>
-          <th scope="col">Espera</th>
-          <th scope="col" class="text-center">J</th>
-          <th scope="col" class="text-center">RP</th>
-          <th scope="col" class="text-center">F</th>
-          <th scope="col" class="text-center">A</th>
-        </tr>
-      </thead>
-      <tbody>
-          @foreach($approvedRequestForms as $requestForm)
-                <tr>
-                    <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
-                    <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
-                    <td class="align-middle">{{ $requestForm->justification }}</td>
-                    <td class="align-middle">{{ $requestForm->created_at }}</td>
-                    <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
-                    <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                    <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                    <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
-                    <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
-                </tr>
-          @endforeach
-      </tbody>
-    </table>
-  </div>
-</div>
 
-<div class="card border border-muted text-black bg-light mb-5">
+@if(count($rejectedRequestForms) > 0)
+<div class="card border border-muted text-black bg-light mb-3">
   <div class="card-header text-primary h6"><i class="fas fa-archive"></i> Formularios Cerrados o Rechazados</div>
   <div class="card-body">
 
@@ -174,9 +159,16 @@
       </tbody>
     </table>
   </div>
-
   </div>
 </div>
+@else
+        <div class="card mb-3 bg-light">
+          <div class="card-body">
+            No hay formularios de requerimiento finalizados o rechazados.
+          </div>
+        </div>
+@endif
+
 
 @endsection
 @section('custom_js')

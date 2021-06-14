@@ -54,20 +54,23 @@ class RequestFormController extends Controller {
         return view('request_form.edit', compact('requestForm', 'manager', 'requestForms'));
     }
 
+
     public function leadershipIndex() {
-        $ou = Authority::getAmIAuthorityFromOu(Carbon::now(),'manager',auth()->user()->id);
+        $ou = Authority::getAmIAuthorityFromOu( Carbon::now(), 'manager', auth()->user()->id );
         if(empty($ou)) {
             session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no es Autoridad en su U.O. ('.auth()->user()->organizationalUnit->name.')');
             return redirect()->route('request_forms.index');
         } else {
-              $createdRequestForms   = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','created')->get();
-              $inProgresRequestForms = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','in_progress')->get();
-              $approvedRequestForms  = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','approved')->get();
-              $rejectedRequestForms  = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)->Where('status','rejected')
-                                                  ->orWhere('status','closed')->get();
+              $createdRequestForms   = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)
+                                       ->Where('status','created')->get();
+              $inProgresRequestForms = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)
+                                       ->Where('status','in_progress')->get();
+              $rejectedRequestForms  = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)
+                                       ->Where('status','rejected')->orWhere('status','closed')->get();
         }
-        return view('request_form.leadership_index', compact('createdRequestForms', 'inProgresRequestForms', 'approvedRequestForms', 'rejectedRequestForms'));
+        return view('request_form.leadership_index', compact('createdRequestForms', 'inProgresRequestForms', 'rejectedRequestForms'));
     }
+
 
     public function leadershipSign(RequestForm $requestForm) {
         $manager              = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
@@ -80,6 +83,7 @@ class RequestFormController extends Controller {
         $eventType = 'leader_ship_event';
         return view('request_form.leadership_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit', 'eventType'));
     }
+
 
     public function prefinanceIndex() {
       if(auth()->user()->organizationalUnit->id != '40' ){
@@ -231,22 +235,20 @@ class RequestFormController extends Controller {
 
     public function purchasingProcess(RequestForm $requestForm){
       $eventType = 'supply_event';
-      return view('request_form.purchasing_process', compact('requestForm', 'eventType'));      
+      return view('request_form.purchasing_process', compact('requestForm', 'eventType'));
+    }
+
+    public function show(RequestForm $requestForm)
+    {
+        //
     }
 
 
 
 
-
-
 /************************ CODIGO PACHA *************************************/
 /************************ CODIGO PACHA *************************************/
 /************************ CODIGO PACHA *************************************/
-
-public function show(RequestForm $requestForm)
-{
-    //
-}
 
     public function store(Request $request)
     {
