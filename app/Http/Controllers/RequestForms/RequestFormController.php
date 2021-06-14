@@ -188,7 +188,23 @@ class RequestFormController extends Controller {
                                                     ->where('status', 'approved');
                                                   })->get();
 
-          return view('request_form.supply_index', compact('waitingRequestForms', 'rejectedRequestForms', 'approvedRequestForms'));
+          $allRequestForms = RequestForm::where('status', 'in_progress')
+                                     //->orWhere('status', 'created')
+                                     //->whereHas('eventRequestForms', function ($q) {
+                                      //            $q->where('event_type','finance_event')
+                                      //              ->where('status', 'approved');})
+
+                                     ->whereDoesntHave('eventRequestForms', function ($f) {
+                                                $f->where('event_type','supply_event')
+                                                ->where('status', 'approved');
+
+                                                  })
+                                     ->orWhere('status', 'created')
+
+                                                  ->get();
+
+
+          return view('request_form.supply_index', compact('waitingRequestForms', 'rejectedRequestForms', 'approvedRequestForms', 'allRequestForms'));
     }
   }
 
@@ -240,7 +256,8 @@ class RequestFormController extends Controller {
 
     public function show(RequestForm $requestForm)
     {
-        //
+        $eventType = 'supply_event';
+        return view('request_form.show', compact('requestForm', 'eventType'));
     }
 
 

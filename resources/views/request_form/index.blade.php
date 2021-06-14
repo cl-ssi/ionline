@@ -36,7 +36,7 @@
                   <th scope="col" class="text-center">RP</th>
                   <th scope="col" class="text-center">F</th>
                   <th scope="col" class="text-center">A</th>
-                  <th scope="col" colspan="2" class="text-center">Opciones</th>
+                  <th scope="col" colspan="3" class="text-center">Opciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -55,6 +55,12 @@
                               <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="text-primary" title="Editar">
                               <i class="far fa-edit"></i></a>
                             </td>
+
+                            <td class="text-center align-middle">
+                              <a href="{{ route('request_forms.show', $requestForm->id) }}" class="text-info" title="Visualizar">
+                              <i class="fas fa-binoculars"></i></a>
+                            </td>
+
                             <td class="text-center align-middle">
                               <a href="{{ route('request_forms.destroy', $requestForm->id) }}" class="text-danger" title="Eliminar">
                               <i class="far fa-trash-alt"></i></a>
@@ -91,6 +97,7 @@
                   <th scope="col" class="text-center">RP</th>
                   <th scope="col" class="text-center">F</th>
                   <th scope="col" class="text-center">A</th>
+                  <th scope="col" class="text-center">V</th>
                 </tr>
               </thead>
               <tbody>
@@ -107,6 +114,12 @@
                             <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
+
+                            <td class="text-center align-middle">
+                              <a href="{{ route('request_forms.show', $requestForm->id) }}" class="text-info" title="Visualizar">
+                              <i class="fas fa-binoculars"></i></a>
+                            </td>
+
                         </tr>
                   @endforeach
               </tbody>
