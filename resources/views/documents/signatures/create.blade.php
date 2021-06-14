@@ -23,7 +23,7 @@
             <input type="hidden" name="signature_type" value="{{$signature->type}}">
         @endif
 
-        @if(isset($xAxis) && isset($yAxis)){
+        @if(isset($xAxis) && isset($yAxis))
             <input type="hidden" name='custom_x_axis' value="{{$xAxis}}">
             <input type="hidden" name='custom_y_axis' value="{{$yAxis}}">
         @endif
@@ -117,7 +117,7 @@
             <hr>
         @endif
 
-        <div class="form-row">            
+        <div class="form-row">
 
         <h5 class="alert alert-info" role="alert">
             Se cambio de posición Destinatario y Distribución a como estaba en el sistema antiguamente, favor cerciorarse el apartado que está digitando
@@ -125,14 +125,14 @@
 
             <fieldset class="form-group col">
                 <label for="for_distribution">Distribución del documento (separados por coma)</label>
-                <textarea class="form-control red-tooltip" id="for_distribution" name="distribution"                
+                <textarea class="form-control red-tooltip" id="for_distribution" name="distribution"
                           rows="6">{{  isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : ''}}</textarea>
             </fieldset>
 
             <fieldset class="form-group col">
                 <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
                 <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6"
-                
+
                 ></textarea>
             </fieldset>
 
