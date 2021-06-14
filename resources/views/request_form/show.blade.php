@@ -66,7 +66,7 @@
 
                   @if($requestForm->eventSingStatus('leader_ship_event')=='approved')
                   <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('leader_ship_event')!!}Aprobación Jefatura</th>
+                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('leader_ship_event')!!} Aprobación Jefatura</th>
                       <td class="col-3">{{ $requestForm->eventSignatureDate('leader_ship_event', 'approved') }}</td>
                       <th class="text-muted col-3" scope="row">Visador Jefatura</th>
                       <td class="col-3">{{ $requestForm->eventSignerName('leader_ship_event', 'approved') }}</td>
@@ -75,7 +75,7 @@
 
                   @if($requestForm->eventSingStatus('pre_finance_event')=='approved')
                   <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('pre_finance_event')!!}Aprobación Refrendación Pres.</th>
+                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('pre_finance_event')!!} Aprobación Refrendación Pres.</th>
                       <td class="col-3">{{ $requestForm->eventSignatureDate('pre_finance_event', 'approved') }}</td>
                       <th class="text-muted col-3" scope="row">Visador Refrendación Pres.</th>
                       <td class="col-3">{{ $requestForm->eventSignerName('pre_finance_event', 'approved') }}</td>
@@ -84,7 +84,7 @@
 
                   @if($requestForm->eventSingStatus('finance_event')=='approved')
                   <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('finance_event')!!}Aprobación Finanzas</th>
+                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('finance_event')!!} Aprobación Finanzas</th>
                       <td class="col-3">{{ $requestForm->eventSignatureDate('finance_event', 'approved') }}</td>
                       <th class="text-muted col-3" scope="row">Visador Finanzas</th>
                       <td class="col-3">{{ $requestForm->eventSignerName('finance_event', 'approved') }}</td>
@@ -93,17 +93,20 @@
 
                   @if($requestForm->eventSingStatus('supply_event')=='approved')
                   <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('supply_event')!!}Aprobación Abastecimiento</th>
+                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('supply_event')!!} Aprobación Abastecimiento</th>
                       <td class="col-3">{{ $requestForm->eventSignatureDate('supply_event', 'approved') }}</td>
                       <th class="text-muted col-3" scope="row">Visador Abastecimiento</th>
                       <td class="col-3">{{ $requestForm->eventSignerName('supply_event', 'approved') }}</td>
                   </tr>
+                  <tr class="d-flex">
+                      <th class="text-muted col-3" scope="row">Comprador Asignado</th>
+                      <td class="col-9 font-weight-bold text-primary">{{ $requestForm->supervisor->fullName }}</td>
+                  </tr>
                   @endif
-
 
                   @if($requestForm->eventSingStatus('leader_ship_event')=='rejected')
                   <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('leader_ship_event')!!}Rechazado por Jefatura</th>
+                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('leader_ship_event')!!} Rechazado por Jefatura</th>
                       <td class="col-3">{{ $requestForm->eventSignatureDate('leader_ship_event', 'rejected') }}</td>
                       <th class="text-muted col-3" scope="row">Visador Jefatura</th>
                       <td class="col-3">{{ $requestForm->eventSignerName('leader_ship_event', 'rejected') }}</td>
@@ -112,7 +115,7 @@
 
                   @if($requestForm->eventSingStatus('pre_finance_event')=='rejected')
                   <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('pre_finance_event')!!}Rechazado por Refrendación Pres.</th>
+                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('pre_finance_event')!!} Rechazado por Refrendación Pres.</th>
                       <td class="col-3">{{ $requestForm->eventSignatureDate('pre_finance_event', 'rejected') }}</td>
                       <th class="text-muted col-3" scope="row">Visador Refrendación Pres.</th>
                       <td class="col-3">{{ $requestForm->eventSignerName('pre_finance_event', 'rejected') }}</td>
@@ -121,7 +124,7 @@
 
                   @if($requestForm->eventSingStatus('finance_event')=='rejected')
                   <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('finance_event')!!}Rechazado por Finanzas</th>
+                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('finance_event')!!} Rechazado por Finanzas</th>
                       <td class="col-3">{{ $requestForm->eventSignatureDate('finance_event', 'rejected') }}</td>
                       <th class="text-muted col-3" scope="row">Visador Finanzas</th>
                       <td class="col-3">{{ $requestForm->eventSignerName('finance_event', 'rejected') }}</td>
@@ -130,13 +133,12 @@
 
                   @if($requestForm->eventSingStatus('supply_event')=='rejected')
                   <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('supply_event')!!}Rechazado por Abastecimiento</th>
+                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('supply_event')!!} Rechazado por Abastecimiento</th>
                       <td class="col-3">{{ $requestForm->eventSignatureDate('supply_event', 'rejected') }}</td>
                       <th class="text-muted col-3" scope="row">Visador Abastecimiento</th>
                       <td class="col-3">{{ $requestForm->eventSignerName('supply_event', 'rejected') }}</td>
                   </tr>
                   @endif
-
 
                   <tr class="d-flex">
                       <th class="text-muted col-3" scope="row"></th>
