@@ -102,27 +102,27 @@ class IaapsController extends Controller
                             //     }
                             // }
                         // } else { // fuente REM
-                            if(Str::contains($source, 'REM')){
-                                //Es rem P la consulta?
-                                $isRemP = Rem::year($year-1)->select('Mes')
-                                    ->whereIn('IdEstablecimiento', $iiaaps->establishment_cods)
-                                    ->whereIn('CodigoPrestacion', preg_replace("/[^a-zA-Z 0-9]+/", "", $cods))->groupBy('Mes')->get()->count() == 2; //Procuro quitar los - de los codigos prestaciones antes de la consulta
-                                
-                                //buscamos por codigos de prestacion con valor negativo indica que existe otra consulta que necesita ser procesada para sumarle (resta) a primera consulta
-                                $cods2 = null;
-                                foreach($cods as $key => $value){
-                                    if (strpos($value, "-") !== false) {
-                                        $cods2[] = substr($value, 1); //le quitamos el signo negativo al codigo prestacion y guardamos valor en array $cods2
-                                        unset($cods[$key]); //removemos item desde $cods
-                                    }
+                        if(Str::contains($source, 'REM')){
+                            //Es rem P la consulta?
+                            $isRemP = Rem::year($year-1)->select('Mes')
+                                ->whereIn('IdEstablecimiento', $iiaaps->establishment_cods)
+                                ->whereIn('CodigoPrestacion', preg_replace("/[^a-zA-Z 0-9]+/", "", $cods))->groupBy('Mes')->get()->count() == 2; //Procuro quitar los - de los codigos prestaciones antes de la consulta
+                            
+                            //buscamos por codigos de prestacion con valor negativo indica que existe otra consulta que necesita ser procesada para sumarle (resta) a primera consulta
+                            $cods2 = null;
+                            foreach($cods as $key => $value){
+                                if (strpos($value, "-") !== false) {
+                                    $cods2[] = substr($value, 1); //le quitamos el signo negativo al codigo prestacion y guardamos valor en array $cods2
+                                    unset($cods[$key]); //removemos item desde $cods
                                 }
-                                
-                                $raws = null;
-                                foreach($cols as $col)
+                            }
+                            
+                            $raws = null;
+                            foreach($cols as $col)
                                 $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
-                                $raws .= ' AS valor, IdEstablecimiento, Mes';
+                            $raws .= ' AS valor, IdEstablecimiento, Mes';
                                 
-                                if(!empty($cods)){
+                            if(!empty($cods)){
                                 $result = Rem::year($isRemP ? $year - 1 : $year)->selectRaw($raws)->with('establecimiento')
                                             ->when($isRemP, function($query){
                                                 return $query->where('Mes', 12);
@@ -137,15 +137,10 @@ class IaapsController extends Controller
                                     $indicator->values->add($value);
                                 }
                             }
+
                             //Existe otra consulta que ejecutar con valores negativos para sumarlos a la primera consulta
                             if($cods2 != null){
-                                //Es rem P la consulta?
-                                // $isRemP = Rem::year($year-1)->select('Mes')
-                                //             ->whereIn('IdEstablecimiento', $iiaaps->establishment_cods)
-                                //             ->whereIn('CodigoPrestacion', $cods2)->groupBy('Mes')->get()->count() == 2;
-                                // if($isRemP) $factor == 'numerador' ? $indicator->isNumRemP = true : $indicator->isDenRemP = true;
-
-                                $result = Rem::year($isRemP ? $year -1 : $year)->selectRaw($raws)->with('establecimiento')
+                                $result = Rem::year($isRemP ? $year - 1 : $year)->selectRaw($raws)->with('establecimiento')
                                             ->when($isRemP, function($query){
                                                 return $query->where('Mes', 12);
                                             })
