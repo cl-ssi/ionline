@@ -86,19 +86,19 @@ class RequestForm extends Model
     public function getStatus(){
       switch ($this->status) {
           case "rejected":
-              return '<span class="font-weight-normal text-danger">Rechazado.</span>';
+              return '<span class="font-weight-bold text-danger">Rechazado.</span>';
               break;
           case "in_progress":
-              return '<span class="font-weight-normal text-success">En progreso.</span>';
+              return '<span class="font-weight-bold text-success">En progreso.</span>';
               break;
           case "created":
-              return '<span class="font-weight-normal text-warning">No revisado.</span>';
+              return '<span class="font-weight-bold text-warning">No revisado.</span>';
               break;
           case "approved":
-              return '<span class="font-weight-normal text-success">Aprovado.</span>';
+              return '<span class="font-weight-bold text-success">Aprovado.</span>';
               break;
           case "closed":
-              return '<span class="font-weight-normal text-warning">Cerrado.</span>';
+              return '<span class="font-weight-bold text-warning">Cerrado.</span>';
               break;
               case "":
               break;
@@ -106,7 +106,7 @@ class RequestForm extends Model
     }
 
 
-    /*Regresa estado de firma de Eventos*/
+    /*Regresa Icono del estado de firma de Eventos [argumento:  tipo de Evento]*/
     public function eventSign($event_type) {
       if(!is_null($this->eventRequestForms()->where('status', 'approved')->where('event_type',$event_type)->first()))
         return '<i class="text-success fas fa-check"></i>';//aprovado
@@ -142,7 +142,6 @@ class RequestForm extends Model
       $date = new Carbon($this->updated_at);
       return $date->format('d-m-Y H:i:s');
     }
-
 
     public function rejectedName() {
       $event = $this->eventRequestForms()->where('status', 'rejected')->first();
@@ -181,6 +180,10 @@ class RequestForm extends Model
         return $day.' días.';
     }
 
+
+/******************************************************/
+/*********** CODIGO  PACHA  **************************/
+/*****************************************************/
 
     public function estimatedExpense()
     {
