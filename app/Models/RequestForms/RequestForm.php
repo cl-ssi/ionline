@@ -83,6 +83,29 @@ class RequestForm extends Model
       }
     }
 
+    public function getStatus(){
+      switch ($this->status) {
+          case "rejected":
+              return '<span class="font-weight-normal text-danger">Rechazado.</span>';
+              break;
+          case "in_progress":
+              return '<span class="font-weight-normal text-success">En progreso.</span>';
+              break;
+          case "created":
+              return '<span class="font-weight-normal text-warning">No revisado.</span>';
+              break;
+          case "approved":
+              return '<span class="font-weight-normal text-success">Aprovado.</span>';
+              break;
+          case "closed":
+              return '<span class="font-weight-normal text-warning">Cerrado.</span>';
+              break;
+              case "":
+              break;
+      }
+    }
+
+
     /*Regresa estado de firma de Eventos*/
     public function eventSign($event_type) {
       if(!is_null($this->eventRequestForms()->where('status', 'approved')->where('event_type',$event_type)->first()))
@@ -115,6 +138,12 @@ class RequestForm extends Model
       return $date->format('d-m-Y H:i:s');
     }
 
+    public function updatedDate() {
+      $date = new Carbon($this->updated_at);
+      return $date->format('d-m-Y H:i:s');
+    }
+
+
     public function rejectedName() {
       $event = $this->eventRequestForms()->where('status', 'rejected')->first();
       if(!is_null($event))
@@ -127,17 +156,16 @@ class RequestForm extends Model
         return $event->comment;
     }
 
-
-    public function eventApprovedDate($event_type){
-      $event = $this->eventRequestForms()->where('status', 'approved')->where('event_type',$event_type)->first();
+    public function eventSignatureDate($event_type, $status){
+      $event = $this->eventRequestForms()->where('status', $status)->where('event_type',$event_type)->first();
       if(!is_null($event)){
         $date = new Carbon($event->signature_date);
         return $date->format('d-m-Y H:i:s');
       }
     }
 
-    public function eventSignerName($event_type){
-      $event = $this->eventRequestForms()->where('status', 'approved')->where('event_type',$event_type)->first();
+    public function eventSignerName($event_type, $status){
+      $event = $this->eventRequestForms()->where('status', $status)->where('event_type',$event_type)->first();
       if(!is_null($event)){
         return $event->signerUser->tinnyName();
       }

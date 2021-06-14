@@ -14,7 +14,11 @@ class PurchaseType extends Model
       return $this->hasMany(RequestForm::class);
   }
 
+  public function getName(){
+    return $this->name ? $this->name : '';
+  }
+
     use HasFactory;
-    protected $table = 'cfg_purchase_types';    
+    protected $table = 'cfg_purchase_types';
 
 }
