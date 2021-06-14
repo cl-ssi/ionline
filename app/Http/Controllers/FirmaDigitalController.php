@@ -521,11 +521,19 @@ class FirmaDigitalController extends Controller
             $coordenada_y = 50 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
             $ancho = 170 * 1.4;
         } else if ($signatureType == 'firmante') {
-            $coordenada_x = 185;
-            $coordenada_y = 365;
+            $milimetros_y_desde_abajo = 107;
+            $milimetros_x_desde_la_izquierda = 22;
+            $factor_y = 2.8248;
+            $factor_x = 2.8248;
+            $coordenada_x = $milimetros_x_desde_la_izquierda * $factor_x;
+            $coordenada_y = $milimetros_y_desde_abajo * $factor_y;
+            // $coordenada_x = 62;
+            // $coordenada_y = 302;
             $ancho = 170 * 1.4;
             $alto = 55;
         }
+
+        //dd($coordenada_x, $coordenada_y);
 
         //header("Content-type: image/png");
         //echo base64_decode($firma);
