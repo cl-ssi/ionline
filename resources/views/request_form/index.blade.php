@@ -52,7 +52,7 @@
                             <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
                             <td class="text-center align-middle">
-                              <a href="{{ route('request_forms.edit', $requestForm->id) }}" class="text-primary" title="Editar">
+                              <a href="#" data-href="{{ route('request_forms.edit', $requestForm->id) }}" class="text-primary" title="Editar" data-toggle="modal" data-target="#confirm" role="button">
                               <i class="far fa-edit"></i></a>
                             </td>
 
@@ -182,34 +182,6 @@
         </div>
 @endif
 
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalCenter">
-          <i class="far fa-trash-alt"></i>
-        </button>
-
-        <a class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" href="http://127.0.0.1:8000/request_forms/28/edit" role="button">Editar</a>
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                ...Hola mundo
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
 @else
         <div class="card">
           <div class="card-body">
@@ -218,8 +190,41 @@
         </div>
 @endif
 
+<!-- Modal -->
+<div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Editar Registro</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <p>Estás por eliminar un Formulario, este proceso es irreversible.</p>
+        <p>Quieres continuar?</p>
+        <p class="debug-url"></p>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <a class="btn btn-danger btn-ok">Eliminar</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Fin Modal -->
+
 @endsection
 @section('custom_js')
+<script>
+    $('#confirm').on('show.bs.modal', function(e) {
+        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+
+        $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
+    });
+</script>
 @endsection
 @section('custom_js_head')
 @endsection
