@@ -231,7 +231,7 @@ class SignatureController extends Controller
 
 
                 $parte = Parte::create([                    
-                    'entered_at' => Carbon::today(),           
+                    'entered_at' => Carbon::now(),           
                     'type' => $this->tipo,
                     'date' => $request->request_date,
                     'subject' => $request->subject,
