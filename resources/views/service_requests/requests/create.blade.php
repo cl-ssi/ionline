@@ -270,6 +270,7 @@
 					<option value="PABELLON TARDE">PABELLON TARDE</option>
 					<option value="PABELLON GINE">PABELLON GINE</option>
 					<option value="TURNO DE RESIDENCIA">TURNO DE RESIDENCIA</option>
+					<option value="SENDA">SENDA</option>
 				@else
 					<option value="PRAPS">PRAPS</option>
 					<option value="PESPI">PESPI</option>
