@@ -9,7 +9,7 @@
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.compliance') }}">
     <div class="form-row">
         <fieldset class="form-group col-4 col-md-2">
-            <label for="for_year">Estab</label>
+            <label for="for_year">Establecimiento</label>
             <select name="establishment" class="form-control">
                 <option value=""></option>
                 <option value="1" {{ (old('establishment')==1)?'selected':'' }}>HETG</option>
