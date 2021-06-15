@@ -203,38 +203,6 @@
           </div><!-- card-body -->
         </div><!-- card-principal -->
 
-
-
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalCenter">
-          <i class="far fa-trash-alt"></i>
-        </button>
-
-        <a class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" href="http://127.0.0.1:8000/request_forms/28/edit" role="button">Editar</a>
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                ...Hola mundo
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-
 @endsection
 @section('custom_js')
 @endsection
