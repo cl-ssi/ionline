@@ -43,10 +43,18 @@ class SuitabilityController extends Controller
     }
 
 
-    public function pending()
+    public function pending(Request $request)
     {
-        $psirequests = PsiRequest::where('status','Test Finalizado')->get();
-        return view('suitability.pending', compact('psirequests'));
+
+        $school_id = $request->colegio;
+        $schools = School::orderBy("name", "asc")->get();
+        $psirequests = PsiRequest::where('status','Test Finalizado')
+        ->when($school_id != null, function ($q) use ($school_id) 
+        {            
+            return $q->where('school_id', $school_id);
+        })        
+        ->get();
+        return view('suitability.pending', compact('psirequests','schools','school_id'));
     }
 
     public function approved()
