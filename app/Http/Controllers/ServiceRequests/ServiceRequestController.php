@@ -101,24 +101,26 @@ class ServiceRequestController extends Controller
     return view('service_requests.requests.index', compact('serviceRequestsMyPendings', 'serviceRequestsOthersPendings', 'serviceRequestsRejected', 'serviceRequestsAnswered', 'serviceRequestsCreated', 'users'));
   }
 
-  public function user(Request $request) {
+  public function user(Request $request)
+  {
     $fulfillments = array();
     $user = null;
 
-    if($request->input('run')) {
+    if ($request->input('run')) {
       $user = User::find($request->input('run'));
 
-      if($user) {
-        $fulfillments = Fulfillment::whereHas('ServiceRequest', function($query) use ($user) {
-          $query->where('user_id',$user->id);}
-          )->orderBy('payment_date')->get();
+      if ($user) {
+        $fulfillments = Fulfillment::whereHas(
+          'ServiceRequest',
+          function ($query) use ($user) {
+            $query->where('user_id', $user->id);
+          }
+        )->orderBy('payment_date')->get();
       }
-
-
     }
     $request->flash();
 
-    return view('service_requests.requests.user', compact('user','fulfillments'));
+    return view('service_requests.requests.user', compact('user', 'fulfillments'));
   }
 
   public function aditional_data_list(Request $request)
@@ -137,35 +139,35 @@ class ServiceRequestController extends Controller
 
     // dd($responsability_center_ou_id);
     $serviceRequests = ServiceRequest::when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
-                                         return $q->where('responsability_center_ou_id', $responsability_center_ou_id);
-                                       })
-                                      ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
-                                        return $q->where('program_contract_type', $program_contract_type);
-                                      })
-                                      ->when($type != NULL, function ($q) use ($type) {
-                                        return $q->where('type', $type);
-                                      })
-                                      ->when($estate != NULL, function ($q) use ($estate) {
-                                            return $q->where('estate',$estate);
-                                           })
-                                      ->when(($name != NULL), function ($q) use ($name) {
-                                        return $q->whereHas("employee", function ($subQuery) use ($name) {
-                                          $subQuery->where('name', 'LIKE', '%' . $name . '%');
-                                          $subQuery->orwhere('fathers_family', 'LIKE', '%' . $name . '%');
-                                          $subQuery->orwhere('mothers_family', 'LIKE', '%' . $name . '%');
-                                        });
-                                      })
-                                      ->when($id != NULL, function ($q) use ($id) {
-                                        return $q->where('id', $id);
-                                      })
-                                      ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
-                                        return $q->where('establishment_id', $establishment_id);
-                                      })
-                                      ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
-                                        return $q->whereNotIn('establishment_id',[1,12]);
-                                      })
-                                      ->orderBy('id', 'asc')
-                                      ->paginate(100);
+      return $q->where('responsability_center_ou_id', $responsability_center_ou_id);
+    })
+      ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
+        return $q->where('program_contract_type', $program_contract_type);
+      })
+      ->when($type != NULL, function ($q) use ($type) {
+        return $q->where('type', $type);
+      })
+      ->when($estate != NULL, function ($q) use ($estate) {
+        return $q->where('estate', $estate);
+      })
+      ->when(($name != NULL), function ($q) use ($name) {
+        return $q->whereHas("employee", function ($subQuery) use ($name) {
+          $subQuery->where('name', 'LIKE', '%' . $name . '%');
+          $subQuery->orwhere('fathers_family', 'LIKE', '%' . $name . '%');
+          $subQuery->orwhere('mothers_family', 'LIKE', '%' . $name . '%');
+        });
+      })
+      ->when($id != NULL, function ($q) use ($id) {
+        return $q->where('id', $id);
+      })
+      ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+        return $q->where('establishment_id', $establishment_id);
+      })
+      ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+        return $q->whereNotIn('establishment_id', [1, 12]);
+      })
+      ->orderBy('id', 'asc')
+      ->paginate(100);
     // ->get();
     $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
     return view('service_requests.requests.aditional_data_list', compact('serviceRequests', 'responsabilityCenters', 'request'));
@@ -179,8 +181,8 @@ class ServiceRequestController extends Controller
     $responsability_center_ou_id = $request->responsability_center_ou_id;
     // dd($responsability_center_ou_id);
     $serviceRequests = ServiceRequest::when($responsability_center_ou_id != NULL, function ($q) use ($responsability_center_ou_id) {
-        return $q->where('responsability_center_ou_id', $responsability_center_ou_id);
-      })
+      return $q->where('responsability_center_ou_id', $responsability_center_ou_id);
+    })
       ->orderBy('id', 'asc')->get();
     $responsabilityCenters = OrganizationalUnit::where('establishment_id', 1)->orderBy('name', 'ASC')->get();
     return view('service_requests.requests.transfer_requests', compact('serviceRequests', 'responsabilityCenters', 'users'));
@@ -190,7 +192,7 @@ class ServiceRequestController extends Controller
   {
     $users = User::orderBy('name', 'ASC')->get();
     $serviceRequests = ServiceRequest::find($request->id);
-    return view('service_requests.requests.change_signature_flow',compact('users','request','serviceRequests'));
+    return view('service_requests.requests.change_signature_flow', compact('users', 'request', 'serviceRequests'));
   }
 
   public function change_signature_flow(Request $request)
@@ -217,12 +219,12 @@ class ServiceRequestController extends Controller
   {
     $users = User::orderBy('name', 'ASC')->get();
     $establishments = Establishment::orderBy('name', 'ASC')->get();
-    $professions = Profession::orderBy('name','ASC')->get();
+    $professions = Profession::orderBy('name', 'ASC')->get();
 
     //signature flow
     if (Auth::user()->organizationalUnit->establishment_id == 38) {
 
-      $subdirections = OrganizationalUnit::where('name', 'LIKE', '%subdirec%')->where('establishment_id', 38)->orderBy('name', 'ASC')->get();
+      $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id', 38)->orderBy('name', 'ASC')->get();
       $responsabilityCenters = OrganizationalUnit::where('establishment_id', 38)->orderBy('name', 'ASC')->get();
     }
     //hospital
@@ -237,7 +239,7 @@ class ServiceRequestController extends Controller
       return redirect()->back();
     }
 
-    return view('service_requests.requests.create', compact('subdirections', 'responsabilityCenters', 'users', 'establishments','professions'));
+    return view('service_requests.requests.create', compact('subdirections', 'responsabilityCenters', 'users', 'establishments', 'professions'));
   }
 
   /**
@@ -289,15 +291,47 @@ class ServiceRequestController extends Controller
     //devuelve user o lo crea
     $user = User::updateOrCreate(
       ['id' => $request->user_id],
-      $request->All()
+      [
+        'dv' =>  $request->dv,
+        'name' =>  $request->name,
+        'fathers_family' =>  $request->fathers_family,
+        'mothers_family' =>  $request->mothers_family,
+        'country_id' =>  $request->country_id,
+        'address' =>  $request->address,
+        'phone_number' =>  $request->phone_number,
+        'email' =>  $request->email,
+        'organizational_unit_id' =>  $request->responsability_center_ou_id
+      ]
+
+
+      //$request->All()
+
     );
+
+
+    // $user = User::find($request->user_id);
+
+    // if ($user !== null) {
+    //   //$user->update(['name' => request('name')]);
+    // } else {
+    //   $user = User::create([
+    //     'id' => $request->user_id,
+    //     'dv' => $request->dv,
+    //     'name' => $request->name,
+    //     'fathers_family' =>  $request->fathers_family,
+    //     'mothers_family' =>  $request->mothers_family,
+    //     'country_id' =>  $request->country_id,
+    //     'address' =>  $request->address,
+    //     'phone_number' =>  $request->phone_number,
+    //     'email' =>  $request->email
+    //   ]);
+    // }
 
     //crea service request
     $serviceRequest = new ServiceRequest($request->All());
     $serviceRequest->user_id = $user->id;
     $serviceRequest->creator_id = Auth::id();
-    if(isset($request->hsa_schedule_detail))
-    {      
+    if (isset($request->hsa_schedule_detail)) {
       $serviceRequest->schedule_detail = $request->hsa_schedule_detail;
     }
     $serviceRequest->save();
@@ -323,7 +357,7 @@ class ServiceRequestController extends Controller
           $program_contract_type = "Mensual";
           $start_date_period = $period->format("d-m-Y");
           $end_date_period = Carbon::createFromFormat('d-m-Y', $period->format("d-m-Y"))->endOfMonth()->format("d-m-Y");
-          if($key == 0){
+          if ($key == 0) {
             $start_date_period = $serviceRequest->start_date->format("d-m-Y");
           }
           if (($cont_periods - 1) == $key) {
@@ -336,7 +370,7 @@ class ServiceRequestController extends Controller
           if ($serviceRequest->program_contract_type == "Mensual") {
             $fulfillment->year = $period->format("Y");
             $fulfillment->month = $period->format("m");
-          }else{
+          } else {
             $program_contract_type = "Horas Médicas";
             $fulfillment->year = $period->format("Y");
             $fulfillment->month = $period->format("m");
@@ -348,9 +382,7 @@ class ServiceRequestController extends Controller
           $fulfillment->save();
         }
       }
-    }
-
-    elseif($serviceRequest->program_contract_type == "Horas"){
+    } elseif ($serviceRequest->program_contract_type == "Horas") {
       if ($serviceRequest->fulfillments->count() == 0) {
         $fulfillment = new Fulfillment();
         $fulfillment->service_request_id = $serviceRequest->id;
@@ -361,7 +393,7 @@ class ServiceRequestController extends Controller
         $fulfillment->end_date = $serviceRequest->end_date;
         $fulfillment->user_id = Auth::user()->id;
         $fulfillment->save();
-      }else {
+      } else {
         $fulfillment = $serviceRequest->fulfillments->first();
       }
     }
@@ -434,7 +466,7 @@ class ServiceRequestController extends Controller
         $SignatureFlow->service_request_id = $serviceRequest->id;
         if ($sign_position == 2) {
           $SignatureFlow->type = "Supervisor";
-        }else{
+        } else {
           $SignatureFlow->type = "visador";
         }
         $SignatureFlow->employee = $employee;
@@ -489,9 +521,9 @@ class ServiceRequestController extends Controller
 
     $users = User::orderBy('name', 'ASC')->get();
     $establishments = Establishment::orderBy('name', 'ASC')->get();
-    $professions = Profession::orderBy('name','ASC')->get();
+    $professions = Profession::orderBy('name', 'ASC')->get();
 
-    $subdirections = OrganizationalUnit::where('name', 'LIKE', '%subdirec%')->orderBy('name', 'ASC')->get();
+    $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->orderBy('name', 'ASC')->get();
     $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
     $countries = Country::orderBy('name', 'ASC')->get();
 
@@ -531,10 +563,9 @@ class ServiceRequestController extends Controller
   {
     //se guarda información de la solicitud
     $serviceRequest->fill($request->all());
-    if(isset($request->hsa_schedule_detail))
-    {      
+    if (isset($request->hsa_schedule_detail)) {
       $serviceRequest->schedule_detail = $request->hsa_schedule_detail;
-    }    
+    }
 
     $serviceRequest->save();
 
@@ -613,17 +644,17 @@ class ServiceRequestController extends Controller
 
     //solicitudes activas
     $serviceRequests = ServiceRequest::whereDoesntHave("SignatureFlows", function ($subQuery) {
-                                        $subQuery->where('status', 0);
-                                      })
-                                      ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
-                                        return $q->where('establishment_id', $establishment_id);
-                                      })
-                                      ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
-                                        return $q->whereNotIn('establishment_id',[1,12]);
-                                      })
-                                      // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
-                                      ->orderBy('request_date', 'asc')
-                                      ->get();
+      $subQuery->where('status', 0);
+    })
+      ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+        return $q->where('establishment_id', $establishment_id);
+      })
+      ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+        return $q->whereNotIn('establishment_id', [1, 12]);
+      })
+      // ->whereBetween('start_date',[$request->dateFrom,$request->dateTo])
+      ->orderBy('request_date', 'asc')
+      ->get();
 
     foreach ($serviceRequests as $key => $serviceRequest) {
       foreach ($serviceRequest->shiftControls as $key => $shiftControl) {
@@ -638,12 +669,12 @@ class ServiceRequestController extends Controller
     $serviceRequestsRejected = ServiceRequest::whereHas("SignatureFlows", function ($subQuery) {
       $subQuery->where('status', 0);
     })
-    ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
-      return $q->where('establishment_id', $establishment_id);
-    })
-    ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
-      return $q->whereNotIn('establishment_id',[1,12]);
-    })
+      ->when($establishment_id != null && $establishment_id != 0, function ($q) use ($establishment_id) {
+        return $q->where('establishment_id', $establishment_id);
+      })
+      ->when($establishment_id != null && $establishment_id == 0, function ($q) use ($establishment_id) {
+        return $q->whereNotIn('establishment_id', [1, 12]);
+      })
       ->orderBy('request_date', 'asc')->get();
 
     foreach ($serviceRequestsRejected as $key => $serviceRequest) {
@@ -655,7 +686,7 @@ class ServiceRequestController extends Controller
       }
     }
 
-    return view('service_requests.requests.consolidated_data', compact('serviceRequests', 'serviceRequestsRejected','request'));
+    return view('service_requests.requests.consolidated_data', compact('serviceRequests', 'serviceRequestsRejected', 'request'));
   }
 
   public function export_sirh()
@@ -665,405 +696,404 @@ class ServiceRequestController extends Controller
 
   public function export_sirh_txt()
   {
-      $filas = ServiceRequest::where('establishment_id', 1)->get();
-      // ->where('sirh_contract_registration',0)->orWhereNull('sirh_contract_registration')
-      // ->whereDoesntHave("SignatureFlows", function($subQuery) {
-      //   $subQuery->where('status',0);
-      // })
-      // ->orderBy('request_date','asc')
-      // ->get();
+    $filas = ServiceRequest::where('establishment_id', 1)->get();
+    // ->where('sirh_contract_registration',0)->orWhereNull('sirh_contract_registration')
+    // ->whereDoesntHave("SignatureFlows", function($subQuery) {
+    //   $subQuery->where('status',0);
+    // })
+    // ->orderBy('request_date','asc')
+    // ->get();
 
-      $txt =
-          'RUN|' .
-          'DV|' .
-          ' N°  cargo |' .
-          ' Fecha  inicio  contrato |' .
-          ' Fecha  fin  contrato |' .
-          'Establecimiento|' .
-          ' Tipo  de  decreto |' .
-          ' Contrato  por  prestación |' .
-          ' Monto  bruto |' .
-          ' Número  de  cuotas |' .
-          'Impuesto|' .
-          ' Día  de  proceso |' .
-          ' Honorario  suma  alzada |' .
-          ' Financiado  proyecto |' .
-          ' Centro  de  costo |' .
-          'Unidad|' .
-          ' Tipo  de  pago |' .
-          ' Código  de  banco |' .
-          ' Cuenta  bancaria |' .
-          'Programa|' .
-          'Glosa|' .
-          'Profesión|' .
-          'Planta|' .
-          'Resolución|' .
-          ' N°  resolución |' .
-          ' Fecha  resolución |' .
-          'Observación|' .
-          'Función|' .
-          ' Descripción  de  la  función  que  cumple |' .
-          ' Estado  tramitación  del  contrato |' .
-          ' Tipo  de  jornada |' .
-          ' Agente  público |' .
-          ' Horas  de  contrato |' .
-          ' Código  por  objetivo |' .
-          ' Función  dotación |' .
-          ' Tipo  de  función |' .
-          ' Afecto  a  sistema  de  turno' . "\r\n";
+    $txt =
+      'RUN|' .
+      'DV|' .
+      ' N°  cargo |' .
+      ' Fecha  inicio  contrato |' .
+      ' Fecha  fin  contrato |' .
+      'Establecimiento|' .
+      ' Tipo  de  decreto |' .
+      ' Contrato  por  prestación |' .
+      ' Monto  bruto |' .
+      ' Número  de  cuotas |' .
+      'Impuesto|' .
+      ' Día  de  proceso |' .
+      ' Honorario  suma  alzada |' .
+      ' Financiado  proyecto |' .
+      ' Centro  de  costo |' .
+      'Unidad|' .
+      ' Tipo  de  pago |' .
+      ' Código  de  banco |' .
+      ' Cuenta  bancaria |' .
+      'Programa|' .
+      'Glosa|' .
+      'Profesión|' .
+      'Planta|' .
+      'Resolución|' .
+      ' N°  resolución |' .
+      ' Fecha  resolución |' .
+      'Observación|' .
+      'Función|' .
+      ' Descripción  de  la  función  que  cumple |' .
+      ' Estado  tramitación  del  contrato |' .
+      ' Tipo  de  jornada |' .
+      ' Agente  público |' .
+      ' Horas  de  contrato |' .
+      ' Código  por  objetivo |' .
+      ' Función  dotación |' .
+      ' Tipo  de  función |' .
+      ' Afecto  a  sistema  de  turno' . "\r\n";
 
-      foreach ($filas as $fila) {
-          if (!$fila->resolution_number or !$fila->resolution_date) {
-              $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
-              switch ($fila->program_contract_type) {
-                  case 'Horas':
-                      $por_prestacion = 'S';
-                      $sirh_n_cargo = 6;
-                      break;
-                  default:
-                      $por_prestacion = 'N';
-                      $sirh_n_cargo = 5;
-                      break;
-              }
+    foreach ($filas as $fila) {
+      if (!$fila->resolution_number or !$fila->resolution_date) {
+        $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
+        switch ($fila->program_contract_type) {
+          case 'Horas':
+            $por_prestacion = 'S';
+            $sirh_n_cargo = 6;
+            break;
+          default:
+            $por_prestacion = 'N';
+            $sirh_n_cargo = 5;
+            break;
+        }
 
-              switch ($fila->establishment->id) {
-                  case 1:
-                      $sirh_estab_code = 130;
-                      break;
-                  case 12:
-                      $sirh_estab_code = 127;
-                      break;
-                  case 38:
-                      $sirh_estab_code = 125;
-                      break;
-                  default:
-                      $sirh_estab_code = 0;
-                      break;
-              }
+        switch ($fila->establishment->id) {
+          case 1:
+            $sirh_estab_code = 130;
+            break;
+          case 12:
+            $sirh_estab_code = 127;
+            break;
+          case 38:
+            $sirh_estab_code = 125;
+            break;
+          default:
+            $sirh_estab_code = 0;
+            break;
+        }
 
-              switch ($fila->programm_name) {
-                  case 'Covid19 Médicos':
-                      $sirh_program_code = 3904;
-                      break;
-                  case 'Covid19 No Médicos':
-                      $sirh_program_code = 3903;
-                      break;
-                  case 'Covid19-APS Médicos':
-                      $sirh_program_code = 3904;
-                      break;
-                  case 'Covid19-APS No Médicos':
-                      $sirh_program_code = 3903;
-                      break;
-              }
+        switch ($fila->programm_name) {
+          case 'Covid19 Médicos':
+            $sirh_program_code = 3904;
+            break;
+          case 'Covid19 No Médicos':
+            $sirh_program_code = 3903;
+            break;
+          case 'Covid19-APS Médicos':
+            $sirh_program_code = 3904;
+            break;
+          case 'Covid19-APS No Médicos':
+            $sirh_program_code = 3903;
+            break;
+        }
 
-              switch ($fila->weekly_hours) {
-                  case 44:
-                      $type_of_day = 'C';
-                      break;
-                  default:
-                      $type_of_day = 'P';
-                      break;
-              }
+        switch ($fila->weekly_hours) {
+          case 44:
+            $type_of_day = 'C';
+            break;
+          default:
+            $type_of_day = 'P';
+            break;
+        }
 
-              switch ($fila->estate) {
-                  case 'Administrativo':
-                      $function = 'Apoyo Administrativo';
-                      $function_type = 'N';
-                      break;
-                  default:
-                      $function = 'Apoyo Clínico';
-                      $function_type = 'S';
-                      break;
-              }
+        switch ($fila->estate) {
+          case 'Administrativo':
+            $function = 'Apoyo Administrativo';
+            $function_type = 'N';
+            break;
+          default:
+            $function = 'Apoyo Clínico';
+            $function_type = 'S';
+            break;
+        }
 
-              switch ($fila->working_day_type) {
-                  case 'DIURNO':
-                      $turno_afecto = 'S';
-                      break;
-                  default:
-                      $turno_afecto = 'N';
-                      break;
-              }
+        switch ($fila->working_day_type) {
+          case 'DIURNO':
+            $turno_afecto = 'S';
+            break;
+          default:
+            $turno_afecto = 'N';
+            break;
+        }
 
-              switch ($fila->responsabilityCenter->id) {
-                  case   12:
-                      $sirh_ou_id = 1253000;
-                      break;
-                  case   55:
-                      $sirh_ou_id = 1305102;
-                      break;
-                  case   18:
-                      $sirh_ou_id = 1301400;
-                      break;
-                  case   224:
-                      $sirh_ou_id = 1253000;
-                      break;
-                  case   225:
-                      $sirh_ou_id = 1252000;
-                      break;
-                  case   43:
-                      $sirh_ou_id = 1304407;
-                      break;
-                  case   116:
-                      $sirh_ou_id = 1301620;
-                      break;
-                  case   138:
-                      $sirh_ou_id = '3510-1';
-                      break;
-                  case   130:
-                      $sirh_ou_id = 1301650;
-                      break;
-                  case   141:
-                      $sirh_ou_id = 1301310;
-                      break;
-                  case   142:
-                      $sirh_ou_id = 1301320;
-                      break;
-                  case   136:
-                      $sirh_ou_id = 1301420;
-                      break;
-                  case   133:
-                      $sirh_ou_id = 1301410;
-                      break;
-                  case   140:
-                      $sirh_ou_id = 1301650;
-                      break;
-                  case   2:
-                      $sirh_ou_id = 1253000;
-                      break;
-                  case   125:
-                      $sirh_ou_id = 1301509;
-                      break;
-                  case   194:
-                      $sirh_ou_id = 1301905;
-                      break;
-                  case   177:
-                      $sirh_ou_id = 1301650;
-                      break;
-                  case   192:
-                      $sirh_ou_id = 1301904;
-                      break;
-                  case   162:
-                      $sirh_ou_id = 1301523;
-                      break;
-                  case   122:
-                      $sirh_ou_id = 1304105;
-                      break;
-                  case   99:
-                      $sirh_ou_id = 1305102;
-                      break;
-                  case   147:
-                      $sirh_ou_id = 1301203;
-                      break;
-                  case   126:
-                      $sirh_ou_id = 1302108;
-                      break;
-                  case   149:
-                      $sirh_ou_id = 1301202;
-                      break;
-                  case  24:
-                      $sirh_ou_id = 1301400;
-                      break;
-                  default:
-                      $sirh_ou_id = 'NO EXISTE';
-                      break;
-              }
+        switch ($fila->responsabilityCenter->id) {
+          case   12:
+            $sirh_ou_id = 1253000;
+            break;
+          case   55:
+            $sirh_ou_id = 1305102;
+            break;
+          case   18:
+            $sirh_ou_id = 1301400;
+            break;
+          case   224:
+            $sirh_ou_id = 1253000;
+            break;
+          case   225:
+            $sirh_ou_id = 1252000;
+            break;
+          case   43:
+            $sirh_ou_id = 1304407;
+            break;
+          case   116:
+            $sirh_ou_id = 1301620;
+            break;
+          case   138:
+            $sirh_ou_id = '3510-1';
+            break;
+          case   130:
+            $sirh_ou_id = 1301650;
+            break;
+          case   141:
+            $sirh_ou_id = 1301310;
+            break;
+          case   142:
+            $sirh_ou_id = 1301320;
+            break;
+          case   136:
+            $sirh_ou_id = 1301420;
+            break;
+          case   133:
+            $sirh_ou_id = 1301410;
+            break;
+          case   140:
+            $sirh_ou_id = 1301650;
+            break;
+          case   2:
+            $sirh_ou_id = 1253000;
+            break;
+          case   125:
+            $sirh_ou_id = 1301509;
+            break;
+          case   194:
+            $sirh_ou_id = 1301905;
+            break;
+          case   177:
+            $sirh_ou_id = 1301650;
+            break;
+          case   192:
+            $sirh_ou_id = 1301904;
+            break;
+          case   162:
+            $sirh_ou_id = 1301523;
+            break;
+          case   122:
+            $sirh_ou_id = 1304105;
+            break;
+          case   99:
+            $sirh_ou_id = 1305102;
+            break;
+          case   147:
+            $sirh_ou_id = 1301203;
+            break;
+          case   126:
+            $sirh_ou_id = 1302108;
+            break;
+          case   149:
+            $sirh_ou_id = 1301202;
+            break;
+          case  24:
+            $sirh_ou_id = 1301400;
+            break;
+          default:
+            $sirh_ou_id = 'NO EXISTE';
+            break;
+        }
 
-              switch ($fila->estate) {
-                  case "Profesional Médico":
-                      $planta = 0;
-                      break;
-                  case "Profesional":
-                      $planta = 4;
-                      break;
-                  case "Técnico":
-                      $planta = 5;
-                      break;
-                  case "Administrativo":
-                      $planta = 6;
-                      break;
-                  case "Farmaceutico":
-                      $planta = 3;
-                      break;
-                  case "Odontólogo":
-                      $planta = 1;
-                      break;
-                  case "Bioquímico":
-                      $planta = 2;
-                      break;
-                  case "Auxiliar":
-                      $planta = 7;
-                      break;
-                  default:
-                      $planta = '';
-                      break;
-                  // - 0 = Médicos
-                  // - 1 = Odontologos
-                  // - 2 = Bioquimicos
-                  // - 3 = Quimicos Farmaceuticos
-                  // - 4 = Profesional
-                  // - 5 = Técnicos
-                  // - 6 = Administrativos
-                  // - 7 = Auxiliares
-              }
+        switch ($fila->estate) {
+          case "Profesional Médico":
+            $planta = 0;
+            break;
+          case "Profesional":
+            $planta = 4;
+            break;
+          case "Técnico":
+            $planta = 5;
+            break;
+          case "Administrativo":
+            $planta = 6;
+            break;
+          case "Farmaceutico":
+            $planta = 3;
+            break;
+          case "Odontólogo":
+            $planta = 1;
+            break;
+          case "Bioquímico":
+            $planta = 2;
+            break;
+          case "Auxiliar":
+            $planta = 7;
+            break;
+          default:
+            $planta = '';
+            break;
+            // - 0 = Médicos
+            // - 1 = Odontologos
+            // - 2 = Bioquimicos
+            // - 3 = Quimicos Farmaceuticos
+            // - 4 = Profesional
+            // - 5 = Técnicos
+            // - 6 = Administrativos
+            // - 7 = Auxiliares
+        }
 
-              switch ($fila->rrhh_team) {
-                  case "Residencia Médica":
-                      $sirh_profession_id = 1000;
-                      $sirh_function_id = 9082; // Antención clínica
-                      break;
-                  case "Médico Diurno":
-                      $sirh_profession_id = 1000;
-                      $sirh_function_id = 9082; // Atención clínica
-                      break;
-                  case "Enfermera Supervisora":
-                      $sirh_profession_id = 1058;
-                      $sirh_function_id = 9082; // Atención clínica
-                      break;
-                  case "Enfermera Diurna":
-                      $sirh_profession_id = 1058;
-                      $sirh_function_id = 9082; // Atención clínica
-                      break;
-                  case "Enfermera Turno":
-                      $sirh_profession_id = 1058;
-                      $sirh_function_id = 9082; // Atención clínica
-                      break;
-                  case "Kinesiólogo Diurno":
-                      $sirh_profession_id = 1057;
-                      $sirh_function_id = 9082; // Atención clínica
-                      break;
-                  case "Kinesiólogo Turno":
-                      $sirh_profession_id = 1057;
-                      $sirh_function_id = 9082; // Atención Clínica
-                      break;
-                  case "Téc.Paramédicos Diurno":
-                      $sirh_profession_id = 1027;
-                      $sirh_function_id = 9082; // Atención Clínica
-                      break;
-                  case "Téc.Paramédicos Turno":
-                      $sirh_profession_id = 1027;
-                      $sirh_function_id = 9082; // Atención Clínica
-                      break;
-                  case "Auxiliar Diurno":
-                      $sirh_profession_id = 111;
-                      $sirh_function_id = 9083; // Apoyo Administrativo
-                      break;
-                  case "Auxiliar Turno":
-                      $sirh_profession_id = 111;
-                      $sirh_function_id = 9083; // Apoyo Administrativo
-                      break;
-                  case "Terapeuta Ocupacional":
-                      $sirh_profession_id = 1055;
-                      $sirh_function_id = 9082; // Atención Clínica
-                      break;
-                  case "Químico Farmacéutico":
-                      $sirh_profession_id = 320;
-                      $sirh_function_id = 9082; // Atención Clínica
-                      break;
-                  case "Bioquímico":
-                      $sirh_profession_id = 1003;
-                      $sirh_function_id = 9082; // Atención Clínica
-                      break;
-                  case "Fonoaudiologo":
-                      $sirh_profession_id = 1319;
-                      $sirh_function_id = 9082; // Atención Clínica
-                      break;
-                  case "Administrativo Diurno":
-                      $sirh_profession_id = 119;
-                      $sirh_function_id = 9083; // Apoyo Administrativo
-                      break;
-                  case "Administrativo Turno":
-                      $sirh_profession_id = 119;
-                      $sirh_function_id = 9083; // Apoyo Administrativo
-                      break;
-                  case "Biotecnólogo Turno":
-                      $sirh_profession_id = 513;
-                      $sirh_function_id = 9082; // Atención Clínica
-                      break;
-                  case "Matrona Turno":
-                      $sirh_profession_id = 1060;
-                      $sirh_function_id = 9082; // Atención Clínica
-                      break;
-                  case "Matrona Diurno":
-                      $sirh_profession_id = 1060;
-                      $sirh_function_id = 9082; // Atención Clínica
-                      break;
-                  case "Otros técnicos":
-                      $sirh_profession_id = 530;
-                      $sirh_function_id = 9082; // Atención Clínica
-                      break;
-                  case "Psicólogo":
-                      $sirh_profession_id = 1160;
-                      $sirh_function_id = 9082; // Atención Clínica
-                      break;
-                  case "Tecn. Médico Diurno":
-                      $sirh_profession_id = 1316;
-                      $sirh_function_id = 9082; // Atención Clínica
-                      break;
-                  case "Tecn. Médico Turno":
-                      $sirh_profession_id = 1316;
-                      $sirh_function_id = 9082; // Atención Clínica
-                      break;
-                  case "Trabajador Social":
-                      $sirh_profession_id = 1020;
-                      $sirh_function_id = 9082; // Atención Clínica
-                      break;
-              }
+        switch ($fila->rrhh_team) {
+          case "Residencia Médica":
+            $sirh_profession_id = 1000;
+            $sirh_function_id = 9082; // Antención clínica
+            break;
+          case "Médico Diurno":
+            $sirh_profession_id = 1000;
+            $sirh_function_id = 9082; // Atención clínica
+            break;
+          case "Enfermera Supervisora":
+            $sirh_profession_id = 1058;
+            $sirh_function_id = 9082; // Atención clínica
+            break;
+          case "Enfermera Diurna":
+            $sirh_profession_id = 1058;
+            $sirh_function_id = 9082; // Atención clínica
+            break;
+          case "Enfermera Turno":
+            $sirh_profession_id = 1058;
+            $sirh_function_id = 9082; // Atención clínica
+            break;
+          case "Kinesiólogo Diurno":
+            $sirh_profession_id = 1057;
+            $sirh_function_id = 9082; // Atención clínica
+            break;
+          case "Kinesiólogo Turno":
+            $sirh_profession_id = 1057;
+            $sirh_function_id = 9082; // Atención Clínica
+            break;
+          case "Téc.Paramédicos Diurno":
+            $sirh_profession_id = 1027;
+            $sirh_function_id = 9082; // Atención Clínica
+            break;
+          case "Téc.Paramédicos Turno":
+            $sirh_profession_id = 1027;
+            $sirh_function_id = 9082; // Atención Clínica
+            break;
+          case "Auxiliar Diurno":
+            $sirh_profession_id = 111;
+            $sirh_function_id = 9083; // Apoyo Administrativo
+            break;
+          case "Auxiliar Turno":
+            $sirh_profession_id = 111;
+            $sirh_function_id = 9083; // Apoyo Administrativo
+            break;
+          case "Terapeuta Ocupacional":
+            $sirh_profession_id = 1055;
+            $sirh_function_id = 9082; // Atención Clínica
+            break;
+          case "Químico Farmacéutico":
+            $sirh_profession_id = 320;
+            $sirh_function_id = 9082; // Atención Clínica
+            break;
+          case "Bioquímico":
+            $sirh_profession_id = 1003;
+            $sirh_function_id = 9082; // Atención Clínica
+            break;
+          case "Fonoaudiologo":
+            $sirh_profession_id = 1319;
+            $sirh_function_id = 9082; // Atención Clínica
+            break;
+          case "Administrativo Diurno":
+            $sirh_profession_id = 119;
+            $sirh_function_id = 9083; // Apoyo Administrativo
+            break;
+          case "Administrativo Turno":
+            $sirh_profession_id = 119;
+            $sirh_function_id = 9083; // Apoyo Administrativo
+            break;
+          case "Biotecnólogo Turno":
+            $sirh_profession_id = 513;
+            $sirh_function_id = 9082; // Atención Clínica
+            break;
+          case "Matrona Turno":
+            $sirh_profession_id = 1060;
+            $sirh_function_id = 9082; // Atención Clínica
+            break;
+          case "Matrona Diurno":
+            $sirh_profession_id = 1060;
+            $sirh_function_id = 9082; // Atención Clínica
+            break;
+          case "Otros técnicos":
+            $sirh_profession_id = 530;
+            $sirh_function_id = 9082; // Atención Clínica
+            break;
+          case "Psicólogo":
+            $sirh_profession_id = 1160;
+            $sirh_function_id = 9082; // Atención Clínica
+            break;
+          case "Tecn. Médico Diurno":
+            $sirh_profession_id = 1316;
+            $sirh_function_id = 9082; // Atención Clínica
+            break;
+          case "Tecn. Médico Turno":
+            $sirh_profession_id = 1316;
+            $sirh_function_id = 9082; // Atención Clínica
+            break;
+          case "Trabajador Social":
+            $sirh_profession_id = 1020;
+            $sirh_function_id = 9082; // Atención Clínica
+            break;
+        }
 
-              $txt .=
-                  $fila->employee->id . '|' .
-                  $fila->employee->dv . '|' .
-                  $sirh_n_cargo . '|' . // contrato 5, prestaión u hora extra es 6
-                  $fila->start_date->format('d/m/Y') . '|' .
-                  $fila->end_date->format('d/m/Y') . '|' .
-                  $sirh_estab_code . '|' .
-                  'S' . '|' .
-                  $por_prestacion . '|' .
-                  $fila->gross_amount . '|' .
-                  $cuotas . '|' . // calculado entre fecha de contratos
-                  'S' . '|' .
-                  '5' . '|' .
-                  'S' . '|' .
-                  'S' . '|' .
-                  '18' . '|' .
-                  $sirh_ou_id . '|' .
-                  '1' . '|' . // cheque
-                  '0' . '|' . // tipo de banco 0 o 1
-                  '0' . '|' . // cuenta 0
-                  $sirh_program_code . '|' . // 3903 (no medico) 3904 (medico)
-                  '24' . '|' . // Glosa todos son 24
-                  $sirh_profession_id . '|' .
-                  $planta . '|' .
-                  '0' . '|' . // Todas son excentas = 0
-                  (($fila->resolution_number) ? $fila->resolution_number : '1') . '|' .
-                  (($fila->resolution_date) ? $fila->resolution_date->format('d/m/Y') : '15/02/2021') . '|' .
-                  substr($fila->digera_strategy, 0, 99) . '|' . // maximo 100
-                  $sirh_function_id . '|' .
-                  preg_replace("/\r|\n/", " ", substr($fila->service_description, 0, 254)) . '|' . // max 255
-                  'A' . '|' .
-                  $type_of_day . '|' . // calcular en base a las horas semanales y tipo de contratacion
-                  'N' . '|' .
-                  $fila->weekly_hours . '|' .
-                  '2103001' . '|' . // único para honorarios
-                  'N' . '|' .
-                  $function_type . '|' . // Apoyo asistenciasl S o N
-                  $turno_afecto . // working_day_type Diurno = S, el resto N
-                  "\r\n";
+        $txt .=
+          $fila->employee->id . '|' .
+          $fila->employee->dv . '|' .
+          $sirh_n_cargo . '|' . // contrato 5, prestaión u hora extra es 6
+          $fila->start_date->format('d/m/Y') . '|' .
+          $fila->end_date->format('d/m/Y') . '|' .
+          $sirh_estab_code . '|' .
+          'S' . '|' .
+          $por_prestacion . '|' .
+          $fila->gross_amount . '|' .
+          $cuotas . '|' . // calculado entre fecha de contratos
+          'S' . '|' .
+          '5' . '|' .
+          'S' . '|' .
+          'S' . '|' .
+          '18' . '|' .
+          $sirh_ou_id . '|' .
+          '1' . '|' . // cheque
+          '0' . '|' . // tipo de banco 0 o 1
+          '0' . '|' . // cuenta 0
+          $sirh_program_code . '|' . // 3903 (no medico) 3904 (medico)
+          '24' . '|' . // Glosa todos son 24
+          $sirh_profession_id . '|' .
+          $planta . '|' .
+          '0' . '|' . // Todas son excentas = 0
+          (($fila->resolution_number) ? $fila->resolution_number : '1') . '|' .
+          (($fila->resolution_date) ? $fila->resolution_date->format('d/m/Y') : '15/02/2021') . '|' .
+          substr($fila->digera_strategy, 0, 99) . '|' . // maximo 100
+          $sirh_function_id . '|' .
+          preg_replace("/\r|\n/", " ", substr($fila->service_description, 0, 254)) . '|' . // max 255
+          'A' . '|' .
+          $type_of_day . '|' . // calcular en base a las horas semanales y tipo de contratacion
+          'N' . '|' .
+          $fila->weekly_hours . '|' .
+          '2103001' . '|' . // único para honorarios
+          'N' . '|' .
+          $function_type . '|' . // Apoyo asistenciasl S o N
+          $turno_afecto . // working_day_type Diurno = S, el resto N
+          "\r\n";
 
-              $txt = mb_convert_encoding($txt, 'utf-8');
+        $txt = mb_convert_encoding($txt, 'utf-8');
+      } // if de sólo sin numero de resolucion
 
-          } // if de sólo sin numero de resolucion
+    }
 
-      }
-
-      $response = new StreamedResponse();
-      $response->setCallBack(function () use ($txt) {
-          echo $txt;
-      });
-      $response->headers->set('Content-Type', 'text/plain; charset=utf-8');
-      $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, "export_sirh.txt");
-      $response->headers->set('Content-Disposition', $disposition);
-      return $response;
+    $response = new StreamedResponse();
+    $response->setCallBack(function () use ($txt) {
+      echo $txt;
+    });
+    $response->headers->set('Content-Type', 'text/plain; charset=utf-8');
+    $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, "export_sirh.txt");
+    $response->headers->set('Content-Disposition', $disposition);
+    return $response;
   }
 
   public function resolution(ServiceRequest $ServiceRequest)
@@ -1264,30 +1294,29 @@ class ServiceRequestController extends Controller
   //   return $pdf->stream('mi-archivo.pdf');
   // }
 
-    public function callbackFirmaBudgetAvailability($message, $modelId, SignaturesFile $signaturesFile = null)
-    {
-        $serviceRequest = ServiceRequest::find($modelId);
+  public function callbackFirmaBudgetAvailability($message, $modelId, SignaturesFile $signaturesFile = null)
+  {
+    $serviceRequest = ServiceRequest::find($modelId);
 
-        if (!$signaturesFile) {
-            session()->flash('danger', $message);
-            return redirect()->route('rrhh.service-request.fulfillment.edit', $serviceRequest->id);
-        }
-
-        $serviceRequest->signed_budget_availability_cert_id = $signaturesFile->id;
-        $serviceRequest->save();
-        // header('Content-Type: application/pdf');
-        // echo base64_decode($signaturesFile->signed_file);
-        session()->flash('success', $message);
-        return redirect()->route('rrhh.service-request.fulfillment.edit', $serviceRequest->id);
+    if (!$signaturesFile) {
+      session()->flash('danger', $message);
+      return redirect()->route('rrhh.service-request.fulfillment.edit', $serviceRequest->id);
     }
 
-    public function signedBudgetAvailabilityPDF(ServiceRequest $serviceRequest)
-    {
-        return Storage::disk('gcs')->response($serviceRequest->signedBudgetAvailabilityCert->signed_file);
-//        header('Content-Type: application/pdf');
-//        if (isset($serviceRequest->signedBudgetAvailabilityCert)) {
-//            echo base64_decode($serviceRequest->signedBudgetAvailabilityCert->signed_file);
-//        }
-    }
+    $serviceRequest->signed_budget_availability_cert_id = $signaturesFile->id;
+    $serviceRequest->save();
+    // header('Content-Type: application/pdf');
+    // echo base64_decode($signaturesFile->signed_file);
+    session()->flash('success', $message);
+    return redirect()->route('rrhh.service-request.fulfillment.edit', $serviceRequest->id);
+  }
 
+  public function signedBudgetAvailabilityPDF(ServiceRequest $serviceRequest)
+  {
+    return Storage::disk('gcs')->response($serviceRequest->signedBudgetAvailabilityCert->signed_file);
+    //        header('Content-Type: application/pdf');
+    //        if (isset($serviceRequest->signedBudgetAvailabilityCert)) {
+    //            echo base64_decode($serviceRequest->signedBudgetAvailabilityCert->signed_file);
+    //        }
+  }
 }

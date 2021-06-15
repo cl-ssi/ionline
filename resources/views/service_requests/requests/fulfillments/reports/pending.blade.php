@@ -99,6 +99,7 @@
         <tr>
 
             <th>Id Sol.</th>
+            <th>C.Responsabilidad</th>
             <th nowrap>Rut</th>
             <th>Nombre</th>
             <th>Periodo</th>
@@ -121,6 +122,7 @@
             <td>{{$fulfillment->servicerequest->id?? ''}}
                 <span class="small">({{$fulfillment->id}})</span>
             </td>
+            <td>{{$fulfillment->servicerequest->responsabilityCenter->name?? ''}}</td>
             <td>{{$fulfillment->servicerequest?$fulfillment->servicerequest->employee->runFormat(): ''}}</td>
             <td>{{$fulfillment->servicerequest->employee->fullName ?? ''}}</td>
             <td>{{$fulfillment->year}} - {{$fulfillment->month}}</td>

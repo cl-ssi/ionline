@@ -409,6 +409,17 @@ class FulfillmentController extends Controller
     public function update(Request $request, Fulfillment $fulfillment)
     {
         $fulfillment->fill($request->all());
+        if($request->hasFile('backup_assistance'))
+        {
+          
+          //$file_name = $fulfillment->year.'_'.$fulfillment->month.'_'.$fulfillment->ServiceRequest->employee->name;
+          $file_name = $fulfillment->year.'_'.$fulfillment->month.'_'.$fulfillment->id;
+          $file = $request->file('backup_assistance');
+          $fulfillment->backup_assistance = $file->storeAs('/ionline/service_request/backup_assistance', $file_name.'.'.$file->extension(), 'gcs');
+          $fulfillment->save();
+          
+
+        }
         $fulfillment->save();
 
         session()->flash('success', 'Se ha modificado la información del período.');
@@ -665,6 +676,12 @@ class FulfillmentController extends Controller
         /* Para google storage */
         //return Storage::disk('gcs')->response($file, mb_convert_encoding($serviceRequest->id.'.pdf', 'ASCII'));
     }
+    // public function downloadAssistance(Fulfillment $fulfillment)
+    // {
+    //     $storage_path = '/ionline/service_request/backup_assistance/';
+    //     $file =  $storage_path . $fulfillment->id . '.pdf';
+    //     return Storage::disk('gcs')->response($file, mb_convert_encoding($fulfillment->id.'.pdf', 'ASCII'));
+    // }
 
     public function signedCertificatePDF(Fulfillment $fulfillment)
     {

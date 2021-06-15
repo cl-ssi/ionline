@@ -19,6 +19,18 @@
             <button class="btn text-white btn-info btn-block" wire:click.prevent="add({{$i}})">Agregar</button>
 {{--            <button class="btn text-white btn-info btn-block" wire:click.prevent="add({{$i}})" {{$disabledAddButton}}>Agregar</button>--}}
         </fieldset>
+
+        <fieldset class="form-group offset-3 col-3">
+            <label for=""></label>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input"
+                       name="visatorAsSignature" id="for_visatorAsSignature" value="1" >
+                <label class="form-check-label" for="for_visatorAsSignature">Visadores como firmantes</label>
+               <small id="presumend_help" class="form-text text-muted">
+                   Si se selecciona, los usuarios visadores pasarán a ser firmantes. Igualmente se debe seleccionar un usuario en firmante. </small>
+            </div>
+        </fieldset>
+
     </div>
     <div class="form-row">
         <div class="col-5">

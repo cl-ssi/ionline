@@ -6,7 +6,7 @@
 
 @include('service_requests.partials.nav')
 
-<h3>Solicitud de Contratación de Servicios</h3>
+<h3>Editar de Contratación de Servicios</h3>
 
   @can('Service Request: additional data rrhh')
 
@@ -351,6 +351,7 @@
           <option value="33" @if($serviceRequest->weekly_hours == 33) selected @endif>33</option>
 					<option value="28" @if($serviceRequest->weekly_hours == 28) selected @endif>28</option>
 					<option value="22" @if($serviceRequest->weekly_hours == 22) selected @endif>22</option>
+          <option value="15" @if($serviceRequest->weekly_hours == 15) selected @endif>15</option>
           <option value="11" @if($serviceRequest->weekly_hours == 11) selected @endif>11</option>
         </select>
 		</fieldset>
@@ -389,6 +390,8 @@
 						<option value="PABELLON TARDE" @if($serviceRequest->programm_name == 'PABELLON TARDE') selected @endif>PABELLON TARDE</option>
 						<option value="PABELLON GINE" @if($serviceRequest->programm_name == 'PABELLON GINE') selected @endif>PABELLON GINE</option>
 						<option value="TURNO DE RESIDENCIA" @if($serviceRequest->programm_name == 'TURNO DE RESIDENCIA') selected @endif>TURNO DE RESIDENCIA</option>
+            <option value="SENDA" @if($serviceRequest->programm_name == 'SENDA') selected @endif>SENDA</option>
+            
 					@else
 						<option value="PRAPS" @if($serviceRequest->programm_name == 'PRAPS') selected @endif>PRAPS</option>
 						<option value="PESPI" @if($serviceRequest->programm_name == 'PESPI') selected @endif>PESPI</option>
@@ -437,7 +440,7 @@
 		</fieldset>
 
     <fieldset class="form-group col-6 col-md-3">
-		    <label for="for_working_day_type_other">Otro</label>
+		    <label for="for_working_day_type_other">Otro<small>(Saldrá en la resolución luego del horario)</small></label>
 		    <input type="text" class="form-control" id="for_working_day_type_other" placeholder="" name="working_day_type_other" value="{{ $serviceRequest->working_day_type_other }}">
 		</fieldset>
 
@@ -490,6 +493,15 @@
 
           <option value="Nutricionista turno" @if($serviceRequest->rrhh_team == "Nutricionista turno") selected @endif>Nutricionista turno</option>
           <option value="Informático" @if($serviceRequest->rrhh_team == "Informático") selected @endif>Informático</option>
+          <option value="Ingeniero" @if($serviceRequest->rrhh_team == "Ingeniero") selected @endif>Ingeniero</option>
+
+
+          <option value="Técnico en rehabilitación" @if($serviceRequest->rrhh_team == "Técnico en rehabilitación") selected @endif>Técnico en rehabilitación</option>
+          <option value="Psiquiatra" @if($serviceRequest->rrhh_team == "Psiquiatra") selected @endif>Psiquiatra</option>
+          <option value="Monitor/a" @if($serviceRequest->rrhh_team == "Monitor/a") selected @endif>Monitor/a</option>
+          <option value="Preparador físico" @if($serviceRequest->rrhh_team == "Preparador físico") selected @endif>Preparador físico</option>
+
+
 
         </select>
     </fieldset>
@@ -530,7 +542,7 @@
 			</select>
 		</fieldset>
 
-    @else    
+    @else
     <fieldset class="form-group col-3" id="div_hsa_schedule">
 			<label for="for_hsa_schedule_detail">Detalle de Horario HSA</label>
 			<input type="text" class="form-control" id="for_hsa_schedule_detail" value="{{$serviceRequest->schedule_detail}}" name="hsa_schedule_detail">
@@ -553,6 +565,13 @@
 		</fieldset>
 	</div> -->
 
+  <div class="form-row" id="div_subt31" style="display: none">
+		<fieldset class="form-group col">
+				<label for="for_subt31">Subtitulo 31<small>(Aparecerá en resolución, luego del texto "El gasto corresponde")</small></label>
+				<textarea id="subt31" name="subt31" class="form-control" rows="4" cols="50" disabled>{{ $serviceRequest->subt31 }}</textarea>
+		</fieldset>
+	</div>
+
   <div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Beneficios adicionales</label>
@@ -563,6 +582,9 @@
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" id="alias_viaticos">Viaticos</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" id="alias_devolucion">Devolución de tiempo</button>
+
 		</fieldset>
 	</div>
 
@@ -656,15 +678,15 @@
           <fieldset class="form-group col-6 col-md-2">
             <label for="for_sirh_contract_registration">&nbsp;</label>
             <div>
-            @if($serviceRequest->type == 'Suma alzada'))
-            <a href="{{ route('rrhh.service-request.report.resolution-pdf-hsa, $serviceRequest) }}"
-                class="btn btn-outline-secondary" target="_blank" title="Resolución">
-              <span class="fas fa-file-pdf" aria-hidden="true"></span></a>              
+              @if($serviceRequest->type == "Covid")
+                <a href="{{ route('rrhh.service-request.report.resolution-pdf', $serviceRequest) }}"
+                  class="btn btn-outline-secondary" target="_blank" title="Resolución">
+                <span class="fas fa-file-pdf" aria-hidden="true"></span></a>
               @else
-              <a href="{{ route('rrhh.service-request.report.resolution-pdf', $serviceRequest) }}"
-                class="btn btn-outline-secondary" target="_blank" title="Resolución">
-              <span class="fas fa-file-pdf" aria-hidden="true"></span></a>
-            @endif
+                <a href="{{ route('rrhh.service-request.report.resolution-pdf-hsa', $serviceRequest) }}"
+                  class="btn btn-outline-secondary btn-sm" target="_blank">
+                <span class="fas fa-file" aria-hidden="true"></span></a>
+              @endif
             </div>
           </fieldset>
 
@@ -990,11 +1012,9 @@
 @section('custom_js')
 <script type="text/javascript">
 
-	$( document ).ready(function() {
+	$( document ).ready(function() {   
 
-    if ($('select[id=type] option').filter(':selected').text() == "Suma alzada"){
-      $("#type").trigger("click");
-    }
+    
 
     //temporal, solicitado por eduardo
     if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Departamento de Salud Ocupacional" ||
@@ -1239,6 +1259,7 @@
   	});
 
   	$('#type').on('change', function() {
+      //alert("");
   		var value = this.value;
   		if (value == "Suma alzada") {
 
@@ -1253,6 +1274,8 @@
 			  $("#div_covid_schedule").hide();
 
         $('#objectives').removeAttr('disabled');
+        $('#subt31').removeAttr('disabled');
+        $("#div_subt31").show();
   			// $('#resolve').removeAttr('disabled');
   			$('#additional_benefits').removeAttr('disabled');
   			$("#div_objectives").show();
@@ -1366,6 +1389,19 @@
   	$("#alias_navidad").click(function(){
   		$('#additional_benefits').append("Aguinaldo de Navidad, homologado al monto establecido en la ley de reajuste vigente en el mes de pago (diciembre).\n\n");
   	});
+    $("#alias_viaticos").click(function(){
+  		$('#additional_benefits').append("El profesional tendrá derecho al pago de un honorario adicional cuando para el desarrollo de sus prestaciones deba ausentarse del lugar de desempeño, autorizado por la Dirección del Servicio de Salud Iquique.\n\n");
+  	});
+    $("#alias_devolucion").click(function(){
+  		$('#additional_benefits').append("El prestador de servicios, podrá solicitar permisos de descansos complementarios para ausentarse de sus labores por motivos particulares, siempre qué por la naturaleza de sus servicios y previa autorización de su Jefatura, deban realizar prestaciones de servicios, fuera de la jornada  que estas estén ajustadas a los procedimientos de programación y autorización de los funcionarios.\n\n");
+  	});
+
+
+    
+    if ($('#type').val() == "Suma alzada") {      
+      $('#type').trigger('change');     
+    }
+
 
 
   });

@@ -8,7 +8,9 @@
             <div class="modal-header" style="background-color:#006cb7;color:white   ">
 
                 <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-calendar"></i> Modificar día de personal </h5>
-
+                @if(isset($this->shiftUser))
+                    {{--json_encode($this->shiftUser->where("day","2021-05-01"))--}}
+                @endif
                 <button type="button" class="close" data-dismiss="modal" wire:click.prevent="cancel()" aria-label="Close">
 
                     <span aria-hidden="true">×</span>
@@ -73,6 +75,9 @@
                                 <td> @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser ) 
                                         {{$shiftUserDay->status}} - {{strtoupper($estados[$shiftUserDay->status])}}
                                         <i class="fa fa-circle " style="color:{{$statusColors[$shiftUserDay->status]}}"></i>
+                                        @if($shiftUserDay->status==3)
+                                            {!! ( $shiftUserDay->confirmationStatus() == 1)?'<small style="color:blue">Confirmado</small>': (( $shiftUserDay->confirmationStatus() == 3)?'<small style="color:red">Rechazado</small>':'<small style="color:red">Sin Confirmar</small>' )  !!}
+                                        @endif
                                     @else
                                     
                                         <i class="fas fa-spinner fa-pulse"></i>
@@ -149,7 +154,13 @@
                         </select>
 
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="display: {{$repeatAction}}">
+
+                        <label for="exampleFormControlInput1"><i class="fa fa-calendar"></i> Repetir acción hasta </label>
+                         <input type="date" name="toDate" class="form-control" wire:model="repeatToDate">
+
+                    </div>
+                    <div class="form-group" style="overflow-y:auto;height: 200px;">
 
                         <input type="hidden" wire:model="user_id">
 
@@ -183,7 +194,12 @@
             </div>
 
             <div class="modal-footer">
+                @if(   isset($shiftUserDay) && $shiftUserDay->ShiftUser && $shiftUserDay->status==3 && $shiftUserDay->confirmationStatus() == 0 )
 
+                    
+                        <button type="button" class="btn btn-success ml-auto" data-dismiss="modal" wire:click.prevent="confirmExtraDay()">Confirmar <i class="fa fa-check"></i></button>
+                  
+                @endif
                 <button type="button" wire:click.prevent="cancel()" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
                 <button type="button" wire:click.prevent="update()" class="btn btn-primary" data-dismiss="modal">Guardar </button>

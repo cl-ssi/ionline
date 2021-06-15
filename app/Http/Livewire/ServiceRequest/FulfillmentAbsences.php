@@ -55,7 +55,7 @@ class FulfillmentAbsences extends Component
       //   }
       // }
 
-      if ($this->type != "Renuncia voluntaria" && $this->type != "Abandono de funciones") {
+      if ($this->type != "Renuncia voluntaria" && $this->type != "Abandono de funciones" && $this->type != "Término de contrato anticipado") {
         $start = Carbon::parse($this->start_date . " " .$this->start_hour);
         $end = Carbon::parse($this->end_date . " " .$this->end_hour);
   			if ($start > $end) {
@@ -84,6 +84,7 @@ class FulfillmentAbsences extends Component
           break;
         case 'Renuncia voluntaria':
         case 'Abandono de funciones':
+        case 'Término de contrato anticipado':
           $fulfillmentItem->end_date = $this->end_date;
           break;
 
@@ -135,6 +136,11 @@ class FulfillmentAbsences extends Component
             break;
           case 'Renuncia voluntaria':
           case 'Abandono de funciones':
+            $this->select_start_date = 'disabled';
+            $this->select_start_hour = 'disabled';
+            $this->select_end_hour = 'disabled';
+            break;
+          case 'Término de contrato anticipado':
             $this->select_start_date = 'disabled';
             $this->select_start_hour = 'disabled';
             $this->select_end_hour = 'disabled';

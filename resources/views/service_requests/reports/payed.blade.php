@@ -23,6 +23,8 @@
 				<option value="12" @if($request->establishment_id == 12) selected @endif>Dr. Héctor Reyno G.</option>
 				<option value="0" @if($request->establishment_id === 0) selected @endif>Dirección SSI</option>
 			</select>
+      <span class="input-group-text">Id</span>
+      <input type="text" name="service_request_id" autocomplete="off" @if($request->service_request_id) value={{$request->service_request_id}} @endif>
 			<div class="input-group-append">
 				<button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
 			</div>
@@ -48,6 +50,7 @@
         <th>Id</th>
         <th>Establecimiento</th>
 				<th>Unidad</th>
+        <th>Tipo de Contrato</th>
         <th>Tipo/Jornada</th>
         <th>Nombre</th>
         <th nowrap>Rut</th>
@@ -69,6 +72,7 @@
           <td class="small">{{$fulfillment->serviceRequest->id}}</td>
           <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
 					<td class="small">{{$fulfillment->serviceRequest->responsabilityCenter->name}}</td>
+          <td class="small">{{$fulfillment->serviceRequest->type ?? ''}}</td>
           <td class="small">
             {{$fulfillment->serviceRequest->program_contract_type}}
             <br>

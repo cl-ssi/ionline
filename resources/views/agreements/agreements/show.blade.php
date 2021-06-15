@@ -7,7 +7,7 @@
 @include('agreements/nav')
 
 
-<h3 class="mb-3">Ver detalle de Convenio
+<h3 class="mb-3">Ver detalle de Convenio #{{$agreement->id}}
     @can('Agreement: delete')
 		<form method="POST" action="{{ route('agreements.destroy', $agreement->id) }}" onclick="return confirm('¿Está seguro/a de eliminar este convenio?');" class="d-inline">
 			{{ method_field('DELETE') }} {{ csrf_field() }}
@@ -44,7 +44,7 @@
 
     @if($agreement->file != null)
     <li>
-        <a class="nav-link text-secondary" href="{{ route('agreements.preview', $agreement->id) }}" target="blank"><i class="fas fa-eye"></i> Previsualizar el convenio</a>
+        <a class="nav-link text-secondary" href="{{ route('agreements.preview', $agreement->id) }}" target="blank"><i class="fas fa-eye"></i> Previsualizar convenio</a>
     </li>
     @endif
 
@@ -156,29 +156,17 @@
                     </select>
                     <small class="form-text text-muted">* Seleccionar uno o más centros de atención</small>
                 </fieldset>
-                
             </div>
             <div class="form-row">
-                <fieldset class="form-group col-4">
-                    <label for="for_authority">Director/a a cargo según fecha convenio</label>
-                    {{--<select id="authority_id" class="selectpicker" name="authority_id" title="Seleccionar" data-width="100%" required>
-                      @foreach($authorities as $authority)
-                      @if($authority->id == $agreement->authority_id) {{$selected_authority = $authority}} @endif
-                      <option value="{{ $authority->id }}" @if($authority->id == $agreement->authority_id) selected @endif>{{ $authority->user->full_name }}</option>
-                      @endforeach
-                    </select>  --}}
-                    <input type="text" name="authority_name" class="form-control" id="authority_name" value="{{$agreement->authority->user->full_name}}" readonly>
-                </fieldset>
-                <fieldset class="form-group col-2">
-                    <label for="fornumber">Rut director/a</label>
-                    <input type="text" name="authority_rut" class="form-control" id="authority_rut" value="{{$agreement->authority->user->runFormat()}}" readonly>
-                </fieldset>
-                <fieldset class="form-group col-6">
-                    <label for="fornumber">Decreto director/a</label>
-                    <input type="text" name="authority_decree" class="form-control" id="authority_decree" value="{{$agreement->authority->decree}}" readonly>
+                <fieldset class="form-group col-12">
+                <label for="forrepresentative">Director/a a cargo</label>
+                        <select name="director_signer_id" class="form-control selectpicker" title="Seleccione..." required>
+                            @foreach($signers as $signer)
+                            <option value="{{$signer->id}}" @if($signer->id == $agreement->director_signer_id) selected @endif>{{$signer->appellative}} {{$signer->user->fullName}}, {{$signer->decree}}</option>
+                            @endforeach
+                        </select>
                 </fieldset>
             </div>
-
             <div class="form-row">
                 <fieldset class="form-group col-4">
                     <label for="forrepresentative">Representante alcalde</label>
@@ -241,20 +229,6 @@
             </div>
             <hr class="mt-2 mb-3"/>
             <div class="form-row">
-                <!-- <fieldset class="form-group col-3">
-                    <label for="for">Archivo Convenio PDF
-                        @if($agreement->fileAgreeEnd != null)  
-                            <a class="text-info" href="{{ route('agreements.downloadAgree', $agreement->id) }}" target="_blank">
-                                <i class="fas fa-paperclip"></i> adjunto
-                            </a>
-                        @endif
-                    </label>
-                    <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="forfile" name="fileAgreeEnd">
-                      <label class="custom-file-label" for="forfile">Seleccionar Archivo </label>
-                     <small class="form-text text-muted">* Adjuntar versión final de Covenio</small>
-                    </div>
-                </fieldset> -->
                 <fieldset class="form-group col-3">
                     <label for="fornumber">Número Resolución Exenta del Convenio</label>
                     <input type="integer" name="res_exempt_number" class="form-control" id="fornumber" value="{{ $agreement->res_exempt_number }}" >
@@ -289,224 +263,6 @@
   </div>
 </div>
 
-<!--<div class="card mt-3 mb-3">
-    <div class="card-body">
-
-        <h5>Ciclo de Vida de un convenio</h5>
-
-        <div class="container mt-3 small">
-            <div class="row">
-                <div class="col-sm border border-light">
-                    <strong>Enc. Convenio</strong><br>
-                    @foreach($agreement->stages as $stage)
-                        @if($stage->type == 'RTP' AND $stage->group == 'CON')
-                            <b>·</b> {{$stage->date->format('d-m-Y')}}<br>
-                            {{ $stage->observation }}<br>
-                        @endif
-                    @endforeach
-                </div>
-                <div class="col-sm border border-light">
-                    <strong>Jefe APS</strong><br>
-                    @foreach($agreement->stages as $stage)
-                        @if($stage->type == 'DAJ' AND $stage->group == 'CON')
-                            <b>·</b> {{ $stage->date->format('d-m-Y') }}<br>
-                            {{ $stage->observation }}<br>
-                        @endif
-                    @endforeach
-                </div>
-                <div class="col-sm border border-light">
-                    <strong>Jurídico</strong><br>
-                    @foreach($agreement->stages as $stage)
-                        @if($stage->type == 'DAP' AND $stage->group == 'CON')
-                            <b>·</b> {{ $stage->date->format('d-m-Y') }}<br>
-                            {{ $stage->observation }}<br>
-                        @endif
-                    @endforeach
-                </div>
-                <div class="col-sm border border-light">
-                    <strong>Finanzas</strong><br>
-                    @foreach($agreement->stages as $stage)
-                        @if($stage->type == 'DGF' AND $stage->group == 'CON')
-                            <b>·</b> {{$stage->date->format('d-m-Y')}} <br>
-                            {{ $stage->observation }}<br>
-                        @endif
-                    @endforeach
-                </div>
-                <div class="col-sm border border-light">
-                    <strong>SDGA</strong><br>
-                    @foreach($agreement->stages as $stage)
-                        @if($stage->type == 'SDGA' AND $stage->group == 'CON')
-                            <b>·</b> {{ $stage->date->format('d-m-Y') }} <br>
-                            {{ $stage->observation }}<br>
-                        @endif
-                    @endforeach
-                </div>
-                <div class="col-sm border border-light">
-                    <strong>Envío Comuna</strong><br>
-                    @foreach($agreement->stages as $stage)
-                        @if($stage->type == 'Comuna' AND $stage->group == 'CON')
-                            <b>·</b> {{$stage->date->format('d-m-Y')}} <br>
-                            {{ $stage->observation }}<br>
-                        @endif
-                    @endforeach
-                </div>
-                <div class="col-sm border border-light">
-                    <strong>Devuelto Comuna</strong><br>
-                    @foreach($agreement->stages as $stage)
-                        @if($stage->type == 'Devuelto Comuna')
-                            <b>·</b> {{$stage->date->format('d-m-Y')}} <br>
-                            {{ $stage->observation}}<br>
-                        @endif
-                    @endforeach
-                </div>
-            </div>
-        </div>
-
-        <form method="POST" class="form-horizontal" action="{{ route('agreements.stage.store') }}">
-            @csrf
-            @method('POST')
-            <input type="hidden" name="agreement_id" value="{{$agreement->id}}">
-            <input type="hidden" name="group" value="CON">
-
-            <div class="row mt-3">
-                <div class="col-2">
-                    <select class="form-control" name="type">
-                        <option >RTP</option>
-                        <option >DAJ</option>
-                        <option >DAP</option>
-                        <option >DGF</option>
-                        <option >SDGA</option>
-                        <option value="Comuna">COMUNA</option>
-                    </select>
-                </div>
-                <div class="col-3">
-                    <input type="date" class="form-control" id="forDate" name="date" required>
-                </div>
-                <div class="col-3">
-                    <input type="date" class="form-control" id="forDate" name="dateEnd" >
-                </div>
-                <div class="col">
-                    <input type="text" class="form-control" id="forObservation"
-                        placeholder="Comentarios" name="observation">
-                </div>
-                <div class="col">
-                    <button type="submit" class="btn btn-primary">Agregar</button>
-                </div>
-            </div>
-        </form>
-
-    </div>
-</div>-->
-
-<!-- RESOLUTION SECTION -->
-<!--<div class="card mt-3 mb-3">
-    <div class="card-body">
-
-        <h5>Ciclo de Vida de un convenio - Resolución</h5>
-
-        <div class="container mt-3 small">
-            <div class="row">
-                <div class="col-sm border border-light">
-                    <strong>Enc. Convenio</strong><br>
-                    @foreach($agreement->stages as $stage)
-                        @if($stage->type == 'RTP' AND $stage->group == 'RES')
-                            <b>·</b> {{$stage->date->format('d-m-Y')}}<br>
-                            {{ $stage->observation }}<br>
-                        @endif
-                    @endforeach
-                </div>
-                <div class="col-sm border border-light">
-                    <strong>Jefe APS</strong><br>
-                    @foreach($agreement->stages as $stage)
-                        @if($stage->type == 'DAJ' AND $stage->group == 'RES')
-                            <b>·</b> {{ $stage->date->format('d-m-Y') }}<br>
-                            {{ $stage->observation }}<br>
-                        @endif
-                    @endforeach
-                </div>
-                <div class="col-sm border border-light">
-                    <strong>Jurídico</strong><br>
-                    @foreach($agreement->stages as $stage)
-                        @if($stage->type == 'DAP' AND $stage->group == 'RES')
-                            <b>·</b> {{ $stage->date->format('d-m-Y') }}<br>
-                            {{ $stage->observation }}<br>
-                        @endif
-                    @endforeach
-                </div>
-                <div class="col-sm border border-light">
-                    <strong>Finanzas</strong><br>
-                    @foreach($agreement->stages as $stage)
-                        @if($stage->type == 'DGF' AND $stage->group == 'RES')
-                            <b>·</b> {{$stage->date->format('d-m-Y')}} <br>
-                            {{ $stage->observation }}<br>
-                        @endif
-                    @endforeach
-                </div>
-                <div class="col-sm border border-light">
-                    <strong>SDGA</strong><br>
-                    @foreach($agreement->stages as $stage)
-                        @if($stage->type == 'SDGA' AND $stage->group == 'RES')
-                            <b>·</b> {{ $stage->date->format('d-m-Y') }} <br>
-                            {{ $stage->observation }}<br>
-                        @endif
-                    @endforeach
-                </div>
-                <div class="col-sm border border-light">
-                    <strong>Envío Comuna</strong><br>
-                    @foreach($agreement->stages as $stage)
-                        @if($stage->type == 'Comuna' AND $stage->group == 'RES')
-                            <b>·</b> {{$stage->date->format('d-m-Y')}} <br>
-                            {{ $stage->observation }}<br>
-                        @endif
-                    @endforeach
-                </div>
-                <div class="col-sm border border-light">
-                    <strong>Devuelto Comuna</strong><br>
-                    @foreach($agreement->stages as $stage)
-                        @if($stage->type == 'Devuelto Comuna' AND $stage->group == 'RES')
-                            <b>·</b> {{$stage->date->format('d-m-Y')}} <br>
-                            {{ $stage->observation}}<br>
-                        @endif
-                    @endforeach
-                </div>
-            </div>
-        </div>
-
-        <form method="POST" class="form-horizontal" action="{{ route('agreements.stage.store') }}">
-            @csrf
-            @method('POST')
-            <input type="hidden" name="agreement_id" value="{{$agreement->id}}">
-            <input type="hidden" name="group" value="RES">
-
-            <div class="row mt-3">
-                <div class="col-2">
-                    <select class="form-control" name="type">
-                        <option value="RTP">RTP</option>
-                        <option value="DAJ">DAJ</option>
-                        <option value="DAP">DAP</option>
-                        <option value="DGF">DGF</option>
-                        <option value="SDGA">SDGA</option>
-                        <option value="OfParte">OF. PARTE</option>
-                    </select>
-                </div>
-                <div class="col-3">
-                    <input type="date" class="form-control" id="forDate" name="date" required>
-                </div>
-                <div class="col-3">
-                    <input type="date" class="form-control" id="forDate" name="dateEnd" >
-                </div>
-                <div class="col">
-                    <input type="text" class="form-control" id="forObservation"
-                        placeholder="Comentarios" name="observation">
-                </div>
-                <div class="col">
-                    <button type="submit" class="btn btn-primary">Agregar</button>
-                </div>
-            </div>
-        </form>
-
-    </div>
-</div><!-- END RESOLUTION SECTION --> 
     <div class="card mt-3 mb-3 small">
         <div class="card-body">
             <h5>Montos</h5>
@@ -558,14 +314,11 @@
     </div>
 
     <div class="card mt-3 small">
-        <div class="card-header">
-            <form method="POST" action="{{ route('agreements.quotaAutomatic.update', $agreement->id) }}" class="d-inline float-right">
+        <div class="card-body">
+            <h5>Cuotas <form method="POST" action="{{ route('agreements.quotaAutomatic.update', $agreement->id) }}" class="d-inline float-right small">
                 {{ method_field('PUT') }} {{ csrf_field() }}
                 <button class="btn btn-sm btn-outline-primary" onclick="return confirm('¿Desea realmente calcular las cuotas automaticamente?')"><i class="fas fa-sync"></i> Calculo Automático</button></button> <!-- onclick="return confirm('¿Desea eliminar el componente realmente?')-->
-            </form>
-        </div>
-        <div class="card-body">
-            <h5>Cuotas</h5>
+            </form></h5>
 
             <table class="table table-sm table-hover">
                 <thead>
@@ -606,20 +359,26 @@
     </div>
 
 
-@foreach($agreement->stages as $stage)
-    @if($stage->type == 'OfParte' AND $stage->group == 'RES' AND $stage->dateEnd != null)
+
+    @if($agreement->fileResEnd != null)
     <div class="card mt-3 small">
         <div class="card-body">
-            <h5>Addendum</h5>
+            <h5>Addendums
+            <button class="btn btn-sm btn-outline-primary float-right" data-toggle="modal"
+                                data-target="#addModalAddendum"
+                                data-formaction="{{ route('agreements.addendums.store' )}}">
+                            <i class="fas fa-plus"></i> Nuevo Addendum</button></h5>
 
             <table class="table table-sm table-hover">
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Número</th>
                         <th>Fecha</th>
-                        <th>Ingresado</th>
-                        <th>Archivo Addeundum</th>
+                        <th>Referente</th>
+                        <th>Director/a a cargo</th>
+                        <th>Representante alcalde</th>
+                        <th>Fecha Res.</th>
+                        <th>N° Res.</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -627,81 +386,78 @@
                     @foreach($agreement->addendums as $addendum)
                     <tr>
                         <td>{{ $addendum->id }}</td>
-                        <td>{{ $addendum->number }}</td>
-                        <td>{{ $addendum->date->format('d-m-Y') }}</td>
-                        <td>{{ $addendum->created_at->format('d-m-Y H:i') }}</td>
-                        <td>
-                             <a class="text-info" href="{{ route('agreements.addendum.download', $addendum->id) }}" target="_blank">
-                                <i class="fas fa-paperclip"></i> Adjunto
+                        <td>{{ $addendum->date ? $addendum->date->format('d-m-Y') : '' }}</td>
+                        <td>{{ $addendum->referrer->fullName ?? ''}}</td>
+                        <td>{{ $addendum->director_signer->user->fullName ?? '' }}</td>
+                        <td>{{ $addendum->representative }}</td>
+                        <td>{{ $addendum->res_date ? $addendum->res_date->format('d-m-Y') : '' }}</td>
+                        <td>{{ $addendum->res_number }}
+                            @if($addendum->res_file)
+                             <a class="text-info" href="{{ route('agreements.addendum.downloadRes', $addendum) }}" target="_blank">
+                                <i class="fas fa-paperclip"></i>
                             </a>
+                            @endif
                         </td>
                         <td class="text-right">
                             <button class="btn btn-sm btn-outline-secondary" data-toggle="modal"
                                 data-target="#editModalAddendum"
-                                data-number="{{ $addendum->number }}"
-                                data-date="{{ $addendum->date->format('Y-m-d') }}"
-                                data-formaction="{{ route('agreements.addendums.update', $addendum->id )}}">
+                                data-referrer_id="{{$addendum->referrer_id}}"
+                                data-director_signer_id="{{$addendum->director_signer_id}}"
+                                data-representative="{{$addendum->representative}}"
+                                data-date="{{ $addendum->date ? $addendum->date->format('Y-m-d') : '' }}"
+                                data-res_number="{{ $addendum->res_number }}"
+                                data-res_date="{{ $addendum->res_date ? $addendum->res_date->format('Y-m-d') : '' }}"
+                                data-formaction="{{ route('agreements.addendums.update', $addendum )}}">
                             <i class="fas fa-edit"></i></button>
+                            <a class="btn btn-sm btn-outline-secondary" href="#" data-toggle="tooltip" data-placement="top" title="Descargar borrador Addendum"
+                                onclick="event.preventDefault(); document.getElementById('submit-form-addendum-{{$addendum->id}}').submit();"><i class="fas fa-file-download"></i></a>
+                            <form id="submit-form-addendum-{{$addendum->id}}" action="{{ route('agreements.addendum.createWord', [$addendum, 'addendum']) }}" method="POST" hidden>@csrf</form>
+                            @if($addendum->file != null)
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.preview', $addendum) }}" target="blank" data-toggle="tooltip" data-placement="top" title="Previsualizar Addendum"><i class="fas fa-eye"></i></a>
+                            @endif
+                            @canany(['Documents: signatures and distribution'])
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.sign', [$addendum, 'visators']) }}" data-toggle="tooltip" data-placement="top" title="Solicitar visación Addendum"><i class="fas fa-file-signature"></i></a>
+                            @if($addendum->fileToEndorse && $addendum->fileToEndorse->HasAllFlowsSigned)
+                            <a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$addendum->file_to_endorse_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver addendum visado"><i class="fas fa-eye"></i></a> 
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.addendum.sign', [$addendum, 'signer']) }}" data-toggle="tooltip" data-placement="top" title="Solicitar firma Addendum"><i class="fas fa-file-signature"></i></a> 
+                            @endif
+                            @if($addendum->fileToSign && $addendum->fileToSign->HasAllFlowsSigned)
+                            <a class="btn btn-sm btn-outline-secondary" href="{{route('documents.signatures.showPdf', [$addendum->file_to_sign_id, time()])}}" target="blank" data-toggle="tooltip" data-placement="top" title="Ver addendum firmado"><i class="fas fa-eye"></i></a> 
+                            <span data-toggle="modal" data-target="#selectSignerRes" data-formaction="{{ route('agreements.addendum.createWord', [$addendum, 'res'] )}}">
+                                <a href="#" class="btn btn-sm btn-outline-secondary" data-toggle="tooltip" data-placement="top" title="Descargar borrador Resolución Addendum"><i class="fas fa-file-download"></i></a>
+                            </span>
+                            @endif
+                            @endcan
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-
-            @if ($agreement->addendums->isEmpty())
-            <form method="POST" class="form-horizontal" action="{{ route('agreements.addendums.store') }}" enctype="multipart/form-data">
-                <div class="form-row">
-
-                    @csrf
-                    @method('POST')
-                    <input type="hidden" name="agreement_id" value="{{$agreement->id}}">
-
-                    <fieldset class="form-group col-3">
-                        <label for="fornumber">Número</label>
-                        <input type="integer" class="form-control" id="fornumber" placeholder="Número de resolución" name="number" required="required">
-                    </fieldset>
-
-                    <fieldset class="form-group col-3">
-                        <label for="fordate">Fecha</label>
-                        <input type="date" class="form-control" id="fordate" name="date" required="required">
-                    </fieldset>
-
-                    <fieldset class="form-group col-6">
-                        <label for="fordate">Archivo</label>
-                        <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="customFile" name="file">
-                          <label class="custom-file-label" for="customFile">Addendum</label>
-                        </div>
-                    </fieldset>
-
-                </div>
-
-                <button type="submit" class="btn btn-primary">Agregar</button>
-
-            </form>
-           
         </div>
-         @endif
 
         
     </div>
     
     @endif
-    
-@endforeach
 
     @include('agreements/agreements/modal_edit_amount')
     @include('agreements/agreements/modal_edit_quota')
+    @include('agreements/agreements/modal_add_addendum')
     @include('agreements/agreements/modal_edit_addendum')
     @include('agreements/agreements/modal_select_signer_res')
 
 @endsection
 
 @section('custom_js')
-<link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
-<script src="{{ asset('js/bootstrap-select.min.js') }}"></script>
+<!-- <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
+<script src="{{ asset('js/bootstrap-select.min.js') }}"></script> -->
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
 <script type="text/javascript">
     $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
         //var jobs = JSON.parse("{{!! json_encode($establishment_list) !!}}");
         var jobs =  @json($establishment_list);
         //console.log(jobs);
@@ -742,14 +498,26 @@
         modal.find("#form-edit").attr('action', button.data('formaction'))
     })
 
+    $('#addModalAddendum').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var modal  = $(this)
+
+        modal.find("#form-add").attr('action', button.data('formaction'))
+    })
+
     $('#editModalAddendum').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var modal  = $(this)
 
-        modal.find('input[name="number"]').val(button.data('number'))
         modal.find('input[name="date"]').val(button.data('date'))
-
+        modal.find('select[name="referrer_id"]').val(button.data('referrer_id'))
+        modal.find('select[name="director_signer_id"]').val(button.data('director_signer_id'))
+        modal.find('select[name="representative"]').val(button.data('representative'))
+        modal.find('input[name="res_number"]').val(button.data('res_number'))
+        modal.find('input[name="res_date"]').val(button.data('res_date'))
+        
         modal.find("#form-edit").attr('action', button.data('formaction'))
+        modal.find('.selectpicker').selectpicker('refresh')
     })
 
     $('#selectSignerRes').on('show.bs.modal', function (event) {

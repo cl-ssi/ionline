@@ -139,6 +139,34 @@
         </fieldset>
     </div>
 
+    <div class="form-row">
+    <fieldset class="form-group col-6 col-md-2">
+            <label for="for_working_day_type">Jornada de Trabajo</label>
+            <select name="working_day_type" class="form-control">
+                <option value=""></option>
+                <option value="DIURNO" @if($request->input('working_day_type')=='DIURNO') selected @endif>DIURNO</option>
+				<option value="TERCER TURNO" @if($request->input('working_day_type')=='TERCER TURNO') selected @endif>TERCER TURNO</option>
+				<option value="TERCER TURNO - MODIFICADO" @if($request->input('working_day_type')=='TERCER TURNO - MODIFICADO') selected @endif>TERCER TURNO - MODIFICADO</option>
+				<option value="CUARTO TURNO" @if($request->input('working_day_type')=='CUARTO TURNO') selected @endif>CUARTO TURNO</option>
+				<option value="CUARTO TURNO - MODIFICADO" @if($request->input('working_day_type')=='CUARTO TURNO - MODIFICADO') selected @endif>CUARTO TURNO - MODIFICADO</option>
+				<option value="DIURNO PASADO A TURNO" @if($request->input('working_day_type')=='DIURNO PASADO A TURNO') selected @endif>DIURNO PASADO A TURNO</option>
+				<option value="HORA MÉDICA" @if($request->input('working_day_type')=='HORA MÉDICA') selected @endif>HORA MÉDICA</option>
+				<option value="HORA EXTRA" @if($request->input('working_day_type')=='HORA EXTRA') selected @endif>HORA EXTRA</option>
+				<option value="TURNO EXTRA">TURNO EXTRA</option>
+				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
+            </select>
+        </fieldset>
+
+        <div class="col-6 text-right">
+
+        <a type="button" class="btn btn-outline-primary" title="Descargar Excel"
+        id="downloadLink" onclick="exportF(this)">Descargar Excel <small>(Resultado primera hoja)</small> <i class="fas fa-file-excel"></i> </a>
+
+        </div>
+
+
+    </div>
+
 </form>
 
 <hr>
@@ -146,15 +174,17 @@
 <h3 class="mb-3">Reporte de cumplimiento</h3>
 
 <div class="table-responsive">
-    <table class="table table-sm table-bordered table-stripped">
+    <table class="table table-sm table-bordered table-stripped" id="tabla_cumplimiento">
         <tr>
             <th>Ct.</th>
             <th>Id Sol.</th>
             <th nowrap>Rut</th>
             <th>Nombre</th>
+            <th>Unidad</th>
             <th>Período</th>
             <th>Tipo</th>
             <th>Tipo de Contrato</th>
+            <th>Tipo de Jornada</th>
             <th>Hitos</th>
             <th></th>
         </tr>
@@ -166,9 +196,11 @@
             </td>
             <td>{{$fulfillment->servicerequest?$fulfillment->servicerequest->employee->runFormat(): ''}}</td>
             <td class="text-uppercase">{{$fulfillment->servicerequest->employee->fullname?? ''}}</td>
+            <td>{{$fulfillment->servicerequest->responsabilityCenter->name??''}}</td>
             <td>{{$fulfillment->year}}-{{$fulfillment->month}}</td>
             <td>{{$fulfillment->servicerequest->type?? ''}}</td>
             <td>{{$fulfillment->servicerequest->program_contract_type?? ''}}</td>
+            <td class="small">{{$fulfillment->servicerequest->working_day_type?? ''}}</td>
             <td>
                 <i title="Resolución" class="fas fa-file-signature 
                     {{ ($fulfillment->serviceRequest->has_resolution_file)?'text-primary':'text-secondary'}}"></i>
@@ -211,6 +243,26 @@
 @endsection
 
 @section('custom_js')
+
+
+<script type="text/javascript">
+  let date = new Date()
+  let day = date.getDate()
+  let month = date.getMonth() + 1
+  let year = date.getFullYear()
+  let hour = date.getHours()
+  let minute = date.getMinutes()
+
+  function exportF(elem) {
+    var table = document.getElementById("tabla_cumplimiento");
+    var html = table.outerHTML;
+    var html_no_links = html.replace(/<a[^>]*>|<\/a>/g, ""); //remove if u want links in your table
+    var url = 'data:application/vnd.ms-excel,' + escape(html_no_links); // Set your html table into url
+    elem.setAttribute("href", url);
+    elem.setAttribute("download", "tabla_cumplimiento.xls"); // Choose the file name
+    return false;
+  }
+</script>
 
 
 @endsection

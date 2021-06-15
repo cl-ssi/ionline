@@ -8,10 +8,30 @@
 
 <h3 class="mb-3">Listado de Solicitudes Pendiente (Test Finalizado)</h3>
 
+<form method="GET" class="form-horizontal" action="{{ route('suitability.pending') }}">
+
+    <div class="form-row">
+        <fieldset class="form-group col-6 col-md-6">
+            <label for="for_year">Colegios</label>
+            <select name="colegio" class="form-control selectpicker" data-live-search="true" >
+                <option value="">Todos Los Colegios</option>
+                @foreach($schools as $school)
+                <option value="{{$school->id}}" @if($school_id == $school->id) selected @endif >{{$school->name}}</option>
+                @endforeach
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-2 col-md-1">
+            <label for="">&nbsp;</label>
+            <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
+        </fieldset>
+    </div>
+
 <table class="table">
     <thead>
         <tr>
             <th>Solicitud N°</th>
+            <th>Colegio</th>
             <th>Run</th>
             <th>Nombre Completo</th>
             <th>Cargo</th>
@@ -25,13 +45,14 @@
     <tbody>
     @foreach($psirequests as $psirequest)
         <tr>
-            <td>{{$psirequest->id}}</td>
-            <td>{{$psirequest->user->runFormat()}}</td>
-            <td>{{$psirequest->user->fullName}}</td>
-            <td>{{$psirequest->job}}</td>
-            <td>{{$psirequest->user->email}}</td>
-            <td>{{$psirequest->status}}</td>
-            <td>{{$psirequest->result->total_points}}</td>
+            <td>{{$psirequest->id ?? ''}}</td>
+            <td>{{ $psirequest->school->name ?? ''  }}</td>
+            <td>{{$psirequest->user->runFormat() ?? ''}}</td>
+            <td>{{$psirequest->user->fullName ?? ''}}</td>
+            <td>{{$psirequest->job ?? ''}}</td>
+            <td>{{$psirequest->user->email ?? ''}}</td>
+            <td>{{$psirequest->status ?? ''}}</td>
+            <td>{{$psirequest->result->total_points ?? ''}}</td>
             <td>
             <form action="{{ route('suitability.finalresult',['psirequest' => $psirequest, 'result' => 'Aprobado']) }}" method="POST" >
             @csrf

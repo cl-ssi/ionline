@@ -74,7 +74,7 @@ input:checked + .slider:before {
     <a class="nav-link active"  href="{{ route('rrhh.shiftsTypes.index') }}">Tipos de Turnos</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#">Mi Turno</a>
+    <a class="nav-link"  href="{{ route('rrhh.shiftManag.myshift') }}" href="#">Mi Turno</a>
   </li>
   <li class="nav-item">
     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Turnos Disponibles</a>

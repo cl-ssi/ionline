@@ -18,12 +18,12 @@
             <input type="text" class="form-control" id="rut_municipality" name="rut_municipality" value="{{$municipality->rut_municipality}}" required readonly>
         </fieldset>
 
-        <fieldset class="form-group col-4">
+        <fieldset class="form-group col-3">
             <label for="for_name">E-mail municipio</label>
             <input type="text" class="form-control" id="email_municipality" name="email_municipality" value="{{$municipality->email_municipality}}">
         </fieldset>
 
-        <fieldset class="form-group col-6">
+        <fieldset class="form-group col-7">
             <label for="for_address">Dirección</label>
             <input type="text" class="form-control" id="adress_municipality" name="adress_municipality" value="{{$municipality->adress_municipality}}" required>
         </fieldset>
@@ -35,14 +35,24 @@
             <input type="text" class="form-control" id="rut_representative" name="rut_representative" value="{{$municipality->rut_representative}}" required>
         </fieldset>
 
-        <fieldset class="form-group col-4">
+        <fieldset class="form-group col-3">
             <label for="for_name">Nombre alcalde</label>
             <input type="text" class="form-control" id="name_representative" name="name_representative" value="{{$municipality->name_representative}}" required>
         </fieldset>
 
-        <fieldset class="form-group col-6">
+        <fieldset class="form-group col-5">
             <label for="for_address">Decreto</label>
             <input type="text" class="form-control" id="decree_representative" name="decree_representative" value="{{$municipality->decree_representative}}" required>
+        </fieldset>
+
+        <fieldset class="form-group col-2">
+            <label for="for_rut">Apelativo</label>
+            <select name="appellative_representative" class="form-control selectpicker" title="Seleccione..." required>
+                @php($appellativeOptions = array('Alcalde Don', 'Alcaldesa Doña'))
+                @foreach($appellativeOptions as $option)
+                <option value="{{$option}}" @if($municipality->appellative_representative == $option) selected @endif>{{$option}}</option>
+                @endforeach
+            </select>
         </fieldset>
     </div>
     <div class="form-row">
@@ -51,14 +61,24 @@
             <input type="text" class="form-control" id="rut_representative_surrogate" name="rut_representative_surrogate" value="{{$municipality->rut_representative_surrogate}}">
         </fieldset>
 
-        <fieldset class="form-group col-4">
+        <fieldset class="form-group col-3">
             <label for="for_name">Nombre alcalde subrogante</label>
             <input type="text" class="form-control" id="name_representative_surrogate" name="name_representative_surrogate" value="{{$municipality->name_representative_surrogate}}">
         </fieldset>
 
-        <fieldset class="form-group col-6">
+        <fieldset class="form-group col-5">
             <label for="for_address">Decreto</label>
             <input type="text" class="form-control" id="decree_representative_surrogate" name="decree_representative_surrogate" value="{{$municipality->decree_representative_surrogate}}">
+        </fieldset>
+
+        <fieldset class="form-group col-2">
+            <label for="for_rut">Apelativo</label>
+            <select name="appellative_representative_surrogate" class="form-control selectpicker" title="Seleccione..." required>
+                @php($appellativeOptions = array('Alcalde Subrogante Don', 'Alcaldesa Subrogante Doña'))
+                @foreach($appellativeOptions as $option)
+                <option value="{{$option}}" @if($municipality->appellative_representative_surrogate == $option) selected @endif>{{$option}}</option>
+                @endforeach
+            </select>
         </fieldset>
 
     </div>

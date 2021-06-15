@@ -38,7 +38,7 @@
     								@if( isset( $usr ) )
                                     	N/A
                                     @else
-                           actuallyMonth             <i class="fas fa-spinner fa-pulse"></i>
+                                        actuallyMonth <i class="fas fa-spinner fa-pulse"></i>
                                     @endif
                                                                 	
                                 </td>
