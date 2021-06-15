@@ -228,8 +228,8 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
       Servicio de Salud Iquique,
     @endif
     el cual tendrá la responsabilidad de evaluar sus servicios en forma mensual.
-    <br>
-    {{$ServiceRequest->subt31}}
+    
+    
 
 </p>
 
@@ -401,7 +401,13 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
     @else
       1140504 SENDA 1 (Fondos extra presupuestarios) asociados al Convenio SENDA – MINSAL Honorario Suma Alzada
     @endif
+    <br>
+    {{$ServiceRequest->subt31}}
+     <br>
      Honorario Suma Alzada.
+
+     
+     
 
 
 
