@@ -50,7 +50,7 @@
         </fieldset>
 
         <fieldset class="form-group col-4 col-md-2">
-            <label for="for_type">Tipo</label>
+            <label for="for_type">Origen Financiamiento</label>
             <select name="type" class="form-control">
                 <option value=""></option>
                 <option value="Covid" @if($request->input('type')=='Covid') selected @endif>Covid</option>
