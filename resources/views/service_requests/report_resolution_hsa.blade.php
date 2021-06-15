@@ -405,12 +405,13 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
     @else
       1140504 SENDA 1 (Fondos extra presupuestarios) asociados al Convenio SENDA – MINSAL Honorario Suma Alzada
     @endif
+    Honorario Suma Alzada.
 
     @endif
     <br>
     
      <br>
-     Honorario Suma Alzada.
+     
 
      
      

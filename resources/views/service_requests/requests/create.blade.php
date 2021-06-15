@@ -434,7 +434,7 @@
 
 	<div class="form-row" id="div_subt31" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_subt31">Subtitulo 31 <small>(Aparecerá en resolución, luego del texto "El gasto correspondiente al ítem")</small></label>
+				<label for="for_subt31">Subtitulo 31 <small>(Aparecerá en resolución, luego del texto "El gasto corresponde")</small></label>
 				<textarea id="subt31" name="subt31" class="form-control" rows="4" cols="50" disabled></textarea>
 		</fieldset>
 	</div>
