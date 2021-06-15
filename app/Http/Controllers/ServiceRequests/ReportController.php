@@ -423,6 +423,7 @@ class ReportController extends Controller
     //$users = User::getUsersBySearch($request->get('name'))->orderBy('name','Asc')->paginate(150);
     $fulfillments = Fulfillment::Search($request)
       ->whereHas('ServiceRequest')
+      ->orderBy('id','Desc')
       ->paginate(200);
 
     /* Año actual y año anterior */

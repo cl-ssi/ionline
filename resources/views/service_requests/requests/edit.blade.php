@@ -351,6 +351,7 @@
           <option value="33" @if($serviceRequest->weekly_hours == 33) selected @endif>33</option>
 					<option value="28" @if($serviceRequest->weekly_hours == 28) selected @endif>28</option>
 					<option value="22" @if($serviceRequest->weekly_hours == 22) selected @endif>22</option>
+          <option value="20" @if($serviceRequest->weekly_hours == 20) selected @endif>20</option>
           <option value="15" @if($serviceRequest->weekly_hours == 15) selected @endif>15</option>
           <option value="11" @if($serviceRequest->weekly_hours == 11) selected @endif>11</option>
         </select>
@@ -390,6 +391,8 @@
 						<option value="PABELLON TARDE" @if($serviceRequest->programm_name == 'PABELLON TARDE') selected @endif>PABELLON TARDE</option>
 						<option value="PABELLON GINE" @if($serviceRequest->programm_name == 'PABELLON GINE') selected @endif>PABELLON GINE</option>
 						<option value="TURNO DE RESIDENCIA" @if($serviceRequest->programm_name == 'TURNO DE RESIDENCIA') selected @endif>TURNO DE RESIDENCIA</option>
+            <option value="SENDA" @if($serviceRequest->programm_name == 'SENDA') selected @endif>SENDA</option>
+            
 					@else
 						<option value="PRAPS" @if($serviceRequest->programm_name == 'PRAPS') selected @endif>PRAPS</option>
 						<option value="PESPI" @if($serviceRequest->programm_name == 'PESPI') selected @endif>PESPI</option>
@@ -562,6 +565,13 @@
 				<textarea id="resolve" name="resolve" class="form-control" rows="4" cols="50">{{ $serviceRequest->resolve }}</textarea>
 		</fieldset>
 	</div> -->
+
+  <div class="form-row" id="div_subt31" style="display: none">
+		<fieldset class="form-group col">
+				<label for="for_subt31">Subtitulo 31<small>(Aparecerá en resolución, luego del texto "El gasto corresponde")</small></label>
+				<textarea id="subt31" name="subt31" class="form-control" rows="4" cols="50" disabled>{{ $serviceRequest->subt31 }}</textarea>
+		</fieldset>
+	</div>
 
   <div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
@@ -1265,6 +1275,8 @@
 			  $("#div_covid_schedule").hide();
 
         $('#objectives').removeAttr('disabled');
+        $('#subt31').removeAttr('disabled');
+        $("#div_subt31").show();
   			// $('#resolve').removeAttr('disabled');
   			$('#additional_benefits').removeAttr('disabled');
   			$("#div_objectives").show();

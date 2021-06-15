@@ -230,6 +230,7 @@
 			<option value="33">33</option>
 			<option value="28">28</option>
 			<option value="22">22</option>
+			<option value="20">20</option>
 			<option value="15">15</option>
 			<option value="11">11</option>
 		</select>
@@ -270,6 +271,7 @@
 					<option value="PABELLON TARDE">PABELLON TARDE</option>
 					<option value="PABELLON GINE">PABELLON GINE</option>
 					<option value="TURNO DE RESIDENCIA">TURNO DE RESIDENCIA</option>
+					<option value="SENDA">SENDA</option>
 				@else
 					<option value="PRAPS">PRAPS</option>
 					<option value="PESPI">PESPI</option>
@@ -431,6 +433,16 @@
 		</fieldset>
 	</div> -->
 
+
+	<div class="form-row" id="div_subt31" style="display: none">
+		<fieldset class="form-group col">
+				<label for="for_subt31">Subtitulo 31 <small>(Aparecerá en resolución, luego del texto "El gasto corresponde")</small></label>
+				<textarea id="subt31" name="subt31" class="form-control" rows="4" cols="50" disabled></textarea>
+		</fieldset>
+	</div>
+	
+
+
 	<div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Beneficios adicionales</label>
@@ -472,6 +484,7 @@
 		$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
 		$("#programm_name option[value='LISTA ESPERA']").hide();
 		$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+		$("#programm_name option[value='SENDA']").hide();
 
 		$("#programm_name option[value='ADP DIRECTOR']").hide();
 		$("#programm_name option[value='SENDA']").hide();
@@ -490,6 +503,7 @@
 		$("#programm_name option[value='PABELLON TARDE']").hide();
 		$("#programm_name option[value='PABELLON GINE']").hide();
 		$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+		$("#programm_name option[value='SENDA']").hide();
 
 
 
@@ -666,6 +680,8 @@
 			$("#div_covid_schedule").hide();
 
 			$('#objectives').removeAttr('disabled');
+			$('#subt31').removeAttr('disabled');
+			$("#div_subt31").show();
 			// $('#resolve').removeAttr('disabled');
 			$('#additional_benefits').removeAttr('disabled');
 			$("#div_objectives").show();
@@ -694,10 +710,12 @@
 				$("#programm_name option[value='DFL']").show();
 				$("#programm_name option[value='TURNOS VACANTES']").show();
 				$("#programm_name option[value='OTROS PROGRAMAS HETG']").show();
-				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();				
 				$("#programm_name option[value='PABELLON TARDE']").show();
 				$("#programm_name option[value='PABELLON GINE']").show();
 				$("#programm_name option[value='TURNO DE RESIDENCIA']").show();
+				$("#programm_name option[value='SENDA']").show();
+				
 
 
 			}else{
@@ -725,6 +743,7 @@
 				$("#programm_name option[value='PABELLON TARDE']").hide();
 				$("#programm_name option[value='PABELLON GINE']").hide();
 				$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+				$("#programm_name option[value='SENDA']").hide();
 			}
 		}
 		else
