@@ -483,6 +483,7 @@
 		$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
 		$("#programm_name option[value='LISTA ESPERA']").hide();
 		$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+		$("#programm_name option[value='SENDA']").hide();
 
 		$("#programm_name option[value='ADP DIRECTOR']").hide();
 		$("#programm_name option[value='SENDA']").hide();
@@ -501,6 +502,7 @@
 		$("#programm_name option[value='PABELLON TARDE']").hide();
 		$("#programm_name option[value='PABELLON GINE']").hide();
 		$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+		$("#programm_name option[value='SENDA']").hide();
 
 
 
@@ -707,10 +709,12 @@
 				$("#programm_name option[value='DFL']").show();
 				$("#programm_name option[value='TURNOS VACANTES']").show();
 				$("#programm_name option[value='OTROS PROGRAMAS HETG']").show();
-				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();				
 				$("#programm_name option[value='PABELLON TARDE']").show();
 				$("#programm_name option[value='PABELLON GINE']").show();
 				$("#programm_name option[value='TURNO DE RESIDENCIA']").show();
+				$("#programm_name option[value='SENDA']").show();
+				
 
 
 			}else{
@@ -738,6 +742,7 @@
 				$("#programm_name option[value='PABELLON TARDE']").hide();
 				$("#programm_name option[value='PABELLON GINE']").hide();
 				$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+				$("#programm_name option[value='SENDA']").hide();
 			}
 		}
 		else
