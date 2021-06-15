@@ -230,6 +230,7 @@
 			<option value="33">33</option>
 			<option value="28">28</option>
 			<option value="22">22</option>
+			<option value="20">20</option>
 			<option value="15">15</option>
 			<option value="11">11</option>
 		</select>
