@@ -13,7 +13,7 @@
 <div class="form-row">
 <fieldset class="form-group col-12 col-md-2">
       <label for="for_type">Origen de Financiamiento</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->type}}" disabled>
+      <input type="text" class="form-control" value="{{$serviceRequest->type}}"@if($serviceRequest->type=='Covid')style="background-color:#F5A7A7;" @else style="background-color:#8fbc8f;" @endif disabled>
   </fieldset>
 </div>
 
