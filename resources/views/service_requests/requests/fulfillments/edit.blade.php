@@ -8,13 +8,21 @@
 
 <h3>Cumplimiento de solicitud:
   <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}">{{ $serviceRequest->id }}</a>
+  
 </h3>
+<div class="form-row">
+<fieldset class="form-group col-12 col-md-2">
+      <label for="for_type">Origen de Financiamiento</label>
+      <input type="text" class="form-control" value="{{$serviceRequest->type}}"@if($serviceRequest->type=='Covid')style="background-color:#F5A7A7;" @else style="background-color:#8fbc8f;" @endif disabled>
+  </fieldset>
+</div>
 
 <div class="form-row">
   <fieldset class="form-group col-12 col-md-2">
       <label for="for_request_date">ID Solicitud</label>
       <input type="text" class="form-control" value="{{$serviceRequest->id}}" disabled>
   </fieldset>
+  
 
   <fieldset class="form-group col-12 col-md-4">
       <label for="for_request_date">C.Responsabilidad</label>

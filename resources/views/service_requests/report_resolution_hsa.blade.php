@@ -228,6 +228,9 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
       Servicio de Salud Iquique,
     @endif
     el cual tendrá la responsabilidad de evaluar sus servicios en forma mensual.
+    
+    
+
 </p>
 
 <p class="justify">
@@ -380,7 +383,11 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
 </p>
 
 <p class="">
-    <strong>3.</strong> El gasto correspondiente al ítem
+    <strong>3.</strong> El gasto corresponde
+    @if($ServiceRequest->subt31)
+    {{$ServiceRequest->subt31}} 
+    @else
+    al ítem
     @if($ServiceRequest->programm_name == "OTROS PROGRAMAS SSI" || $ServiceRequest->programm_name == "LISTA ESPERA" || $ServiceRequest->programm_name == "ADP DIRECTOR")
       21-03-001-001-02
     @elseif($ServiceRequest->programm_name == "SENDA")
@@ -398,7 +405,16 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
     @else
       1140504 SENDA 1 (Fondos extra presupuestarios) asociados al Convenio SENDA – MINSAL Honorario Suma Alzada
     @endif
-     Honorario Suma Alzada.
+    Honorario Suma Alzada.
+
+    @endif
+    <br>
+    
+     <br>
+     
+
+     
+     
 
 
 
