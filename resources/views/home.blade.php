@@ -26,7 +26,7 @@
                 Contactar al ministro de fe Paula Tapia o José Donoso para solicitar la aprobación por parte del ministro de fe.
                 </li>                
                 <li>
-                Volver a ingresar a <a href="https://firma.digital.gob.cl/ra/" target="_blank">firma.digital.gob.cl</a> y escanear el código QR de certificado generado, para escanear urilizar alguna aplicación autentificadora, ejemplo Google Authenticator.<br>
+                Volver a ingresar a <a href="https://firma.digital.gob.cl/ra/" target="_blank">firma.digital.gob.cl</a> y escanear el código QR de certificado generado, para escanear utilizar alguna aplicación autentificadora, ejemplo Google Authenticator.<br>
                 <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Android</a><br>
                 <a href="https://apps.apple.com/cl/app/google-authenticator/id388497605">I-Phone</a>
                 </li>
