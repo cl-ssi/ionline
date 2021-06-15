@@ -228,6 +228,9 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
       Servicio de Salud Iquique,
     @endif
     el cual tendrá la responsabilidad de evaluar sus servicios en forma mensual.
+    
+    
+
 </p>
 
 <p class="justify">
@@ -327,6 +330,10 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
         --
         @break
     @endswitch
+    @if($ServiceRequest->working_day_type_other)
+        {{$ServiceRequest->working_day_type_other}}<br>
+    @endif
+
 
     Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador,
     se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza
@@ -376,7 +383,11 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
 </p>
 
 <p class="">
-    <strong>3.</strong> El gasto correspondiente al ítem
+    <strong>3.</strong> El gasto corresponde
+    @if($ServiceRequest->subt31)
+    {{$ServiceRequest->subt31}} 
+    @else
+    al ítem
     @if($ServiceRequest->programm_name == "OTROS PROGRAMAS SSI" || $ServiceRequest->programm_name == "LISTA ESPERA" || $ServiceRequest->programm_name == "ADP DIRECTOR")
       21-03-001-001-02
     @elseif($ServiceRequest->programm_name == "SENDA")
@@ -387,10 +398,23 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
       114050601
     @elseif($ServiceRequest->programm_name == "SENDA PSIQUIATRIA ADULTO")
       11450602
+    @elseif($ServiceRequest->programm_name == "PESPI")
+      21-03-001-001-04 PESPI ( Programa Especial de Salud Pueblos Indígenas)
+    @elseif($ServiceRequest->programm_name == "SUBT.31")
+      El gasto corresponde al ítem 31-02-001 SUBT.21 ( Consultorías) Honorario Suma Alzada.
     @else
       1140504 SENDA 1 (Fondos extra presupuestarios) asociados al Convenio SENDA – MINSAL Honorario Suma Alzada
     @endif
-     Honorario Suma Alzada.
+    Honorario Suma Alzada.
+
+    @endif
+    <br>
+    
+     <br>
+     
+
+     
+     
 
 
 
@@ -441,25 +465,29 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
     </div>
 </div>
 <br style="padding-bottom: 4px;">
+@if($ServiceRequest->responsabilityCenter->establishment_id == 1)
 <div class="siete" style="padding-top: 2px;">
-    <strong><u>DISTRIBUCIÓN:</u></strong><br>
-    @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+    <strong><u>DISTRIBUCIÓN:</u></strong><br>    
       Honorarios Covid<br>
       Oficina de partes<br>
-    @else
+      {{--
+    @else    
       @if($ServiceRequest->responsabilityCenter->establishment_id == 12)
         CGU (roxana.penaranda@redsalud.gov.cl, anakena.bravo@redsalud.gov.cl)<br>
         Finanzas (patricia.salinasm@redsalud.gov.cl, finanzas.ssi@redsalud.gov.cl)<br>
         Interesado<br>
         Oficina de Partes<br>
-      @else
+
+      
         Personal SSI (vania.ardiles@redsalud.gov.cl, rosa.contreras@redsalud.gov.cl, isis.gallardo@redsalud.gov.cl)<br>
         Finanzas (patricia.salinasm@redsalud.gov.cl, finanzas.ssi@redsalud.gov.cl)<br>
         Interesado<br>
         Oficina de Partes<br>
-      @endif
-    @endif
+        
+      @endif    
+      --}}
 </div>
+@endif
 
 
 </div>

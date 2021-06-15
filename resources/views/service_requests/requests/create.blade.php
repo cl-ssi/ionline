@@ -230,6 +230,7 @@
 			<option value="33">33</option>
 			<option value="28">28</option>
 			<option value="22">22</option>
+			<option value="15">15</option>
 			<option value="11">11</option>
 		</select>
 	</fieldset>
@@ -269,6 +270,7 @@
 					<option value="PABELLON TARDE">PABELLON TARDE</option>
 					<option value="PABELLON GINE">PABELLON GINE</option>
 					<option value="TURNO DE RESIDENCIA">TURNO DE RESIDENCIA</option>
+					<option value="SENDA">SENDA</option>
 				@else
 					<option value="PRAPS">PRAPS</option>
 					<option value="PESPI">PESPI</option>
@@ -312,7 +314,7 @@
 		</fieldset>
 
 		<fieldset class="form-group col">
-			<label for="for_working_day_type_other">Otro</label>
+			<label for="for_working_day_type_other">Otro<small>(Saldrá en la resolución luego del horario)</small></label>
 			<input type="text" class="form-control" id="for_working_day_type_other" placeholder="" name="working_day_type_other">
 		</fieldset>
 
@@ -363,6 +365,17 @@
 				<option value="Prevencionista de Riesgo" >Prevencionista de Riesgo</option>
 				<option value="Nutricionista turno" >Nutricionista turno</option>
 				<option value="Informático">Informático</option>
+				<option value="Ingeniero">Ingeniero</option>
+				<option value="Constructor civil">Constructor civil</option>
+				<option value="Arquitecto">Arquitecto</option>
+				<option value="Dibujante técnico proyectista">Dibujante técnico proyectista</option>
+				<option value="Técnico en rehabilitación">Técnico en rehabilitación</option>
+				<option value="Psiquiatra">Psiquiatra</option>
+				<option value="Monitor/a">Monitor/a</option>
+				<option value="Preparador físico">Preparador físico</option>				
+				<option value="Otros técnicos">Otros técnicos</option>
+				<option value="Otros profesionales">Otros profesionales</option>				
+
 			</select>
 		</fieldset>
 
@@ -419,6 +432,16 @@
 		</fieldset>
 	</div> -->
 
+
+	<div class="form-row" id="div_subt31" style="display: none">
+		<fieldset class="form-group col">
+				<label for="for_subt31">Subtitulo 31 <small>(Aparecerá en resolución, luego del texto "El gasto corresponde")</small></label>
+				<textarea id="subt31" name="subt31" class="form-control" rows="4" cols="50" disabled></textarea>
+		</fieldset>
+	</div>
+	
+
+
 	<div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Beneficios adicionales</label>
@@ -429,6 +452,9 @@
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_devolucion">Devolución de tiempo</button>
+
+
 		</fieldset>
 	</div>
 
@@ -646,11 +672,13 @@
 			$("#programm_name option[value='Covid19 Médicos']").hide();
 			$('#digera_strategy').attr('disabled', 'disabled');
 
-			
+
 			$("#div_hsa_schedule").show();
 			$("#div_covid_schedule").hide();
 
 			$('#objectives').removeAttr('disabled');
+			$('#subt31').removeAttr('disabled');
+			$("#div_subt31").show();
 			// $('#resolve').removeAttr('disabled');
 			$('#additional_benefits').removeAttr('disabled');
 			$("#div_objectives").show();
@@ -892,6 +920,12 @@
 	});
 	$("#alias_navidad").click(function(){
 		$('#additional_benefits').append("Aguinaldo de Navidad, homologado al monto establecido en la ley de reajuste vigente en el mes de pago (diciembre).\n\n");
+	});
+	$("#alias_viaticos").click(function(){
+		$('#additional_benefits').append("El profesional tendrá derecho al pago de un honorario adicional cuando para el desarrollo de sus prestaciones deba ausentarse del lugar de desempeño, autorizado por la Dirección del Servicio de Salud Iquique.\n\n");
+	});
+	$("#alias_devolucion").click(function(){
+		$('#additional_benefits').append("El prestador de servicios, podrá solicitar permisos de descansos complementarios para ausentarse de sus labores por motivos particulares, siempre qué por la naturaleza de sus servicios y previa autorización de su Jefatura, deban realizar prestaciones de servicios, fuera de la jornada  que estas estén ajustadas a los procedimientos de programación y autorización de los funcionarios.\n\n");
 	});
 
 </script>

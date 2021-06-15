@@ -101,7 +101,7 @@
     }
     .cellbutton {
         width: 30px;
-        font-weight: bold;
+       font-size: 13px;
     }
     .btn-full {
         display: block;
@@ -111,7 +111,13 @@
         padding: 1000px;
         font-weight: bold;
     }
-  
+  .deleteButton {
+    color: red;
+  }
+  .deleteButton:hover {
+        opacity: 0.5;
+        filter:  alpha(opacity=50);
+  }
 </style>
 
 
@@ -154,12 +160,41 @@
         <div class="form-row">
             <div class="form-group col-md-5" >
                 <label for="for_name">Unidad organizacional</label>
-                <select class="form-control" id="for_orgunitFilter" name="orgunitFilter">
-                    <!-- <option>0 - Todos</option> -->
-                    @foreach($cargos as $c)
-                        <option value=" {{old('orgunitFilter', $c->id)}}" {{($c->id==$actuallyOrgUnit->id)?'selected':''}}>{{$loop->iteration}} - {{$c->name}} </option>
-                    @endforeach
-                </select>
+                <select class="form-control selectpicker"  id="for_orgunitFilter" name="orgunitFilter" data-live-search="true" required
+                            data-size="5">
+                        @foreach($ouRoots as $ouRoot)
+                            @if($ouRoot->name != 'Externos')
+                                <option value="{{ $ouRoot->id }}"  {{($ouRoot->id==$actuallyOrgUnit->id)?'selected':''}}> 
+                                {{($ouRoot->id ?? '')}}-{{ $ouRoot->name }}
+                                </option>
+                                @foreach($ouRoot->childs as $child_level_1)
+
+                                    <option value="{{ $child_level_1->id }}" {{($child_level_1->id==$actuallyOrgUnit->id)?'selected':''}}>
+                                        &nbsp;&nbsp;&nbsp;
+                                        {{($child_level_1->id ?? '')}}-{{ $child_level_1->name }}
+                                    </option>
+                                    @foreach($child_level_1->childs as $child_level_2)
+                                        <option value="{{ $child_level_2->id }}" {{($child_level_2->id==$actuallyOrgUnit->id)?'selected':''}}>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            {{($child_level_2->id ?? '')}}-{{ $child_level_2->name }}
+                                        </option>
+                                        @foreach($child_level_2->childs as $child_level_3)
+                                            <option value="{{ $child_level_3->id }}" {{($child_level_3->id==$actuallyOrgUnit->id)?'selected':''}}>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                {{($child_level_3->id ?? '')}}-{{ $child_level_3->name }}
+                                            </option>
+                                            @foreach($child_level_3->childs as $child_level_4)
+                                                <option value="{{ $child_level_4->id }}" {{($child_level_4->id==$actuallyOrgUnit->id)?'selected':''}}>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    {{($child_level_4->id ?? '')}}-{{ $child_level_4->name }}
+                                                </option>
+                                            @endforeach
+                                        @endforeach
+                                    @endforeach
+                                @endforeach
+                            @endif
+                        @endforeach
+                    </select>
             </div>
 
             <div class="form-group col-md-2">
@@ -289,7 +324,7 @@
                                 -  
                                 {{$actuallyShift->name}}
 
-                                <a href=" {{route('rrhh.shiftManag.nextMonth')}}"  ">-></a>        
+                                <a href=" {{route('rrhh.shiftManag.nextMonth')}}"  >-></a>        
                             </th> 
                         </tr>
                         <tr>
@@ -298,9 +333,9 @@
                                     $dateFiltered = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$i, 'Europe/London');  
                                 @endphp
                                 <th class="brless dia" 
-                                    style="color:{{ ($dateFiltered->isWeekend() )?'red':'white'}}" >
-                                    <p style="font-size: 10px">{{$i}}</p>
-                                </th>
+                                    style="color:{{ ( ($dateFiltered->isWeekend() )?'red':( ( sizeof($holidays->where('date',$actuallyYear.'-'.$actuallyMonth.'-'.$i)) > 0 ) ? 'red':'white' ))}}" >
+                                    <p style="font-size: 8px">{{$i}}</p>
+                                </th>   
                                 <!-- <th class="brless dia">🌞</th> -->
                                 <!-- <th class="noche">🌒</th> -->
                             @endfor
@@ -333,9 +368,10 @@
                                     @php
                                         $dateFiltered = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$i, 'Europe/London');  
                                     @endphp
+
                                     <th class="brless dia" 
-                                        style="color:{{ ($dateFiltered->isWeekend() )?'red':'white'}}" >
-                                        {{$i}}
+                                        style="color:{{ ( ($dateFiltered->isWeekend() )?'red':( ($holidays::where('date',$dateFiltered)) ? 'red':'white')  )}}" >
+                                       {{$i}}
                                     </th>
                                     <!-- <th class="brless dia">🌞</th> -->
                                     <!-- <th class="noche">🌒</th> -->
@@ -343,7 +379,6 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{$staffInShift}}
                             @livewire('rrhh.list-of-shifts',["actuallyShift"=>$st]
                             )
 
@@ -382,18 +417,25 @@
         overflow:hidden;
     }
     .cellbutton {
-        width: 30px;
-        font-weight: bold;
+         width: 30px;
+       font-size: 13px;
     }
     .btn-full {
-        display: block;
+        display: inherit;
         width: 100%;
         height: 100%;
         margin:-1000px;
         padding: 1000px;
         font-weight: bold;
     }
-
+    .btn-full2 {
+        display: inline;
+        width: 100%;
+        height: 100%;
+        margin:-1000px;
+        padding: 10px;
+        font-weight: bold;
+    }
 </style>
 
 <!-- 

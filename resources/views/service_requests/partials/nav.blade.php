@@ -107,7 +107,7 @@
             @can('Service Request: consolidated data')
             <a class="dropdown-item"
                 href="{{ route('rrhh.service-request.report.export_sirh') }}">
-                <i class="far fa-file"></i> Formato SIRH
+                <i class="far fa-file"></i> Formato SIRH <small>(para hospital)</small>
             </a>
             @endcan
 
@@ -132,7 +132,7 @@
             </a>
             @endcan
 
-            @canany(['Service Request: fulfillments rrhh','Service Request: fulfillments finance'])
+            @canany(['Service Request: fulfillments rrhh','Service Request: fulfillments finance', 'Service Request: compliance'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.compliance') }}"
                 href="{{ route('rrhh.service-request.report.compliance') }}">
                 <i class="fas fa-flag-checkered"></i> Reporte de cumplimientos
@@ -153,6 +153,14 @@
                 <i class="fas fa-piggy-bank"></i> Sin Cuentas Bancarias
             </a>
             @endcan -->
+            
+
+            @canany(['Service Request: pending requests'])
+            <a class="dropdown-item {{ active('rrhh.service-request.report.with-bank-details') }}"
+                href="{{ route('rrhh.service-request.report.with-bank-details') }}">
+                <i class="fas fa-money-check-alt"></i> Cuentas Bancarias Honorarios
+            </a>
+            @endcan
 
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.pending-resolutions') }}"

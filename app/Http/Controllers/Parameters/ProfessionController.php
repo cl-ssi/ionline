@@ -42,7 +42,7 @@ class ProfessionController extends Controller
         //
         $profession = new Profession($request->All());
         $profession->save();
-        session()->flash('success', 'Professión Creada');
+        session()->flash('success', 'Profesión Creada');
         return redirect()->route('parameters.professions.index');
 
     }
@@ -79,7 +79,7 @@ class ProfessionController extends Controller
         //
         $profession->fill($request->all());
         $profession->save();
-        session()->flash('success', 'Professión: '.$profession->name.' ha sido actualizado.');
+        session()->flash('success', 'Profesión: '.$profession->name.' ha sido actualizado.');
         return redirect()->route('parameters.professions.index');
     }
 

@@ -100,10 +100,7 @@
 			<button class="btn btn-sm btn-danger"><span class="fas fa-trash" aria-hidden="true"></span> Eliminar</button>
 		</form>
 
-		<form method="GET" action="{{ route('rrhh.users.switch', $user->id) }}" class="d-inline float-right">
-			{{ csrf_field() }}
-			<button class="btn btn-sm btn-outline-warning"><span class="fas fa-redo" aria-hidden="true"></span> Switch</button>
-		</form>
+		
 
 	</div>
 

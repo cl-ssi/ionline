@@ -13,42 +13,42 @@
     <div class="row">
         <fieldset class="form-group col-1">
             <label for="for_id">Cód Int</label>
-            <input type="text" class="form-control" id="for_id" name="id">
+            <input type="number" class="form-control" id="for_id" name="id" value="{{$request->id}}" autocomplete="off">
         </fieldset>
 
         <fieldset class="form-group col-2">
             <label for="for_type">Tipo</label>
             <select name="type" id="for_type" class="form-control">
                 <option></option>
-                <option value="Carta">Carta</option>
-                <option value="Circular">Circular</option>
-                <option value="Decreto">Decreto</option>
-                <option value="Demanda">Demanda</option>
-                <option value="Informe">Informe</option>
-                <option value="Memo">Memo</option>
-                <option value="Oficio">Oficio</option>
-                <option value="Ordinario">Ordinario</option>
-                <option value="Otro">Otro</option>
-                <option value="Permiso Gremial">Permiso Gremial</option>
-                <option value="Reservado">Reservado</option>
-                <option value="Resolucion">Resolución</option>
+                <option value="Carta" @if($request->type == "Carta") selected @endif>Carta</option>
+                <option value="Circular"@if($request->type == "Circular") selected @endif >Circular</option>
+                <option value="Decreto" @if($request->type == "Decreto") selected @endif >Decreto</option>
+                <option value="Demanda" @if($request->type == "Demanda") selected @endif >Demanda</option>
+                <option value="Informe" @if($request->type == "Informe") selected @endif >Informe</option>
+                <option value="Memo" @if($request->type == "Memo") selected @endif>Memo</option>
+                <option value="Oficio" @if($request->type == "Oficio") selected @endif>Oficio</option>
+                <option value="Ordinario" @if($request->type == "Ordinario") selected @endif>Ordinario</option>
+                <option value="Otro" @if($request->type == "Otro") selected @endif>Otro</option>
+                <option value="Permiso Gremial" @if($request->type == "Permiso Gremial") selected @endif>Permiso Gremial</option>
+                <option value="Reservado" @if($request->type == "Reservado") selected @endif>Reservado</option>
+                <option value="Resolucion" @if($request->type == "Resolucion") selected @endif>Resolución</option>
             </select>
         </fieldset>
 
 
         <fieldset class="form-group col-1">
             <label for="for_number">Número</label>
-            <input type="text" class="form-control" id="for_number" name="number">
+            <input type="number" class="form-control" id="for_number" name="number" value="{{$request->number}}" autocomplete="off">
         </fieldset>
 
         <fieldset class="form-group col">
             <label for="for_origin">Origen</label>
-            <input type="text" class="form-control" id="for_origin" name="origin">
+            <input type="text" class="form-control" id="for_origin" name="origin" value="{{$request->origin}}">
         </fieldset>
 
         <fieldset class="form-group col-4">
             <label for="for_subject">Asunto</label>
-            <input type="text" class="form-control" id="for_subject" name="subject">
+            <input type="text" class="form-control" id="for_subject" name="subject" value="{{$request->subject}}">
         </fieldset>
 
         <button type="submit" class="btn btn-primary mt-4 mb-3">
@@ -181,7 +181,7 @@
     </tbody>
 </table>
 
-{{ $partes->render() }}
+{{ $partes->appends(request()->query())->links() }}
 
 @endsection
 

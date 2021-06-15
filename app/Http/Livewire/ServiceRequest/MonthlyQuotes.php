@@ -13,9 +13,12 @@ class MonthlyQuotes extends Component
     public $serviceRequest;
     public $valores;
     public $resultadoEnNumero = false;
+    public $string;
 
     public function render()
     {
+
+        //dd('entre aca');
         $serviceRequest = $this->serviceRequest;
 
         $first_month = $serviceRequest->start_date->month;
@@ -25,6 +28,7 @@ class MonthlyQuotes extends Component
 
         //////////////CALCULO Y RENDERICACIÓN PARA COVID////////////////////////
         if ($serviceRequest->type == 'Covid') {
+            // dd('entre en tipo COVID');
 
             switch ($serviceRequest->estate) {
                 case 'Profesional Médico':
@@ -68,16 +72,16 @@ class MonthlyQuotes extends Component
                     )->amount;
 
                     switch ($serviceRequest->weekly_hours) {
-                        // case '33':
-                        //     $valor_mensual = $valor_mensual * 0.75;
-                        //     break;
-                        //     //case '28': $valor_mensual = $valor_mensual * 0.636363; break;
+                            // case '33':
+                            //     $valor_mensual = $valor_mensual * 0.75;
+                            //     break;
+                            //     //case '28': $valor_mensual = $valor_mensual * 0.636363; break;
                         case '22':
                             $valor_mensual = $valor_mensual * 0.5;
                             break;
-                        // case '11':
-                        //     $valor_mensual = $valor_mensual * 0.25;
-                        //     break;
+                            // case '11':
+                            //     $valor_mensual = $valor_mensual * 0.25;
+                            //     break;
                     }
                     break;
 
@@ -167,7 +171,11 @@ class MonthlyQuotes extends Component
         }
         ////es HONORARIO SUMA ALZADA
         else {            ///son cuotas iguales
+            // dd('en HSA');
+            $aguinaldo = $this->aguinaldopatrias($serviceRequest);
+
             if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
+                // dd('entre aca');
                 $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
                 $valor_mensual = $serviceRequest->net_amount;
                 $string = $nroCuotas . " cuotas,";
@@ -186,6 +194,7 @@ class MonthlyQuotes extends Component
             } else
             //son cuotas valores diferentes
             {
+                //dd('entre aca');
 
                 if ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') != $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
                     $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 2;
@@ -209,39 +218,110 @@ class MonthlyQuotes extends Component
                             $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
                         }
                     }
-                }
+                } elseif ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d')) {
 
-
-
-                    elseif ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d')) {
-                        //La Persona no parte a trabajar en un mes cerrado
-                        $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
-                        $valor_mensual = $serviceRequest->net_amount;
-                        $string = $nroCuotas . " cuotas,";
-                        $interval = DateInterval::createFromDateString('1 month');
-                        $periods   = new DatePeriod($serviceRequest->start_date, $interval, $serviceRequest->end_date);
-                        $periods = iterator_to_array($periods);
-                        $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
-                        $valor_diferente = round($dias_trabajados * round(($valor_mensual / 30)));
-                        foreach ($periods as $key => $period) {
-                            if ($key === array_key_first($periods)) {
-                                $string .= " una de $" . number_format($valor_diferente) . " el mes de " . $period->monthName;
-                            } else if ($key === array_key_last($periods)) {
-                                $string .= " y una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName . ";";
-                            } else {
-                                $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
-                            }
+                    //La Persona no parte a trabajar en un mes cerrado
+                    $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
+                    $valor_mensual = $serviceRequest->net_amount;
+                    $string = $nroCuotas . " cuotas,";
+                    $interval = DateInterval::createFromDateString('1 month');
+                    $periods   = new DatePeriod($serviceRequest->start_date, $interval, $serviceRequest->end_date);
+                    $periods = iterator_to_array($periods);
+                    $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
+                    $valor_diferente = round($dias_trabajados * round(($valor_mensual / 30)));
+                    foreach ($periods as $key => $period) {
+                        if ($key === array_key_first($periods)) {
+                            $string .= " una de $" . number_format($valor_diferente) . " el mes de " . $period->monthName;
+                        } else if ($key === array_key_last($periods)) {
+                            $string .= " y una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName . ";";
+                        } else {
+                            $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
                         }
                     }
+                }
+                //la persona termina de trabajar en un día que no es fin de mes
+                elseif ($serviceRequest->end_date->format('Y-m-d') != $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
+                    //dd('entra aca');
+                    $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
+                    $valor_mensual = $serviceRequest->net_amount;
+                    $string = $nroCuotas . " cuotas,";
+                    $interval = DateInterval::createFromDateString('1 month');
+                    $periods   = new DatePeriod($serviceRequest->start_date, $interval, $serviceRequest->end_date);
+                    $periods = iterator_to_array($periods);
+                    // $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
+                    //$dias_trabajados = $serviceRequest->end_date->lastOfMonth()->diff($serviceRequest->end_date)->days + 1;
+                    $dias_trabajados = (int)$serviceRequest->end_date->format('d');
+                    //dd($dias_trabajados);
+                    $valor_diferente = round($dias_trabajados * round(($valor_mensual / 30)));
+                    //dd($valor_diferente);
 
+                    foreach ($periods as $key => $period) {
+                        if ($key === array_key_first($periods)) {
+                            $string .= " una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
+                        } else if ($key === array_key_last($periods)) {
+                            $string .= " y una de $" . number_format($valor_diferente) . " el mes de " . $period->monthName . ";";
+                        } else {
+                            $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
+                        }
+                    }
+                }
             }
+
+
+            $string .= $aguinaldo;
+
+
+
+
+
 
             $this->valores = $string;
         }
 
 
 
-
+        //dd($string);
         return view('livewire.service-request.monthly-quotes');
+    }
+
+    public function aguinaldopatrias($serviceRequest)
+    {
+        //$aguinaldo;
+        // dd('entre a aguinaldo');
+
+        $startDate = $serviceRequest->start_date;
+        $endDate = $serviceRequest->end_date;
+        $septiembre = \Carbon\Carbon::createFromFormat('Y-m-d', '2021-09-1');
+        //dd(\Carbon\Carbon::now());
+        $check = $septiembre->between($startDate, $endDate);
+
+        if ($check) {
+
+            switch ($serviceRequest->programm_name) {
+                case 'PESPI':
+                case 'SENDA':
+                case 'OTROS PROGRAMAS SSI':
+                case 'CHILE CRECE CONTIGO':
+
+                    if ($serviceRequest->net_amount <= 794149) {
+                        return (" en la cuota de Septiembre percibirá un aguinaldo de $76.528");
+                    } else {
+
+                        switch ($serviceRequest->estate) {
+                            case 'Profesional':
+                                // dd('entre aca csm');
+                                return (" en la cuota de Septiembre percibirá un aguinaldo de $53.124");
+
+                                break;
+                            default:
+                                /* TODO: No sé que hacer acá */
+                                return (" en la cuota de Septiembre percibirá un aguinaldo de $76.528");
+                                break;
+                        }
+                    }
+            }
+        }
+
+        
     }
 }

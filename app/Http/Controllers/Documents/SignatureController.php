@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Documents;
 
+use App\Agreements\Addendum;
 use App\Agreements\Agreement;
 use App\Documents\Document;
 use App\Http\Controllers\Controller;
@@ -28,6 +29,9 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use App\Rrhh\Authority;
 use Throwable;
+use App\Documents\Parte;
+use App\Documents\ParteFile;
+use Carbon\Carbon;
 
 class SignatureController extends Controller
 {
@@ -75,12 +79,9 @@ class SignatureController extends Controller
      *
      * @return Application|Factory|View|Response
      */
-    public function create()
+    public function create($xAxis = null, $yAxis = null)
     {
-//        $users = User::orderBy('name', 'ASC')->get();
-//        $organizationalUnits = OrganizationalUnit::orderBy('id', 'asc')->get();
-        return view('documents.signatures.create');
-//        return view('documents.signatures.create', compact('users', 'organizationalUnits'));
+        return view('documents.signatures.create', compact('xAxis', 'yAxis'));
     }
 
     /**
@@ -145,6 +146,8 @@ class SignatureController extends Controller
                 $signaturesFlow->type = 'firmante';
                 $signaturesFlow->ou_id = $request->ou_id_signer;
                 $signaturesFlow->user_id = $request->user_signer;
+                $signaturesFlow->custom_x_axis = $request->custom_x_axis;
+                $signaturesFlow->custom_y_axis = $request->custom_y_axis;
                 $signaturesFlow->save();
             }
 
@@ -172,6 +175,11 @@ class SignatureController extends Controller
                 $request->signature_type == 'visators' ? $agreement->update(['file_to_endorse_id' => $signaturesFileDocumentId, 'file_to_sign_id' => null]) : $agreement->update(['file_to_sign_id' => $signaturesFileDocumentId]);
             }
 
+            if ($request->has('addendum_id')) {
+                $addendum = Addendum::find($request->addendum_id);
+                $request->signature_type == 'visators' ? $addendum->update(['file_to_endorse_id' => $signaturesFileDocumentId, 'file_to_sign_id' => null]) : $addendum->update(['file_to_sign_id' => $signaturesFileDocumentId]);
+            }
+
             //Envía los correos correspondientes
             if ($request->endorse_type != 'Visación en cadena de responsabilidad') {
                 foreach ($signature->signaturesFlows as $signaturesFlow) {
@@ -194,6 +202,62 @@ class SignatureController extends Controller
             DB::rollBack();
             throw $e;
         }
+
+
+        //se crea documento si va de Destinatarios del documento al director
+        $destinatarios = $request->recipients;
+
+        $dest_vec = array_map('trim', explode(',', $destinatarios));
+
+        foreach($dest_vec as $dest){
+            if($dest== 'director.ssi@redsalud.gob.cl' or $dest=='director.ssi@redsalud.gov.cl' or $dest=='direccion.ssi@redsalud.gov.cl')
+            {
+                $tipo = null;
+                $generador = Auth::user()->full_name;
+                $unidad = Auth::user()->organizationalUnit->name;
+                
+                switch($request->document_type)
+                    {
+                        case 'Memorando':
+                            $this->tipo ='Memo';
+                        break;
+                        case 'Resoluciones':
+                            $this->tipo ='Resolución';
+                        break;
+                        default:
+                        $this->tipo = $request->document_type;
+                        break;
+                    }
+
+
+                $parte = Parte::create([                    
+                    'entered_at' => Carbon::today(),           
+                    'type' => $this->tipo,
+                    'date' => $request->request_date,
+                    'subject' => $request->subject,
+                    'origin' => $unidad.' (Parte generado desde Solicitud de Firma N°'.$signature->id.' por '.$generador.')',
+                    
+                ]);                
+
+                ParteFile::create([
+                    'parte_id' => $parte->id,
+                    'file' => $filePath,
+                    'name' => $signaturesFileDocumentId.'.pdf',
+                    
+                ]);
+
+            }
+            
+
+        }
+
+        
+
+
+
+
+        
+
 
         session()->flash('info', 'La solicitud de firma ' . $signature->id . ' ha sido creada.');
         return redirect()->route('documents.signatures.index', ['mis_documentos']);

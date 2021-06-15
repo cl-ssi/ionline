@@ -21,7 +21,7 @@ class Signature extends Model implements Auditable
     protected $fillable = [
         'id', 'ou_id', 'responsable_id', 'request_date', 'document_type',
         'subject','description','endorse_type','recipients',
-        'distribution', 'user_id'
+        'distribution', 'user_id', 'visatorAsSignature','url'
     ];
 
     public function user(){

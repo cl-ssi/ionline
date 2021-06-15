@@ -24,10 +24,11 @@
                 <option></option>
                 <option value="Memo">Memo</option>
                 <option value="Oficio">Oficio</option>
-                <option value="Ordinario">Ordinario</option>
+                <!-- <option value="Ordinario">Ordinario</option> -->
                 <option value="Reservado">Reservado</option>
                 <option value="Circular">Circular</option>
                 <option value="Acta de recepción">Acta de recepción</option>
+                <option value="Resolución">Resolución</option>
             </select>
         </fieldset>
 
