@@ -431,6 +431,16 @@
 		</fieldset>
 	</div> -->
 
+
+	<div class="form-row" id="div_subt31" style="display: none">
+		<fieldset class="form-group col">
+				<label for="for_subt31">Subtitulo 31 <small>(Aparecerá en resolución, luego del texto "El prestador recibirá los lineamientos por parte del Jefe  el cual tendrá la responsabilidad de evaluar sus servicios en forma mensual")</small></label>
+				<textarea id="subt31" name="subt31" class="form-control" rows="4" cols="50" disabled></textarea>
+		</fieldset>
+	</div>
+	
+
+
 	<div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Beneficios adicionales</label>
@@ -666,6 +676,8 @@
 			$("#div_covid_schedule").hide();
 
 			$('#objectives').removeAttr('disabled');
+			$('#subt31').removeAttr('disabled');
+			$("#div_subt31").show();
 			// $('#resolve').removeAttr('disabled');
 			$('#additional_benefits').removeAttr('disabled');
 			$("#div_objectives").show();

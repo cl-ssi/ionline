@@ -331,6 +331,8 @@
         Servicio de Salud Iquique,
         @endif
         el cual tendrá la responsabilidad de evaluar sus servicios en forma mensual.
+        <br>
+        {{$ServiceRequest->subt31}}
       </p>
 
       <p class="justify">
