@@ -52,7 +52,7 @@
                             <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
                             <td class="text-center align-middle">
-                              <a href="#" data-href="{{ route('request_forms.edit', $requestForm->id) }}" class="text-primary" title="Editar" data-toggle="modal" data-target="#confirm" role="button">
+                              <a href="{{ route('request_forms.edit', $requestForm->id) }}"  class="text-primary" title="Editar">
                               <i class="far fa-edit"></i></a>
                             </td>
 
@@ -62,7 +62,7 @@
                             </td>
 
                             <td class="text-center align-middle">
-                              <a href="{{ route('request_forms.destroy', $requestForm->id) }}" class="text-danger" title="Eliminar">
+                              <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
                               <i class="far fa-trash-alt"></i></a>
                             </td>
                         </tr>
@@ -195,7 +195,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Editar Registro</h5>
+        <h5 class="modal-title text-danger" id="exampleModalLongTitle"><i class="fas fa-exclamation-triangle"></i> Eliminar Registro</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -208,7 +208,7 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
         <a class="btn btn-danger btn-ok">Eliminar</a>
       </div>
     </div>
@@ -222,7 +222,7 @@
     $('#confirm').on('show.bs.modal', function(e) {
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
 
-        $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
+        $('.debug-url').html('<strong>Eliminar Formulario de Requerimiento ID ' + $(e.relatedTarget).data('id') + '</strong>');
     });
 </script>
 @endsection

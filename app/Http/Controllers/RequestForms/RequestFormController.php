@@ -223,11 +223,11 @@ class RequestFormController extends Controller {
     public function destroy(RequestForm $requestForm)
     {
         $id = $requestForm->id;
-        RequestForm::find($requestForm)->first()->delete();
+        //RequestForm::find($requestForm)->first()->delete();
         //dd($req);
-        session()->flash('info', 'El formulario de requerimiento N°'.$id.' ha sido eliminado correctamente.');
+        $requestForm->delete();
+        session()->flash('danger', 'El formulario de requerimiento ID '.$id.' ha sido eliminado correctamente.');
         return redirect()->route('request_forms.index');
-        //Implementar Eliminar request form pasado por  argumento.... usar pop.up de confiración...
     }
 
 
