@@ -246,6 +246,21 @@ class SignatureController extends Controller
                     
                 ]);
 
+                
+                $signaturesFiles = SignaturesFile::where('signature_id', $signature->id)->where('file_type', 'anexo')->get();
+                
+                    foreach ($signaturesFiles as $key => $sf) {                        
+                        ParteFile::create([
+                            'parte_id' => $parte->id,
+                            'file' => $sf->file,
+                            'name' => $sf->id.'.pdf',                            
+                        ]);
+
+                
+                    
+
+                }
+
             }
             
 
