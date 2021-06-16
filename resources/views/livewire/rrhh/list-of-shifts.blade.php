@@ -1,4 +1,14 @@
+<style type="text/css">
+    
+.menu {
+    display: none;
+}
 
+figure:active .menu,
+figure:focus .menu {
+    display: visible;
+}
+</style>
 <div>
    <div wire:loading>
               <i class="fas fa-spinner fa-pulse"></i>
@@ -43,10 +53,24 @@
 
                                 @endforeach
                             @else
-                               
-                               <i data-toggle="modal" data-target="#newDatModal"  data-keyboard= "false" data-backdrop= "static"  style="color:green;font-weight: bold;font-size:20px" class="fa fa-plus btnShiftDay">
+                            <figure tabindex="-1">   
+                               <i data-toggle="modal" data-target="#newDatModal"  data-keyboard= "false" data-backdrop= "static"  style="color:green;font-weight: bold;font-size:20px" class="fa fa-plus btnShiftDay doge">
                                 </i>
-                                
+
+                                <nav class="menu">
+                                    <ul>
+                                        <li>
+                                            <button class="btn-context">Open Image in New Tab</button>
+                                        </li>
+                                        <li>
+                                          <button class="btn-context">Save Image As...</button>
+                                        </li>
+                                        <li>
+                                          <button class="btn-context">Copy Image Address</button>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </figure>
                             @endif
                         
                     </td>
@@ -60,5 +84,15 @@
         @endif
 
 </div>
+
+<script type="text/javascript">
+    const img = document.querySelector('.doge');
+    const menu = document.querySelector('.menu');
+
+    img.addEventListener('mousedown', ({ offsetX, offsetY }) => {
+        menu.style.top = offsetY + 'px';
+        menu.style.left = offsetX + 'px';
+    });
+</script>
 
 

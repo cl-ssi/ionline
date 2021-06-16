@@ -268,8 +268,8 @@
             </div>
 
              <div class="col-md-1">
-                <label>Iniciar en</label>
-                <select class="form-control">
+                <label>Inicio</label>
+                <select class="form-control" name="initial-serie">
                 @if(isset($actuallyShift->day_series))
                     @php $currentSeries =  explode(",", $actuallyShift->day_series); @endphp
                     @for(  $i=0;$i< sizeof($currentSeries);$i++  )

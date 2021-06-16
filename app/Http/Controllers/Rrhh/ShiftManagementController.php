@@ -106,10 +106,7 @@ class ShiftManagementController extends Controller
         else
             $actuallyShift=$sTypes->first();
         // Inicio groupname dinamico
-        // $this->groupsnames = array(); 
-        // foreach(ShiftUser::groupBy("groupname")->get() as $g){
-        //     array_push($this->groupsnames, $g);
-        // }
+        
         // Fin groupname dinamico
 
         // if(Session::has('staff') && Session::get('staff') != "")
@@ -121,11 +118,30 @@ class ShiftManagementController extends Controller
         //     $staffInShift = Session::get('staffInShift');
         // else
             // echo "H:".htmlentities($groupname);$this->groupsnames
-        if($actuallyShift->id != 0) // 
+
+        if($actuallyShift->id != 0){ // un turno en especifico
+
+            $this->groupsnames = array(); 
+            array_push($this->groupsnames, ""); //agregos los sin grupo
+
+            // $groupsnames = array(); 
+            foreach(ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->groupBy("groupname")->get() as $g){
+                    
+                    array_push($this->groupsnames, $g->groupname);
+                // echo json_encode($g->groupname);
+            }
+
             $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->where('groupname',htmlentities($groupname))->get();
-        else // Todos los turnos
+       
+        }else{ // Todos los turnos
+
+            //  $this->groupsnames = array(); 
+            // foreach(ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->groupBy("groupname")->get() as $g){
+            //     array_push($this->groupsnames, $g);
+            // }
            $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->where('groupname',htmlentities($groupname))->get();
 
+        }
         // echo "SISH: ". $staffInShift;
         
         $months = $this->months;
@@ -468,9 +484,32 @@ class ShiftManagementController extends Controller
         return redirect()->route('rrhh.shiftManag.index');
     }
 
-    public function downloadShiftControlInPdf(){
+    public function downloadShiftControlInPdf(Request $r){
+        // header("Content-type:application/pdf");
+        // $filename = "test";
+        // header("Content-Disposition:inline;filename='$filename");
+        // echo "download ".$r->days;
+        $days= 0;
+        $dateFiltered = Carbon::createFromFormat('Y-m-d',  $r->actuallyYears."-".$r->actuallyMonth."-01", 'Europe/London');
+        $days = $dateFiltered->daysInMonth;
 
-        return view('rrhh.shift_control.form');
+        $actuallyYears =$r->actuallyYears;
+        $actuallyMonth  = $r->actuallyMonth;
+        $actuallyUser =  serialize($r->actuallyUser );
+        $actuallyOrgUnit = $r->actuallyOrgUnit;
+       
+        // $usr = User::find($actuallyUser->id);
+        // $shifsUsr = ShiftUser::where('date_up','>=',$actuallyYears."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYears."-".$actuallyMonth."-".$days)->where("user_id",$actuallyUser->id)->first();
+        // $shifsUsr = ShiftUser::where('date_up','>=',$actuallyYears."-".$actuallyMonth."-".$days)->where("user_id",$actuallyUser)->first();
+      
+        echo   $actuallyUser;
+      // return view('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr,'usr'=>$usr  ]);
+
+       // $pdf = app('dompdf.wrapper');
+       //  $pdf->loadView('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr  ]);
+       //  return $pdf->stream('mi-archivo.pdf');
+
+        
     }
 
 
