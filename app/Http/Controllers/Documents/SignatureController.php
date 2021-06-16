@@ -29,6 +29,9 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use App\Rrhh\Authority;
 use Throwable;
+use App\Documents\Parte;
+use App\Documents\ParteFile;
+use Carbon\Carbon;
 
 class SignatureController extends Controller
 {
@@ -76,12 +79,9 @@ class SignatureController extends Controller
      *
      * @return Application|Factory|View|Response
      */
-    public function create()
+    public function create($xAxis = null, $yAxis = null)
     {
-//        $users = User::orderBy('name', 'ASC')->get();
-//        $organizationalUnits = OrganizationalUnit::orderBy('id', 'asc')->get();
-        return view('documents.signatures.create');
-//        return view('documents.signatures.create', compact('users', 'organizationalUnits'));
+        return view('documents.signatures.create', compact('xAxis', 'yAxis'));
     }
 
     /**
@@ -146,6 +146,8 @@ class SignatureController extends Controller
                 $signaturesFlow->type = 'firmante';
                 $signaturesFlow->ou_id = $request->ou_id_signer;
                 $signaturesFlow->user_id = $request->user_signer;
+                $signaturesFlow->custom_x_axis = $request->custom_x_axis;
+                $signaturesFlow->custom_y_axis = $request->custom_y_axis;
                 $signaturesFlow->save();
             }
 
@@ -200,6 +202,77 @@ class SignatureController extends Controller
             DB::rollBack();
             throw $e;
         }
+
+
+        //se crea documento si va de Destinatarios del documento al director
+        $destinatarios = $request->recipients;
+
+        $dest_vec = array_map('trim', explode(',', $destinatarios));
+
+        foreach($dest_vec as $dest){
+            if($dest== 'director.ssi@redsalud.gob.cl' or $dest=='director.ssi@redsalud.gov.cl')
+            {
+                $tipo = null;
+                $generador = Auth::user()->full_name;
+                $unidad = Auth::user()->organizationalUnit->name;
+                
+                switch($request->document_type)
+                    {
+                        case 'Memorando':
+                            $this->tipo ='Memo';
+                        break;
+                        case 'Resoluciones':
+                            $this->tipo ='Resolución';
+                        break;
+                        default:
+                        $this->tipo = $request->document_type;
+                        break;
+                    }
+
+
+                $parte = Parte::create([                    
+                    'entered_at' => Carbon::now(),           
+                    'type' => $this->tipo,
+                    'date' => $request->request_date,
+                    'subject' => $request->subject,
+                    'origin' => $unidad.' (Parte generado desde Solicitud de Firma N°'.$signature->id.' por '.$generador.')',
+                    
+                ]);
+                $distribucion = SignaturesFile::where('signature_id', $signature->id)->where('file_type', 'documento')->get();
+                ParteFile::create([
+                    'parte_id' => $parte->id,
+                    'file' => $distribucion->first()->file,
+                    'name' => $distribucion->first()->id.'.pdf',
+                    
+                ]);
+
+                
+                $signaturesFiles = SignaturesFile::where('signature_id', $signature->id)->where('file_type', 'anexo')->get();
+                
+                    foreach ($signaturesFiles as $key => $sf) {                        
+                        ParteFile::create([
+                            'parte_id' => $parte->id,
+                            'file' => $sf->file,
+                            'name' => $sf->id.'.pdf',                            
+                        ]);
+
+                
+                    
+
+                }
+
+            }
+            
+
+        }
+
+        
+
+
+
+
+        
+
 
         session()->flash('info', 'La solicitud de firma ' . $signature->id . ' ha sido creada.');
         return redirect()->route('documents.signatures.index', ['mis_documentos']);

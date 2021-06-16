@@ -14,7 +14,7 @@
                 <option value="">Todos Los Colegios</option>
                 @foreach($schools as $school)
                 <option value="{{$school->id}}" @if($school_id == $school->id) selected @endif >{{$school->name}}</option>
-                @endforeach                
+                @endforeach
             </select>
         </fieldset>
 
@@ -41,7 +41,7 @@
                 <th>Estado</th>
                 <th>Ver Test</th>
                 <!-- <th>Ver Certificado (Aprobados)</th> -->
-                <th>Enviar a Firmar</th>
+                <!-- <th>Enviar a Firmar</th> -->
                 <!-- <th>Descargar PDF (Aprobados)</th> -->
                 <!-- <th>Enviar por Mail </th> -->
             </tr>
@@ -57,7 +57,7 @@
                 <td nowrap>{{ $result->user->runFormat() ?? ''  }}</td>
                 <td>{{ $result->psirequest->job ?? ''  }}</td>
                 <td>{{ $result->total_points ?? '' }}</td>
-                <td>{{ $result->created_at ?? '' }}</td>
+                <td>{{ $result->updated_at ?? '' }}</td>
                 <td>{{ $result->psirequest->status ?? '' }}</td>
                 <td>
                     <a href="{{ route('suitability.results.show', $result->id) }}" class="btn btn-outline-primary">
@@ -68,14 +68,14 @@
                         <span class="fas fa-stamp" aria-hidden="true"></span></a>
                     @endif
                 </td> -->
-                @can('be god')
-                <td>
+
+                <!-- <td>
                     @if($result->psirequest && $result->psirequest->status =="Aprobado" && $result->signed_certificate_id === null)
                     <a href="{{ route('suitability.sendForSignature', $result->id) }}" class="btn btn-outline-primary">
                         <span class="fas fa-signature" aria-hidden="true"></span></a>
                     @endif
-                </td>
-                @endcan
+                </td> -->
+
                 <!-- <td>
                     @if($result->psirequest && $result->psirequest->status =="Aprobado")
 

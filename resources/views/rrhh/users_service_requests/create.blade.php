@@ -4,7 +4,7 @@
 
 @section('content')
 
-<h3>Nuevo usuario</h3>
+<h3>Nuevo usuario de Sistema Phuqhaña</h3>
 
 <form method="POST" action="{{ route('rrhh.users.service_requests.store') }}" enctype="multipart/form-data">
 	@csrf

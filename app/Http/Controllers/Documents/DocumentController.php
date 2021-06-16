@@ -306,6 +306,9 @@ class DocumentController extends Controller
         else if($document->type == 'Resolución') {
             $documentFile = \PDF::loadView('documents.resolution', compact('document'));
         }
+        else if($document->type == 'Circular') {
+            $documentFile = \PDF::loadView('documents.circular', compact('document'));
+        }
         else {
             $documentFile = \PDF::loadView('documents.show', compact('document'));
         }

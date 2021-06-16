@@ -688,7 +688,8 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::resource('partes', 'Documents\ParteController');
 
     Route::get('signatures/index/{tab}', 'Documents\SignatureController@index')->name('signatures.index');
-    Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
+    Route::get('signatures/create/{xAxis?}/{yAxis?}', 'Documents\SignatureController@create')->name('signatures.create');
+    Route::resource('signatures', 'Documents\SignatureController')->except(['index', 'create']);
     Route::get('/showPdf/{signaturesFile}/{timestamp?}', 'Documents\SignatureController@showPdf')->name('signatures.showPdf');
     Route::post('/showPdfFromFile', 'Documents\SignatureController@showPdfFromFile')->name('signatures.showPdfFromFile');
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('signatures.showPdfAnexo');
@@ -756,6 +757,12 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::get('/', 'Indicators\ApsController@index')->name('index');
         Route::get('/{year}', 'Indicators\ApsController@list')->name('list');
         Route::get('/{year}/{slug}/{establishment_type}', 'Indicators\ApsController@show')->name('show');
+    });
+
+    Route::prefix('iiaaps')->as('iiaaps.')->group(function () {
+        Route::get('/', 'Indicators\IaapsController@index')->name('index');
+        Route::get('/{year}', 'Indicators\IaapsController@list')->name('list');
+        Route::get('/{year}/{commune}', 'Indicators\IaapsController@show')->name('show');
     });
 
     Route::prefix('19813')->as('19813.')->group(function () {

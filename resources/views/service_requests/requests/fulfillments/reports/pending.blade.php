@@ -50,7 +50,7 @@
         </fieldset>
 
         <fieldset class="form-group col-4 col-md-2">
-            <label for="for_type">Tipo</label>
+            <label for="for_type">Origen Financiamiento</label>
             <select name="type" class="form-control">
                 <option value=""></option>
                 <option value="Covid" @if($request->input('type')=='Covid') selected @endif>Covid</option>
@@ -99,6 +99,7 @@
         <tr>
 
             <th>Id Sol.</th>
+            <th>C.Responsabilidad</th>
             <th nowrap>Rut</th>
             <th>Nombre</th>
             <th>Periodo</th>
@@ -121,6 +122,7 @@
             <td>{{$fulfillment->servicerequest->id?? ''}}
                 <span class="small">({{$fulfillment->id}})</span>
             </td>
+            <td>{{$fulfillment->servicerequest->responsabilityCenter->name?? ''}}</td>
             <td>{{$fulfillment->servicerequest?$fulfillment->servicerequest->employee->runFormat(): ''}}</td>
             <td>{{$fulfillment->servicerequest->employee->fullName ?? ''}}</td>
             <td>{{$fulfillment->year}} - {{$fulfillment->month}}</td>

@@ -23,6 +23,7 @@
                         @case('19664')      Ley 19.664      @break
                         @case('18834')      Ley 18.834      @break
                         @case('iaaps')      IAAPS           @break
+                        @case('iiaaps')      IAAPS           @break
                         @case('program_aps') Programación APS @break
                         @case('programming_aps') Programación APS @break
                         @case('0')  RESUMEN @break;
