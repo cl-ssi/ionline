@@ -351,6 +351,8 @@
           <option value="33" @if($serviceRequest->weekly_hours == 33) selected @endif>33</option>
 					<option value="28" @if($serviceRequest->weekly_hours == 28) selected @endif>28</option>
 					<option value="22" @if($serviceRequest->weekly_hours == 22) selected @endif>22</option>
+          <option value="20" @if($serviceRequest->weekly_hours == 20) selected @endif>20</option>
+          <option value="15" @if($serviceRequest->weekly_hours == 15) selected @endif>15</option>
           <option value="11" @if($serviceRequest->weekly_hours == 11) selected @endif>11</option>
         </select>
 		</fieldset>
@@ -389,6 +391,8 @@
 						<option value="PABELLON TARDE" @if($serviceRequest->programm_name == 'PABELLON TARDE') selected @endif>PABELLON TARDE</option>
 						<option value="PABELLON GINE" @if($serviceRequest->programm_name == 'PABELLON GINE') selected @endif>PABELLON GINE</option>
 						<option value="TURNO DE RESIDENCIA" @if($serviceRequest->programm_name == 'TURNO DE RESIDENCIA') selected @endif>TURNO DE RESIDENCIA</option>
+            <option value="SENDA" @if($serviceRequest->programm_name == 'SENDA') selected @endif>SENDA</option>
+            
 					@else
 						<option value="PRAPS" @if($serviceRequest->programm_name == 'PRAPS') selected @endif>PRAPS</option>
 						<option value="PESPI" @if($serviceRequest->programm_name == 'PESPI') selected @endif>PESPI</option>
@@ -437,7 +441,7 @@
 		</fieldset>
 
     <fieldset class="form-group col-6 col-md-3">
-		    <label for="for_working_day_type_other">Otro</label>
+		    <label for="for_working_day_type_other">Otro<small>(Saldrá en la resolución luego del horario)</small></label>
 		    <input type="text" class="form-control" id="for_working_day_type_other" placeholder="" name="working_day_type_other" value="{{ $serviceRequest->working_day_type_other }}">
 		</fieldset>
 
@@ -491,6 +495,13 @@
           <option value="Nutricionista turno" @if($serviceRequest->rrhh_team == "Nutricionista turno") selected @endif>Nutricionista turno</option>
           <option value="Informático" @if($serviceRequest->rrhh_team == "Informático") selected @endif>Informático</option>
           <option value="Ingeniero" @if($serviceRequest->rrhh_team == "Ingeniero") selected @endif>Ingeniero</option>
+
+
+          <option value="Técnico en rehabilitación" @if($serviceRequest->rrhh_team == "Técnico en rehabilitación") selected @endif>Técnico en rehabilitación</option>
+          <option value="Psiquiatra" @if($serviceRequest->rrhh_team == "Psiquiatra") selected @endif>Psiquiatra</option>
+          <option value="Monitor/a" @if($serviceRequest->rrhh_team == "Monitor/a") selected @endif>Monitor/a</option>
+          <option value="Preparador físico" @if($serviceRequest->rrhh_team == "Preparador físico") selected @endif>Preparador físico</option>
+
 
 
         </select>
@@ -555,12 +566,19 @@
 		</fieldset>
 	</div> -->
 
+  <div class="form-row" id="div_subt31" style="display: none">
+		<fieldset class="form-group col">
+				<label for="for_subt31">Subtitulo 31<small>(Aparecerá en resolución, luego del texto "El gasto corresponde")</small></label>
+				<textarea id="subt31" name="subt31" class="form-control" rows="4" cols="50" disabled>{{ $serviceRequest->subt31 }}</textarea>
+		</fieldset>
+	</div>
+
   <div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Beneficios adicionales</label>
 				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50">{{ $serviceRequest->additional_benefits }}</textarea>
 
-        <button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanzo</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
@@ -1257,6 +1275,8 @@
 			  $("#div_covid_schedule").hide();
 
         $('#objectives').removeAttr('disabled');
+        $('#subt31').removeAttr('disabled');
+        $("#div_subt31").show();
   			// $('#resolve').removeAttr('disabled');
   			$('#additional_benefits').removeAttr('disabled');
   			$("#div_objectives").show();

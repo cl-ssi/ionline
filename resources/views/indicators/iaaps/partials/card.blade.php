@@ -4,6 +4,9 @@
     </div>
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
+            <a href="{{ route('indicators.iiaaps.list', 2021) }}">2021</a> <span class="badge badge-warning">En Desarrollo</span>
+        </li>
+        <li class="list-group-item">
             <a href="{{ route('indicators.iaaps.2019.index') }}">2019</a>
         </li>
     </ul>

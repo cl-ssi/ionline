@@ -158,9 +158,12 @@
               @endif
             @else
               Hospital Dr.Ernesto Torres Galdames
+            @endif            
+            durante el período de 
+            @if($fulfillment->serviceRequest->type == 'Covid')
+            contingencia COVID del
             @endif
-            durante el período de contingencia COVID
-            del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>.
+            <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>.
 
             <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
         </div>
@@ -185,9 +188,9 @@
             @endif
           @elseif($fulfillment->FulfillmentItems->where('type','Abandono de funciones')->count() > 0)
             @if($fulfillment->FulfillmentItems->where('type','!=','Abandono de funciones')->count() > 0)
-              El prestador de servicios Honorario Suma Alzada , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo.. Además se registraron las siguientes ausencias:
+              El prestador de servicios Honorario {{$fulfillment->serviceRequest->type??''}} , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo.. Además se registraron las siguientes ausencias:
             @else
-              El prestador de servicios Honorario Suma Alzada , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo.
+              El prestador de servicios Honorario {{$fulfillment->serviceRequest->type??''}} , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo.
             @endif
           @else
             Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas

@@ -132,13 +132,14 @@ class MonthlyQuotes extends Component
                         /* Días trabajados */
                         $valores[$i] = round($dias_trabajados * ($valor_mensual / 30));
                     }
-                } else if ($i == $last_month) {
-                    if ($serviceRequest->end_date->lastOfMonth()->day == $last_day_month) {
+                } else if ($i == $last_month) {                    
+                    if ($serviceRequest->end_date->day == $last_day_month) {                        
                         $valores[$i] = $valor_mensual;
-                    } else {
+                    } else {                        
                         $dias_trabajados = $serviceRequest->end_date->diff($serviceRequest->end_date->firstOfMonth())->days + 1;
                         /* Días trabajados */
                         $valores[$i] = round($dias_trabajados * ($valor_mensual / 30));
+                        
                     }
                 } else {
                     /* Mes completo porque es el intermedio */
@@ -171,7 +172,7 @@ class MonthlyQuotes extends Component
         }
         ////es HONORARIO SUMA ALZADA
         else {            ///son cuotas iguales
-            // dd('en HSA');
+            // dd('en HSA');            
             $aguinaldo = $this->aguinaldopatrias($serviceRequest);
 
             if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
@@ -206,6 +207,7 @@ class MonthlyQuotes extends Component
                     $dias_trabajados1 = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
                     $valor_diferente1 = round($dias_trabajados1 * round(($valor_mensual / 30)));
                     $dias_trabajados2 = $serviceRequest->end_date->firstOfMonth()->diff($serviceRequest->end_date)->days + 1;
+                    dd($dias_trabajados2);
                     $valor_diferente2 = round($dias_trabajados2 * round(($valor_mensual / 30)));
 
 
