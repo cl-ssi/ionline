@@ -34,6 +34,7 @@ class SeeShiftControlForm extends Component
         6=>"fuero gremial",
         7=>"feriado legal",
         8=>"permiso excepcional",
+        9 => "Permiso sin goce de sueldo"
         
     );
     public $months = array(
