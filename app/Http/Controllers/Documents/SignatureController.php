@@ -237,12 +237,12 @@ class SignatureController extends Controller
                     'subject' => $request->subject,
                     'origin' => $unidad.' (Parte generado desde Solicitud de Firma N°'.$signature->id.' por '.$generador.')',
                     
-                ]);                
-
+                ]);
+                $distribucion = SignaturesFile::where('signature_id', $signature->id)->where('file_type', 'documento')->get();
                 ParteFile::create([
                     'parte_id' => $parte->id,
-                    'file' => $filePath,
-                    'name' => $signaturesFileDocumentId.'.pdf',
+                    'file' => $distribucion->first()->file,
+                    'name' => $distribucion->first()->id.'.pdf',
                     
                 ]);
 
