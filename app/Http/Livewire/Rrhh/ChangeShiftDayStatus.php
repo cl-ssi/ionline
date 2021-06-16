@@ -24,6 +24,7 @@ class ChangeShiftDayStatus extends Component
             6 => "#af7ac5",
             7 => "#f4d03f",
             8 => "gray",
+            9  => "yellow",
     );
     // public function postAdded(Post $post)
     // {

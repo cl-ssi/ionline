@@ -112,12 +112,15 @@
                         <select class="form-control" name="slcAction" wire:model="action" wire:change="changeAction">
                             <option value="0"> <b> </b> - - - </option>
                             <option value="1"> <b> </b>1 - Cambiar Turno con </option>
-                            <option value="2"> <b> </b>2 - Marcar como Cumplido </option>
+                            <!-- <option value="2"> <b> </b>2 - Marcar como Cumplido </option> -->
                             <option value="3"> <b> </b>3 - Marcar como Licencia Medica </option>
                             <option value="4"> 4 - <b style="color:">Marcar como Fuero Gremial</b> </option>
-                            <option value="5"> 6 - <b style="color:">Marcar como Feriado Legal</b> </option>
-                            <option value="6"> 7 - <b style="color:">Marcar como Permiso Excepcional</b> </option>
-                            <option value="7"> 8 - <b style="color:">Cambiar Tipo de Jornada Por</b> </option>
+                            <option value="5"> 5 - <b style="color:">Marcar como Feriado Legal</b> </option>
+                            <option value="6"> 6 - <b style="color:">Marcar como Permiso Excepcional</b> </option>
+                            <option value="7"> 7 - <b style="color:">Cambiar Tipo de Jornada Por</b> </option>
+                            <option value="8"> 8 - <b style="color:">Marcar como Permiso Sin goce de sueldo</b> </option>
+                            
+
                         </select>
                       
                        
@@ -151,6 +154,21 @@
                             @endforeach
                       
 
+                        </select>
+
+                    </div>
+                     <div class="form-group " style="display: {{$usersSelect2}}">
+
+                        <label for="exampleFormControlInput1"><i class="fa fa-user"></i> REMPLAZAR CON </label>
+                         <select class="form-control" wire:model="userIdtoChange2" name="slcAction">
+                            <option value="0" >0 - Dejar disponible </option>
+                            @if( isset($users) )
+                                @foreach($users as $u)
+                                
+                                    <option value="{{$u->id}}" >{{$u->id}} - {{$u->name}} {{ $u->fathers_family }} {{ $u->mothers_family }} </option>
+
+                                @endforeach
+                            @endif
                         </select>
 
                     </div>
