@@ -31,7 +31,7 @@
 
             <div class="modal-header" style="background-color:#006cb7;color:white   ">
 
-                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-clock"></i> Control de Turnos de personal L:{{ $log }}</h5>
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-clock"></i> Planilla de control de Turnos</h5>
 
                 <button type="button" class="close" data-dismiss="modal" wire:click.prevent="cancel()" aria-label="Close">
 
@@ -192,7 +192,7 @@
                                                 @endphp
 
                 				<tbody>
-                        			@if($days > 0)	
+                        			@if(isset( $days ) && $days > 0)	
                         				@for($i = 1; $i < ($days+1); $i++ )
                         					<tr>
                         						<td>{{$i}}	</td>
@@ -248,8 +248,19 @@
 
                 <button type="button" wire:click.prevent="cancel()" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
-                <button type="button" wire:click.prevent="downloadShiftControlForm()" class="btn btn-primary" >Descargar <i class="fa fa-download "></i>
-                </button>
+                
+                <form method="post" action="{{ route('rrhh.shiftManag.downloadform') }}" >
+                    @csrf
+                    {{ method_field('post') }} 
+                    <input style=" display:none;" name="days" value="{{ $days }}">
+                    <input style=" display:none;" name="actuallyMonth" value="{{ $actuallyMonth }}">
+                    <input style=" display:none;" name="actuallyYears" value="{{ $actuallyYears }}">
+                    <input style=" display:none;" name="shifsUsr" value="{{ $shifsUsr }}">
+                   
+                    <input style=" display:none;" name="actuallyUser" value="{{ $usr }}">
+                  <button class="btn btn-success ">Descargar <i class="fa fa-check"></i></button>
+                </form>
+
             </div>
 
        </div>

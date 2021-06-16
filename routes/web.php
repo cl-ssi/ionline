@@ -386,7 +386,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
 
 
-        Route::get('/shift-control-form/download', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'downloadShiftControlInPdf'])->name('shiftManag.downloadform')->middleware('auth');
+        Route::post('/shift-control-form/download', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'downloadShiftControlInPdf'])->name('shiftManag.downloadform')->middleware('auth');
 
 
         Route::post('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'indexfiltered'])->name('shiftManag.indexF')->middleware('auth');

@@ -311,7 +311,7 @@ class ModalEditShiftUserDay extends Component
 	}	
 
 	public function confirmExtraDay(){
-		 return redirect()->route('rrhh.shiftManag.confirmDay',[$this->shiftUserDay]);
+		 return redirect()->route('rrhh.shiftManag.confirmDay',[$this->shiftUserDay]);	 
 	}
     public function render()
     {
