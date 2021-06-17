@@ -180,6 +180,10 @@ class RequestForm extends Model
         return $day.' días.';
     }
 
+    public function quantityOfItems(){
+      return count($this->itemRequestForms);
+    }
+
 
 /******************************************************/
 /*********** CODIGO  PACHA  **************************/

@@ -30,6 +30,7 @@
                   <th scope="col">Id</th>
                   <th scope="col">Usuario Gestor</th>
                   <th scope="col">Justificación</th>
+                  <th scope="col">Items</th>
                   <th scope="col">Fecha Creación</th>
                   <th scope="col">Espera</th>
                   <th scope="col" class="text-center">J</th>
@@ -42,26 +43,27 @@
               <tbody>
                   @foreach($createdRequestForms as $requestForm)
                         <tr>
-                            <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
-                            <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->tinnyName() : 'Usuario eliminado' }}</td>
-                            <td class="align-middle">{{ $requestForm->justification }}</td>
-                            <td class="align-middle">{{ $requestForm->created_at }}</td>
-                            <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
-                            <td class="text-center align-middle">
+                            <th class="align-middle brd-b brd-l" scope="row">{{ $requestForm->id }}</td>
+                            <td class="align-middle brd-b">{{ $requestForm->creator ? $requestForm->creator->tinnyName() : 'Usuario eliminado' }}</td>
+                            <td class="align-middle brd-b">{{ $requestForm->justification }}</td>
+                            <td class="align-middle brd-b">{{ $requestForm->quantityOfItems() }}</td>
+                            <td class="align-middle brd-b">{{ $requestForm->created_at }}</td>
+                            <td class="align-middle brd-b">{{ $requestForm->getElapsedTime() }}</td>
+                            <td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                            <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
+                            <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
+                            <td class="align-middle text-center brd-b brd-r">{!! $requestForm->eventSign('supply_event') !!}</td>
+                            <td class="text-center align-middle brd-b">
                               <a href="{{ route('request_forms.edit', $requestForm->id) }}"  class="text-primary" title="Editar">
                               <i class="far fa-edit"></i></a>
                             </td>
 
-                            <td class="text-center align-middle">
+                            <td class="text-center align-middle brd-b">
                               <a href="{{ route('request_forms.show', $requestForm->id) }}" class="text-info" title="Visualizar">
                               <i class="fas fa-binoculars"></i></a>
                             </td>
 
-                            <td class="text-center align-middle">
+                            <td class="text-center align-middle brd-r brd-b">
                               <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
                               <i class="far fa-trash-alt"></i></a>
                             </td>
@@ -103,19 +105,19 @@
               <tbody>
                   @foreach($inProgressRequestForms as $requestForm)
                         <tr>
-                            <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
-                            <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->tinnyName() : 'Usuario eliminado' }}</td>
-                            <td class="align-middle">{{ $requestForm->justification }}</td>
-                            <td class="align-middle">{{ $requestForm->created_at }}</td>
-                            <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
-                            <td class="align-middle">{{ $requestForm->updated_at }}</td>
-                            <td class="align-middle">{{ $requestForm->supervisor ? $requestForm->supervisor->tinnyName() : '-- --' }}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
+                            <th class="align-middle brd-b brd-l" scope="row">{{ $requestForm->id }}</td>
+                            <td class="align-middle brd-b">{{ $requestForm->creator ? $requestForm->creator->tinnyName() : 'Usuario eliminado' }}</td>
+                            <td class="align-middle brd-b">{{ $requestForm->justification }}</td>
+                            <td class="align-middle brd-b">{{ $requestForm->created_at }}</td>
+                            <td class="align-middle brd-b">{{ $requestForm->getElapsedTime() }}</td>
+                            <td class="align-middle brd-b">{{ $requestForm->updated_at }}</td>
+                            <td class="align-middle brd-b">{{ $requestForm->supervisor ? $requestForm->supervisor->tinnyName() : '-- --' }}</td>
+                            <td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                            <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
+                            <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
+                            <td class="align-middle text-center brd-b brd-r">{!! $requestForm->eventSign('supply_event') !!}</td>
 
-                            <td class="text-center align-middle">
+                            <td class="text-center align-middle brd-b brd-r">
                               <a href="{{ route('request_forms.show', $requestForm->id) }}" class="text-info" title="Visualizar">
                               <i class="fas fa-binoculars"></i></a>
                             </td>
@@ -227,4 +229,32 @@
 </script>
 @endsection
 @section('custom_js_head')
+<style>
+table {
+border-collapse: collapse;
+}
+.brd-l {
+ border-left: solid 1px #D6DBDF;
+}
+.brd-r {
+border-right: solid 1px #D6DBDF;
+}
+.brd-b {
+border-bottom: solid 1px #D6DBDF;
+}
+.brd-t {
+border-top: solid 1px #D6DBDF;
+}
+
+
+oz {
+  color: red;
+  font-size: 60px;
+  background-color: yellow;
+  font-family: time new roman;
+}
+
+
+
+</style>
 @endsection

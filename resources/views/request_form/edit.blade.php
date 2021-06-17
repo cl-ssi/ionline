@@ -14,7 +14,7 @@
   <div class="card-body mx-4 px-0">
 
     <div class="row mx-1 mt-3 pt-0"> <!-- DIV para TABLA-->
-      <table class="table table-sm">
+      <table class="table table-hover table-sm small">
           <tr>
               <th scope="row" class="text-muted">Nombre del Solicitante</th>
               <td class="align-middle">{{ $requestForm->creator->getFullNameAttribute()}}</td>
@@ -43,4 +43,30 @@
 
 <livewire:request-form.request-form-create :requestForm="$requestForm">
 
+@endsection
+
+@section('custom_js_head')
+<style>
+table {
+border-collapse: collapse;
+}
+.brd-l {
+ border-left: solid 1px #D6DBDF;
+}
+.brd-r {
+border-right: solid 1px #D6DBDF;
+}
+.brd-b {
+border-bottom: solid 1px #D6DBDF;
+}
+.brd-t {
+border-top: solid 1px #D6DBDF;
+}
+oz {
+  color: red;
+  font-size: 60px;
+  background-color: yellow;
+  font-family: time new roman;
+}
+</style>
 @endsection

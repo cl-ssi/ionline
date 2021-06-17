@@ -34,7 +34,7 @@
                     <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
                     <td class="align-middle">{{ $requestForm->justification }}</td>
                     <td class="align-middle">{{ $requestForm->createdDate() }}</td>
-                    <td class="align-middle">{{ $requestForm->eventApprovedDate('supply_event') }}</td>
+                    <td class="align-middle">{{ $requestForm->eventSignatureDate('supply_event', 'approved') }}</td>
                     <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
                     <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
                     <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
