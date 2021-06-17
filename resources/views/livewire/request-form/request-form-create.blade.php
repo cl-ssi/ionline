@@ -51,7 +51,7 @@
 
            <div class="card mx-3 mb-3 mt-0 pt-0">
              <div class="card-body mb-1">
-                 <h6 class="card-subtitle mt-0 mb-2 text-primary">{{$title}}:</h6>
+                 <h6 class="card-subtitle mt-0 mb-2 text-primary"><i class="far fa-keyboard"></i> {{$title}}:</h6>
                  <div class="row justify-content-md-center"><!-- FILA 2 -->
                   <div class="form-group col-5">
                     <label for="forRut">Artículo:</label>
@@ -127,41 +127,41 @@
           </div><!-- CARD -->
 
         <div class="mx-3 mb-3 mt-3 pt-0"> <!-- DIV para TABLA-->
-          <h6 class="card-subtitle mt-0 mb-2 text-primary">Items - Bienes y/o Servicios:</h6>
-          <table class="table table-condensed table-hover table-bordered table-sm small">
+          <h6 class="card-subtitle mt-0 mb-2 text-primary"><i class="fas fa-th-list"></i> Items - Bienes y/o Servicios:</h6>
+          <table class="table table-striped table-sm small" name="items">
             <thead>
-              <tr>
-                <th>Item</th>
+              <tr class="bg-light">
+                <th class="brd-l">Item</th>
 
                 <th>Artículo</th>
                 <th>UM</th>
                 <th>Especificaciones Técnicas</th>
                 <th>Archivo</th>
-                <th>Cantidad</th>
-                <th>Valor U.</th>
+                <th style="text-align:right">Cantidad</th>
+                <th style="text-align:right">Valor U.</th>
                 <th>Impuestos</th>
-                <th>Total Item</th>
-                <th colspan="2">Acciones</th>
+                <th style="text-align:right">Total Item</th>
+                <th style="text-align:center" colspan="2" class="brd-r">Acciones</th>
               </tr>
             </thead>
             <tbody>
               @foreach($items as $key => $item)
                       <tr>
-                          <td>{{$key+1}}</td>
+                          <td class="brd-l">{{$key+1}}</td>
 
                           <td>{{$item['article']}}</td>
                           <td>{{$item['unitOfMeasurement']}}</td>
                           <td>{{$item['technicalSpecifications']}}</td>
                           <td>fileItem</td>
-                          <td>{{$item['quantity']}}</td>
-                          <td>{{$item['unitValue']}}</td>
+                          <td style="text-align:right">{{$item['quantity']}}</td>
+                          <td style="text-align:right">{{$item['unitValue']}}</td>
                           <td>{{$item['taxes']}}</td>
-                          <td>{{$item['totalValue']}}</td>
-                          <td align="center">
-                            <a class="btn btn-outline-primary btn-sm" title="Editar" wire:click="editRequestService({{ $key }})"><i class="fas fa-pencil-alt"></i></a>
+                          <td align="right">{{$item['totalValue']}}</td>
+                          <td align="center" class="brd-l brd-b">
+                            <a href="#items" class="text-info" title="Editar" wire:click="editRequestService({{ $key }})"><i class="fas fa-pencil-alt"></i></a>
                           </td>
-                          <td align="center">
-                            <a class="btn btn-outline-danger btn-sm" title="Eliminar" wire:click="deleteRequestService({{ $key }})"><i class="far fa-trash-alt"></i></a>
+                          <td class="brd-r brd-b" align="center">
+                            <a href="#items" class="text-danger" title="Eliminar" wire:click="deleteRequestService({{ $key }})"><i class="far fa-trash-alt"></i></a>
                           </td>
                       </tr>
               @endforeach
@@ -169,12 +169,15 @@
             <tfoot>
               <tr>
                 <td colspan="6" rowspan="2"></td>
-                <td colspan="3">Cantidad de Items</td>
-                <td colspan="3">{{count($items)}}</td>
+                <td colspan="2">Valor Total</td>
+                <td colspan="1" style="text-align:right">{{$totalDocument}}</td>
+                <td colspan="2"></td>
+
               </tr>
               <tr>
-                <td colspan="3">Valor Total</td>
-                <td colspan="3">{{$totalDocument}}</td>
+                <td class="brd-b" colspan="2">Cantidad de Items</td>
+                <td class="brd-b" colspan="1" style="text-align:right">{{count($items)}}</td>
+                <td colspan="2" class="brd-b"></td>
               </tr>
             </tfoot>
           </table>

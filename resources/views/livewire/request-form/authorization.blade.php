@@ -21,7 +21,7 @@
 
         @if($eventType=='supply_event')
         <div class="row justify-content-md-start mt-0 mb-2"><!-- FILA 3 -->
-          <div class="col-4">
+          <div class="col-3">
             <label>Comprador:</label><br>
             <select wire:model.defer="supervisorUser" wire:click="resetError" name="supervisorUser" class="form-control form-control-sm" required>
                 <option value="">Seleccione...</option>
@@ -32,7 +32,7 @@
             @error('supervisorUser') <span class="error text-danger">{{ $message }}</span> @enderror
           </div>
 
-          <div class="col-4">
+          <div class="col-3">
             <label>Unidad de Compra:</label><br>
             <select wire:model.defer="purchaseUnit" wire:click="resetError" name="purchaseUnit" class="form-control form-control-sm" required>
                 <option value="">Seleccione...</option>
@@ -43,7 +43,7 @@
             @error('purchaseUnit') <span class="error text-danger">{{ $message }}</span> @enderror
           </div>
 
-          <div class="col-4">
+          <div class="col-3">
             <label>Tipo de Compra:</label><br>
             <select wire:model.defer="purchaseType" wire:click="resetError" name="purchaseType" class="form-control form-control-sm" required>
                 <option value="">Seleccione...</option>
@@ -53,6 +53,20 @@
             </select>
             @error('purchaseType') <span class="error text-danger">{{ $message }}</span> @enderror
           </div>
+
+          <div class="form-group col-3">
+            <label>Mecanismo de Compra:</label><br>
+            <select wire:model="purchaseMechanism" name="purchaseMechanism" class="form-control form-control-sm" required>
+              <option value="">Seleccione...</option>
+              <option value="cm<1000">Convenio Marco < 1000 UTM</option>
+              <option value="cm>1000">Convenio Marco > 1000 UTM</option>
+              <option value="lp">Licitación Pública</option>
+              <option value="td">Trato Directo</option>
+              <option value="ca">Compra Ágil</option>
+            </select>
+            @error('purchaseMechanism') <span class="error text-danger">{{ $message }}</span> @enderror
+          </div>
+
         </div>
         @endif
 

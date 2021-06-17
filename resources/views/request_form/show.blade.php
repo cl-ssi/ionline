@@ -13,7 +13,7 @@
 
             <div class="container-fluid row mx-0 mb-3 mt-3 pt-0"> <!-- DIV para TABLA-->
 
-              <table class="table table-condensed table-sm small">
+              <table class="table table-condensed table-hover table-sm small">
 
                 <tr class="d-flex">
                     <th class="text-muted col-3" scope="row">ID</th>

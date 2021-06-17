@@ -55,9 +55,9 @@
 
           <tr class="d-flex">
               <th class="text-muted col-3" scope="row">Aprobación Abastecimiento</th>
-              <td class="col-3">{{ $requestForm->eventApprovedDate('supply_event') }}</td>
+              <td class="col-3">{{ $requestForm->eventSignatureDate('supply_event', 'approved') }}</td>
               <th class="text-muted col-3" scope="row">Visador Abastecimiento</th>
-              <td class="col-3">{{ $requestForm->eventSignerName('supply_event') }}</td>
+              <td class="col-3">{{ $requestForm->eventSignerName('supply_event', 'approved') }}</td>
           </tr>
 
           <tr class="d-flex">
