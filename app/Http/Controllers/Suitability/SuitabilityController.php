@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
+use App\Mail\NewPsiRequest;
+use Illuminate\Support\Facades\Mail;
 
 class SuitabilityController extends Controller
 {
@@ -147,6 +149,11 @@ class SuitabilityController extends Controller
         $psirequest->user_creator_id = Auth::guard('external')->user()->id;
         $psirequest->school_id = $request->input('school_id');
         $psirequest->save();
+        Mail::to('maria.zuniga@redsalud.gob.cl')
+        // Mail::to('tebiccr@gmail.com')
+                        ->send(new NewPsiRequest($psirequest));
+
+
         session()->flash('success', 'Solicitud Creada Exitosamente, ahora el asistente puede ingresar a este mismo sitio con los datos de clave única a realizar la prueba');
         return redirect()->route('external');
     }
