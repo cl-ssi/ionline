@@ -194,9 +194,15 @@ class ShowTotalHours extends Component
 
                 $businessDays = $this->fulfillment->serviceRequest->start_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
                     return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
-                }, $this->fulfillment->serviceRequest->end_date);
+                }, $this->fulfillment->serviceRequest->end_date);                
+                $businessDays = $businessDays+1;
+                //dd($businessDays);
+
+                //$prueba = $this->fulfillment->serviceRequest->start_date->diffInDays()
 
                 $daysInMonth = $this->fulfillment->serviceRequest->start_date->daysInMonth;
+
+                //dd($daysInMonth);
 
 
                 $fulfilmentitems = FulfillmentItem::where('fulfillment_id', $this->fulfillment->id)->get();
@@ -259,18 +265,20 @@ class ShowTotalHours extends Component
                 
 
                 $workingHoursInMonth = 0;
-
+                // dd($daysavg);
                 if (isset($daysavg)) {
                     $workingHoursInMonth = $daysavg * 8.8;
                 } else {
                     $workingHoursInMonth = $businessDays * 8.8;
                 }
+                // dd($businessDays);
 
 
                 $this->refundHours = round(($workingHoursInMonth - $this->totalHoursDay), 0);
                 $this->totalHours = $this->refundHours + $this->totalHoursNight;
                 // dd($this->totalHoursNight);
-                //dd($value->amount);
+                //dd($this->refundHours);
+                // dd($value->amount);
                 $totalAmountNight = $this->totalHoursNight * ($value->amount * 1.5);
                 $totalAmountDayRefund = $this->refundHours * $value->amount;
                 $this->totalAmount = $totalAmountNight - $totalAmountDayRefund;
