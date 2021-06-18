@@ -22,7 +22,7 @@
 </style>
 
 <h3 class="mb-3">Componentes según REM de {{$iiaaps->name}}.</h3>
-<p><strong class="text-center">DE ESTRATEGIA DE REDES INTEGRADAS DE SERVICIOS DE SALUD (RISS)</strong></p>
+<p><strong class="text-center">DE ESTRATEGIA DE REDES INTEGRADAS DE SERVICIOS DE SALUD (RISS) - CORTE N°{{$iiaaps->section}}</strong></p>
 
 <!-- Nav tabs -->
 <ul class="nav nav-tabs d-print-none">
@@ -64,28 +64,34 @@
                     <tr class="text-center">
                         <td rowspan="2" class="align-middle">{{$indicator->number}}</td>
                         <td rowspan="2" class="text-left align-middle glosa">{{$indicator->name}}.</td>
-                        <td class="text-left glosa">{{$indicator->numerator}}. <span class="badge badge-secondary">{{$indicator->numerator_source}}</span></span></td>
+                        <td class="text-left glosa">{{$indicator->numerator}}. <span class="badge badge-secondary">{{$indicator->numerator_source}}</span></td>
                         <td rowspan="2" class="text-center align-middle">{{$indicator->goal}}</td>
                         <td rowspan="2" class="text-center align-middle">{{str_contains($indicator->goal ?? '%', '%') ? number_format($indicator->getCompliance2($iiaaps->commune, null), 2, ',', '.').'%' : number_format($indicator->getCompliance2($iiaaps->commune, null)/100, 2, '.', ',')}}</td>
-                        <td class="text-center">{{$indicator->getValuesAcum2('numerador', $iiaaps->commune, null) != null ? number_format($indicator->getValuesAcum2('numerador', $iiaaps->commune, null), 0, ',', '.') : ''}}</td>
-                        @if(Str::contains($indicator->numerator_source, ['FONASA', 'REM P']))
-                            <td colspan="12" class="text-center">{{ $indicator->getValuesAcum2('numerador', $iiaaps->commune, null) != null ? number_format($indicator->getValuesAcum2('numerador', $iiaaps->commune, null), 0, ',', '.') : ''}}</td>
+                        @if($indicator->is_evaluated)
+                            <td class="text-center">{{$indicator->getValuesAcum2('numerador', $iiaaps->commune, null) != null ? number_format($indicator->getValuesAcum2('numerador', $iiaaps->commune, null), 0, ',', '.') : ''}}</td>
+                            @if(Str::contains($indicator->numerator_source, ['FONASA', 'REM P']))
+                                <td colspan="12" class="text-center">{{ $indicator->getValuesAcum2('numerador', $iiaaps->commune, null) != null ? number_format($indicator->getValuesAcum2('numerador', $iiaaps->commune, null), 0, ',', '.') : ''}}</td>
+                            @else
+                                @foreach($months as $number => $month)
+                                <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('numerador', $number, $iiaaps->commune, null) != null ? number_format($indicator->getValueByFactorAndMonth2('numerador', $number, $iiaaps->commune, null), 0, ',', '.') : ''}}</td>
+                                @endforeach
+                            @endif
                         @else
-                            @foreach($months as $number => $month)
-                            <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('numerador', $number, $iiaaps->commune, null) != null ? number_format($indicator->getValueByFactorAndMonth2('numerador', $number, $iiaaps->commune, null), 0, ',', '.') : ''}}</td>
-                            @endforeach
+                            <td colspan="13" rowspan="2" class="text-center align-middle"><span class="badge badge-secondary">No aplica según corte</span></td>
                         @endif
                     </tr>
                 <!-- denominador comuna -->
                     <tr class="text-center">
                         <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{$indicator->denominator_source}}</span></td>
-                        <td class="text-center">{{$indicator->getValuesAcum2('denominador', $iiaaps->commune, null) != null ? number_format($indicator->getValuesAcum2('denominador', $iiaaps->commune, null), 0, ',', '.'): ''}}</td>
-                        @if(Str::contains($indicator->denominator_source, ['FONASA', 'REM P']))
-                            <td colspan="12" class="text-center">{{ $indicator->getValuesAcum2('denominador', $iiaaps->commune, null) != null ? number_format($indicator->getValuesAcum2('denominador', $iiaaps->commune, null), 0, ',', '.') : ''}}</td>
-                        @else
-                            @foreach($months as $number => $month)
-                            <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('denominador', $number, $iiaaps->commune, null) != null ? number_format($indicator->getValueByFactorAndMonth2('denominador', $number, $iiaaps->commune, null), 0, ',', '.') : ''}}</td>
-                            @endforeach
+                        @if($indicator->is_evaluated)
+                            <td class="text-center">{{$indicator->getValuesAcum2('denominador', $iiaaps->commune, null) != null ? number_format($indicator->getValuesAcum2('denominador', $iiaaps->commune, null), 0, ',', '.'): ''}}</td>
+                            @if(Str::contains($indicator->denominator_source, ['FONASA', 'REM P']))
+                                <td colspan="12" class="text-center">{{ $indicator->getValuesAcum2('denominador', $iiaaps->commune, null) != null ? number_format($indicator->getValuesAcum2('denominador', $iiaaps->commune, null), 0, ',', '.') : ''}}</td>
+                            @else
+                                @foreach($months as $number => $month)
+                                <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('denominador', $number, $iiaaps->commune, null) != null ? number_format($indicator->getValueByFactorAndMonth2('denominador', $number, $iiaaps->commune, null), 0, ',', '.') : ''}}</td>
+                                @endforeach
+                            @endif
                         @endif
                     </tr>
                 @endforeach
@@ -119,25 +125,31 @@
                             <td class="text-left glosa">{{$indicator->numerator}}.</span></td>
                             <td rowspan="2" class="text-center align-middle">{{$indicator->goal}}</td>
                             <td rowspan="2" class="text-center align-middle">{{str_contains($indicator->goal ?? '%', '%') ? number_format($indicator->getCompliance2(null, $establishment->alias_estab), 2, ',', '.').'%' : number_format($indicator->getCompliance2(null, $establishment->alias_estab)/100, 2, '.', ',')}}</td>
-                            <td class="text-center">{{$indicator->getValuesAcum2('numerador', null, $establishment->alias_estab) != null ? number_format($indicator->getValuesAcum2('numerador', null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
-                            @if(Str::contains($indicator->numerator_source, ['FONASA', 'REM P']))
-                                <td colspan="12" class="text-center">{{ $indicator->getValuesAcum2('numerador', null, $establishment->alias_estab) != null ? number_format($indicator->getValuesAcum2('numerador', null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
+                            @if($indicator->is_evaluated)
+                                <td class="text-center">{{$indicator->getValuesAcum2('numerador', null, $establishment->alias_estab) != null ? number_format($indicator->getValuesAcum2('numerador', null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
+                                @if(Str::contains($indicator->numerator_source, ['FONASA', 'REM P']))
+                                    <td colspan="12" class="text-center">{{ $indicator->getValuesAcum2('numerador', null, $establishment->alias_estab) != null ? number_format($indicator->getValuesAcum2('numerador', null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
+                                @else
+                                    @foreach($months as $number => $month)
+                                    <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('numerador', $number, null, $establishment->alias_estab) != null ? number_format($indicator->getValueByFactorAndMonth2('numerador', $number, null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
+                                    @endforeach
+                                @endif
                             @else
-                                @foreach($months as $number => $month)
-                                <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('numerador', $number, null, $establishment->alias_estab) != null ? number_format($indicator->getValueByFactorAndMonth2('numerador', $number, null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
-                                @endforeach
+                                <td colspan="13" rowspan="2" class="text-center align-middle"><span class="badge badge-secondary">No aplica según corte</span></td>
                             @endif
                         </tr>
                     <!-- denominador establecimiento -->
                         <tr class="text-center">
                             <td class="text-left glosa">{{$indicator->denominator}}.</td>
-                            <td class="text-center">{{$indicator->getValuesAcum2('denominador', null, $establishment->alias_estab) != null ? number_format($indicator->getValuesAcum2('denominador', null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
-                            @if(Str::contains($indicator->denominator_source, ['FONASA', 'REM P']))
-                                <td colspan="12" class="text-center">{{ $indicator->getValuesAcum2('denominador', null, $establishment->alias_estab) != null ? number_format($indicator->getValuesAcum2('denominador', null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
-                            @else
-                                @foreach($months as $number => $month)
-                                <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('denominador', $number, null, $establishment->alias_estab) != null ? number_format($indicator->getValueByFactorAndMonth2('denominador', $number, null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
-                                @endforeach
+                            @if($indicator->is_evaluated)
+                                <td class="text-center">{{$indicator->getValuesAcum2('denominador', null, $establishment->alias_estab) != null ? number_format($indicator->getValuesAcum2('denominador', null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
+                                @if(Str::contains($indicator->denominator_source, ['FONASA', 'REM P']))
+                                    <td colspan="12" class="text-center">{{ $indicator->getValuesAcum2('denominador', null, $establishment->alias_estab) != null ? number_format($indicator->getValuesAcum2('denominador', null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
+                                @else
+                                    @foreach($months as $number => $month)
+                                    <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('denominador', $number, null, $establishment->alias_estab) != null ? number_format($indicator->getValueByFactorAndMonth2('denominador', $number, null, $establishment->alias_estab), 0, ',', '.') : ''}}</td>
+                                    @endforeach
+                                @endif
                             @endif
                         </tr>
                     @endforeach
