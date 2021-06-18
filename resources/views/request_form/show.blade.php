@@ -111,6 +111,10 @@
                       <th class="text-muted col-3" scope="row">Visador Jefatura</th>
                       <td class="col-3">{{ $requestForm->eventSignerName('leader_ship_event', 'rejected') }}</td>
                   </tr>
+                  <tr class="d-flex">
+                      <th class="text-muted col-3" scope="row">Comentario</th>
+                      <td class="col-9">{{ $requestForm->rejectedComment() }}</td>
+                  </tr>
                   @endif
 
                   @if($requestForm->eventSingStatus('pre_finance_event')=='rejected')
@@ -119,6 +123,10 @@
                       <td class="col-3">{{ $requestForm->eventSignatureDate('pre_finance_event', 'rejected') }}</td>
                       <th class="text-muted col-3" scope="row">Visador Refrendación Pres.</th>
                       <td class="col-3">{{ $requestForm->eventSignerName('pre_finance_event', 'rejected') }}</td>
+                  </tr>
+                  <tr class="d-flex">
+                      <th class="text-muted col-3" scope="row">Comentario</th>
+                      <td class="col-9">{{ $requestForm->rejectedComment() }}</td>
                   </tr>
                   @endif
 
@@ -129,6 +137,10 @@
                       <th class="text-muted col-3" scope="row">Visador Finanzas</th>
                       <td class="col-3">{{ $requestForm->eventSignerName('finance_event', 'rejected') }}</td>
                   </tr>
+                  <tr class="d-flex">
+                      <th class="text-muted col-3" scope="row">Comentario</th>
+                      <td class="col-9">{{ $requestForm->rejectedComment() }}</td>
+                  </tr>
                   @endif
 
                   @if($requestForm->eventSingStatus('supply_event')=='rejected')
@@ -137,6 +149,10 @@
                       <td class="col-3">{{ $requestForm->eventSignatureDate('supply_event', 'rejected') }}</td>
                       <th class="text-muted col-3" scope="row">Visador Abastecimiento</th>
                       <td class="col-3">{{ $requestForm->eventSignerName('supply_event', 'rejected') }}</td>
+                  </tr>
+                  <tr class="d-flex">
+                      <th class="text-muted col-3" scope="row">Comentario</th>
+                      <td class="col-9">{{ $requestForm->rejectedComment() }}</td>
                   </tr>
                   @endif
 

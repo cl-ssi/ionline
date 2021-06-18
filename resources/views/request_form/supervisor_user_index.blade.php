@@ -24,25 +24,31 @@
           <th scope="col" class="text-center">RP</th>
           <th scope="col" class="text-center">F</th>
           <th scope="col" class="text-center">A</th>
-          <th scope="col" class="text-center">Seguimiento</th>
+          <th scope="col" class="text-center" colspan="2">Opciones</th>
         </tr>
       </thead>
       <tbody>
           @foreach($waitingRequestForms as $requestForm)
                 <tr>
-                    <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
-                    <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
-                    <td class="align-middle">{{ $requestForm->justification }}</td>
-                    <td class="align-middle">{{ $requestForm->createdDate() }}</td>
-                    <td class="align-middle">{{ $requestForm->eventSignatureDate('supply_event', 'approved') }}</td>
-                    <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
-                    <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                    <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                    <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
-                    <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
-                    <td class="text-center align-middle">
+                    <th class="align-middle brd-b brd-l" scope="row">{{ $requestForm->id }}</td>
+                    <td class="align-middle brd-b">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
+                    <td class="align-middle brd-b">{{ $requestForm->justification }}</td>
+                    <td class="align-middle brd-b">{{ $requestForm->createdDate() }}</td>
+                    <td class="align-middle brd-b">{{ $requestForm->eventSignatureDate('supply_event', 'approved') }}</td>
+                    <td class="align-middle brd-b">{{ $requestForm->getElapsedTime() }}</td>
+                    <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                    <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
+                    <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
+                    <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('supply_event') !!}</td>
+
+                    <td class="text-center align-middle brd-b brd-l">
                       <a href="{{ route('request_forms.purchasing_process', $requestForm->id) }}" class="text-primary" title="Seguimiento de Compra">
                       <i class="fas fa-shopping-cart"></i></a>
+                    </td>
+
+                    <td class="text-center align-middle brd-b brd-r">
+                      <a href="{{ route('request_forms.show', $requestForm->id) }}" class="text-info" title="Visualizar">
+                      <i class="fas fa-binoculars"></i></a>
                     </td>
                 </tr>
           @endforeach
@@ -97,4 +103,23 @@
 @section('custom_js')
 @endsection
 @section('custom_js_head')
+@section('custom_js_head')
+<style>
+table {
+border-collapse: collapse;
+}
+.brd-l {
+ border-left: solid 1px #D6DBDF;
+}
+.brd-r {
+border-right: solid 1px #D6DBDF;
+}
+.brd-b {
+border-bottom: solid 1px #D6DBDF;
+}
+.brd-t {
+border-top: solid 1px #D6DBDF;
+}
+</style>
+@endsection
 @endsection
