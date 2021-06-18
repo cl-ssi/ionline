@@ -195,7 +195,7 @@ class MonthlyQuotes extends Component
             } else
             //son cuotas valores diferentes
             {
-                //dd('entre aca');
+                // dd('entre aca');
 
                 if ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') != $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
                     $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 2;
@@ -205,10 +205,12 @@ class MonthlyQuotes extends Component
                     $periods   = new DatePeriod($serviceRequest->start_date, $interval, $serviceRequest->end_date->addMonth());
                     $periods = iterator_to_array($periods);
                     $dias_trabajados1 = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
-                    $valor_diferente1 = round($dias_trabajados1 * round(($valor_mensual / 30)));
+                    //$valor_diferente1 = round($dias_trabajados1 * round(($valor_mensual / 30)));
+                    // se modifica el cálculo según correo
+                    $valor_diferente1 = round($dias_trabajados1 * ($valor_mensual / 30));
                     $dias_trabajados2 = $serviceRequest->end_date->firstOfMonth()->diff($serviceRequest->end_date)->days + 1;
-                    dd($dias_trabajados2);
-                    $valor_diferente2 = round($dias_trabajados2 * round(($valor_mensual / 30)));
+                    //dd($dias_trabajados2);
+                    $valor_diferente2 = round($dias_trabajados2 * ($valor_mensual / 30));
 
 
                     foreach ($periods as $key => $period) {
@@ -230,7 +232,8 @@ class MonthlyQuotes extends Component
                     $periods   = new DatePeriod($serviceRequest->start_date, $interval, $serviceRequest->end_date);
                     $periods = iterator_to_array($periods);
                     $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
-                    $valor_diferente = round($dias_trabajados * round(($valor_mensual / 30)));
+                    //$valor_diferente = round($dias_trabajados * round(($valor_mensual / 30)));
+                    $valor_diferente = round($dias_trabajados * ($valor_mensual / 30));
                     foreach ($periods as $key => $period) {
                         if ($key === array_key_first($periods)) {
                             $string .= " una de $" . number_format($valor_diferente) . " el mes de " . $period->monthName;
@@ -254,7 +257,8 @@ class MonthlyQuotes extends Component
                     //$dias_trabajados = $serviceRequest->end_date->lastOfMonth()->diff($serviceRequest->end_date)->days + 1;
                     $dias_trabajados = (int)$serviceRequest->end_date->format('d');
                     //dd($dias_trabajados);
-                    $valor_diferente = round($dias_trabajados * round(($valor_mensual / 30)));
+                    //$valor_diferente = round($dias_trabajados * round(($valor_mensual / 30)));
+                    $valor_diferente = round($dias_trabajados * ($valor_mensual / 30));
                     //dd($valor_diferente);
 
                     foreach ($periods as $key => $period) {
