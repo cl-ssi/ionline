@@ -370,7 +370,7 @@
                                     @endphp
 
                                     <th class="brless dia" 
-                                        style="color:{{ ( ($dateFiltered->isWeekend() )?'red':( ($holidays::where('date',$dateFiltered)) ? 'red':'white')  )}}" >
+                                        style="color:{{ ( ($dateFiltered->isWeekend() )?'red':( ($holidays->where('date',$dateFiltered)) ? 'red':'white')  )}}" >
                                        {{$i}}
                                     </th>
                                     <!-- <th class="brless dia">🌞</th> -->
