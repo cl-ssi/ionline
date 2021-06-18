@@ -495,14 +495,19 @@ class ShiftManagementController extends Controller
 
         $actuallyYears =$r->actuallyYears;
         $actuallyMonth  = $r->actuallyMonth;
-        $actuallyUser =  serialize($r->actuallyUser );
+        $actuallyUser =  $r->actuallyUser ;
+
         $actuallyOrgUnit = $r->actuallyOrgUnit;
-       
+        // $actuallyUser = explode();$actuallyUser[0];
+        // $actuallyUser =  str_replace("}","", $actuallyUser);
+
+        // $actuallyUser =  str_replace('"',"", $actuallyUser[0]);
+        
         // $usr = User::find($actuallyUser->id);
         // $shifsUsr = ShiftUser::where('date_up','>=',$actuallyYears."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYears."-".$actuallyMonth."-".$days)->where("user_id",$actuallyUser->id)->first();
         // $shifsUsr = ShiftUser::where('date_up','>=',$actuallyYears."-".$actuallyMonth."-".$days)->where("user_id",$actuallyUser)->first();
       
-        echo   $actuallyUser;
+        echo  $actuallyUser;
       // return view('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr,'usr'=>$usr  ]);
 
        // $pdf = app('dompdf.wrapper');
