@@ -42,6 +42,16 @@ table {
 .brd-t {
   border-top: solid 1px #D6DBDF;
 }
+.bgTableLight {
+  background-color: #E5ECF0;
+}
+.bgTableDark {
+  background-color: #C8D7E2;
+}
+.bgTableTittle {
+  background-color: #80A3B4;
+}
+
 oz {
   color: red;
   font-size: 60px;
