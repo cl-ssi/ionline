@@ -27,6 +27,7 @@ class PurchasingProcess extends Component
         $this->lstPurchaseUnit    = PurchaseUnit::all();
         $this->setArrayVista(false);
         $this->setArrayBgTable();
+        $this->setArrayPurchase();
     }
 
     private function setArrayVista($val)
@@ -42,6 +43,12 @@ class PurchasingProcess extends Component
             $this->arrayBgTable[$key]['value'] = 'bgTableLight';
           else
             $this->arrayBgTable[$key]['value'] = 'bgTableDark';
+        }
+    }
+
+    private function setArrayPurchase(){
+        foreach($this->requestForm->itemRequestForms as $key => $item){
+          $this->arrayPurchaseMechanism[$item->id]['value']='';
         }
     }
 

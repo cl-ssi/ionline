@@ -80,7 +80,7 @@
 
     <div class="row mx-3 mb-3 mt-3 pt-0"> <!-- DIV para TABLA-->
       <h6 class="card-subtitle mt-0 mb-2 text-primary">Lista de Bienes y/o Servicios:</h6>
-      <table class="table table-condensed table-sm small">
+      <table class="table table-sm small">
         <thead>
           <tr class="bgTableTittle">
             <th>Item</th>
@@ -99,27 +99,47 @@
         </thead>
         <tbody>
           @foreach($requestForm->itemRequestForms as $key => $item)
+                @if($key >> 0 && $arrayVista[$key]['value'])
+                  <thead>
+                    <tr class="bgTableTittle">
+                      <th>Item</th>
+                      <th>ID</th>
+                      <th>Cod.Presup.</th>
+                      <th>Artículo</th>
+                      <th>UM</th>
+                      <th>Especificaciones Técnicas</th>
+                      <th>Archivo</th>
+                      <th>Cantidad</th>
+                      <th>Valor U.</th>
+                      <th>Impuestos</th>
+                      <th>Total Item</th>
+                      <th>Opción</th>
+                    </tr>
+                  </thead>
+                @endif
                   <tr class="{{$arrayBgTable[$key]['value']}}">
-                      <td>{{ $key+1 }}</td>
-                      <td>{{ $item->id }}</td>
-                      <td>{{ $item->budgetItem()->first()->fullName() }}</td>
-                      <td>{{ $item->article }}</td>
-                      <td>{{ $item->unit_of_measurement }}</td>
-                      <td>{{ $item->specification }}</td>
-                      <td>FILE</td>
-                      <td align='right'>{{ $item->quantity }}</td>
-                      <td align='right'>{{ $item->unit_value }}</td>
-                      <td>{{ $item->tax }}</td>
-                      <td align='right'>{{ $item->formatExpense() }}</td>
-                      <td><button type="button" class="btn btn-primary btn-sm" wire:click="showMe( {{ $key }} )">mostrear</button></td>
+                      <td class="align-middle">{{ $key+1 }}</td>
+                      <td class="align-middle">{{ $item->id }}</td>
+                      <td class="align-middle">{{ $item->budgetItem()->first()->fullName() }}</td>
+                      <td class="align-middle">{{ $item->article }}</td>
+                      <td class="align-middle">{{ $item->unit_of_measurement }}</td>
+                      <td class="align-middle">{{ $item->specification }}</td>
+                      <td class="align-middle">FILE</td>
+                      <td class="align-middle" align='right'>{{ $item->quantity }}</td>
+                      <td class="align-middle" align='right'>{{ $item->unit_value }}</td>
+                      <td class="align-middle">{{ $item->tax }}</td>
+                      <td class="align-middle" align='right'>{{ $item->formatExpense() }}</td>
+                      <td class="align-middle"><i class="text-primary fas fa-link btn" wire:click="showMe( {{ $key }} )"></i></td>
+
                   </tr>
                   @if($arrayVista[$key]['value'])
                   <tr class="{{$arrayBgTable[$key]['value']}}">
-                    <td colspan="12">
-                      <div class="row">
+                    <td colspan="12" class="brd-bb">
+                      <div class="row mb-3">
                         <div class="col-4">
-                            <select wire:model="arrayPurchaseMechanism.{{ $item->id }}.value" wire:click="resetError" class="form-control form-control-sm" required>
-                              <option value="">Seleccione...</option>
+                            <label class="font-weight-bold text-muted ml-1 mb-0">Mecanismo de Compra:</label><br>
+                            <select wire:model.defer="arrayPurchaseMechanism.{{ $item->id }}.value" wire:click="resetError" class="form-control form-control-sm" required>
+                              <option selected>Seleccione...</option>
                               <option value="cm<1000">Convenio Marco < 1000 UTM</option>
                               <option value="cm>1000">Convenio Marco > 1000 UTM</option>
                               <option value="lp">Licitación Pública</option>
@@ -128,31 +148,83 @@
                             </select>
                         </div>
                         <div class="col-4">
+                            <label class="font-weight-bold text-muted ml-1 mb-0">Tipo de Compra:</label><br>
                             <select wire:model.defer="arrayPurchaseType.{{ $item->id }}.value" wire:click="resetError" class="form-control form-control-sm" required>
-                                <option value="">Seleccione...</option>
+                                <option selected>Seleccione...</option>
                               @foreach($lstPurchaseType as $type)
                                 <option value="{{$type->id}}">{{$type->name}}</option>
                               @endforeach
                             </select>
                         </div>
+
                         <div class="col-4">
+                            <label class="font-weight-bold text-muted ml-1 mb-0">Unidad de Compra:</label><br>
                             <select wire:model.defer="arrayPurchaseUnit.{{ $item->id }}.value" wire:click="resetError" class="form-control form-control-sm" required>
-                                <option value="">Seleccione...</option>
+                                <option selected>Seleccione...</option>
                               @foreach($lstPurchaseUnit as $unit)
                                 <option value="{{$unit->id}}">{{$unit->name}}</option>
                               @endforeach
                             </select>
                         </div>
                       </div>
-                    </td>
-                  </tr>
-                  <tr class="{{$arrayBgTable[$key]['value']}}">
-                    <td colspan="12">
-                      <div>
 
-                        <div><p><h4>Hola mundo {{$key+1}}</h4></p></div>
-
+                      <div class="row mb-3">
+                        <div class="col-3">
+                          <label class="font-weight-bold text-muted ml-1 mb-0">ID OC:</label><br>
+                          <input value="" class="form-control form-control-sm" type="text">
+                        </div>
+                        <div class="col-3">
+                          <label class="font-weight-bold text-muted ml-1 mb-0">ID OC Excel:</label><br>
+                          <input value="" class="form-control form-control-sm" type="text">
+                        </div>
+                        <div class="col-3">
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Fecha OC:</label><br>
+                          <input wire:model.defer="envio" type="date" class="form-control form-control-sm" id="forbirthday" name="birthDay" required>
+                        </div>
+                        <div class="col-3">
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Fecha Envío OC:</label><br>
+                          <input wire:model.defer="envio" type="date" class="form-control form-control-sm" id="forbirthday" name="birthDay" required>
+                        </div>
                       </div>
+
+                      <div class="row mb-3">
+                        <div class="col-3">
+                          <label class="font-weight-bold text-muted ml-1 mb-0">ID Gran Compra:</label><br>
+                          <input value="" class="form-control form-control-sm" type="text">
+                        </div>
+                        <div class="col-3">
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Monto Pesos:</label><br>
+                          <input value="" class="form-control form-control-sm" type="text">
+                        </div>
+                        <div class="col-3">
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Monto Dólar:</label><br>
+                          <input value="" class="form-control form-control-sm" type="text">
+                        </div>
+                        <div class="col-3">
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Monto UF:</label><br>
+                          <input value="" class="form-control form-control-sm" type="text">
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <div class="col-3">
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Plazo Entrega: OC:</label><br>
+                          <input value="" class="form-control form-control-sm" type="text">
+                        </div>
+                        <div class="col-3">
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Fecha Entrega:</label><br>
+                          <input wire:model.defer="envio" type="date" class="form-control form-control-sm" id="forbirthday" name="birthDay" required>
+                        </div>
+                        <div class="col-3">
+                          <label class="font-weight-bold text-muted ml-1 mb-0">ID Licitación:</label><br>
+                          <input value="" class="form-control form-control-sm" type="text">
+                        </div>
+                        <div class="col-3">
+                          <label class="font-weight-bold text-muted ml-1 mb-0">ID Cotización:</label><br>
+                          <input value="" class="form-control form-control-sm" type="text">
+                        </div>
+                      </div>
+
                     </td>
                   </tr>
                   @endif

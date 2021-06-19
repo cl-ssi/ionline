@@ -51,6 +51,9 @@ table {
 .bgTableTittle {
   background-color: #80A3B4;
 }
+.brd-bb {
+  border-bottom: solid 4px #336B87;
+}
 
 oz {
   color: red;
