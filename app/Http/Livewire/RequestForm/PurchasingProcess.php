@@ -30,7 +30,7 @@ class PurchasingProcess extends Component
     {
     }
 
-    public function edit($index[])
+    public function edit()
     {
       if(!$this->vista)
         $this->vista = true;
