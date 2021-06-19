@@ -14,16 +14,13 @@ class PrefinanceAuthorization extends Component
 {
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $rejectedComment,
            $lstBudgetItem, $program, $sigfe, $codigo;
-    public $arrayItemRequest = [
-            [
-              'budgetId' => ''
-            ]
-    ];
+    public $arrayItemRequest = [['budgetId' => '']];
 
 
     protected $rules = [
         'rejectedComment' => 'required|min:6',
     ];
+
 
     protected $messages = [
         'rejectedComment.required'  => 'Debe ingresar un comentario antes de rechazar Formulario.',
