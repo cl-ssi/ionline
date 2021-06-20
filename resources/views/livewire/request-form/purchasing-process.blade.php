@@ -78,7 +78,7 @@
       </table>
     </div><!-- div para TABLA -->
 
-    <div class="row mx-3 mb-3 mt-3 pt-0"> <!-- DIV para TABLA-->
+    <div class="row mx-0 mb-3 mt-3 pt-0"> <!-- DIV para TABLA-->
       <h6 class="card-subtitle mt-0 mb-2 text-primary">Lista de Bienes y/o Servicios:</h6>
       <table class="table table-sm small">
         <thead>
@@ -94,7 +94,9 @@
             <th>Valor U.</th>
             <th>Impuestos</th>
             <th>Total Item</th>
-            <th>Opción</th>
+            <th class="text-center brd-l">E</th>
+            <th class="text-center">O</th>
+            <th class="text-center brd-r">D</th>
           </tr>
         </thead>
         <tbody>
@@ -113,7 +115,9 @@
                       <th>Valor U.</th>
                       <th>Impuestos</th>
                       <th>Total Item</th>
-                      <th>Opción</th>
+                      <th class="text-center brd-l">E</th>
+                      <th class="text-center">O</th>
+                      <th class="text-center brd-r">D</th>
                     </tr>
                   </thead>
                 @endif
@@ -129,12 +133,17 @@
                       <td class="align-middle" align='right'>{{ $item->unit_value }}</td>
                       <td class="align-middle">{{ $item->tax }}</td>
                       <td class="align-middle" align='right'>{{ $item->formatExpense() }}</td>
-                      <td class="align-middle"><i class="text-primary fas fa-link btn" wire:click="showMe( {{ $key }} )"></i></td>
-
+                      <td class="align-middle brd-l" align='center'>
+                        <a href="#{{$key}}" title="Editar Item {{$key+1}}" class="text-primary" wire:click="showMe({{$key}})">
+                          <i class="fas fa-pencil-alt"></i>
+                        </a>
+                      </td>
+                      <td></td>
+                      <td></td>
                   </tr>
                   @if($arrayVista[$key]['value'])
                   <tr class="{{$arrayBgTable[$key]['value']}}">
-                    <td colspan="12" class="brd-bb">
+                    <td colspan="14" class="brd-bb">
                       <div class="row mb-3">
                         <div class="col-4">
                             <label class="font-weight-bold text-muted ml-1 mb-0">Mecanismo de Compra:</label><br>
@@ -179,11 +188,11 @@
                         </div>
                         <div class="col-3">
                           <label class="font-weight-bold text-muted ml-1 mb-0">Fecha OC:</label><br>
-                          <input wire:model.defer="envio" type="date" class="form-control form-control-sm" id="forbirthday" name="birthDay" required>
+                          <input type="date" class="form-control form-control-sm" required>
                         </div>
                         <div class="col-3">
                           <label class="font-weight-bold text-muted ml-1 mb-0">Fecha Envío OC:</label><br>
-                          <input wire:model.defer="envio" type="date" class="form-control form-control-sm" id="forbirthday" name="birthDay" required>
+                          <input type="date" class="form-control form-control-sm" required>
                         </div>
                       </div>
 
@@ -213,7 +222,7 @@
                         </div>
                         <div class="col-3">
                           <label class="font-weight-bold text-muted ml-1 mb-0">Fecha Entrega:</label><br>
-                          <input wire:model.defer="envio" type="date" class="form-control form-control-sm" id="forbirthday" name="birthDay" required>
+                          <input type="date" class="form-control form-control-sm" required>
                         </div>
                         <div class="col-3">
                           <label class="font-weight-bold text-muted ml-1 mb-0">ID Licitación:</label><br>
@@ -243,9 +252,5 @@
         </tfoot>
       </table>
     </div><!-- DIV para TABLA-->
-
-
-
-
 
 </div><!-- LIVEWIRE -->
