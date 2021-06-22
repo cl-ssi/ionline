@@ -13,6 +13,7 @@ class PurchasingProcess extends Component
   public $requestForm, $purchaseMechanism, $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit, $radioSource, $checkStatus;
   public $arrayVista=[['value'=>'']], $arrayPurchaseMechanism=[['value'=>'']], $arrayPurchaseType=[['value'=>'']], $arrayPurchaseUnit=[['value'=>'']];
   public $arrayBgTable=[['value'=>'']];
+  public $subKey;
 
     public function mount(RequestForm $requestForm)
     {
@@ -67,6 +68,27 @@ class PurchasingProcess extends Component
           $this->arrayVista[$key]['value'] = true;
         else
           $this->arrayVista[$key]['value'] = false;
+    }
+
+    /*Deshabilita el checkbox correspondiente al item del radiobutton seleccionado*/
+    public function disableCheck($key)
+    {
+        if(!is_null($this->subKey))
+          $this->setCheckStatus('enabled', $this->subKey);
+        $this->setCheckStatus('disabled', $key);
+        $this->subKey=$key;
+    }
+
+    public function showAllItems()
+    {
+        foreach($this->requestForm->itemRequestForms as $key => $item)
+          $this->setArrayVista(true, $key);
+    }
+
+    public function hideAllItems()
+    {
+        foreach($this->requestForm->itemRequestForms as $key => $item)
+          $this->setArrayVista(false, $key);
     }
 
     public function resetError()
