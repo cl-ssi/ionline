@@ -79,7 +79,7 @@
     </div><!-- div para TABLA -->
 
     <div class="row mx-0 mb-3 mt-3 pt-0"> <!-- DIV para TABLA-->
-      <h6 class="card-subtitle mt-0 mb-2 text-primary">Lista de Bienes y/o Servicios:</h6>
+      <h6 class="card-subtitle mt-0 mb-2 text-primary">Lista de Bienes y/o Servicios: {{$radioSource}}</h6>
       <table class="table table-sm small">
         <thead>
           <tr class="bgTableTittle">
@@ -138,8 +138,8 @@
                           <i class="fas fa-pencil-alt"></i>
                         </a>
                       </td>
-                      <td></td>
-                      <td></td>
+                      <td align='center'><input type="radio" wire:model="radioSource" name="radioSource" id="{{'sour_'.$item->id}}" value="{{$item->id}}"></td>
+                      <td align='center'><input type="checkbox" id="{{'dest_'.$item->id}}" name="{{$item->id}}" value="{{$item->id}}" {{$checkStatus[$key]}}></td>
                   </tr>
                   @if($arrayVista[$key]['value'])
                   <tr class="{{$arrayBgTable[$key]['value']}}">
