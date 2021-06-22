@@ -7,13 +7,10 @@ use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseType;
-use App\Rrhh\Authority;
-use Carbon\Carbon;
-use App\User;
 
 class PurchasingProcess extends Component
 {
-  public $requestForm, $purchaseMechanism, $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit;
+  public $requestForm, $purchaseMechanism, $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit, $radioSource, $checkStatus;
   public $arrayVista=[['value'=>'']], $arrayPurchaseMechanism=[['value'=>'']], $arrayPurchaseType=[['value'=>'']], $arrayPurchaseUnit=[['value'=>'']];
   public $arrayBgTable=[['value'=>'']];
 
@@ -25,33 +22,45 @@ class PurchasingProcess extends Component
         $this->purchaseType       = $requestForm->purchaseType->id;
         $this->lstPurchaseType    = PurchaseType::all();
         $this->lstPurchaseUnit    = PurchaseUnit::all();
-        $this->setArrayVista(false);
-        $this->setArrayBgTable();
-        $this->setArrayPurchase();
+        $this->configItems();
     }
 
-    private function setArrayVista($val)
-    {
-        foreach($this->requestForm->itemRequestForms as $key => $item)
-          $this->arrayVista[$key]['value']=$val;
-    }
-
-    private function setArrayBgTable()
+    /*Esta funcion permite configurar varios parametros en cada item*/
+    private function configItems()
     {
         foreach($this->requestForm->itemRequestForms as $key => $item){
-          if($key%2 >> 0)
-            $this->arrayBgTable[$key]['value'] = 'bgTableLight';
-          else
-            $this->arrayBgTable[$key]['value'] = 'bgTableDark';
+          $this->setArrayVista(false, $key);
+          $this->setCheckStatus('enabled', $key);
+          $this->setArrayBgTable($key);
         }
+
     }
 
-    private function setArrayPurchase(){
-        foreach($this->requestForm->itemRequestForms as $key => $item){
-          $this->arrayPurchaseMechanism[$item->id]['value']='';
-        }
+    /*Setea arrayVista en FAlSE, esto hace que no se muestre la informacion para
+      completar bajo cada uno de los items en la tabla de bienes y/o servicios*/
+    private function setArrayVista($status, $key)
+    {
+      $this->arrayVista[$key]['value']=$status;
     }
 
+    /*Configura el color de fondo de las Filas en tabla de items.
+      Los valores son clases css en el blade principal*/
+    private function setArrayBgTable($key)
+    {
+      if($key%2 >> 0)
+        $this->arrayBgTable[$key]['value'] = 'bgTableLight';
+      else
+        $this->arrayBgTable[$key]['value'] = 'bgTableDark';
+    }
+
+    /*Funcion para configurar el estado(enabled, disabled) de los checkbox por items*/
+    private function setCheckStatus($status, $key)
+    {
+        $this->checkStatus[$key] = $status;
+    }
+
+    /*Esta funcion se ejecuta al hacer click en cada uno de los lapices de los items,
+      esto permite mostrar o no el contenido editable de cada item*/
     public function showMe($key)
     {
         if($this->arrayVista[$key]['value']==false)
