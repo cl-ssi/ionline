@@ -20,7 +20,7 @@
     @foreach($iaps as $item)
         {{$item->number}}. {{$item->name}} 
         <ol>
-            <li>  <a href="{{ route('indicators.iaps.show', [$year, $item->slug, 'aps']) }}">APS</a> </li>
+            @if($item->aps_active)<li><a href="{{ route('indicators.iaps.show', [$year, $item->slug, 'aps']) }}">APS</a></li> @endif
             @if($item->reyno_active)<li><a href="{{ route('indicators.iaps.show', [$year, $item->slug, 'reyno']) }}">CGU Dr. Hector Reyno</a></li>  @endif
             @if($item->hospital_active)<li><a href="{{ route('indicators.iaps.show', [$year, $item->slug, 'hospital']) }}">Hospital Dr. Ernesto Torres G.</a></li> @endif
             @if($item->ssi_active)<li><a href="{{ route('indicators.iaps.show', [$year, $item->slug, 'ssi']) }}">Dirección Servicio de Salud</a> @endif
