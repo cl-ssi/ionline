@@ -138,7 +138,7 @@
                           <i class="fas fa-pencil-alt"></i>
                         </a>
                       </td>
-                      <td align='center'><input type="radio" wire:model="radioSource" name="radioSource" id="{{'sour_'.$item->id}}" value="{{$item->id}}"></td>
+                      <td align='center'><input type="radio" wire:model="radioSource" wire:click="disableCheck({{$key}})" name="radioSource" id="{{'sour_'.$item->id}}" value="{{$item->id}}"></td>
                       <td align='center'><input type="checkbox" id="{{'dest_'.$item->id}}" name="{{$item->id}}" value="{{$item->id}}" {{$checkStatus[$key]}}></td>
                   </tr>
                   @if($arrayVista[$key]['value'])
@@ -241,16 +241,34 @@
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="8" rowspan="2"></td>
-            <td colspan="2" align='right'>Cantidad de Items</td>
-            <td colspan="2" align='right'>{{count($requestForm->itemRequestForms)}}</td>
-          </tr>
-          <tr>
+            <td colspan="7" rowspan="2"></td>
             <td colspan="2" align='right'>Valor Total</td>
             <td colspan="2" align='right'>{{$requestForm->estimatedExpense()}}</td>
+            <td class="brd-b"></td>
+            <td class="brd-b"></td>
+            <td class="brd-b"></td>
+          </tr>
+          <tr>
+            <td class="brd-b" colspan="2" align='right'>Cantidad de Items</td>
+            <td class="brd-b" colspan="2" align='right'>{{count($requestForm->itemRequestForms)}}</td>
+            <td class="brd-b"></td>
+            <td class="brd-b"></td>
+            <td class="brd-b"></td>
           </tr>
         </tfoot>
       </table>
     </div><!-- DIV para TABLA-->
+
+    <div class="row mx-0 mb-3 mt-3 pt-0">
+      <div class="col-2 mx-0 px-0">
+        <button type="button" class="btn btn-primary btn-sm" wire:click="showAllItems">Mostrar Items</button>
+      </div>
+      <div class="col-2 mx-0 px-0">
+        <button type="button" class="btn btn-primary btn-sm" wire:click="hideAllItems">Ocultar Items</button>
+      </div>
+      <div class="col-2 mx-0 px-0">
+        <button type="button" class="btn btn-primary btn-sm">Pegar Items</button>
+      </div>
+    </div>
 
 </div><!-- LIVEWIRE -->
