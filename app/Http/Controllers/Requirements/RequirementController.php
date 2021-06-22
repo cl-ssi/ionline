@@ -319,7 +319,8 @@ class RequirementController extends Controller
     $requirementStatus->status = "viewed";
     $requirementStatus->save();
 
-    return redirect()->route('requirements.outbox');
+    //return redirect()->route('requirements.outbox');
+    return redirect()->back()->with('success', 'Se han Archivado correctamente');;
   }
 
   public function archive_requirement_delete(Requirement $requirement)
