@@ -57,8 +57,34 @@ class DeleteShift extends Component
         $this->cantDaysToDelete = sizeof( $this->daysList );
 
     }
+    public function changeDate(){
+        $this->daysList= array();
+        if($this->deleteAll == 0){
+
+            $days =  (object) $this->ShiftUser->days;
+            foreach ($days->where("day",">=",$this->startdate)->where("day","<=",$this->enddate) as $day) {
+                array_push($this->daysList,$day);
+            }
+        }else{
+            $days =  (object) $this->ShiftUser->days;
+            foreach ($days as $day) {
+                array_push($this->daysList,$day);
+            }
+        }
+        $this->cantDaysToDelete = sizeof( $this->daysList );
+    }
 
     public function clearDeleteModal(){
          $this->reset();
+    }
+
+    public function confirmDeleteDays(){
+        for($i=0;$i<sizeof($this->daysList);$i++){
+            $ShiftUserDay = ShiftUserDay::find($this->daysList[$i]["id"]); 
+            // dd($ShiftUserDay);
+            $ShiftUserDay->delete();
+        }
+        session()->flash('success', 'Se han eliminado los dias seleccionados ');
+        return redirect()->route('rrhh.shiftsTypes.index');
     }
 }
