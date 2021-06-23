@@ -127,7 +127,7 @@
     <a class="nav-link active" aria-current="page" href="{{ route('rrhh.shiftManag.index') }}">Gestión de Turnos</a>
   </li>
   <li class="nav-item">
-    <a class="nav-link"  href="{{ route('rrhh.shiftsTypes.index') }}">Tipos de Turnos</a>
+    <a class="nav-link"  href="{{ route('rrhh.shiftsTypes.index') }}">Tipos de Turnos (Series)</a>
   </li>
   <li class="nav-item">
     <a class="nav-link"  href="{{ route('rrhh.shiftManag.myshift') }}">Mi Turno</a>
