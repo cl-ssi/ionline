@@ -23,6 +23,7 @@ figure:focus .menu {
 
     @endphp
 
+     @livewire( 'rrhh.delete-shift',['startdate'=>$mInit[0],'enddate'=> $mEnd[0] ] ) 
 
     @if(isset($staffInShift)&&count($staffInShift)>0&&$staffInShift!="")
         @foreach($staffInShift as $sis)
@@ -30,7 +31,9 @@ figure:focus .menu {
         @if( sizeof($sis->days->where('day','>=',$mInit[0])->where('day','<',$mEnd[0])) > 0 )  
             <tr>
                 <td class="bless br cellbutton" >
-                    <i class="fa fa-close deleteButton" href="/"></i>  
+                    
+                    @livewire( 'rrhh.delete-shift-button',['actuallyShiftUserDay'=>$sis])
+
                     @livewire( 'rrhh.see-shift-control-form', ['usr'=>$sis->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth], key($loop->index) )
 
                   {{ $sis->user->runFormat()}} - {{$sis->user->name}} {{$sis->user->fathers_family}} 
@@ -54,22 +57,10 @@ figure:focus .menu {
                                 @endforeach
                             @else
                             <figure tabindex="-1">   
-                               <i data-toggle="modal" data-target="#newDatModal"  data-keyboard= "false" data-backdrop= "static"  style="color:green;font-weight: bold;font-size:20px" class="fa fa-plus btnShiftDay doge">
+                               <i data-toggle="modal" data-target="#newDatModal"  data-keyboard= "false" data-backdrop= "static"  style="color:green;font-weight: bold;font-size:20px" class="fa fa-plus btnShiftDay" id="doge" > 
                                 </i>
 
-                                <nav class="menu">
-                                    <ul>
-                                        <li>
-                                            <button class="btn-context">Open Image in New Tab</button>
-                                        </li>
-                                        <li>
-                                          <button class="btn-context">Save Image As...</button>
-                                        </li>
-                                        <li>
-                                          <button class="btn-context">Copy Image Address</button>
-                                        </li>
-                                    </ul>
-                                </nav>
+                                
                             </figure>
                             @endif
                         
@@ -85,14 +76,5 @@ figure:focus .menu {
 
 </div>
 
-<script type="text/javascript">
-    const img = document.querySelector('.doge');
-    const menu = document.querySelector('.menu');
-
-    img.addEventListener('mousedown', ({ offsetX, offsetY }) => {
-        menu.style.top = offsetY + 'px';
-        menu.style.left = offsetX + 'px';
-    });
-</script>
 
 
