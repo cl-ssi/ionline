@@ -147,6 +147,7 @@ class WordTestController extends Controller
         $templateProcesor->setValue('directorRut',$directorRut);
         $templateProcesor->setValue('directorDecreto',$directorDecreto);
         $templateProcesor->setValue('directorNationality',$directorNationality);
+        $templateProcesor->setValue('art8', !Str::contains($directorApelativo, '(S)') ? 'Art. 8 del ' : '');
 
         // CLONE BLOCK PARA LISTAR COMPONENTES
         if(env('APP_ENV') == 'local') ini_set("pcre.backtrack_limit", -1);
@@ -196,12 +197,13 @@ class WordTestController extends Controller
         $programa = $first_word == 'Programa' ? substr(strstr($agreements->Program->name," "), 1) : $agreements->Program->name;
         
         //Director ssi quien firma a la fecha de hoy
-        $directorDecreto = Signer::find($request->signer_id)->decree;
+        $director = Signer::find($request->signer_id);
 
         //email referente
         $emailReferrer = $agreements->referrer != null ? $agreements->referrer->email : '';
 
-        $mainTemplateProcessor->setValue('directorDecreto',$directorDecreto);
+        $mainTemplateProcessor->setValue('directorDecreto',$director->decree);
+        $mainTemplateProcessor->setValue('art8', !Str::contains($director->appellative, '(S)') ? 'Art. 8 del ' : '');
         $mainTemplateProcessor->setValue('numResolucion',$numResolucion);
         $mainTemplateProcessor->setValue('yearResolucion',$yearResolucion);
         $mainTemplateProcessor->setValue('programa',$programa);
@@ -303,6 +305,7 @@ class WordTestController extends Controller
         $templateProcessor->setValue('directorNationality', $directorNationality);
         $templateProcessor->setValue('directorRut', mb_strtoupper($addendum->director_signer->user->runFormat()));
         $templateProcessor->setValue('directorDecreto', $addendum->director_signer->decree);
+        $templateProcessor->setValue('art8', !Str::contains($directorApelativo, '(S)') ? 'Art. 8 del ' : '');
         $templateProcessor->setValue('comuna', $addendum->agreement->commune->name);
         $templateProcessor->setValue('comunaRut', $municipality->rut_municipality);
         $templateProcessor->setValue('ilustre', ucfirst(mb_strtolower($ilustre)));

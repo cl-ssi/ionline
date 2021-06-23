@@ -19,7 +19,9 @@ class ApsController extends Controller
     public function list($year)
     {
         $iaps = Aps::with('indicators')->where('year', $year)->orderBy('number')->get();
+        $withoutAPS = ['102307', '102100', '102307,102100', '102100,102307'];
         foreach($iaps as $item){
+            $item->aps_active = $item->indicators()->count() > 0 && $item->indicators()->whereIn('establishment_cods', $withoutAPS)->count() == 0 || $item->indicators()->whereIn('establishment_cods', $withoutAPS)->count() != $item->indicators()->count();
             $item->reyno_active = $item->indicators()->where('establishment_cods','LIKE', '%102307%')->count() > 0;
             $item->hospital_active = $item->indicators()->where('establishment_cods','LIKE', '%102100%')->count() > 0;
             $item->ssi_active = $item->indicators()->where('establishment_cods','LIKE', '%102010%')->count() > 0;
