@@ -401,9 +401,7 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
     @elseif($ServiceRequest->programm_name == "PESPI")
       21-03-001-001-04 PESPI ( Programa Especial de Salud Pueblos Indígenas)
     @elseif($ServiceRequest->programm_name == "SUBT.31")
-      El gasto corresponde al ítem 31-02-001 SUBT.21 ( Consultorías) Honorario Suma Alzada.
-    @else
-      1140504 SENDA 1 (Fondos extra presupuestarios) asociados al Convenio SENDA – MINSAL Honorario Suma Alzada
+      El gasto corresponde al ítem 31-02-001 SUBT.21 ( Consultorías) Honorario Suma Alzada.    
     @endif
     Honorario Suma Alzada.
 
