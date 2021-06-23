@@ -118,5 +118,10 @@ class ListOfShifts extends Component
         // dd($this->shiftDay);
     }
 
+    public function deleteActually($actuallyShiftDay){
+        dd($actuallyShiftDay);
+        // $this->emit("setDataToDeleteModal",[$actuallyShiftDay]);
+
+    }
  
 }
