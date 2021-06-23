@@ -47,10 +47,11 @@ class DeleteShift extends Component
 
         $this->enddate =  Session::get('actuallyYear') 
         ."-". Session::get('actuallyMonth') ."-31";
-        $days =  $this->ShiftUser->days;
-        // foreach ($days->where("day",">=",$this->startdate)->where("day","<=",this->enddate) as $day) {
-        foreach ($days as $day) {
-            if($day->day >= $this->startdate && $day->day <= this->enddate)
+        $days =  (object) $this->ShiftUser->days;
+        foreach ($days->where("day",">=",$this->startdate)->where("day","<=",$this->enddate) as $day) {
+// dd(   $days );
+        // foreach ($days as $day) {
+        //     if($day->day >= $this->startdate && $day->day <= $this->enddate)
                 array_push($this->daysList,$day);
         }
         $this->cantDaysToDelete = sizeof( $this->daysList );
