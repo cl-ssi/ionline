@@ -208,6 +208,13 @@ $mes = $meses[($fecha->format('n')) - 1];
 $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' . $fecha->format('Y');
 @endphp
 
+@if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+<p class="justify">
+    En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL ERNESTO TORRES GALDAMES</b>, persona jurídica de derecho público, RUT. 62.000.530-4 , con domicilio en calle Av.héroes de la concepcion N 502 de la ciudad de Iquique, representado por su Director <b>HÉCTOR ALARCÓN ALARCÓN</b> chileno, Cédula Nacional de Identidad N°14.101.085-9, del mismo domicilio del servicio público que representa, en
+    adelante , "El Director del Hospital Ernesto Torres Galdames", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
+    con domicilio en {{$ServiceRequest->address}}, de la ciudad de Iquique, en adelante “El Profesional” y exponen lo siguiente:
+</p>
+@else
 <p class="justify">
     En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>SERVICIO DE SALUD IQUIQUE</b>, persona jurídica de derecho público, RUT. 61.606.100-3, con domicilio en calle Aníbal
     Pinto N°815 de la ciudad de Iquique, representado por su Director <b>JORGE GALLEGUILLOS MÖLLER</b> chileno, Cédula Nacional de Identidad N°9.381.231-K, del mismo domicilio del servicio público que representa, en
@@ -215,12 +222,22 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
     con domicilio en {{$ServiceRequest->address}}, de la ciudad de Iquique, en adelante “El Profesional” y exponen lo siguiente:
 </p>
 
-
+@endif
+@if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+<strong>PRIMERO:</strong>
+    Don HECTOR ALARCÓN ALARCÓN, en su calidad de Director del Hospital Ernesto Torres Galdames, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
+    @if($ServiceRequest->profession){{$ServiceRequest->profession->name}},@endif apoyo a {{$ServiceRequest->responsabilityCenter->name}} de la Dirección del Hospital Ernesto Torres Galdames.
+@else
 <p class="justify">
     <strong>PRIMERO:</strong>
     Don JORGE GALLEGUILLOS MÖLLER, en su calidad de Director del Servicio de Salud Iquique, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
     @if($ServiceRequest->profession){{$ServiceRequest->profession->name}},@endif apoyo a {{$ServiceRequest->responsabilityCenter->name}} de la Dirección del Servicio Salud Iquique.
   </p>
+
+
+@endif
+
+
 
 <p class="justify">
     <strong>SEGUNDO:</strong> En cumplimiento del presente convenio El prestador deberá llevar a cabo las siguientes prestaciones:
