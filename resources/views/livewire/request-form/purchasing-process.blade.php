@@ -79,11 +79,11 @@
     </div><!-- div para TABLA -->
 
     <div class="row mx-0 mb-3 mt-3 pt-0"> <!-- DIV para TABLA-->
-      <h6 class="card-subtitle mt-0 mb-2 text-primary">Lista de Bienes y/o Servicios: {{$radioSource}}</h6>
+      <h6 class="card-subtitle mt-0 mb-2 text-primary">Lista de Bienes y/o Servicios:</h6>
       <table class="table table-sm small">
         <thead>
           <tr class="bgTableTittle">
-            <th>Item</th>
+            <th class="brd-l">Item</th>
             <th>ID</th>
             <th>Cod.Presup.</th>
             <th>Artículo</th>
@@ -104,7 +104,7 @@
                 @if($key >> 0 && $arrayVista[$key]['value'])
                   <thead>
                     <tr class="bgTableTittle">
-                      <th>Item</th>
+                      <th class="brd-l">Item</th>
                       <th>ID</th>
                       <th>Cod.Presup.</th>
                       <th>Artículo</th>
@@ -122,7 +122,7 @@
                   </thead>
                 @endif
                   <tr class="{{$arrayBgTable[$key]['value']}}">
-                      <td class="align-middle">{{ $key+1 }}</td>
+                      <td class="align-middle brd-l">{{ $key+1 }}</td>
                       <td class="align-middle">{{ $item->id }}</td>
                       <td class="align-middle">{{ $item->budgetItem()->first()->fullName() }}</td>
                       <td class="align-middle">{{ $item->article }}</td>
@@ -138,8 +138,8 @@
                           <i class="fas fa-pencil-alt"></i>
                         </a>
                       </td>
-                      <td align='center'><input type="radio" wire:model="radioSource" wire:click="disableCheck({{$key}})" name="radioSource" id="{{'sour_'.$item->id}}" value="{{$item->id}}"></td>
-                      <td align='center'><input type="checkbox" id="{{'dest_'.$item->id}}" name="{{$item->id}}" value="{{$item->id}}" {{$checkStatus[$key]}}></td>
+                      <td align='center'><input type="radio" wire:model="radioSource" wire:click="disableCheck({{$key}})" name="radioSource" id="{{'sour_'.$item->id}}" value="{{$key}}"></td>
+                      <td align='center'><input type="checkbox" wire:model="arrayCheckItem.{{ $key }}.value"  wire:click="selectItem({{$key}})" id="{{'dest_'.$item->id}}" value="{{ $item->id }}" {{$checkStatus[$key]}}></td>
                   </tr>
                   @if($arrayVista[$key]['value'])
                   <tr class="{{$arrayBgTable[$key]['value']}}">
@@ -241,34 +241,41 @@
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="7" rowspan="2"></td>
+
+            <td class="brd-l brd-r brd-b align-middle" colspan="4" rowspan="2">
+              <div class="row mx-0 my-0 px-0 py-0">
+                <div class="col-12 mx-0 my-0 px-0 py-0 text-center">
+                  <button type="button" class="btn btn-primary btn-sm mr-4" wire:click="showAllItems">Mostrar</button>
+                  <button type="button" class="btn btn-primary btn-sm mr-4" wire:click="hideAllItems">Ocultar</button>
+                  <button type="button" class="btn btn-primary btn-sm">Pegar</button>
+                </div>
+              </div>
+            </td>
+
+            <td class="brd-r brd-b" colspan="4">
+              <span class="text-muted">Item de Origen:</span> <span class="text-dark"> {{$radioSource+1}}</span>
+            </td>
+
             <td colspan="2" align='right'>Valor Total</td>
-            <td colspan="2" align='right'>{{$requestForm->estimatedExpense()}}</td>
+            <td colspan="1" align='right'>{{$requestForm->estimatedExpense()}}</td>
             <td class="brd-b"></td>
             <td class="brd-b"></td>
-            <td class="brd-b"></td>
+            <td class="brd-b brd-r"></td>
           </tr>
+
           <tr>
+            <td class="brd-r brd-b" colspan="4">
+              <span class="text-muted">Items de Destino:</span><span class="text-dark"> {{$selectedItems}}</span>
+            </td>
+
             <td class="brd-b" colspan="2" align='right'>Cantidad de Items</td>
-            <td class="brd-b" colspan="2" align='right'>{{count($requestForm->itemRequestForms)}}</td>
+            <td class="brd-b" colspan="1" align='right'>{{count($requestForm->itemRequestForms)}}</td>
             <td class="brd-b"></td>
             <td class="brd-b"></td>
-            <td class="brd-b"></td>
+            <td class="brd-b brd-r"></td>
           </tr>
         </tfoot>
       </table>
     </div><!-- DIV para TABLA-->
-
-    <div class="row mx-0 mb-3 mt-3 pt-0">
-      <div class="col-2 mx-0 px-0">
-        <button type="button" class="btn btn-primary btn-sm" wire:click="showAllItems">Mostrar Items</button>
-      </div>
-      <div class="col-2 mx-0 px-0">
-        <button type="button" class="btn btn-primary btn-sm" wire:click="hideAllItems">Ocultar Items</button>
-      </div>
-      <div class="col-2 mx-0 px-0">
-        <button type="button" class="btn btn-primary btn-sm">Pegar Items</button>
-      </div>
-    </div>
 
 </div><!-- LIVEWIRE -->

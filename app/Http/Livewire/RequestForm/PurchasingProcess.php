@@ -13,7 +13,8 @@ class PurchasingProcess extends Component
   public $requestForm, $purchaseMechanism, $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit, $radioSource, $checkStatus;
   public $arrayVista=[['value'=>'']], $arrayPurchaseMechanism=[['value'=>'']], $arrayPurchaseType=[['value'=>'']], $arrayPurchaseUnit=[['value'=>'']];
   public $arrayBgTable=[['value'=>'']];
-  public $subKey;
+  public $subKey, $selectedItems;
+  public $arrayCheckItem;
 
     public function mount(RequestForm $requestForm)
     {
@@ -23,6 +24,7 @@ class PurchasingProcess extends Component
         $this->purchaseType       = $requestForm->purchaseType->id;
         $this->lstPurchaseType    = PurchaseType::all();
         $this->lstPurchaseUnit    = PurchaseUnit::all();
+        $this->radioSource        = -1;
         $this->configItems();
     }
 
@@ -90,6 +92,29 @@ class PurchasingProcess extends Component
         foreach($this->requestForm->itemRequestForms as $key => $item)
           $this->setArrayVista(false, $key);
     }
+
+    /*Tabla Item -> ID  empezar desde 1 */
+    public function selectItem($key)
+    {
+      if(!$this->arrayCheckItem[$key]['value'])
+        unset($this->arrayCheckItem[$key]);
+
+      $this->selectedItems = '';
+      foreach($this->arrayCheckItem as $item)
+        $this->selectedItems = $this->selectedItems.($item['value']).' ';
+
+/*      if($this->arrayCheckItem[$key]['value'])
+      {
+        //dd($this->arrayCheckItem[$key]['value']);
+
+        //dd($this->arrayCheckItem[$key]['value']);
+
+      }
+        //if(is_null($item['value'])){
+        //  unset($this->arrayCheckItem[$key]);
+        //}else{*/
+      }
+
 
     public function resetError()
     {
