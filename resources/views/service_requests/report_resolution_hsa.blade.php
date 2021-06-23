@@ -171,14 +171,14 @@ En estos antecedentes, según lo dispuesto según inciso final del Art. 2º y 3�
 
 <b>Que</b>, por la índole del servicio que debe realizarse es más recomendable fijar un honorario consistente en una suma alzada.<br><br>
 
-<b>Que</b>, el Servicio de Salud Iquique, cuenta con las disponibilidades presupuestarias suficientes para solventar tal convenio.<br><br>
+<b>Que</b>, el @if($ServiceRequest->responsabilityCenter->establishment_id == 1) Hospital Ernesto Torres Galdames @else Servicio de Salud Iquique @endif, cuenta con las disponibilidades presupuestarias suficientes para solventar tal convenio.<br><br>
 </p>
 
 <p class="justify">
 <strong>RESUELVO:</strong><br><br>
 <!-- {{$ServiceRequest->resolve}}<br><br> -->
 
-<strong>1.CONTRÁTESE</strong> a honorarios a suma alzada en el Servicio de Salud Iquique, a la persona que más abajo se individualiza de acuerdo a su área de competencia,
+<strong>1.CONTRÁTESE</strong> a honorarios a suma alzada en el @if($ServiceRequest->responsabilityCenter->establishment_id == 1) Hospital Ernesto Torres Galdames, @else Servicio de Salud Iquique, @endif a la persona que más abajo se individualiza de acuerdo a su área de competencia,
 
 </p>
 
@@ -496,8 +496,10 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
 @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
 <div class="siete" style="padding-top: 2px;">
     <strong><u>DISTRIBUCIÓN:</u></strong><br>    
-      Honorarios Covid<br>
-      Oficina de partes<br>
+      Honorarios Suma Alzada<br>
+      Finanzas<br>
+      Interesado<br>
+      Ofiicna de Partes<br>
       {{--
     @else    
       @if($ServiceRequest->responsabilityCenter->establishment_id == 12)
