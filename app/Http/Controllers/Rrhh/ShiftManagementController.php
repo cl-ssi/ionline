@@ -503,12 +503,13 @@ class ShiftManagementController extends Controller
 
         // $actuallyUser =  str_replace('"',"", $actuallyUser[0]);
         
-        // $usr = User::find($actuallyUser->id);
+        $usr = User::find($actuallyUser->id);
         // $shifsUsr = ShiftUser::where('date_up','>=',$actuallyYears."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYears."-".$actuallyMonth."-".$days)->where("user_id",$actuallyUser->id)->first();
-        // $shifsUsr = ShiftUser::where('date_up','>=',$actuallyYears."-".$actuallyMonth."-".$days)->where("user_id",$actuallyUser)->first();
+        $shifsUsr = ShiftUser::where('date_up','>=',$actuallyYears."-".$actuallyMonth."-".$days)->where("user_id",$actuallyUser)->first();
       
-        echo  $actuallyUser;
-      // return view('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr,'usr'=>$usr  ]);
+        // dd($actuallyUser);
+
+      return view('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr,'usr'=>$usr  ]);
 
        // $pdf = app('dompdf.wrapper');
        //  $pdf->loadView('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr  ]);
