@@ -204,8 +204,8 @@
   <div class="form-row">
 
     <fieldset class="form-group col">
-        <label for="for_service_description">Descripción Servicio</label>
-        <textarea id="service_description" name="service_description" class="form-control" rows="5">{{ $serviceRequest->service_description }}</textarea>
+        <label for="for_service_description">Descripción Servicio*</label>
+        <textarea id="service_description" name="service_description" class="form-control" rows="5" required>{{ $serviceRequest->service_description }}</textarea>
     </fieldset>
 
   </div>
@@ -581,9 +581,12 @@
         <button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
+        @if(Auth::user()->organizationalUnit->establishment_id == 1)
+				@else
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
         <button type="button" class="btn btn-outline-primary btn-sm" id="alias_viaticos">Viaticos</button>
+        @endif
         <button type="button" class="btn btn-outline-primary btn-sm" id="alias_devolucion">Devolución de tiempo</button>
 
 		</fieldset>
@@ -1382,6 +1385,7 @@
   		$('#additional_benefits').append("Permisos para ausentarse de sus labores por motivos particulares hasta por seis días hábiles en el año, con goce de honorarios. Estos permisos podrán fraccionarse por días o medios días y serán resueltos por la Coordinadora del área correspondiente.\n\n");
   	});
   	$("#alias_capacitacion").click(function(){
+      alert('aprete en capacitacion');
   		$('#additional_benefits').append("Acceso a aquellos programas de capacitación que no signifique un costo para el Servicio de Salud, siempre y cuando éstos sean atingentes a su área de desempeño. Las capacitaciones se deben enmarcar en curso, talleres, seminarios, etc., excluyéndose los cursos de perfeccionamiento. Además, se debe establecer la obligación de devolución y replica de los cursos.\n\n");
   	});
   	$("#alias_fiestas_patrias").click(function(){
