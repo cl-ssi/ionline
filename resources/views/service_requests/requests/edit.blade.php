@@ -47,8 +47,8 @@
     <fieldset class="form-group col-6 col-md">
 		    <label for="for_name">Tipo</label>
 		    <select name="type" class="form-control" id="type" required>
-          <option value="Covid" @if($serviceRequest->type == 'Covid') selected @endif>Honorarios - Covid</option>
-          <option value="Suma alzada" @if($serviceRequest->type == 'Suma alzada') selected @endif>Suma alzada</option>
+          <option style="background-color:#F5A7A7;" value="Covid" @if($serviceRequest->type == 'Covid') selected @endif>Honorarios - Covid</option>
+          <option style="background-color:#8fbc8f;" value="Suma alzada"  @if($serviceRequest->type == 'Suma alzada') selected @endif>Suma alzada</option>
           <!-- <option value="Genérico" @if($serviceRequest->type == 'Genérico') selected @endif >Honorarios - Genérico</option> -->
         </select>
 		</fieldset>
