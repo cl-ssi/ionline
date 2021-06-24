@@ -87,7 +87,7 @@
     <td>
       @if($fulfillment->serviceRequest != null)
       <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}" title="Editar">
-        {{$fulfillment->serviceRequest->id}}
+        {{$fulfillment->serviceRequest->id ?? ''}}
       </a>
       @else
 
@@ -101,8 +101,8 @@
       <br>
       {{$fulfillment->serviceRequest->working_day_type??''}}
     </td>
-    <td>{{$fulfillment->serviceRequest->employee->fullName?? ''}}</td>
-    <td nowrap>{{$fulfillment->serviceRequest->employee->runFormat() ?? ''}}</td>
+    <td>{{$fulfillment->serviceRequest->employee? $fulfillment->serviceRequest->employee->fullName : ''}}</td>
+    <td nowrap>{{$fulfillment->serviceRequest->employee? $fulfillment->serviceRequest->employee->runFormat() : ''}}</td>
     <td>
       @if($fulfillment->year)
       {{ $fulfillment->year }}-{{ $fulfillment->month }}
