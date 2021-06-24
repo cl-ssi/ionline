@@ -392,7 +392,7 @@
 						<option value="PABELLON GINE" @if($serviceRequest->programm_name == 'PABELLON GINE') selected @endif>PABELLON GINE</option>
 						<option value="TURNO DE RESIDENCIA" @if($serviceRequest->programm_name == 'TURNO DE RESIDENCIA') selected @endif>TURNO DE RESIDENCIA</option>
             <option value="SENDA" @if($serviceRequest->programm_name == 'SENDA') selected @endif>SENDA</option>
-            
+
 					@else
 						<option value="PRAPS" @if($serviceRequest->programm_name == 'PRAPS') selected @endif>PRAPS</option>
 						<option value="PESPI" @if($serviceRequest->programm_name == 'PESPI') selected @endif>PESPI</option>
@@ -1009,6 +1009,13 @@
     <div style="height: 300px; overflow-y: scroll;">
         @include('service_requests.requests.partials.audit', ['audits' => $serviceRequest->audits] )
     </div>
+
+    <br /><hr />
+    <div style="height: 300px; overflow-y: scroll;">
+      @foreach($serviceRequest->SignatureFlows as $signatureFlow)
+        @include('service_requests.requests.partials.audit', ['audits' => $signatureFlow->audits] )
+      @endforeach
+    </div>
     @endcanany
 
 @endsection
@@ -1016,9 +1023,9 @@
 @section('custom_js')
 <script type="text/javascript">
 
-	$( document ).ready(function() {   
+	$( document ).ready(function() {
 
-    
+
 
     //temporal, solicitado por eduardo
     if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Departamento de Salud Ocupacional" ||
@@ -1402,9 +1409,9 @@
   	});
 
 
-    
-    if ($('#type').val() == "Suma alzada") {      
-      $('#type').trigger('change');     
+
+    if ($('#type').val() == "Suma alzada") {
+      $('#type').trigger('change');
     }
 
 
