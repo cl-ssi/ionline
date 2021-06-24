@@ -114,6 +114,8 @@
         <label for="for_service_description">Descripción Servicio</label>
         <textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50"></textarea>
 
+		<div id="id_descripcion_servicio">
+
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_enfermeros">Enfermeras/os</button>
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_kinesiologos">Kinesiólogos/as</button>
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_paramedicos">Técnicos paraméricos</button>
@@ -125,6 +127,7 @@
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fonoaudiologas">Fonoaudiologas</button>
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_terapeuta_ocupacional">Terapeuta Ocupacional</button>
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_psicologo">Psicólogo</button>
+		</div>
 
     </fieldset>
 
@@ -675,6 +678,9 @@
 			$("#programm_name option[value='Covid19 Médicos']").hide();
 			$('#digera_strategy').attr('disabled', 'disabled');
 
+			
+			$("#id_descripcion_servicio").hide();
+
 
 			$("#div_hsa_schedule").show();
 			$("#div_covid_schedule").hide();
@@ -755,6 +761,9 @@
 			$("#programm_name option[value='Covid19 No Médicos']").show();
 			$("#programm_name option[value='Covid19 Médicos']").show();
 			$('#digera_strategy').removeAttr('disabled');
+
+
+			$("#id_descripcion_servicio").show();
 
 			$('#objectives').attr('disabled', 'disabled');
 			// $('#resolve').attr('disabled', 'disabled');
