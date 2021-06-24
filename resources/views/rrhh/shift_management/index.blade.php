@@ -199,10 +199,29 @@
 
             <div class="form-group col-md-2">
                 <label for="for_name" class="input-group-addon">Turnos</label>
+              
+
+                               
                 <select class="form-control" id="for_turnFilter" name="turnFilter" >
+
                     <option value="0">0 - Todos</option>
+                    @php
+                        $index = 0;
+                    @endphp
                     @foreach($sTypes as $st)
-                        <option value="{{$st->id}}" {{($st->id==$actuallyShift->id)?'selected':''}}>{{$loop->iteration}} - Solo {{$st->name}}</option>
+                       
+                        @foreach($actuallyShiftMonthsList  as $key =>  $shiftMonth)
+                            @foreach($shiftMonth as $sMonth)
+                                @if($sMonth->shift_type_id == $st->id && $sMonth->user_id == auth()->user()->id && $sMonth->month == $actuallyMonth)
+                                
+                                    <option value="{{$st->id}}" {{($st->id==$actuallyShift->id)?'selected':''}}>{{$index}} - Solo {{$st->name}}</option>
+                                    {{--json_encode($sMonth)--}}
+                                @endif
+                            @endforeach
+                        @endforeach
+                        @php
+                            $index++;
+                        @endphp
                     @endforeach
                     <option value="99">99 - Solo Turno Personalizado</option>
                 </select>
