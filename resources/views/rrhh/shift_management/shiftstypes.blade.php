@@ -91,6 +91,8 @@ input:checked + .slider:before {
 				<th>#</th>
 				<th>Nombre</th>
 				<th>Abrev.</th>
+				<th>Serie</th>
+
 				<th>Estado</th>
 				<th>Creado en</th>
 				<th>Accion</th>
@@ -102,6 +104,8 @@ input:checked + .slider:before {
 						<td>{{$loop->iteration}}</td>
 						<td>{{$sType->name}}</td>
 						<td>{{$sType->shortname}}</td>
+						<th>{{$sType->day_series}}</th>
+
 						<td>
 							<label class="switch">
   								<input type="checkbox" {{($sType->status==1)?"checked":""}}>
