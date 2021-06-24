@@ -237,7 +237,6 @@ class ShiftManagementController extends Controller
         return view('rrhh.shift_management.editshiftstype', compact('sType','tiposJornada'));
     }
 
-
     public function newshifttype(){
     	// echo "create";
         $tiposJornada =   $this->tiposJornada;
@@ -462,7 +461,7 @@ class ShiftManagementController extends Controller
                 
 
         }
-        return redirect()->route('rrhh.shiftManag.index');
+        return redirect()->route('rrhh.shiftManag.index',["groupname"=>Session::get("groupname") ]);
     }
 
     public function goToPreviousMonth(){
@@ -481,7 +480,7 @@ class ShiftManagementController extends Controller
 
         }
                 
-        return redirect()->route('rrhh.shiftManag.index');
+        return redirect()->route('rrhh.shiftManag.index',["groupname"=>Session::get("groupname") ]);
     }
 
     public function downloadShiftControlInPdf(Request $r){
@@ -514,10 +513,7 @@ class ShiftManagementController extends Controller
        // $pdf = app('dompdf.wrapper');
        //  $pdf->loadView('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr  ]);
        //  return $pdf->stream('mi-archivo.pdf');
-
-        
     }
-
 
     public function myShift(){
         // echo "myShift";
@@ -622,8 +618,8 @@ class ShiftManagementController extends Controller
         
            session()->flash('success', 'Se ha confirmado el turno extra del dia '.$d->day);
         return redirect()->route('rrhh.shiftManag.myshift');
-      
     }
+      
     public function myShiftReject($day){
         $d = ShiftUserDay::find($day);
        // echo "C".json_encode($d); 
@@ -639,8 +635,8 @@ class ShiftManagementController extends Controller
         $nHistory->save();
         session()->flash('danger', 'Se ha rechazado el turno extra del dia '.$d->day);
         return redirect()->route('rrhh.shiftManag.myshift');
-
     }
+
 
     public function adminShiftConfirm($day){
 
@@ -658,6 +654,6 @@ class ShiftManagementController extends Controller
         $nHistory->save();
         
         return redirect()->route('rrhh.shiftManag.index');
-      
     }
+      
 }

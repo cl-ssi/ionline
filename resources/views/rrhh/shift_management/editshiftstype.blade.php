@@ -32,6 +32,63 @@
         		</fieldset>
     		</div>
     		<div class="row">
+        		<fieldset class="form-group col-6 col-md-2">
+        		    <label for="for_mostrar">Mostrar en </label>
+        		     <div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" />
+  					<label class="form-check-label" for="inlineCheckbox1">Ene</label>
+				</div>
+
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+  					<label class="form-check-label" for="inlineCheckbox2">Feb</label>
+				</div>
+        			
+        			<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+  					<label class="form-check-label" for="inlineCheckbox2">Mar</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+  					<label class="form-check-label" for="inlineCheckbox2">Abr</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+  					<label class="form-check-label" for="inlineCheckbox2">May</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+  					<label class="form-check-label" for="inlineCheckbox2">Jun</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+  					<label class="form-check-label" for="inlineCheckbox2">Jul</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+  					<label class="form-check-label" for="inlineCheckbox2">Ago</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+  					<label class="form-check-label" for="inlineCheckbox2">Sep</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+  					<label class="form-check-label" for="inlineCheckbox2">Oct</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+  					<label class="form-check-label" for="inlineCheckbox2">Nov</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" />
+  					<label class="form-check-label" for="inlineCheckbox2">Dic</label>
+				</div>
+
+        		</fieldset>
+    		</div>
+
+    		<div class="row">
     			@php
     				$days = explode(",",$sType->day_series)
     			@endphp
