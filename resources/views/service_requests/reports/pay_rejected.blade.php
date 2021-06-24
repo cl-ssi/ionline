@@ -131,11 +131,13 @@
       @endif
     </td>
     <td>
-      @if($fulfillment->serviceRequest->has_resolution_file and $fulfillment->serviceRequest)
+    @if($fulfillment->serviceRequest)
+      @if($fulfillment->serviceRequest->has_resolution_file)
       <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fulfillment->serviceRequest)}}" target="_blank" title="Resolución">
         <i class="fas fa-paperclip"></i>
       </a>
       @endif
+    @endif
     </td>
     <td>
       @livewire('service-request.payment-feedback-toggle', ['fulfillment' => $fulfillment])
