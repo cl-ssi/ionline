@@ -97,9 +97,9 @@
     <td class="small">{{$fulfillment->serviceRequest->responsabilityCenter->name?? ''}}</td>
     <td class="small">{{$fulfillment->serviceRequest->type ?? ''}}</td>
     <td>
-      {{$fulfillment->serviceRequest->program_contract_type}}
+      {{$fulfillment->serviceRequest->program_contract_type??''}}
       <br>
-      {{$fulfillment->serviceRequest->working_day_type}}
+      {{$fulfillment->serviceRequest->working_day_type??''}}
     </td>
     <td>{{$fulfillment->serviceRequest->employee->fullName}}</td>
     <td nowrap>{{$fulfillment->serviceRequest->employee->runFormat()}}</td>
