@@ -8,7 +8,7 @@
         </a>
     @else
 
-        <strong>Boleta:</strong>
+        <strong>Boleta:</strong> <small>(Fecha de Boleta debe ser último día del mes trabajado)</small>
         <input type="file" wire:model="invoiceFile">
         @error('invoiceFile') <span class="error">{{ $message }}</span> @enderror
         <div wire:loading wire:target="invoiceFile"><strong>Cargando</strong></div>
