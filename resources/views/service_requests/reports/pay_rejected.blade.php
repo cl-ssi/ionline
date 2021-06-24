@@ -131,7 +131,7 @@
       @endif
     </td>
     <td>
-      @if($fulfillment->serviceRequest->has_resolution_file)
+      @if($fulfillment->serviceRequest->has_resolution_file and $fulfillment->serviceRequest)
       <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fulfillment->serviceRequest)}}" target="_blank" title="Resolución">
         <i class="fas fa-paperclip"></i>
       </a>
