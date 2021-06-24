@@ -11,6 +11,7 @@ use App\Holiday;
 use App\Models\Rrhh\ShiftTypes;
 use App\Models\Rrhh\ShiftUser;
 use App\Models\Rrhh\ShiftUserDay;
+use App\Models\Rrhh\UserShiftTypeMonths;
 use App\Models\Rrhh\ShiftDayHistoryOfChanges;   
 use App\Rrhh\OrganizationalUnit;
 use App\Programmings\Professional;
@@ -109,16 +110,10 @@ class ShiftManagementController extends Controller
         
         // Fin groupname dinamico
 
-        // if(Session::has('staff') && Session::get('staff') != "")
-        //     $staff = Session::get('staff');
-        // else
-            $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
+     
+        $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
 
-        // if(Session::has('staffInShift') && Session::get('staffInShift') != "")
-        //     $staffInShift = Session::get('staffInShift');
-        // else
-            // echo "H:".htmlentities($groupname);$this->groupsnames
-
+  
         if($actuallyShift->id != 0){ // un turno en especifico
 
             $this->groupsnames = array(); 
@@ -135,10 +130,7 @@ class ShiftManagementController extends Controller
        
         }else{ // Todos los turnos
 
-            //  $this->groupsnames = array(); 
-            // foreach(ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->groupBy("groupname")->get() as $g){
-            //     array_push($this->groupsnames, $g);
-            // }
+          
            $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->where('groupname',htmlentities($groupname))->get();
 
         }
@@ -147,7 +139,27 @@ class ShiftManagementController extends Controller
         $months = $this->months;
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
         $holidays = Holiday::all();
-        
+        $actuallyShiftMonthsList = array();
+        foreach($sTypes as $sType){
+            //Nuevo filtrar por mes cada serie por usuario
+            $actuallyShiftMonths = UserShiftTypeMonths::where("user_id",Auth()->user()->id)->where("shift_type_id",$sType->id)->get();
+            if( !isset($actuallyShiftMonths) || $actuallyShiftMonths =="" || sizeof($actuallyShiftMonths) < 1 ){
+                $actuallyShiftMonths = array();
+                for($i=1;$i<13;$i++){
+                    $aMonth = (object) array("month" => $i,"user_id" =>Auth()->user()->id ,'shift_type_id' => $sType->id );
+                    // $aMonth = (object) $actuallyShiftMonths;
+                    array_push($actuallyShiftMonths,$aMonth);
+                }
+                // $actuallyShiftMonths = (object) $actuallyShiftMonths;
+
+                array_push($actuallyShiftMonthsList,$actuallyShiftMonths);
+
+            }else{
+
+                array_push($actuallyShiftMonthsList,$actuallyShiftMonths);
+            } 
+        };
+        $actuallyShiftMonthsList = (object) $actuallyShiftMonthsList;
         $filter ="";
         Session::put('users',$users);
         Session::put('ouRoots',$ouRoots);
@@ -169,7 +181,7 @@ class ShiftManagementController extends Controller
         if(!isset($groupname) || $groupname =="")
             $groupname = $this->groupsnames[0];
         $groupsnames =$this->groupsnames;
-        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter','groupname','groupsnames','ouRoots','holidays'));
+        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter','groupname','groupsnames','ouRoots','holidays','actuallyShiftMonthsList'));
     }
 
  	public function indexfiltered(Request $r){
@@ -234,7 +246,25 @@ class ShiftManagementController extends Controller
 
     	$tiposJornada =   $this->tiposJornada;
         $sType = ShiftTypes::findOrFail($r->id); 
-        return view('rrhh.shift_management.editshiftstype', compact('sType','tiposJornada'));
+        $idUser = Auth()->user()->id;
+        $actuallyMonths = UserShiftTypeMonths::where("user_id",Auth()->user()->id)->where("shift_type_id",$r->id)->get();
+        $months = (object) $this->months;
+        // echo "MOnths : ".json_encode($actuallyMonths);
+        if( !isset($actuallyMonths) || count($actuallyMonths ) <1  ){
+            echo "if";
+            $actuallyMonths = array();
+            for($i=1;$i<13;$i++){
+
+                $aMonth = (object) array('month' => $i,'user_id' =>Auth()->user()->id ,'shift_type_id' => $r->id );
+              
+                // $aMonth =  $actuallyMonths;
+
+                array_push($actuallyMonths,$aMonth);
+
+            }
+            // $actuallyMonths = (object) $actuallyMonths;
+        }
+        return view('rrhh.shift_management.editshiftstype', compact('sType','tiposJornada','actuallyMonths','idUser','months'));
     }
 
     public function newshifttype(){
@@ -246,13 +276,22 @@ class ShiftManagementController extends Controller
 
     public function storenewshift(Request $r){
 
+        // dd($r->months);
         $nSType = new ShiftTypes; 
         $nSType->name = $r->name;
         $nSType->shortname = $r->shortname;
         $nSType->day_series = implode(",", $r->day_series);
         $nSType->save();
-        session()->flash('info', 'El Turno tipo <i>"'.$r->name.'"</i> ha sido creado.');
-        return redirect()->route('rrhh.shiftsTypes.index');
+
+        for($i=0;$i<sizeof($r->months);$i++){
+            $nUShiftTypesMonts = new UserShiftTypeMonths;
+            $nUShiftTypesMonts->month =$r->months[$i] ;
+            $nUShiftTypesMonts->user_id =  Auth()->user()->id; 
+            $nUShiftTypesMonts->shift_type_id = $nSType->id;
+            $nUShiftTypesMonts->save();
+        }
+        // session()->flash('info', 'El Turno tipo <i>"'.$r->name.'"</i> ha sido creado.');
+        // return redirect()->route('rrhh.shiftsTypes.index');
     }
 
     public function updateshifttype(Request $r){
@@ -263,6 +302,18 @@ class ShiftManagementController extends Controller
 		$fSType->shortname = $r->shortname;
 		$fSType->day_series = implode(",", $r->day_series);
 		$fSType->update();
+
+        $actaullyMonths = UserShiftTypeMonths::where("user_id",Auth()->user()->id)->where("shift_type_id",$r->id)->get();
+        foreach($actaullyMonths as $months){
+            $months->delete();
+        }
+        for($i=0;$i<sizeof($r->months);$i++){
+            $nUShiftTypesMonths = new UserShiftTypeMonths;
+            $nUShiftTypesMonths->month =$r->months[$i] ;
+            $nUShiftTypesMonths->user_id =  Auth()->user()->id; 
+            $nUShiftTypesMonths->shift_type_id = $fSType->id;
+            $nUShiftTypesMonths->save();
+        }
         session()->flash('info', 'El Turno tipo <i>"'.$r->name.'"</i> ha sido modificado.');
         return redirect()->route('rrhh.shiftsTypes.index');
     } 
@@ -444,6 +495,7 @@ class ShiftManagementController extends Controller
         $writer->save('php://output');
     }
 
+    //function for move to the next month with arrow in shiftManagement.index
     public function goToNextMonth(){
 
         if(Session::get('actuallyMonth')){
@@ -463,7 +515,7 @@ class ShiftManagementController extends Controller
         }
         return redirect()->route('rrhh.shiftManag.index',["groupname"=>Session::get("groupname") ]);
     }
-
+    //function for move to the previous month with arrow in shiftManagement.index
     public function goToPreviousMonth(){
         
         if(Session::get('actuallyMonth')){
@@ -482,7 +534,7 @@ class ShiftManagementController extends Controller
                 
         return redirect()->route('rrhh.shiftManag.index',["groupname"=>Session::get("groupname") ]);
     }
-
+    //route for for download actually shift table in pdf formatm with button in right upper corner from shiftManagement.index
     public function downloadShiftControlInPdf(Request $r){
         // header("Content-type:application/pdf");
         // $filename = "test";
@@ -636,7 +688,6 @@ class ShiftManagementController extends Controller
         session()->flash('danger', 'Se ha rechazado el turno extra del dia '.$d->day);
         return redirect()->route('rrhh.shiftManag.myshift');
     }
-
 
     public function adminShiftConfirm($day){
 
