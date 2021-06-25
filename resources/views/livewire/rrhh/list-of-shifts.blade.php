@@ -24,7 +24,7 @@ figure:focus .menu {
     @endphp
 
      @livewire( 'rrhh.delete-shift',['startdate'=>$mInit[0],'enddate'=> $mEnd[0] ] ) 
-
+     @livewire('rrhh.add-day-of-shift-modal')
     @if(isset($staffInShift)&&count($staffInShift)>0&&$staffInShift!="")
         @foreach($staffInShift as $sis)
         {{-- sizeof($sis->days->where('day','>=',$mInit[0])->where('day','<',$mEnd[0])) --}}
@@ -56,12 +56,7 @@ figure:focus .menu {
 
                                 @endforeach
                             @else
-                            <figure tabindex="-1">   
-                               <i data-toggle="modal" data-target="#newDatModal"  data-keyboard= "false" data-backdrop= "static"  style="color:green;font-weight: bold;font-size:20px" class="fa fa-plus btnShiftDay" id="doge" > 
-                                </i>
-
-                                
-                            </figure>
+                                @livewire('rrhh.add-day-of-shift-button',['shiftUser'=>$sis,'day'=>$date])
                             @endif
                         
                     </td>

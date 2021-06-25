@@ -2,7 +2,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header"  style="background-color:#006cb7;color:white   ">
-        <h5 class="modal-title" id="exampleModalLabel">Eliminar personal de turno actual</h5>
+        <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-close"></i> Eliminar personal de turno actual</h5>
         <button type="button" class="btn btn-close" data-dismiss="modal" aria-label="Close" wire:click.prevent="clearDeleteModal()">x</button>
       </div>
       <div class="modal-body">
@@ -75,13 +75,15 @@
         <div class="row">
              <div class="col-md-6">
 
-           <b> TOTAL: </b><i>{{$cantDaysToDelete}}</i>      Días a eliminar
+           <b> TOTAL: </b><div wire:loading>
+                            <i class="fas fa-spinner fa-pulse"></i>
+                    </div><i>{{$cantDaysToDelete}}</i>      Días a eliminar
         </div>
         </div>
 
       </div>
       <div class="modal-footer">
-        <button wire:click.prevent="clearDeleteModal()" type="button" class="btn btn-warning" data-dismiss="modal" >Cerrar</button>
+        <button wire:click.prevent="clearDeleteModal()" type="button" class="btn " data-dismiss="modal" >Cerrar</button>
         <button type="button" class="btn btn-danger" wire:click.prevent="confirmDeleteDays">Confirmar</button>
       </div>
     </div>
