@@ -45,7 +45,7 @@ class ServiceRequestController extends Controller
    * @return \Illuminate\Http\Response
    */
   public function index()
-  {
+  { 
     $user_id = Auth::user()->id;
     $users = User::orderBy('name', 'ASC')->get();
 
