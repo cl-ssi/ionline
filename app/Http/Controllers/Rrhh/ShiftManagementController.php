@@ -208,7 +208,13 @@ class ShiftManagementController extends Controller
 
         // echo "4To:".htmlentities(Session::get('groupname'));
         if($r->turnFilter!=0){
-            $actuallyShift=ShiftTypes::find($r->turnFilter);
+            if($r->turnFilter == 999){
+                $actuallyShift = (object) array('id'=>99,'name' => "T.Personalizado",'shortname' =>"TP" ,'day_series' =>",,,,,," ,'status' =>1 );
+            }else{
+
+                $actuallyShift=ShiftTypes::find($r->turnFilter);
+
+            }
             $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->where("groupname",htmlentities(Session::get('groupname')) )->get();
         } else {
              $actuallyShift=  (object) array('id' =>0,'name'=>"Todos" );
@@ -318,7 +324,7 @@ class ShiftManagementController extends Controller
         return redirect()->route('rrhh.shiftsTypes.index');
     } 
 
-    public function assignStaff(Request $r){
+    public function assignStaff(Request $r){ // crea un sift user y le crea dias de acuerdo al sifttype
         $nShift = new ShiftUser;
         $nShift->date_from = $r->dateFromAssign;
         $nShift->date_up = $r->dateUpAssign;
@@ -334,6 +340,8 @@ class ShiftManagementController extends Controller
         $actuallyShift = ShiftTypes::find( $r->shiftId );
         $currentSeries =  explode(",", $actuallyShift->day_series); 
         $i = 0;
+        if($r->shiftId != 99 ){ // si no es turno personalizado, agrego los dias seun las serie
+
         foreach ($ranges as $date) {
 
 
@@ -385,6 +393,9 @@ class ShiftManagementController extends Controller
                 $i=0;
             }
         }
+
+        }
+
             return redirect('/rrhh/shift-management/'.Session::get('groupname'));
     }
 

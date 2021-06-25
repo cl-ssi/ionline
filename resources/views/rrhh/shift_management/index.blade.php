@@ -223,7 +223,7 @@
                             $index++;
                         @endphp
                     @endforeach
-                    <option value="99">99 - Solo Turno Personalizado</option>
+                    <!-- <option value="99">99 - Solo Turno Personalizado</option> -->
                 </select>
             </div>
 
