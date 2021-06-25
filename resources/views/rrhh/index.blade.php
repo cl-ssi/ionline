@@ -43,8 +43,10 @@
 			<td class="small">{{ @$user->organizationalunit->name ?: ''}}</td>
 			<td class="small">{{ $user->position }}</td>
 			<td nowrap>
-				<a href="{{ route('rrhh.users.edit',$user->id) }}" class="btn btn-outline-primary">
-				<span class="fas fa-edit" aria-hidden="true"></span></a>
+				@can('Users: edit')
+					<a href="{{ route('rrhh.users.edit',$user->id) }}" class="btn btn-outline-primary">
+					<span class="fas fa-edit" aria-hidden="true"></span></a>
+				@endcan
 
 				@role('god')
 				<a href="{{ route('rrhh.users.switch', $user->id) }}" class="btn btn-outline-warning">
