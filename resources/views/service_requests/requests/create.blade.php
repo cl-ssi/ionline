@@ -111,8 +111,10 @@
   <div class="form-row">
 
     <fieldset class="form-group col">
-        <label for="for_service_description">Descripción Servicio</label>
-        <textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50"></textarea>
+        <label for="for_service_description">Descripción Servicio*</label>
+        <textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50" required></textarea>
+
+		<div id="id_descripcion_servicio">
 
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_enfermeros">Enfermeras/os</button>
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_kinesiologos">Kinesiólogos/as</button>
@@ -125,6 +127,7 @@
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fonoaudiologas">Fonoaudiologas</button>
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_terapeuta_ocupacional">Terapeuta Ocupacional</button>
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_psicologo">Psicólogo</button>
+		</div>
 
     </fieldset>
 
@@ -421,7 +424,7 @@
 
 	<div class="form-row" id="div_objectives" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_estate">Objetivos</label>
+				<label for="for_estate">Objetivos*</label>
 				<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50" disabled></textarea>
 		</fieldset>
 	</div>
@@ -433,13 +436,16 @@
 		</fieldset>
 	</div> -->
 
+	@if(Auth::user()->organizationalUnit->establishment_id == 1)
 
+	@else
 	<div class="form-row" id="div_subt31" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_subt31">Subtitulo 31 <small>(Aparecerá en resolución, luego del texto "El gasto corresponde")</small></label>
 				<textarea id="subt31" name="subt31" class="form-control" rows="4" cols="50" disabled></textarea>
 		</fieldset>
 	</div>
+	@endif
 	
 
 
@@ -450,9 +456,13 @@
 
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
+				
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
+				@if(Auth::user()->organizationalUnit->establishment_id == 1)
+				@else
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
+				@endif				
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_devolucion">Devolución de tiempo</button>
 
 
@@ -675,11 +685,16 @@
 			$("#programm_name option[value='Covid19 Médicos']").hide();
 			$('#digera_strategy').attr('disabled', 'disabled');
 
+			
+			$("#id_descripcion_servicio").hide();
+
 
 			$("#div_hsa_schedule").show();
 			$("#div_covid_schedule").hide();
 
 			$('#objectives').removeAttr('disabled');
+			$("#objectives").prop('required',true);
+			//$('#objectives').removeAttr('disabled');
 			$('#subt31').removeAttr('disabled');
 			$("#div_subt31").show();
 			// $('#resolve').removeAttr('disabled');
@@ -756,7 +771,11 @@
 			$("#programm_name option[value='Covid19 Médicos']").show();
 			$('#digera_strategy').removeAttr('disabled');
 
+
+			$("#id_descripcion_servicio").show();
+
 			$('#objectives').attr('disabled', 'disabled');
+			$("#objectives").prop('required',false);
 			// $('#resolve').attr('disabled', 'disabled');
 			$('#additional_benefits').attr('disabled', 'disabled');
 			$("#div_objectives").hide();
