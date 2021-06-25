@@ -87,7 +87,7 @@
     <td>
       @if($fulfillment->serviceRequest != null)
       <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}" title="Editar">
-        {{$fulfillment->serviceRequest->id}}
+        {{$fulfillment->serviceRequest->id ?? ''}}
       </a>
       @else
 
@@ -97,12 +97,12 @@
     <td class="small">{{$fulfillment->serviceRequest->responsabilityCenter->name?? ''}}</td>
     <td class="small">{{$fulfillment->serviceRequest->type ?? ''}}</td>
     <td>
-      {{$fulfillment->serviceRequest->program_contract_type}}
+      {{$fulfillment->serviceRequest->program_contract_type??''}}
       <br>
-      {{$fulfillment->serviceRequest->working_day_type}}
+      {{$fulfillment->serviceRequest->working_day_type??''}}
     </td>
-    <td>{{$fulfillment->serviceRequest->employee->fullName}}</td>
-    <td nowrap>{{$fulfillment->serviceRequest->employee->runFormat()}}</td>
+    <td>{{$fulfillment->serviceRequest ? $fulfillment->serviceRequest->employee->fullName : ''}}</td>
+    <td nowrap>{{$fulfillment->serviceRequest ? $fulfillment->serviceRequest->employee->runFormat() : ''}}</td>
     <td>
       @if($fulfillment->year)
       {{ $fulfillment->year }}-{{ $fulfillment->month }}
@@ -131,11 +131,13 @@
       @endif
     </td>
     <td>
+    @if($fulfillment->serviceRequest)
       @if($fulfillment->serviceRequest->has_resolution_file)
       <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fulfillment->serviceRequest)}}" target="_blank" title="Resolución">
         <i class="fas fa-paperclip"></i>
       </a>
       @endif
+    @endif
     </td>
     <td>
       @livewire('service-request.payment-feedback-toggle', ['fulfillment' => $fulfillment])

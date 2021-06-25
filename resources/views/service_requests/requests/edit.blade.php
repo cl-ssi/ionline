@@ -47,8 +47,8 @@
     <fieldset class="form-group col-6 col-md">
 		    <label for="for_name">Tipo</label>
 		    <select name="type" class="form-control" id="type" required>
-          <option value="Covid" @if($serviceRequest->type == 'Covid') selected @endif>Honorarios - Covid</option>
-          <option value="Suma alzada" @if($serviceRequest->type == 'Suma alzada') selected @endif>Suma alzada</option>
+          <option style="background-color:#F5A7A7;" value="Covid" @if($serviceRequest->type == 'Covid') selected @endif>Honorarios - Covid</option>
+          <option style="background-color:#8fbc8f;" value="Suma alzada"  @if($serviceRequest->type == 'Suma alzada') selected @endif>Suma alzada</option>
           <!-- <option value="Genérico" @if($serviceRequest->type == 'Genérico') selected @endif >Honorarios - Genérico</option> -->
         </select>
 		</fieldset>
@@ -204,8 +204,8 @@
   <div class="form-row">
 
     <fieldset class="form-group col">
-        <label for="for_service_description">Descripción Servicio</label>
-        <textarea id="service_description" name="service_description" class="form-control" rows="5">{{ $serviceRequest->service_description }}</textarea>
+        <label for="for_service_description">Descripción Servicio*</label>
+        <textarea id="service_description" name="service_description" class="form-control" rows="5" required>{{ $serviceRequest->service_description }}</textarea>
     </fieldset>
 
   </div>
@@ -392,7 +392,7 @@
 						<option value="PABELLON GINE" @if($serviceRequest->programm_name == 'PABELLON GINE') selected @endif>PABELLON GINE</option>
 						<option value="TURNO DE RESIDENCIA" @if($serviceRequest->programm_name == 'TURNO DE RESIDENCIA') selected @endif>TURNO DE RESIDENCIA</option>
             <option value="SENDA" @if($serviceRequest->programm_name == 'SENDA') selected @endif>SENDA</option>
-            
+
 					@else
 						<option value="PRAPS" @if($serviceRequest->programm_name == 'PRAPS') selected @endif>PRAPS</option>
 						<option value="PESPI" @if($serviceRequest->programm_name == 'PESPI') selected @endif>PESPI</option>
@@ -581,9 +581,12 @@
         <button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
+        @if(Auth::user()->organizationalUnit->establishment_id == 1)
+				@else
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
         <button type="button" class="btn btn-outline-primary btn-sm" id="alias_viaticos">Viaticos</button>
+        @endif
         <button type="button" class="btn btn-outline-primary btn-sm" id="alias_devolucion">Devolución de tiempo</button>
 
 		</fieldset>
@@ -1006,6 +1009,13 @@
     <div style="height: 300px; overflow-y: scroll;">
         @include('service_requests.requests.partials.audit', ['audits' => $serviceRequest->audits] )
     </div>
+
+    <br /><hr />
+    <div style="height: 300px; overflow-y: scroll;">
+      @foreach($serviceRequest->SignatureFlows as $signatureFlow)
+        @include('service_requests.requests.partials.audit', ['audits' => $signatureFlow->audits] )
+      @endforeach
+    </div>
     @endcanany
 
 @endsection
@@ -1013,9 +1023,9 @@
 @section('custom_js')
 <script type="text/javascript">
 
-	$( document ).ready(function() {   
+	$( document ).ready(function() {
 
-    
+
 
     //temporal, solicitado por eduardo
     if ($('select[id=responsability_center_ou_id] option').filter(':selected').text() == "Departamento de Salud Ocupacional" ||
@@ -1382,6 +1392,7 @@
   		$('#additional_benefits').append("Permisos para ausentarse de sus labores por motivos particulares hasta por seis días hábiles en el año, con goce de honorarios. Estos permisos podrán fraccionarse por días o medios días y serán resueltos por la Coordinadora del área correspondiente.\n\n");
   	});
   	$("#alias_capacitacion").click(function(){
+      alert('aprete en capacitacion');
   		$('#additional_benefits').append("Acceso a aquellos programas de capacitación que no signifique un costo para el Servicio de Salud, siempre y cuando éstos sean atingentes a su área de desempeño. Las capacitaciones se deben enmarcar en curso, talleres, seminarios, etc., excluyéndose los cursos de perfeccionamiento. Además, se debe establecer la obligación de devolución y replica de los cursos.\n\n");
   	});
   	$("#alias_fiestas_patrias").click(function(){
@@ -1398,9 +1409,9 @@
   	});
 
 
-    
-    if ($('#type').val() == "Suma alzada") {      
-      $('#type').trigger('change');     
+
+    if ($('#type').val() == "Suma alzada") {
+      $('#type').trigger('change');
     }
 
 

@@ -136,7 +136,10 @@ class ServiceRequest extends Model implements Auditable
       $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                            $subQuery->where('responsable_id',$user_id);
                                            $subQuery->orwhere('user_id',$user_id);
+                                           //$subQuery->whereNull('derive_date');
+                                           
                                          })
+                                         
                                          ->orderBy('id','asc')
                                          ->get();
       $cont = 0;
