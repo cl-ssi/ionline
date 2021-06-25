@@ -84,7 +84,7 @@ class DeleteShift extends Component
             // dd($ShiftUserDay);
             $ShiftUserDay->delete();
         }
-        session()->flash('success', 'Se han eliminado los dias seleccionados ');
-        return redirect()->route('rrhh.shiftsTypes.index');
+        session()->flash('warning', 'Se han eliminado los dias seleccionados ');
+        return redirect()->route('rrhh.shiftManag.index');
     }
 }
