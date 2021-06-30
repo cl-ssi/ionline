@@ -60,6 +60,12 @@ class ReportController extends Controller
           $subQuery->where('establishment_id', $establishment_id);
         });
       })
+      ->when($type != null, function ($q) use ($type) {
+        return $q->whereHas("ServiceRequest", function ($subQuery) use ($type) {
+          $subQuery->where('type', $type);
+        });
+      })
+      
       // ->when($request->establishment_id === 0, function ($q) use ($establishment_id) {
       //      return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
       //                  $subQuery->where('establishment_id',38);
