@@ -309,6 +309,7 @@
 			<select name="working_day_type" class="form-control" required id="working_day_type">
 				<option value=""></option>
 				<option value="DIURNO">DIURNO</option>
+				<option value="VESPERTINO">VESPERTINO</option>
 				<option value="TERCER TURNO">TERCER TURNO</option>
 				<option value="TERCER TURNO - MODIFICADO">TERCER TURNO - MODIFICADO</option>
 				<option value="CUARTO TURNO">CUARTO TURNO</option>
@@ -317,7 +318,7 @@
 				<option value="HORA MÉDICA">HORA MÉDICA</option>
 				<option value="HORA EXTRA">HORA EXTRA</option>
 				<option value="TURNO EXTRA">TURNO EXTRA</option>
-				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
+				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>				
 				<!-- <option value="OTRO">OTRO</option> -->
 			</select>
 		</fieldset>
