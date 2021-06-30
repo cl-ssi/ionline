@@ -231,11 +231,16 @@
 			<option value=""></option>
 			<option value="44">44</option>
 			<option value="33">33</option>
+			<option value="30">30</option>
 			<option value="28">28</option>
 			<option value="22">22</option>
 			<option value="20">20</option>
 			<option value="15">15</option>
 			<option value="11">11</option>
+			<option value="9">9</option>
+			<option value="5">5</option>
+			<option value="4">4</option>
+			<option value="3">3</option>
 		</select>
 	</fieldset>
 

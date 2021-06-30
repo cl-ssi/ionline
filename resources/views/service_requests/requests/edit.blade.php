@@ -349,11 +349,15 @@
 					<option value=""></option>
           <option value="44" @if($serviceRequest->weekly_hours == 44) selected @endif>44</option>
           <option value="33" @if($serviceRequest->weekly_hours == 33) selected @endif>33</option>
+          <option value="30" @if($serviceRequest->weekly_hours == 30) selected @endif>30</option>
 					<option value="28" @if($serviceRequest->weekly_hours == 28) selected @endif>28</option>
 					<option value="22" @if($serviceRequest->weekly_hours == 22) selected @endif>22</option>
           <option value="20" @if($serviceRequest->weekly_hours == 20) selected @endif>20</option>
           <option value="15" @if($serviceRequest->weekly_hours == 15) selected @endif>15</option>
           <option value="11" @if($serviceRequest->weekly_hours == 11) selected @endif>11</option>
+          <option value="5" @if($serviceRequest->weekly_hours == 5) selected @endif>5</option>
+          <option value="4" @if($serviceRequest->weekly_hours == 4) selected @endif>4</option>
+          <option value="3" @if($serviceRequest->weekly_hours == 3) selected @endif>3</option>
         </select>
 		</fieldset>
 
