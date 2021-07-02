@@ -122,20 +122,8 @@
 
 
 <!--Menu de Filtros  -->
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="{{ route('rrhh.shiftManag.index') }}">Gestión de Turnos</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link"  href="{{ route('rrhh.shiftsTypes.index') }}">Tipos de Turnos (Series)</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link"  href="{{ route('rrhh.shiftManag.myshift') }}">Mi Turno</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Turnos Disponibles</a>
-  </li>
-</ul>
+
+@include("rrhh.shift_management.tabs", array('actuallyMenu' => 'indexTab'))
 <!-- TODO: Que hace este div? -->
 <div id="shiftapp">
 

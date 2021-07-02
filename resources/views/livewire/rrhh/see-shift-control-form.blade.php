@@ -208,7 +208,7 @@
                                                 @if($date2->isPast())
                                                     <td>{{ (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["from"]:""  }}</td>
                         						    <td>{{  (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["to"]:"" }}</td>
-                                                    <td>{{  ( isset($timePerDay[$d["working_day"]]) )?$shiftStatus[$d["status"]]:"" }}</td>
+                                                    <td>{{  ( isset($timePerDay[$d["working_day"]]) )?$shiftStatus[$d["status"]]:""     }}</td>
                                                     @php
                                                       $total+=   (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["time"]:0  ;
                                                     @endphp
@@ -246,7 +246,7 @@
             </div>
             <div class="modal-footer">
 
-                <button type="button" wire:click.prevent="cancel()" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" wire:click.prevent="cancel()" class="btn" data-dismiss="modal">Cerrar</button>
 
                 
                 <form method="post" action="{{ route('rrhh.shiftManag.downloadform') }}" >
@@ -257,8 +257,8 @@
                     <input style=" display:none;" name="actuallyYears" value="{{ $actuallyYears }}">
                     <input style=" display:none;" name="shifsUsr" value="{{ $shifsUsr }}">
                    
-                    <input style=" display:none;" name="actuallyUser" value="{{ $usr }}">
-                  <button class="btn btn-success ">Descargar <i class="fa fa-check"></i></button>
+                    <input style=" display:none;" name="actuallyUser" value="{{ $usr->id }}">
+                  <button class="btn btn-success " target="_blank">Descargar <i class="fa fa-check"></i></button>
                 </form>
 
             </div>
