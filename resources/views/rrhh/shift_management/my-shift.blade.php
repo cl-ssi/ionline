@@ -10,20 +10,8 @@
 }
 </style>
 <!--Menu de Filtros  -->
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link " aria-current="page" href="{{ route('rrhh.shiftManag.index') }}">Gestión de Turnos</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link"  href="{{ route('rrhh.shiftsTypes.index') }}">Tipos de Turnos</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link active" href="{{ route('rrhh.shiftManag.myshift') }}">Mi Turno</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Turnos Disponibles</a>
-  </li>
-</ul>
+
+@include("rrhh.shift_management.tabs", array('actuallyMenu' => 'MyShiftTab'))
 
 <div>
 	 <div class="col-md-6">

@@ -24,7 +24,6 @@ use Session;
 class ShiftManagementController extends Controller
 {   
 
-
     private $months = array(
 
         '01'=>'Enero',
@@ -56,6 +55,19 @@ class ShiftManagementController extends Controller
             'auxiliares',
             'administrativos',
             'auxiliar de servicio TA',
+    );
+
+    public $shiftStatus = array(
+        1=>"asignado",
+        2=>"completado",
+        3=>"turno extra",
+        4=>"cambio turno con",
+        5=>"licencia medica",
+        6=>"fuero gremial",
+        7=>"feriado legal",
+        8=>"permiso excepcional",
+        9 => "Permiso sin goce de sueldo"
+        
     );
     public function index(Request $r, $groupname=null){
     	// echo "Shift Management";
@@ -503,7 +515,7 @@ class ShiftManagementController extends Controller
         header('Cache-Control: max-age=0');
 
         $writer = new Xlsx($spreadsheet);
-        $writer->save('php://output');
+        $writer->save('php://output'); //funcion qe permite descarar la tabla con los turnos visibles actualmete
     }
 
     //function for move to the next month with arrow in shiftManagement.index
@@ -545,8 +557,10 @@ class ShiftManagementController extends Controller
                 
         return redirect()->route('rrhh.shiftManag.index',["groupname"=>Session::get("groupname") ]);
     }
+
     //route for for download actually shift table in pdf formatm with button in right upper corner from shiftManagement.index
     public function downloadShiftControlInPdf(Request $r){
+
         // header("Content-type:application/pdf");
         // $filename = "test";
         // header("Content-Disposition:inline;filename='$filename");
@@ -557,8 +571,13 @@ class ShiftManagementController extends Controller
 
         $actuallyYears =$r->actuallyYears;
         $actuallyMonth  = $r->actuallyMonth;
-        $actuallyUser =  $r->actuallyUser ;
 
+        $actuallyUser = User::find($r->actuallyUser);
+        // $actuallyUser = str_replace('{"', " ",$actuallyUser);
+        // $actuallyUser = str_replace("{","",$actuallyUser);
+        // $actuallyUser =  explode (",",$actuallyUser );
+
+        // dd( $actuallyUser );
         $actuallyOrgUnit = $r->actuallyOrgUnit;
         // $actuallyUser = explode();$actuallyUser[0];
         // $actuallyUser =  str_replace("}","", $actuallyUser);
@@ -570,12 +589,13 @@ class ShiftManagementController extends Controller
         $shifsUsr = ShiftUser::where('date_up','>=',$actuallyYears."-".$actuallyMonth."-".$days)->where("user_id",$actuallyUser)->first();
       
         // dd($actuallyUser);
+            $months = $this->months ;
 
-      return view('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr,'usr'=>$usr  ]);
+        //  return view('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr,'usr'=>$usr,'months'=>$months  ]);
 
-       // $pdf = app('dompdf.wrapper');
-       //  $pdf->loadView('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr  ]);
-       //  return $pdf->stream('mi-archivo.pdf');
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr,'usr'=>$usr,'months'=>$months  ]);
+        return $pdf->stream('mi-archivo.pdf');
     }
 
     public function myShift(){
@@ -717,5 +737,66 @@ class ShiftManagementController extends Controller
         
         return redirect()->route('rrhh.shiftManag.index');
     }
-      
+    
+    public function closeShift(){
+
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        $cargos = OrganizationalUnit::all();
+        $months = $this->months;
+
+        if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
+            $actuallyYear = Session::get('actuallyYear');
+        else
+            $actuallyYear = Carbon::now()->format('Y');
+        
+        if(Session::has('actuallyOrgUnit') && Session::get('actuallyOrgUnit') != "")
+            $actuallyOrgUnit = Session::get('actuallyOrgUnit');
+        else    
+            $actuallyOrgUnit = $cargos->first();
+
+        if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
+            $actuallyMonth = Session::get('actuallyMonth');
+        else
+            $actuallyMonth = Carbon::now()->format('m');
+
+        if(Session::has('days') && Session::get('days') != "")
+            $days = Session::get('days');
+        else
+           $days = Carbon::now()->daysInMonth;
+
+        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
+
+
+        return view('rrhh.shift_management.close-shift', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift' ));
+    }
+
+    public function shiftReports(){
+        // echo "shiftReports";
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        $cargos = OrganizationalUnit::all();
+        $months = $this->months;
+        $shiftStatus = $this->shiftStatus;
+        if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
+            $actuallyYear = Session::get('actuallyYear');
+        else
+            $actuallyYear = Carbon::now()->format('Y');
+        
+        if(Session::has('actuallyOrgUnit') && Session::get('actuallyOrgUnit') != "")
+            $actuallyOrgUnit = Session::get('actuallyOrgUnit');
+        else    
+            $actuallyOrgUnit = $cargos->first();
+
+        if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
+            $actuallyMonth = Session::get('actuallyMonth');
+        else
+            $actuallyMonth = Carbon::now()->format('m');
+
+        if(Session::has('days') && Session::get('days') != "")
+            $days = Session::get('days');
+        else
+           $days = Carbon::now()->daysInMonth;
+        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
+
+       return view('rrhh.shift_management.reports', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','shiftStatus' ));
+    }
 }
