@@ -57,6 +57,16 @@ class ShiftManagementController extends Controller
             'auxiliar de servicio TA',
     );
 
+    private $weekMap = [
+            0 => 'DOM',
+            1 => 'LUN',
+            2 => 'MAR',
+            3 => 'MIE',
+            4 => 'JUE',
+            5 => 'VIE',
+            6 => 'SAB',
+    ];
+
     public $shiftStatus = array(
         1=>"asignado",
         2=>"completado",
@@ -775,7 +785,29 @@ class ShiftManagementController extends Controller
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
         $cargos = OrganizationalUnit::all();
         $months = $this->months;
-        $shiftStatus = $this->shiftStatus;
+        $shiftDayPerStatus =  array();
+        $shiftDayPerJournalType =  array();
+        foreach($this->shiftStatus as $s){
+
+            array_push($shiftDayPerStatus,  array('name' =>  $s,'cant'=>10 ));
+
+            
+        };
+
+        foreach($this->tiposJornada  as $index => $s){
+           array_push($shiftDayPerJournalType,  array('name' =>$s,'id' =>  $index,'cant'=>10 ));
+
+        };
+        
+        $chartpeoplecant = array();
+        foreach($this->weekMap as $index => $w){
+            
+            array_push($chartpeoplecant,  array('id' => $index,'name' =>  $w,'cant'=>random_int(5, 18) ));
+
+            
+        };
+
+
         if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
             $actuallyYear = Session::get('actuallyYear');
         else
@@ -797,6 +829,6 @@ class ShiftManagementController extends Controller
            $days = Carbon::now()->daysInMonth;
         $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
 
-       return view('rrhh.shift_management.reports', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','shiftStatus' ));
+       return view('rrhh.shift_management.reports', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','shiftDayPerStatus' , 'shiftDayPerJournalType','chartpeoplecant'));
     }
 }
