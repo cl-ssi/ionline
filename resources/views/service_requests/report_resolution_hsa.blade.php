@@ -241,8 +241,9 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
 
 <p class="justify">
     <strong>SEGUNDO:</strong> En cumplimiento del presente convenio El prestador deberá llevar a cabo las siguientes prestaciones:
-    <ul>
-        <li>{!!$ServiceRequest->service_description!!}</li>
+    <ul>    
+
+        <li>{!! nl2br(e($ServiceRequest->service_description!)) !!}</li>
     </ul>
 </p>
 
