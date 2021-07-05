@@ -65,7 +65,7 @@ class ReportController extends Controller
           $subQuery->where('type', $type);
         });
       })
-      
+
       // ->when($request->establishment_id === 0, function ($q) use ($establishment_id) {
       //      return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
       //                  $subQuery->where('establishment_id',38);
@@ -380,15 +380,30 @@ class ReportController extends Controller
 
   public function pending(Request $request, $who)
   {
+    if (Auth::user()->organizationalUnit->establishment_id == 38) {
+      $responsabilityCenters = OrganizationalUnit::where('establishment_id', 38)->orderBy('name', 'ASC')->get();
+    }
+    //hospital
+    elseif (Auth::user()->organizationalUnit->establishment_id == 1) {
+      $responsabilityCenters = OrganizationalUnit::where('establishment_id', 1)->orderBy('name', 'ASC')->get();
+    }
 
     $establishments = Establishment::all();
     $user_id = Auth::user()->id;
     $query = Fulfillment::query();
+    $responsability_center = $request->responsability_center;
 
+    // dd($request->responsability_center);
     $query->Search($request)
       ->whereHas('ServiceRequest')
+      ->when($responsability_center != null, function ($q) use ($responsability_center) {
+        return $q->whereHas("serviceRequest", function ($subQuery) use ($responsability_center) {
+          $subQuery->where('responsability_center_ou_id', $responsability_center);
+        });
+      })
       ->orderBy('year')
       ->orderBy('month');
+
 
     switch ($who) {
       case 'responsable':
@@ -420,7 +435,7 @@ class ReportController extends Controller
 
     return view(
       'service_requests.requests.fulfillments.reports.pending',
-      compact('fulfillments', 'request', 'periodo', 'who', 'establishments')
+      compact('fulfillments', 'request', 'periodo', 'who', 'establishments', 'responsabilityCenters')
     );
   }
 
@@ -457,7 +472,7 @@ class ReportController extends Controller
   public function export_sirh(Request $request)
   {
 
-    
+
     $filitas = null;
 
     $filitas = ServiceRequest::where('establishment_id', 1)->paginate(100);
@@ -472,7 +487,7 @@ class ReportController extends Controller
 
 
 
-    
+
 
       $filitas = ServiceRequest::where('establishment_id', 1)
         ->when($request->run != null, function ($q) use ($run) {
@@ -499,7 +514,7 @@ class ReportController extends Controller
         })->paginate(100);
 
         $request->flash(); //envia los input de regreso
-    
+
 
 
     return view('service_requests.export_sirh', compact('request', 'filitas'));
@@ -511,16 +526,16 @@ class ReportController extends Controller
     $filas = null;
 
     $filas = ServiceRequest::where('establishment_id', 1);
-    
+
 
     $run = $request->run;
     $id_from = $request->id_from;
     $id_to = $request->id_to;
     $from = $request->from;
     $to = $request->to;
-    
-    
-    
+
+
+
     $filas = ServiceRequest::where('establishment_id', 1)
       ->when($request->run != null, function ($q) use ($run) {
         return $q->where('user_id', $run);
@@ -543,7 +558,7 @@ class ReportController extends Controller
           ->whereNotNull('gross_amount')
           ->orwhereNotNull('resolution_date');
       })->get();
-    
+
 
 
 
@@ -888,7 +903,7 @@ class ReportController extends Controller
           break;
       }
 
-      $txt .=        
+      $txt .=
         $fila->employee->id . '|' .
         $fila->employee->dv . '|' .
         $sirh_n_cargo . '|' . // contrato 5, prestaión u hora extra es 6
