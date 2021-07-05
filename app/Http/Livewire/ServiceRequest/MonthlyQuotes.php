@@ -172,8 +172,11 @@ class MonthlyQuotes extends Component
         }
         ////es HONORARIO SUMA ALZADA
         else {            ///son cuotas iguales
-            // dd('en HSA');            
-            $aguinaldo = $this->aguinaldopatrias($serviceRequest);
+            // dd('en HSA');
+            if($serviceRequest->weekly_hours == 22 or $serviceRequest->weekly_hours == 44)
+            {
+                $aguinaldo = $this->aguinaldopatrias($serviceRequest);
+            }
 
             if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
                 // dd('entre aca');
