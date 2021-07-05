@@ -22,7 +22,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {   
+    {
         //$users = User::Search($request->get('name'))->orderBy('name','Asc')->paginate(50);
         $users = User::getUsersBySearch($request->get('name'))->orderBy('name','Asc')->paginate(150);
         return view('rrhh.index', compact('users'));
@@ -134,7 +134,7 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\User  $user
