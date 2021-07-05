@@ -50,15 +50,15 @@ class InvoiceController extends Controller
 
 
 
-        $fulfillments = Fulfillment::whereHas('ServiceRequest', function($query) use ($user_id) { 
+        $fulfillments = Fulfillment::whereHas('ServiceRequest', function($query) use ($user_id) {
             $query->where('user_id',$user_id);}
-            )->orderBy('payment_date')->get();
+            )->orderBy('year', 'DESC')->orderBy('month', 'DESC')->get();
 
         $bankaccount = UserBankAccount::where('user_id',$user_id)->get();
 
         $user = User::find($user_id);
 
-        
+
         return view('service_requests.invoice.show', compact('fulfillments','bankaccount','user'));
     }
 

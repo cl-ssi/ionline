@@ -349,11 +349,15 @@
 					<option value=""></option>
           <option value="44" @if($serviceRequest->weekly_hours == 44) selected @endif>44</option>
           <option value="33" @if($serviceRequest->weekly_hours == 33) selected @endif>33</option>
+          <option value="30" @if($serviceRequest->weekly_hours == 30) selected @endif>30</option>
 					<option value="28" @if($serviceRequest->weekly_hours == 28) selected @endif>28</option>
 					<option value="22" @if($serviceRequest->weekly_hours == 22) selected @endif>22</option>
           <option value="20" @if($serviceRequest->weekly_hours == 20) selected @endif>20</option>
           <option value="15" @if($serviceRequest->weekly_hours == 15) selected @endif>15</option>
           <option value="11" @if($serviceRequest->weekly_hours == 11) selected @endif>11</option>
+          <option value="5" @if($serviceRequest->weekly_hours == 5) selected @endif>5</option>
+          <option value="4" @if($serviceRequest->weekly_hours == 4) selected @endif>4</option>
+          <option value="3" @if($serviceRequest->weekly_hours == 3) selected @endif>3</option>
         </select>
 		</fieldset>
 
@@ -423,6 +427,7 @@
 		    <select name="working_day_type" class="form-control" id="working_day_type" required>
           <!-- <option value="08:00 a 16:48 hrs (L-M-M-J-V)" @if($serviceRequest->working_day_type == '08:00 a 16:48 hrs (L-M-M-J-V)') selected @endif >08:00 a 16:48 hrs (L-M-M-J-V)</option> -->
           <option value="DIURNO" @if($serviceRequest->working_day_type == 'DIURNO') selected @endif >DIURNO</option>
+          <option value="VESPERTINO" @if($serviceRequest->working_day_type == 'VESPERTINO') selected @endif >VESPERTINO</option>
           <option value="TERCER TURNO" @if($serviceRequest->working_day_type == 'TERCER TURNO') selected @endif >TERCER TURNO</option>
           <option value="TERCER TURNO - MODIFICADO" @if($serviceRequest->working_day_type == 'TERCER TURNO - MODIFICADO') selected @endif >TERCER TURNO - MODIFICADO</option>
           <option value="CUARTO TURNO" @if($serviceRequest->working_day_type == 'CUARTO TURNO') selected @endif >CUARTO TURNO</option>
