@@ -9,7 +9,7 @@ use App\Models\Rrhh\ShiftUserDay;
 class AddDayOfShiftModal extends Component
 {   
     public $shiftDay;
-    public $journalType;
+    public $journalType = "L";
     public $day;
 
     protected $listeners = ['setAddModalValue' => "setValue"];
@@ -23,6 +23,8 @@ class AddDayOfShiftModal extends Component
     }
 
     public function confirmAddDay(){
+
+        // dd($this->journalType);
         $nShiftUserDay = new ShiftUserDay;
         
         $nShiftUserDay->day = $this->day;
