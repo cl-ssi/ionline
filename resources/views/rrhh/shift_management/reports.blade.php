@@ -60,7 +60,7 @@
             </div>
 
             <div class="form-group col-md-2">
-                <label for="for_name" class="input-group-addon">Turnos</label>
+                <label for="for_name" class="input-group-addon">Turnos (Series)</label>
               
 
                                
@@ -69,13 +69,10 @@
                     <option value="0">0 - Todos</option>
                    
                     @foreach($sTypes as $st)
-                       
-                      
-                                
-                                    <option value="{{$st->id}}" {{($st->id==1)?'selected':''}}>{{$loop->iteration}} - Solo {{$st->name}}</option>
+                     
+     					<option value="{{$st->id}}" {{($st->id==$actuallySerie)?'selected':''}}>{{$loop->iteration}} - Solo {{$st->name}}</option>
                                     
-                                
-                        @endforeach
+                    @endforeach
                        
                   
                     <!-- <option value="99">99 - Solo Turno Personalizado</option> -->
@@ -84,14 +81,14 @@
 
             <div class="form-group col-md-2">
                 <label for="for_name" class="input-group-addon">Jornada</label>              
-                <select class="form-control" id="for_turnFilter" name="turnFilter" >
+                <select class="form-control" id="for_journalType" name="journalType" >
 
                     <option value="0">0 - Todas</option>
                     @php
                         $index = 0;
                     @endphp
                     @foreach($tiposJornada as $index => $jt)
-                       <option value="{{$index}}">{{$loop->iteration}} - {{ $jt }} </option>
+                       <option value="{{$index}}" {{($index==$actuallyJournalType)?'selected':''}} >{{$loop->iteration}} - {{ $jt }} </option>
                     @endforeach
                     <!-- <option value="99">99 - Solo Turno Personalizado</option> -->
                 </select>
@@ -99,11 +96,11 @@
 
             <div class="form-group col-md-2">
                 <label for="for_name" class="input-group-addon">Estado</label>              
-                <select class="form-control" id="for_turnFilter" name="turnFilter" >
+                <select class="form-control" id="for_dayStatus" name="dayStatus" >
 
                     <option value="0">0 - Todos</option>
                     @foreach($shiftStatus as $index => $ss)
-                       <option value="{{$index}}">{{$index}} - {{ ucfirst($ss) }} </option>
+                       <option value="{{$index}}"  {{($index==$actuallyDayStatus)?'selected':''}} >{{$index}} - {{ ucfirst($ss) }} </option>
                     @endforeach
                     <!-- <option value="99">99 - Solo Turno Personalizado</option> -->
                 </select>
@@ -112,13 +109,13 @@
             <div class="form-group col-md-2">	
                 <label for="for_name">Desde</label>
            
-                <input type="date" class="form-control" name="datefrom">
+                <input type="date" class="form-control" name="datefrom" value="{{$datefrom}}">
             </div>
 
             <div class="form-group col-md-2">    	
                 <label for="for_name">Hasta</label>
                 
-                <input type="date" class="form-control" name="dateto">
+                <input type="date" class="form-control" name="dateto" value="{{$dateto}}">
 
             </div>
 
@@ -133,24 +130,26 @@
 <br>
 <h5>#1 Registros coincidentes con la busqueda </h5>
 <br>
-	<table class="table table-sm table-bordered">
+	<table class="table table-sm table-bordered" style=" max-height: 450px;overflow: auto;display:inline-block;">
 		<thead>
 			<tr>
 				<th>#</th>
 				<th>Rut</th>
 				<th>Nombre</th>
 				<th>Dia</th>
+				<th>Jornada</th>
 				<th>Estado</th>
 				<th>Remplazado con</th>
 				<th>Confirmacion</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr>
+		<!-- 	<tr>
 				<td>1</td>
 				<td>18004474-4</td>
 				<td>Armando Barra Perez</td>
 				<td>01/07/21</td>
+				<td>L - Largo</td>
 				<td>Licencia Medica</td>
 				<td>Prueba p1</td>
 				<td>
@@ -158,7 +157,24 @@
 				 	<small>Confirmado por supervicion medica <i class="fa fa-check"></i></small><br>
 				 	<small>Confirmado por supervisora rrhh <i class="fa fa-check"></i> </small>
 				 </td>
-			</tr>	
+			</tr>	 -->
+			@foreach($reportResult as $r)
+				<tr>
+					<td>{{$loop->iteration}}</td>
+					<td>{{$r->ShiftUser->user->runFormat()}}</td>
+					<td>{{$r->ShiftUser->user->getFullNameAttribute()}}</td>
+					<td>{{$r->day}}</td>
+					<td>{{$r->working_day}} - {{ $tiposJornada [ $r->working_day ] }}</td>
+					<td>{{ ucfirst ( $shiftStatus [ $r->status ] ) }}</td>
+					<td>{{$r->derived_from}}</td>
+					<td>
+				 		<small>Confirmado por supervisor area  <i class="fa fa-check"></i></small><br>
+				 		<small>Confirmado por supervicion medica <i class="fa fa-check"></i></small><br>
+				 		<small>Cerrado por supervisora rrhh <i class="fa fa-check"></i> </small>
+				 	</td>
+					
+				</tr>
+			@endforeach
 		</tbody>
 	</table>
 	

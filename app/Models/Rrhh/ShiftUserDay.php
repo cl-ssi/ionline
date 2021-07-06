@@ -26,6 +26,7 @@ class ShiftUserDay extends Model
     	return $this->hasMany(ShiftDayHistoryOfChanges::class, 'shift_user_day_id');
 	}
 	public function confirmationStatus(){
+
 		$actuallyStatus = 0;
 		$reject = 0;
 		if($this->status!=3)
@@ -45,6 +46,10 @@ class ShiftUserDay extends Model
 		else
 			return 3;
 			
+	}
+
+	public function ChangedWith(){
+    	return $this->hasOne(ShiftUserDay::class, 'derived_from');
 
 	}
 

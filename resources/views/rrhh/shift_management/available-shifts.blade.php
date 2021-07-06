@@ -164,6 +164,7 @@
     			<b>Estado</b>
     			<p style="color:green"> Confirmado</p>
     		</li>
+    		{{json_encode($availableDays)}}
   		</ul>
 	</div>
 @endsection
