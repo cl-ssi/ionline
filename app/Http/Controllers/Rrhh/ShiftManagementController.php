@@ -780,7 +780,93 @@ class ShiftManagementController extends Controller
         return view('rrhh.shift_management.close-shift', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift' ));
     }
 
-    public function shiftReports(){
+    public function shiftReports(Request $r){
+        // echo "shiftReports";
+        if(isset($r) && $r->orgunitFilter)
+            dd($r->orgunitFilter);
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        $cargos = OrganizationalUnit::all();
+        $months = $this->months;
+        $shiftDayPerStatus =  array();
+        $shiftDayPerJournalType =  array();
+        foreach($this->shiftStatus as $s){
+
+            array_push($shiftDayPerStatus,  array('name' =>  $s,'cant'=>10 ));
+
+            
+        };
+
+        foreach($this->tiposJornada  as $index => $s){
+           array_push($shiftDayPerJournalType,  array('name' =>$s,'id' =>  $index,'cant'=>10 ));
+
+        };
+        
+        $chartpeoplecant = array();
+        foreach($this->weekMap as $index => $w){
+            
+            array_push($chartpeoplecant,  array('id' => $index,'name' =>  $w,'cant'=>random_int(5, 18) ));
+
+            
+        };
+        if( Session::has('actuallyShift') && Session::get('actuallyShift') )
+            $actuallyShift =  Session::get('actuallyShift');
+        else
+            $actuallyShift = ShiftTypes::first();
+
+        if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
+            $actuallyYear = Session::get('actuallyYear');
+        else
+            $actuallyYear = Carbon::now()->format('Y');
+        
+        if(Session::has('actuallyOrgUnit') && Session::get('actuallyOrgUnit') != "")
+            $actuallyOrgUnit = Session::get('actuallyOrgUnit');
+        else    
+            $actuallyOrgUnit = $cargos->first();
+
+        if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
+            $actuallyMonth = Session::get('actuallyMonth');
+        else
+            $actuallyMonth = Carbon::now()->format('m');
+
+        if(Session::has('days') && Session::get('days') != "")
+            $days = Session::get('days');
+        else
+           $days = Carbon::now()->daysInMonth;
+
+        if(Session::has('sTypes') && Session::get('sTypes') != "")
+            $sTypes = Session::get('sTypes');
+        else
+            $sTypes = ShiftTypes::all(); 
+
+        $actuallyShiftMonthsList = array();
+        foreach($sTypes as $sType){
+            //Nuevo filtrar por mes cada serie por usuario
+            $actuallyShiftMonths = UserShiftTypeMonths::where("user_id",Auth()->user()->id)->where("shift_type_id",$sType->id)->get();
+            if( !isset($actuallyShiftMonths) || $actuallyShiftMonths =="" || sizeof($actuallyShiftMonths) < 1 ){
+                $actuallyShiftMonths = array();
+                for($i=1;$i<13;$i++){
+                    $aMonth = (object) array("month" => $i,"user_id" =>Auth()->user()->id ,'shift_type_id' => $sType->id );
+                    // $aMonth = (object) $actuallyShiftMonths;
+                    array_push($actuallyShiftMonths,$aMonth);
+                }
+                // $actuallyShiftMonths = (object) $actuallyShiftMonths;
+
+                array_push($actuallyShiftMonthsList,$actuallyShiftMonths);
+
+            }else{
+
+                array_push($actuallyShiftMonthsList,$actuallyShiftMonths);
+            } 
+        };
+        $actuallyShiftMonthsList = (object) $actuallyShiftMonthsList;
+
+        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
+        $tiposJornada = $this->tiposJornada;
+        $shiftStatus = $this->shiftStatus;
+       return view('rrhh.shift_management.reports', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','shiftDayPerStatus' , 'shiftDayPerJournalType','chartpeoplecant','sTypes','actuallyShiftMonthsList','actuallyShift','tiposJornada','shiftStatus'));
+    }
+
+    public function shiftDashboard(){
         // echo "shiftReports";
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
         $cargos = OrganizationalUnit::all();
@@ -830,5 +916,31 @@ class ShiftManagementController extends Controller
         $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
 
        return view('rrhh.shift_management.reports', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','shiftDayPerStatus' , 'shiftDayPerJournalType','chartpeoplecant'));
+    }
+
+    public function availableShifts(){
+         $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        $cargos = OrganizationalUnit::all();
+        $months = $this->months;
+         if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
+            $actuallyYear = Session::get('actuallyYear');
+        else
+            $actuallyYear = Carbon::now()->format('Y');
+        
+        if(Session::has('actuallyOrgUnit') && Session::get('actuallyOrgUnit') != "")
+            $actuallyOrgUnit = Session::get('actuallyOrgUnit');
+        else    
+            $actuallyOrgUnit = $cargos->first();
+
+        if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
+            $actuallyMonth = Session::get('actuallyMonth');
+        else
+            $actuallyMonth = Carbon::now()->format('m');
+
+        if(Session::has('days') && Session::get('days') != "")
+            $days = Session::get('days');
+        else
+           $days = Carbon::now()->daysInMonth;
+           return view('rrhh.shift_management.available-shifts', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth'));
     }
 }
