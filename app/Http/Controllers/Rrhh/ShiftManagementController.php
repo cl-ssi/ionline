@@ -44,7 +44,9 @@ class ShiftManagementController extends Controller
             'F' => "Libre",
             'D' => "Dia",
             'L' => "Largo",
-            'N' => "Noche"
+            'N' => "Noche",
+            "MD" => "Media jornada dia",
+            "MN" => "Media jornada nocuturna"
     );
 
     private $groupsnames = array(
@@ -76,7 +78,8 @@ class ShiftManagementController extends Controller
         6=>"fuero gremial",
         7=>"feriado legal",
         8=>"permiso excepcional",
-        9 => "Permiso sin goce de sueldo"
+        9 => "Permiso sin goce de sueldo",
+        10 => "Descanzo compensatorio",
         
     );
     public function index(Request $r, $groupname=null){
@@ -965,11 +968,21 @@ class ShiftManagementController extends Controller
         else
            $days = Carbon::now()->daysInMonth;
 
+       $tiposJornada = $this->tiposJornada;
+       $dummyVar ="only for recordatory";
+         $availableDays = ShiftUserDay::where("status",4)->where('day','>=',$actuallyYear."-".$actuallyMonth."-01")->where('day','<=',$actuallyYear."-".$actuallyMonth."-".$days)->whereHas("shiftUserDayLog",  function($q) use($dummyVar){
+                // Busco todos los dias que esten en estado 3 que es turno extra,  
+                $q->where('change_type',7); // este mismo cambiar  el change type y agregarle una "nueva linea" para escribir un nuevo mensaje qe ya fue confirmado
+        
+            })->get();
+             /*doesntHave("shiftUserDayLog",  function($q) use($userId){
+                
+                $q->where('change_type',8);
+        
+            })->get();*/
 
-            // $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->where('groupname',htmlentities($groupname))->get();
+       // $availableDays = ShiftUserDay::where("status",4)->where('day','>=',$actuallyYear."-".$actuallyMonth."-01")->where('day','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
 
-       $availableDays = ShiftUserDay::where("status",4)->where('day','>=',$actuallyYear."-".$actuallyMonth."-01")->where('day','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
-
-           return view('rrhh.shift_management.available-shifts', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','availableDays'));
+           return view('rrhh.shift_management.available-shifts', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','availableDays','tiposJornada'));
     }
 }
