@@ -81,13 +81,14 @@
 
 	<h5><b>Disponibles:</b></h5>
 	<br>
-	<div class="alert alert-primary" role="alert">
-		Sin días disponibles para solicitar
-	</div>
-
+	@if( sizeof ( $availableDays ) < 1 )
+		<div class="alert alert-primary" role="alert">
+			Sin días disponibles para solicitar
+		</div>
+	@endif
 	<div class="card " >
   		<ul class="list-group list-group-flush overflow-auto">
-    		<li class="list-group-item">
+    	<!-- 	<li class="list-group-item">
     			<b>Propietario</b>
     			<p>18.004.474-4 - Armando Barra Perez</p>
     			
@@ -113,7 +114,37 @@
     			<p> 05/07/2021, Jornada: L - Larga</p>
     			<button class="btn btn-success">Solicitar</button>
 
+    		</li> -->
+
+    		@foreach($availableDays as $aDay )
+    			<li class="list-group-item">
+    				<b>Propietario</b>
+    				<p>{{$aDay->ShiftUser->user->runFormat()}} -  {{$aDay->ShiftUser->user->getFullNameAttribute()}} </p>
+    			
+    				<b>Día</b>
+    				<p> {{$aDay->day }}, Jornada: {{$aDay->working_day }}- {{ $tiposJornada[ $aDay->working_day ] }}</p>
+    				<button class="btn btn-success">Solicitar</button>
+
+    			</li>  
+    			<li class="list-group-item ">
+    			<div class="row row-striped">
+    				<div class="col-2 text-right">
+						<h1 class="display-4"><span class="badge badge-secondary">23</span></h1>
+						<h2>OCT</h2>
+					</div>
+					<div class="col-10">
+						<h3 class="text-uppercase"><strong>Jornada: {{$aDay->working_day }}- {{ $tiposJornada[ $aDay->working_day ] }}</strong></h3>
+						<ul class="list-inline">
+				    		<li class="list-inline-item"><i class="fa fa-calendar-o" aria-hidden="true"></i> Monday</li>
+							<li class="list-inline-item"><i class="fa fa-clock-o" aria-hidden="true"></i> 12:30 PM - 2:00 PM</li>
+							<li class="list-inline-item"><i class="fa fa-location-arrow info" aria-hidden="true"></i> Hospital Dr. Ernesto Torres Galdames</li>
+						</ul>
+						<p>Lorem ipsum dolsit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.{{$aDay->commentary}}</p>
+						<button class="btn btn-success">Solicitar</button>
+					</div>
+				</div>
     		</li>
+    		@endforeach
   		</ul>
 	</div>
 	<br>
@@ -164,7 +195,7 @@
     			<b>Estado</b>
     			<p style="color:green"> Confirmado</p>
     		</li>
-    		{{json_encode($availableDays)}}
+    		{{--json_encode($availableDays)--}}
   		</ul>
 	</div>
 @endsection
