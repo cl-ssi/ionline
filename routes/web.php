@@ -43,6 +43,8 @@ use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\ServiceRequests\InvoiceController;
 use App\Http\Controllers\ServiceRequests\ValueController;
 
+use App\Http\Controllers\ServiceRequests\AttachmentController;
+
 use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 use App\Http\Controllers\ServiceRequests\FulfillmentController;
 use App\Http\Controllers\ServiceRequests\SignatureFlowController;
@@ -97,6 +99,7 @@ Route::group(['middleware' => 'auth:external'], function () {
     Route::patch('/update/{psi_request_id?}', [TestsController::class, 'updateStatus'])->name('updateStatus');
     Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
     Route::post('/test', [TestsController::class, 'storeExternal'])->name('storeExternal');
+    Route::get('/signed-suitability-certificate-pdf/{id}', [SuitabilityController::class, 'signedSuitabilityCertificatePDF'])->name('signedSuitabilityCertificate');
     });
 
     Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
@@ -468,6 +471,13 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
                 Route::post('/store', [FulfillmentItemController::class, 'store'])->name('store');
                 Route::put('/{fulfillment}/update', [FulfillmentItemController::class, 'update'])->name('update');
                 Route::delete('{fulfillmentItem}/destroy', [FulfillmentItemController::class, 'destroy'])->name('destroy');
+            });
+
+
+            Route::prefix('attachment')->name('attachment.')->group(function () {
+                //descomposición del attachment
+                Route::post('/{fulfillment}/store', [AttachmentController::class, 'store'])->name('store');
+
             });
 
 

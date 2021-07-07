@@ -29,7 +29,7 @@
             @if($psirequest->status =="Aprobado")
 
                     @if($psirequest->result->signedCertificate && $psirequest->result->signedCertificate->hasSignedFlow)
-                    <a href="{{ route('suitability.results.signedSuitabilityCertificate', $psirequest->result->id) }}" class="btn @if($psirequest->result->signedCertificate->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif" target="_blank">
+                    <a href="{{ route('idoneidad.signedSuitabilityCertificate', $psirequest->result->id) }}" class="btn @if($psirequest->result->signedCertificate->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif" target="_blank">
                         <span class="fas fa-file-pdf" aria-hidden="true"></span></a>                    
                     @endif
             @endif
