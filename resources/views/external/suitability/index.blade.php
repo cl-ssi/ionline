@@ -25,7 +25,15 @@
             <td>{{$psirequest->job}}</td>
             <td>{{$psirequest->user->email}}</td>
             <td>{{$psirequest->status}}</td>
-            <td></td>
+            <td>
+            @if($psirequest->status =="Aprobado")
+
+                    @if($psirequest->result->signedCertificate && $psirequest->result->signedCertificate->hasSignedFlow)
+                    <a href="{{ route('suitability.results.signedSuitabilityCertificate', $psirequest->result->id) }}" class="btn @if($psirequest->result->signedCertificate->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif" target="_blank">
+                        <span class="fas fa-file-pdf" aria-hidden="true"></span></a>                    
+                    @endif
+            @endif
+            </td>
         </tr>
         @empty
         <tr><td colspan="6" style="text-align: center; vertical-align: middle;" >No Hay Solicitudes Creadas</td></tr>
