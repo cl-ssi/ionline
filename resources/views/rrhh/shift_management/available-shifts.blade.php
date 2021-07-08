@@ -193,7 +193,7 @@
 	<br>
 	
 	{{--$misSolicitudes --}}
-	@if( count ( $misSolicitudes ) > 0)
+	@if( count ( $misSolicitudes ) < 0)
 		<div class="alert alert-primary" role="alert">
 			Sin registro de solicitudes realizadas este mes
 		</div>
@@ -205,19 +205,26 @@
   			 @foreach( $misSolicitudes as $solicitud)
   			 	<li class="list-group-item">
     				<b>Propietario</b>
-    				<p>18.004.474-4 - Armando Barra Perez</p>
+    				<p>{{$solicitud->user->runFormat()}} -  {{$solicitud->user->getFullNameAttribute()}} </p>
     			
     				<b>Día</b>
-    				<p> 05/07/2021, Jornada: L - Larga</p>
+    				<p> {{ $solicitud->ShiftUserDay->day }}, Jornada: {{ $solicitud->ShiftUserDay->working_day}} - {{ $tiposJornada [ $solicitud->ShiftUserDay->working_day ] }}</p>
 
     				<b>Solicitud</b>
-    				<p> Solicitado en 05/07/2021 20:30:00</p>
+    				<p> Solicitado en {{ $solicitud->created_at}}</p>
     				<b>Estado</b>
-    				<p style="color:yellow"> Espera de confirmacion</p>
-    				<button class="btn btn-danger">Cancelar</button>
+    				<p style="color:{{$solicitud->statusColor()}}"> {{ strtoupper( $solicitud->status ) }}</p>
+    				@if($solicitud->status == "pendiente")
+    					<form  method="post" action="{{ route('rrhh.shiftManag.availableShifts.cancelRequest') }}" >
+							@csrf
+        					{{ method_field('post') }}
+    						<input type="hidden" name="solicitudId" value="{{$solicitud->id}}">
+    						<button class="btn btn-danger">Cancelar</button>
+    					</form>
+    				@endif
     		</li>
   			 @endforeach
-    		<li class="list-group-item">
+    		<!-- <li class="list-group-item">
     			<b>Propietario</b>
     			<p>18.004.474-4 - Armando Barra Perez</p>
     			
@@ -253,7 +260,7 @@
     			<p> Solicitado en 05/07/2021 20:30:00</p>
     			<b>Estado</b>
     			<p style="color:green"> Confirmado</p>
-    		</li>
+    		</li> -->
     		{{--json_encode($availableDays)--}}
   		</ul>
 	</div>
