@@ -476,7 +476,10 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
             Route::prefix('attachment')->name('attachment.')->group(function () {
                 //descomposición del attachment
-                Route::post('/{fulfillment}/store', [AttachmentController::class, 'store'])->name('store');
+                Route::post('/{var}/store', [AttachmentController::class, 'store'])->name('store');
+                Route::get('/{attachment}/show', [AttachmentController::class, 'show'])->name('show');
+                Route::get('/{attachment}/download', [AttachmentController::class, 'download'])->name('download');
+                Route::delete('/{attachment}/destroy', [AttachmentController::class, 'destroy'])->name('destroy');                
 
             });
 

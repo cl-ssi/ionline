@@ -95,6 +95,10 @@ class Fulfillment extends Model implements Auditable
     return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signatures_file_id');
   }
 
+  public function attachments() {
+    return $this->hasMany('App\Models\ServiceRequests\Attachment');
+}
+
   public function scopeSearch($query, Request $request)
   {
 
