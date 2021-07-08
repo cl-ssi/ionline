@@ -241,8 +241,9 @@ $inputs['Fecha'] = $fecha->format('d') . ' días del mes del ' . $mes . ' del ' 
 
 <p class="justify">
     <strong>SEGUNDO:</strong> En cumplimiento del presente convenio El prestador deberá llevar a cabo las siguientes prestaciones:
-    <ul>
-        <li>{{$ServiceRequest->service_description}}</li>
+    <ul>    
+
+        <li>{!! nl2br(e($ServiceRequest->service_description)) !!}</li>
     </ul>
 </p>
 
@@ -431,7 +432,9 @@ Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribu
     @elseif($ServiceRequest->programm_name == "PESPI")
       21-03-001-001-04 PESPI ( Programa Especial de Salud Pueblos Indígenas)
     @elseif($ServiceRequest->programm_name == "SUBT.31")
-      El gasto corresponde al ítem 31-02-001 SUBT.21 ( Consultorías) Honorario Suma Alzada.    
+      El gasto corresponde al ítem 31-02-001 SUBT.21 ( Consultorías) Honorario Suma Alzada.
+    @elseif($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG")
+    21-03-001-001-02 Honorarios a Suma Alzada del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique. )    
     @endif
     Honorario Suma Alzada.
 

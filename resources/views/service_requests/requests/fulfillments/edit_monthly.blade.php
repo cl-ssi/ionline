@@ -3,7 +3,61 @@
 	<div class="card-header">
 		<h4>Información del período: {{$fulfillment->year}}-{{$fulfillment->month}} ({{Carbon\Carbon::parse($fulfillment->year . "-" . $fulfillment->month)->monthName}}) <span class="small text-muted float-right">{{ $fulfillment->id}}</span></h4>
 	</div>
+	<div class="card-header">
+		<h5>Archivos Adjuntos (opcional)</h5>
+		<div class="card-body">
+			@if($fulfillment->attachments->count() > 0)
+			<table class="table small table-striped table-bordered">
+				<thead class="text-center">
+
+					<tr>
+						<td style="width: 11%">Fecha de Carga</td>
+						<th>Nombre</th>
+						<th>Archivo</th>
+						<th style="width: 10%"></th>
+						<th style="width: 2%"></th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach($fulfillment->attachments as $attachment)
+					<tr>
+						<td>{{ $attachment->updated_at->format('d-m-Y H:i:s') }}</td>
+						<td class="text-center">{{ $attachment->name ?? '' }}</td>
+						<td class="text-center">
+							@if(pathinfo($attachment->file, PATHINFO_EXTENSION) == 'pdf')
+							<i class="fas fa-file-pdf fa-2x"></i>
+							@endif
+						</td>
+						<td>
+							<a href="{{ route('rrhh.service-request.fulfillment.attachment.show', $attachment) }}" class="btn btn-outline-secondary btn-sm" title="Ir" target="_blank"> <i class="far fa-eye"></i></a>
+							<a class="btn btn-outline-secondary btn-sm" href="{{ route('rrhh.service-request.fulfillment.attachment.download', $attachment) }}" target="_blank"><i class="fas fa-download"></i>
+							</a>
+						</td>
+						<td>
+							<form method="POST" class="form-horizontal" action="{{ route('rrhh.service-request.fulfillment.attachment.destroy', $attachment) }}">
+								@csrf
+								@method('DELETE')
+								<button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro que desea eliminar este archivo adjunto?')">
+									<i class="fas fa-trash"></i>
+								</button>
+
+							</form>
+						</td>
+
+					</tr>
+					@endforeach
+				</tbody>
+			</table>
+			@endif
+
+		</div>
+		<div>
+			@livewire('service-request.attachments-fulfillments', ['var' => $fulfillment->id])
+		</div>
+	</div>
+
 	<div class="card-body">
+
 		<form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$fulfillment) }}" enctype="multipart/form-data">
 			@csrf
 			@method('PUT')
@@ -209,7 +263,7 @@
 				@php
 				//$reponsable = App\Rrhh\Authority;
 				@endphp
-				
+
 				@can('Service Request: fulfillments responsable')
 				@if(Auth::user()->id == $serviceRequest->signatureFlows->where('sign_position',2)->first()->responsable_id or App\Rrhh\Authority::getAmIAuthorityFromOu(now(),['manager'],Auth::user()->id))
 				@if($fulfillment->responsable_approver_id == NULL)
