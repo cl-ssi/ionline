@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class ShiftUserDay extends Model
 {
     use HasFactory;
-    protected $fillable = [ 'day' ,'commentary' ,'status','shift_user_id','working_day','derived_from' ];
+    protected $fillable = [ 'day' ,'commentary' ,'status','shift_user_id','working_day','derived_from','shift_close_id' ];
 
 	protected $table = 'rrhh_shift_user_days';
 	
@@ -51,6 +51,13 @@ class ShiftUserDay extends Model
 	public function ChangedWith(){
     	return $this->hasOne(ShiftUserDay::class, 'derived_from');
 
+	}
+	public function closeStatus(){
+		return $this->belongsTo(ShiftClose::class,'shift_close_id');
+	}
+
+	public function Solicitudes(){
+		return $this->hasMany(UserRequestOfDay::class,'shift_user_day_id');
 	}
 
 }

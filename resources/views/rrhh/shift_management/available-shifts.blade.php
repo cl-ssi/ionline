@@ -9,7 +9,7 @@
 	<h3>Turnos Disponibles</h3>
 	<br>
 
-		<form method="post" action="{{ route('rrhh.shiftManag.indexF') }}" >
+		<form method="post" action="{{ route('rrhh.shiftManag.availableShifts') }}" >
         	@csrf
         	{{ method_field('post') }}  <!-- equivalente a: @method('POST') -->
 
@@ -116,48 +116,107 @@
 
     		</li> -->
 
+			@php
+				$i=0;
+			@endphp
     		@foreach($availableDays as $aDay )
-    			<li class="list-group-item">
-    				<b>Propietario</b>
-    				<p>{{$aDay->ShiftUser->user->runFormat()}} -  {{$aDay->ShiftUser->user->getFullNameAttribute()}} </p>
-    			
-    				<b>Día</b>
-    				<p> {{$aDay->day }}, Jornada: {{$aDay->working_day }}- {{ $tiposJornada[ $aDay->working_day ] }}</p>
-    				<button class="btn btn-success">Solicitar</button>
 
-    			</li>  
+				@if( null !==  \App\Models\Rrhh\UserRequestOfDay::where("user_id",\Auth::id())->first()     )
+
+				@else
+
+    			@php
+    				$i++;
+    			@endphp
+    			@php
+                    $dayFormated = \Carbon\Carbon::createFromFormat('Y-m-d', $aDay->day, 'Europe/London');  
+                @endphp
+    			
+    			@php
+								
+					$dayWithCarbon = \Carbon\Carbon::createFromFormat('Y-m-d',  $aDay->day, 'Europe/London');
+				@endphp
     			<li class="list-group-item ">
     			<div class="row row-striped">
     				<div class="col-2 text-right">
-						<h1 class="display-4"><span class="badge badge-secondary">23</span></h1>
-						<h2>OCT</h2>
+						<h1 class="display-4"><span class="badge badge-secondary">{{ $dayWithCarbon->day }}</span></h1>
+						<h2>{{ strtoupper ( substr ( $months [ $dayWithCarbon->month ], 0, 3 ) ) }} </h2>
 					</div>
 					<div class="col-10">
 						<h3 class="text-uppercase"><strong>Jornada: {{$aDay->working_day }}- {{ $tiposJornada[ $aDay->working_day ] }}</strong></h3>
 						<ul class="list-inline">
-				    		<li class="list-inline-item"><i class="fa fa-calendar-o" aria-hidden="true"></i> Monday</li>
-							<li class="list-inline-item"><i class="fa fa-clock-o" aria-hidden="true"></i> 12:30 PM - 2:00 PM</li>
-							<li class="list-inline-item"><i class="fa fa-location-arrow info" aria-hidden="true"></i> Hospital Dr. Ernesto Torres Galdames</li>
+							
+				    		<li class="list-inline-item"><i style="color:red" class="fa fa-calendar-o" aria-hidden="true"></i>  {{ $weekMap [ $dayWithCarbon->dayOfWeek ] }}</li>
+							<li class="list-inline-item"><i style="color:red" class="fa fa-clock-o" aria-hidden="true"></i> 12:30 PM - 2:00 PM</li>
+							<li class="list-inline-item"><i style="color:blue" class="fa fa-location-arrow info" aria-hidden="true"></i> Hospital Dr. Ernesto Torres Galdames</li>
 						</ul>
-						<p>Lorem ipsum dolsit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.{{$aDay->commentary}}</p>
-						<button class="btn btn-success">Solicitar</button>
+
+    					<b>Propietario</b>
+						<p>{{$aDay->ShiftUser->user->runFormat()}} -  {{$aDay->ShiftUser->user->getFullNameAttribute()}} </p>
+    					<b>Comentario</b>
+						<p>{{$aDay->commentary}}</p>
+						
+						
+						@if( null !==  \App\Models\Rrhh\UserRequestOfDay::where("user_id",\Auth::id())->first()     )
+							Solicitado el {{\App\Models\Rrhh\UserRequestOfDay::where("user_id",\Auth::id())->first()->created_at}}
+							<small> <i class="fa fa-user"></i> {{ count( $aDay->Solicitudes ) }} Solicitudes.</small>
+								
+						@else
+
+							<form method="post" action="{{ route('rrhh.shiftManag.availableShifts.applyfor') }}" >
+        						@csrf
+        						{{ method_field('post') }}
+        						<input type="hidden" name="idShiftUserDay" value="{{$aDay->id}}">
+								<button class="btn btn-success">Solicitar</button>
+								<small> <i class="fa fa-user"></i> {{ count( $aDay->Solicitudes ) }} Solicitudes.</small>
+							</form>
+
+						@endif
 					</div>
 				</div>
-    		</li>
+    			</li>
+
+    			@endif
+    			
+
     		@endforeach
+    		@if( $i == 0 )
+				<div class="alert alert-primary" role="alert">
+					Sin días disponibles para solicitar
+				</div>
+			@endif
   		</ul>
 	</div>
 	<br>
 
 	<h5><b>Mis solicitudes:</b></h5>
 	<br>
-	<div class="alert alert-primary" role="alert">
-		Sin registro de solicitudes realizadas este mes
-	</div>
+	
+	{{--$misSolicitudes --}}
+	@if( count ( $misSolicitudes ) > 0)
+		<div class="alert alert-primary" role="alert">
+			Sin registro de solicitudes realizadas este mes
+		</div>
+	@endif
 	<br>
 
 	<div class="card overflow-auto"  >
   		<ul class="list-group list-group-flush">
+  			 @foreach( $misSolicitudes as $solicitud)
+  			 	<li class="list-group-item">
+    				<b>Propietario</b>
+    				<p>18.004.474-4 - Armando Barra Perez</p>
+    			
+    				<b>Día</b>
+    				<p> 05/07/2021, Jornada: L - Larga</p>
+
+    				<b>Solicitud</b>
+    				<p> Solicitado en 05/07/2021 20:30:00</p>
+    				<b>Estado</b>
+    				<p style="color:yellow"> Espera de confirmacion</p>
+    				<button class="btn btn-danger">Cancelar</button>
+    		</li>
+  			 @endforeach
     		<li class="list-group-item">
     			<b>Propietario</b>
     			<p>18.004.474-4 - Armando Barra Perez</p>
