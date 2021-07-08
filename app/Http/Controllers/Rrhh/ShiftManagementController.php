@@ -1002,6 +1002,8 @@ class ShiftManagementController extends Controller
         else    
             $actuallyOrgUnit = $cargos->first();
 
+        $actuallyOrgUnit =    Auth()->user()->organizationalUnit; // porque solo puedo ver los turnos disponibles de mi unidad (momentaneamente)
+
         if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
             $actuallyMonth = Session::get('actuallyMonth');
         else
@@ -1017,9 +1019,13 @@ class ShiftManagementController extends Controller
         $months = $this->monthsNumber;
         $timePerDay = $this->timePerDay;
         $dummyVar ="only for recordatory";
+
         $availableDays = ShiftUserDay::where("status",4)->where('day','>=',$actuallyYear."-".$actuallyMonth."-01")->where('day','<=',$actuallyYear."-".$actuallyMonth."-".$days)->whereHas("shiftUserDayLog",  function($q) use($dummyVar){
+                // Busco todos los dias que esten en estado 4 que es turno extra,  
+                $q->where('change_type',7); // este mismo cambiar  el change type y agregarle una "nuevo salto de linea" para escribir un nuevo mensaje qe ya fue confirmado
+        })->whereHas("ShiftUser",  function($q) use($actuallyOrgUnit){
                 // Busco todos los dias que esten en estado 3 que es turno extra,  
-                $q->where('change_type',7); // este mismo cambiar  el change type y agregarle una "nueva linea" para escribir un nuevo mensaje qe ya fue confirmado
+                $q->where('organizational_units_id',$actuallyOrgUnit->id); // Para filtrar solo los dias de la unidad organizacional del usuario
         })->get();
         
              /*doesntHave("shiftUserDayLog",  function($q) use($userId){
@@ -1029,10 +1035,24 @@ class ShiftManagementController extends Controller
             })->get();*/
 
           $misSolicitudes =   UserRequestOfDay::where("user_id",Auth()->user()->id)->where("created_at",">=", $actuallyYear."-".$actuallyMonth."-01")->where("created_at","<=", $actuallyYear."-".$actuallyMonth."-31")->get();
+          $solicitudesPorAprobar ="";
+        // if( $user->can("Shift Management: approval extra day request") ){
+            $orgForAprove = Auth()->user()->organizational_unit_id;
+            $solicitudesPorAprobar =  UserRequestOfDay::where("created_at",">=", $actuallyYear."-".$actuallyMonth."-01")->where("created_at","<=", $actuallyYear."-".$actuallyMonth."-31")->whereHas("ShiftUserDay",  function($q) use($orgForAprove){
+                
+                // $q->where('organizational_units_id',$actuallyOrgUnit->id);
 
-             
+                $q->whereHas("ShiftUser",  function($r) use($orgForAprove){
+                
+                            $r->where('organizational_units_id',$orgForAprove);
+           
+                });
+           
+            })->get();
 
-           return view('rrhh.shift_management.available-shifts', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','availableDays','tiposJornada','weekMap','months','timePerDay','misSolicitudes'));
+        // }
+
+           return view('rrhh.shift_management.available-shifts', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','availableDays','tiposJornada','weekMap','months','timePerDay','misSolicitudes','solicitudesPorAprobar'));
     }
 
     public function applyForAvailableShifts(Request $r){
@@ -1052,6 +1072,87 @@ class ShiftManagementController extends Controller
     }
 
     public function cancelShiftRequest(Request $r){
-        dd($r->input("solicitudId"));
+        // dd($r->input("solicitudId"));
+        $fSolicitud = UserRequestOfDay::find($r->input("solicitudId"));
+        $fSolicitud->status = "cancelado";
+        $fSolicitud->status_change_by  = Auth()->user()->id;
+        $fSolicitud->save();
+
+        session()->flash('warning', 'Se ha cancelado la solicitud del día extra del '.$fSolicitud->ShiftUserDay->day);
+        return redirect()->route('rrhh.shiftManag.availableShifts');
+    }
+
+    public function approveShiftRequest(Request $r){
+        // 1) confirmar solicitud
+        $fSolicitud = UserRequestOfDay::find($r->input("solicitudId"));
+        $fSolicitud->status = "confirmado";
+        $fSolicitud->status_change_by  = Auth()->user()->id;
+        $fSolicitud->save();
+        
+        // 2) buscar solicitudes del mismo dia y rechazarlas
+        $fSolicitudARechazar =  UserRequestOfDay::where("shift_user_day_id",$fSolicitud->shift_user_day_id)->where("status","pendiente")->get();
+        foreach($fSolicitudARechazar as $sol){
+
+            $sol->status = "rechazado";
+            $sol->status_change_by  = Auth()->user()->id;
+            $sol->save();
+        
+        }
+
+        // agregar dia extra a usuario correspondiente a la solicitud aprobada
+        // $fSolicitud->ShiftUserDay->shiftUserDayLog->where(); // cambiar cahge_tyoe al id
+       
+        $daysOfMonth = Carbon::createFromFormat('Y-m-d',  $fSolicitud->ShiftUserDay->day, 'Europe/London');
+        $splitDay = explode("-", $fSolicitud->ShiftUserDay->day);
+        $from = date($splitDay[0].'-'.$splitDay[1].'-01');
+        $to = date($splitDay[0].'-'.$splitDay[1].'-'.$daysOfMonth->daysInMonth);
+        $days = $daysOfMonth->daysInMonth;
+        $bTurno = ShiftUser::where("user_id",$fSolicitud->user_id)->where("date_from",">=",$from)->where("date_up","<=",$to)->where("organizational_units_id",$fSolicitud->ShiftUserDay->ShiftUser->organizational_units_id)->first(); 
+        if( !isset($bTurno) || $bTurno == ""){ // si no tiene ningun turno asociado a ese rango, se le crea
+            $bTurno = new ShiftUser;
+            $bTurno->date_from = $from;
+            $bTurno->date_up = $to; 
+            $bTurno->asigned_by = Auth::user()->id;
+            $bTurno->user_id = $fSolicitud->user_id;
+            $bTurno->shift_types_id = $fSolicitud->ShiftUserDay->ShiftUser->shift_types_id;
+            $bTurno->organizational_units_id = $fSolicitud->ShiftUserDay->ShiftUser->organizational_units_id;
+            $bTurno->groupname ="";
+            $bTurno->save();
+        }
+
+        $nDay = new ShiftUserDay;
+        $nDay->day = $fSolicitud->ShiftUserDay->day;
+        $nDay->commentary = "Dia extra agregado, perteneciente al usuario ".$fSolicitud->ShiftUserDay->ShiftUser->user_id;
+        $nDay->status = 3;
+        $nDay->shift_user_id = $bTurno->id;
+        $nDay->working_day = $fSolicitud->ShiftUserDay->working_day;
+        $nDay->derived_from = $fSolicitud->ShiftUserDay->id;
+        $nDay->save();  
+        //si tiene turno creado para ese mes y ese tipo de turno
+
+        $nHistory = new ShiftDayHistoryOfChanges;
+        $nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $fSolicitud->ShiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$fSolicitud->user_id."\"";
+        $nHistory->shift_user_day_id = $fSolicitud->ShiftUserDay->id;
+        $nHistory->modified_by = Auth()->user()->id;
+        $nHistory->change_type = 2;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+        $nHistory->day =  $fSolicitud->ShiftUserDay->day;
+        $nHistory->previous_value = 2;
+        $nHistory->current_value = 2;
+        $nHistory->save();
+
+        session()->flash('success', 'Se ha confirmado la solicitud del día extra del '.$fSolicitud->ShiftUserDay->day);
+        return redirect()->route('rrhh.shiftManag.availableShifts');
+    }
+    
+
+    public function rejectShiftRequest(Request $r){
+        // dd($r->input("solicitudId"));
+        $fSolicitud = UserRequestOfDay::find($r->input("solicitudId"));
+        $fSolicitud->status = "rechazado";
+        $fSolicitud->status_change_by  = Auth()->user()->id;
+        $fSolicitud->save();
+
+        session()->flash('warning', 'Se ha rechazado la solicitud del día extra del '.$fSolicitud->ShiftUserDay->day);
+        return redirect()->route('rrhh.shiftManag.availableShifts');
     }
 }
