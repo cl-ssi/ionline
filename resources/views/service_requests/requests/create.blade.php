@@ -238,6 +238,8 @@
 			<option value="15">15</option>
 			<option value="11">11</option>
 			<option value="9">9</option>
+			<option value="8.5">8.5</option>
+			<option value="7.5">7.5</option>
 			<option value="5">5</option>
 			<option value="4">4</option>
 			<option value="3">3</option>
