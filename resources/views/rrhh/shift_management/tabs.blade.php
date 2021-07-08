@@ -1,5 +1,5 @@
 <ul class="nav nav-tabs">
-  <li class="nav-item">
+  <li class="nav-item disabled">
     <a class="nav-link {{ ($actuallyMenu == 'dashboard')?'active':'' }}" name="indexTab" aria-current="page" href="{{ route('rrhh.shiftManag.shiftReports') }}">Dashboard</a>
   </li>
   <li class="nav-item">
@@ -14,7 +14,7 @@
   <li class="nav-item">
     <a class="nav-link  {{ ($actuallyMenu == 'availableShifts')?'active':'' }}" name="availableShifts" href="{{ route('rrhh.shiftManag.availableShifts') }}" tabindex="-1">Turnos Disponibles</a>
   </li>
-  <li class="nav-item">
+  <li class="nav-item disabled">
     <a class="nav-link {{ ($actuallyMenu == 'shiftclose')?'active':'' }}" name="indexTab" aria-current="page" href="{{ route('rrhh.shiftManag.closeShift') }}">Cierre de turno 	</a>
   </li>
   <li class="nav-item">

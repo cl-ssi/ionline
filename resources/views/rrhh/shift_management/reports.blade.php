@@ -168,9 +168,9 @@
 					<td>{{ ucfirst ( $shiftStatus [ $r->status ] ) }}</td>
 					<td>{{$r->derived_from}}</td>
 					<td>
-				 		<small>Confirmado por supervisor area  <i class="fa fa-check"></i></small><br>
+				 		<!-- <small>Confirmado por supervisor area  <i class="fa fa-check"></i></small><br>
 				 		<small>Confirmado por supervicion medica <i class="fa fa-check"></i></small><br>
-				 		<small>Cerrado por supervisora rrhh <i class="fa fa-check"></i> </small>
+				 		<small>Cerrado por supervisora rrhh <i class="fa fa-check"></i> </small> -->
 				 	</td>
 					
 				</tr>
