@@ -23,8 +23,10 @@ class CreateRrhhShiftCloseTable extends Migration
             $table->dateTime('first_confirmation_date')->nullable();
 
             $table->string('close_commentary')->nullable();
-            $table->string('first_confirmation_status')->nullable();
-            $table->dateTime('first_confirmation_date')->nullable();
+            $table->string('close_status')->nullable();
+            $table->dateTime('close_date')->nullable();
+            
+            $table->integer('date_of_closing_id')->nullable();
             
             $table->unsignedBigInteger('first_confirmation_user_id')->nullable();
             $table->unsignedBigInteger('close_user_id')->nullable();

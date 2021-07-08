@@ -34,18 +34,27 @@ class ModalEditShiftUserDay extends Component
             'F' => "Libre",
             'D' => "Dia",
             'L' => "Largo",
-            'N' => "Noche"
+            'N' => "Noche",
+            "MD" => "Media jornada dia",
+            "MN" => "Media jornada nocuturna",
+            "MD2" => "Media jornada dia 2",
+            "MN2" => "Media jornada nocuturna 2",
     );
  	private $estados = array(
-            1 => "Asignado",
-            2 => "Completado",
-            3 => "Turno Extra",
-            4 => "Turno Cambiado",
-            5 => "Licencia Medica",
-            6 => "Fuero Gremial",
-            7 => "Feriado Legal",
-            8 => "Permiso Excepcional",
-            9 => "Permiso sin goce de sueldo",
+           1=>"Asignado",
+           2=>"Completado",
+           3=>"Turno extra",
+           4=>"Cambio turno con",
+           5=>"Ñicencia medica",
+           6=>"Fuero gremial",
+           7=>"Feriado legal",
+           8=>"Permiso excepcional",
+           9 => "Permiso sin goce de sueldo",
+           10 => "Descanzo Compensatorio",
+           11 => "Permiso Administrativo Completo",
+           12 => "Permiso Administrativo Medio Turno Diurno",
+           13 => "Permiso Administrativo Medio Turno Nocturno",
+           14 => "Permiso a Curso",
     );
     private $colors = array(
             1 => "lightblue",
@@ -57,6 +66,11 @@ class ModalEditShiftUserDay extends Component
             7 => "#f4d03f",
             8 => "gray",
             9  => "yellow",
+            10  => "brown",
+            11  => "brown",
+            12  => "brown",
+            13  => "brown",
+            14  => "brown",
     );
     protected $listeners = ['setshiftUserDay','clearModal','ChangeWorkingDay'=>'enableChangeTypeOfWorkingDay'];
     // public function mount(array $headers){

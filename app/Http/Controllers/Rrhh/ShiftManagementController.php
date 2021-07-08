@@ -12,7 +12,8 @@ use App\Models\Rrhh\ShiftTypes;
 use App\Models\Rrhh\ShiftUser;
 use App\Models\Rrhh\ShiftUserDay;
 use App\Models\Rrhh\UserShiftTypeMonths;
-use App\Models\Rrhh\ShiftDayHistoryOfChanges;   
+use App\Models\Rrhh\ShiftDayHistoryOfChanges;  
+use App\Models\Rrhh\UserRequestOfDay; 
 use App\Rrhh\OrganizationalUnit;
 use App\Programmings\Professional;
 use Spatie\Permission\Models\Role;
@@ -39,14 +40,30 @@ class ShiftManagementController extends Controller
         '11'=>'Noviembre',
         '12'=>'Diciembre',
     );
+    private $monthsNumber = array(
 
+        1=>'Enero',
+        2=>'Febrero',
+        3=>'Marzo',
+        4=>'Abril',
+        5=>'Mayo',
+        6=>'Junio',
+        7=>'Julio',
+        8=>'Agosto',
+        9=>'Septiembre',
+        10=>'Octubre',
+        11=>'Noviembre',
+        12=>'Diciembre',
+    );
     private $tiposJornada = array(
             'F' => "Libre",
             'D' => "Dia",
             'L' => "Largo",
             'N' => "Noche",
             "MD" => "Media jornada dia",
-            "MN" => "Media jornada nocuturna"
+            "MN" => "Media jornada nocuturna",
+            "MD2" => "Media jornada dia 2",
+            "MN2" => "Media jornada nocuturna 2",
     );
 
     private $groupsnames = array(
@@ -79,9 +96,26 @@ class ShiftManagementController extends Controller
         7=>"feriado legal",
         8=>"permiso excepcional",
         9 => "Permiso sin goce de sueldo",
-        10 => "Descanzo compensatorio",
+        10 => "Descanzo Compensatorio",
+        11 => "Permiso Administrativo Completo",
+        12 => "Permiso Administrativo Medio Turno Diurno",
+        13 => "Permiso Administrativo Medio Turno Nocturno",
+        14 => "Permiso a Curso",
         
     );
+    
+    public $timePerDay = array(
+
+        'L' => array("from"=>"08:00","to"=>"20:00","time"=>12),
+        'N' => array("from"=>"20:00","to"=>"08:00","time"=>12),
+        'D' => array("from"=>"08:00","to"=>"17:00","time"=>8),
+        'F' => array("from"=>"","to"=>"","time"=>0),
+        'MD' => array("from"=>"","to"=>"","time"=>0),
+        'MN' => array("from"=>"","to"=>"","time"=>0),
+        'MD2' => array("from"=>"","to"=>"","time"=>0),
+        'MN2' => array("from"=>"","to"=>"","time"=>0),
+
+     );
     public function index(Request $r, $groupname=null){
     	// echo "Shift Management";
         // echo "<h1>".$groupname."</h1>";
@@ -969,6 +1003,9 @@ class ShiftManagementController extends Controller
            $days = Carbon::now()->daysInMonth;
 
        $tiposJornada = $this->tiposJornada;
+       $weekMap = $this->weekMap;
+       $months = $this->monthsNumber;
+       $timePerDay = $this->timePerDay;
        $dummyVar ="only for recordatory";
          $availableDays = ShiftUserDay::where("status",4)->where('day','>=',$actuallyYear."-".$actuallyMonth."-01")->where('day','<=',$actuallyYear."-".$actuallyMonth."-".$days)->whereHas("shiftUserDayLog",  function($q) use($dummyVar){
                 // Busco todos los dias que esten en estado 3 que es turno extra,  
@@ -981,8 +1018,28 @@ class ShiftManagementController extends Controller
         
             })->get();*/
 
-       // $availableDays = ShiftUserDay::where("status",4)->where('day','>=',$actuallyYear."-".$actuallyMonth."-01")->where('day','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
+          $misSolicitudes =   UserRequestOfDay::where("user_id",Auth()->user()->id)->where("created_at",">=", $actuallyYear."-".$actuallyMonth."-01")->where("created_at","<=", $actuallyYear."-".$actuallyMonth."-31")->get();
 
-           return view('rrhh.shift_management.available-shifts', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','availableDays','tiposJornada'));
+             
+
+           return view('rrhh.shift_management.available-shifts', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','availableDays','tiposJornada','weekMap','months','timePerDay','misSolicitudes'));
+    }
+
+    public function applyForAvailableShifts(Request $r){
+        // dd($r->input("idShiftUserDay"));
+        $sUserDay = ShiftUserDay::find($r->input("idShiftUserDay"));
+        $nRqst = new UserRequestOfDay;
+        $nRqst->status = "pendiente";
+        $nRqst->commentary = "";
+        $nRqst->shift_user_day_id =  $sUserDay->id;
+        $nRqst->user_id =  Auth()->user()->id;
+        $nRqst->status_change_by =  Auth()->user()->id;
+        $nRqst->save();
+        // dd($nRqst);
+
+        session()->flash('success', 'Se ha realizado la solicitud del día extra del '.$sUserDay->day);
+        return redirect()->route('rrhh.shiftManag.availableShifts');
+
+
     }
 }

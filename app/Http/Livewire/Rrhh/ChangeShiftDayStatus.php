@@ -15,7 +15,7 @@ class ChangeShiftDayStatus extends Component
 	// public $id;
     public $actuallyColor;
     protected $listeners = ['renderShiftDay' => '$refresh','changeColor' =>'setActuallyColor'];
-   	private $colors = array(
+    private $colors = array(
             1 => "lightblue",
             2 => "#2471a3",
             3 => " #52be80 ",
@@ -25,6 +25,11 @@ class ChangeShiftDayStatus extends Component
             7 => "#f4d03f",
             8 => "gray",
             9  => "yellow",
+            10  => "brown",
+            11  => "brown",
+            12  => "brown",
+            13  => "brown",
+            14  => "brown",
     );
     // public function postAdded(Post $post)
     // {
