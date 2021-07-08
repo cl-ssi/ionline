@@ -9,6 +9,11 @@
         @if(isset($shiftDay)  )
             <b>Agregando día {{json_encode($day)}} a {{ $shiftDay->user->name }} {{ $shiftDay->user->fathers_family }}</b>
         @endif
+        
+        <div wire:loading >
+            <i class="fas fa-spinner fa-pulse"></i>
+        </div>
+        
         <br>
         <label>Tipo de jornada a agregar:</label>
         <select class="form-control" wire:model="journalType">

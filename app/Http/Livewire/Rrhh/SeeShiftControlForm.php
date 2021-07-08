@@ -25,7 +25,7 @@ class SeeShiftControlForm extends Component
         'F' => array("from"=>"","to"=>"","time"=>0),
 
      );
-    public $shiftStatus = array(
+  public $shiftStatus = array(
         1=>"asignado",
         2=>"completado",
         3=>"turno extra",
@@ -34,9 +34,16 @@ class SeeShiftControlForm extends Component
         6=>"fuero gremial",
         7=>"feriado legal",
         8=>"permiso excepcional",
-        9 => "Permiso sin goce de sueldo"
+        9 => "Permiso sin goce de sueldo",
+        10 => "Descanzo Compensatorio",
+        11 => "Permiso Administrativo Completo",
+        12 => "Permiso Administrativo Medio Turno Diurno",
+        13 => "Permiso Administrativo Medio Turno Nocturno",
+        14 => "Permiso a Curso",
+
         
     );
+
     public $months = array(
 
         '01'=>'Enero',
