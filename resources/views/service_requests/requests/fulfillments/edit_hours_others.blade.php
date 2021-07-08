@@ -5,7 +5,7 @@
 	<div class="card-header">
 		<h5>Archivos Adjuntos (opcional)</h5>
 		<div class="card-body">
-			@if($fulfillment->attachments->count() > 0)
+			@if($serviceRequest->Fulfillments->first()->attachments->count() > 0)
 			<table class="table small table-striped table-bordered">
 				<thead class="text-center">
 
@@ -18,7 +18,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					@foreach($fulfillment->attachments as $attachment)
+					@foreach($serviceRequest->Fulfillments->first()->attachments as $attachment)
 					<tr>
 						<td>{{ $attachment->updated_at->format('d-m-Y H:i:s') }}</td>
 						<td class="text-center">{{ $attachment->name ?? '' }}</td>
