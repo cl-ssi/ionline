@@ -14,9 +14,9 @@
   <li class="nav-item">
     <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Videoconferencia</a>
   </li>
-  <!-- <li class="nav-item">
+  <li class="nav-item">
     <a class="nav-link" id="messages-tab" data-toggle="tab" href="#messages" role="tab" aria-controls="messages" aria-selected="false">Vehículos</a>
-  </li> -->
+  </li>
   <li class="nav-item">
     <a class="nav-link" id="zoom-tab" data-toggle="tab" href="#zoom" role="tab" aria-controls="zoom" aria-selected="false">Zoom</a>
   </li>
@@ -38,17 +38,17 @@
     <div class="tab-pane active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
         <iframe src="https://calendar.google.com/calendar/b/3/embed?title=Sala%20de%20Videoconferencia&amp;showCalendars=0&amp;showTz=0&amp;mode=WEEK&amp;height=600&amp;wkst=2&amp;bgcolor=%23FFFFFF&amp;src=hjf5qbbq8hb1it8a849aau1bgs%40group.calendar.google.com&amp;color=%235A6986&amp;ctz=America%2FSantiago" style="border-width:0" width="1100" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
-    <!-- <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+    <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
         <iframe src="https://calendar.google.com/calendar/embed?title=Agenda%20de%20veh%C3%ADculos&amp;showCalendars=0&amp;showTz=0&amp;height=600&amp;wkst=2&amp;hl=es_419&amp;bgcolor=%23FFFFFF&amp;src=servicios.generales.dssi%40gmail.com&ctz=America%2FSantiago" style="border-width:0" width="1100" height="600" frameborder="0" scrolling="no"></iframe>
-    </div> -->
+    </div>
     <div class="tab-pane" id="zoom" role="tabpanel" aria-labelledby="zoom-tab">
         <iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=2&amp;bgcolor=%23ffffff&amp;ctz=America%2FSantiago&amp;src=Z3BhaDdlbjZzYW40dm82bzBsdGR1cGdqZTRAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&amp;color=%23F4511E&amp;mode=WEEK" style="border:solid 1px #777" width="1100" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
-    
+
     <div class="tab-pane" id="aps" role="tabpanel" aria-labelledby="zoom-tab">
         <iframe src="https://calendar.google.com/calendar/embed?src=pcqg722u69hendclsjjvgtqgb8%40group.calendar.google.com&ctz=America%2FSantiago" width="1100" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
-    
+
 </div>
 
 

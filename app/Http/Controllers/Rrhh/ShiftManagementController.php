@@ -12,7 +12,8 @@ use App\Models\Rrhh\ShiftTypes;
 use App\Models\Rrhh\ShiftUser;
 use App\Models\Rrhh\ShiftUserDay;
 use App\Models\Rrhh\UserShiftTypeMonths;
-use App\Models\Rrhh\ShiftDayHistoryOfChanges;   
+use App\Models\Rrhh\ShiftDayHistoryOfChanges;  
+use App\Models\Rrhh\UserRequestOfDay; 
 use App\Rrhh\OrganizationalUnit;
 use App\Programmings\Professional;
 use Spatie\Permission\Models\Role;
@@ -23,7 +24,6 @@ use Session;
 
 class ShiftManagementController extends Controller
 {   
-
 
     private $months = array(
 
@@ -40,12 +40,30 @@ class ShiftManagementController extends Controller
         '11'=>'Noviembre',
         '12'=>'Diciembre',
     );
+    private $monthsNumber = array(
 
+        1=>'Enero',
+        2=>'Febrero',
+        3=>'Marzo',
+        4=>'Abril',
+        5=>'Mayo',
+        6=>'Junio',
+        7=>'Julio',
+        8=>'Agosto',
+        9=>'Septiembre',
+        10=>'Octubre',
+        11=>'Noviembre',
+        12=>'Diciembre',
+    );
     private $tiposJornada = array(
             'F' => "Libre",
             'D' => "Dia",
             'L' => "Largo",
-            'N' => "Noche"
+            'N' => "Noche",
+            "MD" => "Media jornada dia",
+            "MN" => "Media jornada nocuturna",
+            "MD2" => "Media jornada dia 2",
+            "MN2" => "Media jornada nocuturna 2",
     );
 
     private $groupsnames = array(
@@ -57,6 +75,47 @@ class ShiftManagementController extends Controller
             'administrativos',
             'auxiliar de servicio TA',
     );
+
+    private $weekMap = [
+            0 => 'DOM',
+            1 => 'LUN',
+            2 => 'MAR',
+            3 => 'MIE',
+            4 => 'JUE',
+            5 => 'VIE',
+            6 => 'SAB',
+    ];
+
+    public $shiftStatus = array(
+        1=>"asignado",
+        2=>"completado",
+        3=>"turno extra",
+        4=>"cambio turno con",
+        5=>"licencia medica",
+        6=>"fuero gremial",
+        7=>"feriado legal",
+        8=>"permiso excepcional",
+        9 => "Permiso sin goce de sueldo",
+        10 => "Descanzo Compensatorio",
+        11 => "Permiso Administrativo Completo",
+        12 => "Permiso Administrativo Medio Turno Diurno",
+        13 => "Permiso Administrativo Medio Turno Nocturno",
+        14 => "Permiso a Curso",
+        
+    );
+    
+    public $timePerDay = array(
+
+        'L' => array("from"=>"08:00","to"=>"20:00","time"=>12),
+        'N' => array("from"=>"20:00","to"=>"08:00","time"=>12),
+        'D' => array("from"=>"08:00","to"=>"17:00","time"=>8),
+        'F' => array("from"=>"","to"=>"","time"=>0),
+        'MD' => array("from"=>"","to"=>"","time"=>0),
+        'MN' => array("from"=>"","to"=>"","time"=>0),
+        'MD2' => array("from"=>"","to"=>"","time"=>0),
+        'MN2' => array("from"=>"","to"=>"","time"=>0),
+
+     );
     public function index(Request $r, $groupname=null){
     	// echo "Shift Management";
         // echo "<h1>".$groupname."</h1>";
@@ -208,7 +267,13 @@ class ShiftManagementController extends Controller
 
         // echo "4To:".htmlentities(Session::get('groupname'));
         if($r->turnFilter!=0){
-            $actuallyShift=ShiftTypes::find($r->turnFilter);
+            if($r->turnFilter == 999){
+                $actuallyShift = (object) array('id'=>99,'name' => "T.Personalizado",'shortname' =>"TP" ,'day_series' =>",,,,,," ,'status' =>1 );
+            }else{
+
+                $actuallyShift=ShiftTypes::find($r->turnFilter);
+
+            }
             $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->where("groupname",htmlentities(Session::get('groupname')) )->get();
         } else {
              $actuallyShift=  (object) array('id' =>0,'name'=>"Todos" );
@@ -318,7 +383,7 @@ class ShiftManagementController extends Controller
         return redirect()->route('rrhh.shiftsTypes.index');
     } 
 
-    public function assignStaff(Request $r){
+    public function assignStaff(Request $r){ // crea un sift user y le crea dias de acuerdo al sifttype
         $nShift = new ShiftUser;
         $nShift->date_from = $r->dateFromAssign;
         $nShift->date_up = $r->dateUpAssign;
@@ -334,6 +399,8 @@ class ShiftManagementController extends Controller
         $actuallyShift = ShiftTypes::find( $r->shiftId );
         $currentSeries =  explode(",", $actuallyShift->day_series); 
         $i = 0;
+        if($r->shiftId != 99 ){ // si no es turno personalizado, agrego los dias seun las serie
+
         foreach ($ranges as $date) {
 
 
@@ -385,6 +452,9 @@ class ShiftManagementController extends Controller
                 $i=0;
             }
         }
+
+        }
+
             return redirect('/rrhh/shift-management/'.Session::get('groupname'));
     }
 
@@ -492,7 +562,7 @@ class ShiftManagementController extends Controller
         header('Cache-Control: max-age=0');
 
         $writer = new Xlsx($spreadsheet);
-        $writer->save('php://output');
+        $writer->save('php://output'); //funcion qe permite descarar la tabla con los turnos visibles actualmete
     }
 
     //function for move to the next month with arrow in shiftManagement.index
@@ -534,8 +604,10 @@ class ShiftManagementController extends Controller
                 
         return redirect()->route('rrhh.shiftManag.index',["groupname"=>Session::get("groupname") ]);
     }
+
     //route for for download actually shift table in pdf formatm with button in right upper corner from shiftManagement.index
     public function downloadShiftControlInPdf(Request $r){
+
         // header("Content-type:application/pdf");
         // $filename = "test";
         // header("Content-Disposition:inline;filename='$filename");
@@ -546,8 +618,13 @@ class ShiftManagementController extends Controller
 
         $actuallyYears =$r->actuallyYears;
         $actuallyMonth  = $r->actuallyMonth;
-        $actuallyUser =  $r->actuallyUser ;
 
+        $actuallyUser = User::find($r->actuallyUser);
+        // $actuallyUser = str_replace('{"', " ",$actuallyUser);
+        // $actuallyUser = str_replace("{","",$actuallyUser);
+        // $actuallyUser =  explode (",",$actuallyUser );
+
+        // dd( $actuallyUser );
         $actuallyOrgUnit = $r->actuallyOrgUnit;
         // $actuallyUser = explode();$actuallyUser[0];
         // $actuallyUser =  str_replace("}","", $actuallyUser);
@@ -559,12 +636,13 @@ class ShiftManagementController extends Controller
         $shifsUsr = ShiftUser::where('date_up','>=',$actuallyYears."-".$actuallyMonth."-".$days)->where("user_id",$actuallyUser)->first();
       
         // dd($actuallyUser);
+            $months = $this->months ;
 
-      return view('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr,'usr'=>$usr  ]);
+        //  return view('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr,'usr'=>$usr,'months'=>$months  ]);
 
-       // $pdf = app('dompdf.wrapper');
-       //  $pdf->loadView('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr  ]);
-       //  return $pdf->stream('mi-archivo.pdf');
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr,'usr'=>$usr,'months'=>$months  ]);
+        return $pdf->stream('mi-archivo.pdf');
     }
 
     public function myShift(){
@@ -662,7 +740,7 @@ class ShiftManagementController extends Controller
         $nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family."\" ha <b>confirmado la jornada</b> del \"".$d->day;
         $nHistory->shift_user_day_id = $d->id;
         $nHistory->modified_by = Auth()->user()->id;
-        $nHistory->change_type = 4;//0_asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+        $nHistory->change_type = 4;//0_asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario;4:Confirmado por el usuario 5: confirmado por el administrador, 6:rechazado por usuario?
         $nHistory->day =  $d->day;
         $nHistory->previous_value = "";
         $nHistory->current_value = "";
@@ -680,7 +758,7 @@ class ShiftManagementController extends Controller
         $nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family."\" ha <b>rechazado la jornada</b> del \"".$d->day;
         $nHistory->shift_user_day_id = $d->id;
         $nHistory->modified_by = Auth()->user()->id;
-        $nHistory->change_type = 6;//0_asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+        $nHistory->change_type = 6;//0_asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario; 5: confirmado por el administrador, 6:rechazado por usuario?
         $nHistory->day =  $d->day;
         $nHistory->previous_value = "";
         $nHistory->current_value = "";
@@ -698,7 +776,7 @@ class ShiftManagementController extends Controller
         $nHistory->commentary = "El administrador ha <b>confirmado la jornada</b> del \"".$d->day;
         $nHistory->shift_user_day_id = $d->id;
         $nHistory->modified_by = Auth()->user()->id;
-        $nHistory->change_type = 5;//0_asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+        $nHistory->change_type = 5;//0_asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario; 5: confirmado por el administrador
         $nHistory->day =  $d->day;
         $nHistory->previous_value = $d->status;
         $nHistory->current_value = $d->status;
@@ -706,5 +784,262 @@ class ShiftManagementController extends Controller
         
         return redirect()->route('rrhh.shiftManag.index');
     }
-      
+    
+    public function closeShift(){
+
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        $cargos = OrganizationalUnit::all();
+        $months = $this->months;
+
+        if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
+            $actuallyYear = Session::get('actuallyYear');
+        else
+            $actuallyYear = Carbon::now()->format('Y');
+        
+        if(Session::has('actuallyOrgUnit') && Session::get('actuallyOrgUnit') != "")
+            $actuallyOrgUnit = Session::get('actuallyOrgUnit');
+        else    
+            $actuallyOrgUnit = $cargos->first();
+
+        if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
+            $actuallyMonth = Session::get('actuallyMonth');
+        else
+            $actuallyMonth = Carbon::now()->format('m');
+
+        if(Session::has('days') && Session::get('days') != "")
+            $days = Session::get('days');
+        else
+           $days = Carbon::now()->daysInMonth;
+
+        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
+
+
+        return view('rrhh.shift_management.close-shift', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift' ));
+    }
+
+    public function shiftReports(Request $r){
+        // echo "shiftReports";
+       
+
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        $cargos = OrganizationalUnit::all();
+        $months = $this->months;
+        $shiftDayPerStatus =  array();
+        $shiftDayPerJournalType =  array();
+        foreach($this->shiftStatus as $s){
+
+            array_push($shiftDayPerStatus,  array('name' =>  $s,'cant'=>10 ));
+
+            
+        };
+
+        foreach($this->tiposJornada  as $index => $s){
+           array_push($shiftDayPerJournalType,  array('name' =>$s,'id' =>  $index,'cant'=>10 ));
+
+        };
+        
+        $chartpeoplecant = array();
+        foreach($this->weekMap as $index => $w){
+            
+            array_push($chartpeoplecant,  array('id' => $index,'name' =>  $w,'cant'=>random_int(5, 18) ));
+
+            
+        };
+        if( Session::has('actuallyShift') && Session::get('actuallyShift') )
+            $actuallyShift =  Session::get('actuallyShift');
+        else
+            $actuallyShift = ShiftTypes::first();
+
+        if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
+            $actuallyYear = Session::get('actuallyYear');
+        else
+            $actuallyYear = Carbon::now()->format('Y');
+        
+        // if(Session::has('actuallyOrgUnit') && Session::get('actuallyOrgUnit') != "")
+        //     $actuallyOrgUnit = Session::get('actuallyOrgUnit');
+        // else    
+        //     $actuallyOrgUnit = $cargos->first();
+        
+
+        if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
+            $actuallyMonth = Session::get('actuallyMonth');
+        else
+            $actuallyMonth = Carbon::now()->format('m');
+
+        if(Session::has('days') && Session::get('days') != "")
+            $days = Session::get('days');
+        else
+           $days = Carbon::now()->daysInMonth;
+
+        if(Session::has('sTypes') && Session::get('sTypes') != "")
+            $sTypes = Session::get('sTypes');
+        else
+            $sTypes = ShiftTypes::all(); 
+
+
+
+        //nueva forma
+        if(isset($r) && isset($r->turnFilter) )
+            $actuallySerie = $r->turnFilter;
+        else
+            $actuallySerie = 0;
+
+        if(isset($r) && $r->orgunitFilter)
+            $actuallyOrgUnit =  OrganizationalUnit::find($r->orgunitFilter);
+        else    
+            $actuallyOrgUnit = $cargos->first();
+
+        if(isset($r) && isset($r->dayStatus) )
+            $actuallyDayStatus = $r->dayStatus;
+        else
+           $actuallyDayStatus =  0;
+
+        if(isset($r) && isset($r->journalType) )
+            $actuallyJournalType = $r->journalType;
+        else
+            $actuallyJournalType =  "0";
+
+        if( isset($r) && $r->datefrom )
+            $datefrom = $r->datefrom;   
+        else
+            $datefrom = Carbon::now()->format("Y-m-d");
+
+        if(isset($r) && $r->dateto ) 
+            $dateto = $r->dateto; 
+        else
+            $dateto = Carbon::now()->format("Y-m-d"); 
+
+        $staffInShift = 1;//ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',  {{{$actuallyYear."-".$actuallyMonth."-".$days)->get();
+        
+        $tiposJornada = $this->tiposJornada;
+        $shiftStatus = $this->shiftStatus;
+        $reportResult = ShiftUserDay::where('day','>=',$datefrom)->where('day','<=',$dateto)->orderBy("day","ASC")->get();
+        // echo $actuallyJournalType;
+        // echo "gere";
+        if($actuallyJournalType!="0")
+            $reportResult = $reportResult->where("working_day",$actuallyJournalType);
+
+        if($actuallyDayStatus!="0")
+            $reportResult = $reportResult->where("status",$actuallyDayStatus);
+
+       return view('rrhh.shift_management.reports', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','shiftDayPerStatus' , 'shiftDayPerJournalType','chartpeoplecant','sTypes','actuallyShift','tiposJornada','shiftStatus','actuallyDayStatus','actuallyJournalType','datefrom','dateto','actuallySerie','reportResult'));
+    }
+
+    public function shiftDashboard(){
+        // echo "shiftReports";
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        $cargos = OrganizationalUnit::all();
+        $months = $this->months;
+        $shiftDayPerStatus =  array();
+        $shiftDayPerJournalType =  array();
+        foreach($this->shiftStatus as $s){
+
+            array_push($shiftDayPerStatus,  array('name' =>  $s,'cant'=>10 ));
+
+            
+        };
+
+        foreach($this->tiposJornada  as $index => $s){
+           array_push($shiftDayPerJournalType,  array('name' =>$s,'id' =>  $index,'cant'=>10 ));
+
+        };
+        
+        $chartpeoplecant = array();
+        foreach($this->weekMap as $index => $w){
+            
+            array_push($chartpeoplecant,  array('id' => $index,'name' =>  $w,'cant'=>random_int(5, 18) ));
+
+            
+        };
+
+
+        if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
+            $actuallyYear = Session::get('actuallyYear');
+        else
+            $actuallyYear = Carbon::now()->format('Y');
+        
+        if(Session::has('actuallyOrgUnit') && Session::get('actuallyOrgUnit') != "")
+            $actuallyOrgUnit = Session::get('actuallyOrgUnit');
+        else    
+            $actuallyOrgUnit = $cargos->first();
+
+        if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
+            $actuallyMonth = Session::get('actuallyMonth');
+        else
+            $actuallyMonth = Carbon::now()->format('m');
+
+        if(Session::has('days') && Session::get('days') != "")
+            $days = Session::get('days');
+        else
+           $days = Carbon::now()->daysInMonth;
+        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
+
+       return view('rrhh.shift_management.reports', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','shiftDayPerStatus' , 'shiftDayPerJournalType','chartpeoplecant'));
+    }
+
+    public function availableShifts(){
+        
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        $cargos = OrganizationalUnit::all();
+        $months = $this->months;
+         if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
+            $actuallyYear = Session::get('actuallyYear');
+        else
+            $actuallyYear = Carbon::now()->format('Y');
+        
+        if(Session::has('actuallyOrgUnit') && Session::get('actuallyOrgUnit') != "")
+            $actuallyOrgUnit = Session::get('actuallyOrgUnit');
+        else    
+            $actuallyOrgUnit = $cargos->first();
+
+        if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
+            $actuallyMonth = Session::get('actuallyMonth');
+        else
+            $actuallyMonth = Carbon::now()->format('m');
+
+        if(Session::has('days') && Session::get('days') != "")
+            $days = Session::get('days');
+        else
+           $days = Carbon::now()->daysInMonth;
+
+       $tiposJornada = $this->tiposJornada;
+       $weekMap = $this->weekMap;
+       $months = $this->monthsNumber;
+       $timePerDay = $this->timePerDay;
+       $dummyVar ="only for recordatory";
+         $availableDays = ShiftUserDay::where("status",4)->where('day','>=',$actuallyYear."-".$actuallyMonth."-01")->where('day','<=',$actuallyYear."-".$actuallyMonth."-".$days)->whereHas("shiftUserDayLog",  function($q) use($dummyVar){
+                // Busco todos los dias que esten en estado 3 que es turno extra,  
+                $q->where('change_type',7); // este mismo cambiar  el change type y agregarle una "nueva linea" para escribir un nuevo mensaje qe ya fue confirmado
+        
+            })->get();
+             /*doesntHave("shiftUserDayLog",  function($q) use($userId){
+                
+                $q->where('change_type',8);
+        
+            })->get();*/
+
+          $misSolicitudes =   UserRequestOfDay::where("user_id",Auth()->user()->id)->where("created_at",">=", $actuallyYear."-".$actuallyMonth."-01")->where("created_at","<=", $actuallyYear."-".$actuallyMonth."-31")->get();
+
+             
+
+           return view('rrhh.shift_management.available-shifts', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','availableDays','tiposJornada','weekMap','months','timePerDay','misSolicitudes'));
+    }
+
+    public function applyForAvailableShifts(Request $r){
+        // dd($r->input("idShiftUserDay"));
+        $sUserDay = ShiftUserDay::find($r->input("idShiftUserDay"));
+        $nRqst = new UserRequestOfDay;
+        $nRqst->status = "pendiente";
+        $nRqst->commentary = "";
+        $nRqst->shift_user_day_id =  $sUserDay->id;
+        $nRqst->user_id =  Auth()->user()->id;
+        $nRqst->status_change_by =  Auth()->user()->id;
+        $nRqst->save();
+        // dd($nRqst);
+
+        session()->flash('success', 'Se ha realizado la solicitud del día extra del '.$sUserDay->day);
+        return redirect()->route('rrhh.shiftManag.availableShifts');
+
+
+    }
 }
