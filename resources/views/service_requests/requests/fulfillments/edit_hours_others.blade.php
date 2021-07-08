@@ -50,8 +50,8 @@
 			@endif
 
 		</div>
-		<div>
-			@livewire('service-request.attachments-fulfillments', ['var' => $fulfillment->id])
+		<div>		
+			@livewire('service-request.attachments-fulfillments', ['var' => $serviceRequest->Fulfillments->first()->id])
 		</div>
 	</div>
     <div class="card-body">
