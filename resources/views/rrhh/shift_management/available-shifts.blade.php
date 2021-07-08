@@ -180,7 +180,7 @@
     			
 
     		@endforeach
-    		@if( $i == 0 )
+    		@if( $i == 0 &&   sizeof (  $availableDays ) > 0 )
 				<div class="alert alert-primary" role="alert">
 					Sin días disponibles para solicitar
 				</div>
@@ -222,7 +222,7 @@
     						<button class="btn btn-danger">Cancelar</button>
     					</form>
     				@endif
-    		</li>
+    			</li>
   			 @endforeach
     		<!-- <li class="list-group-item">
     			<b>Propietario</b>
@@ -264,4 +264,76 @@
     		{{--json_encode($availableDays)--}}
   		</ul>
 	</div>
+
+	<br>
+
+	<h5><b>Solicitudes pendientes de aprobar:</b></h5>
+	<br>
+	<div class="card overflow-auto"  >
+
+		@if( count ( $solicitudesPorAprobar ) < 1)
+			<div class="alert alert-primary" role="alert">
+				Sin registro de solicitudes pendientes de aprobar
+			</div>
+		@endif
+
+  		<ul class="list-group list-group-flush">
+<!-- 			<li class="list-group-item">
+    			<b>ID:#1</b>
+				<br>
+    			<b>Propietario</b>
+    			<p>18.004.474-4 - Armando Barra Perez</p>
+    			
+    			<b>Día</b>
+    			<p> 05/07/2021, Jornada: L - Larga</p>
+
+    			<b>Solicitud</b>
+    			<p> Solicitado en 05/07/2021 20:30:00</p>
+    			<b>Estado</b>
+    			<p style="color:yellow"> Espera de confirmacion</p>
+    			<form  method="post" action="{{route('rrhh.shiftManag.availableShifts.cancelRequest') }}" >
+					@csrf
+        			{{ method_field('post') }}
+    				<input type="hidden" name="solicitudId" value="{{ route('rrhh.shiftManag.availableShifts.approvalRequest') }}">
+    				<button class="btn btn-success">Aprobar <i class="fa fa-check"></i></button>
+				</form>
+				<form  method="post" action="{{route('rrhh.shiftManag.availableShifts.cancelRequest') }}" >
+					@csrf
+        			{{ method_field('post') }}
+    				<input type="hidden" name="solicitudId" value="{{ route('rrhh.shiftManag.availableShifts.rejectRequest') }}">
+    				<button class="btn btn-danger">Rechazar <i class="fa fa-cancel"></i></button>
+    			</form>
+    		</li>
+ -->
+    		@foreach($solicitudesPorAprobar as $solPending)
+    			<li class="list-group-item">
+    				<b>ID:#1</b>
+					<br>
+    				<b>Propietario</b>
+    				<p>18.004.474-4 - Armando Barra Perez</p>
+    			
+    				<b>Día</b>
+    				<p> 05/07/2021, Jornada: L - Larga</p>
+
+    				<b>Solicitud</b>
+    				<p> Solicitado en 05/07/2021 20:30:00</p>
+    				<b>Estado</b>
+    				<p style="color:yellow"> Espera de confirmacion</p>
+    				<form  method="post" action="{{route('rrhh.shiftManag.availableShifts.cancelRequest') }}" >
+						@csrf
+        				{{ method_field('post') }}
+    					<input type="hidden" name="solicitudId" value="{{ route('rrhh.shiftManag.availableShifts.approvalRequest') }}">
+    					<button class="btn btn-success">Aprobar <i class="fa fa-check"></i></button>
+					</form>
+					<form  method="post" action="{{route('rrhh.shiftManag.availableShifts.cancelRequest') }}" >
+						@csrf
+        				{{ method_field('post') }}
+    					<input type="hidden" name="solicitudId" value="{{ route('rrhh.shiftManag.availableShifts.rejectRequest') }}">
+    					<button class="btn btn-danger">Rechazar <i class="fa fa-cancel"></i></button>
+    				</form>
+    			</li>
+    		@endforeach
+		</ul>
+	</div>
 @endsection
+
