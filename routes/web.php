@@ -43,6 +43,8 @@ use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\ServiceRequests\InvoiceController;
 use App\Http\Controllers\ServiceRequests\ValueController;
 
+use App\Http\Controllers\ServiceRequests\AttachmentController;
+
 use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 use App\Http\Controllers\ServiceRequests\FulfillmentController;
 use App\Http\Controllers\ServiceRequests\SignatureFlowController;
@@ -97,6 +99,7 @@ Route::group(['middleware' => 'auth:external'], function () {
     Route::patch('/update/{psi_request_id?}', [TestsController::class, 'updateStatus'])->name('updateStatus');
     Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
     Route::post('/test', [TestsController::class, 'storeExternal'])->name('storeExternal');
+    Route::get('/signed-suitability-certificate-pdf/{id}', [SuitabilityController::class, 'signedSuitabilityCertificatePDF'])->name('signedSuitabilityCertificate');
     });
 
     Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
@@ -376,6 +379,15 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
            Route::get('/myshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShift'])->name('shiftManag.myshift')->middleware('auth');
 
+           Route::get('/closeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeShift'])->name('shiftManag.closeShift')->middleware('auth');
+
+           Route::get('/shiftreports', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReports'])->name('shiftManag.shiftReports')->middleware('auth');
+           Route::post('/shiftreports', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReports'])->name('shiftManag.shiftReports')->middleware('auth');
+
+           Route::get('/shiftdashboard', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftDashboard'])->name('shiftManag.shiftDashboard')->middleware('auth');
+           Route::get('/available-shifts', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'availableShifts'])->name('shiftManag.availableShifts')->middleware('auth');
+            Route::post('/available-shifts/applyfor', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'applyForAvailableShifts'])->name('shiftManag.availableShifts.applyfor')->middleware('auth');
+
            Route::get('/myshift/confirm/{day}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShiftConfirm'])->name('shiftManag.myshift.confirmDay')->middleware('auth');
            Route::get('/myshift/reject/{day}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShiftReject'])->name('shiftManag.myshift.rejectDay')->middleware('auth');
 
@@ -468,6 +480,16 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
                 Route::post('/store', [FulfillmentItemController::class, 'store'])->name('store');
                 Route::put('/{fulfillment}/update', [FulfillmentItemController::class, 'update'])->name('update');
                 Route::delete('{fulfillmentItem}/destroy', [FulfillmentItemController::class, 'destroy'])->name('destroy');
+            });
+
+
+            Route::prefix('attachment')->name('attachment.')->group(function () {
+                //descomposición del attachment
+                Route::post('/{var}/store', [AttachmentController::class, 'store'])->name('store');
+                Route::get('/{attachment}/show', [AttachmentController::class, 'show'])->name('show');
+                Route::get('/{attachment}/download', [AttachmentController::class, 'download'])->name('download');
+                Route::delete('/{attachment}/destroy', [AttachmentController::class, 'destroy'])->name('destroy');                
+
             });
 
 

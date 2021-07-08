@@ -313,7 +313,7 @@
       <p class="justify">
         <strong>SEGUNDO:</strong> En cumplimiento del presente convenio El prestador deberá llevar a cabo las siguientes prestaciones:
       <ul>
-        <li>{{$ServiceRequest->service_description}}</li>
+        <li>{!! nl2br(e($ServiceRequest->service_description)) !!}</li>
       </ul>
       </p>
 
@@ -424,14 +424,14 @@
 
       @if($ServiceRequest->program_contract_type == "Mensual")
       <p class="justify">
-        <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en 
+        <strong>OCTAVO:</strong> La presente contratación se efectuará sobre la base de honorarios, por una suma alzada de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en
         <!-- TODO para salir del caso excepcional de gramático  se debe cambiar-->
-        @if($ServiceRequest->id == 4509) 
+        @if($ServiceRequest->id == 4509)
         1 cuota de ${{number_format($ServiceRequest->net_amount)}}
-        @else 
+        @else
         @livewire('service-request.monthly-quotes', ['serviceRequest' => $ServiceRequest])
         @endif
-         se deberá acreditar contra presentación de certificado extendido por el
+        se deberá acreditar contra presentación de certificado extendido por el
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         Supervisor
         @else

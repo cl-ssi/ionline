@@ -45,7 +45,7 @@ class ServiceRequestController extends Controller
    * @return \Illuminate\Http\Response
    */
   public function index()
-  { 
+  {
     $user_id = Auth::user()->id;
     $users = User::orderBy('name', 'ASC')->get();
 
@@ -103,6 +103,7 @@ class ServiceRequestController extends Controller
 
   public function user(Request $request)
   {
+    // dd("");
     $fulfillments = array();
     $user = null;
 
@@ -115,7 +116,7 @@ class ServiceRequestController extends Controller
           function ($query) use ($user) {
             $query->where('user_id', $user->id);
           }
-        )->orderBy('payment_date')->get();
+        )->orderBy('year', 'DESC')->orderBy('month', 'DESC')->get();
       }
     }
     $request->flash();

@@ -34,18 +34,27 @@ class ModalEditShiftUserDay extends Component
             'F' => "Libre",
             'D' => "Dia",
             'L' => "Largo",
-            'N' => "Noche"
+            'N' => "Noche",
+            "MD" => "Media jornada dia",
+            "MN" => "Media jornada nocuturna",
+            "MD2" => "Media jornada dia 2",
+            "MN2" => "Media jornada nocuturna 2",
     );
  	private $estados = array(
-            1 => "Asignado",
-            2 => "Completado",
-            3 => "Turno Extra",
-            4 => "Turno Cambiado",
-            5 => "Licencia Medica",
-            6 => "Fuero Gremial",
-            7 => "Feriado Legal",
-            8 => "Permiso Excepcional",
-            9 => "Permiso sin goce de sueldo",
+           1=>"Asignado",
+           2=>"Completado",
+           3=>"Turno extra",
+           4=>"Cambio turno con",
+           5=>"Ñicencia medica",
+           6=>"Fuero gremial",
+           7=>"Feriado legal",
+           8=>"Permiso excepcional",
+           9 => "Permiso sin goce de sueldo",
+           10 => "Descanzo Compensatorio",
+           11 => "Permiso Administrativo Completo",
+           12 => "Permiso Administrativo Medio Turno Diurno",
+           13 => "Permiso Administrativo Medio Turno Nocturno",
+           14 => "Permiso a Curso",
     );
     private $colors = array(
             1 => "lightblue",
@@ -57,6 +66,11 @@ class ModalEditShiftUserDay extends Component
             7 => "#f4d03f",
             8 => "gray",
             9  => "yellow",
+            10  => "brown",
+            11  => "brown",
+            12  => "brown",
+            13  => "brown",
+            14  => "brown",
     );
     protected $listeners = ['setshiftUserDay','clearModal','ChangeWorkingDay'=>'enableChangeTypeOfWorkingDay'];
     // public function mount(array $headers){
@@ -357,8 +371,7 @@ class ModalEditShiftUserDay extends Component
 				
         		$days = $daysOfMonth->daysInMonth;
 
-				// $bTurno = ShiftUser::whereBetween('reservation_from', [$from, $to])->get();
-				// $bTurno = ShiftUser::where("user_id",$this->userIdtoChange)->where("date_from","<=",$this->shiftUserDay->day)->where("date_up",">=",$this->shiftUserDay->day)->first(); 05/04/21 30/04/21  2021/04/01 
+				// busco si tiene turno entre las fechas de donde corresponde el dia
 				$bTurno = ShiftUser::where("user_id",$this->userIdtoChange)->where("date_from",">=",$from)->where("date_up","<=",$to)->first(); 
 				if( !isset($bTurno) || $bTurno == ""){ // si no tiene ningun turno asociado a ese rango, se le crea
 					$bTurno = new ShiftUser;
@@ -384,7 +397,18 @@ class ModalEditShiftUserDay extends Component
 				$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange."\"";
 				$nHistory->shift_user_day_id = $this->shiftUserDay->id;
 				$nHistory->modified_by = Auth()->user()->id;
-				$nHistory->change_type = 2;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+				$nHistory->change_type = 3;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+				$nHistory->day =  $this->shiftUserDay->day;
+				$nHistory->previous_value = $this->previousStatus;
+				$nHistory->current_value = $this->newStatus;
+				$nHistory->save();
+			}else{ // si el id es = 0 osea DEJAR DIA DISPONIBLE
+
+				$nHistory = new ShiftDayHistoryOfChanges;
+				$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha dejado el día disponible \"";
+				$nHistory->shift_user_day_id = $this->shiftUserDay->id;
+				$nHistory->modified_by = Auth()->user()->id;
+				$nHistory->change_type = 7;//0:asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario;4:Confirmado por el usuario 5: confirmado por el administrador, 6:rechazado por usuario?, 7 Dejar disponible
 				$nHistory->day =  $this->shiftUserDay->day;
 				$nHistory->previous_value = $this->previousStatus;
 				$nHistory->current_value = $this->newStatus;

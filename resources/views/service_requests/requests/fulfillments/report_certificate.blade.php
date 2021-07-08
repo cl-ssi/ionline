@@ -158,12 +158,9 @@
               @endif
             @else
               Hospital Dr.Ernesto Torres Galdames
-            @endif            
-            durante el período de 
-            @if($fulfillment->serviceRequest->type == 'Covid')
-            contingencia COVID del
             @endif
-            <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>.
+            durante el preríodo de contingencia COVID
+            del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>.
 
             <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
         </div>
@@ -188,9 +185,9 @@
             @endif
           @elseif($fulfillment->FulfillmentItems->where('type','Abandono de funciones')->count() > 0)
             @if($fulfillment->FulfillmentItems->where('type','!=','Abandono de funciones')->count() > 0)
-              El prestador de servicios Honorario {{$fulfillment->serviceRequest->type??''}} , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo.. Además se registraron las siguientes ausencias:
+              El prestador de servicios Honorario Suma Alzada , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo.. Además se registraron las siguientes ausencias:
             @else
-              El prestador de servicios Honorario {{$fulfillment->serviceRequest->type??''}} , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo.
+              El prestador de servicios Honorario Suma Alzada , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo.
             @endif
           @else
             Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
@@ -204,7 +201,7 @@
             @else
               Hospital Dr.Ernesto Torres Galdames
             @endif
-            durante el período de contingencia COVID
+            durante el preríodo de contingencia COVID
             del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>,
             registrando las siguientes ausencias:
           @endif
@@ -251,10 +248,10 @@
             </thead>
             <tbody>
               <tr>
-                  <td style="text-align:center">{{$FulfillmentItem->type ?? ''}}</td>
-                  <td style="text-align:center">{{ $FulfillmentItem->start_date?$FulfillmentItem->start_date->format('d-m-Y H:i'):''}}</td>
-                  <td style="text-align:center">{{$FulfillmentItem->end_date?$FulfillmentItem->end_date->format('d-m-Y H:i'):''}}</td>
-                  <td style="text-align:center">{{$FulfillmentItem->observation ?? ''}}</td>
+                  <td style="text-align:center">{{$FulfillmentItem->type}}</td>
+                  <td style="text-align:center">{{$FulfillmentItem->start_date->format('d-m-Y H:i')}}</td>
+                  <td style="text-align:center">{{$FulfillmentItem->end_date->format('d-m-Y H:i')}}</td>
+                  <td style="text-align:center">{{$FulfillmentItem->observation}}</td>
               </tr>
             </tbody>
           </table>
@@ -278,13 +275,16 @@
           @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
             @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
               Consultorio General Urbano Dr. Hector Reyno,
+              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
             @else
               Servicio Salud Iquique,
+              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
             @endif
           @else
             Hospital Dr. Ernesto Torres Galdames,
+            por <b>horas extras realizadas en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}} por contingencia COVID</b>.
           @endif
-            por <b>horas extras realizadas en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}} por contingencia COVID</b>.<br><br>
+            <br><br>
 
 
               <table class="siete">
