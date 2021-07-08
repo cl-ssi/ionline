@@ -278,13 +278,16 @@
           @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
             @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
               Consultorio General Urbano Dr. Hector Reyno,
+              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
             @else
               Servicio Salud Iquique,
+              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
             @endif
           @else
             Hospital Dr. Ernesto Torres Galdames,
+            por <b>horas extras realizadas en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}} por contingencia COVID</b>.
           @endif
-            por <b>horas extras realizadas en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}} por contingencia COVID</b>.<br><br>
+            <br><br>
 
 
               <table class="siete">
