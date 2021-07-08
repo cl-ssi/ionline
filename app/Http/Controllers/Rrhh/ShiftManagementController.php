@@ -65,7 +65,6 @@ class ShiftManagementController extends Controller
             "MD2" => "Media jornada dia 2",
             "MN2" => "Media jornada nocuturna 2",
     );
-
     private $groupsnames = array(
             '',
             'enfermeros',
@@ -75,7 +74,6 @@ class ShiftManagementController extends Controller
             'administrativos',
             'auxiliar de servicio TA',
     );
-
     private $weekMap = [
             0 => 'DOM',
             1 => 'LUN',
@@ -85,7 +83,6 @@ class ShiftManagementController extends Controller
             5 => 'VIE',
             6 => 'SAB',
     ];
-
     public $shiftStatus = array(
         1=>"asignado",
         2=>"completado",
@@ -101,11 +98,9 @@ class ShiftManagementController extends Controller
         12 => "Permiso Administrativo Medio Turno Diurno",
         13 => "Permiso Administrativo Medio Turno Nocturno",
         14 => "Permiso a Curso",
-        
-    );
-    
+    );   
     public $timePerDay = array(
-
+       
         'L' => array("from"=>"08:00","to"=>"20:00","time"=>12),
         'N' => array("from"=>"20:00","to"=>"08:00","time"=>12),
         'D' => array("from"=>"08:00","to"=>"17:00","time"=>8),
@@ -114,8 +109,8 @@ class ShiftManagementController extends Controller
         'MN' => array("from"=>"","to"=>"","time"=>0),
         'MD2' => array("from"=>"","to"=>"","time"=>0),
         'MN2' => array("from"=>"","to"=>"","time"=>0),
-
      );
+
     public function index(Request $r, $groupname=null){
     	// echo "Shift Management";
         // echo "<h1>".$groupname."</h1>";
@@ -458,7 +453,7 @@ class ShiftManagementController extends Controller
             return redirect('/rrhh/shift-management/'.Session::get('groupname'));
     }
 
-    public function downloadShiftInXls(Request $r){
+    public function downloadShiftInXls(Request $r){// Funcion para descargar los turnos en formato excel
 
 
         $users = Session::get('users');
@@ -884,10 +879,15 @@ class ShiftManagementController extends Controller
         else
             $actuallySerie = 0;
 
-        if(isset($r) && $r->orgunitFilter)
+        if(isset($r) && $r->orgunitFilter && $r->orgunitFilter != 0)
             $actuallyOrgUnit =  OrganizationalUnit::find($r->orgunitFilter);
-        else    
-            $actuallyOrgUnit = $cargos->first();
+        // elseif(isset($r) && $r->orgunitFilter && $r->orgunitFilter == 0)
+        //     $actuallyOrgUnit = (object) array('id' => 0,'name'  => 'Todos');
+        // else    
+        //     $actuallyOrgUnit = $cargos->first();
+        else
+            $actuallyOrgUnit = (object) array('id' => 0,'name'  => 'Todos');
+
 
         if(isset($r) && isset($r->dayStatus) )
             $actuallyDayStatus = $r->dayStatus;
@@ -913,9 +913,19 @@ class ShiftManagementController extends Controller
         
         $tiposJornada = $this->tiposJornada;
         $shiftStatus = $this->shiftStatus;
-        $reportResult = ShiftUserDay::where('day','>=',$datefrom)->where('day','<=',$dateto)->orderBy("day","ASC")->get();
+        
         // echo $actuallyJournalType;
         // echo "gere";
+        if($actuallyOrgUnit->id!="0"){
+
+            $reportResult = ShiftUserDay::where('day','>=',$datefrom)->where('day','<=',$dateto)->orderBy("day","ASC")->whereHas("ShiftUser",  function($q) use($actuallyOrgUnit){ // Busco todos los dias que esten en estado 3 que es turno extra,  
+                $q->where('organizational_units_id',$actuallyOrgUnit->id);
+            })->get();
+        }else{
+
+            $reportResult = ShiftUserDay::where('day','>=',$datefrom)->where('day','<=',$dateto)->orderBy("day","ASC")->get();  
+        }
+
         if($actuallyJournalType!="0")
             $reportResult = $reportResult->where("working_day",$actuallyJournalType);
 
@@ -982,7 +992,7 @@ class ShiftManagementController extends Controller
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
         $cargos = OrganizationalUnit::all();
         $months = $this->months;
-         if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
+        if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
             $actuallyYear = Session::get('actuallyYear');
         else
             $actuallyYear = Carbon::now()->format('Y');
@@ -1002,16 +1012,16 @@ class ShiftManagementController extends Controller
         else
            $days = Carbon::now()->daysInMonth;
 
-       $tiposJornada = $this->tiposJornada;
-       $weekMap = $this->weekMap;
-       $months = $this->monthsNumber;
-       $timePerDay = $this->timePerDay;
-       $dummyVar ="only for recordatory";
-         $availableDays = ShiftUserDay::where("status",4)->where('day','>=',$actuallyYear."-".$actuallyMonth."-01")->where('day','<=',$actuallyYear."-".$actuallyMonth."-".$days)->whereHas("shiftUserDayLog",  function($q) use($dummyVar){
+        $tiposJornada = $this->tiposJornada;
+        $weekMap = $this->weekMap;
+        $months = $this->monthsNumber;
+        $timePerDay = $this->timePerDay;
+        $dummyVar ="only for recordatory";
+        $availableDays = ShiftUserDay::where("status",4)->where('day','>=',$actuallyYear."-".$actuallyMonth."-01")->where('day','<=',$actuallyYear."-".$actuallyMonth."-".$days)->whereHas("shiftUserDayLog",  function($q) use($dummyVar){
                 // Busco todos los dias que esten en estado 3 que es turno extra,  
                 $q->where('change_type',7); // este mismo cambiar  el change type y agregarle una "nueva linea" para escribir un nuevo mensaje qe ya fue confirmado
+        })->get();
         
-            })->get();
              /*doesntHave("shiftUserDayLog",  function($q) use($userId){
                 
                 $q->where('change_type',8);
@@ -1039,7 +1049,9 @@ class ShiftManagementController extends Controller
 
         session()->flash('success', 'Se ha realizado la solicitud del día extra del '.$sUserDay->day);
         return redirect()->route('rrhh.shiftManag.availableShifts');
+    }
 
-
+    public function cancelShiftRequest(Request $r){
+        dd($r->input("solicitudId"));
     }
 }
