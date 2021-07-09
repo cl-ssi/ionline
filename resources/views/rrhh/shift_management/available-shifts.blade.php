@@ -79,7 +79,7 @@
   		</form>
 	<br>
 
-	<h5><b>Disponibles:</b></h5>
+	<h5><b>Disponibles: {{sizeof ( $availableDays )}}</b></h5>
 	<br>
 	@if( sizeof ( $availableDays ) < 1 )
 		<div class="alert alert-primary" role="alert">
@@ -121,7 +121,7 @@
 			@endphp
     		@foreach($availableDays as $aDay )
 
-				@if( null !==  \App\Models\Rrhh\UserRequestOfDay::where("user_id",\Auth::id())->first()     )
+				@if( null !==  \App\Models\Rrhh\UserRequestOfDay::where("user_id",\Auth::id())->where("shift_user_day_id",$aDay->id)->first()     )
 
 				@else
 
@@ -147,7 +147,7 @@
 						<ul class="list-inline">
 							
 				    		<li class="list-inline-item"><i style="color:red" class="fa fa-calendar-o" aria-hidden="true"></i>  {{ $weekMap [ $dayWithCarbon->dayOfWeek ] }}</li>
-							<li class="list-inline-item"><i style="color:red" class="fa fa-clock-o" aria-hidden="true"></i> 12:30 PM - 2:00 PM</li>
+							<li class="list-inline-item"><i style="color:red" class="fa fa-clock-o" aria-hidden="true"></i> {{ $timePerDay [ $aDay->working_day  ] [ "from" ]}} - {{ $timePerDay [ $aDay->working_day  ] [ "to" ]}} </li>
 							<li class="list-inline-item"><i style="color:blue" class="fa fa-location-arrow info" aria-hidden="true"></i> Hospital Dr. Ernesto Torres Galdames</li>
 						</ul>
 
@@ -157,8 +157,8 @@
 						<p>{{$aDay->commentary}}</p>
 						
 						
-						@if( null !==  \App\Models\Rrhh\UserRequestOfDay::where("user_id",\Auth::id())->first()     )
-							Solicitado el {{\App\Models\Rrhh\UserRequestOfDay::where("user_id",\Auth::id())->first()->created_at}}
+						@if( null !==  \App\Models\Rrhh\UserRequestOfDay::where("user_id",\Auth::id())->where("shift_user_day_id",$aDay->id)->first()     )
+							Solicitado el {{ \App\Models\Rrhh\UserRequestOfDay::where("user_id",\Auth::id())->first()->created_at}}
 							<small> <i class="fa fa-user"></i> {{ count( $aDay->Solicitudes ) }} Solicitudes.</small>
 								
 						@else
@@ -204,13 +204,18 @@
   		<ul class="list-group list-group-flush">
   			 @foreach( $misSolicitudes as $solicitud)
   			 	<li class="list-group-item">
+    				<b>ID: # {{$solicitud->id}}</b><br>
+    				
+
     				<b>Propietario</b>
-    				<p>{{$solicitud->user->runFormat()}} -  {{$solicitud->user->getFullNameAttribute()}} </p>
+    				<p>{{$solicitud->ShiftUserDay->ShiftUser->user->runFormat()}} -  {{$solicitud->ShiftUserDay->ShiftUser->user->getFullNameAttribute()}} </p>
     			
     				<b>Día</b>
     				<p> {{ $solicitud->ShiftUserDay->day }}, Jornada: {{ $solicitud->ShiftUserDay->working_day}} - {{ $tiposJornada [ $solicitud->ShiftUserDay->working_day ] }}</p>
 
     				<b>Solicitud</b>
+    				<p>Solicitado por {{$solicitud->user->runFormat()}} -  {{$solicitud->user->getFullNameAttribute()}} </p>
+
     				<p> Solicitado en {{ $solicitud->created_at}}</p>
     				<b>Estado</b>
     				<p style="color:{{$solicitud->statusColor()}}"> {{ strtoupper( $solicitud->status ) }}</p>
