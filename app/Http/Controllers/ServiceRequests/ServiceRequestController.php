@@ -230,7 +230,7 @@ class ServiceRequestController extends Controller
     }
     //hospital
     elseif (Auth::user()->organizationalUnit->establishment_id == 1) {
-      $subdirections = OrganizationalUnit::where('name', 'LIKE', '%subdirec%')->where('establishment_id', 1)->orderBy('name', 'ASC')->get();
+      $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id', 1)->orderBy('name', 'ASC')->get();
       $responsabilityCenters = OrganizationalUnit::where('establishment_id', 1)
         ->orderBy('name', 'ASC')->get();
     }
