@@ -766,7 +766,7 @@
 				$("#programm_name option[value='PABELLON TARDE']").hide();
 				$("#programm_name option[value='PABELLON GINE']").hide();
 				$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
-				$("#programm_name option[value='SENDA']").hide();
+//				$("#programm_name option[value='SENDA']").hide();
 			}
 		}
 		else
