@@ -307,6 +307,14 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('/addendum/sign/{addendum}/type/{type}', 'Agreements\AddendumController@sign')->name('addendum.sign');
     Route::get('/addendum/preview/{addendum}', 'Agreements\AddendumController@preview')->name('addendum.preview');
     Route::resource('programs', 'Agreements\ProgramController');
+    Route::prefix('programs')->name('programs.')->group(function () {
+        Route::resource('resolutions', 'Agreements\ProgramResolutionController');
+        Route::get('resolution/createWord/{program_resolution}', 'Agreements\WordTestController@createWordDocxResProgram')->name('resolution.createWord');
+        Route::get('resolution/download/{program_resolution}', 'Agreements\ProgramResolutionController@download')->name('resolution.download');
+        Route::post('resolution/amount/{program_resolution}', 'Agreements\ProgramResolutionController@storeAmount')->name('resolution.amount.store');
+        Route::put('resolution/amount/{resolution_amount}', 'Agreements\ProgramResolutionController@updateAmount')->name('resolution.amount.update');
+        Route::delete('resolution/amount/{resolution_amount}', 'Agreements\ProgramResolutionController@destroyAmount')->name('resolution.amount.destroy');
+    });
     Route::resource('municipalities', 'MunicipalityController');
     Route::resource('signers', 'Agreements\SignerController');
     Route::put('/amount/{agreement_amount}', 'Agreements\AgreementController@updateAmount')->name('amount.update');
