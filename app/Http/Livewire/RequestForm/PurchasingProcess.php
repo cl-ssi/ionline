@@ -14,6 +14,8 @@ class PurchasingProcess extends Component
   public $arrayPurchaseMechanism=[['value'=>'']], $arrayPurchaseType=[['value'=>'']], $arrayPurchaseUnit=[['value'=>'']];
   public $lastKey, $selectedItems;
   public $arrayCheckBox, $arrayVista, $arrayBgTable;
+  public $idOC, $idInternalOC, $dateOC, $shippingDateOC, $idBigBuy, $pesoAmount, $dollarAmount,
+         $ufAmount, $deliveryTerm, $deliveryDate, $idOffer, $idQuotation;
 
     public function mount(RequestForm $requestForm){
         $this->requestForm        = $requestForm;
@@ -36,6 +38,7 @@ class PurchasingProcess extends Component
           $this->setPurchaseMechanism($this->purchaseMechanism, $key);
           $this->setPurchaseType($this->purchaseType, $key);
           $this->setPurchaseUnit($this->purchaseUnit, $key);
+          $this->setInitialValues($key);
         }
     }
 
@@ -115,7 +118,41 @@ class PurchasingProcess extends Component
     }
 
     public function pasteItems(){
-      
+        foreach($this->arrayCheckBox as $checkBox){
+            if($checkBox['value'] && $checkBox['value'] != $this->radioSource)
+              {
+              $this->setPurchaseMechanism($this->arrayPurchaseMechanism[($this->radioSource)-1]['value'], ($checkBox['value']-1));
+              $this->setPurchaseType($this->arrayPurchaseType[($this->radioSource)-1]['value'], ($checkBox['value']-1));
+              $this->setPurchaseUnit($this->arrayPurchaseUnit[($this->radioSource)-1]['value'], ($checkBox['value']-1));
+              $this->idOC[$checkBox['value']-1]['value']            =   $this->idOC[($this->radioSource)-1]['value'];
+              $this->idInternalOC[$checkBox['value']-1]['value']    =   $this->idInternalOC[($this->radioSource)-1]['value'];
+              $this->dateOC[$checkBox['value']-1]['value']          =   $this->dateOC[($this->radioSource)-1]['value'];
+              $this->shippingDateOC[$checkBox['value']-1]['value']  =   $this->shippingDateOC[($this->radioSource)-1]['value'];
+              $this->idBigBuy[$checkBox['value']-1]['value']        =   $this->idBigBuy[($this->radioSource)-1]['value'];
+              $this->pesoAmount[$checkBox['value']-1]['value']      =   $this->pesoAmount[($this->radioSource)-1]['value'];
+              $this->dollarAmount[$checkBox['value']-1]['value']    =   $this->dollarAmount[($this->radioSource)-1]['value'];
+              $this->ufAmount[$checkBox['value']-1]['value']        =   $this->ufAmount[($this->radioSource)-1]['value'];
+              $this->deliveryTerm[$checkBox['value']-1]['value']    =   $this->deliveryTerm[($this->radioSource)-1]['value'];
+              $this->deliveryDate[$checkBox['value']-1]['value']    =   $this->deliveryDate[($this->radioSource)-1]['value'];
+              $this->idOffer[$checkBox['value']-1]['value']         =   $this->idOffer[($this->radioSource)-1]['value'];
+              $this->idQuotation[$checkBox['value']-1]['value']     =   $this->idQuotation[($this->radioSource)-1]['value'];
+          }
+        }
+    }
+
+    private function setInitialValues($key){
+      $this->idOC[$key]['value']            =   '';
+      $this->idInternalOC[$key]['value']    =   '';
+      $this->dateOC[$key]['value']          =   '';
+      $this->shippingDateOC[$key]['value']  =   '';
+      $this->idBigBuy[$key]['value']        =   '';
+      $this->pesoAmount[$key]['value']      =   '';
+      $this->dollarAmount[$key]['value']    =   '';
+      $this->ufAmount[$key]['value']        =   '';
+      $this->deliveryTerm[$key]['value']    =   '';
+      $this->deliveryDate[$key]['value']    =   '';
+      $this->idOffer[$key]['value']         =   '';
+      $this->idQuotation[$key]['value']     =   '';
     }
 
     public function resetError(){
