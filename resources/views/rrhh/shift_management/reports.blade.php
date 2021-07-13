@@ -169,8 +169,26 @@
 					<td>{{$r->ShiftUser->user->organizationalUnit->name}}</td>
                     <td>{{$r->day}}</td>
 
-					<td>{{$r->working_day}} - {{ $tiposJornada [ $r->working_day ] }}</td>
-					<td>{{ ucfirst ( $shiftStatus [ $r->status ] ) }}</td>
+				
+
+                    @if ( substr( $r->working_day,0, 1) != "+" ) 
+                        
+                        <td>{{$r->working_day}} - {{strtoupper($tiposJornada[$r->working_day])}}</td>
+                                   
+                    @elseif(  substr( $r->working_day,0, 1) == "+" )
+                        
+                        <td> <i class="fa fa-clock-o"></i> {{$r->working_day}}</td>
+                    
+                    @else
+                    
+                       <td> <i class="fas fa-spinner fa-pulse"></i></td>
+
+                    @endif
+
+                    @php
+                        $dayF = \Carbon\Carbon::createFromFormat('Y-m-d',  $r->day, 'Europe/London');   
+                    @endphp
+					<td>{{ ucfirst ( ( $r->status == 1 && $dayF->isPast() ) ? "Completado" : $shiftStatus [ $r->status ]  )}}</td>
 					<td>{{ ($r->derived_from != "" && isset($r->DerivatedShift) ) ? $r->DerivatedShift->ShiftUser->user->runFormat()." ".$r->DerivatedShift->ShiftUser->user->getFullNameAttribute() : "--"}}</td>
 					<td>
 				 		<!-- <small>Confirmado por supervisor area  <i class="fa fa-check"></i></small><br>

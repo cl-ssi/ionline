@@ -143,7 +143,19 @@
 						<h2>{{ strtoupper ( substr ( $months [ $dayWithCarbon->month ], 0, 3 ) ) }} </h2>
 					</div>
 					<div class="col-10">
-						<h3 class="text-uppercase"><strong>Jornada: {{$aDay->working_day }}- {{ $tiposJornada[ $aDay->working_day ] }}</strong></h3>
+						<h3 class="text-uppercase"><strong>Jornada: 
+
+                        	@if ( substr( $aDay->working_day,0, 1) != "+" ) 
+
+                        		{{$aDay->working_day }}- {{ $tiposJornada[ $aDay->working_day ] }}
+
+                        	@elseif( substr( $aDay->working_day,0, 1) == "+" )
+
+                             	{{$aDay->working_day}}
+                       		
+                        	@endif
+                        </strong></h3>
+
 						<ul class="list-inline">
 							
 				    		<li class="list-inline-item"><i style="color:red" class="fa fa-calendar-o" aria-hidden="true"></i>  {{ $weekMap [ $dayWithCarbon->dayOfWeek ] }}</li>
