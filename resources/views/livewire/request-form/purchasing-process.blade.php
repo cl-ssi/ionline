@@ -1,3 +1,4 @@
+
 <div><!-- LIVEWIRE -->
     {{-- Because she competes with no one, no one can compete with her. --}}
 
@@ -78,7 +79,7 @@
       </table>
     </div><!-- div para TABLA -->
 
-    <div class="row mx-0 mb-3 mt-3 pt-0"> <!-- DIV para TABLA-->
+    <div class="row mx-0 mb-3 mt-3 pt-0"> <!-- DIV para TABLA ITEMS-->
       <h6 class="card-subtitle mt-0 mb-2 text-primary">Lista de Bienes y/o Servicios:</h6>
       <table class="table table-sm small">
         <thead>
@@ -101,7 +102,7 @@
         </thead>
         <tbody>
           @foreach($requestForm->itemRequestForms as $key => $item)
-                @if($key >> 0 && $arrayVista[$key]['value'])
+                @if($key >> 0 && $arrayVista[$key])
                   <thead>
                     <tr class="bgTableTittle">
                       <th class="brd-l">Item</th>
@@ -121,7 +122,7 @@
                     </tr>
                   </thead>
                 @endif
-                  <tr class="{{$arrayBgTable[$key]['value']}}">
+                  <tr class="{{$arrayBgTable[$key]}}">
                       <td class="align-middle brd-l">{{ $key+1 }}</td>
                       <td class="align-middle">{{ $item->id }}</td>
                       <td class="align-middle">{{ $item->budgetItem()->first()->fullName() }}</td>
@@ -134,20 +135,20 @@
                       <td class="align-middle">{{ $item->tax }}</td>
                       <td class="align-middle" align='right'>{{ $item->formatExpense() }}</td>
                       <td class="align-middle brd-l" align='center'>
-                        <a href="#{{$key}}" title="Editar Item {{$key+1}}" class="text-primary" wire:click="showMe({{$key}})">
+                        <a href="#{{$key}}" title="Editar Item {{$key+1}}" class="text-primary" wire:click="btnShowMe({{$key}})">
                           <i class="fas fa-pencil-alt"></i>
                         </a>
                       </td>
-                      <td align='center'><input type="radio" wire:model="radioSource" wire:click="disableCheck({{$key}})" name="radioSource" id="{{'sour_'.$item->id}}" value="{{$key}}"></td>
-                      <td align='center'><input type="checkbox" wire:model="arrayCheckItem.{{ $key }}.value"  wire:click="selectItem({{$key}})" id="{{'dest_'.$item->id}}" value="{{ $item->id }}" {{$checkStatus[$key]}}></td>
+                      <td align='center'><input type="radio" wire:model="radioSource" wire:click="selectRadioButton({{$key}})" name="radioSource" id="{{'sour_'.$item->id}}" value="{{ $key+1 }}"></td>
+                      <td align='center'><input type="checkbox" wire:model="arrayCheckBox.{{ $key }}.value"  wire:click="selectCheckBox({{$key}})" id="{{'dest_'.$item->id}}" value="{{ $key+1 }}" {{$checkBoxStatus[$key]}}></td>
                   </tr>
-                  @if($arrayVista[$key]['value'])
-                  <tr class="{{$arrayBgTable[$key]['value']}}">
-                    <td colspan="14" class="brd-bb">
+                  @if($arrayVista[$key])
+                  <tr class="{{$arrayBgTable[$key]}}">
+                    <td colspan="14" class="brd-bb  brd-l brd-r">
                       <div class="row mb-3">
                         <div class="col-4">
                             <label class="font-weight-bold text-muted ml-1 mb-0">Mecanismo de Compra:</label><br>
-                            <select wire:model.defer="arrayPurchaseMechanism.{{ $item->id }}.value" wire:click="resetError" class="form-control form-control-sm" required>
+                            <select wire:model.defer="arrayPurchaseMechanism.{{ $key }}.value" wire:click="resetError" class="form-control form-control-sm" required>
                               <option selected>Seleccione...</option>
                               <option value="cm<1000">Convenio Marco < 1000 UTM</option>
                               <option value="cm>1000">Convenio Marco > 1000 UTM</option>
@@ -158,7 +159,7 @@
                         </div>
                         <div class="col-4">
                             <label class="font-weight-bold text-muted ml-1 mb-0">Tipo de Compra:</label><br>
-                            <select wire:model.defer="arrayPurchaseType.{{ $item->id }}.value" wire:click="resetError" class="form-control form-control-sm" required>
+                            <select wire:model.defer="arrayPurchaseType.{{ $key }}.value" wire:click="resetError" class="form-control form-control-sm" required>
                                 <option selected>Seleccione...</option>
                               @foreach($lstPurchaseType as $type)
                                 <option value="{{$type->id}}">{{$type->name}}</option>
@@ -168,7 +169,7 @@
 
                         <div class="col-4">
                             <label class="font-weight-bold text-muted ml-1 mb-0">Unidad de Compra:</label><br>
-                            <select wire:model.defer="arrayPurchaseUnit.{{ $item->id }}.value" wire:click="resetError" class="form-control form-control-sm" required>
+                            <select wire:model.defer="arrayPurchaseUnit.{{ $key }}.value" wire:click="resetError" class="form-control form-control-sm" required>
                                 <option selected>Seleccione...</option>
                               @foreach($lstPurchaseUnit as $unit)
                                 <option value="{{$unit->id}}">{{$unit->name}}</option>
@@ -247,13 +248,13 @@
                 <div class="col-12 mx-0 my-0 px-0 py-0 text-center">
                   <button type="button" class="btn btn-primary btn-sm mr-4" wire:click="showAllItems">Mostrar</button>
                   <button type="button" class="btn btn-primary btn-sm mr-4" wire:click="hideAllItems">Ocultar</button>
-                  <button type="button" class="btn btn-primary btn-sm">Pegar</button>
+                  <button type="button" class="btn btn-primary btn-sm" wire:click="pasteItems">Pegar</button>
                 </div>
               </div>
             </td>
 
             <td class="brd-r brd-b" colspan="4">
-              <span class="text-muted">Item de Origen:</span> <span class="text-dark"> {{$radioSource+1}}</span>
+              <span class="text-muted">Item de Origen:</span> <span class="text-dark"> {{$radioSource}}</span>
             </td>
 
             <td colspan="2" align='right'>Valor Total</td>
@@ -276,6 +277,6 @@
           </tr>
         </tfoot>
       </table>
-    </div><!-- DIV para TABLA-->
+    </div><!-- DIV para TABLA ITEMS-->
 
 </div><!-- LIVEWIRE -->

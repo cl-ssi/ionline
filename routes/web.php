@@ -1150,6 +1150,20 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     //Route::get('/authorize_inbox', [RequestFormController::class, 'authorizeInbox'])->name('authorize_inbox');
     Route::get('/create', [RequestFormController::class, 'create'])->name('create');
     //Route::get('/finance_inbox', [RequestFormController::class, 'financeInbox'])->name('finance_inbox');
+    //Route::get('/tesseract', [RequestFormController::class, 'financeIndex'])->name('tesseract');
+    Route::get('/saludo/{name}/{nickname?}', function ($name, $nickname = null) {
+      if ($nickname) {
+          return "Bienvenido {$name}, tu apodo es {$nickname}";
+        } else {
+            return "Bienvenido {$name}, no tienes apodo";
+          }
+    });
+
+    Route::get('/tesseract', function() {
+    return File::get(public_path() . '\tesseract.html');
+    });
+
+    //return File::get(public_path() . '/to new folder name/index.html');
 
     //Route::get('/own', [RequestFormController::class, 'indexOwn'])->name('own');
     //Route::get('/validaterequest', [RequestFormController::class, 'validaterequest'])->name('validaterequest');
