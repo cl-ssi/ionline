@@ -24,12 +24,14 @@ class ModalEditShiftUserDay extends Component
 	public $usersSelect2 ="none";
 	public $changeDayType ="none";
 	public $repeatAction ="none";
+	public $addHours ="none";
 	public $previousStatus;
 	public $newStatus;
 	public $newWorkingDay;
 	public $previousWorkingDay;
 	public $varLog;
 	public $repeatToDate;
+	public $cantNewHours="00:00";
     private $tiposJornada = array(
             'F' => "Libre",
             'D' => "Dia",
@@ -151,6 +153,7 @@ class ModalEditShiftUserDay extends Component
 			$this->changeDayType ="none";
 			$this->repeatAction="none";
 			$this->usersSelect2 ="none";
+			$this->addHours = "none" ;
 
 		}elseif($this->action ==2 ){ //cumplido
 			$this->newStatus = 2;
@@ -158,14 +161,16 @@ class ModalEditShiftUserDay extends Component
 			$this->changeDayType ="none";
 			$this->repeatAction="visible";
 			$this->usersSelect2 ="none";
+			$this->addHours = "none" ;
+
 
 		}elseif($this->action ==3 ){ // licencia
 			$this->newStatus = 5;
 			$this->usersSelect ="none";
 			$this->changeDayType ="none";
 			$this->repeatAction="visible";
-
 			$this->usersSelect2 ="visible";
+			$this->addHours = "none" ;
 
 		}elseif($this->action ==4 ){ // Fuero gremial
 			$this->newStatus = 6;
@@ -173,6 +178,7 @@ class ModalEditShiftUserDay extends Component
 			$this->repeatAction="visible";
 			$this->changeDayType ="none";
 			$this->usersSelect2 ="visible";
+			$this->addHours = "none" ;
 
 		}elseif($this->action ==5 ){ // Feriado Legal
 			$this->newStatus = 7;
@@ -180,6 +186,7 @@ class ModalEditShiftUserDay extends Component
 			$this->repeatAction="visible";
 			$this->changeDayType ="none";
 			$this->usersSelect2 ="visible";
+			$this->addHours = "none" ;
 			
 		}elseif($this->action ==6 ){ // PErmiso excepcional
 			$this->newStatus = 8;
@@ -187,12 +194,14 @@ class ModalEditShiftUserDay extends Component
 			$this->repeatAction="visible";
 			$this->changeDayType ="none";
 			$this->usersSelect2 ="visible";
+			$this->addHours = "none" ;
 		
 		}elseif($this->action ==7 ){ // Cambiar tipo de jornada
 			// $this->newStatus = 8;
 			$this->usersSelect ="none";
 			$this->repeatAction="none";
 			$this->usersSelect2 ="none";
+			$this->addHours = "none" ;
 
 			$this->emit('ChangeWorkingDay');
 		}elseif($this->action ==8 ){ // PErmiso excepcional sin sueldo
@@ -201,6 +210,61 @@ class ModalEditShiftUserDay extends Component
 			$this->repeatAction="visible";
 			$this->changeDayType ="none";
 			$this->usersSelect2 ="visible";
+			$this->addHours = "none" ;
+		
+		}elseif($this->action ==9 ){ // Descanzo Compensatorio
+			$this->newStatus = 10;
+			$this->usersSelect ="none";
+			$this->repeatAction="visible";
+			$this->changeDayType ="none";
+			$this->usersSelect2 ="visible";
+			$this->addHours = "none" ;
+
+		}elseif($this->action ==10 ){ // Permiso Administrativo Completo
+			$this->newStatus = 11;
+			$this->usersSelect ="none";
+			$this->repeatAction="visible";
+			$this->changeDayType ="none";
+			$this->usersSelect2 ="visible";
+			$this->addHours = "none" ;
+
+		}elseif($this->action ==11 ){ // Permiso Administrativo Medio Turno Diurno
+			$this->newStatus = 12;
+			$this->usersSelect ="none";
+			$this->repeatAction="visible";
+			$this->changeDayType ="none";
+			$this->usersSelect2 ="visible";
+			$this->addHours = "none" ;
+
+		}elseif($this->action ==12 ){ // Permiso Administrativo Medio Turno Nocturno
+			$this->newStatus = 13;
+			$this->usersSelect ="none";
+			$this->repeatAction="visible";
+			$this->changeDayType ="none";
+			$this->usersSelect2 ="visible";
+			$this->addHours = "none" ;
+
+		}elseif($this->action ==13 ){ // Permiso a curso
+			$this->newStatus = 14;
+			$this->usersSelect ="none";
+			$this->repeatAction="visible";
+			$this->changeDayType ="none";
+			$this->usersSelect2 ="visible";
+			$this->addHours = "none" ;
+
+		}elseif($this->action ==14 ){ // Aresr ooras
+			// $this->newStatus = 8;
+			$this->usersSelect ="none";
+			$this->repeatAction="none";
+			$this->usersSelect2 ="none";
+			$this->addHours = "visible" ;
+			/*
+			  9 => "Permiso sin goce de sueldo",
+           10 => "Descanzo Compensatorio",
+           11 => "Permiso Administrativo Completo",
+           12 => "Permiso Administrativo Medio Turno Diurno",
+           13 => "Permiso Administrativo Medio Turno Nocturno",
+           14 => "Permiso a Curso", */
 		
 		}else{
 			$this->changeDayType ="none";
@@ -217,7 +281,7 @@ class ModalEditShiftUserDay extends Component
 			$this->changeDayType ="visible";
 	}
 	public function update(){//funcion que actualiza la informacion segun el estado elegido en el modal
-		if( ($this->action != 1 && $this->action != 7) &&  isset($this->shiftUserDay) ){
+		if( ($this->action != 1 && $this->action != 7 && $this->action != 14) &&  isset($this->shiftUserDay) ){
 
 				if($this->repeatToDate == $this->shiftUserDay->day ){ // Si esque no se repiten
 
@@ -337,6 +401,17 @@ class ModalEditShiftUserDay extends Component
 								$nHistory->previous_value = $this->previousStatus;
 								$nHistory->current_value = $this->newStatus;
 								$nHistory->save();
+							}else{ // si el id es = 0 osea DEJAR DIA DISPONIBLE
+
+								$nHistory = new ShiftDayHistoryOfChanges;
+								$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha dejado el día disponible \"";
+								$nHistory->shift_user_day_id = $this->shiftUserDay->id;
+								$nHistory->modified_by = Auth()->user()->id;
+								$nHistory->change_type = 7;//0:asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario;4:Confirmado por el usuario 5: confirmado por el administrador, 6:rechazado por usuario?, 7 Dejar disponible
+								$nHistory->day =  $this->shiftUserDay->day;
+								$nHistory->previous_value = $this->previousStatus;
+								$nHistory->current_value = $this->newStatus;
+								$nHistory->save();
 							}
 								
 						}
@@ -414,6 +489,14 @@ class ModalEditShiftUserDay extends Component
 				$nHistory->current_value = $this->newStatus;
 				$nHistory->save();
 			}
+		}elseif($this->action == 14 &&  isset($this->shiftUserDay)){
+			$nShiftUserDay = new ShiftUserDay;
+			$nShiftUserDay->day = $this->shiftUserDay->day;
+			$nShiftUserDay->status = 1;
+			$nShiftUserDay->shift_user_id = $this->shiftUserDay->shift_user_id;
+			$nShiftUserDay->working_day = "+".$this->cantNewHours;
+			$nShiftUserDay->commentary = "Horas agregadas por necesidad de servicio";
+			$nShiftUserDay->save();
 		}
 		$this->emitUp('refreshListOfShifts');
 		// $this->emitSelf('renderShiftDay');

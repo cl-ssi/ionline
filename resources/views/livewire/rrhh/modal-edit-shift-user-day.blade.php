@@ -49,8 +49,14 @@
                             <tr>
                                 <th style="text-align: left;">Tipo de jornada</th>
                                 <td>
-                                    @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser ) 
+                                  
+
+                                    @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser && substr( $shiftUserDay->working_day,0, 1) != "+" ) 
                                         {{$shiftUserDay->working_day}} - {{strtoupper($tiposJornada[$shiftUserDay->working_day])}}
+                                   
+                                    @elseif( isset($shiftUserDay) && $shiftUserDay->ShiftUser && substr( $shiftUserDay->working_day,0, 1) == "+" )
+
+                                        {{$shiftUserDay->working_day}}
                                     @else
                                     
                                         <i class="fas fa-spinner fa-pulse"></i>
@@ -112,13 +118,20 @@
                         <select class="form-control" name="slcAction" wire:model="action" wire:change="changeAction">
                             <option value="0"> <b> </b> - - - </option>
                             <option value="1"> <b> </b>1 - Cambiar Turno con </option>
+                            <option value="7"> 2 - <b style="color:">Cambiar Tipo de Jornada Por</b> </option>
                             <!-- <option value="2"> <b> </b>2 - Marcar como Cumplido </option> -->
                             <option value="3"> <b> </b>3 - Marcar como Licencia Medica </option>
                             <option value="4"> 4 - <b style="color:">Marcar como Fuero Gremial</b> </option>
                             <option value="5"> 5 - <b style="color:">Marcar como Feriado Legal</b> </option>
                             <option value="6"> 6 - <b style="color:">Marcar como Permiso Excepcional</b> </option>
-                            <option value="7"> 7 - <b style="color:">Cambiar Tipo de Jornada Por</b> </option>
                             <option value="8"> 8 - <b style="color:">Marcar como Permiso Sin goce de sueldo</b> </option>
+
+                            <option value="9"> 9 - <b style="color:">Marcar como Descanzo Compensatorio</b> </option>
+                            <option value="10"> 10 - <b style="color:">Marcar como Permiso Administrativo Completo</b> </option>
+                            <option value="11"> 11 - <b style="color:">Marcar como Permiso Administrativo Medio Turno Diurno</b> </option>
+                            <option value="12"> 12 - <b style="color:">Marcar como Permiso Administrativo Medio Turno Nocturno</b> </option>
+                            <option value="13"> 13 - <b style="color:">Marcar como Permiso a curso</b> </option>
+                            <option value="14"> 14 - <b style="color:">Agregar horas por necesidad de servicio</b> </option>
                             
 
                         </select>
@@ -157,6 +170,11 @@
                         </select>
 
                     </div>
+                    <div class="form-group" style="display: {{$addHours}}">
+                        <label for="exampleFormControlInput1"><i class="fa fa-time"></i> CANT. HORAS </label>
+                        <input type="time" wire:model="cantNewHours">
+                    </div>
+
                      <div class="form-group " style="display: {{$usersSelect2}}">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-user"></i> REMPLAZAR CON </label>
@@ -218,7 +236,7 @@
                         <button type="button" class="btn btn-success ml-auto" data-dismiss="modal" wire:click.prevent="confirmExtraDay()">Confirmar <i class="fa fa-check"></i></button>
                   
                 @endif
-                <button type="button" wire:click.prevent="cancel()" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" wire:click.prevent="cancel()" class="btn" data-dismiss="modal">Cerrar</button>
 
                 <button type="button" wire:click.prevent="update()" class="btn btn-primary" data-dismiss="modal">Guardar </button>
 
