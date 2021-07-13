@@ -105,9 +105,11 @@ class ProgramResolutionController extends Controller
      * @param  \App\Agreements\ProgramResolution  $programResolution
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProgramResolution $programResolution)
+    public function destroy($programResolutionId)
     {
-        //
+        ProgramResolution::findOrFail($programResolutionId)->delete();
+        session()->flash('success', 'La resolución se ha dado de baja satisfactoriamente');
+        return redirect()->back();
     }
 
     public function download(ProgramResolution $program_resolution)
