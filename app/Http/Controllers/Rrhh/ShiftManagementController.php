@@ -295,7 +295,7 @@ class ShiftManagementController extends Controller
         // return view('rrhh.shift_management.index', compact('cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter'));
  	}
 
- 	public function shiftstypesindex(){
+ 	public function shiftstypesindex(){ // pantalla principal tipos de series, 
         // return view('rrhh.shift_management.shiftstypes', compact('users'));
         $sTypes = ShiftTypes::all(); 
         // $sTypes = 1;

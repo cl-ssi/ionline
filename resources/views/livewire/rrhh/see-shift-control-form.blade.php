@@ -208,7 +208,7 @@
                                                 @if($date2->isPast())
                                                     <td>{{ (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["from"]:""  }}</td>
                         						    <td>{{  (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["to"]:"" }}</td>
-                                                    <td>{{  ( isset($timePerDay[$d["working_day"]]) )?$shiftStatus[$d["status"]]:""     }}</td>
+                                                    <td>{{  (( isset($timePerDay[$d["working_day"]]) )? ( ($shiftStatus[$d["status"]] == "asignado" )?"Completado":$shiftStatus[$d["status"]]   ):""  )   }}</td>
                                                     @php
                                                       $total+=   (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["time"]:0  ;
                                                     @endphp
