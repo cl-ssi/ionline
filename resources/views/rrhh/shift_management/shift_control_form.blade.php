@@ -252,19 +252,19 @@
                 <table class="siete">
                     <thead>
                         <tr>
-                            <th>    
+                            <td>    
                                 @if ( isset( $usr ) ) 
                                 {{strtoupper($usr->fathers_family)}} 
-                                   {{strtoupper($usr->mothers_family) }}
+                                   
                                 @endif
-                            </th>
-                            <th> <p style="color:white">   || </p> </th>
-                            <th>
+                            </td>
+                            <td>    {{strtoupper($usr->mothers_family) }} </td>
+                            <td>
                                 @if ( isset( $usr ) ) 
-                                    {{$usr->getFirstNameAttribute()}}
+                                    {{strtoupper($usr->getFirstNameAttribute())         }}
                           
                                 @endif
-                            </th>
+                            </td>
                         </tr>
                         <tr class="bottomFields">
                             <th>APELLIDO PATERNO</th>
@@ -300,31 +300,30 @@
                                 <tr>
                                     <td style="text-align:center;">{{$i}}  </td>
                                     <td>
-                                        @php
-                                            $date2 = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYears."-".$actuallyMonth."-".$i);  
-                                            $date =explode(" ",$date2);
-                                            if(isset($shifsUsr) && $shifsUsr->days){
-                                                $d = $shifsUsr->days->where('day',$date[0]);
-                                                $d = $d->first();
-                                            }else{
-                                                $d["working_day"] = "";
-                                                $d["status"] = "";
-                                            }
-                                        @endphp
-                                        {{ ($d["working_day"]!="F")?$d["working_day"]:"-"  }}                    
+                                          @php
+                                                        $date2 = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYears."-".$actuallyMonth."-".$i);  
+                                                        $date =explode(" ",$date2);
+                                                        $d = $shifsUsr->days->where('day',$date[0]);
+                                                        $d = $d->first();
+                                                    @endphp
+                                                     {{ ($d["working_day"]!="F")?$d["working_day"]:"-"  }}                
                                     </td>
-                                    @if($date2->isPast())
-                                        <td>{{ (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["from"]:""  }}</td>
-                                        <td>{{  (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["to"]:"" }}</td>
-                                        <td>{{  ( isset($timePerDay[$d["working_day"]]) )?  ( ($shiftStatus[$d["status"]] == 1)? "Completado":$shiftStatus[$d["status"]] ) :"" }}</td>
-                                        @php
-                                            $total+=   (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["time"]:0  ;
-                                        @endphp
-                                    @else
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    @endif
+                               @if($date2->isPast())
+                                                    <td>{{ (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["from"]:""  }}</td>
+                                                    <td>{{  (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["to"]:"" }}</td>
+                                                    <td>{{  (( isset($timePerDay[$d["working_day"]]) )? ( ($shiftStatus[$d["status"]] == "asignado" )?"Completado":$shiftStatus[$d["status"]]   ):""  )   }}</td>
+                                                    @php
+                                                      $total+=   (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["time"]:0  ;
+                                                    @endphp
+
+
+
+                                                @else
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+
+                                                @endif
                                 </tr>
                             @endfor
                         @else
