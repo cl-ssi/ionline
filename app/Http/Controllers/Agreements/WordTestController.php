@@ -12,6 +12,7 @@ use App\Agreements\AgreementAmount;
 use App\Agreements\AgreementQuota;
 use App\Agreements\OpenTemplateProcessor;
 use App\Agreements\MyClass;
+use App\Agreements\ProgramResolution;
 use App\Agreements\Signer;
 use App\Models\Commune;
 use App\Municipality;
@@ -22,9 +23,10 @@ use Luecano\NumeroALetras\NumeroALetras;
 use PhpOffice\PhpWord\Settings;
 use PhpOffice;
 use PhpOffice\PhpWord\TemplateProcessor;
+use PhpOffice\PhpWord\Element\Table;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-
+use PhpOffice\PhpWord\SimpleType\TblWidth;
 
 class WordTestController extends Controller
 {
@@ -353,6 +355,121 @@ class WordTestController extends Controller
         $download_path = 'app/public/Prev-'. ($type != 'addendum' ? 'Resolucion-' : '') .'Addendum.docx';
         $templateProcessor->saveAs(storage_path($download_path));
         return response()->download(storage_path($download_path))->deleteFileAfterSend(true);
+    }
+
+    public function createWordDocxResProgram(ProgramResolution $program_resolution)
+    {
+        $program_resolution->load('program', 'resolution_amounts.program_component', 'referrer', 'director_signer.user');
+        $meses = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+
+    	// ARRAY PARA OBTENER LOS COMPONENTES ASOCIADOS A LA RESOLUCION
+    	foreach ($program_resolution->resolution_amounts as $key => $amount) {
+			$arrayComponent[] = array('index' => $key+1, 'componenteNombre' => $amount->program_component->name);
+    	}
+
+        // SE CONVIERTE EL VALOR TOTAL DE LA RESOLUCION EN PALABRAS
+        $formatter = new NumeroALetras;
+        $formatter->apocope = true;
+        $totalResolucion = $program_resolution->resolution_amounts()->sum('amount');
+        $totalResolucionLetras = $this->correctAmountText($formatter->toMoney($totalResolucion,0, 'pesos',''));
+
+        // SE LISTA MONTOS SUBTITULOS 21 Y 22
+        $subtitulo21 = $program_resolution->resolution_amounts->where('subtitle', 21);
+        $subtitulo22 = $program_resolution->resolution_amounts->where('subtitle', 22);
+        // SE CALCULA SUBTOTALES POR SUBTITULO 21 Y 22
+        $totalSubtitulo21 = $subtitulo21->sum('amount');
+        $totalSubtitulo22 = $subtitulo22->sum('amount');
+
+    	$templateProcesor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/resolucionprogram2021.docx'));
+
+    	$periodo = $program_resolution->date->format('Y');
+
+    	$numResolucion = $program_resolution->res_exempt_number;
+        $yearResolucion = $program_resolution->res_exempt_date ? $program_resolution->res_exempt_date->format('Y') : '';
+        $fechaResolucion = $program_resolution->res_exempt_date ? $program_resolution->res_exempt_date->format('j').' de '.$meses[$program_resolution->res_exempt_date->format('n')-1].' del año '.$program_resolution->res_exempt_date->format('Y'): '';
+    	$numResourceResolucion = $program_resolution->res_resource_number;
+        $yearResourceResolucion = $program_resolution->res_resource_date ? $program_resolution->res_resource_date->format('Y') : '';
+        $fechaResourceResolucion = $program_resolution->res_resource_date ? $program_resolution->res_resource_date->format('j').' de '.$meses[$program_resolution->res_resource_date->format('n')-1].' del año '.$program_resolution->res_resource_date->format('Y'): '';
+        
+        $first_word = explode(' ',trim($program_resolution->program->name))[0];
+        $programa = $first_word == 'Programa' ? substr(strstr($program_resolution->program->name," "), 1) : $program_resolution->program->name;
+
+        $subtituloEtiqueta = 'Subtítulo ' . ($subtitulo21->count() > 0 ? '21' : '') . ($subtitulo21->isNotEmpty() && $subtitulo22->isNotEmpty() ? ' y ' : '') . ($subtitulo22->count() > 0 ? '22' : '');
+        $subtitulos = ($subtitulo21->count() > 0 ? 'Subtítulo 21 destinado a Gastos en Personal' : '') . ($subtitulo21->isNotEmpty() && $subtitulo22->isNotEmpty() ? ' y ' : '') . ($subtitulo22->count() > 0 ? 'Subtítulo 22 destinado a Bienes y Servicios de Consumo' : '');
+
+        $componentesSubtitulo21 = $subtitulo21->pluck('program_component.name')->map(function($item, $key){ return '"'.$item.'"'; })->join(', ', ' y ');
+        $componentesSubtitulo22 = $subtitulo22->pluck('program_component.name')->map(function($item, $key){ return '"'.$item.'"'; })->join(', ', ' y ');
+        $componentes = ($componentesSubtitulo21 ? 'Subtítulo 21 '.$componentesSubtitulo21 : '') . ($componentesSubtitulo21 && $componentesSubtitulo22 ? ' y ' : '') . ($componentesSubtitulo22 ? 'Subtítulo 22 '.$componentesSubtitulo22 : '');
+        
+        $directorDecreto = $program_resolution->director_signer->decree;
+        $directorApelativo = $program_resolution->director_signer->appellative;
+
+        $establecimiento = $program_resolution->establishment;
+
+        $emailReferrer = $program_resolution->referrer != null ? $program_resolution->referrer->email : '';
+
+        $punto4 = $subtitulo21->count() > 0 ? '4.-      Se adjuntan el anexo correspondiente a las contrataciones asociadas al programa.' : '';
+
+		$templateProcesor->setValue('programa', $programa);
+		$templateProcesor->setValue('periodo', $periodo);
+		$templateProcesor->setValue('numResolucion', $numResolucion);
+		$templateProcesor->setValue('yearResolucion', $yearResolucion);
+        $templateProcesor->setValue('fechaResolucion', $fechaResolucion);
+		$templateProcesor->setValue('numResourceResolucion', $numResourceResolucion);
+		$templateProcesor->setValue('yearResourceResolucion', $yearResourceResolucion);
+        $templateProcesor->setValue('fechaResourceResolucion', $fechaResourceResolucion);
+		$templateProcesor->setValue('totalResolucion', number_format($totalResolucion,0,",","."));
+		$templateProcesor->setValue('totalResolucionLetras', $totalResolucionLetras);
+        $templateProcesor->setValue('directorDecreto',$directorDecreto);
+        $templateProcesor->setValue('art8', !Str::contains($directorApelativo, '(S)') ? 'Art. 8 del ' : '');
+        $templateProcesor->setValue('subtitulos', $subtitulos);
+        $templateProcesor->setValue('subtituloEtiqueta', $subtituloEtiqueta);
+        $templateProcesor->setValue('componentes', $componentes);
+        $templateProcesor->setValue('establecimiento', $establecimiento);
+        $templateProcesor->setValue('punto4', $punto4);
+        $templateProcesor->setValue('emailReferrer', $emailReferrer);
+
+        $table = new Table(array('align' => 'center', 'borderSize' => 10, 'width' => 100 * 50, 'unit' => 'pct'));
+        $table->addRow();
+        $table->addCell(700)->addText('COMPONENTE', ['bold' => true]);
+        $table->addCell(300)->addText('RECURSOS', ['bold' => true], ['align' => 'center']);
+        foreach($subtitulo21 as $item){
+            $table->addRow();
+            $table->addCell(700)->addText($item->program_component->name);
+            $table->addCell(300)->addText('$ '.number_format($item->amount,0,",","."), null, ['align' => 'right']);
+        }
+
+        foreach($subtitulo22 as $item){
+            $table->addRow();
+            $table->addCell(700)->addText($item->program_component->name);
+            $table->addCell(300)->addText('$ '.number_format($item->amount,0,",","."), null, ['align' => 'right']);
+        }
+
+        if($subtitulo21->isNotEmpty() && $subtitulo22->isNotEmpty()){
+            $table->addRow();
+            $table->addCell(700)->addText('TOTAL POR SUBTITULO 21', ['bold' => true], ['align' => 'right']);
+            $table->addCell(300)->addText('$ '.number_format($totalSubtitulo21,0,",","."), null, ['align' => 'right']);
+            $table->addRow();
+            $table->addCell(700)->addText('TOTAL POR SUBTITULO 22', ['bold' => true], ['align' => 'right']);
+            $table->addCell(300)->addText('$ '.number_format($totalSubtitulo22,0,",","."), null, ['align' => 'right']);
+        }
+
+        $table->addRow();
+        $table->addCell(700)->addText('TOTAL', ['bold' => true], ['align' => 'right']);
+        $table->addCell(300)->addText('$ '.number_format($totalResolucion,0,",","."), ['bold' => true], ['align' => 'right']);
+
+        $templateProcesor->setComplexBlock('table', $table);
+
+        // // CLONE BLOCK PARA LISTAR COMPONENTES
+        // if(env('APP_ENV') == 'local') ini_set("pcre.backtrack_limit", -1);
+        // $templateProcesor->cloneBlock('componentesListado', 0, true, false,$arrayComponent);
+        // // CLONE BLOCK PARA LISTAR CUOTAS
+        // $templateProcesor->cloneBlock('cuotasListado', 0, true, false,$arrayQuota);
+
+
+    	$templateProcesor->saveAs(storage_path('app/public/Prev-Res.docx')); //'Prev-RESOL'.$numResolucion.'.docx'
+
+    	return response()->download(storage_path('app/public/Prev-Res.docx'))->deleteFileAfterSend(true);
     }
 
 
