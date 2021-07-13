@@ -172,7 +172,7 @@
                     </div>
                     <div class="form-group" style="display: {{$addHours}}">
                         <label for="exampleFormControlInput1"><i class="fa fa-time"></i> CANT. HORAS </label>
-                        <input type="time" wire:model="cantNewHours">
+                        <input type="time" class="form-control" wire:model="cantNewHours">
                     </div>
 
                      <div class="form-group " style="display: {{$usersSelect2}}">

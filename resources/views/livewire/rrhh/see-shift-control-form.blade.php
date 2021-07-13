@@ -194,34 +194,35 @@
                 				<tbody>
                         			@if(isset( $days ) && $days > 0)	
                         				@for($i = 1; $i < ($days+1); $i++ )
-                        					<tr>
-                        						<td>{{$i}}	</td>
-                        						<td>
-                                                    @php
-                                                        $date2 = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYears."-".$actuallyMonth."-".$i);  
-                                                        $date =explode(" ",$date2);
-                                                        $d = $shifsUsr->days->where('day',$date[0]);
-                                                        $d = $d->first();
-                                                    @endphp
-                                                     {{ ($d["working_day"]!="F")?$d["working_day"]:"-"  }}                    
-                                                </td>
-                                                @if($date2->isPast())
-                                                    <td>{{ (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["from"]:""  }}</td>
-                        						    <td>{{  (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["to"]:"" }}</td>
-                                                    <td>{{  (( isset($timePerDay[$d["working_day"]]) )? ( ($shiftStatus[$d["status"]] == "asignado" )?"Completado":$shiftStatus[$d["status"]]   ):""  )   }}</td>
-                                                    @php
-                                                      $total+=   (isset($timePerDay[$d["working_day"]]))?$timePerDay[$d["working_day"]]["time"]:0  ;
-                                                    @endphp
-
-
-
-                                                @else
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-
-                                                @endif
-                        					</tr>
+                                            @php
+                                                $date2 = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYears."-".$actuallyMonth."-".$i);  
+                                                $date =explode(" ",$date2);
+                                                $d = $shifsUsr->days->where('day',$date[0]);
+                                                
+                                            @endphp
+                                            @foreach($d as $dd)
+                        					   <tr>
+                        						  <td>{{$i}}	</td>
+                        						  <td>
+                                                         {{ ($dd["working_day"]!="F")?$dd["working_day"]:"-"  }}                    
+                                                    </td>
+                                                    @if($date2->isPast())
+                                                        <td>{{ (isset($timePerDay[$dd["working_day"]]))?$timePerDay[$dd["working_day"]]["from"]:""  }}</td>
+                        						      <td>{{  (isset($timePerDay[$dd["working_day"]]))?$timePerDay[$dd["working_day"]]["to"]:"" }}</td>
+                                                        <td>{{  (( isset($timePerDay[$dd["working_day"]]) )? ( ($shiftStatus[$dd["status"]] == "asignado" )?"Completado":$shiftStatus[$dd["status"]]   ):""  )   }}</td>
+                                                        @php
+                                                            if(  substr($dd["working_day"],0, 1) != "+" )
+                                                                $total+=   (isset($timePerDay[$dd["working_day"]]))?$timePerDay[$dd["working_day"]]["time"]:0  ;
+                                                            else
+                                                                $total+= intval( substr( $dd["working_day"],1,2) );
+                                                        @endphp
+                                                    @else
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    @endif
+                        					   </tr>
+                                            @endforeach
                         				@endfor
                         			@else
                                         <tr><td>
