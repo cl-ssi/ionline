@@ -181,57 +181,57 @@
                       <div class="row mb-3">
                         <div class="col-3">
                           <label class="font-weight-bold text-muted ml-1 mb-0">ID OC:</label><br>
-                          <input value="" class="form-control form-control-sm" type="text">
+                          <input wire:model="idOC.{{ $key }}.value" class="form-control form-control-sm" type="text">
                         </div>
                         <div class="col-3">
-                          <label class="font-weight-bold text-muted ml-1 mb-0">ID OC Excel:</label><br>
-                          <input value="" class="form-control form-control-sm" type="text">
+                          <label class="font-weight-bold text-muted ml-1 mb-0">ID OC Interna:</label><br>
+                          <input wire:model="idInternalOC.{{ $key }}.value" class="form-control form-control-sm" type="text">
                         </div>
                         <div class="col-3">
                           <label class="font-weight-bold text-muted ml-1 mb-0">Fecha OC:</label><br>
-                          <input type="date" class="form-control form-control-sm" required>
+                          <input wire:model="dateOC.{{ $key }}.value" type="date" class="form-control form-control-sm" required>
                         </div>
                         <div class="col-3">
                           <label class="font-weight-bold text-muted ml-1 mb-0">Fecha Envío OC:</label><br>
-                          <input type="date" class="form-control form-control-sm" required>
+                          <input wire:model="shippingDateOC.{{ $key }}.value" type="date" class="form-control form-control-sm" required>
                         </div>
                       </div>
 
                       <div class="row mb-3">
                         <div class="col-3">
                           <label class="font-weight-bold text-muted ml-1 mb-0">ID Gran Compra:</label><br>
-                          <input value="" class="form-control form-control-sm" type="text">
+                          <input wire:model="idBigBuy.{{ $key }}.value" class="form-control form-control-sm" type="text">
                         </div>
                         <div class="col-3">
                           <label class="font-weight-bold text-muted ml-1 mb-0">Monto Pesos:</label><br>
-                          <input value="" class="form-control form-control-sm" type="text">
+                          <input wire:model="pesoAmount.{{ $key }}.value" class="form-control form-control-sm" type="number">
                         </div>
                         <div class="col-3">
                           <label class="font-weight-bold text-muted ml-1 mb-0">Monto Dólar:</label><br>
-                          <input value="" class="form-control form-control-sm" type="text">
+                          <input wire:model="dollarAmount.{{ $key }}.value" class="form-control form-control-sm" type="number">
                         </div>
                         <div class="col-3">
                           <label class="font-weight-bold text-muted ml-1 mb-0">Monto UF:</label><br>
-                          <input value="" class="form-control form-control-sm" type="text">
+                          <input wire:model="ufAmount.{{ $key }}.value" class="form-control form-control-sm" type="number">
                         </div>
                       </div>
 
                       <div class="row mb-3">
                         <div class="col-3">
-                          <label class="font-weight-bold text-muted ml-1 mb-0">Plazo Entrega: OC:</label><br>
-                          <input value="" class="form-control form-control-sm" type="text">
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Plazo Entrega:</label><br>
+                          <input wire:model="deliveryTerm.{{ $key }}.value" class="form-control form-control-sm" type="text">
                         </div>
                         <div class="col-3">
                           <label class="font-weight-bold text-muted ml-1 mb-0">Fecha Entrega:</label><br>
-                          <input type="date" class="form-control form-control-sm" required>
+                          <input wire:model="deliveryDate.{{ $key }}.value" type="date" class="form-control form-control-sm" required>
                         </div>
                         <div class="col-3">
                           <label class="font-weight-bold text-muted ml-1 mb-0">ID Licitación:</label><br>
-                          <input value="" class="form-control form-control-sm" type="text">
+                          <input wire:model="idOffer.{{ $key }}.value" class="form-control form-control-sm" type="text">
                         </div>
                         <div class="col-3">
                           <label class="font-weight-bold text-muted ml-1 mb-0">ID Cotización:</label><br>
-                          <input value="" class="form-control form-control-sm" type="text">
+                          <input wire:model="idQuotation.{{ $key }}.value" class="form-control form-control-sm" type="text">
                         </div>
                       </div>
 
