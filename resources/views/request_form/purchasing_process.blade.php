@@ -43,7 +43,7 @@ table {
   border-top: solid 1px #D6DBDF;
 }
 .bgTableLight {
-  background-color: #E5ECF0;
+  background-color: #EBF2F6;
 }
 .bgTableDark {
   background-color: #C8D7E2;
