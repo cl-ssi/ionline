@@ -137,7 +137,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($program_resolution->resolution_amounts as $amount)
+                    @forelse($program_resolution->resolution_amounts as $amount)
                     <tr>
                         <td>{{$loop->iteration}}</td>
                         <td>{{ $amount->program_component->name }}</td>
@@ -158,7 +158,12 @@
                             </form>
                         </td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="5" align="center">No hay registro de montos para esta resolución</td>
+                    </tr>
+                    @endforelse
+                    @if($program_resolution->resolution_amounts->isNotEmpty())
                     <tr>
                         <td></td>
                         <td></td>
@@ -166,6 +171,7 @@
                         <td class="text-right font-weight-bold">@numero($program_resolution->resolution_amounts->sum('amount'))</td>
                         <td></td>
                     </tr>
+                    @endif
                 </tbody>
             </table>
 
