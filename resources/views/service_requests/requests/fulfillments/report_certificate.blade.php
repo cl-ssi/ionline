@@ -185,7 +185,24 @@
             @endif
           @elseif($fulfillment->FulfillmentItems->where('type','Abandono de funciones')->count() > 0)
             @if($fulfillment->FulfillmentItems->where('type','!=','Abandono de funciones')->count() > 0)
-              El prestador de servicios Honorario Suma Alzada , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo desde el día  {{$fulfillment->FulfillmentItems->where('type','Abandono de funciones')->first()->end_date->format('d/m/Y')}}. Además se registraron las siguientes ausencias:
+            Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b>
+            ha desempeñado las actividades estipuladas en su convenio de prestación de servicios con   
+            
+            @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
+              @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
+                Consultorio General Urbano Dr. Hector Reyno
+              @else
+                Servicio Salud Iquique
+              @endif
+            @else
+              Hospital Dr.Ernesto Torres Galdames
+            @endif
+            del periodo <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->FulfillmentItems->where('type','Abandono de funciones')->first()->end_date->sub(1, 'day')->format('d/m/Y')}}</b>.
+
+            <br>
+            Se deja constancia que el prestador de servicio Abandonó sus funciones a contar del día <b>{{$fulfillment->FulfillmentItems->where('type','Abandono de funciones')->first()->end_date->format('d/m/Y')}}.</b>
+            
+            . Además se registraron las siguientes ausencias:
             @else
               El prestador de servicios Honorario Suma Alzada , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo desde el día {{$fulfillment->FulfillmentItems->where('type','Abandono de funciones')->first()->end_date->format('d/m/Y')}}.
             @endif
@@ -248,10 +265,10 @@
             </thead>
             <tbody>
               <tr>
-                  <td style="text-align:center">{{$FulfillmentItem->type}}</td>
-                  <td style="text-align:center">{{$FulfillmentItem->start_date->format('d-m-Y H:i')}}</td>
-                  <td style="text-align:center">{{$FulfillmentItem->end_date->format('d-m-Y H:i')}}</td>
-                  <td style="text-align:center">{{$FulfillmentItem->observation}}</td>
+                  <td style="text-align:center">{{$FulfillmentItem->type??''}}</td>
+                  <td style="text-align:center">{{$FulfillmentItem->start_date ? $FulfillmentItem->start_date->format('d-m-Y H:i'):''}}</td>
+                  <td style="text-align:center">{{$FulfillmentItem->end_date ? $FulfillmentItem->end_date->format('d-m-Y H:i'):''}}</td>
+                  <td style="text-align:center">{{$FulfillmentItem->observation??''}}</td>
               </tr>
             </tbody>
           </table>
