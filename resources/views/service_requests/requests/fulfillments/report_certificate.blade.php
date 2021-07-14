@@ -185,7 +185,7 @@
             @endif
           @elseif($fulfillment->FulfillmentItems->where('type','Abandono de funciones')->count() > 0)
             @if($fulfillment->FulfillmentItems->where('type','!=','Abandono de funciones')->count() > 0)
-            Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las     actividades estipuladas en su convenio de prestación de servicios con el <b>{{$fulfillment->serviceRequest->establishment->name ?? ''}}</b> del periodo del
+            Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas en su convenio de prestación de servicios con el <b>{{$fulfillment->serviceRequest->establishment->name ?? ''}}</b> del periodo del
               {{$fulfillment->start_date->format('d/m/Y')}}
             al {{$fulfillment->FulfillmentItems->where('type','Abandono de funciones')->first()->end_date->sub(1, 'day')->format('d/m/Y')}} </b>
             <br>
@@ -203,7 +203,31 @@
             Se deja constancia que el prestador de servicio Abandonó sus funciones a contar del día <b>{{$fulfillment->FulfillmentItems->where('type','Abandono de funciones')->first()->end_date->format('d/m/Y')}}</b>.
             
               <!-- El prestador de servicios Honorario Suma Alzada , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo desde el día {{$fulfillment->FulfillmentItems->where('type','Abandono de funciones')->first()->end_date->format('d/m/Y')}}. -->
+            @endif            
+            @elseif($fulfillment->FulfillmentItems->where('type','Término de contrato anticipado')->count() > 0)
+            @if($fulfillment->FulfillmentItems->where('type','!=','Término de contrato anticipado')->count() > 0)
+            Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las     actividades estipuladas en su convenio de prestación de servicios con el <b>{{$fulfillment->serviceRequest->establishment->name ?? ''}}</b> del periodo del
+            <b>
+            {{$fulfillment->start_date->format('d/m/Y')}}
+            al {{$fulfillment->FulfillmentItems->where('type','Término de contrato anticipado')->first()->end_date->sub(1, 'day')->format('d/m/Y')}} 
+            </b>
+            <br>
+            <br>
+            Se deja constancia que el prestador de servicio se le realizó por parte de su jefatura directa un Término de contrato anticipado a contar del día            
+            <b>{{$fulfillment->FulfillmentItems->where('type','Término de contrato anticipado')->first()->end_date->format('d/m/Y')}}</b>
+            @else
+            Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las     actividades estipuladas en su convenio de prestación de servicios con el <b>{{$fulfillment->serviceRequest->establishment->name ?? ''}}</b> del periodo del
+            <b>
+            {{$fulfillment->start_date->format('d/m/Y')}}
+            al {{$fulfillment->FulfillmentItems->where('type','Término de contrato anticipado')->first()->end_date->sub(1, 'day')->format('d/m/Y')}} 
+            </b>
+            <br>
+            <br>
+            Se deja constancia que el prestador de servicio se le realizó por parte de su jefatura directa un Término de contrato anticipado a contar del día
+            <b>{{$fulfillment->FulfillmentItems->where('type','Término de contrato anticipado')->first()->end_date->format('d/m/Y')}}</b>
             @endif
+            
+            
           @else
             Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
             en su convenio de prestación de servicios con el
