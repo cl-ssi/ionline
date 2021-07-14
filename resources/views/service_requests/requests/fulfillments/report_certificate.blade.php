@@ -185,9 +185,9 @@
             @endif
           @elseif($fulfillment->FulfillmentItems->where('type','Abandono de funciones')->count() > 0)
             @if($fulfillment->FulfillmentItems->where('type','!=','Abandono de funciones')->count() > 0)
-              El prestador de servicios Honorario Suma Alzada , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo.. Además se registraron las siguientes ausencias:
+              El prestador de servicios Honorario Suma Alzada , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo desde el día  {{$fulfillment->FulfillmentItems->where('type','Abandono de funciones')->first()->end_date->sub(1, 'day')->format('d/m/Y')}}. Además se registraron las siguientes ausencias:
             @else
-              El prestador de servicios Honorario Suma Alzada , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo.
+              El prestador de servicios Honorario Suma Alzada , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo desde el día {{$fulfillment->FulfillmentItems->where('type','Abandono de funciones')->first()->end_date->sub(1, 'day')->format('d/m/Y')}}.
             @endif
           @else
             Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
