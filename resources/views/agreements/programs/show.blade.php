@@ -21,13 +21,17 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($program->components as $component)
+                @forelse($program->components as $component)
                 <tr>
                     <td>{{$component->id}}</td>
                     <td>{{$component->name }}</td>
                     <td></td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="3" align="center">No hay registro de componentes para este programa</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
@@ -51,7 +55,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($program->resolutions as $resolution)
+                @forelse($program->resolutions as $resolution)
                 <tr>
                     <td>{{ $resolution->id }}</td>
                     <td>{{ $resolution->date ? $resolution->date->format('d-m-Y') : '' }}</td>
@@ -65,9 +69,20 @@
                     <td>{{ $resolution->referrer->fullName ?? ''}}</td>
                     <td>{{ $resolution->director_signer->user->fullName ?? '' }}</td>
                     <td>{{ $resolution->establishment}}</td>
-                    <td><a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.programs.resolutions.show', $resolution) }}"><i class="fas fa-edit"></i></a></td>
+                    <td><a class="btn btn-sm btn-outline-secondary" href="{{ route('agreements.programs.resolutions.show', $resolution) }}"><i class="fas fa-edit"></i></a> 
+                    @can('Agreement: delete')
+                    <form method="POST" action="{{ route('agreements.programs.resolutions.destroy', $resolution) }}" class="d-inline">
+                        {{ method_field('DELETE') }} {{ csrf_field() }}
+                        <button class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Desea dar de baja esta resolución?')"><i class="fas fa-trash-alt"></i></button></button>
+                    </form>
+                    @endcan
+                    </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="7" align="center">No hay registro de resoluciones para este programa</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
