@@ -209,13 +209,15 @@
                                                     @if($date2->isPast())
                                                         <td>{{ (isset($timePerDay[$dd["working_day"]]))?$timePerDay[$dd["working_day"]]["from"]:""  }}</td>
                         						      <td>{{  (isset($timePerDay[$dd["working_day"]]))?$timePerDay[$dd["working_day"]]["to"]:"" }}</td>
-                                                        <td>{{  (( isset($timePerDay[$dd["working_day"]]) )? ( ($shiftStatus[$dd["status"]] == "asignado" )?"Completado":$shiftStatus[$dd["status"]]   ):""  )   }}</td>
-                                                        @php
-                                                            if(  substr($dd["working_day"],0, 1) != "+" )
-                                                                $total+=   (isset($timePerDay[$dd["working_day"]]))?$timePerDay[$dd["working_day"]]["time"]:0  ;
-                                                            else
-                                                                $total+= intval( substr( $dd["working_day"],1,2) );
-                                                        @endphp
+                                                        <td>{{  (( isset($timePerDay[$dd["working_day"]]) )? ( ($shiftStatus[$dd["status"]] == "asignado" )?"Completado":ucfirst($shiftStatus[$dd["status"]] )  ):""  )   }} - <small style="color:{{ ( $dd->confirmationStatus() == 1 ) ? 'green;':'red;'    }}"> {{ ( $dd->confirmationStatus() == 1 ) ? 'Confirmado':'Sin Confirmar'    }}</small></td>
+                                                        @if( $dd->confirmationStatus() == 1 )
+                                                            @php
+                                                                if(  substr($dd["working_day"],0, 1) != "+" )
+                                                                    $total+=   (isset($timePerDay[$dd["working_day"]]))?$timePerDay[$dd["working_day"]]["time"]:0  ;
+                                                                else
+                                                                    $total+= intval( substr( $dd["working_day"],1,2) );
+                                                            @endphp
+                                                        @endif
                                                     @else
                                                         <td></td>
                                                         <td></td>

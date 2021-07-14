@@ -25,7 +25,7 @@ class ShiftUserDay extends Model
 	{
     	return $this->hasMany(ShiftDayHistoryOfChanges::class, 'shift_user_day_id');
 	}
-	public function confirmationStatus(){
+	public function confirmationStatus(){ // estado de la confirmacion x parte del usuario administrador de la Unidad Organizacional, en este caso por requerimiento se confirmar automaticamente los dias de cada turno
 
 		$actuallyStatus = 0;
 		$reject = 0;

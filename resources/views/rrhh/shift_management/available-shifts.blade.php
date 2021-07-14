@@ -114,7 +114,8 @@
     			<p> 05/07/2021, Jornada: L - Larga</p>
     			<button class="btn btn-success">Solicitar</button>
 
-    		</li> -->
+    		</li> 
+    	-->
 
 			@php
 				$i=0;
@@ -161,20 +162,20 @@
 				    		<li class="list-inline-item"><i style="color:red" class="fa fa-calendar-o" aria-hidden="true"></i>  {{ $weekMap [ $dayWithCarbon->dayOfWeek ] }}</li>
 							<li class="list-inline-item"><i style="color:red" class="fa fa-clock-o" aria-hidden="true"></i> {{ $timePerDay [ $aDay->working_day  ] [ "from" ]}} - {{ $timePerDay [ $aDay->working_day  ] [ "to" ]}} </li>
 							<li class="list-inline-item"><i style="color:blue" class="fa fa-location-arrow info" aria-hidden="true"></i> Hospital Dr. Ernesto Torres Galdames</li>
+						
 						</ul>
 
+						<b>ID:<small># {{$aDay->id }}</small></b><br>
     					<b>Propietario</b>
 						<p>{{$aDay->ShiftUser->user->runFormat()}} -  {{$aDay->ShiftUser->user->getFullNameAttribute()}} </p>
     					<b>Comentario</b>
 						<p>{{$aDay->commentary}}</p>
-						
 						
 						@if( null !==  \App\Models\Rrhh\UserRequestOfDay::where("user_id",\Auth::id())->where("shift_user_day_id",$aDay->id)->first()     )
 							Solicitado el {{ \App\Models\Rrhh\UserRequestOfDay::where("user_id",\Auth::id())->first()->created_at}}
 							<small> <i class="fa fa-user"></i> {{ count( $aDay->Solicitudes ) }} Solicitudes.</small>
 								
 						@else
-
 							<form method="post" action="{{ route('rrhh.shiftManag.availableShifts.applyfor') }}" >
         						@csrf
         						{{ method_field('post') }}
@@ -216,6 +217,7 @@
   		<ul class="list-group list-group-flush">
   			 @foreach( $misSolicitudes as $solicitud)
   			 	<li class="list-group-item">
+  			 		<div class="row row-striped">
     				<b>ID: # {{$solicitud->id}}</b><br>
     				
 
@@ -239,6 +241,7 @@
     						<button class="btn btn-danger">Cancelar</button>
     					</form>
     				@endif
+    				</div>
     			</li>
   			 @endforeach
     		<!-- <li class="list-group-item">
@@ -253,8 +256,8 @@
     			<b>Estado</b>
     			<p style="color:yellow"> Espera de confirmacion</p>
     			<button class="btn btn-danger">Cancelar</button>
-    		</li>
-    		<li class="list-group-item">
+    			</li>
+    			<li class="list-group-item">
     			<b>Propietario</b>
     			<p>18.004.474-4 - Armando Barra Perez</p>
     			
@@ -265,8 +268,8 @@
     			<p> Solicitado en 05/07/2021 20:30:00</p>
     			<b>Estado</b>
     			<p style="color:red"> Rechazado</p>
-    		</li>
-    		<li class="list-group-item">
+    			</li>
+    			<li class="list-group-item">
     			<b>Propietario</b>
     			<p>18.004.474-4 - Armando Barra Perez</p>
     			
@@ -277,13 +280,14 @@
     			<p> Solicitado en 05/07/2021 20:30:00</p>
     			<b>Estado</b>
     			<p style="color:green"> Confirmado</p>
-    		</li> -->
-    		{{--json_encode($availableDays)--}}
+    			</li> 
+    		-->
+    			{{--json_encode($availableDays)--}}
   		</ul>
 	</div>
 
 	<br>
-
+<!-- x terminar -->
 	<h5><b>Solicitudes pendientes de aprobar:</b></h5>
 	<br>
 	<div class="card overflow-auto"  >
@@ -293,9 +297,9 @@
 				Sin registro de solicitudes pendientes de aprobar
 			</div>
 		@endif
-
   		<ul class="list-group list-group-flush">
-<!-- 			<li class="list-group-item">
+
+			<!--<li class="list-group-item">
     			<b>ID:#1</b>
 				<br>
     			<b>Propietario</b>
@@ -320,8 +324,7 @@
     				<input type="hidden" name="solicitudId" value="{{ route('rrhh.shiftManag.availableShifts.rejectRequest') }}">
     				<button class="btn btn-danger">Rechazar <i class="fa fa-cancel"></i></button>
     			</form>
-    		</li>
- -->
+    		</li> -->
     		@foreach($solicitudesPorAprobar as $solPending)
     			<li class="list-group-item">
     				<b>ID:#1</b>

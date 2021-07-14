@@ -1022,13 +1022,15 @@ class ShiftManagementController extends Controller
         $timePerDay = $this->timePerDay;
         $dummyVar ="only for recordatory";
 
-        $availableDays = ShiftUserDay::where("status",4)->where('day','>=',$actuallyYear."-".$actuallyMonth."-01")->where('day','<=',$actuallyYear."-".$actuallyMonth."-".$days)->whereHas("shiftUserDayLog",  function($q) use($dummyVar){
-                // Busco todos los dias que esten en estado 4 que es turno extra,  
+        // $availableDays = ShiftUserDay::where("status",4) .... antes 
+        //aora
+        $availableDays = ShiftUserDay::where('day','>=',$actuallyYear."-".$actuallyMonth."-01")->where('day','<=',$actuallyYear."-".$actuallyMonth."-".$days)->whereHas("shiftUserDayLog",  function($q) use($dummyVar){
+                // Busco todos los dias que esten en estado 4 que cambio turno con,  
                 $q->where('change_type',7); // este mismo cambiar  el change type y agregarle una "nuevo salto de linea" para escribir un nuevo mensaje qe ya fue confirmado
         })->whereHas("ShiftUser",  function($q) use($actuallyOrgUnit){
-                // Busco todos los dias que esten en estado 3 que es turno extra,  
+                
                 $q->where('organizational_units_id',$actuallyOrgUnit->id); // Para filtrar solo los dias de la unidad organizacional del usuario
-        })->get();
+        })->get();//aqui faltan agregar los turnos qe dejan disponibles a partir de otro estado
         
              /*doesntHave("shiftUserDayLog",  function($q) use($userId){
                 
@@ -1050,7 +1052,8 @@ class ShiftManagementController extends Controller
            
                 });
            
-            })->get();
+            })->get(); 
+            
 
         // }
 
