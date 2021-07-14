@@ -35,9 +35,9 @@ class PurchasingProcess extends Component
           $this->setCheckBoxStatus('enabled', $key);
           $this->setArrayBgTable($key);
           $this->setArrayCheckBox(0, $key);
-          $this->setPurchaseMechanism($this->purchaseMechanism, $key);
-          $this->setPurchaseType($this->purchaseType, $key);
-          $this->setPurchaseUnit($this->purchaseUnit, $key);
+          $this->setArrayPurchaseMechanism($this->purchaseMechanism, $key);
+          $this->setArrayPurchaseType($this->purchaseType, $key);
+          $this->setArrayPurchaseUnit($this->purchaseUnit, $key);
           $this->setInitialValues($key);
         }
     }
@@ -105,15 +105,15 @@ class PurchasingProcess extends Component
       $this->arrayCheckBox[$key]['value'] = $value;
     }
 
-    private function setPurchaseMechanism($value, $key){
+    private function setArrayPurchaseMechanism($value, $key){
       $this->arrayPurchaseMechanism[$key]['value'] = $value;
     }
 
-    private function setPurchaseType($value, $key){
+    private function setArrayPurchaseType($value, $key){
       $this->arrayPurchaseType[$key]['value'] = $value;
     }
 
-    private function setPurchaseUnit($value, $key){
+    private function setArrayPurchaseUnit($value, $key){
       $this->arrayPurchaseUnit[$key]['value'] = $value;
     }
 
@@ -121,9 +121,9 @@ class PurchasingProcess extends Component
         foreach($this->arrayCheckBox as $checkBox){
             if($checkBox['value'] && $checkBox['value'] != $this->radioSource)
               {
-              $this->setPurchaseMechanism($this->arrayPurchaseMechanism[($this->radioSource)-1]['value'], ($checkBox['value']-1));
-              $this->setPurchaseType($this->arrayPurchaseType[($this->radioSource)-1]['value'], ($checkBox['value']-1));
-              $this->setPurchaseUnit($this->arrayPurchaseUnit[($this->radioSource)-1]['value'], ($checkBox['value']-1));
+              $this->setArrayPurchaseMechanism($this->arrayPurchaseMechanism[($this->radioSource)-1]['value'], ($checkBox['value']-1));
+              $this->setArrayPurchaseType($this->arrayPurchaseType[($this->radioSource)-1]['value'], ($checkBox['value']-1));
+              $this->setArrayPurchaseUnit($this->arrayPurchaseUnit[($this->radioSource)-1]['value'], ($checkBox['value']-1));
               $this->idOC[$checkBox['value']-1]['value']            =   $this->idOC[($this->radioSource)-1]['value'];
               $this->idInternalOC[$checkBox['value']-1]['value']    =   $this->idInternalOC[($this->radioSource)-1]['value'];
               $this->dateOC[$checkBox['value']-1]['value']          =   $this->dateOC[($this->radioSource)-1]['value'];
