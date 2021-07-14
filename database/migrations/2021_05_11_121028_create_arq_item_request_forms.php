@@ -24,8 +24,29 @@ class CreateArqItemRequestForms extends Migration
             $table->longText('specification');
             $table->string('tax');
             $table->unsignedInteger('expense');
+
+            $table->string('purchase_mechanism')->nullable();
+            $table->foreignId('purchase_type_id')->nullable();
+            $table->foreignId('purchase_unit_id')->nullable();
+            $table->string('id_oc')->nullable();
+            $table->string('id_internal_oc')->nullable();
+            $table->dateTime('date_oc', $precision = 0)->nullable();
+            $table->dateTime('shipping_date_oc', $precision = 0)->nullable();
+            $table->string('id_big_buy')->nullable();
+            $table->integer('peso_amount')->nullable();
+            $table->integer('dollar_amount')->nullable();
+            $table->integer('uf_amount')->nullable();
+            $table->integer('delivery_term')->nullable();
+            $table->dateTime('delivery_date', $precision = 0)->nullable();
+            $table->string('id_offer')->nullable();
+            $table->string('id_quotation')->nullable();
+
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('purchase_type_id')->references('id')->on('cfg_purchase_types');
+            $table->foreign('purchase_unit_id')->references('id')->on('cfg_purchase_units');
+
             $table->foreign('request_form_id')->references('id')->on('arq_request_forms');
             $table->foreign('budget_item_id')->references('id')->on('arq_budget_items');
         });
