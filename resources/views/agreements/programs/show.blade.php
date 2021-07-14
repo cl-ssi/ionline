@@ -21,13 +21,17 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($program->components as $component)
+                @forelse($program->components as $component)
                 <tr>
                     <td>{{$component->id}}</td>
                     <td>{{$component->name }}</td>
                     <td></td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="3" align="center">No hay registro de componentes para este programa</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
@@ -51,7 +55,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($program->resolutions as $resolution)
+                @forelse($program->resolutions as $resolution)
                 <tr>
                     <td>{{ $resolution->id }}</td>
                     <td>{{ $resolution->date ? $resolution->date->format('d-m-Y') : '' }}</td>
@@ -74,7 +78,11 @@
                     @endcan
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="7" align="center">No hay registro de resoluciones para este programa</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>
