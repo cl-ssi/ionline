@@ -174,7 +174,7 @@ class MonthlyQuotes extends Component
         else {            ///son cuotas iguales
             // dd('en HSA');
             $aguinaldo = '';
-            if($serviceRequest->weekly_hours == 22 or $serviceRequest->weekly_hours == 44)
+            if($serviceRequest->weekly_hours == 22 or $serviceRequest->weekly_hours == 44 or $serviceRequest->weekly_hours == 11)
             {
                 $aguinaldo = $this->aguinaldopatrias($serviceRequest);
             }
