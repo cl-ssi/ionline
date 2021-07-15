@@ -99,7 +99,9 @@
           </tr>
         </thead>
         <tbody>
+
           @foreach($requestForm->itemRequestForms as $key => $item)
+
                 @if($key >> 0 && $arrayVista[$key])
                   <thead>
                     <tr class="bgTableTittle">
@@ -120,6 +122,7 @@
                     </tr>
                   </thead>
                 @endif
+
                   <tr class="{{$arrayBgTable[$key]}}">
                       <td class="align-middle brd-l">{{ $key+1 }}</td>
                       <td class="align-middle">{{ $item->id }}</td>
@@ -140,6 +143,7 @@
                       <td align='center'><input type="radio" wire:model="radioSource" wire:click="selectRadioButton({{$key}})" name="radioSource" id="{{'sour_'.$item->id}}" value="{{ $key+1 }}"></td>
                       <td align='center'><input type="checkbox" wire:model="arrayCheckBox.{{ $key }}.value"  wire:click="selectCheckBox({{$key}})" id="{{'dest_'.$item->id}}" value="{{ $key+1 }}" {{$checkBoxStatus[$key]}}></td>
                   </tr>
+
                 @if($arrayVista[$key])
                   <tr class="{{$arrayBgTable[$key]}}">
                     <td colspan="14" class="brd-bb  brd-l brd-r">
@@ -150,7 +154,7 @@
                               <option selected>Seleccione...</option>
                               @foreach($lstPurchaseMechanism as $val)
                               <option value="{{$val->id}}">{{$val->name}}</option>
-                              $endforeach
+                              @endforeach
                             </select>
                         </div>
                         <div class="col-4">
@@ -234,7 +238,9 @@
                     </td>
                   </tr>
                 @endif
-          @endforeach
+
+            @endforeach
+
         </tbody>
         <tfoot>
           <tr>
