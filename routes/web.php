@@ -653,6 +653,22 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::post('/store', 'Parameters\BudgetItemController@store')->name('store');
     });
 
+    Route::prefix('purchasemechanisms')->as('purchasemechanisms.')->group(function () {
+        Route::get('/', 'Parameters\PurchaseMechanismController@index')->name('index');
+        Route::get('/create', 'Parameters\PurchaseMechanismController@create')->name('create');
+        Route::get('/edit/{purchaseMechanism}', 'Parameters\PurchaseMechanismController@edit')->name('edit');
+        Route::put('/update/{purchaseMechanism}', 'Parameters\PurchaseMechanismController@update')->name('update');
+        Route::post('/store', 'Parameters\PurchaseMechanismController@store')->name('store');
+    });
+
+    Route::prefix('purchasetypes')->as('purchasetypes.')->group(function () {
+        Route::get('/', 'Parameters\PurchaseTypeController@index')->name('index');
+        Route::get('/create', 'Parameters\PurchaseTypeController@create')->name('create');
+        Route::get('/edit/{purchaseType}', 'Parameters\PurchaseTypeController@edit')->name('edit');
+        Route::put('/update/{purchaseType}', 'Parameters\PurchaseTypeController@update')->name('update');
+        Route::post('/store', 'Parameters\PurchaseTypeController@store')->name('store');
+    });
+
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {

@@ -71,7 +71,11 @@
             <i class="fas fa-ruler-combined"></i> Unidades de Medida</a>
     </li>
 
-
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('parameters.purchasemechanisms.index') }}">
+            <i class="fas fa-ruler-combined"></i> Mecanismos de Compra</a>
+    </li>
     <!-- <li class="nav-item">
         <a class="nav-link"
             href="{{ route('parameters.values.index') }}">
