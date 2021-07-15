@@ -10,11 +10,18 @@
 	<br>
 	<div class="row"> 
 		<div class="col-md-3">
+				<label for="for_name">Fecha de inicio</label>
+			<div class="input-group mb-3">
+  				<input  type="date" class="form-control" value="{{ $cierreDelMes->init_date }}"  aria-describedby="basic-addon2">
+  					
+			</div>	
+		</div>
+		<div class="col-md-3">
 				<label for="for_name">Fecha de cierre</label>
 			<div class="input-group mb-3">
-  				<input readonly type="date" class="form-control"  aria-describedby="basic-addon2">
+  				<input  type="date" class="form-control" value="{{ $cierreDelMes->close_date }}"   aria-describedby="basic-addon2">
   					<div class="input-group-append">
-    					<button class="btn btn-success" type="button">Editar</button>
+    					<button class="btn btn-success" type="button">Guardar</button>
   					</div>
 			</div>	
 		</div>
@@ -123,7 +130,7 @@
 					<th>Rut</th>
 					<th>Nombre</th>
 					<th>Comentarios</th>
-					<th>Cant. horas</th>
+					<!-- <th>Cant. horas</th> -->
 					<th></th>
 				</tr>
 			</thead>
@@ -134,10 +141,10 @@
 					<td>{{$s->user->runFormat() }}</td>
 					<td>{{$s->user->getFullNameAttribute() }}</td>
 					<td><input type="text" class="form-control" name="" value="Comentario de prueba desde el area anterior"> </td>
-					<td>100</td>
+					<!-- <td>100</td> -->
 					<td>
 						<button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Confirmar</button>
-                    	@livewire( 'rrhh.see-shift-control-form', ['usr'=>$s->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth], key($loop->index) )
+                    	@livewire( 'rrhh.see-shift-control-form', ['usr'=>$s->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>1], key($loop->index) )
 
 					</td>
 				</tr>

@@ -192,6 +192,46 @@
                                                 @endphp
 
                 				<tbody>
+                                @if(isset( $close ) && $close == 1 )
+
+                                    @php
+                                        $ranges = \Carbon\CarbonPeriod::create($cierreDelMes->init_date, $cierreDelMes->close_date);
+
+                                    @endphp
+                                    @foreach ($ranges as $date) 
+
+                                            @php
+                                                $d = $daysForClose->where('day',$date->format("Y-m-d"));
+                                            @endphp
+                                            @foreach($d as $dd)
+                                        <tr>
+                                                <td>{{$date->format("d/m")}}    </td>
+                                                <td> {{ ($dd->working_day!="F")?$dd->working_day:"-"  }} </td>
+                                                @if($date->isPast())
+                                                    <td>{{ (isset($timePerDay[$dd->working_day]))?$timePerDay[$dd->working_day]["from"]:""  }}</td>
+                                                    <td>{{  (isset($timePerDay[$dd->working_day]))?$timePerDay[$dd->working_day]["to"]:"" }}</td>
+                                                    <td>{{  (( isset($timePerDay[$dd->working_day]) )? ( ($shiftStatus[$dd->status] == "asignado" )?"Completado":ucfirst($shiftStatus[$dd->status] )  ):""  )   }} - <small style="color:{{ ( $dd->confirmationStatus() == 1 ) ? 'green;':'red;'    }}"> {{ ( $dd->confirmationStatus() == 1 ) ? 'Confirmado':'Sin Confirmar'    }}</small></td>
+                                                        @if( $dd->confirmationStatus() == 1 )
+                                                            @php
+                                                                if(  substr($dd->working_day,0, 1) != "+" )
+                                                                    $total+=   (isset($timePerDay[$dd->working_day]))?$timePerDay[$dd->working_day]["time"]:0  ;
+                                                                else
+                                                                    $total+= intval( substr( $dd->working_day,1,2) );
+                                                            @endphp
+                                                        @endif
+                                                @else
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                @endif
+                                        </tr>
+
+                                            @endforeach
+                                           
+
+
+                                    @endforeach
+                                @else
                         			@if(isset( $days ) && $days > 0)	
                         				@for($i = 1; $i < ($days+1); $i++ )
                                             @php
@@ -234,6 +274,8 @@
                                         </tr>
 
                         			@endif
+                                @endif
+
                         			<tr>
                         				<th>TOTAL</th>	
                         				<td>{{$total}}</td>	

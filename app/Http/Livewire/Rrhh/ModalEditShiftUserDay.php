@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Rrhh\ShiftDayHistoryOfChanges;	
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Session;
 
 class ModalEditShiftUserDay extends Component
 {	
@@ -23,6 +24,11 @@ class ModalEditShiftUserDay extends Component
 	public $usersSelect ="none";
 	public $usersSelect2 ="none";
 	public $changeDayType ="none";
+	public $availableOwnDaysToChangeVisible ="none";
+	public $availableOwnDaysToChange = array();
+	public $availableExternalDaysToChangeVisible ="none";
+	public $availableExternalDaysToChange= array();
+	public $dayToToChange;
 	public $repeatAction ="none";
 	public $addHours ="none";
 	public $previousStatus;
@@ -46,8 +52,8 @@ class ModalEditShiftUserDay extends Component
            1=>"Asignado",
            2=>"Completado",
            3=>"Turno extra",
-           4=>"Cambio turno con",
-           5=>"Ñicencia medica",
+           4=>"Intercambio de turno con",
+           5=>"Licencia medica",
            6=>"Fuero gremial",
            7=>"Feriado legal",
            8=>"Permiso excepcional",
@@ -57,6 +63,8 @@ class ModalEditShiftUserDay extends Component
            12 => "Permiso Administrativo Medio Turno Diurno",
            13 => "Permiso Administrativo Medio Turno Nocturno",
            14 => "Permiso a Curso",
+           15 => "Ausencia sin justificar",
+           16 => "Cambiado por necesidad de servicio",
     );
     private $colors = array(
             1 => "lightblue",
@@ -73,8 +81,10 @@ class ModalEditShiftUserDay extends Component
             12  => "brown",
             13  => "brown",
             14  => "brown",
+            15  => "lightred",
+            16  => "lightbrown",
     );
-    protected $listeners = ['setshiftUserDay','clearModal','ChangeWorkingDay'=>'enableChangeTypeOfWorkingDay'];
+    protected $listeners = ['setshiftUserDay','clearModal','ChangeWorkingDay'=>'enableChangeTypeOfWorkingDay','findAvailableOwnDaysToChange'];
     // public function mount(array $headers){
     public function mount(){
 		
@@ -154,14 +164,19 @@ class ModalEditShiftUserDay extends Component
 			$this->repeatAction="none";
 			$this->usersSelect2 ="none";
 			$this->addHours = "none" ;
+			$this->availableOwnDaysToChangeVisible  = "none";
+			$this->availableExternalDaysToChangeVisible = "visible";
+			$this->emit('findAvailableExternalDaysToChange',$this->shiftUserDay->ShiftUser->user_id);
+
 
 		}elseif($this->action ==2 ){ //cumplido
-			$this->newStatus = 2;
+			$this->newStatus = 2; 	
 			$this->usersSelect ="none";
 			$this->changeDayType ="none";
 			$this->repeatAction="visible";
 			$this->usersSelect2 ="none";
 			$this->addHours = "none" ;
+			$this->availableOwnDaysToChangeVisible  = "none";
 
 
 		}elseif($this->action ==3 ){ // licencia
@@ -179,6 +194,8 @@ class ModalEditShiftUserDay extends Component
 			$this->changeDayType ="none";
 			$this->usersSelect2 ="visible";
 			$this->addHours = "none" ;
+			$this->availableOwnDaysToChangeVisible  = "none";
+
 
 		}elseif($this->action ==5 ){ // Feriado Legal
 			$this->newStatus = 7;
@@ -187,6 +204,8 @@ class ModalEditShiftUserDay extends Component
 			$this->changeDayType ="none";
 			$this->usersSelect2 ="visible";
 			$this->addHours = "none" ;
+			$this->availableOwnDaysToChangeVisible  = "none";
+
 			
 		}elseif($this->action ==6 ){ // PErmiso excepcional
 			$this->newStatus = 8;
@@ -195,6 +214,8 @@ class ModalEditShiftUserDay extends Component
 			$this->changeDayType ="none";
 			$this->usersSelect2 ="visible";
 			$this->addHours = "none" ;
+			$this->availableOwnDaysToChangeVisible  = "none";
+
 		
 		}elseif($this->action ==7 ){ // Cambiar tipo de jornada
 			// $this->newStatus = 8;
@@ -202,6 +223,8 @@ class ModalEditShiftUserDay extends Component
 			$this->repeatAction="none";
 			$this->usersSelect2 ="none";
 			$this->addHours = "none" ;
+			$this->availableOwnDaysToChangeVisible  = "none";
+
 
 			$this->emit('ChangeWorkingDay');
 		}elseif($this->action ==8 ){ // PErmiso excepcional sin sueldo
@@ -211,6 +234,8 @@ class ModalEditShiftUserDay extends Component
 			$this->changeDayType ="none";
 			$this->usersSelect2 ="visible";
 			$this->addHours = "none" ;
+			$this->availableOwnDaysToChangeVisible  = "none";
+
 		
 		}elseif($this->action ==9 ){ // Descanzo Compensatorio
 			$this->newStatus = 10;
@@ -219,6 +244,8 @@ class ModalEditShiftUserDay extends Component
 			$this->changeDayType ="none";
 			$this->usersSelect2 ="visible";
 			$this->addHours = "none" ;
+			$this->availableOwnDaysToChangeVisible  = "none";
+
 
 		}elseif($this->action ==10 ){ // Permiso Administrativo Completo
 			$this->newStatus = 11;
@@ -227,6 +254,8 @@ class ModalEditShiftUserDay extends Component
 			$this->changeDayType ="none";
 			$this->usersSelect2 ="visible";
 			$this->addHours = "none" ;
+			$this->availableOwnDaysToChangeVisible  = "none";
+
 
 		}elseif($this->action ==11 ){ // Permiso Administrativo Medio Turno Diurno
 			$this->newStatus = 12;
@@ -235,6 +264,8 @@ class ModalEditShiftUserDay extends Component
 			$this->changeDayType ="none";
 			$this->usersSelect2 ="visible";
 			$this->addHours = "none" ;
+			$this->availableOwnDaysToChangeVisible  = "none";
+
 
 		}elseif($this->action ==12 ){ // Permiso Administrativo Medio Turno Nocturno
 			$this->newStatus = 13;
@@ -243,6 +274,8 @@ class ModalEditShiftUserDay extends Component
 			$this->changeDayType ="none";
 			$this->usersSelect2 ="visible";
 			$this->addHours = "none" ;
+			$this->availableOwnDaysToChangeVisible  = "none";
+
 
 		}elseif($this->action ==13 ){ // Permiso a curso
 			$this->newStatus = 14;
@@ -251,6 +284,8 @@ class ModalEditShiftUserDay extends Component
 			$this->changeDayType ="none";
 			$this->usersSelect2 ="visible";
 			$this->addHours = "none" ;
+			$this->availableOwnDaysToChangeVisible  = "none";
+
 
 		}elseif($this->action ==14 ){ // Aresr ooras
 			// $this->newStatus = 8;
@@ -258,6 +293,8 @@ class ModalEditShiftUserDay extends Component
 			$this->repeatAction="none";
 			$this->usersSelect2 ="none";
 			$this->addHours = "visible" ;
+			$this->availableOwnDaysToChangeVisible  = "none";
+
 			/*
 			  9 => "Permiso sin goce de sueldo",
            10 => "Descanzo Compensatorio",
@@ -266,12 +303,79 @@ class ModalEditShiftUserDay extends Component
            13 => "Permiso Administrativo Medio Turno Nocturno",
            14 => "Permiso a Curso", */
 		
+		}elseif($this->action ==15 ){ // Permiso a curso
+			$this->newStatus = 15;
+			$this->usersSelect ="none";
+			$this->repeatAction="visible";
+			$this->changeDayType ="none";
+			$this->usersSelect2 ="visible";
+			$this->addHours = "none" ;
+			$this->availableOwnDaysToChangeVisible  = "none";
+
+		}elseif($this->action ==16 ){ // Cambiar por necesidad del servicio
+			$this->newStatus = 16;
+			$this->usersSelect ="none";
+			$this->repeatAction="none";
+			$this->usersSelect2 ="none";
+			$this->addHours = "none" ;
+
+			$this->availableOwnDaysToChangeVisible  = "visible";
+			$this->emit('findAvailableOwnDaysToChange',$this->shiftUserDay->ShiftUser->user_id);
+
 		}else{
 			$this->changeDayType ="none";
 			$this->repeatAction="none";
 
 			$this->usersSelect ="none";
 		}
+	}
+	public function findAvailableOwnDaysToChange($user_id){
+
+		if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
+            $actuallyMonth = Session::get('actuallyMonth');
+        else
+            $actuallyMonth = Carbon::now()->format('m');
+ 		
+ 		if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
+            $actuallyYear = Session::get('actuallyYear');
+        else
+            $actuallyYear = Carbon::now()->format('Y');
+
+		 $ShiftUser = ShiftUser::where('user_id',$user_id )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-31")->get();
+		 
+		 foreach ($ShiftUser as $s ) {
+		 	 
+			foreach ($s->days as $day ) {
+				if( $this->shiftUserDay->id != $day->id )
+			 		array_push($this->availableOwnDaysToChange, $day);
+			 } 
+
+		 }
+	}
+	public function findAvailableExternalDaysToChange(){
+		if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
+            $actuallyMonth = Session::get('actuallyMonth');
+        else
+            $actuallyMonth = Carbon::now()->format('m');
+ 		
+ 		if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
+            $actuallyYear = Session::get('actuallyYear');
+        else
+            $actuallyYear = Carbon::now()->format('Y');
+
+		 $ShiftUser = ShiftUser::where('user_id',$userIdtoChange )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-31")->get();
+		 
+		 foreach ($ShiftUser as $s ) {
+		 	 
+			foreach ($s->days as $day ) {
+				if( $this->shiftUserDay->id != $day->id )
+			 		array_push($this->availableExternalDaysToChange, $day);
+			 } 
+
+		 }
+
+
+
 	}
 	public function enableAnnouncementDayAvailableFields(){
 		// habilitar aqui campos para crear el anuncio de dia de turno disponble
@@ -281,14 +385,14 @@ class ModalEditShiftUserDay extends Component
 			$this->changeDayType ="visible";
 	}
 	public function update(){//funcion que actualiza la informacion segun el estado elegido en el modal
-		if( ($this->action != 1 && $this->action != 7 && $this->action != 14) &&  isset($this->shiftUserDay) ){
+		if( ($this->action != 1 && $this->action != 7 && $this->action != 14 && $this->action !=  16) &&  isset($this->shiftUserDay) ){
 
-				if($this->repeatToDate == $this->shiftUserDay->day ){ // Si esque no se repiten
+				if($this->repeatToDate == $this->shiftUserDay->day ){ // Si esque el cambio en el estado del dia no se repite en otra fecha, osea el dia de repeticion ed igual al dia actual
 
 					$this->shiftUserDay->status =$this->newStatus;
 					$this->shiftUserDay->update();
 
-					if($this->userIdtoChange2 != 0){ // si esque quiere replazarlo con otro usuario
+					if($this->userIdtoChange2 != 0){ // si esque quiere replazarlo con otro usuario, ahora hay 2 opciones, que ese remplazo sea de un suplente (se crea turno si no tiene y se le agrega, amarillo) o qe sea de un externo osea siempre turno extra
 
 						$daysOfMonth = Carbon::createFromFormat('Y-m-d',  $this->shiftUserDay->day, 'Europe/London');
 
@@ -308,7 +412,11 @@ class ModalEditShiftUserDay extends Component
 							$bTurno->user_id = $this->userIdtoChange2;
 							$bTurno->shift_types_id = $this->shiftUserDay->ShiftUser->shift_types_id;
 							$bTurno->organizational_units_id = $this->shiftUserDay->ShiftUser->organizational_units_id;
-							$bTurno->groupname ="";
+        					if(Session::has('groupname') && Session::get('groupname') != "")
+								$bTurno->groupname =Session::get('groupname');
+							else
+								$bTurno->groupname ="";
+
 							$bTurno->save();
 						}
 						$nDay = new ShiftUserDay;
@@ -325,6 +433,17 @@ class ModalEditShiftUserDay extends Component
 						$nHistory->shift_user_day_id = $this->shiftUserDay->id;
 						$nHistory->modified_by = Auth()->user()->id;
 						$nHistory->change_type = 2;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+						$nHistory->day =  $this->shiftUserDay->day;
+						$nHistory->previous_value = $this->previousStatus;
+						$nHistory->current_value = $this->newStatus;
+						$nHistory->save();
+					}else{
+
+						$nHistory = new ShiftDayHistoryOfChanges;
+						$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha dejado el día disponible \"";
+						$nHistory->shift_user_day_id = $this->shiftUserDay->id;
+						$nHistory->modified_by = Auth()->user()->id;
+						$nHistory->change_type = 7;//0:asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario;4:Confirmado por el usuario 5: confirmado por el administrador, 6:rechazado por usuario?, 7 Dejar disponible
 						$nHistory->day =  $this->shiftUserDay->day;
 						$nHistory->previous_value = $this->previousStatus;
 						$nHistory->current_value = $this->newStatus;
@@ -380,7 +499,10 @@ class ModalEditShiftUserDay extends Component
 									$bTurno->user_id = $this->userIdtoChange2;
 									$bTurno->shift_types_id = $day->ShiftUser->shift_types_id;
 									$bTurno->organizational_units_id = $day->ShiftUser->organizational_units_id;
-									$bTurno->groupname ="";
+									if(Session::has('groupname') && Session::get('groupname') != "")
+										$bTurno->groupname ="groupname";
+									else
+										$bTurno->groupname ="";
 									$bTurno->save();
 								}
 								$nDay = new ShiftUserDay;
@@ -403,12 +525,14 @@ class ModalEditShiftUserDay extends Component
 								$nHistory->save();
 							}else{ // si el id es = 0 osea DEJAR DIA DISPONIBLE
 
+							
+
 								$nHistory = new ShiftDayHistoryOfChanges;
 								$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha dejado el día disponible \"";
-								$nHistory->shift_user_day_id = $this->shiftUserDay->id;
+								$nHistory->shift_user_day_id = $day->id;
 								$nHistory->modified_by = Auth()->user()->id;
 								$nHistory->change_type = 7;//0:asignado 1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario;4:Confirmado por el usuario 5: confirmado por el administrador, 6:rechazado por usuario?, 7 Dejar disponible
-								$nHistory->day =  $this->shiftUserDay->day;
+								$nHistory->day =  $day->day;
 								$nHistory->previous_value = $this->previousStatus;
 								$nHistory->current_value = $this->newStatus;
 								$nHistory->save();
@@ -456,7 +580,10 @@ class ModalEditShiftUserDay extends Component
 					$bTurno->user_id = $this->userIdtoChange;
 					$bTurno->shift_types_id = $this->shiftUserDay->ShiftUser->shift_types_id;
 					$bTurno->organizational_units_id = $this->shiftUserDay->ShiftUser->organizational_units_id;
-					$bTurno->groupname ="";
+					if(Session::has('groupname') && Session::get('groupname') != "")
+						$bTurno->groupname ="groupname";
+					else
+						$bTurno->groupname ="";
 					$bTurno->save();
 				}
 				$nDay = new ShiftUserDay;
@@ -502,7 +629,7 @@ class ModalEditShiftUserDay extends Component
 		// $this->emitSelf('renderShiftDay');
 		$this->emitSelf('changeColor',["color"=>$this->colors[$this->shiftUserDay->status]]);
 		 $this->reset();
-		    return redirect('/rrhh/shift-management');
+		    return redirect('/rrhh/shift-management/'.(( Session::has('groupname') && Session::get('groupname') != ""  )?Session::get('groupname'):""));
 	}	
 
 	public function confirmExtraDay(){
