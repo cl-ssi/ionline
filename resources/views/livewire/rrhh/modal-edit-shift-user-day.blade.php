@@ -206,7 +206,14 @@
 
                             @foreach( $availableOwnDaysToChange as $day )
                                 <option value="{{$day->id}}">
-                                {{$loop->iteration}} - {{strtoupper($day->day)}} {{ $day->working_day }} {{ $tiposJornada [ $day->working_day ]}}
+                                {{$loop->iteration}} - {{strtoupper($day->day)}} {{ $day->working_day }} 
+                                 @if ( substr( $day->working_day,0, 1) != "+" ) 
+                                    {{ $tiposJornada [ $day->working_day ]}}
+                                @elseif(  substr( $day->working_day,0, 1) == "+" )
+                                    {{-- $day->working_day --}} 
+                                    <!-- no cambiar las oras -->
+                                @endif
+
                                 </option> 
                                 </option>
                             @endforeach
