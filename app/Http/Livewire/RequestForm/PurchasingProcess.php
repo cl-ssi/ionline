@@ -7,10 +7,12 @@ use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseType;
+use App\Models\Parameters\PurchaseMechanism;
 
 class PurchasingProcess extends Component
 {
-  public $requestForm, $purchaseMechanism, $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit, $radioSource, $checkBoxStatus;
+  public $requestForm, $purchaseMechanism, $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit,
+         $lstPurchaseMechanism, $radioSource, $checkBoxStatus;
   public $arrayPurchaseMechanism=[['value'=>'']], $arrayPurchaseType=[['value'=>'']], $arrayPurchaseUnit=[['value'=>'']];
   public $lastKey, $selectedItems;
   public $arrayCheckBox, $arrayVista, $arrayBgTable;
@@ -18,12 +20,13 @@ class PurchasingProcess extends Component
          $ufAmount, $deliveryTerm, $deliveryDate, $idOffer, $idQuotation;
 
     public function mount(RequestForm $requestForm){
-        $this->requestForm        = $requestForm;
-        $this->purchaseMechanism  = $requestForm->purchase_mechanism;
-        $this->purchaseUnit       = $requestForm->purchaseUnit->id;
-        $this->purchaseType       = $requestForm->purchaseType->id;
-        $this->lstPurchaseType    = PurchaseType::all();
-        $this->lstPurchaseUnit    = PurchaseUnit::all();
+        $this->requestForm            = $requestForm;
+        $this->purchaseMechanism      = $requestForm->purchaseMechanism->id;
+        $this->purchaseUnit           = $requestForm->purchaseUnit->id;
+        $this->purchaseType           = $requestForm->purchaseType->id;
+        $this->lstPurchaseType        = PurchaseType::all();
+        $this->lstPurchaseUnit        = PurchaseUnit::all();
+        $this->lstPurchaseMechanism   = PurchaseMechanism::all();
         $this->radioSource        = null;
         $this->configInitialParameters();
     }
