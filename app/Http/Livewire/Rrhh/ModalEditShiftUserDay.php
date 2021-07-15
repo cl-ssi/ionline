@@ -555,11 +555,12 @@ class ModalEditShiftUserDay extends Component
 			$nHistory->previous_value = $this->previousStatus;
 			$nHistory->current_value = $this->newStatus;
 			$nHistory->save();
-		}elseif($this->action == 1 &&  isset($this->shiftUserDay) ){ // Asignar dia laboral a otro usuario
+		}elseif($this->action == 1 &&  isset($this->shiftUserDay) ){ // Asignar dia laboral a otro usuario, aora es intercambio con otro usuario
 			$this->shiftUserDay->status =$this->newStatus;
 			$this->shiftUserDay->update();
 
-			if($this->userIdtoChange != 0){ // si el id es ditinto a 0 = dejar dia laboral disponible
+			if($this->userIdtoChange != 0){ // si el id es ditinto a 0 = dejar dia laboral disponible, aora elio un dia en especifico para intercambiar
+
 				// $chgUsr = User::find( $userIdtoChange );
 				// $bTurno = ShiftUser::where()->first();
 				$daysOfMonth = Carbon::createFromFormat('Y-m-d',  $this->shiftUserDay->day, 'Europe/London');
@@ -569,41 +570,43 @@ class ModalEditShiftUserDay extends Component
 				$to = date($splitDay[0].'-'.$splitDay[1].'-'.$daysOfMonth->daysInMonth);
 				
         		$days = $daysOfMonth->daysInMonth;
+        		if($this->dayToToChange == 0 ){ //osea no intercambiar por ninun dia, sino solo traspasar el dia
 
-				// busco si tiene turno entre las fechas de donde corresponde el dia
-				$bTurno = ShiftUser::where("user_id",$this->userIdtoChange)->where("date_from",">=",$from)->where("date_up","<=",$to)->first(); 
-				if( !isset($bTurno) || $bTurno == ""){ // si no tiene ningun turno asociado a ese rango, se le crea
-					$bTurno = new ShiftUser;
-					$bTurno->date_from = $from;
-					$bTurno->date_up = $to;	
-					$bTurno->asigned_by = Auth::user()->id;
-					$bTurno->user_id = $this->userIdtoChange;
-					$bTurno->shift_types_id = $this->shiftUserDay->ShiftUser->shift_types_id;
-					$bTurno->organizational_units_id = $this->shiftUserDay->ShiftUser->organizational_units_id;
-					if(Session::has('groupname') && Session::get('groupname') != "")
-						$bTurno->groupname ="groupname";
-					else
-						$bTurno->groupname ="";
-					$bTurno->save();
+					// busco si tiene turno entre las fechas de donde corresponde el dia
+					$bTurno = ShiftUser::where("user_id",$this->userIdtoChange)->where("date_from",">=",$from)->where("date_up","<=",$to)->first(); 
+					if( !isset($bTurno) || $bTurno == ""){ // si no tiene ningun turno asociado a ese rango, se le crea
+						$bTurno = new ShiftUser;
+						$bTurno->date_from = $from;
+						$bTurno->date_up = $to;	
+						$bTurno->asigned_by = Auth::user()->id;
+						$bTurno->user_id = $this->userIdtoChange;
+						$bTurno->shift_types_id = $this->shiftUserDay->ShiftUser->shift_types_id;
+						$bTurno->organizational_units_id = $this->shiftUserDay->ShiftUser->organizational_units_id;
+						if(Session::has('groupname') && Session::get('groupname') != "")
+							$bTurno->groupname ="groupname";
+						else
+							$bTurno->groupname ="";
+						$bTurno->save();
+					}
+					$nDay = new ShiftUserDay;
+					$nDay->day = $this->shiftUserDay->day;
+					$nDay->commentary = "Dia extra agregado, perteneciente al usuario ".$this->shiftUserDay->ShiftUser->user_id;
+					$nDay->status = 3;
+					$nDay->shift_user_id = $bTurno->id;
+					$nDay->working_day = $this->shiftUserDay->working_day;
+					$nDay->derived_from = $this->shiftUserDay->id;
+					$nDay->save();	
+					//si tiene turno creado para ese mes y ese tipo de turno
+					$nHistory = new ShiftDayHistoryOfChanges;
+					$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange."\"";
+					$nHistory->shift_user_day_id = $this->shiftUserDay->id;
+					$nHistory->modified_by = Auth()->user()->id;
+					$nHistory->change_type = 3;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+					$nHistory->day =  $this->shiftUserDay->day;
+					$nHistory->previous_value = $this->previousStatus;
+					$nHistory->current_value = $this->newStatus;
+					$nHistory->save();
 				}
-				$nDay = new ShiftUserDay;
-				$nDay->day = $this->shiftUserDay->day;
-				$nDay->commentary = "Dia extra agregado, perteneciente al usuario ".$this->shiftUserDay->ShiftUser->user_id;
-				$nDay->status = 3;
-				$nDay->shift_user_id = $bTurno->id;
-				$nDay->working_day = $this->shiftUserDay->working_day;
-				$nDay->derived_from = $this->shiftUserDay->id;
-				$nDay->save();	
-				//si tiene turno creado para ese mes y ese tipo de turno
-				$nHistory = new ShiftDayHistoryOfChanges;
-				$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange."\"";
-				$nHistory->shift_user_day_id = $this->shiftUserDay->id;
-				$nHistory->modified_by = Auth()->user()->id;
-				$nHistory->change_type = 3;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
-				$nHistory->day =  $this->shiftUserDay->day;
-				$nHistory->previous_value = $this->previousStatus;
-				$nHistory->current_value = $this->newStatus;
-				$nHistory->save();
 			}else{ // si el id es = 0 osea DEJAR DIA DISPONIBLE
 
 				$nHistory = new ShiftDayHistoryOfChanges;
