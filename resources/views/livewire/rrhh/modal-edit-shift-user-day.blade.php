@@ -203,7 +203,6 @@
                         <label for="exampleFormControlInput1"><i class="fa fa-sun-o"></i> Cambiar día por</label>
                         {{--sizeof($availableOwnDaysToChange)--}}
                         <select class="form-control" wire:model="dayToToChange" name="slcAction">
-
                             @foreach( $availableOwnDaysToChange as $day )
                                 <option value="{{$day->id}}">
                                 {{$loop->iteration}} - {{strtoupper($day->day)}} {{ $day->working_day }} 
@@ -227,8 +226,8 @@
 
                         <label for="exampleFormControlInput1"><i class="fa fa-sun-o"></i> Cambiar día por</label>
                         {{--sizeof($availableOwnDaysToChange)--}}
-                        <select class="form-control" wire:model="dayToToChange" name="slcAction">
-
+                        <select class="form-control" wire:model="dayToToChange" name="slcAction" wire:change="findAvailableExternalDaysToChange">
+                            <option value="0"> 0 - No intercambiar por otro día</option>
                             @foreach( $availableExternalDaysToChange as $day )
                                 <option value="{{$day->id}}">
                                 {{$loop->iteration}} - {{strtoupper($day->day)}} {{ $day->working_day }} {{ $tiposJornada [ $day->working_day ]}}
