@@ -363,7 +363,7 @@ class ModalEditShiftUserDay extends Component
         else
             $actuallyYear = Carbon::now()->format('Y');
 
-		 $ShiftUser = ShiftUser::where('user_id',$userIdtoChange )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-31")->get();
+		 $ShiftUser = ShiftUser::where('user_id',$this->userIdtoChange )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-31")->get();
 		 
 		 foreach ($ShiftUser as $s ) {
 		 	 
@@ -540,8 +540,6 @@ class ModalEditShiftUserDay extends Component
 								
 						}
 				}
-
-
 		}elseif($this->action == 7 &&  isset($this->shiftUserDay) ){ // Cambiar jornada laboral
 			$this->shiftUserDay->working_day =$this->newWorkingDay;
 			$this->shiftUserDay->update();
@@ -606,6 +604,8 @@ class ModalEditShiftUserDay extends Component
 					$nHistory->previous_value = $this->previousStatus;
 					$nHistory->current_value = $this->newStatus;
 					$nHistory->save();
+				}else{// intercambio de dia
+						dd($this->dayToToChange);
 				}
 			}else{ // si el id es = 0 osea DEJAR DIA DISPONIBLE
 
