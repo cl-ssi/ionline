@@ -45,7 +45,7 @@
 		</fieldset>
 
     <fieldset class="form-group col-6 col-md">
-		    <label for="for_name">Tipo</label>
+		    <label for="for_name">Origen de Financiamiento</label>
 		    <select name="type" class="form-control" id="type" required>
           <option style="background-color:#F5A7A7;" value="Covid" @if($serviceRequest->type == 'Covid') selected @endif>Honorarios - Covid</option>
           <option style="background-color:#8fbc8f;" value="Suma alzada"  @if($serviceRequest->type == 'Suma alzada') selected @endif>Suma alzada</option>
