@@ -669,6 +669,15 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::post('/store', 'Parameters\PurchaseTypeController@store')->name('store');
     });
 
+    Route::prefix('purchaseunits')->as('purchaseunits.')->group(function () {
+        Route::get('/', 'Parameters\PurchaseUnitController@index')->name('index');
+        Route::get('/create', 'Parameters\PurchaseUnitController@create')->name('create');
+        Route::get('/edit/{purchaseUnit}', 'Parameters\PurchaseUnitController@edit')->name('edit');
+        Route::put('/update/{purchaseUnit}', 'Parameters\PurchaseUnitController@update')->name('update');
+        Route::post('/store', 'Parameters\PurchaseUnitController@store')->name('store');
+    });
+
+
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {

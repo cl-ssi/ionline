@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Parameters;
 
 use Illuminate\Http\Request;
-use App\Models\Parameters\PurchaseMechanism;
+use App\Models\Parameters\PurchaseType;
 use App\Http\Controllers\Controller;
 
 
@@ -36,7 +36,7 @@ class PurchaseTypeController extends Controller
         return view('parameters.purchasetypes.edit', compact('purchaseType'));
     }
 
-    public function update(Request $request, PurchaseMechanism $purchaseType){
+    public function update(Request $request, PurchaseType $purchaseType){
         $purchaseType->fill($request->all());
         $purchaseType->save();
 

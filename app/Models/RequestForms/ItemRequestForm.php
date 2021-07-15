@@ -35,7 +35,7 @@ class ItemRequestForm extends Model
     }
 
     public function purchaseMechanism(){
-      return $this->belongTo(PurchaseMechanism::class, 'purchase_mechanism_id')
+      return $this->belongTo(PurchaseMechanism::class, 'purchase_mechanism_id');
     }
 
 
