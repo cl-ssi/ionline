@@ -14,6 +14,8 @@ use App\Models\Rrhh\ShiftUserDay;
 use App\Models\Rrhh\UserShiftTypeMonths;
 use App\Models\Rrhh\ShiftDayHistoryOfChanges;  
 use App\Models\Rrhh\UserRequestOfDay; 
+use App\Models\Rrhh\ShiftDateOfClosing;
+use App\Models\Rrhh\ShiftClose;
 use App\Rrhh\OrganizationalUnit;
 use App\Programmings\Professional;
 use Spatie\Permission\Models\Role;
@@ -98,6 +100,8 @@ class ShiftManagementController extends Controller
         12 => "Permiso Administrativo Medio Turno Diurno",
         13 => "Permiso Administrativo Medio Turno Nocturno",
         14 => "Permiso a Curso",
+        15 => "Ausencia sin justificar",
+        16 => "Cambiado por necesidad de servicio",
     );   
     public $timePerDay = array(
        
@@ -810,8 +814,23 @@ class ShiftManagementController extends Controller
 
         $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
 
+        // ShiftDateOfClosing
+        // ShiftClose
+        $cierreDelMes = ShiftDateOfClosing::where('close_date','<=',Carbon::now()->format('Y-m-d'))->latest()->first();
+        if(isset($cierreDelMes) && $cierreDelMes !="" ){
+            // echo "Cierre del mes econtrad";
 
-        return view('rrhh.shift_management.close-shift', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift' ));
+        }else{
+            $cierreDelMes = (object) array("user_id"=>1,"commentary"=>"","init_date"=>$actuallyYear."-".$actuallyMonth."-01","close_date"=>$actuallyYear."-".$actuallyMonth."-".$days);
+        }
+
+        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->whereHas("days",  function($q) use($cierreDelMes){
+                
+                    $q->where('day','<=',$cierreDelMes->close_date)->where('day','>=',$cierreDelMes->init_date); // Para filtrar solo los dias de la unidad organizacional del usuario
+            
+            })->get();
+        $closed= array();
+        return view('rrhh.shift_management.close-shift', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','closed','cierreDelMes' ));
     }
 
     public function shiftReports(Request $r){

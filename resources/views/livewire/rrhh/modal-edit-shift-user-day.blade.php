@@ -117,7 +117,7 @@
                       
                         <select class="form-control" name="slcAction" wire:model="action" wire:change="changeAction">
                             <option value="0"> <b> </b> - - - </option>
-                            <option value="1"> <b> </b>1 - Cambiar Turno con </option>
+                            <option value="1"> <b> </b>1 - Intercambiar Turno con </option>
                             <option value="7"> 2 - <b style="color:">Cambiar Tipo de Jornada Por</b> </option>
                             <!-- <option value="2"> <b> </b>2 - Marcar como Cumplido </option> -->
                             <option value="3"> <b> </b>3 - Marcar como Licencia Medica </option>
@@ -130,8 +130,10 @@
                             <option value="10"> 10 - <b style="color:">Marcar como Permiso Administrativo Completo</b> </option>
                             <option value="11"> 11 - <b style="color:">Marcar como Permiso Administrativo Medio Turno Diurno</b> </option>
                             <option value="12"> 12 - <b style="color:">Marcar como Permiso Administrativo Medio Turno Nocturno</b> </option>
-                            <option value="13"> 13 - <b style="color:">Marcar como Permiso a curso</b> </option>
-                            <option value="14"> 14 - <b style="color:">Agregar horas por necesidad de servicio</b> </option>
+                            <option value="13"> 13 - <b style="color:">Marcar como Permiso a Curso</b> </option>
+                            <option value="15"> 14 - <b style="color:">Marcar como Ausencia sin Justificar</b> </option>
+                            <option value="16"> 15 - <b style="color:">Cambiar jornada por necesidad de servicio</b> </option>
+                            <option value="14"> 16 - <b style="color:">Agregar horas por necesidad de servicio</b> </option>
                             
 
                         </select>
@@ -143,7 +145,7 @@
                     <div class="form-group " style="display: {{$usersSelect}}">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-user"></i> PERSONAL </label>
-                         <select class="form-control" wire:model="userIdtoChange" name="slcAction">
+                         <select class="form-control" wire:model="userIdtoChange" wire:change="$emit(findAvailableExternalDaysToChange)" name="slcAction">
                             <option value="0" >0 - Dejar disponible </option>
                             @if( isset($users) )
                                 @foreach($users as $u)
@@ -155,7 +157,7 @@
                         </select>
 
                     </div>
-                     <div class="form-group" style="display: {{$changeDayType}}">
+                    <div class="form-group" style="display: {{$changeDayType}}">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-sun-o"></i> Tipo de Jornada </label>
                          <select class="form-control" wire:model="newWorkingDay" name="slcAction">
@@ -168,14 +170,14 @@
                       
 
                         </select>
-
                     </div>
+
                     <div class="form-group" style="display: {{$addHours}}">
                         <label for="exampleFormControlInput1"><i class="fa fa-time"></i> CANT. HORAS </label>
                         <input type="time" class="form-control" wire:model="cantNewHours">
                     </div>
 
-                     <div class="form-group " style="display: {{$usersSelect2}}">
+                    <div class="form-group " style="display: {{$usersSelect2}}">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-user"></i> REMPLAZAR CON </label>
                          <select class="form-control" wire:model="userIdtoChange2" name="slcAction">
@@ -188,14 +190,50 @@
                                 @endforeach
                             @endif
                         </select>
-
                     </div>
+
                     <div class="form-group" style="display: {{$repeatAction}}">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-calendar"></i> Repetir acción hasta </label>
                          <input type="date" name="toDate" class="form-control" wire:model="repeatToDate">
+                    </div>
+                    @if($availableOwnDaysToChangeVisible == "visible")
+                    <div class="form-group" style="display: {{$availableOwnDaysToChangeVisible}}">
+
+                        <label for="exampleFormControlInput1"><i class="fa fa-sun-o"></i> Cambiar día por</label>
+                        {{--sizeof($availableOwnDaysToChange)--}}
+                        <select class="form-control" wire:model="dayToToChange" name="slcAction">
+
+                            @foreach( $availableOwnDaysToChange as $day )
+                                <option value="{{$day->id}}">
+                                {{$loop->iteration}} - {{strtoupper($day->day)}} {{ $day->working_day }} {{ $tiposJornada [ $day->working_day ]}}
+                                </option> 
+                                </option>
+                            @endforeach
+                      
+
+                        </select>
 
                     </div>
+                    @endif
+                    <div class="form-group" style="display: {{$availableExternalDaysToChangeVisible}}">
+
+                        <label for="exampleFormControlInput1"><i class="fa fa-sun-o"></i> Cambiar día por</label>
+                        {{--sizeof($availableOwnDaysToChange)--}}
+                        <select class="form-control" wire:model="dayToToChange" name="slcAction">
+
+                            @foreach( $availableExternalDaysToChange as $day )
+                                <option value="{{$day->id}}">
+                                {{$loop->iteration}} - {{strtoupper($day->day)}} {{ $day->working_day }} {{ $tiposJornada [ $day->working_day ]}}
+                                </option> 
+                                </option>
+                            @endforeach
+                      
+
+                        </select>
+
+                    </div>
+
                     <div class="form-group" style="overflow-y:auto;height: 200px;">
 
                         <input type="hidden" wire:model="user_id">
