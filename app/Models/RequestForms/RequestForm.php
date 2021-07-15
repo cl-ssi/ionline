@@ -10,12 +10,13 @@ use App\Models\RequestForms\ItemRequestForm;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseUnit;
+use App\Models\Parameters\PurchaseMechanism;
 
 class RequestForm extends Model
 {
     protected $fillable = [
         'applicant_position', 'estimated_expense', 'program', 'justification', 'type_form', 'bidding_number','purchase_mechanism', 'creator_user_id',
-        'supervisor_user_id', 'applicant_user_id', 'applicant_ou_id', 'status', 'sigfe', 'purchase_unit_id', 'purchase_type_id',
+        'supervisor_user_id', 'applicant_user_id', 'applicant_ou_id', 'status', 'sigfe', 'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id',
     ];
 
     public function creator() {
@@ -36,6 +37,10 @@ class RequestForm extends Model
 
     public function purchaseType(){
       return $this->belongsTo(PurchaseType::class, 'purchase_type_id');
+    }
+
+    public function purchaseMechanism(){
+      return $this->belongTo(PurchaseMechanism::class, 'purchase_mechanism_id')
     }
 
     public function organizationalUnit(){
