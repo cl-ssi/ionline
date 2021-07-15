@@ -15,7 +15,7 @@ use App\Models\Parameters\PurchaseMechanism;
 class RequestForm extends Model
 {
     protected $fillable = [
-        'applicant_position', 'estimated_expense', 'program', 'justification', 'type_form', 'bidding_number','purchase_mechanism', 'creator_user_id',
+        'applicant_position', 'estimated_expense', 'program', 'justification', 'type_form', 'bidding_number', 'creator_user_id',
         'supervisor_user_id', 'applicant_user_id', 'applicant_ou_id', 'status', 'sigfe', 'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id',
     ];
 
@@ -40,7 +40,7 @@ class RequestForm extends Model
     }
 
     public function purchaseMechanism(){
-      return $this->belongTo(PurchaseMechanism::class, 'purchase_mechanism_id');
+      return $this->belongsTo(PurchaseMechanism::class, 'purchase_mechanism_id');
     }
 
     public function organizationalUnit(){
@@ -67,25 +67,7 @@ class RequestForm extends Model
 
 
     public function getPurchaseMechanism(){
-      switch ($this->purchase_mechanism) {
-          case "cm<1000":
-              return 'Convenio Marco < 1000 UTM';
-              break;
-          case "cm>1000":
-              return 'Convenio Marco > 1000 UTM';
-              break;
-          case "lp":
-              return 'Licitación Pública';
-              break;
-          case "td":
-              return 'Trato Directo';
-              break;
-          case "ca":
-              return 'Compra Ágil';
-              break;
-              case "":
-              break;
-      }
+      return PurchaseMechanism::find($this->purchase_mechanism_id)->name;
     }
 
     public function getStatus(){

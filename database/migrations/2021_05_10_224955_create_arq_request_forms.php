@@ -26,7 +26,7 @@ class CreateArqRequestForms extends Migration
             $table->string('type_form');
             $table->string('sigfe')->nullable();
             $table->string('bidding_number')->nullable();//id nro. de licitación.
-            $table->string('purchase_mechanism');
+
             $table->enum('status', ['approved', 'rejected', 'created', 'in_progress', 'closed']);
 
 /*
@@ -37,6 +37,7 @@ class CreateArqRequestForms extends Migration
                                            'TRATO DIRECTO OBRAS', 'LICITACIÓN DE SUMINISTRO', 'L1', 'LE', 'LP', 'LQ', 'LR > 5.000 UTM',
                                            'LR > 8.000 UTM', 'LR > 15.000 UTM', 'ADDENDUM', 'RENOVACIÓN'])->nullable();
 */
+            $table->bigInteger('purchase_mechanism_id')->unsigned();
             $table->bigInteger('purchase_unit_id')->unsigned()->nullable();
             $table->bigInteger('purchase_type_id')->unsigned()->nullable();
 
@@ -44,9 +45,10 @@ class CreateArqRequestForms extends Migration
             $table->timestamps();
             $table->softDeletes();
 
+            $table->foreign('purchase_mechanism_id')->references('id')->on('cfg_purchase_mechanisms');
             $table->foreign('purchase_unit_id')->references('id')->on('cfg_purchase_units');
             $table->foreign('purchase_type_id')->references('id')->on('cfg_purchase_types');
-            
+
             $table->foreign('creator_user_id')->references('id')->on('users');
             $table->foreign('applicant_user_id')->references('id')->on('users');
             $table->foreign('supervisor_user_id')->references('id')->on('users');

@@ -7,6 +7,7 @@ use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseType;
+use App\Models\Parameters\PurchaseMechanism;
 use App\Rrhh\Authority;
 use Carbon\Carbon;
 use App\User;
@@ -15,7 +16,7 @@ class Authorization extends Component
 {
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $rejectedComment;
     public $lstSupervisorUser, $supervisorUser, $title, $route;
-    public $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit, $purchaseMechanism;
+    public $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit, $lstPurchaseMechanism, $purchaseMechanism;
 
     protected $rules = [
         'rejectedComment' => 'required|min:6',
@@ -35,12 +36,13 @@ class Authorization extends Component
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
       $this->position           = auth()->user()->position;
       if($eventType=='supply_event'){
-          $this->lstSupervisorUser  = User::where('organizational_unit_id', 37)->get();
-          $this->lstPurchaseType   = PurchaseType::all();
-          $this->lstPurchaseUnit   = PurchaseUnit::all();
+          $this->lstSupervisorUser      = User::where('organizational_unit_id', 37)->get();
+          $this->lstPurchaseType        = PurchaseType::all();
+          $this->lstPurchaseUnit        = PurchaseUnit::all();
+          $this->lstPurchaseMechanism   = PurchaseMechanism::all();
           $this->title = 'Autorización Abastecimiento';
           $this->route = 'request_forms.supply_index';
-          $this->purchaseMechanism = $requestForm->purchase_mechanism;
+          $this->purchaseMechanism = $requestForm->purchase_mechanism_id;
       }elseif($eventType=='finance_event'){
           $this->title = 'Autorización Finanzas';
           $this->route = 'request_forms.finance_index';
@@ -71,10 +73,10 @@ class Authorization extends Component
             'purchaseMechanism.required'  =>  'Seleccione M. de compra.',
          ]
         );
-        $this->requestForm->supervisor_user_id  =  $this->supervisorUser;
-        $this->requestForm->purchase_unit_id    =  $this->purchaseUnit;
-        $this->requestForm->purchase_type_id    =  $this->purchaseType;
-        $this->requestForm->purchase_mechanism  =  $this->purchaseMechanism;
+        $this->requestForm->supervisor_user_id      =  $this->supervisorUser;
+        $this->requestForm->purchase_unit_id        =  $this->purchaseUnit;
+        $this->requestForm->purchase_type_id        =  $this->purchaseType;
+        $this->requestForm->purchase_mechanism_id   =  $this->purchaseMechanism;
       }
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'created')->first();
       if(!is_null($event)){

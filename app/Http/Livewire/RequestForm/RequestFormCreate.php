@@ -6,7 +6,7 @@ use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\ItemRequestForm;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\UnitOfMeasurement;
-//use App\Models\Parameters\BudgetItem;
+use App\Models\Parameters\PurchaseMechanism;
 use Illuminate\Support\Collection;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +18,7 @@ class RequestFormCreate extends Component
     $unitValue, $taxes, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
     public $purchaseMechanism, $messagePM, $program, $justify, $totalDocument;
     public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF;
-    public $budget_item_id;
+    public $budget_item_id, $lstPurchaseMechanism;
 
     protected $rules = [
         'unitValue'           =>  'required|numeric|min:1',
@@ -51,7 +51,7 @@ class RequestFormCreate extends Component
       $this->edit                   = false;
       $this->editRF                 = false;
       $this->lstUnitOfMeasurement   = UnitOfMeasurement::all();
-      //$this->lstBudgetItem          = BudgetItem::all();
+      $this->lstPurchaseMechanism   = PurchaseMechanism::all();
       if(!is_null($requestForm)){
         $this->requestForm = $requestForm;
         $this->setRequestForm();
@@ -61,7 +61,7 @@ class RequestFormCreate extends Component
     private function setRequestForm(){
       $this->program            =   $this->requestForm->program;
       $this->justify            =   $this->requestForm->justification;
-      $this->purchaseMechanism  =   $this->requestForm->purchase_mechanism;
+      $this->purchaseMechanism  =   $this->requestForm->purchase_mechanism_id;
       $this->editRF             =   true;
       $this->idRF               =   $this->requestForm->id;
       foreach($this->requestForm->itemRequestForms as $item)
@@ -218,7 +218,7 @@ class RequestFormCreate extends Component
           'applicant_ou_id'       =>  Auth()->user()->organizationalUnit->id,
           'applicant_position'    =>  Auth()->user()->getPosition(),
           'estimated_expense'     =>  $this->totalDocument,
-          'purchase_mechanism'    =>  $this->purchaseMechanism,
+          'purchase_mechanism_id' =>  $this->purchaseMechanism,
           'program'               =>  $this->program,
           'status'                =>  'created'
       ]);

@@ -11,12 +11,10 @@
             <div class="form-group col-4">
               <label>Mecanismo de Compra:</label><br>
               <select wire:model="purchaseMechanism" name="purchaseMechanism" class="form-control form-control-sm" required>
-                <option value="">Seleccione...</option>
-                <option value="cm<1000">Convenio Marco < 1000 UTM</option>
-                <option value="cm>1000">Convenio Marco > 1000 UTM</option>
-                <option value="lp">Licitación Pública</option>
-                <option value="td">Trato Directo</option>
-                <option value="ca">Compra Ágil</option>
+                <option>Seleccione...</option>
+                @foreach($lstPurchaseMechanism as $val)
+                  <option value="{{$val->id}}">{{$val->name}}</option>
+                @endforeach
               </select>
             </div>
            <div class="form-group col-3">

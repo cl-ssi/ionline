@@ -17,12 +17,10 @@
               <th class="text-muted col-3 align-middle">Mecanismo de Compra</th>
               <td class="col-3 align-middle">
                   <select wire:model="purchaseMechanism" name="purchaseMechanism" class="form-control form-control-sm" required>
-                    <option value="">Seleccione...</option>
-                    <option value="cm<1000">Convenio Marco < 1000 UTM</option>
-                    <option value="cm>1000">Convenio Marco > 1000 UTM</option>
-                    <option value="lp">Licitación Pública</option>
-                    <option value="td">Trato Directo</option>
-                    <option value="ca">Compra Ágil</option>
+                    <option>Seleccione...</option>
+                    @foreach($lstPurchaseMechanism as $val)
+                      <option value="{{$val->id}}">{{$val->name}}</option>
+                    @endforeach
                   </select>
               </td>
           </tr>
@@ -142,7 +140,7 @@
                       <td align='center'><input type="radio" wire:model="radioSource" wire:click="selectRadioButton({{$key}})" name="radioSource" id="{{'sour_'.$item->id}}" value="{{ $key+1 }}"></td>
                       <td align='center'><input type="checkbox" wire:model="arrayCheckBox.{{ $key }}.value"  wire:click="selectCheckBox({{$key}})" id="{{'dest_'.$item->id}}" value="{{ $key+1 }}" {{$checkBoxStatus[$key]}}></td>
                   </tr>
-                  @if($arrayVista[$key])
+                @if($arrayVista[$key])
                   <tr class="{{$arrayBgTable[$key]}}">
                     <td colspan="14" class="brd-bb  brd-l brd-r">
                       <div class="row mb-3">
@@ -150,11 +148,9 @@
                             <label class="font-weight-bold text-muted ml-1 mb-0">Mecanismo de Compra:</label><br>
                             <select wire:model.defer="arrayPurchaseMechanism.{{ $key }}.value" wire:click="resetError" class="form-control form-control-sm" required>
                               <option selected>Seleccione...</option>
-                              <option value="cm<1000">Convenio Marco < 1000 UTM</option>
-                              <option value="cm>1000">Convenio Marco > 1000 UTM</option>
-                              <option value="lp">Licitación Pública</option>
-                              <option value="td">Trato Directo</option>
-                              <option value="ca">Compra Ágil</option>
+                              @foreach($lstPurchaseMechanism as $val)
+                              <option value="{{$val->id}}">{{$val->name}}</option>
+                              $endforeach
                             </select>
                         </div>
                         <div class="col-4">
@@ -237,7 +233,7 @@
 
                     </td>
                   </tr>
-                  @endif
+                @endif
           @endforeach
         </tbody>
         <tfoot>
