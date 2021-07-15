@@ -11,10 +11,11 @@ class PurchaseType extends Model
 {
   protected $fillable = [ 'name' ];
 
+/*
   public function requestForms() {
       return $this->hasMany(RequestForm::class);
   }
-
+*/
   public function itemRequestForms() {
       return $this->hasMany(ItemRequestForm::class, 'purchase_type_id');
   }

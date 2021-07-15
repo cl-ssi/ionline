@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Crear Tipo de Compra')
+@section('title', 'Crear Unidad de Compra')
 
 @section('content')
 
 @include('parameters.nav')
 
-<h3 class="mb-3">Crear Tipo de Compra</h3>
+<h3 class="mb-3">Crear Unidad de Compra</h3>
 
-<form method="POST" class="form-horizontal" action="{{ route('parameters.purchasetypes.store') }}">
+<form method="POST" class="form-horizontal" action="{{ route('parameters.purchaseunits.store') }}">
     @csrf
 
     <div class="row">
@@ -20,7 +20,7 @@
 
     </div>
     <button type="submit" class="btn btn-primary">Guardar</button>
-    <a class="btn btn-outline-secondary" href="{{ route('parameters.purchasetypes.index') }}">Volver</a>
+    <a class="btn btn-outline-secondary" href="{{ route('parameters.purchaseunits.index') }}">Volver</a>
 
 </form>
 

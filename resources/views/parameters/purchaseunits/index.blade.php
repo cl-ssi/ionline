@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', 'Tipo de Compra')
+@section('title', 'Unidad de Compra')
 
 @section('content')
 
 @include('parameters.nav')
 
-<h3 class="mb-3">Mantenedor Tipo de Compra</h3>
+<h3 class="mb-3">Mantenedor Unidad de Compra</h3>
 
-<a class="btn btn-primary mb-3" href="{{ route('parameters.purchasetypes.create') }}">
+<a class="btn btn-primary mb-3" href="{{ route('parameters.purchaseunits.create') }}">
     Crear
 </a>
 
@@ -20,11 +20,11 @@
         </tr>
     </thead>
     <tbody>
-        @foreach($purchaseTypes as $purchaseType)
+        @foreach($purchaseUnits as $purchaseUnit)
         <tr>
-            <td>{{ $purchaseType->name }}</td>
+            <td>{{ $purchaseUnit->name }}</td>
             <td>
-                <a href="{{ route('parameters.purchasetypes.edit', $purchaseType) }}">
+                <a href="{{ route('parameters.purchaseunits.edit', $purchaseUnit) }}">
                     <i class="fas fa-edit"></i>
                 </a>
             </td>
