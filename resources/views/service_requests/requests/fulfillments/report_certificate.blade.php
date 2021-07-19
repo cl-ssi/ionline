@@ -240,8 +240,9 @@
             @else
               Hospital Dr.Ernesto Torres Galdames
             @endif
-            durante el preríodo de contingencia COVID
-            del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>,
+            durante el periodo de 
+            <!-- contingencia COVID del  -->
+            <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>,
             registrando las siguientes ausencias:
           @endif
         </div>
