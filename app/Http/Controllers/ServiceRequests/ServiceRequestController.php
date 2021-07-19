@@ -482,11 +482,11 @@ class ServiceRequestController extends Controller
     if (env('APP_ENV') == 'production') {
       $email = $serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->email;
       Mail::to($email)->send(new ServiceRequestNotification($serviceRequest));
-      if ( $serviceRequest->SignatureFlows->where('responsable_id', 9381231)->first())
-      {
-        $emaildire = $serviceRequest->SignatureFlows->where('responsable_id', 9381231)->first()->user->email;
-        Mail::to($emaildire)->send(new ServiceRequestNotification($serviceRequest));
-      }
+      // if ( $serviceRequest->SignatureFlows->where('responsable_id', 9381231)->first())
+      // {
+      //   $emaildire = $serviceRequest->SignatureFlows->where('responsable_id', 9381231)->first()->user->email;
+      //   Mail::to($emaildire)->send(new ServiceRequestNotification($serviceRequest));
+      // }
     }
 
     session()->flash('info', 'La solicitud ' . $serviceRequest->id . ' ha sido creada.');
