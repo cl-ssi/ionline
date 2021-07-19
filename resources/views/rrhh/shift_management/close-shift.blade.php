@@ -33,7 +33,22 @@
 
         	<!-- Menu de Filtros  -->
 			<div class="form-row">
-            	<div class="form-group col-md-5" >
+				<div class="col-md-3">
+					<label for="for_name">Cierre</label>
+					<div class="input-group mb-3">
+  				
+  					<select class="form-control">
+  						<option value="1">De 2021-10-10 a 2021-10-10</option>
+  						@foreach($cierres as $c)
+
+  							<option value="{{$c->id}}">De {{ $c->init_date }} a {{ $c->close_date }}</option>
+
+  						@endforeach
+  					</select>
+				</div>	
+			</div>
+
+            	<div class="form-group col-md-4" >
                 	<label for="for_name">Unidad organizacional</label>
                 	<select class="form-control selectpicker"  id="for_orgunitFilter" name="orgunitFilter" data-live-search="true" required
                             data-size="5">
@@ -106,24 +121,73 @@
 					<th>Rut</th>
 					<th>Nombre</th>
 					<th>Cant. horas</th>
+					<th>Comentarios</th>
+
 					<th>Cerrado en</th>
 					<th></th>
 				</tr>
 			</thead>
 			<tbody>
+				@foreach($closed as $c)
 				<tr>
-					<td>1</td>
-					<td>11.111.111-1</td>
-					<td>Armando Barra Perez</td>
-					<td>100</td>
-					<td>11:20:00 22/06/21</td>
-					<td><button class="btn btn-info"><i class="fa fa-eye"></i></button></td>
+					<td>{{$loop->iteration}}</td>
+					<td>{{$c->user->runFormat() }}</td>
+					<td>{{$c->user->getFullNameAttribute()}}</td>
+					<td>{{$c->total_hours}}</td>
+					<td>{{$c->first_confirmation_commentary}}</td>
+					<td>{{$c->close_date}}</td>
+					<td>
+						@livewire( 'rrhh.see-shift-control-form', ['usr'=>$c->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>1], key($loop->index) )
+					</td>
 				</tr>
+				@endforeach
+			</tbody>
+		</table>
+	<h4>Confirmados</h4>
+	<br>
+		<table  class="table table-sm">
+			<thead class="thead-dark">
+				<tr>
+					<th>#</th>
+					<th>Rut</th>
+					<th>Nombre</th>
+					<th>Cant. horas</th>
+					<th>Comentarios</th>
+
+					<th>Cerrado en</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				
+				@foreach($firstConfirmations as $f)
+					<tr>
+						<td>{{$loop->iteration}}</td>
+						<td>{{$f->user->runFormat() }}</td>
+						<td>{{$f->user->getFullNameAttribute()}}</td>
+						<td>{{$f->total_hours}}</td>
+						<td>{{$f->first_confirmation_commentary}}</td>
+						<td>{{$f->first_confirmation_date}}</td>
+						<td>
+							@livewire( 'rrhh.see-shift-control-form', ['usr'=>$f->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>1], key($loop->index) )
+
+							<form method="post" action="{{ route('rrhh.shiftManag.closeShift.closeConfirmation') }}">
+							@csrf
+        					{{ method_field('post') }}
+
+							<input type="hidden" name="ShiftCloseId" value="{{$f->id}}">
+							<button class="btn btn-success">Cerrar</button>
+							<!-- <button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Confirmar</button> -->
+
+						</form>
+						</td>
+					</tr>
+				@endforeach
 			</tbody>
 		</table>
 	<h4>Pendientes</h4>
 	<br>
-			<table  class="table table-sm">
+		<table  class="table table-sm">
 			<thead class="thead-dark">
 				<tr>
 					<th>#</th>
@@ -140,10 +204,20 @@
 					<td>{{$loop->iteration }}</td>
 					<td>{{$s->user->runFormat() }}</td>
 					<td>{{$s->user->getFullNameAttribute() }}</td>
-					<td><input type="text" class="form-control" name="" value="Comentario de prueba desde el area anterior"> </td>
+						<form method="post" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
+					<td><input type="text" class="form-control" name="comment" value="Comentario de prueba desde el area anterior"> </td>
 					<!-- <td>100</td> -->
 					<td>
-						<button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Confirmar</button>
+						@csrf
+        				{{ method_field('post') }}
+
+							<input type="hidden" name="userId" value="{{$s->user->id}}">
+							<input type="hidden" name="cierreId" value="{{ $cierreDelMes->id }}">
+							<button class="btn btn-success">Confirmar</button>
+							<!-- <button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Confirmar</button> -->
+
+						</form>
+
                     	@livewire( 'rrhh.see-shift-control-form', ['usr'=>$s->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>1], key($loop->index) )
 
 					</td>
