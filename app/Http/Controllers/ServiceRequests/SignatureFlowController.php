@@ -125,6 +125,16 @@ class SignatureFlowController extends Controller
             $SignatureFlow->status = $request->status;
             $SignatureFlow->observation = $request->observation;
             $SignatureFlow->save();
+
+            $posicion = $SignatureFlow->sign_position;
+            $posicion = $posicion+1; //la firma que sigue
+
+            //$emaildire = $serviceRequest->SignatureFlows->where('responsable_id', 9381231)->first()->user->email;
+            if (env('APP_ENV') == 'production') {
+              $emaildire = $serviceRequest->SignatureFlows->where('responsable_id', 9381231)->where('sign_position', $posicion)->first()->user->email;
+              Mail::to($emaildire)->send(new ServiceRequestNotification($serviceRequest));
+
+            }
           }
 
 
