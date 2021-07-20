@@ -347,6 +347,7 @@ class ModalEditShiftUserDay extends Component
 		}
 	}
 	public function findAvailableOwnDaysToChange($user_id){
+		$this->dayToToChange2 = 0;
 
 		if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
             $actuallyMonth = Session::get('actuallyMonth');
@@ -370,6 +371,7 @@ class ModalEditShiftUserDay extends Component
 		 }
 	}
 	public function findAvailableExternalDaysToChange(){
+		$this->dayToToChange = 0;
 		if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
             $actuallyMonth = Session::get('actuallyMonth');
         else
