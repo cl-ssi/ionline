@@ -382,7 +382,7 @@ class ShiftManagementController extends Controller
         return redirect()->route('rrhh.shiftsTypes.index');
     } 
 
-    public function assignStaff(Request $r){ // crea un sift user y le crea dias de acuerdo al sifttype
+    public function assignStaff(Request $r){ // crea un shift user y le crea dias de acuerdo al sifttype
         $nShift = new ShiftUser;
         $nShift->date_from = $r->dateFromAssign;
         $nShift->date_up = $r->dateUpAssign;
@@ -398,7 +398,8 @@ class ShiftManagementController extends Controller
         $actuallyShift = ShiftTypes::find( $r->shiftId );
         $currentSeries =  explode(",", $actuallyShift->day_series); 
         $i = 0;
-        if($r->shiftId != 99 ){ // si no es turno personalizado, agrego los dias seun las serie
+        $i = $r->initialSerie;
+        if($r->shiftId != 99 ){ // si no es turno personalizado, agrego los dias segun las serie
 
         foreach ($ranges as $date) {
 
