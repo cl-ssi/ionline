@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
+use App\Mail\NewPsiRequest;
+use Illuminate\Support\Facades\Mail;
 
 class SuitabilityController extends Controller
 {
@@ -43,10 +45,18 @@ class SuitabilityController extends Controller
     }
 
 
-    public function pending()
+    public function pending(Request $request)
     {
-        $psirequests = PsiRequest::where('status','Test Finalizado')->get();
-        return view('suitability.pending', compact('psirequests'));
+
+        $school_id = $request->colegio;
+        $schools = School::orderBy("name", "asc")->get();
+        $psirequests = PsiRequest::where('status','Test Finalizado')
+        ->when($school_id != null, function ($q) use ($school_id) 
+        {            
+            return $q->where('school_id', $school_id);
+        })        
+        ->get();
+        return view('suitability.pending', compact('psirequests','schools','school_id'));
     }
 
     public function approved()
@@ -66,7 +76,13 @@ class SuitabilityController extends Controller
 
         $psirequest->status = $result;
         $psirequest->save();
-        session()->flash('success', 'Se dio resultado de manera correcta');
+        if ($result === 'Aprobado') {
+            $signatureId =  $this->sendForSignature($psirequest->result()->first()->id);
+            session()->flash('success', "Se dio resultado de manera correcta y se creó solicitud de firma $signatureId");
+        }
+        else{
+            session()->flash('success', "Se dio resultado de manera correcta.");
+        }
         return redirect()->back();
     }
 
@@ -133,6 +149,11 @@ class SuitabilityController extends Controller
         $psirequest->user_creator_id = Auth::guard('external')->user()->id;
         $psirequest->school_id = $request->input('school_id');
         $psirequest->save();
+        Mail::to('maria.zuniga@redsalud.gob.cl')
+        // Mail::to('tebiccr@gmail.com')
+                        ->send(new NewPsiRequest($psirequest));
+
+
         session()->flash('success', 'Solicitud Creada Exitosamente, ahora el asistente puede ingresar a este mismo sitio con los datos de clave única a realizar la prueba');
         return redirect()->route('external');
     }
@@ -248,8 +269,7 @@ class SuitabilityController extends Controller
             throw $e;
         }
 
-        session()->flash('info', 'La solicitud de firma ' . $signature->id . ' ha sido creada. <a href="'. route('documents.signatures.index', ['mis_documentos']) . '"> Ver solicitudes </a>');
-        return redirect()->back();
+        return $signature->id;
     }
 
     public function signedSuitabilityCertificatePDF($id)

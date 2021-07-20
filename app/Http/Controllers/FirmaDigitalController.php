@@ -27,10 +27,11 @@ class FirmaDigitalController extends Controller
     const modoDesatendidoTest = 0;
     const modoAtendidoTest = 1;
     const modoAtendidoProduccion = 2;
+    const modoDesatendidoProduccion = 3;
 
     /**
-     * Función que recibe pdf a firmar desde url o archivo, lo firma llamando a signPdfApi y guarda NUEVO registro
-     * SignaturesFile.
+     * Se utiliza para firmar docs que no se crean en el modulo de solicitud de firmas. Recibe pdf a firmar desde url o archivo, 
+     * lo firma llamando a signPdfApi y guarda NUEVO registro SignaturesFile.
      * @param Request $request
      * @return string
      * @throws Exception
@@ -117,6 +118,8 @@ class FirmaDigitalController extends Controller
         $modo = self::modoAtendidoProduccion;
         $verificationCode = Str::random(6);
         $docId = $signaturesFlow->signaturesFile->id;
+        $custom_x_axis = $signaturesFlow->custom_x_axis;
+        $custom_y_axis = $signaturesFlow->custom_y_axis;
 
         $ct_firmas_visator = null;
         $ct_posicion_firmas = null;
@@ -125,8 +128,12 @@ class FirmaDigitalController extends Controller
             $ct_posicion_firmas = $signaturesFlow->sign_position;
         }
 
+        // if($type === 'folio'){
+        //     $modo = self::modoDesatendidoProduccion;
+        // }
+
         $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $type, $docId, $verificationCode,
-            $ct_firmas_visator, $ct_posicion_firmas, $visatorAsSignature);
+            $ct_firmas_visator, $ct_posicion_firmas, $visatorAsSignature, $custom_x_axis, $custom_y_axis);
 
         if (!$responseArray['statusOk']) {
             session()->flash('warning', "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}");
@@ -207,7 +214,7 @@ class FirmaDigitalController extends Controller
      */
     public function signPdfApi(string $pdfbase64, string $checksum_pdf, $modo, string $otp, string $signatureType,
                                int $docId, string $verificationCode, int $ct_firmas_visator = null, int $posicion_firma = null,
-                               bool $visatorAsSignature = null): array
+                               bool $visatorAsSignature = null, int $custom_x_axis = null, int $custom_y_axis = null): array
     {
 
 //        dd($pdfbase64, $checksum_pdf, $modo, $otp, $signatureType);
@@ -287,10 +294,18 @@ class FirmaDigitalController extends Controller
             $otp = $otp;
             $run = Auth::id();
 //            $run = 16351236;
-
             $purpose = 'Propósito General';
             $entity = 'Servicio de Salud Iquique';
-        } else {
+        } elseif ($modo == self::modoDesatendidoProduccion) {
+            $url = env('FIRMA_URL');
+            $api_token = env('FIRMA_API_TOKEN');
+            $secret = env('FIRMA_SECRET');
+            $otp = $otp;
+            $run = Auth::id();
+//            $run = 16351236;
+            $purpose = 'Desatendido';
+            $entity = 'Servicio de Salud Iquique';
+        }else {
             session()->flash('warning', 'Modo de firma no seleccionado');
             return redirect()->route('documents.signatures.index', ['pendientes']);
         }
@@ -321,8 +336,10 @@ class FirmaDigitalController extends Controller
             $coordenada_y = 50 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
             $ancho = 170 * 1.4;
         } else if ($signatureType == 'firmante') {
-            $coordenada_x = 310;
-            $coordenada_y = 49;
+            ($custom_x_axis) ? $coordenada_x = $custom_x_axis : $coordenada_x = 310;
+            ($custom_y_axis) ? $coordenada_y = $custom_y_axis : $coordenada_y = 49;
+            // $coordenada_x = 310;
+            // $coordenada_y = 49;
             $ancho = 170 * 1.4;
             $alto = 55;
         }
@@ -410,7 +427,7 @@ class FirmaDigitalController extends Controller
         $pdf            = 'samples/samp.pdf';
         $pdfbase64      = base64_encode(file_get_contents(public_path($pdf)));
         $checksum_pdf   = md5_file(public_path($pdf));
-        $signatureType  = 'visador';
+        $signatureType  = 'firmante';
         $docId          = 1;
         $verificationCode = 'asaasf';
         $visatorAsSignature = false;
@@ -433,7 +450,7 @@ class FirmaDigitalController extends Controller
         $fontSize   = 10;
 
         if ($signatureType === 'firmante' || $visatorAsSignature === true) {
-            $im = @imagecreate(480, 80) or die("Cannot Initialize new GD image stream");
+            $im = @imagecreate(400, 80) or die("Cannot Initialize new GD image stream");
             $background_color = imagecolorallocate($im, 204, 204, 204);
             $white = imagecolorallocate($im, 255, 255, 255);
             imagefilledrectangle($im, 1, 1, 398, 78, $white);
@@ -457,10 +474,10 @@ class FirmaDigitalController extends Controller
                 $text_color, $font_light, Str::upper(Auth::user()->initials) . ' - ' . Str::upper(Auth::user()->organizationalUnit->initials));
         }
 
-        $firma_gob = imagecreatefrompng(public_path('images/firma_gobierno_80.png'));
-        //imagecopyresized($thumb, $origen, 0, 0, 0, 0, $nuevo_ancho, $nuevo_alto, $ancho, $alto);
-        //( $dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct )
-        imagecopymerge($im, $firma_gob, 400, 0, 0, 0, 80, 84, 100);
+        // $firma_gob = imagecreatefrompng(public_path('images/firma_gobierno_80.png'));
+        // //imagecopyresized($thumb, $origen, 0, 0, 0, 0, $nuevo_ancho, $nuevo_alto, $ancho, $alto);
+        // //( $dst_im, $src_im, $dst_x, $dst_y, $src_x, $src_y, $src_w, $src_h, $pct )
+        // imagecopymerge($im, $firma_gob, 400, 0, 0, 0, 80, 84, 100);
 
         /* Obtener Imagen de firma en variable $firma */
         ob_start();
@@ -474,6 +491,7 @@ class FirmaDigitalController extends Controller
         $otp        = $otp;
         $run        = Auth::id();
 
+        // $purpose    = 'Desatendido';
         $purpose    = 'Propósito General';
         $entity     = 'Servicio de Salud Iquique';
 
@@ -503,11 +521,19 @@ class FirmaDigitalController extends Controller
             $coordenada_y = 50 + $padding * $ct_firmas_visator - ($posicion_firma * $padding);
             $ancho = 170 * 1.4;
         } else if ($signatureType == 'firmante') {
-            $coordenada_x = 280;
-            $coordenada_y = 65;
-            $ancho = 200 * 1.4;
+            $milimetros_y_desde_abajo = 107;
+            $milimetros_x_desde_la_izquierda = 22;
+            $factor_y = 2.8248;
+            $factor_x = 2.8248;
+            $coordenada_x = $milimetros_x_desde_la_izquierda * $factor_x;
+            $coordenada_y = $milimetros_y_desde_abajo * $factor_y;
+            // $coordenada_x = 62;
+            // $coordenada_y = 302;
+            $ancho = 170 * 1.4;
             $alto = 55;
         }
+
+        //dd($coordenada_x, $coordenada_y);
 
         //header("Content-type: image/png");
         //echo base64_decode($firma);
@@ -546,9 +572,33 @@ class FirmaDigitalController extends Controller
         //die();
 
         $response = Http::withHeaders(['otp' => $otp])->post($url, $data);
+        // $response = Http::post($url, $data);
         $json = $response->json();
         //dd($json);
 //        $json['files'][0]['content'];
+
+
+        if (array_key_exists('error', $json)) {
+            return ['statusOk' => false,
+                'content' => '',
+                'errorMsg' => $json['error'],
+            ];
+        }
+
+        if (!array_key_exists('content', $json['files'][0])) {
+            if (array_key_exists('error', $json)) {
+                return ['statusOk' => false,
+                    'content' => '',
+                    'errorMsg' => $json['error'],
+                ];
+            } else {
+                return ['statusOk' => false,
+                    'content' => '',
+                    'errorMsg' => $json['files'][0]['status'],
+                ];
+            }
+
+        }
 
         header('Content-Type: application/pdf');
         echo base64_decode($json['files'][0]['content']);

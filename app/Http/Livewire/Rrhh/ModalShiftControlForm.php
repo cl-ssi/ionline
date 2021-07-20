@@ -95,7 +95,8 @@ class ModalShiftControlForm extends Component
 
 	}
     public function render()
-    {
+    {   
+        
         return view('livewire.rrhh.modal-shift-control-form');
     }
 }

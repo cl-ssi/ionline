@@ -10,37 +10,27 @@
 }
 </style>
 <!--Menu de Filtros  -->
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link " aria-current="page" href="{{ route('rrhh.shiftManag.index') }}">Gestión de Turnos</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link"  href="{{ route('rrhh.shiftsTypes.index') }}">Tipos de Turnos</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link active" href="{{ route('rrhh.shiftManag.myshift') }}">Mi Turno</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Turnos Disponibles</a>
-  </li>
-</ul>
+
+@include("rrhh.shift_management.tabs", array('actuallyMenu' => 'MyShiftTab'))
 
 <div>
 	 <div class="col-md-6">
           <h3> Mi de Turno </h3>
      </div>
 <div class="scroll">
-    @if(!$myConfirmationEarrings)
+    @if(        $myConfirmationEarrings && json_encode($myConfirmationEarrings)=="{}")
+
 	<div class="alert alert-info">
-  		<strong>Ninguna</strong> confirmación pendiente!.
+  		<strong>Ninguna</strong> confirmación de día extra pendiente!.
 	</div>
     @else
-{{--json_encode($myConfirmationEarrings)--}}
-@foreach($myConfirmationEarrings as $day)
-	<div class="card ">
-  		<div class="card-body">
-    		<h5 class="card-title">Día Agregado</h5>
-    		<p class="card-text" style="margin-left: 101px"> 
+        
+        {{--json_encode($myConfirmationEarrings)--}}
+        @foreach($myConfirmationEarrings as $day)
+	       <div class="card ">
+  		    <div class="card-body">
+    		  <h5 class="card-title">Día Agregado</h5>
+    		  <p class="card-text" style="margin-left: 101px"> 
     			<i>
     			<i class="fa fa-user"></i> <i class="fa fa-arrow-right"></i> 
     			<i class="fa fa-user"></i> 
@@ -63,14 +53,24 @@
 
                 @endif
                 </p>
-    		</i>
-    		<div class="pull-right"><a href="#" class="btn btn-primary ">Confirmar <i class="fa fa-check"></i></a>
-    		<a href="#" class="btn btn-danger pull-right"><b>X</b> </a></div>
+    		  </i>
+            <div class="pull-right">
+                <form action="{{ route('rrhh.shiftManag.myshift.confirmDay',[$day]) }}" >
+                    @csrf
+    		      <button class="btn btn-success ">Confirmar <i class="fa fa-check"></i></button>
+                </form>
+            </div>
+            <div class="pull-right">
+                <form action="{{ route('rrhh.shiftManag.myshift.rejectDay',[$day]) }}" >
+                    @csrf
+    		      <button class="btn btn-danger pull-right"><b>X</b> </button>
+                </form>
+            </div>       
   		</div>
-	</div>
-@endforeach
-@endif
-
+	   </div>
+        @endforeach
+    @endif
+</div>
     
 
 <br>

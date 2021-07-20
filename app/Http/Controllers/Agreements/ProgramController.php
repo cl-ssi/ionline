@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Agreements;
 
 use App\Agreements\Program;
+use App\Agreements\Signer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\User;
 
 class ProgramController extends Controller
 {
@@ -15,8 +17,8 @@ class ProgramController extends Controller
      */
     public function index()
     {
-        $programs = Program::All()->SortBy('name');
-        return view('agreements/programs/index')->withPrograms($programs);
+        $programs = Program::with('components')->orderBy('name')->get();
+        return view('agreements.programs.index', compact('programs'));
     }
 
     /**
@@ -48,7 +50,10 @@ class ProgramController extends Controller
      */
     public function show(Program $program)
     {
-        //
+        $program->load('resolutions', 'components');
+        $referrers = User::all()->sortBy('name');
+        $signers = Signer::with('user')->get();
+        return view('agreements.programs.show', compact('program', 'referrers', 'signers'));
     }
 
     /**

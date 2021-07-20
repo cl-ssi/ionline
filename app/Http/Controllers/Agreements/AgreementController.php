@@ -227,42 +227,15 @@ class AgreementController extends Controller
         }elseif($agreement->quotas == 12){
             $amountPerQuota = round($agreementTotal/$agreement->quotas);
             $diff = $agreementTotal - $amountPerQuota * $agreement->quotas; //residuo
-            foreach ($agreement->agreement_quotas as $quota) {
-                $quota->amount = $amountPerQuota;
-                if($diff != 0){
-                    ($diff > 0) ? $quota->amount++ : $quota->amount--;
-                    ($diff > 0) ? $diff-- : $diff++;
-                }
-                $quota->save();
-            }
-        } else {
-            $quotasWithDecimal = collect();
-            foreach ($agreement->agreement_quotas as $quota) {
-                $quota->amount = ($quota->percentage * $agreementTotal)/100;
-                if(is_float($quota->amount)) $quotasWithDecimal->add($quota);
-                $quota->save();
-            }
-
+            foreach($agreement->agreement_quotas as $quota)
+                $quota->update(['amount' => $agreement->agreement_quotas->last() == $quota && $diff != 0 ? $amountPerQuota + $diff : $amountPerQuota]);
+        }else{
+            foreach ($agreement->agreement_quotas as $quota)
+                $quota->update(['amount' => ($quota->percentage * $agreementTotal)/100]);
             $diff = $agreementTotal - $agreement->agreement_quotas()->sum('amount'); //residuo
-        
-            foreach($quotasWithDecimal as $quota){
-                $fraction = $quota->amount - floor($quota->amount);
-                if($diff != 0)
-                    if($diff > 0){ //falta para completar el total agreement
-                        if($fraction >= 0.5){ // revisar si está demás esta condición o no
-                            $quota->amount++;
-                            $diff--;
-                            $quota->save();
-                        }
-                    }else{ //quedé debiendo
-                        if($fraction >= 0.5){
-                            $quota->amount--;
-                            $diff++;
-                            $quota->save();
-                        }
-                    }
-            }
+            if($diff != 0) $agreement->agreement_quotas->last()->update(['amount' => $agreement->agreement_quotas->last()->amount + $diff]);
         }
+
         return redirect()->back();
     }
 

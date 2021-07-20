@@ -19,16 +19,23 @@ class ListOfShifts extends Component
     public $statusx;
     private  $actuallyShift;
     private $colors = array(
-        1 => "lightblue",
-        2 => "#2471a3",
-        3 => " #52be80 ",
-        4 => "orange",
-        5 => "#ec7063",
-        6 => "#af7ac5",
-        7 => "#f4d03f",
-        8 => "gray",
+            1 => "lightblue",
+            2 => "#2471a3",
+            3 => " #52be80 ",
+            4 => "orange",
+            5 => "#ec7063",
+            6 => "#af7ac5",
+            7 => "#f4d03f",
+            8 => "gray",
+            9  => "yellow",
+            10  => "brown",
+            11  => "brown",
+            12  => "brown",
+            13  => "brown",
+            14  => "brown",
+            15  => "lightred",
+            16  => "lightbrown",
     );
-        
     protected $listeners = ['refreshListOfShifts' => '$refreh'];
 
     public function ref()  {   
@@ -117,5 +124,10 @@ class ListOfShifts extends Component
         // dd($this->shiftDay);
     }
 
+    public function deleteActually($actuallyShiftDay){
+        dd($actuallyShiftDay);
+        // $this->emit("setDataToDeleteModal",[$actuallyShiftDay]);
+
+    }
  
 }

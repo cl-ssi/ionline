@@ -8,13 +8,14 @@ use App\Models\Rrhh\ShiftUserDay;
 class ChangeShiftDayStatus extends Component
 {	
 
-	public $count = 0;
+    public $count = 0;
+	public $loop;
 	public $shiftDay;
 	public $filered="off";
 	// public $id;
     public $actuallyColor;
     protected $listeners = ['renderShiftDay' => '$refresh','changeColor' =>'setActuallyColor'];
-   	private $colors = array(
+    private $colors = array(
             1 => "lightblue",
             2 => "#2471a3",
             3 => " #52be80 ",
@@ -23,6 +24,14 @@ class ChangeShiftDayStatus extends Component
             6 => "#af7ac5",
             7 => "#f4d03f",
             8 => "gray",
+            9  => "yellow",
+            10  => "brown",
+            11  => "brown",
+            12  => "brown",
+            13  => "brown",
+            14  => "brown",
+            15  => "lightred",
+            16  => "lightbrown",
     );
     // public function postAdded(Post $post)
     // {

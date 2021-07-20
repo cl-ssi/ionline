@@ -22,13 +22,14 @@
 </form>
 
 
-
+@if($created_requirements->isNotEmpty())
 <div class="alert alert-info alert-dismissible fade show" role="alert">
   <strong>¡Es importante que cierres tus requerimientos!</strong> Requerimientos abiertos producen demoras en tus tiempos productivos.
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
+@endif
 
 <h3 class="mb-3">Pendientes por atender</h3>
 

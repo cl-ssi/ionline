@@ -7,7 +7,10 @@ use Carbon\Carbon;
 use App\User;
 use App\Models\Rrhh\ShiftUser;
 use App\Models\Rrhh\ShiftUserDay;
-use App\Models\Rrhh\ShiftDayHistoryOfChanges;   
+use App\Models\Rrhh\ShiftDayHistoryOfChanges;  
+use App\Models\Rrhh\ShiftClose;
+use App\Models\Rrhh\ShiftDateOfClosing;
+
 class SeeShiftControlForm extends Component
 {
     public  $usr;
@@ -17,6 +20,9 @@ class SeeShiftControlForm extends Component
 	public  $days;
 	public $log;
     public $shifsUsr;
+    public $close=0;
+    public $daysForClose;
+    // public $cierreDelMes=array();
     public $timePerDay = array(
 
         'L' => array("from"=>"08:00","to"=>"20:00","time"=>12),
@@ -25,17 +31,26 @@ class SeeShiftControlForm extends Component
         'F' => array("from"=>"","to"=>"","time"=>0),
 
      );
-    public $shiftStatus = array(
-        1=>"asignado",
-        2=>"completado",
-        3=>"turno extra",
-        4=>"cambio turno con",
-        5=>"licencia medica",
-        6=>"fuero gremial",
-        7=>"feriado legal",
-        8=>"permiso excepcional",
+  public $shiftStatus = array(
+        1=>"Asignado",
+           2=>"Completado",
+           3=>"Turno extra",
+           4=>"Intercambio de turno con",
+           5=>"Licencia medica",
+           6=>"Fuero gremial",
+           7=>"Feriado legal",
+           8=>"Permiso excepcional",
+           9 => "Permiso sin goce de sueldo",
+           10 => "Descanzo Compensatorio",
+           11 => "Permiso Administrativo Completo",
+           12 => "Permiso Administrativo Medio Turno Diurno",
+           13 => "Permiso Administrativo Medio Turno Nocturno",
+           14 => "Permiso a Curso",
+           15 => "Ausencia sin justificar",
+           16 => "Cambiado por necesidad de servicio",
         
     );
+
     public $months = array(
 
         '01'=>'Enero',
@@ -59,6 +74,7 @@ class SeeShiftControlForm extends Component
         $this->days = $dateFiltered->daysInMonth;
 
         $this->shifsUsr = ShiftUser::where('date_up','>=',$this->actuallyYears."-".$this->actuallyMonth."-".$this->days)->where('date_from','<=',$this->actuallyYears."-".$this->actuallyMonth."-".$this->days)->where("user_id",$this->usr->id)->first();
+        $id = $this->usr->id ;
 
 	}
 
@@ -85,7 +101,24 @@ class SeeShiftControlForm extends Component
 
     public function render()
     {
+        $cierreDelMes = array();
+         if($this->close == 1){ // si estoy en la vista de cierre 
+            
+            $cierreDelMes = ShiftDateOfClosing::where('close_date','<=',Carbon::now()->format('Y-m-d'))->latest()->first();
+            if(isset($cierreDelMes) &&  $cierreDelMes!=""){
+                // echo "Cierre del mes econtrad";
 
-        return view('livewire.rrhh.see-shift-control-form');
+            }else{
+                $cierreDelMes = (object) array("user_id"=>1,"commentary"=>"","init_date"=>$this->actuallyYears."-".$this->actuallyMonth."-02","close_date"=>$this->actuallyYears."-".$this->actuallyMonth."-".$this->days);
+            }
+            
+            $id = $this->usr->id ;
+
+            $this->daysForClose = ShiftUserDay::where('day','>=',$cierreDelMes->init_date)->where('day','<=',$cierreDelMes->close_date)->whereHas("ShiftUser",  function($q) use($id){
+                
+                    $q->where('user_id',$id); // Para filtrar solo los dias de la unidad organizacional del usuario
+            })->get();
+        }
+        return view('livewire.rrhh.see-shift-control-form',['cierreDelMes' => $cierreDelMes]);
     }
 }
