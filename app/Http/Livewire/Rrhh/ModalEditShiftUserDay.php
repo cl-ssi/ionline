@@ -28,8 +28,8 @@ class ModalEditShiftUserDay extends Component
 	public $availableOwnDaysToChange = array();
 	public $availableExternalDaysToChangeVisible ="none";
 	public $availableExternalDaysToChange= array();
-	public $dayToToChange;
-	public $dayToToChange2;
+	public $dayToToChange=0;
+	public $dayToToChange2=0;
 	public $repeatAction ="none";
 	public $addHours ="none";
 	public $previousStatus;
@@ -94,6 +94,8 @@ class ModalEditShiftUserDay extends Component
 
 		$this->usersSelect ="none";
 		$this->changeDayType = "none";
+		// $this->dayToToChange2 = 0;
+		// $this->dayToToChange = 0;
 		// $this->newWorkingDay = "F";
     }
     public function clearModal(){
@@ -232,9 +234,8 @@ class ModalEditShiftUserDay extends Component
 			$this->addHours = "none" ;
 			$this->availableExternalDaysToChangeVisible = "none";
 			$this->availableOwnDaysToChangeVisible  = "none";
-
-
 			$this->emit('ChangeWorkingDay');
+
 		}elseif($this->action ==8 ){ // PErmiso excepcional sin sueldo
 			$this->newStatus = 9;
 			$this->usersSelect ="none";
@@ -244,7 +245,6 @@ class ModalEditShiftUserDay extends Component
 			$this->addHours = "none" ;
 			$this->availableOwnDaysToChangeVisible  = "none";
 			$this->availableExternalDaysToChangeVisible = "none";
-
 		
 		}elseif($this->action ==9 ){ // Descanzo Compensatorio
 			$this->newStatus = 10;
@@ -256,7 +256,6 @@ class ModalEditShiftUserDay extends Component
 			$this->availableOwnDaysToChangeVisible  = "none";
 			$this->availableExternalDaysToChangeVisible = "none";
 
-
 		}elseif($this->action ==10 ){ // Permiso Administrativo Completo
 			$this->newStatus = 11;
 			$this->usersSelect ="none";
@@ -266,7 +265,6 @@ class ModalEditShiftUserDay extends Component
 			$this->addHours = "none" ;
 			$this->availableOwnDaysToChangeVisible  = "none";
 			$this->availableExternalDaysToChangeVisible = "none";
-
 
 		}elseif($this->action ==11 ){ // Permiso Administrativo Medio Turno Diurno
 			$this->newStatus = 12;
@@ -348,7 +346,7 @@ class ModalEditShiftUserDay extends Component
 	}
 	public function findAvailableOwnDaysToChange($user_id){
 		$this->dayToToChange2 = 0;
-
+		$this->availableOwnDaysToChange =  array();
 		if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
             $actuallyMonth = Session::get('actuallyMonth');
         else
@@ -372,6 +370,7 @@ class ModalEditShiftUserDay extends Component
 	}
 	public function findAvailableExternalDaysToChange(){
 		$this->dayToToChange = 0;
+		$this->availableExternalDaysToChange= array();
 		if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
             $actuallyMonth = Session::get('actuallyMonth');
         else
@@ -404,7 +403,7 @@ class ModalEditShiftUserDay extends Component
 	public function update(){//funcion que actualiza la informacion segun el estado elegido en el modal
 		if( ($this->action != 1 && $this->action != 7 && $this->action != 14 && $this->action !=  16) &&  isset($this->shiftUserDay) ){
 
-				if($this->repeatToDate == $this->shiftUserDay->day ){ // Si esque el cambio en el estado del dia no se repite en otra fecha, osea el dia de repeticion ed igual al dia actual
+				if($this->repeatToDate == $this->shiftUserDay->day ){ // Si esque el cambio en el estado del dia no se repite en un rango de fechas, osea el dia de repeticion es igual al dia actual
 
 					$this->shiftUserDay->status =$this->newStatus;
 					$this->shiftUserDay->update();
@@ -655,9 +654,16 @@ class ModalEditShiftUserDay extends Component
 
 		 return redirect()->route('rrhh.shiftManag.confirmDay',[$this->shiftUserDay]);	 
 	}
+	public function changeDay(){
+    	dd($this->dayToToChange);
+		// $this->emit('findAvailableExternalDaysToChange');
+
+  //   	$this->dayToToChange = $this->dayToToChange;
+    }
     public function render(){
 
         return view('livewire.rrhh.modal-edit-shift-user-day',["tiposJornada"=>$this->tiposJornada,"estados"=>$this->estados,"statusColors"=>$this->colors]);
     }
+
 
 }
