@@ -3,11 +3,6 @@
 @section('title', 'Lista de Usuarios')
 
 @section('content')
-@php
-$user = $users->first();
-@endphp
-
-@livewire('search-select-user')
 
 @can('Users: create')
 <h3 class="inline mt-3">Usuarios
@@ -28,6 +23,7 @@ $user = $users->first();
 	</div>
 </form>
 
+@livewire('search-select-user')
 <br>
 
 <table class="table table-striped table-sm">

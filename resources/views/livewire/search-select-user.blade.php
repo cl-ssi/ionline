@@ -1,4 +1,4 @@
-<div class="mb-3">
+<div>
     <div class="input-group">
         <input 
             type="text" 
