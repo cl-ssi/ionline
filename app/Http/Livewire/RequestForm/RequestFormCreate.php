@@ -149,38 +149,44 @@ class RequestFormCreate extends Component
    public function messageMechanism(){
       $this->messagePM = array();
       switch ($this->purchaseMechanism) {
-          case "cm<1000":
+          case 1: //Convenio Marco < 1000 utm
               $this->messagePM[] = "Adjuntar ID Mercado Público";
               $this->messagePM[] = "Especificaciones Técnicas de Bien y/o Servicios";
               $this->messagePM[] = "Decretos Presupuestarios";
               $this->messagePM[] = "Convenios Mandatos";
               $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
               break;
-          case "cm>1000":
+          case 2: //Convenio Marco > 1000 utm
               $this->messagePM[] = "Bases Técnicas y Especificaciones Técnicas de Bien y/o Servicios";
               $this->messagePM[] = "Decretos Presupuestarios";
               $this->messagePM[] = "Convenios Mandatos";
               $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
               break;
-          case "lp":
+          case 3: // Licitación Pública
               $this->messagePM[] = "Bases Técnicas y Especificaciones Técnicas de Bien y/o Servicios";
               $this->messagePM[] = "Decretos Presupuestarios";
               $this->messagePM[] = "Convenios Mandatos";
               $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
               break;
-          case "td":
+          case 4: // Trato Directo
               $this->messagePM[] = "Términos de Referencias y Especificaciones Técnicas de Bien y/o Servicios";
               $this->messagePM[] = "Decretos Presupuestarios";
               $this->messagePM[] = "Convenios Mandatos";
               $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
               break;
-          case "ca":
+          case 5: //Compra Ágil
               $this->messagePM[] = "Especificaciones Técnicas de Bien y/o Servicios";
               $this->messagePM[] = "Decretos Presupuestarios";
               $this->messagePM[] = "Convenios Mandatos";
               $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
               $this->messagePM[] = "Tres Cotizaciones (Opcional)";
               break;
+          case 6: //Compra Interna
+              $this->messagePM[] = "Especificaciones Técnicas de Bien y/o Servicios";
+              $this->messagePM[] = "Decretos Presupuestarios";
+              $this->messagePM[] = "Convenios Mandatos";
+              $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
+              break;  
           case "":
               break;
       }
