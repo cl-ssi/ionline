@@ -135,6 +135,7 @@ class ServiceRequest extends Model implements Auditable
       $user_id = Auth::user()->id;
       $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                            $subQuery->where('responsable_id',$user_id);
+                                           $subQuery->whereNull('deleted_at');
                                            $subQuery->orwhere('user_id',$user_id);
                                            //$subQuery->whereNull('derive_date');
                                            
