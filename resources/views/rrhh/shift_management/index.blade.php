@@ -276,7 +276,7 @@
 
              <div class="col-md-1">
                 <label>Inicio</label>
-                <select class="form-control" name="initial-serie">
+                <select class="form-control" name="initialSerie">
                 @if(isset($actuallyShift->day_series))
                     @php $currentSeries =  explode(",", $actuallyShift->day_series); @endphp
                     @for(  $i=0;$i< sizeof($currentSeries);$i++  )
