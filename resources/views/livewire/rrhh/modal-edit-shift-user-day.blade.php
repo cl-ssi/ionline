@@ -222,6 +222,9 @@
                         </select>
 
                     </div>
+                    <div>
+                        <input type="checkbox"  class="form-control"  name="">
+                    </div>
                     @endif
                     <div class="form-group" style="display: {{$availableExternalDaysToChangeVisible}}">
 
