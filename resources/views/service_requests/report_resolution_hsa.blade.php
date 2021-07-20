@@ -465,7 +465,7 @@
         @if($ServiceRequest->programm_name == "OTROS PROGRAMAS SSI" || $ServiceRequest->programm_name == "LISTA ESPERA" || $ServiceRequest->programm_name == "ADP DIRECTOR")
         21-03-001-001-02
         @elseif($ServiceRequest->programm_name == "SENDA")
-        11-40-504
+        11-40-504 <b>SENDA</b> (Fondos Extrapresupuestario) asociado al convenio SENDA 1, 
         @elseif($ServiceRequest->programm_name == "SENDA UHCIP")
         11450602
         @elseif($ServiceRequest->programm_name == "SENDA LEY ALCOHOLES")
