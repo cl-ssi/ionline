@@ -103,6 +103,7 @@ class ServiceRequestController extends Controller
 
   public function user(Request $request)
   {
+    // dd("");
     $fulfillments = array();
     $user = null;
 
@@ -115,7 +116,7 @@ class ServiceRequestController extends Controller
           function ($query) use ($user) {
             $query->where('user_id', $user->id);
           }
-        )->orderBy('payment_date')->get();
+        )->orderBy('year', 'DESC')->orderBy('month', 'DESC')->get();
       }
     }
     $request->flash();
@@ -229,7 +230,7 @@ class ServiceRequestController extends Controller
     }
     //hospital
     elseif (Auth::user()->organizationalUnit->establishment_id == 1) {
-      $subdirections = OrganizationalUnit::where('name', 'LIKE', '%subdirec%')->where('establishment_id', 1)->orderBy('name', 'ASC')->get();
+      $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id', 1)->orderBy('name', 'ASC')->get();
       $responsabilityCenters = OrganizationalUnit::where('establishment_id', 1)
         ->orderBy('name', 'ASC')->get();
     }
@@ -481,6 +482,11 @@ class ServiceRequestController extends Controller
     if (env('APP_ENV') == 'production') {
       $email = $serviceRequest->SignatureFlows->where('sign_position', 2)->first()->user->email;
       Mail::to($email)->send(new ServiceRequestNotification($serviceRequest));
+      // if ( $serviceRequest->SignatureFlows->where('responsable_id', 9381231)->first())
+      // {
+      //   $emaildire = $serviceRequest->SignatureFlows->where('responsable_id', 9381231)->first()->user->email;
+      //   Mail::to($emaildire)->send(new ServiceRequestNotification($serviceRequest));
+      // }
     }
 
     session()->flash('info', 'La solicitud ' . $serviceRequest->id . ' ha sido creada.');

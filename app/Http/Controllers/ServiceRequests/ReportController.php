@@ -17,18 +17,25 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Establishment;
+use App\Rrhh\OrganizationalUnit;
 
 class ReportController extends Controller
 {
   public function toPay(Request $request)
   {
     $establishment_id = $request->establishment_id;
+    $type = $request->type;
     $topay_fulfillments1 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
       $subQuery->where('has_resolution_file', 1);
     })
       ->when($establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
           $subQuery->where('establishment_id', $establishment_id);
+        });
+      })
+      ->when($type != null, function ($q) use ($type) {
+        return $q->whereHas("ServiceRequest", function ($subQuery) use ($type) {
+          $subQuery->where('type', $type);
         });
       })
       // ->when($establishment_id == 0, function ($q) use ($establishment_id) {
@@ -53,6 +60,12 @@ class ReportController extends Controller
           $subQuery->where('establishment_id', $establishment_id);
         });
       })
+      ->when($type != null, function ($q) use ($type) {
+        return $q->whereHas("ServiceRequest", function ($subQuery) use ($type) {
+          $subQuery->where('type', $type);
+        });
+      })
+
       // ->when($request->establishment_id === 0, function ($q) use ($establishment_id) {
       //      return $q->whereHas("ServiceRequest", function($subQuery) use ($establishment_id) {
       //                  $subQuery->where('establishment_id',38);
@@ -313,6 +326,8 @@ class ReportController extends Controller
 
     $program_contract_type = $request->program_contract_type;
     $working_day_type = $request->working_day_type;
+    $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
+    $responsability_center_ou_id = $request->responsability_center_ou_id;
 
     $fulfillments = Fulfillment::where('payment_ready', 0)
       ->when($program_contract_type != null, function ($q) use ($program_contract_type) {
@@ -323,6 +338,11 @@ class ReportController extends Controller
       ->when($working_day_type != null, function ($q) use ($working_day_type) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($working_day_type) {
           $subQuery->where('working_day_type', $working_day_type);
+        });
+      })
+      ->when($responsability_center_ou_id != null, function ($q) use ($responsability_center_ou_id) {
+        return $q->whereHas("ServiceRequest", function ($subQuery) use ($responsability_center_ou_id) {
+          $subQuery->where('responsability_center_ou_id', $responsability_center_ou_id);
         });
       })
 
@@ -336,7 +356,7 @@ class ReportController extends Controller
     //   })->get();
 
     // }
-    return view('service_requests.reports.pay_rejected', compact('fulfillments', 'request'));
+    return view('service_requests.reports.pay_rejected', compact('fulfillments', 'request','responsabilityCenters'));
   }
 
   public function budgetAvailability(ServiceRequest $serviceRequest)
@@ -360,15 +380,30 @@ class ReportController extends Controller
 
   public function pending(Request $request, $who)
   {
+    if (Auth::user()->organizationalUnit->establishment_id == 38) {
+      $responsabilityCenters = OrganizationalUnit::where('establishment_id', 38)->orderBy('name', 'ASC')->get();
+    }
+    //hospital
+    elseif (Auth::user()->organizationalUnit->establishment_id == 1) {
+      $responsabilityCenters = OrganizationalUnit::where('establishment_id', 1)->orderBy('name', 'ASC')->get();
+    }
 
     $establishments = Establishment::all();
     $user_id = Auth::user()->id;
     $query = Fulfillment::query();
+    $responsability_center = $request->responsability_center;
 
+    // dd($request->responsability_center);
     $query->Search($request)
       ->whereHas('ServiceRequest')
+      ->when($responsability_center != null, function ($q) use ($responsability_center) {
+        return $q->whereHas("serviceRequest", function ($subQuery) use ($responsability_center) {
+          $subQuery->where('responsability_center_ou_id', $responsability_center);
+        });
+      })
       ->orderBy('year')
       ->orderBy('month');
+
 
     switch ($who) {
       case 'responsable':
@@ -400,7 +435,7 @@ class ReportController extends Controller
 
     return view(
       'service_requests.requests.fulfillments.reports.pending',
-      compact('fulfillments', 'request', 'periodo', 'who', 'establishments')
+      compact('fulfillments', 'request', 'periodo', 'who', 'establishments', 'responsabilityCenters')
     );
   }
 
@@ -409,6 +444,7 @@ class ReportController extends Controller
     //$users = User::getUsersBySearch($request->get('name'))->orderBy('name','Asc')->paginate(150);
     $fulfillments = Fulfillment::Search($request)
       ->whereHas('ServiceRequest')
+      ->orderBy('id','Desc')
       ->paginate(200);
 
     /* Año actual y año anterior */
@@ -436,7 +472,7 @@ class ReportController extends Controller
   public function export_sirh(Request $request)
   {
 
-    $establishments = Establishment::all();
+
     $filitas = null;
 
     $filitas = ServiceRequest::where('establishment_id', 1)->paginate(100);
@@ -444,84 +480,127 @@ class ReportController extends Controller
 
 
     $run = $request->run;
+    $id_from = $request->id_from;
+    $id_to = $request->id_to;
+    $from = $request->from;
+    $to = $request->to;
 
 
 
-    if ($request->has('from')) {
+
 
       $filitas = ServiceRequest::where('establishment_id', 1)
         ->when($request->run != null, function ($q) use ($run) {
           return $q->where('user_id', $run);
         })
+        ->when($request->id_from != null, function ($q) use ($id_from) {
+          return $q->where('id', '>=', $id_from);
+        })
+        ->when($request->id_to != null, function ($q) use ($id_to) {
+          return $q->where('id', '<=', $id_to);
+        })
+        ->when($request->from != null, function ($q) use ($from) {
+          return $q->where('start_date', '>=', $from);
+        })
+        ->when($request->to != null, function ($q) use ($to) {
+          return $q->where('start_date', '<=', $to);
+        })
 
-        ->whereBetween('start_date', [$request->from, $request->to])
+        //->whereBetween('start_date', [$request->from, $request->to])
         ->where(function ($q) {
           $q->whereNotNull('resolution_number')
             ->whereNotNull('gross_amount')
             ->orwhereNotNull('resolution_date');
         })->paginate(100);
-    }
+
+        $request->flash(); //envia los input de regreso
 
 
-    return view('service_requests.export_sirh', compact('request', 'establishments', 'filitas'));
+
+    return view('service_requests.export_sirh', compact('request', 'filitas'));
   }
 
   public function export_sirh_txt(Request $request)
   {
 
+    $filas = null;
+
+    $filas = ServiceRequest::where('establishment_id', 1);
+
+
     $run = $request->run;
+    $id_from = $request->id_from;
+    $id_to = $request->id_to;
+    $from = $request->from;
+    $to = $request->to;
+
+
+
     $filas = ServiceRequest::where('establishment_id', 1)
       ->when($request->run != null, function ($q) use ($run) {
         return $q->where('user_id', $run);
       })
-      ->whereBetween('start_date', [$request->from, $request->to])
+      ->when($request->id_from != null, function ($q) use ($id_from) {
+        return $q->where('id', '>=', $id_from);
+      })
+      ->when($request->id_to != null, function ($q) use ($id_to) {
+        return $q->where('id', '<=', $id_to);
+      })
+      ->when($request->from != null, function ($q) use ($from) {
+        return $q->where('start_date', '>=', $from);
+      })
+      ->when($request->to != null, function ($q) use ($to) {
+        return $q->where('start_date', '<=', $to);
+      })
+      //->whereBetween('start_date', [$request->from, $request->to])
       ->where(function ($q) {
         $q->whereNotNull('resolution_number')
           ->whereNotNull('gross_amount')
           ->orwhereNotNull('resolution_date');
-      })->paginate(100);
+      })->get();
 
 
 
 
-    $txt =
-      'RUN|' .
-      'DV|' .
-      ' N°  cargo |' .
-      ' Fecha  inicio  contrato |' .
-      ' Fecha  fin  contrato |' .
-      'Establecimiento|' .
-      ' Tipo  de  decreto |' .
-      ' Contrato  por  prestación |' .
-      ' Monto  bruto |' .
-      ' Número  de  cuotas |' .
-      'Impuesto|' .
-      ' Día  de  proceso |' .
-      ' Honorario  suma  alzada |' .
-      ' Financiado  proyecto |' .
-      ' Centro  de  costo |' .
-      'Unidad|' .
-      ' Tipo  de  pago |' .
-      ' Código  de  banco |' .
-      ' Cuenta  bancaria |' .
-      'Programa|' .
-      'Glosa|' .
-      'Profesión|' .
-      'Planta|' .
-      'Resolución|' .
-      ' N°  resolución |' .
-      ' Fecha  resolución |' .
-      'Observación|' .
-      'Función|' .
-      ' Descripción  de  la  función  que  cumple |' .
-      ' Estado  tramitación  del  contrato |' .
-      ' Tipo  de  jornada |' .
-      ' Agente  público |' .
-      ' Horas  de  contrato |' .
-      ' Código  por  objetivo |' .
-      ' Función  dotación |' .
-      ' Tipo  de  función |' .
-      ' Afecto  a  sistema  de  turno' . "\r\n";
+
+    $txt = null;
+      // 'RUN|' .
+      // 'DV|' .
+      // ' N°  cargo |' .
+      // ' Fecha  inicio  contrato |' .
+      // ' Fecha  fin  contrato |' .
+      // 'Establecimiento|' .
+      // ' Tipo  de  decreto |' .
+      // ' Contrato  por  prestación |' .
+      // ' Monto  bruto |' .
+      // ' Número  de  cuotas |' .
+      // 'Impuesto|' .
+      // ' Día  de  proceso |' .
+      // ' Honorario  suma  alzada |' .
+      // ' Financiado  proyecto |' .
+      // ' Centro  de  costo |' .
+      // 'Unidad|' .
+      // ' Tipo  de  pago |' .
+      // ' Código  de  banco |' .
+      // ' Cuenta  bancaria |' .
+      // 'Programa|' .
+      // 'Glosa|' .
+      // 'Profesión|' .
+      // 'Planta|' .
+      // 'Resolución|' .
+      // ' N°  resolución |' .
+      // ' Fecha  resolución |' .
+      // 'Observación|' .
+      // 'Función|' .
+      // ' Descripción  de  la  función  que  cumple |' .
+      // ' Estado  tramitación  del  contrato |' .
+      // ' Tipo  de  jornada |' .
+      // ' Agente  público |' .
+      // ' Horas  de  contrato |' .
+      // ' Código  por  objetivo |' .
+      // ' Función  dotación |' .
+      // ' Tipo  de  función |' .
+      // ' Afecto  a  sistema  de  turno' . "\r\n";
 
     foreach ($filas as $fila) {
       $cuotas = $fila->end_date->month - $fila->start_date->month + 1;

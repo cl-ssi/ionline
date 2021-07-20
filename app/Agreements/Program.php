@@ -13,6 +13,10 @@ class Program extends Model
         return $this->hasMany('App\Programs\Agreement');
     }
 
+    public function resolutions() {
+        return $this->hasMany('App\Agreements\ProgramResolution')->orderBy('created_at','desc');
+    }
+
     /**
      * Get the ProgramComponent for the model.
      *

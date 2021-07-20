@@ -31,7 +31,7 @@ class ParteController extends Controller
         //     $query->where('active', 1)
         //           ->where('user_id', Auth::id());
         // })->get();
-        return view('documents.partes.index', compact('partes'));
+        return view('documents.partes.index', compact('partes', 'request'));
     }
 
     public function outbox(Request $request)

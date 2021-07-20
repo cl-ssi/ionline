@@ -1,4 +1,14 @@
+<style type="text/css">
+    
+.menu {
+    display: none;
+}
 
+figure:active .menu,
+figure:focus .menu {
+    display: visible;
+}
+</style>
 <div>
    <div wire:loading>
               <i class="fas fa-spinner fa-pulse"></i>
@@ -13,36 +23,40 @@
 
     @endphp
 
-
+    @livewire( 'rrhh.delete-shift',['startdate'=>$mInit[0],'enddate'=> $mEnd[0] ] ) 
+    @livewire('rrhh.add-day-of-shift-modal')
     @if(isset($staffInShift)&&count($staffInShift)>0&&$staffInShift!="")
         @foreach($staffInShift as $sis)
         {{-- sizeof($sis->days->where('day','>=',$mInit[0])->where('day','<',$mEnd[0])) --}}
-        @if( sizeof($sis->days->where('day','>=',$mInit[0])->where('day','<',$mEnd[0])) > 0 )  
+        @if( sizeof($sis->days->where('day','>=',$mInit[0])->where('day','<',$mEnd[0])) > 0  || $actuallyShift->id == 99 )  
             <tr>
                 <td class="bless br cellbutton" >
-                    <i class="fa fa-close deleteButton" href="/"></i>  
+                    
+                    @livewire( 'rrhh.delete-shift-button',['actuallyShiftUserDay'=>$sis])
+
                     @livewire( 'rrhh.see-shift-control-form', ['usr'=>$sis->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth], key($loop->index) )
 
-                  {{ $sis->user->runFormat()}} - {{$sis->user->name}} {{$sis->user->fathers_family}} 
+                    {{ $sis->user->runFormat()}} - {{$sis->user->name}} {{$sis->user->fathers_family}} 
       
                 </td>
                 @for($j = 1; $j <= $days; $j++) 
                     @php
+
                         $date = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$j);  
                         $date =explode(" ",$date);
                         $d = $sis->days->where('day',$date[0]);
-                       
-                       
+                        
                     @endphp
                     <td class="bbd day "  style="text-align:center;width:54px;height:54px">
-                            
                             @if( isset($d) && count($d) )  
-                               @livewire('rrhh.change-shift-day-status',['shiftDay'=>$d->first()],key($d->first()->id) )
+                                @foreach($d as $dd)
+                                   
+
+                                    @livewire('rrhh.change-shift-day-status',['shiftDay'=>$dd,'loop'=>$loop->index],key($dd->id) )
+
+                                @endforeach
                             @else
-                               
-                               <i data-toggle="modal" data-target="#newDatModal"  data-keyboard= "false" data-backdrop= "static"  style="color:green;font-weight: bold;font-size:20px" class="fa fa-plus btnShiftDay">
-                                </i>
-                              
+                                @livewire('rrhh.add-day-of-shift-button',['shiftUser'=>$sis,'day'=>$date])
                             @endif
                         
                     </td>
@@ -56,5 +70,6 @@
         @endif
 
 </div>
+
 
 

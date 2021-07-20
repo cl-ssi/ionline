@@ -43,6 +43,8 @@ use App\Http\Controllers\VaccinationController;
 use App\Http\Controllers\ServiceRequests\InvoiceController;
 use App\Http\Controllers\ServiceRequests\ValueController;
 
+use App\Http\Controllers\ServiceRequests\AttachmentController;
+
 use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 use App\Http\Controllers\ServiceRequests\FulfillmentController;
 use App\Http\Controllers\ServiceRequests\SignatureFlowController;
@@ -97,6 +99,7 @@ Route::group(['middleware' => 'auth:external'], function () {
     Route::patch('/update/{psi_request_id?}', [TestsController::class, 'updateStatus'])->name('updateStatus');
     Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
     Route::post('/test', [TestsController::class, 'storeExternal'])->name('storeExternal');
+    Route::get('/signed-suitability-certificate-pdf/{id}', [SuitabilityController::class, 'signedSuitabilityCertificatePDF'])->name('signedSuitabilityCertificate');
     });
 
     Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
@@ -306,6 +309,14 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('/addendum/sign/{addendum}/type/{type}', 'Agreements\AddendumController@sign')->name('addendum.sign');
     Route::get('/addendum/preview/{addendum}', 'Agreements\AddendumController@preview')->name('addendum.preview');
     Route::resource('programs', 'Agreements\ProgramController');
+    Route::prefix('programs')->name('programs.')->group(function () {
+        Route::resource('resolutions', 'Agreements\ProgramResolutionController');
+        Route::get('resolution/createWord/{program_resolution}', 'Agreements\WordTestController@createWordDocxResProgram')->name('resolution.createWord');
+        Route::get('resolution/download/{program_resolution}', 'Agreements\ProgramResolutionController@download')->name('resolution.download');
+        Route::post('resolution/amount/{program_resolution}', 'Agreements\ProgramResolutionController@storeAmount')->name('resolution.amount.store');
+        Route::put('resolution/amount/{resolution_amount}', 'Agreements\ProgramResolutionController@updateAmount')->name('resolution.amount.update');
+        Route::delete('resolution/amount/{resolution_amount}', 'Agreements\ProgramResolutionController@destroyAmount')->name('resolution.amount.destroy');
+    });
     Route::resource('municipalities', 'MunicipalityController');
     Route::resource('signers', 'Agreements\SignerController');
     Route::put('/amount/{agreement_amount}', 'Agreements\AgreementController@updateAmount')->name('amount.update');
@@ -377,11 +388,34 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/prev', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'goToPreviousMonth'])->name('shiftManag.prevMonth')->middleware('auth');
 
            Route::get('/myshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShift'])->name('shiftManag.myshift')->middleware('auth');
+
+           Route::get('/closeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeShift'])->name('shiftManag.closeShift')->middleware('auth');
+           Route::post('/closeshift/first', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'firstConfirmation'])->name('shiftManag.closeShift.firstConfirmation')->middleware('auth');
+           Route::post('/closeshift/close', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeDaysConfirmation'])->name('shiftManag.closeShift.closeConfirmation')->middleware('auth');
+
+
+           Route::get('/shiftreports', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReports'])->name('shiftManag.shiftReports')->middleware('auth');
+           Route::post('/shiftreports', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReports'])->name('shiftManag.shiftReports')->middleware('auth');
+           
+           
+
+           Route::get('/shiftdashboard', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftDashboard'])->name('shiftManag.shiftDashboard')->middleware('auth');
+           Route::get('/available-shifts', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'availableShifts'])->name('shiftManag.availableShifts')->middleware('auth');
+            Route::post('/available-shifts/applyfor', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'applyForAvailableShifts'])->name('shiftManag.availableShifts.applyfor')->middleware('auth');
+            Route::post('/available-shifts/cancelDay', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'cancelShiftRequest'])->name('shiftManag.availableShifts.cancelRequest')->middleware('auth');
+            Route::post('/available-shifts/approvalRequest', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'approveShiftRequest'])->name('shiftManag.availableShifts.approvalRequest')->middleware('auth');
+           Route::post('/available-shifts/rejectRequest', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'rejectShiftRequest'])->name('shiftManag.availableShifts.rejectRequest')->middleware('auth');
+           Route::get('/myshift/confirm/{day}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShiftConfirm'])->name('shiftManag.myshift.confirmDay')->middleware('auth');
+           Route::get('/myshift/reject/{day}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShiftReject'])->name('shiftManag.myshift.rejectDay')->middleware('auth');
+
+           Route::get('/reject/{day}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'adminShiftConfirm'])->name('shiftManag.confirmDay')->middleware('auth');
+           
+
         Route::post('/myshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShift'])->name('shiftManag.myshiftfiltered')->middleware('auth');
 
 
 
-        Route::get('/shift-control-form/download', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'downloadShiftControlInPdf'])->name('shiftManag.downloadform')->middleware('auth');
+        Route::post('/shift-control-form/download', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'downloadShiftControlInPdf'])->name('shiftManag.downloadform')->middleware('auth');
 
 
         Route::post('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'indexfiltered'])->name('shiftManag.indexF')->middleware('auth');
@@ -463,6 +497,16 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
                 Route::post('/store', [FulfillmentItemController::class, 'store'])->name('store');
                 Route::put('/{fulfillment}/update', [FulfillmentItemController::class, 'update'])->name('update');
                 Route::delete('{fulfillmentItem}/destroy', [FulfillmentItemController::class, 'destroy'])->name('destroy');
+            });
+
+
+            Route::prefix('attachment')->name('attachment.')->group(function () {
+                //descomposición del attachment
+                Route::post('/{var}/store', [AttachmentController::class, 'store'])->name('store');
+                Route::get('/{attachment}/show', [AttachmentController::class, 'show'])->name('show');
+                Route::get('/{attachment}/download', [AttachmentController::class, 'download'])->name('download');
+                Route::delete('/{attachment}/destroy', [AttachmentController::class, 'destroy'])->name('destroy');                
+
             });
 
 
@@ -683,7 +727,8 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::resource('partes', 'Documents\ParteController');
 
     Route::get('signatures/index/{tab}', 'Documents\SignatureController@index')->name('signatures.index');
-    Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
+    Route::get('signatures/create/{xAxis?}/{yAxis?}', 'Documents\SignatureController@create')->name('signatures.create');
+    Route::resource('signatures', 'Documents\SignatureController')->except(['index', 'create']);
     Route::get('/showPdf/{signaturesFile}/{timestamp?}', 'Documents\SignatureController@showPdf')->name('signatures.showPdf');
     Route::post('/showPdfFromFile', 'Documents\SignatureController@showPdfFromFile')->name('signatures.showPdfFromFile');
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('signatures.showPdfAnexo');
@@ -751,6 +796,12 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::get('/', 'Indicators\ApsController@index')->name('index');
         Route::get('/{year}', 'Indicators\ApsController@list')->name('list');
         Route::get('/{year}/{slug}/{establishment_type}', 'Indicators\ApsController@show')->name('show');
+    });
+
+    Route::prefix('iiaaps')->as('iiaaps.')->group(function () {
+        Route::get('/', 'Indicators\IaapsController@index')->name('index');
+        Route::get('/{year}', 'Indicators\IaapsController@list')->name('list');
+        Route::get('/{year}/{commune}', 'Indicators\IaapsController@show')->name('show');
     });
 
     Route::prefix('19813')->as('19813.')->group(function () {

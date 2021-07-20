@@ -111,8 +111,10 @@
   <div class="form-row">
 
     <fieldset class="form-group col">
-        <label for="for_service_description">Descripción Servicio</label>
-        <textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50"></textarea>
+        <label for="for_service_description">Descripción Servicio*</label>
+        <textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50" required></textarea>
+
+		<div id="id_descripcion_servicio">
 
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_enfermeros">Enfermeras/os</button>
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_kinesiologos">Kinesiólogos/as</button>
@@ -125,6 +127,7 @@
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fonoaudiologas">Fonoaudiologas</button>
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_terapeuta_ocupacional">Terapeuta Ocupacional</button>
 		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_psicologo">Psicólogo</button>
+		</div>
 
     </fieldset>
 
@@ -228,9 +231,18 @@
 			<option value=""></option>
 			<option value="44">44</option>
 			<option value="33">33</option>
+			<option value="30">30</option>
 			<option value="28">28</option>
 			<option value="22">22</option>
+			<option value="20">20</option>
+			<option value="15">15</option>
 			<option value="11">11</option>
+			<option value="9">9</option>
+			<option value="8.5">8.5</option>
+			<option value="7.5">7.5</option>
+			<option value="5">5</option>
+			<option value="4">4</option>
+			<option value="3">3</option>
 		</select>
 	</fieldset>
 
@@ -269,6 +281,7 @@
 					<option value="PABELLON TARDE">PABELLON TARDE</option>
 					<option value="PABELLON GINE">PABELLON GINE</option>
 					<option value="TURNO DE RESIDENCIA">TURNO DE RESIDENCIA</option>
+					<option value="SENDA">SENDA</option>
 				@else
 					<option value="PRAPS">PRAPS</option>
 					<option value="PESPI">PESPI</option>
@@ -298,6 +311,7 @@
 			<select name="working_day_type" class="form-control" required id="working_day_type">
 				<option value=""></option>
 				<option value="DIURNO">DIURNO</option>
+				<option value="VESPERTINO">VESPERTINO</option>
 				<option value="TERCER TURNO">TERCER TURNO</option>
 				<option value="TERCER TURNO - MODIFICADO">TERCER TURNO - MODIFICADO</option>
 				<option value="CUARTO TURNO">CUARTO TURNO</option>
@@ -306,13 +320,13 @@
 				<option value="HORA MÉDICA">HORA MÉDICA</option>
 				<option value="HORA EXTRA">HORA EXTRA</option>
 				<option value="TURNO EXTRA">TURNO EXTRA</option>
-				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
+				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>				
 				<!-- <option value="OTRO">OTRO</option> -->
 			</select>
 		</fieldset>
 
 		<fieldset class="form-group col">
-			<label for="for_working_day_type_other">Otro</label>
+			<label for="for_working_day_type_other">Otro<small>(Saldrá en la resolución luego del horario)</small></label>
 			<input type="text" class="form-control" id="for_working_day_type_other" placeholder="" name="working_day_type_other">
 		</fieldset>
 
@@ -367,6 +381,12 @@
 				<option value="Constructor civil">Constructor civil</option>
 				<option value="Arquitecto">Arquitecto</option>
 				<option value="Dibujante técnico proyectista">Dibujante técnico proyectista</option>
+				<option value="Técnico en rehabilitación">Técnico en rehabilitación</option>
+				<option value="Psiquiatra">Psiquiatra</option>
+				<option value="Monitor/a">Monitor/a</option>
+				<option value="Preparador físico">Preparador físico</option>				
+				<option value="Otros técnicos">Otros técnicos</option>
+				<option value="Otros profesionales">Otros profesionales</option>				
 
 			</select>
 		</fieldset>
@@ -396,6 +416,7 @@
 			<label for="for_schedule_detail">Detalle de horario</label>
 			<select name="schedule_detail" class="form-control" id="schedule_detail">
 				<option value=""></option>
+				<option value="DIURNO DE LUNES A VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:48 HRS)">DIURNO DE LUNES A VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:48 HRS)</option>
 				<option value="DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)">DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)</option>
 				<option value="DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)">DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)</option>
 				<option value="FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)">FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)</option>
@@ -412,7 +433,7 @@
 
 	<div class="form-row" id="div_objectives" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_estate">Objetivos</label>
+				<label for="for_estate">Objetivos*</label>
 				<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50" disabled></textarea>
 		</fieldset>
 	</div>
@@ -424,16 +445,33 @@
 		</fieldset>
 	</div> -->
 
+	@if(Auth::user()->organizationalUnit->establishment_id == 1)
+
+	@else
+	<div class="form-row" id="div_subt31" style="display: none">
+		<fieldset class="form-group col">
+				<label for="for_subt31">Subtitulo 31 <small>(Aparecerá en resolución, luego del texto "El gasto corresponde")</small></label>
+				<textarea id="subt31" name="subt31" class="form-control" rows="4" cols="50" disabled></textarea>
+		</fieldset>
+	</div>
+	@endif
+	
+
+
 	<div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Beneficios adicionales</label>
 				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50" disabled></textarea>
 
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanzo</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
+				
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
+				@if(Auth::user()->organizationalUnit->establishment_id == 1)
+				@else
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
+				@endif				
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_devolucion">Devolución de tiempo</button>
 
 
@@ -465,6 +503,7 @@
 		$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
 		$("#programm_name option[value='LISTA ESPERA']").hide();
 		$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+		$("#programm_name option[value='SENDA']").hide();
 
 		$("#programm_name option[value='ADP DIRECTOR']").hide();
 		$("#programm_name option[value='SENDA']").hide();
@@ -483,6 +522,7 @@
 		$("#programm_name option[value='PABELLON TARDE']").hide();
 		$("#programm_name option[value='PABELLON GINE']").hide();
 		$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+		$("#programm_name option[value='SENDA']").hide();
 
 
 
@@ -654,11 +694,18 @@
 			$("#programm_name option[value='Covid19 Médicos']").hide();
 			$('#digera_strategy').attr('disabled', 'disabled');
 
+			
+			$("#id_descripcion_servicio").hide();
+
 
 			$("#div_hsa_schedule").show();
 			$("#div_covid_schedule").hide();
 
 			$('#objectives').removeAttr('disabled');
+			$("#objectives").prop('required',true);
+			//$('#objectives').removeAttr('disabled');
+			$('#subt31').removeAttr('disabled');
+			$("#div_subt31").show();
 			// $('#resolve').removeAttr('disabled');
 			$('#additional_benefits').removeAttr('disabled');
 			$("#div_objectives").show();
@@ -687,10 +734,12 @@
 				$("#programm_name option[value='DFL']").show();
 				$("#programm_name option[value='TURNOS VACANTES']").show();
 				$("#programm_name option[value='OTROS PROGRAMAS HETG']").show();
-				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
+				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();				
 				$("#programm_name option[value='PABELLON TARDE']").show();
 				$("#programm_name option[value='PABELLON GINE']").show();
 				$("#programm_name option[value='TURNO DE RESIDENCIA']").show();
+				$("#programm_name option[value='SENDA']").show();
+				
 
 
 			}else{
@@ -718,6 +767,7 @@
 				$("#programm_name option[value='PABELLON TARDE']").hide();
 				$("#programm_name option[value='PABELLON GINE']").hide();
 				$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+//				$("#programm_name option[value='SENDA']").hide();
 			}
 		}
 		else
@@ -730,7 +780,11 @@
 			$("#programm_name option[value='Covid19 Médicos']").show();
 			$('#digera_strategy').removeAttr('disabled');
 
+
+			$("#id_descripcion_servicio").show();
+
 			$('#objectives').attr('disabled', 'disabled');
+			$("#objectives").prop('required',false);
 			// $('#resolve').attr('disabled', 'disabled');
 			$('#additional_benefits').attr('disabled', 'disabled');
 			$("#div_objectives").hide();

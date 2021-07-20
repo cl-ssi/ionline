@@ -8,14 +8,24 @@
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.fulfillment-pending',$who) }}">
 
-    <div class="form-row">     
+    <div class="form-row">
 
-        <fieldset class="form-group col-12 col-md-4">
+        <fieldset class="form-group col-12 col-md">
             <label for="for_establishment_id">Establecimiento</label>
             <select name="establishment" class="form-control" id="for_establishment_id">
                 <option value="">Seleccionar</option>
                 @foreach($establishments as $establishment)
                 <option value="{{$establishment->id}}" @if(old('establishment') == $establishment->id) selected @endif >{{$establishment->name}}</option>
+                @endforeach
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col col-md">
+            <label for="for_establishment_id">Unidad</label>
+            <select name="responsability_center" class="form-control" id="for_responsability_center">
+                <option value="">Seleccionar</option>
+                @foreach($responsabilityCenters as $responsabilityCenter)
+                <option value="{{$responsabilityCenter->id}}" @if(old('responsability_center') == $responsabilityCenter->id) selected @endif >{{$responsabilityCenter->name}}</option>
                 @endforeach
             </select>
         </fieldset>
@@ -50,7 +60,7 @@
         </fieldset>
 
         <fieldset class="form-group col-4 col-md-2">
-            <label for="for_type">Tipo</label>
+            <label for="for_type">Origen Financiamiento</label>
             <select name="type" class="form-control">
                 <option value=""></option>
                 <option value="Covid" @if($request->input('type')=='Covid') selected @endif>Covid</option>
@@ -75,7 +85,7 @@
             <label for="for_program_contract_type">ID</label>
             <input class="form-control" type="text" name="sr_id" value="{{ old('sr_id') }}">
         </fieldset>
-        
+
         <fieldset class="form-group col-12 col-md-4">
             <label for="for_rut">Rut (sin dv) o nombre</label>
             <input name="rut" class="form-control" placeholder="Run o nombre" value="{{ old('rut') }}" aucomplete="off">
@@ -99,6 +109,7 @@
         <tr>
 
             <th>Id Sol.</th>
+            <th>C.Responsabilidad</th>
             <th nowrap>Rut</th>
             <th>Nombre</th>
             <th>Periodo</th>
@@ -121,19 +132,20 @@
             <td>{{$fulfillment->servicerequest->id?? ''}}
                 <span class="small">({{$fulfillment->id}})</span>
             </td>
+            <td>{{$fulfillment->servicerequest->responsabilityCenter->name?? ''}}</td>
             <td>{{$fulfillment->servicerequest?$fulfillment->servicerequest->employee->runFormat(): ''}}</td>
             <td>{{$fulfillment->servicerequest->employee->fullName ?? ''}}</td>
             <td>{{$fulfillment->year}} - {{$fulfillment->month}}</td>
             <td>{{$fulfillment->servicerequest->type?? ''}}</td>
             <td>{{$fulfillment->servicerequest->program_contract_type?? ''}}</td>
             <td>
-                <i title="Contrato" class="fas fa-file-signature 
+                <i title="Contrato" class="fas fa-file-signature
                     {{ ($fulfillment->serviceRequest->has_resolution_file)?'text-primary':'text-secondary'}}"></i>
-                <i title="Certificado" class="fas fa-certificate 
+                <i title="Certificado" class="fas fa-certificate
                     {{ ($fulfillment->signatures_file_id)?'text-primary':'text-secondary'}}"></i>
-                <i title="Boleta" class="fas fa-file-invoice-dollar 
+                <i title="Boleta" class="fas fa-file-invoice-dollar
                     {{ ($fulfillment->has_invoice_file)?'text-primary':'text-secondary'}}"></i>
-                <i title="Pago" class="fas fa-money-bill 
+                <i title="Pago" class="fas fa-money-bill
                     {{ ($fulfillment->payment_date)?'text-primary':'text-secondary'}}"></i>
             </td>
             <td>

@@ -122,20 +122,8 @@
 
 
 <!--Menu de Filtros  -->
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="{{ route('rrhh.shiftManag.index') }}">Gestión de Turnos</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link"  href="{{ route('rrhh.shiftsTypes.index') }}">Tipos de Turnos</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link"  href="{{ route('rrhh.shiftManag.myshift') }}">Mi Turno</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Turnos Disponibles</a>
-  </li>
-</ul>
+
+@include("rrhh.shift_management.tabs", array('actuallyMenu' => 'indexTab'))
 <!-- TODO: Que hace este div? -->
 <div id="shiftapp">
 
@@ -199,12 +187,31 @@
 
             <div class="form-group col-md-2">
                 <label for="for_name" class="input-group-addon">Turnos</label>
+              
+
+                               
                 <select class="form-control" id="for_turnFilter" name="turnFilter" >
+
                     <option value="0">0 - Todos</option>
+                    @php
+                        $index = 0;
+                    @endphp
                     @foreach($sTypes as $st)
-                        <option value="{{$st->id}}" {{($st->id==$actuallyShift->id)?'selected':''}}>{{$loop->iteration}} - Solo {{$st->name}}</option>
+                       
+                        @foreach($actuallyShiftMonthsList  as $key =>  $shiftMonth)
+                            @foreach($shiftMonth as $sMonth)
+                                @if($sMonth->shift_type_id == $st->id && $sMonth->user_id == auth()->user()->id && $sMonth->month == $actuallyMonth)
+                                
+                                    <option value="{{$st->id}}" {{($st->id==$actuallyShift->id)?'selected':''}}>{{$index}} - Solo {{$st->name}}</option>
+                                    {{--json_encode($sMonth)--}}
+                                @endif
+                            @endforeach
+                        @endforeach
+                        @php
+                            $index++;
+                        @endphp
                     @endforeach
-                    <option value="99">99 - Solo Turno Personalizado</option>
+                    <!-- <option value="99">99 - Solo Turno Personalizado</option> -->
                 </select>
             </div>
 
@@ -268,8 +275,8 @@
             </div>
 
              <div class="col-md-1">
-                <label>Iniciar en</label>
-                <select class="form-control">
+                <label>Inicio</label>
+                <select class="form-control" name="initial-serie">
                 @if(isset($actuallyShift->day_series))
                     @php $currentSeries =  explode(",", $actuallyShift->day_series); @endphp
                     @for(  $i=0;$i< sizeof($currentSeries);$i++  )
@@ -334,7 +341,7 @@
                                 @endphp
                                 <th class="brless dia" 
                                     style="color:{{ ( ($dateFiltered->isWeekend() )?'red':( ( sizeof($holidays->where('date',$actuallyYear.'-'.$actuallyMonth.'-'.$i)) > 0 ) ? 'red':'white' ))}}" >
-                                    <p style="font-size: 10px">{{$i}}</p>
+                                    <p style="font-size: 8px">{{$i}}</p>
                                 </th>   
                                 <!-- <th class="brless dia">🌞</th> -->
                                 <!-- <th class="noche">🌒</th> -->
@@ -370,7 +377,7 @@
                                     @endphp
 
                                     <th class="brless dia" 
-                                        style="color:{{ ( ($dateFiltered->isWeekend() )?'red':( ($holidays::where('date',$dateFiltered)) ? 'red':'white')  )}}" >
+                                        style="color:{{ ( ($dateFiltered->isWeekend() )?'red':( ($holidays->where('date',$dateFiltered)) ? 'red':'white')  )}}" >
                                        {{$i}}
                                     </th>
                                     <!-- <th class="brless dia">🌞</th> -->
@@ -421,14 +428,21 @@
        font-size: 13px;
     }
     .btn-full {
-        display: block;
+        display: inherit;
         width: 100%;
         height: 100%;
         margin:-1000px;
         padding: 1000px;
         font-weight: bold;
     }
-
+    .btn-full2 {
+        display: inline;
+        width: 100%;
+        height: 100%;
+        margin:-1000px;
+        padding: 10px;
+        font-weight: bold;
+    }
 </style>
 
 <!-- 

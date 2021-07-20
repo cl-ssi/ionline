@@ -31,6 +31,7 @@
         		        value="{{$sType->shortname}}">
         		</fieldset>
     		</div>
+    		
     		<div class="row">
     			@php
     				$days = explode(",",$sType->day_series)
@@ -48,6 +49,31 @@
         		         	@endforeach
         		         </select>
         		    @endfor
+        		</fieldset>
+    		</div>
+
+    		<div class="row">
+        		<fieldset class="form-group col-6 col-md-2">
+        		    <label for="for_mostrar">Visible en </label>
+				@foreach( $months as $month )
+					@php
+						$index = $loop->iteration;
+					@endphp
+					<div class="form-check form-check-inline">
+  						<input class="form-check-input" type="checkbox"  name="months[]" value="{{$loop->iteration}}"  
+  						{{-- (isset($actuallyMonths) && count( $actuallyMonths->where("month",$loop->iteration)->where("user_id",$idUser) ) > 0 )?"checked":"" --}} 
+  						@foreach( $actuallyMonths as $key=> $aMonth )
+
+  							@if( $aMonth->month == $index )
+  								checked
+  							@endif
+  						@endforeach
+  						/>
+  						<label class="form-check-label" for="inlineCheckbox2">{{  substr($month, 0, 3) }} </label>
+					</div>
+				@endforeach
+				
+
         		</fieldset>
     		</div>
     		<input hidden id="for_id" name="id" value="{{$sType->id}}">
