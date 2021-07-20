@@ -145,7 +145,7 @@
                     <div class="form-group " style="display: {{$usersSelect}}">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-user"></i> PERSONAL </label>
-                         <select class="form-control" wire:model="userIdtoChange" wire:change="findAvailableExternalDaysToChange" name="slcAction">
+                         <select class="form-control" wire:model="userIdtoChange" wire:change="findAvailableExternalDaysToChange">
                             <option value="0" >0 - Dejar disponible </option>
                             @if( isset($users) )
                                 @foreach($users as $u)
@@ -202,7 +202,7 @@
 
                         <label for="exampleFormControlInput1"><i class="fa fa-calendar"></i> Cambiar día por</label>
                         {{--sizeof($availableOwnDaysToChange)--}}
-                        <select class="form-control" wire:model="dayToToChange2" name="slcAction">
+                        <select class="form-control" wire:model.defer="dayToToChange2" name="slcAction">
                             @foreach( $availableOwnDaysToChange as $day )
                             @if(isset($day) && isset($day->id))
                                 <option value="{{$day->id}}">
@@ -227,26 +227,19 @@
                     </div>
                     @endif
                     <div class="form-group" style="display: {{$availableExternalDaysToChangeVisible}}">
-
-                        <label for="exampleFormControlInput1"><i class="fa fa-sun-o"></i> Cambiar día por</label>
-                        
-                        <select class="form-control" wire:model="dayToToChange" name="slcAction">
+                        <label for="exampleFormControlInput1"><i class="fa fa-calendar"></i> Cambiar día por</label>
+                        <select class="form-control" wire:model.defer="dayToToChange">
                             <option value="0"> 0 - No intercambiar por otro día</option>
                             @foreach( $availableExternalDaysToChange as $day )
                                 @if ( isset(  $day->working_day ) && substr( $day->working_day,0, 1) != "+" ) 
-                                
                                     <option value="{{$day->id}}">
                                         {{$loop->iteration}} - {{strtoupper($day->day)}} {{ $day->working_day }}
 
                                         {{ $tiposJornada [ $day->working_day ]}}
                                     </option> 
-                                
                                 @endif    
                             @endforeach
-                      
-
                         </select>
-
                     </div>
 
                     <div class="form-group" style="overflow-y:auto;height: 200px;">

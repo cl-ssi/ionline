@@ -12,6 +12,8 @@ class ShiftUserDay extends Model
     protected $fillable = [ 'day' ,'commentary' ,'status','shift_user_id','working_day','derived_from','shift_close_id' ];
 
 	protected $table = 'rrhh_shift_user_days';
+
+	// protected $dates = [ 'day' ];
 	
 	public function ShiftUser()
 	{
