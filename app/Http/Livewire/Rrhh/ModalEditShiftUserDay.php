@@ -39,6 +39,7 @@ class ModalEditShiftUserDay extends Component
 	public $varLog;
 	public $repeatToDate;
 	public $cantNewHours="00:00";
+	public $chkSuplente =FALSE;
     private $tiposJornada = array(
             'F' => "Libre",
             'D' => "Dia",

@@ -222,9 +222,7 @@
                         </select>
 
                     </div>
-                    <div>
-                        <input type="checkbox"  class="form-control"  name="">
-                    </div>
+                    
                     @endif
                     <div class="form-group" style="display: {{$availableExternalDaysToChangeVisible}}">
                         <label for="exampleFormControlInput1"><i class="fa fa-calendar"></i> Cambiar día por</label>
@@ -240,6 +238,10 @@
                                 @endif    
                             @endforeach
                         </select>
+                    </div>
+                    <div class="form-group" style="display: {{$availableExternalDaysToChangeVisible}}" >
+                        <label for="exampleFormControlInput1">  Suplente</label>
+                        <input type="checkbox"   wire:model="chkSuplente">
                     </div>
 
                     <div class="form-group" style="overflow-y:auto;height: 200px;">
