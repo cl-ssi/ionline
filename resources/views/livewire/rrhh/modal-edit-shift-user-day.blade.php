@@ -161,14 +161,11 @@
 
                         <label for="exampleFormControlInput1"><i class="fa fa-sun-o"></i> Tipo de Jornada </label>
                          <select class="form-control" wire:model="newWorkingDay" name="slcAction">
-
                             @foreach( $tiposJornada as $index=>$tj )
                                 <option value="{{$index}}">
                                 {{$index}} - {{strtoupper($tj)}} 
                                 </option>
                             @endforeach
-                      
-
                         </select>
                     </div>
 
@@ -178,8 +175,9 @@
                     </div>
 
                     <div class="form-group " style="display: {{$usersSelect2}}">
-
-                        <label for="exampleFormControlInput1"><i class="fa fa-user"></i> REMPLAZAR CON </label>
+                        <div class="row">
+                        <div class="col-md-6">
+                             <label for="exampleFormControlInput1"><i class="fa fa-user"></i> REMPLAZAR CON </label>
                          <select class="form-control" wire:model="userIdtoChange2" name="slcAction">
                             <option value="0" >0 - Dejar disponible </option>
                             @if( isset($users) )
@@ -190,7 +188,16 @@
                                 @endforeach
                             @endif
                         </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="exampleFormControlInput1">  Es suplente</label>
+                            <br>
+                        <input type="checkbox"   wire:model="chkSuplente">
+                        </div>
+                        </div>
+                       
                     </div>
+                    
 
                     <div class="form-group" style="display: {{$repeatAction}}">
 
@@ -239,10 +246,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group" style="display: {{$availableExternalDaysToChangeVisible}}" >
-                        <label for="exampleFormControlInput1">  Suplente</label>
-                        <input type="checkbox"   wire:model="chkSuplente">
-                    </div>
+                   
 
                     <div class="form-group" style="overflow-y:auto;height: 200px;">
 
