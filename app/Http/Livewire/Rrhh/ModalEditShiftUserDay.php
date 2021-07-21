@@ -565,7 +565,7 @@ class ModalEditShiftUserDay extends Component
 								
 						}
 				}
-		}elseif($this->action == 7 &&  isset($this->shiftUserDay) ){ // Cambiar jornada laboral
+		}elseif( $this->action == 7  && isset($this->shiftUserDay) ){ // Cambiar jornada laboral
 			$this->shiftUserDay->working_day =$this->newWorkingDay;
 			$this->shiftUserDay->update();
 
@@ -578,7 +578,7 @@ class ModalEditShiftUserDay extends Component
 			$nHistory->previous_value = $this->previousStatus;
 			$nHistory->current_value = $this->newStatus;
 			$nHistory->save();
-		}elseif($this->action == 1 &&  isset($this->shiftUserDay) ){ // Asignar dia laboral a otro usuario, aora es intercambio con otro usuario
+		}elseif( $this->action == 1  && isset($this->shiftUserDay) ){ // Intercambio con otro usuario
 			$this->shiftUserDay->status =$this->newStatus;
 			$this->shiftUserDay->update();
 
@@ -673,7 +673,7 @@ class ModalEditShiftUserDay extends Component
 				$nHistory->current_value = $this->newStatus;
 				$nHistory->save();
 			}
-		}elseif($this->action == 14 &&  isset($this->shiftUserDay)){
+		}elseif( $this->action == 14 && isset($this->shiftUserDay) ){ // Agregar horas por necesida de servicio
 			$nShiftUserDay = new ShiftUserDay;
 			$nShiftUserDay->day = $this->shiftUserDay->day;
 			$nShiftUserDay->status = 1;
@@ -681,6 +681,28 @@ class ModalEditShiftUserDay extends Component
 			$nShiftUserDay->working_day = "+".$this->cantNewHours;
 			$nShiftUserDay->commentary = "Horas agregadas por necesidad de servicio";
 			$nShiftUserDay->save();
+		}elseif( $this->action == 16 && isset($this->shiftUserDay) ){ // intercambio de dia del mes por otro dia del mes del mismo usuario
+			// dd($this->dayToToChange2);
+			$dateOfDay1 =$this->shiftUserDay->day;  // guardo la fecha en que era originalmente el dia
+			
+			$bDay = ShiftUserDay::find($this->dayToToChange2);
+			$dateOfDay2 = $bDay->day; 
+			
+			$bDay->day = $dateOfDay1;
+			$bDay->save();
+
+			$this->shiftUserDay->day = $dateOfDay2;
+			$this->shiftUserDay->save();	
+
+			$nHistory = new ShiftDayHistoryOfChanges;
+			$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha generado el intercamvio en la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id;
+			$nHistory->shift_user_day_id = $this->shiftUserDay->id;
+			$nHistory->modified_by = Auth()->user()->id;
+			$nHistory->change_type = 2;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+			$nHistory->day =  $this->shiftUserDay->day;
+			$nHistory->previous_value = $this->previousStatus;
+			$nHistory->current_value = $this->newStatus;
+			$nHistory->save();
 		}
 		$this->emitUp('refreshListOfShifts');
 		// $this->emitSelf('renderShiftDay');
