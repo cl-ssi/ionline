@@ -149,7 +149,7 @@
                     <td colspan="14" class="brd-bb  brd-l brd-r">
                       <div class="row mb-3">
                         <div class="col-4">
-                            <label class="font-weight-bold text-muted ml-1 mb-0">Mecanismo de Compra:</label><br>
+                            <label class="font-weight-bold text-muted ml-1 mb-0">Mecanismo de Compra:</label>
                             <select wire:model.defer="arrayPurchaseMechanism.{{ $key }}.value" wire:click="resetError" class="form-control form-control-sm" required>
                               <option selected>Seleccione...</option>
                               @foreach($lstPurchaseMechanism as $val)
@@ -158,7 +158,7 @@
                             </select>
                         </div>
                         <div class="col-4">
-                            <label class="font-weight-bold text-muted ml-1 mb-0">Tipo de Compra:</label><br>
+                            <label class="font-weight-bold text-muted ml-1 mb-0">Tipo de Compra:</label>
                             <select wire:model.defer="arrayPurchaseType.{{ $key }}.value" wire:click="resetError" class="form-control form-control-sm" required>
                                 <option selected>Seleccione...</option>
                               @foreach($lstPurchaseType as $type)
@@ -168,7 +168,7 @@
                         </div>
 
                         <div class="col-4">
-                            <label class="font-weight-bold text-muted ml-1 mb-0">Unidad de Compra:</label><br>
+                            <label class="font-weight-bold text-muted ml-1 mb-0">Unidad de Compra:</label>
                             <select wire:model.defer="arrayPurchaseUnit.{{ $key }}.value" wire:click="resetError" class="form-control form-control-sm" required>
                                 <option selected>Seleccione...</option>
                               @foreach($lstPurchaseUnit as $unit)
@@ -180,58 +180,74 @@
 
                       <div class="row mb-3">
                         <div class="col-3">
-                          <label class="font-weight-bold text-muted ml-1 mb-0">ID OC:</label><br>
+                          <label class="font-weight-bold text-muted ml-1 mb-0">ID OC:</label>
                           <input wire:model="idOC.{{ $key }}.value" class="form-control form-control-sm" type="text">
                         </div>
                         <div class="col-3">
-                          <label class="font-weight-bold text-muted ml-1 mb-0">ID OC Interna:</label><br>
+                          <label class="font-weight-bold text-muted ml-1 mb-0">ID OC Interna:</label>
                           <input wire:model="idInternalOC.{{ $key }}.value" class="form-control form-control-sm" type="text">
                         </div>
                         <div class="col-3">
-                          <label class="font-weight-bold text-muted ml-1 mb-0">Fecha OC:</label><br>
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Fecha OC:</label>
                           <input wire:model="dateOC.{{ $key }}.value" type="date" class="form-control form-control-sm" required>
                         </div>
                         <div class="col-3">
-                          <label class="font-weight-bold text-muted ml-1 mb-0">Fecha Envío OC:</label><br>
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Fecha Envío OC:</label>
                           <input wire:model="shippingDateOC.{{ $key }}.value" type="date" class="form-control form-control-sm" required>
                         </div>
                       </div>
 
                       <div class="row mb-3">
                         <div class="col-3">
-                          <label class="font-weight-bold text-muted ml-1 mb-0">ID Gran Compra:</label><br>
+                          <label class="font-weight-bold text-muted ml-1 mb-0">ID Gran Compra:</label>
                           <input wire:model="idBigBuy.{{ $key }}.value" class="form-control form-control-sm" type="text">
                         </div>
                         <div class="col-3">
-                          <label class="font-weight-bold text-muted ml-1 mb-0">Monto Pesos:</label><br>
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Monto Pesos:</label>
                           <input wire:model="pesoAmount.{{ $key }}.value" class="form-control form-control-sm" type="number">
                         </div>
                         <div class="col-3">
-                          <label class="font-weight-bold text-muted ml-1 mb-0">Monto Dólar:</label><br>
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Monto Dólar:</label>
                           <input wire:model="dollarAmount.{{ $key }}.value" class="form-control form-control-sm" type="number">
                         </div>
                         <div class="col-3">
-                          <label class="font-weight-bold text-muted ml-1 mb-0">Monto UF:</label><br>
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Monto UF:</label>
                           <input wire:model="ufAmount.{{ $key }}.value" class="form-control form-control-sm" type="number">
                         </div>
                       </div>
 
                       <div class="row mb-3">
                         <div class="col-3">
-                          <label class="font-weight-bold text-muted ml-1 mb-0">Plazo Entrega:</label><br>
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Plazo Entrega:</label>
                           <input wire:model="deliveryTerm.{{ $key }}.value" class="form-control form-control-sm" type="text">
                         </div>
                         <div class="col-3">
-                          <label class="font-weight-bold text-muted ml-1 mb-0">Fecha Entrega:</label><br>
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Fecha Entrega:</label>
                           <input wire:model="deliveryDate.{{ $key }}.value" type="date" class="form-control form-control-sm" required>
                         </div>
                         <div class="col-3">
-                          <label class="font-weight-bold text-muted ml-1 mb-0">ID Licitación:</label><br>
+                          <label class="font-weight-bold text-muted ml-1 mb-0">ID Licitación:</label>
                           <input wire:model="idOffer.{{ $key }}.value" class="form-control form-control-sm" type="text">
                         </div>
                         <div class="col-3">
-                          <label class="font-weight-bold text-muted ml-1 mb-0">ID Cotización:</label><br>
+                          <label class="font-weight-bold text-muted ml-1 mb-0">ID Cotización:</label>
                           <input wire:model="idQuotation.{{ $key }}.value" class="form-control form-control-sm" type="text">
+                        </div>
+                      </div>
+
+                      <div class="row mb-3">
+                        <div class="col-3">
+                          <label class="font-weight-bold text-muted ml-1 mb-0">Estado de Compra:</label>
+                        </div>
+                        <div class="col-3">
+                          <select wire:model="status.{{ $key }}.value" class="form-control form-control-sm" required>
+                            <option selected>Seleccione...</option>
+                            <option value="en_progreso">En progreso</option>
+                            <option value="parcial">Recepción Parcial</option>
+                            <option value="total">Recepción Total</option>
+                            <option value="desierto">Desierto</option>
+                            <option value="caducado">Caducado</option>
+                          </select>
                         </div>
                       </div>
 
