@@ -582,7 +582,7 @@ class ModalEditShiftUserDay extends Component
 			$this->shiftUserDay->status =$this->newStatus;
 			$this->shiftUserDay->update();
 
-			if($this->userIdtoChange != 0){ // si el id es ditinto a 0 = dejar dia laboral disponible, aora elio un dia en especifico para intercambiar
+			if($this->userIdtoChange != 0){ // si el id es ditinto a 0 = dejar dia laboral disponible, ahora elijo un dia en especifico para intercambiar
 
 				// $chgUsr = User::find( $userIdtoChange );
 				// $bTurno = ShiftUser::where()->first();
@@ -631,6 +631,35 @@ class ModalEditShiftUserDay extends Component
 					$nHistory->save();
 				}else{// intercambio de dia
 						// dd($this->dayToToChange);
+					$ownDayShiftId = $this->shiftUserDay->shift_user_id;
+					$bDay = ShiftUserDay::find($this->dayToToChange);
+					$extDayShiftId = $bDay->shift_user_id;
+
+					$this->shiftUserDay->shift_user_id = $extDayShiftId;
+					$this->shiftUserDay->save();
+
+					$bDay->shift_user_id = $ownDayShiftId;
+					$bDay->save();
+					
+					$nHistory = new ShiftDayHistoryOfChanges;
+					$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha generado el intercamvio en la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange."\"";
+					$nHistory->shift_user_day_id = $this->shiftUserDay->id;
+					$nHistory->modified_by = Auth()->user()->id;
+					$nHistory->change_type = 3;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+					$nHistory->day =  $this->shiftUserDay->day;
+					$nHistory->previous_value = $this->previousStatus;
+					$nHistory->current_value = $this->newStatus;
+					$nHistory->save();
+
+					$nHistory = new ShiftDayHistoryOfChanges;
+					$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha generado el intercambio en la asignacion del dia</b> del usuario \"". $bDay->ShiftUser->user_id . "\" al usuario \"" .$this->shiftUserDay->ShiftUser->user_id."\"";
+					$nHistory->shift_user_day_id = $bDay->id;
+					$nHistory->modified_by = Auth()->user()->id;
+					$nHistory->change_type = 3;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+					$nHistory->day =  $bDay->day;
+					$nHistory->previous_value = $this->previousStatus;
+					$nHistory->current_value = $this->newStatus;
+					$nHistory->save();
 				}
 			}else{ // si el id es = 0 osea DEJAR DIA DISPONIBLE
 
