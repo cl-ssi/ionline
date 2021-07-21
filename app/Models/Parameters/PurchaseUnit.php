@@ -5,7 +5,7 @@ namespace App\Models\Parameters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\RequestForms\RequestForm;
-use App\Models\RequestForms\ItemRequestForm;
+use App\Models\RequestForms\PurchasingProcess;
 
 class PurchaseUnit extends Model
 {
@@ -15,8 +15,8 @@ class PurchaseUnit extends Model
       return $this->hasMany(RequestForm::class, 'purchase_unit_id');
   }
 
-  public function itemRequestForms() {
-      return $this->hasMany(ItemRequestForm::class, 'purchase_unit_id');
+  public function purchasingProcesses() {
+      return $this->hasMany(PurchasingProcess::class, 'purchase_unit_id');
   }
 
 

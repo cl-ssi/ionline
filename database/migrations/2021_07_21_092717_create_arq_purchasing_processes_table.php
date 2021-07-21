@@ -25,6 +25,7 @@ class CreateArqPurchasingProcessesTable extends Migration
             $table->foreignId('purchase_mechanism_id');
             $table->foreignId('purchase_type_id');
             $table->foreignId('purchase_unit_id');
+            $table->foreignId('item_request_form_id');
             $table->enum('status', ['in_progress', 'total', 'partial', 'desert',  'timed_out', 'not_available']);
             $table->dateTime('status_change_date', $precision = 0)->nullable();
             $table->string('id_oc')->nullable();
@@ -44,6 +45,7 @@ class CreateArqPurchasingProcessesTable extends Migration
             $table->foreign('purchase_mechanism_id')->references('id')->on('cfg_purchase_mechanisms');
             $table->foreign('purchase_type_id')->references('id')->on('cfg_purchase_types');
             $table->foreign('purchase_unit_id')->references('id')->on('cfg_purchase_units');
+            $table->foreign('item_request_form_id')->references('id')->on('arq_item_request_forms');
         });
     }
 
