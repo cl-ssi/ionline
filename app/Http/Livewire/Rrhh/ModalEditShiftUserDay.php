@@ -99,7 +99,7 @@ class ModalEditShiftUserDay extends Component
 		// $this->dayToToChange = 0;
 		// $this->newWorkingDay = "F";
     }
-    public function clearModal(){
+    public function clearModal(){ // limpia los valores del livewire
     	// unset($this->shiftUserDay);
     	 $this->reset();
 		// $this->emit('setshiftUserDay', $this->shiftDay->id);
@@ -345,7 +345,7 @@ class ModalEditShiftUserDay extends Component
 			$this->usersSelect ="none";
 		}
 	}
-	public function findAvailableOwnDaysToChange($user_id){
+	public function findAvailableOwnDaysToChange($user_id){ // funcion que se activa cuando cambio la jornada de un usuario, esta funcion busca todos los dias que tiene asignado ese usuario $user_id, y los almacean en un arreglo para posteriormente mostrarlos en el select 
 		$this->dayToToChange2 = 0;
 		$this->availableOwnDaysToChange =  array();
 		if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
@@ -401,8 +401,8 @@ class ModalEditShiftUserDay extends Component
 
 			$this->changeDayType ="visible";
 	}
-	public function update(){//funcion que actualiza la informacion segun el estado elegido en el modal
-		if( ($this->action != 1 && $this->action != 7 && $this->action != 14 && $this->action !=  16) &&  isset($this->shiftUserDay) ){
+	public function update(){//funcion que actualiza la informacion segun el estado elegido del select accion en el modal
+		if( ($this->action != 1 && $this->action != 7 && $this->action != 14 && $this->action !=  16) &&  isset($this->shiftUserDay) ){ // este if es para filtrar solo los que son cambio de estado
 
 				if($this->repeatToDate == $this->shiftUserDay->day ){ // Si esque el cambio en el estado del dia no se repite en un rango de fechas, osea el dia de repeticion es igual al dia actual
 
@@ -437,9 +437,18 @@ class ModalEditShiftUserDay extends Component
 							$bTurno->save();
 						}
 						$nDay = new ShiftUserDay;
-						$nDay->day = $this->shiftUserDay->day;
-						$nDay->commentary = "Dia extra agregado, perteneciente al usuario ".$this->shiftUserDay->ShiftUser->user_id;
-						$nDay->status = 3;
+						if($chkSuplente){
+
+							$nDay->day = $this->shiftUserDay->day;
+							$nDay->commentary = "Dia agregado por concepto de suplencia al funcionario ".$this->shiftUserDay->ShiftUser->user_id;
+							$nDay->status = 1;
+
+						}else{
+
+							$nDay->day = $this->shiftUserDay->day;
+							$nDay->commentary = "Dia extra agregado, perteneciente al usuario ".$this->shiftUserDay->ShiftUser->user_id;
+							$nDay->status = 3;
+						}
 						$nDay->shift_user_id = $bTurno->id;
 						$nDay->working_day = $this->shiftUserDay->working_day;
 						$nDay->derived_from = $this->shiftUserDay->id;
@@ -454,7 +463,7 @@ class ModalEditShiftUserDay extends Component
 						$nHistory->previous_value = $this->previousStatus;
 						$nHistory->current_value = $this->newStatus;
 						$nHistory->save();
-					}else{
+					}else{ // si no se selecciona ningun usuario para remplazo, qedara disponible
 
 						$nHistory = new ShiftDayHistoryOfChanges;
 						$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha dejado el día disponible \"";
@@ -480,7 +489,7 @@ class ModalEditShiftUserDay extends Component
 					$actuallyShift = $this->shiftUserDay->ShiftUser;
 					$days = $actuallyShift->days;
 					$days = $this->shiftUser;
-					$ranges = CarbonPeriod::create($this->shiftUserDay->day, $this->repeatToDate );
+					$ranges = CarbonPeriod::create($this->shiftUserDay->day, $this->repeatToDate ); // creo los rangos con los valores qe rescato de los input repetir hasta en el modal
 						foreach ($ranges as $date) {
 
 							
@@ -500,7 +509,7 @@ class ModalEditShiftUserDay extends Component
 							$nHistory->current_value = $this->newStatus;
 							$nHistory->save();
 
-							if($this->userIdtoChange2 != 0){ // si esque quiere replazarlo con otro usuario
+							if($this->userIdtoChange2 != 0){ // si esque quiere replazarlo con otro usuario pero
 
 								$daysOfMonth = Carbon::createFromFormat('Y-m-d',  $day->day, 'Europe/London');
 								$splitDay = explode("-", $day->day);
@@ -540,9 +549,8 @@ class ModalEditShiftUserDay extends Component
 								$nHistory->previous_value = $this->previousStatus;
 								$nHistory->current_value = $this->newStatus;
 								$nHistory->save();
-							}else{ // si el id es = 0 osea DEJAR DIA DISPONIBLE
 
-							
+							}else{ // si el id es = 0 osea DEJAR DIA DISPONIBLE
 
 								$nHistory = new ShiftDayHistoryOfChanges;
 								$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha dejado el día disponible \"";
