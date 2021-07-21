@@ -17,7 +17,7 @@ class PurchasingProcess extends Component
   public $lastKey, $selectedItems;
   public $arrayCheckBox, $arrayVista, $arrayBgTable;
   public $idOC, $idInternalOC, $dateOC, $shippingDateOC, $idBigBuy, $pesoAmount, $dollarAmount,
-         $ufAmount, $deliveryTerm, $deliveryDate, $idOffer, $idQuotation;
+         $ufAmount, $deliveryTerm, $deliveryDate, $idOffer, $idQuotation, $status;
 
     public function mount(RequestForm $requestForm){
         $this->requestForm            = $requestForm;
@@ -156,6 +156,7 @@ class PurchasingProcess extends Component
       $this->deliveryDate[$key]['value']    =   '';
       $this->idOffer[$key]['value']         =   '';
       $this->idQuotation[$key]['value']     =   '';
+      $this->status[$key]['value']          =   'en_progreso';
     }
 
     public function resetError(){
