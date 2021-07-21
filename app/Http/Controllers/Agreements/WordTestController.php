@@ -116,8 +116,8 @@ class WordTestController extends Controller
 
         //Director
         //construir nombre director
-        $first_name = explode(' ',trim($agreements->director_signer->user->name))[0];
-        $director = mb_strtoupper($first_name . ' ' . $agreements->director_signer->user->fathers_family . ' ' . $agreements->director_signer->user->mothers_family);
+        // $first_name = explode(' ',trim($agreements->director_signer->user->name))[0];
+        $director = mb_strtoupper($agreements->director_signer->user->fullName);
         $directorApelativo = $agreements->director_signer->appellative;
         $directorRut = mb_strtoupper($agreements->director_signer->user->runFormat());
         $directorDecreto = $agreements->director_signer->decree;
@@ -212,6 +212,7 @@ class WordTestController extends Controller
         $mainTemplateProcessor->setValue('numResourceResolucion',$numResourceResolucion);
         $mainTemplateProcessor->setValue('yearResourceResolucion',$yearResourceResolucion);
         $mainTemplateProcessor->setValue('fechaResolucion',$fechaResolucion);
+        $mainTemplateProcessor->setValue('periodoConvenio',$periodoConvenio);
         $mainTemplateProcessor->setValue('fechaResourceResolucion',$fechaResourceResolucion);
         $mainTemplateProcessor->setValue('fechaConvenio',$fechaConvenio); // Cambiar formato d de m y
         $mainTemplateProcessor->setValue('ilustreTitulo',$ilustre);
@@ -275,6 +276,13 @@ class WordTestController extends Controller
             // Se asigna director quien firma la resolución, no necesariamente tiene que ser el mismo quien firmó el addendum
             $addendum->director_signer = Signer::with('user')->find($request->signer_id);
             // No se guarda los cambios en el addendum ya que es solo para efectos de generar el documento
+            $formatter = new NumeroALetras;
+            $formatter->apocope = true;
+            $addendum->load('agreement.agreement_amounts');
+            $totalConvenio = $addendum->agreement->agreement_amounts->sum('amount');
+            $totalConvenioLetras = $this->correctAmountText($formatter->toMoney($totalConvenio,0, 'pesos',''));
+            $templateProcessor->setValue('totalConvenio',number_format($totalConvenio,0,",","."));
+            $templateProcessor->setValue('totalConvenioLetras',$totalConvenioLetras);
         }
 
         $first_word = explode(' ',trim($addendum->agreement->program->name))[0];
@@ -286,12 +294,12 @@ class WordTestController extends Controller
         $fechaResolucionConvenio = $this->formatDate($addendum->agreement->res_exempt_date);
         $directorApelativo = $addendum->director_signer->appellative;
         //construir nombre director
-        $first_name = explode(' ',trim($addendum->director_signer->user->name))[0];
-        $director = mb_strtoupper($first_name . ' ' . $addendum->director_signer->user->fathers_family . ' ' . $addendum->director_signer->user->mothers_family);
+        // $first_name = explode(' ',trim($addendum->director_signer->user->name))[0];
+        $director = mb_strtoupper($addendum->director_signer->user->fullName);
         $directorNationality = Str::contains($addendum->director_signer->appellative, 'a') ? 'chilena' : 'chileno';
 
         $alcaldeNationality = Str::endsWith($addendum->representative_appellative, 'a') ? 'chilena' : 'chileno';
-
+        $alcaldeApelativoCorto = Str::beforeLast($addendum->representative_appellative, ' ');
 		$templateProcessor->setValue('programaTitulo', mb_strtoupper($programa));
 		$templateProcessor->setValue('programa', $programa);
 		$templateProcessor->setValue('periodoConvenio', $addendum->agreement->period);
@@ -312,6 +320,7 @@ class WordTestController extends Controller
         $templateProcessor->setValue('comunaRut', $municipality->rut_municipality);
         $templateProcessor->setValue('ilustre', ucfirst(mb_strtolower($ilustre)));
         $templateProcessor->setValue('alcaldeApelativo', $addendum->representative_appellative);
+        $templateProcessor->setValue('alcaldeApelativoCorto', $alcaldeApelativoCorto);
         $templateProcessor->setValue('alcalde', mb_strtoupper($addendum->representative));
         $templateProcessor->setValue('alcaldeNationality', $alcaldeNationality);
         $templateProcessor->setValue('alcaldeRut', $addendum->representative_rut);
@@ -334,6 +343,8 @@ class WordTestController extends Controller
             $innerXml = Str::beforeLast($innerXml, 'addendum');
             $innerXml .= 'addendum.</w:t></w:r></w:p>';
             // dd($innerXml);
+            $templateProcessorEnd->setValue('programa', $programa);
+            $templateProcessorEnd->setValue('periodoConvenio', $addendum->agreement->period);
             $templateProcessorEnd->setValue('ilustre', ucfirst(mb_strtolower($ilustre)));
             $templateProcessorEnd->setValue('comuna', $addendum->agreement->commune->name);
             $templateProcessorEnd->setValue('emailReferrer', $addendum->referrer != null ? $addendum->referrer->email : '');

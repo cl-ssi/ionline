@@ -126,6 +126,8 @@ Route::group(['middleware' => 'auth:external'], function () {
 });
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+/** Para testing, no he probado pero me la pedian en clave única */
+Route::get('logout-testing', 'Auth\LoginController@logout')->name('logout-testing');
 
 
 
