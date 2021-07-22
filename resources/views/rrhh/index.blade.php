@@ -23,7 +23,6 @@
 	</div>
 </form>
 
-@livewire('search-select-user')
 <br>
 
 <table class="table table-striped table-sm">
