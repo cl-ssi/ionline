@@ -10,10 +10,10 @@
     @csrf
     @method('PUT')
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col">
-            <label for="for_organizational_unit_id">Unidad Organizacional</label>
-            <select name="organizational_unit_id" id="for_organizational_unit_id" class="form-control" style="font-family:monospace; font-size: 15px;">
+            <label for="for_organizational_unit_id">Unidad Organizacional*</label>
+            <select required name="organizational_unit_id" id="for_organizational_unit_id" class="form-control" style="font-family:monospace; font-size: 15px;">
                 <option value="{{ $ouTopLevel->id }}" {{ ($ouTopLevel->id == $authority->organizational_unit_id)?'selected':''}} >{{ $ouTopLevel->name }}</option>
                 @foreach($ouTopLevel->childs as $child_level_1)
                     <option value="{{ $child_level_1->id }}" {{ ($child_level_1->id == $authority->organizational_unit_id)?'selected':''}}> - {{ $child_level_1->name }}</option>
@@ -29,29 +29,25 @@
     </div>
 
     <div class="row">
-        <fieldset class="form-group col-4">
-            <label for="for_user_id">Funcionario</label>
-            <select class="form-control selectpicker" data-live-search="true" id="for_user_id" name="user_id" required data-size="5">
-            <!-- <select name="user_id" id="for_user_id" class="form-control"> -->
-                @foreach($users as $user)
-                <option value="{{ $user->id }}" {{ ($user->id == $authority->user_id)?'selected':''}}>{{ $user->fullName }}</option>
-                @endforeach
-            </select>
+        <fieldset class="form-group col-6">
+            <label for="for_user_id">Funcionario*</label>
+            @livewire('search-select-user', ['user' => $authority->user])
         </fieldset>
 
         <fieldset class="form-group col">
-            <label for="for_from">Desde</label>
-            <input type="date" class="form-control" id="for_from" name="from" required value="{{ $authority->from->format('Y-m-d') }}">
+            <label for="for_from">Desde*</label>
+            <input required type="date" class="form-control" id="for_from" name="from" required value="{{ $authority->from->format('Y-m-d') }}">
         </fieldset>
 
         <fieldset class="form-group col">
-            <label for="for_to">Hasta</label>
-            <input type="date" class="form-control" id="for_to" name="to" required value="{{ $authority->to->format('Y-m-d') }}">
+            <label for="for_to">Hasta*</label>
+            <input required type="date" class="form-control" id="for_to" name="to" required value="{{ $authority->to->format('Y-m-d') }}">
         </fieldset>
-
-
+    
+    </div>
+    <div class="form-row">
         <fieldset class="form-group col">
-            <label for="for_position">Cargo</label>
+            <label for="for_position">Cargo*</label>
             <select name="position" id="for_position" class="form-control" required>
                 <option {{ ($authority->position == 'Director')?'selected':'' }}>Director</option>
                 <option {{ ($authority->position == 'Directora')?'selected':'' }}>Directora</option>
@@ -78,19 +74,16 @@
 
 
         <fieldset class="form-group col">
-            <label for="for_type">Tipo</label>
-            <select name="type" id="for_type" class="form-control">
+            <label for="for_type">Tipo*</label>
+            <select name="type" id="for_type" class="form-control" required>
                 <option value="manager" {{ ($authority->type == 'manager')?'selected':'' }}>Encargado (Jefes)</option>
                 <option value="delegate" {{ ($authority->type == 'delegate')?'selected':'' }}>Delegado (Igual acceso que el jefe)</option>
                 <option value="secretary" {{ ($authority->type == 'secretary')?'selected':'' }}>Secretario/a</option>
             </select>
         </fieldset>
 
-    </div>
-
-    <div class="row">
         <fieldset class="form-group col">
-            <label for="for_decree">Decreto que autoriza al funcionario ejercer cargo</label>
+            <label for="for_decree">Decreto autorización ejercer cargo</label>
             <input type="text" class="form-control" id="for_decree" name="decree" value="{{$authority->decree}}">
         </fieldset>
     </div>
