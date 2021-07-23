@@ -14,6 +14,7 @@ class PurchasingProcess extends Model
 {
     use HasFactory;
 
+
     protected $fillable = [
         'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id', 'status', 'status_change_date', 'id_oc', 'id_internal_oc',
         'date_oc', 'shipping_date_oc', 'id_big_buy', 'peso_amount', 'dollar_amount', 'uf_amount', 'delivery_term', 'delivery_date',
@@ -35,9 +36,6 @@ class PurchasingProcess extends Model
     public function itemRequestForm(){
       return $this->belongsTo(ItemRequestForm::class, 'item_request_form_id');
     }
-
-
-
 
     /**
     * The table associated with the model.

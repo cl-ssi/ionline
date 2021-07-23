@@ -27,7 +27,7 @@ class PurchasingProcess extends Component
         $this->lstPurchaseType        = PurchaseType::all();
         $this->lstPurchaseUnit        = PurchaseUnit::all();
         $this->lstPurchaseMechanism   = PurchaseMechanism::all();
-        $this->radioSource        = null;
+        $this->radioSource            = null;
         $this->configInitialParameters();
     }
 

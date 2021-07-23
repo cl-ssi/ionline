@@ -147,6 +147,18 @@
                 @if($arrayVista[$key])
                   <tr class="{{$arrayBgTable[$key]}}">
                     <td colspan="14" class="brd-bb  brd-l brd-r">
+
+                      <div class="row mb-3">
+                        <div class="col-6">
+                          @foreach($item->purchasingProcesses as $pp)
+                            @if($pp->status=='in_progress')
+                              Id: {{$pp->id}} <br>
+                              Creación: {{$pp->created_at}} <br>
+                            @endif
+                          @endforeach
+                        </div>
+                      </div>
+
                       <div class="row mb-3">
                         <div class="col-4">
                             <label class="font-weight-bold text-muted ml-1 mb-0">Mecanismo de Compra:</label>
