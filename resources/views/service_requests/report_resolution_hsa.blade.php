@@ -352,7 +352,7 @@
       </p>
 
       @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->estate == "Profesional Médico")
+      @if($ServiceRequest->estate == "Profesional Médico" or $ServiceRequest->estate == "Profesional")
       <p class="justify">
         <strong>OCTAVO:</strong> El “valor por hora” será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
