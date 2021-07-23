@@ -5,6 +5,7 @@ namespace App\Http\Livewire\RequestForm;
 use Livewire\Component;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\EventRequestForm;
+use App\Models\RequestForms\PurchasingProcess;
 use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseMechanism;
@@ -52,6 +53,17 @@ class Authorization extends Component
       }
     }
 
+    private function createPurchasingProcesses(){
+      foreach($this->requestForm->itemRequestForms as $item){
+        $purchasingProcess = new PurchasingProcess([
+          'status'                  =>        'in_progress',
+          'purchase_mechanism_id'   =>        $this->purchaseMechanism,
+          'purchase_type_id'        =>        $this->purchaseType,
+          'purchase_unit_id'        =>        $this->purchaseUnit,
+        ]);
+        $item->purchasingProcesses()->save($purchasingProcess);
+      }
+    }
 
     public function resetError(){
       $this->resetErrorBag();
@@ -77,7 +89,9 @@ class Authorization extends Component
         $this->requestForm->purchase_unit_id        =  $this->purchaseUnit;
         $this->requestForm->purchase_type_id        =  $this->purchaseType;
         $this->requestForm->purchase_mechanism_id   =  $this->purchaseMechanism;
+        $this->createPurchasingProcesses();
       }
+
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'created')->first();
       if(!is_null($event)){
            $this->requestForm->status = 'in_progress';
