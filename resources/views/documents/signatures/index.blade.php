@@ -189,13 +189,15 @@
                         @elseif($signedSignaturesFlow->status === 0)
                             <p class="text-danger">Rechazada</p>
                         @else Pendiente @endif
-                    </td>
+                    </td>                    
                     <td>
+                    @if($signedSignaturesFlow->signature)
                         <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
                                 onclick="getSignatureFlowsModal({{$signedSignaturesFlow->signature->id}})"
                                 title="Ver circuito de firmas"
                         ><i class="fas fa-search"></i>
                         </button>
+                    @endif
                     </td>
                     <td>
                         <!-- <a href="{{ route('documents.signatures.showPdf',
