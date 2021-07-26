@@ -5,7 +5,16 @@
 @section('content')
 
 	@include("rrhh.shift_management.tabs", array('actuallyMenu' => 'shiftclose'))
-
+	<style type="text/css">
+		    .only-icon {
+        background-color: Transparent;
+        background-repeat:no-repeat;
+        border: none;
+        cursor:pointer;
+        overflow: hidden;
+        outline:none;
+    }
+	</style>
 	<h3>Cierre de turnos</h3>
 	<br>
 	<div class="row"> 
@@ -172,14 +181,15 @@
 							@livewire( 'rrhh.see-shift-control-form', ['usr'=>$f->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>1], key($loop->index) )
 
 							<form method="post" action="{{ route('rrhh.shiftManag.closeShift.closeConfirmation') }}">
-							@csrf
-        					{{ method_field('post') }}
+								@csrf
+        						{{ method_field('post') }}
 
-							<input type="hidden" name="ShiftCloseId" value="{{$f->id}}">
-							<button class="btn btn-success">Cerrar</button>
-							<!-- <button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Confirmar</button> -->
+								<input type="hidden" name="ShiftCloseId" value="{{$f->id}}">
+								<button class="btn btn-success">Cerrar</button>
+								<!-- <button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Confirmar</button> -->
 
-						</form>
+							</form>
+
 						</td>
 					</tr>
 				@endforeach
@@ -204,19 +214,27 @@
 					<td>{{$loop->iteration }}</td>
 					<td>{{$s->user->runFormat() }}</td>
 					<td>{{$s->user->getFullNameAttribute() }}</td>
-						<form method="post" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
-					<td><input type="text" class="form-control" name="comment" value="Comentario de prueba desde el area anterior"> </td>
-					<!-- <td>100</td> -->
-					<td>
+					<form method="post" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
+						<td><input type="text" class="form-control" name="comment" value="Comentario de prueba desde el area anterior"> </td>
+						<!-- <td>100</td> -->
+						<td>
+							@csrf
+        					{{ method_field('post') }}
+
+								<input type="hidden" name="userId" value="{{$s->user->id}}">
+								<input type="hidden" name="cierreId" value="{{ $cierreDelMes->id }}">
+								<button class="btn btn-success">Confirmar</button>
+								<!-- <button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Confirmar</button> -->
+
+					</form>
+					<form method="post" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
 						@csrf
         				{{ method_field('post') }}
 
-							<input type="hidden" name="userId" value="{{$s->user->id}}">
-							<input type="hidden" name="cierreId" value="{{ $cierreDelMes->id }}">
-							<button class="btn btn-success">Confirmar</button>
-							<!-- <button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Confirmar</button> -->
-
-						</form>
+						<input type="hidden" name="userId" value="{{$s->user->id}}">
+						<input type="hidden" name="cierreId" value="{{ $cierreDelMes->id }}">
+						<button class="btn btn-danger">Rechazar</button>
+					</form>
 
                     	@livewire( 'rrhh.see-shift-control-form', ['usr'=>$s->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>1], key($loop->index) )
 
@@ -226,6 +244,22 @@
 			</tbody>
 		</table>
 	<br>
+	<h4>Rechazados</h4>
+	<br>
+	<table  class="table table-sm">
+		<thead class="thead-dark">
+			<tr>
+				<th>#</th>
+				<th>Rut</th>
+				<th>Nombre</th>
+				<th>Comentarios</th>
+				<!-- <th>Cant. horas</th> -->
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">

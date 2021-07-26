@@ -130,12 +130,12 @@ class ModalEditShiftUserDay extends Component
 						// $this->varLog .=" >> foreach  shiftUser <br> ".">> uShiftDays:".json_encode($suser)."<br>";
 						if ( isset($suser->days) && $suser->days->where("day",$this->shiftUserDay->day) != null){
 							$sUDay = $suser->days->where("day",$this->shiftUserDay->day)->first();
-							$this->varLog .=" >> foreach:"."<p align='center'>"." suser : ".$sUDay['working_day']."</p><br>" ;
+							// $this->varLog .=" >> foreach:"."<p align='center'>"." suser : ".$sUDay['working_day']."</p><br>" ;
 
 							if($sUDay['working_day'] !="F" && $sUDay['working_day'] != "" ){
-								$this->varLog .="<p align='center'>"." IF UNSET  : ".$index."".$u->id."</p><br>" ;
+								// $this->varLog .="<p align='center'>"." IF UNSET  : ".$index."".$u->id."</p><br>" ;
 
-								$this->users->forget($index);
+							//	$this->users->forget($index); con este filtra solo los usuarios qe tienen el dia disponible
 							}
 
 						}else{
@@ -632,14 +632,20 @@ class ModalEditShiftUserDay extends Component
 				}else{// intercambio de dia
 						// dd($this->dayToToChange);
 					$ownDayShiftId = $this->shiftUserDay->shift_user_id;
+					$ownDayShiftDay =  $this->shiftUserDay->day;
+
 					$bDay = ShiftUserDay::find($this->dayToToChange);
 					$extDayShiftId = $bDay->shift_user_id;
+					$extDayShiftDay = $bDay->day;
 
+					$this->shiftUserDay->day = $extDayShiftDay;
 					$this->shiftUserDay->shift_user_id = $extDayShiftId;
-					$this->shiftUserDay->save();
+					$this->shiftUserDay->update();
 
 					$bDay->shift_user_id = $ownDayShiftId;
-					$bDay->save();
+					$bDay->day = $ownDayShiftDay;
+					$bDay->status = 4;
+					$bDay->update();
 					
 					$nHistory = new ShiftDayHistoryOfChanges;
 					$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha generado el intercamvio en la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange."\"";
@@ -685,21 +691,31 @@ class ModalEditShiftUserDay extends Component
 			// dd($this->dayToToChange2);
 			$dateOfDay1 =$this->shiftUserDay->day;  // guardo la fecha en que era originalmente el dia
 			
-			$bDay = ShiftUserDay::find($this->dayToToChange2);
-			$dateOfDay2 = $bDay->day; 
+			$bDay = ShiftUserDay::find($this->dayToToChange2); // busco el ID del dia con el cual lo vo a intercambiar
+			$dateOfDay2 = $bDay->day; // cuando lo encuentro seteo el valor del DAY 
 			
 			$bDay->day = $dateOfDay1;
-			$bDay->save();
+			$bDay->update();
 
 			$this->shiftUserDay->day = $dateOfDay2;
-			$this->shiftUserDay->save();	
+			$this->shiftUserDay->update();	
 
 			$nHistory = new ShiftDayHistoryOfChanges;
-			$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha generado el intercamvio en la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id;
+			$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha generado el intercambio en la asignacion del dia</b> del usuario por necesidad del servicio \"". $this->shiftUserDay->ShiftUser->user_id;
 			$nHistory->shift_user_day_id = $this->shiftUserDay->id;
 			$nHistory->modified_by = Auth()->user()->id;
 			$nHistory->change_type = 2;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
 			$nHistory->day =  $this->shiftUserDay->day;
+			$nHistory->previous_value = $this->previousStatus;
+			$nHistory->current_value = $this->newStatus;
+			$nHistory->save();
+
+			$nHistory = new ShiftDayHistoryOfChanges;
+			$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha generado el intercambio en la asignacion del dia</b> del usuario por necesidad del servicio \"". $bDay->ShiftUser->user_id;
+			$nHistory->shift_user_day_id = $bDay->id;
+			$nHistory->modified_by = Auth()->user()->id;
+			$nHistory->change_type = 2;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+			$nHistory->day =  $bDay->day;
 			$nHistory->previous_value = $this->previousStatus;
 			$nHistory->current_value = $this->newStatus;
 			$nHistory->save();
