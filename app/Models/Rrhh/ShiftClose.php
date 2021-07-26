@@ -16,5 +16,25 @@ class ShiftClose extends Model
         return $this->belongsTo(\App\User::class, 'owner_of_the_days_id');
     }
 
+    public function status()
+    {   
+        $name = "";
+        if( $this->status == 1 ){
+            $name = "Confirmado";
+        
+        }elseif ($this->status == 2) {
+            $name = "Cerrado";
+            
+        }elseif ($this->status == 3){
+            $name = "Rechazado";
+
+        }elseif ($this->status == 4){
+            $name = "Confirmado - Rechazado";
+
+        }
+
+        return  array("id"=>$this->status,"name"=>$name);
+    }
+
 
 }

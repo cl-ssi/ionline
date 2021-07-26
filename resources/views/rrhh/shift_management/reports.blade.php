@@ -129,7 +129,10 @@
     </form>
 
 <br>
-<h5>#{{sizeof($reportResult)}} Registros coincidentes con la busqueda </h5>
+<h5>#{{sizeof($reportResult)}} Registros coincidentes con la busqueda 
+    
+    <a href="#"  class="btn btn-outline-success btn-xs"> <i class="fa fa-file-excel"></i></a>
+ </h5>
 <br>
 	<table class="table table-sm table-bordered" style=" max-height: 450px;overflow: auto;display:inline-block;">
 		<thead>
