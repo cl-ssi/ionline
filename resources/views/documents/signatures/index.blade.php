@@ -214,9 +214,11 @@
                     </td>
                    <td>
                         @foreach($signedSignaturesFlow->signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
+                        @if($signedSignaturesFlow->signature)
                             <a href="{{route('documents.signatures.showPdfAnexo', $anexo)}}"
                                target="_blank"><i class="fas fa-paperclip" title="anexo"></i>&nbsp
                             </a>
+                        @endif
                         @endforeach
                     </td>
                 </tr>
