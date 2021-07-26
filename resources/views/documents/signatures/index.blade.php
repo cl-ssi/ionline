@@ -212,14 +212,14 @@
                         <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
                     </td>
-                   <td>
+                   <td>@if($signedSignaturesFlow->signature)
                         @foreach($signedSignaturesFlow->signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
-                        @if($signedSignaturesFlow->signature)
+                        
                             <a href="{{route('documents.signatures.showPdfAnexo', $anexo)}}"
                                target="_blank"><i class="fas fa-paperclip" title="anexo"></i>&nbsp
-                            </a>
-                        @endif
+                            </a>                        
                         @endforeach
+                        @endif
                     </td>
                 </tr>
             @endforeach
