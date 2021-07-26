@@ -178,7 +178,7 @@
             @foreach($signedSignaturesFlows as $signedSignaturesFlow)
                 <tr>
                     <td>{{ $signedSignaturesFlow->signature->id ??'' }}</td>
-                    <td>{{ $signedSignaturesFlow->signature->request_date? Carbon\Carbon::parse($signedSignaturesFlow->signature->request_date)->format('Y-m-d'):'' }}</td>
+                    <td>{{ $signedSignaturesFlow->signature? Carbon\Carbon::parse($signedSignaturesFlow->signature->request_date)->format('Y-m-d'):'' }}</td>
                     <td>{{ $signedSignaturesFlow->signature->responsable->getFullNameAttribute()??'' }}</td>
                     <td>{{$signedSignaturesFlow->type??''}}</td>
                     <td>{{ $signedSignaturesFlow->signature->subject??'' }}</td>
