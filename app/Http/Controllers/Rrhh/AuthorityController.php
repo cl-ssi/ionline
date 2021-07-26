@@ -87,12 +87,12 @@ class AuthorityController extends Controller
         //dd($request->establishment_id);
         if($request->establishment_id)
         {
-        $users = User::orderBy('name')->orderBy('fathers_family')->get();
+        //$users = User::orderBy('name')->orderBy('fathers_family')->get();
         $ous = OrganizationalUnit::All();
         //$ouTopLevel = OrganizationalUnit::Find(1);
         $ouTopLevel = OrganizationalUnit::where('level', 1)->where('establishment_id', $request->establishment_id)->first();
         //dd($ouTopLevel);
-        return view('rrhh.authorities.create', compact('ous','users','ouTopLevel'));
+        return view('rrhh.authorities.create', compact('ous','ouTopLevel'));
         }
 
     }
@@ -133,10 +133,9 @@ class AuthorityController extends Controller
      */
     public function edit(Authority $authority)
     {
-        $users = User::orderBy('name')->orderBy('fathers_family')->get();
         $ous = OrganizationalUnit::All();
         $ouTopLevel = OrganizationalUnit::Find(1);
-        return view('rrhh.authorities.edit', compact('ous','users','ouTopLevel','authority'));
+        return view('rrhh.authorities.edit', compact('ous','ouTopLevel','authority'));
     }
 
     /**

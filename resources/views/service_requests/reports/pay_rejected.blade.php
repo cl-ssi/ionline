@@ -40,6 +40,21 @@
     </select>
 
     <div class="input-group-prepend">
+      <span class="input-group-text">Establecimiento</span>
+    </div>
+    <select class="form-control selectpicker" data-live-search="true" name="establishment_id" data-size="5">
+      <option value=""></option>
+      @if($establishments)
+      @foreach($establishments as $key => $establishment)
+      <option value="{{$establishment->id}}" {{ (old('establishment_id')==$establishment->id)?'selected':''}}>{{$establishment->name}}</option>
+      @endforeach
+      @endif
+
+    </select>
+
+
+
+    <div class="input-group-prepend">
       <span class="input-group-text">Centro de Responsabilidad</span>
     </div>
     <select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" data-size="5">

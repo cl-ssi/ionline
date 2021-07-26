@@ -8,8 +8,9 @@
         @if(!$user) 
             wire:model.debounce.1000ms="query"
             wire:keydown.escape="resetx"
+            required
         @else 
-            wire:model="selectedName" 
+            wire:model.debounce.1000ms="selectedName" 
             disabled readonly
         @endif
         />
@@ -21,7 +22,7 @@
     </div>
 
     @if($user)
-    <input type="hidden"  name="{{ $selected_id }}" value="{{ $user->id }}">
+    <input type="hidden"  name="{{ $selected_id }}" value="{{ $user->id }}" required>
     @endif
 
     @if(!empty($query))
