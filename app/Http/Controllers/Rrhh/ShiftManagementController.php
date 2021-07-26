@@ -789,7 +789,6 @@ class ShiftManagementController extends Controller
     
     public function closeShift(){ // direcciona a vista para cerrar los turnos, utilizado por rrhh del hospital.
 
-
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
         $cargos = OrganizationalUnit::all();
         $months = $this->months;
@@ -1235,13 +1234,29 @@ class ShiftManagementController extends Controller
 
     public function closeDaysConfirmation(Request $r){
 
-       $f =  ShiftClose::find($r->input("ShiftCloseId"));
+        $f =  ShiftClose::find($r->input("ShiftCloseId"));
+        $f->status = 2;
         $f->close_commentary = "";
         $f->close_status = 1;
         $f->close_date = Carbon::now()->format('Y-m-d');;
         $f->close_user_id =  Auth()->user()->id; ;
-       $f->save();
-       session()->flash('success', 'Se han cerrado los días ');
+        $f->save();
+        session()->flash('success', 'Se han cerrado los días ');
         return redirect()->route('rrhh.shiftManag.closeShift');
     }
+
+    public function rejectedDays(Request $r){
+
+        $f =  ShiftClose::find($r->input("ShiftCloseId"));
+        $f->status = 3;
+        $f->close_commentary = "";
+        $f->close_status = 2;
+        $f->close_date = Carbon::now()->format('Y-m-d');;
+        $f->close_user_id =  Auth()->user()->id; ;
+        $f->save();
+        session()->flash('success', 'Se han cerrado los días ');
+        return redirect()->route('rrhh.shiftManag.closeShift');
+    
+    }
+
 }
