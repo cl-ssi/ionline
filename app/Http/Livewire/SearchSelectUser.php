@@ -29,6 +29,7 @@ class SearchSelectUser extends Component
         $this->query = '';
         $this->users = [];
         $this->user = null;
+        $this->selectedName = null;
     }
 
     public function mount()

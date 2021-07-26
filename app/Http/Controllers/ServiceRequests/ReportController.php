@@ -327,7 +327,9 @@ class ReportController extends Controller
     $program_contract_type = $request->program_contract_type;
     $working_day_type = $request->working_day_type;
     $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
+    $establishments = Establishment::orderBy('name', 'ASC')->get();
     $responsability_center_ou_id = $request->responsability_center_ou_id;
+    $establishment_id = $request->establishment_id;
 
     $fulfillments = Fulfillment::where('payment_ready', 0)
       ->when($program_contract_type != null, function ($q) use ($program_contract_type) {
@@ -345,6 +347,11 @@ class ReportController extends Controller
           $subQuery->where('responsability_center_ou_id', $responsability_center_ou_id);
         });
       })
+      ->when($establishment_id != null, function ($q) use ($establishment_id) {
+        return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
+          $subQuery->where('establishment_id', $establishment_id);
+        });
+      })
 
       ->orderByDesc('id')
       ->get();
@@ -356,7 +363,8 @@ class ReportController extends Controller
     //   })->get();
 
     // }
-    return view('service_requests.reports.pay_rejected', compact('fulfillments', 'request','responsabilityCenters'));
+    $request->flash();
+    return view('service_requests.reports.pay_rejected', compact('fulfillments', 'request','responsabilityCenters', 'establishments'));
   }
 
   public function budgetAvailability(ServiceRequest $serviceRequest)
