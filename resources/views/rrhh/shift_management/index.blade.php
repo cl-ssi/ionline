@@ -437,11 +437,12 @@
     }
     .btn-full2 {
         display: inline;
-        width: 100%;
+        /*width: 100%;*/
         height: 100%;
         margin:-1000px;
-        padding: 10px;
+        /*padding: 10px;*/
         font-weight: bold;
+        /*font-size: 15px;*/
     }
 </style>
 
