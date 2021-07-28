@@ -606,7 +606,7 @@ class ModalEditShiftUserDay extends Component
 						$bTurno->shift_types_id = $this->shiftUserDay->ShiftUser->shift_types_id;
 						$bTurno->organizational_units_id = $this->shiftUserDay->ShiftUser->organizational_units_id;
 						if(Session::has('groupname') && Session::get('groupname') != "")
-							$bTurno->groupname ="groupname";
+							$bTurno->groupname =Session::get('groupname');
 						else
 							$bTurno->groupname ="";
 						$bTurno->save();
