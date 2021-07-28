@@ -476,6 +476,8 @@
         El gasto corresponde al ítem 31-02-001 SUBT.21 ( Consultorías) Honorario Suma Alzada.
         @elseif($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG")
         21-03-001-001-02 Honorarios a Suma Alzada del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique. )
+        @elseif($ServiceRequest->programm_name == "33 MIL HORAS")
+        21-03-001-001-06 Honorarios Suma Alzada “Programa Cierres de Brechas 33.000 horas” dispuestos por el Ministerio de Salud, Subtítulo 21. 
         @endif
         Honorario Suma Alzada.
 
