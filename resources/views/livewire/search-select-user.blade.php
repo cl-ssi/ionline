@@ -5,9 +5,9 @@
             class="form-control" 
             placeholder="Nombre" 
             aria-label="Nombre"
+            wire:keydown.escape="resetx"
         @if(!$user) 
             wire:model.debounce.1000ms="query"
-            wire:keydown.escape="resetx"
             required
         @else 
             wire:model.debounce.1000ms="selectedName" 
@@ -26,7 +26,7 @@
     @endif
 
     @if(!empty($query))
-        <ul class="list-group">
+        <ul class="list-group col-12" style="z-index: 3; position: absolute;">
             @if( count($users) >= 1 )
                 @foreach($users as $user)
                     <a wire:click="setUser({{$user->id}})"
@@ -34,9 +34,9 @@
                     >{{ $user->fullName }} </a>
                 @endforeach
             @elseif($msg_too_many)
-                <div class="list-group-item disabled">Hemos encontrado muchas coincidencias</div>
+                <div class="list-group-item list-group-item-info">Hemos encontrado muchas coincidencias</div>
             @else 
-                <div class="list-group-item disabled">No hay resultados</div>
+                <div class="list-group-item list-group-item-warning">No hay resultados</div>
             @endif
         </ul>
     @endif

@@ -28,7 +28,7 @@
         </fieldset>
     </div>
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-6">
             <label for="for_user_id">Funcionario*</label>
             @livewire('search-select-user', ['user' => $authority->user])
