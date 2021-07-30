@@ -351,8 +351,7 @@
         </b>
       </p>
 
-      @elseif($ServiceRequest->program_contract_type == "Horas")
-      @if($ServiceRequest->estate == "Profesional Médico" or $ServiceRequest->estate == "Profesional" or $ServiceRequest->estate == "Técnico")
+      @elseif($ServiceRequest->program_contract_type == "Horas")    
       <p class="justify">
         <strong>OCTAVO:</strong> El “valor por hora” será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
@@ -371,7 +370,6 @@
         </b>
       </p>
 
-      @endif
       @endif
 
 
@@ -478,6 +476,8 @@
         El gasto corresponde al ítem 31-02-001 SUBT.21 ( Consultorías) Honorario Suma Alzada.
         @elseif($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG")
         21-03-001-001-02 Honorarios a Suma Alzada del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique. )
+        @elseif($ServiceRequest->programm_name == "33 MIL HORAS")
+        21-03-001-001-06 Honorarios Suma Alzada “Programa Cierres de Brechas 33.000 horas” dispuestos por el Ministerio de Salud, Subtítulo 21. 
         @endif
         Honorario Suma Alzada.
 

@@ -178,9 +178,9 @@
             @foreach($signedSignaturesFlows as $signedSignaturesFlow)
                 <tr>
                     <td>{{ $signedSignaturesFlow->signature->id ??'' }}</td>
-                    <td>{{ Carbon\Carbon::parse($signedSignaturesFlow->signature->request_date)->format('Y-m-d')??'' }}</td>
-                    <td>{{ $signedSignaturesFlow->signature->responsable->getFullNameAttribute()??'' }}</td>
-                    <td>{{$signedSignaturesFlow->type??''}}</td>
+                    <td>{{ $signedSignaturesFlow->signature? Carbon\Carbon::parse($signedSignaturesFlow->signature->request_date)->format('Y-m-d'):'' }}</td>
+                    <td>{{ $signedSignaturesFlow->signature? $signedSignaturesFlow->signature->responsable->getFullNameAttribute():'' }}</td>
+                    <td>{{$signedSignaturesFlow->signature? $signedSignaturesFlow->type :''}}</td>
                     <td>{{ $signedSignaturesFlow->signature->subject??'' }}</td>
                     <td>{{ $signedSignaturesFlow->signature->description??'' }}</td>
                     <td>
@@ -189,13 +189,15 @@
                         @elseif($signedSignaturesFlow->status === 0)
                             <p class="text-danger">Rechazada</p>
                         @else Pendiente @endif
-                    </td>
+                    </td>                    
                     <td>
+                    @if($signedSignaturesFlow->signature)
                         <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
                                 onclick="getSignatureFlowsModal({{$signedSignaturesFlow->signature->id}})"
                                 title="Ver circuito de firmas"
                         ><i class="fas fa-search"></i>
                         </button>
+                    @endif
                     </td>
                     <td>
                         <!-- <a href="{{ route('documents.signatures.showPdf',
@@ -210,12 +212,14 @@
                         <span class="fas fa-file" aria-hidden="true"></span>
                         </a>
                     </td>
-                   <td>
+                   <td>@if($signedSignaturesFlow->signature)
                         @foreach($signedSignaturesFlow->signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
+                        
                             <a href="{{route('documents.signatures.showPdfAnexo', $anexo)}}"
                                target="_blank"><i class="fas fa-paperclip" title="anexo"></i>&nbsp
-                            </a>
+                            </a>                        
                         @endforeach
+                        @endif
                     </td>
                 </tr>
             @endforeach
