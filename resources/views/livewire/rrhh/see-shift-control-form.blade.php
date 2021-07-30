@@ -237,8 +237,11 @@
                                             @php
                                                 $date2 = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYears."-".$actuallyMonth."-".$i);  
                                                 $date =explode(" ",$date2);
-                                                $d = $shifsUsr->days->where('day',$date[0]);
-                                                
+
+                                                if(isset($shifsUsr) && isset($shifsUsr->days))
+                                                    $d = $shifsUsr->days->where('day',$date[0]);
+                                                else
+                                                    $d = array();
                                             @endphp
                                             @foreach($d as $dd)
                         					   <tr>

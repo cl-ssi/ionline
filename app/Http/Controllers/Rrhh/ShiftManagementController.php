@@ -102,6 +102,8 @@ class ShiftManagementController extends Controller
         14 => "Permiso a Curso",
         15 => "Ausencia sin justificar",
         16 => "Cambiado por necesidad de servicio",
+        17 => "Abandono de funciones",
+
     );   
     public $timePerDay = array(
        

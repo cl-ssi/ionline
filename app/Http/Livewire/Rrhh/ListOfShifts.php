@@ -104,7 +104,7 @@ class ListOfShifts extends Component
         if($actuallyShift)
             $this->actuallyShift = $actuallyShift;
         if($this->actuallyShift->id != 0)
-            $this->staffInShift = ShiftUser::where('organizational_units_id', $this->actuallyOrgUnit->id )->where('shift_types_id',$this->actuallyShift->id)->where('date_up','>=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->where('date_from','<=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->where('groupname',htmlentities(Session::get('groupname')))->get();
+            $this->staffInShift = ShiftUser::where('organizational_units_id', $this->actuallyOrgUnit->id )->where('shift_types_id',$this->actuallyShift->id)->where('date_up','>=',$this->actuallyYear."-".$this->actuallyMonth."-01")->where('date_from','<=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->where('groupname',htmlentities(Session::get('groupname')))->get();
         // else
         //     $this->staffInShift = ShiftUser::where('organizational_units_id', $this->actuallyOrgUnit->id )->where('date_up','>=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->where('date_from','<=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->get();
     }
