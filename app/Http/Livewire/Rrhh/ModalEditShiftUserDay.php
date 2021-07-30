@@ -72,7 +72,7 @@ class ModalEditShiftUserDay extends Component
     private $colors = array(
             1 => "lightblue",
             2 => "#2471a3",
-            3 => " #52be80 ",
+            3 => "#52be80",
             4 => "orange",
             5 => "#ec7063",
             6 => "#af7ac5",
@@ -86,7 +86,7 @@ class ModalEditShiftUserDay extends Component
             14  => "brown",
             15  => "lightred",
             16  => "lightbrown",
-            16  => "lightred",
+            17  => "lightred",
     );
     protected $listeners = ['setshiftUserDay','clearModal','ChangeWorkingDay'=>'enableChangeTypeOfWorkingDay','findAvailableOwnDaysToChange'];
     // public function mount(array $headers){
