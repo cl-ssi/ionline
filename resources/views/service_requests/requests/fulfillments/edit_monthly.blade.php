@@ -246,6 +246,9 @@
 				<a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',[$fulfillment, time()]) }}" target="_blank" title="Certificado">
 					Certificado firmado <i class="fas fa-signature"></i>
 				</a>
+				<a class="btn btn-outline-danger ml-4" href="{{ route('rrhh.service-request.fulfillment.delete-signed-certificate-pdf',$fulfillment) }}" title="Borrar Certificado" onclick="return confirm('¿Está seguro que desea eliminar el certificado de cumplimiento firmado?')">
+				<i class="fas fa-trash"></i>
+				</a>
 				@else
 				@php
 				$idModelModal = $fulfillment->id;
@@ -342,13 +345,13 @@
 						<div class="col-12 col-md-2">
 							<button type="submit" class="btn btn-primary">Guardar</button>
 						</div>
-						<div class="col-12 col-md-7">
+						<!-- <div class="col-12 col-md-7">
 							@if($fulfillment->total_to_pay)
 							@livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment])
 							@else
 							No se ha ingresado el "Total a pagar".
 							@endif
-						</div>
+						</div> -->
 						<div class="col-12 col-md-3 text-right">
 							@if($fulfillment->rrhh_approver_id == NULL)
 							<a type="button" class="btn btn-danger" onclick="return confirm('Una vez confirmado, no podrá modificar la información. ¿Está seguro de rechazar?');" href="{{ route('rrhh.service-request.fulfillment.refuse-Fulfillment',$fulfillment) }}">
