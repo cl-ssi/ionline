@@ -67,6 +67,7 @@ class ModalEditShiftUserDay extends Component
            14 => "Permiso a Curso",
            15 => "Ausencia sin justificar",
            16 => "Cambiado por necesidad de servicio",
+           17 => "Abandono de funciones",
     );
     private $colors = array(
             1 => "lightblue",
@@ -85,6 +86,7 @@ class ModalEditShiftUserDay extends Component
             14  => "brown",
             15  => "lightred",
             16  => "lightbrown",
+            16  => "lightred",
     );
     protected $listeners = ['setshiftUserDay','clearModal','ChangeWorkingDay'=>'enableChangeTypeOfWorkingDay','findAvailableOwnDaysToChange'];
     // public function mount(array $headers){
@@ -337,6 +339,16 @@ class ModalEditShiftUserDay extends Component
 			$this->availableOwnDaysToChangeVisible  = "visible";
 			$this->emit('findAvailableOwnDaysToChange',$this->shiftUserDay->ShiftUser->user_id);
 
+		}elseif($this->action ==17 ){ // abandono funciones
+			$this->newStatus = 17;
+			$this->usersSelect ="none";
+			$this->repeatAction="visible";
+			$this->changeDayType ="none";
+			$this->usersSelect2 ="visible";
+			$this->addHours = "none" ;
+			$this->availableOwnDaysToChangeVisible  = "none";
+			$this->availableExternalDaysToChangeVisible = "none";
+
 		}else{
 			$this->changeDayType ="none";
 			$this->repeatAction="none";
@@ -434,10 +446,14 @@ class ModalEditShiftUserDay extends Component
 							else
 								$bTurno->groupname ="";
 
+							if($this->chkSuplente)
+								$bTurno->commentary = "Suplente:".$this->shiftUserDay->shift_user_id;
+							
+
 							$bTurno->save();
 						}
 						$nDay = new ShiftUserDay;
-						if($chkSuplente){
+						if($this->chkSuplente){
 
 							$nDay->day = $this->shiftUserDay->day;
 							$nDay->commentary = "Dia agregado por concepto de suplencia al funcionario ".$this->shiftUserDay->ShiftUser->user_id;
@@ -453,16 +469,32 @@ class ModalEditShiftUserDay extends Component
 						$nDay->working_day = $this->shiftUserDay->working_day;
 						$nDay->derived_from = $this->shiftUserDay->id;
 						$nDay->save();	
-						//si tiene turno creado para ese mes y ese tipo de turno
-						$nHistory = new ShiftDayHistoryOfChanges;
-						$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange2."\"";
-						$nHistory->shift_user_day_id = $this->shiftUserDay->id;
-						$nHistory->modified_by = Auth()->user()->id;
-						$nHistory->change_type = 2;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
-						$nHistory->day =  $this->shiftUserDay->day;
-						$nHistory->previous_value = $this->previousStatus;
-						$nHistory->current_value = $this->newStatus;
-						$nHistory->save();
+
+						if($this->chkSuplente){
+
+							$nHistory = new ShiftDayHistoryOfChanges;
+							$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha registrado la suplencia para del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange2."\"";
+							$nHistory->shift_user_day_id = $this->shiftUserDay->id;
+							$nHistory->modified_by = Auth()->user()->id;
+							$nHistory->change_type = 10;
+							$nHistory->day =  $this->shiftUserDay->day;
+							$nHistory->previous_value = $this->previousStatus;
+							$nHistory->current_value = $this->newStatus;
+							$nHistory->save();
+
+						}else{
+
+							//si tiene turno creado para ese mes y ese tipo de turno
+							$nHistory = new ShiftDayHistoryOfChanges;
+							$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange2."\"";
+							$nHistory->shift_user_day_id = $this->shiftUserDay->id;
+							$nHistory->modified_by = Auth()->user()->id;
+							$nHistory->change_type = 3;// 3 intercambio con otro usuario / 3 remplazo
+							$nHistory->day =  $this->shiftUserDay->day;
+							$nHistory->previous_value = $this->previousStatus;
+							$nHistory->current_value = $this->newStatus;
+							$nHistory->save();
+						}
 					}else{ // si no se selecciona ningun usuario para remplazo, qedara disponible
 
 						$nHistory = new ShiftDayHistoryOfChanges;
@@ -526,25 +558,51 @@ class ModalEditShiftUserDay extends Component
 									$bTurno->shift_types_id = $day->ShiftUser->shift_types_id;
 									$bTurno->organizational_units_id = $day->ShiftUser->organizational_units_id;
 									if(Session::has('groupname') && Session::get('groupname') != "")
-										$bTurno->groupname ="groupname";
+										$bTurno->groupname =Session::get('groupname');
 									else
 										$bTurno->groupname ="";
+
+									if($this->chkSuplente)
+										$bTurno->commentary = "Suplente:".$day->shift_user_id;
+
 									$bTurno->save();
 								}
 								$nDay = new ShiftUserDay;
 								$nDay->day = $day->day;
-								$nDay->commentary = "Dia extra agregado, perteneciente al usuario ".$day->ShiftUser->user_id;
-								$nDay->status = 3;
+
+								if($this->chkSuplente){
+
+									$nDay->day = $day->day;
+									$nDay->commentary = "Dia agregado por concepto de suplencia al funcionario ".$day->ShiftUser->user_id;
+									$nDay->status = 1;
+
+								}else{
+
+									$nDay->day = $day->day;
+									$nDay->commentary = "Dia extra agregado, perteneciente al usuario ".$day->ShiftUser->user_id;
+									$nDay->status = 3;
+								}
+
+								// $nDay->commentary = "Dia extra agregado, perteneciente al usuario ".$day->ShiftUser->user_id;
+								// $nDay->status = 3;
+
+
 								$nDay->shift_user_id = $bTurno->id;
 								$nDay->working_day = $day->working_day;
 								$nDay->derived_from = $day->id;
 								$nDay->save();	
 								//si tiene turno creado para ese mes y ese tipo de turno
+
+
 								$nHistory = new ShiftDayHistoryOfChanges;
+								
+
 								$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $day->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange2."\"";
 								$nHistory->shift_user_day_id = $day->id;
 								$nHistory->modified_by = Auth()->user()->id;
 								$nHistory->change_type = 2;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
+								
+
 								$nHistory->day =  $day->day;
 								$nHistory->previous_value = $this->previousStatus;
 								$nHistory->current_value = $this->newStatus;
@@ -606,7 +664,7 @@ class ModalEditShiftUserDay extends Component
 						$bTurno->shift_types_id = $this->shiftUserDay->ShiftUser->shift_types_id;
 						$bTurno->organizational_units_id = $this->shiftUserDay->ShiftUser->organizational_units_id;
 						if(Session::has('groupname') && Session::get('groupname') != "")
-							$bTurno->groupname ="groupname";
+							$bTurno->groupname =Session::get('groupname');
 						else
 							$bTurno->groupname ="";
 						$bTurno->save();
