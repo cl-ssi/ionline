@@ -116,7 +116,25 @@ class ShiftManagementController extends Controller
         'MD2' => array("from"=>"","to"=>"","time"=>0),
         'MN2' => array("from"=>"","to"=>"","time"=>0),
      );
-
+    private $colors = array(
+            1 => "lightblue",
+            2 => "#2471a3",
+            3 => " #52be80 ",
+            4 => "orange",
+            5 => "#ec7063",
+            6 => "#af7ac5",
+            7 => "#f4d03f",
+            8 => "gray",
+            9  => "yellow",
+            10  => "brown",
+            11  => "brown",
+            12  => "brown",
+            13  => "brown",
+            14  => "brown",
+            15  => "lightred",
+            16  => "lightbrown",
+            16  => "lightred",
+    );
     public function index(Request $r, $groupname=null){
     	// echo "Shift Management";
         // echo "<h1>".$groupname."</h1>";
@@ -513,6 +531,7 @@ class ShiftManagementController extends Controller
             }
             $sheet->setCellValue($cell."2", $i);
             $sheet->getColumnDimension($cell)->setAutoSize(true);
+            $sheet->getStyle($cell."2")->getAlignment()->setHorizontal('center');
         }   
 
 
@@ -552,15 +571,42 @@ class ShiftManagementController extends Controller
                 $date =explode(" ",$date);
                 $d = $sis->days->where('day',$date[0]);
 
-                $sheet->setCellValue($cell.$i, 
-                ( ( isset($d) && count($d) )? ( ($d->first()->working_day!="F")?$d->first()->working_day:"-" ) :"n/a" )
-                 );
-                $sheet->getColumnDimension($cell)->setAutoSize(true);
+                /* $sheet->setCellValue($cell.$i, 
+                 ( ( isset($d) && count($d) )? ( ($d->first()->working_day!="F")?$d->first()->working_day:"-" ) :"n/a" )
+                  );*/ // funcionando con 1 joranda por dia
 
-                if(isset($d) && count($d) && $d->first()->working_day == "F"){
+                /*actualizacion, por si tiene mas de 1 jornada x dia*/
+                $cellTextValue = "";
+                if(isset($d) && count($d)){ 
+                    $cellTextValue ="";
+                    $count = 0;
+                    foreach($d as $dd){
+                        if($count > 0){
+                            $cellTextValue .=" / ";
 
-                    $sheet->getStyle($cell.$i)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFFF0000');
+                        }
+                        if($dd->working_day!="F"){
+                            $cellTextValue .=$dd->working_day;
+                        }else{
+                            $cellTextValue .="-";
+                        }
+                        $count++;
+                    }
                 }
+                $sheet->setCellValue($cell.$i, $cellTextValue);
+                $sheet->getColumnDimension($cell)->setAutoSize(true);
+                $sheet->getStyle($cell.$i)->getAlignment()->setHorizontal('center');
+                
+                if(isset($d) && count($d)){ 
+                
+                }else{
+                    $sheet->getStyle($cell.$i)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('000000');
+                }
+
+                // if(isset($d) && count($d) && $d->first()->working_day == "F"){
+
+                //     $sheet->getStyle($cell.$i)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFFF0000');
+                // }
             }   
             $i++;
             
