@@ -461,7 +461,7 @@ class ShiftManagementController extends Controller
     }
 
     public function downloadShiftInXls(Request $r){// Funcion para descargar los turnos en formato excel
-
+        $hojas = 1;
 
         $users = Session::get('users');
         $cargos = Session::get('cargos');
@@ -479,8 +479,12 @@ class ShiftManagementController extends Controller
         
 
 
-        $spreadsheet = new Spreadsheet();
+        $spreadsheet = new Spreadsheet(); 
+
+
+
         $sheet = $spreadsheet->getActiveSheet();
+        // $sheet =  new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Sin grupo');
         
         $sheet->setCellValue('A1',  strtoupper($months[$actuallyMonth]).' '.$actuallyYear);
         if($days==28)
@@ -552,12 +556,29 @@ class ShiftManagementController extends Controller
                 ( ( isset($d) && count($d) )? ( ($d->first()->working_day!="F")?$d->first()->working_day:"-" ) :"n/a" )
                  );
                 $sheet->getColumnDimension($cell)->setAutoSize(true);
+
+                if(isset($d) && count($d) && $d->first()->working_day == "F"){
+
+                    $sheet->getStyle($cell.$i)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFFF0000');
+                }
             }   
             $i++;
             
         }
 
          $sheet->getColumnDimension("A")->setAutoSize(true);
+        $sheet->setTitle('Sin grupo');
+        // $spreadsheet->addSheet($sheet, 0);
+
+
+         /*Hoja 2*/
+         // $sheet2 = $spreadsheet->getSheet(1);
+
+         // Create a new worksheet called "My Data"
+        $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Nueva Hoja');
+
+        // Attach the "My Data" worksheet as the first worksheet in the Spreadsheet object
+            $spreadsheet->addSheet($myWorkSheet, 1);
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="turnos20210413-113325.xlsx"');
