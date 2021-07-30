@@ -72,6 +72,9 @@
 					<a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',[$serviceRequest->Fulfillments->first(), time()]) }}" target="_blank" title="Certificado">
 						Certificado firmado<i class="fas fa-signature"></i>
 					</a>
+					<a class="btn btn-outline-danger ml-4" href="{{ route('rrhh.service-request.fulfillment.delete-signed-certificate-pdf',$serviceRequest->Fulfillments->first()) }}" title="Borrar Certificado" onclick="return confirm('¿Está seguro que desea eliminar el certificado de cumplimiento firmado?')">
+				<i class="fas fa-trash"></i>
+				</a>
                 @else
 					{{--modal firmador--}}
 					@php $idModelModal = $serviceRequest->Fulfillments->first()->id;
