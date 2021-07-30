@@ -692,6 +692,16 @@ class FulfillmentController extends Controller
 //        }
     }
 
+    public function deletesignedCertificatePDF(Fulfillment $fulfillment)
+    {      
+      $fulfillment->signatures_file_id = null;
+      $fulfillment->save();
+      session()->flash('success', 'Se ha borrado exitosamente el certificado de cumplimiento.');
+      return Storage::disk('gcs')->delete($fulfillment->signedCertificate->signed_file);
+      return redirect()->back();      
+
+    }
+
     public function updatePaidValues(Request $request)
     {
         $fulfillment = Fulfillment::find($request->fulfillment_id);
