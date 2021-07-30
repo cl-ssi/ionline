@@ -61,15 +61,17 @@ class MonthlyQuotes extends Component
                     break;
                 case 'Profesional':
 
-                    $valor_mensual = optional(
-                        Value::orderBy('validity_from', 'desc')
-                            ->where('contract_type', 'Mensual')
-                            ->where('type', 'covid')
-                            ->where('establishment_id', $serviceRequest->establishment_id)
-                            ->where('estate', $serviceRequest->estate)
-                            ->where('work_type', $serviceRequest->working_day_type)
-                            ->first()
-                    )->amount;
+                    // $valor_mensual = optional(
+                    //     Value::orderBy('validity_from', 'desc')
+                    //         ->where('contract_type', 'Mensual')
+                    //         ->where('type', 'covid')
+                    //         ->where('establishment_id', $serviceRequest->establishment_id)
+                    //         ->where('estate', $serviceRequest->estate)
+                    //         ->where('work_type', $serviceRequest->working_day_type)
+                    //         ->first()
+                    // )->amount;
+
+                    $valor_mensual = $serviceRequest->gross_amount;
 
                     switch ($serviceRequest->weekly_hours) {
                             // case '33':
