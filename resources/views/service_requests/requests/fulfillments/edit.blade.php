@@ -169,7 +169,7 @@
     $(".end_date").val('');
     $('.end_hour').attr('readonly', false);
     $('.end_hour').val('');
-    if (this.value == "Inasistencia Injustificada") {      
+    if (this.value == "Inasistencia Injustificada" || this.value == "Permiso") {
     }
     if (this.value == "Licencia no covid") {
       $('.start_hour').attr('readonly', true);
