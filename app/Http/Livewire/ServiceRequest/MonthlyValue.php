@@ -73,6 +73,7 @@ class MonthlyValue extends Component
                             $mes_completo = false;
                             $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
                             $dias_descuento += 1;
+                            //dd('soy termino de contrato');
                             break;
                 }
             }
@@ -155,6 +156,10 @@ class MonthlyValue extends Component
             if ($mes_completo) {
                 $total = $valor_mensual - ($dias_descuento * ($valor_mensual / 30));
             } else {
+                if ($dias_trabajado_antes_retiro == 0) {
+                    //dd('soy cero');
+                    $total_dias_trabajados = 0;
+                }
                 if ($dias_trabajado_antes_retiro != 0) {
                     //dd($total_dias_trabajados);
 
