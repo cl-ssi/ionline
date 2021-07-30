@@ -509,7 +509,7 @@ class ShiftManagementController extends Controller
                 }
         }
 
-        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
+        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->where('groupname',"")->get();
         // Session::flush();
         
 
@@ -648,16 +648,127 @@ class ShiftManagementController extends Controller
 
 
 
-         /*Hoja 2*/
-         // $sheet2 = $spreadsheet->getSheet(1);
-
-         // Create a new worksheet called "My Data"
+         /// Aqui relleno las otras hojas con los groupname correspondientes
          $index = 1;
         foreach($this->groupsnames as $gName){
 
             $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, strtoupper($gName)); 
-            // Attach the "My Data" worksheet as the first worksheet in the Spreadsheet object
             $spreadsheet->addSheet($myWorkSheet, $index);
+            
+            // Attach the "My Data" worksheet as the first worksheet in the Spreadsheet object
+            $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->where('groupname',htmlentities($gName))->get();
+
+            // $sheet = $spreadsheet->getActiveSheet();
+            // $sheet =  new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Sin grupo');
+        
+            $myWorkSheet->setCellValue('A1',  strtoupper($months[$actuallyMonth]).' '.$actuallyYear);
+            if($days==28)
+                $myWorkSheet->MergeCells('A1:AE1');
+            elseif($days==29)
+                $myWorkSheet->MergeCells('A1:AF1');
+            elseif($days==30)
+                $myWorkSheet->MergeCells('A1:AG1');
+            elseif($days==31)
+                $myWorkSheet->MergeCells('A1:AH1');
+            $myWorkSheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+            $myWorkSheet->getStyle('B1')->getAlignment()->setHorizontal('center');
+
+            $myWorkSheet->setCellValue('B2', 'CARGO');
+            $myWorkSheet->setCellValue('C2', '');
+            $index = 68;
+            $index2 = 65;
+            $cell = "";
+            for ($i=1; $i < ($days+1) ; $i++) { 
+               
+                if($index<91){
+                    $cell = chr($index);
+                    $index++;
+                }  else{
+                    $cell = "A".chr($index2);
+                    $index2++;
+                }
+                $myWorkSheet->setCellValue($cell."2", $i);
+                $myWorkSheet->getColumnDimension($cell)->setAutoSize(true);
+                $myWorkSheet->getStyle($cell."2")->getAlignment()->setHorizontal('center');
+            }   
+            $myWorkSheet->getStyle('A1:AH1')->applyFromArray(
+                    array(
+                        'font' => array(
+                        'bold' => true
+                        )
+                    )
+                );
+            $myWorkSheet->getStyle('A2:AH2')->applyFromArray(
+                    array(
+                        'font' => array(
+                        'bold' => true
+                        )
+                    )
+                );
+            $i=3;
+            $staffType="Titular";
+            foreach ($staffInShift as $sis) {
+                $myWorkSheet->setCellValue("A".$i,$sis->position);
+                $myWorkSheet->setCellValue("B".$i, $sis->user->runFormat()." - ".$sis->user->name." ".$sis->user->fathers_family);
+                $staffType=str_replace( "(","",$sis->esSuplencia() );
+                $staffType=str_replace( ")","",$staffType );
+                $staffType= substr($staffType,0,5);
+                $myWorkSheet->setCellValue("C".$i, strtoupper($staffType) );
+                $index = 68;// lleter C in ascii
+                $index2 = 65; //letter A in ascii
+                $cell = "";
+                for ($j=1; $j < ($days+1) ; $j++) { 
+           
+                    if($index<91){
+                        $cell = chr($index);
+                        $index++;
+                    }  else{
+                        $cell = "A".chr($index2);
+                        $index2++;
+                    }
+                    $date = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$j);
+                    $date =explode(" ",$date);
+                    $d = $sis->days->where('day',$date[0]);
+                
+                    /*actualizacion, por si tiene mas de 1 jornada x dia*/
+                    $cellTextValue = "";
+                    if(isset($d) && count($d)){ 
+                        $cellTextValue ="";
+                        $count = 0;
+                        foreach($d as $dd){
+                            if($count > 0){
+                                $cellTextValue .=" / ";
+                            }
+                            if($dd->working_day!="F"){
+                                $cellTextValue .=$dd->working_day;
+                            }else{
+                                $cellTextValue .="-";
+                            }
+                            $count++;
+                        }
+                    }
+                    $myWorkSheet->setCellValue($cell.$i, $cellTextValue);
+                    $myWorkSheet->getColumnDimension($cell)->setAutoSize(true);
+                    $myWorkSheet->getStyle($cell.$i)->getAlignment()->setHorizontal('center');
+                
+                    if(isset($d) && count($d)){ 
+                        foreach($d as $dd){
+                            if($dd->status != 1) // con esto dejo los estado 1 asfginado o cumplido sin
+                                $myWorkSheet->getStyle($cell.$i)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB($this->colorsRgb[$dd->status]);
+                    
+                        }
+                    
+                    }else{
+                        $myWorkSheet->getStyle($cell.$i)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('000000');
+                    }
+                }   
+                $i++;
+                
+            }
+
+            $myWorkSheet->getColumnDimension("A")->setAutoSize(true);
+            $myWorkSheet->getColumnDimension("B")->setAutoSize(true);
+
             $index ++ ;
         }
 
