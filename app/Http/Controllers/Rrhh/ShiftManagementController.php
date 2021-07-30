@@ -116,24 +116,24 @@ class ShiftManagementController extends Controller
         'MD2' => array("from"=>"","to"=>"","time"=>0),
         'MN2' => array("from"=>"","to"=>"","time"=>0),
      );
-    private $colors = array(
-            1 => "lightblue",
-            2 => "#2471a3",
-            3 => " #52be80 ",
-            4 => "orange",
-            5 => "#ec7063",
-            6 => "#af7ac5",
-            7 => "#f4d03f",
-            8 => "gray",
-            9  => "yellow",
-            10  => "brown",
-            11  => "brown",
-            12  => "brown",
-            13  => "brown",
-            14  => "brown",
-            15  => "lightred",
-            16  => "lightbrown",
-            16  => "lightred",
+    private $colorsRgb = array(
+            1 => "FFFFFF",
+            2 => "2471a3",
+            3 => "52be80 ",
+            4 => "FFA500",
+            5 => "ec7063",
+            6 => "af7ac5",
+            7 => "f4d03f",
+            8 => "808080",
+            9  => "FFFF00",
+            10  => "A52A2A",
+            11  => "A52A2A",
+            12  => "A52A2A",
+            13  => "A52A2A",
+            14  => "A52A2A",
+            15  => "FA8072",
+            16  => "F4A460",
+            17  => "A52A2A",
     );
     public function index(Request $r, $groupname=null){
     	// echo "Shift Management";
@@ -598,7 +598,12 @@ class ShiftManagementController extends Controller
                 $sheet->getStyle($cell.$i)->getAlignment()->setHorizontal('center');
                 
                 if(isset($d) && count($d)){ 
-                
+                    foreach($d as $dd){
+                        if($dd->status != 1) // con esto dejo los estado 1 asfginado o cumplido sin color
+                            $sheet->getStyle($cell.$i)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB($this->colorsRgb[$dd->status]);
+                    
+                    }
+                    
                 }else{
                     $sheet->getStyle($cell.$i)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('000000');
                 }
