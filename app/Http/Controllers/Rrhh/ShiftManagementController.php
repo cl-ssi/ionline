@@ -195,7 +195,7 @@ class ShiftManagementController extends Controller
         if($actuallyShift->id != 0){ // un turno en especifico
 
             $this->groupsnames = array(); 
-            array_push($this->groupsnames, ""); //agregos los sin grupo
+            // array_push($this->groupsnames, ""); //agregos los sin grupo
 
             // $groupsnames = array(); 
             foreach(ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->groupBy("groupname")->get() as $g){
@@ -479,7 +479,11 @@ class ShiftManagementController extends Controller
     }
 
     public function downloadShiftInXls(Request $r){// Funcion para descargar los turnos en formato excel
+        
+        $this->groupsnames = array(); 
         $hojas = 1;
+
+   
 
         $users = Session::get('users');
         $cargos = Session::get('cargos');
@@ -493,6 +497,19 @@ class ShiftManagementController extends Controller
         $staff = Session::get('staff');
         $actuallyShift = Session::get('actuallyShift');
         $staffInShift = Session::get('staffInShift');
+        
+        foreach(ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->groupBy("groupname")->get() as $g){
+            
+                if($g->groupname != ""){
+
+                    array_push($this->groupsnames, $g->groupname);
+
+                    $hojas++;
+                
+                }
+        }
+
+        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->get();
         // Session::flush();
         
 
@@ -514,10 +531,11 @@ class ShiftManagementController extends Controller
         elseif($days==31)
             $sheet->MergeCells('A1:AH1');
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('B1')->getAlignment()->setHorizontal('center');
 
-        $sheet->setCellValue('A2', 'CARGO');
-        $sheet->setCellValue('B2', '');
-        $index = 67;
+        $sheet->setCellValue('B2', 'CARGO');
+        $sheet->setCellValue('C2', '');
+        $index = 68;
         $index2 = 65;
         $cell = "";
         for ($i=1; $i < ($days+1) ; $i++) { 
@@ -553,9 +571,15 @@ class ShiftManagementController extends Controller
         $i=3;
         $staffType="Titular";
         foreach ($staffInShift as $sis) {
-            $sheet->setCellValue("A".$i, $sis->user->runFormat()." - ".$sis->user->name." ".$sis->user->fathers_family);
-             $sheet->setCellValue("B".$i, $staffType);
-            $index = 67;// lleter C in ascii
+            $sheet->setCellValue("A".$i,$sis->position);
+            $sheet->setCellValue("B".$i, $sis->user->runFormat()." - ".$sis->user->name." ".$sis->user->fathers_family);
+            
+            $staffType=str_replace( "(","",$sis->esSuplencia() );
+            $staffType=str_replace( ")","",$staffType );
+           $staffType= substr($staffType,0,5);
+            $sheet->setCellValue("C".$i, strtoupper($staffType) );
+            
+            $index = 68;// lleter C in ascii
             $index2 = 65; //letter A in ascii
             $cell = "";
             for ($j=1; $j < ($days+1) ; $j++) { 
@@ -599,7 +623,7 @@ class ShiftManagementController extends Controller
                 
                 if(isset($d) && count($d)){ 
                     foreach($d as $dd){
-                        if($dd->status != 1) // con esto dejo los estado 1 asfginado o cumplido sin color
+                        if($dd->status != 1) // con esto dejo los estado 1 asfginado o cumplido sin
                             $sheet->getStyle($cell.$i)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB($this->colorsRgb[$dd->status]);
                     
                     }
@@ -618,20 +642,27 @@ class ShiftManagementController extends Controller
         }
 
          $sheet->getColumnDimension("A")->setAutoSize(true);
-        $sheet->setTitle('Sin grupo');
+         $sheet->getColumnDimension("B")->setAutoSize(true);
+        $sheet->setTitle('SIN GRUPO');
         // $spreadsheet->addSheet($sheet, 0);
+
 
 
          /*Hoja 2*/
          // $sheet2 = $spreadsheet->getSheet(1);
 
          // Create a new worksheet called "My Data"
-        $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Nueva Hoja');
+         $index = 1;
+        foreach($this->groupsnames as $gName){
 
-        // Attach the "My Data" worksheet as the first worksheet in the Spreadsheet object
-            $spreadsheet->addSheet($myWorkSheet, 1);
+            $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, strtoupper($gName)); 
+            // Attach the "My Data" worksheet as the first worksheet in the Spreadsheet object
+            $spreadsheet->addSheet($myWorkSheet, $index);
+            $index ++ ;
+        }
 
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.s heet');
         header('Content-Disposition: attachment;filename="turnos20210413-113325.xlsx"');
         header('Cache-Control: max-age=0');
 
