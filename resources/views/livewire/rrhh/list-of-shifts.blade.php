@@ -26,9 +26,11 @@ figure:focus .menu {
     @livewire( 'rrhh.delete-shift',['startdate'=>$mInit[0],'enddate'=> $mEnd[0] ] ) 
     @livewire('rrhh.add-day-of-shift-modal')
     @if(isset($staffInShift)&&count($staffInShift)>0&&$staffInShift!="")
-        @foreach($staffInShift as $sis)
+        @foreach($staffInShift->sortBy('position') as $sis)
         {{-- sizeof($sis->days->where('day','>=',$mInit[0])->where('day','<',$mEnd[0])) --}}
         @if( sizeof($sis->days->where('day','>=',$mInit[0])->where('day','<',$mEnd[0])) > 0  || $actuallyShift->id == 99 )  
+            
+
             <tr>
                 <td class="bless br cellbutton" >
                     
@@ -37,6 +39,7 @@ figure:focus .menu {
                     @livewire( 'rrhh.see-shift-control-form', ['usr'=>$sis->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth], key($loop->index) )
 
                     {{ $sis->user->runFormat()}} - {{$sis->user->name}} {{$sis->user->fathers_family}} 
+                    <small>{{$sis->esSuplencia()}}</small>
       
                 </td>
                 @for($j = 1; $j <= $days; $j++) 
@@ -66,7 +69,7 @@ figure:focus .menu {
         @endforeach
         
         @else                           
-            <td style="text-align:  center;" colspan="{{$days}}">SIN PERSONAL ASIGNADO</td>
+            <td style="text-align:  center;" colspan="{{$days}}">SIN PERSONAL ASIGNADO </td>
         @endif
 
 </div>

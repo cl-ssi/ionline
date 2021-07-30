@@ -134,6 +134,7 @@
                             <option value="15"> 14 - <b style="color:">Marcar como Ausencia sin Justificar</b> </option>
                             <option value="16"> 15 - <b style="color:">Cambiar jornada por necesidad de servicio</b> </option>
                             <option value="14"> 16 - <b style="color:">Agregar horas por necesidad de servicio</b> </option>
+                            <option value="17"> 17 - <b style="color:">Marcar como Abandono de funciones</b> </option>
                             
 
                         </select>

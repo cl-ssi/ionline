@@ -61,5 +61,5 @@ class ShiftUserDay extends Model
 	public function Solicitudes(){
 		return $this->hasMany(UserRequestOfDay::class,'shift_user_day_id');
 	}
-
+	
 }
