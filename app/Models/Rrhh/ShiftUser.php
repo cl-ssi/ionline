@@ -34,7 +34,10 @@ class ShiftUser extends Model
 		if(isset($this->commentary) &&  $this->commentary != "" ){
 				$resp = explode(":", $this->commentary);
 				$resp = "(".$resp[0].")";
+		}else{
+			$resp = "("."titular".")";
 		}
+
 		return $resp;
 	}
 	public function	position(){
