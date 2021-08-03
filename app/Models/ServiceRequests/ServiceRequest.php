@@ -135,11 +135,11 @@ class ServiceRequest extends Model implements Auditable
       $user_id = Auth::user()->id;
       $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                            $subQuery->where('responsable_id',$user_id);                                           
-                                           $subQuery->where('status', '<>', 2);                                           
+                                           //$subQuery->where('status', '<>', 2);                                           
                                            $subQuery->orwhere('user_id',$user_id);
                                            //$subQuery->whereNull('derive_date');
                                            
-                                         })
+                                         })->with("SignatureFlows")
                                          
                                          ->orderBy('id','asc')
                                          ->get();
@@ -151,7 +151,7 @@ class ServiceRequest extends Model implements Auditable
               if ($signatureFlow->status == NULL) {
                 if ($serviceRequest->SignatureFlows->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL) {
                 }else{
-                  var_dump($serviceRequest->id);
+                  //var_dump($serviceRequest->id);
                   $cont += 1;
                 }
 
