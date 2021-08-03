@@ -34,11 +34,15 @@ class ShowTotalHours extends Component
     public function render()
     {
         //TODO HORA MÉDICA ya no obtiene el valor hora de value
+        $value = $this->fulfillment->serviceRequest->net_amount;
+        if( $this->fulfillment->serviceRequest->type == 'Covid' )
+        {
         $value = Value::where('contract_type', $this->fulfillment->serviceRequest->program_contract_type)
             ->where('work_type', $this->fulfillment->serviceRequest->working_day_type)
             ->where('type', $this->fulfillment->serviceRequest->type)
             ->where('estate', $this->fulfillment->serviceRequest->estate)
             ->whereDate('validity_from', '<=', now())->first();
+        }        
 
         if (!$value) {
             $this->errorMsg = "No se encuentra valor Hora/Jornada vigente para la solicitud de servicio:
@@ -146,7 +150,16 @@ class ShowTotalHours extends Component
                 }
 
                 $this->totalHours = floor($totalMinutes / 60);
-                $this->totalAmount = $this->totalHours * $value->amount;
+                if( $this->fulfillment->serviceRequest->type == 'Covid' )
+                {
+                    $this->totalAmount = $this->totalHours * $value->amount;
+                }
+                else
+                {
+                    $this->totalAmount = $this->totalHours * $value;
+                    
+                }
+                
                 break;
             case 'DIURNO PASADO A TURNO':
                 $holidays = Holiday::whereYear('date', '=', $this->fulfillment->serviceRequest->start_date->year)

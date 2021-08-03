@@ -511,9 +511,13 @@
 
           @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
           <strong>
-            <span class="uppercase">HECTOR ALARCÓN ALARCÓN</span><br>
-            DIRECTOR<br>
-            HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
+            <span class="uppercase">
+              <!-- HECTOR ALARCÓN ALARCÓN -->
+              PEDRO IRIONDO CORREA
+            </span>
+            <br>
+            DIRECTOR(S)<br>
+            HOSPITAL DR ERNESTO TORRES GALDÁMEZ (S)<br>
           </strong>
 
           <br style="padding-bottom: 4px;">
