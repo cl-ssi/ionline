@@ -40,7 +40,7 @@ class ShiftUser extends Model
 
 		return $resp;
 	}
-	public function	position(){
+	public function	realposition(){
 		$p=0;
 		if(isset($this->position) && $this->position != ""  ){
 				$p = $this->position;
