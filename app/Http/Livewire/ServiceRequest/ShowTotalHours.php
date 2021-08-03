@@ -34,7 +34,7 @@ class ShowTotalHours extends Component
     public function render()
     {
         //TODO HORA MÉDICA ya no obtiene el valor hora de value
-        if( $this->fulfillment->serviceRequest->type) = 'Covid' )
+        if( $this->fulfillment->serviceRequest->type) == 'Covid' )
         {
         $value = Value::where('contract_type', $this->fulfillment->serviceRequest->program_contract_type)
             ->where('work_type', $this->fulfillment->serviceRequest->working_day_type)
