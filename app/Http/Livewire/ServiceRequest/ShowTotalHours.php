@@ -34,6 +34,7 @@ class ShowTotalHours extends Component
     public function render()
     {
         //TODO HORA MÉDICA ya no obtiene el valor hora de value
+        $value = $this->fulfillment->serviceRequest->net_amount;
         if( $this->fulfillment->serviceRequest->type == 'Covid' )
         {
         $value = Value::where('contract_type', $this->fulfillment->serviceRequest->program_contract_type)
@@ -41,11 +42,7 @@ class ShowTotalHours extends Component
             ->where('type', $this->fulfillment->serviceRequest->type)
             ->where('estate', $this->fulfillment->serviceRequest->estate)
             ->whereDate('validity_from', '<=', now())->first();
-        }
-        else
-        {
-        $value = $this->fulfillment->serviceRequest->net_amount;
-        }
+        }        
 
         if (!$value) {
             $this->errorMsg = "No se encuentra valor Hora/Jornada vigente para la solicitud de servicio:
