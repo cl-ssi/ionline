@@ -256,8 +256,11 @@ class ShiftManagementController extends Controller
         Session::put('groupname',$groupname);
 
         // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
-        if(!isset($groupname) || $groupname =="")
+        if( (!isset($groupname) || $groupname =="") && isset($this->groupsnames[0]) )
             $groupname = $this->groupsnames[0];
+        elseif( (!isset($groupname) || $groupname =="") && !isset($this->groupsnames[0]) )
+            $groupname = "";
+
         $groupsnames =$this->groupsnames;
         return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter','groupname','groupsnames','ouRoots','holidays','actuallyShiftMonthsList'));
     }
