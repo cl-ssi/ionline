@@ -593,7 +593,7 @@ class ShiftManagementController extends Controller
         $i=3;
         $staffType="Titular";
         // con esto relleno la hoja 0, osea los SIN GRUPO
-        foreach ($staffInShift as $sis) {
+        foreach ($staffInShift->sortBy('position') as $sis) {
             $sheet->setCellValue("A".$i,$sis->position);
             $sheet->setCellValue("B".$i, $sis->user->runFormat()." - ".$sis->user->name." ".$sis->user->fathers_family);
             
@@ -748,7 +748,7 @@ class ShiftManagementController extends Controller
                 );
             $i=3;
             $staffType="Titular";
-            foreach ($staffInShift as $sis) {
+            foreach ($staffInShift->sortBy('position') as $sis) {
                 $myWorkSheet->setCellValue("A".$i,$sis->position);
                 $myWorkSheet->setCellValue("B".$i, $sis->user->runFormat()." - ".$sis->user->name." ".$sis->user->fathers_family);
                 $staffType=str_replace( "(","",$sis->esSuplencia() );
