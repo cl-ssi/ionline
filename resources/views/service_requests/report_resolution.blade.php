@@ -693,7 +693,7 @@
               <!-- HECTOR ALARCÓN ALARCÓN -->
               PEDRO IRIONDO CORREA
             </span><br>
-            DIRECTOR<br>
+            DIRECTOR (S)<br>
             HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
           </strong>
 
