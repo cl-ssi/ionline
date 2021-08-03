@@ -537,7 +537,7 @@ class ShiftManagementController extends Controller
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('B1')->getAlignment()->setHorizontal('center');
 
-        $sheet->setCellValue('B2', 'CARGO');
+        $sheet->setCellValue('B2', strtoupper($actuallyShift->name).":");
         $sheet->setCellValue('C2', '');
         $index = 68;
         $index2 = 65;
@@ -696,7 +696,7 @@ class ShiftManagementController extends Controller
             $myWorkSheet->getStyle('A1')->getAlignment()->setHorizontal('center');
             $myWorkSheet->getStyle('B1')->getAlignment()->setHorizontal('center');
 
-            $myWorkSheet->setCellValue('B2', 'CARGO');
+            $myWorkSheet->setCellValue('B2', strtoupper($actuallyShift->name).":");
             $myWorkSheet->setCellValue('C2', '');
             $index = 68;
             $index2 = 65;
