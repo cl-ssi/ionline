@@ -18,7 +18,7 @@ class MonthlyQuotes extends Component
     public function render()
     {
 
-        //dd('entre aca');
+        // dd('entre aca');
         $serviceRequest = $this->serviceRequest;
 
         $first_month = $serviceRequest->start_date->month;
@@ -29,6 +29,7 @@ class MonthlyQuotes extends Component
         //////////////CALCULO Y RENDERICACIÓN PARA COVID////////////////////////
         if ($serviceRequest->type == 'Covid') {
             // dd('entre en tipo COVID');
+            //dd('soy auxiliar');
 
             switch ($serviceRequest->estate) {
                 case 'Profesional Médico':
@@ -71,7 +72,7 @@ class MonthlyQuotes extends Component
                     //         ->first()
                     // )->amount;
 
-                    $valor_mensual = $serviceRequest->gross_amount;
+                    $valor_mensual = $serviceRequest->net_amount;
 
                     switch ($serviceRequest->weekly_hours) {
                             // case '33':
@@ -104,6 +105,7 @@ class MonthlyQuotes extends Component
                     //         ->first()
                     // )->amount;
                     $valor_mensual = $serviceRequest->gross_amount;
+                    // dd('soy auxiliar');
             }
 
             for ($i = $first_month; $i <= $last_month; $i++) {
