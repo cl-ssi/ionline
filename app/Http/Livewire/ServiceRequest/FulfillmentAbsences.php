@@ -71,13 +71,14 @@ class FulfillmentAbsences extends Component
       $fulfillmentItem->type = $this->type;
       switch($this->type) {
         case 'Inasistencia Injustificada':
+        case 'Permiso':
         case 'Turno':
           $fulfillmentItem->start_date = $this->start_date . " " .$this->start_hour;
           $fulfillmentItem->end_date = $this->end_date . " " .$this->end_hour;
           break;
         case 'Licencia médica':
         case 'Licencia no covid':
-        case 'Permiso':
+        //case 'Permiso':
         case 'Feriado':
           $fulfillmentItem->start_date = $this->start_date;
           $fulfillmentItem->end_date = $this->end_date;
