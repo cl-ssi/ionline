@@ -150,7 +150,16 @@ class ShowTotalHours extends Component
                 }
 
                 $this->totalHours = floor($totalMinutes / 60);
-                $this->totalAmount = $this->totalHours * $value->amount;
+                if( $this->fulfillment->serviceRequest->type == 'Covid' )
+                {
+                    $this->totalAmount = $this->totalHours * $value->amount;
+                }
+                else
+                {
+                    $this->totalAmount = $this->totalHours * $value;
+                    
+                }
+                
                 break;
             case 'DIURNO PASADO A TURNO':
                 $holidays = Holiday::whereYear('date', '=', $this->fulfillment->serviceRequest->start_date->year)
