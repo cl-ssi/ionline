@@ -256,8 +256,11 @@ class ShiftManagementController extends Controller
         Session::put('groupname',$groupname);
 
         // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
-        if(!isset($groupname) || $groupname =="")
+        if( (!isset($groupname) || $groupname =="") && isset($this->groupsnames[0]) )
             $groupname = $this->groupsnames[0];
+        elseif( (!isset($groupname) || $groupname =="") && !isset($this->groupsnames[0]) )
+            $groupname = "";
+
         $groupsnames =$this->groupsnames;
         return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter','groupname','groupsnames','ouRoots','holidays','actuallyShiftMonthsList'));
     }
@@ -483,6 +486,7 @@ class ShiftManagementController extends Controller
         $this->groupsnames = array(); 
         $hojas = 1;
 
+        $holidays = Holiday::all();
    
 
         $users = Session::get('users');
@@ -550,6 +554,24 @@ class ShiftManagementController extends Controller
             $sheet->setCellValue($cell."2", $i);
             $sheet->getColumnDimension($cell)->setAutoSize(true);
             $sheet->getStyle($cell."2")->getAlignment()->setHorizontal('center');
+
+            $dateFiltered = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$i, 'Europe/London'); 
+            $dayCellColor =  "";
+            if( $dateFiltered->isWeekend()  || count( $holidays->where('date',$dateFiltered) ) > 0  ){
+                $dayCellColor = 'FF0000'; 
+
+            }
+            if( $dayCellColor != "" ){
+                $sheet->getStyle($cell."2")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB($dayCellColor);
+                $sheet->getStyle($cell."2")->applyFromArray(
+                array(
+                    'font' => array(
+                        'bold' => true,
+                        'color' => array('rgb' => 'FFFFFF')
+                    )
+                )
+            );
+            }
         }   
 
 
@@ -570,7 +592,8 @@ class ShiftManagementController extends Controller
             );
         $i=3;
         $staffType="Titular";
-        foreach ($staffInShift as $sis) {
+        // con esto relleno la hoja 0, osea los SIN GRUPO
+        foreach ($staffInShift->sortBy('position') as $sis) {
             $sheet->setCellValue("A".$i,$sis->position);
             $sheet->setCellValue("B".$i, $sis->user->runFormat()." - ".$sis->user->name." ".$sis->user->fathers_family);
             
@@ -654,7 +677,7 @@ class ShiftManagementController extends Controller
 
             $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, strtoupper($gName)); 
             $spreadsheet->addSheet($myWorkSheet, $index);
-            
+
             // Attach the "My Data" worksheet as the first worksheet in the Spreadsheet object
             $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->where('groupname',htmlentities($gName))->get();
 
@@ -690,6 +713,24 @@ class ShiftManagementController extends Controller
                 $myWorkSheet->setCellValue($cell."2", $i);
                 $myWorkSheet->getColumnDimension($cell)->setAutoSize(true);
                 $myWorkSheet->getStyle($cell."2")->getAlignment()->setHorizontal('center');
+
+                 $dateFiltered = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$i, 'Europe/London'); 
+                $dayCellColor =  "";
+                if( $dateFiltered->isWeekend()  || count( $holidays->where('date',$dateFiltered) ) > 0  ){
+                    $dayCellColor = 'FF0000'; 
+
+                }
+                if( $dayCellColor != "" ){
+                    $myWorkSheet->getStyle($cell."2")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB($dayCellColor);
+                    $myWorkSheet->getStyle($cell."2")->applyFromArray(
+                        array(
+                            'font' => array(
+                                'bold' => true,
+                                'color' => array('rgb' => 'FFFFFF')
+                            )
+                        )
+                    );
+                }
             }   
             $myWorkSheet->getStyle('A1:AH1')->applyFromArray(
                     array(
@@ -707,7 +748,7 @@ class ShiftManagementController extends Controller
                 );
             $i=3;
             $staffType="Titular";
-            foreach ($staffInShift as $sis) {
+            foreach ($staffInShift->sortBy('position') as $sis) {
                 $myWorkSheet->setCellValue("A".$i,$sis->position);
                 $myWorkSheet->setCellValue("B".$i, $sis->user->runFormat()." - ".$sis->user->name." ".$sis->user->fathers_family);
                 $staffType=str_replace( "(","",$sis->esSuplencia() );
