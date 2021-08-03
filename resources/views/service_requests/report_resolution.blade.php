@@ -689,7 +689,10 @@
 
           @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
           <strong>
-            <span class="uppercase">HECTOR ALARCÓN ALARCÓN</span><br>
+            <span class="uppercase">
+              <!-- HECTOR ALARCÓN ALARCÓN -->
+              PEDRO IRIONDO CORREA
+            </span><br>
             DIRECTOR<br>
             HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
           </strong>
@@ -725,7 +728,7 @@
         Oficina de partes<br>
         {{--
     @else
-    
+
       @if($ServiceRequest->responsabilityCenter->establishment_id == 12)
         CGU (roxana.penaranda@redsalud.gov.cl, anakena.bravo@redsalud.gov.cl)<br>
         Finanzas (patricia.salinasm@redsalud.gov.cl, finanzas.ssi@redsalud.gov.cl)<br>
@@ -736,7 +739,7 @@
         Finanzas (patricia.salinasm@redsalud.gov.cl, finanzas.ssi@redsalud.gov.cl)<br>
         Interesado<br>
         Oficina de Partes<br>
-        
+
       @endif
       --}}
 
