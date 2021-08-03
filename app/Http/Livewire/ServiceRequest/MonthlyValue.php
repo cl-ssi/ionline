@@ -14,6 +14,7 @@ class MonthlyValue extends Component
         /* Si es tipo Mensual y tipo Covid */
         //$mes_completo = true;
         //$mes_completo = true;
+        $total_dias_trabajados = 0;
         if (
             $fulfillment->serviceRequest->program_contract_type == 'Mensual'
             and $fulfillment->serviceRequest->type = 'Covid'
@@ -28,7 +29,7 @@ class MonthlyValue extends Component
 
             /* si inicio de contrato coincide con inicio de mes y término de contrato coincide con fin de mes */
             if ($fulfillment->start_date and $fulfillment->end_date) {
-                $total_dias_trabajados = 30;
+                //$total_dias_trabajados = 30;
                 if (
                     $fulfillment->start_date->toDateString() == $fulfillment->start_date->startOfMonth()->toDateString()
                     and $fulfillment->end_date->toDateString() == $fulfillment->end_date->endOfMonth()->toDateString()
@@ -40,7 +41,10 @@ class MonthlyValue extends Component
 
                 /* De lo contrario es la diferencia entre el primer y último día */ else {                    
                     $total_dias_trabajados = $fulfillment->start_date->diff($fulfillment->end_date)->days + 1;
-                    $mes_completo = false;
+                    $mes_completo = false; 
+                    //dd('aca entre');
+                    //dd($total_dias_trabajados);
+                                       
                 }
             }
 
@@ -79,6 +83,7 @@ class MonthlyValue extends Component
             }
 
             // dd($dias_trabajado_antes_retiro);
+            //dd($total_dias_trabajados);
             $total_dias_trabajados -= $dias_descuento;
 
             
@@ -129,6 +134,9 @@ class MonthlyValue extends Component
                             ->where('establishment_id', $fulfillment->serviceRequest->establishment_id)
                             ->first()
                     )->amount;
+                    //$valor_mensual = $fulfillment->serviceRequest->gross_amount;
+                    //dd($valor_mensual);
+                    //dd('soy auxiliar');
 
                     switch ($fulfillment->serviceRequest->weekly_hours) {
                         case '33':
@@ -149,22 +157,26 @@ class MonthlyValue extends Component
                     break;
                 default:
                     /* TODO: No se que se hace acá */
-                    $valor_mensual = 0;
+                    //$valor_mensual = 0;
+                    $valor_mensual = $fulfillment->serviceRequest->gross_amount;
                     break;
             }
 
             if ($mes_completo) {
                 $total = $valor_mensual - ($dias_descuento * ($valor_mensual / 30));
+                //dd('trabaje el mes completo');
             } else {
+                //dd('no trabaje el mes completo');
                 if ($dias_trabajado_antes_retiro == 0) {
+                    //$total_dias_trabajados =
                     //dd('soy cero');
-                    $total_dias_trabajados = 0;
+                    //$total_dias_trabajados = 0;
                 }
-                if ($dias_trabajado_antes_retiro != 0) {
-                    //dd($total_dias_trabajados);
+                if ($dias_trabajado_antes_retiro != 0) {                    
 
                     $total_dias_trabajados = $dias_trabajado_antes_retiro;
                 };
+                //dd($total_dias_trabajados);
                 $total = $total_dias_trabajados * ($valor_mensual / 30);
             }
         }
