@@ -211,9 +211,9 @@
 			<tbody>
 				@foreach($staffInShift as $s)
 				<tr>
-					<td>{{$loop->iteration }}</td>
-					<td>{{$s->user->runFormat() }}</td>
-					<td>{{$s->user->getFullNameAttribute() }}</td>
+					<td>{{$loop->iteration?? '' }}</td>
+					<td>{{$s->user? $s->user->runFormat(): '' }}</td>
+					<td>{{$s->user? $s->user->getFullNameAttribute(): '' }}</td>
 					<form method="post" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
 						<td><input type="text" class="form-control" name="comment" value="Comentario de prueba desde el area anterior"> </td>
 						<!-- <td>100</td> -->
@@ -221,8 +221,8 @@
 							@csrf
         					{{ method_field('post') }}
 
-								<input type="hidden" name="userId" value="{{$s->user->id}}">
-								<input type="hidden" name="cierreId" value="{{ $cierreDelMes->id }}">
+								<input type="hidden" name="userId" value="{{$s->user? $s->user->id : ''}}">
+								<input type="hidden" name="cierreId" value="{{$cierreDelMes? $cierreDelMes->id : ''}}">
 								<button class="btn btn-success">Confirmar</button>
 								<!-- <button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Confirmar</button> -->
 
@@ -231,8 +231,8 @@
 						@csrf
         				{{ method_field('post') }}
 
-						<input type="hidden" name="userId" value="{{$s->user->id}}">
-						<input type="hidden" name="cierreId" value="{{ $cierreDelMes->id }}">
+						<input type="hidden" name="userId" value="{{$s->user? $s->user->id : ''}}">
+						<input type="hidden" name="cierreId" value="{{$cierreDelMes? $cierreDelMes->id : '' }}">
 						<button class="btn btn-danger">Rechazar</button>
 					</form>
 
