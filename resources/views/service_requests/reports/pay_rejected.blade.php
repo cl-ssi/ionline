@@ -12,7 +12,19 @@
   @endcan
 </h3>
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.pay-rejected') }}">
+
   <div class="input-group mb-3">
+
+    <div class="input-group-prepend">
+      <span class="input-group-text">Origen Financiamiento</span>
+    </div>
+    <select class="form-control selectpicker" data-live-search="true" name="type" data-size="5">
+      <option value="">Todos</option>
+      <option value="Covid" @if($request->type == "Covid") selected @endif>Honorarios - Covid</option>
+      <option value="Suma alzada" @if($request->type == "Suma alzada") selected @endif>Suma alzada</option>
+    </select>
+
+
     <div class="input-group-prepend">
       <span class="input-group-text">Tipo de Contrato</span>
     </div>
@@ -146,13 +158,13 @@
       @endif
     </td>
     <td>
-    @if($fulfillment->serviceRequest)
+      @if($fulfillment->serviceRequest)
       @if($fulfillment->serviceRequest->has_resolution_file)
       <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fulfillment->serviceRequest)}}" target="_blank" title="Resolución">
         <i class="fas fa-paperclip"></i>
       </a>
       @endif
-    @endif
+      @endif
     </td>
     <td>
       @livewire('service-request.payment-feedback-toggle', ['fulfillment' => $fulfillment])
