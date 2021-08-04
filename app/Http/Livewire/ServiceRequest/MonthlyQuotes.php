@@ -104,7 +104,7 @@ class MonthlyQuotes extends Component
                     //         ->where('work_type', $serviceRequest->working_day_type)
                     //         ->first()
                     // )->amount;
-                    $valor_mensual = $serviceRequest->gross_amount;
+                    $valor_mensual = $serviceRequest->net_amount;
                     // dd('soy auxiliar');
             }
 
