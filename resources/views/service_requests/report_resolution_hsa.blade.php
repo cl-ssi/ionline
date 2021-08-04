@@ -230,7 +230,7 @@
 
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       <p class="justify">
-        En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL ERNESTO TORRES GALDAMES</b>, persona jurídica de derecho público, RUT. 62.000.530-4 , con domicilio en calle Av.héroes de la concepcion N 502 de la ciudad de Iquique, representado por su Director <b>HÉCTOR ALARCÓN ALARCÓN</b> chileno, Cédula Nacional de Identidad N°14.101.085-9, del mismo domicilio del servicio público que representa, en
+        En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL ERNESTO TORRES GALDAMES</b>, persona jurídica de derecho público, RUT. 62.000.530-4 , con domicilio en calle Av.héroes de la concepcion N 502 de la ciudad de Iquique, representado por su Director (s) <b>PEDRO IRIONDO CORREA</b> chileno, Cédula Nacional de Identidad N°14.101.085-9, del mismo domicilio del servicio público que representa, en
         adelante , "El Director del Hospital Ernesto Torres Galdames", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
         con domicilio en {{$ServiceRequest->address}}, de la ciudad de Iquique, en adelante “El Profesional” y exponen lo siguiente:
       </p>
@@ -245,7 +245,7 @@
       @endif
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       <strong>PRIMERO:</strong>
-      Don HECTOR ALARCÓN ALARCÓN, en su calidad de Director del Hospital Ernesto Torres Galdames, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
+      Don PEDRO IRIONDO CORREA, en su calidad de Director (s) del Hospital Ernesto Torres Galdames, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
       @if($ServiceRequest->profession){{$ServiceRequest->profession->name}},@endif apoyo a {{$ServiceRequest->responsabilityCenter->name}} de la Dirección del Hospital Ernesto Torres Galdames.
       @else
       <p class="justify">
@@ -351,7 +351,7 @@
         </b>
       </p>
 
-      @elseif($ServiceRequest->program_contract_type == "Horas")    
+      @elseif($ServiceRequest->program_contract_type == "Horas")
       <p class="justify">
         <strong>OCTAVO:</strong> El “valor por hora” será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
@@ -463,7 +463,7 @@
         @if($ServiceRequest->programm_name == "OTROS PROGRAMAS SSI" || $ServiceRequest->programm_name == "LISTA ESPERA" || $ServiceRequest->programm_name == "ADP DIRECTOR")
         21-03-001-001-02
         @elseif($ServiceRequest->programm_name == "SENDA")
-        11-40-504 <b>SENDA</b> (Fondos Extrapresupuestario) asociado al convenio SENDA 1, 
+        11-40-504 <b>SENDA</b> (Fondos Extrapresupuestario) asociado al convenio SENDA 1,
         @elseif($ServiceRequest->programm_name == "SENDA UHCIP")
         11450602
         @elseif($ServiceRequest->programm_name == "SENDA LEY ALCOHOLES")
@@ -477,7 +477,7 @@
         @elseif($ServiceRequest->programm_name == "OTROS PROGRAMAS HETG")
         21-03-001-001-02 Honorarios a Suma Alzada del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique. )
         @elseif($ServiceRequest->programm_name == "33 MIL HORAS")
-        21-03-001-001-06 Honorarios Suma Alzada “Programa Cierres de Brechas 33.000 horas” dispuestos por el Ministerio de Salud, Subtítulo 21. 
+        21-03-001-001-06 Honorarios Suma Alzada “Programa Cierres de Brechas 33.000 horas” dispuestos por el Ministerio de Salud, Subtítulo 21.
         @endif
         Honorario Suma Alzada.
 
@@ -516,7 +516,7 @@
               PEDRO IRIONDO CORREA
             </span>
             <br>
-            DIRECTOR(S)<br>
+            DIRECTOR (S)<br>
             HOSPITAL DR ERNESTO TORRES GALDÁMEZ (S)<br>
           </strong>
 
@@ -551,20 +551,20 @@
         Interesado<br>
         Ofiicna de Partes<br>
         {{--
-    @else    
+    @else
       @if($ServiceRequest->responsabilityCenter->establishment_id == 12)
         CGU (roxana.penaranda@redsalud.gov.cl, anakena.bravo@redsalud.gov.cl)<br>
         Finanzas (patricia.salinasm@redsalud.gov.cl, finanzas.ssi@redsalud.gov.cl)<br>
         Interesado<br>
         Oficina de Partes<br>
 
-      
+
         Personal SSI (vania.ardiles@redsalud.gov.cl, rosa.contreras@redsalud.gov.cl, isis.gallardo@redsalud.gov.cl)<br>
         Finanzas (patricia.salinasm@redsalud.gov.cl, finanzas.ssi@redsalud.gov.cl)<br>
         Interesado<br>
         Oficina de Partes<br>
-        
-      @endif    
+
+      @endif
       --}}
       </div>
       @endif
