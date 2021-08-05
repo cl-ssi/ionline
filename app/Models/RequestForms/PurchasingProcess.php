@@ -9,6 +9,18 @@ use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseMechanism;
 
+/**
+ * Diferentes estados del Proceso de Compra
+ * ========================================
+ * status:
+ * not_available:  no disponible por parte del oferente
+ * timed_out: caducado, excedido tiempo transcurrido según ley
+ * desert: no se encuentra en el mercado
+ * partial: entrega Parcial
+ * total: entrega total
+ * in_progress: en progreso
+ **/
+
 
 class PurchasingProcess extends Model
 {
