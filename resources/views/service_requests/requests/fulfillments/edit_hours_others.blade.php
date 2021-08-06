@@ -1,7 +1,7 @@
 <div class="card">
-    <div class="card-header">
-        <h4>Información del período: {{ $serviceRequest->Fulfillments->first()->year }}-{{ $serviceRequest->Fulfillments->first()->month }} ({{Carbon\Carbon::parse($serviceRequest->Fulfillments->first()->year . "-" . $serviceRequest->Fulfillments->first()->month)->monthName}}) <span class="small text-muted float-right">{{ $serviceRequest->Fulfillments->first()->id }} </span> </h4>
-    </div>
+	<div class="card-header">
+		<h4>Información del período: {{ $serviceRequest->Fulfillments->first()->year }}-{{ $serviceRequest->Fulfillments->first()->month }} ({{Carbon\Carbon::parse($serviceRequest->Fulfillments->first()->year . "-" . $serviceRequest->Fulfillments->first()->month)->monthName}}) <span class="small text-muted float-right">{{ $serviceRequest->Fulfillments->first()->id }} </span> </h4>
+	</div>
 	<div class="card-header">
 		<h5>Archivos Adjuntos (opcional)</h5>
 		<div class="card-body">
@@ -50,50 +50,53 @@
 			@endif
 
 		</div>
-		<div>		
+		<div>
 			@livewire('service-request.attachments-fulfillments', ['var' => $serviceRequest->Fulfillments->first()->id])
 		</div>
 	</div>
-    <div class="card-body">
-        <!-- @livewire('service-request.shifts-control', ['fulfillment' => $serviceRequest->fulfillments->first()]) -->
+	<div class="card-body">
+		<!-- @livewire('service-request.shifts-control', ['fulfillment' => $serviceRequest->fulfillments->first()]) -->
 
-        <h4>Inasistencias</h4>
-        @if($serviceRequest->working_day_type == "DIURNO PASADO A TURNO")
-          @livewire('service-request.fulfillment-absences', ['fulfillment' => $serviceRequest->Fulfillments->first()])
-        @endif
-        <br><br><hr>
+		<h4>Inasistencias</h4>
+		@if($serviceRequest->working_day_type == "DIURNO PASADO A TURNO")
+		@livewire('service-request.fulfillment-absences', ['fulfillment' => $serviceRequest->Fulfillments->first()])
+		@endif
+		<br><br>
+		<hr>
 
-        @livewire('service-request.show-total-hours', ['fulfillment' => $serviceRequest->fulfillments->first()])
-        <div class="form-row">
-            <fieldset class="form-group col-12 col-md-6">
-                <a type="button" class="btn btn-outline-primary" href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank"> Ver certificado <i class="fas fa-file"></i> </a>
+		@livewire('service-request.show-total-hours', ['fulfillment' => $serviceRequest->fulfillments->first()])
+		<div class="form-row">
+			<fieldset class="form-group col-12 col-md-6">
+				<a type="button" class="btn btn-outline-primary" href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$serviceRequest->Fulfillments->first()) }}" target="_blank"> Ver certificado <i class="fas fa-file"></i> </a>
 
-                @if($serviceRequest->Fulfillments->first()->signatures_file_id)
-					<a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',[$serviceRequest->Fulfillments->first(), time()]) }}" target="_blank" title="Certificado">
-						Certificado firmado<i class="fas fa-signature"></i>
-					</a>
-					<a class="btn btn-outline-danger ml-4" href="{{ route('rrhh.service-request.fulfillment.delete-signed-certificate-pdf',$serviceRequest->Fulfillments->first()) }}" title="Borrar Certificado" onclick="return confirm('¿Está seguro que desea eliminar el certificado de cumplimiento firmado?')">
-				<i class="fas fa-trash"></i>
+				@if($serviceRequest->Fulfillments->first()->signatures_file_id)
+				<a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',[$serviceRequest->Fulfillments->first(), time()]) }}" target="_blank" title="Certificado">
+					Certificado firmado<i class="fas fa-signature"></i>
 				</a>
-                @else
-					{{--modal firmador--}}
-					@php $idModelModal = $serviceRequest->Fulfillments->first()->id;
-					$routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal/".auth()->id();
-                    $routeCallbackSignModal = 'documents.callbackFirma';
-					@endphp
+				@can('Service Request: delete signed certificate')
+				<a class="btn btn-outline-danger ml-4" href="{{ route('rrhh.service-request.fulfillment.delete-signed-certificate-pdf',$serviceRequest->Fulfillments->first()) }}" title="Borrar Certificado" onclick="return confirm('¿Está seguro que desea eliminar el certificado de cumplimiento firmado?')">
+					<i class="fas fa-trash"></i>
+				</a>
+				@endcan
+				@else
+				{{--modal firmador--}}
+				@php $idModelModal = $serviceRequest->Fulfillments->first()->id;
+				$routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal/".auth()->id();
+				$routeCallbackSignModal = 'documents.callbackFirma';
+				@endphp
 
-					@include('documents.signatures.partials.sign_file')
-					<button type="button" data-toggle="modal" class="btn btn-outline-info" data-target="#signPdfModal{{$idModelModal}}" title="Firmar">Firmar certificado <i class="fas fa-signature"></i></button>
-                @endif
-            </fieldset>
+				@include('documents.signatures.partials.sign_file')
+				<button type="button" data-toggle="modal" class="btn btn-outline-info" data-target="#signPdfModal{{$idModelModal}}" title="Firmar">Firmar certificado <i class="fas fa-signature"></i></button>
+				@endif
+			</fieldset>
 
-            <fieldset class="form-group col-6 col-md-6 text-right">
-                <a type="button" class="btn btn-outline-success" href="{{ route('rrhh.service-request.report.resolution-pdf',$serviceRequest) }}" target="_blank">
-                    Generar Resolución
-                    <i class="fas fa-file"></i>
-                </a>
-            </fieldset>
-        </div>
+			<fieldset class="form-group col-6 col-md-6 text-right">
+				<a type="button" class="btn btn-outline-success" href="{{ route('rrhh.service-request.report.resolution-pdf',$serviceRequest) }}" target="_blank">
+					Generar Resolución
+					<i class="fas fa-file"></i>
+				</a>
+			</fieldset>
+		</div>
 
 
 		@canany(['Service Request: fulfillments rrhh'])
@@ -132,9 +135,9 @@
 						</div>
 						<div class="col-12 col-md-7">
 							@if($serviceRequest->Fulfillments->first()->total_to_pay)
-								@livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ])
+							@livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ])
 							@else
-								No se ha ingresado el "Total a pagar".
+							No se ha ingresado el "Total a pagar".
 							@endif
 						</div>
 					</div>
@@ -175,17 +178,17 @@
 						</fieldset>
 						<div class="form-check form-check-inline">
 							<input type="hidden" name="illness_leave" value="0">
-							<input class="form-check-input" type="checkbox" name="illness_leave"  value="1" {{ ( $serviceRequest->Fulfillments->first()->illness_leave== '1' ) ? 'checked="checked"' : null }} >
+							<input class="form-check-input" type="checkbox" name="illness_leave" value="1" {{ ( $serviceRequest->Fulfillments->first()->illness_leave== '1' ) ? 'checked="checked"' : null }}>
 							<label class="form-check-label" for="for_illness_leave">Licencias</label>
 						</div>
 						<div class="form-check form-check-inline">
 							<input type="hidden" name="leave_of_absence" value="0">
-							<input class="form-check-input" type="checkbox" id="permisos" name="leave_of_absence" value="1" {{ ( $serviceRequest->Fulfillments->first()->leave_of_absence== '1' ) ? 'checked="checked"' : null }} >
+							<input class="form-check-input" type="checkbox" id="permisos" name="leave_of_absence" value="1" {{ ( $serviceRequest->Fulfillments->first()->leave_of_absence== '1' ) ? 'checked="checked"' : null }}>
 							<label class="form-check-label" for="permisos">Permisos</label>
 						</div>
 						<div class="form-check form-check-inline">
 							<input type="hidden" name="assistance" value="0">
-							<input class="form-check-input" type="checkbox"  name="assistance" value="1" {{ ( $serviceRequest->Fulfillments->first()->assistance== '1' ) ? 'checked="checked"' : null }} >
+							<input class="form-check-input" type="checkbox" name="assistance" value="1" {{ ( $serviceRequest->Fulfillments->first()->assistance== '1' ) ? 'checked="checked"' : null }}>
 							<label class="form-check-label" for="asistencia">Asistencia</label>
 						</div>
 
@@ -239,13 +242,13 @@
 						</div>
 						<div class="col-12 col-md-7">
 							@if($serviceRequest->Fulfillments->first()->total_to_pay)
-								@livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ])
+							@livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ])
 							@else
-								No se ha ingresado el "Total a pagar".
+							No se ha ingresado el "Total a pagar".
 							@endif
 						</div>
 					</div>
-       			</div>
+				</div>
 			</div>
 		</form>
 		@endcan
@@ -253,67 +256,67 @@
 
 		<h5>Aprobaciones de Solicitud</h5>
 
-        <div class="table-responsive">
-            <table class="table table-sm table-bordered small">
-                <thead>
-                    <tr>
-                        <th scope="col">Fecha</th>
-                        <th scope="col">U.Organizacional</th>
-                        <th scope="col">Cargo</th>
-                        <th scope="col">Usuario</th>
-                        <th scope="col">Tipo</th>
-                        <th scope="col">Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{{$serviceRequest->created_at}}</td>
-                    <td>{{$serviceRequest->creator->organizationalUnit->name}}</td>
-                    <td>{{$serviceRequest->creator->position}}</td>
-                    <td>{{$serviceRequest->creator->getFullNameAttribute()}}</td>
-                    <td>Creador</td>
-                    <td>Creada</td>
-                    <td></td>
-                  </tr>
-                  @foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
-                    @if($SignatureFlow->status === null)
-                      <tr class="bg-light">
-                    @elseif($SignatureFlow->status === 0)
-                      <tr class="bg-danger">
-                    @elseif($SignatureFlow->status === 1)
-                      <tr>
-                    @elseif($SignatureFlow->status === 2)
-                      <tr class="bg-warning">
-                    @endif
+		<div class="table-responsive">
+			<table class="table table-sm table-bordered small">
+				<thead>
+					<tr>
+						<th scope="col">Fecha</th>
+						<th scope="col">U.Organizacional</th>
+						<th scope="col">Cargo</th>
+						<th scope="col">Usuario</th>
+						<th scope="col">Tipo</th>
+						<th scope="col">Estado</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{$serviceRequest->created_at}}</td>
+						<td>{{$serviceRequest->creator->organizationalUnit->name}}</td>
+						<td>{{$serviceRequest->creator->position}}</td>
+						<td>{{$serviceRequest->creator->getFullNameAttribute()}}</td>
+						<td>Creador</td>
+						<td>Creada</td>
+						<td></td>
+					</tr>
+					@foreach($serviceRequest->SignatureFlows->sortBy('sign_position') as $key => $SignatureFlow)
+					@if($SignatureFlow->status === null)
+					<tr class="bg-light">
+						@elseif($SignatureFlow->status === 0)
+					<tr class="bg-danger">
+						@elseif($SignatureFlow->status === 1)
+					<tr>
+						@elseif($SignatureFlow->status === 2)
+					<tr class="bg-warning">
+						@endif
 
-          							<td>{{ $SignatureFlow->signature_date}}</td>
-          							<td>{{ $SignatureFlow->organizationalUnit->name}}</td>
-          							<td>{{ $SignatureFlow->employee }}</td>
-          							<td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
-          							<!-- <td>{{ $SignatureFlow->type }}</td> -->
-                        @if($SignatureFlow->sign_position == 1)
-                         <td>Responsable</td>
-                        @elseif($SignatureFlow->sign_position == 2)
-                         <td>Supervisor</td>
-                        @else
-                         <td>{{ $SignatureFlow->type }}</td>
-                        @endif
-          							<td>
-          								@if($SignatureFlow->status === null)
-          								@elseif($SignatureFlow->status === 1) Aceptada
-          								@elseif($SignatureFlow->status === 0) Rechazada
-          								@endif
-          							</td>
-          						</tr>
+						<td>{{ $SignatureFlow->signature_date}}</td>
+						<td>{{ $SignatureFlow->organizationalUnit->name}}</td>
+						<td>{{ $SignatureFlow->employee }}</td>
+						<td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
+						<!-- <td>{{ $SignatureFlow->type }}</td> -->
+						@if($SignatureFlow->sign_position == 1)
+						<td>Responsable</td>
+						@elseif($SignatureFlow->sign_position == 2)
+						<td>Supervisor</td>
+						@else
+						<td>{{ $SignatureFlow->type }}</td>
+						@endif
+						<td>
+							@if($SignatureFlow->status === null)
+							@elseif($SignatureFlow->status === 1) Aceptada
+							@elseif($SignatureFlow->status === 0) Rechazada
+							@endif
+						</td>
+					</tr>
 
-          						@if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
-          						<tr>
-          							<td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
-          						</tr>
-          						@endif
-        					@endforeach
-                </tbody>
-            </table>
-        </div>
+					@if($SignatureFlow->status === 0 && $SignatureFlow->observation != null)
+					<tr>
+						<td class="text-right" colspan="6">Observación rechazo: {{$SignatureFlow->observation}}</td>
+					</tr>
+					@endif
+					@endforeach
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
