@@ -173,7 +173,7 @@
                         @endcan
 
 
-                        @canany(['Service Request'])
+                        @canany(['Service Request', 'Service Request: report excel'])
                         <a class="dropdown-item"
                             href="{{ route('rrhh.service-request.home') }}">
                             <i class="fas fa-child fa-fw"></i> Contratación Honorarios
