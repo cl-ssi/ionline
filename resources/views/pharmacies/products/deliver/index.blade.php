@@ -192,7 +192,7 @@
 		Descargar <i class="fas fa-download"></i>
 							</button></p>
 <div class="table-responsive">
-	<table class="table table-striped table-sm" id="tabla_confirmed_deliveries">
+	<table class="table table-striped table-sm @canany(['Pharmacy: transfer view ortesis']) small @endcan" id="tabla_confirmed_deliveries">
 		<thead>
 			<tr>
 				<th scope="col" align="left">Origen solicitud</th>
@@ -207,7 +207,8 @@
 				<th scope="col" align="left">Médico</th>
 				<th scope="col" align="left">Folio</th>
 				<th scope="col" align="left">Observaciones</th>
-			</tr>
+				@canany(['Pharmacy: transfer view ortesis']) <th scope="col" align="left">Acciones</th> @endcan
+			</tr> 
 		</thead>
 		<tbody>
 			@forelse($confirmed_deliveries as $delivery)
@@ -224,6 +225,16 @@
 				<td>{{$delivery->doctor_name}}</td>
 				<td>{{$delivery->invoice}}</td>
 				<td>{{$delivery->remarks}}</td>
+				@canany(['Pharmacy: transfer view ortesis'])
+				<td><form method="POST" action="{{ route('pharmacies.products.deliver.restore', $delivery) }}" class="d-inline">
+			            @csrf
+			            @method('DELETE')
+						<button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('Esta operación devolverá {{$delivery->quantity}} {{$delivery->product['name']}} a {{$delivery->establishment['name']}}, ¿Está seguro/a de eliminar esta confirmación de entrega?');">
+							<span class="fas fa-trash-alt" aria-hidden="true"></span>
+						</button>
+					</form>
+				</td>
+				@endcan
 			</tr>
 			@empty
 				<tr><td colspan="13" class="text-center">No existen entregas confirmadas</td></tr>
