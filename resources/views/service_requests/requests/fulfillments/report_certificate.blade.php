@@ -321,7 +321,7 @@
             @endif
           @else
             Hospital Dr. Ernesto Torres Galdames,
-            por <b>horas extras realizadas en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}} por contingencia COVID</b>.
+            por <b>horas extras realizadas en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}} </b>.
           @endif
             <br><br>
 

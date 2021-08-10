@@ -37,7 +37,7 @@ class CreateTypes extends Component
                 $this->signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
                 $this->signatureFlows['Planificación CG RRHH'] = 18263660; // 59 - Planificación y Control de Gestión de Recursos Humanos
                 $this->signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-                $this->signatureFlows['S.D.A SSI'] = 9994426; // 31 - Subdirección de Recursos Físicos y Financieros
+                $this->signatureFlows['S.D.A SSI'] = 17432199; // 31 - Subdirección de Recursos Físicos y Financieros
                 $this->signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
               }
               //servicio de salud iqq
@@ -45,7 +45,7 @@ class CreateTypes extends Component
                 $this->signatureFlows['S.D.G.A SSI'] = 14104369; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
                 $this->signatureFlows['Planificación CG RRHH'] = 18263660; // 59 - Planificación y Control de Gestión de Recursos Humanos
                 $this->signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-                $this->signatureFlows['S.D.A SSI'] = 9994426; // 31 - Subdirección de Recursos Físicos y Financieros
+                $this->signatureFlows['S.D.A SSI'] = 17432199; // 31 - Subdirección de Recursos Físicos y Financieros
                 $this->signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
               }
             }
@@ -66,13 +66,13 @@ class CreateTypes extends Component
                 $this->signatureFlows['Funcionario'] = 10739552; // 24 - Consultorio General Urbano Dr. Hector Reyno
                 $this->signatureFlows['Directora CGU'] = 14745638; // 24 - Consultorio General Urbano Dr. Hector Reyno
                 $this->signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-                $this->signatureFlows['S.D.A SSI'] = 9994426; // 31 - Subdirección de Recursos Físicos y Financieros
+                $this->signatureFlows['S.D.A SSI'] = 17432199; // 31 - Subdirección de Recursos Físicos y Financieros
               }
               //servicio de salud iqq
               else{
                 $this->signatureFlows['Planificación CG RRHH'] = 18263660; // 59 - Planificación y Control de Gestión de Recursos Humanos
                 $this->signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-                $this->signatureFlows['S.D.A SSI'] = 9994426; // 31 - Subdirección de Recursos Físicos y Financieros
+                $this->signatureFlows['S.D.A SSI'] = 17432199; // 31 - Subdirección de Recursos Físicos y Financieros
               }
             }
             //hospital
@@ -91,7 +91,7 @@ class CreateTypes extends Component
           }else{
             $this->signatureFlows['Planificación CG RRHH'] = 18263660; // 59 - Planificación y Control de Gestión de Recursos Humanos
             $this->signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-            $this->signatureFlows['S.D.A SSI'] = 9994426; // 31 - Subdirección de Recursos Físicos y Financieros
+            $this->signatureFlows['S.D.A SSI'] = 17432199; // 31 - Subdirección de Recursos Físicos y Financieros
           }
         }
 

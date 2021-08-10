@@ -330,6 +330,7 @@ class ReportController extends Controller
     $establishments = Establishment::orderBy('name', 'ASC')->get();
     $responsability_center_ou_id = $request->responsability_center_ou_id;
     $establishment_id = $request->establishment_id;
+    $type = $request->type;
 
     $fulfillments = Fulfillment::where('payment_ready', 0)
       ->when($program_contract_type != null, function ($q) use ($program_contract_type) {
@@ -350,6 +351,11 @@ class ReportController extends Controller
       ->when($establishment_id != null, function ($q) use ($establishment_id) {
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($establishment_id) {
           $subQuery->where('establishment_id', $establishment_id);
+        });
+      })
+      ->when($type != null, function ($q) use ($type) {
+        return $q->whereHas("ServiceRequest", function ($subQuery) use ($type) {
+          $subQuery->where('type', $type);
         });
       })
 
