@@ -18,7 +18,7 @@
 
                 <fieldset class="form-group col-md-2">
                     <label for="for_hours_training">N° de horas</label>
-                    <input type="number" min="1" class="form-control" name="hours_training[]" placeholder="" required>
+                    <input type="number" min="1" class="form-control" name="hours_training[]" placeholder="">
                 </fieldset>
 
                 <fieldset class="form-group col mt">

@@ -1140,6 +1140,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
         Route::resource('deliver', 'Pharmacies\DeliverController');
         Route::put('deliver/{deliver}/confirm', 'Pharmacies\DeliverController@confirm')->name('deliver.confirm');
         Route::put('deliver/{deliver}/saveDocId', 'Pharmacies\DeliverController@saveDocId')->name('deliver.saveDocId');
+        Route::delete('deliver/{deliver}/restore', 'Pharmacies\DeliverController@restore')->name('deliver.restore');
     });
     Route::resource('products', 'Pharmacies\ProductController');
 

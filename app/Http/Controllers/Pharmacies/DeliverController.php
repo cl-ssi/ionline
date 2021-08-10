@@ -199,4 +199,22 @@ class DeliverController extends Controller
         session()->flash('success', 'Se ha borrado registro de entrega pendiente satisfactoriamente.');
         return redirect()->route('pharmacies.products.deliver.index');
     }
+
+    public function restore(Deliver $deliver)
+    {
+        $product = Product::with('establishments')->find($deliver->product_id);
+        $pass = false;
+        foreach($product->establishments as $establishment)
+          if($establishment->id == $deliver->establishment_id){
+              $establishment->pivot->increment('stock', $deliver->quantity);
+              $pass = true;
+          }
+        if(!$pass){
+          $product->establishments()->attach($deliver->establishment_id, ['stock' => $deliver->quantity]);
+        }
+
+        $deliver->delete();
+        session()->flash('success', 'Se ha reestablecido ayuda técnica al establecimiento satisfactoriamente.');
+        return redirect()->route('pharmacies.products.deliver.index');
+    }
 }
