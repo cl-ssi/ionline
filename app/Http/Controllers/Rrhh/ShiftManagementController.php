@@ -1044,24 +1044,24 @@ class ShiftManagementController extends Controller
         return redirect()->route('rrhh.shiftManag.index');
     }
     
-    public function closeShift(){ // direcciona a vista para cerrar los turnos, utilizado por rrhh del hospital.
+    public function closeShift(Request $r){ // direcciona a vista para cerrar los turnos, utilizado por rrhh del hospital.
 
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
         $cargos = OrganizationalUnit::all();
         $months = $this->months;
 
-        if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
-            $actuallyYear = Session::get('actuallyYear');
+        if( $r->yearFilter &&  $r->yearFilter != "")
+            $actuallyYear =  $r->yearFilter;
         else
             $actuallyYear = Carbon::now()->format('Y');
         
-        if(Session::has('actuallyOrgUnit') && Session::get('actuallyOrgUnit') != "")
-            $actuallyOrgUnit = Session::get('actuallyOrgUnit');
+        if($r->orgunitFilter && $r->orgunitFilter != "")
+            $actuallyOrgUnit = OrganizationalUnit::find($r->orgunitFilter);
         else    
             $actuallyOrgUnit = $cargos->first();
 
-        if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
-            $actuallyMonth = Session::get('actuallyMonth');
+        if( $r->monthFilter &&  $r->monthFilter != "")
+            $actuallyMonth = $r->monthFilter;
         else
             $actuallyMonth = Carbon::now()->format('m');
 

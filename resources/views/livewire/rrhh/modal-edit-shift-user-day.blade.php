@@ -27,7 +27,7 @@
 
                         <input type="hidden" wire:model="user_id">
 
-                        <label for="exampleFormControlInput1"><i class="fa fa-info"></i> INFORMACIÓN {{--$varLog--}} </label>
+                        <label for="exampleFormControlInput1"><i class="fa fa-info"></i> INFORMACIÓN {{--$varLog--}} ID <b>#</b>{{ ( isset($shiftUserDay) && $shiftUserDay->ShiftUser ) ? $shiftUserDay->id : '' }}</label>
                        <div  class="table-responsive">
                            
                        
