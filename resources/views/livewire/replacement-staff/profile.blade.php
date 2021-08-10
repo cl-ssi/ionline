@@ -37,7 +37,7 @@
                         <option value="" {{ ($selectstate == '')?'selected':'' }}>Seleccione</option>
                         <option value="managerial">Directivo</option>
                         <option value="administrative management">Gestión administrativa</option>
-                        <option value="healthcare">Asistencial(clínica u hospitalaria)</option>
+                        <option value="healthcare">Asistencial (clínica u hospitalaria)</option>
                         <option value="operations">Operaciones</option>
                     </select>
                 </fieldset>
@@ -47,12 +47,12 @@
                 <fieldset class="form-group col-sm-3">
                     <label for="for_degree_date">Fecha de Titulación</label>
                     <input type="date" class="form-control" min="1900-01-01" max="{{Carbon\Carbon::now()->toDateString()}}"
-                        name="degree_date" {{ $selectstate }} required>
+                        name="degree_date" required>
                 </fieldset>
 
                 <fieldset class="form-group col mt">
                     <div class="mb-3">
-                      <label for="forFile" class="form-label"><br></label>
+                      <label for="forFile" class="form-label">Título o Certificado de Escolaridad</label>
                       <input class="form-control" type="file" name="file"
                           accept="application/pdf" required>
                     </div>
