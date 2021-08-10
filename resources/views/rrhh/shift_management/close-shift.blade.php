@@ -36,7 +36,7 @@
 		</div>
 	</div>
 
-		<form method="post" action="{{ route('rrhh.shiftManag.indexF') }}" >
+		<form method="post" action="{{ route('rrhh.shiftManag.closeShift') }}" >
         	@csrf
         	{{ method_field('post') }}  <!-- equivalente a: @method('POST') -->
 
@@ -184,7 +184,7 @@
 								@csrf
         						{{ method_field('post') }}
 
-								<input type="hidden" name="ShiftCloseId" value="{{$f->id}}">
+								<input type="hidden" name="ShiftCloseId" value="{{$f? $f->id : ''}}">
 								<button class="btn btn-success">Cerrar</button>
 								<!-- <button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Confirmar</button> -->
 
@@ -222,7 +222,7 @@
         					{{ method_field('post') }}
 
 								<input type="hidden" name="userId" value="{{$s->user? $s->user->id : ''}}">
-								<input type="hidden" name="cierreId" value="{{$cierreDelMes? $cierreDelMes->id : ''}}">
+								<input type="hidden" name="cierreId" value="{{$cierreDelMes&&$cierreDelMes->id? $cierreDelMes->id : ''}}">
 								<button class="btn btn-success">Confirmar</button>
 								<!-- <button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Confirmar</button> -->
 
@@ -232,7 +232,7 @@
         				{{ method_field('post') }}
 
 						<input type="hidden" name="userId" value="{{$s->user? $s->user->id : ''}}">
-						<input type="hidden" name="cierreId" value="{{$cierreDelMes? $cierreDelMes->id : '' }}">
+						<input type="hidden" name="cierreId" value="{{$cierreDelMes&&$cierreDelMes->id? $cierreDelMes->id : '' }}">
 						<button class="btn btn-danger">Rechazar</button>
 					</form>
 
@@ -254,7 +254,7 @@
 				<th>Nombre</th>
 				<th>Comentarios</th>
 				<!-- <th>Cant. horas</th> -->
-				<th></th>
+				<th>Cerrado en</th>
 			</tr>
 		</thead>
 		<tbody>
