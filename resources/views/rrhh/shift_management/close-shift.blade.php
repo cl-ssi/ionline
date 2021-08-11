@@ -197,23 +197,23 @@
 		</table>
 	<h4>Pendientes</h4>
 	<br>
-		<table  class="table table-sm">
-			<thead class="thead-dark">
-				<tr>
-					<th>#</th>
-					<th>Rut</th>
-					<th>Nombre</th>
-					<th>Comentarios</th>
-					<!-- <th>Cant. horas</th> -->
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach($staffInShift as $s)
+	<table  class="table table-sm">
+		<thead class="thead-dark">
+			<tr>
+				<th>#</th>
+				<th>Rut</th>
+				<th>Nombre</th>
+				<th>Comentarios</th>
+				<!-- <th>Cant. horas</th> -->
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach($staffInShift as $s)
 				<tr>
 					<td>{{$loop->iteration?? '' }}</td>
-					<td>{{$s->user? $s->user->runFormat(): '' }}</td>
-					<td>{{$s->user? $s->user->getFullNameAttribute(): '' }}</td>
+					<td>{{$s->user&&$s->user->id? $s->user->runFormat(): '' }}</td>
+					<td>{{$s->user&&$s->user->id? $s->user->getFullNameAttribute(): '' }}</td>
 					<form method="post" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
 						<td><input type="text" class="form-control" name="comment" value="Comentario de prueba desde el area anterior"> </td>
 						<!-- <td>100</td> -->
@@ -221,18 +221,30 @@
 							@csrf
         					{{ method_field('post') }}
 
-								<input type="hidden" name="userId" value="{{$s->user? $s->user->id : ''}}">
-								<input type="hidden" name="cierreId" value="{{$cierreDelMes&&$cierreDelMes->id? $cierreDelMes->id : ''}}">
-								<button class="btn btn-success">Confirmar</button>
-								<!-- <button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Confirmar</button> -->
+							<input type="hidden" name="userId" value="{{ $s->user && $s->user->id ? $s->user->id : ''}}">
+							<!-- inicio bug -->
+							<input type="hidden" name="cierreId" value="{{$cierreDelMes&&$cierreDelMes->id? $cierreDelMes->id : ''}}">
+
+
+							<!-- fin bug -->
+							 {{--json_encode($cierreDelMes--}}
+								
+							<button class="btn btn-success">Confirmar</button>
+							<!-- <button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Confirmar</button> -->
 
 					</form>
 					<form method="post" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
 						@csrf
         				{{ method_field('post') }}
 
-						<input type="hidden" name="userId" value="{{$s->user? $s->user->id : ''}}">
+						<input type="hidden" name="userId" value="{{$s->user&&$s->user->id? $s->user->id : ''}}">
+						
+						<!-- inicio bug -->
+						{{--json_encode($cierreDelMes--}}
 						<input type="hidden" name="cierreId" value="{{$cierreDelMes&&$cierreDelMes->id? $cierreDelMes->id : '' }}">
+						<!-- fin bug -->
+
+
 						<button class="btn btn-danger">Rechazar</button>
 					</form>
 
@@ -260,6 +272,7 @@
 		<tbody>
 		</tbody>
 	</table>
+
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
