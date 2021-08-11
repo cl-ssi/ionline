@@ -146,6 +146,7 @@
                     <div class="form-group " style="display: {{$usersSelect}}">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-user"></i> PERSONAL </label>
+                       
                          <select class="form-control" wire:model="userIdtoChange" wire:change="findAvailableExternalDaysToChange">
                             <option value="0" >0 - Dejar disponible </option>
                             @if( isset($users) )

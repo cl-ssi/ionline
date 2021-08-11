@@ -1516,4 +1516,16 @@ class ShiftManagementController extends Controller
     
     }
 
+    public function transferUser(){
+
+        $a = 0;
+        for ($i=0; $i < 3 ; $i++) { 
+            $a += $i*$a;
+            // echo $a;
+
+        }
+        return $a;
+
+    }
+
 }
