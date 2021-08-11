@@ -651,7 +651,7 @@ class ModalEditShiftUserDay extends Component
 				$to = date($splitDay[0].'-'.$splitDay[1].'-'.$daysOfMonth->daysInMonth);
 				
         		$days = $daysOfMonth->daysInMonth;
-        		if($this->dayToToChange == 0 ){ //osea no intercambiar por ninun dia, sino solo traspasar el dia
+        		if($this->dayToToChange == 0 ){ //osea NO  intercambiar por ningun dia, sino solo traspasar el dia
 
 					// busco si tiene turno entre las fechas de donde corresponde el dia
 					$bTurno = ShiftUser::where("user_id",$this->userIdtoChange)->where("date_from",">=",$from)->where("date_up","<=",$to)->first(); 
@@ -689,24 +689,48 @@ class ModalEditShiftUserDay extends Component
 					$nHistory->save();
 				}else{// intercambio de dia
 						// dd($this->dayToToChange);
+
+					// obteniendo el dia propio
 					$ownDayShiftId = $this->shiftUserDay->shift_user_id;
 					$ownDayShiftDay =  $this->shiftUserDay->day;
 
+					//buscando el dia externo
 					$bDay = ShiftUserDay::find($this->dayToToChange);
 					$extDayShiftId = $bDay->shift_user_id;
 					$extDayShiftDay = $bDay->day;
 
-					$this->shiftUserDay->day = $extDayShiftDay;
+
+					// a mi dia le doy el id del turno correspondiente al otro usuario
 					$this->shiftUserDay->shift_user_id = $extDayShiftId;
 					$this->shiftUserDay->update();
 
+					//si el dia externo coincide con un dia F - LIBRE, muevo ese libre a la fecha anterior para que no quede en blanco o en + el espacio de ese dia y el dia libre montado
+					$myFreeDay = ShiftUserDay::where("shift_user_id",$ownDayShiftId)->where("day",$extDayShiftDay)->where("working_day","F")->first();
+					//dd($myFreeDay);
+					// si lo encuentro le cambio el dia al dia que entrege
+				
+					if(isset($myFreeDay) && $myFreeDay->id)
+					{
+						$myFreeDay->day =$ownDayShiftDay;
+						$myFreeDay->update();
+					}
+
+
 					$bDay->shift_user_id = $ownDayShiftId;
-					$bDay->day = $ownDayShiftDay;
+					// $bDay->day = $ownDayShiftDay;
 					$bDay->status = 4;
 					$bDay->update();
-					
+					$theirFreeDay = ShiftUserDay::where("shift_user_id",$extDayShiftId)->where("day",$ownDayShiftDay)->where("working_day","F")->first();
+					// si lo encuentro le cambio el dia al dia que entrege
+					if(isset($theirFreeDay)  && $theirFreeDay->id)
+					{
+						$theirFreeDay->day =$extDayShiftDay;
+						$theirFreeDay->update();
+					}
+
+
 					$nHistory = new ShiftDayHistoryOfChanges;
-					$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha generado el intercamvio en la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange."\"";
+					$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha generado el intercambio en la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange."\"";
 					$nHistory->shift_user_day_id = $this->shiftUserDay->id;
 					$nHistory->modified_by = Auth()->user()->id;
 					$nHistory->change_type = 3;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
@@ -724,6 +748,8 @@ class ModalEditShiftUserDay extends Component
 					$nHistory->previous_value = $this->previousStatus;
 					$nHistory->current_value = $this->newStatus;
 					$nHistory->save();
+
+					
 				}
 			}else{ // si el id es = 0 osea DEJAR DIA DISPONIBLE
 
