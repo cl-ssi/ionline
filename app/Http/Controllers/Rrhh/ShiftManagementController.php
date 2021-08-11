@@ -1079,7 +1079,7 @@ class ShiftManagementController extends Controller
             // echo "Cierre del mes econtrad";
 
         }else{
-            $cierreDelMes = (object) array("user_id"=>1,"commentary"=>"","init_date"=>$actuallyYear."-".$actuallyMonth."-01","close_date"=>$actuallyYear."-".$actuallyMonth."-".$days);
+            $cierreDelMes = (object) array("id"=>0,"user_id"=>1,"commentary"=>"","init_date"=>$actuallyYear."-".$actuallyMonth."-01","close_date"=>$actuallyYear."-".$actuallyMonth."-".$days);
         }
 
         $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->whereHas("days",  function($q) use($cierreDelMes){
