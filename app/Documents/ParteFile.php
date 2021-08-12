@@ -12,7 +12,7 @@ class ParteFile extends Model
    * @var array
    */
     protected $fillable = [
-      'id','file','name','parte_id'
+      'id','file','name','signature_file_id','parte_id'
     ];
 
 
