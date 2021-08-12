@@ -233,7 +233,10 @@
 
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       <p class="justify">
-        En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL ERNESTO TORRES GALDAMES</b>, persona jurídica de derecho público, RUT. 62.000.530-4 , con domicilio en calle Av.héroes de la concepcion N 502 de la ciudad de Iquique, representado por su Director (s) <b>PEDRO IRIONDO CORREA</b> chileno, Cédula Nacional de Identidad N°14.101.085-9, del mismo domicilio del servicio público que representa, en
+        En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL ERNESTO TORRES GALDAMES</b>, persona jurídica de derecho público, RUT. 62.000.530-4 , con domicilio en calle Av.héroes de la concepcion N 502 de la ciudad de Iquique, representado por su Director
+        <!-- (s) <b>PEDRO IRIONDO CORREA</b> -->
+        <b>HÉCTOR ALARCÓN ALARCÓN</b>
+        chileno, Cédula Nacional de Identidad N°14.101.085-9, del mismo domicilio del servicio público que representa, en
         adelante , "El Director del Hospital Ernesto Torres Galdames", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
         con domicilio en {{$ServiceRequest->address}}, de la ciudad de Iquique, en adelante “El Profesional” y exponen lo siguiente:
       </p>
@@ -248,7 +251,10 @@
       @endif
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       <strong>PRIMERO:</strong>
-      Don PEDRO IRIONDO CORREA, en su calidad de Director (s) del Hospital Ernesto Torres Galdames, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
+      Don
+      <!-- PEDRO IRIONDO CORREA,  -->
+      HÉCTOR ALARCÓN ALARCÓN,
+      en su calidad de Director del Hospital Ernesto Torres Galdames, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
       @if($ServiceRequest->profession){{$ServiceRequest->profession->name}},@endif apoyo a {{$ServiceRequest->responsabilityCenter->name}} de la Dirección del Hospital Ernesto Torres Galdames.
       @else
       <p class="justify">
@@ -520,7 +526,7 @@
             </span>
             <br>
             DIRECTOR<br>
-            HOSPITAL DR ERNESTO TORRES GALDÁMEZ (S)<br>
+            HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
           </strong>
 
           <br style="padding-bottom: 4px;">
