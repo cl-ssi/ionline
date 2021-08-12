@@ -174,8 +174,8 @@
         <strong>VISTOS:</strong><br>
 
         Lo dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud;
-        <!-- Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020  -->
-        Resolución Exenta N°8847, de fecha 23 de diciembre del 2020
+        Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020
+        <!-- Resolución Exenta N°8847, de fecha 23 de diciembre del 2020 -->
         del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2020; Resoluciones N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República<br><br>
       </p>
       @else
@@ -233,7 +233,10 @@
 
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       <p class="justify">
-        En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL ERNESTO TORRES GALDAMES</b>, persona jurídica de derecho público, RUT. 62.000.530-4 , con domicilio en calle Av.héroes de la concepcion N 502 de la ciudad de Iquique, representado por su Director (s) <b>PEDRO IRIONDO CORREA</b> chileno, Cédula Nacional de Identidad N°14.101.085-9, del mismo domicilio del servicio público que representa, en
+        En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL ERNESTO TORRES GALDAMES</b>, persona jurídica de derecho público, RUT. 62.000.530-4 , con domicilio en calle Av.héroes de la concepcion N 502 de la ciudad de Iquique, representado por su Director
+        <!-- (s) <b>PEDRO IRIONDO CORREA</b> -->
+        <b>HÉCTOR ALARCÓN ALARCÓN</b>
+        chileno, Cédula Nacional de Identidad N°14.101.085-9, del mismo domicilio del servicio público que representa, en
         adelante , "El Director del Hospital Ernesto Torres Galdames", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
         con domicilio en {{$ServiceRequest->address}}, de la ciudad de Iquique, en adelante “El Profesional” y exponen lo siguiente:
       </p>
@@ -248,7 +251,10 @@
       @endif
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       <strong>PRIMERO:</strong>
-      Don PEDRO IRIONDO CORREA, en su calidad de Director (s) del Hospital Ernesto Torres Galdames, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
+      Don
+      <!-- PEDRO IRIONDO CORREA,  -->
+      HÉCTOR ALARCÓN ALARCÓN,
+      en su calidad de Director del Hospital Ernesto Torres Galdames, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
       @if($ServiceRequest->profession){{$ServiceRequest->profession->name}},@endif apoyo a {{$ServiceRequest->responsabilityCenter->name}} de la Dirección del Hospital Ernesto Torres Galdames.
       @else
       <p class="justify">
@@ -515,12 +521,12 @@
           @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
           <strong>
             <span class="uppercase">
-              <!-- HECTOR ALARCÓN ALARCÓN -->
-              PEDRO IRIONDO CORREA
+              HECTOR ALARCÓN ALARCÓN
+              <!-- PEDRO IRIONDO CORREA -->
             </span>
             <br>
-            DIRECTOR (S)<br>
-            HOSPITAL DR ERNESTO TORRES GALDÁMEZ (S)<br>
+            DIRECTOR<br>
+            HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
           </strong>
 
           <br style="padding-bottom: 4px;">
