@@ -108,11 +108,9 @@ class SignatureController extends Controller
             if ($request->file_base_64) {
                 $documentFile = base64_decode($request->file_base_64);
                 $signaturesFile->md5_file = $request->md5_file;
-//                $signaturesFile->file = $request->file_base_64;
             } else {
                 $documentFile = file_get_contents($request->file('document')->getRealPath());
                 $signaturesFile->md5_file = md5_file($request->file('document'));
-//                $signaturesFile->file = base64_encode(file_get_contents($documentFile->getRealPath()));
             }
 
             $signaturesFile->file_type = 'documento';
@@ -129,7 +127,6 @@ class SignatureController extends Controller
                     $signaturesFile->signature_id = $signature->id;
                     $documentFile = $annexed;
 
-//                    $signaturesFile->file = base64_encode($annexed->openFile()->fread($documentFile->getSize()));
                     $signaturesFile->file_type = 'anexo';
                     $signaturesFile->save();
 
@@ -159,7 +156,6 @@ class SignatureController extends Controller
                     $signaturesFlow->ou_id = $ou_id_visator;
                     $signaturesFlow->user_id = $request->user_visator[$key];
                     $signaturesFlow->sign_position = $key + 1;
-//                    $signaturesFlow->status = false;
                     $signaturesFlow->save();
                 }
             }
@@ -203,10 +199,8 @@ class SignatureController extends Controller
             throw $e;
         }
 
-
         //se crea documento si va de Destinatarios del documento al director
         $destinatarios = $request->recipients;
-
         $dest_vec = array_map('trim', explode(',', $destinatarios));
 
         foreach($dest_vec as $dest){
@@ -229,26 +223,22 @@ class SignatureController extends Controller
                         break;
                     }
 
-
                 $parte = Parte::create([                    
                     'entered_at' => Carbon::now(),           
                     'type' => $this->tipo,
                     'date' => $request->request_date,
                     'subject' => $request->subject,
                     'origin' => $unidad.' (Parte generado desde Solicitud de Firma N°'.$signature->id.' por '.$generador.')',
-                    
                 ]);
+
                 $distribucion = SignaturesFile::where('signature_id', $signature->id)->where('file_type', 'documento')->get();
                 ParteFile::create([
                     'parte_id' => $parte->id,
                     'file' => $distribucion->first()->file,
                     'name' => $distribucion->first()->id.'.pdf',
-                    
                 ]);
-
                 
                 $signaturesFiles = SignaturesFile::where('signature_id', $signature->id)->where('file_type', 'anexo')->get();
-                
                     foreach ($signaturesFiles as $key => $sf) {                        
                         ParteFile::create([
                             'parte_id' => $parte->id,
@@ -256,24 +246,9 @@ class SignatureController extends Controller
                             'name' => $sf->id.'.pdf',
                             'signature_file_id' => $sf->id,
                         ]);
-
-                
-                    
-
                 }
-
             }
-            
-
         }
-
-        
-
-
-
-
-        
-
 
         session()->flash('info', 'La solicitud de firma ' . $signature->id . ' ha sido creada.');
         return redirect()->route('documents.signatures.index', ['mis_documentos']);
