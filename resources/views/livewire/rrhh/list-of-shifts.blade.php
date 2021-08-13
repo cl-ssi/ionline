@@ -25,6 +25,8 @@ figure:focus .menu {
 
     @livewire( 'rrhh.delete-shift',['startdate'=>$mInit[0],'enddate'=> $mEnd[0] ] ) 
     @livewire('rrhh.add-day-of-shift-modal')
+
+    
     @if(isset($staffInShift)&&count($staffInShift)>0&&$staffInShift!="")
         @foreach($staffInShift->sortBy('position') as $sis)
         {{-- sizeof($sis->days->where('day','>=',$mInit[0])->where('day','<',$mEnd[0])) --}}

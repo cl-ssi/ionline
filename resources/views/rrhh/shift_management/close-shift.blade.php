@@ -3,6 +3,7 @@
 @section('title', 'Gestion de Turnos')
 
 @section('content')
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.css"/>
 
 	@include("rrhh.shift_management.tabs", array('actuallyMenu' => 'shiftclose'))
 	<style type="text/css">
@@ -17,24 +18,43 @@
 	</style>
 	<h3>Cierre de turnos</h3>
 	<br>
-	<div class="row"> 
-		<div class="col-md-3">
+	<form method="post" action="{{ route('rrhh.shiftManag.closeShift.saveDate') }} ">
+		@csrf
+        {{ method_field('post') }} 
+		<div class="row"> 
+			<div class="col-md-1">
+				<label for="for_name">ID:</label>
+				<div class="input-group mb-3">
+					# <b>{{$cierreDelMes->id}}</b>
+				</div>	
+			</div>
+
+			<div class="col-md-3">
 				<label for="for_name">Fecha de inicio</label>
-			<div class="input-group mb-3">
-  				<input  type="date" class="form-control" value="{{ $cierreDelMes->init_date }}"  aria-describedby="basic-addon2">
+				<div class="input-group mb-3">
+  					<input  type="date" class="form-control" name="initDate" value="{{ $cierreDelMes->init_date }}"  aria-describedby="basic-addon2">
+				</div>	
+			</div>
   					
-			</div>	
-		</div>
-		<div class="col-md-3">
+			<div class="col-md-3">
 				<label for="for_name">Fecha de cierre</label>
-			<div class="input-group mb-3">
-  				<input  type="date" class="form-control" value="{{ $cierreDelMes->close_date }}"   aria-describedby="basic-addon2">
-  					<div class="input-group-append">
-    					<button class="btn btn-success" type="button">Guardar</button>
+				<div class="input-group mb-3">
+  					<input  type="date" class="form-control" value="{{ $cierreDelMes->close_date }}"  name="closeDate" aria-describedby="basic-addon2">
+					<input type="hidden" name="id" value="{{$cierreDelMes->id}}">
+  					
+				</div>	
+			</div>
+			<div class="col-md-3">
+
+				<label for="for_name" style="color:white">.</label>
+				<div class="input-group-append">
+    					<button class="btn btn-success" >{{ $cierreDelMes->id!=0? 'Modificar':'Crear' }}</button>
+    					<button class="btn btn-info" name="new" value="true">Crear</button>
   					</div>
-			</div>	
+			</div>
+
 		</div>
-	</div>
+	</form>
 
 		<form method="post" action="{{ route('rrhh.shiftManag.closeShift') }}" >
         	@csrf
@@ -47,10 +67,10 @@
 					<div class="input-group mb-3">
   				
   					<select class="form-control">
-  						<option value="1">De 2021-10-10 a 2021-10-10</option>
+  						<!-- <option value="1">De 2021-10-10 a 2021-10-10</option> -->
   						@foreach($cierres as $c)
 
-  							<option value="{{$c->id}}">De {{ $c->init_date }} a {{ $c->close_date }}</option>
+  							<option value="{{$c->id}}">#{{$c->id}} - De {{ $c->init_date }} a {{ $c->close_date }}</option>
 
   						@endforeach
   					</select>
@@ -121,7 +141,13 @@
   		</form>
 
 
-	<h4>Cerrados</h4>
+	<h4>Cerrados <a href="" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
+	<small class="form-check">
+  			<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
+  			<label class="form-check-label" for="flexCheckIndeterminate">
+    			Solo cerrados por mi
+  			</label>
+		</small>
 	<br>
 		<table  class="table table-sm">
 			<thead class="thead-dark">
@@ -150,9 +176,24 @@
 					</td>
 				</tr>
 				@endforeach
+				@if( count( $closed ) < 1 )
+				<tr>
+					<td  colspan="6" style="text-align:center">	
+							
+						Sin registro de cerrados en este rango de fechas
+
+					</td>
+				</tr>
+				@endif
 			</tbody>
 		</table>
-	<h4>Confirmados</h4>
+	<h4>Confirmados <a href="" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a> </h4>
+	<small class="form-check">
+  			<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
+  			<label class="form-check-label" for="flexCheckIndeterminate">
+    			Solo confirmados por mi
+  			</label>
+		</small>
 	<br>
 		<table  class="table table-sm">
 			<thead class="thead-dark">
@@ -193,11 +234,21 @@
 						</td>
 					</tr>
 				@endforeach
+				@if( count( $firstConfirmations ) < 1 )
+				<tr>
+					<td  colspan="6" style="text-align:center">	
+							
+						Sin registro de confirmados en este rango de fechas
+
+					</td>
+				</tr>
+				@endif
 			</tbody>
 		</table>
-	<h4>Pendientes</h4>
+	<h4>Pendientes <a href="" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
 	<br>
-	<table  class="table table-sm">
+	<div class="table-wrapper-scroll-y my-custom-scrollbar" style="position: relative;height: 400px;overflow: auto;display: block;">
+	<table  class="table table-sm" id="tblPendientes">
 		<thead class="thead-dark">
 			<tr>
 				<th>#</th>
@@ -255,8 +306,15 @@
 				@endforeach
 			</tbody>
 		</table>
+	</div>
 	<br>
-	<h4>Rechazados</h4>
+	<h4>Rechazados <a href="" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
+	<small class="form-check">
+  			<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
+  			<label class="form-check-label" for="flexCheckIndeterminate">
+    			Solo rechazados por mi
+  			</label>
+		</small>
 	<br>
 	<table  class="table table-sm">
 		<thead class="thead-dark">
@@ -301,4 +359,42 @@
     </div>
   </div>
 </div>
+@endsection
+
+
+@section('custom_js')
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/datatables.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#tblPendientes').DataTable({
+        "paging": false,
+        "language":{
+             "decimal":        "",
+             "emptyTable":     "Sin registro de pendientes en ese rango de fechas",
+             "info":           "Mostrando _START_ de _END_ de un total de _TOTAL_",
+             "infoEmpty":      "Mostrando 0 to 0 of 0 registros",
+             "infoFiltered":   "(filtered from _MAX_ total entries)",
+             "infoPostFix":    "",
+             "thousands":      ",",
+             "lengthMenu":     "Mostrar _MENU_ filas",
+             "loadingRecords": "Cargando...",
+             "processing":     "Procesando...",
+             "search":         "Buscar:",
+             "zeroRecords":    "No se encontró nada con ese criterio",
+             "paginate": {
+                 "first":      "Primera",
+                 "last":       "Última",
+                 "next":       "Siguiente",
+                 "previous":   "Anterior"
+             },
+             "aria": {
+                 "sortAscending":  ": activate to sort column ascending",
+                 "sortDescending": ": activate to sort column descending"
+             }
+         }
+
+    } );
+} );
+</script>
+
 @endsection
