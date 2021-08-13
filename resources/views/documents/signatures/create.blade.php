@@ -157,6 +157,14 @@
             form.submitBtn.disabled = true;
             return true;
         }
+
+        $('#for_document').bind('change', function() {
+            if((this.files[0].size / 1024 / 1024) > 3){
+                alert('No puede cargar un pdf de mas de 3 MB.');
+                $('#for_document').val('');
+            }
+        });
+
     </script>
 
 @endsection
