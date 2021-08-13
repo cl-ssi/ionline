@@ -45,7 +45,7 @@ class ReportController extends Controller
       //   })
       ->where('has_invoice_file', 1)
       ->whereNotNull('signatures_file_id')
-      ->whereIn('type', ['Mensual', 'Parcial'])
+      ->whereIn('type', ['Mensual', 'Parcial', 'Horas Médicas'])
       ->where('responsable_approbation', 1)
       ->where('rrhh_approbation', 1)
       ->where('finances_approbation', 1)

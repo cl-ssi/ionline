@@ -1079,10 +1079,13 @@ class ShiftManagementController extends Controller
             // echo "Cierre del mes econtrad";
 
         }else{
-            $cierreDelMes = (object) array("id"=>0,"user_id"=>1,"commentary"=>"","init_date"=>$actuallyYear."-".$actuallyMonth."-01","close_date"=>$actuallyYear."-".$actuallyMonth."-".$days);
+            $cierreDelMes = ShiftDateOfClosing::latest()->first();
+            if(!isset($cierreDelMes))
+                $cierreDelMes = (object) array("id"=>0,"user_id"=>1,"commentary"=>"","init_date"=>$actuallyYear."-".$actuallyMonth."-01","close_date"=>$actuallyYear."-".$actuallyMonth."-".$days); // anters
         }
-
-        $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->whereHas("days",  function($q) use($cierreDelMes){
+        $staffInShift = array();
+        if($cierreDelMes->id != 0)
+            $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->whereHas("days",  function($q) use($cierreDelMes){
                 
                     $q->where('day','<=',$cierreDelMes->close_date)->where('day','>=',$cierreDelMes->init_date)->whereNull('shift_close_id'); // Para filtrar solo los dias de la unidad organizacional del usuario
             
@@ -1091,6 +1094,9 @@ class ShiftManagementController extends Controller
         $firstConfirmations = ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->get();
         $closed= ShiftClose::whereNotNull("close_date")->get();
         $cierres = ShiftDateOfClosing::all();
+        // if(isset( $cierres ))
+        //     $cierres = (object) array("id"=>0,"user_id"=>1,"commentary"=>"","init_date"=>$actuallyYear."-".$actuallyMonth."-01","close_date"=>$actuallyYear."-".$actuallyMonth."-".$days);
+
         // foreach ($staffInShift as $s ) {
         //     if( $s->shift_close_id != 0 && $s->shift_close_id != ""){
         //         if( $s->closeStatus->close_status != "" && $s->closeStatus->close_status == 1 )
@@ -1509,7 +1515,7 @@ class ShiftManagementController extends Controller
         $f->close_commentary = "";
         $f->close_status = 2;
         $f->close_date = Carbon::now()->format('Y-m-d');;
-        $f->close_user_id =  Auth()->user()->id; ;
+        $f->close_user_id =  Auth()->user()->id; 
         $f->save();
         session()->flash('success', 'Se han cerrado los días ');
         return redirect()->route('rrhh.shiftManag.closeShift');
@@ -1527,5 +1533,34 @@ class ShiftManagementController extends Controller
         return $a;
 
     }
+    public function saveClose($new=false,Request $r){
+        $new = $r->new;
+        if(!$new){
 
+            if($r->id == 0) //crear
+                $bDate = new ShiftDateOfClosing;
+            else // actualizar
+                $bDate = ShiftDateOfClosing::find($r->id);
+        
+            $bDate->init_date = $r->initDate;
+            $bDate->close_date = $r->closeDate;
+            $bDate->user_id = Auth()->user()->id;
+            if($r->id == 0) //crear
+                $bDate->save() ; 
+            else // actualizar
+                $bDate->update() ; 
+
+            session()->flash('success', 'Se han '.( ($r->id == 0)?'creado':'modificado' ).' el dia de cierre ');
+        }else{
+                $bDate = new ShiftDateOfClosing;
+                $bDate->init_date = $r->initDate;
+                $bDate->close_date = $r->closeDate;
+                $bDate->user_id = Auth()->user()->id;
+                $bDate->save() ; 
+                session()->flash('success', 'Se han creado el dia de cierre ');
+
+        }
+
+        return redirect()->route('rrhh.shiftManag.closeShift');    
+    }
 }
