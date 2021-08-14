@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\ServiceRequests\ServiceRequest;
+use App\Models\ServiceRequests\Fulfillment;
 use Carbon\Carbon;
 
 class CheckSR extends Command
@@ -42,7 +43,7 @@ class CheckSR extends Command
         $srs = ServiceRequest::where('program_contract_type','Mensual')->get();
         $ct = 1;
         foreach($srs as $sr) {
-            $diferencia = $sr->end_date->month - $sr->start_date->month + 1 ;
+            $diferencia = $sr->end_date->month - $sr->start_date->month + 1 ;             
             if( $diferencia < count($sr->fulfillments)  ) {
                 echo $ct . ") " . $sr->id . " " . $sr->program_contract_type 
                 . " " . $sr->working_day_type . " ";
@@ -61,6 +62,7 @@ class CheckSR extends Command
                 foreach($sr->fulfillments as $f) {
                     if(in_array($f->month, $array_real) === false) {
                         echo "eliminar fulfillment: " . $f->id . "\n"; 
+                        $f->delete();
                     }
                     $array_malo[] = $f->month;
                 }
@@ -74,6 +76,7 @@ class CheckSR extends Command
                 echo $sr->end_date->month - $sr->start_date->month + 1 . " => ";
                 echo count($sr->fulfillments). " \n ";
                 $ct++;
+                //echo'soy mayor';
 
                 $array_real = null;
                 for($i = $sr->start_date->month; $i <= $sr->end_date->month; $i++) {
@@ -91,6 +94,7 @@ class CheckSR extends Command
                         $array_real[$i]['end_date']   = $sr->end_date;
                         $array_real[$i]['year']       = $sr->start_date->year;
                         $array_real[$i]['month']      = $sr->start_date->month;
+                        $array_real[$i]['user_id']    = $sr->responsable_id;
                     }
                     else if($i == $sr->start_date->month) {
                         if($sr->start_date->day == $sr->start_date->firstOfMonth()->day){
@@ -103,6 +107,7 @@ class CheckSR extends Command
                         $array_real[$i]['end_date']   = $sr->start_date->endOfMonth();
                         $array_real[$i]['year']       = $sr->start_date->year;
                         $array_real[$i]['month']      = $sr->start_date->month;
+                        $array_real[$i]['user_id']    = $sr->responsable_id;
                     }
                     else if($i == $sr->end_date->month) {
                         if($sr->end_date->day == $sr->end_date->endOfMonth()->day){
@@ -115,6 +120,7 @@ class CheckSR extends Command
                         $array_real[$i]['end_date']   = $sr->end_date;
                         $array_real[$i]['year']       = $sr->end_date->year;
                         $array_real[$i]['month']      = $sr->end_date->month;
+                        $array_real[$i]['user_id']    = $sr->responsable_id;
                     }
                     else {
                         $fecha_start = new Carbon($sr->start_date->year.'-'.$i.'-1');
@@ -124,11 +130,21 @@ class CheckSR extends Command
                         $array_real[$i]['end_date']   = $fecha_end->endOfMonth();
                         $array_real[$i]['year']       = $fecha_start->year;
                         $array_real[$i]['month']      = $fecha_start->month;
+                        $array_real[$i]['user_id']    = $sr->responsable_id;
                     }
                     
                     
                 }
+                echo("////////Comienzo agregar ///////////"). " \n ";
                 print_r($array_real);
+                // Fulfillment::create([
+                //     'destination' => 'LAX',
+                //     'origin' => 'LHR',
+                //     'last_flown' => '2020-03-04 11:00:00',
+                //     'last_pilot_id' => 747,
+                // ]);
+                Fulfillment::insert($array_real);
+                echo("////////Fin agregar ///////////"). " \n ";
 
                 // $array_malo = null;
                 // foreach($sr->fulfillments as $f) {
