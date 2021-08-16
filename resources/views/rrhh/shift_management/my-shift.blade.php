@@ -71,7 +71,7 @@
         @endforeach
     @endif
 </div>
-    
+     @livewire('rrhh.list-of-shifts', ["staffInShift"=>$myShifts])
 
 <br>
 <br>

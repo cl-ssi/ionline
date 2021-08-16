@@ -57,7 +57,7 @@ class ListOfShifts extends Component
         // return view('livewire.rrhh.list-of-shifts',[compact($this- >staffInShift,$this->days),'actuallyMonth'=>$this->actuallyMonth,'actuallyYear'=>$this->actuallyYear]);
     }
 
-    public function mount($actuallyShift=null)
+    public function mount($actuallyShift=null,$staffInShift=null)
     {
         // $this->staffInShift = $staffInShift;
         // $this->actuallyYear = $actuallyYear;
@@ -105,6 +105,8 @@ class ListOfShifts extends Component
             $this->actuallyShift = $actuallyShift;
         if($this->actuallyShift->id != 0)
             $this->staffInShift = ShiftUser::where('organizational_units_id', $this->actuallyOrgUnit->id )->where('shift_types_id',$this->actuallyShift->id)->where('date_up','>=',$this->actuallyYear."-".$this->actuallyMonth."-01")->where('date_from','<=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->where('groupname',htmlentities(Session::get('groupname')))->get();
+        if($staffInShift!=null)
+            $this->staffInShift = $staffInShift;
         // else
         //     $this->staffInShift = ShiftUser::where('organizational_units_id', $this->actuallyOrgUnit->id )->where('date_up','>=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->where('date_from','<=',$this->actuallyYear."-".$this->actuallyMonth."-".$this->days)->get();
     }

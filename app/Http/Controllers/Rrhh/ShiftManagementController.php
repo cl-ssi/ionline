@@ -985,9 +985,12 @@ class ShiftManagementController extends Controller
                     array_push($myConfirmationEarrings, $myChangeDay) ;
             }
             $myConfirmationEarrings = (object) $myConfirmationEarrings;
+
+          $myShifts    = ShiftUser::where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->where('user_id',Auth()->user()->id)->get();
+
         $months = $this->months;
         $tiposJornada = $this->tiposJornada;
-         return view('rrhh.shift_management.my-shift',compact('days','actuallyMonth','actuallyDay','actuallyYear','sTypes','users','months','myConfirmationEarrings','tiposJornada'));
+         return view('rrhh.shift_management.my-shift',compact('days','actuallyMonth','actuallyDay','actuallyYear','sTypes','users','months','myConfirmationEarrings','tiposJornada','myShifts'));
     }
 
     public function myShiftConfirm($day){
