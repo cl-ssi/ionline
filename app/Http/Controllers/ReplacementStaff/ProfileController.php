@@ -17,8 +17,8 @@ class ProfileController extends Controller
         $profile = new Profile();
         $profile->degree_date = $request->degree_date;
         $profile->profile_manage_id = $request->profile;
-        if($request->profile == 2 or $request->profile == 4){
-            $profile->profession_manage_id = $request->profession;
+        $profile->profession_manage_id = $request->profession;
+        if($request->profile == 3 or $request->profile == 4){
             $profile->experience = $request->experience;
         }
         $profile->replacement_staff()->associate($replacementStaff);

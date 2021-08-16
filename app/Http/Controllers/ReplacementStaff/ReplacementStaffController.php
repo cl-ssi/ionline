@@ -79,11 +79,11 @@ class ReplacementStaffController extends Controller
 
     public function edit(ReplacementStaff $replacementStaff)
     {
-        $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
+        //$professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
         $profileManage = ProfileManage::orderBy('name', 'ASC')->get();
         // dd(Auth()->user());
         if($replacementStaff->run == Auth()->user()->id){
-          return view('replacement_staff.edit', compact('replacementStaff', 'professionManage', 'profileManage'));
+          return view('replacement_staff.edit', compact('replacementStaff'));
         }
         else{
             return redirect()->back();
