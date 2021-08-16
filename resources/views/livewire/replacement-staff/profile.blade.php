@@ -15,21 +15,30 @@
                     <label for="for_profile">Estamento</label>
                     <select name="profile" class="form-control" wire:model="profileSelected" required>
                         <option value="">Seleccione</option>
-                        @foreach($profileManage as $profile)
-                            <option value="{{ $profile->id }}">{{ $profile->Name }}</option>
+                        @foreach($profiles as $profile)
+                            <option value="{{ $profile->id }}">{{ $profile->name }}</option>
                         @endforeach
                     </select>
                 </fieldset>
 
+                @if(!is_null($professions))
                 <fieldset class="form-group col mt">
                     <label for="for_profession">Profesión</label>
-                    <select name="profession" class="form-control" required {{ $selectstate }}>
+                    <select name="profession" class="form-control" required>
                         <option value="" {{ ($selectstate == '')?'selected':'' }}>Seleccione</option>
-                        @foreach($professionManage as $profession)
-                            <option value="{{ $profession->id }}">{{ $profession->Name }}</option>
+                        @foreach($professions as $profession)
+                            <option value="{{ $profession->id }}">{{ $profession->name }}</option>
                         @endforeach
                     </select>
                 </fieldset>
+                @else
+                <fieldset class="form-group col mt">
+                    <label for="for_profession">Profesión</label>
+                    <select name="profession" class="form-control" disabled required>
+                        <option value="">Seleccione</option>
+                    </select>
+                </fieldset>
+                @endif
 
                 <fieldset class="form-group col mt">
                     <label for="for_profession">Experiencia</label>
