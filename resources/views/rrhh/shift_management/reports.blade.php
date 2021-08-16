@@ -169,7 +169,7 @@
 					<td>{{$loop->iteration}}</td>
 					<td>{{$r->ShiftUser->user->runFormat()}}</td>
 					<td>{{$r->ShiftUser->user->getFullNameAttribute()}}</td>
-					<td>{{(isset($r->ShiftUser->user->organizationalUnit) && $r->ShiftUser->user->organizationalUnit !="") ? "":$r->ShiftUser->user->organizationalUnit->name}}</td>
+					<td>{{(isset($r->ShiftUser->user->organizationalUnit) && $r->ShiftUser->user->organizationalUnit !="" && isset($r->ShiftUser->user->organizationalUnit->name) ) ? $r->ShiftUser->user->organizationalUnit->name:""}}</td>
                     <td>{{$r->day}}</td>
 
 				
