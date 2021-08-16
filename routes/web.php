@@ -402,7 +402,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
            Route::get('/shiftreports', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReports'])->name('shiftManag.shiftReports')->middleware('auth');
            Route::post('/shiftreports', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReports'])->name('shiftManag.shiftReports')->middleware('auth');
-           
+           Route::get('/shiftreports/XLSdownload', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReportsXLSDownload'])->name('shiftManag.shiftReportsXLSdownload')->middleware('auth');
            
 
            Route::get('/shiftdashboard', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftDashboard'])->name('shiftManag.shiftDashboard')->middleware('auth');

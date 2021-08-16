@@ -814,7 +814,7 @@ class ShiftManagementController extends Controller
         }
 
 
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.s heet');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="turnos20210413-113325.xlsx"');
         header('Cache-Control: max-age=0');
 
@@ -1232,7 +1232,38 @@ class ShiftManagementController extends Controller
         if($actuallyDayStatus!="0")
             $reportResult = $reportResult->where("status",$actuallyDayStatus);
 
+     Session::put('reportResult',$reportResult);
+
        return view('rrhh.shift_management.reports', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','shiftDayPerStatus' , 'shiftDayPerJournalType','chartpeoplecant','sTypes','actuallyShift','tiposJornada','shiftStatus','actuallyDayStatus','actuallyJournalType','datefrom','dateto','actuallySerie','reportResult'));
+    }
+
+    public function shiftReportsXLSDownload(){
+
+        $spreadsheet = new Spreadsheet(); 
+        $sheet = $spreadsheet->getActiveSheet();
+        $reportResult = (object) array();
+        if( null !== Session::get('reportResult')  )
+            $reportResult = Session::get('reportResult');
+        $index = 1;
+        // $sheet->setCellValue('A1',  strtoupper("A"));
+        foreach($reportResult as $r){
+
+            $sheet->setCellValue('A'.$index,  strtoupper($r->ShiftUser->user->runFormat()) );
+            $sheet->setCellValue('B'.$index,  strtoupper($r->ShiftUser->user->getFullNameAttribute()) );
+            $sheet->setCellValue('C'.$index,  strtoupper(isset($r->ShiftUser->user->organizationalUnit) && $r->ShiftUser->user->organizationalUnit !="" && isset($r->ShiftUser->user->organizationalUnit->name) ) ? $r->ShiftUser->user->organizationalUnit->name:"");
+            $sheet->setCellValue('D'.$index,  strtoupper($r->day));
+                
+                $index++;
+        }
+
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="reporte20210413-113325.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output'); 
+
     }
 
     public function shiftDashboard(){
@@ -1522,9 +1553,8 @@ class ShiftManagementController extends Controller
         $f->save();
         session()->flash('success', 'Se han cerrado los días ');
         return redirect()->route('rrhh.shiftManag.closeShift');
-    
     }
-
+    
     public function transferUser(){
 
         $a = 0;
@@ -1534,8 +1564,8 @@ class ShiftManagementController extends Controller
 
         }
         return $a;
-
     }
+
     public function saveClose($new=false,Request $r){
         $new = $r->new;
         if(!$new){
