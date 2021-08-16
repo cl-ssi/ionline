@@ -1253,7 +1253,23 @@ class ShiftManagementController extends Controller
             $sheet->setCellValue('C'.$index,  strtoupper(isset($r->ShiftUser->user->organizationalUnit) && $r->ShiftUser->user->organizationalUnit !="" && isset($r->ShiftUser->user->organizationalUnit->name) ) ? $r->ShiftUser->user->organizationalUnit->name:"");
             $sheet->setCellValue('D'.$index,  strtoupper($r->day));
                 
-                $index++;
+            if ( substr( $r->working_day,0, 1) != "+" ) 
+                        
+                $sheet->setCellValue('E'.$index,  $this->tiposJornada[$r->working_day]); 
+                                   
+            elseif(  substr( $r->working_day,0, 1) == "+" )
+                        
+                $sheet->setCellValue('E'.$index,  $r->working_day);
+                    
+            else
+                    
+                $sheet->setCellValue('E'.$index,  "N/A");
+                    
+
+            $dayF = Carbon::createFromFormat('Y-m-d',  $r->day, 'Europe/London');
+            $sheet->setCellValue('F'.$index, ucfirst ( ( $r->status == 1 && $dayF->isPast() ) ? "Completado" : $this->shiftStatus [ $r->status ]  ) );
+            $sheet->setCellValue('G'.$index, ($r->derived_from != "" && isset($r->DerivatedShift) ) ? $r->DerivatedShift->ShiftUser->user->runFormat()." ".$r->DerivatedShift->ShiftUser->user->getFullNameAttribute() : "--" );
+            $index++;
         }
 
 
