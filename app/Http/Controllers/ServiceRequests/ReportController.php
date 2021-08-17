@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Establishment;
 use App\Rrhh\OrganizationalUnit;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ComplianceExport;
 
 class ReportController extends Controller
 {
@@ -73,7 +75,7 @@ class ReportController extends Controller
       //   })
       ->where('has_invoice_file', 1)
       ->whereNotNull('signatures_file_id')
-      ->whereNotIn('type', ['Mensual', 'Parcial'])
+      ->whereNotIn('type', ['Mensual', 'Parcial', 'Horas Médicas'])
       ->whereNull('total_paid')
       ->get();
 
@@ -467,10 +469,19 @@ class ReportController extends Controller
 
     $request->flash();
 
+
     return view(
       'service_requests.requests.fulfillments.reports.compliance',
       compact('years', 'fulfillments', 'request')
     );
+  }
+
+  public function complianceExport()
+  {      
+    //dd($request);
+    //dd($request->year);
+    return Excel::download(new ComplianceExport, 'reporte-de-cumplimiento.xlsx');
+    
   }
 
 
