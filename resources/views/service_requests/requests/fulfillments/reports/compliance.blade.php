@@ -144,18 +144,25 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-1">
+        <!-- <fieldset class="form-group col-md-1">
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
         </fieldset>
         <div class="col">
         <fieldset class="form-group col-md-6">
-             <label for="">&nbsp;</label>
+             <label for="">&nbsp;</label>             
             <button type="button" class="btn btn-outline-primary" title="Descargar Excel" id="downloadLink" onclick="exportF(this)">Descargar Excel<i class="fas fa-file-excel"></i> </button>
+            <a></a>         
+            
         </fieldset>
-        </div>
+        
+        </div> -->
 
     </div>
+
+
+    <a type="button" class="btn btn-outline-primary" title="Descargar Excel" href="{{ route('rrhh.service-request.report.compliance-export') }}"
+        id="downloadLink">Descargar Excel <small>(todos)</small> <i class="fas fa-file-excel"></i> </a>
    
     
 
@@ -165,7 +172,7 @@
 
 <h3 class="mb-3">Reporte de cumplimiento</h3>
 
-<div class="table-responsive">
+
     <table class="table table-sm table-bordered table-stripped" id="tabla_cumplimiento">
         <tr>
             <th>Ct.</th>
@@ -227,10 +234,10 @@
         @endforeach
     </table>
 
-    {{ $fulfillments->appends(request()->query())->links() }}
+    
 
-</div>
 
+{{ $fulfillments->appends(request()->query())->links() }}
 
 @endsection
 
@@ -246,12 +253,14 @@
   let minute = date.getMinutes()
 
   function exportF(elem) {
+    //alert('entre acá');
     var table = document.getElementById("tabla_cumplimiento");
     var html = table.outerHTML;
     var html_no_links = html.replace(/<a[^>]*>|<\/a>/g, ""); //remove if u want links in your table
     var url = 'data:application/vnd.ms-excel,' + escape(html_no_links); // Set your html table into url
     elem.setAttribute("href", url);
-    elem.setAttribute("download", "tabla_cumplimiento.xls"); // Choose the file name
+    alert(table);
+    elem.setAttribute("download", "probando.xls"); // Choose the file name
     return false;
   }
 </script>
