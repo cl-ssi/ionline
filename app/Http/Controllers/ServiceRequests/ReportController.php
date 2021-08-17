@@ -480,7 +480,7 @@ class ReportController extends Controller
   {      
     //dd($request);
     //dd($request->year);
-    return Excel::download(new ComplianceExport, 'reporte-de-cumplimiento.xlsx');
+    return Excel::download(new ComplianceExport, 'reporte-de-cumplimiento-todos.xlsx');
     
   }
 
