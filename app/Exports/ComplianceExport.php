@@ -2,12 +2,12 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\{FromCollection, WithHeadings, WithMapping};
+use Maatwebsite\Excel\Concerns\{FromCollection, WithHeadings, WithMapping, ShouldAutoSize};
 use App\Models\ServiceRequests\Fulfillment;
 use Illuminate\Http\Request;
 
 
-class ComplianceExport implements FromCollection, WithHeadings, WithMapping 
+class ComplianceExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize
 {
 
     // private $request;
