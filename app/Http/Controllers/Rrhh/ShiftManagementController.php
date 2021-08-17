@@ -1614,4 +1614,13 @@ class ShiftManagementController extends Controller
 
         return redirect()->route('rrhh.shiftManag.closeShift');    
     }
+
+    public function changeShiftUserCommentary(Request $r){
+        $bShiftUser = ShiftUser::find( $r->id );
+        $bShiftUser->commentary = $r->commentary; 
+        $bShiftUser->update();
+         session()->flash('success', 'Se ha modificado el turno ID #'. $r->id);
+
+        return redirect()->route('rrhh.shiftManag.index',["groupname"=>Session::get('groupname')]);
+    }
 }
