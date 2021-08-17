@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\{FromCollection, WithHeadings, WithMapping, ShouldAutoSize};
 use App\Models\ServiceRequests\Fulfillment;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Illuminate\Http\Request;
 
 
@@ -11,10 +12,13 @@ class ComplianceExport implements FromCollection, WithHeadings, WithMapping, Sho
 {
 
     // private $request;
-    // public function __construct(Request $request)
-    // {
-    //     $this->request = $request;
-    // }
+    
+    use Exportable;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
 
 
 
@@ -22,9 +26,9 @@ class ComplianceExport implements FromCollection, WithHeadings, WithMapping, Sho
     {
         
         return Fulfillment::
-        whereHas('ServiceRequest')
-        ->orderBy('id','Desc')->get();
-        //return $this->fulfillment->all();
+        Search($this->request)
+        ->whereHas('ServiceRequest')
+        ->orderBy('id','Desc')->get();        
     }
 
 
@@ -49,7 +53,7 @@ class ComplianceExport implements FromCollection, WithHeadings, WithMapping, Sho
             ($fulfillment->servicerequest)?$fulfillment->servicerequest->employee->runFormat(): '',
             ($fulfillment->servicerequest->employee)? strtoupper($fulfillment->servicerequest->employee->fullname) : '',
             $fulfillment->servicerequest->responsabilityCenter->name,
-            $fulfillment->year-$fulfillment->month,
+            $fulfillment->year - $fulfillment->month,
             $fulfillment->servicerequest->type,
             $fulfillment->servicerequest->program_contract_type,
             $fulfillment->servicerequest->working_day_type            

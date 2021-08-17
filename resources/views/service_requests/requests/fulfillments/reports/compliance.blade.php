@@ -139,8 +139,8 @@
 				<option value="DIURNO PASADO A TURNO" @if($request->input('working_day_type')=='DIURNO PASADO A TURNO') selected @endif>DIURNO PASADO A TURNO</option>
 				<option value="HORA MÉDICA" @if($request->input('working_day_type')=='HORA MÉDICA') selected @endif>HORA MÉDICA</option>
 				<option value="HORA EXTRA" @if($request->input('working_day_type')=='HORA EXTRA') selected @endif>HORA EXTRA</option>
-				<option value="TURNO EXTRA">TURNO EXTRA</option>
-				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
+				<option value="TURNO EXTRA" @if($request->input('working_day_type')=='TURNO EXTRA') selected @endif>TURNO EXTRA</option>
+				<option value="TURNO DE REEMPLAZO" @if($request->input('working_day_type')=='TURNO DE REEMPLAZO') selected @endif >TURNO DE REEMPLAZO</option>
             </select>
         </fieldset>
 
@@ -148,22 +148,24 @@
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
         </fieldset>
-        <!--
+        
         <div class="col">
         <fieldset class="form-group col-md-6">
              <label for="">&nbsp;</label>             
-            <button type="button" class="btn btn-outline-primary" title="Descargar Excel" id="downloadLink" onclick="exportF(this)">Descargar Excel<i class="fas fa-file-excel"></i> </button>
-            <a></a>         
-            
+            <button type="submit" class="btn btn-outline-primary" title="Descargar Excel" name="excel">Descargar Excel<i class="fas fa-file-excel"></i> </button>
         </fieldset>
         
-        </div> -->
+        </div>
 
     </div>
 
 
-    <a type="button" class="btn btn-outline-primary" title="Descargar Excel" href="{{ route('rrhh.service-request.report.compliance-export') }}"
-        id="downloadLink">Descargar Excel <small>(todos)</small> <i class="fas fa-file-excel"></i> </a>
+    <!-- <button type="submit" name="excel" class="form-control btn btn-primary"><i class="fas fa-file-excel"></i></button> -->
+
+
+    <!-- 
+        <a type="button" class="btn btn-outline-primary" title="Descargar Excel" href="#"
+        id="downloadLink">Descargar Excel <small>(todos)</small> <i class="fas fa-file-excel"></i> </a> -->
    
     
 
