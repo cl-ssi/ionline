@@ -990,7 +990,9 @@ class ShiftManagementController extends Controller
 
         $months = $this->months;
         $tiposJornada = $this->tiposJornada;
-         return view('rrhh.shift_management.my-shift',compact('days','actuallyMonth','actuallyDay','actuallyYear','sTypes','users','months','myConfirmationEarrings','tiposJornada','myShifts'));
+        $holidays = Holiday::all();
+
+         return view('rrhh.shift_management.my-shift',compact('days','actuallyMonth','actuallyDay','actuallyYear','sTypes','users','months','myConfirmationEarrings','tiposJornada','myShifts','holidays'));
     }
 
     public function myShiftConfirm($day){
