@@ -144,10 +144,11 @@
             </select>
         </fieldset>
 
-        <!-- <fieldset class="form-group col-md-1">
+         <fieldset class="form-group col-md-1">
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
         </fieldset>
+        <!--
         <div class="col">
         <fieldset class="form-group col-md-6">
              <label for="">&nbsp;</label>             
