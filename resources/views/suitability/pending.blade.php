@@ -26,6 +26,7 @@
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
         </fieldset>
     </div>
+</form>
 
 <table class="table">
     <thead>
@@ -56,7 +57,7 @@
             <td>
             <form action="{{ route('suitability.finalresult',['psirequest' => $psirequest, 'result' => 'Aprobado']) }}" method="POST" >
             @csrf
-            @method('PATCH')
+            @method('PATCH')            
             <button type="submit" class="btn btn-success float-left"><i class="fa fa-check"></i></button>
             </form>
             </td>

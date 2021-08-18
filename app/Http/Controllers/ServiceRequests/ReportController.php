@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Support\Facades\Auth;
 use App\Establishment;
 use App\Rrhh\OrganizationalUnit;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ComplianceExport;
 
 class ReportController extends Controller
 {
@@ -73,7 +75,7 @@ class ReportController extends Controller
       //   })
       ->where('has_invoice_file', 1)
       ->whereNotNull('signatures_file_id')
-      ->whereNotIn('type', ['Mensual', 'Parcial'])
+      ->whereNotIn('type', ['Mensual', 'Parcial', 'Horas Médicas'])
       ->whereNull('total_paid')
       ->get();
 
@@ -370,7 +372,7 @@ class ReportController extends Controller
 
     // }
     $request->flash();
-    return view('service_requests.reports.pay_rejected', compact('fulfillments', 'request','responsabilityCenters', 'establishments'));
+    return view('service_requests.reports.pay_rejected', compact('fulfillments', 'request', 'responsabilityCenters', 'establishments'));
   }
 
   public function budgetAvailability(ServiceRequest $serviceRequest)
@@ -458,7 +460,7 @@ class ReportController extends Controller
     //$users = User::getUsersBySearch($request->get('name'))->orderBy('name','Asc')->paginate(150);
     $fulfillments = Fulfillment::Search($request)
       ->whereHas('ServiceRequest')
-      ->orderBy('id','Desc')
+      ->orderBy('id', 'Desc')
       ->paginate(200);
 
     /* Año actual y año anterior */
@@ -466,12 +468,24 @@ class ReportController extends Controller
     $years[] = now()->subYear('1')->format('Y');
 
     $request->flash();
+    if ($request->has('excel')) {
+      //$this->complianceExport($request);
+      return Excel::download(new ComplianceExport($request), 'reporte-de-cumplimiento.xlsx');
+    }
 
-    return view(
-      'service_requests.requests.fulfillments.reports.compliance',
-      compact('years', 'fulfillments', 'request')
-    );
+
+
+    //$this->complianceExport($request);
+    else {
+      return view(
+        'service_requests.requests.fulfillments.reports.compliance',
+        compact('years', 'fulfillments', 'request')
+      );
+    }
+
   }
+
+  
 
 
   //public function paginate($items, $perPage = 5, $page = null, $options = [])
@@ -503,31 +517,31 @@ class ReportController extends Controller
 
 
 
-      $filitas = ServiceRequest::where('establishment_id', 1)
-        ->when($request->run != null, function ($q) use ($run) {
-          return $q->where('user_id', $run);
-        })
-        ->when($request->id_from != null, function ($q) use ($id_from) {
-          return $q->where('id', '>=', $id_from);
-        })
-        ->when($request->id_to != null, function ($q) use ($id_to) {
-          return $q->where('id', '<=', $id_to);
-        })
-        ->when($request->from != null, function ($q) use ($from) {
-          return $q->where('start_date', '>=', $from);
-        })
-        ->when($request->to != null, function ($q) use ($to) {
-          return $q->where('start_date', '<=', $to);
-        })
+    $filitas = ServiceRequest::where('establishment_id', 1)
+      ->when($request->run != null, function ($q) use ($run) {
+        return $q->where('user_id', $run);
+      })
+      ->when($request->id_from != null, function ($q) use ($id_from) {
+        return $q->where('id', '>=', $id_from);
+      })
+      ->when($request->id_to != null, function ($q) use ($id_to) {
+        return $q->where('id', '<=', $id_to);
+      })
+      ->when($request->from != null, function ($q) use ($from) {
+        return $q->where('start_date', '>=', $from);
+      })
+      ->when($request->to != null, function ($q) use ($to) {
+        return $q->where('start_date', '<=', $to);
+      })
 
-        //->whereBetween('start_date', [$request->from, $request->to])
-        ->where(function ($q) {
-          $q->whereNotNull('resolution_number')
-            ->whereNotNull('gross_amount')
-            ->orwhereNotNull('resolution_date');
-        })->paginate(100);
+      //->whereBetween('start_date', [$request->from, $request->to])
+      ->where(function ($q) {
+        $q->whereNotNull('resolution_number')
+          ->whereNotNull('gross_amount')
+          ->orwhereNotNull('resolution_date');
+      })->paginate(100);
 
-        $request->flash(); //envia los input de regreso
+    $request->flash(); //envia los input de regreso
 
 
 
@@ -578,43 +592,43 @@ class ReportController extends Controller
 
 
     $txt = null;
-      // 'RUN|' .
-      // 'DV|' .
-      // ' N°  cargo |' .
-      // ' Fecha  inicio  contrato |' .
-      // ' Fecha  fin  contrato |' .
-      // 'Establecimiento|' .
-      // ' Tipo  de  decreto |' .
-      // ' Contrato  por  prestación |' .
-      // ' Monto  bruto |' .
-      // ' Número  de  cuotas |' .
-      // 'Impuesto|' .
-      // ' Día  de  proceso |' .
-      // ' Honorario  suma  alzada |' .
-      // ' Financiado  proyecto |' .
-      // ' Centro  de  costo |' .
-      // 'Unidad|' .
-      // ' Tipo  de  pago |' .
-      // ' Código  de  banco |' .
-      // ' Cuenta  bancaria |' .
-      // 'Programa|' .
-      // 'Glosa|' .
-      // 'Profesión|' .
-      // 'Planta|' .
-      // 'Resolución|' .
-      // ' N°  resolución |' .
-      // ' Fecha  resolución |' .
-      // 'Observación|' .
-      // 'Función|' .
-      // ' Descripción  de  la  función  que  cumple |' .
-      // ' Estado  tramitación  del  contrato |' .
-      // ' Tipo  de  jornada |' .
-      // ' Agente  público |' .
-      // ' Horas  de  contrato |' .
-      // ' Código  por  objetivo |' .
-      // ' Función  dotación |' .
-      // ' Tipo  de  función |' .
-      // ' Afecto  a  sistema  de  turno' . "\r\n";
+    // 'RUN|' .
+    // 'DV|' .
+    // ' N°  cargo |' .
+    // ' Fecha  inicio  contrato |' .
+    // ' Fecha  fin  contrato |' .
+    // 'Establecimiento|' .
+    // ' Tipo  de  decreto |' .
+    // ' Contrato  por  prestación |' .
+    // ' Monto  bruto |' .
+    // ' Número  de  cuotas |' .
+    // 'Impuesto|' .
+    // ' Día  de  proceso |' .
+    // ' Honorario  suma  alzada |' .
+    // ' Financiado  proyecto |' .
+    // ' Centro  de  costo |' .
+    // 'Unidad|' .
+    // ' Tipo  de  pago |' .
+    // ' Código  de  banco |' .
+    // ' Cuenta  bancaria |' .
+    // 'Programa|' .
+    // 'Glosa|' .
+    // 'Profesión|' .
+    // 'Planta|' .
+    // 'Resolución|' .
+    // ' N°  resolución |' .
+    // ' Fecha  resolución |' .
+    // 'Observación|' .
+    // 'Función|' .
+    // ' Descripción  de  la  función  que  cumple |' .
+    // ' Estado  tramitación  del  contrato |' .
+    // ' Tipo  de  jornada |' .
+    // ' Agente  público |' .
+    // ' Horas  de  contrato |' .
+    // ' Código  por  objetivo |' .
+    // ' Función  dotación |' .
+    // ' Tipo  de  función |' .
+    // ' Afecto  a  sistema  de  turno' . "\r\n";
 
     foreach ($filas as $fila) {
       $cuotas = $fila->end_date->month - $fila->start_date->month + 1;
