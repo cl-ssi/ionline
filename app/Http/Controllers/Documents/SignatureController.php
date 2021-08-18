@@ -68,7 +68,7 @@ class SignatureController extends Controller
             $signedSignaturesFlows = SignaturesFlow::whereIn('user_id', $users)
                 ->whereNotNull('status')
                 ->orderByDesc('id')
-                ->get();
+                ->paginate(20);
         }
 
         return view('documents.signatures.index', compact('mySignatures', 'pendingSignaturesFlows', 'signedSignaturesFlows', 'tab'));
