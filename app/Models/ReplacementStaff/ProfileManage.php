@@ -15,16 +15,6 @@ class ProfileManage extends Model
         'name'
     ];
 
-    public function setNameAttribute($value)
-    {
-        $this->attributes['name'] = strtolower($value);
-    }
-
-    public function getNameAttribute()
-    {
-        return ucwords(strtolower($this->attributes['name']));
-    }
-
     protected $hidden = [
         'created_at', 'updated_at'
     ];

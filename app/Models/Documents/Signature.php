@@ -28,7 +28,7 @@ class Signature extends Model implements Auditable
         return $this->belongsTo('App\User');
     }
     public function responsable(){
-        return $this->belongsTo('App\User','responsable_id');
+        return $this->belongsTo('App\User','responsable_id')->withTrashed();
     }
 
     public function organizationalUnit(){

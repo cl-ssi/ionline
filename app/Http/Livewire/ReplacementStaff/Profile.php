@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\ReplacementStaff;
 
 use Livewire\Component;
+use App\Models\ReplacementStaff\ProfileManage;
+use App\Models\ReplacementStaff\ProfessionManage;
 
 class Profile extends Component
 {
@@ -11,12 +13,11 @@ class Profile extends Component
     public $count = 0;
 
     public $replacementStaff;
-    public $professionManage;
-    public $profileManage;
+    public $profiles;
 
     public $profileSelected = null;
-    public $valueSelected = null;
     public $selectstate = 'disabled';
+    public $professions = null;
 
 
     public function add($i)
@@ -33,16 +34,10 @@ class Profile extends Component
         $this->count--;
     }
 
-    public function mount($replacementStaff, $professionManage, $profileManage)
-    {
-        $this->replacementStaff = $replacementStaff;
-        $this->professionManage = $professionManage;
-        $this->profileManage = $profileManage;
-
-    }
-
     public function updatedprofileSelected($profile_id){
-        if($profile_id == 2 or $profile_id == 4){
+        $this->professions = ProfessionManage::where('profile_manage_id', $profile_id)->get();
+
+        if($profile_id == 3 or $profile_id == 4){
             $this->selectstate = '';
         }
         else{
@@ -52,8 +47,10 @@ class Profile extends Component
 
     public function render()
     {
+        $this->profiles = ProfileManage::all();
+
         return view('livewire.replacement-staff.profile',
-            compact($this->replacementStaff, $this->professionManage, $this->profileManage));
+            compact($this->profiles, $this->replacementStaff));
     }
 
 }

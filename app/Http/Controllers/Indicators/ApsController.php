@@ -33,7 +33,11 @@ class ApsController extends Controller
     public function show($year, $slug, $establishment_type)
     {
         $iaps = Aps::where('year', $year)->where('slug', $slug)->firstOrFail();
-        $iaps->load('indicators.values');
+
+        $iaps->load(['indicators' => function($q) use ($establishment_type){
+            $q->where('establishment_cods', $establishment_type == 'hospital' ? 'LIKE' : 'NOT LIKE', '102100')->with('values');
+        }]);
+ 
         $this->loadValuesWithRemSource($year, $iaps, $establishment_type);
         // return $iaps;
         return view('indicators.iaps.show', compact('iaps'));

@@ -4,10 +4,12 @@ namespace App\Models\ServiceRequests;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Value extends Model
+class Value extends Model implements Auditable
 {
     use HasFactory;
+    use \OwenIt\Auditing\Auditable;
 
     public $table = 'sr_values';
 
