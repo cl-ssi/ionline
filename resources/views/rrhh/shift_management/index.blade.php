@@ -149,7 +149,7 @@
             <div class="form-group col-md-5" >
                 <label for="for_name">Unidad organizacional</label>
                 <select class="form-control selectpicker"  id="for_orgunitFilter" name="orgunitFilter" data-live-search="true" required
-                            data-size="5">
+                            data-size="5" onchange="this.form.submit()">
                         @foreach($ouRoots as $ouRoot)
                             @if($ouRoot->name != 'Externos')
                                 <option value="{{ $ouRoot->id }}"  {{($ouRoot->id==$actuallyOrgUnit->id)?'selected':''}}> 
@@ -185,12 +185,12 @@
                     </select>
             </div>
 
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-3">
                 <label for="for_name" class="input-group-addon">Turnos</label>
               
 
                                
-                <select class="form-control" id="for_turnFilter" name="turnFilter" >
+                <select class="form-control" id="for_turnFilter" name="turnFilter" onchange="this.form.submit()">
 
                     <option value="0">0 - Todos</option>
                     @php
@@ -217,7 +217,7 @@
 
             <div class="form-group col-md-2">	
                 <label for="for_name">Año</label>
-                <select class="form-control" id="for_yearFilter" name="yearFilter">
+                <select class="form-control" id="for_yearFilter" name="yearFilter" onchange="this.form.submit()">
                     @for($i = (intval($actuallyYear)-2); $i< (intval($actuallyYear) + 4); $i++)
                         <option value="{{$i}}" {{ ($i == $actuallyYear )?"selected":"" }}> {{$i}}</option>
                     @endfor	
@@ -226,17 +226,17 @@
 
             <div class="form-group col-md-2">    	
                 <label for="for_name">Mes</label>
-                <select class="form-control" id="for_monthFilter" name="monthFilter">
+                <select class="form-control" id="for_monthFilter" name="monthFilter" onchange="this.form.submit()">
                     @foreach($months AS $index => $month)
                         <option value="{{ $index }}" {{ ($index == $actuallyMonth )?"selected":"" }}>{{$loop->iteration}} - {{$month}} </option>
                     @endforeach
                 </select> 		
             </div>
 
-            <div class="form-group col-md-1">
+         <!--    <div class="form-group col-md-1">
                 <label for="for_submit">&nbsp;</label>
                 <button type="submit" class="btn btn-primary form-control">Filtrar</button>
-            </div>
+            </div> -->
 
         </div>
 
