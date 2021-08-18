@@ -35,7 +35,7 @@ class ApsController extends Controller
         $iaps = Aps::where('year', $year)->where('slug', $slug)->firstOrFail();
 
         $iaps->load(['indicators' => function($q) use ($establishment_type){
-            $q->where('establishment_cods', $establishment_type == 'hospital' ? 'LIKE' : 'NOT LIKE', '%102100%')->with('values');
+            $q->where('establishment_cods', $establishment_type == 'hospital' ? 'LIKE' : 'NOT LIKE', '102100')->with('values');
         }]);
  
         $this->loadValuesWithRemSource($year, $iaps, $establishment_type);
