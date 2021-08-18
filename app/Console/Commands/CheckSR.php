@@ -40,7 +40,11 @@ class CheckSR extends Command
      */
     public function handle()
     {
-        $srs = ServiceRequest::where('program_contract_type','Mensual')->get();
+        //Solamente para los mensuales
+        //$srs = ServiceRequest::where('program_contract_type','Mensual')->get();
+        // ahora comando para los horas y TURNO DE REEMPLAZO
+        //working_day_type == "TURNO DE REEMPLAZO"
+        $srs = ServiceRequest::where('program_contract_type','horas')->where('working_day_type','TURNO DE REEMPLAZO')->get();
         $ct = 1;
         foreach($srs as $sr) {
             $diferencia = $sr->end_date->month - $sr->start_date->month + 1 ;             
