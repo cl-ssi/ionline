@@ -173,7 +173,11 @@
                                 <td class="text-left glosa">{{$indicator->denominator}}. <span class="badge badge-secondary">{{$indicator->denominator_source}}</span></td>
                                 <td class="text-center">{{number_format($indicator->denominator_source == 'REM P' ? $indicator->getLastValueByFactor('denominador') : $indicator->getValuesAcum('denominador'), 0, ',', '.')}}</td>
                                 @foreach($months as $number => $month)
+                                @if($indicator->id == 310)
+                                <td class="text-right">{{ $indicator->getValueByFactorAndMonth2('denominador', $number, null, null) != null ? number_format($indicator->getValueByFactorAndMonth2('denominador', $number, null, null), 0, ',', '.') : ''}}</td>
+                                @else
                                 <td class="text-right">{{ $indicator->getValueByFactorAndMonth('denominador', $number) != null ? number_format($indicator->getValueByFactorAndMonth('denominador', $number), 0, ',', '.') : ''}}</td>
+                                @endif
                                 @endforeach
                             </tr>
                         </tbody>
