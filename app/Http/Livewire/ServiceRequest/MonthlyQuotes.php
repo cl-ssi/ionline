@@ -183,7 +183,7 @@ class MonthlyQuotes extends Component
 
             if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
                 // dd('entre aca');
-                dd('entre aca 69');
+                //dd('entre aca 69');
                 $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
                 $valor_mensual = $serviceRequest->net_amount;
                 $string = $nroCuotas . " cuotas,";
@@ -261,7 +261,7 @@ class MonthlyQuotes extends Component
                     //la persona termina de trabajar en un día que no es fin de mes
                     elseif ($serviceRequest->end_date->format('Y-m-d') != $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
                         //dd('entra aca');
-                        dd('entre aca 2');
+                        //dd('entre aca 2');
                         $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
                         $valor_mensual = $serviceRequest->net_amount;
                         $string = $nroCuotas . " cuotas,";
