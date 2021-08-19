@@ -397,7 +397,14 @@ class SignatureController extends Controller
                 Storage::disk('gcs')->delete($signaturesFile->signed_file);
             }
 
+            // borro partes files y partes
+            if ($signaturesFile->parteFile) {
+                $signaturesFile->parteFile->delete();
+                $signaturesFile->parteFile->event->delete();
+            }
             $signaturesFile->delete();
+            
+            
         }
         $signature->delete();
 

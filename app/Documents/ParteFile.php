@@ -22,6 +22,11 @@ class ParteFile extends Model
         return $this->belongsTo('App\Documents\Parte');
     }
 
+    
+    public function signatureFile() {
+      return $this->belongsTo('App\Models\SignatureFile');
+  }
+
 
     use SoftDeletes;
 
