@@ -58,7 +58,7 @@
 
 		<form method="post" action="{{ route('rrhh.shiftManag.closeShift') }}" >
         	@csrf
-        	{{ method_field('post') }}  <!-- equivalente a: @method('POST') -->
+        	{{ method_field('post') }}  
 
         	<!-- Menu de Filtros  -->
 			<div class="form-row">
@@ -66,11 +66,11 @@
 					<label for="for_name">Cierre</label>
 					<div class="input-group mb-3">
   				
-  					<select class="form-control">
+  					<select class="form-control" name="idCierre">
   						<!-- <option value="1">De 2021-10-10 a 2021-10-10</option> -->
   						@foreach($cierres as $c)
 
-  							<option value="{{$c->id}}">#{{$c->id}} - De {{ $c->init_date }} a {{ $c->close_date }}</option>
+  							<option value="{{$c->id}}"  {{ ( $cierreDelMes->id == $c->id ) ? 'selected':'' }} >#{{$c->id}} - De {{ $c->init_date }} a {{ $c->close_date }}</option>
 
   						@endforeach
   					</select>
@@ -115,7 +115,7 @@
                     </select>
             	</div>
 
-   				<div class="form-group col-md-2">	
+   				<div class="form-group col-md-1">	
                 	<label for="for_name">Año</label>
                 	<select class="form-control" id="for_yearFilter" name="yearFilter">
                     	@for($i = (intval($actuallyYear)-2); $i< (intval($actuallyYear) + 4); $i++)
@@ -133,15 +133,15 @@
                 	</select> 		
             	</div>
 
-            	<div class="form-group col-md-1">
+            	<div class="form-group col-md-2">
                 	<label for="for_submit">&nbsp;</label>
-                	<button type="submit" class="btn btn-primary form-control">Filtrar</button>
+                	<button type="submit" class="btn btn-primary form-control">Filtrar <i class="fa fa-filter"></i></button>
             	</div>
         	</div>
   		</form>
 
 
-	<h4>Cerrados <a href="" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
+	<h4>Cerrados <a href="#" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
 	<small class="form-check">
   			<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
   			<label class="form-check-label" for="flexCheckIndeterminate">
@@ -172,7 +172,9 @@
 					<td>{{$c->first_confirmation_commentary}}</td>
 					<td>{{$c->close_date}}</td>
 					<td>
-						@livewire( 'rrhh.see-shift-control-form', ['usr'=>$c->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>1], key($loop->index) )
+						
+						@livewire( 'rrhh.see-shift-control-form', ['usr'=>$c->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>$cierreDelMes->id], key($loop->index) )
+						}
 					</td>
 				</tr>
 				@endforeach
@@ -187,7 +189,7 @@
 				@endif
 			</tbody>
 		</table>
-	<h4>Confirmados <a href="" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a> </h4>
+	<h4>Confirmados <a href="#" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a> </h4>
 	<small class="form-check">
   			<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
   			<label class="form-check-label" for="flexCheckIndeterminate">
@@ -219,7 +221,7 @@
 						<td>{{$f->first_confirmation_commentary}}</td>
 						<td>{{$f->first_confirmation_date}}</td>
 						<td>
-							@livewire( 'rrhh.see-shift-control-form', ['usr'=>$f->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>1], key($loop->index) )
+							@livewire( 'rrhh.see-shift-control-form', ['usr'=>$f->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>$cierreDelMes->id], key($loop->index) )
 
 							<form method="post" action="{{ route('rrhh.shiftManag.closeShift.closeConfirmation') }}">
 								@csrf
@@ -245,7 +247,7 @@
 				@endif
 			</tbody>
 		</table>
-	<h4>Pendientes <a href="" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
+	<h4>Pendientes <a href="#" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
 	<br>
 	<div class="table-wrapper-scroll-y my-custom-scrollbar" style="position: relative;height: 400px;overflow: auto;display: block;">
 	<table  class="table table-sm" id="tblPendientes">
@@ -266,7 +268,9 @@
 					<td>{{$s->user&&$s->user->id? $s->user->runFormat(): '' }}</td>
 					<td>{{$s->user&&$s->user->id? $s->user->getFullNameAttribute(): '' }}</td>
 					<form method="post" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
-						<td><input type="text" class="form-control" name="comment" value="Comentario de prueba desde el area anterior"> </td>
+						<td><!-- <input type="text" class="form-control" name="commentX" value="Comentario de prueba desde el area anterior"> -->
+							<textarea  class="form-control" name="comment" placeholder ="Ingrese un comentario  " ></textarea>
+						 </td>
 						<!-- <td>100</td> -->
 						<td>
 							@csrf
@@ -299,7 +303,7 @@
 						<button class="btn btn-danger">Rechazar</button>
 					</form>
 
-                    	@livewire( 'rrhh.see-shift-control-form', ['usr'=>$s->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>1], key($loop->index) )
+                    	@livewire( 'rrhh.see-shift-control-form', ['usr'=>$s->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>$cierreDelMes->id], key($loop->index) )
 
 					</td>
 				</tr>
@@ -308,7 +312,7 @@
 		</table>
 	</div>
 	<br>
-	<h4>Rechazados <a href="" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
+	<h4>Rechazados <a href="#" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
 	<small class="form-check">
   			<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
   			<label class="form-check-label" for="flexCheckIndeterminate">

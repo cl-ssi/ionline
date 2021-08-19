@@ -3,17 +3,23 @@
 @section('title', 'Gestion de Turnos')
 
 	@section('content')
-	<style>
-#chartpeoplecant {
-  width: 100%;
-  height: 500px;
-}
+	   <style>
+            #chartpeoplecant {
+                width: 100%;
+                height: 500px;
+            }
+            .tableFixHead          { overflow: auto; height: 300px; }
+            .tableFixHead thead th { position: sticky; top: 0; z-index: 1; }
 
-</style>
-	@include("rrhh.shift_management.tabs", array('actuallyMenu' => 'reports'))
+            /* Just common table stuff. Really. */
+            table  { border-collapse: collapse; width: 100%; }
+            th, td { padding: 8px 16px; }
+            th     { background:#eee; }
+        </style>
+	   @include("rrhh.shift_management.tabs", array('actuallyMenu' => 'reports'))
 
-	<h3>Reportes</h3>
-	<br>
+	   <h3>Reportes</h3>
+	   <br>
     <form method="post" action="{{ route('rrhh.shiftManag.shiftReports') }}" >
         @csrf
         {{ method_field('post') }}  <!-- equivalente a: @method('POST') -->
@@ -134,7 +140,7 @@
     <a href="{{route('rrhh.shiftManag.shiftReportsXLSdownload')}}"  class="btn btn-outline-success btn-xs"> <i class="fa fa-file-excel"></i></a>
  </h5>
 <br>
-	<table class="table table-sm table-bordered" style=" max-height: 450px;overflow: auto;display:inline-block;">
+	<table class="table table-sm table-bordered tableFixHead" style=" max-height: 450px;overflow: auto;display:inline-block;">
 		<thead>
 			<tr>
 				<th>#</th>
@@ -150,20 +156,7 @@
 			</tr>
 		</thead>
 		<tbody>
-		<!-- 	<tr>
-				<td>1</td>
-				<td>18004474-4</td>
-				<td>Armando Barra Perez</td>
-				<td>01/07/21</td>
-				<td>L - Largo</td>
-				<td>Licencia Medica</td>
-				<td>Prueba p1</td>
-				<td>
-				 	<small>Confirmado por supervisor area  <i class="fa fa-check"></i></small><br>
-				 	<small>Confirmado por supervicion medica <i class="fa fa-check"></i></small><br>
-				 	<small>Confirmado por supervisora rrhh <i class="fa fa-check"></i> </small>
-				 </td>
-			</tr>	 -->
+	
 			@foreach($reportResult as $r)
 				<tr>
 					<td>{{$loop->iteration}}</td>

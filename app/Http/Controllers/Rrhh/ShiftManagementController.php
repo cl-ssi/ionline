@@ -1056,8 +1056,8 @@ class ShiftManagementController extends Controller
         $months = $this->months;
 
         if( $r->yearFilter &&  $r->yearFilter != "")
-            $actuallyYear =  $r->yearFilter;
-        else
+            $actuallyYear =  $r->yearFilter; 
+         else
             $actuallyYear = Carbon::now()->format('Y');
         
         if($r->orgunitFilter && $r->orgunitFilter != "")
@@ -1079,7 +1079,11 @@ class ShiftManagementController extends Controller
 
         // ShiftDateOfClosing
         // ShiftClose
-        $cierreDelMes = ShiftDateOfClosing::where('close_date','<=',Carbon::now()->format('Y-m-d'))->latest()->first();
+        if(isset($r->idCierre) && $r->idCierre && $r->idCierre != "")
+            $cierreDelMes = ShiftDateOfClosing::find($r->idCierre);
+        else
+            $cierreDelMes = ShiftDateOfClosing::where('close_date','<=',Carbon::now()->format('Y-m-d'))->latest()->first();
+
         if(isset($cierreDelMes) && $cierreDelMes !="" ){
             // echo "Cierre del mes econtrad";
 

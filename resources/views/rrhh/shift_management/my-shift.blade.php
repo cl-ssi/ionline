@@ -130,7 +130,7 @@
 
 <div>
 	 <div class="col-md-6">
-          <h3> Mi de Turno </h3>
+          <h3> Mi Turno </h3>
      </div>
 <div class="scroll">
     @if(        $myConfirmationEarrings && json_encode($myConfirmationEarrings)=="{}")
