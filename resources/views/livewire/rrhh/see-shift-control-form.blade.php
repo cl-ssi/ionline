@@ -192,12 +192,13 @@
                                                 @endphp
 
                 				<tbody>
-                                @if(isset( $close ) && $close == 1 )
-
+                                @if(  $close != 0 )
+                                    distinto
                                     @php
                                         $ranges = \Carbon\CarbonPeriod::create($cierreDelMes->init_date, $cierreDelMes->close_date);
 
                                     @endphp
+                                    {{$cierreDelMes->init_date}} <br> {{$cierreDelMes->close_date}}<br>                                     {{json_encode($ranges)}}
                                     @foreach ($ranges as $date) 
 
                                             @php
