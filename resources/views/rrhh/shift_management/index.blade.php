@@ -149,7 +149,7 @@
             <div class="form-group col-md-5" >
                 <label for="for_name">Unidad organizacional</label>
                 <select class="form-control selectpicker"  id="for_orgunitFilter" name="orgunitFilter" data-live-search="true" required
-                            data-size="5">
+                            data-size="5" onchange="this.form.submit()">
                         @foreach($ouRoots as $ouRoot)
                             @if($ouRoot->name != 'Externos')
                                 <option value="{{ $ouRoot->id }}"  {{($ouRoot->id==$actuallyOrgUnit->id)?'selected':''}}> 
@@ -185,12 +185,12 @@
                     </select>
             </div>
 
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-3">
                 <label for="for_name" class="input-group-addon">Turnos</label>
               
 
                                
-                <select class="form-control" id="for_turnFilter" name="turnFilter" >
+                <select class="form-control" id="for_turnFilter" name="turnFilter" onchange="this.form.submit()">
 
                     <option value="0">0 - Todos</option>
                     @php
@@ -217,7 +217,7 @@
 
             <div class="form-group col-md-2">	
                 <label for="for_name">Año</label>
-                <select class="form-control" id="for_yearFilter" name="yearFilter">
+                <select class="form-control" id="for_yearFilter" name="yearFilter" onchange="this.form.submit()">
                     @for($i = (intval($actuallyYear)-2); $i< (intval($actuallyYear) + 4); $i++)
                         <option value="{{$i}}" {{ ($i == $actuallyYear )?"selected":"" }}> {{$i}}</option>
                     @endfor	
@@ -226,17 +226,17 @@
 
             <div class="form-group col-md-2">    	
                 <label for="for_name">Mes</label>
-                <select class="form-control" id="for_monthFilter" name="monthFilter">
+                <select class="form-control" id="for_monthFilter" name="monthFilter" onchange="this.form.submit()">
                     @foreach($months AS $index => $month)
                         <option value="{{ $index }}" {{ ($index == $actuallyMonth )?"selected":"" }}>{{$loop->iteration}} - {{$month}} </option>
                     @endforeach
                 </select> 		
             </div>
 
-            <div class="form-group col-md-1">
+         <!--    <div class="form-group col-md-1">
                 <label for="for_submit">&nbsp;</label>
                 <button type="submit" class="btn btn-primary form-control">Filtrar</button>
-            </div>
+            </div> -->
 
         </div>
 
@@ -446,189 +446,7 @@
     }
 </style>
 
-<!-- 
-<table class="table table-sm table-bordered mt-4">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>1</th>
-            <th>2</th>
-            <th class="text-danger">3</th>
-            <th class="text-danger">4</th>
-            <th>5</th>
-            <th>6</th>
-            <th>7</th>
-            <th>8</th>
-            <th>9</th>
-            <th>10</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>15.456.789-1 - Alvaro Torres Fuchslocher</td>
-            <td class="cellbutton">
-                <button class="btn btn-danger btn-full">
-                    +
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-warning btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-warning btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-        </tr>
 
-
-        <tr>
-            <td>18.123.123-9 - Armando Birra Xxxxx</td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-warning btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-        </tr>
-
-
-        <tr>
-            <td> 15.123.123-2 - Angelina Jolie Voight</td>
-            <td class="cellbutton">
-                <button class="btn btn-success btn-full">
-                    +
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-success btn-full">
-                    +
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-        </tr>
-    </tbody>
-</table> -->
 @endsection
 
 

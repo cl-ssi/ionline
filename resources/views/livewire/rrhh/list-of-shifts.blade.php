@@ -41,8 +41,23 @@ figure:focus .menu {
                     @livewire( 'rrhh.see-shift-control-form', ['usr'=>$sis->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth], key($loop->index) )
 
                     {{ $sis->user->runFormat()}} - {{$sis->user->name}} {{$sis->user->fathers_family}} 
-                    <small>{{$sis->esSuplencia()}}</small>
-      
+                    <small>
+                        @if( $sis->esSuplencia() == "Suplente" )
+                            {{$sis->esSuplencia()}}
+                        @else
+                        <form method="POST" action="{{ route('rrhh.shiftManag.shiftupdate') }}">
+                             
+                            @csrf
+                            @method('POST')
+                            <select class="form-control form-control-sm"  name="commentary" onchange="this.form.submit()">
+                                <option value="titular" {{( $sis->esSuplencia() == "titular" )?"selected":""}} >Titular</option>
+                                <option value="contrata" {{( $sis->esSuplencia() == "contrata" )?"selected":$sis->esSuplencia()}} >Contrata</option>
+                                <option value="honorario" {{( $sis->esSuplencia() == "honorario" )?"selected":""}} >Honorario</option>
+                            </select>
+                            <input name="id" hidden value="{{$sis->id}}">
+                        </form>
+                        @endif
+                    </small>
                 </td>
                 @for($j = 1; $j <= $days; $j++) 
                     @php
