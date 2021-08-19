@@ -67,7 +67,7 @@ class CheckSR extends Command
                 $array_malo = null;
                 foreach($sr->fulfillments as $f) {
                     if(in_array($f->month, $array_real) === false) {
-                        echo "eliminar fulfillment: " . $f->id . " del service request" .$sr->id. "\n"; 
+                        echo "eliminar fulfillment: " . $f->id . " del service request " .$sr->id. "\n"; 
                         $f->delete();
                     }
                     $array_malo[] = $f->month;
