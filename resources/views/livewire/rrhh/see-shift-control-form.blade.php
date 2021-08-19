@@ -210,7 +210,7 @@
                                                 @if($date->isPast())
                                                     <td>{{ (isset($timePerDay[$dd->working_day]))?$timePerDay[$dd->working_day]["from"]:""  }}</td>
                                                     <td>{{  (isset($timePerDay[$dd->working_day]))?$timePerDay[$dd->working_day]["to"]:"" }}</td>
-                                                    <td>{{  (( isset($timePerDay[$dd->working_day]) )? ( ($shiftStatus[$dd->status] == "asignado" )?"Completado":ucfirst($shiftStatus[$dd->status] )  ):""  )   }} - <small style="color:{{ ( $dd->confirmationStatus() == 1 ) ? 'green;':'red;'    }}"> {{ ( $dd->confirmationStatus() == 1 ) ? 'Confirmado':'Sin Confirmar'    }}</small></td>
+                                                    <td>{{  (( isset($timePerDay[$dd->working_day]) )? ( ($dd->status == 1 )?"Completado":ucfirst($shiftStatus[$dd->status] )."X"  ):""  )   }} - <small style="color:{{ ( $dd->confirmationStatus() == 1 ) ? 'green;':'red;'    }}"> {{ ( $dd->confirmationStatus() == 1 ) ? 'Confirmado':'Sin Confirmar'    }}</small></td>
                                                         @if( $dd->confirmationStatus() == 1 )
                                                             @php
                                                                 if(  substr($dd->working_day,0, 1) != "+" )
