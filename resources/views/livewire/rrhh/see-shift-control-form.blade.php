@@ -192,12 +192,13 @@
                                                 @endphp
 
                 				<tbody>
-                                @if(isset( $close ) && $close == 1 )
-
+                                @if(  $close != 0 )
+                                    distinto
                                     @php
                                         $ranges = \Carbon\CarbonPeriod::create($cierreDelMes->init_date, $cierreDelMes->close_date);
 
                                     @endphp
+                                    {{$cierreDelMes->init_date}} <br> {{$cierreDelMes->close_date}}<br>                                     {{json_encode($ranges)}}
                                     @foreach ($ranges as $date) 
 
                                             @php
@@ -210,7 +211,7 @@
                                                 @if($date->isPast())
                                                     <td>{{ (isset($timePerDay[$dd->working_day]))?$timePerDay[$dd->working_day]["from"]:""  }}</td>
                                                     <td>{{  (isset($timePerDay[$dd->working_day]))?$timePerDay[$dd->working_day]["to"]:"" }}</td>
-                                                    <td>{{  (( isset($timePerDay[$dd->working_day]) )? ( ($shiftStatus[$dd->status] == "asignado" )?"Completado":ucfirst($shiftStatus[$dd->status] )  ):""  )   }} - <small style="color:{{ ( $dd->confirmationStatus() == 1 ) ? 'green;':'red;'    }}"> {{ ( $dd->confirmationStatus() == 1 ) ? 'Confirmado':'Sin Confirmar'    }}</small></td>
+                                                    <td>{{  (( isset($timePerDay[$dd->working_day]) )? ( ($dd->status == 1 )?"Completado":ucfirst($shiftStatus[$dd->status] )."X"  ):""  )   }} - <small style="color:{{ ( $dd->confirmationStatus() == 1 ) ? 'green;':'red;'    }}"> {{ ( $dd->confirmationStatus() == 1 ) ? 'Confirmado':'Sin Confirmar'    }}</small></td>
                                                         @if( $dd->confirmationStatus() == 1 )
                                                             @php
                                                                 if(  substr($dd->working_day,0, 1) != "+" )
