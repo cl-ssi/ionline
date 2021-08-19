@@ -68,7 +68,7 @@
 						<option value=""></option>
 						<option value="Mensual" @if($fulfillment->type == "Mensual") selected @endif>Mensual</option>
 						<option value="Parcial" @if($fulfillment->type == "Parcial") selected @endif>Parcial</option>
-						<option value="Horas" @if($fulfillment->type == "Horas") selected @endif>Horas</option>
+						<option value="Horas Médicas" @if($fulfillment->type == "Horas Médicas") selected @endif>Horas Médicas</option>
 					</select>
 				</fieldset>
 				<fieldset class="form-group col-3">
