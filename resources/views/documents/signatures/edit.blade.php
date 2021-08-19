@@ -153,6 +153,16 @@
     @csrf
     @method('DELETE')
 </form>
+
+
+@can('be god')
+    @include('partials.audit', ['audits' => $signature->audits] )
+@endcan
+
+@can('be god')
+    @include('partials.audit', ['audits' => $signature->signaturesFlowSigner->audits] )
+@endcan
+
 @endsection
 
 @section('custom_js')
