@@ -131,7 +131,7 @@
 <br>
 <h5>#{{sizeof($reportResult)}} Registros coincidentes con la busqueda 
     
-    <a href="#"  class="btn btn-outline-success btn-xs"> <i class="fa fa-file-excel"></i></a>
+    <a href="{{route('rrhh.shiftManag.shiftReportsXLSdownload')}}"  class="btn btn-outline-success btn-xs"> <i class="fa fa-file-excel"></i></a>
  </h5>
 <br>
 	<table class="table table-sm table-bordered" style=" max-height: 450px;overflow: auto;display:inline-block;">
@@ -169,7 +169,7 @@
 					<td>{{$loop->iteration}}</td>
 					<td>{{$r->ShiftUser->user->runFormat()}}</td>
 					<td>{{$r->ShiftUser->user->getFullNameAttribute()}}</td>
-					<td>{{(isset($r->ShiftUser->user->organizationalUnit) && $r->ShiftUser->user->organizationalUnit !="") ? "":$r->ShiftUser->user->organizationalUnit->name}}</td>
+					<td>{{(isset($r->ShiftUser->user->organizationalUnit) && $r->ShiftUser->user->organizationalUnit !="" && isset($r->ShiftUser->user->organizationalUnit->name) ) ? $r->ShiftUser->user->organizationalUnit->name:""}}</td>
                     <td>{{$r->day}}</td>
 
 				

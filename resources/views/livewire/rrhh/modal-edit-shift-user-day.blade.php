@@ -147,7 +147,7 @@
 
                         <label for="exampleFormControlInput1"><i class="fa fa-user"></i> PERSONAL </label>
                        
-                         <select class="form-control" wire:model="userIdtoChange" wire:change="findAvailableExternalDaysToChange">
+                         <select class="selectpicker  form-control" wire:model="userIdtoChange" wire:change="findAvailableExternalDaysToChange">
                             <option value="0" >0 - Dejar disponible </option>
                             @if( isset($users) )
                                 @foreach($users as $u)
@@ -180,7 +180,7 @@
                         <div class="row">
                         <div class="col-md-6">
                              <label for="exampleFormControlInput1"><i class="fa fa-user"></i> REMPLAZAR CON </label>
-                         <select class="form-control" wire:model="userIdtoChange2" name="slcAction">
+                         <select class="form-control selectpicker " wire:model="userIdtoChange2" name="slcAction">
                             <option value="0" >0 - Dejar disponible </option>
                             @if( isset($users) )
                                 @foreach($users as $u)
