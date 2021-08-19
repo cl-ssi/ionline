@@ -149,7 +149,7 @@ class CheckSR extends Command
                 //     'last_flown' => '2020-03-04 11:00:00',
                 //     'last_pilot_id' => 747,
                 // ]);
-                //Fulfillment::insert($array_real);
+                Fulfillment::insert($array_real);
                 echo("////////Fin agregar ///////////"). " \n ";
 
                 // $array_malo = null;
