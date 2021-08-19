@@ -102,14 +102,20 @@ class SeeShiftControlForm extends Component
     public function render()
     {
         $cierreDelMes = array();
-         if($this->close == 1){ // si estoy en la vista de cierre 
+         if($this->close != 0){ // si estoy en la vista de cierre 
             
-            $cierreDelMes = ShiftDateOfClosing::where('close_date','<=',Carbon::now()->format('Y-m-d'))->latest()->first();
+            $cierreDelMes = ShiftDateOfClosing::find($this->close);
+            // if( isset($cierreDelMes) && $cierreDelMes !=" )
+
+            // else
+            //     $cierreDelMes = ShiftDateOfClosing::where('close_date','<=',Carbon::now()->format('Y-m-d'))->latest()->first();
+
+
             if(isset($cierreDelMes) &&  $cierreDelMes!=""){
                 // echo "Cierre del mes econtrad";
 
             }else{
-                $cierreDelMes = (object) array("user_id"=>1,"commentary"=>"","init_date"=>$this->actuallyYears."-".$this->actuallyMonth."-02","close_date"=>$this->actuallyYears."-".$this->actuallyMonth."-".$this->days);
+                $cierreDelMes = (object) array("user_id"=>1,"commentary"=>"","init_date"=>$this->actuallyYears."-".$this->actuallyMonth."-01","close_date"=>$this->actuallyYears."-".$this->actuallyMonth."-".$this->days);
             }
             
             $id = $this->usr->id ;

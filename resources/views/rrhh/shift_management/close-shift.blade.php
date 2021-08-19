@@ -172,7 +172,9 @@
 					<td>{{$c->first_confirmation_commentary}}</td>
 					<td>{{$c->close_date}}</td>
 					<td>
-						@livewire( 'rrhh.see-shift-control-form', ['usr'=>$c->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>1], key($loop->index) )
+						
+						@livewire( 'rrhh.see-shift-control-form', ['usr'=>$c->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>$cierreDelMes->id], key($loop->index) )
+						}
 					</td>
 				</tr>
 				@endforeach
@@ -219,7 +221,7 @@
 						<td>{{$f->first_confirmation_commentary}}</td>
 						<td>{{$f->first_confirmation_date}}</td>
 						<td>
-							@livewire( 'rrhh.see-shift-control-form', ['usr'=>$f->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>1], key($loop->index) )
+							@livewire( 'rrhh.see-shift-control-form', ['usr'=>$f->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>$cierreDelMes->id], key($loop->index) )
 
 							<form method="post" action="{{ route('rrhh.shiftManag.closeShift.closeConfirmation') }}">
 								@csrf
@@ -266,7 +268,9 @@
 					<td>{{$s->user&&$s->user->id? $s->user->runFormat(): '' }}</td>
 					<td>{{$s->user&&$s->user->id? $s->user->getFullNameAttribute(): '' }}</td>
 					<form method="post" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
-						<td><input type="text" class="form-control" name="comment" value="Comentario de prueba desde el area anterior"> </td>
+						<td><!-- <input type="text" class="form-control" name="commentX" value="Comentario de prueba desde el area anterior"> -->
+							<textarea  class="form-control" name="comment" placeholder ="Ingrese un comentario  " ></textarea>
+						 </td>
 						<!-- <td>100</td> -->
 						<td>
 							@csrf
@@ -299,7 +303,7 @@
 						<button class="btn btn-danger">Rechazar</button>
 					</form>
 
-                    	@livewire( 'rrhh.see-shift-control-form', ['usr'=>$s->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>1], key($loop->index) )
+                    	@livewire( 'rrhh.see-shift-control-form', ['usr'=>$s->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>$cierreDelMes->id], key($loop->index) )
 
 					</td>
 				</tr>
