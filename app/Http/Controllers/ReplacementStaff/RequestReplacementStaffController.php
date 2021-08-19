@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewRequestReplacementStaff;
 
 
 class RequestReplacementStaffController extends Controller
@@ -289,6 +291,8 @@ class RequestReplacementStaffController extends Controller
                 $request_sing->save();
             }
         }
+
+        Mail::to(explode(',', env('APP_RYS_MAIL')))->send(new NewRequestReplacementStaff($request_replacement));
 
         session()->flash('success', 'Se ha creado la Solicitud Exitosamente');
         return redirect()->route('replacement_staff.request.own_index');
