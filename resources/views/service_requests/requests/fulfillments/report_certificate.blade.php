@@ -335,7 +335,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  @foreach($fulfillment->shiftControls as $key => $shiftControl)
+                  @foreach($fulfillment->shiftControls->sortBy('start_date') as $key => $shiftControl)
                       <tr>
                           <td>{{$shiftControl->start_date->format('d-m-Y H:i')}}</td>
                           <td>{{$shiftControl->end_date->format('d-m-Y H:i')}}</td>
