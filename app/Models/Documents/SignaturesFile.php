@@ -40,6 +40,12 @@ class SignaturesFile extends Model
     }
 
 
+    public function parteFile()
+    {
+        return $this->hasOne('App\Documents\ParteFile', 'signature_file_id');
+    }
+
+
     /**
      * @return bool
      */

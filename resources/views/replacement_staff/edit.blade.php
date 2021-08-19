@@ -170,11 +170,7 @@
         @endif
 
         @livewire('replacement-staff.profile', ['replacementStaff' => $replacementStaff,
-        'professionManage' => $professionManage,
-        'profileManage' => $profileManage,
-        'usersSelect' => 'readonly'
-
-        ])
+        'usersSelect' => 'readonly'])
 
     </div>
 </div>

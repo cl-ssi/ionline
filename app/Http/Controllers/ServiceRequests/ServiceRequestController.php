@@ -59,6 +59,7 @@ class ServiceRequestController extends Controller
       $subQuery->where('responsable_id', $user_id);
       $subQuery->orwhere('user_id', $user_id);
     })
+      ->with("SignatureFlows")
       ->orderBy('id', 'asc')
       ->get();
 
@@ -352,7 +353,8 @@ class ServiceRequestController extends Controller
     $cont_periods = iterator_count($periods);
 
     // crea de forma automática las cabeceras
-    if ($serviceRequest->program_contract_type == "Mensual" || ($serviceRequest->program_contract_type == "Horas" && $serviceRequest->working_day_type == "HORA MÉDICA")) {
+    if ($serviceRequest->program_contract_type == "Mensual" || ($serviceRequest->program_contract_type == "Horas" && ($serviceRequest->working_day_type == "HORA MÉDICA" || $serviceRequest->working_day_type == "TURNO DE REEMPLAZO" ))  )
+    {
       if ($serviceRequest->fulfillments->count() == 0) {
         foreach ($periods as $key => $period) {
           $program_contract_type = "Mensual";

@@ -130,6 +130,13 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Partes: director']);
         Permission::create(['name' => 'Partes: oficina']);
 
+        Permission::create(['name' => 'Replacement Staff: admin']);
+
+        // @role(
+        //   'Replacement Staff: admin |
+        //   Replacement Staff: user'
+        // )
+
         // create roles and assign created permissions
         // GOD LIKE
         $role = Role::create(['name' => 'god']);
@@ -174,6 +181,6 @@ class RoleAndPermissionSeeder extends Seeder
         $role->givePermissionTo(['Resources: create', 'Resources: edit', 'Resources: delete']);
 
         $role = Role::create(['name' => 'Tickets: admin']);
-        $role->givePermissionTo(['Tickets: create', 'Tickets: manage','Tickets: TI']);        
+        $role->givePermissionTo(['Tickets: create', 'Tickets: manage','Tickets: TI']);
     }
 }
