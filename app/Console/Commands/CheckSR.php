@@ -44,7 +44,8 @@ class CheckSR extends Command
         //$srs = ServiceRequest::where('program_contract_type','Mensual')->get();
         // ahora comando para los horas y TURNO DE REEMPLAZO
         //working_day_type == "TURNO DE REEMPLAZO"
-        $srs = ServiceRequest::where('program_contract_type','horas')->where('working_day_type','TURNO DE REEMPLAZO')->get();
+        //$srs = ServiceRequest::where('program_contract_type','horas')->where('working_day_type','TURNO DE REEMPLAZO')->get();
+        $srs = ServiceRequest::where('program_contract_type','horas')->where('working_day_type','HORA MÉDICA')->get();
         $ct = 1;
         foreach($srs as $sr) {
             $diferencia = $sr->end_date->month - $sr->start_date->month + 1 ;             
@@ -55,6 +56,7 @@ class CheckSR extends Command
                 echo $sr->end_date->month - $sr->start_date->month + 1 . " => ";
                 echo count($sr->fulfillments). " \n ";
                 $ct++;
+                // echo'soy menor';
 
                 $array_real = null;
                 for($i = $sr->start_date->month; $i <= $sr->end_date->month; $i++) {
@@ -66,7 +68,7 @@ class CheckSR extends Command
                 foreach($sr->fulfillments as $f) {
                     if(in_array($f->month, $array_real) === false) {
                         echo "eliminar fulfillment: " . $f->id . "\n"; 
-                        $f->delete();
+                        //$f->delete();
                     }
                     $array_malo[] = $f->month;
                 }
@@ -80,7 +82,7 @@ class CheckSR extends Command
                 echo $sr->end_date->month - $sr->start_date->month + 1 . " => ";
                 echo count($sr->fulfillments). " \n ";
                 $ct++;
-                //echo'soy mayor';
+                // echo'soy mayor';
 
                 $array_real = null;
                 for($i = $sr->start_date->month; $i <= $sr->end_date->month; $i++) {
@@ -147,7 +149,7 @@ class CheckSR extends Command
                 //     'last_flown' => '2020-03-04 11:00:00',
                 //     'last_pilot_id' => 747,
                 // ]);
-                Fulfillment::insert($array_real);
+                //Fulfillment::insert($array_real);
                 echo("////////Fin agregar ///////////"). " \n ";
 
                 // $array_malo = null;
