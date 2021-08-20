@@ -90,12 +90,16 @@ class SuitabilityController extends Controller
 
 
 
-    public function indexOwn()
+    public function indexOwn(Request $request)
     {
-
-        $psirequests = PsiRequest::all();
-        return view('suitability.indexown', compact('psirequests'));
-
+        $school_id = $request->colegio;
+        $psirequests = PsiRequest::when($school_id != null, function ($q) use ($school_id) 
+        {                        
+            return $q->where('school_id', $school_id);
+        })
+        ->get();
+        $schools = School::orderBy("name", "asc")->get();
+        return view('suitability.indexown', compact('psirequests', 'schools','school_id'));
     }
 
 
