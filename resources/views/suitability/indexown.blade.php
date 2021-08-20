@@ -8,6 +8,27 @@
 
 <h3 class="mb-3">Listado de Todas las Solicitudes de Idoneidad</h3>
 
+<form method="GET" class="form-horizontal" action="{{ route('suitability.own') }}">
+
+    <div class="form-row">
+        <fieldset class="form-group col-6 col-md-6">
+            <label for="for_year">Colegios</label>
+            <select name="colegio" class="form-control selectpicker" data-live-search="true" >
+                <option value="">Todos Los Colegios</option>
+                @foreach($schools as $school)
+                <option value="{{$school->id}}" @if($school_id == $school->id) selected @endif >{{$school->name}}</option>
+                @endforeach
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-2 col-md-1">
+            <label for="">&nbsp;</label>
+            <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
+        </fieldset>
+    </div>
+
+</forn>
+
 <table class="table">
     <thead>
         <tr>
