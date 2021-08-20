@@ -482,10 +482,9 @@ class ReportController extends Controller
         compact('years', 'fulfillments', 'request')
       );
     }
-
   }
 
-  
+
 
 
   //public function paginate($items, $perPage = 5, $page = null, $options = [])
@@ -546,6 +545,16 @@ class ReportController extends Controller
 
 
     return view('service_requests.export_sirh', compact('request', 'filitas'));
+  }
+
+
+  public function duplicateContracts(Request $request)
+  {    
+    $srall = ServiceRequest::all();
+    $srUnique = $srall->unique('user_id');
+    $serviceRequestssinordenar = $srall->diff($srUnique);
+    $serviceRequests = $serviceRequestssinordenar->sortBy('user_id')->paginate(100);
+    return view('service_requests.reports.duplicate_contracts', compact('request', 'serviceRequests'));
   }
 
   public function export_sirh_txt(Request $request)
