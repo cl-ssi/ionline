@@ -553,7 +553,8 @@ class ReportController extends Controller
     $srall = ServiceRequest::all();
     $srUnique = $srall->unique('user_id');
     $serviceRequestssinordenar = $srall->diff($srUnique);
-    $serviceRequests = $serviceRequestssinordenar->sortBy('user_id')->paginate(100);
+    $serviceRequests = $serviceRequestssinordenar->sortBy('user_id');
+    $serviceRequests = $serviceRequests->paginate(100);
     return view('service_requests.reports.duplicate_contracts', compact('request', 'serviceRequests'));
   }
 
