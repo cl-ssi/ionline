@@ -6,7 +6,7 @@
 
 @include('service_requests.partials.nav')
 
-<h3 class="mb-3">Reporte - Contratos Duplicados <small>(Prototipo-En Desarrollo)</small></h3> 
+<h3 class="mb-3">Reporte - Contratos Duplicados <small>(Prototipo-En Desarrollo)</small></h3>
 
 
 <table class="table table-sm table-bordered table-stripped" id="table_duplicated">
@@ -20,7 +20,12 @@
   </tr>
   @foreach($serviceRequests as $key => $serviceRequest)
   <tr>
-  <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}"><td>{{$serviceRequest->id?? ''}}</td><a>
+
+    <td>
+      <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}">
+        {{$serviceRequest->id?? ''}}
+      <a>
+    </td>
     <td>{{$serviceRequest->employee->runNotFormat()}}</td>
     <td>{{$serviceRequest->employee->getFullNameAttribute()}}</td>
     <td>{{$serviceRequest->responsabilityCenter->name??''}}</td>
