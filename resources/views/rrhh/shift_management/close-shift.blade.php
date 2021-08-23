@@ -174,7 +174,7 @@
 					<td>
 						
 						@livewire( 'rrhh.see-shift-control-form', ['usr'=>$c->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>$cierreDelMes->id], key($loop->index) )
-						}
+						
 					</td>
 				</tr>
 				@endforeach
@@ -297,6 +297,7 @@
 						<!-- inicio bug -->
 						{{--json_encode($cierreDelMes--}}
 						<input type="hidden" name="cierreId" value="{{$cierreDelMes&&$cierreDelMes->id? $cierreDelMes->id : '' }}">
+						<input type="hidden" name="rechazar" value="1">
 						<!-- fin bug -->
 
 
@@ -327,12 +328,37 @@
 				<th>Rut</th>
 				<th>Nombre</th>
 				<th>Comentarios</th>
-				<!-- <th>Cant. horas</th> -->
-				<th>Cerrado en</th>
+				<th>Cant. horas</th>
+				<th>Rechazado en</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-		</tbody>
+				@foreach($rejected as $r)
+				<tr>
+					<td>{{$loop->iteration}}</td>
+					<td>{{$r->user->runFormat() }}</td>
+					<td>{{$r->user->getFullNameAttribute()}}</td>
+					<td>{{$r->first_confirmation_commentary}}</td>
+					<td>{{$r->total_hours}}</td>
+					<td>{{$r->first_confirmation_date}}</td>
+					<td>
+						
+						@livewire( 'rrhh.see-shift-control-form', ['usr'=>$r->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>$cierreDelMes->id], key($loop->index) )
+						
+					</td>
+				</tr>
+				@endforeach
+				@if( count( $rejected ) < 1 )
+				<tr>
+					<td  colspan="6" style="text-align:center">	
+							
+						Sin registro de rechazados en este rango de fechas
+
+					</td>
+				</tr>
+				@endif
+			</tbody>
 	</table>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
