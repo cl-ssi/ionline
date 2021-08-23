@@ -193,12 +193,12 @@
 
                 				<tbody>
                                 @if(  $close != 0 )
-                                    distinto
+                                    
                                     @php
                                         $ranges = \Carbon\CarbonPeriod::create($cierreDelMes->init_date, $cierreDelMes->close_date);
 
                                     @endphp
-                                    {{$cierreDelMes->init_date}} <br> {{$cierreDelMes->close_date}}<br>                                     {{json_encode($ranges)}}
+                                 
                                     @foreach ($ranges as $date) 
 
                                             @php
@@ -305,6 +305,7 @@
                     <input style=" display:none;" name="actuallyMonth" value="{{ $actuallyMonth }}">
                     <input style=" display:none;" name="actuallyYears" value="{{ $actuallyYears }}">
                     <input style=" display:none;" name="shifsUsr" value="{{ $shifsUsr }}">
+                    <input style=" display:none;" name="close" value="{{ $close }}">
                    
                     <input style=" display:none;" name="actuallyUser" value="{{ $usr->id }}">
                   <button class="btn btn-success " target="_blank">Descargar <i class="fa fa-check"></i></button>
