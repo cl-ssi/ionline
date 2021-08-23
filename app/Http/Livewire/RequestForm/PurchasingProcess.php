@@ -17,7 +17,7 @@ class PurchasingProcess extends Component
   public $lastKey, $selectedItems;
   public $arrayCheckBox, $arrayVista, $arrayBgTable;
   public $idOC, $idInternalOC, $dateOC, $shippingDateOC, $idBigBuy, $pesoAmount, $dollarAmount,
-         $ufAmount, $deliveryTerm, $deliveryDate, $idOffer, $idQuotation, $status;
+         $ufAmount, $deliveryTerm, $deliveryDate, $idOffer, $idQuotation, $arrayPurchasingProcessStatus;
 
     public function mount(RequestForm $requestForm){
         $this->requestForm            = $requestForm;
@@ -38,15 +38,15 @@ class PurchasingProcess extends Component
           $this->setCheckBoxStatus('enabled', $key);
           $this->setArrayBgTable($key);
           $this->setArrayCheckBox(0, $key);
-          $this->setArrayPurchaseMechanism($this->purchaseMechanism, $key);
-          $this->setArrayPurchaseType($this->purchaseType, $key);
-          $this->setArrayPurchaseUnit($this->purchaseUnit, $key);
-          $this->setInitialValues($key);
+          $this->setArrayPurchaseMechanism($item->getPurchasingProcess('in_progress')->purchaseMechanism->id, $key);
+          $this->setArrayPurchaseType($item->getPurchasingProcess('in_progress')->purchaseType->id, $key);
+          $this->setArrayPurchaseUnit($item->getPurchasingProcess('in_progress')->purchaseUnit->id, $key);
+          $this->setInitialValues($key, $item);
         }
     }
 
-    /*Setea arrayVista en FAlSE, esto hace que no se muestre la informacion para
-      completar bajo cada uno de los items en la tabla de bienes y/o servicios*/
+    /*Setea arrayVista en FAlSE, esto hace que no se muestren los intputBox bajo cada
+      items en la tabla de bienes y/o servicios*/
     private function setArrayVista($status, $key){
       $this->arrayVista[$key]=$status;
     }
@@ -143,20 +143,20 @@ class PurchasingProcess extends Component
         }
     }
 
-    private function setInitialValues($key){
-      $this->idOC[$key]['value']            =   '';
-      $this->idInternalOC[$key]['value']    =   '';
-      $this->dateOC[$key]['value']          =   '';
-      $this->shippingDateOC[$key]['value']  =   '';
-      $this->idBigBuy[$key]['value']        =   '';
-      $this->pesoAmount[$key]['value']      =   '';
-      $this->dollarAmount[$key]['value']    =   '';
-      $this->ufAmount[$key]['value']        =   '';
-      $this->deliveryTerm[$key]['value']    =   '';
-      $this->deliveryDate[$key]['value']    =   '';
-      $this->idOffer[$key]['value']         =   '';
-      $this->idQuotation[$key]['value']     =   '';
-      $this->status[$key]['value']          =   'en_progreso';
+    private function setInitialValues($key, $item){
+      $this->idOC[$key]['value']                          =   '';
+      $this->idInternalOC[$key]['value']                  =   '';
+      $this->dateOC[$key]['value']                        =   '';
+      $this->shippingDateOC[$key]['value']                =   '';
+      $this->idBigBuy[$key]['value']                      =   '';
+      $this->pesoAmount[$key]['value']                    =   '';
+      $this->dollarAmount[$key]['value']                  =   '';
+      $this->ufAmount[$key]['value']                      =   '';
+      $this->deliveryTerm[$key]['value']                  =   '';
+      $this->deliveryDate[$key]['value']                  =   '';
+      $this->idOffer[$key]['value']                       =   '';
+      $this->idQuotation[$key]['value']                   =   '';
+      $this->arrayPurchasingProcessStatus[$key]['value']  =   $item->getPurchasingProcess('in_progress')->status;
     }
 
     public function resetError(){

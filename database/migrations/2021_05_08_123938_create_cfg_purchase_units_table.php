@@ -16,6 +16,7 @@ class CreateCfgPurchaseUnitsTable extends Migration
         Schema::create('cfg_purchase_units', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->unsignedInteger('supply_continuous_day');
             $table->timestamps();
             $table->softDeletes();
         });

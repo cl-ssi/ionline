@@ -16,6 +16,8 @@ class CreateCfgPurchaseTypesTable extends Migration
         Schema::create('cfg_purchase_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->unsignedInteger('finance_business_day');
+            $table->unsignedInteger('supply_continuous_day');
             $table->timestamps();
             $table->softDeletes();
         });
