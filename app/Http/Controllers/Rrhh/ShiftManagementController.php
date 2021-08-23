@@ -1128,17 +1128,21 @@ class ShiftManagementController extends Controller
                 
 
         }
-        // hacer foreach y revisar quien se cierra
+        // hacer foreach y revisar quien se cierra 
         if( $onlyConfirmedByMe == 0 )
-            $firstConfirmations = ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->get();
+            $firstConfirmations = ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->where("first_confirmation_status",">",0)->get();
         else
-            $firstConfirmations = ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->where("first_confirmation_user_id",Auth()->user()->id)->get();
+            $firstConfirmations = ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->where("first_confirmation_user_id",Auth()->user()->id)->where("first_confirmation_status",">",0)->get();
 
 
         if($onlyClosedByMe == 0)
             $closed= ShiftClose::whereNotNull("close_date")->get();
         else
             $closed= ShiftClose::whereNotNull("close_date")->where("close_user_id", Auth()->user()->id)->get();
+        if($onlyRejectedForMe == 0)
+            $rejected= ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->where("first_confirmation_status","-1")->get();
+        else
+            $rejected = ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->where("first_confirmation_user_id",Auth()->user()->id)->where("first_confirmation_status","-1")->get();
 
         $cierres = ShiftDateOfClosing::all();
         // if(isset( $cierres ))
@@ -1153,7 +1157,7 @@ class ShiftManagementController extends Controller
         //     }
         // }
 
-        return view('rrhh.shift_management.close-shift', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','closed','cierreDelMes','firstConfirmations',"cierres","onlyConfirmedByMe","onlyClosedByMe","onlyRejectedForMe" ));
+        return view('rrhh.shift_management.close-shift', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','closed','cierreDelMes','firstConfirmations',"cierres","onlyConfirmedByMe","onlyClosedByMe","onlyRejectedForMe","rejected" ));
     }
 
     public function shiftReports(Request $r){
@@ -1557,13 +1561,18 @@ class ShiftManagementController extends Controller
                 
                     $q->where('user_id',$idUser); // Para filtrar solo los dias de la unidad organizacional del usuario
         })->get();
-
+        
+       
         foreach($daysForClose as $dd){
+        
+            $date = Carbon::createFromFormat('Y-m-d',  $dd->day, 'Europe/London');
+            if( $date->isPast() ){ // aqui comparar la fecha con que fue  cerrado con la fecha del dia 
 
-            if(  substr($dd->working_day,0, 1) != "+" )
-                $total_hours+=   (isset($this->timePerDay[$dd->working_day]))?$this->timePerDay[$dd->working_day]["time"]:0  ;
-            else
-                $total_hours+= intval( substr( $dd->working_day,1,2) );
+                if(  substr($dd->working_day,0, 1) != "+" )
+                    $total_hours+=   (isset($this->timePerDay[$dd->working_day]))?$this->timePerDay[$dd->working_day]["time"]:0  ;
+                else
+                    $total_hours+= intval( substr( $dd->working_day,1,2) );
+            }
 
         }
 
@@ -1572,8 +1581,11 @@ class ShiftManagementController extends Controller
         $n->status = 1;
         $n->total_hours = $total_hours;
         $n->first_confirmation_commentary = $r->input("comment");
-        $n->first_confirmation_status = 1;
-        $n->first_confirmation_date =  Carbon::now()->format('Y-m-d');
+        if( isset( $r->rechazar ) && $r->rechazar == 1 )
+            $n->first_confirmation_status = -1;
+        else
+            $n->first_confirmation_status = 1;
+        $n->first_confirmation_date =  Carbon::now();
         $n->first_confirmation_user_id = Auth()->user()->id; 
         $n->date_of_closing_id = $r->input("cierreId");
         $n->owner_of_the_days_id = $r->input("userId");
@@ -1594,7 +1606,7 @@ class ShiftManagementController extends Controller
         $f->status = 2;
         $f->close_commentary = "";
         $f->close_status = 1;
-        $f->close_date = Carbon::now()->format('Y-m-d');;
+        $f->close_date = Carbon::now();
         $f->close_user_id =  Auth()->user()->id; ;
         $f->save();
         session()->flash('success', 'Se han cerrado los días ');
