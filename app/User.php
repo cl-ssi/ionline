@@ -91,6 +91,11 @@ class User extends Authenticatable
         return mb_convert_case(mb_strtolower("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_TITLE, "UTF-8");
     }
 
+    public function getFullNameUpperAttribute()
+    {
+        return mb_convert_case(mb_strtoupper("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_UPPER, "UTF-8");
+    }
+
     public function getShortNameAttribute()
     {
         return ucwords(strtolower("{$this->name} {$this->fathers_family}"));
