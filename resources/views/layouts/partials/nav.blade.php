@@ -13,7 +13,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('rrhh.users.directory') }}">
-                        <i class="fas fa-address-book" title="Teléfonos"></i> Tel. 
+                        <i class="fas fa-address-book" title="Teléfonos"></i> Tel.
                     </a>
                 </li>
 
@@ -108,7 +108,7 @@
                         <i class="fas fa-file-powerpoint"></i> Planes Comunales
                     </a>
 
-                    
+
 
                     </div>
                 </li>
@@ -186,7 +186,7 @@
                             <i class="fa fa-calendar fa-fw"></i> Modulo Turnos
                         </a>
                         @endcan
-                        
+
                         @canany(['Users: service requests'])
                         <a class="dropdown-item @active('rrhh.users.service_requests.index')"
                             href="{{ route('rrhh.users.service_requests.index') }}">
@@ -194,26 +194,42 @@
                         </a>
                         @endcan
 
-                        @role('Replacement Staff: admin')
-                            <div class="dropdown-divider"></div>
-
-                            <a class="dropdown-item @active('replacement_staff.index')"
-                               href="{{ route('replacement_staff.index') }}">
-                                <i class="far fa-id-card"></i> Staff de Reemplazos
-                            </a>
-                        @endrole
-
-                        @role('Replacement Staff: user')
+                        @if(Auth::user()->hasRole('Replacement Staff: admin'))
                             <div class="dropdown-divider"></div>
 
                             <a class="dropdown-item @active('replacement_staff.request.index')"
-                               href="{{ route('replacement_staff.request.own_index') }}">
+                               href="{{ route('replacement_staff.request.index') }}">
                                 <i class="far fa-id-card"></i> Staff de Reemplazos
-                                @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
+                                {{-- @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
                                     <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span>
-                                @endif
+                                @endif --}}
                             </a>
-                        @endrole
+                        @else
+                            @canany(['Replacement Staff: create request'])
+                                <div class="dropdown-divider"></div>
+
+                                <a class="dropdown-item @active('replacement_staff.request.own_index')"
+                                   href="{{ route('replacement_staff.request.own_index') }}">
+                                    <i class="far fa-id-card"></i> Staff de Reemplazos
+                                </a>
+                            @endcan
+                        @endif
+
+
+                        {{-- @endrole --}}
+
+                        {{-- @role('Replacement Staff: user')--}}
+
+                            <!-- <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item @active('replacement_staff.request.index')"
+                               href="{{ route('replacement_staff.request.own_index') }}">
+                                <i class="far fa-id-card"></i> Staff de Reemplazos -->
+                                {{-- @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0) --}}
+                                    <!-- <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span> -->
+                                {{-- @endif --}}
+                            <!-- </a> -->
+                        {{-- @endrole --}}
 
                     </div>
 

@@ -53,6 +53,8 @@
 				<th scope="col">SALIDA</th>
 				<th scope="col">SALDO</th>
 				<th scope="col">NOTAS</th>
+				<th scope="col">ACTA</th>
+				<th scope="col">LOTE</th>
 				<th>
 					<button type="button" class="btn btn-sm btn-outline-primary"
 						onclick="tableToExcel('tabla_bincard', 'Bincard')">
@@ -72,6 +74,8 @@
 						<td>{{ $matrix[$i]['salida'] }}</td>
 						<td>{{ $matrix[$i]['saldo'] }}</td>
 						<td>{{ $matrix[$i]['notas'] }}</td>
+						<td>{{ $matrix[$i]['act_number'] }}</td>
+						<td>{{ $matrix[$i]['product_batch'] }}</td>
 						<td>
 							<a href="{{ route('pharmacies.products.'.$matrix[$i]['type'].'.edit', $matrix[$i]['id']) }}"
 								class="btn btn-outline-secondary btn-sm">
