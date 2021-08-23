@@ -189,7 +189,7 @@
 
       <p class="justify">
         <strong>CONSIDERANDO:</strong><br>
-        
+
         {{$ServiceRequest->objectives}}.<br>
 
         <b>- Que</b>, esta labor no puede cumplirse con los recursos humanos propios de la institución no por carecer de ellos, sino porque éstos tienen relación con labores accidentales y no habituales de la Institución, de tal forma de encuadrarse en el Art. 11 Ley N°18.834, sobre Estatuto Administrativo. <br>
@@ -235,10 +235,9 @@
 
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       <p class="justify">
-        En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL ERNESTO TORRES GALDAMES</b>, persona jurídica de derecho público, RUT. 62.000.530-4 , con domicilio en calle Av.héroes de la concepcion N 502 de la ciudad de Iquique, representado por su Director
-        <!-- (s) <b>PEDRO IRIONDO CORREA</b> -->
-        <b>HÉCTOR ALARCÓN ALARCÓN</b>
-        chileno, Cédula Nacional de Identidad N°14.101.085-9, del mismo domicilio del servicio público que representa, en
+        En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL ERNESTO TORRES GALDAMES</b>, persona jurídica de derecho público, RUT. 62.000.530-4 , con domicilio en calle Av.héroes de la concepcion N 502 de la ciudad de Iquique, representado por su {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}
+        <b>{{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}</b>,
+        chileno, Cédula Nacional de Identidad N°{{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->runFormat()}}, del mismo domicilio del servicio público que representa, en
         adelante , "El Director del Hospital Ernesto Torres Galdames", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
         con domicilio en {{$ServiceRequest->address}}, de la ciudad de Iquique, en adelante “El Profesional” y exponen lo siguiente:
       </p>
@@ -253,10 +252,7 @@
       @endif
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       <strong>PRIMERO:</strong>
-      Don
-      <!-- PEDRO IRIONDO CORREA,  -->
-      HÉCTOR ALARCÓN ALARCÓN,
-      en su calidad de Director del Hospital Ernesto Torres Galdames, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
+      Don {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital Ernesto Torres Galdames, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
       @if($ServiceRequest->profession){{$ServiceRequest->profession->name}},@endif apoyo a {{$ServiceRequest->responsabilityCenter->name}} de la Dirección del Hospital Ernesto Torres Galdames.
       @else
       <p class="justify">
@@ -264,11 +260,7 @@
         Don JORGE GALLEGUILLOS MÖLLER, en su calidad de Director del Servicio de Salud Iquique, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
         @if($ServiceRequest->profession){{$ServiceRequest->profession->name}},@endif apoyo a {{$ServiceRequest->responsabilityCenter->name}} de la Dirección del Servicio Salud Iquique.
       </p>
-
-
       @endif
-
-
 
       <p class="justify">
         <strong>SEGUNDO:</strong> En cumplimiento del presente convenio El prestador deberá llevar a cabo las siguientes prestaciones:
@@ -495,7 +487,7 @@
         @endif
         <br>
 
-        
+
 
 
 
@@ -515,11 +507,11 @@
           @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
           <strong>
             <span class="uppercase">
-              HECTOR ALARCÓN ALARCÓN
-              <!-- PEDRO IRIONDO CORREA -->
+              {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}
             </span>
             <br>
-            DIRECTOR<br>
+              <span style="text-transform:uppercase">{{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}</span>
+            <br>
             HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
           </strong>
 
