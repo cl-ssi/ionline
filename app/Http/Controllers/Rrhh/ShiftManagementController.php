@@ -1164,7 +1164,65 @@ class ShiftManagementController extends Controller
         return view('rrhh.shift_management.close-shift', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','closed','cierreDelMes','firstConfirmations',"cierres","onlyConfirmedByMe","onlyClosedByMe","onlyRejectedForMe","rejected" ));
     }
     public function downloadCloseInXls($id){
-            echo "downloadCloseInXls".$id;
+            // echo "downloadCloseInXls".$id;   
+            $spreadsheet = new Spreadsheet(); 
+            $sheet = $spreadsheet->getActiveSheet();
+            $reportResult = (object) array();
+            
+            if($id == "closed")
+                $reportResult = Session::get("staffInShift_close");
+            elseif($id == "confirmed")
+                $reportResult = Session::get("firstConfirmations_close");
+            elseif($id == "slopes")
+                $reportResult = Session::get("closed_close");
+            elseif($id == "rejected")
+                $reportResult = Session::get("rejected_close");
+            else
+                $reportResult ="";
+
+
+            $sheet->setCellValue('A1',  "#" );
+            $sheet->setCellValue('B1',  "Rut " );
+            $sheet->setCellValue('C1',  "Nombre" );
+            $sheet->setCellValue('D1',  "Horas Totales" );
+            $sheet->setCellValue('E1',  "Comentario" );
+            $sheet->setCellValue('F1',  "Confirmado Por" );
+            $sheet->setCellValue('G1',  "Fecha Confirmacion" );
+            $sheet->setCellValue('H1',  "Cerado por" );
+            $sheet->setCellValue('I1',  "Fecha de cierre" );
+
+
+            $index = 2;
+            $filename="$id";
+            foreach($reportResult as $r){
+
+                $sheet->setCellValue('A'.$index,  $index );
+                $sheet->setCellValue('B'.$index,  strtoupper($r->user->runFormat()) );
+                $sheet->setCellValue('C'.$index,  strtoupper($r->user->getFullNameAttribute()) );
+                $sheet->setCellValue('D'.$index,  strtoupper($r->total_hours) );
+                $sheet->setCellValue('E'.$index,  strtoupper($r->first_confirmation_commentary) );
+                $sheet->setCellValue('F'.$index,  strtoupper($r->first_confirmation_user_id) );
+                $sheet->setCellValue('G'.$index,  strtoupper($r->first_confirmation_date) );
+                $sheet->setCellValue('H'.$index,  strtoupper($r->close_user_id) );
+                $sheet->setCellValue('I'.$index,  strtoupper($r->close_date) );
+                
+                $index++;
+
+            }
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="reporte20210413-113325.xlsx"');
+        header('Cache-Control: max-age=0');
+ $sheet->getStyle('A1:AH1')->applyFromArray(
+                    array(
+                        'font' => array(
+                        'bold' => true
+                        )
+                    )
+                );
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output'); 
+
     }
     public function shiftReports(Request $r){
         // echo "shiftReports";
