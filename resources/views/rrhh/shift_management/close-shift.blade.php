@@ -56,7 +56,7 @@
 		</div>
 	</form>
 
-		<form method="post" action="{{ route('rrhh.shiftManag.closeShift') }}" >
+		<form method="post" action="{{ route('rrhh.shiftManag.closeShift') }}" name="menuFilters">
         	@csrf
         	{{ method_field('post') }}  
 
@@ -132,7 +132,7 @@
                     	@endforeach
                 	</select> 		
             	</div>
-
+            	<input type="hidden" name="filtrados" id="filtrados"  value="0,0,0">
             	<div class="form-group col-md-2">
                 	<label for="for_submit">&nbsp;</label>
                 	<button type="submit" class="btn btn-primary form-control">Filtrar <i class="fa fa-filter"></i></button>
@@ -143,7 +143,7 @@
 
 	<h4>Cerrados <a href="#" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
 	<small class="form-check">
-  			<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
+  			<input class="form-check-input" type="checkbox" value="1" id="onlyClosedByMe"  name="onlyClosedByMe" onchange="setValueToFiltrados()" {{ $onlyClosedByMe != 0 ? 'checked':'' }} >
   			<label class="form-check-label" for="flexCheckIndeterminate">
     			Solo cerrados por mi
   			</label>
@@ -191,7 +191,7 @@
 		</table>
 	<h4>Confirmados <a href="#" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a> </h4>
 	<small class="form-check">
-  			<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
+  			<input class="form-check-input"  type="checkbox" value="1" id="onlyConfirmedByMe" name="onlyConfirmedByMe" onchange="setValueToFiltrados()" {{ $onlyConfirmedByMe != 0 ? 'checked':'' }} >
   			<label class="form-check-label" for="flexCheckIndeterminate">
     			Solo confirmados por mi
   			</label>
@@ -314,7 +314,7 @@
 	<br>
 	<h4>Rechazados <a href="#" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
 	<small class="form-check">
-  			<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
+  			<input class="form-check-input" type="checkbox" value="1" id="onlyRejectedForMe" name="onlyRejectedForMe" onchange="setValueToFiltrados()" {{ $onlyRejectedForMe != 0 ? 'checked':'' }}>
   			<label class="form-check-label" for="flexCheckIndeterminate">
     			Solo rechazados por mi
   			</label>
@@ -399,6 +399,22 @@ $(document).ready(function() {
 
     } );
 } );
+
+function setValueToFiltrados(){
+	var onlyClosedByMe=0;
+	var onlyConfirmedByMe=0;
+	var onlyRejectedForMe=0;
+
+	if ( $("#onlyConfirmedByMe").prop( "checked") )
+		onlyConfirmedByMe = 1;
+	if ( $("#onlyClosedByMe").prop( "checked") )
+		onlyClosedByMe = 1;
+	if ( $("#onlyRejectedForMe").prop( "checked") )
+		onlyRejectedForMe = 1;
+	$("#filtrados").val( onlyClosedByMe +","+ onlyConfirmedByMe +","+ onlyRejectedForMe  );
+	// alert($("#filtrados").val()  );
+	menuFilters.submit();
+}
 </script>
 
 @endsection

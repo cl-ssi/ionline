@@ -898,9 +898,21 @@ class ShiftManagementController extends Controller
             $months = $this->months ;
 
         //  return view('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr,'usr'=>$usr,'months'=>$months  ]);
+        $close = $r->close;
+        $cierreDelMes = "";
+        $daysForClose  ="";
+        if($close != 0){
+            $cierreDelMes = ShiftDateOfClosing::find($close);
+            $id = $r->actuallyUser;
+            $daysForClose = ShiftUserDay::where('day','>=',$cierreDelMes->init_date)->where('day','<=',$cierreDelMes->close_date)->whereHas("ShiftUser",  function($q) use($id){
+                
+                    $q->where('user_id',$id); // Para filtrar solo los dias de la unidad organizacional del usuario
+            })->get();
+        }
+
 
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr,'usr'=>$usr,'months'=>$months  ,'timePerDay' =>$this->timePerDay,'shiftStatus' => $this->shiftStatus]);
+        $pdf->loadView('rrhh.shift_management.shift_control_form',['days'=>$days,'actuallyYears'=>$actuallyYears,'actuallyMonth'=>$actuallyMonth ,'shifsUsr'=>$shifsUsr,'usr'=>$usr,'months'=>$months  ,'timePerDay' =>$this->timePerDay,'shiftStatus' => $this->shiftStatus,'close'=>$close,'cierreDelMes'=>$cierreDelMes, 'daysForClose'=>$daysForClose]);
         return $pdf->stream('mi-archivo.pdf');
     }
 
@@ -1051,6 +1063,18 @@ class ShiftManagementController extends Controller
     
     public function closeShift(Request $r){ // direcciona a vista para cerrar los turnos, utilizado por rrhh del hospital.
 
+        $onlyClosedByMe= 0 ;
+        $onlyConfirmedByMe= 0 ;
+        $onlyRejectedForMe= 0 ;
+        // dd($r->filtrados);
+        if( isset( $r->filtrados )  ){
+            // echo "HERE".$r->filtrados;
+            $filtradosFortmatead = explode(",", $r->filtrados);
+            $onlyClosedByMe=$filtradosFortmatead[0];
+            $onlyConfirmedByMe=$filtradosFortmatead[1];
+            $onlyRejectedForMe=$filtradosFortmatead[2];
+        }
+
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
         $cargos = OrganizationalUnit::all();
         $months = $this->months;
@@ -1093,15 +1117,29 @@ class ShiftManagementController extends Controller
                 $cierreDelMes = (object) array("id"=>0,"user_id"=>1,"commentary"=>"","init_date"=>$actuallyYear."-".$actuallyMonth."-01","close_date"=>$actuallyYear."-".$actuallyMonth."-".$days); // anters
         }
         $staffInShift = array();
-        if($cierreDelMes->id != 0)
-            $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->whereHas("days",  function($q) use($cierreDelMes){
+        if($cierreDelMes->id != 0){
+           
+                $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->whereHas("days",  function($q) use($cierreDelMes){
                 
-                    $q->where('day','<=',$cierreDelMes->close_date)->where('day','>=',$cierreDelMes->init_date)->whereNull('shift_close_id'); // Para filtrar solo los dias de la unidad organizacional del usuario
+                        $q->where('day','<=',$cierreDelMes->close_date)->where('day','>=',$cierreDelMes->init_date)->whereNull('shift_close_id'); // Para filtrar solo los dias de la unidad organizacional del usuario
             
-            })->groupBy("user_id")->get(); // busco todos aqellos dias entre las fechas de cierre la unidad or qe  
+                })->groupBy("user_id")->get(); // busco todos aqellos dias entre las fechas de cierre la unidad or qe  
+            
+                
+
+        }
         // hacer foreach y revisar quien se cierra
-        $firstConfirmations = ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->get();
-        $closed= ShiftClose::whereNotNull("close_date")->get();
+        if( $onlyConfirmedByMe == 0 )
+            $firstConfirmations = ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->get();
+        else
+            $firstConfirmations = ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->where("first_confirmation_user_id",Auth()->user()->id)->get();
+
+
+        if($onlyClosedByMe == 0)
+            $closed= ShiftClose::whereNotNull("close_date")->get();
+        else
+            $closed= ShiftClose::whereNotNull("close_date")->where("close_user_id", Auth()->user()->id)->get();
+
         $cierres = ShiftDateOfClosing::all();
         // if(isset( $cierres ))
         //     $cierres = (object) array("id"=>0,"user_id"=>1,"commentary"=>"","init_date"=>$actuallyYear."-".$actuallyMonth."-01","close_date"=>$actuallyYear."-".$actuallyMonth."-".$days);
@@ -1115,7 +1153,7 @@ class ShiftManagementController extends Controller
         //     }
         // }
 
-        return view('rrhh.shift_management.close-shift', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','closed','cierreDelMes','firstConfirmations',"cierres" ));
+        return view('rrhh.shift_management.close-shift', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','closed','cierreDelMes','firstConfirmations',"cierres","onlyConfirmedByMe","onlyClosedByMe","onlyRejectedForMe" ));
     }
 
     public function shiftReports(Request $r){
@@ -1285,7 +1323,6 @@ class ShiftManagementController extends Controller
 
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output'); 
-
     }
 
     public function shiftDashboard(){
