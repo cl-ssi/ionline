@@ -125,7 +125,7 @@
                         data-original-title="{{ $file->name }}">
                         <i class="fas fa-paperclip"></i>
                     </a>
-                    @if($parte->created_at->diffInDays('now') <= 1)
+                    @if($parte->created_at->diffInDays('now') <= 7)
 
 
                     <form method="POST" style="display:inline-block;"
