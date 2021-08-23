@@ -19,6 +19,16 @@ class CreateCfgPurchaseMechanismsTable extends Migration
           $table->timestamps();
           $table->softDeletes();
         });
+
+        Schema::create('cfg_purchase_mechanism_type', function (Blueprint $table) {
+          $table->foreignId('purchase_mechanism_id')->unsigned();
+          $table->foreign('purchase_mechanism_id')->references('id')->on('cfg_purchase_mechanisms')->onDelete('cascade');
+
+          $table->foreignId('purchase_type_id')->unsigned();
+          $table->foreign('purchase_type_id')->references('id')->on('cfg_purchase_types')->onDelete('cascade');
+          $table->softDeletes();
+          $table->timestamps();
+        });
     }
 
     /**

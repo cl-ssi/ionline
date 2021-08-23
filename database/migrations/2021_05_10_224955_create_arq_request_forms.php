@@ -29,17 +29,9 @@ class CreateArqRequestForms extends Migration
 
             $table->enum('status', ['approved', 'rejected', 'created', 'in_progress', 'closed']);
 
-/*
-            $table->enum('purchase_unit', ['BIENES Y SS', 'CGU', 'SSI', 'ADM DE FONDOS', 'OBRAS', 'FARMACOS',
-                                           'ACTIVO FIJO', 'GORE',  'BIENESTAR'])->nullable();
-            $table->enum('purchase_type', ['FONDO MENOR', 'OC INTERNA', 'FONDO A RENDIR', 'GRAN COMPRA', 'TRATO DIRECTO DE SUMINISTRO',
-                                           'TRATO DIRECTO <1.000 UTM', 'TRATO DIRECTO < 4.999 UTM', 'TRATO DIRECTO > 5.000 UTM',
-                                           'TRATO DIRECTO OBRAS', 'LICITACIÓN DE SUMINISTRO', 'L1', 'LE', 'LP', 'LQ', 'LR > 5.000 UTM',
-                                           'LR > 8.000 UTM', 'LR > 15.000 UTM', 'ADDENDUM', 'RENOVACIÓN'])->nullable();
-*/
             $table->bigInteger('purchase_mechanism_id')->unsigned();
             $table->bigInteger('purchase_unit_id')->unsigned()->nullable();
-            $table->bigInteger('purchase_type_id')->unsigned()->nullable();
+            //$table->bigInteger('purchase_type_id')->unsigned()->nullable();
 
 
             $table->timestamps();
@@ -47,7 +39,7 @@ class CreateArqRequestForms extends Migration
 
             $table->foreign('purchase_mechanism_id')->references('id')->on('cfg_purchase_mechanisms');
             $table->foreign('purchase_unit_id')->references('id')->on('cfg_purchase_units');
-            $table->foreign('purchase_type_id')->references('id')->on('cfg_purchase_types');
+            //$table->foreign('purchase_type_id')->references('id')->on('cfg_purchase_types');
 
             $table->foreign('creator_user_id')->references('id')->on('users');
             $table->foreign('applicant_user_id')->references('id')->on('users');

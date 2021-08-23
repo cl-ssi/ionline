@@ -31,6 +31,10 @@ class ItemRequestForm extends Model
     public function purchasingProcesses() {
         return $this->hasMany(PurchasingProcess::class, 'item_request_form_id');
     }
+
+    public function getPurchasingProcess($status){
+        return PurchasingProcess::Where('status',$status)->Where('item_request_form_id', $this->id)->get()->first();
+    }
 /*
     public function purchaseUnit(){
       return $this->belongsTo(PurchaseUnit::class, 'purchase_unit_id');

@@ -148,15 +148,24 @@
                   <tr class="{{$arrayBgTable[$key]}}">
                     <td colspan="14" class="brd-bb  brd-l brd-r">
 
-                      <div class="row mb-3">
-                        <div class="col-6">
-                          @foreach($item->purchasingProcesses as $pp)
-                            @if($pp->status=='in_progress')
-                              Id: {{$pp->id}} <br>
-                              Creación: {{$pp->created_at}} <br>
-                            @endif
-                          @endforeach
-                        </div>
+                      <div class="container-fluid row mx-0 mb-3 mt-3 pt-0"> <!-- DIV para TABLA-->
+                        <table class="table table-condensed table-sm small table-bordered">
+                            <tr>
+                                <th class="text-muted col-2" scope="row">ID Proceso de Compra:</th>
+                                <td class="col-2">{{$item->getPurchasingProcess('in_progress')->id}}</td>
+                                <th class="text-muted col-2" scope="row">Estado</th>
+                                <td class="col-2">{{$item->getPurchasingProcess('in_progress')->status}}</td>
+                                <th class="text-muted col-2 align-middle">Procesos anteriores</th>
+                                <td class="col-2 align-middle">{{count($item->purchasingProcesses)-1}}</td>
+                            </tr>
+                            <tr>
+                                <th class="text-muted col-2 align-middle">Fecha de Creación</th>
+                                <td class="col-2 align-middle">{{$item->getPurchasingProcess('in_progress')->created_at}}</td>
+                                <th class="text-muted col-2 align-middle">Fecha de Actualización</th>
+                                <td class="col-2 align-middle">{{$item->getPurchasingProcess('in_progress')->updated_at}}</td>
+                                <th class="col-2"></th><td class="col-2"></td>
+                            </tr>
+                        </table>
                       </div>
 
                       <div class="row mb-3">
@@ -252,15 +261,20 @@
                           <label class="font-weight-bold text-muted ml-1 mb-0">Estado de Compra:</label>
                         </div>
                         <div class="col-3">
-                          <select wire:model="status.{{ $key }}.value" class="form-control form-control-sm" required>
+                          <select wire:model="arrayPurchasingProcessStatus.{{ $key }}.value" class="form-control form-control-sm" required>
                             <option selected>Seleccione...</option>
-                            <option value="en_progreso">En progreso</option>
-                            <option value="parcial">Recepción Parcial</option>
+                            <option value="in_progress">En progreso</option>
+                            <option value="partial">Recepción Parcial</option>
                             <option value="total">Recepción Total</option>
-                            <option value="desierto">Desierto</option>
-                            <option value="caducado">Caducado</option>
+                            <option value="desert">Desierto</option>
+                            <option value="timed_out">Caducado</option>
+                            <option value="not_available">No Disponible</option>
+                            <!--'in_progress', 'total', 'partial', 'desert',  'timed_out', 'not_available'-->
                           </select>
                         </div>
+                          <div class="col-6 mx-0 my-0 px-0 py-0 text-right">
+                            <button type="button" class="btn btn-primary btn-sm mr-3"><i class="far fa-save"></i> Guardar Proceso de Compra</button>
+                          </div>
                       </div>
 
                     </td>
@@ -308,5 +322,17 @@
         </tfoot>
       </table>
     </div><!-- DIV para TABLA ITEMS-->
+
+    <div class="row mx-0 my-0 mx-0 py-0">
+      <div class="col-12 text-right mr-0">
+          <button type="button" class="btn btn-primary btn-sm mx-0 px-2" wire:click="showAllItems">Guardar Todo</button>
+      </div>
+    </div>
+
+
+
+
+
+
 
 </div><!-- LIVEWIRE -->
