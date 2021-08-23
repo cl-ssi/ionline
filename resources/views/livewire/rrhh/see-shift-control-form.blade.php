@@ -31,7 +31,7 @@
 
             <div class="modal-header" style="background-color:#006cb7;color:white   ">
 
-                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-clock"></i> Planilla de control de Turnos</h5>
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-clock"></i> Planilla de control de Turnos <small><b>#ID</b> </small></h5>
 
                 <button type="button" class="close" data-dismiss="modal" wire:click.prevent="cancel()" aria-label="Close">
 
