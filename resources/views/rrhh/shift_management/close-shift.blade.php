@@ -269,7 +269,7 @@
 					<td>{{$s->user&&$s->user->id? $s->user->getFullNameAttribute(): '' }}</td>
 					<form method="post" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
 						<td><!-- <input type="text" class="form-control" name="commentX" value="Comentario de prueba desde el area anterior"> -->
-							<textarea  class="form-control" name="comment" placeholder ="Ingrese un comentario  " ></textarea>
+							<textarea  class="form-control" name="comment" id="comment1_{{$s->id}}" placeholder ="Ingrese un comentario  " ></textarea>
 						 </td>
 						<!-- <td>100</td> -->
 						<td>
@@ -288,7 +288,7 @@
 							<!-- <button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Confirmar</button> -->
 
 					</form>
-					<form method="post" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
+					<form method="post" id="rejectForm_{{$s->id}}" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
 						@csrf
         				{{ method_field('post') }}
 
@@ -298,10 +298,11 @@
 						{{--json_encode($cierreDelMes--}}
 						<input type="hidden" name="cierreId" value="{{$cierreDelMes&&$cierreDelMes->id? $cierreDelMes->id : '' }}">
 						<input type="hidden" name="rechazar" value="1">
+						<input type="hidden" name="comment" id="comment2_{{$s->id}}" value="">
 						<!-- fin bug -->
 
 
-						<button class="btn btn-danger">Rechazar</button>
+						<button type="button" onclick="rejectForm({{$s->id}});" class="btn btn-danger">Rechazar</button>
 					</form>
 
                     	@livewire( 'rrhh.see-shift-control-form', ['usr'=>$s->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>$cierreDelMes->id], key($loop->index) )
@@ -440,6 +441,12 @@ function setValueToFiltrados(){
 	$("#filtrados").val( onlyClosedByMe +","+ onlyConfirmedByMe +","+ onlyRejectedForMe  );
 	// alert($("#filtrados").val()  );
 	menuFilters.submit();
+}
+
+function rejectForm(idField){
+	$("#comment2_"+idField).val( $("#comment1_"+idField).val() );
+	// alert($("#comment2_"+idField).val());
+	$("#rejectForm_"+idField).submit();
 }
 </script>
 
