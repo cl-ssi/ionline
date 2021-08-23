@@ -133,9 +133,13 @@ class AuthorityController extends Controller
      */
     public function edit(Authority $authority)
     {
-        $ous = OrganizationalUnit::All();
-        $ouTopLevel = OrganizationalUnit::Find(1);
-        return view('rrhh.authorities.edit', compact('ous','ouTopLevel','authority'));
+        switch($authority->organizationalUnit->level) {
+            case 4: $ouTopLevel = $authority->organizationalUnit->father->father->father; break;
+            case 3: $ouTopLevel = $authority->organizationalUnit->father->father; break;
+            case 2: $ouTopLevel = $authority->organizationalUnit->father; break;
+            case 2: $ouTopLevel = $authority->organizationalUnit; break; 
+        }
+        return view('rrhh.authorities.edit', compact('ouTopLevel','authority'));
     }
 
     /**

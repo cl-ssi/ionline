@@ -1116,7 +1116,7 @@ class ShiftManagementController extends Controller
             if(!isset($cierreDelMes))
                 $cierreDelMes = (object) array("id"=>0,"user_id"=>1,"commentary"=>"","init_date"=>$actuallyYear."-".$actuallyMonth."-01","close_date"=>$actuallyYear."-".$actuallyMonth."-".$days); // anters
         }
-        $staffInShift = array();
+        $staffInShift = array(); // pendientes
         if($cierreDelMes->id != 0){
            
                 $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->whereHas("days",  function($q) use($cierreDelMes){
@@ -1156,10 +1156,16 @@ class ShiftManagementController extends Controller
         //             array_push($firstConfirmations,$s);
         //     }
         // }
+        Session::put('staffInShift_close',$staffInShift);
+        Session::put('firstConfirmations_close',$firstConfirmations);
+        Session::put('closed_close',$closed);
+        Session::put('rejected_close',$rejected);
 
         return view('rrhh.shift_management.close-shift', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','closed','cierreDelMes','firstConfirmations',"cierres","onlyConfirmedByMe","onlyClosedByMe","onlyRejectedForMe","rejected" ));
     }
-
+    public function downloadCloseInXls($id){
+            echo "downloadCloseInXls".$id;
+    }
     public function shiftReports(Request $r){
         // echo "shiftReports";
        
