@@ -561,7 +561,7 @@
       </p>
       @else
       <p class="justify">
-        <strong>DÉCIMO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
+        <strong>DÉCIMO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implica la caducidad inmediata de éste.
       </p>
       @endif
       @endif
@@ -569,12 +569,12 @@
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       @if($ServiceRequest->program_contract_type == "Mensual")
       <p class="justify">
-        <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
+        <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implica la caducidad inmediata de éste.
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
       @if($ServiceRequest->estate == "Profesional Médico")
       <p class="justify">
-        <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
+        <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implica la caducidad inmediata de éste.
       </p>
       @else
       <p class="justify">
@@ -591,7 +591,7 @@
       @else
       @if($ServiceRequest->program_contract_type == "Mensual")
       <p class="justify">
-        <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
+        <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implica la caducidad inmediata de éste.
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
       <p class="justify">
