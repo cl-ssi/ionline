@@ -36,7 +36,8 @@
         <thead class="text-center">
             <tr>
                 <th>#</th>
-                <th>Cargo</th>
+                <th>Fecha</th>
+                <th>Solicitud</th>
                 <th>Grado</th>
                 <th>Calidad Jurídica</th>
                 <th>Periodo</th>
@@ -65,6 +66,7 @@
                     @endif
 
                 </td>
+                <td>{{ $request->created_at->format('d-m-Y H:i:s') }}</td>
                 <td>{{ $request->name }}</td>
                 <td class="text-center">{{ $request->degree }}</td>
                 <td class="text-center">{{ $request->LegalQualityValue }}</td>

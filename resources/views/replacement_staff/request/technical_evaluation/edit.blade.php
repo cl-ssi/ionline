@@ -262,7 +262,7 @@
                       <select name="profile_search" class="form-control">
                           <option value="0">Seleccione...</option>
                           @foreach($profileManage as $profile)
-                              <option value="{{ $profile->id }}" {{ ($request->profile_search == $profile->id)?'selected':'' }}>{{ $profile->Name }}</option>
+                              <option value="{{ $profile->id }}" {{ ($request->profile_search == $profile->id)?'selected':'' }}>{{ $profile->name }}</option>
                           @endforeach
                       </select>
                   </fieldset>
@@ -272,7 +272,7 @@
                       <select name="profession_search" class="form-control">
                           <option value="0">Seleccione...</option>
                           @foreach($professionManage as $profession)
-                              <option value="{{ $profession->id }}" {{ ($request->profession_search == $profession->id)?'selected':'' }}>{{ $profession->Name }}</option>
+                              <option value="{{ $profession->id }}" {{ ($request->profession_search == $profession->id)?'selected':'' }}>{{ $profession->name }}</option>
                           @endforeach
                       </select>
                   </fieldset>

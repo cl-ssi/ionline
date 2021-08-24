@@ -29,9 +29,9 @@
 
             <a class="dropdown-item" href="{{ route('replacement_staff.request.to_sign') }}">
                 <i class="fas fa-check-circle"></i> Gestión de solicitudes
-                @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
-                    <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span>
-                @endif
+                {{-- @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0) --}}
+                    <!-- <span class="badge badge-secondary">{{-- App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() --}} </span> -->
+                {{-- @endif --}}
             </a>
        </div>
    </li>
