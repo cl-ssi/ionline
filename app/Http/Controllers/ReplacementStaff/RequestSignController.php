@@ -75,7 +75,7 @@ class RequestSignController extends Controller
         if($status == 'accepted'){
             $requestSign->user_id = Auth::user()->id;
             $requestSign->request_status = $status;
-            $requestSign->date_sign = Carbon::now()->format('Y_m_d_H_i_s');
+            $requestSign->date_sign = Carbon::now();
             $requestSign->save();
 
             $nextRequestSign = $requestSign->requestReplacementStaff->requestSign->where('position', $requestSign->position + 1);
@@ -99,7 +99,8 @@ class RequestSignController extends Controller
         else{
           $requestSign->user_id = Auth::user()->id;
           $requestSign->request_status = $status;
-          $requestSign->date_sign = Carbon::now()->format('Y_m_d_H_i_s');
+          $requestSign->observation = $request->observation;
+          $requestSign->date_sign = Carbon::now();
           $requestSign->save();
 
           session()->flash('danger', 'Su solicitud ha sido Rechazada con éxito.');

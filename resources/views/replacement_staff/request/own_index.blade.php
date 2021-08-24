@@ -44,14 +44,15 @@
       <thead class="text-center">
           <tr>
               <th>#</th>
-              <th>Cargo</th>
+              <th style="width: 8%">Fecha</th>
+              <th>Solicitud</th>
               <th>Grado</th>
               <th>Calidad Jurídica</th>
               <th>Periodo</th>
               <th>Fundamento</th>
               <th>Solicitante</th>
               <th>Estado</th>
-              <th></th>
+              <th style="width: 2%"></th>
           </tr>
       </thead>
       <tbody>
@@ -64,6 +65,7 @@
                       <i class="fas fa-clock" title="Evaluación Técnica: Pendiente"></i>
                   @endif
               </td>
+              <td>{{ $request->created_at->format('d-m-Y H:i:s') }}</td>
               <td>{{ $request->name }}</td>
               <td class="text-center">{{ $request->degree }}</td>
               <td class="text-center">{{ $request->LegalQualityValue }}</td>
@@ -118,6 +120,7 @@
       <thead class="text-center">
           <tr>
               <th>#</th>
+              <th style="width: 8%">Fecha</th>
               <th>Cargo</th>
               <th>Grado</th>
               <th>Calidad Jurídica</th>

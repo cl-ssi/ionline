@@ -78,18 +78,35 @@
                                                       <i class="fas fa-check-circle"></i></a>
                                                   </button>
                                             </form>
-                                      </div>
-                                      <div class="col-sm">
-                                          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'rejected']) }}">
-                                              @csrf
-                                              @method('PUT')
-                                              <button type="submit" class="btn btn-danger btn-sm"
-                                                  onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
-                                                  title="Rechazar">
-                                                  <i class="fas fa-times-circle"></i></a>
-                                              </button>
-                                          </form>
-                                      </div>
+                                        </div>
+                                        <div class="col-sm">
+                                          <p>
+                                            <a class="btn btn-danger btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                <i class="fas fa-times-circle"></i>
+                                            </a>
+                                          </p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <div class="collapse" id="collapseExample">
+                                                <div class="card card-body">
+                                                  <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'rejected']) }}">
+                                                      @csrf
+                                                      @method('PUT')
+                                                      <div class="form-group">
+                                                          <label class="float-left" for="for_observation">Motivo Rechazo</label>
+                                                          <textarea class="form-control" id="for_observation" name="observation" rows="2"></textarea>
+                                                      </div>
+                                                      <button type="submit" class="btn btn-danger btn-sm float-right"
+                                                          onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
+                                                          title="Rechazar">
+                                                          <i class="fas fa-times-circle"></i> Rechazar</a>
+                                                      </button>
+                                                  </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 @elseif($requestSign->request_status == 'accepted')
                                     <span style="color: green;">

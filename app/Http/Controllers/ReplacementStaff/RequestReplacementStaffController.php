@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewRequestReplacementStaff;
+use App\Mail\NotificationSign;
 
 
 class RequestReplacementStaffController extends Controller
@@ -244,6 +245,7 @@ class RequestReplacementStaffController extends Controller
 
                 $date = Carbon::now()->format('Y_m_d_H_i_s');
                 $type = 'manager';
+                $type_adm = 'secretary';
                 $user_id = Auth::user()->id;
 
                 $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
@@ -274,6 +276,17 @@ class RequestReplacementStaffController extends Controller
                         $request_sing->ou_alias = 'leadership';
                         $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
                         $request_sing->request_status = 'pending';
+
+                        //manager
+                        $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
+                        //secretary
+                        $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type_adm);
+
+                        $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
+
+                        Mail::to($emails)
+                          ->cc(env('APP_RYS_MAIL'))
+                          ->send(new NotificationSign($request_replacement));
                     }
                     if ($i == 2) {
                       $request_sing->position = '2';
@@ -294,7 +307,7 @@ class RequestReplacementStaffController extends Controller
 
         Mail::to(explode(',', env('APP_RYS_MAIL')))->send(new NewRequestReplacementStaff($request_replacement));
 
-        session()->flash('success', 'Se ha creado la Solicitud Exitosamente');
+        session()->flash('success', 'Estimados Usuario, se ha creado la Solicitud Exitosamente');
         return redirect()->route('replacement_staff.request.own_index');
     }
 
