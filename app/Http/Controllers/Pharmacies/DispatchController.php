@@ -398,7 +398,9 @@ class DispatchController extends Controller
       $file = $dispatch->files->first();
       // return response()->download(storage_path('app/' . $file->file), $file->name, [], 'inline');
 
-      return Storage::response($file->file, mb_convert_encoding($file->name,'ASCII'));
+      // return Storage::response($file->file, mb_convert_encoding($file->name,'ASCII'));
+      // return Storage::disk('gcs')->get('ionline/pharmacies/'.$file->name, $file->file);
+      return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
     }
 
     public function exportExcel(){
