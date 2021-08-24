@@ -170,6 +170,13 @@
             @endcan
 
             @canany(['Service Request: pending requests'])
+            <a class="dropdown-item {{ active('rrhh.service-request.report.contract') }}"
+                href="{{ route('rrhh.service-request.report.contract') }}">
+                <i class="fas fa-file-contract"></i> Reporte de contratos
+            </a>
+            @endcan
+
+            @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.duplicate-contracts') }}"
                 href="{{ route('rrhh.service-request.report.duplicate-contracts') }}">
                 <i class="fas fa-clone"></i> Contratos Solapados                

@@ -558,6 +558,31 @@ class ReportController extends Controller
     return view('service_requests.reports.duplicate_contracts', compact('request', 'serviceRequests'));
   }
 
+  public function contract(Request $request)
+  {    
+
+    $responsabilityCenters = OrganizationalUnit::where('establishment_id', Auth::user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
+    //dd($responsabilityCenters);
+
+    
+    //$srs = ServiceRequest::select("*");
+    $srs = ServiceRequest::paginate(100);
+
+    if ($request->has('from')) {
+    $srs = ServiceRequest::whereBetween($request->option, [$request->from, $request->to])->
+    orderByAsc($request->option)
+    ->paginate(100);
+    }
+
+    
+
+    
+
+    $request->flash(); // envía los inputs de regreso
+    return view('service_requests.reports.contract', compact('request', 'responsabilityCenters','srs'));
+
+  }
+
   public function export_sirh_txt(Request $request)
   {
 
