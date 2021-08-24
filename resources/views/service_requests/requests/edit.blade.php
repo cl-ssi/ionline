@@ -445,6 +445,9 @@
           <option value="TURNO DE REEMPLAZO" @if($serviceRequest->working_day_type == 'TURNO DE REEMPLAZO') selected @endif>TURNO DE REEMPLAZO</option>
 
           <option value="OTRO" @if($serviceRequest->working_day_type == 'OTRO') selected @endif >OTRO</option>
+
+          <option value=""></option>
+  				<option value="DIARIO" @if($serviceRequest->working_day_type == 'DIARIO') selected @endif>DIARIO</option>
         </select>
 
 		</fieldset>
