@@ -25,7 +25,7 @@
             de la Unidad de Reclutamiento y Selección del Servicio de Salud Iquique.
             <br><br>
             Las postulaciones realizadas por este medio no son vinculantes a las convocatorias
-            publicadas en portal de empleos públicos.
+            publicadas en portal de <b>Empleos Públicos</b> y/o en la página web del <b>Servicio de Salud Iquique</b>.
         </p>
         <a href="{{ route('replacement_staff.create') }}" class="btn btn-primary">Ir</a>
       </div>
