@@ -34,7 +34,7 @@
         <fieldset class="form-group col-sm-3">
             <label for="for_to">Unidad Organizacional</label>
             <select name="uo" class="form-control">
-                <option value="">Seleccionar Unidad</option>
+                <option value="">Todos</option>
                 @foreach($responsabilityCenters as $key => $responsabilityCenter)
                 <option value="{{$responsabilityCenter->id}}" {{ (old('uo')==$responsabilityCenter->id)?'selected':'' }}>{{$responsabilityCenter->name}}</option>
                 @endforeach
@@ -54,13 +54,14 @@
 
 
 <hr>
-<h3 class="mb-3">Reporte de contrato</h3>
+<h3 class="mb-3">Reporte de contratos</h3>
 <table class="table table-sm table-bordered table-stripped" id="tabla_contrato">
     <tr>
         <th>Id Sol.</th>
         <th>Tipo</th>
         <th>Origen Financiamiento</th>
         <th nowrap>Rut</th>
+        <th>Nombre</th>
         <th>Fecha Solicitud</th>
         <th>F.Inicio de Contrato</th>
         <th>F.Término de Contrato</th>
@@ -68,10 +69,15 @@
     @if(isset($request->option))
     @foreach($srs as $sr)
     <tr>
-        <td>{{ $sr->id ?? '' }}</td>
+        <td>
+        <a href="{{ route('rrhh.service-request.fulfillment.edit',$sr) }}" target="_blank">                    
+            {{ $sr->id ?? '' }}
+            </a>        
+        </td>
         <td>{{ $sr->program_contract_type ?? '' }}</td>
         <td>{{ $sr->type ?? '' }}</td>
         <td>{{ $sr->id ? $sr->employee->runFormat(): '' }}</td>
+        <td class="text-uppercase">{{$sr->employee->fullname?? ''}}</td>
         <td>{{ $sr->request_date ? $sr->request_date->format('d-m-Y'): '' }}</td>
         <td>{{ $sr->start_date ? $sr->start_date->format('d-m-Y'): '' }}</td>
         <td>{{ $sr->end_date ? $sr->end_date->format('d-m-Y'): '' }}</td>
@@ -80,6 +86,6 @@
     @endif
 </table>
 
-{{ $srs->links() }}
+{{ $srs->appends(request()->query())->links() }}
 
 @endsection
