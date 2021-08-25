@@ -25,10 +25,35 @@ class RequestReplacementStaffController extends Controller
      */
     public function index()
     {
-        $requestReplacementStaff = RequestReplacementStaff::orderBy('id', 'DESC')
+        $pending_requests = RequestReplacementStaff::latest()
+            ->where(function ($q){
+                $q->doesntHave('technicalEvaluation')
+                ->orWhereHas('technicalEvaluation', function( $query ) {
+                  $query->where('technical_evaluation_status','pending');
+                });
+            })
+            ->OrWhereHas('requestSign', function($j) {
+              $j->Where('request_status', 'pending');
+            })
+            ->get();
+
+        $requests = RequestReplacementStaff::latest()
+            ->where(function ($q){
+                $q->whereHas('requestSign', function($j) {
+                    $j->Where('request_status', 'rejected');
+                })
+                ->orWhereHas('technicalEvaluation', function($y){
+                    $y->Where('technical_evaluation_status', 'complete')
+                    ->OrWhere('technical_evaluation_status', 'rejected');
+                });
+            })
             ->paginate(10);
 
-        return view('replacement_staff.request.index', compact('requestReplacementStaff'));
+        // dd($pending_requests);
+        // $requestReplacementStaff = RequestReplacementStaff::orderBy('id', 'DESC')
+        //     ->paginate(10);
+
+        return view('replacement_staff.request.index', compact('pending_requests', 'requests'));
     }
 
     public function own_index()
@@ -82,14 +107,14 @@ class RequestReplacementStaffController extends Controller
         if(!empty($authorities)){
             foreach ($authorities as $authority) {
 
-                $request_to_sign = RequestReplacementStaff::latest()
+                $pending_requests_to_sign = RequestReplacementStaff::latest()
                     ->whereHas('requestSign', function($q) use ($authority){
                         $q->Where('organizational_unit_id', $authority->organizational_unit_id)
                         ->Where('request_status', 'pending');
                     })
                     ->get();
 
-                $request_to_sign_accepted = RequestReplacementStaff::latest()
+                $requests_to_sign = RequestReplacementStaff::latest()
                     ->whereHas('requestSign', function($q) use ($authority){
                         $q->Where('organizational_unit_id', $authority->organizational_unit_id)
                         ->Where(function ($j){
@@ -99,7 +124,7 @@ class RequestReplacementStaffController extends Controller
                     })
                     ->paginate(10);
             }
-            return view('replacement_staff.request.to_sign', compact('request_to_sign', 'request_to_sign_accepted'));
+            return view('replacement_staff.request.to_sign', compact('pending_requests_to_sign', 'requests_to_sign'));
         }
 
         session()->flash('danger', 'Estimado Usuario/a: Usted no dispone de solicitudes para aprobación.');

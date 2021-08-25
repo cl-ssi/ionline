@@ -172,7 +172,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/to_select/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_select'])->name('to_select');
         Route::get('/to_sign', [RequestReplacementStaffController::class, 'to_sign'])->name('to_sign');
         Route::prefix('sign')->name('sign.')->group(function(){
-            Route::put('/{requestSign}/{status}/update', [RequestSignController::class, 'update'])->name('update');
+            Route::put('/{requestSign}/{status}/{requestReplacementStaff}/update', [RequestSignController::class, 'update'])->name('update');
         });
         Route::prefix('technical_evaluation')->name('technical_evaluation.')->group(function(){
             Route::get('/{technicalEvaluation}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
@@ -397,7 +397,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
            Route::post('/closeshift/close', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeDaysConfirmation'])->name('shiftManag.closeShift.closeConfirmation')->middleware('auth');
 
            Route::post('/closeshift/saveclosedate/{new?}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'saveClose'])->name('shiftManag.closeShift.saveDate')->middleware('auth');
-           
+
            Route::post('/shiftupdate', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'changeShiftUserCommentary'])->name('shiftManag.shiftupdate')->middleware('auth');
 
 
@@ -405,7 +405,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
            Route::get('/shiftreports', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReports'])->name('shiftManag.shiftReports')->middleware('auth');
            Route::post('/shiftreports', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReports'])->name('shiftManag.shiftReports')->middleware('auth');
            Route::get('/shiftreports/XLSdownload', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReportsXLSDownload'])->name('shiftManag.shiftReportsXLSdownload')->middleware('auth');
-           
+
 
            Route::get('/shiftdashboard', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftDashboard'])->name('shiftManag.shiftDashboard')->middleware('auth');
            Route::get('/available-shifts', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'availableShifts'])->name('shiftManag.availableShifts')->middleware('auth');
@@ -417,7 +417,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
            Route::get('/myshift/reject/{day}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShiftReject'])->name('shiftManag.myshift.rejectDay')->middleware('auth');
 
            Route::get('/reject/{day}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'adminShiftConfirm'])->name('shiftManag.confirmDay')->middleware('auth');
-           
+
 
         Route::post('/myshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShift'])->name('shiftManag.myshiftfiltered')->middleware('auth');
 
@@ -514,7 +514,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
                 Route::post('/{var}/store', [AttachmentController::class, 'store'])->name('store');
                 Route::get('/{attachment}/show', [AttachmentController::class, 'show'])->name('show');
                 Route::get('/{attachment}/download', [AttachmentController::class, 'download'])->name('download');
-                Route::delete('/{attachment}/destroy', [AttachmentController::class, 'destroy'])->name('destroy');                
+                Route::delete('/{attachment}/destroy', [AttachmentController::class, 'destroy'])->name('destroy');
 
             });
 
