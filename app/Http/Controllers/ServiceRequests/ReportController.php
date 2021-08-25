@@ -569,8 +569,11 @@ class ReportController extends Controller
     $srs = ServiceRequest::paginate(100);
 
     if ($request->has('from')) {
-    $srs = ServiceRequest::whereBetween($request->option, [$request->from, $request->to])->
-    orderByAsc($request->option)
+    $srs = ServiceRequest::whereBetween($request->option, [$request->from, $request->to])
+    ->when($request->uo != null, function ($q) use ($request) {
+      return $q->where('responsability_center_ou_id', $request->uo);
+    })    
+    ->orderBy($request->option)
     ->paginate(100);
     }
 
