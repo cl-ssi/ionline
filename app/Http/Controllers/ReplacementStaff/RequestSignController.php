@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Rrhh\Authority;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NotificationSign;
+use App\Models\ReplacementStaff\RequestReplacementStaff;
+use App\Mail\NotificationEndSigningProcess;
 
 class RequestSignController extends Controller
 {
@@ -70,7 +75,7 @@ class RequestSignController extends Controller
      * @param  \App\Models\RequestSign  $requestSing
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, RequestSign $requestSign, $status)
+    public function update(Request $request, RequestSign $requestSign, $status, RequestReplacementStaff $requestReplacementStaff)
     {
         if($status == 'accepted'){
             $requestSign->user_id = Auth::user()->id;
@@ -87,10 +92,25 @@ class RequestSignController extends Controller
 
               // AQUI ENVIAR NOTIFICACIÓN DE CORREO ELECTRONICO AL NUEVO VISADOR.
 
+              //manager
+              $type = 'manager';
+              $mail_notification_ou_manager = Authority::getAuthorityFromDate($nextRequestSign->organizational_unit_id, $requestSign->date_sign, $type);
+              //secretary
+              $type_adm = 'secretary';
+              $mail_notification_ou_secretary = Authority::getAuthorityFromDate($nextRequestSign->organizational_unit_id, $requestSign->date_sign, $type_adm);
+
+              $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
+
+              Mail::to($emails)
+                ->cc(env('APP_RYS_MAIL'))
+                ->send(new NotificationSign($requestReplacementStaff));
+
               session()->flash('success', 'Su la solicitud ha sido Aceptada con exito.');
               return redirect()->route('replacement_staff.request.to_sign');
             }
             else{
+                Mail::to(explode(',', env('APP_RYS_MAIL')))->send(new NotificationEndSigningProcess($requestReplacementStaff));
+
                 session()->flash('success', 'Su la solicitud ha sido Aceptada en su totalidad.');
                 return redirect()->route('replacement_staff.request.to_sign');
             }

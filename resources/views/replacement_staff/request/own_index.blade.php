@@ -139,9 +139,9 @@
                   @if($request->TechnicalEvaluation->technical_evaluation_status == 'complete')
                       <i class="fas fa-check-circle" title="Evaluación Técnica: {{ $request->TechnicalEvaluation->StatusValue }}"></i>
                   @endif
-                  @if($request->TechnicalEvaluation->technical_evaluation_status == 'rejected')
-                      <i class="fas fa-times-circle" title="Evaluación Técnica: {{ $request->TechnicalEvaluation->StatusValue }}"></i>
-                  @endif
+                  {{-- @if($request->TechnicalEvaluation->technical_evaluation_status == 'rejected') --}}
+                      <!-- <i class="fas fa-times-circle" title="Evaluación Técnica: {{ $request->TechnicalEvaluation->StatusValue }}"></i> -->
+                  {{-- @endif --}}
                 @endif
               </td>
               <td>{{ $request->name }}</td>
