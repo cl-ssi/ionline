@@ -79,43 +79,49 @@ class ApsController extends Controller
                 }
 
                 if($factor_cods != null && $factor_cols != null){
-                    //procesamos los datos necesarios para las consultas rem
-                    $cods = array_map('trim', explode(',', $factor_cods));
-                    $cols = array_map('trim', explode(',', $factor_cols));
-                    $raws = null;
-                    foreach($cols as $col)
-                        $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
-                    $raws .= ' AS valor, IdEstablecimiento, Mes';
-    
-                    $result = Rem::year($last_year ?? $year)->selectRaw($raws)
-                                ->when($establishment_type == 'aps', function($query) use ($establishment_cods){ 
-                                    return $query->with('establecimiento')->whereIn('IdEstablecimiento', $establishment_cods); 
-                                })
-                                ->when($establishment_type == 'reyno', function($query){
-                                    return $query->where('IdEstablecimiento', 102307);
-                                })
-                                ->when($establishment_type == 'hospital' && $indicator->id == 310, function($query) use ($factor){
-                                    return $factor == 'denominador' ? $query->whereIn('IdEstablecimiento', array(102300,102301,102302,102303,102308,102305,102306,102307,102308,102309,102310,102400,102402,102403,102406,200474,102407,102408,102409,102410,102411,102412,102413,102414,102415,102416,102701,102705,200335,200557)) : $query->where('IdEstablecimiento', 102100);
-                                })
-                                ->when($establishment_type == 'hospital' && $indicator->id != 310, function($query){
-                                    return $query->where('IdEstablecimiento', 102100);
-                                })
-                                ->when($establishment_type == 'ssi', function($query){
-                                    return $query->where('IdEstablecimiento', 102010);
-                                })
-                                ->when($factor_source == 'REM P', function($query){
-                                    return $query->whereIn('Mes', [6,12]);
-                                })
-                                ->when($last_year, function($query) use ($last_month_rem){
-                                    return $query->where('Mes', '<=', $last_month_rem);
-                                })
-                                ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
-    
-                    foreach($result as $item){
-                        $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => $item->valor]);
-                        $value->commune = $item->establecimiento['comuna'];
-                        $value->establishment = $item->establecimiento['alias_estab'];
-                        $indicator->values->add($value);
+                    //procesamos los datos necesarios para todas consultas rem que se necesiten para la meta sanitaria
+                    $cods_array = array_map('trim', explode(';', $factor_cods));
+                    $cols_array = array_map('trim', explode(';', $factor_cols));
+
+                    for($i = 0; $i < count($cods_array); $i++){
+                        //procesamos los datos necesarios para las consultas rem
+                        $cods = array_map('trim', explode(',', $cods_array[$i]));
+                        $cols = array_map('trim', explode(',', $cols_array[$i]));
+                        $raws = null;
+                        foreach($cols as $col)
+                            $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
+                        $raws .= ' AS valor, IdEstablecimiento, Mes';
+        
+                        $result = Rem::year($last_year ?? $year)->selectRaw($raws)
+                                    ->when($establishment_type == 'aps', function($query) use ($establishment_cods){ 
+                                        return $query->with('establecimiento')->whereIn('IdEstablecimiento', $establishment_cods); 
+                                    })
+                                    ->when($establishment_type == 'reyno', function($query){
+                                        return $query->where('IdEstablecimiento', 102307);
+                                    })
+                                    ->when($establishment_type == 'hospital' && $indicator->id == 310, function($query) use ($factor){
+                                        return $factor == 'denominador' ? $query->whereIn('IdEstablecimiento', array(102300,102301,102302,102303,102308,102305,102306,102307,102308,102309,102310,102400,102402,102403,102406,200474,102407,102408,102409,102410,102411,102412,102413,102414,102415,102416,102701,102705,200335,200557)) : $query->where('IdEstablecimiento', 102100);
+                                    })
+                                    ->when($establishment_type == 'hospital' && $indicator->id != 310, function($query){
+                                        return $query->where('IdEstablecimiento', 102100);
+                                    })
+                                    ->when($establishment_type == 'ssi', function($query){
+                                        return $query->where('IdEstablecimiento', 102010);
+                                    })
+                                    ->when($factor_source == 'REM P', function($query){
+                                        return $query->whereIn('Mes', [6,12]);
+                                    })
+                                    ->when($last_year, function($query) use ($last_month_rem){
+                                        return $query->where('Mes', '<=', $last_month_rem);
+                                    })
+                                    ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
+        
+                        foreach($result as $item){
+                            $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => $item->valor]);
+                            $value->commune = $item->establecimiento['comuna'];
+                            $value->establishment = $item->establecimiento['alias_estab'];
+                            $indicator->values->add($value);
+                        }
                     }
                 }
             }
