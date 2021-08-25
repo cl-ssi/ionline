@@ -1210,9 +1210,10 @@
 
       if (this.value == "DIARIO") {
 				$('#for_weekly_hours').attr('disabled', 'disabled');
-			}else{
-				$('#for_weekly_hours').removeAttr('disabled');
 			}
+      // else{
+			// 	$('#for_weekly_hours').removeAttr('disabled');
+			// }
 		});
 
 		$('#responsability_center_ou_id').on('change', function() {
