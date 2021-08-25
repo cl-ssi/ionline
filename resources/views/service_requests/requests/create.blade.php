@@ -390,7 +390,7 @@
 				<option value="Preparador físico">Preparador físico</option>
 				<option value="Otros técnicos">Otros técnicos</option>
 				<option value="Otros profesionales">Otros profesionales</option>
-
+				<option value="Médico por prestación">Médico por prestación</option>
 			</select>
 		</fieldset>
 
@@ -603,6 +603,12 @@
 			}
 			if (this.value == "DIURNO") {
 				$('#schedule_detail').removeAttr('disabled');
+			}
+
+			if (this.value == "DIARIO") {
+				$('#for_weekly_hours').attr('disabled', 'disabled');
+			}else{
+				$('#for_weekly_hours').removeAttr('disabled');
 			}
 		});
 
