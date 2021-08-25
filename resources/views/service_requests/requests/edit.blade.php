@@ -514,8 +514,7 @@
           <option value="Monitor/a" @if($serviceRequest->rrhh_team == "Monitor/a") selected @endif>Monitor/a</option>
           <option value="Preparador físico" @if($serviceRequest->rrhh_team == "Preparador físico") selected @endif>Preparador físico</option>
 
-
-
+          <option value="Médico por prestación" @if($serviceRequest->rrhh_team == "Médico por prestación") selected @endif>Médico por prestación</option>
         </select>
     </fieldset>
 
@@ -1207,6 +1206,12 @@
 			}
 			if (this.value == "DIURNO") {
 				$('#schedule_detail').removeAttr('disabled');
+			}
+
+      if (this.value == "DIARIO") {
+				$('#for_weekly_hours').attr('disabled', 'disabled');
+			}else{
+				$('#for_weekly_hours').removeAttr('disabled');
 			}
 		});
 
