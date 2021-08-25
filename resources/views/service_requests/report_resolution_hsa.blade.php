@@ -357,7 +357,7 @@
       @elseif($ServiceRequest->program_contract_type == "Horas")
       <p class="justify">
         <strong>OCTAVO:</strong> El 
-        @if($serviceRequest->working_day_type == 'HORA EXTRA')
+        @if($ServiceRequest->working_day_type == 'HORA EXTRA')
         valor total por horas extras del mes
         @else
         valor por hora
