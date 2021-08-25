@@ -716,7 +716,7 @@
 					</fieldset>
 
           <fieldset class="form-group col-6 col-md-3">
-					    <label for="for_gross_amount">Monto Bruto</label>
+					    <label for="for_gross_amount">Monto Bruto/Valor Hora</label>
               <input type="text" class="form-control" name="gross_amount" value="{{$serviceRequest->gross_amount}}">
 					</fieldset>
 
