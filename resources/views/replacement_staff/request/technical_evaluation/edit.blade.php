@@ -8,13 +8,13 @@
 
 
 <div class="table-responsive">
-    <table class="table table-sm table-bordered">
-        <thead>
+    <table class="table table-sm table-striped table-bordered">
+        <thead class="small">
             <tr class="table-active">
                 <th colspan="3">Formulario Solicitud Contratación de Personal</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="small">
             <tr>
                 <th class="table-active">Por medio del presente, la Subdirección</th>
                 <td colspan="2">
@@ -108,12 +108,12 @@
 
 <div class="table-responsive">
     <table class="table table-sm table-bordered">
-        <thead>
+        <thead class="small">
             <tr class="table-active">
                 <th colspan="6">Evaluación Técnica</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="small">
             <tr>
                 <th rowspan="2" class="table-active text-center"><i class="fas fa-user"></i></th>
                 <td>{{ $technicalEvaluation->user->FullName }}</td>
@@ -138,8 +138,8 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table small table-striped table-bordered">
-                <thead class="text-center">
+            <table class="table table-sm table-striped table-bordered">
+                <thead class="text-center small">
                     <tr>
                       <th>Nombre</th>
                       <th>Unidad Organizacional</th>
@@ -147,7 +147,7 @@
                       <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="small">
                     @foreach($technicalEvaluation->commissions as $commission)
                     <tr>
                         <td>{{ $commission->user->FullName }}</td>
@@ -194,8 +194,8 @@
     <div class="card-body">
       @if($technicalEvaluation->applicants->count() > 0)
         <div class="table-responsive">
-            <table class="table small table-striped table-bordered">
-                <thead class="text-center">
+            <table class="table table-sm table-striped table-bordered">
+                <thead class="text-center small">
                     <tr>
                       <th>Nombre</th>
                       <th>Calificación</th>
@@ -203,7 +203,7 @@
                       <th colspan="2"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="small">
                     @foreach($technicalEvaluation->applicants->sortByDesc('score') as $applicant)
                     <tr class="{{ ($applicant->selected == 1)?'table-success':''}}">
                         <td>{{ $applicant->replacement_staff->FullName }}</td>
@@ -287,8 +287,8 @@
       <br>
 
       <div class="table-responsive">
-          <table class="table small table-striped table-bordered">
-              <thead>
+          <table class="table table-sm table-striped table-bordered">
+              <thead class="small">
                   <tr>
                       <th>Nombre Completo</th>
                       <th>Run</th>
@@ -301,7 +301,7 @@
                       <th></th>
                   </tr>
               </thead>
-              <tbody>
+              <tbody class="small">
                   <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.store', $technicalEvaluation) }}">
                   @csrf
                   @method('POST')
@@ -372,8 +372,8 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table small table-striped table-bordered">
-                <thead class="text-center">
+            <table class="table table-sm table-striped table-bordered">
+                <thead class="text-center small">
                     <tr>
                       <th>Nombre Archivo</th>
                       <th>Cargado por</th>
@@ -381,7 +381,7 @@
                       <th colspan="2"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="small">
                   @foreach($technicalEvaluation->technical_evaluation_files->sortByDesc('created_at') as $technicalEvaluationFiles)
                     <tr>
                       <td>{{ $technicalEvaluationFiles->name }}</td>

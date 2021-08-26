@@ -64,11 +64,12 @@ class RequestReplacementStaffController extends Controller
               	$q->doesntHave('technicalEvaluation')
                 ->orWhereHas('technicalEvaluation', function( $query ) {
                   $query->where('technical_evaluation_status','pending');
+                })
+                ->orWhereHas('requestSign', function($j) {
+                  $j->Where('request_status', 'pending');
                 });
             })
-            ->WhereHas('requestSign', function($j) {
-              $j->Where('request_status', 'pending');
-            })
+
             ->get();
 
         $my_request = RequestReplacementStaff::latest()
