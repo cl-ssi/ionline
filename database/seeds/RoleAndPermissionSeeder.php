@@ -130,7 +130,11 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Partes: director']);
         Permission::create(['name' => 'Partes: oficina']);
 
+
         Permission::create(['name' => 'Replacement Staff: create request']);
+        Permission::create(['name' => 'Replacement Staff: list rrhh']);
+        Permission::create(['name' => 'Replacement Staff: technical evaluation']);
+
 
         // @role(
         //   'Replacement Staff: admin |
