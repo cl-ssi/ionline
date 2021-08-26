@@ -162,7 +162,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/show_file/{training}', [TrainingController::class, 'show_file'])->name('show_file');
     });
     Route::prefix('request')->name('request.')->group(function(){
-        Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index');
+        Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index')->middleware(['role:Replacement Staff: admin']);
         Route::get('/own_index', [RequestReplacementStaffController::class, 'own_index'])->name('own_index');
         Route::get('/ou_index', [RequestReplacementStaffController::class, 'ou_index'])->name('ou_index');
         Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
