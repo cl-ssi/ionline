@@ -13,59 +13,6 @@
 
 @livewire('service-request.create-types',['subdirections' => $subdirections,
                                           'responsabilityCenters' => $responsabilityCenters])
-	<!--<div class="form-row">
-
-		 <div class="form-group col-6">
-			@livewire('service-request.create-types')
-		</div>
-
-    	<fieldset class="form-group col">
-		    <label for="for_subdirection_ou_id">Subdirección</label>
-			<select class="form-control selectpicker" data-live-search="true" id="subdirection_ou_id" name="subdirection_ou_id" required data-size="5">
-				<option value=""></option>
-				@foreach($subdirections as $key => $subdirection)
-					<option value="{{$subdirection->id}}">{{$subdirection->name}}</option>
-				@endforeach
-			</select>
-		</fieldset>
-
-    	<fieldset class="form-group col">
-		    <label for="for_responsability_center_ou_id">Centro de Responsabilidad</label>
-				<select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" id="responsability_center_ou_id" required data-size="5">
-					<option value=""></option>
-          @foreach($responsabilityCenters as $key => $responsabilityCenter)
-            <option value="{{$responsabilityCenter->id}}">{{$responsabilityCenter->name}}</option>
-          @endforeach
-        </select>
-		</fieldset>
-
-	</div>-->
-
-	<!-- <div class="form-row">
-
-		<fieldset class="form-group col">
-			<label for="for_users">Responsable</label>
-			<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" data-size="5" required>
-				<option value=""></option>
-				@foreach($users as $key => $user)
-					<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
-				@endforeach
-			</select>
-		</fieldset>
-
-		<fieldset class="form-group col">
-			<label for="for_users">Supervisor</label>
-			<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" data-size="5" required>
-				<option value=""></option>
-				@foreach($users as $key => $user)
-					<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
-				@endforeach
-			</select>
-		</fieldset>
-
-	</div>
-
-	@livewire('service-request.signature-flows') -->
 
 	<br>
 
@@ -688,10 +635,10 @@
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 		if (value != 85) {
-			$('#Subdirector').val(9882506); //PERDRO IRIONDO: 9882506
+			$('#Subdirector').val(12621281); //PERDRO IRIONDO: 9882506
 			$('#Subdirector').selectpicker('refresh');
 
-			$('#SubdirectorTurnos').val(9882506); //PERDRO IRIONDO: 9882506
+			$('#SubdirectorTurnos').val(12621281); //PERDRO IRIONDO: 9882506
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 	});
