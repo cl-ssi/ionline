@@ -356,12 +356,12 @@
 
       @elseif($ServiceRequest->program_contract_type == "Horas")
       <p class="justify">
-        <strong>OCTAVO:</strong> El 
+        <strong>OCTAVO:</strong> El
         @if($ServiceRequest->working_day_type == 'HORA EXTRA')
         valor total por horas extras del mes
         @else
         valor por hora
-        @endif        
+        @endif
         será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         Hospital Regional de Iquique,
@@ -548,8 +548,8 @@
       <div class="siete" style="padding-top: 2px;">
         <strong><u>DISTRIBUCIÓN:</u></strong><br>
         Honorarios Suma Alzada<br>
-        Finanzas<br>
-        Interesado<br>
+        <!-- Finanzas<br>
+        Interesado<br> -->
         Ofiicna de Partes<br>
         {{--
     @else
