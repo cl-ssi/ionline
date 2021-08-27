@@ -69,6 +69,7 @@
 						<option value="Mensual" @if($fulfillment->type == "Mensual") selected @endif>Mensual</option>
 						<option value="Parcial" @if($fulfillment->type == "Parcial") selected @endif>Parcial</option>
 						<option value="Horas Médicas" @if($fulfillment->type == "Horas Médicas") selected @endif>Horas Médicas</option>
+						<option value="Horas" @if($fulfillment->type == "Horas") selected @endif>Horas</option>
 					</select>
 				</fieldset>
 				<fieldset class="form-group col-3">
@@ -83,7 +84,17 @@
 					<label for="for_estate">Observación</label>
 					<input type="text" class="form-control" name="observation" value="{{$fulfillment->observation}}">
 				</fieldset>
+
+				@can('Service Request: fulfillments rrhh')
+				<fieldset class="form-group col">
+					<label for="for_estate"><br /></label>
+					<button type="submit" class="form-control btn btn-primary">Guardar</button>
+				</fieldset>
+				@endcan
 			</div>
+		</form>
+
+		<form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$fulfillment) }}" enctype="multipart/form-data">
 			<div class="form-row">
 				<fieldset class="form-group col">
 					<label for="for_backup_assistance">Respaldo de asistencia</label>
