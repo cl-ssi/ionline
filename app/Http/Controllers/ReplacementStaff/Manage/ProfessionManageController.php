@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\ReplacementStaff\Manage;
 
 use App\Models\ReplacementStaff\ProfessionManage;
+use App\Models\ReplacementStaff\ProfileManage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -16,7 +17,8 @@ class ProfessionManageController extends Controller
     public function index()
     {
         $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
-        return view('replacement_staff.manage.profession.index', compact('professionManage'));
+        $profiles = ProfileManage::orderBy('name', 'ASC')->get();
+        return view('replacement_staff.manage.profession.index', compact('professionManage', 'profiles'));
     }
 
     /**
