@@ -15,6 +15,10 @@ class ProfessionManage extends Model
         'name'
     ];
 
+    public function profileManage() {
+        return $this->belongsTo('App\Models\ReplacementStaff\ProfileManage');
+    }
+
     protected $hidden = [
         'created_at', 'updated_at'
     ];
