@@ -46,30 +46,21 @@ class Authority extends Model
     }
 
     public static function getAmIAuthorityFromOu($date, $type, $user_id) {
-        // return Authority::with('user','organizationalUnit')
-        //                 ->where('user_id', $user_id)
-        //                 ->where('type', $type)
-        //                 ->where('from','<=',$date)->where('to','>=',$date)->get();
-
-        $ous = OrganizationalUnit::All();
+        // Pregunto por cada unidad organizacional que autoridad/es está/n a cargo segun el tipo y fecha de la consulta ordenados desde el mas nuevo
+        $ous = OrganizationalUnit::with(['authorities' => function($q) use ($type, $date){
+                                    $q->when($type, function ($q) use ($type) {
+                                        is_array($type) ? $q->whereIn('type', $type) : $q->where('type', $type);
+                                      })
+                                      ->where('from','<=',$date)->where('to','>=',$date)
+                                      ->orderBy('id', 'desc');
+                                 }])->get();        
+        
+        // Ahora que se que autoridad/es esta/n a cargo en cada unidad organizacional pregunto por el user_id al primero de la lista de autoridad/es, de ser correcto guardo en un array de autoridades a retornar
         $authorities = array();
-        foreach($ous as $ou) {
-            $authority = Authority::with('user','organizationalUnit')
-                ->where('organizational_unit_id', $ou->id)
-                // ->where('type', $type)
-                ->when(is_array($type), function ($q) use ($type) {
-                  return $q->whereIn('type', $type);
-                })
-                ->when(!is_array($type), function ($q) use ($type) {
-                  return $q->where('type', $type);
-                })
-                ->where('from','<=',$date)->where('to','>=',$date)->get()->last();
-            if($authority) {
-                if($authority->user_id == $user_id){
-                        $authorities[] = $authority;
-                }
-            }
-        }
+        foreach($ous as $ou)
+            if($ou->authorities->isNotEmpty() && $ou->authorities->first()->user_id == $user_id)
+                $authorities[] = $ou->authorities->first()->load('user', 'organizationalUnit');
+        
         return $authorities;
     }
 
