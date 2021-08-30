@@ -77,13 +77,17 @@
 
 
 		<div class="card border-success mb-3">
-				<div class="card-header bg-success text-white">
-				Responsable
-				</div>
-				<div class="card-body">
+			<div class="card-header bg-success text-white">
+			Responsable
+			</div>
+		<div class="card-body">
 
 
-		@livewire('service-request.fulfillment-absences', ['fulfillment' => $fulfillment])
+		@if($serviceRequest->working_day_type == "DIARIO")
+			@livewire('service-request.shift-control-add-day', ['fulfillment' => $fulfillment])
+		@else
+			@livewire('service-request.fulfillment-absences', ['fulfillment' => $fulfillment])
+		@endif
 		<!-- <form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.store') }}" enctype="multipart/form-data">
 			@csrf
 			<div class="form-row">
