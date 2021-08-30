@@ -74,6 +74,8 @@
                                   <i class="fas fa-times-circle"></i> {{ $requestSign->StatusValue }} </span><br>
                                 <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
                                 <i class="fas fa-calendar-alt"></i> {{ $requestSign->date_sign->format('d-m-Y H:i:s') }}<br>
+                                <hr>
+                                {{ $requestSign->observation }}<br>
                             @endif
                             @if($requestSign->request_status == 'pending' || $requestSign->request_status == NULL)
                                 <i class="fas fa-clock"></i> Pendiente.<br>

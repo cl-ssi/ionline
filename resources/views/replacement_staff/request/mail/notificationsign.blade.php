@@ -8,7 +8,10 @@
 
   <br>
 
-  <p>A través del presente, se informa ingreso de nueva solicitud de reemplazo:</p>
+  <p>A través del presente, se informa que se encuentra disponible en {{ env('APP_NAME') }}
+    una solicitud de reemplazo correspondiente a su Unidad Organizacional, favor ingresar
+    al módulo de reemplazos para aceptar o declinar la solicitud.
+  </p>
 
   <ul>
       <li><strong>Nº Solicitud</strong>: {{ $requestReplacementStaff->id }}</li>
