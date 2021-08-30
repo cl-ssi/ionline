@@ -137,7 +137,7 @@ class AuthorityController extends Controller
             case 4: $ouTopLevel = $authority->organizationalUnit->father->father->father; break;
             case 3: $ouTopLevel = $authority->organizationalUnit->father->father; break;
             case 2: $ouTopLevel = $authority->organizationalUnit->father; break;
-            case 2: $ouTopLevel = $authority->organizationalUnit; break; 
+            case 1: $ouTopLevel = $authority->organizationalUnit; break; 
         }
         return view('rrhh.authorities.edit', compact('ouTopLevel','authority'));
     }

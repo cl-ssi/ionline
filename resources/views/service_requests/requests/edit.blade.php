@@ -445,6 +445,9 @@
           <option value="TURNO DE REEMPLAZO" @if($serviceRequest->working_day_type == 'TURNO DE REEMPLAZO') selected @endif>TURNO DE REEMPLAZO</option>
 
           <option value="OTRO" @if($serviceRequest->working_day_type == 'OTRO') selected @endif >OTRO</option>
+
+          <option value=""></option>
+  				<option value="DIARIO" @if($serviceRequest->working_day_type == 'DIARIO') selected @endif>DIARIO</option>
         </select>
 
 		</fieldset>
@@ -511,8 +514,7 @@
           <option value="Monitor/a" @if($serviceRequest->rrhh_team == "Monitor/a") selected @endif>Monitor/a</option>
           <option value="Preparador físico" @if($serviceRequest->rrhh_team == "Preparador físico") selected @endif>Preparador físico</option>
 
-
-
+          <option value="Médico por prestación" @if($serviceRequest->rrhh_team == "Médico por prestación") selected @endif>Médico por prestación</option>
         </select>
     </fieldset>
 
@@ -714,7 +716,7 @@
 					</fieldset>
 
           <fieldset class="form-group col-6 col-md-3">
-					    <label for="for_gross_amount">Monto Bruto</label>
+					    <label for="for_gross_amount">Monto Bruto/Valor Hora</label>
               <input type="text" class="form-control" name="gross_amount" value="{{$serviceRequest->gross_amount}}">
 					</fieldset>
 
@@ -1145,6 +1147,7 @@
 				$("#working_day_type option[value='TERCER TURNO - MODIFICADO']").hide();
 				$("#working_day_type option[value='CUARTO TURNO']").hide();
 				$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").hide();
+        $("#working_day_type option[value='DIARIO']").hide();
 
 				$("#working_day_type option[value='DIURNO PASADO A TURNO']").show();
 				$("#working_day_type option[value='HORA MÉDICA']").show();
@@ -1164,6 +1167,7 @@
 				$("#working_day_type option[value='TERCER TURNO - MODIFICADO']").show();
 				$("#working_day_type option[value='CUARTO TURNO']").show();
 				$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").show();
+        $("#working_day_type option[value='DIARIO']").show();
 
 				$("#working_day_type option[value='DIURNO PASADO A TURNO']").hide();
 				$("#working_day_type option[value='HORA MÉDICA']").hide();
@@ -1203,6 +1207,13 @@
 			if (this.value == "DIURNO") {
 				$('#schedule_detail').removeAttr('disabled');
 			}
+
+      if (this.value == "DIARIO") {
+				$('#for_weekly_hours').attr('disabled', 'disabled');
+			}
+      // else{
+			// 	$('#for_weekly_hours').removeAttr('disabled');
+			// }
 		});
 
 		$('#responsability_center_ou_id').on('change', function() {
@@ -1271,10 +1282,10 @@
   			$('#SubdirectorTurnos').selectpicker('refresh');
   		}
   		if (value != 85) {
-  			$('#Subdirector').val(9882506); //PERDRO IRIONDO: 9882506
+  			$('#Subdirector').val(12621281); //PERDRO IRIONDO: 9882506
   			$('#Subdirector').selectpicker('refresh');
 
-  			$('#SubdirectorTurnos').val(9882506); //PERDRO IRIONDO: 9882506
+  			$('#SubdirectorTurnos').val(12621281); //PERDRO IRIONDO: 9882506
   			$('#SubdirectorTurnos').selectpicker('refresh');
   		}
   	});

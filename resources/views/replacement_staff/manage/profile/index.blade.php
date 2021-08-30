@@ -25,8 +25,8 @@
 
     <div class="col-sm">
         <br>
-        <table class="table small">
-            <thead>
+        <table class="table table-sm table-striped table-bordered">
+            <thead class="small">
                 <tr>
                     <th>#</th>
                     <th>Nombre Perfil</th>
@@ -34,11 +34,11 @@
                     <th style="width: 5%"></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="small">
                 @foreach($profileManage as $key => $profile)
                 <tr>
                     <td>{{ $key + 1 }}</td>
-                    <td>{{ $profile->Name }}</td>
+                    <td>{{ $profile->name }}</td>
                     <td>
                         <a href="{{ route('replacement_staff.manage.profile.edit', $profile) }}"
                           class="btn btn-outline-secondary btn-sm"

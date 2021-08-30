@@ -26,7 +26,7 @@
             <td>{{$psirequest->user->email}}</td>
             <td>{{$psirequest->status}}</td>
             <td>
-            @if($psirequest->status =="Aprobado")
+            @if($psirequest->status =="Aprobado" and $psirequest->result)
 
                     @if($psirequest->result->signedCertificate && $psirequest->result->signedCertificate->hasSignedFlow)
                     <a href="{{ route('idoneidad.signedSuitabilityCertificate', $psirequest->result->id) }}" class="btn @if($psirequest->result->signedCertificate->hasAllFlowsSigned) btn-outline-success @else btn-outline-primary @endif" target="_blank">

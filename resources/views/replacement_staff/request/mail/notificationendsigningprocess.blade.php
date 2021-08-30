@@ -8,7 +8,7 @@
 
   <br>
 
-  <p>A través del presente, se informa ingreso de nueva solicitud de reemplazo:</p>
+  <p>A través del presente, se informa fin del proceso de firmas:</p>
 
   <ul>
       <li><strong>Nº Solicitud</strong>: {{ $requestReplacementStaff->id }}</li>

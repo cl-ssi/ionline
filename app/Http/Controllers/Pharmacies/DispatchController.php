@@ -9,6 +9,7 @@ use App\Pharmacies\Establishment;
 use App\Pharmacies\File;
 use App\Pharmacies\Product;
 
+use Illuminate\Support\Facades\Storage;
 use App\Exports\DispatchExport;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -395,7 +396,7 @@ class DispatchController extends Controller
     public function openFile(Dispatch $dispatch)
     {
       $file = $dispatch->files->first();
-      return response()->download(storage_path('app/' . $file->file), $file->name, [], 'inline');
+      return Storage::disk('gcs')->response($file->file, mb_convert_encoding($file->name,'ASCII'));
     }
 
     public function exportExcel(){

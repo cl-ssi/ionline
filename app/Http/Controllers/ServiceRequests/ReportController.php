@@ -315,7 +315,13 @@ class ReportController extends Controller
     }
 
     $pdf = app('dompdf.wrapper');
-    $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+
+    if ($ServiceRequest->working_day_type == "DIARIO") {
+      $pdf->loadView('service_requests.report_resolution_diary', compact('ServiceRequest'));
+    }else{
+      $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+    }
+
 
     return $pdf->stream('mi-archivo.pdf');
     // return view('service_requests.report_resolution', compact('serviceRequest'));
@@ -549,13 +555,41 @@ class ReportController extends Controller
 
 
   public function duplicateContracts(Request $request)
-  {    
+  {
     $srall = ServiceRequest::all();
     $srUnique = $srall->unique('user_id');
     $serviceRequestssinordenar = $srall->diff($srUnique);
     $serviceRequests = $serviceRequestssinordenar->sortBy('user_id');
     //$serviceRequests = $serviceRequests->paginate(100);
     return view('service_requests.reports.duplicate_contracts', compact('request', 'serviceRequests'));
+  }
+
+  public function contract(Request $request)
+  {
+
+    $responsabilityCenters = OrganizationalUnit::where('establishment_id', Auth::user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
+    //dd($responsabilityCenters);
+
+
+    //$srs = ServiceRequest::select("*");
+    $srs = ServiceRequest::paginate(100);
+
+    if ($request->has('from')) {
+    $srs = ServiceRequest::whereBetween($request->option, [$request->from, $request->to])
+    ->when($request->uo != null, function ($q) use ($request) {
+      return $q->where('responsability_center_ou_id', $request->uo);
+    })
+    ->orderBy($request->option)
+    ->paginate(100);
+    }
+
+
+
+
+
+    $request->flash(); // envía los inputs de regreso
+    return view('service_requests.reports.contract', compact('request', 'responsabilityCenters','srs'));
+
   }
 
   public function export_sirh_txt(Request $request)
