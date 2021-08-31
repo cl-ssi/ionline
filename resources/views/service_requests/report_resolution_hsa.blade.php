@@ -188,7 +188,7 @@
       @endif
 
       <p class="justify">
-        <strong>CONSIDERANDO:</strong><br>
+        <strong>CONSIDERANDO:</strong><br><br>
 
         {{$ServiceRequest->objectives}}.<br><br>
 
