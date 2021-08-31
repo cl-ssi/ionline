@@ -46,6 +46,18 @@ class Authority extends Model
     }
 
     public static function getAmIAuthorityFromOu($date, $type, $user_id) {
+
+        // $authorities =  Authority::with('organizationalUnit')
+        //                 ->where('user_id', $user_id)
+        //                 ->where('type', $type)
+        //                 ->where('from','<=',$date)->where('to','>=',$date)
+        //                 ->get();
+
+        // $ous = array();
+        // foreach($authorities as $authority) {
+        //     $ous[] = $authority->organizationalUnit;
+        // }
+
         // Pregunto por cada unidad organizacional que autoridad/es está/n a cargo segun el tipo y fecha de la consulta ordenados desde el mas nuevo
         $ous = OrganizationalUnit::with(['authorities' => function($q) use ($type, $date){
                                     $q->when($type, function ($q) use ($type) {
