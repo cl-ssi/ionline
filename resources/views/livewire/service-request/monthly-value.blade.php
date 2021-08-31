@@ -1,1 +1,1 @@
-<span class="text-muted small">{{ $invoice }} (prueba)</span>
+<span class="text-muted small">{{ $invoice }} (Se debe comprobar)</span>
