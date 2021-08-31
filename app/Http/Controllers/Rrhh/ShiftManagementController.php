@@ -377,8 +377,8 @@ class ShiftManagementController extends Controller
             $nUShiftTypesMonts->shift_type_id = $nSType->id;
             $nUShiftTypesMonts->save();
         }
-        // session()->flash('info', 'El Turno tipo <i>"'.$r->name.'"</i> ha sido creado.');
-        // return redirect()->route('rrhh.shiftsTypes.index');
+        session()->flash('info', 'El Turno tipo <i>"'.$r->name.'"</i> ha sido creado.');
+        return redirect()->route('rrhh.shiftsTypes.index');
     }
 
     public function updateshifttype(Request $r){
