@@ -1185,8 +1185,8 @@ class ServiceRequestController extends Controller
     //
     //     $SignatureFlow = new SignatureFlow();
     //     $SignatureFlow->ou_id = $serviceRequest->subdirection_ou_id;
-    //     $SignatureFlow->responsable_id = 9882506;
-    //     $SignatureFlow->user_id = 9882506;
+    //     $SignatureFlow->responsable_id = 111;
+    //     $SignatureFlow->user_id = 111;
     //     $SignatureFlow->service_request_id = $serviceRequest->id;
     //     $SignatureFlow->type = "visador";
     //     $SignatureFlow->employee = "Subdirector Médico";

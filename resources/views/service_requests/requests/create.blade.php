@@ -13,59 +13,6 @@
 
 @livewire('service-request.create-types',['subdirections' => $subdirections,
                                           'responsabilityCenters' => $responsabilityCenters])
-	<!--<div class="form-row">
-
-		 <div class="form-group col-6">
-			@livewire('service-request.create-types')
-		</div>
-
-    	<fieldset class="form-group col">
-		    <label for="for_subdirection_ou_id">Subdirección</label>
-			<select class="form-control selectpicker" data-live-search="true" id="subdirection_ou_id" name="subdirection_ou_id" required data-size="5">
-				<option value=""></option>
-				@foreach($subdirections as $key => $subdirection)
-					<option value="{{$subdirection->id}}">{{$subdirection->name}}</option>
-				@endforeach
-			</select>
-		</fieldset>
-
-    	<fieldset class="form-group col">
-		    <label for="for_responsability_center_ou_id">Centro de Responsabilidad</label>
-				<select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" id="responsability_center_ou_id" required data-size="5">
-					<option value=""></option>
-          @foreach($responsabilityCenters as $key => $responsabilityCenter)
-            <option value="{{$responsabilityCenter->id}}">{{$responsabilityCenter->name}}</option>
-          @endforeach
-        </select>
-		</fieldset>
-
-	</div>-->
-
-	<!-- <div class="form-row">
-
-		<fieldset class="form-group col">
-			<label for="for_users">Responsable</label>
-			<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" data-size="5" required>
-				<option value=""></option>
-				@foreach($users as $key => $user)
-					<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
-				@endforeach
-			</select>
-		</fieldset>
-
-		<fieldset class="form-group col">
-			<label for="for_users">Supervisor</label>
-			<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" data-size="5" required>
-				<option value=""></option>
-				@foreach($users as $key => $user)
-					<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
-				@endforeach
-			</select>
-		</fieldset>
-
-	</div>
-
-	@livewire('service-request.signature-flows') -->
 
 	<br>
 
@@ -321,8 +268,10 @@
 				<option value="HORA MÉDICA">HORA MÉDICA</option>
 				<option value="HORA EXTRA">HORA EXTRA</option>
 				<option value="TURNO EXTRA">TURNO EXTRA</option>
-				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>				
+				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
 				<!-- <option value="OTRO">OTRO</option> -->
+				<option value=""></option>
+				<option value="DIARIO">DIARIO</option>
 			</select>
 		</fieldset>
 
@@ -385,10 +334,10 @@
 				<option value="Técnico en rehabilitación">Técnico en rehabilitación</option>
 				<option value="Psiquiatra">Psiquiatra</option>
 				<option value="Monitor/a">Monitor/a</option>
-				<option value="Preparador físico">Preparador físico</option>				
+				<option value="Preparador físico">Preparador físico</option>
 				<option value="Otros técnicos">Otros técnicos</option>
-				<option value="Otros profesionales">Otros profesionales</option>				
-
+				<option value="Otros profesionales">Otros profesionales</option>
+				<option value="Médico por prestación">Médico por prestación</option>
 			</select>
 		</fieldset>
 
@@ -456,7 +405,7 @@
 		</fieldset>
 	</div>
 	@endif
-	
+
 
 
 	<div class="form-row" id="div_additional_benefits" style="display: none">
@@ -466,13 +415,13 @@
 
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
-				
+
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
 				@if(Auth::user()->organizationalUnit->establishment_id == 1)
 				@else
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
-				@endif				
+				@endif
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_devolucion">Devolución de tiempo</button>
 
 
@@ -542,6 +491,7 @@
 				$("#working_day_type option[value='TERCER TURNO - MODIFICADO']").hide();
 				$("#working_day_type option[value='CUARTO TURNO']").hide();
 				$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").hide();
+				$("#working_day_type option[value='DIARIO']").hide();
 
 				$("#working_day_type option[value='DIURNO PASADO A TURNO']").show();
 				$("#working_day_type option[value='HORA MÉDICA']").show();
@@ -561,6 +511,7 @@
 				$("#working_day_type option[value='TERCER TURNO - MODIFICADO']").show();
 				$("#working_day_type option[value='CUARTO TURNO']").show();
 				$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").show();
+				$("#working_day_type option[value='DIARIO']").show();
 
 				$("#working_day_type option[value='DIURNO PASADO A TURNO']").hide();
 				$("#working_day_type option[value='HORA MÉDICA']").hide();
@@ -600,6 +551,13 @@
 			if (this.value == "DIURNO") {
 				$('#schedule_detail').removeAttr('disabled');
 			}
+
+			if (this.value == "DIARIO") {
+				$('#for_weekly_hours').attr('disabled', 'disabled');
+			}
+			// else{
+			// 	$('#for_weekly_hours').removeAttr('disabled');
+			// }
 		});
 
 		$('#responsability_center_ou_id').on('change', function() {
@@ -677,10 +635,10 @@
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 		if (value != 85) {
-			$('#Subdirector').val(9882506); //PERDRO IRIONDO: 9882506
+			$('#Subdirector').val(12621281); //PERDRO IRIONDO: 9882506
 			$('#Subdirector').selectpicker('refresh');
 
-			$('#SubdirectorTurnos').val(9882506); //PERDRO IRIONDO: 9882506
+			$('#SubdirectorTurnos').val(12621281); //PERDRO IRIONDO: 9882506
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 	});
@@ -695,7 +653,7 @@
 			$("#programm_name option[value='Covid19 Médicos']").hide();
 			$('#digera_strategy').attr('disabled', 'disabled');
 
-			
+
 			$("#id_descripcion_servicio").hide();
 
 
@@ -735,12 +693,12 @@
 				$("#programm_name option[value='DFL']").show();
 				$("#programm_name option[value='TURNOS VACANTES']").show();
 				$("#programm_name option[value='OTROS PROGRAMAS HETG']").show();
-				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();				
+				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
 				$("#programm_name option[value='PABELLON TARDE']").show();
 				$("#programm_name option[value='PABELLON GINE']").show();
 				$("#programm_name option[value='TURNO DE RESIDENCIA']").show();
 				$("#programm_name option[value='SENDA']").show();
-				
+
 
 
 			}else{

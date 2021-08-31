@@ -8,8 +8,6 @@
 
 <h3>Modificar flujo de firmas</h3><br>
 
-<!-- @livewire('service-request.change-signature-flow') -->
-
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.change_signature_flow_view') }}">
   <div class="input-group mb-3">
     <div class="input-group-prepend">

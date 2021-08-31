@@ -4,7 +4,7 @@
 		<h4>Información del período: {{$fulfillment->year}}-{{$fulfillment->month}} ({{Carbon\Carbon::parse($fulfillment->year . "-" . $fulfillment->month)->monthName}}) <span class="small text-muted float-right">{{ $fulfillment->id}}</span></h4>
 	</div>
 	<div class="card-header">
-		
+
 	</div>
 
 	<div class="card-body">
@@ -13,7 +13,7 @@
 			@csrf
 			@method('PUT')
 			<div class="form-row">
-				<fieldset class="form-group col-12 col-md-2">
+				<fieldset class="form-group col-12 col-md">
 					<label for="for_type">Período</label>
 					<select name="type" class="form-control" required>
 						<option value=""></option>
@@ -29,49 +29,42 @@
 					<label for="for_estate">Término</label>
 					<input type="date" class="form-control" name="end_date" value="{{$fulfillment->end_date->format('Y-m-d')}}" required>
 				</fieldset>
-				<fieldset class="form-group col-12 col-md-4">
+				<fieldset class="form-group col-12 col-md">
 					<label for="for_estate">Observación</label>
 					<input type="text" class="form-control" name="observation" value="{{$fulfillment->observation}}">
 				</fieldset>
 
 				<!-- @can('Service Request: fulfillments responsable')
-					@if($fulfillment->responsable_approver_id == NULL)
-					<fieldset class="form-group col">
-						<label for="for_estate"><br/></label>
-						<button type="submit" class="btn btn-primary form-control">Guardar</button>
-					</fieldset>
-					@else
-					<fieldset class="form-group col">
-						<label for="for_estate"><br/></label>
-						<button type="submit" class="btn btn-primary form-control" disabled>Guardar</button>
-					</fieldset>
-				@endif
-				@endcan
-
-				@can('Service Request: fulfillments rrhh')
-					@if($fulfillment->rrhh_approver_id == NULL)
-					<fieldset class="form-group col">
-						<label for="for_estate"><br/></label>
-						<button type="submit" class="btn btn-primary form-control">Guardar</button>
-					</fieldset>
-					@else
-					<fieldset class="form-group col">
-						<label for="for_estate"><br/></label>
-						<button type="submit" class="btn btn-primary form-control" disabled>Guardar</button>
-					</fieldset>
-					@endif
-				@endcan
-
-				 @can('Service Request: fulfillments finance')
-				@if($fulfillment->finances_approver_id == NULL)
+				@if($fulfillment->responsable_approver_id == NULL)
 				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary form-control">Guardar</button>
+					<label for="for_estate"><br /></label>
+					<button type="submit" class="btn btn-primary">Guardar</button>
 				</fieldset>
 				@else
 				<fieldset class="form-group col">
-					<label for="for_estate"><br/></label>
-					<button type="submit" class="btn btn-primary form-control" disabled>Guardar</button>
+					<label for="for_estate"><br /></label>
+					<button type="submit" class="btn btn-primary" disabled>Guardar</button>
+				</fieldset>
+				@endif
+				@endcan -->
+
+				@can('Service Request: fulfillments rrhh')
+				<fieldset class="form-group col">
+					<label for="for_estate"><br /></label>
+					<button type="submit" class="form-control btn btn-primary">Guardar</button>
+				</fieldset>
+				@endcan
+
+				<!-- @can('Service Request: fulfillments finance')
+				@if($fulfillment->finances_approver_id == NULL)
+				<fieldset class="form-group col">
+					<label for="for_estate"><br /></label>
+					<button type="submit" class="btn btn-primary">Guardar</button>
+				</fieldset>
+				@else
+				<fieldset class="form-group col">
+					<label for="for_estate"><br /></label>
+					<button type="submit" class="btn btn-primary" disabled>Guardar</button>
 				</fieldset>
 				@endif
 				@endcan -->
@@ -84,13 +77,17 @@
 
 
 		<div class="card border-success mb-3">
-				<div class="card-header bg-success text-white">
-				Responsable
-				</div>
-				<div class="card-body">
-				
-		
-		@livewire('service-request.fulfillment-absences', ['fulfillment' => $fulfillment])
+			<div class="card-header bg-success text-white">
+			Responsable
+			</div>
+		<div class="card-body">
+
+
+		@if($serviceRequest->working_day_type == "DIARIO")
+			@livewire('service-request.shift-control-add-day', ['fulfillment' => $fulfillment])
+		@else
+			@livewire('service-request.fulfillment-absences', ['fulfillment' => $fulfillment])
+		@endif
 		<!-- <form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.store') }}" enctype="multipart/form-data">
 			@csrf
 			<div class="form-row">
@@ -194,7 +191,7 @@
 				@endforeach
 			</tbody>
 		</table> -->
-		
+
 		<div class="form-row">
 			<fieldset class="form-group col">
 				@if($fulfillment->responsable_approbation != NULL)
@@ -358,7 +355,7 @@
 							<button type="submit" class="btn btn-primary">Guardar</button>
 						</div>
 						<div class="col-12 col-md-7">
-							
+
 						</div>
 						<div class="col-12 col-md-3 text-right">
 							@if($fulfillment->rrhh_approver_id == NULL)
@@ -384,7 +381,7 @@
 					Boleta
 				</div>
 				<div class="card-body">
-					
+
 					<div class="form-row">
 
 						<div class="col-md-7">
@@ -394,7 +391,7 @@
 							No se ha ingresado el "Total a pagar".
 							@endif
 						</div>
-					
+
 					</div>
 				</div>
 		</div>
@@ -468,7 +465,7 @@
 							<button type="submit" class="btn btn-primary">Guardar</button>
 						</div>
 						<div class="col-12 col-md-7">
-							
+
 						</div>
 						<div class="col-12 col-md-3 text-right">
 							@can('Service Request: fulfillments finance')
