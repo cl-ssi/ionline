@@ -190,7 +190,7 @@
       <p class="justify">
         <strong>CONSIDERANDO:</strong><br>
 
-        {{$ServiceRequest->objectives}}.<br>
+        {{$ServiceRequest->objectives}}.<br><br>
 
         <b>- Que</b>, esta labor no puede cumplirse con los recursos humanos propios de la institución no por carecer de ellos, sino porque éstos tienen relación con labores accidentales y no habituales de la Institución, de tal forma de encuadrarse en el Art. 11 Ley N°18.834, sobre Estatuto Administrativo. <br><br>
 
