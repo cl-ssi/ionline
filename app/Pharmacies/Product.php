@@ -148,6 +148,7 @@ class Product extends Model
 
                         $matrix[$cont]['act_number'] = null;
                         $matrix[$cont]['product_batch'] = null;
+                        $matrix[$cont]['file'] = null;
                     }
                     if ($key1==1) {
                         //$saldo = $saldo + $CollectionItem->amount;
@@ -165,6 +166,7 @@ class Product extends Model
 
                         $matrix[$cont]['act_number'] = null;
                         $matrix[$cont]['product_batch'] = null;
+                        $matrix[$cont]['file'] = null;
                     }
                     if ($key1==2) {
                         //$saldo = $saldo - $CollectionItem->amount;
@@ -182,6 +184,7 @@ class Product extends Model
 
                         $matrix[$cont]['act_number'] = $CollectionItem->dispatch->id;
                         $matrix[$cont]['product_batch'] = $CollectionItem->batch;
+                        $matrix[$cont]['file'] = $CollectionItem->dispatch;
                     }
 
                     $cont = $cont + 1;
