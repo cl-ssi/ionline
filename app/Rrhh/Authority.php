@@ -46,12 +46,19 @@ class Authority extends Model
     }
 
     public static function getAmIAuthorityFromOu($date, $type, $user_id) {
-        // return Authority::with('user','organizationalUnit')
-        //                 ->where('user_id', $user_id)
-        //                 ->where('type', $type)
-        //                 ->where('from','<=',$date)->where('to','>=',$date)->get();
+        
+        $authorities =  Authority::with('organizationalUnit')
+                        ->where('user_id', $user_id)
+                        ->where('type', $type)
+                        ->where('from','<=',$date)->where('to','>=',$date)
+                        ->get();
 
-        $ous = OrganizationalUnit::All();
+        $ous = array();
+        foreach($authorities as $authority) {
+            $ous[] = $authority->organizationalUnit;
+        }
+
+        //$ous = OrganizationalUnit::All();
         $authorities = array();
         foreach($ous as $ou) {
             $authority = Authority::with('user','organizationalUnit')
