@@ -159,7 +159,11 @@
             @else
               Hospital Dr.Ernesto Torres Galdames
             @endif
-            durante el periodo del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>.
+            durante el periodo 
+            @if($fulfillment->serviceRequest->type == 'Covid')
+            de contingencia COVID
+            @endif
+            del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>.
 
             <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
         </div>
