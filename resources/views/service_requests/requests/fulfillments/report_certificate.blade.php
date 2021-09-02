@@ -159,7 +159,11 @@
             @else
               Hospital Dr.Ernesto Torres Galdames
             @endif
-            durante el periodo del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>.
+            durante el periodo 
+            @if($fulfillment->serviceRequest->type == 'Covid')
+            de contingencia COVID
+            @endif
+            del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>.
 
             <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
         </div>
@@ -314,10 +318,16 @@
           @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
             @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
               Consultorio General Urbano Dr. Hector Reyno,
-              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
+              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b> 
+              @if($fulfillment->serviceRequest->type == 'Covid')
+              durante el periodo de contingencia COVID  
+              @endif
             @else
               Servicio Salud Iquique,
               <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
+              @if($fulfillment->serviceRequest->type == 'Covid')
+              durante el periodo de contingencia COVID  
+              @endif
             @endif
           @else
             Hospital Dr. Ernesto Torres Galdames,
