@@ -18,6 +18,11 @@
             <input type="text" class="form-control" id="for_name" name="name">
         </fieldset>
 
+        <fieldset class="form-group col">
+            <label for="for_supply_continuous_day">Días Continuos</label>
+            <input type="number" class="form-control" id="for_supply_continuous_day" name="supply_continuous_day">
+        </fieldset>
+
     </div>
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a class="btn btn-outline-secondary" href="{{ route('parameters.purchaseunits.index') }}">Volver</a>

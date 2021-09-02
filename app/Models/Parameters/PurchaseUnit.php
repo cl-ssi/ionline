@@ -9,7 +9,7 @@ use App\Models\RequestForms\PurchasingProcess;
 
 class PurchaseUnit extends Model
 {
-  protected $fillable = [ 'name' ];
+  protected $fillable = [ 'name', 'supply_continuous_day' ];
 
   public function requestForms() {
       return $this->hasMany(RequestForm::class, 'purchase_unit_id');

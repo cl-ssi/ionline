@@ -9,7 +9,7 @@ use App\Models\RequestForms\RequestForm;
 
 class PurchaseType extends Model
 {
-  protected $fillable = [ 'name' ];
+  protected $fillable = [ 'name', 'finance_business_day', 'supply_continuous_day' ];
 
 /*
   public function requestForms() {
