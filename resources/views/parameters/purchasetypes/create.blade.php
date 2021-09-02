@@ -17,6 +17,14 @@
             <label for="for_name">Nombre</label>
             <input type="text" class="form-control" id="for_name" name="name">
         </fieldset>
+        <fieldset class="form-group col">
+            <label for="for_name">Días Hábiles Finanza</label>
+            <input type="number" class="form-control" id="for_name" name="finance_business_day">
+        </fieldset>
+        <fieldset class="form-group col">
+            <label for="for_name">Días Corridos Abastecimiento</label>
+            <input type="number" class="form-control" id="for_name" name="supply_continuous_day">
+        </fieldset>
 
     </div>
     <button type="submit" class="btn btn-primary">Guardar</button>

@@ -16,6 +16,7 @@
     <thead>
         <tr>
             <th>Nombre</th>
+            <th>Días Continuos</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -23,6 +24,7 @@
         @foreach($purchaseUnits as $purchaseUnit)
         <tr>
             <td>{{ $purchaseUnit->name }}</td>
+            <td>{{ $purchaseUnit->supply_continuous_day }}</td>
             <td>
                 <a href="{{ route('parameters.purchaseunits.edit', $purchaseUnit) }}">
                     <i class="fas fa-edit"></i>

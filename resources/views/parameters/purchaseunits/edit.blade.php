@@ -18,7 +18,12 @@
             <input type="text" class="form-control" id="for_prefix"
             value="{{ $purchaseUnit->name }}" name="name" required>
         </fieldset>
-
+supply_continuous_day
+        <fieldset class="form-group col">
+            <label for="for_prefix">Días Continuos</label>
+            <input type="number" class="form-control" id="for_prefix"
+            value="{{ $purchaseUnit->supply_continuous_day }}" name="supply_continuous_day" required>
+        </fieldset>
     </div>
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a class="btn btn-outline-secondary" href="{{ route('parameters.purchaseunits.index') }}">Volver</a>

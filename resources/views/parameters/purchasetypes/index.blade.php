@@ -16,6 +16,8 @@
     <thead>
         <tr>
             <th>Nombre</th>
+            <th>Días Habiles Finanza</th>
+            <th>Días Corridos Abastecimiento</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -23,6 +25,8 @@
         @foreach($purchaseTypes as $purchaseType)
         <tr>
             <td>{{ $purchaseType->name }}</td>
+            <td>{{ $purchaseType->finance_business_day }}</td>
+            <td>{{ $purchaseType->supply_continuous_day }}</td>
             <td>
                 <a href="{{ route('parameters.purchasetypes.edit', $purchaseType) }}">
                     <i class="fas fa-edit"></i>
