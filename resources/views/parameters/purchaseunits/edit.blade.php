@@ -18,7 +18,7 @@
             <input type="text" class="form-control" id="for_prefix"
             value="{{ $purchaseUnit->name }}" name="name" required>
         </fieldset>
-supply_continuous_day
+
         <fieldset class="form-group col">
             <label for="for_prefix">Días Continuos</label>
             <input type="number" class="form-control" id="for_prefix"
