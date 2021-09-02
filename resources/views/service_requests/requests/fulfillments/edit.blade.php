@@ -11,8 +11,8 @@
           <h3>Cumplimiento de solicitud:
             <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}">{{ $serviceRequest->id }}</a>
           </h3>
-    </fieldset> 
-    
+    </fieldset>
+
     <div class="row col-md-5">
         <div class="col-md-7">
             <span class="form-text">
@@ -33,7 +33,7 @@
       <label for="for_request_date">ID Solicitud</label>
       <input type="text" class="form-control" value="{{$serviceRequest->id}}" disabled>
   </fieldset>
-  
+
 
   <fieldset class="form-group col-12 col-md-4">
       <label for="for_request_date">C.Responsabilidad</label>
@@ -134,6 +134,21 @@
 </div>
 @endcanany
 
+@canany(['Service Request: audit'])
+<br /><hr />
+<div style="height: 300px; overflow-y: scroll;">
+  @foreach($serviceRequest->fulfillments as $fulfillment)
+    @foreach($fulfillment->FulfillmentItems as $fulfillmentItem)
+      @include('service_requests.requests.partials.audit', ['audits' => $fulfillmentItem->audits] )
+    @endforeach
+    @foreach($fulfillment->shiftControls as $shiftControl)
+      @include('service_requests.requests.partials.audit', ['audits' => $shiftControl->audits] )
+    @endforeach
+  @endforeach
+</div>
+<br /><hr />
+@endcanany
+
 @endsection
 
 @section('custom_js')
@@ -160,7 +175,7 @@
   //     });
   // });
 
-  $('.for_type').on('change', function() {    
+  $('.for_type').on('change', function() {
     $('.start_date').attr('readonly', false);
     $(".start_date").val('');
     $('.start_hour').attr('readonly', false);
@@ -179,9 +194,9 @@
     if (this.value == "Renuncia voluntaria") {
       $('.start_date').attr('readonly', true);
       $('.start_hour').attr('readonly', true);
-      $('.end_hour').attr('readonly', true);                 
-      
-      
+      $('.end_hour').attr('readonly', true);
+
+
     }
     if (this.value == "Abandono de funciones" || this.value == "Término de contrato anticipado") {
       $('.start_date').attr('readonly', true);
@@ -194,9 +209,9 @@
     //   $('.start_date').attr('readonly', true);
     //   $('.start_hour').attr('readonly', true);
     //   $('.end_hour').attr('readonly', true);
-      
-      
-      
+
+
+
     // }
 
     // start_date
