@@ -318,10 +318,16 @@
           @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
             @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
               Consultorio General Urbano Dr. Hector Reyno,
-              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
+              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b> 
+              @if($fulfillment->serviceRequest->type == 'Covid')
+              durante el periodo de contingencia COVID  
+              @endif
             @else
               Servicio Salud Iquique,
               <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
+              @if($fulfillment->serviceRequest->type == 'Covid')
+              durante el periodo de contingencia COVID  
+              @endif
             @endif
           @else
             Hospital Dr. Ernesto Torres Galdames,
