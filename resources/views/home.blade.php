@@ -3,6 +3,12 @@
 @section('title', 'Home')
 
 @section('content')
+<div class="mt-2">
+    <img src="{{ asset('images/Sept2021_ComunicadoCambiodeHora.jpg') }}" class="img-fluid mb-2" />
+    <p><b>Guía de Configuración:</b><br>
+    <a href="https://firma.digital.gob.cl/biblioteca/manuales-firmagob/configuracion-2do-factor/" target="_blank">Configuración OTP</a>
+    </p>
+</div>
 <div class="jumbotron mt-5">
     <div class="row">
         <div class="col-9">
@@ -32,7 +38,6 @@
                 </li>
             </ol>
             </p>
-
         </div>
         <div class="col-md-3 col-12">
             <img src="{{ asset('images/logo_blanco.png') }}" alt="Logo {{ env('APP_SS') }}" style="background-color: rgb(0, 108, 183);" class="img-thumbnail">
