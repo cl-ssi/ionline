@@ -12,7 +12,7 @@ class ProfessionManage extends Model
     use softDeletes;
 
     protected $fillable = [
-        'name'
+        'name', 'profile_manage_id'
     ];
 
     public function profileManage() {
