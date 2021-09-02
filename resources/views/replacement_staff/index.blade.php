@@ -61,6 +61,7 @@
     <table class="table table-sm table-striped table-bordered">
         <thead class="text-center small">
             <tr>
+                <th>Ingreso</th>
                 <th>Nombre Completo</th>
                 <th>Run</th>
                 <th>Estamento</th>
@@ -75,6 +76,7 @@
         <tbody class="small">
             @foreach($replacementStaff as $staff)
             <tr>
+                <td>{{ $staff->created_at->format('d-m-Y H:i:s') }}</td>
                 <td>{{ $staff->FullName }}</td>
                 <td>{{ $staff->Identifier }}</td>
                 <td>

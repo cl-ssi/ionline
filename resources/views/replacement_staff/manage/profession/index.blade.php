@@ -20,8 +20,8 @@
                   <input type="text" class="form-control" name="name">
           </fieldset>
           <fieldset class="form-group col mt">
-              <label for="for_profile">Estamento</label>
-              <select name="profile" class="form-control" wire:model="profileSelected" required>
+              <label for="for_profile_manage_id">Estamento</label>
+              <select name="profile_manage_id" class="form-control" wire:model="profileSelected" required>
                   <option value="">Seleccione</option>
                   @foreach($profiles as $profile)
                       <option value="{{ $profile->id }}">{{ $profile->name }}</option>

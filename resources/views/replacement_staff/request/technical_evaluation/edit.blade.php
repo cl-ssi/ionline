@@ -197,9 +197,10 @@
             <table class="table table-sm table-striped table-bordered">
                 <thead class="text-center small">
                     <tr>
-                      <th>Nombre</th>
-                      <th>Calificación</th>
-                      <th>Observaciones</th>
+                      <th style="width: 22%">Nombre</th>
+                      <th style="width: 22%">Calificación Evaluación Psicolaboral</th>
+                      <th style="width: 22%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
+                      <th style="width: 22%">Observaciones</th>
                       <th colspan="2"></th>
                     </tr>
                 </thead>
@@ -207,7 +208,8 @@
                     @foreach($technicalEvaluation->applicants->sortByDesc('score') as $applicant)
                     <tr class="{{ ($applicant->selected == 1)?'table-success':''}}">
                         <td>{{ $applicant->replacement_staff->FullName }}</td>
-                        <td>{{ $applicant->score }}</td>
+                        <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
+                        <td class="text-center">{{ $applicant->technical_evaluation_score }} <br> {{ $applicant->TechEvaScore }}</td>
                         <td>{{ $applicant->observations }}</td>
                         <td style="width: 4%">
                             @if($technicalEvaluation->date_end == NULL)
@@ -252,12 +254,12 @@
           <form method="GET" class="form-horizontal"
               action="{{ route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation) }}">
               <div class="form-row">
-                  <fieldset class="form-group col-4">
-                      <label for="for_name">Nombres</label>
+                  <fieldset class="form-group col-5">
+                      <label for="for_name">Nombres / Identificación</label>
                       <input class="form-control" type="text" name="search" autocomplete="off" style="text-transform: uppercase;" placeholder="RUN (sin dígito verificador) / NOMBRE" value="{{$request->search}}">
                   </fieldset>
 
-                  <fieldset class="form-group col-4">
+                  <fieldset class="form-group col-2">
                       <label for="for_profile_search">Estamento</label>
                       <select name="profile_search" class="form-control">
                           <option value="0">Seleccione...</option>
@@ -267,7 +269,7 @@
                       </select>
                   </fieldset>
 
-                  <fieldset class="form-group col-4">
+                  <fieldset class="form-group col-5">
                       <label for="for_profession_search">Profesión</label>
                       <select name="profession_search" class="form-control">
                           <option value="0">Seleccione...</option>
@@ -288,7 +290,7 @@
 
       <div class="table-responsive">
           <table class="table table-sm table-striped table-bordered">
-              <thead class="small">
+              <thead class="text-center small">
                   <tr>
                       <th>Nombre Completo</th>
                       <th>Run</th>
