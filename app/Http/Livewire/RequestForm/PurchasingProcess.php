@@ -23,7 +23,7 @@ class PurchasingProcess extends Component
         $this->requestForm            = $requestForm;
         $this->purchaseMechanism      = $requestForm->purchaseMechanism->id;
         $this->purchaseUnit           = $requestForm->purchaseUnit->id;
-        $this->purchaseType           = $requestForm->purchaseType->id;
+        //$this->purchaseType           = $requestForm->purchaseType->id;
         $this->lstPurchaseType        = PurchaseType::all();
         $this->lstPurchaseUnit        = PurchaseUnit::all();
         $this->lstPurchaseMechanism   = PurchaseMechanism::all();
@@ -39,7 +39,7 @@ class PurchasingProcess extends Component
           $this->setArrayBgTable($key);
           $this->setArrayCheckBox(0, $key);
           $this->setArrayPurchaseMechanism($item->getPurchasingProcess('in_progress')->purchaseMechanism->id, $key);
-          $this->setArrayPurchaseType($item->getPurchasingProcess('in_progress')->purchaseType->id, $key);
+          //$this->setArrayPurchaseType($item->getPurchasingProcess('in_progress')->purchaseType->id, $key);
           $this->setArrayPurchaseUnit($item->getPurchasingProcess('in_progress')->purchaseUnit->id, $key);
           $this->setInitialValues($key, $item);
         }
