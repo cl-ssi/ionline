@@ -9,7 +9,7 @@ use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseMechanism;
 
-/**
+/*
  * Diferentes estados del Proceso de Compra
  * ========================================
  * status:
@@ -18,7 +18,17 @@ use App\Models\Parameters\PurchaseMechanism;
  * desert: no se encuentra en el mercado
  * partial: entrega Parcial
  * total: entrega total
- * in_progress: en progreso
+ * in_progress: en progreso (en proceso)
+
+ Falta de presupuesto
+ item se compra
+ recepción conforme
+ estado de pago, enviado a pugo
+pagado
+
+presupuesto por item optativo
+
+firma electronica, enlace bodega
  **/
 
 
