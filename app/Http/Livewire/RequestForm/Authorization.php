@@ -38,12 +38,13 @@ class Authorization extends Component
       $this->position           = auth()->user()->position;
       if($eventType=='supply_event'){
           $this->lstSupervisorUser      = User::where('organizational_unit_id', 37)->get();
-          $this->lstPurchaseType        = PurchaseType::all();
+          //$this->lstPurchaseType        = PurchaseType::all();
+          $this->purchaseMechanism      = $requestForm->purchase_mechanism_id;
+          $this->lstPurchaseType        = PurchaseMechanism::find($this->purchaseMechanism)->purchaseTypes()->get();
           $this->lstPurchaseUnit        = PurchaseUnit::all();
           $this->lstPurchaseMechanism   = PurchaseMechanism::all();
           $this->title = 'Autorización Abastecimiento';
           $this->route = 'request_forms.supply_index';
-          $this->purchaseMechanism = $requestForm->purchase_mechanism_id;
       }elseif($eventType=='finance_event'){
           $this->title = 'Autorización Finanzas';
           $this->route = 'request_forms.finance_index';
@@ -63,6 +64,12 @@ class Authorization extends Component
         ]);
         $item->purchasingProcesses()->save($purchasingProcess);
       }
+    }
+
+    public function changePurchaseMechanism(){
+      if($this->purchaseMechanism != "")
+        $this->lstPurchaseType = PurchaseMechanism::find($this->purchaseMechanism)->purchaseTypes()->get();
+      $this->purchaseType = "";
     }
 
     public function resetError(){

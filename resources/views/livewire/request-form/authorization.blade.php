@@ -32,15 +32,15 @@
             @error('supervisorUser') <span class="error text-danger">{{ $message }}</span> @enderror
           </div>
 
-          <div class="col-3">
-            <label>Unidad de Compra:</label><br>
-            <select wire:model.defer="purchaseUnit" wire:click="resetError" name="purchaseUnit" class="form-control form-control-sm" required>
-                <option value="">Seleccione...</option>
-              @foreach($lstPurchaseUnit as $unit)
-                <option value="{{$unit->id}}">{{$unit->name}}</option>
+          <div class="form-group col-3">
+            <label>Mecanismo de Compra:</label><br>
+            <select wire:model="purchaseMechanism" name="purchaseMechanism" wire:change="changePurchaseMechanism" class="form-control form-control-sm" required>
+              <option value="">Seleccione...</option>
+              @foreach($lstPurchaseMechanism as $val)
+                <option value="{{$val->id}}">{{$val->name}}</option>
               @endforeach
             </select>
-            @error('purchaseUnit') <span class="error text-danger">{{ $message }}</span> @enderror
+            @error('purchaseMechanism') <span class="error text-danger">{{ $message }}</span> @enderror
           </div>
 
           <div class="col-3">
@@ -54,15 +54,15 @@
             @error('purchaseType') <span class="error text-danger">{{ $message }}</span> @enderror
           </div>
 
-          <div class="form-group col-3">
-            <label>Mecanismo de Compra:</label><br>
-            <select wire:model="purchaseMechanism" name="purchaseMechanism" class="form-control form-control-sm" required>
-              <option>Seleccione...</option>
-              @foreach($lstPurchaseMechanism as $val)
-                <option value="{{$val->id}}">{{$val->name}}</option>
+          <div class="col-3">
+            <label>Unidad de Compra:</label><br>
+            <select wire:model.defer="purchaseUnit" wire:click="resetError" name="purchaseUnit" class="form-control form-control-sm" required>
+                <option value="">Seleccione...</option>
+              @foreach($lstPurchaseUnit as $unit)
+                <option value="{{$unit->id}}">{{$unit->name}}</option>
               @endforeach
             </select>
-            @error('purchaseMechanism') <span class="error text-danger">{{ $message }}</span> @enderror
+            @error('purchaseUnit') <span class="error text-danger">{{ $message }}</span> @enderror
           </div>
 
         </div>
