@@ -17,7 +17,8 @@ class CreateRstApplicantsTable extends Migration
             $table->id();
 
             $table->foreignId('replacement_staff_id');
-            $table->integer('score')->nullable();
+            $table->integer('psycholabor_evaluation_score')->nullable();
+            $table->integer('technical_evaluation_score')->nullable();
             $table->longText('observations')->nullable();
             //Exclusive Selected
             $table->boolean('selected')->nullable();
