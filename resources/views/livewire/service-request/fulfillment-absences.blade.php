@@ -54,6 +54,12 @@
           <label for="for_estate"><br/></label>
           Ya está aprobada por el responsable
         </fieldset>
+        @can('Service Request: delete signed certificate')
+        <a class="btn btn-outline-danger ml-4" href="{{ route('rrhh.service-request.fulfillment.delete-responsable-vb',$fulfillment) }}" title="Borrar Aprobación Responsable" onclick="return confirm('¿Está seguro que desea eliminar la aprobación del responsable, deberá contactar a responsable para que vuelva a dar VB?')">
+					<i class="fas fa-trash"></i>
+				</a>
+        @endcan
+
         @endif
       @endcan
     </div>
