@@ -10,6 +10,24 @@
 
 <br>
 
+@if($replacementStaff->profiles->count() == 0)
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        Estimado Usuario: Para una correcta postulación, favor completar su <b>Perfil Profesional</b>.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif
+
+@if($replacementStaff->trainings->count() == 0)
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        Estimado Usuario: Para una correcta postulación, favor completar su <b>Perfeccionamiento / Capacitaciones</b>.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+@endif
+
 <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.update', $replacementStaff) }}" enctype="multipart/form-data">
     @csrf
     @method('PUT')
