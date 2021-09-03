@@ -3,23 +3,16 @@
 @section('title', 'Home')
 
 @section('content')
-<div class="mt-2">
-    <img src="{{ asset('images/Sept2021_ComunicadoCambiodeHora.jpg') }}" class="img-fluid mb-2" />
-    <p><b>Guía de Configuración:</b><br>
-    <a href="https://firma.digital.gob.cl/biblioteca/manuales-firmagob/configuracion-2do-factor/" target="_blank">Configuración OTP</a>
-    </p>
-</div>
-<div class="jumbotron mt-5">
+
+<div class="jumbotron mt-4">
     <div class="row">
         <div class="col-9">
             <h1 class="display-4">Intranet Online</h1>
             <p class="lead">{{ env('APP_SS') }}</p>
-            <hr class="my-5">
+            <hr class="my-4">
             <p>Contacto:
                 <a href="mailto:{{ env('APP_SS_EMAIL') }}">{{ env('APP_SS_EMAIL') }}</a>
             </p>
-            <p>
-
             <ol>
                 <h6>Pasos para solicitud de Firma Electrónica del Gobierno (OTP)</h6>
                 <li>
@@ -37,7 +30,6 @@
                 <a href="https://apps.apple.com/cl/app/google-authenticator/id388497605">I-Phone</a>
                 </li>
             </ol>
-            </p>
         </div>
         <div class="col-md-3 col-12">
             <img src="{{ asset('images/logo_blanco.png') }}" alt="Logo {{ env('APP_SS') }}" style="background-color: rgb(0, 108, 183);" class="img-thumbnail">
@@ -61,6 +53,20 @@
 
         <pre>{{ $phrase ? $phrase->phrase : '' }}</pre>
     </div>
+</div>
+<!-- ANUNCIO -->
+<div class="alert alert-warning" role="alert">
+  <h4 class="alert-heading">Cambio de Hora - Errores OTP</h4>
+  <p>Estimados, junto con saludar, les informamos que dado el cambio de hora que ocurrirá este <b>Sábado 4 de Septiembre</b>,
+    muchos de los firmantes de su Institución podrán tener problemas para utilizar la firma con el código OTP que entrega
+    la aplicación Google Authenticator (o similar), por lo que le sugerimos revisar en su celular la configuración de zona
+    horaria (Chile/Automática).</p>
+  <p>Para mas detalles, dejamos disponible una guía con las indicaciones de configuración.</p>
+  <p class="mt-1"><b>Guía de Configuración:</b><br>
+    <a href="https://firma.digital.gob.cl/biblioteca/manuales-firmagob/configuracion-2do-factor/" target="_blank">Configuración OTP</a>
+    </p>
+</div>
+<!-- FIN ANUNCIO -->
     @endsection
 
     @section('custom_js')
