@@ -54,12 +54,6 @@
           <label for="for_estate"><br/></label>
           Ya está aprobada por el responsable
         </fieldset>
-        @can('Service Request: delete signed certificate')
-        <a class="btn btn-outline-danger ml-4" href="{{ route('rrhh.service-request.fulfillment.delete-responsable-vb',$fulfillment) }}" title="Borrar Aprobación Responsable" onclick="return confirm('¿Está seguro que desea eliminar la aprobación del responsable, deberá contactar a responsable para que vuelva a dar VB?')">
-					<i class="fas fa-trash"></i>
-				</a>
-        @endcan
-
         @endif
       @endcan
     </div>
@@ -86,7 +80,7 @@
       @foreach($fulfillment->FulfillmentItems as $key => $FulfillmentItem)
       <tr>
         <td>
-          @can('Service Request: fulfillments responsable')
+          @canany(['Service Request: fulfillments responsable','Service Request: fulfillments rrhh'])
           @if($fulfillment->responsable_approver_id == NULL)
           <!-- <form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.destroy', $FulfillmentItem) }}" class="d-inline">
             @csrf

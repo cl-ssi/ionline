@@ -203,8 +203,8 @@
 					Certificado firmado <i class="fas fa-signature"></i>
 				</a>
 				@can('Service Request: delete signed certificate')
-				<a class="btn btn-outline-danger ml-4" href="{{ route('rrhh.service-request.fulfillment.delete-signed-certificate-pdf',$fulfillment) }}" title="Borrar Certificado" onclick="return confirm('¿Está seguro que desea eliminar el certificado de cumplimiento firmado?')">
-				<i class="fas fa-trash"></i>
+				<a class="btn btn-outline-danger" href="{{ route('rrhh.service-request.fulfillment.delete-signed-certificate-pdf',$fulfillment) }}" title="Borrar Certificado" onclick="return confirm('¿Está seguro que desea eliminar el certificado de cumplimiento firmado?')">
+				<i class="fas fa-trash"></i> Certificado
 				</a>
 				@endcan
 				@else
@@ -221,10 +221,6 @@
 				@endif
 			</fieldset>
 			<fieldset class="form-group col text-right">
-				@php
-				//$reponsable = App\Rrhh\Authority;
-				@endphp
-
 				@can('Service Request: fulfillments responsable')
 				@if(Auth::user()->id == $serviceRequest->signatureFlows->where('sign_position',2)->first()->responsable_id or App\Rrhh\Authority::getAmIAuthorityFromOu(now(),['manager'],Auth::user()->id))
 				@if($fulfillment->responsable_approver_id == NULL)
@@ -235,12 +231,16 @@
 					Confirmar
 				</a>
 				@else
-				<button type="submit" class="btn btn-danger" disabled>Rechazar</button>
-				<button type="submit" class="btn btn-success" disabled>Confirmar</button>
+				<button class="btn btn-danger" disabled>Rechazar</button>
+				<button class="btn btn-success" disabled>Confirmar</button>
 				@endif
 				@endif
 				@endcan
-
+				@can('Service Request: delete signed certificate')
+        		<a class="btn btn-outline-danger" href="{{ route('rrhh.service-request.fulfillment.delete-responsable-vb',$fulfillment) }}" title="Borrar Aprobación Responsable" onclick="return confirm('¿Está seguro que desea eliminar la aprobación del responsable, deberá contactar a responsable para que vuelva a dar VB?')">
+					<i class="fas fa-trash"></i> Aprobación
+				</a>
+        		@endcan
 			</fieldset>
 		</div>
 
