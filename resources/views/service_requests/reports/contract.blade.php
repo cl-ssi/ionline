@@ -17,6 +17,7 @@
                 <option value="request_date" {{ (old('option')=='request_date')?'selected':'' }}>Solicitados entre</option>
                 <option value="start_date" {{ (old('option')=='start_date')?'selected':'' }}>Que comiencen entre</option>
                 <option value="end_date" {{ (old('option')=='end_date')?'selected':'' }}>Que terminen entre</option>
+                <option value="vigenci" {{ (old('option')=='vigenci')?'selected':'' }}>Vigentes entre</option>
             </select>
         </fieldset>
 
@@ -42,6 +43,20 @@
             </select>
         </fieldset>
 
+    </div>
+    <div class="form-row">
+    <fieldset class="form-group col-md-3">
+            <label for="for_type">Origen de financiamiento*</label>
+            <select name="type" class="form-control">
+                <option value="">Todos</option>
+                <option value="Covid" {{ (old('type')=='Covid')?'selected':'' }}>Honorarios - Covid</option>
+                <option value="Suma alzada" {{ (old('type')=='Suma alzada')?'selected':'' }}>Suma alzada</option>
+            </select>
+        </fieldset>
+
+
+
+
         <fieldset class="form-group col-md-1">
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
@@ -62,6 +77,7 @@
         <th>Origen Financiamiento</th>
         <th nowrap>Rut</th>
         <th>Nombre</th>
+        <th>Unidad Organizacional</th>
         <th>Fecha Solicitud</th>
         <th>F.Inicio de Contrato</th>
         <th>F.Término de Contrato</th>
@@ -78,6 +94,7 @@
         <td>{{ $sr->type ?? '' }}</td>
         <td>{{ $sr->id ? $sr->employee->runFormat(): '' }}</td>
         <td class="text-uppercase">{{$sr->employee->fullname?? ''}}</td>
+        <td>{{ $sr->responsabilityCenter->name ?? '' }}</td>
         <td>{{ $sr->request_date ? $sr->request_date->format('d-m-Y'): '' }}</td>
         <td>{{ $sr->start_date ? $sr->start_date->format('d-m-Y'): '' }}</td>
         <td>{{ $sr->end_date ? $sr->end_date->format('d-m-Y'): '' }}</td>

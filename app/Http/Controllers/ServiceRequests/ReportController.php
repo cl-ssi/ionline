@@ -574,14 +574,35 @@ class ReportController extends Controller
     //$srs = ServiceRequest::select("*");
     $srs = ServiceRequest::paginate(100);
 
+    
+    //lista los que no son vigente, creados, solicitados, que comiencen, que terminen entre
+    if ($request->option != 'vigenci') {
     if ($request->has('from')) {
     $srs = ServiceRequest::whereBetween($request->option, [$request->from, $request->to])
     ->when($request->uo != null, function ($q) use ($request) {
       return $q->where('responsability_center_ou_id', $request->uo);
     })
+    ->when($request->type != null, function ($q) use ($request) {
+      return $q->where('type',  $request->type);
+    })
     ->orderBy($request->option)
     ->paginate(100);
     }
+  }
+
+  else //aca son solo los vigentes
+  {
+    $srs = ServiceRequest::whereDate('start_date','<=',$request->from)
+    ->whereDate('end_date','>=',$request->to)
+    ->when($request->uo != null, function ($q) use ($request) {
+      return $q->where('responsability_center_ou_id', $request->uo);
+    })
+    ->when($request->type != null, function ($q) use ($request) {
+      return $q->where('type',  $request->type);
+    })    
+    ->orderBy('start_date')
+    ->paginate(100);    
+  }
 
 
 
