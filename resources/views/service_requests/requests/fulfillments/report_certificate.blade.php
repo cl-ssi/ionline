@@ -181,7 +181,12 @@
               a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->add(1, 'day')->format('d/m/Y')}}</b>. 
               -->
               Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas en su convenio de prestación de servicios con el 
-              <b><span class="uppercase">{{$fulfillment->serviceRequest->establishment->name}}</span></b>, durante el periodo de contingencia COVID desde
+              <b><span class="uppercase">{{$fulfillment->serviceRequest->establishment->name}}</span></b>, 
+              @if($fulfillment->serviceRequest->type == 'Covid')
+              durante el periodo de
+              contingencia COVID
+              @endif
+              desde
               <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->sub(1, 'day')->format('d/m/Y')}}</b>.
               <br><br>
               Se deja constancia que presentó su renuncia voluntaria a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->format('d/m/Y')}}</b>
