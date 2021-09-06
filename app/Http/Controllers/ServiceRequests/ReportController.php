@@ -20,6 +20,8 @@ use App\Establishment;
 use App\Rrhh\OrganizationalUnit;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ComplianceExport;
+use App\Exports\ContractExport;
+
 
 class ReportController extends Controller
 {
@@ -599,10 +601,20 @@ class ReportController extends Controller
     })
     ->when($request->type != null, function ($q) use ($request) {
       return $q->where('type',  $request->type);
-    })    
+    })
     ->orderBy('start_date')
     ->paginate(100);    
   }
+
+
+
+  if ($request->has('excel')) {
+    return Excel::download(new ContractExport($request), 'reporte-de-contrato.xlsx');
+  }
+
+
+
+  
 
 
 
