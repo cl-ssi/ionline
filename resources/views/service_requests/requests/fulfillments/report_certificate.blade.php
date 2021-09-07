@@ -248,7 +248,11 @@
             @else
               Hospital Dr.Ernesto Torres Galdames
             @endif
-            durante el periodo de 
+
+            @if($fulfillment->serviceRequest->type == 'Covid')
+              durante el periodo de contingencia COVID  
+            @endif
+            
             <!-- contingencia COVID del  -->
             <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>,
             registrando las siguientes ausencias:
