@@ -56,7 +56,7 @@ class CreateTypes extends Component
               $this->signatureFlows['S.G.D.P Hospital'] = 16593799; // 86 - Subdirección de Gestión de Desarrollo de las Personas
               $this->signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
               $this->signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-              $this->signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
+              $this->signatureFlows['Director Hospital'] = 12029814; // 84 - Dirección
             }
           }elseif ($this->program_contract_type == "Horas") {
             $this->a = "horas";
@@ -87,7 +87,7 @@ class CreateTypes extends Component
             $this->a = "suma";
             $this->signatureFlows['S.G.D.P Hospital'] = 16593799;
             $this->signatureFlows['Jefe Finanzas'] = 13866194;
-            $this->signatureFlows['Director Hospital'] = 14101085;
+            $this->signatureFlows['Director Hospital'] = 12029814;
           }else{
             $this->signatureFlows['Planificación CG RRHH'] = 18263660; // 59 - Planificación y Control de Gestión de Recursos Humanos
             $this->signatureFlows['S.G.D.P SSI'] = 15685508; // 44 - Subdirección de Gestión y Desarrollo de las Personas
