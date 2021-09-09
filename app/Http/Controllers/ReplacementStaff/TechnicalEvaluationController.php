@@ -7,6 +7,7 @@ use App\Models\ReplacementStaff\RequestReplacementStaff;
 use App\Models\ReplacementStaff\ReplacementStaff;
 use App\Models\ReplacementStaff\ProfessionManage;
 use App\Models\ReplacementStaff\ProfileManage;
+use App\Models\ReplacementStaff\AssignEvaluation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -44,17 +45,20 @@ class TechnicalEvaluationController extends Controller
      */
     public function store(Request $request, RequestReplacementStaff $requestReplacementStaff)
     {
+        $assign_evaluation = new AssignEvaluation($request->All());
+        $assign_evaluation->user()->associate(Auth::user());
+        $assign_evaluation->requestReplacementStaff()->associate($requestReplacementStaff);
+        $assign_evaluation->save();
+
         $technicalEvaluation = new TechnicalEvaluation();
-        // $date = Carbon::now();
         $technicalEvaluation->technical_evaluation_status = 'pending';
         $technicalEvaluation->user()->associate(Auth::user());
         $technicalEvaluation->organizational_unit_id = Auth::user()->organizationalUnit->id;
         $technicalEvaluation->request_replacement_staff_id = $requestReplacementStaff->id;
         $technicalEvaluation->save();
 
-        session()->flash('success', 'Se ha creado Exitosamente el Proceso de Selección');
-        return redirect()->route('replacement_staff.request.technical_evaluation.edit', compact('technicalEvaluation',
-            'requestReplacementStaff'));
+        session()->flash('success', 'Se ha asignado exitosamente el Proceso de Selección');
+        return redirect()->route('replacement_staff.request.index');
     }
 
     /**
