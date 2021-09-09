@@ -106,7 +106,37 @@
 
 <br>
 
-<div class="table-responsive">
+<div class="card" id="commission">
+    <div class="card-header">
+        <h6>Funcionario(s) asignados a esta solicitud</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered">
+                <thead class="small">
+                    <tr class="table-active">
+                        <th><i class="fas fa-calendar-alt"></i> Fecha</th>
+                        <th><i class="fas fa-user"></i> De</th>
+                        <th><i class="fas fa-user"></i> Para</th>
+                        <th><i class="fas fa-info"></i> Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                  @foreach($technicalEvaluation->requestReplacementStaff->assignEvaluations as $assignEvaluation)
+                    <tr>
+                        <td>{{ $assignEvaluation->created_at->format('d-m-Y H:i:s') }}</th>
+                        <td>{{ $assignEvaluation->user->FullName }}</td>
+                        <td>{{ $assignEvaluation->userAssigned->FullName }}</td>
+                        <td>{{ $assignEvaluation->observation }}</td>
+                    </tr>
+                  @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="table-responsive">
     <table class="table table-sm table-bordered">
         <thead class="small">
             <tr class="table-active">
@@ -128,7 +158,7 @@
             </tr>
         </tbody>
     </table>
-</div>
+</div> -->
 
 <br>
 
