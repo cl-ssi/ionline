@@ -63,10 +63,10 @@
         </fieldset>
 
 
-        <fieldset class="form-group col-md-1">
+        <!-- <fieldset class="form-group col-md-1">
             <label for="">&nbsp;</label>
             <button type="submit" class="btn btn-outline-primary" title="Descargar Excel" name="excel">Descargar Excel<i class="fas fa-file-excel"></i> </button>
-        </fieldset>
+        </fieldset> -->
     </div>
 
 </form>
