@@ -16,6 +16,7 @@ class PurchasingProcess extends Component
   public $arrayPurchaseMechanism=[['value'=>'']], $arrayPurchaseType=[['value'=>'']], $arrayPurchaseUnit=[['value'=>'']];
   public $lastKey, $selectedItems;
   public $arrayCheckBox, $arrayVista, $arrayBgTable;
+  public $arrayLstPurchaseType;// = array();
   public $idOC, $idInternalOC, $dateOC, $shippingDateOC, $idBigBuy, $pesoAmount, $dollarAmount,
          $ufAmount, $deliveryTerm, $deliveryDate, $idOffer, $idQuotation, $arrayPurchasingProcessStatus;
 
@@ -23,25 +24,26 @@ class PurchasingProcess extends Component
         $this->requestForm            = $requestForm;
         $this->purchaseMechanism      = $requestForm->purchaseMechanism->id;
         $this->purchaseUnit           = $requestForm->purchaseUnit->id;
-        //$this->purchaseType           = $requestForm->purchaseType->id;
-        $this->lstPurchaseType        = PurchaseType::all();
+        $this->purchaseType           = $requestForm->purchaseType->id;
         $this->lstPurchaseUnit        = PurchaseUnit::all();
         $this->lstPurchaseMechanism   = PurchaseMechanism::all();
         $this->radioSource            = null;
+        $this->lstPurchaseType        = $requestForm->purchaseMechanism->purchaseTypes()->get();
         $this->configInitialParameters();
     }
 
     /*Esta funcion configura parametros iniciales*/
-    private function configInitialParameters(){
+    public function configInitialParameters(){
         foreach($this->requestForm->itemRequestForms as $key => $item){
           $this->setArrayVista(false, $key);
           $this->setCheckBoxStatus('enabled', $key);
           $this->setArrayBgTable($key);
           $this->setArrayCheckBox(0, $key);
           $this->setArrayPurchaseMechanism($item->getPurchasingProcess('in_progress')->purchaseMechanism->id, $key);
-          //$this->setArrayPurchaseType($item->getPurchasingProcess('in_progress')->purchaseType->id, $key);
+          $this->setArrayPurchaseType($item->getPurchasingProcess('in_progress')->purchaseType->id, $key);
           $this->setArrayPurchaseUnit($item->getPurchasingProcess('in_progress')->purchaseUnit->id, $key);
           $this->setInitialValues($key, $item);
+          $this->arrayLstPurchaseType[] = $item->getPurchasingProcess('in_progress')->purchaseMechanism->purchaseTypes()->get();
         }
     }
 
@@ -49,6 +51,13 @@ class PurchasingProcess extends Component
       items en la tabla de bienes y/o servicios*/
     private function setArrayVista($status, $key){
       $this->arrayVista[$key]=$status;
+    }
+
+    public function changePurchaseMechanism($key){
+      if($key=='lst' && $this->purchaseMechanism !='null')
+        $this->lstPurchaseType = PurchaseMechanism::find($this->purchaseMechanism)->purchaseTypes()->get();
+      elseif($this->arrayPurchaseMechanism[$key]['value'] != "")
+        $this->arrayLstPurchaseType[$key] = PurchaseMechanism::find($this->arrayPurchaseMechanism[$key]['value'])->purchaseTypes()->get();
     }
 
     /*Configura el color de fondo de las Filas en tabla de items.
