@@ -16,8 +16,8 @@
               <td class="col-3 align-middle">{{ $requestForm->organizationalUnit->getInitialsAttribute() }}</td>
               <th class="text-muted col-3 align-middle">Mecanismo de Compra</th>
               <td class="col-3 align-middle">
-                  <select wire:model="purchaseMechanism" name="purchaseMechanism" class="form-control form-control-sm" required>
-                    <option>Seleccione...</option>
+                  <select wire:model="purchaseMechanism" name="purchaseMechanism" wire:change="changePurchaseMechanism('lst')" class="form-control form-control-sm" required>
+
                     @foreach($lstPurchaseMechanism as $val)
                       <option value="{{$val->id}}">{{$val->name}}</option>
                     @endforeach
@@ -52,7 +52,7 @@
               <th class="text-muted col-3 align-middle">Tipo de Compra</th>
               <td class="col-3 align-middle">
                 <select wire:model.defer="purchaseType" wire:click="resetError" name="purchaseType" class="form-control form-control-sm" required>
-                    <option value="">Seleccione...</option>
+
                   @foreach($lstPurchaseType as $type)
                     <option value="{{$type->id}}">{{$type->name}}</option>
                   @endforeach
@@ -61,7 +61,7 @@
               <th class="text-muted col-3 align-middle">Unidad de Compra</th>
               <td class="col-3 align-middle">
                 <select wire:model.defer="purchaseUnit" wire:click="resetError" name="purchaseUnit" class="form-control form-control-sm" required>
-                    <option value="">Seleccione...</option>
+                    
                   @foreach($lstPurchaseUnit as $unit)
                     <option value="{{$unit->id}}">{{$unit->name}}</option>
                   @endforeach
@@ -171,8 +171,8 @@
                       <div class="row mb-3">
                         <div class="col-4">
                             <label class="font-weight-bold text-muted ml-1 mb-0">Mecanismo de Compra:</label>
-                            <select wire:model.defer="arrayPurchaseMechanism.{{ $key }}.value" wire:click="resetError" class="form-control form-control-sm" required>
-                              <option selected>Seleccione...</option>
+                            <select wire:model.defer="arrayPurchaseMechanism.{{ $key }}.value" wire:click="resetError" wire:change="changePurchaseMechanism('{{$key}}')" class="form-control form-control-sm" required>
+                              <option selected value="">Seleccione...</option>
                               @foreach($lstPurchaseMechanism as $val)
                               <option value="{{$val->id}}">{{$val->name}}</option>
                               @endforeach
@@ -182,8 +182,8 @@
                             <label class="font-weight-bold text-muted ml-1 mb-0">Tipo de Compra:</label>
                             <select wire:model.defer="arrayPurchaseType.{{ $key }}.value" wire:click="resetError" class="form-control form-control-sm" required>
                                 <option selected>Seleccione...</option>
-                              @foreach($lstPurchaseType as $type)
-                                <option value="{{$type->id}}">{{$type->name}}</option>
+                              @foreach($arrayLstPurchaseType[$key] as $type)
+                                <option value="{{$type["id"]}}">{{$type["name"]}}</option>
                               @endforeach
                             </select>
                         </div>

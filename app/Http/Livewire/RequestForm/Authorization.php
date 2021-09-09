@@ -58,7 +58,7 @@ class Authorization extends Component
         $purchasingProcess = new PurchasingProcess([
           'status'                  =>        'in_progress',
           'purchase_mechanism_id'   =>        $this->purchaseMechanism,
-          //'purchase_type_id'        =>        $this->purchaseType,
+          'purchase_type_id'        =>        $this->purchaseType,
           'purchase_unit_id'        =>        $this->purchaseUnit,
         ]);
         $item->purchasingProcesses()->save($purchasingProcess);
@@ -93,7 +93,7 @@ class Authorization extends Component
         );
         $this->requestForm->supervisor_user_id      =  $this->supervisorUser;
         $this->requestForm->purchase_unit_id        =  $this->purchaseUnit;
-        //$this->requestForm->purchase_type_id        =  $this->purchaseType;
+        $this->requestForm->purchase_type_id        =  $this->purchaseType;
         $this->requestForm->purchase_mechanism_id   =  $this->purchaseMechanism;
         $this->createPurchasingProcesses();
       }
