@@ -76,17 +76,35 @@
             }
         </style>
 
-        @foreach($calendar as $key => $entry)
+        @foreach($calendar as $item)
 
-            <div class="dia_calendario small p-2" {!! ($today->format('Y-m-d') == $key)?'style="border: 2px solid black;"':'' !!}>
+            <div class="dia_calendario small p-2" {!! ($today->format('Y-m-d') == $item['date'])?'style="border: 2px solid black;"':'' !!}>
                 <center>
-                    {{ $key }}                    
+                    {{ $item['date'] }}
+                    @if($item['manager'])
                     <hr class="mt-1 mb-1" >
-                    @if($entry) {{ $entry->user->name }} @endif <br>
-                    @if($entry) {{ $entry->user->fathers_family }} @endif <br>
-                    @if($entry) {{ $entry->user->mothers_family }} @endif <br>
-                    <hr class="mt-1 mb-1">
-                    @if($entry) <em class="text-muted">{{ $entry->position }}</em> @endif <br>
+                    {{ $item['manager']->user->name }} <br>
+                    {{ $item['manager']->user->fathers_family }} <br>
+                    {{ $item['manager']->user->mothers_family }} <br>
+                    <!-- <hr class="mt-1 mb-1"> -->
+                    <em class="text-muted">{{ $item['manager']->position }}</em><br>
+                    @endif
+                    @if($item['delegate'])
+                    <hr class="mt-1 mb-1" >
+                    {{ $item['delegate']->user->name }} <br>
+                    {{ $item['delegate']->user->fathers_family }} <br>
+                    {{ $item['delegate']->user->mothers_family }} <br>
+                    <!-- <hr class="mt-1 mb-1"> -->
+                    <em class="text-muted">{{ $item['delegate']->position }}</em><br>
+                    @endif
+                    @if($item['secretary'])
+                    <hr class="mt-1 mb-1" >
+                    {{ $item['secretary']->user->name }} <br>
+                    {{ $item['secretary']->user->fathers_family }} <br>
+                    {{ $item['secretary']->user->mothers_family }} <br>
+                    <!-- <hr class="mt-1 mb-1"> -->
+                    <em class="text-muted">{{ $item['secretary']->position }}</em> <br>
+                    @endif
                 </center>
             </div>
 

@@ -77,17 +77,17 @@ class Fulfillment extends Model implements Auditable
 
   public function responsableUser()
   {
-    return $this->belongsTo('App\User', 'responsable_approver_id');
+    return $this->belongsTo('App\User', 'responsable_approver_id')->withTrashed();;
   }
 
   public function rrhhUser()
   {
-    return $this->belongsTo('App\User', 'rrhh_approver_id');
+    return $this->belongsTo('App\User', 'rrhh_approver_id')->withTrashed();
   }
 
   public function financesUser()
   {
-    return $this->belongsTo('App\User', 'finances_approver_id');
+    return $this->belongsTo('App\User', 'finances_approver_id')->withTrashed();;
   }
 
   public function signedCertificate()
