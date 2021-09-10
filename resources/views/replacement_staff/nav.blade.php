@@ -17,11 +17,6 @@
                 <i class="fas fa-inbox"></i> Solicitudes
             </a>
             <div class="dropdown-menu">
-                @can('Replacement Staff: technical evaluation')
-                <a class="dropdown-item" href="{{ route('replacement_staff.request.index') }}"><i class="fas fa-inbox"></i> Reclutamiento: Gestión de Solicitudes</a>
-                <div class="dropdown-divider"></div>
-                @endcan
-
                 <a class="dropdown-item" href="{{ route('replacement_staff.request.own_index') }}"><i class="fas fa-inbox"></i> Mis Solicitudes</a>
 
                 <a class="dropdown-item disabled" href="{{ route('replacement_staff.request.ou_index') }}"><i class="fas fa-inbox"></i> Solicitudes de mi U.O.</a>
@@ -39,6 +34,23 @@
            </div>
        </li>
     @endif
+
+    @canany(['Replacement Staff: assign request', 'Replacement Staff: technical evaluation'])
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+            <i class="fas fa-users"></i> Unidad de Reclutamiento
+        </a>
+
+        <div class="dropdown-menu">
+            @can('Replacement Staff: assign request')
+            <a class="dropdown-item" href="{{ route('replacement_staff.request.index') }}"><i class="fas fa-user-tag"></i> Asignar Solicitud</a>
+            @endcan
+            @can('Replacement Staff: technical evaluation')
+            <a class="dropdown-item" href="{{ route('replacement_staff.request.assign_index') }}"><i class="fas fa-inbox"></i> Reclutamiento: Gestión de Solicitudes</a>
+            @endcan
+        </div>
+   </li>
+   @endcan
 
     @canany(['Replacement Staff: manage'])
     <li class="nav-item dropdown">

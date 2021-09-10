@@ -35,8 +35,13 @@ class ContractExport implements FromCollection, WithHeadings, WithMapping, Shoul
         // ->get();
         
         return 
-        ServiceRequest::whereDate('start_date','<=',$this->request->from)
-        ->whereDate('end_date','>=',$this->request->from)        
+        ServiceRequest::
+        //whereDate('start_date','<=',$this->request->from)
+        where('type','Covid')
+        ->whereHas("SignatureFlows", function ($subQuery) {
+            $subQuery->where('status','<>', 0);
+          })
+        ->whereDate('end_date','<=','2021-09-30')        
         ->orderBy('start_date')
         ->get();
     }

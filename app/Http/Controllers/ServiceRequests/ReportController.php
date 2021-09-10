@@ -576,6 +576,11 @@ class ReportController extends Controller
     //$srs = ServiceRequest::select("*");
     $srs = ServiceRequest::paginate(100);
 
+
+
+    if ($request->has('excel')) {
+      return Excel::download(new ContractExport($request), 'reporte-de-contrato.xlsx');
+    }
     
     //lista los que no son vigente, creados, solicitados, que comiencen, que terminen entre
     if ($request->option != 'vigenci') {
@@ -605,20 +610,6 @@ class ReportController extends Controller
     ->orderBy('start_date')
     ->paginate(100);    
   }
-
-
-
-  if ($request->has('excel')) {
-    return Excel::download(new ContractExport($request), 'reporte-de-contrato.xlsx');
-  }
-
-
-
-  
-
-
-
-
 
     $request->flash(); // envía los inputs de regreso
     return view('service_requests.reports.contract', compact('request', 'responsabilityCenters','srs'));

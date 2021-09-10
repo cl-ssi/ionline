@@ -7,6 +7,7 @@ use App\Models\ReplacementStaff\ReplacementStaff;
 use App\Models\ReplacementStaff\RequestSign;
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -49,11 +50,38 @@ class RequestReplacementStaffController extends Controller
             })
             ->paginate(10);
 
-        // dd($pending_requests);
-        // $requestReplacementStaff = RequestReplacementStaff::orderBy('id', 'DESC')
-        //     ->paginate(10);
+        $users_rys = User::where('organizational_unit_id', 48)->get();
 
-        return view('replacement_staff.request.index', compact('pending_requests', 'requests'));
+        return view('replacement_staff.request.index', compact('pending_requests', 'requests', 'users_rys'));
+    }
+
+    public function assign_index()
+    {
+        $pending_requests = RequestReplacementStaff::latest()
+            ->where(function ($q){
+                $q->doesntHave('technicalEvaluation')
+                ->orWhereHas('technicalEvaluation', function( $query ) {
+                  $query->where('technical_evaluation_status','pending');
+                });
+            })
+            ->OrWhereHas('requestSign', function($j) {
+              $j->Where('request_status', 'pending');
+            })
+            ->get();
+
+        $requests = RequestReplacementStaff::latest()
+            ->where(function ($q){
+                $q->whereHas('requestSign', function($j) {
+                    $j->Where('request_status', 'rejected');
+                })
+                ->orWhereHas('technicalEvaluation', function($y){
+                    $y->Where('technical_evaluation_status', 'complete')
+                    ->OrWhere('technical_evaluation_status', 'rejected');
+                });
+            })
+            ->paginate(10);
+
+        return view('replacement_staff.request.assign_index', compact('pending_requests', 'requests'));
     }
 
     public function own_index()
@@ -88,14 +116,14 @@ class RequestReplacementStaffController extends Controller
         return view('replacement_staff.request.own_index', compact('my_request', 'my_pending_requests'));
     }
 
-    public function ou_index()
-    {
-        $ou_request = RequestReplacementStaff::where('organizational_unit_id', Auth::user()->organizationalUnit->id)
-            ->orderBy('id', 'DESC')
-            ->paginate(10);
-
-        return view('replacement_staff.request.ou_index', compact('ou_request'));
-    }
+    // public function ou_index()
+    // {
+    //     $ou_request = RequestReplacementStaff::where('organizational_unit_id', Auth::user()->organizationalUnit->id)
+    //         ->orderBy('id', 'DESC')
+    //         ->paginate(10);
+    //
+    //     return view('replacement_staff.request.ou_index', compact('ou_request'));
+    // }
 
     public function to_sign(RequestReplacementStaff $requestReplacementStaff)
     {
