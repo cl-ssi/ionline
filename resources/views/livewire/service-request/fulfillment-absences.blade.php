@@ -80,7 +80,7 @@
       @foreach($fulfillment->FulfillmentItems as $key => $FulfillmentItem)
       <tr>
         <td>
-          @can('Service Request: fulfillments responsable')
+          @canany(['Service Request: fulfillments responsable','Service Request: fulfillments rrhh'])
           @if($fulfillment->responsable_approver_id == NULL)
           <!-- <form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.destroy', $FulfillmentItem) }}" class="d-inline">
             @csrf

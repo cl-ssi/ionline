@@ -162,7 +162,8 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/show_file/{training}', [TrainingController::class, 'show_file'])->name('show_file');
     });
     Route::prefix('request')->name('request.')->group(function(){
-        Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index')->middleware(['role:Replacement Staff: admin']);
+        Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index')->middleware('permission:Replacement Staff: assign request');
+        Route::get('/assign_index', [RequestReplacementStaffController::class, 'assign_index'])->name('assign_index')->middleware('permission:Replacement Staff: technical evaluation');
         Route::get('/own_index', [RequestReplacementStaffController::class, 'own_index'])->name('own_index');
         Route::get('/ou_index', [RequestReplacementStaffController::class, 'ou_index'])->name('ou_index');
         Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
@@ -176,7 +177,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         });
         Route::prefix('technical_evaluation')->name('technical_evaluation.')->group(function(){
             Route::get('/{technicalEvaluation}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
-            Route::get('/store/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'store'])->name('store');
+            Route::post('/store/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'store'])->name('store');
             Route::prefix('commission')->name('commission.')->group(function(){
                 Route::post('/store/{technicalEvaluation}', [CommissionController::class, 'store'])->name('store');
                 Route::delete('{commission}/destroy', [CommissionController::class, 'destroy'])->name('destroy');
@@ -494,6 +495,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/certificate-pdf/{fulfillment}/{user?}', [FulfillmentController::class, 'certificatePDF'])->name('certificate-pdf');
             Route::get('/signed-certificate-pdf/{fulfillment}/{timestamp?}', [FulfillmentController::class, 'signedCertificatePDF'])->name('signed-certificate-pdf');
             Route::get('/delete-signed-certificate-pdf/{fulfillment}', [FulfillmentController::class, 'deletesignedCertificatePDF'])->name('delete-signed-certificate-pdf');
+            Route::get('/delete-responsable-vb/{fulfillment}', [FulfillmentController::class, 'deleteResponsableVB'])->name('delete-responsable-vb');
             //eliminar palabra fulfiment en URL y en metodo
             Route::get('/confirm-fulfillment/{fulfillment}', [FulfillmentController::class, 'confirmFulfillment'])->name('confirm-Fulfillment');
             Route::get('/refuse-fulfillment/{fulfillment}', [FulfillmentController::class, 'refuseFulfillment'])->name('refuse-Fulfillment');

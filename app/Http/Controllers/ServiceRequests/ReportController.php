@@ -20,6 +20,8 @@ use App\Establishment;
 use App\Rrhh\OrganizationalUnit;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ComplianceExport;
+use App\Exports\ContractExport;
+
 
 class ReportController extends Controller
 {
@@ -574,18 +576,40 @@ class ReportController extends Controller
     //$srs = ServiceRequest::select("*");
     $srs = ServiceRequest::paginate(100);
 
+
+
+    if ($request->has('excel')) {
+      return Excel::download(new ContractExport($request), 'reporte-de-contrato.xlsx');
+    }
+    
+    //lista los que no son vigente, creados, solicitados, que comiencen, que terminen entre
+    if ($request->option != 'vigenci') {
     if ($request->has('from')) {
     $srs = ServiceRequest::whereBetween($request->option, [$request->from, $request->to])
     ->when($request->uo != null, function ($q) use ($request) {
       return $q->where('responsability_center_ou_id', $request->uo);
     })
+    ->when($request->type != null, function ($q) use ($request) {
+      return $q->where('type',  $request->type);
+    })
     ->orderBy($request->option)
     ->paginate(100);
     }
+  }
 
-
-
-
+  else //aca son solo los vigentes
+  {
+    $srs = ServiceRequest::whereDate('start_date','<=',$request->from)
+    ->whereDate('end_date','>=',$request->to)
+    ->when($request->uo != null, function ($q) use ($request) {
+      return $q->where('responsability_center_ou_id', $request->uo);
+    })
+    ->when($request->type != null, function ($q) use ($request) {
+      return $q->where('type',  $request->type);
+    })
+    ->orderBy('start_date')
+    ->paginate(100);    
+  }
 
     $request->flash(); // envía los inputs de regreso
     return view('service_requests.reports.contract', compact('request', 'responsabilityCenters','srs'));

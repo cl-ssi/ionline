@@ -177,7 +177,8 @@
         @if(App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position == "Director")
           Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020
         @else
-          Resolución Exenta N°8847, de fecha 23 de diciembre del 2020
+          <!-- Resolución Exenta N°8847, de fecha 23 de diciembre del 2020 -->
+          {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         @endif
         del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
         @elseif($ServiceRequest->program_contract_type == "Horas")
@@ -186,7 +187,8 @@
         @if(App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position == "Director")
           Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020
         @else
-          Resolución Exenta N°8847, de fecha 23 de diciembre del 2020
+          <!-- Resolución Exenta N°8847, de fecha 23 de diciembre del 2020 -->
+          {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         @endif
         del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
         @else
@@ -194,7 +196,8 @@
         @if(App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position == "Director")
           Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020
         @else
-          Resolución Exenta N°8847, de fecha 23 de diciembre del 2020
+          <!-- Resolución Exenta N°8847, de fecha 23 de diciembre del 2020 -->
+          {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         @endif
         del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2021; Resoluciones N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República;
         @endif
@@ -582,7 +585,8 @@
         @if(App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position == "Director")
           Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020,
         @else
-          Resolución Exenta N°8847, de fecha 23 de diciembre del 2020,
+          <!-- Resolución Exenta N°8847, de fecha 23 de diciembre del 2020, -->
+          {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}}, 
         @endif
         del Servicio de Salud Iquique.
       </p>
@@ -599,7 +603,8 @@
         @if(App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position == "Director")
           Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020,
         @else
-          Resolución Exenta N°8847, de fecha 23 de diciembre del 2020,
+          <!-- Resolución Exenta N°8847, de fecha 23 de diciembre del 2020, -->
+          {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         @endif
         del Servicio de Salud Iquique.
       </p>
@@ -642,7 +647,8 @@
         @if(App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position == "Director")
           Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020,
         @else
-          Resolución Exenta N°8847, de fecha 23 de diciembre del 2020,
+          <!-- Resolución Exenta N°8847, de fecha 23 de diciembre del 2020, -->
+          {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         @endif
         del Servicio de Salud Iquique.
         @else
@@ -665,7 +671,8 @@
         @if(App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position == "Director")
           Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020,
         @else
-          Resolución Exenta N°8847, de fecha 23 de diciembre del 2020,
+          <!-- Resolución Exenta N°8847, de fecha 23 de diciembre del 2020, -->
+          {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         @endif
         del Servicio de Salud Iquique.
         @else

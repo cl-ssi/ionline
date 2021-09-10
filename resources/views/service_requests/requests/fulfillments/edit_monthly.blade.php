@@ -3,9 +3,6 @@
 	<div class="card-header">
 		<h4>Información del período: {{$fulfillment->year}}-{{$fulfillment->month}} ({{Carbon\Carbon::parse($fulfillment->year . "-" . $fulfillment->month)->monthName}}) <span class="small text-muted float-right">{{ $fulfillment->id}}</span></h4>
 	</div>
-	<div class="card-header">
-
-	</div>
 
 	<div class="card-body">
 
@@ -13,7 +10,7 @@
 			@csrf
 			@method('PUT')
 			<div class="form-row">
-				<fieldset class="form-group col-12 col-md">
+				<fieldset class="form-group col-12 col-md-2">
 					<label for="for_type">Período</label>
 					<select name="type" class="form-control" required>
 						<option value=""></option>
@@ -21,15 +18,15 @@
 						<option value="Parcial" @if($fulfillment->type == "Parcial") selected @endif>Parcial</option>
 					</select>
 				</fieldset>
-				<fieldset class="form-group col-6 col-md-3">
+				<fieldset class="form-group col-6 col-md-2">
 					<label for="for_estate">Inicio</label>
 					<input type="date" class="form-control" name="start_date" value="{{$fulfillment->start_date->format('Y-m-d')}}" required>
 				</fieldset>
-				<fieldset class="form-group col-6 col-md-3">
+				<fieldset class="form-group col-6 col-md-2">
 					<label for="for_estate">Término</label>
 					<input type="date" class="form-control" name="end_date" value="{{$fulfillment->end_date->format('Y-m-d')}}" required>
 				</fieldset>
-				<fieldset class="form-group col-12 col-md">
+				<fieldset class="form-group col-12 col-md-4">
 					<label for="for_estate">Observación</label>
 					<input type="text" class="form-control" name="observation" value="{{$fulfillment->observation}}">
 				</fieldset>
@@ -48,12 +45,14 @@
 				@endif
 				@endcan -->
 
-				@can('Service Request: fulfillments rrhh')
-				<fieldset class="form-group col">
+				
+				<fieldset class="form-group col-2">
 					<label for="for_estate"><br /></label>
+					@can('Service Request: fulfillments rrhh')
 					<button type="submit" class="form-control btn btn-primary">Guardar</button>
+					@endcan
 				</fieldset>
-				@endcan
+				
 
 				<!-- @can('Service Request: fulfillments finance')
 				@if($fulfillment->finances_approver_id == NULL)
@@ -204,8 +203,8 @@
 					Certificado firmado <i class="fas fa-signature"></i>
 				</a>
 				@can('Service Request: delete signed certificate')
-				<a class="btn btn-outline-danger ml-4" href="{{ route('rrhh.service-request.fulfillment.delete-signed-certificate-pdf',$fulfillment) }}" title="Borrar Certificado" onclick="return confirm('¿Está seguro que desea eliminar el certificado de cumplimiento firmado?')">
-				<i class="fas fa-trash"></i>
+				<a class="btn btn-outline-danger" href="{{ route('rrhh.service-request.fulfillment.delete-signed-certificate-pdf',$fulfillment) }}" title="Borrar Certificado" onclick="return confirm('¿Está seguro que desea eliminar el certificado de cumplimiento firmado?')">
+				<i class="fas fa-trash"></i> Certificado
 				</a>
 				@endcan
 				@else
@@ -222,10 +221,6 @@
 				@endif
 			</fieldset>
 			<fieldset class="form-group col text-right">
-				@php
-				//$reponsable = App\Rrhh\Authority;
-				@endphp
-
 				@can('Service Request: fulfillments responsable')
 				@if(Auth::user()->id == $serviceRequest->signatureFlows->where('sign_position',2)->first()->responsable_id or App\Rrhh\Authority::getAmIAuthorityFromOu(now(),['manager'],Auth::user()->id))
 				@if($fulfillment->responsable_approver_id == NULL)
@@ -236,73 +231,75 @@
 					Confirmar
 				</a>
 				@else
-				<button type="submit" class="btn btn-danger" disabled>Rechazar</button>
-				<button type="submit" class="btn btn-success" disabled>Confirmar</button>
+				<button class="btn btn-danger" disabled>Rechazar</button>
+				<button class="btn btn-success" disabled>Confirmar</button>
 				@endif
 				@endif
 				@endcan
-
+				@can('Service Request: delete signed certificate')
+        		<a class="btn btn-outline-danger" href="{{ route('rrhh.service-request.fulfillment.delete-responsable-vb',$fulfillment) }}" title="Borrar Aprobación Responsable" onclick="return confirm('¿Está seguro que desea eliminar la aprobación del responsable, deberá contactar a responsable para que vuelva a dar VB?')">
+					<i class="fas fa-trash"></i> Aprobación
+				</a>
+        		@endcan
 			</fieldset>
 		</div>
-		<div class="form-row">
-			<div class="col-12 col-md-6">
-				<strong>Valor de la boleta</strong>
-				<div>
-					$ @livewire('service-request.monthly-value',['fulfillment' => $fulfillment])
+
+
+		<!--archivos adjuntos-->
+		<div class="card">
+			<div class="card-body">
+				<h6 class="card-title">Adjuntar archivos al cumplimiento (opcional)</h6>
+
+					@if($fulfillment->attachments->count() > 0)
+					<table class="table table-sm small table-bordered">
+						<thead class="text-center">
+
+							<tr class="table-secondary">
+								<th width="160">Fecha de Carga</th>
+								<th>Nombre</th>
+								<th>Archivo</th>
+								<th width="100"></th>
+								<th width="50"></th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach($fulfillment->attachments as $attachment)
+							<tr>
+								<td>{{ $attachment->updated_at->format('d-m-Y H:i:s') }}</td>
+								<td>{{ $attachment->name ?? '' }}</td>
+								<td class="text-center">
+									@if(pathinfo($attachment->file, PATHINFO_EXTENSION) == 'pdf')
+									<i class="fas fa-file-pdf fa-2x"></i>
+									@endif
+								</td>
+								<td>
+									<a href="{{ route('rrhh.service-request.fulfillment.attachment.show', $attachment) }}" class="btn btn-outline-secondary btn-sm" title="Ir" target="_blank"> <i class="far fa-eye"></i></a>
+									<a class="btn btn-outline-secondary btn-sm" href="{{ route('rrhh.service-request.fulfillment.attachment.download', $attachment) }}" target="_blank"><i class="fas fa-download"></i>
+									</a>
+								</td>
+								<td>
+									<form method="POST" class="form-horizontal" action="{{ route('rrhh.service-request.fulfillment.attachment.destroy', $attachment) }}">
+										@csrf
+										@method('DELETE')
+										<button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro que desea eliminar este archivo adjunto?')">
+											<i class="fas fa-trash"></i>
+										</button>
+
+									</form>
+								</td>
+
+							</tr>
+							@endforeach
+						</tbody>
+					</table>
+					@endif
+					<div>
+						@livewire('service-request.attachments-fulfillments', ['var' => $fulfillment->id])
+					</div>
 				</div>
 			</div>
-
-		</div>
-		<!--archivos adjuntos-->
-		<h4>Archivos Adjuntos (opcional)<h4>
-
-						@if($fulfillment->attachments->count() > 0)
-						<table class="table small table-striped table-bordered">
-							<thead class="text-center">
-
-								<tr>
-									<td style="width: 11%">Fecha de Carga</td>
-									<th>Nombre</th>
-									<th>Archivo</th>
-									<th style="width: 10%"></th>
-									<th style="width: 2%"></th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach($fulfillment->attachments as $attachment)
-								<tr>
-									<td>{{ $attachment->updated_at->format('d-m-Y H:i:s') }}</td>
-									<td class="text-center">{{ $attachment->name ?? '' }}</td>
-									<td class="text-center">
-										@if(pathinfo($attachment->file, PATHINFO_EXTENSION) == 'pdf')
-										<i class="fas fa-file-pdf fa-2x"></i>
-										@endif
-									</td>
-									<td>
-										<a href="{{ route('rrhh.service-request.fulfillment.attachment.show', $attachment) }}" class="btn btn-outline-secondary btn-sm" title="Ir" target="_blank"> <i class="far fa-eye"></i></a>
-										<a class="btn btn-outline-secondary btn-sm" href="{{ route('rrhh.service-request.fulfillment.attachment.download', $attachment) }}" target="_blank"><i class="fas fa-download"></i>
-										</a>
-									</td>
-									<td>
-										<form method="POST" class="form-horizontal" action="{{ route('rrhh.service-request.fulfillment.attachment.destroy', $attachment) }}">
-											@csrf
-											@method('DELETE')
-											<button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro que desea eliminar este archivo adjunto?')">
-												<i class="fas fa-trash"></i>
-											</button>
-
-										</form>
-									</td>
-
-								</tr>
-								@endforeach
-							</tbody>
-						</table>
-						@endif
-						<div>
-							@livewire('service-request.attachments-fulfillments', ['var' => $fulfillment->id])
-						</div>
 			<!--fin archivos adjuntos-->
+
 		</div>
 		</div>
 
@@ -375,25 +372,31 @@
 			</div>
 		</form>
 		@endcan
+
 		<!-- información  boleta -->
 		<div class="card border-warning mb-3">
-				<div class="card-header bg-warning text-white">
-					Boleta
-				</div>
-				<div class="card-body">
+			<div class="card-header bg-warning text-white">
+				Boleta
+			</div>
+			<div class="card-body">
 
-					<div class="form-row">
+				<div class="form-row">
 
-						<div class="col-md-7">
-							@if($fulfillment->total_to_pay)
-							@livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment])
-							@else
-							No se ha ingresado el "Total a pagar".
-							@endif
+					<div class="col-12 col-md-8">
+						@if($fulfillment->total_to_pay)
+						@livewire('service-request.upload-invoice', ['fulfillment' => $fulfillment])
+						@else
+						No se ha ingresado el "Total a pagar".
+						@endif
+					</div>
+					<div class="col-12 col-md-4">
+						<strong>Valor de la boleta</strong>
+						<div>
+							$ @livewire('service-request.monthly-value',['fulfillment' => $fulfillment])
 						</div>
-
 					</div>
 				</div>
+			</div>
 		</div>
 		<!-- fin información boleta -->
 		<!-- información adicional finanzas -->
