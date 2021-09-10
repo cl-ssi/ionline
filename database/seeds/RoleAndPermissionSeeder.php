@@ -135,6 +135,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Replacement Staff: list rrhh']);
         Permission::create(['name' => 'Replacement Staff: manage']);
         Permission::create(['name' => 'Replacement Staff: technical evaluation']);
+        Permission::create(['name' => 'Replacement Staff: assign request']);
 
         // @role(
         //   'Replacement Staff: admin |

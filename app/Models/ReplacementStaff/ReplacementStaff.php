@@ -27,7 +27,7 @@ class ReplacementStaff extends Model
 
     public function getFullNameAttribute()
     {
-        return strtoupper("{$this->name} {$this->fathers_family} {$this->mothers_family}");
+        return $this->name.' '.$this->fathers_family.' '.$this->mothers_family;
     }
 
     public function getIdentifierAttribute()

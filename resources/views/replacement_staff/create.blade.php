@@ -58,7 +58,7 @@
     <div class="form-row">
         <fieldset class="form-group col-6">
             <label for="for_email">Correo Electrónico</label>
-            <input type="text" class="form-control" name="email" id="for_email" required>
+            <input type="email" class="form-control" name="email" id="for_email" required>
         </fieldset>
         <fieldset class="form-group col-3">
             <label for="for_telephone">Teléfono Movil</label>

@@ -144,7 +144,62 @@
 <br><br>
 
 
+@if($fulfillment->serviceRequest->working_day_type == "HORA MÉDICA" or $serviceRequest->working_day_type == "TURNO DE REEMPLAZO")
+<?php setlocale(LC_ALL, 'es'); ?>
+  <div class="nueve">
+      <div class="justify" style="width: 100%;">
+          Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades
+          estipuladas en su convenio de prestación de servicios con el
+          @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
+            @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
+              Consultorio General Urbano Dr. Hector Reyno,
+              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b> 
+              @if($fulfillment->serviceRequest->type == 'Covid')
+              durante el periodo de contingencia COVID  
+              @endif
+            @else
+              Servicio Salud Iquique,
+              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
+              @if($fulfillment->serviceRequest->type == 'Covid')
+              durante el periodo de contingencia COVID  
+              @endif
+            @endif
+          @else
+            Hospital Dr. Ernesto Torres Galdames,
+            por <b>horas extras realizadas en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}} </b>.
+          @endif
+            <br><br>
+
+
+              <table class="siete">
+                  <thead>
+                  <tr>
+                      <th>Inicio</th>
+                      <th>Término</th>
+                      <th>Observación</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  @foreach($fulfillment->shiftControls->sortBy('start_date') as $key => $shiftControl)
+                      <tr>
+                          <td>{{$shiftControl->start_date->format('d-m-Y H:i')}}</td>
+                          <td>{{$shiftControl->end_date->format('d-m-Y H:i')}}</td>
+                          <td>{{ ($fulfillment->serviceRequest->working_day_type == 'DIURNO PASADO A TURNO') ? 'DIURNO PASADO A TURNO' : $shiftControl->observation}}</td>
+                      </tr>
+                  @endforeach
+              </table>
+          <br>
+          @livewire('service-request.show-total-hours', ['fulfillment' => $fulfillment,
+                                                         'forCertificate' => true])
+
+          <br><br>Se extiende el presente certificado para ser presentado en recursos humanos, para que éste acredite la asistencia del funcionario.
+          Para posteriormente finanzas y contabilidad realice la gestión de pago.
+      </div>
+  </div>
+
+@else
 @if($fulfillment->type == "Mensual" || $fulfillment->type == "Parcial")
+
   @if($fulfillment->FulfillmentItems->count() == 0)
     <div class="nueve">
         <div class="justify" style="width: 100%;">
@@ -159,7 +214,11 @@
             @else
               Hospital Dr.Ernesto Torres Galdames
             @endif
-            durante el periodo del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>.
+            durante el periodo 
+            @if($fulfillment->serviceRequest->type == 'Covid')
+            de contingencia COVID
+            @endif
+            del <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>.
 
             <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
         </div>
@@ -177,7 +236,12 @@
               a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->add(1, 'day')->format('d/m/Y')}}</b>. 
               -->
               Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas en su convenio de prestación de servicios con el 
-              <b><span class="uppercase">{{$fulfillment->serviceRequest->establishment->name}}</span></b>, durante el periodo de contingencia COVID desde
+              <b><span class="uppercase">{{$fulfillment->serviceRequest->establishment->name}}</span></b>, 
+              @if($fulfillment->serviceRequest->type == 'Covid')
+              durante el periodo de
+              contingencia COVID
+              @endif
+              desde
               <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->sub(1, 'day')->format('d/m/Y')}}</b>.
               <br><br>
               Se deja constancia que presentó su renuncia voluntaria a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->format('d/m/Y')}}</b>
@@ -239,7 +303,11 @@
             @else
               Hospital Dr.Ernesto Torres Galdames
             @endif
-            durante el periodo de 
+
+            @if($fulfillment->serviceRequest->type == 'Covid')
+              durante el periodo de contingencia COVID  
+            @endif
+            
             <!-- contingencia COVID del  -->
             <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>,
             registrando las siguientes ausencias:
@@ -314,10 +382,16 @@
           @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
             @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
               Consultorio General Urbano Dr. Hector Reyno,
-              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
+              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b> 
+              @if($fulfillment->serviceRequest->type == 'Covid')
+              durante el periodo de contingencia COVID  
+              @endif
             @else
               Servicio Salud Iquique,
               <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
+              @if($fulfillment->serviceRequest->type == 'Covid')
+              durante el periodo de contingencia COVID  
+              @endif
             @endif
           @else
             Hospital Dr. Ernesto Torres Galdames,
@@ -351,6 +425,7 @@
           Para posteriormente finanzas y contabilidad realice la gestión de pago.
       </div>
   </div>
+@endif
 
 @endif
 

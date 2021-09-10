@@ -129,7 +129,7 @@
               <tr>
                   <th>#</th>
                   <th style="width: 8%">Fecha</th>
-                  <th>Cargo</th>
+                  <th>Solicitud</th>
                   <th>Grado</th>
                   <th>Calidad Jurídica</th>
                   <th>Periodo</th>
