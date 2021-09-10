@@ -194,8 +194,6 @@
                         </a>
                         @endcan
 
-                        {{-- dd() --}}
-
                         @if(Auth::user()->hasRole('Replacement Staff: admin'))
                             <div class="dropdown-divider"></div>
 
@@ -203,20 +201,29 @@
                                href="{{ route('replacement_staff.request.index') }}">
                                 <i class="far fa-id-card"></i> Staff de Reemplazos
                             </a>
-                        @else
-                            @if(Auth::user()->hasPermissionTo('Replacement Staff: create request') ||
-                                App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', Auth::user()->id))
+                        @endif
 
-                                <div class="dropdown-divider"></div>
+                        @if(Auth::user()->hasRole('Replacement Staff: user rys'))
+                            <div class="dropdown-divider"></div>
 
-                                <a class="dropdown-item @active('replacement_staff.request.own_index')"
-                                   href="{{ route('replacement_staff.request.own_index') }}">
-                                    <i class="far fa-id-card"></i> Staff de Reemplazos
-                                    @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
-                                        <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span>
-                                    @endif
-                                </a>
-                            @endif
+                            <a class="dropdown-item @active('replacement_staff.request.index')"
+                               href="{{ route('replacement_staff.request.index') }}">
+                                <i class="far fa-id-card"></i> Staff de Reemplazos
+                            </a>
+                        @endif
+
+                        @if(Auth::user()->hasRole('Replacement Staff: user') ||
+                            App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', Auth::user()->id))
+
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item @active('replacement_staff.request.own_index')"
+                               href="{{ route('replacement_staff.request.own_index') }}">
+                                <i class="far fa-id-card"></i> Staff de Reemplazos
+                                @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
+                                    <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span>
+                                @endif
+                            </a>
                         @endif
                     </div>
 

@@ -36,6 +36,10 @@ class RequestReplacementStaff extends Model
         return $this->hasOne('App\Models\ReplacementStaff\TechnicalEvaluation');
     }
 
+    public function assignEvaluations() {
+        return $this->hasMany('App\Models\ReplacementStaff\AssignEvaluation');
+    }
+
     public function getLegalQualityValueAttribute() {
         switch($this->legal_quality) {
           case 'to hire':
