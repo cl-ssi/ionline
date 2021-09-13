@@ -260,9 +260,10 @@ class ShiftManagementController extends Controller
             $groupname = $this->groupsnames[0];
         elseif( (!isset($groupname) || $groupname =="") && !isset($this->groupsnames[0]) )
             $groupname = "";
-
+        $shiftStatus = $this->shiftStatus;
+        $colorsRgb = $this->colorsRgb;
         $groupsnames =$this->groupsnames;
-        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter','groupname','groupsnames','ouRoots','holidays','actuallyShiftMonthsList'));
+        return view('rrhh.shift_management.index', compact('users','cargos','sTypes','days','actuallyMonth','actuallyDay','actuallyYear','months','actuallyOrgUnit','staff','actuallyShift','staffInShift','filter','groupname','groupsnames','ouRoots','holidays','actuallyShiftMonthsList','shiftStatus','colorsRgb'));
     }
 
  	public function indexfiltered(Request $r){
@@ -275,8 +276,13 @@ class ShiftManagementController extends Controller
         $cargos = OrganizationalUnit::all();
         $filter = "on";
 
-        $dateFiltered = Carbon::createFromFormat('Y-m-d',  $r->yearFilter."-".$r->monthFilter."-".$actuallyDay, 'Europe/London');
+        // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $r->yearFilter."-".$r->monthFilter."-".$actuallyDay, 'Europe/London');
 
+        // dd(  $r->monthYearFilter );
+        $dateFiltered = Carbon::createFromFormat('Y-m-d',  $r->monthYearFilter."-".$actuallyDay, 'Europe/London');
+        
+        // explode("delimiter", string)
+        
         $days = $dateFiltered->daysInMonth;
         $actuallyMonth = $dateFiltered->format('m');
         $actuallyYear = $dateFiltered->format('Y');
@@ -1209,9 +1215,11 @@ class ShiftManagementController extends Controller
                 $index++;
 
             }
+       
+        $name= Carbon::now()->format('Ymd-H:i');
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="reporte20210413-113325.xlsx"');
+        header('Content-Disposition: attachment;filename="reporte'.$name.'.xlsx"');
         header('Cache-Control: max-age=0');
  $sheet->getStyle('A1:AH1')->applyFromArray(
                     array(
@@ -1384,9 +1392,11 @@ class ShiftManagementController extends Controller
             $index++;
         }
 
+        $name= Carbon::now()->format('Ymd-H::i');
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="reporte20210413-113325.xlsx"');
+        // header('Content-Disposition: attachment;filename="reporte20210413-113325.xlsx"');
+        header('Content-Disposition: attachment;filename="reporte'.$name.'.xlsx"');
         header('Cache-Control: max-age=0');
 
         $writer = new Xlsx($spreadsheet);
@@ -1645,10 +1655,15 @@ class ShiftManagementController extends Controller
         $n->status = 1;
         $n->total_hours = $total_hours;
         $n->first_confirmation_commentary = $r->input("comment");
-        if( isset( $r->rechazar ) && $r->rechazar == 1 )
+        if( isset( $r->rechazar ) && $r->rechazar == 1 ){
             $n->first_confirmation_status = -1;
-        else
+            $msg = "se han rechazado los días";
+        }
+        else{
             $n->first_confirmation_status = 1;
+            $msg = "se han confirmado los días";
+
+        }
         $n->first_confirmation_date =  Carbon::now();
         $n->first_confirmation_user_id = Auth()->user()->id; 
         $n->date_of_closing_id = $r->input("cierreId");
