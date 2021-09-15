@@ -12,7 +12,7 @@
 
         <fieldset class="form-group col-md-3">
             <label for="for_option">Opción*</label>
-            <select name="option" class="form-control">
+            <select name="option" class="form-control" required>
                 <option value="">Seleccione Opción</option>
                 <option value="request_date" {{ (old('option')=='request_date')?'selected':'' }}>Solicitados entre</option>
                 <option value="start_date" {{ (old('option')=='start_date')?'selected':'' }}>Que comiencen entre</option>
@@ -22,30 +22,17 @@
         </fieldset>
 
 
-        <fieldset class="form-group col-sm-2">
+        <fieldset class="form-group col-md-3">
             <label for="for_from">Desde*</label>
-            <input type="date" class="form-control" min="1900-01-01" max="{{Carbon\Carbon::now()->toDateString()}}" name="from" value ={{ old('from') }} required>
+            <input type="date" class="form-control" min="2020-01-01" max="{{Carbon\Carbon::now()->toDateString()}}" name="from" value="{{ old('from') }}" required>
         </fieldset>
 
-        <fieldset class="form-group col-sm-2">
+        <fieldset class="form-group col-md-3">
             <label for="for_to">Hasta*</label>
-            <input type="date" class="form-control" min="1900-01-01" max="2022-01-01" name="to" value ={{ old('to') }} required>
+            <input type="date" class="form-control" min="2020-01-01" max="2022-01-01" name="to" value="{{ old('to') }}" required>
         </fieldset>
 
-        <fieldset class="form-group col-sm-3">
-            <label for="for_to">Unidad Organizacional</label>
-            <select name="uo" class="form-control">
-                <option value="">Todos</option>
-                @foreach($responsabilityCenters as $key => $responsabilityCenter)
-                <option value="{{$responsabilityCenter->id}}" {{ (old('uo')==$responsabilityCenter->id)?'selected':'' }}>{{$responsabilityCenter->name}}</option>
-                @endforeach
-
-            </select>
-        </fieldset>
-
-    </div>
-    <div class="form-row">
-    <fieldset class="form-group col-md-3">
+        <fieldset class="form-group col-md-3">
             <label for="for_type">Origen de financiamiento*</label>
             <select name="type" class="form-control">
                 <option value="">Todos</option>
@@ -54,8 +41,17 @@
             </select>
         </fieldset>
 
-
-
+    </div>
+    <div class="form-row">
+        <fieldset class="form-group col-md-5">
+            <label for="for_to">Unidad Organizacional</label>
+            <select name="uo" class="form-control">
+                <option value="">Todos</option>
+                @foreach($responsabilityCenters as $key => $responsabilityCenter)
+                <option value="{{$responsabilityCenter->id}}" {{ (old('uo')==$responsabilityCenter->id)?'selected':'' }}>{{$responsabilityCenter->name}}</option>
+                @endforeach
+            </select>
+        </fieldset>
 
         <fieldset class="form-group col-md-1">
             <label for="">&nbsp;</label>
@@ -65,28 +61,32 @@
 
         <fieldset class="form-group col-md-1">
             <label for="">&nbsp;</label>
-            <button type="submit" class="btn btn-outline-primary" title="Descargar Excel" name="excel">Descargar Excel<i class="fas fa-file-excel"></i> </button>
+            <button type="submit" class="btn btn-outline-success form-control" title="Descargar Excel" name="excel"><i class="fas fa-file-excel"></i></button>
         </fieldset>
     </div>
 
+    @livewire('select-organizational-unit')
+
 </form>
 
-
 <hr>
-<h3 class="mb-3">Reporte de contratos</h3>
-<table class="table table-sm table-bordered table-stripped" id="tabla_contrato">
+
+@if(!empty($srs))
+<h3 class="mb-3">Reporte de contratos <small>Cantidad de registros: {{ $total_srs }}</small></h3>
+<table class="table table-sm table-bordered small" id="tabla_contrato">
     <tr>
         <th>Id Sol.</th>
         <th>Tipo</th>
         <th>Origen Financiamiento</th>
-        <th nowrap>Rut</th>
+        <th>Rut</th>
         <th>Nombre</th>
         <th>Unidad Organizacional</th>
+        
+        <th>Inicio Contrato</th>
+        <th>Término Contrato</th>
         <th>Fecha Solicitud</th>
-        <th>F.Inicio de Contrato</th>
-        <th>F.Término de Contrato</th>
     </tr>
-    @if(isset($request->option))
+
     @foreach($srs as $sr)
     <tr>
         <td>
@@ -96,17 +96,17 @@
         </td>
         <td>{{ $sr->program_contract_type ?? '' }}</td>
         <td>{{ $sr->type ?? '' }}</td>
-        <td>{{ $sr->id ? $sr->employee->runFormat(): '' }}</td>
+        <td nowrap>{{ $sr->id ? $sr->employee->runFormat(): '' }}</td>
         <td class="text-uppercase">{{$sr->employee->fullname?? ''}}</td>
         <td>{{ $sr->responsabilityCenter->name ?? '' }}</td>
-        <td>{{ $sr->request_date ? $sr->request_date->format('d-m-Y'): '' }}</td>
-        <td>{{ $sr->start_date ? $sr->start_date->format('d-m-Y'): '' }}</td>
-        <td>{{ $sr->end_date ? $sr->end_date->format('d-m-Y'): '' }}</td>
+        <td nowrap>{{ $sr->start_date ? $sr->start_date->format('d-m-Y'): '' }}</td>
+        <td nowrap>{{ $sr->end_date ? $sr->end_date->format('d-m-Y'): '' }}</td>
+        <td nowrap>{{ $sr->request_date ? $sr->request_date->format('d-m-Y'): '' }}</td>
     </tr>
     @endforeach
-    @endif
+    
 </table>
 
 {{ $srs->appends(request()->query())->links() }}
-
+@endif
 @endsection
