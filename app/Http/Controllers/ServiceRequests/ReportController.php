@@ -566,55 +566,60 @@ class ReportController extends Controller
     return view('service_requests.reports.duplicate_contracts', compact('request', 'serviceRequests'));
   }
 
-  public function contract(Request $request)
-  {
+  	public function contract(Request $request)
+  	{
+    	$responsabilityCenters = OrganizationalUnit::where('establishment_id', Auth::user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
+    	//dd($responsabilityCenters);
 
-    $responsabilityCenters = OrganizationalUnit::where('establishment_id', Auth::user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
-    //dd($responsabilityCenters);
+		$srs = array();
+		$total_srs = 0;
+		
+		if(isset($request->option)) 
+		{
+			
+			$srs = ServiceRequest::query();
 
+			if ($request->has('excel')) {
+				return Excel::download(new ContractExport($request), 'reporte-de-contrato.xlsx');
+			}
+		
+			//lista los que no son vigente, creados, solicitados, que comiencen, que terminen entre
+			if ($request->option != 'vigenci') {
+				if ($request->has('from')) {
+					$srs = $srs->whereBetween($request->option, [$request->from, $request->to])
+						->when($request->uo != null, function ($q) use ($request) {
+							return $q->where('responsability_center_ou_id', $request->uo);
+					})
+					->when($request->type != null, function ($q) use ($request) {
+						return $q->where('type',  $request->type);
+					})
+					->orderBy($request->option);
+				}
+			}
 
-    //$srs = ServiceRequest::select("*");
-    $srs = ServiceRequest::paginate(100);
+			else //aca son solo los vigentes
+			{
+				$srs = $srs->whereDate('start_date','<=',$request->from)
+					->whereDate('end_date','>=',$request->to)
+					->when($request->uo != null, function ($q) use ($request) {
+						return $q->where('responsability_center_ou_id', $request->uo);
+					})
+					->when($request->type != null, function ($q) use ($request) {
+						return $q->where('type',  $request->type);
+					})
+					->orderBy('start_date');    
+			}
 
+			$total_srs = $srs->count(); 
+			
+			$srs = $srs->paginate(100);
 
+			$request->flash(); // envía los inputs de regreso
 
-    if ($request->has('excel')) {
-      return Excel::download(new ContractExport($request), 'reporte-de-contrato.xlsx');
-    }
-    
-    //lista los que no son vigente, creados, solicitados, que comiencen, que terminen entre
-    if ($request->option != 'vigenci') {
-    if ($request->has('from')) {
-    $srs = ServiceRequest::whereBetween($request->option, [$request->from, $request->to])
-    ->when($request->uo != null, function ($q) use ($request) {
-      return $q->where('responsability_center_ou_id', $request->uo);
-    })
-    ->when($request->type != null, function ($q) use ($request) {
-      return $q->where('type',  $request->type);
-    })
-    ->orderBy($request->option)
-    ->paginate(100);
-    }
-  }
-
-  else //aca son solo los vigentes
-  {
-    $srs = ServiceRequest::whereDate('start_date','<=',$request->from)
-    ->whereDate('end_date','>=',$request->to)
-    ->when($request->uo != null, function ($q) use ($request) {
-      return $q->where('responsability_center_ou_id', $request->uo);
-    })
-    ->when($request->type != null, function ($q) use ($request) {
-      return $q->where('type',  $request->type);
-    })
-    ->orderBy('start_date')
-    ->paginate(100);    
-  }
-
-    $request->flash(); // envía los inputs de regreso
-    return view('service_requests.reports.contract', compact('request', 'responsabilityCenters','srs'));
-
-  }
+		}
+    	return view('service_requests.reports.contract', 
+			compact('request', 'responsabilityCenters','srs','total_srs'));
+  	}
 
   public function export_sirh_txt(Request $request)
   {
