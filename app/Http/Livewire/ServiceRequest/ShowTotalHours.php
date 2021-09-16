@@ -17,6 +17,7 @@ class ShowTotalHours extends Component
     public $totalHoursDay;
     public $totalHoursNight;
     public $totalHours;
+    public $totalHoursContab;
     public $totalAmount;
     public $errorMsg;
     public $refundHours;
@@ -121,6 +122,7 @@ class ShowTotalHours extends Component
 
 
                 $this->totalHours = $this->totalHoursDay + $this->totalHoursNight;
+                $this->totalHoursContab = floor($this->totalHoursDay + $this->totalHoursNight);
                 $this->totalAmount = $this->totalHours * $this->fulfillment->serviceRequest->gross_amount;
                 break;
 
