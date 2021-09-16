@@ -57,7 +57,7 @@
 
                   <td>{{$shiftControl->start_date->format('Y-m-d H:i')}}</td>
                   <td>{{$shiftControl->end_date->format('Y-m-d H:i')}}</td>
-                  <td>{{$shiftControl->end_date->diffInHours($shiftControl->start_date)}}</td>
+                  <td>{{$shiftControl->end_date->diffInMinutes($shiftControl->start_date)/60}}</td>
                   <td>{{$shiftControl->observation}}</td>
                   <td>
 
