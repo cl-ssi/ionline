@@ -85,13 +85,11 @@
         <th>Inicio Contrato</th>
         <th>Término Contrato</th>
         <th>Fecha Solicitud</th>
-        <th>Término de contrato</th>
+        <th>Fecha de Renuncia</th>
     </tr>
 
     @foreach($srs as $sr)
-    <tr>
-        @if ($sr->fulfillment)
-        @if($sr->fulfillment->fulfillmentitems->where('type','!=','Renuncia voluntaria')->count() > 0)
+    <tr>        
 
 
         <td>
@@ -107,6 +105,11 @@
         <td nowrap>{{ $sr->start_date ? $sr->start_date->format('d-m-Y'): '' }}</td>
         <td nowrap>{{ $sr->end_date ? $sr->end_date->format('d-m-Y'): '' }}</td>
         <td nowrap>{{ $sr->request_date ? $sr->request_date->format('d-m-Y'): '' }}</td>
+        <td nowrap>
+        @if ($sr->fulfillment)
+        @if($sr->fulfillment->fulfillmentitems->where('type','!=','Renuncia voluntaria')->count() > 0)
+        {{ $sr->fulfillment->fulfillmentitems->where('type','!=','Renuncia voluntaria')->latest->get()->end_date }}
+        </td>
         @endif
         @endif
 
