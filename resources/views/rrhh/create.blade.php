@@ -66,7 +66,7 @@
 	</fieldset>
 -->
 
-	<div class="form-row">
+	<!-- <div class="form-row">
 		<fieldset class="form-group col-md-4">
 			<label for="forPosition">Cargo/Funcion</label>
 			<input type="text" class="form-control" id="forPosition" placeholder="Cargo/Funcion" name="position">
@@ -74,7 +74,6 @@
 
 		<fieldset class="form-group col-md-8">
 			<label for="forOrganizationalUnit">Unidad Organizacional</label>
-			<!-- <select class="custom-select" id="forOrganizationalUnit" name="organizationalunit"> -->
 				<select class="form-control selectpicker" data-live-search="true" id="forOrganizationalUnit" name="organizationalunit" required data-size="5">
 				<option></option>
 				@foreach($ouRoots as $ouRoot)
@@ -108,8 +107,9 @@
 				@endforeach
 			</select>
 		</fieldset>
+	</div> -->
 
-	</div>
+	@livewire('establishment-ou-search') 
 
 	<button type="submit" class="btn btn-primary">Crear</button>
 

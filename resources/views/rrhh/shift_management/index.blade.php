@@ -186,7 +186,7 @@
             </div>
 
             <div class="form-group col-md-3">
-                <label for="for_name" class="input-group-addon">Turnos</label>
+                <label for="for_name" class="input-group-addon">Series</label>
               
 
                                
@@ -215,23 +215,24 @@
                 </select>
             </div>
 
-            <div class="form-group col-md-2">	
-                <label for="for_name">Año</label>
-                <select class="form-control" id="for_yearFilter" name="yearFilter" onchange="this.form.submit()">
+            <div class="form-group col-md-4">	
+                <label for="for_name">Fecha</label>
+                <input type="month" class="form-control" onchange="this.form.submit()" name="monthYearFilter" value="{{ $actuallyYear."-".$actuallyMonth }}">
+                <!-- <select class="form-control" id="for_yearFilter" name="yearFilter" onchange="this.form.submit()">
                     @for($i = (intval($actuallyYear)-2); $i< (intval($actuallyYear) + 4); $i++)
                         <option value="{{$i}}" {{ ($i == $actuallyYear )?"selected":"" }}> {{$i}}</option>
                     @endfor	
-                </select>
+                </select> -->
             </div>
 
-            <div class="form-group col-md-2">    	
+            <!-- <div class="form-group col-md-2">    	
                 <label for="for_name">Mes</label>
                 <select class="form-control" id="for_monthFilter" name="monthFilter" onchange="this.form.submit()">
                     @foreach($months AS $index => $month)
                         <option value="{{ $index }}" {{ ($index == $actuallyMonth )?"selected":"" }}>{{$loop->iteration}} - {{$month}} </option>
                     @endforeach
                 </select> 		
-            </div>
+            </div> -->
 
          <!--    <div class="form-group col-md-1">
                 <label for="for_submit">&nbsp;</label>
@@ -239,8 +240,8 @@
             </div> -->
 
         </div>
-
     </form>
+
 
 
     <!-- Select con personal de la unidad  -->
@@ -258,9 +259,9 @@
        
         <div class="form-row"> 	
             <div class="col-md-4">
-                <label>Personal de"{{$actuallyOrgUnit->name}}"</label>
-                <select class="selectpicker form-control" data-live-search="true" name="slcStaff">
-                    <option> - </option>
+                <label>Personal de "{{$actuallyOrgUnit->name}}"</label>
+                <select class="selectpicker form-control"  data-live-search="true" name="slcStaff" required>
+                    <option value=""> - </option>
                     @foreach($staff as $user)
                         <option value="{{$user->id}}">
                             {{$user->runFormat() }} - {{ $user->fullName }}
@@ -273,8 +274,7 @@
                 <input type="text" class="form-control" name="groupname" 
                     value="{{strtoupper(html_entity_decode ($groupname))}}" placeholder="Sin grupo">
             </div>
-
-             <div class="col-md-1">
+            <div class="col-md-1">
                 <label>Inicio</label>
                 <select class="form-control" name="initialSerie">
                 @if(isset($actuallyShift->day_series))
@@ -293,13 +293,11 @@
                 <input type="date" class="form-control" name="dateFromAssign" 
                     value="{{$actuallyYear}}-{{$actuallyMonth}}-01">
             </div>
-
             <div class="col-md-2 ">
                 <label>Hasta</label>
                 <input type="date" class="form-control" name="dateUpAssign" 
                     value="{{$actuallyYear}}-{{$actuallyMonth}}-{{$days}}">
             </div>
-            
             <div class="col-md-1">
                 <label>&nbsp;</label>
                 <button class="btn btn-success form-control">
@@ -309,8 +307,14 @@
         </div>
 
     </form>
+    
+
+    @for( $i = 1 ; $i < (sizeof($shiftStatus)+1); $i++ )
+
+        <a href="#" class="badge badge-secondary" style="background-color:#{{$colorsRgb[$i]}}">{{ucfirst($shiftStatus[$i])}}</a>
 
 
+    @endfor
     <div class="row" class="small" style=" overflow: auto;white-space: nowrap;">
         <div class="col-md-2">
             
