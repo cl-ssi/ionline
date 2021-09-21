@@ -38,19 +38,28 @@ class ApplicantController extends Controller
      */
     public function store(Request $request, TechnicalEvaluation $technicalEvaluation)
     {
-        foreach ($request->replacement_staff_id as $key_file => $req) {
-            $exist = Applicant::where('replacement_staff_id', $req)->
-                Where('technical_evaluation_id', $technicalEvaluation->id)->
-                get();
-            if($exist->isEmpty()){
-                $applicant = new Applicant();
-                $applicant->replacement_staff_id = $req;
-                $applicant->technical_evaluation()->associate($technicalEvaluation);
-                $applicant->save();
-            }
+
+        if ($request->missing('replacement_staff_id')) {
+            return redirect()
+              ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#applicant')
+              ->with('message-danger-without-applicants', 'Estimado usuario, primero debe seleccionar postulante(s) al cargo');
         }
-        session()->flash('success', 'El postulante ha sido correctamente ingresado/s.');
-        return redirect()->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#applicant');
+        else{
+            foreach ($request->replacement_staff_id as $key_file => $req) {
+                $exist = Applicant::where('replacement_staff_id', $req)->
+                    Where('technical_evaluation_id', $technicalEvaluation->id)->
+                    get();
+                if($exist->isEmpty()){
+                    $applicant = new Applicant();
+                    $applicant->replacement_staff_id = $req;
+                    $applicant->technical_evaluation()->associate($technicalEvaluation);
+                    $applicant->save();
+                }
+            }
+            return redirect()
+                ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technical_evaluation_id).'#applicant')
+                ->with('message-success-applicants', 'El postulante ha sido correctamente ingresado/s.');
+        }
     }
 
     /**
@@ -101,8 +110,9 @@ class ApplicantController extends Controller
     {
         $applicant->delete();
 
-        session()->flash('danger', 'El postulante ha sido eliminado.');
-        return redirect()->back();
+        return redirect()
+          ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technical_evaluation_id).'#applicant')
+          ->with('message-danger-delete-applicants', 'Estimado usuario, primero debe seleccionar postulante(s) al cargo');
     }
 
     public function update_to_select(Request $request, Applicant $applicant)
