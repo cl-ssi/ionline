@@ -190,6 +190,7 @@
 				 		<!-- <small>Confirmado por supervisor area  <i class="fa fa-check"></i></small><br>
 				 		<small>Confirmado por supervicion medica <i class="fa fa-check"></i></small><br>
 				 		<small>Cerrado por supervisora rrhh <i class="fa fa-check"></i> </small> -->
+                        {{ json_encode ( $r->shift_close_id ) }}
 				 	</td>
 					
 				</tr>

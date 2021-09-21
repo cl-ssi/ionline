@@ -178,7 +178,12 @@ class MonthlyQuotes extends Component
         else {            ///son cuotas iguales
             $aguinaldo = '';
             if ($serviceRequest->weekly_hours == 22 or $serviceRequest->weekly_hours == 44 or $serviceRequest->weekly_hours == 11) {
-                $aguinaldo = $this->aguinaldopatrias($serviceRequest);
+
+                if ($serviceRequest->id !=8146)
+                {
+                    $aguinaldo = $this->aguinaldopatrias($serviceRequest);
+                }
+                
             }
 
             if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
