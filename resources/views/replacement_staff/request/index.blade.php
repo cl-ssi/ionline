@@ -117,7 +117,7 @@
                         @include('replacement_staff.modals.modal_to_assign')
 
                     @elseif($sign->request_status == "accepted" && $requestReplacementStaff->technicalEvaluation)
-                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->user_assigned->FullName }}">
+                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
                         <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
                               class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
                         </span>

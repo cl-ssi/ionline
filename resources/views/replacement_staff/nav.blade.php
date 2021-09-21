@@ -46,7 +46,7 @@
             <a class="dropdown-item" href="{{ route('replacement_staff.request.index') }}"><i class="fas fa-user-tag"></i> Asignar Solicitud</a>
             @endcan
             @can('Replacement Staff: technical evaluation')
-            <a class="dropdown-item" href="{{ route('replacement_staff.request.assign_index') }}"><i class="fas fa-inbox"></i> Reclutamiento: Gestión de Solicitudes</a>
+            <a class="dropdown-item" href="{{ route('replacement_staff.request.assign_index') }}"><i class="fas fa-inbox"></i> Reclutamiento: Evaluación Técnica</a>
             @endcan
         </div>
    </li>
