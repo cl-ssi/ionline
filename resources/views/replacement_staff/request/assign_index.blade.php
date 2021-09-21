@@ -7,8 +7,8 @@
 @include('replacement_staff.nav')
 
 <div class="row">
-    <div class="col-sm-3">
-        <h4 class="mb-3">Listado de Solicitudes: </h4>
+    <div class="col-sm-5">
+        <h4 class="mb-3">Listado de Solicitudes Asignadas: </h4>
     </div>
     <div class="col-sm-3">
         <p>
@@ -101,24 +101,12 @@
                     @endforeach
                 </td>
                 <td>
-                    @if($requestReplacementStaff->RequestSign->last()->request_status == "accepted" &&
-                      !$requestReplacementStaff->technicalEvaluation &&
-                      Auth::user()->hasPermissionTo('Replacement Staff: assign request'))
-                        <!-- <a href="{{ route('replacement_staff.request.technical_evaluation.store', $requestReplacementStaff) }}"
-                                onclick="return confirm('¿Está seguro de iniciar el proceso de selección?')"
-                                class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a> -->
-
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
-                          data-target="#exampleModal-assign-{{ $requestReplacementStaff->id }}">
-                            <i class="fas fa-user-tag"></i>
-                        </button>
-
-                        @include('replacement_staff.modals.modal_to_assign')
-
-                    @elseif($sign->request_status == "accepted" && $requestReplacementStaff->technicalEvaluation)
-                        Asignado a:
-                    @endif
+                  @if($requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
+                      <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
+                      <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
+                            class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
+                      </span>
+                  @endif
                 </td>
             </tr>
             @endforeach

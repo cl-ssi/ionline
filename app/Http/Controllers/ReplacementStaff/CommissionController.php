@@ -9,6 +9,7 @@ use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class CommissionController extends Controller
 {
@@ -49,11 +50,14 @@ class CommissionController extends Controller
             $commission->organizational_unit_id = $user_ou->organizationalUnit->id;
 
             $commission->technicalEvaluation()->associate($technicalEvaluation);
+            $commission->register_user_id = Auth::user()->id;
+
             $commission->save();
         }
 
-        session()->flash('success', 'Integrantes de Comisión ha/n sido correctamente ingresado/s.');
-        return redirect()->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#commission');
+        return redirect()
+          ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#commission')
+          ->with('message-success-commission', 'Integrante(s) de Comisión ha/n sido correctamente ingresado/s.');
     }
 
     /**
@@ -100,7 +104,9 @@ class CommissionController extends Controller
     {
         $commission->delete();
 
-        session()->flash('danger', 'El Integrante de Comisión ha sido eliminado de la Evaluación Técnica.');
-        return redirect()->back();
+        //session()->flash('danger', 'El Integrante de Comisión ha sido eliminado de la Evaluación Técnica.');
+        return redirect()
+        ->to(route('replacement_staff.request.technical_evaluation.edit', $commission->technicalEvaluation).'#commission')
+        ->with('message-danger-commission', 'El Integrante de Comisión ha sido eliminado de la Evaluación Técnica.');
     }
 }

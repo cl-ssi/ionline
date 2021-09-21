@@ -6,7 +6,6 @@
 
 @include('replacement_staff.nav')
 
-
 <div class="table-responsive">
     <table class="table table-sm table-striped table-bordered">
         <thead class="small">
@@ -133,6 +132,16 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Button trigger modal -->
+        @can('Replacement Staff: assign request')
+        <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal"
+          data-target="#exampleModal-assign-{{ $technicalEvaluation->requestReplacementStaff->id }}">
+            <i class="fas fa-user-tag"></i> Asignar nuevamente
+        </button>
+
+        @include('replacement_staff.modals.modal_to_re_assign')
+        @endcan
     </div>
 </div>
 
@@ -167,6 +176,23 @@
         <h6>Integrantes Comisión</h6>
     </div>
     <div class="card-body">
+        @if (session('message-success-commission'))
+          <div class="alert alert-success alert-dismissible fade show">
+              {{ session('message-success-commission') }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+        @endif
+        @if (session('message-danger-commission'))
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              {{ session('message-danger-commission') }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+        @endif
+
         <div class="table-responsive">
             <table class="table table-sm table-striped table-bordered">
                 <thead class="text-center small">
@@ -209,8 +235,11 @@
                 </tbody>
             </table>
         </div>
-        @livewire('replacement-staff.commission', ['users' => $users,
-                  'technicalEvaluation' => $technicalEvaluation])
+
+        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
+            @livewire('replacement-staff.commission', ['users' => $users,
+                      'technicalEvaluation' => $technicalEvaluation])
+        @endif
     </div>
     <br>
 </div>
@@ -219,9 +248,37 @@
 
 <div class="card" id="applicant">
     <div class="card-header">
-        <h6>Postulantes </h6>
+        <h6>Selección de RR.HH.</h6>
     </div>
     <div class="card-body">
+      @if (session('message-danger-without-applicants'))
+        <div class="alert alert-danger alert-dismissible fade show">
+            {{ session('message-danger-without-applicants') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      @endif
+
+      @if (session('message-danger-delete-applicants'))
+        <div class="alert alert-danger alert-dismissible fade show">
+            {{ session('message-danger-delete-applicants') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      @endif
+
+      @if (session('message-success-applicants'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('message-success-applicants') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      @endif
+
+      <h6>Postulantes a cargo(s)</h6>
       @if($technicalEvaluation->applicants->count() > 0)
         <div class="table-responsive">
             <table class="table table-sm table-striped table-bordered">
@@ -231,7 +288,9 @@
                       <th style="width: 22%">Calificación Evaluación Psicolaboral</th>
                       <th style="width: 22%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
                       <th style="width: 22%">Observaciones</th>
+                      @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
                       <th colspan="2"></th>
+                      @endif
                     </tr>
                 </thead>
                 <tbody class="small">
@@ -241,6 +300,7 @@
                         <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
                         <td class="text-center">{{ $applicant->technical_evaluation_score }} <br> {{ $applicant->TechEvaScore }}</td>
                         <td>{{ $applicant->observations }}</td>
+                        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
                         <td style="width: 4%">
                             @if($technicalEvaluation->date_end == NULL)
                             <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.destroy', $applicant) }}">
@@ -270,6 +330,7 @@
                             </button>
                             @include('replacement_staff.modals.modal_to_select_applicant')
                         </td>
+                        @endif
                     </tr>
                     @endforeach
                 </tbody>
@@ -277,7 +338,9 @@
         </div>
       @endif
 
-      <br>
+      <hr>
+
+      <h6>Busqueda de Postulantes</h6>
 
       @if($technicalEvaluation->technical_evaluation_status == 'pending')
       <div class="card card-body">
@@ -308,11 +371,11 @@
                           @endforeach
                       </select>
                   </fieldset>
-
-                  <button type="submit" class="btn btn-primary float-right">
-                      <i class="fas fa-search"></i> Buscar
-                  </button>
               </div>
+
+              <button type="submit" class="btn btn-primary float-right">
+                  <i class="fas fa-search"></i> Buscar
+              </button>
           </form>
       </div>
 
@@ -386,8 +449,9 @@
 
               </tbody>
           </table>
-
-          <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Seleccionar</button>
+          @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
+            <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Seleccionar</button>
+          @endif
           </form>
           {{ $replacementStaff->links() }}
       </div>
@@ -451,8 +515,10 @@
                 </tbody>
             </table>
         </div>
-        @livewire('replacement-staff.files', ['users' => $users,
-                  'technicalEvaluation' => $technicalEvaluation])
+        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
+          @livewire('replacement-staff.files', ['users' => $users,
+                    'technicalEvaluation' => $technicalEvaluation])
+        @endif
     </div>
     <br>
 </div>
