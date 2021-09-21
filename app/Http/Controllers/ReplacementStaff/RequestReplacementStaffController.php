@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ReplacementStaff;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 use App\Models\ReplacementStaff\ReplacementStaff;
 use App\Models\ReplacementStaff\RequestSign;
+use App\Models\ReplacementStaff\AssignEvaluation;
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
 use App\User;
@@ -58,16 +59,14 @@ class RequestReplacementStaffController extends Controller
     public function assign_index()
     {
         $pending_requests = RequestReplacementStaff::latest()
-            ->where(function ($q){
-                $q->doesntHave('technicalEvaluation')
-                ->orWhereHas('technicalEvaluation', function( $query ) {
-                  $query->where('technical_evaluation_status','pending');
-                });
+            ->WhereHas('technicalEvaluation', function($q) {
+              $q->Where('technical_evaluation_status', 'pending');
             })
-            ->OrWhereHas('requestSign', function($j) {
-              $j->Where('request_status', 'pending');
-            })
-            ->get();
+             ->WhereHas('assignEvaluations', function($j) {
+               $j->Where('to_user_id', Auth::user()->id)
+               ->where('status', 'assigned');
+             })
+             ->get();
 
         $requests = RequestReplacementStaff::latest()
             ->where(function ($q){

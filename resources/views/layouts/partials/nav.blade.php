@@ -206,8 +206,8 @@
                         @if(Auth::user()->hasRole('Replacement Staff: user rys'))
                             <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item @active('replacement_staff.request.index')"
-                               href="{{ route('replacement_staff.request.index') }}">
+                            <a class="dropdown-item @active('replacement_staff.request.assign_index')"
+                               href="{{ route('replacement_staff.request.assign_index') }}">
                                 <i class="far fa-id-card"></i> Staff de Reemplazos
                             </a>
                         @endif
