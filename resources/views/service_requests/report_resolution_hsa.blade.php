@@ -84,7 +84,7 @@
     }
 
     #firmas {
-      margin-top: 40px;
+      margin-top: 80px;
     }
 
     #firmas>div {
@@ -164,7 +164,7 @@
         </div>
       </div>
 
-      <br><br>
+      <br><br><br>
 
       <!-- VISTO HETG -->
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
@@ -489,9 +489,9 @@
 
         @endif
 
-        <br><br>
+
       </p>
-      
+      <br>      
       <p class="center">
         <strong>
           ANÓTESE, COMUNÍQUESE Y REMÍTASE ESTA RESOLUCIÓN CON LOS ANTECEDENTES QUE CORRESPONDAN A LA CONTRALORÍA REGIONAL DE TARAPACÁ PARA SU REGISTRO Y CONTROL POSTERIOR.
