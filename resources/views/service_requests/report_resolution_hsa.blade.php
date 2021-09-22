@@ -490,14 +490,6 @@
         Honorario Suma Alzada.
 
         @endif
-        <br>
-
-
-
-
-
-
-
       </p>
 
       <p class="center">
