@@ -164,7 +164,7 @@
         </div>
       </div>
 
-      <br><br><br>
+      <br><br>
 
       <!-- VISTO HETG -->
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
@@ -284,7 +284,7 @@
         <strong>CUARTO:</strong> El profesional contratante a través de declaración jurada señaló no estar afecto a ninguna de las inhabilidades establecidas en el artículo 54 de la
         Ley Nº 18.575, que pasan a expresarse:<br><br>
 
-        <i>De las inhabilidades e incompatibilidades administrativas
+        <i class="seis">De las inhabilidades e incompatibilidades administrativas
         <br>Artículo 56:<br>
 
         a) Las personas que tengan vigente o suscriban, por sí o por terceros, contratos o cauciones ascendentes a doscientas unidades tributarias mensuales o más, con el respectivo organismo de la Administración Pública. Tampoco podrán hacerlo quienes tengan litigios pendientes con la institución de que se trata, a menos que se refieran al ejercicio de derechos propios, de su cónyuge, hijos, adoptados o parientes hasta el tercer grado de consanguinidad y segundo de afinidad inclusive. Igual prohibición regirá respecto de los directores, administradores, representantes y socios titulares del diez por ciento o más de los derechos de cualquier clase de sociedad, cuando ésta tenga contratos o cauciones vigentes ascendentes a doscientas unidades tributarias mensuales o más, o litigios pendientes, con el organismo de la Administración a cuyo ingreso se postule.<br>
