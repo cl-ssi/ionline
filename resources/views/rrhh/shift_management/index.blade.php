@@ -218,26 +218,10 @@
             <div class="form-group col-md-4">	
                 <label for="for_name">Fecha</label>
                 <input type="month" class="form-control" onchange="this.form.submit()" name="monthYearFilter" value="{{ $actuallyYear."-".$actuallyMonth }}">
-                <!-- <select class="form-control" id="for_yearFilter" name="yearFilter" onchange="this.form.submit()">
-                    @for($i = (intval($actuallyYear)-2); $i< (intval($actuallyYear) + 4); $i++)
-                        <option value="{{$i}}" {{ ($i == $actuallyYear )?"selected":"" }}> {{$i}}</option>
-                    @endfor	
-                </select> -->
+              
             </div>
 
-            <!-- <div class="form-group col-md-2">    	
-                <label for="for_name">Mes</label>
-                <select class="form-control" id="for_monthFilter" name="monthFilter" onchange="this.form.submit()">
-                    @foreach($months AS $index => $month)
-                        <option value="{{ $index }}" {{ ($index == $actuallyMonth )?"selected":"" }}>{{$loop->iteration}} - {{$month}} </option>
-                    @endforeach
-                </select> 		
-            </div> -->
-
-         <!--    <div class="form-group col-md-1">
-                <label for="for_submit">&nbsp;</label>
-                <button type="submit" class="btn btn-primary form-control">Filtrar</button>
-            </div> -->
+           
 
         </div>
     </form>
@@ -454,9 +438,3 @@
 @endsection
 
 
-@section('custom_js')
-
-<!-- TODO: que hace esto? -->
-
-
-@endsection
