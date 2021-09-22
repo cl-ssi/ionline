@@ -179,7 +179,7 @@ class MonthlyQuotes extends Component
             $aguinaldo = '';
             if ($serviceRequest->weekly_hours == 22 or $serviceRequest->weekly_hours == 44 or $serviceRequest->weekly_hours == 11) {
 
-                if ($serviceRequest->id !=8146)
+                if (!in_array($serviceRequest->id, array(8146, 7925, 8381, 8382, 8384, 8385, 8387)))
                 {
                     $aguinaldo = $this->aguinaldopatrias($serviceRequest);
                 }

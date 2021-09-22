@@ -49,27 +49,27 @@
 
                     @foreach($ouRoots as $ouRoot)
                         <option value="{{ $ouRoot->id }}">
-                            {{ $ouRoot->name }}
+                            {{ $ouRoot->name  . ' - ' . $ouRoot->establishment->alias}}
                         </option>
                         @foreach($ouRoot->childs as $child_level_1)
                             <option value="{{ $child_level_1->id }}">
                                 &nbsp;&nbsp;&nbsp;
-                                {{ $child_level_1->name }}
+                                {{ $child_level_1->name  . ' - ' . $ouRoot->establishment->alias}}
                             </option>
                             @foreach($child_level_1->childs as $child_level_2)
                                 <option value="{{ $child_level_2->id }}">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    {{ $child_level_2->name }}
+                                    {{ $child_level_2->name  . ' - ' . $ouRoot->establishment->alias}}
                                 </option>
                                 @foreach($child_level_2->childs as $child_level_3)
                                     <option value="{{ $child_level_3->id }}">
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        {{ $child_level_3->name }}
+                                        {{ $child_level_3->name  . ' - ' . $ouRoot->establishment->alias}}
                                     </option>
                                     @foreach($child_level_3->childs as $child_level_4)
                                         <option value="{{ $child_level_4->id }}">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            {{ $child_level_4->name }}
+                                            {{ $child_level_4->name  . ' - ' . $ouRoot->establishment->alias}}
                                         </option>
                                     @endforeach
                                 @endforeach
