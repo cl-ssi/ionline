@@ -191,11 +191,11 @@
 
         {{$ServiceRequest->objectives}}.<br><br>
 
-        <b>- Que</b>, esta labor no puede cumplirse con los recursos humanos propios de la institución no por carecer de ellos, sino porque éstos tienen relación con labores accidentales y no habituales de la Institución, de tal forma de encuadrarse en el Art. 11 Ley N°18.834, sobre Estatuto Administrativo. <br><br><br><br>
+        <b>- Que</b>, esta labor no puede cumplirse con los recursos humanos propios de la institución no por carecer de ellos, sino porque éstos tienen relación con labores accidentales y no habituales de la Institución, de tal forma de encuadrarse en el Art. 11 Ley N°18.834, sobre Estatuto Administrativo. <br><br>
 
-        <b>- Que</b>, por la índole del servicio que debe realizarse es más recomendable fijar un honorario consistente en una suma alzada.<br><br><br><br>
+        <b>- Que</b>, por la índole del servicio que debe realizarse es más recomendable fijar un honorario consistente en una suma alzada.<br><br>
 
-        <b>- Que</b>, el @if($ServiceRequest->responsabilityCenter->establishment_id == 1) Hospital Ernesto Torres Galdames @else Servicio de Salud Iquique @endif, cuenta con las disponibilidades presupuestarias suficientes para solventar tal convenio.<br><br><br><br>
+        <b>- Que</b>, el @if($ServiceRequest->responsabilityCenter->establishment_id == 1) Hospital Ernesto Torres Galdames @else Servicio de Salud Iquique @endif, cuenta con las disponibilidades presupuestarias suficientes para solventar tal convenio.<br><br>
       </p>
 
       <p class="justify">
