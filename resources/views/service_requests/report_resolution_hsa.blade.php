@@ -84,7 +84,7 @@
     }
 
     #firmas {
-      margin-top: 80px;
+      margin-top: 40px;
     }
 
     #firmas>div {
@@ -139,7 +139,6 @@
 <body>
   <div class="content">
 
-    <div class="content">
       <img style="padding-bottom: 4px;" src="images/logo_pluma.jpg" width="120" alt="Logo Servicio de Salud"><br>
 
 
@@ -165,8 +164,7 @@
         </div>
       </div>
 
-
-      <div style="clear: both; padding-bottom: 10px">&nbsp;</div>
+      <br><br>
 
       <!-- VISTO HETG -->
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
@@ -292,7 +290,7 @@
         a) Las personas que tengan vigente o suscriban, por sí o por terceros, contratos o cauciones ascendentes a doscientas unidades tributarias mensuales o más, con el respectivo organismo de la Administración Pública. Tampoco podrán hacerlo quienes tengan litigios pendientes con la institución de que se trata, a menos que se refieran al ejercicio de derechos propios, de su cónyuge, hijos, adoptados o parientes hasta el tercer grado de consanguinidad y segundo de afinidad inclusive. Igual prohibición regirá respecto de los directores, administradores, representantes y socios titulares del diez por ciento o más de los derechos de cualquier clase de sociedad, cuando ésta tenga contratos o cauciones vigentes ascendentes a doscientas unidades tributarias mensuales o más, o litigios pendientes, con el organismo de la Administración a cuyo ingreso se postule.<br>
 
         b) Las personas que tengan la calidad de cónyuge, hijos, adoptados o parientes hasta el tercer grado de consanguinidad y segundo de afinidad inclusive respecto de las autoridades y de los funcionarios directivos del organismo de la administración civil del Estado al que postulan, hasta el nivel de jefe de departamento o su equivalente, inclusive.<br>
-        c) Las personas que se hallen condenadas por crimen o simple delito<br>
+        c) Las personas que se hallen condenadas por crimen o simple delito.<br>
         <br>Artículo 57:<br>
         Para los efectos del artículo anterior, los postulantes a un cargo público deberán prestar una declaración jurada que acredite que no se encuentran afectos a alguna de las causales de inhabilidad previstas en ese artículo. (Igual obligación rige para los contratados a honorarios).<br>
 
@@ -490,8 +488,10 @@
         Honorario Suma Alzada.
 
         @endif
-      </p>
 
+        <br><br>
+      </p>
+      
       <p class="center">
         <strong>
           ANÓTESE, COMUNÍQUESE Y REMÍTASE ESTA RESOLUCIÓN CON LOS ANTECEDENTES QUE CORRESPONDAN A LA CONTRALORÍA REGIONAL DE TARAPACÁ PARA SU REGISTRO Y CONTROL POSTERIOR.
