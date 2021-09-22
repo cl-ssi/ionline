@@ -171,7 +171,7 @@
       <!-- VISTO HETG -->
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       <p class="justify">
-        <strong>VISTOS:</strong><br><br>
+        <strong>VISTOS:</strong><br>
 
         Lo dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud;
         {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}}, 
@@ -179,7 +179,7 @@
       </p>
       @else
       <p class="justify">
-        <strong>VISTOS:</strong><br><br>
+        <strong>VISTOS:</strong><br>
 
         En estos antecedentes, según lo dispuesto según inciso final del Art. 2º y 3º del Decreto Nº 98 de 1991 del Ministerio de Hacienda, Circular Nº 2C/45 de 1998 todos del Ministerio de Salud, Art. 11° del D.F.L. Nº29/04 que fija texto refundido, coordinado y sistematizado de la Ley 18.834/89 sobre Estatuto Administrativo, Ley Nº 21.289/2020 de Presupuesto del Sector Público para el año 2021; D.F.L. Nº01/05 que fija texto refundido, coordinado y sistematizado, Dto. Ley Nº 2763/79 y de las leyes 18.933 y 18469 del Ministerio de Salud; Art. 8° III letra d) del Dto. Nº 140/04 del Ministerio de Salud que aprobó el Reglamento Orgánico de los Servicios de Salud, Dto. Afecto N°42/2019, Resolución Nº6/2019, Resolución N° 18/2017 y Dictamen Nº 21.900/98 todos de la Contraloría General de la República.<br>
       </p>
@@ -199,7 +199,7 @@
       </p>
 
       <p class="justify">
-        <strong>RESUELVO:</strong><br><br>
+        <strong>RESUELVO:</strong><br>
         <!-- {{$ServiceRequest->resolve}}<br><br> -->
 
         <strong>1.CONTRÁTESE</strong> a honorarios a suma alzada en el @if($ServiceRequest->responsabilityCenter->establishment_id == 1) Hospital Ernesto Torres Galdames, @else Servicio de Salud Iquique, @endif a la persona que más abajo se individualiza de acuerdo a su área de competencia,
@@ -292,14 +292,14 @@
         a) Las personas que tengan vigente o suscriban, por sí o por terceros, contratos o cauciones ascendentes a doscientas unidades tributarias mensuales o más, con el respectivo organismo de la Administración Pública. Tampoco podrán hacerlo quienes tengan litigios pendientes con la institución de que se trata, a menos que se refieran al ejercicio de derechos propios, de su cónyuge, hijos, adoptados o parientes hasta el tercer grado de consanguinidad y segundo de afinidad inclusive. Igual prohibición regirá respecto de los directores, administradores, representantes y socios titulares del diez por ciento o más de los derechos de cualquier clase de sociedad, cuando ésta tenga contratos o cauciones vigentes ascendentes a doscientas unidades tributarias mensuales o más, o litigios pendientes, con el organismo de la Administración a cuyo ingreso se postule.<br>
 
         b) Las personas que tengan la calidad de cónyuge, hijos, adoptados o parientes hasta el tercer grado de consanguinidad y segundo de afinidad inclusive respecto de las autoridades y de los funcionarios directivos del organismo de la administración civil del Estado al que postulan, hasta el nivel de jefe de departamento o su equivalente, inclusive.<br>
-        c) Las personas que se hallen condenadas por crimen o simple delito<br><br>
+        c) Las personas que se hallen condenadas por crimen o simple delito<br>
         Artículo 57:<br>
         Para los efectos del artículo anterior, los postulantes a un cargo público deberán prestar una declaración jurada que acredite que no se encuentran afectos a alguna de las causales de inhabilidad previstas en ese artículo. (Igual obligación rige para los contratados a honorarios).<br>
 
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         @else
         Artículo 58:<br>
-        Todos los funcionarios tendrán derecho a ejercer libremente cualquier profesión, industria, comercio u oficio conciliable con su posición en la Administración del Estado, siempre que con ello no se perturbe el fiel y oportuno cumplimiento de sus deberes funcionarios, sin perjuicio de las prohibiciones o limitaciones establecidas por ley. Estas actividades deberán desarrollarse siempre fuera de la jornada de trabajo y con recursos privados. Son incompatibles con la función pública las actividades particulares cuyo ejercicio deba realizarse en horarios que coincidan total o parcialmente con la jornada de trabajo que se tenga asignada. Asimismo, son incompatibles con el ejercicio de la función pública las actividades particulares de las autoridades o funcionarios que se refieran a materias específicas o casos concretos que deban ser analizados, informados o resueltos por ellos o por el organismo o servicio público a que pertenezcan; y la representación de un tercero en acciones civiles deducidas en contra de un organismo de la Administración del Estado, salvo que actúen en favor de alguna de las personas señaladas en la letra b) del artículo 56 o que medie disposición especial de ley que regule dicha representación. Del mismo modo son incompatibles las actividades de las ex autoridades o ex funcionarios de una institución fiscalizadora que impliquen una relación laboral con entidades del sector privado sujetas a la fiscalización de ese organismo. Esta incompatibilidad se mantendrá hasta seis meses después de haber expirado en servicios.<br><br>
+        Todos los funcionarios tendrán derecho a ejercer libremente cualquier profesión, industria, comercio u oficio conciliable con su posición en la Administración del Estado, siempre que con ello no se perturbe el fiel y oportuno cumplimiento de sus deberes funcionarios, sin perjuicio de las prohibiciones o limitaciones establecidas por ley. Estas actividades deberán desarrollarse siempre fuera de la jornada de trabajo y con recursos privados. Son incompatibles con la función pública las actividades particulares cuyo ejercicio deba realizarse en horarios que coincidan total o parcialmente con la jornada de trabajo que se tenga asignada. Asimismo, son incompatibles con el ejercicio de la función pública las actividades particulares de las autoridades o funcionarios que se refieran a materias específicas o casos concretos que deban ser analizados, informados o resueltos por ellos o por el organismo o servicio público a que pertenezcan; y la representación de un tercero en acciones civiles deducidas en contra de un organismo de la Administración del Estado, salvo que actúen en favor de alguna de las personas señaladas en la letra b) del artículo 56 o que medie disposición especial de ley que regule dicha representación. Del mismo modo son incompatibles las actividades de las ex autoridades o ex funcionarios de una institución fiscalizadora que impliquen una relación laboral con entidades del sector privado sujetas a la fiscalización de ese organismo. Esta incompatibilidad se mantendrá hasta seis meses después de haber expirado en servicios.<br>
         @endif
   </i>
 
