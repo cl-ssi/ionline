@@ -139,7 +139,6 @@
 <body>
   <div class="content">
 
-    <div class="content">
       <img style="padding-bottom: 4px;" src="images/logo_pluma.jpg" width="120" alt="Logo Servicio de Salud"><br>
 
 
@@ -165,8 +164,7 @@
         </div>
       </div>
 
-
-      <div style="clear: both; padding-bottom: 10px">&nbsp;</div>
+      <br><br>
 
       <!-- VISTO HETG -->
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
@@ -187,15 +185,15 @@
       @endif
 
       <p class="justify">
-        <strong>CONSIDERANDO:</strong><br><br>
+        <strong>CONSIDERANDO:</strong><br>
 
         {{$ServiceRequest->objectives}}.<br><br>
 
-        <b>- Que</b>, esta labor no puede cumplirse con los recursos humanos propios de la institución no por carecer de ellos, sino porque éstos tienen relación con labores accidentales y no habituales de la Institución, de tal forma de encuadrarse en el Art. 11 Ley N°18.834, sobre Estatuto Administrativo. <br><br><br><br>
+        <b>- Que</b>, esta labor no puede cumplirse con los recursos humanos propios de la institución no por carecer de ellos, sino porque éstos tienen relación con labores accidentales y no habituales de la Institución, de tal forma de encuadrarse en el Art. 11 Ley N°18.834, sobre Estatuto Administrativo. <br>
 
-        <b>- Que</b>, por la índole del servicio que debe realizarse es más recomendable fijar un honorario consistente en una suma alzada.<br><br><br><br>
+        <b>- Que</b>, por la índole del servicio que debe realizarse es más recomendable fijar un honorario consistente en una suma alzada.<br>
 
-        <b>- Que</b>, el @if($ServiceRequest->responsabilityCenter->establishment_id == 1) Hospital Ernesto Torres Galdames @else Servicio de Salud Iquique @endif, cuenta con las disponibilidades presupuestarias suficientes para solventar tal convenio.<br><br><br><br>
+        <b>- Que</b>, el @if($ServiceRequest->responsabilityCenter->establishment_id == 1) Hospital Ernesto Torres Galdames @else Servicio de Salud Iquique @endif, cuenta con las disponibilidades presupuestarias suficientes para solventar tal convenio.<br>
       </p>
 
       <p class="justify">
@@ -283,12 +281,33 @@
       </p>
 
       <p class="justify">
+<<<<<<< HEAD
         <strong>CUARTO:</strong> El prestador de Servicios contratante a través
         de la declaración jurada señaló no estar afecto a ninguna de las inhabilidades
         establecidas en los arts. 54, 55 y 56 de la Ley Nº 18.575, Orgánica Constitucional
         de las Bases Generales de la Administración del Estado. Dichas disposiciones
         relativas a inhabilidades e incompatibilidades administrativas serán aplicables al prestador,
         con quién se suscribe el presente contrato a Honorarios a Suma Alzada.
+=======
+        <strong>CUARTO:</strong> El profesional contratante a través de declaración jurada señaló no estar afecto a ninguna de las inhabilidades establecidas en el artículo 54 de la
+        Ley Nº 18.575, que pasan a expresarse:<br><br>
+
+        <i class="seis">De las inhabilidades e incompatibilidades administrativas
+        <br>Artículo 56:<br>
+
+        a) Las personas que tengan vigente o suscriban, por sí o por terceros, contratos o cauciones ascendentes a doscientas unidades tributarias mensuales o más, con el respectivo organismo de la Administración Pública. Tampoco podrán hacerlo quienes tengan litigios pendientes con la institución de que se trata, a menos que se refieran al ejercicio de derechos propios, de su cónyuge, hijos, adoptados o parientes hasta el tercer grado de consanguinidad y segundo de afinidad inclusive. Igual prohibición regirá respecto de los directores, administradores, representantes y socios titulares del diez por ciento o más de los derechos de cualquier clase de sociedad, cuando ésta tenga contratos o cauciones vigentes ascendentes a doscientas unidades tributarias mensuales o más, o litigios pendientes, con el organismo de la Administración a cuyo ingreso se postule.<br>
+
+        b) Las personas que tengan la calidad de cónyuge, hijos, adoptados o parientes hasta el tercer grado de consanguinidad y segundo de afinidad inclusive respecto de las autoridades y de los funcionarios directivos del organismo de la administración civil del Estado al que postulan, hasta el nivel de jefe de departamento o su equivalente, inclusive.<br>
+        c) Las personas que se hallen condenadas por crimen o simple delito.<br>
+        <br>Artículo 57:<br>
+        Para los efectos del artículo anterior, los postulantes a un cargo público deberán prestar una declaración jurada que acredite que no se encuentran afectos a alguna de las causales de inhabilidad previstas en ese artículo. (Igual obligación rige para los contratados a honorarios).<br>
+
+        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+        @else
+        <br>Artículo 58:<br>
+        Todos los funcionarios tendrán derecho a ejercer libremente cualquier profesión, industria, comercio u oficio conciliable con su posición en la Administración del Estado, siempre que con ello no se perturbe el fiel y oportuno cumplimiento de sus deberes funcionarios, sin perjuicio de las prohibiciones o limitaciones establecidas por ley. Estas actividades deberán desarrollarse siempre fuera de la jornada de trabajo y con recursos privados. Son incompatibles con la función pública las actividades particulares cuyo ejercicio deba realizarse en horarios que coincidan total o parcialmente con la jornada de trabajo que se tenga asignada. Asimismo, son incompatibles con el ejercicio de la función pública las actividades particulares de las autoridades o funcionarios que se refieran a materias específicas o casos concretos que deban ser analizados, informados o resueltos por ellos o por el organismo o servicio público a que pertenezcan; y la representación de un tercero en acciones civiles deducidas en contra de un organismo de la Administración del Estado, salvo que actúen en favor de alguna de las personas señaladas en la letra b) del artículo 56 o que medie disposición especial de ley que regule dicha representación. Del mismo modo son incompatibles las actividades de las ex autoridades o ex funcionarios de una institución fiscalizadora que impliquen una relación laboral con entidades del sector privado sujetas a la fiscalización de ese organismo. Esta incompatibilidad se mantendrá hasta seis meses después de haber expirado en servicios.<br>
+        @endif
+>>>>>>> 5215298a9408b90c951019c5888e18b0caa003f6
   </i>
 
 
@@ -444,7 +463,7 @@
       </p>
       @endif
 
-      Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribute()}} <br><br>
+      Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribute()}} <br>
 
       <p class="">
         <strong>2.</strong> El convenio que por este acto se aprueban, se entiende que forman parte integrante de la presente Resolución.
@@ -478,16 +497,10 @@
         Honorario Suma Alzada.
 
         @endif
-        <br>
-
-
-
-
-
 
 
       </p>
-
+      <br>      
       <p class="center">
         <strong>
           ANÓTESE, COMUNÍQUESE Y REMÍTASE ESTA RESOLUCIÓN CON LOS ANTECEDENTES QUE CORRESPONDAN A LA CONTRALORÍA REGIONAL DE TARAPACÁ PARA SU REGISTRO Y CONTROL POSTERIOR.
