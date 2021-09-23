@@ -139,7 +139,6 @@
 <body>
   <div class="content">
 
-    <div class="content">
       <img style="padding-bottom: 4px;" src="images/logo_pluma.jpg" width="120" alt="Logo Servicio de Salud"><br>
 
 
@@ -165,8 +164,7 @@
         </div>
       </div>
 
-
-      <div style="clear: both; padding-bottom: 10px">&nbsp;</div>
+      <br><br>
 
       <!-- VISTO HETG -->
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
@@ -174,8 +172,7 @@
         <strong>VISTOS:</strong><br>
 
         Lo dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos de Autogestión en Red todas del Ministerio de Salud;
-        Resolución Exenta RA N° 425/300/2020, de fecha 30 de noviembre del 2020
-        <!-- Resolución Exenta N°8847, de fecha 23 de diciembre del 2020 -->
+        {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2020; Resoluciones N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República.<br>
       </p>
       @else
@@ -189,8 +186,8 @@
 
       <p class="justify">
         <strong>CONSIDERANDO:</strong><br>
-        
-        {{$ServiceRequest->objectives}}.<br>
+
+        {{$ServiceRequest->objectives}}.<br><br>
 
         <b>- Que</b>, esta labor no puede cumplirse con los recursos humanos propios de la institución no por carecer de ellos, sino porque éstos tienen relación con labores accidentales y no habituales de la Institución, de tal forma de encuadrarse en el Art. 11 Ley N°18.834, sobre Estatuto Administrativo. <br>
 
@@ -235,10 +232,9 @@
 
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       <p class="justify">
-        En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL ERNESTO TORRES GALDAMES</b>, persona jurídica de derecho público, RUT. 62.000.530-4 , con domicilio en calle Av.héroes de la concepcion N 502 de la ciudad de Iquique, representado por su Director
-        <!-- (s) <b>PEDRO IRIONDO CORREA</b> -->
-        <b>HÉCTOR ALARCÓN ALARCÓN</b>
-        chileno, Cédula Nacional de Identidad N°14.101.085-9, del mismo domicilio del servicio público que representa, en
+        En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>HOSPITAL ERNESTO TORRES GALDAMES</b>, persona jurídica de derecho público, RUT. 62.000.530-4 , con domicilio en calle Av.héroes de la concepcion N 502 de la ciudad de Iquique, representado por su {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}
+        <b>{{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}</b>,
+        chileno, Cédula Nacional de Identidad N°{{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->runFormat()}}, del mismo domicilio del servicio público que representa, en
         adelante , "El Director del Hospital Ernesto Torres Galdames", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
         con domicilio en {{$ServiceRequest->address}}, de la ciudad de Iquique, en adelante “El Profesional” y exponen lo siguiente:
       </p>
@@ -253,10 +249,7 @@
       @endif
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       <strong>PRIMERO:</strong>
-      Don
-      <!-- PEDRO IRIONDO CORREA,  -->
-      HÉCTOR ALARCÓN ALARCÓN,
-      en su calidad de Director del Hospital Ernesto Torres Galdames, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
+      Don {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital Ernesto Torres Galdames, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
       @if($ServiceRequest->profession){{$ServiceRequest->profession->name}},@endif apoyo a {{$ServiceRequest->responsabilityCenter->name}} de la Dirección del Hospital Ernesto Torres Galdames.
       @else
       <p class="justify">
@@ -264,11 +257,7 @@
         Don JORGE GALLEGUILLOS MÖLLER, en su calidad de Director del Servicio de Salud Iquique, contrata los servicios a honorarios a suma alzada de {{$ServiceRequest->employee->getFullNameAttribute()}},
         @if($ServiceRequest->profession){{$ServiceRequest->profession->name}},@endif apoyo a {{$ServiceRequest->responsabilityCenter->name}} de la Dirección del Servicio Salud Iquique.
       </p>
-
-
       @endif
-
-
 
       <p class="justify">
         <strong>SEGUNDO:</strong> En cumplimiento del presente convenio El prestador deberá llevar a cabo las siguientes prestaciones:
@@ -292,24 +281,12 @@
       </p>
 
       <p class="justify">
-        <strong>CUARTO:</strong> El profesional contratante a través de declaración jurada señaló no estar afecto a ninguna de las inhabilidades establecidas en el artículo 54 de la
-        Ley Nº 18.575, que pasan a expresarse:<br><br>
-
-        <i>De las inhabilidades e incompatibilidades administrativas<br>
-        Artículo 56:<br>
-
-        a) Las personas que tengan vigente o suscriban, por sí o por terceros, contratos o cauciones ascendentes a doscientas unidades tributarias mensuales o más, con el respectivo organismo de la Administración Pública. Tampoco podrán hacerlo quienes tengan litigios pendientes con la institución de que se trata, a menos que se refieran al ejercicio de derechos propios, de su cónyuge, hijos, adoptados o parientes hasta el tercer grado de consanguinidad y segundo de afinidad inclusive. Igual prohibición regirá respecto de los directores, administradores, representantes y socios titulares del diez por ciento o más de los derechos de cualquier clase de sociedad, cuando ésta tenga contratos o cauciones vigentes ascendentes a doscientas unidades tributarias mensuales o más, o litigios pendientes, con el organismo de la Administración a cuyo ingreso se postule.<br>
-
-        b) Las personas que tengan la calidad de cónyuge, hijos, adoptados o parientes hasta el tercer grado de consanguinidad y segundo de afinidad inclusive respecto de las autoridades y de los funcionarios directivos del organismo de la administración civil del Estado al que postulan, hasta el nivel de jefe de departamento o su equivalente, inclusive.<br>
-        c) Las personas que se hallen condenadas por crimen o simple delito<br><br>
-        Artículo 57:<br>
-        Para los efectos del artículo anterior, los postulantes a un cargo público deberán prestar una declaración jurada que acredite que no se encuentran afectos a alguna de las causales de inhabilidad previstas en ese artículo. (Igual obligación rige para los contratados a honorarios).<br>
-
-        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-        @else
-        Artículo 58:<br>
-        Todos los funcionarios tendrán derecho a ejercer libremente cualquier profesión, industria, comercio u oficio conciliable con su posición en la Administración del Estado, siempre que con ello no se perturbe el fiel y oportuno cumplimiento de sus deberes funcionarios, sin perjuicio de las prohibiciones o limitaciones establecidas por ley. Estas actividades deberán desarrollarse siempre fuera de la jornada de trabajo y con recursos privados. Son incompatibles con la función pública las actividades particulares cuyo ejercicio deba realizarse en horarios que coincidan total o parcialmente con la jornada de trabajo que se tenga asignada. Asimismo, son incompatibles con el ejercicio de la función pública las actividades particulares de las autoridades o funcionarios que se refieran a materias específicas o casos concretos que deban ser analizados, informados o resueltos por ellos o por el organismo o servicio público a que pertenezcan; y la representación de un tercero en acciones civiles deducidas en contra de un organismo de la Administración del Estado, salvo que actúen en favor de alguna de las personas señaladas en la letra b) del artículo 56 o que medie disposición especial de ley que regule dicha representación. Del mismo modo son incompatibles las actividades de las ex autoridades o ex funcionarios de una institución fiscalizadora que impliquen una relación laboral con entidades del sector privado sujetas a la fiscalización de ese organismo. Esta incompatibilidad se mantendrá hasta seis meses después de haber expirado en servicios.<br><br>
-        @endif
+        <strong>CUARTO:</strong> El prestador de Servicios contratante a través
+        de la declaración jurada señaló no estar afecto a ninguna de las inhabilidades
+        establecidas en los arts. 54, 55 y 56 de la Ley Nº 18.575, Orgánica Constitucional
+        de las Bases Generales de la Administración del Estado. Dichas disposiciones
+        relativas a inhabilidades e incompatibilidades administrativas serán aplicables al prestador,
+        con quién se suscribe el presente contrato a Honorarios a Suma Alzada.
   </i>
 
 
@@ -364,7 +341,13 @@
 
       @elseif($ServiceRequest->program_contract_type == "Horas")
       <p class="justify">
-        <strong>OCTAVO:</strong> El “valor por hora” será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago
+        <strong>OCTAVO:</strong> El
+        @if($ServiceRequest->working_day_type == 'HORA EXTRA')
+        valor total por horas extras del mes
+        @else
+        valor por hora
+        @endif
+        será por la suma de ${{number_format($ServiceRequest->gross_amount)}}.- ({{$ServiceRequest->gross_amount_description}}), para efectos del pago
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         Hospital Regional de Iquique,
         @else
@@ -428,7 +411,7 @@
 
 
       <p class="justify">
-        <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implicará la caducidad inmediata de éste, como así la devolución de las cuotas pagadas.
+        <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implica la caducidad inmediata de éste.
       </p>
 
 
@@ -459,7 +442,7 @@
       </p>
       @endif
 
-      Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribute()}} <br><br>
+      Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribute()}} <br>
 
       <p class="">
         <strong>2.</strong> El convenio que por este acto se aprueban, se entiende que forman parte integrante de la presente Resolución.
@@ -493,16 +476,10 @@
         Honorario Suma Alzada.
 
         @endif
-        <br>
-
-        
-
-
-
 
 
       </p>
-
+      <br>
       <p class="center">
         <strong>
           ANÓTESE, COMUNÍQUESE Y REMÍTASE ESTA RESOLUCIÓN CON LOS ANTECEDENTES QUE CORRESPONDAN A LA CONTRALORÍA REGIONAL DE TARAPACÁ PARA SU REGISTRO Y CONTROL POSTERIOR.
@@ -515,11 +492,11 @@
           @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
           <strong>
             <span class="uppercase">
-              HECTOR ALARCÓN ALARCÓN
-              <!-- PEDRO IRIONDO CORREA -->
+              {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}
             </span>
             <br>
-            DIRECTOR<br>
+              <span style="text-transform:uppercase">{{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}</span>
+            <br>
             HOSPITAL DR ERNESTO TORRES GALDÁMEZ<br>
           </strong>
 
@@ -550,9 +527,9 @@
       <div class="siete" style="padding-top: 2px;">
         <strong><u>DISTRIBUCIÓN:</u></strong><br>
         Honorarios Suma Alzada<br>
-        Finanzas<br>
-        Interesado<br>
-        Ofiicna de Partes<br>
+        <!-- Finanzas<br>
+        Interesado<br> -->
+        Oficina de Partes<br>
         {{--
     @else
       @if($ServiceRequest->responsabilityCenter->establishment_id == 12)

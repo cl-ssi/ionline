@@ -36,6 +36,10 @@ class RequestReplacementStaff extends Model
         return $this->hasOne('App\Models\ReplacementStaff\TechnicalEvaluation');
     }
 
+    public function assignEvaluations() {
+        return $this->hasMany('App\Models\ReplacementStaff\AssignEvaluation');
+    }
+
     public function getLegalQualityValueAttribute() {
         switch($this->legal_quality) {
           case 'to hire':
@@ -97,11 +101,15 @@ class RequestReplacementStaff extends Model
 
         $authorities = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
 
+        foreach ($authorities as $authority){
+            $iam_authorities_in[] = $authority->organizational_unit_id;
+        }
+
         if(!empty($authorities)){
             foreach ($authorities as $authority) {
                 $request_to_sign = RequestReplacementStaff::latest()
-                    ->whereHas('requestSign', function($q) use ($authority){
-                        $q->Where('organizational_unit_id', $authority->organizational_unit_id)
+                    ->whereHas('requestSign', function($q) use ($authority, $iam_authorities_in){
+                        $q->Where('organizational_unit_id', $iam_authorities_in)
                         ->Where('request_status', 'pending');
                     })
                     ->paginate(10)
@@ -112,8 +120,6 @@ class RequestReplacementStaff extends Model
         else{
             return $request_to_sign = 0;
         }
-
-
     }
 
     /**

@@ -45,7 +45,7 @@
             </select>
         </fieldset>
     </div>
-    
+
     <div class="form-row">
     <fieldset class="form-group col-md-1">
             <label for="for_resolution">Resolución</label>
@@ -103,8 +103,8 @@
                 <option value="P" @if($request->input('payment_date')=='P') selected @endif>Pagado</option>
                 <option value="SP" @if($request->input('payment_date')=='SP')) selected @endif>No Pagado</option>
             </select>
-        </fieldset>    
-       
+        </fieldset>
+
     </div>
 
     <div class="form-row">
@@ -126,21 +126,22 @@
                 <option value="Horas" @if($request->input('program_contract_type')=='Horas') selected @endif>Horas</option>
             </select>
         </fieldset>
-       
+
         <fieldset class="form-group col-md-3">
             <label for="for_working_day_type">Jornada de Trabajo</label>
             <select name="working_day_type" class="form-control">
                 <option value="">Todas</option>
                 <option value="DIURNO" @if($request->input('working_day_type')=='DIURNO') selected @endif>DIURNO</option>
-				<option value="TERCER TURNO" @if($request->input('working_day_type')=='TERCER TURNO') selected @endif>TERCER TURNO</option>
-				<option value="TERCER TURNO - MODIFICADO" @if($request->input('working_day_type')=='TERCER TURNO - MODIFICADO') selected @endif>TERCER TURNO - MODIFICADO</option>
-				<option value="CUARTO TURNO" @if($request->input('working_day_type')=='CUARTO TURNO') selected @endif>CUARTO TURNO</option>
-				<option value="CUARTO TURNO - MODIFICADO" @if($request->input('working_day_type')=='CUARTO TURNO - MODIFICADO') selected @endif>CUARTO TURNO - MODIFICADO</option>
-				<option value="DIURNO PASADO A TURNO" @if($request->input('working_day_type')=='DIURNO PASADO A TURNO') selected @endif>DIURNO PASADO A TURNO</option>
-				<option value="HORA MÉDICA" @if($request->input('working_day_type')=='HORA MÉDICA') selected @endif>HORA MÉDICA</option>
-				<option value="HORA EXTRA" @if($request->input('working_day_type')=='HORA EXTRA') selected @endif>HORA EXTRA</option>
-				<option value="TURNO EXTRA" @if($request->input('working_day_type')=='TURNO EXTRA') selected @endif>TURNO EXTRA</option>
-				<option value="TURNO DE REEMPLAZO" @if($request->input('working_day_type')=='TURNO DE REEMPLAZO') selected @endif >TURNO DE REEMPLAZO</option>
+        				<option value="TERCER TURNO" @if($request->input('working_day_type')=='TERCER TURNO') selected @endif>TERCER TURNO</option>
+        				<option value="TERCER TURNO - MODIFICADO" @if($request->input('working_day_type')=='TERCER TURNO - MODIFICADO') selected @endif>TERCER TURNO - MODIFICADO</option>
+        				<option value="CUARTO TURNO" @if($request->input('working_day_type')=='CUARTO TURNO') selected @endif>CUARTO TURNO</option>
+        				<option value="CUARTO TURNO - MODIFICADO" @if($request->input('working_day_type')=='CUARTO TURNO - MODIFICADO') selected @endif>CUARTO TURNO - MODIFICADO</option>
+        				<option value="DIURNO PASADO A TURNO" @if($request->input('working_day_type')=='DIURNO PASADO A TURNO') selected @endif>DIURNO PASADO A TURNO</option>
+        				<option value="HORA MÉDICA" @if($request->input('working_day_type')=='HORA MÉDICA') selected @endif>HORA MÉDICA</option>
+        				<option value="HORA EXTRA" @if($request->input('working_day_type')=='HORA EXTRA') selected @endif>HORA EXTRA</option>
+        				<option value="TURNO EXTRA" @if($request->input('working_day_type')=='TURNO EXTRA') selected @endif>TURNO EXTRA</option>
+        				<option value="TURNO DE REEMPLAZO" @if($request->input('working_day_type')=='TURNO DE REEMPLAZO') selected @endif >TURNO DE REEMPLAZO</option>
+                <option value="DIARIO" @if($request->input('working_day_type')=='DIARIO') selected @endif >DIARIO</option>
             </select>
         </fieldset>
 
@@ -148,13 +149,13 @@
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
         </fieldset>
-        
+
         <div class="col">
         <fieldset class="form-group col-md-6">
-             <label for="">&nbsp;</label>             
+             <label for="">&nbsp;</label>
             <button type="submit" class="btn btn-outline-primary" title="Descargar Excel" name="excel">Descargar Excel<i class="fas fa-file-excel"></i> </button>
         </fieldset>
-        
+
         </div>
 
     </div>
@@ -163,11 +164,11 @@
     <!-- <button type="submit" name="excel" class="form-control btn btn-primary"><i class="fas fa-file-excel"></i></button> -->
 
 
-    <!-- 
+    <!--
         <a type="button" class="btn btn-outline-primary" title="Descargar Excel" href="#"
         id="downloadLink">Descargar Excel <small>(todos)</small> <i class="fas fa-file-excel"></i> </a> -->
-   
-    
+
+
 
 </form>
 
@@ -204,24 +205,24 @@
             <td>{{$fulfillment->servicerequest->program_contract_type?? ''}}</td>
             <td class="small">{{$fulfillment->servicerequest->working_day_type?? ''}}</td>
             <td>
-                <i title="Resolución" class="fas fa-file-signature 
+                <i title="Resolución" class="fas fa-file-signature
                     {{ ($fulfillment->serviceRequest->has_resolution_file)?'text-primary':'text-secondary'}}"></i>
 
-                <i title="Certificado" class="fas fa-certificate 
+                <i title="Certificado" class="fas fa-certificate
                     {{ ($fulfillment->signatures_file_id)?'text-primary':'text-secondary'}}"></i>
 
-                <i title="Aprobado Responsable" class="fas fa-chess-king 
+                <i title="Aprobado Responsable" class="fas fa-chess-king
                     {{ ($fulfillment->responsable_approbation)?'text-primary':'text-secondary'}}"></i>
 
-                <i title="Aprobado RRHH" class="fas fa-user-shield 
+                <i title="Aprobado RRHH" class="fas fa-user-shield
                     {{ ($fulfillment->rrhh_approbation)?'text-primary':'text-secondary'}}"></i>
 
-                <i title="Aprobado Finanzas" class="fas fa-piggy-bank 
+                <i title="Aprobado Finanzas" class="fas fa-piggy-bank
                     {{ ($fulfillment->finances_approbation)?'text-primary':'text-secondary'}}"></i>
 
-                <i title="Boleta" class="fas fa-file-invoice-dollar 
+                <i title="Boleta" class="fas fa-file-invoice-dollar
                     {{ ($fulfillment->has_invoice_file)?'text-primary':'text-secondary'}}"></i>
-                <i title="Pago" class="fas fa-money-bill 
+                <i title="Pago" class="fas fa-money-bill
                     {{ ($fulfillment->payment_date)?'text-primary':'text-secondary'}}"></i>
             </td>
             <td>
@@ -237,7 +238,7 @@
         @endforeach
     </table>
 
-    
+
 
 
 {{ $fulfillments->appends(request()->query())->links() }}

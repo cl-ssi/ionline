@@ -13,7 +13,7 @@
             <div class="form-row">
                 <fieldset class="form-group col mt">
                     <fieldset class="form-group">
-                        <label for="for_name">Cargo</label>
+                        <label for="for_name">Nombre Archivo</label>
                         <input type="text" class="form-control" name="name[]" required>
                     </fieldset>
                 </fieldset>
@@ -32,6 +32,8 @@
             <hr>
         @endforeach
 
+        @if($count>0)
         <button type="submit" class="btn btn-primary float-right">Guardar</button>
+        @endif
     </form>
 </div>

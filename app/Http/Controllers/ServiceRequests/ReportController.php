@@ -20,6 +20,8 @@ use App\Establishment;
 use App\Rrhh\OrganizationalUnit;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ComplianceExport;
+use App\Exports\ContractExport;
+
 
 class ReportController extends Controller
 {
@@ -315,7 +317,13 @@ class ReportController extends Controller
     }
 
     $pdf = app('dompdf.wrapper');
-    $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+
+    if ($ServiceRequest->working_day_type == "DIARIO") {
+      $pdf->loadView('service_requests.report_resolution_diary', compact('ServiceRequest'));
+    }else{
+      $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+    }
+
 
     return $pdf->stream('mi-archivo.pdf');
     // return view('service_requests.report_resolution', compact('serviceRequest'));
@@ -549,7 +557,7 @@ class ReportController extends Controller
 
 
   public function duplicateContracts(Request $request)
-  {    
+  {
     $srall = ServiceRequest::all();
     $srUnique = $srall->unique('user_id');
     $serviceRequestssinordenar = $srall->diff($srUnique);
@@ -557,6 +565,61 @@ class ReportController extends Controller
     //$serviceRequests = $serviceRequests->paginate(100);
     return view('service_requests.reports.duplicate_contracts', compact('request', 'serviceRequests'));
   }
+
+  	public function contract(Request $request)
+  	{
+    	$responsabilityCenters = OrganizationalUnit::where('establishment_id', Auth::user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
+    	//dd($responsabilityCenters);
+
+		$srs = array();
+		$total_srs = 0;
+		
+		if(isset($request->option)) 
+		{
+			
+			$srs = ServiceRequest::query();
+
+			if ($request->has('excel')) {
+				return Excel::download(new ContractExport($request), 'reporte-de-contrato.xlsx');
+			}
+		
+			//lista los que no son vigente, creados, solicitados, que comiencen, que terminen entre
+			if ($request->option != 'vigenci') {
+				if ($request->has('from')) {
+					$srs = $srs->whereBetween($request->option, [$request->from, $request->to])
+						->when($request->uo != null, function ($q) use ($request) {
+							return $q->where('responsability_center_ou_id', $request->uo);
+					})
+					->when($request->type != null, function ($q) use ($request) {
+						return $q->where('type',  $request->type);
+					})
+					->orderBy($request->option);
+				}
+			}
+
+			else //aca son solo los vigentes
+			{
+				$srs = $srs->whereDate('start_date','<=',$request->from)
+					->whereDate('end_date','>=',$request->to)
+					->when($request->uo != null, function ($q) use ($request) {
+						return $q->where('responsability_center_ou_id', $request->uo);
+					})
+					->when($request->type != null, function ($q) use ($request) {
+						return $q->where('type',  $request->type);
+					})
+					->orderBy('start_date');    
+			}
+
+			$total_srs = $srs->count(); 
+			
+			$srs = $srs->paginate(100);
+
+			$request->flash(); // envía los inputs de regreso
+
+		}
+    	return view('service_requests.reports.contract', 
+			compact('request', 'responsabilityCenters','srs','total_srs'));
+  	}
 
   public function export_sirh_txt(Request $request)
   {

@@ -45,7 +45,8 @@ class CheckSR extends Command
         // ahora comando para los horas y TURNO DE REEMPLAZO
         //working_day_type == "TURNO DE REEMPLAZO"
         //$srs = ServiceRequest::where('program_contract_type','horas')->where('working_day_type','TURNO DE REEMPLAZO')->get();
-        $srs = ServiceRequest::where('program_contract_type','horas')->where('working_day_type','HORA MÉDICA')->get();
+        //$srs = ServiceRequest::where('program_contract_type','horas')->where('working_day_type','HORA MÉDICA')->get();
+        $srs = ServiceRequest::all();
         $ct = 1;
         foreach($srs as $sr) {
             $diferencia = $sr->end_date->month - $sr->start_date->month + 1 ;             
@@ -56,13 +57,14 @@ class CheckSR extends Command
                 echo $sr->end_date->month - $sr->start_date->month + 1 . " => ";
                 echo count($sr->fulfillments). " \n ";
                 $ct++;
-                // echo'soy menor';
+                //echo'soy menor';
 
                 $array_real = null;
                 for($i = $sr->start_date->month; $i <= $sr->end_date->month; $i++) {
                     $array_real[] = $i;
                 }
-                //print_r($array_real);
+                echo'array real es \n';
+                print_r($array_real);
 
                 $array_malo = null;
                 foreach($sr->fulfillments as $f) {
@@ -100,7 +102,7 @@ class CheckSR extends Command
                         $array_real[$i]['end_date']   = $sr->end_date;
                         $array_real[$i]['year']       = $sr->start_date->year;
                         $array_real[$i]['month']      = $sr->start_date->month;
-                        $array_real[$i]['user_id']    = $sr->responsable_id;
+                        $array_real[$i]['user_id']    = $sr->creator_id;
                     }
                     else if($i == $sr->start_date->month) {
                         if($sr->start_date->day == $sr->start_date->firstOfMonth()->day){
@@ -113,7 +115,7 @@ class CheckSR extends Command
                         $array_real[$i]['end_date']   = $sr->start_date->endOfMonth();
                         $array_real[$i]['year']       = $sr->start_date->year;
                         $array_real[$i]['month']      = $sr->start_date->month;
-                        $array_real[$i]['user_id']    = $sr->responsable_id;
+                        $array_real[$i]['user_id']    = $sr->creator_id;
                     }
                     else if($i == $sr->end_date->month) {
                         if($sr->end_date->day == $sr->end_date->endOfMonth()->day){
@@ -126,7 +128,7 @@ class CheckSR extends Command
                         $array_real[$i]['end_date']   = $sr->end_date;
                         $array_real[$i]['year']       = $sr->end_date->year;
                         $array_real[$i]['month']      = $sr->end_date->month;
-                        $array_real[$i]['user_id']    = $sr->responsable_id;
+                        $array_real[$i]['user_id']    = $sr->creator_id;
                     }
                     else {
                         $fecha_start = new Carbon($sr->start_date->year.'-'.$i.'-1');
@@ -136,7 +138,7 @@ class CheckSR extends Command
                         $array_real[$i]['end_date']   = $fecha_end->endOfMonth();
                         $array_real[$i]['year']       = $fecha_start->year;
                         $array_real[$i]['month']      = $fecha_start->month;
-                        $array_real[$i]['user_id']    = $sr->responsable_id;
+                        $array_real[$i]['user_id']    = $sr->creator_id;
                     }
                     
                     

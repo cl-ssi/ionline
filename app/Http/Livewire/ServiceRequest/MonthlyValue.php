@@ -65,7 +65,10 @@ class MonthlyValue extends Component
                     case 'Abandono de funciones':
                         $mes_completo = false;
                         $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
-                        $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
+                        //dd((int)$item->end_date->format("d"));
+                        //dd($fulfillment->start_date->format("d"));
+                        $dias_trabajado_antes_retiro = ((int)$item->end_date->format("d"))-(int)$fulfillment->start_date->format("d") ;
+                        //dd($dias_trabajado_antes_retiro);
 
                         break;
                     case 'Renuncia voluntaria':                        
@@ -176,7 +179,7 @@ class MonthlyValue extends Component
 
                     $total_dias_trabajados = $dias_trabajado_antes_retiro;
                 };
-                //dd($total_dias_trabajados);
+                // dd($total_dias_trabajados);
                 $total = $total_dias_trabajados * ($valor_mensual / 30);
             }
         }

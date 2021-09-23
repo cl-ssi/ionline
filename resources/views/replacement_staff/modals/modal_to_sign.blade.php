@@ -9,8 +9,8 @@
         </button>
       </div>
       <div class="modal-body">
-          @if(!$request_to_sign->Where('id', $request->id)->isEmpty())
-          @foreach($request_to_sign->Where('id', $request->id) as $modal_request)
+          @if(!$pending_requests_to_sign->Where('id', $request->id)->isEmpty())
+          @foreach($pending_requests_to_sign->Where('id', $request->id) as $requestReplacementStaff)
               <table class="table table-sm table-bordered">
                   <thead>
                       <tr class="table-active">
@@ -21,55 +21,55 @@
                       <tr>
                           <th class="table-active">Por medio del presente, la</th>
                           <td colspan="2">
-                              {{ $modal_request->organizationalUnit->name }}
+                              {{ $requestReplacementStaff->organizationalUnit->name }}
                           </td>
                       </tr>
                       <tr>
                           <th class="table-active">Solicita autorizar el llamado a presentar antecedentes al cargo de</th>
                           <td colspan="2">
-                              {{ $modal_request->name }}
+                              {{ $requestReplacementStaff->name }}
                           </td>
                       </tr>
                       <tr>
                           <th class="table-active">En el grado</th>
-                          <td colspan="2">{{ $modal_request->degree }}</td>
+                          <td colspan="2">{{ $requestReplacementStaff->degree }}</td>
                       </tr>
                       <tr>
                           <th class="table-active">Calidad Jurídica</th>
-                          <td colspan="2">{{ $modal_request->LegalQualityValue }}</td>
+                          <td colspan="2">{{ $requestReplacementStaff->LegalQualityValue }}</td>
                       </tr>
                       <tr>
                           <th class="table-active">La Persona cumplirá labores en Jornada</th>
-                          <td style="width: 33%">{{ $modal_request->WorkDayValue }}</td>
-                          <td style="width: 33%">{{ $modal_request->other_work_day }}</td>
+                          <td style="width: 33%">{{ $requestReplacementStaff->WorkDayValue }}</td>
+                          <td style="width: 33%">{{ $requestReplacementStaff->other_work_day }}</td>
                       </tr>
                       <tr>
                           <th class="table-active">Justificación o fundamento de la Contratación</th>
-                          <td style="width: 33%">{{ $modal_request->FundamentValue }}</td>
-                          <td style="width: 33%">De funcionario: {{ $modal_request->name_to_replace }}</td>
+                          <td style="width: 33%">{{ $requestReplacementStaff->FundamentValue }}</td>
+                          <td style="width: 33%">De funcionario: {{ $requestReplacementStaff->name_to_replace }}</td>
                       </tr>
                       <tr>
                           <th class="table-active">Otros (especifique)</th>
-                          <td colspan="2">{{ $modal_request->other_fundament }}</td>
+                          <td colspan="2">{{ $requestReplacementStaff->other_fundament }}</td>
                       </tr>
                       <tr>
                           <td colspan="3">El documento debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
                       </tr>
                       <tr>
-                          @foreach($modal_request->RequestSign as $sign)
+                          @foreach($requestReplacementStaff->RequestSign as $sign)
                             <td class="table-active text-center">
                                 {{ $sign->organizationalUnit->name }}<br>
                             </td>
                           @endforeach
                       </tr>
                       <tr>
-                          @foreach($modal_request->RequestSign as $requestSign)
+                          @foreach($requestReplacementStaff->RequestSign as $requestSign)
                             <td align="center">
                                 @if($requestSign->request_status == 'pending' && $requestSign->organizational_unit_id == Auth::user()->organizationalUnit->id)
                                     Estado: {{ $requestSign->StatusValue }} <br><br>
                                     <div class="row">
                                         <div class="col-sm">
-                                            <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'accepted']) }}">
+                                            <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'accepted', $requestReplacementStaff]) }}">
                                                   @csrf
                                                   @method('PUT')
                                                   <button type="submit" class="btn btn-success btn-sm"
@@ -78,18 +78,35 @@
                                                       <i class="fas fa-check-circle"></i></a>
                                                   </button>
                                             </form>
-                                      </div>
-                                      <div class="col-sm">
-                                          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'rejected']) }}">
-                                              @csrf
-                                              @method('PUT')
-                                              <button type="submit" class="btn btn-danger btn-sm"
-                                                  onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
-                                                  title="Rechazar">
-                                                  <i class="fas fa-times-circle"></i></a>
-                                              </button>
-                                          </form>
-                                      </div>
+                                        </div>
+                                        <div class="col-sm">
+                                          <p>
+                                            <a class="btn btn-danger btn-sm" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                                <i class="fas fa-times-circle"></i>
+                                            </a>
+                                          </p>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <div class="collapse" id="collapseExample">
+                                                <div class="card card-body">
+                                                  <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.sign.update', [$requestSign, 'status' => 'rejected', $requestReplacementStaff]) }}">
+                                                      @csrf
+                                                      @method('PUT')
+                                                      <div class="form-group">
+                                                          <label class="float-left" for="for_observation">Motivo Rechazo</label>
+                                                          <textarea class="form-control" id="for_observation" name="observation" rows="2"></textarea>
+                                                      </div>
+                                                      <button type="submit" class="btn btn-danger btn-sm float-right"
+                                                          onclick="return confirm('¿Está seguro que desea Rechazar la solicitud?')"
+                                                          title="Rechazar">
+                                                          <i class="fas fa-times-circle"></i> Rechazar</a>
+                                                      </button>
+                                                  </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 @elseif($requestSign->request_status == 'accepted')
                                     <span style="color: green;">

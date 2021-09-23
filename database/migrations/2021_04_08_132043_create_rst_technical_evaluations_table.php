@@ -17,7 +17,7 @@ class CreateRstTechnicalEvaluationsTable extends Migration
             $table->id();
             $table->dateTime('date_end')->nullable();
             $table->enum('technical_evaluation_status',['pending', 'complete', 'rejected']);
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->nullable();
             $table->foreignId('organizational_unit_id');
             $table->foreignId('request_replacement_staff_id');
 
