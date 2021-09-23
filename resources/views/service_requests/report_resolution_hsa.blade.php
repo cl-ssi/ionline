@@ -287,11 +287,6 @@
         de las Bases Generales de la Administración del Estado. Dichas disposiciones
         relativas a inhabilidades e incompatibilidades administrativas serán aplicables al prestador,
         con quién se suscribe el presente contrato a Honorarios a Suma Alzada.
-  </i>
-
-
-
-
       </p>
 
       <p class="justify">
