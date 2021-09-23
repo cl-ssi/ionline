@@ -54,19 +54,7 @@
         <pre>{{ $phrase ? $phrase->phrase : '' }}</pre>
     </div>
 </div>
-<!-- ANUNCIO -->
-<div class="alert alert-warning" role="alert">
-  <h4 class="alert-heading">Cambio de Hora - Errores OTP</h4>
-  <p>Estimados, junto con saludar, les informamos que dado el cambio de hora que ocurrirá este <b>Sábado 4 de Septiembre</b>,
-    muchos de los firmantes de su Institución podrán tener problemas para utilizar la firma con el código OTP que entrega
-    la aplicación Google Authenticator (o similar), por lo que le sugerimos revisar en su celular la configuración de zona
-    horaria (Chile/Automática).</p>
-  <p>Para mas detalles, dejamos disponible una guía con las indicaciones de configuración.</p>
-  <p class="mt-1"><b>Guía de Configuración:</b><br>
-    <a href="https://firma.digital.gob.cl/biblioteca/manuales-firmagob/configuracion-2do-factor/" target="_blank">Configuración OTP</a>
-    </p>
-</div>
-<!-- FIN ANUNCIO -->
+
     @endsection
 
     @section('custom_js')
