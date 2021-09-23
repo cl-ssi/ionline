@@ -75,6 +75,5 @@ class UserSeeder extends Seeder
             'email'=>'alvaro.lupa@redsalud.gob.cl','password'=>bcrypt('admin'), 'position'=>'Profesional SIDRA', 'organizational_unit_id'=>$ouTIC->id]);
         $user->assignRole('god','dev');
         $user->givePermissionTo(Permission::all());
-
     }
 }

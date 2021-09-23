@@ -41,14 +41,14 @@ class TechnicalEvaluationFileController extends Controller
     public function store(Request $request, TechnicalEvaluation $technicalEvaluation)
     {
         foreach ($request->file as $key_file => $file) {
-            $files = new TechnicalEvaluationFiles();
+            $files = new TechnicalEvaluationFile();
 
             $files->name = $request->input('name.'.$key_file.'');
 
             $now = Carbon::now()->format('Y_m_d_H_i_s');
             $id_file = $key_file + 1;
             $file_name = $now.'_'.$id_file.'_'.$technicalEvaluation->id;
-            $files->file = $file->storeAs('/ionline/replacement_staff/technical_evaluation_docs/', $file_name.'.'.$file->extension(), 'gcs');
+            $files->file = $file->storeAs('/ionline/replacement_staff_dev/technical_evaluation_docs/', $file_name.'.'.$file->extension(), 'gcs');
 
             $files->user()->associate(Auth::user());
             $files->technical_evaluation()->associate($technicalEvaluation);
@@ -56,8 +56,9 @@ class TechnicalEvaluationFileController extends Controller
             $files->save();
         }
 
-        session()->flash('success', 'El archivo fue correctamente ingresado/s.');
-        return redirect()->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#file');
+        return redirect()
+            ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#file')
+            ->with('message-success-file', 'Estimado usuario, archivo(s) correctamente ingresado(s).');
     }
 
     /**
@@ -102,11 +103,12 @@ class TechnicalEvaluationFileController extends Controller
      */
     public function destroy(TechnicalEvaluationFile $technicalEvaluationFile)
     {
-        $technicalEvaluationFiles->delete();
+        $technicalEvaluationFile->delete();
         Storage::disk('gcs')->delete($technicalEvaluationFile->file);
 
-        session()->flash('danger', 'El archivo ha sido eliminado.');
-        return redirect()->back();
+        return redirect()
+            ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluationFile->technicalEvaluation).'#file')
+            ->with('message-danger-file', 'El archivo ha sido eliminado.');
     }
 
     public function download(TechnicalEvaluationFile $technicalEvaluationFile)

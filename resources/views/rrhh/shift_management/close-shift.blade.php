@@ -56,7 +56,7 @@
 		</div>
 	</form>
 
-		<form method="post" action="{{ route('rrhh.shiftManag.closeShift') }}" >
+		<form method="post" action="{{ route('rrhh.shiftManag.closeShift') }}" name="menuFilters">
         	@csrf
         	{{ method_field('post') }}  
 
@@ -132,7 +132,7 @@
                     	@endforeach
                 	</select> 		
             	</div>
-
+            	<input type="hidden" name="filtrados" id="filtrados"  value="0,0,0">
             	<div class="form-group col-md-2">
                 	<label for="for_submit">&nbsp;</label>
                 	<button type="submit" class="btn btn-primary form-control">Filtrar <i class="fa fa-filter"></i></button>
@@ -141,9 +141,9 @@
   		</form>
 
 
-	<h4>Cerrados <a href="#" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
+	<h4>Cerrados <a href="{{ route('rrhh.shiftManag.closeShift.download',['id'=>'closed']) }}" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
 	<small class="form-check">
-  			<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
+  			<input class="form-check-input" type="checkbox" value="1" id="onlyClosedByMe"  name="onlyClosedByMe" onchange="setValueToFiltrados()" {{ $onlyClosedByMe != 0 ? 'checked':'' }} >
   			<label class="form-check-label" for="flexCheckIndeterminate">
     			Solo cerrados por mi
   			</label>
@@ -158,7 +158,8 @@
 					<th>Cant. horas</th>
 					<th>Comentarios</th>
 
-					<th>Cerrado en</th>
+					<th>Cerrado por</th>
+					<th>Fecha cierre</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -170,11 +171,12 @@
 					<td>{{$c->user->getFullNameAttribute()}}</td>
 					<td>{{$c->total_hours}}</td>
 					<td>{{$c->first_confirmation_commentary}}</td>
+					<td>{{$c->close_user_id}}</td>
 					<td>{{$c->close_date}}</td>
 					<td>
 						
 						@livewire( 'rrhh.see-shift-control-form', ['usr'=>$c->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>$cierreDelMes->id], key($loop->index) )
-						}
+						
 					</td>
 				</tr>
 				@endforeach
@@ -189,9 +191,9 @@
 				@endif
 			</tbody>
 		</table>
-	<h4>Confirmados <a href="#" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a> </h4>
+	<h4>Confirmados <a href="{{ route('rrhh.shiftManag.closeShift.download',['id'=>'confirmed']) }}" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a> </h4>
 	<small class="form-check">
-  			<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
+  			<input class="form-check-input"  type="checkbox" value="1" id="onlyConfirmedByMe" name="onlyConfirmedByMe" onchange="setValueToFiltrados()" {{ $onlyConfirmedByMe != 0 ? 'checked':'' }} >
   			<label class="form-check-label" for="flexCheckIndeterminate">
     			Solo confirmados por mi
   			</label>
@@ -205,8 +207,9 @@
 					<th>Nombre</th>
 					<th>Cant. horas</th>
 					<th>Comentarios</th>
+					<th>Confirmado por</th>
 
-					<th>Cerrado en</th>
+					<th>Fecha confirmacion</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -219,6 +222,7 @@
 						<td>{{$f->user->getFullNameAttribute()}}</td>
 						<td>{{$f->total_hours}}</td>
 						<td>{{$f->first_confirmation_commentary}}</td>
+						<td>{{$f->first_confirmation_user_id}}</td>
 						<td>{{$f->first_confirmation_date}}</td>
 						<td>
 							@livewire( 'rrhh.see-shift-control-form', ['usr'=>$f->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>$cierreDelMes->id], key($loop->index) )
@@ -247,7 +251,7 @@
 				@endif
 			</tbody>
 		</table>
-	<h4>Pendientes <a href="#" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
+	<h4>Pendientes <a href="{{ route('rrhh.shiftManag.closeShift.download',['id'=>'slopes']) }}" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
 	<br>
 	<div class="table-wrapper-scroll-y my-custom-scrollbar" style="position: relative;height: 400px;overflow: auto;display: block;">
 	<table  class="table table-sm" id="tblPendientes">
@@ -269,7 +273,7 @@
 					<td>{{$s->user&&$s->user->id? $s->user->getFullNameAttribute(): '' }}</td>
 					<form method="post" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
 						<td><!-- <input type="text" class="form-control" name="commentX" value="Comentario de prueba desde el area anterior"> -->
-							<textarea  class="form-control" name="comment" placeholder ="Ingrese un comentario  " ></textarea>
+							<textarea  class="form-control" name="comment" id="comment1_{{$s->id}}" placeholder ="Ingrese un comentario  " ></textarea>
 						 </td>
 						<!-- <td>100</td> -->
 						<td>
@@ -288,7 +292,7 @@
 							<!-- <button data-toggle="modal" data-target="#exampleModal" class="btn btn-success">Confirmar</button> -->
 
 					</form>
-					<form method="post" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
+					<form method="post" id="rejectForm_{{$s->id}}" action="{{ route('rrhh.shiftManag.closeShift.firstConfirmation') }}">
 						@csrf
         				{{ method_field('post') }}
 
@@ -297,10 +301,12 @@
 						<!-- inicio bug -->
 						{{--json_encode($cierreDelMes--}}
 						<input type="hidden" name="cierreId" value="{{$cierreDelMes&&$cierreDelMes->id? $cierreDelMes->id : '' }}">
+						<input type="hidden" name="rechazar" value="1">
+						<input type="hidden" name="comment" id="comment2_{{$s->id}}" value="">
 						<!-- fin bug -->
 
 
-						<button class="btn btn-danger">Rechazar</button>
+						<button type="button" onclick="rejectForm({{$s->id}});" class="btn btn-danger">Rechazar</button>
 					</form>
 
                     	@livewire( 'rrhh.see-shift-control-form', ['usr'=>$s->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>$cierreDelMes->id], key($loop->index) )
@@ -312,9 +318,9 @@
 		</table>
 	</div>
 	<br>
-	<h4>Rechazados <a href="#" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
+	<h4>Rechazados <a href="{{ route('rrhh.shiftManag.closeShift.download',['id'=>'rejected']) }}" style="font-size:12px;">	<i class="fa fa-download" aria-hidden="true"></i></a></h4>
 	<small class="form-check">
-  			<input class="form-check-input" type="checkbox" value="" id="flexCheckIndeterminate">
+  			<input class="form-check-input" type="checkbox" value="1" id="onlyRejectedForMe" name="onlyRejectedForMe" onchange="setValueToFiltrados()" {{ $onlyRejectedForMe != 0 ? 'checked':'' }}>
   			<label class="form-check-label" for="flexCheckIndeterminate">
     			Solo rechazados por mi
   			</label>
@@ -327,12 +333,39 @@
 				<th>Rut</th>
 				<th>Nombre</th>
 				<th>Comentarios</th>
-				<!-- <th>Cant. horas</th> -->
-				<th>Cerrado en</th>
+				<th>Cant. horas</th>
+				<th>Rechazado por</th>
+				<th>Fecha rechazo</th>
+				<th></th>
 			</tr>
 		</thead>
 		<tbody>
-		</tbody>
+				@foreach($rejected as $r)
+				<tr>
+					<td>{{$loop->iteration}}</td>
+					<td>{{$r->user->runFormat() }}</td>
+					<td>{{$r->user->getFullNameAttribute()}}</td>
+					<td>{{$r->first_confirmation_commentary}}</td>
+					<td>{{$r->total_hours}}</td>
+					<td>{{$r->first_confirmation_user_id}}</td>
+					<td>{{$r->first_confirmation_date}}</td>
+					<td>
+						
+						@livewire( 'rrhh.see-shift-control-form', ['usr'=>$r->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth,'close'=>$cierreDelMes->id], key($loop->index) )
+						
+					</td>
+				</tr>
+				@endforeach
+				@if( count( $rejected ) < 1 )
+				<tr>
+					<td  colspan="6" style="text-align:center">	
+							
+						Sin registro de rechazados en este rango de fechas
+
+					</td>
+				</tr>
+				@endif
+			</tbody>
 	</table>
 
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -399,6 +432,28 @@ $(document).ready(function() {
 
     } );
 } );
+
+function setValueToFiltrados(){
+	var onlyClosedByMe=0;
+	var onlyConfirmedByMe=0;
+	var onlyRejectedForMe=0;
+
+	if ( $("#onlyConfirmedByMe").prop( "checked") )
+		onlyConfirmedByMe = 1;
+	if ( $("#onlyClosedByMe").prop( "checked") )
+		onlyClosedByMe = 1;
+	if ( $("#onlyRejectedForMe").prop( "checked") )
+		onlyRejectedForMe = 1;
+	$("#filtrados").val( onlyClosedByMe +","+ onlyConfirmedByMe +","+ onlyRejectedForMe  );
+	// alert($("#filtrados").val()  );
+	menuFilters.submit();
+}
+
+function rejectForm(idField){
+	$("#comment2_"+idField).val( $("#comment1_"+idField).val() );
+	// alert($("#comment2_"+idField).val());
+	$("#rejectForm_"+idField).submit();
+}
 </script>
 
 @endsection

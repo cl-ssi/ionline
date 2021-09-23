@@ -12,8 +12,12 @@ class ProfessionManage extends Model
     use softDeletes;
 
     protected $fillable = [
-        'name'
+        'name', 'profile_manage_id'
     ];
+
+    public function profileManage() {
+        return $this->belongsTo('App\Models\ReplacementStaff\ProfileManage');
+    }
 
     protected $hidden = [
         'created_at', 'updated_at'

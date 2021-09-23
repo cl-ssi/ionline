@@ -176,14 +176,18 @@ class MonthlyQuotes extends Component
         }
         ////es HONORARIO SUMA ALZADA
         else {            ///son cuotas iguales
-            $aguinaldo = '';
-            if ($serviceRequest->weekly_hours == 22 or $serviceRequest->weekly_hours == 44 or $serviceRequest->weekly_hours == 11) {
-                $aguinaldo = $this->aguinaldopatrias($serviceRequest);
-            }
+            // $aguinaldo = '';
+            // if ($serviceRequest->weekly_hours == 22 or $serviceRequest->weekly_hours == 44 or $serviceRequest->weekly_hours == 11) {
+
+            //     if (!in_array($serviceRequest->id, array(8146, 7925, 8381, 8382, 8384, 8385, 8387)))
+            //     {
+            //         $aguinaldo = $this->aguinaldopatrias($serviceRequest);
+            //     }
+                
+            // }
 
             if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
-                // dd('entre aca');
-                //dd('entre aca 69');
+                // dd('entre aca');                
                 $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
                 $valor_mensual = $serviceRequest->net_amount;
                 $string = $nroCuotas . " cuotas,";
@@ -203,6 +207,7 @@ class MonthlyQuotes extends Component
             //son cuotas valores diferentes
             {
                 // la persona trabaja menos de 1 mes
+                //dd('holita');
                 $diff_in_months = $serviceRequest->end_date->diffInMonths($serviceRequest->start_date);
                 if ($diff_in_months < 1) {
                     $string = "1 cuota de $";
@@ -243,11 +248,17 @@ class MonthlyQuotes extends Component
                         $valor_mensual = $serviceRequest->net_amount;
                         $string = $nroCuotas . " cuotas,";
                         $interval = DateInterval::createFromDateString('1 month');
-                        $periods   = new DatePeriod($serviceRequest->start_date, $interval, $serviceRequest->end_date);
+                        $periods   = new DatePeriod($serviceRequest->start_date->firstOfMonth(), $interval, $serviceRequest->end_date->endOfMonth());
+                        //dd($interval);
+                        //dd($periods);
                         $periods = iterator_to_array($periods);
+                        //dd($periods);
                         $dias_trabajados = $serviceRequest->start_date->diff($serviceRequest->start_date->lastOfMonth())->days + 1;
                         //$valor_diferente = round($dias_trabajados * round(($valor_mensual / 30)));
                         $valor_diferente = round($dias_trabajados * ($valor_mensual / 30));
+                        // dd('entre aca');
+                        //dd($periods);
+                        //$periods = $periods+1;
                         foreach ($periods as $key => $period) {
                             if ($key === array_key_first($periods)) {
                                 $string .= " una de $" . number_format($valor_diferente) . " el mes de " . $period->monthName;
@@ -261,7 +272,7 @@ class MonthlyQuotes extends Component
                     //la persona termina de trabajar en un día que no es fin de mes
                     elseif ($serviceRequest->end_date->format('Y-m-d') != $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
                         //dd('entra aca');
-                        //dd('entre aca 2');
+                        // dd('entre aca 2');
                         $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
                         $valor_mensual = $serviceRequest->net_amount;
                         $string = $nroCuotas . " cuotas,";
@@ -290,7 +301,7 @@ class MonthlyQuotes extends Component
             }
 
 
-            $string .= $aguinaldo;
+            // $string .= $aguinaldo;
 
 
 

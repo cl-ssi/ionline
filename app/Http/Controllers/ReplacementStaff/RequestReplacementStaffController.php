@@ -5,14 +5,17 @@ namespace App\Http\Controllers\ReplacementStaff;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 use App\Models\ReplacementStaff\ReplacementStaff;
 use App\Models\ReplacementStaff\RequestSign;
+use App\Models\ReplacementStaff\AssignEvaluation;
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewRequestReplacementStaff;
+use App\Mail\NotificationSign;
 
 
 class RequestReplacementStaffController extends Controller
@@ -24,10 +27,60 @@ class RequestReplacementStaffController extends Controller
      */
     public function index()
     {
-        $requestReplacementStaff = RequestReplacementStaff::orderBy('id', 'DESC')
+        $pending_requests = RequestReplacementStaff::latest()
+            ->where(function ($q){
+                $q->doesntHave('technicalEvaluation')
+                ->orWhereHas('technicalEvaluation', function( $query ) {
+                  $query->where('technical_evaluation_status','pending');
+                });
+            })
+            ->OrWhereHas('requestSign', function($j) {
+              $j->Where('request_status', 'pending');
+            })
+            ->get();
+
+        $requests = RequestReplacementStaff::latest()
+            ->where(function ($q){
+                $q->whereHas('requestSign', function($j) {
+                    $j->Where('request_status', 'rejected');
+                })
+                ->orWhereHas('technicalEvaluation', function($y){
+                    $y->Where('technical_evaluation_status', 'complete')
+                    ->OrWhere('technical_evaluation_status', 'rejected');
+                });
+            })
             ->paginate(10);
 
-        return view('replacement_staff.request.index', compact('requestReplacementStaff'));
+        $users_rys = User::where('organizational_unit_id', 48)->get();
+
+        return view('replacement_staff.request.index', compact('pending_requests', 'requests', 'users_rys'));
+    }
+
+    public function assign_index()
+    {
+        $pending_requests = RequestReplacementStaff::latest()
+            ->WhereHas('technicalEvaluation', function($q) {
+              $q->Where('technical_evaluation_status', 'pending');
+            })
+             ->WhereHas('assignEvaluations', function($j) {
+               $j->Where('to_user_id', Auth::user()->id)
+               ->where('status', 'assigned');
+             })
+             ->get();
+
+        $requests = RequestReplacementStaff::latest()
+            ->where(function ($q){
+                $q->whereHas('requestSign', function($j) {
+                    $j->Where('request_status', 'rejected');
+                })
+                ->orWhereHas('technicalEvaluation', function($y){
+                    $y->Where('technical_evaluation_status', 'complete')
+                    ->OrWhere('technical_evaluation_status', 'rejected');
+                });
+            })
+            ->paginate(10);
+
+        return view('replacement_staff.request.assign_index', compact('pending_requests', 'requests'));
     }
 
     public function own_index()
@@ -38,11 +91,12 @@ class RequestReplacementStaffController extends Controller
               	$q->doesntHave('technicalEvaluation')
                 ->orWhereHas('technicalEvaluation', function( $query ) {
                   $query->where('technical_evaluation_status','pending');
+                })
+                ->orWhereHas('requestSign', function($j) {
+                  $j->Where('request_status', 'pending');
                 });
             })
-            ->WhereHas('requestSign', function($j) {
-              $j->Where('request_status', 'pending');
-            })
+
             ->get();
 
         $my_request = RequestReplacementStaff::latest()
@@ -61,14 +115,14 @@ class RequestReplacementStaffController extends Controller
         return view('replacement_staff.request.own_index', compact('my_request', 'my_pending_requests'));
     }
 
-    public function ou_index()
-    {
-        $ou_request = RequestReplacementStaff::where('organizational_unit_id', Auth::user()->organizationalUnit->id)
-            ->orderBy('id', 'DESC')
-            ->paginate(10);
-
-        return view('replacement_staff.request.ou_index', compact('ou_request'));
-    }
+    // public function ou_index()
+    // {
+    //     $ou_request = RequestReplacementStaff::where('organizational_unit_id', Auth::user()->organizationalUnit->id)
+    //         ->orderBy('id', 'DESC')
+    //         ->paginate(10);
+    //
+    //     return view('replacement_staff.request.ou_index', compact('ou_request'));
+    // }
 
     public function to_sign(RequestReplacementStaff $requestReplacementStaff)
     {
@@ -78,27 +132,28 @@ class RequestReplacementStaffController extends Controller
 
         $authorities = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
 
+        foreach ($authorities as $authority){
+            $iam_authorities_in[] = $authority->organizational_unit_id;
+        }
+
         if(!empty($authorities)){
-            foreach ($authorities as $authority) {
+            $pending_requests_to_sign = RequestReplacementStaff::latest()
+                ->whereHas('requestSign', function($q) use ($authority, $iam_authorities_in){
+                    $q->Where('organizational_unit_id', $iam_authorities_in)
+                    ->Where('request_status', 'pending');
+                })
+                ->get();
 
-                $request_to_sign = RequestReplacementStaff::latest()
-                    ->whereHas('requestSign', function($q) use ($authority){
-                        $q->Where('organizational_unit_id', $authority->organizational_unit_id)
-                        ->Where('request_status', 'pending');
-                    })
-                    ->get();
-
-                $request_to_sign_accepted = RequestReplacementStaff::latest()
-                    ->whereHas('requestSign', function($q) use ($authority){
-                        $q->Where('organizational_unit_id', $authority->organizational_unit_id)
-                        ->Where(function ($j){
-                          $j->Where('request_status', 'accepted')
-                          ->OrWhere('request_status', 'rejected');
-                        });
-                    })
-                    ->paginate(10);
-            }
-            return view('replacement_staff.request.to_sign', compact('request_to_sign', 'request_to_sign_accepted'));
+            $requests_to_sign = RequestReplacementStaff::latest()
+                ->whereHas('requestSign', function($q) use ($authority, $iam_authorities_in){
+                    $q->Where('organizational_unit_id', $iam_authorities_in)
+                    ->Where(function ($j){
+                        $j->Where('request_status', 'accepted')
+                        ->OrWhere('request_status', 'rejected');
+                    });
+                })
+                ->paginate(10);
+            return view('replacement_staff.request.to_sign', compact('pending_requests_to_sign', 'requests_to_sign'));
         }
 
         session()->flash('danger', 'Estimado Usuario/a: Usted no dispone de solicitudes para aprobación.');
@@ -141,6 +196,7 @@ class RequestReplacementStaffController extends Controller
 
                 $date = Carbon::now()->format('Y_m_d_H_i_s');
                 $type = 'manager';
+                $type_adm = 'secretary';
                 $user_id = Auth::user()->id;
 
                 $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
@@ -166,13 +222,23 @@ class RequestReplacementStaffController extends Controller
                       $request_sing->ou_alias = 'sub_rrhh';
                       $request_sing->organizational_unit_id = 44;
                       $request_sing->request_status = 'pending';
+
+                      //manager
+                      $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
+                      //secretary
+                      $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type_adm);
+
+                      $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
+
+                      Mail::to($emails)
+                        ->cc(env('APP_RYS_MAIL'))
+                        ->send(new NotificationSign($request_replacement));
                   }
 
                   if ($i == 2) {
                       $request_sing->position = '2';
                       $request_sing->ou_alias = 'dir';
                       $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
-                      $request_sing->request_status = 'pending';
                   }
                 }
                 $request_sing->request_replacement_staff_id = $request_replacement->id;
@@ -188,6 +254,7 @@ class RequestReplacementStaffController extends Controller
 
                 $date = Carbon::now()->format('Y_m_d_H_i_s');
                 $type = 'manager';
+                $type_adm = 'secretary';
                 $user_id = Auth::user()->id;
 
                 $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
@@ -218,6 +285,17 @@ class RequestReplacementStaffController extends Controller
                         $request_sing->ou_alias = 'leadership';
                         $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
                         $request_sing->request_status = 'pending';
+
+                        //manager
+                        $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
+                        //secretary
+                        $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type_adm);
+
+                        $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
+
+                        Mail::to($emails)
+                          ->cc(env('APP_RYS_MAIL'))
+                          ->send(new NotificationSign($request_replacement));
                     }
                     if ($i == 2) {
                         $request_sing->position = '2';
@@ -244,6 +322,7 @@ class RequestReplacementStaffController extends Controller
 
                 $date = Carbon::now()->format('Y_m_d_H_i_s');
                 $type = 'manager';
+                $type_adm = 'secretary';
                 $user_id = Auth::user()->id;
 
                 $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
@@ -259,6 +338,7 @@ class RequestReplacementStaffController extends Controller
                       $request_sing->position = '2';
                       $request_sing->ou_alias = 'sub';
                       $request_sing->organizational_unit_id = $uo_request->father->id;
+                      $request_sing->request_status = 'pending';
                     }
 
                     if ($i == 3) {
@@ -274,6 +354,17 @@ class RequestReplacementStaffController extends Controller
                         $request_sing->ou_alias = 'leadership';
                         $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
                         $request_sing->request_status = 'pending';
+
+                        //manager
+                        $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
+                        //secretary
+                        $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type_adm);
+
+                        $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
+
+                        Mail::to($emails)
+                          ->cc(env('APP_RYS_MAIL'))
+                          ->send(new NotificationSign($request_replacement));
                     }
                     if ($i == 2) {
                       $request_sing->position = '2';
@@ -294,7 +385,7 @@ class RequestReplacementStaffController extends Controller
 
         Mail::to(explode(',', env('APP_RYS_MAIL')))->send(new NewRequestReplacementStaff($request_replacement));
 
-        session()->flash('success', 'Se ha creado la Solicitud Exitosamente');
+        session()->flash('success', 'Estimados Usuario, se ha creado la Solicitud Exitosamente');
         return redirect()->route('replacement_staff.request.own_index');
     }
 

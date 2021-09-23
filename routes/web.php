@@ -149,7 +149,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 /* Nuevas rutas, Laravel 8.0 */
 Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')->group(function(){
-    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware(['role:Replacement Staff: admin']);
+    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware(['role:Replacement Staff: admin|Replacement Staff: user rys']);
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
     Route::get('/download_file/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download_file');
     Route::get('/view_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('view_file');
@@ -162,7 +162,8 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/show_file/{training}', [TrainingController::class, 'show_file'])->name('show_file');
     });
     Route::prefix('request')->name('request.')->group(function(){
-        Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index');
+        Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index')->middleware('permission:Replacement Staff: assign request');
+        Route::get('/assign_index', [RequestReplacementStaffController::class, 'assign_index'])->name('assign_index')->middleware('permission:Replacement Staff: technical evaluation');
         Route::get('/own_index', [RequestReplacementStaffController::class, 'own_index'])->name('own_index');
         Route::get('/ou_index', [RequestReplacementStaffController::class, 'ou_index'])->name('ou_index');
         Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
@@ -172,11 +173,11 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/to_select/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_select'])->name('to_select');
         Route::get('/to_sign', [RequestReplacementStaffController::class, 'to_sign'])->name('to_sign');
         Route::prefix('sign')->name('sign.')->group(function(){
-            Route::put('/{requestSign}/{status}/update', [RequestSignController::class, 'update'])->name('update');
+            Route::put('/{requestSign}/{status}/{requestReplacementStaff}/update', [RequestSignController::class, 'update'])->name('update');
         });
         Route::prefix('technical_evaluation')->name('technical_evaluation.')->group(function(){
             Route::get('/{technicalEvaluation}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
-            Route::get('/store/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'store'])->name('store');
+            Route::post('/store/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'store'])->name('store');
             Route::prefix('commission')->name('commission.')->group(function(){
                 Route::post('/store/{technicalEvaluation}', [CommissionController::class, 'store'])->name('store');
                 Route::delete('{commission}/destroy', [CommissionController::class, 'destroy'])->name('destroy');
@@ -391,13 +392,13 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
            Route::get('/closeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeShift'])->name('shiftManag.closeShift')->middleware('auth');
            Route::post('/closeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeShift'])->name('shiftManag.closeShift')->middleware('auth');
-
+           Route::get('/closeshift/download/{id}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'downloadCloseInXls'])->name('shiftManag.closeShift.download')->middleware('auth');
 
            Route::post('/closeshift/first', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'firstConfirmation'])->name('shiftManag.closeShift.firstConfirmation')->middleware('auth');
            Route::post('/closeshift/close', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeDaysConfirmation'])->name('shiftManag.closeShift.closeConfirmation')->middleware('auth');
 
            Route::post('/closeshift/saveclosedate/{new?}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'saveClose'])->name('shiftManag.closeShift.saveDate')->middleware('auth');
-           
+
            Route::post('/shiftupdate', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'changeShiftUserCommentary'])->name('shiftManag.shiftupdate')->middleware('auth');
 
 
@@ -405,7 +406,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
            Route::get('/shiftreports', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReports'])->name('shiftManag.shiftReports')->middleware('auth');
            Route::post('/shiftreports', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReports'])->name('shiftManag.shiftReports')->middleware('auth');
            Route::get('/shiftreports/XLSdownload', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReportsXLSDownload'])->name('shiftManag.shiftReportsXLSdownload')->middleware('auth');
-           
+
 
            Route::get('/shiftdashboard', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftDashboard'])->name('shiftManag.shiftDashboard')->middleware('auth');
            Route::get('/available-shifts', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'availableShifts'])->name('shiftManag.availableShifts')->middleware('auth');
@@ -417,7 +418,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
            Route::get('/myshift/reject/{day}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShiftReject'])->name('shiftManag.myshift.rejectDay')->middleware('auth');
 
            Route::get('/reject/{day}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'adminShiftConfirm'])->name('shiftManag.confirmDay')->middleware('auth');
-           
+
 
         Route::post('/myshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShift'])->name('shiftManag.myshiftfiltered')->middleware('auth');
 
@@ -494,6 +495,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/certificate-pdf/{fulfillment}/{user?}', [FulfillmentController::class, 'certificatePDF'])->name('certificate-pdf');
             Route::get('/signed-certificate-pdf/{fulfillment}/{timestamp?}', [FulfillmentController::class, 'signedCertificatePDF'])->name('signed-certificate-pdf');
             Route::get('/delete-signed-certificate-pdf/{fulfillment}', [FulfillmentController::class, 'deletesignedCertificatePDF'])->name('delete-signed-certificate-pdf');
+            Route::get('/delete-responsable-vb/{fulfillment}', [FulfillmentController::class, 'deleteResponsableVB'])->name('delete-responsable-vb');
             //eliminar palabra fulfiment en URL y en metodo
             Route::get('/confirm-fulfillment/{fulfillment}', [FulfillmentController::class, 'confirmFulfillment'])->name('confirm-Fulfillment');
             Route::get('/refuse-fulfillment/{fulfillment}', [FulfillmentController::class, 'refuseFulfillment'])->name('refuse-Fulfillment');
@@ -514,7 +516,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
                 Route::post('/{var}/store', [AttachmentController::class, 'store'])->name('store');
                 Route::get('/{attachment}/show', [AttachmentController::class, 'show'])->name('show');
                 Route::get('/{attachment}/download', [AttachmentController::class, 'download'])->name('download');
-                Route::delete('/{attachment}/destroy', [AttachmentController::class, 'destroy'])->name('destroy');                
+                Route::delete('/{attachment}/destroy', [AttachmentController::class, 'destroy'])->name('destroy');
 
             });
 
@@ -530,6 +532,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/without-bank-details', [ReportController::class, 'withoutBankDetails'])->name('without-bank-details');
             Route::get('/with-bank-details', [ReportController::class, 'withBankDetails'])->name('with-bank-details');
             Route::get('/pending-resolutions', [ReportController::class, 'pendingResolutions'])->name('pending-resolutions');
+            Route::get('/contract', [ReportController::class, 'contract'])->name('contract');
             Route::get('/duplicate-contracts', [ReportController::class, 'duplicateContracts'])->name('duplicate-contracts');
             Route::get('/resolution-pdf/{ServiceRequest}', [ReportController::class, 'resolutionPDF'])->name('resolution-pdf');
             Route::get('/resolution-pdf-hsa/{ServiceRequest}', [ReportController::class, 'resolutionPDFhsa'])->name('resolution-pdf-hsa');

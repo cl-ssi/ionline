@@ -35,41 +35,29 @@ class Authority extends Model
     public static function getAuthorityFromDate($ou_id, $date, $type) {
         return Authority::with('user','organizationalUnit')
             ->where('organizational_unit_id', $ou_id)
-            // ->where('type', $type)
-            ->when(is_array($type), function ($q) use ($type) {
-              return $q->whereIn('type', $type);
-            })
-            ->when(!is_array($type), function ($q) use ($type) {
-              return $q->where('type', $type);
-            })
+            ->when($type, function ($q) use ($type) {
+                is_array($type) ? $q->whereIn('type', $type) : $q->where('type', $type);
+              })
             ->where('from','<=',$date)->where('to','>=',$date)->get()->last();
     }
 
     public static function getAmIAuthorityFromOu($date, $type, $user_id) {
-        // return Authority::with('user','organizationalUnit')
-        //                 ->where('user_id', $user_id)
-        //                 ->where('type', $type)
-        //                 ->where('from','<=',$date)->where('to','>=',$date)->get();
-
-        $ous = OrganizationalUnit::All();
+        // Pregunto por cada unidad organizacional si el user_id existe segun el tipo y fecha de la consulta
+        $ous = OrganizationalUnit::whereHas('authorities', function($q) use ($type, $date, $user_id){
+                                    $q->where('user_id', $user_id)
+                                      ->when($type, function ($q) use ($type) {
+                                        is_array($type) ? $q->whereIn('type', $type) : $q->where('type', $type);
+                                      })
+                                      ->where('from','<=',$date)->where('to','>=',$date);
+                                })->get();
+        
+        // Ahora que se que unidades organizacionales pertenece uder_id pregunto si por cada unidad organizacional se encuetra primero en la lista de autoridad/es, de ser correcto guardo en un array de autoridades a retornar
         $authorities = array();
-        foreach($ous as $ou) {
-            $authority = Authority::with('user','organizationalUnit')
-                ->where('organizational_unit_id', $ou->id)
-                // ->where('type', $type)
-                ->when(is_array($type), function ($q) use ($type) {
-                  return $q->whereIn('type', $type);
-                })
-                ->when(!is_array($type), function ($q) use ($type) {
-                  return $q->where('type', $type);
-                })
-                ->where('from','<=',$date)->where('to','>=',$date)->get()->last();
-            if($authority) {
-                if($authority->user_id == $user_id){
-                        $authorities[] = $authority;
-                }
-            }
+        foreach($ous as $ou){
+            $authority = self::getAuthorityFromDate($ou->id, $date, $type);
+            if($authority->user_id == $user_id) $authorities[] = $authority;
         }
+
         return $authorities;
     }
 

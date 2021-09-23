@@ -200,37 +200,31 @@
                             <a class="dropdown-item @active('replacement_staff.request.index')"
                                href="{{ route('replacement_staff.request.index') }}">
                                 <i class="far fa-id-card"></i> Staff de Reemplazos
-                                {{-- @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
-                                    <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span>
-                                @endif --}}
                             </a>
-                        @else
-                            @canany(['Replacement Staff: create request'])
-                                <div class="dropdown-divider"></div>
-
-                                <a class="dropdown-item @active('replacement_staff.request.own_index')"
-                                   href="{{ route('replacement_staff.request.own_index') }}">
-                                    <i class="far fa-id-card"></i> Staff de Reemplazos
-                                </a>
-                            @endcan
                         @endif
 
+                        @if(Auth::user()->hasRole('Replacement Staff: user rys'))
+                            <div class="dropdown-divider"></div>
 
-                        {{-- @endrole --}}
+                            <a class="dropdown-item @active('replacement_staff.request.assign_index')"
+                               href="{{ route('replacement_staff.request.assign_index') }}">
+                                <i class="far fa-id-card"></i> Staff de Reemplazos
+                            </a>
+                        @endif
 
-                        {{-- @role('Replacement Staff: user')--}}
+                        @if(Auth::user()->hasRole('Replacement Staff: user') ||
+                            App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', Auth::user()->id))
 
-                            <!-- <div class="dropdown-divider"></div>
+                            <div class="dropdown-divider"></div>
 
-                            <a class="dropdown-item @active('replacement_staff.request.index')"
+                            <a class="dropdown-item @active('replacement_staff.request.own_index')"
                                href="{{ route('replacement_staff.request.own_index') }}">
-                                <i class="far fa-id-card"></i> Staff de Reemplazos -->
-                                {{-- @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0) --}}
-                                    <!-- <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span> -->
-                                {{-- @endif --}}
-                            <!-- </a> -->
-                        {{-- @endrole --}}
-
+                                <i class="far fa-id-card"></i> Staff de Reemplazos
+                                @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
+                                    <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span>
+                                @endif
+                            </a>
+                        @endif
                     </div>
 
                 </li>

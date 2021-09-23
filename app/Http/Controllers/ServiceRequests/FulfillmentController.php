@@ -411,13 +411,13 @@ class FulfillmentController extends Controller
         $fulfillment->fill($request->all());
         if($request->hasFile('backup_assistance'))
         {
-          
+
           //$file_name = $fulfillment->year.'_'.$fulfillment->month.'_'.$fulfillment->ServiceRequest->employee->name;
           $file_name = $fulfillment->year.'_'.$fulfillment->month.'_'.$fulfillment->id;
           $file = $request->file('backup_assistance');
           $fulfillment->backup_assistance = $file->storeAs('/ionline/service_request/backup_assistance', $file_name.'.'.$file->extension(), 'gcs');
           $fulfillment->save();
-          
+
 
         }
         $fulfillment->save();
@@ -693,13 +693,26 @@ class FulfillmentController extends Controller
     }
 
     public function deletesignedCertificatePDF(Fulfillment $fulfillment)
-    {      
+    {
       //return Storage::disk('gcs')->delete($fulfillment->signedCertificate->signed_file);
       Storage::disk('gcs')->delete($fulfillment->signedCertificate->signed_file);
       $fulfillment->signatures_file_id = null;
       $fulfillment->save();
-      session()->flash('success', 'Se ha borrado exitosamente el certificado de cumplimiento.');      
-      return redirect()->back();      
+      session()->flash('success', 'Se ha borrado exitosamente el certificado de cumplimiento.');
+      return redirect()->back();
+
+    }
+
+
+    public function deleteResponsableVB(Fulfillment $fulfillment)
+    {
+      
+      $fulfillment->responsable_approbation = null;
+      $fulfillment->responsable_approbation_date = null;
+      $fulfillment->responsable_approver_id = null;
+      $fulfillment->save();      
+      session()->flash('success', 'Se ha borrado exitosamente el visto bueno de responsable.');
+      return redirect()->back();
 
     }
 
