@@ -37,8 +37,8 @@
     <table class="table table-sm " width="100%">
         <thead>
             <tr class="small ">
-                @can('Programming: status')<th class="text-left align-middle table-dark" >Estado</th>@endcan
-                @can('Programming: edit')<th class="text-left align-middle table-dark" ></th>@endcan
+                <th class="text-left align-middle table-dark" >{{ $request->get('status') == "active" ? 'selected' : '' }}Estado</th>
+                <th class="text-left align-middle table-dark" >{{ $request->get('edit') == "active" ? 'selected' : '' }}Editar</th>
                 <th class="text-left align-middle table-dark" >%</th> 
                 <th class="text-left align-middle table-dark" >Obs.</th> 
                 <th class="text-left align-middle table-dark" >Id</th> 
@@ -52,7 +52,6 @@
             @foreach($programmings as $programming)
             <tr class="small">
             <!-- Permiso para Activar o Desactivar programación númerica -->
-            @can('Programming: status')
                 <td >
                     <button class="btn btb-flat  btn-light" data-toggle="modal"
                         data-target="#updateModalRect"
@@ -66,43 +65,34 @@
                         @endif
                     
                     </button>
-                </td>
-            @endcan
+                </td> 
+
             <!-- Permiso para editar programación númerica -->
-            @can('Programming: edit')
                 <td ><a href="{{ route('programmings.show', $programming->id) }}" class="btn btb-flat btn-sm btn-light" >
                     <i class="fas fa-edit"></i></a>
                 </td>
-            @endcan
                 <td > <span class="badge badge-info">{{ number_format(($programming->qty_traz/51) *100, 0, ',', ' ')}}%</span> </td>
                 <td > <span class="badge badge-danger">{{ number_format($programming->qty_reviews, 0, ',', ' ')}}</span> </td>
-                <td >
-                {{ $programming->id }}</td>
+                <td >{{ $programming->id }}</td>
                 <td>{{ $programming->establishment->commune->name}}</td>
                 <td>{{ $programming->establishment->type }} {{ $programming->establishment->name }}</td>
                 <td>{{ $programming->year }}</td>
                 <td class="text-right ">
                 <!-- Permiso para asignar profesionales a la programación númerica en proceso -->
-                @can('ProfessionalHour: view')
                     <a href="{{ route('professionalhours.index', ['programming_id' => $programming->id]) }}" class="btn btb-flat btn-sm btn-secondary">
                         <i class="fas fa-user-tag small"></i>
                         <span class="small d-none d-sm-none d-md-inline">Profesionales</span> 
                     </a>
-                @endcan
                 <!-- Permiso para paremtrizar los días habiles anuales en la programación númerica en proceso -->
-                @can('ProgrammingDay: view')
                     <a href="{{ route('programmingdays.index',['programming_id' => $programming->id]) }}"  class="btn btb-flat btn-sm btn-secondary" >
                         <i class="fas fa-calendar-alt small"></i>
                         <span class="small d-none d-sm-none d-md-inline">Días a Programar</span> 
                     </a>
-                @endcan
                 <!-- Permiso para gestionar actividades en la programación númerica en proceso -->
-                @can('ProgrammingItem: view')
                     <a href="{{ route('programmingitems.index', ['programming_id' => $programming->id]) }}" class="btn btb-flat btn-sm btn-info" >
                         <i class="fas fa-tasks small"></i>
                         <span class="small d-none d-sm-none d-md-inline">Actividades</span> 
                     </a>
-                @endcan
             
                 </td> 
             </tr>
