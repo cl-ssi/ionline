@@ -256,7 +256,7 @@
       <p class="justify">
         En Iquique, a {{$inputs['Fecha']}}, comparece por una parte el <b>SERVICIO DE SALUD IQUIQUE</b>, persona jurídica de derecho público, RUT. 61.606.100-3, con domicilio en calle Aníbal
         Pinto N°815 de la ciudad de Iquique, representado por su {{ App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position }} <b>{{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}</b> chileno, Cédula Nacional de Identidad N°{{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->runFormat()}}, del mismo domicilio del servicio público que representa, en
-        adelante , "El {{ App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position }} del Servicio de Salud Iquique", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
+        adelante , "{{ App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position }} del Servicio de Salud Iquique", y por la otra don <b>{{$ServiceRequest->employee->getFullNameAttribute()}}</b>@if($ServiceRequest->profession), {{$ServiceRequest->profession->name}}@endif, RUT:{{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}, chileno,
         con domicilio en {{$ServiceRequest->address}}, de la ciudad de Iquique, en adelante “El Profesional” y exponen lo siguiente:
       </p>
 
