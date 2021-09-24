@@ -212,7 +212,8 @@
             </table>
         </div>
 
-        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
+        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+          Auth::user()->hasRole('Replacement Staff: admin'))
             @livewire('replacement-staff.commission', ['users' => $users,
                       'technicalEvaluation' => $technicalEvaluation])
         @endif
@@ -266,6 +267,15 @@
       @if (session('message-danger-aplicant-no-evaluated'))
         <div class="alert alert-danger alert-dismissible fade show">
             {{ session('message-danger-aplicant-no-evaluated') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      @endif
+
+      @if (session('message-success-aplicant-finish'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('message-success-aplicant-finish') }}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -333,16 +343,22 @@
         </div>
       @endif
 
-      <div class="row">
-          <div class="col">
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal"
-              data-target="#exampleModal-to-select-applicants">
-                <i class="fas fa-user-check"></i> Finalizar Selección
-            </button>
-            @include('replacement_staff.modals.modal_to_select_applicants')
-          </div>
-      </div>
+      @if($technicalEvaluation->applicants->count() > 0 && $technicalEvaluation->date_end == NULL)
+
+          @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+            Auth::user()->hasRole('Replacement Staff: admin'))
+              <div class="row">
+                  <div class="col">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal"
+                      data-target="#exampleModal-to-select-applicants">
+                        <i class="fas fa-user-check"></i> Finalizar Selección
+                    </button>
+                    @include('replacement_staff.modals.modal_to_select_applicants')
+                  </div>
+              </div>
+          @endif
+      @endif
 
       <hr>
 
@@ -455,7 +471,8 @@
 
               </tbody>
           </table>
-          @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
+          @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+              Auth::user()->hasRole('Replacement Staff: admin'))
             <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Seleccionar</button>
           @endif
           </form>
@@ -501,7 +518,7 @@
                     </tr>
                 </thead>
                 <tbody class="small">
-                  @foreach($technicalEvaluation->technical_evaluation_files->sortByDesc('created_at') as $technicalEvaluationFiles)
+                  @foreach($technicalEvaluation->technicalEvaluationFiles->sortByDesc('created_at') as $technicalEvaluationFiles)
                     <tr>
                       <td>{{ $technicalEvaluationFiles->name }}</td>
                       <td>{{ $technicalEvaluationFiles->user->FullName }}</td>
@@ -538,9 +555,10 @@
                 </tbody>
             </table>
         </div>
-        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
-          @livewire('replacement-staff.files', ['users' => $users,
-                    'technicalEvaluation' => $technicalEvaluation])
+        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+          Auth::user()->hasRole('Replacement Staff: admin'))
+            @livewire('replacement-staff.files', ['users' => $users,
+                      'technicalEvaluation' => $technicalEvaluation])
         @endif
     </div>
     <br>

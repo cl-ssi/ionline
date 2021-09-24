@@ -51,7 +51,7 @@ class TechnicalEvaluationFileController extends Controller
             $files->file = $file->storeAs('/ionline/replacement_staff_dev/technical_evaluation_docs/', $file_name.'.'.$file->extension(), 'gcs');
 
             $files->user()->associate(Auth::user());
-            $files->technical_evaluation()->associate($technicalEvaluation);
+            $files->technicalEvaluation()->associate($technicalEvaluation);
 
             $files->save();
         }

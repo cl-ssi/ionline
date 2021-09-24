@@ -52,7 +52,7 @@ class ApplicantController extends Controller
                 if($exist->isEmpty()){
                     $applicant = new Applicant();
                     $applicant->replacement_staff_id = $req;
-                    $applicant->technical_evaluation()->associate($technicalEvaluation);
+                    $applicant->technicalEvaluation()->associate($technicalEvaluation);
                     $applicant->save();
                 }
             }
@@ -130,17 +130,22 @@ class ApplicantController extends Controller
             }
         }
 
-        // $applicant->fill($request->all());
-        // $applicant->selected = 1;
-        // $applicant->save();
-        //
-        // $technicalEvaluation = TechnicalEvaluation::Find($applicant->technical_evaluation)->first();
-        // $now = Carbon::now();
-        // $technicalEvaluation->date_end = $now;
-        // $technicalEvaluation->technical_evaluation_status = 'complete';
-        // $technicalEvaluation->save();
+        foreach ($request->applicant_id as $key_file => $app_id) {
+            $applicant_evaluated = Applicant::Find($app_id)->first();
 
-        session()->flash('success', 'El postulante ha sido seleccionado.');
-        return redirect()->back();
+            $applicant_evaluated->fill($request->all());
+            $applicant_evaluated->selected = 1;
+            $applicant->save();
+
+            $technicalEvaluation = TechnicalEvaluation::Find($applicant->technicalEvaluation)->first();
+            $now = Carbon::now();
+            $technicalEvaluation->date_end = $now;
+            $technicalEvaluation->technical_evaluation_status = 'complete';
+            $technicalEvaluation->save();
+        }
+
+        return redirect()
+          ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation).'#applicant')
+          ->with('message-success-aplicant-finish', 'Estimado usuario, ha completado el proceso de selección');
     }
 }
