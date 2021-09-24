@@ -69,16 +69,7 @@ class ShiftManagementController extends Controller
             "MN2" => "Media jornada nocuturna 2",
     );
 
-    // TODO: eliminar
-    private $groupsnames = array(
-            '',
-            'enfermeros',
-            'tp4turno',
-            'tp3turno',
-            'auxiliares',
-            'administrativos',
-            'auxiliar de servicio TA',
-    );
+
     private $weekMap = [
             0 => 'DOM',
             1 => 'LUN',
@@ -89,17 +80,16 @@ class ShiftManagementController extends Controller
             6 => 'SAB',
     ];
 
-    // TODO: Cambiar letras mayúsculas
     public $shiftStatus = array(
-        1=>"asignado",
-        2=>"completado",
-        3=>"turno extra",
-        4=>"cambio turno con",
-        5=>"licencia medica",
-        6=>"fuero gremial",
-        7=>"feriado legal",
-        8=>"permiso excepcional",
-        9 => "Permiso sin goce de sueldo",
+        1=>"Asignado",
+        2=>"Completado",
+        3=>"Turno Extra",
+        4=>"Cambio Turno con",
+        5=>"Licencia Medica",
+        6=>"Fuero Gremial",
+        7=>"Feriado Legal",
+        8=>"Permiso Excepcional",
+        9 => "Permiso sin Goce de Sueldo",
         10 => "Descanzo Compensatorio",
         11 => "Permiso Administrativo Completo",
         12 => "Permiso Administrativo Medio Turno Diurno",
@@ -197,12 +187,12 @@ class ShiftManagementController extends Controller
         $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
 
         /* TODO: armar la query 
-        $staffInShift = ShiftUser::query();
         $staffInShift->where(x);
         $staffInShift->where(x);
         $staffInShfit->get();
         */
-
+        // $staffInShfit = new ShiftUser;
+        $staffInShift = ShiftUser::query();
         if($actuallyShift->id != 0){ // un turno en especifico
 
             $this->groupsnames = array(); 
@@ -211,23 +201,20 @@ class ShiftManagementController extends Controller
             // $groupsnames = array(); 
             // TODO: Traer los shfituser que pertenezcan al mes que estás buscando
             // TODO: ShiftUser::where('organizational_units_id',141)->where('shift_types_id',8)->groupBy("groupname")->pluck('groupname')
-            foreach(ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->groupBy("groupname")->get() as $g){
+            // foreach(ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->groupBy("groupname")->get() as $g){
                     
-                    array_push($this->groupsnames, $g->groupname);
-                // echo json_encode($g->groupname);
-            }
+            //         array_push($this->groupsnames, $g->groupname);
+            //     // echo json_encode($g->groupname);
+            // }
 
-            $staffInShift = $staffInShift->where('organizational_units_id', $actuallyOrgUnit->id )
-                ->where('shift_types_id',$actuallyShift->id)
-                ->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)
-                ->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)
-                ->where('groupname',htmlentities($groupname))
-                ->get();
+            $this->groupsnames = ShiftUser::where('organizational_units_id',141)->where('shift_types_id',8)->groupBy("groupname")->pluck('groupname');
+
+            $staffInShift = $staffInShift->where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->where('groupname',htmlentities($groupname))->get();
        
         }else{ // Todos los turnos
 
           
-            $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )
+            $staffInShift = $staffInShift->where('organizational_units_id', $actuallyOrgUnit->id )
                 ->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)
                 ->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)
                 ->where('groupname',htmlentities($groupname))
@@ -240,6 +227,7 @@ class ShiftManagementController extends Controller
         // TODO: Pasar el select de Series a un livewire
         $months = $this->months;
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        // $ouRoots = OrganizationalUnit::with('childs.childs.childs.childs')->where('level', 1)->get();
         $holidays = Holiday::all();
         $actuallyShiftMonthsList = array();
         foreach($sTypes as $sType){

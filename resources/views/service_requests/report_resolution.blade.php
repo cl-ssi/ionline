@@ -343,7 +343,12 @@
       </p>
 
       <p class="justify">
-        <strong>CUARTO:</strong> El prestador de Servicios contratante a través de la declaración jurada señaló no estar afecto a ninguna de las inhabilidades establecidas en los arts. 54, 55 y 56 de la Ley Nº 18.575, Orgánica Constitucional de las Bases Generales de la Administración del Estado. Dichas disposiciones relativas a inhabilidades e incompatibilidades administrativas serán aplicables al prestador, con quién se suscribe el presente contrato a Honorarios a Suma Alzada.
+        <strong>CUARTO:</strong> El prestador de Servicios contratante a través
+        de la declaración jurada señaló no estar afecto a ninguna de las inhabilidades
+        establecidas en los arts. 54, 55 y 56 de la Ley Nº 18.575, Orgánica Constitucional
+        de las Bases Generales de la Administración del Estado. Dichas disposiciones
+        relativas a inhabilidades e incompatibilidades administrativas serán aplicables al prestador,
+        con quién se suscribe el presente contrato a Honorarios a Suma Alzada.
       </p>
 
       <p class="justify">
@@ -638,7 +643,7 @@
         <strong>DECIMO TERCERO:</strong>
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         La personería de D.{{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, para representar al Hospital “Dr. E. Torres G.” de Iquique, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}}, consta en
-        {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}}, 
+        {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         del Servicio de Salud Iquique.
         @else
         La personería de D. JORGE GALLEGUILLOS MÖLLER, para representar al Servicio de Salud Iquique, en su calidad de Director, consta en el Dto. de Nombramiento N° 42/2019 del Ministerio de Salud.

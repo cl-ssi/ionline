@@ -21,7 +21,7 @@ class Applicant extends Model
         return $this->belongsTo('App\Models\ReplacementStaff\ReplacementStaff');
     }
 
-    public function technical_evaluation() {
+    public function technicalEvaluation() {
         return $this->belongsTo('App\Models\ReplacementStaff\TechnicalEvaluation');
     }
 
@@ -33,7 +33,7 @@ class Applicant extends Model
             return 'Recomendable con observaciones';
         }
         if($this->psycholabor_evaluation_score >= 80){
-            return 'Recomenda';
+            return 'Recomendable';
         }
     }
 
