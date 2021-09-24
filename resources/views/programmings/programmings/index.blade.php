@@ -78,8 +78,8 @@
                 <td > <span class="badge badge-danger">{{ number_format($programming->qty_reviews, 0, ',', ' ')}}</span> </td>
                 <td >
                 {{ $programming->id }}</td>
-                <td>{{ $programming->establishment->commune->name}}</td>
-                <td>{{ $programming->establishment->type }} {{ $programming->establishment->name }}</td>
+                <td>{{ $programming->commune }}</td>
+                <td>{{ $programming->establishment_type }} {{ $programming->establishment }}</td>
                 <td>{{ $programming->year }}</td>
                 <td class="text-right ">
                 <!-- Permiso para asignar profesionales a la programación númerica en proceso -->
