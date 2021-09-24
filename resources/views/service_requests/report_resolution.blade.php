@@ -303,7 +303,7 @@
         <b>{{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}</b>, RUN: {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->runFormat()}}
         en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital “Dr. Ernesto Torres Galdames” de Iquique, con domicilio en Av. Héroes de la Concepción N° 502 de Iquique, en adelante "el Director del Hospital “Dr. Ernesto Torres Galdames", y por la otra <b>{{$ServiceRequest->employee->getFullNameAttribute()}}, RUN: {{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
         @else
-        En Iquique, a {{$inputs['Fecha']}}, entre <b>D. JORGE GALLEGUILLOS MÖLLER, RUN: 9.381.231-K</b>, en su calidad de Director del Servicio de Salud Iquique, con domicilio Aníbal Pinto N° 815 de Iquique, en adelante el Director del Servicio de Salud Iquique, y por la otra <b>{{$ServiceRequest->employee->getFullNameAttribute()}}, RUN: {{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
+        En Iquique, a {{$inputs['Fecha']}}, entre <b>D. {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, RUN: {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->runFormat()}}</b>, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}} del Servicio de Salud Iquique, con domicilio Aníbal Pinto N° 815 de Iquique, en adelante el Director del Servicio de Salud Iquique, y por la otra <b>{{$ServiceRequest->employee->getFullNameAttribute()}}, RUN: {{$ServiceRequest->employee->id}}-{{$ServiceRequest->employee->dv}}</b>, domiciliado en {{$ServiceRequest->address}}, de la Ciudad de Iquique, en adelante "el prestador”, ambos mayores de edad, se ha convenido el siguiente:
         @endif
       </p>
 
@@ -313,7 +313,7 @@
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         Don {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
         @else
-        Don JORGE GALLEGUILLOS MÖLLER, en su calidad de Director del Servicio de Salud Iquique de Iquique, contrata a {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
+        D. {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}} del Servicio de Salud Iquique de Iquique, contrata a {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
         @endif
       </p>
 
@@ -584,7 +584,7 @@
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
       <p class="justify">
-        <strong>DÉCIMO PRIMERO:</strong> La personería de D. JORGE GALLEGUILLOS MÖLLER , para representar al Servicio Salud Iquique, en su calidad de Director, consta en
+        <strong>DÉCIMO PRIMERO:</strong> La personería de D. {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}} , para representar al Servicio Salud Iquique, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}}, consta en
         {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         del Servicio de Salud Iquique.
       </p>
@@ -627,7 +627,7 @@
         {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         del Servicio de Salud Iquique.
         @else
-        La personería de D. JORGE GALLEGUILLOS MÖLLER, para representar al Servicio de Salud Iquique, en su calidad de Director, consta en el Dto. de Nombramiento N° 42/2019 del Ministerio de Salud.
+        La personería de D. {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, para representar al Servicio de Salud Iquique, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}}, consta en el Dto. de Nombramiento N° 42/2019 del Ministerio de Salud.
         @endif
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
@@ -646,7 +646,7 @@
         {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
         del Servicio de Salud Iquique.
         @else
-        La personería de D. JORGE GALLEGUILLOS MÖLLER, para representar al Servicio de Salud Iquique, en su calidad de Director, consta en el Dto. de Nombramiento N° 42/2019 del Ministerio de Salud.
+        La personería de D. {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, para representar al Servicio de Salud Iquique, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}}, consta en el Dto. de Nombramiento N° 42/2019 del Ministerio de Salud.
         @endif
       </p>
       @else
