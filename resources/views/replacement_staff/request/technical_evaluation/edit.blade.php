@@ -145,30 +145,6 @@
     </div>
 </div>
 
-<!-- <div class="table-responsive">
-    <table class="table table-sm table-bordered">
-        <thead class="small">
-            <tr class="table-active">
-                <th colspan="6">Evaluación Técnica</th>
-            </tr>
-        </thead>
-        <tbody class="small">
-            <tr>
-                <th rowspan="2" class="table-active text-center"><i class="fas fa-user"></i></th>
-                <td>{{ $technicalEvaluation->user->FullName }}</td>
-                <th rowspan="2" class="table-active text-center"><i class="fas fa-calendar-alt"></i></th>
-                <td>{{ $technicalEvaluation->created_at->format('d-m-Y H:i:s') }}</td>
-                <th rowspan="2" class="table-active text-center">Estado</th>
-                <td rowspan="2">{{ $technicalEvaluation->StatusValue }}</td>
-            </tr>
-            <tr>
-                <td>{{ $technicalEvaluation->user->organizationalUnit->name }}</td>
-                <td>{{ (isset($technicalEvaluation->date_end)) ? $technicalEvaluation->date_end->format('d-m-Y H:i:s'):''}}</td>
-            </tr>
-        </tbody>
-    </table>
-</div> -->
-
 <br>
 
 <div class="card" id="commission">
@@ -278,6 +254,24 @@
         </div>
       @endif
 
+      @if (session('message-success-evaluate-applicants'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('message-success-evaluate-applicants') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      @endif
+
+      @if (session('message-danger-aplicant-no-evaluated'))
+        <div class="alert alert-danger alert-dismissible fade show">
+            {{ session('message-danger-aplicant-no-evaluated') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      @endif
+
       <h6>Postulantes a cargo(s)</h6>
       @if($technicalEvaluation->applicants->count() > 0)
         <div class="table-responsive">
@@ -302,7 +296,8 @@
                         <td>{{ $applicant->observations }}</td>
                         @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
                         <td style="width: 4%">
-                            @if($technicalEvaluation->date_end == NULL)
+                            @if($technicalEvaluation->date_end == NULL &&
+                              ($applicant->psycholabor_evaluation_score == null || $applicant->technical_evaluation_score == null || $applicant->observations == null))
                             <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.destroy', $applicant) }}">
                                 @csrf
                                 @method('DELETE')
@@ -325,10 +320,10 @@
                         <td style="width: 4%">
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
-                              data-target="#exampleModal-applicant-{{ $applicant->id }}">
+                              data-target="#exampleModal-to-evaluate-applicant-{{ $applicant->id }}">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            @include('replacement_staff.modals.modal_to_select_applicant')
+                            @include('replacement_staff.modals.modal_to_evaluate_applicant')
                         </td>
                         @endif
                     </tr>
@@ -337,6 +332,17 @@
             </table>
         </div>
       @endif
+
+      <div class="row">
+          <div class="col">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal"
+              data-target="#exampleModal-to-select-applicants">
+                <i class="fas fa-user-check"></i> Finalizar Selección
+            </button>
+            @include('replacement_staff.modals.modal_to_select_applicants')
+          </div>
+      </div>
 
       <hr>
 
@@ -468,6 +474,23 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
+            @if (session('message-success-file'))
+              <div class="alert alert-success alert-dismissible fade show">
+                  {{ session('message-success-file') }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+            @endif
+
+            @if (session('message-danger-file'))
+              <div class="alert alert-danger alert-dismissible fade show">
+                  {{ session('message-danger-file') }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+            @endif
             <table class="table table-sm table-striped table-bordered">
                 <thead class="text-center small">
                     <tr>
@@ -491,20 +514,20 @@
                       </td>
                       <td style="width: 4%">
                           @if($technicalEvaluation->technical_evaluation_status == 'pending')
-                          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.destroy', $applicant) }}">
+                          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.file.destroy', $technicalEvaluationFiles) }}">
                               @csrf
                               @method('DELETE')
                                   <button type="submit" class="btn btn-outline-danger btn-sm"
-                                      onclick="return confirm('¿Está seguro que desea eliminar el Postulante?')">
+                                      onclick="return confirm('¿Está seguro que desea eliminar el Archivo Adjunto?')">
                                       <i class="fas fa-trash"></i>
                                   </button>
                           </form>
                           @else
-                          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.destroy', $applicant) }}">
+                          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.file.destroy', $technicalEvaluationFiles) }}">
                               @csrf
                               @method('DELETE')
                                   <button type="submit" class="btn btn-outline-danger btn-sm"
-                                      onclick="return confirm('¿Está seguro que desea eliminar el Postulante?')" disabled>
+                                      onclick="return confirm('¿Está seguro que desea eliminar el Archivo Adjunto?')" disabled>
                                       <i class="fas fa-trash"></i>
                                   </button>
                           </form>

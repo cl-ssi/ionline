@@ -19,7 +19,7 @@ class TechnicalEvaluationFile extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function technical_evaluation() {
+    public function technicalEvaluation() {
         return $this->belongsTo('App\Models\ReplacementStaff\TechnicalEvaluation');
     }
 
