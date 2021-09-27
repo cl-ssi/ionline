@@ -107,7 +107,8 @@ class PayedExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
           'Rut',
           'Nombre',
           'Unidad',
-          'Periodo',
+          'Año',
+		  'Mes',
           'Tipo',
           'Tipo de Contrato',
           'Tipo de Jornada',
@@ -123,7 +124,12 @@ class PayedExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
             ($fulfillment->servicerequest)?$fulfillment->servicerequest->employee->runFormat(): '',
             ($fulfillment->servicerequest->employee)? strtoupper($fulfillment->servicerequest->employee->fullname) : '',
             $fulfillment->servicerequest->responsabilityCenter->name,
+<<<<<<< HEAD
             $fulfillment->year . "-" . $fulfillment->month,
+=======
+            $fulfillment->year,
+			$fulfillment->month,
+>>>>>>> 54bd1ebba1a59f2b1e7bdf846666eb1c3dee98bf
             $fulfillment->servicerequest->type,
             $fulfillment->servicerequest->program_contract_type,
             $fulfillment->servicerequest->working_day_type,
