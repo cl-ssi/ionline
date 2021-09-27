@@ -108,10 +108,10 @@ class PayedExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
           'Nombre',
           'Unidad',
           'Año',
-		  'Mes',
           'Tipo',
           'Tipo de Contrato',
           'Tipo de Jornada',
+          'Hrs pagadas',
           'F.Pago',
           'Monto'
         ];
@@ -128,6 +128,7 @@ class PayedExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
             $fulfillment->servicerequest->type,
             $fulfillment->servicerequest->program_contract_type,
             $fulfillment->servicerequest->working_day_type,
+            $fulfillment->total_hours_paid,
             $fulfillment->payment_date->format('Y-m-d'),
             $fulfillment->total_paid
         ];
