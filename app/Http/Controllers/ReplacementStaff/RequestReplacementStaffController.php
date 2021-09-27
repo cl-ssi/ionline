@@ -5,6 +5,7 @@ namespace App\Http\Controllers\ReplacementStaff;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 use App\Models\ReplacementStaff\ReplacementStaff;
 use App\Models\ReplacementStaff\RequestSign;
+use App\Models\ReplacementStaff\AssignEvaluation;
 use App\Rrhh\OrganizationalUnit;
 use App\Rrhh\Authority;
 use App\User;
@@ -58,26 +59,23 @@ class RequestReplacementStaffController extends Controller
     public function assign_index()
     {
         $pending_requests = RequestReplacementStaff::latest()
-            ->where(function ($q){
-                $q->doesntHave('technicalEvaluation')
-                ->orWhereHas('technicalEvaluation', function( $query ) {
-                  $query->where('technical_evaluation_status','pending');
-                });
+            ->WhereHas('technicalEvaluation', function($q) {
+              $q->Where('technical_evaluation_status', 'pending');
             })
-            ->OrWhereHas('requestSign', function($j) {
-              $j->Where('request_status', 'pending');
+            ->WhereHas('assignEvaluations', function($j) {
+              $j->Where('to_user_id', Auth::user()->id)
+               ->where('status', 'assigned');
             })
             ->get();
 
         $requests = RequestReplacementStaff::latest()
-            ->where(function ($q){
-                $q->whereHas('requestSign', function($j) {
-                    $j->Where('request_status', 'rejected');
-                })
-                ->orWhereHas('technicalEvaluation', function($y){
-                    $y->Where('technical_evaluation_status', 'complete')
-                    ->OrWhere('technical_evaluation_status', 'rejected');
-                });
+            ->WhereHas('technicalEvaluation', function($q) {
+              $q->Where('technical_evaluation_status', 'complete')
+              ->OrWhere('technical_evaluation_status', 'rejected');
+            })
+            ->WhereHas('assignEvaluations', function($j) {
+              $j->Where('to_user_id', Auth::user()->id)
+               ->where('status', 'assigned');
             })
             ->paginate(10);
 
@@ -424,7 +422,7 @@ class RequestReplacementStaffController extends Controller
         $requestReplacementStaff->fill($request->all());
         $requestReplacementStaff->save();
         session()->flash('success', 'Su solicitud ha sido sido correctamente actualizada.');
-        return redirect()->route('replacement_staff.edit', $requestReplacementStaff);
+        return redirect()->route('replacement_staff.request.edit', $requestReplacementStaff);
     }
 
     /**

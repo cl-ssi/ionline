@@ -11,10 +11,27 @@
  @can('Programming: create')
     <a href="{{ route('programmings.create') }}" class="btn btn-info mb-4">Comenzar Nueva Programación</a>
  @endcan
+ <form method="GET" class="form-horizontal" action="{{ route('programmings.index') }}">
+ <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Filtrar por Año</span>
+        </div>
+        <select name="year" id="for_year" class="form-control">
+            <option value=""></option>
+            <option value="2021" {{ $request->get('year') == "2021" ? 'selected' : '' }}>2021</option>
+            <option value="2022" {{ $request->get('year') == "2022" ? 'selected' : '' }}>2022</option>
+        </select>
+        <div>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+        </div>
+</div>
+ </form>
+
 <div class="float-right text-center">
 <h5>Tiempo Restante</h5>
 <div id="timer"></div>
 </div>
+
 
 <div class="table-responsive"> 
     <table class="table table-sm " width="100%">

@@ -92,6 +92,6 @@ class Visators extends Component
         }
 
         return view('livewire.signatures.visators')
-            ->withOuRoots(OrganizationalUnit::where('level', 1)->where('establishment_id', 38)->get());
+            ->withOuRoots(OrganizationalUnit::where('level', 1)->whereIn('establishment_id', [38, 1])->get());
     }
 }
