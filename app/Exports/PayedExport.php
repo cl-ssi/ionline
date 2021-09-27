@@ -123,7 +123,7 @@ class PayedExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
             ($fulfillment->servicerequest)?$fulfillment->servicerequest->employee->runFormat(): '',
             ($fulfillment->servicerequest->employee)? strtoupper($fulfillment->servicerequest->employee->fullname) : '',
             $fulfillment->servicerequest->responsabilityCenter->name,
-            $fulfillment->year - $fulfillment->month,
+            $fulfillment->year . "-" . $fulfillment->month,
             $fulfillment->servicerequest->type,
             $fulfillment->servicerequest->program_contract_type,
             $fulfillment->servicerequest->working_day_type,
