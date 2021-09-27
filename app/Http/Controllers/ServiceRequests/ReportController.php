@@ -20,6 +20,7 @@ use App\Establishment;
 use App\Rrhh\OrganizationalUnit;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ComplianceExport;
+use App\Exports\PayedExport;
 use App\Exports\ContractExport;
 
 
@@ -90,6 +91,18 @@ class ReportController extends Controller
   {
     $establishment_id = $request->establishment_id;
     $service_request_id = $request->service_request_id;
+    $working_day_type = $request->working_day_type;
+
+    $from = $request->from;
+    $to = $request->to;
+    if ($to == null) {
+      $to = Carbon::now();
+    }
+
+    $request->flash();
+    if ($request->has('excel')) {
+      return Excel::download(new PayedExport($request), 'reporte-de-pagados.xlsx');
+    }
 
     $payed_fulfillments1 = Fulfillment::whereHas("ServiceRequest", function ($subQuery) {
       $subQuery->where('has_resolution_file', 1);
@@ -103,6 +116,14 @@ class ReportController extends Controller
         return $q->whereHas("ServiceRequest", function ($subQuery) use ($service_request_id) {
           $subQuery->where('id', $service_request_id);
         });
+      })
+      ->when($working_day_type != null, function ($q) use ($working_day_type) {
+        return $q->whereHas("ServiceRequest", function ($subQuery) use ($working_day_type) {
+          $subQuery->where('working_day_type', $working_day_type);
+        });
+      })
+      ->when($from != null, function ($q) use ($from, $to) {
+        return $q->whereBetween('payment_date',[$from, $to]);
       })
       ->where('has_invoice_file', 1)
       ->whereIn('type', ['Mensual', 'Parcial'])
@@ -125,6 +146,14 @@ class ReportController extends Controller
           $subQuery->where('id', $service_request_id);
         });
       })
+      ->when($working_day_type != null, function ($q) use ($working_day_type) {
+        return $q->whereHas("ServiceRequest", function ($subQuery) use ($working_day_type) {
+          $subQuery->where('working_day_type', $working_day_type);
+        });
+      })
+      ->when($from != null, function ($q) use ($from, $to) {
+        return $q->whereBetween('payment_date',[$from, $to]);
+      })
       ->where('has_invoice_file', 1)
       ->whereNotIn('type', ['Mensual', 'Parcial'])
       ->whereNotNull('total_paid')
@@ -136,6 +165,61 @@ class ReportController extends Controller
 
     return view('service_requests.reports.payed', compact('payed_fulfillments', 'request'));
   }
+
+  public function export(){
+
+      $headers = array(
+          "Content-type" => "text/csv",
+          "Content-Disposition" => "attachment; filename=export_data.csv",
+          "Pragma" => "no-cache",
+          "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+          "Expires" => "0"
+      );
+
+      $filas = ServiceRequest::all();
+
+      $columnas = array(
+          'ID'
+          // 'Establecimiento',
+          // 'Unidad Organizacional',
+          // 'Informado a través',
+          // 'Nombre',
+          // 'A.Paterno',
+          // 'A.Materno',
+          // 'RUN',
+          // '1° Dosis Cita',
+          // '1° Suministrada',
+          // '2° Dosis Cita',
+          // '2° Suministrada'
+      );
+
+      $callback = function() use ($filas, $columnas)
+      {
+          $file = fopen('php://output', 'w');
+          fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+          fputcsv($file, $columnas,';');
+          foreach($filas as $fila) {
+              fputcsv($file, array(
+                  $fila->id
+                  // $fila->aliasEstab,
+                  // $fila->organizationalUnit,
+                  // $fila->aliasInformMethod,
+                  // $fila->name,
+                  // $fila->fathers_family,
+                  // $fila->mothers_family,
+                  // $fila->runFormat,
+                  // $fila->first_dose,
+                  // $fila->first_dose_at,
+                  // $fila->second_dose,
+                  // $fila->second_dose_at,
+              ),';');
+          }
+          fclose($file);
+      };
+      return response()->stream($callback, 200, $headers);
+  }
+
+
 
   public function bankPaymentFile($establishment_id = NULL)
   {
@@ -566,55 +650,60 @@ class ReportController extends Controller
     return view('service_requests.reports.duplicate_contracts', compact('request', 'serviceRequests'));
   }
 
-  public function contract(Request $request)
-  {
+  	public function contract(Request $request)
+  	{
+    	$responsabilityCenters = OrganizationalUnit::where('establishment_id', Auth::user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
+    	//dd($responsabilityCenters);
 
-    $responsabilityCenters = OrganizationalUnit::where('establishment_id', Auth::user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
-    //dd($responsabilityCenters);
+		$srs = array();
+		$total_srs = 0;
 
+		if(isset($request->option))
+		{
 
-    //$srs = ServiceRequest::select("*");
-    $srs = ServiceRequest::paginate(100);
+			$srs = ServiceRequest::query();
 
+			if ($request->has('excel')) {
+				return Excel::download(new ContractExport($request), 'reporte-de-contrato.xlsx');
+			}
 
+			//lista los que no son vigente, creados, solicitados, que comiencen, que terminen entre
+			if ($request->option != 'vigenci') {
+				if ($request->has('from')) {
+					$srs = $srs->whereBetween($request->option, [$request->from, $request->to])
+						->when($request->uo != null, function ($q) use ($request) {
+							return $q->where('responsability_center_ou_id', $request->uo);
+					})
+					->when($request->type != null, function ($q) use ($request) {
+						return $q->where('type',  $request->type);
+					})
+					->orderBy($request->option);
+				}
+			}
 
-    if ($request->has('excel')) {
-      return Excel::download(new ContractExport($request), 'reporte-de-contrato.xlsx');
-    }
-    
-    //lista los que no son vigente, creados, solicitados, que comiencen, que terminen entre
-    if ($request->option != 'vigenci') {
-    if ($request->has('from')) {
-    $srs = ServiceRequest::whereBetween($request->option, [$request->from, $request->to])
-    ->when($request->uo != null, function ($q) use ($request) {
-      return $q->where('responsability_center_ou_id', $request->uo);
-    })
-    ->when($request->type != null, function ($q) use ($request) {
-      return $q->where('type',  $request->type);
-    })
-    ->orderBy($request->option)
-    ->paginate(100);
-    }
-  }
+			else //aca son solo los vigentes
+			{
+				$srs = $srs->whereDate('start_date','<=',$request->from)
+					->whereDate('end_date','>=',$request->to)
+					->when($request->uo != null, function ($q) use ($request) {
+						return $q->where('responsability_center_ou_id', $request->uo);
+					})
+					->when($request->type != null, function ($q) use ($request) {
+						return $q->where('type',  $request->type);
+					})
+					->orderBy('start_date');
+			}
 
-  else //aca son solo los vigentes
-  {
-    $srs = ServiceRequest::whereDate('start_date','<=',$request->from)
-    ->whereDate('end_date','>=',$request->to)
-    ->when($request->uo != null, function ($q) use ($request) {
-      return $q->where('responsability_center_ou_id', $request->uo);
-    })
-    ->when($request->type != null, function ($q) use ($request) {
-      return $q->where('type',  $request->type);
-    })
-    ->orderBy('start_date')
-    ->paginate(100);    
-  }
+			$total_srs = $srs->count();
 
-    $request->flash(); // envía los inputs de regreso
-    return view('service_requests.reports.contract', compact('request', 'responsabilityCenters','srs'));
+			$srs = $srs->paginate(100);
 
-  }
+			$request->flash(); // envía los inputs de regreso
+
+		}
+    	return view('service_requests.reports.contract',
+			compact('request', 'responsabilityCenters','srs','total_srs'));
+  	}
 
   public function export_sirh_txt(Request $request)
   {

@@ -144,7 +144,7 @@
 <br><br>
 
 
-@if($fulfillment->serviceRequest->working_day_type == "HORA MÉDICA" or $serviceRequest->working_day_type == "TURNO DE REEMPLAZO")
+@if($fulfillment->serviceRequest->working_day_type == "HORA MÉDICA" or $fulfillment->serviceRequest->working_day_type == "TURNO DE REEMPLAZO")
 <?php setlocale(LC_ALL, 'es'); ?>
   <div class="nueve">
       <div class="justify" style="width: 100%;">

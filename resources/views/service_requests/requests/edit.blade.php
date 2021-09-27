@@ -309,7 +309,9 @@
   </div> -->
 
 @if($serviceRequest->fulfillments->count()>0)
-  @livewire('service-request.shifts-control', ['fulfillment' => $serviceRequest->fulfillments->first()])
+  @if($serviceRequest->working_day_type != "DIARIO")
+    @livewire('service-request.shifts-control', ['fulfillment' => $serviceRequest->fulfillments->first()])
+  @endif
 @endif
 
   <br>
@@ -1095,6 +1097,11 @@
     }else{
       $("#control_turnos").hide();
       $('#for_weekly_hours').removeAttr('disabled');
+
+      if ($('#working_day_type').val() == "DIARIO") {
+        $("#control_turnos").show();
+        $('#for_weekly_hours').attr('disabled', 'disabled');
+      }
     }
 
 

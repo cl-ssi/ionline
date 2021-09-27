@@ -31,7 +31,7 @@ class TechnicalEvaluation extends Model
         return $this->hasMany('App\Models\ReplacementStaff\Applicant');
     }
 
-    public function technical_evaluation_files() {
+    public function technicalEvaluationFiles() {
         return $this->hasMany('App\Models\ReplacementStaff\TechnicalEvaluationFile');
     }
 

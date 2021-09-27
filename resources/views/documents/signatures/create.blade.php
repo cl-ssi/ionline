@@ -119,9 +119,7 @@
 
         <div class="form-row">
 
-        <h5 class="alert alert-info" role="alert">
-            Se cambio de posición Destinatario y Distribución a como estaba en el sistema antiguamente, favor cerciorarse el apartado que está digitando
-        </h5>
+       
 
             <fieldset class="form-group col">
                 <label for="for_distribution">Distribución del documento (separados por coma)</label>

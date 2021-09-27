@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Programmings;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Programmings\Programming;
 use App\Programmings\ProgrammingItem;
 use App\Establishment;
@@ -20,10 +21,13 @@ use Illuminate\Support\Facades\DB;
 
 class ProgrammingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $year = '';
+        $programmings = Programming::where('year', $request->year)->get();
+        $communes = Commune::where('name', $request->name)->get();
 
+        //dd($programmings);
+        $year = '';
         // Indicador de revisiones
         $reviewIndicators = ReviewItem::select(
                     'T2.id'
@@ -66,8 +70,9 @@ class ProgrammingController extends Controller
                 ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
                 ->leftjoin('users AS T3', 'pro_programmings.user_id', '=', 'T3.id')
                 ->Where('pro_programmings.year','LIKE','%'.$year.'%')
-                ->orderBy('T2.name','ASC')->get();
+                ->orderBy('pro_programmings.id')->get();
         }
+
         // Si no, sólo muestra el establecimiento asignado al usuario
         else {
             $programmings = Programming::select(
@@ -89,14 +94,15 @@ class ProgrammingController extends Controller
             ->Where('pro_programmings.year','LIKE','%'.$year.'%')
             ->Where('pro_programmings.status','=','active')
             ->Where('pro_programmings.access','LIKE','%'.Auth()->user()->id.'%')
-            ->orderBy('T2.name','ASC')->get();
+            ->orderBy('pro_programmings.id')->get();
         }
 
         foreach ($programmings as $programming) {
-            foreach ($indicatorCompletes as $indicatorComplete) {
+            foreach ($indicatorCompletes as $indicatorComplete ) {
 
                 if($programming->id == $indicatorComplete->id) {
                     $programming['qty_traz'] = $indicatorComplete->qty;
+
                 }
 
             }
@@ -111,8 +117,7 @@ class ProgrammingController extends Controller
 
             }
         }
-        
-        return view('programmings/programmings/index')->withProgrammings($programmings);
+        return view('programmings/programmings/index')->withProgrammings($programmings)->withRequest($request);
     }
 
     public function create() 
@@ -153,7 +158,8 @@ class ProgrammingController extends Controller
     {
         $establishments = Establishment::whereIn('type',['CESFAM','CGR'])
                                        ->OrderBy('name')->get();
-        
+        $communes = Commune::where('name')->get();
+
         $users = User::with('organizationalUnit')->where('position', 'Funcionario Programación')->OrderBy('name')->get(); // Sólo Funcionario Programación
         $access_list = unserialize($programming->access);
         $user = $programming->user;
@@ -161,6 +167,7 @@ class ProgrammingController extends Controller
                                                     ->with('access_list', $access_list)
                                                     ->with('user', $user)
                                                     ->withEstablishments($establishments)
+                                                    ->withCommunes($communes)
                                                     ->withUsers($users);
     }
 
@@ -186,5 +193,6 @@ class ProgrammingController extends Controller
 
         return redirect()->back();
     }
+    
 
 }

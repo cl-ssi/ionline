@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="exampleModal-assign-{{$requestReplacementStaff->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal-assign-{{$technicalEvaluation->requestReplacementStaff->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -9,7 +9,7 @@
         </button>
       </div>
       <div class="modal-body">
-          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.store', $requestReplacementStaff) }}">
+          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.store', $technicalEvaluation->requestReplacementStaff) }}">
               @csrf
               @method('POST')
               <div class="form-row">
