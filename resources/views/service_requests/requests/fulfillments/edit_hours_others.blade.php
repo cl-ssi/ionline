@@ -1,68 +1,18 @@
-<div class="card">
+<div class="card border-dark">
 	<div class="card-header">
 		<h4>Información del período: {{ $serviceRequest->Fulfillments->first()->year }}-{{ $serviceRequest->Fulfillments->first()->month }} ({{Carbon\Carbon::parse($serviceRequest->Fulfillments->first()->year . "-" . $serviceRequest->Fulfillments->first()->month)->monthName}}) <span class="small text-muted float-right">{{ $serviceRequest->Fulfillments->first()->id }} </span> </h4>
 	</div>
-	<div class="card-header">
-		<h5>Archivos Adjuntos (opcional)</h5>
-		<div class="card-body">
-			@if($serviceRequest->Fulfillments->first()->attachments->count() > 0)
-			<table class="table small table-striped table-bordered">
-				<thead class="text-center">
-
-					<tr>
-						<td style="width: 11%">Fecha de Carga</td>
-						<th>Nombre</th>
-						<th>Archivo</th>
-						<th style="width: 10%"></th>
-						<th style="width: 2%"></th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach($serviceRequest->Fulfillments->first()->attachments as $attachment)
-					<tr>
-						<td>{{ $attachment->updated_at->format('d-m-Y H:i:s') }}</td>
-						<td class="text-center">{{ $attachment->name ?? '' }}</td>
-						<td class="text-center">
-							@if(pathinfo($attachment->file, PATHINFO_EXTENSION) == 'pdf')
-							<i class="fas fa-file-pdf fa-2x"></i>
-							@endif
-						</td>
-						<td>
-							<a href="{{ route('rrhh.service-request.fulfillment.attachment.show', $attachment) }}" class="btn btn-outline-secondary btn-sm" title="Ir" target="_blank"> <i class="far fa-eye"></i></a>
-							<a class="btn btn-outline-secondary btn-sm" href="{{ route('rrhh.service-request.fulfillment.attachment.download', $attachment) }}" target="_blank"><i class="fas fa-download"></i>
-							</a>
-						</td>
-						<td>
-							<form method="POST" class="form-horizontal" action="{{ route('rrhh.service-request.fulfillment.attachment.destroy', $attachment) }}">
-								@csrf
-								@method('DELETE')
-								<button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro que desea eliminar este archivo adjunto?')">
-									<i class="fas fa-trash"></i>
-								</button>
-
-							</form>
-						</td>
-
-					</tr>
-					@endforeach
-				</tbody>
-			</table>
-			@endif
-
-		</div>
-		<div>
-			@livewire('service-request.attachments-fulfillments', ['var' => $serviceRequest->Fulfillments->first()->id])
-		</div>
-	</div>
 	<div class="card-body">
 		<!-- @livewire('service-request.shifts-control', ['fulfillment' => $serviceRequest->fulfillments->first()]) -->
+
+		<div class="card border-success mb-3">
+			<div class="card-header bg-success text-white">Responsable</div>
+			<div class="card-body">
 
 		@if($serviceRequest->working_day_type == "DIURNO PASADO A TURNO")
 			<h4>Inasistencias</h4>
 			@livewire('service-request.fulfillment-absences', ['fulfillment' => $serviceRequest->Fulfillments->first()])
 		@endif
-		<br><br>
-		<hr>
 
 		@livewire('service-request.show-total-hours', ['fulfillment' => $serviceRequest->fulfillments->first()])
 		<div class="form-row">
@@ -74,8 +24,8 @@
 					Certificado firmado<i class="fas fa-signature"></i>
 				</a>
 				@can('Service Request: delete signed certificate')
-				<a class="btn btn-outline-danger ml-4" href="{{ route('rrhh.service-request.fulfillment.delete-signed-certificate-pdf',$serviceRequest->Fulfillments->first()) }}" title="Borrar Certificado" onclick="return confirm('¿Está seguro que desea eliminar el certificado de cumplimiento firmado?')">
-					<i class="fas fa-trash"></i>
+				<a class="btn btn-outline-danger ml-2" href="{{ route('rrhh.service-request.fulfillment.delete-signed-certificate-pdf',$serviceRequest->Fulfillments->first()) }}" title="Borrar Certificado" onclick="return confirm('¿Está seguro que desea eliminar el certificado de cumplimiento firmado?')">
+					<i class="fas fa-trash"></i> Certificado
 				</a>
 				@endcan
 				@else
@@ -91,17 +41,71 @@
 			</fieldset>
 
 			<fieldset class="form-group col-6 col-md-6 text-right">
-				<a type="button" class="btn btn-outline-success" href="{{ route('rrhh.service-request.report.resolution-pdf',$serviceRequest) }}" target="_blank">
-					Generar Resolución
-					<i class="fas fa-file"></i>
-				</a>
+
 			</fieldset>
 		</div>
+		
+		@php $fulfillment = $serviceRequest->Fulfillments->first();  @endphp
+		<!--archivos adjuntos-->
+		<div class="card">
+			<div class="card-body">
+				<h6 class="card-title">Adjuntar archivos al cumplimiento (opcional)</h6>
 
-		<div class="alert alert-primary" role="alert">
+					@if($fulfillment->attachments->count() > 0)
+					<table class="table table-sm small table-bordered">
+						<thead class="text-center">
+
+							<tr class="table-secondary">
+								<th width="160">Fecha de Carga</th>
+								<th>Nombre</th>
+								<th>Archivo</th>
+								<th width="100"></th>
+								<th width="50"></th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach($fulfillment->attachments as $attachment)
+							<tr>
+								<td>{{ $attachment->updated_at->format('d-m-Y H:i:s') }}</td>
+								<td>{{ $attachment->name ?? '' }}</td>
+								<td class="text-center">
+									@if(pathinfo($attachment->file, PATHINFO_EXTENSION) == 'pdf')
+									<i class="fas fa-file-pdf fa-2x"></i>
+									@endif
+								</td>
+								<td>
+									<a href="{{ route('rrhh.service-request.fulfillment.attachment.show', $attachment) }}" class="btn btn-outline-secondary btn-sm" title="Ir" target="_blank"> <i class="far fa-eye"></i></a>
+									<a class="btn btn-outline-secondary btn-sm" href="{{ route('rrhh.service-request.fulfillment.attachment.download', $attachment) }}" target="_blank"><i class="fas fa-download"></i>
+									</a>
+								</td>
+								<td>
+									<form method="POST" class="form-horizontal" action="{{ route('rrhh.service-request.fulfillment.attachment.destroy', $attachment) }}">
+										@csrf
+										@method('DELETE')
+										<button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro que desea eliminar este archivo adjunto?')">
+											<i class="fas fa-trash"></i>
+										</button>
+
+									</form>
+								</td>
+
+							</tr>
+							@endforeach
+						</tbody>
+					</table>
+					@endif
+					<div>
+						@livewire('service-request.attachments-fulfillments', ['var' => $fulfillment->id])
+					</div>
+				</div>
+			</div>
+			<!--fin archivos adjuntos-->
+
+		</div></div>
+
+		<div class="alert alert-warning border-dark" role="alert">
 		  Para horas extra, se exige solo al jefe de unidad la firma electrónica del certificado de cumplimiento.
 		</div>
-
 
 		@canany(['Service Request: fulfillments rrhh'])
 		<form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$serviceRequest->Fulfillments->first()) }}" enctype="multipart/form-data">
@@ -118,31 +122,45 @@
 							<input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}" />
 						</fieldset>
 
-						<fieldset class="form-group col-7 col-md-3">
+						<fieldset class="form-group col-7 col-md-2">
 							<label for="for_resolution_date">Fecha Resolución</label>
 							<input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
 						</fieldset>
 
-						<fieldset class="form-group col-6 col-md-3">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_total_hours_paid">Total hrs. a pagar per.</label>
 							<input type="text" class="form-control" name="total_hours_to_pay" value="{{$serviceRequest->Fulfillments->first()->total_hours_to_pay}}" />
 						</fieldset>
 
-						<fieldset class="form-group col-6 col-md-3">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_total_paid">Total a pagar</label>
 							<input type="text" class="form-control" name="total_to_pay" value="{{$serviceRequest->Fulfillments->first()->total_to_pay}}" />
 						</fieldset>
+
+						<div class="form-check form-check-inline">
+							<input type="hidden" name="illness_leave" value="0">
+							<input class="form-check-input" type="checkbox" name="illness_leave" value="1" {{ ( $serviceRequest->Fulfillments->first()->illness_leave== '1' ) ? 'checked="checked"' : null }}>
+							<label class="form-check-label" for="for_illness_leave">Licencias</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input type="hidden" name="leave_of_absence" value="0">
+							<input class="form-check-input" type="checkbox" id="permisos" name="leave_of_absence" value="1" {{ ( $serviceRequest->Fulfillments->first()->leave_of_absence== '1' ) ? 'checked="checked"' : null }}>
+							<label class="form-check-label" for="permisos">Permisos</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input type="hidden" name="assistance" value="0">
+							<input class="form-check-input" type="checkbox" name="assistance" value="1" {{ ( $serviceRequest->Fulfillments->first()->assistance== '1' ) ? 'checked="checked"' : null }}>
+							<label class="form-check-label" for="asistencia">Asistencia</label>
+						</div>
 					</div>
 					<div class="form-row">
 						<div class="col-md-2">
 							<button type="submit" class="btn btn-primary">Guardar</button>
 						</div>
 						<div class="col-12 col-md-7">
-							@if($serviceRequest->Fulfillments->first()->total_to_pay)
-							@livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ])
-							@else
-							No se ha ingresado el "Total a pagar".
-							@endif
+							<a type="button" class="btn btn-outline-success" href="{{ route('rrhh.service-request.report.resolution-pdf',$serviceRequest) }}" target="_blank">
+								<i class="fas fa-file"></i> Resolución
+							</a>
 						</div>
 					</div>
 
@@ -150,6 +168,33 @@
 			</div>
 		</form>
 		@endcan
+
+		<!-- información  boleta -->
+		<div class="card border-warning mb-3">
+			<div class="card-header bg-warning text-white">
+				Boleta
+			</div>
+			<div class="card-body">
+
+				<div class="form-row">
+
+					<div class="col-12 col-md-8">
+						@if($serviceRequest->Fulfillments->first()->total_to_pay)
+						@livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ])
+						@else
+						No se ha ingresado el "Total a pagar".
+						@endif
+					</div>
+					<div class="col-12 col-md-4">
+						<strong></strong>
+						<div>
+						
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- fin información boleta -->
 
 		@canany(['Service Request: fulfillments finance'])
 		<form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$serviceRequest->Fulfillments->first()) }}" enctype="multipart/form-data">
@@ -166,36 +211,20 @@
 							<input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}" />
 						</fieldset>
 
-						<fieldset class="form-group col-7 col-md-3">
+						<fieldset class="form-group col-7 col-md-2">
 							<label for="for_resolution_date">Fecha Resolución</label>
 							<input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
 						</fieldset>
 
-						<fieldset class="form-group col-6 col-md-3">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_total_hours_paid">Total hrs. a pagar per.</label>
 							<input type="text" class="form-control" name="total_hours_to_pay" disabled value="{{$serviceRequest->Fulfillments->first()->total_hours_to_pay}}" />
 						</fieldset>
 
-						<fieldset class="form-group col-6 col-md-3">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_total_paid">Total a pagar</label>
 							<input type="text" class="form-control" name="total_to_pay" disabled value="{{$serviceRequest->Fulfillments->first()->total_to_pay}}" />
 						</fieldset>
-						<div class="form-check form-check-inline">
-							<input type="hidden" name="illness_leave" value="0">
-							<input class="form-check-input" type="checkbox" name="illness_leave" value="1" {{ ( $serviceRequest->Fulfillments->first()->illness_leave== '1' ) ? 'checked="checked"' : null }}>
-							<label class="form-check-label" for="for_illness_leave">Licencias</label>
-						</div>
-						<div class="form-check form-check-inline">
-							<input type="hidden" name="leave_of_absence" value="0">
-							<input class="form-check-input" type="checkbox" id="permisos" name="leave_of_absence" value="1" {{ ( $serviceRequest->Fulfillments->first()->leave_of_absence== '1' ) ? 'checked="checked"' : null }}>
-							<label class="form-check-label" for="permisos">Permisos</label>
-						</div>
-						<div class="form-check form-check-inline">
-							<input type="hidden" name="assistance" value="0">
-							<input class="form-check-input" type="checkbox" name="assistance" value="1" {{ ( $serviceRequest->Fulfillments->first()->assistance== '1' ) ? 'checked="checked"' : null }}>
-							<label class="form-check-label" for="asistencia">Asistencia</label>
-						</div>
-
 
 
 					</div>
@@ -216,12 +245,12 @@
 							<input type="text" class="form-control" name="total_paid" value="{{$serviceRequest->Fulfillments->first()->total_paid}}" />
 						</fieldset>
 
-						<fieldset class="form-group col-3 col-md-3">
+						<fieldset class="form-group col-3 col-md-2">
 							<label for="for_payment_date">Fecha pago</label>
 							<input type="date" class="form-control" name="payment_date" required @if($serviceRequest->Fulfillments->first()->payment_date) value="{{$serviceRequest->Fulfillments->first()->payment_date->format('Y-m-d')}}" @endif>
 						</fieldset>
 
-						<fieldset class="form-group col col-md">
+						<fieldset class="form-group col col-md-3">
 							<label for="for_contable_month">Mes contable pago</label>
 							<select name="contable_month" class="form-control" required>
 								<option value=""></option>
@@ -245,11 +274,7 @@
 							<button type="submit" class="btn btn-primary">Guardar</button>
 						</div>
 						<div class="col-12 col-md-7">
-							@if($serviceRequest->Fulfillments->first()->total_to_pay)
-							@livewire('service-request.upload-invoice', ['fulfillment' => $serviceRequest->Fulfillments->first() ])
-							@else
-							No se ha ingresado el "Total a pagar".
-							@endif
+
 						</div>
 					</div>
 				</div>
