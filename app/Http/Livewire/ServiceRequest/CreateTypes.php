@@ -38,7 +38,7 @@ class CreateTypes extends Component
                 $this->signatureFlows['Planificación CG RRHH'] = 18263660; // 59 - Planificación y Control de Gestión de Recursos Humanos
                 $this->signatureFlows['S.G.D.P SSI'] = 14112543; // 44 - Subdirección de Gestión y Desarrollo de las Personas
                 $this->signatureFlows['S.D.A SSI'] = 9994426; // 31 - Subdirección de Recursos Físicos y Financieros
-                $this->signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
+                $this->signatureFlows[Authority::getAuthorityFromDate(1,now(),['manager'])->position . " - " . Authority::getAuthorityFromDate(1,now(),['manager'])->user->organizationalUnit->establishment->name] = Authority::getAuthorityFromDate(1,now(),['manager'])->user->id; // 1 - Dirección
               }
               //servicio de salud iqq
               else{
@@ -46,7 +46,7 @@ class CreateTypes extends Component
                 $this->signatureFlows['Planificación CG RRHH'] = 18263660; // 59 - Planificación y Control de Gestión de Recursos Humanos
                 $this->signatureFlows['S.G.D.P SSI'] = 14112543; // 44 - Subdirección de Gestión y Desarrollo de las Personas
                 $this->signatureFlows['S.D.A SSI'] = 9994426; // 31 - Subdirección de Recursos Físicos y Financieros
-                $this->signatureFlows['Director SSI'] = 9381231; // 1 - Dirección
+                $this->signatureFlows[Authority::getAuthorityFromDate(1,now(),['manager'])->position . " - " . Authority::getAuthorityFromDate(1,now(),['manager'])->user->organizationalUnit->establishment->name] = Authority::getAuthorityFromDate(1,now(),['manager'])->user->id; // 1 - Dirección
               }
             }
             //hospital
@@ -56,7 +56,7 @@ class CreateTypes extends Component
               $this->signatureFlows['S.G.D.P Hospital'] = 16593799; // 86 - Subdirección de Gestión de Desarrollo de las Personas
               $this->signatureFlows['Jefe Finanzas'] = 13866194; // 11 - Departamento de Finanzas
               $this->signatureFlows['S.G.D.P SSI'] = 14112543; // 44 - Subdirección de Gestión y Desarrollo de las Personas
-              $this->signatureFlows['Director Hospital'] = 14101085; // 84 - Dirección
+              $this->signatureFlows[Authority::getAuthorityFromDate(84,now(),['manager'])->position . " - " . Authority::getAuthorityFromDate(84,now(),['manager'])->user->organizationalUnit->establishment->name] = Authority::getAuthorityFromDate(84,now(),['manager'])->user->id; // 84 - Dirección
             }
           }elseif ($this->program_contract_type == "Horas") {
             $this->a = "horas";
@@ -87,7 +87,7 @@ class CreateTypes extends Component
             $this->a = "suma";
             $this->signatureFlows['S.G.D.P Hospital'] = 16593799;
             $this->signatureFlows['Jefe Finanzas'] = 13866194;
-            $this->signatureFlows['Director Hospital'] = 14101085;
+            $this->signatureFlows[Authority::getAuthorityFromDate(84,now(),['manager'])->position . " - " . Authority::getAuthorityFromDate(84,now(),['manager'])->user->organizationalUnit->establishment->name] = Authority::getAuthorityFromDate(84,now(),['manager'])->user->id;
           }else{
             $this->signatureFlows['Planificación CG RRHH'] = 18263660; // 59 - Planificación y Control de Gestión de Recursos Humanos
             $this->signatureFlows['S.G.D.P SSI'] = 14112543; // 44 - Subdirección de Gestión y Desarrollo de las Personas
