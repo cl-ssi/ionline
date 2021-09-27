@@ -49,7 +49,7 @@
                 <td>{{$totalHours}}</td>
                 <td>{{$totalHoursContab}}</td>
                 <td>{{ '$'.number_format($totalAmount, 0, ',', '.') }} <span
-                        class="text-muted small">(valor de prueba)</span></td>
+                        class="text-muted small">(Se debe comprobar)</span></td>
             </tr>
             </tbody>
         </table>
@@ -76,7 +76,7 @@
 
                 <td>{{$totalHours}}</td>
                 @if(!$forCertificate) <td>{{ '$'.number_format($totalAmount, 0, ',', '.') }} <span
-                        class="text-muted small">(valor de prueba)</span></td> @endif
+                        class="text-muted small">(Se debe comprobar)</span></td> @endif
             </tr>
             </tbody>
         </table>
