@@ -120,7 +120,7 @@ class PayedExport implements FromCollection, WithHeadings, WithMapping, ShouldAu
     public function map($fulfillment): array
     {
         return [
-            $fulfillment->id,
+            $fulfillment->servicerequest->id,
             ($fulfillment->servicerequest)?$fulfillment->servicerequest->employee->runFormat(): '',
             ($fulfillment->servicerequest->employee)? strtoupper($fulfillment->servicerequest->employee->fullname) : '',
             $fulfillment->servicerequest->responsabilityCenter->name,

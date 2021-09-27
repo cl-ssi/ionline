@@ -98,6 +98,10 @@
 			</fieldset>
 		</div>
 
+		<div class="alert alert-primary" role="alert">
+		  Para horas extra, se exige solo al jefe de unidad la firma electrónica del certificado de cumplimiento.
+		</div>
+
 
 		@canany(['Service Request: fulfillments rrhh'])
 		<form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$serviceRequest->Fulfillments->first()) }}" enctype="multipart/form-data">
