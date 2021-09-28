@@ -17,6 +17,6 @@ class ReviewItem extends Model
 
     public function programItem()
     {
-        return $this->belongsTo('App\Programming\ProgramminfItem', 'id', 'programming_item_id');
+        return $this->belongsTo('App\Programmings\ProgrammingItem', 'programming_item_id');
     }
 }

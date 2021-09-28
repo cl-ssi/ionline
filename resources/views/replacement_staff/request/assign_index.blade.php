@@ -148,7 +148,6 @@
             </tr>
         </thead>
         <tbody class="small">
-          @if($requests != NULL)
             @foreach($requests as $requestReplacementStaff)
             <tr>
                 <td>
@@ -195,28 +194,11 @@
                     @endforeach
                 </td>
                 <td>
-                    @foreach($requestReplacementStaff->RequestSign as $sign)
-                        @if($sign->position == 3 && $sign->request_status == "accepted" && !$request->technicalEvaluation)
-                            <a href="{{ route('replacement_staff.request.technical_evaluation.store', $requestReplacementStaff) }}"
-                                onclick="return confirm('¿Está seguro de iniciar el proceso de selección?')"
+                    <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
                                 class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-                        @elseif($sign->position == 3 && $sign->request_status == "accepted" && $request->technicalEvaluation)
-                            <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $request->technicalEvaluation) }}"
-                                class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-                        @endif
-                    @endforeach
                 </td>
             </tr>
             @endforeach
-          @else
-            <tr>
-                <td>Hola
-                  <div class="alert alert-secondary" role="alert">
-                    A simple secondary alert—check it out!
-                  </div>
-                </td>
-            </tr>
-          @endif
         </tbody>
     </table>
 

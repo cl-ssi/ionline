@@ -17,7 +17,7 @@
     <div class="col-md-5 small">
         <b>+</b> <a href="{{ route('rrhh.authorities.index') }}?ou={{$ouTopLevel->id}}">{{ $ouTopLevel->name }}</a>
         <ul>
-        
+
             @foreach($ouTopLevel->childs as $child_level_1)
                 <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_1->id}}"> {{$child_level_1->name}} </a></li>
                 <ul>
@@ -28,7 +28,7 @@
                                     <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_3->id}}">{{ $child_level_3->name }}</a></li>
                                     @foreach($child_level_3->childs as $child_level_4)
                                     <ul>
-                                    <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_4->id}}">{{ $child_level_4->name }}</a></li>                                    
+                                    <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_4->id}}">{{ $child_level_4->name }}</a></li>
                                     </ul>
                                     @endforeach
                                 @endforeach
@@ -36,7 +36,7 @@
                     @endforeach
                 </ul>
             @endforeach
-        
+
         </ul>
     </div>
 
@@ -77,7 +77,7 @@
         </style>
 
         @foreach($calendar as $item)
-
+          @if($item['manager']->user)
             <div class="dia_calendario small p-2" {!! ($today->format('Y-m-d') == $item['date'])?'style="border: 2px solid black;"':'' !!}>
                 <center>
                     {{ $item['date'] }}
@@ -107,7 +107,7 @@
                     @endif
                 </center>
             </div>
-
+          @endif
         @endforeach
 
 
@@ -125,6 +125,7 @@
             <tbody>
                 @foreach($authorities as $authority)
                     @if($authority)
+                    @if($authority->user)
                     <tr class="small">
                         <td>{{ $authority->user->fullName }}</td>
                         <td nowrap>{{ $authority->from->format('d-m-Y') }}</td>
@@ -141,6 +142,7 @@
                             @endcan
                         </th>
                     </tr>
+                    @endif
                     @endif
                 @endforeach
 
