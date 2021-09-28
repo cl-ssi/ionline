@@ -600,6 +600,11 @@ class ServiceRequestController extends Controller
   {
     //se guarda información de la solicitud
     $serviceRequest->fill($request->all());
+    if($request->has('signature_page_break')){
+      $serviceRequest->signature_page_break = 1;
+    }else{
+      $serviceRequest->signature_page_break = 0;
+    }
     $serviceRequest->save();
 
     //devuelve UserBankAccount o crea
