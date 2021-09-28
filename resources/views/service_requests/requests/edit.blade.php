@@ -590,7 +590,7 @@
   <div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Beneficios adicionales</label>
-				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50">{{ $serviceRequest->additional_benefits }}</textarea>
+				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50">{{ html_entity_decode($serviceRequest->additional_benefits) }}</textarea>
 
         <button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
