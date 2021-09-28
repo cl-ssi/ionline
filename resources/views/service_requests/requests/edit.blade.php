@@ -738,7 +738,15 @@
 
         </div>
 
-
+        <fieldset class="form-group form-check">
+          <input type="checkbox" 
+            class="form-check-input" 
+            name="signature_page_break" 
+            value="1" id="forbreakPage"
+            {{ ($serviceRequest->signature_page_break)?'checked':'' }}>
+            
+          <label class="form-check-label" for="forbreakPage">Salto de página en firmas</label>
+        </fieldset>
 
       </div>
 

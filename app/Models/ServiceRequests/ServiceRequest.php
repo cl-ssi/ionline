@@ -29,7 +29,7 @@ class ServiceRequest extends Model implements Auditable
         'digera_strategy','rrhh_team','gross_amount', 'net_amount','sirh_contract_registration',
         'resolution_number','resolution_date','bill_number','total_hours_paid','total_paid',
         'has_resolution_file','payment_date','verification_code','observation','creator_id',
-        'address','phone_number','email'
+        'address','phone_number','email','signature_page_break'
         // 'rut', 'name','bank_id','account_number','pay_method','nationality',
     ];
 
