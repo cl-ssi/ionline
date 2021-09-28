@@ -54,6 +54,8 @@ use App\Http\Controllers\ServiceRequests\ReportController;
 
 
 use App\Http\Controllers\Parameters\ProfessionController;
+use App\Http\Controllers\Pharmacies\PurchaseController;
+use App\Pharmacies\Purchase;
 
 /*
 |--------------------------------------------------------------------------
@@ -1143,7 +1145,11 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
         Route::get('dispatch/{dispatch}/file', 'Pharmacies\DispatchController@openFile')->name('dispatch.openFile');
         Route::resource('purchase', 'Pharmacies\PurchaseController');
         Route::resource('purchase_item', 'Pharmacies\PurchaseItemController');
+        Route::get('purchase/sendForSignature/{purchase}/', 'Pharmacies\PurchaseController@sendForSignature')->name('purchase.sendForSignature');
         Route::get('purchase/record/{purchase}', 'Pharmacies\PurchaseController@record')->name('purchase.record');
+        Route::get('purchase/record-pdf/{purchase}', 'Pharmacies\PurchaseController@recordPdf')->name('purchase.record_pdf');
+        Route::get('/callback-firma-record/{message}/{modelId}/{signaturesFile?}', [PurchaseController::class, 'callbackFirmaRecord'])->name('callbackFirmaRecord');
+        Route::get('/signed-record-pdf/{purchase}', [PurchaseController::class, 'signedRecordPdf'])->name('signed_record_pdf');
 
         Route::resource('transfer', 'Pharmacies\TransferController');
         Route::get('transfer/{establishment}/auth', 'Pharmacies\TransferController@auth')->name('transfer.auth');
