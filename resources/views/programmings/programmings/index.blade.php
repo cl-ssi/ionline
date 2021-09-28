@@ -13,12 +13,12 @@
  @endcan
  <form method="GET" class="form-horizontal" action="{{ route('programmings.index') }}">
  <div class="input-group mb-3">
-        <div class="input-group-prepend">
+        <div class="input-group-append">
             <span class="input-group-text">Filtrar por Año</span>
         </div>
         <select name="year" id="for_year" class="form-control">
-            <option value=""></option>
-            <option value="2021" {{ $request->get('year') == "2021" ? 'selected' : '' }}>2021</option>
+        <option value=""></option>
+            <option value="2021" selected {{ $request->get('year') == "2021" ? 'selected' : '' }}>2021</option>
             <option value="2022" {{ $request->get('year') == "2022" ? 'selected' : '' }}>2022</option>
         </select>
         <div>
@@ -38,7 +38,7 @@
         <thead>
             <tr class="small ">
                 @can('Programming: status')<th class="text-left align-middle table-dark" >Estado</th>@endcan
-                @can('Programming: edit')<th class="text-left align-middle table-dark" ></th>@endcan
+                @can('Programming: edit')<th class="text-left align-middle table-dark" >Editar</th>@endcan
                 <th class="text-left align-middle table-dark" >%</th> 
                 <th class="text-left align-middle table-dark" >Obs.</th> 
                 <th class="text-left align-middle table-dark" >Id</th> 
@@ -74,12 +74,12 @@
                     <i class="fas fa-edit"></i></a>
                 </td>
             @endcan
-                <td > <span class="badge badge-info">{{ number_format(($programming->qty_traz/51) *100, 0, ',', ' ')}}%</span> </td>
-                <td > <span class="badge badge-danger">{{ number_format($programming->qty_reviews, 0, ',', ' ')}}</span> </td>
+                <td > <span class="badge badge-info">{{ number_format(($programming->getCountActivities()/51) *100, 0, ',', ' ')}}%</span> </td>
+                <td > <span class="badge badge-danger">{{ number_format($programming->countTotalNOTRectifiedReviews(), 0, ',', ' ')}}</span> </td>
                 <td >
                 {{ $programming->id }}</td>
-                <td>{{ $programming->commune }}</td>
-                <td>{{ $programming->establishment_type }} {{ $programming->establishment }}</td>
+                <td>{{ $programming->establishment->commune->name}}</td>
+                <td>{{ $programming->establishment->type }} {{ $programming->establishment->name }}</td>
                 <td>{{ $programming->year }}</td>
                 <td class="text-right ">
                 <!-- Permiso para asignar profesionales a la programación númerica en proceso -->

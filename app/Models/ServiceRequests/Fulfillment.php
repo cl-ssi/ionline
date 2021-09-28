@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use App\Models\ServiceRequests\Denomination1121;
+use App\Models\ServiceRequests\DenominationFormula;
 use app\User;
 
 class Fulfillment extends Model implements Auditable
@@ -26,8 +28,19 @@ class Fulfillment extends Model implements Auditable
     'finances_approbation', 'finances_approbation_date', 'finances_approver_id', 'invoice_path', 'user_id',
     'bill_number', 'total_hours_to_pay', 'total_to_pay', 'total_hours_paid', 'total_paid', 'payment_date', 'contable_month',
     'payment_rejection_detail', 'illness_leave', 'leave_of_absence', 'assistance','backup_assistance'
-    
+
   ];
+
+
+  public function Denominations1121()
+  {
+      return $this->belongsToMany(Denomination1121::class, 'doc_1121_fulfillments', 'doc_1121_id', 'doc_fulfillments_id', )->withTimestamps();
+  }
+
+  public function DenominationsFormula()
+  {
+      return $this->belongsToMany(DenominationFormula::class, 'doc_formula_fulfillments', 'doc_formula_id', 'doc_fulfillments_id', )->withTimestamps();
+  }
 
   public function MonthOfPayment()
   {
@@ -144,7 +157,7 @@ class Fulfillment extends Model implements Auditable
       $query->where('year', $request->input('year'));
     }
 
-    if ($request->input('month') != "") {      
+    if ($request->input('month') != "") {
       $query->where('month', $request->input('month'));
     }
 
@@ -162,7 +175,7 @@ class Fulfillment extends Model implements Auditable
       });
     }
 
-    if ($request->input('resolution') != "") {      
+    if ($request->input('resolution') != "") {
       if ($request->input('resolution') == 'Yes') {
         $query->whereHas('serviceRequest', function ($q) use ($request) {
           $q->where('has_resolution_file', 1);
@@ -176,57 +189,57 @@ class Fulfillment extends Model implements Auditable
     }
 
 
-    if ($request->input('payment_date') != "") {      
-      if ($request->input('payment_date') == 'P') {        
+    if ($request->input('payment_date') != "") {
+      if ($request->input('payment_date') == 'P') {
         $query->whereNotNull('payment_date');
       }
-      if ($request->input('payment_date') == 'SP') {        
+      if ($request->input('payment_date') == 'SP') {
         $query->whereNull('payment_date');
       }
     }
 
-    if ($request->input('certificate') != "") {      
+    if ($request->input('certificate') != "") {
       if ($request->input('certificate') == 'Yes') {
         $query->whereNotNull('signatures_file_id');
       }
-      if ($request->input('certificate') == 'No') {        
+      if ($request->input('certificate') == 'No') {
         $query->whereNull('signatures_file_id');
       }
     }
 
-    if ($request->input('ok_responsable') != "") {      
+    if ($request->input('ok_responsable') != "") {
       if ($request->input('ok_responsable') == 'Yes') {
         $query->whereNotNull('responsable_approbation');
       }
-      if ($request->input('ok_responsable') == 'No') {         
+      if ($request->input('ok_responsable') == 'No') {
         $query->whereNull('responsable_approbation');
       }
     }
 
-    if ($request->input('ok_rrhh') != "") {      
+    if ($request->input('ok_rrhh') != "") {
       if ($request->input('ok_rrhh') == 'Yes') {
         $query->whereNotNull('rrhh_approbation');
       }
-      if ($request->input('ok_rrhh') == 'No') {         
+      if ($request->input('ok_rrhh') == 'No') {
         $query->whereNull('rrhh_approbation');
       }
     }
 
 
-    if ($request->input('ok_finances') != "") {      
+    if ($request->input('ok_finances') != "") {
       if ($request->input('ok_finances') == 'Yes') {
         $query->whereNotNull('finances_approbation');
       }
-      if ($request->input('ok_finances') == 'No') {         
+      if ($request->input('ok_finances') == 'No') {
         $query->whereNull('finances_approbation');
       }
     }
 
-    if ($request->input('invoice') != "") {      
+    if ($request->input('invoice') != "") {
       if ($request->input('invoice') == 'Yes') {
         $query->whereNotNull('has_invoice_file');
       }
-      if ($request->input('invoice') == 'No') {         
+      if ($request->input('invoice') == 'No') {
         $query->whereNull('has_invoice_file');
       }
     }
@@ -262,7 +275,7 @@ class Fulfillment extends Model implements Auditable
     //   $query->whereNull('responsable_approbation');
     // }
 
-    
+
 
     // if ($request->has('ok_finanzas')) {
     //   $query->whereNotNull('finances_approbation');

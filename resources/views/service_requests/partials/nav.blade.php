@@ -153,7 +153,7 @@
                 <i class="fas fa-piggy-bank"></i> Sin Cuentas Bancarias
             </a>
             @endcan -->
-            
+
 
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.with-bank-details') }}"
@@ -179,7 +179,7 @@
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.duplicate-contracts') }}"
                 href="{{ route('rrhh.service-request.report.duplicate-contracts') }}">
-                <i class="fas fa-clone"></i> Contratos Solapados                
+                <i class="fas fa-clone"></i> Contratos Solapados
             </a>
             @endcan
 
@@ -208,13 +208,18 @@
     @canany(['Service Request: maintainers'])
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle {{ active('parameters.values.report.*') }}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-cog"></i>
+            <i class="fas fa-cog"></i> Valores Horas
         </a>
         <div class="dropdown-menu">
 
           <a class="dropdown-item {{ active('parameters.values.index') }}"
               href="{{ route('parameters.values.index') }}">
-              <i class="fas fa-money-bill-alt"></i> Valor Hora/Jornada</a>
+              <i class="fas fa-money-bill-alt"></i> Valor Hora/Jornada
+          </a>
+
+          <a class="dropdown-item {{ active('parameters.values.index') }}"
+              href="{{ route('parameters.values.index') }}">
+              <i class="fas fa-clipboard"></i> Algo más
           </a>
 
         </div>
