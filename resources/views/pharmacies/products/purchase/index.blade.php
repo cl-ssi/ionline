@@ -66,6 +66,9 @@
 						class="btn btn-outline-secondary btn-sm" target="_blank">
 						<span class="fas fa-file" aria-hidden="true"></span>
 					</a>
+					@can('Pharmacy: sign')	
+					    @livewire('pharmacies.sign-purchase-record', ['purchase' => $purchase])
+					@endcan
 				</td>
 			</tr>
 			@endforeach
