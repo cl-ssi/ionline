@@ -12,7 +12,7 @@
 
   <fieldset class="form-group col">
       <label for="for_type">Origen Financiamiento</label>
-      <select name="type" class="form-control" wire:model.lazy="type" required id="type" {{$statusType}}>
+      <select name="type" class="form-control" wire:model.lazy="type" required id="type">
         <option value=""></option>
         <option value="Covid">Honorarios - Covid</option>
         <option value="Suma alzada">Suma alzada</option>
