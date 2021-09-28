@@ -635,10 +635,10 @@
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 		if (value != 85) {
-			$('#Subdirector').val(12621281); //PERDRO IRIONDO: 9882506
+			$('#Subdirector').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
 			$('#Subdirector').selectpicker('refresh');
 
-			$('#SubdirectorTurnos').val(12621281); //PERDRO IRIONDO: 9882506
+			$('#SubdirectorTurnos').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 	});

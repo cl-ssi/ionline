@@ -18,6 +18,18 @@ class ProgrammingItem extends Model
     
     public function reviewItems()
     {
-        return $this->hasMany('App\Models\Programming\ReviewItem');
+        return $this->hasMany('App\Models\Programmings\ReviewItem');
     }
+
+    public function getCountNOTRectifiedReviews(){
+        return $this->reviewItems
+            ->Where('rectified','=','NO')
+            ->Where('answer','=','NO')->count();
+    }
+
+    public function activityItem(){
+        return $this->belongsTo('App\Programmings\ActivityItem', 'activity_id');
+    }
+
+    
 }

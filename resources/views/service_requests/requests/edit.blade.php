@@ -309,7 +309,9 @@
   </div> -->
 
 @if($serviceRequest->fulfillments->count()>0)
-  @livewire('service-request.shifts-control', ['fulfillment' => $serviceRequest->fulfillments->first()])
+  @if($serviceRequest->working_day_type != "DIARIO")
+    @livewire('service-request.shifts-control', ['fulfillment' => $serviceRequest->fulfillments->first()])
+  @endif
 @endif
 
   <br>
@@ -588,7 +590,7 @@
   <div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
 				<label for="for_estate">Beneficios adicionales</label>
-				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50">{{ $serviceRequest->additional_benefits }}</textarea>
+				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50">{{ html_entity_decode($serviceRequest->additional_benefits) }}</textarea>
 
         <button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
@@ -1103,6 +1105,11 @@
     }else{
       $("#control_turnos").hide();
       $('#for_weekly_hours').removeAttr('disabled');
+
+      if ($('#working_day_type').val() == "DIARIO") {
+        $("#control_turnos").show();
+        $('#for_weekly_hours').attr('disabled', 'disabled');
+      }
     }
 
 
