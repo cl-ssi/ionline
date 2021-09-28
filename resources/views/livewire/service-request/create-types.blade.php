@@ -2,16 +2,17 @@
 <div class="row" wire:loading.remove>
   <fieldset class="form-group col">
       <label for="for_program_contract_type">Tipo</label>
-      <select name="program_contract_type" class="form-control" wire:model.lazy="program_contract_type" id="program_contract_type" required>
+      <select name="program_contract_type" wire:change="changeProgramContractType()" class="form-control" wire:model.lazy="program_contract_type" id="program_contract_type" required>
         <option value=""></option>
         <option value="Mensual">Mensual</option>
         <option value="Horas">Horas</option>
+        <option value="quirurgico">Servicios Quirúrgicos</option>
       </select>
   </fieldset>
 
   <fieldset class="form-group col">
       <label for="for_type">Origen Financiamiento</label>
-      <select name="type" class="form-control" wire:model.lazy="type" required id="type">
+      <select name="type" class="form-control" wire:model.lazy="type" required id="type" {{$statusType}}>
         <option value=""></option>
         <option value="Covid">Honorarios - Covid</option>
         <option value="Suma alzada">Suma alzada</option>

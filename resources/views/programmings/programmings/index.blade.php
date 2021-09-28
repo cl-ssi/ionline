@@ -11,17 +11,34 @@
  @can('Programming: create')
     <a href="{{ route('programmings.create') }}" class="btn btn-info mb-4">Comenzar Nueva Programación</a>
  @endcan
+ <form method="GET" class="form-horizontal" action="{{ route('programmings.index') }}">
+ <div class="input-group mb-3">
+        <div class="input-group-append">
+            <span class="input-group-text">Filtrar por Año</span>
+        </div>
+        <select name="year" id="for_year" class="form-control">
+        <option value=""></option>
+            <option value="2021" selected {{ $request->get('year') == "2021" ? 'selected' : '' }}>2021</option>
+            <option value="2022" {{ $request->get('year') == "2022" ? 'selected' : '' }}>2022</option>
+        </select>
+        <div>
+        <button type="submit" class="btn btn-primary" >Submit</button>
+        </div>
+</div>
+ </form>
+
 <div class="float-right text-center">
 <h5>Tiempo Restante</h5>
 <div id="timer"></div>
 </div>
+
 
 <div class="table-responsive"> 
     <table class="table table-sm " width="100%">
         <thead>
             <tr class="small ">
                 @can('Programming: status')<th class="text-left align-middle table-dark" >Estado</th>@endcan
-                @can('Programming: edit')<th class="text-left align-middle table-dark" ></th>@endcan
+                @can('Programming: edit')<th class="text-left align-middle table-dark" >Editar</th>@endcan
                 <th class="text-left align-middle table-dark" >%</th> 
                 <th class="text-left align-middle table-dark" >Obs.</th> 
                 <th class="text-left align-middle table-dark" >Id</th> 
@@ -57,12 +74,12 @@
                     <i class="fas fa-edit"></i></a>
                 </td>
             @endcan
-                <td > <span class="badge badge-info">{{ number_format(($programming->qty_traz/51) *100, 0, ',', ' ')}}%</span> </td>
-                <td > <span class="badge badge-danger">{{ number_format($programming->qty_reviews, 0, ',', ' ')}}</span> </td>
+                <td > <span class="badge badge-info">{{ number_format(($programming->getCountActivities()/51) *100, 0, ',', ' ')}}%</span> </td>
+                <td > <span class="badge badge-danger">{{ number_format($programming->countTotalNOTRectifiedReviews(), 0, ',', ' ')}}</span> </td>
                 <td >
                 {{ $programming->id }}</td>
-                <td>{{ $programming->commune }}</td>
-                <td>{{ $programming->establishment_type }} {{ $programming->establishment }}</td>
+                <td>{{ $programming->establishment->commune->name}}</td>
+                <td>{{ $programming->establishment->type }} {{ $programming->establishment->name }}</td>
                 <td>{{ $programming->year }}</td>
                 <td class="text-right ">
                 <!-- Permiso para asignar profesionales a la programación númerica en proceso -->
