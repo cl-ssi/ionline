@@ -178,16 +178,16 @@ class MonthlyQuotes extends Component
         else {            ///son cuotas iguales
             // $aguinaldo = '';
             // if ($serviceRequest->weekly_hours == 22 or $serviceRequest->weekly_hours == 44 or $serviceRequest->weekly_hours == 11) {
-
+            //
             //     if (!in_array($serviceRequest->id, array(8146, 7925, 8381, 8382, 8384, 8385, 8387)))
             //     {
             //         $aguinaldo = $this->aguinaldopatrias($serviceRequest);
             //     }
-                
+            //
             // }
 
             if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
-                // dd('entre aca');                
+                // dd('entre aca');
                 $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
                 $valor_mensual = $serviceRequest->net_amount;
                 $string = $nroCuotas . " cuotas,";
@@ -213,7 +213,7 @@ class MonthlyQuotes extends Component
                     $string = "1 cuota de $";
                     $string .= number_format($serviceRequest->gross_amount);
                     //->monthName
-                    
+
                 } else {
 
                     if ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') != $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
@@ -243,7 +243,7 @@ class MonthlyQuotes extends Component
                         }
                     } elseif ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d')) {
 
-                        //La Persona no parte a trabajar en un mes cerrado                        
+                        //La Persona no parte a trabajar en un mes cerrado
                         $nroCuotas = $serviceRequest->start_date->diffInMonths($serviceRequest->end_date) + 1;
                         $valor_mensual = $serviceRequest->net_amount;
                         $string = $nroCuotas . " cuotas,";
@@ -302,8 +302,9 @@ class MonthlyQuotes extends Component
 
 
             // $string .= $aguinaldo;
-
-
+            if ($serviceRequest->bonus_indications != null) {
+              $string .= ", " . $serviceRequest->bonus_indications . ", ";
+            }
 
 
 
