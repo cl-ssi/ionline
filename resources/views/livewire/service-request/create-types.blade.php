@@ -2,11 +2,10 @@
 <div class="row" wire:loading.remove>
   <fieldset class="form-group col">
       <label for="for_program_contract_type">Tipo</label>
-      <select name="program_contract_type" wire:change="changeProgramContractType()" class="form-control" wire:model.lazy="program_contract_type" id="program_contract_type" required>
+      <select name="program_contract_type" class="form-control" wire:model.lazy="program_contract_type" id="program_contract_type" required>
         <option value=""></option>
         <option value="Mensual">Mensual</option>
         <option value="Horas">Horas</option>
-        <option value="quirurgico">Servicios Quirúrgicos</option>
       </select>
   </fieldset>
 
