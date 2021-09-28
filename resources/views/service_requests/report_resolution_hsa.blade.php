@@ -162,29 +162,29 @@
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       <p class="justify">
         <strong>VISTOS:</strong><br>
-        Lo dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido, 
-        coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f) 
-        inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado 
-        del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del 
-        Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud; 
-        Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que 
-        Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos 
+        Lo dispuesto en el art. 11° del D.F.L. N° 29, de 2004 del Ministerio de Hacienda, que Fija el texto refundido,
+        coordinado y sistematizado de la Ley N° 18.834, de 1989 sobre Estatuto Administrativo; art. 36° letra f)
+        inciso 2, del D.F.L. N° 01, de 2005 del Ministerio de Salud, que Fija texto refundido, coordinado y sistematizado
+        del Decreto Ley N° 2.763, de 1979 y de las Leyes N° 18.933 y N° 18.469; Art. 54° II letras a), b) y c) del
+        Decreto Supremo N° 140, de 2004, que aprobó el Reglamento Orgánico de los Servicios de Salud;
+        Ley N° 19.880 de Bases de Procedimiento Administrativo, Art. 23° letra f) del Decreto N° 38, de 2005 que
+        Aprueba Reglamento Orgánico de los Establecimientos de Salud de Menor Complejidad y de los Establecimientos
         de Autogestión en Red todas del Ministerio de Salud;
         {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->decree}},
-        del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República, 
-        Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2020; 
+        del Servicio de Salud Iquique, Gabinete Presidencial N° 02, de 2018 de la Presidencia de la República,
+        Ley N° 21.289, de 2020 del Ministerio de Hacienda, que Aprueba Presupuesto del Sector Público año 2020;
         Resoluciones N° 18, de 2017 y N° 6, de 2019 ambas de la Contraloría General de la República.<br>
       </p>
       @else
       <p class="justify">
         <strong>VISTOS:</strong><br>
-        En estos antecedentes, según lo dispuesto según inciso final del Art. 2º y 3º del Decreto Nº 98 de 1991 del 
-        Ministerio de Hacienda, Circular Nº 2C/45 de 1998 todos del Ministerio de Salud, Art. 11° del D.F.L. Nº29/04 que 
-        fija texto refundido, coordinado y sistematizado de la Ley 18.834/89 sobre Estatuto Administrativo, 
-        Ley Nº 21.289/2020 de Presupuesto del Sector Público para el año 2021; D.F.L. Nº01/05 que fija texto refundido, 
-        coordinado y sistematizado, Dto. Ley Nº 2763/79 y de las leyes 18.933 y 18469 del Ministerio de Salud; 
-        Art. 8° III letra d) del Dto. Nº 140/04 del Ministerio de Salud que aprobó el Reglamento Orgánico de 
-        los Servicios de Salud, {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->decree}}, 
+        En estos antecedentes, según lo dispuesto según inciso final del Art. 2º y 3º del Decreto Nº 98 de 1991 del
+        Ministerio de Hacienda, Circular Nº 2C/45 de 1998 todos del Ministerio de Salud, Art. 11° del D.F.L. Nº29/04 que
+        fija texto refundido, coordinado y sistematizado de la Ley 18.834/89 sobre Estatuto Administrativo,
+        Ley Nº 21.289/2020 de Presupuesto del Sector Público para el año 2021; D.F.L. Nº01/05 que fija texto refundido,
+        coordinado y sistematizado, Dto. Ley Nº 2763/79 y de las leyes 18.933 y 18469 del Ministerio de Salud;
+        Art. 8° III letra d) del Dto. Nº 140/04 del Ministerio de Salud que aprobó el Reglamento Orgánico de
+        los Servicios de Salud, {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->decree}},
         Resolución Nº6/2019, Resolución N° 18/2017 y Dictamen Nº 21.900/98 todos de la Contraloría General de la República.<br>
       </p>
 
@@ -439,7 +439,7 @@
       <p class="justify">
         <strong>DECIMO CUARTO:</strong> El prestador (a) individualizado (a) en la presente resolución tendrá los siguientes beneficios adicionales:<br><br>
 
-        {{$ServiceRequest->additional_benefits}}
+        {!! nl2br($ServiceRequest->additional_benefits) !!}
       </p>
       @endif
 

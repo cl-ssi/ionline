@@ -92,7 +92,7 @@ class FirmaDigitalController extends Controller
         $signaturesFile->update(['signed_file' => $filePath]);
         Storage::disk('gcs')->put($filePath, base64_decode($responseArray['content']));
 
-        return redirect()->route($callbackRoute, ['message' => "El documento $signaturesFile->id se ha firmado correctamente.",
+        return redirect()->route($callbackRoute, ['message' => "El documento $modelId se ha firmado correctamente.",
             'modelId' => $modelId,
             'signaturesFile' => $signaturesFile->id]);
     }
