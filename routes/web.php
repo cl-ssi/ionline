@@ -167,7 +167,9 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/own_index', [RequestReplacementStaffController::class, 'own_index'])->name('own_index');
         Route::get('/ou_index', [RequestReplacementStaffController::class, 'ou_index'])->name('ou_index');
         Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
+        Route::get('/{requestReplacementStaff}/create_extension', [RequestReplacementStaffController::class, 'create_extension'])->name('create_extension');
         Route::post('/store', [RequestReplacementStaffController::class, 'store'])->name('store');
+        Route::post('/{requestReplacementStaff}/store_extension', [RequestReplacementStaffController::class, 'store_extension'])->name('store_extension');
         Route::get('/{requestReplacementStaff}/edit', [RequestReplacementStaffController::class, 'edit'])->name('edit');
         Route::put('/{requestReplacementStaff}/update', [RequestReplacementStaffController::class, 'update'])->name('update');
         Route::get('/to_select/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_select'])->name('to_select');
