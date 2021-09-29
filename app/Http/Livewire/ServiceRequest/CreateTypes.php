@@ -103,7 +103,7 @@ class CreateTypes extends Component
               }
               //servicio de salud iqq
               else{
-                $this->signatureFlows['Planificación CG RRHH'] = getAuthorityFromDate(59,now(),['manager'])->user->id; // 59 - Planificación y Control de Gestión de Recursos Humanos
+                $this->signatureFlows['Planificación CG RRHH'] = Authority::getAuthorityFromDate(59,now(),['manager'])->user->id; // 59 - Planificación y Control de Gestión de Recursos Humanos
                 $this->signatureFlows['S.G.D.P SSI'] = Authority::getAuthorityFromDate(44,now(),['manager'])->user->id; // 44 - Subdirección de Gestión y Desarrollo de las Personas
                 $this->signatureFlows['S.D.A SSI'] = Authority::getAuthorityFromDate(40,now(),['manager'])->user->id; // 31 - Subdirección de Recursos Físicos y Financieros
               }
