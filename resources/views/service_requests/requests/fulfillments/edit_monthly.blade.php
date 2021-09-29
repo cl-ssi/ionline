@@ -399,6 +399,7 @@
 			</div>
 		</div>
 		<!-- fin información boleta -->
+
 		<!-- información adicional finanzas -->
 		@canany(['Service Request: fulfillments finance'])
 		<form method="POST" action="{{ route('rrhh.service-request.fulfillment.update',$fulfillment) }}" enctype="multipart/form-data">
@@ -414,15 +415,15 @@
 							<label for="for_resolution_number">N° Resolución</label>
 							<input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
 						</fieldset>
-						<fieldset class="form-group col-7 col-md-3">
+						<fieldset class="form-group col-7 col-md-2">
 							<label for="for_resolution_date">Fecha Resolución</label>
 							<input type="date" class="form-control" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
 						</fieldset>
-						<fieldset class="form-group col col-md-3">
+						<fieldset class="form-group col col-md-2">
 							<label for="for_total_hours_paid">Total hrs. a pagar per.</label>
 							<input type="text" class="form-control" name="total_hours_to_pay" disabled value="{{$fulfillment->total_hours_to_pay}}">
 						</fieldset>
-						<fieldset class="form-group col col-md-3">
+						<fieldset class="form-group col col-md-2">
 							<label for="for_total_paid">Total a pagar</label>
 							<input type="text" class="form-control" name="total_to_pay" disabled value="{{$fulfillment->total_to_pay}}">
 						</fieldset>
@@ -440,11 +441,11 @@
 							<label for="for_total_paid">Total pagado</label>
 							<input type="text" class="form-control" name="total_paid" value="{{$fulfillment->total_paid}}">
 						</fieldset>
-						<fieldset class="form-group col-6 col-md-3">
+						<fieldset class="form-group col-6 col-md-2">
 							<label for="for_payment_date">Fecha pago</label>
 							<input type="date" class="form-control" name="payment_date" required @if($fulfillment->payment_date) value="{{$fulfillment->payment_date->format('Y-m-d')}}" @endif>
 						</fieldset>
-						<fieldset class="form-group col-6 col-md-2">
+						<fieldset class="form-group col-6 col-md-3">
 							<label for="for_contable_month">Mes contable pago</label>
 							<select name="contable_month" class="form-control" required>
 								<option value=""></option>
