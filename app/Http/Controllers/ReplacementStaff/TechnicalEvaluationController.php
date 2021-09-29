@@ -110,10 +110,14 @@ class TechnicalEvaluationController extends Controller
             return view('replacement_staff.request.technical_evaluation.edit',
                 compact('technicalEvaluation', 'users', 'request', 'replacementStaff',
                         'professionManage', 'profileManage', 'users_rys'));
-            //return redirect()->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#applicant');
+
             // return redirect()
             //   ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#applicant')
-            //   ->withInput();
+            //   ->withInput()
+            //   ->withReplacementStaff($replacementStaff);
+
+
+            // return redirect('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation)->withInput();
         }
         else{
             return view('replacement_staff.request.technical_evaluation.edit',
