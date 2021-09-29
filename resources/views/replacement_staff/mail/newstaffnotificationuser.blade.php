@@ -20,7 +20,7 @@
   </p>
 
   <ul>
-      <li><strong>Fecha de Ingreso</strong>: {{ \Carbon\Carbon::parse($replacementStaff->created_at)->format('d-m-Y H:i:s') }}</li>
+      <li><strong>Fecha de Ingreso de Antecedentes</strong>: {{ \Carbon\Carbon::parse($replacementStaff->created_at)->format('d-m-Y H:i:s') }}</li>
   </ul>
 
   <hr>
