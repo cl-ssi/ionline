@@ -19,10 +19,10 @@ class CreateRstAssignEvaluationsTable extends Migration
             $table->foreignId('request_replacement_staff_id');
             $table->foreignId('from_user_id');
             $table->foreignId('to_user_id');
-            $table->text('observation');
+            $table->text('observation')->nullable();
             $table->string('status')->nullable();
 
-            $table->foreign('request_replacement_staff_id')->references('id')->on('rst_replacement_staff');
+            $table->foreign('request_replacement_staff_id')->references('id')->on('rst_request_replacement_staff');
             $table->foreign('from_user_id')->references('id')->on('users');
             $table->foreign('to_user_id')->references('id')->on('users');
 

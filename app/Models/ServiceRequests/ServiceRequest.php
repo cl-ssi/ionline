@@ -25,11 +25,12 @@ class ServiceRequest extends Model implements Auditable
         'program_contract_type', 'weekly_hours', 'daily_hours', 'nightly_hours', 'estate',
         'estate_other', 'working_day_type','schedule_detail', 'working_day_type_other', 'subdirection_id',
         'responsability_center_id','budget_cdp_number', 'budget_item', 'budget_amount',
-        'budget_date', 'contract_number','month_of_payment','establishment_id','profession_id','objectives','resolve','subt31','additional_benefits',
+        'budget_date', 'contract_number','month_of_payment','establishment_id','profession_id','objectives','resolve','subt31',
+        'additional_benefits','bonus_indications',
         'digera_strategy','rrhh_team','gross_amount', 'net_amount','sirh_contract_registration',
         'resolution_number','resolution_date','bill_number','total_hours_paid','total_paid',
         'has_resolution_file','payment_date','verification_code','observation','creator_id',
-        'address','phone_number','email'
+        'address','phone_number','email','signature_page_break'
         // 'rut', 'name','bank_id','account_number','pay_method','nationality',
     ];
 

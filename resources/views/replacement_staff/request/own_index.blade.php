@@ -58,28 +58,28 @@
               </tr>
           </thead>
           <tbody>
-              @foreach($my_pending_requests as $request)
+              @foreach($my_pending_requests as $requestReplacementStaff)
               <tr class="small">
-                  <td>{{ $request->id }}<br>
-                      @if($request->TechnicalEvaluation)
-                          <i class="fas fa-clock" title="Evaluación Técnica: {{ $request->TechnicalEvaluation->StatusValue }}"></i>
+                  <td>{{ $requestReplacementStaff->id }}<br>
+                      @if($requestReplacementStaff->TechnicalEvaluation)
+                          <i class="fas fa-clock" title="Evaluación Técnica: {{ $requestReplacementStaff->TechnicalEvaluation->StatusValue }}"></i>
                       @else
                           <i class="fas fa-clock" title="Evaluación Técnica: Pendiente"></i>
                       @endif
                   </td>
-                  <td>{{ $request->created_at->format('d-m-Y H:i:s') }}</td>
-                  <td>{{ $request->name }}</td>
-                  <td class="text-center">{{ $request->degree }}</td>
-                  <td class="text-center">{{ $request->LegalQualityValue }}</td>
-                  <td>{{ Carbon\Carbon::parse($request->start_date)->format('d-m-Y') }} <br>
-                      {{ Carbon\Carbon::parse($request->end_date)->format('d-m-Y') }}
+                  <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
+                  <td>{{ $requestReplacementStaff->name }}</td>
+                  <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
+                  <td class="text-center">{{ $requestReplacementStaff->LegalQualityValue }}</td>
+                  <td>{{ Carbon\Carbon::parse($requestReplacementStaff->start_date)->format('d-m-Y') }} <br>
+                      {{ Carbon\Carbon::parse($requestReplacementStaff->end_date)->format('d-m-Y') }}
                   </td>
-                  <td>{{ $request->FundamentValue }}</td>
-                  <td>{{ $request->user->FullName }}<br>
-                      {{ $request->organizationalUnit->name }}
+                  <td>{{ $requestReplacementStaff->FundamentValue }}</td>
+                  <td>{{ $requestReplacementStaff->user->FullName }}<br>
+                      {{ $requestReplacementStaff->organizationalUnit->name }}
                   </td>
                   <td class="text-center">
-                      @foreach($request->RequestSign as $sign)
+                      @foreach($requestReplacementStaff->RequestSign as $sign)
                           @if($sign->request_status == 'pending' || $sign->request_status == NULL)
                               <i class="fas fa-clock fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
                           @endif
@@ -96,16 +96,16 @@
                       @endforeach
                   </td>
                   <td>
-                      @if($request->RequestSign->first()->request_status == 'pending')
-                      <a href="{{ route('replacement_staff.request.edit', $request) }}"
+                      {{-- @if($requestReplacementStaff->requestSign->first()->request_status == 'pending') --}}
+                      <a href="{{ route('replacement_staff.request.edit', $requestReplacementStaff) }}"
                           class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-                      @else
-                      <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
-                          data-target="#exampleModalCenter-req-{{ $request->id }}">
+                      {{-- @else --}}
+                      <!-- <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                          data-target="#exampleModalCenter-req-{{ $requestReplacementStaff->id }}">
                         <i class="fas fa-eye"></i>
-                      </button>
+                      </button> -->
                       @include('replacement_staff.modals.modal_to_view_request')
-                      @endif
+                      {{-- @endif --}}
                   </td>
               </tr>
               @endforeach
@@ -140,30 +140,31 @@
               </tr>
           </thead>
           <tbody class="small">
-              @foreach($my_request as $request)
+              @foreach($my_request as $requestReplacementStaff)
               <tr>
-                  <td>{{ $request->id }} <br>
-                    @if($request->TechnicalEvaluation)
-                      @if($request->TechnicalEvaluation->technical_evaluation_status == 'complete')
-                          <i class="fas fa-check-circle" title="Evaluación Técnica: {{ $request->TechnicalEvaluation->StatusValue }}"></i>
+                  <td>{{ $requestReplacementStaff->id }} <br>
+                    @if($requestReplacementStaff->TechnicalEvaluation)
+                      @if($requestReplacementStaff->TechnicalEvaluation->technical_evaluation_status == 'complete')
+                          <i class="fas fa-check-circle" title="Evaluación Técnica: {{ $requestReplacementStaff->TechnicalEvaluation->StatusValue }}"></i>
                       @endif
-                      {{-- @if($request->TechnicalEvaluation->technical_evaluation_status == 'rejected') --}}
-                          <!-- <i class="fas fa-times-circle" title="Evaluación Técnica: {{ $request->TechnicalEvaluation->StatusValue }}"></i> -->
+                      {{-- @if($requestReplacementStaff->TechnicalEvaluation->technical_evaluation_status == 'rejected') --}}
+                          <!-- <i class="fas fa-times-circle" title="Evaluación Técnica: {{ $requestReplacementStaff->TechnicalEvaluation->StatusValue }}"></i> -->
                       {{-- @endif --}}
                     @endif
                   </td>
-                  <td>{{ $request->name }}</td>
-                  <td class="text-center">{{ $request->degree }}</td>
-                  <td class="text-center">{{ $request->LegalQualityValue }}</td>
-                  <td>{{ Carbon\Carbon::parse($request->start_date)->format('d-m-Y') }} <br>
-                      {{ Carbon\Carbon::parse($request->end_date)->format('d-m-Y') }}
+                  <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
+                  <td>{{ $requestReplacementStaff->name }}</td>
+                  <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
+                  <td class="text-center">{{ $requestReplacementStaff->LegalQualityValue }}</td>
+                  <td>{{ Carbon\Carbon::parse($requestReplacementStaff->start_date)->format('d-m-Y') }} <br>
+                      {{ Carbon\Carbon::parse($requestReplacementStaff->end_date)->format('d-m-Y') }}
                   </td>
-                  <td>{{ $request->FundamentValue }}</td>
-                  <td>{{ $request->user->FullName }}<br>
-                      {{ $request->organizationalUnit->name }}
+                  <td>{{ $requestReplacementStaff->FundamentValue }}</td>
+                  <td>{{ $requestReplacementStaff->user->FullName }}<br>
+                      {{ $requestReplacementStaff->organizationalUnit->name }}
                   </td>
                   <td class="text-center">
-                      @foreach($request->RequestSign as $sign)
+                      @foreach($requestReplacementStaff->RequestSign as $sign)
                           @if($sign->request_status == 'pending' || $sign->request_status == NULL)
                               <i class="fas fa-clock fa-2x" title="{{ $sign->organizationalUnit->name }}"></i>
                           @endif
@@ -181,7 +182,7 @@
                   </td>
                   <td>
                       <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
-                          data-target="#exampleModalCenter-req-{{ $request->id }}">
+                          data-target="#exampleModalCenter-req-{{ $requestReplacementStaff->id }}">
                         <i class="fas fa-eye"></i>
                       </button>
                       @include('replacement_staff.modals.modal_to_view_request')

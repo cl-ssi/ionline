@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="exampleModalCenter-req-{{ $request->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="exampleModalCenter-req-{{ $requestReplacementStaff->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -9,12 +9,23 @@
         </button>
       </div>
       <div class="modal-body">
-          @if(!$pending_requests_to_sign->Where('id', $request->id)->isEmpty())
-          @foreach($pending_requests_to_sign->Where('id', $request->id) as $requestReplacementStaff)
+          @if($requestReplacementStaff->request_id != NULL)
+              <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                  <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+          @endif
+          @if(!$pending_requests_to_sign->Where('id', $requestReplacementStaff->id)->isEmpty())
+          @foreach($pending_requests_to_sign->Where('id', $requestReplacementStaff->id) as $requestReplacementStaff)
               <table class="table table-sm table-bordered">
                   <thead>
                       <tr class="table-active">
-                        <th colspan="3">Formulario Solicitud Contratación de Personal</th>
+                        <th>Nº Solicitud Contratación de Personal</th>
+                        <td colspan="2">
+                            {{ $requestReplacementStaff->id }}
+                        </td>
                       </tr>
                   </thead>
                   <tbody>

@@ -100,9 +100,9 @@
                     @endforeach
                 </td>
                 <td>
-                    @if($requestReplacementStaff->RequestSign->last()->request_status == "accepted" &&
+                    {{-- @if($requestReplacementStaff->RequestSign->last()->request_status == "accepted" &&
                       !$requestReplacementStaff->technicalEvaluation &&
-                      Auth::user()->hasPermissionTo('Replacement Staff: assign request'))
+                      Auth::user()->hasPermissionTo('Replacement Staff: assign request')) --}}
                         <!-- Button trigger modal -->
                         <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
                           data-target="#exampleModal-assign-{{ $requestReplacementStaff->id }}">
@@ -111,12 +111,12 @@
 
                         @include('replacement_staff.modals.modal_to_assign')
 
-                    @elseif($requestReplacementStaff->technicalEvaluation)
-                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
+                    {{--@elseif($requestReplacementStaff->technicalEvaluation)
+                        <!-- <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Asignado a: {{ $requestReplacementStaff->assignEvaluations->last()->userAssigned->FullName }}">
                         <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
                               class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
-                        </span>
-                    @endif
+                        </span> -->
+                    @endif --}}
                 </td>
             </tr>
             @endforeach
@@ -195,16 +195,8 @@
                     @endforeach
                 </td>
                 <td>
-                    @foreach($requestReplacementStaff->RequestSign as $sign)
-                        @if($sign->position == 3 && $sign->request_status == "accepted" && !$requestReplacementStaff->technicalEvaluation)
-                            <a href="{{ route('replacement_staff.request.technical_evaluation.store', $requestReplacementStaff) }}"
-                                onclick="return confirm('¿Está seguro de iniciar el proceso de selección?')"
+                    <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
                                 class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-                        @elseif($sign->position == 3 && $sign->request_status == "accepted" && $requestReplacementStaff->technicalEvaluation)
-                            <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
-                                class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-                        @endif
-                    @endforeach
                 </td>
             </tr>
             @endforeach

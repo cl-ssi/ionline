@@ -121,18 +121,10 @@
       clear: both;
     }
 
-    @media all {
-      .page-break {
-        display: none;
-      }
+    .page-break {
+      page-break-after: always;
     }
 
-    @media print {
-      .page-break {
-        display: block;
-        page-break-before: always;
-      }
-    }
   </style>
 </head>
 
@@ -451,6 +443,10 @@
       </p>
       @endif
 
+      @if($ServiceRequest->signature_page_break)
+      <div class="page-break"></div>
+      @endif
+
       Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribute()}} <br>
 
       <p class="">
@@ -485,8 +481,6 @@
         Honorario Suma Alzada.
 
         @endif
-
-
       </p>
       <br>
       <p class="center">

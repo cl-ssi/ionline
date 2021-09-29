@@ -10,7 +10,7 @@
     <table class="table table-sm table-striped table-bordered">
         <thead class="small">
             <tr class="table-active">
-                <th colspan="3">Formulario Solicitud Contratación de Personal</th>
+                <th colspan="3">Formulario Contratación de Personal - Solicitud Nº {{ $technicalEvaluation->requestReplacementStaff->id }}</th>
             </tr>
         </thead>
         <tbody class="small">
@@ -371,7 +371,7 @@
               <div class="form-row">
                   <fieldset class="form-group col-5">
                       <label for="for_name">Nombres / Identificación</label>
-                      <input class="form-control" type="text" name="search" autocomplete="off" style="text-transform: uppercase;" placeholder="RUN (sin dígito verificador) / NOMBRE" value="{{$request->search}}">
+                      <input class="form-control" type="text" name="search" autocomplete="off" style="text-transform: uppercase;" placeholder="RUN (sin dígito verificador) / NOMBRE" value="{{ old('search') }}">
                   </fieldset>
 
                   <fieldset class="form-group col-2">
