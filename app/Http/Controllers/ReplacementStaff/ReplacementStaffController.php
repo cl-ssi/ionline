@@ -69,9 +69,8 @@ class ReplacementStaffController extends Controller
             $now = Carbon::now()->format('Y_m_d_H_i_s');
             $file_name = $now.'_cv_'.$replacementStaff->run;
             $file = $request->file('cv_file');
-            //$replacementStaff->cv_file = $file->storeAs('/ionline/replacement_staff/cv_docs/', $file_name.'.'.$file->extension(), 'gcs');
-            //$fileModel->file = $file->store('ionline/documents/partes',['disk' => 'gcs']);
-            //$replacementStaff->save();
+            $replacementStaff->cv_file = $file->storeAs('/ionline/replacement_staff/cv_docs/', $file_name.'.'.$file->extension(), 'gcs');
+            $replacementStaff->save();
 
             Mail::to($replacementStaff->email)
               ->cc(env('APP_RYS_MAIL'))

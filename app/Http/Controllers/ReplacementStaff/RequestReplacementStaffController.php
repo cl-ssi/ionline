@@ -169,6 +169,11 @@ class RequestReplacementStaffController extends Controller
         return view('replacement_staff.request.create');
     }
 
+    public function create_extension(RequestReplacementStaff $requestReplacementStaff)
+    {
+        return view('replacement_staff.request.create_extension', compact('requestReplacementStaff'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -385,6 +390,45 @@ class RequestReplacementStaffController extends Controller
         Mail::to(explode(',', env('APP_RYS_MAIL')))->send(new NewRequestReplacementStaff($request_replacement));
 
         session()->flash('success', 'Estimados Usuario, se ha creado la Solicitud Exitosamente');
+        return redirect()->route('replacement_staff.request.own_index');
+    }
+
+    public function store_extension(Request $request, RequestReplacementStaff $requestReplacementStaff)
+    {
+        $newRequestReplacementStaff = new RequestReplacementStaff($request->All());
+        $newRequestReplacementStaff->request_id = $requestReplacementStaff->id;
+        $newRequestReplacementStaff->user()->associate(Auth::user());
+        $newRequestReplacementStaff->organizational_unit_id = Auth::user()->organizationalUnit->id;
+        $newRequestReplacementStaff->save();
+
+        $request_sing = new RequestSign();
+
+        $request_sing->position = '1';
+        $request_sing->ou_alias = 'leadership';
+        $request_sing->organizational_unit_id = Auth::user()->organizationalUnit->id;
+        $request_sing->request_status = 'pending';
+        $request_sing->request_replacement_staff_id = $newRequestReplacementStaff->id;
+        $request_sing->save();
+
+        //COPIA MAIL PARA FIRMAS
+        $date = Carbon::now()->format('Y_m_d_H_i_s');
+        $type = 'manager';
+        $type_adm = 'secretary';
+        //manager
+        $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
+        //secretary
+        $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type_adm);
+
+        $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
+
+        Mail::to($emails)
+          ->cc(env('APP_RYS_MAIL'))
+          ->send(new NotificationSign($newRequestReplacementStaff));
+
+        //COPIA MAIL PARA FIRMAS
+        Mail::to(explode(',', env('APP_RYS_MAIL')))->send(new NewRequestReplacementStaff($newRequestReplacementStaff));
+
+        session()->flash('success', 'Estimados Usuario, se ha creado la Solicitud de Extensión Exitosamente');
         return redirect()->route('replacement_staff.request.own_index');
     }
 
