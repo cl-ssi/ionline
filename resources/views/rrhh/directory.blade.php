@@ -75,10 +75,12 @@
 			<br>
 			@endif
 
-			<a href="tel:+56{{ $user->telephones[0]->number }}"><i class="fas fa-phone"></i>
-				<abbr title="Teléfono"> {{ $user->telephones->first()->number }} </abbr>
+			@foreach($user->telephones as $telephone)
+			<a href="tel:+56{{ $telephone->number }}"><i class="fas fa-phone"></i>
+				<abbr title="Teléfono"> {{ $telephone->number }} </abbr>
 			</a> - <i class="fas fa-phone-square"></i>
-				<abbr title="Anexo Minsal">{{ $user->telephones->first()->minsal }}</abbr>
+				<abbr title="Anexo Minsal">{{ $telephone->minsal }}</abbr><br>
+			@endforeach
 
 		</address>
 		@endforeach

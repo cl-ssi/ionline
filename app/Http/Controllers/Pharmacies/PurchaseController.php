@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Pharmacies\Purchase;
 use App\Pharmacies\Supplier;
 use App\Pharmacies\Product;
+use App\Models\Documents\SignaturesFile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PurchaseController extends Controller
 {
@@ -141,5 +143,31 @@ class PurchaseController extends Controller
     public function record(Purchase $purchase)
     {
         return view('pharmacies.products.purchase.record', compact('purchase'));
+    }
+
+    public function recordPdf(Purchase $purchase)
+    {
+      $pdf = \PDF::loadView('pharmacies.products.purchase.record', compact('purchase'));
+      return $pdf->download('file.pdf');
+    }
+
+    public function signedRecordPdf(Purchase $purchase)
+    {
+      return Storage::disk('gcs')->response($purchase->signedRecord->signed_file);
+    }
+
+    public function callbackFirmaRecord($message, $modelId, SignaturesFile $signaturesFile = null)
+    {
+      $purchase = Purchase::find($modelId);
+
+      if (!$signaturesFile) {
+        session()->flash('danger', $message);
+        return redirect()->route('pharmacies.products.purchase.index');
+      }
+
+      $purchase->signed_record_id = $signaturesFile->id;
+      $purchase->save();
+      session()->flash('success', $message);
+      return redirect()->route('pharmacies.products.purchase.index');
     }
 }

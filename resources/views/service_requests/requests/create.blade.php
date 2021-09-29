@@ -406,11 +406,16 @@
 	</div>
 	@endif
 
-
+	<div class="form-row">
+		<fieldset class="form-group col">
+				<label for="for_estate">Aguinaldos (se inserta en cláusula 8va)</label>
+				<textarea name="bonus_indications" class="form-control" rows="4" cols="50" placeholder="ej: en septiembre un bono de 53.000 por concepto de aguinaldo de fiestas patrias"></textarea>
+		</fieldset>
+	</div>
 
 	<div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_estate">Beneficios adicionales</label>
+				<label for="for_estate">Beneficios adicionales (se inserta en cláusula 14)</label>
 				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50" disabled></textarea>
 
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
@@ -635,10 +640,10 @@
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 		if (value != 85) {
-			$('#Subdirector').val(12621281); //PERDRO IRIONDO: 9882506
+			$('#Subdirector').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
 			$('#Subdirector').selectpicker('refresh');
 
-			$('#SubdirectorTurnos').val(12621281); //PERDRO IRIONDO: 9882506
+			$('#SubdirectorTurnos').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 	});

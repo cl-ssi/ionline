@@ -50,10 +50,12 @@ use App\Http\Controllers\ServiceRequests\FulfillmentController;
 use App\Http\Controllers\ServiceRequests\SignatureFlowController;
 use App\Http\Controllers\ServiceRequests\FulfillmentItemController;
 use App\Http\Controllers\ServiceRequests\ReportController;
-
-
+use App\Http\Controllers\ServiceRequests\Denomination1121Controller;
+use App\Http\Controllers\ServiceRequests\DenominationFormulaController;
 
 use App\Http\Controllers\Parameters\ProfessionController;
+use App\Http\Controllers\Pharmacies\PurchaseController;
+use App\Pharmacies\Purchase;
 
 /*
 |--------------------------------------------------------------------------
@@ -480,6 +482,29 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
         Route::get('/signed-budget-availability-pdf/{serviceRequest}', [ServiceRequestController::class, 'signedBudgetAvailabilityPDF'])->name('signed-budget_availability-pdf');
         Route::get('/callback-firma-budget-availability/{message}/{modelId}/{signaturesFile?}', [ServiceRequestController::class, 'callbackFirmaBudgetAvailability'])->name('callbackFirmaBudgetAvailability');
+
+
+        Route::prefix('parameters')->name('parameters.')->middleware('auth')->group(function () {
+
+          Route::prefix('1121')->name('1121.')->group(function () {
+                Route::get('/', [Denomination1121Controller::class, 'index'])->name('index');
+                Route::get('/create', [Denomination1121Controller::class, 'create'])->name('create');
+                Route::post('/store', [Denomination1121Controller::class, 'store'])->name('store');
+                Route::get('/{denomination1121}/edit', [Denomination1121Controller::class, 'edit'])->name('edit');
+                Route::put('/{denomination1121}/update', [Denomination1121Controller::class, 'update'])->name('update');
+                Route::delete('{denomination1121}/destroy', [Denomination1121Controller::class, 'destroy'])->name('destroy');
+              });
+
+          Route::prefix('formula')->name('formula.')->group(function () {
+                Route::get('/', [DenominationFormulaController::class, 'index'])->name('index');
+                Route::get('/create', [DenominationFormulaController::class, 'create'])->name('create');
+                Route::post('/store', [DenominationFormulaController::class, 'store'])->name('store');
+                Route::get('/{denominationFormula}/edit', [DenominationFormulaController::class, 'edit'])->name('edit');
+                Route::put('/{denominationFormula}/update', [DenominationFormulaController::class, 'update'])->name('update');
+                Route::delete('{denominationFormula}/destroy', [DenominationFormulaController::class, 'destroy'])->name('destroy');
+              });
+        });
+
 
 
         Route::prefix('fulfillment')->name('fulfillment.')->group(function () {
@@ -1145,7 +1170,11 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
         Route::get('dispatch/{dispatch}/file', 'Pharmacies\DispatchController@openFile')->name('dispatch.openFile');
         Route::resource('purchase', 'Pharmacies\PurchaseController');
         Route::resource('purchase_item', 'Pharmacies\PurchaseItemController');
+        Route::get('purchase/sendForSignature/{purchase}/', 'Pharmacies\PurchaseController@sendForSignature')->name('purchase.sendForSignature');
         Route::get('purchase/record/{purchase}', 'Pharmacies\PurchaseController@record')->name('purchase.record');
+        Route::get('purchase/record-pdf/{purchase}', 'Pharmacies\PurchaseController@recordPdf')->name('purchase.record_pdf');
+        Route::get('/callback-firma-record/{message}/{modelId}/{signaturesFile?}', [PurchaseController::class, 'callbackFirmaRecord'])->name('callbackFirmaRecord');
+        Route::get('/signed-record-pdf/{purchase}', [PurchaseController::class, 'signedRecordPdf'])->name('signed_record_pdf');
 
         Route::resource('transfer', 'Pharmacies\TransferController');
         Route::get('transfer/{establishment}/auth', 'Pharmacies\TransferController@auth')->name('transfer.auth');
