@@ -683,15 +683,30 @@ class ReportController extends Controller
 
 			else //aca son solo los vigentes
 			{
-				$srs = $srs->whereDate('start_date','<=',$request->from)
-					->whereDate('end_date','>=',$request->to)
-					->when($request->uo != null, function ($q) use ($request) {
-						return $q->where('responsability_center_ou_id', $request->uo);
-					})
-					->when($request->type != null, function ($q) use ($request) {
-						return $q->where('type',  $request->type);
-					})
-					->orderBy('start_date');
+				$srs = $srs->whereDate('start_date','>=',$request->from)
+        ->whereDate('end_date','<=',$request->to)
+        ->when($request->uo != null, function ($q) use ($request) {
+          return $q->where('responsability_center_ou_id', $request->uo);
+        })
+        ->when($request->type != null, function ($q) use ($request) {
+          return $q->where('type',  $request->type);
+        })
+        ->whereDoesntHave("fulfillments", function ($subQuery) {
+          $subQuery->whereHas("FulfillmentItems", function ($subQuery) {
+                        $subQuery->where('type','Renuncia voluntaria');
+                });
+        })
+        ->whereDoesntHave("fulfillments", function ($subQuery) {
+          $subQuery->whereHas("FulfillmentItems", function ($subQuery) {
+                        $subQuery->where('type','Abandono de funciones');
+                });
+        })
+        ->whereDoesntHave("fulfillments", function ($subQuery) {
+          $subQuery->whereHas("FulfillmentItems", function ($subQuery) {
+                        $subQuery->where('type','Término de contrato anticipado');
+                });
+        })
+        ->orderBy('start_date');
 			}
 
 			$total_srs = $srs->count();
