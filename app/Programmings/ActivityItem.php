@@ -7,4 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class ActivityItem extends Model
 {
     protected $table = 'pro_activity_items';
+    protected $fillable = [
+        'id', 'int_code', 'vitakl_cycle', 'tracer', 'action_type', 'activity_name', 'def_target_population', 'verification_rem', 'professional', 'activity_id'
+    ];
+
+    public function program(){
+        return $this->belongsTo('App\Programmings\ActivityProgram');
+    }
 }

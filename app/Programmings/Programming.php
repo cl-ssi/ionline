@@ -2,10 +2,12 @@
 
 namespace App\Programmings;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class Programming extends Model
 {
+    // use DuplicateRelations;
     protected $table = 'pro_programmings';
     protected $fillable = [
         'id','year', 'description'
@@ -63,3 +65,30 @@ class Programming extends Model
     //     return $this->hasMany('App\Models\Programmings\Review');
     // }
 }
+
+// trait DuplicateRelations
+// {
+//     public static function duplicateRelations($from, $to)
+//     {
+//         foreach ($from->relations as $relationName => $object){
+//             if($object !== null) {
+//                 if ($object instanceof Collection) {
+//                     foreach ($object as $relation) {
+//                         self::replication($relationName, $relation, $to);
+//                     }
+//                 } else {
+//                     self::replication($relationName, $object, $to);
+//                 }
+//             }
+//         }
+//     }
+
+//     private static function replication($name, $relation, $to)
+//     {
+//         $newRelation = $relation->replicate();
+//         $to->{$name}()->create($newRelation->toArray());
+//         if($relation->relations !== null) {
+//             self::duplicateRelations($relation, $to->{$name});
+//         }
+//     }
+// }
