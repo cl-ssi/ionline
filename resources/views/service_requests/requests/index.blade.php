@@ -44,6 +44,7 @@
 								<th scope="col">T.Contrato</th>
 								<th scope="col">C.Responsabilidad</th>
 								<th scope="col">Origen Financiamiento</th>
+								<th scope="col">F.Solicitud</th>
 								<th scope="col">Rut</th>
 								<th scope="col">Funcionario</th>
 								<th scope="col">F.Inicio</th>
