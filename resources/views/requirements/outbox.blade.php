@@ -198,7 +198,7 @@
           @else
             @switch($archived->status)
                 @case('creado')
-                    @if($archived->user == Auth::user())
+                    @if($archived->user_id == Auth::user()->id)
                         <tr class="alert-info">
                     @else
                         <tr class="alert-light">
