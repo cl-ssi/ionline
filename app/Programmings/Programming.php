@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Programming extends Model
 {
-    // use DuplicateRelations;
     protected $table = 'pro_programmings';
     protected $fillable = [
         'id','year', 'description'
@@ -22,11 +21,11 @@ class Programming extends Model
     }
 
     public function days(){
-        return $this->hasMany('App\Models\Programmings\ProgrammingDay');
+        return $this->hasMany('App\Programmings\ProgrammingDay');
     }
 
     public function professionalHours(){
-        return $this->hasMany('App\Models\Programmings\ProfessionalHour');
+        return $this->hasMany('App\Programmings\ProfessionalHour');
     }
 
     public function establishment() {
@@ -48,47 +47,10 @@ class Programming extends Model
                 $activities->add($item->activityItem);
             }
         }
-        //dd($activities->unique('int_code'));
-         $uniqueAct=$activities->unique('int_code');
-        // if($this->id==2){
-        //     dd($uniqueAct);
-        // }
-        
-        return count($uniqueAct);
+        return count($activities->unique('int_code'));
     }
 
     protected $casts = [
         'access' => 'array'
     ];
-
-    // public function programming_reviews() {
-    //     return $this->hasMany('App\Models\Programmings\Review');
-    // }
 }
-
-// trait DuplicateRelations
-// {
-//     public static function duplicateRelations($from, $to)
-//     {
-//         foreach ($from->relations as $relationName => $object){
-//             if($object !== null) {
-//                 if ($object instanceof Collection) {
-//                     foreach ($object as $relation) {
-//                         self::replication($relationName, $relation, $to);
-//                     }
-//                 } else {
-//                     self::replication($relationName, $object, $to);
-//                 }
-//             }
-//         }
-//     }
-
-//     private static function replication($name, $relation, $to)
-//     {
-//         $newRelation = $relation->replicate();
-//         $to->{$name}()->create($newRelation->toArray());
-//         if($relation->relations !== null) {
-//             self::duplicateRelations($relation, $to->{$name});
-//         }
-//     }
-// }
