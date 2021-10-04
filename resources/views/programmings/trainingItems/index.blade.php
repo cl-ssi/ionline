@@ -25,7 +25,7 @@
         <tr style="font-size:45%;">
             <th class="text-center align-middle">LINEAMIENTOS ESTRATEGICOS</th>
             <th class="text-center align-middle">ACTIVIDADES DE CAPACITACION (TEMAS)</th>
-            <th class="text-center align-middle">OBJETIVOS EDUCATIVOS</th>
+            <th class="text-center align-middle">RESULTADOS ESPERADOS</th>
             <th class="text-center align-middle">A (Médicos, Odont, QF,etc.)</th>
             <th class="text-center align-middle">B (Otros Profesio-nales)</th>
             <th class="text-center align-middle">C (Técnicos Nivel Superior) </th>
