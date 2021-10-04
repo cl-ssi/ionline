@@ -27,7 +27,10 @@
             Las postulaciones realizadas por este medio no son vinculantes a las convocatorias
             publicadas en portal de <b>Empleos Públicos</b> y/o en la página web del <b>Servicio de Salud Iquique</b>.
         </p>
-        <a href="{{ route('replacement_staff.create') }}" class="btn btn-primary">Ir</a>
+        <div class="float-right">
+          <a href="{{ route('replacement_staff.create') }}" class="btn btn-primary">Ingresar</a>
+          <a href="https://www.youtube.com/watch?v=WBe0WOgJnYc" class="btn btn-danger" target="_blank"><i class="fab fa-youtube"></i> Video</a>
+        </div>
       </div>
     </div>
   </div>
