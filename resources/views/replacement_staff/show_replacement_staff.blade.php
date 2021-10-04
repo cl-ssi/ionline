@@ -70,19 +70,7 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col">
-            <label for="for_commune_id">Comuna</label>
-            <select name="commune" id="for_commune" class="form-control" required readonly>
-                <option value="">Seleccione...</option>
-                <option value="alto hospicio" {{ ($replacementStaff->commune == 'alto hospicio')?'selected':'' }}>Alto Hospicio</option>
-                <option value="camina" {{ ($replacementStaff->commune == 'camina')?'selected':'' }}>Camiña</option>
-                <option value="colchane" {{ ($replacementStaff->commune == 'colchane')?'selected':'' }}>Colchane</option>
-                <option value="huara" {{ ($replacementStaff->commune == 'huara')?'selected':'' }}>Huara</option>
-                <option value="iquique" {{ ($replacementStaff->commune == 'iquique')?'selected':'' }}>Iquique</option>
-                <option value="pica" {{ ($replacementStaff->commune == 'pica')?'selected':'' }}>Pica</option>
-                <option value="pozo almonte" {{ ($replacementStaff->commune == 'pozo almonte')?'selected':'' }}>Pozo Almonte</option>
-            </select>
-        </fieldset>
+        @livewire('replacement-staff.commune-region-select', ['replacementStaff' => $replacementStaff])
 
         <fieldset class="form-group col">
             <label for="for_address">Dirección</label>
@@ -99,12 +87,6 @@
               <option value="working_external" {{ ($replacementStaff->status == 'working_external')?'selected':'' }}>Trabajando</option>
           </select>
       </fieldset>
-      <!-- <fieldset class="form-group col-5">
-          <div class="mb-3">
-            <label for="forcv_file" class="form-label">Actualizar Curriculum Vitae</label>
-            <input class="form-control" type="file" name="cv_file" accept="application/pdf" readonly>
-          </div>
-      </fieldset> -->
       <div class="col">
         <p>Curriculum Vitae</p>
         <a href="{{ route('replacement_staff.view_file', $replacementStaff) }}"
@@ -132,8 +114,9 @@
     </div>
     <div class="card-body">
         @if($replacementStaff->profiles->count() > 0)
-            <table class="table small table-striped table-bordered">
-                <thead class="text-center">
+          <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered">
+                <thead class="text-center small">
                     <tr>
                         <th style="width: 11%">Fecha Registro</th>
                         <th>Estamento</th>
@@ -144,7 +127,7 @@
                         <th style="width: 10%"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="small">
                     @foreach($replacementStaff->profiles as $profile)
                     <tr>
                         <td>{{ $profile->updated_at->format('d-m-Y H:i:s') }}</td>
@@ -162,6 +145,7 @@
                     @endforeach
                 </tbody>
             </table>
+          </div>
         @endif
     </div>
 </div>
@@ -174,8 +158,9 @@
     </div>
     <div class="card-body">
         @if($replacementStaff->trainings->count() > 0)
-            <table class="table small table-striped table-bordered">
-                <thead class="text-center">
+          <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered">
+                <thead class="text-center small">
                     <tr>
                         <th style="width: 11%">Fecha Registro</th>
                         <th>Nombre de Capacitación</th>
@@ -184,7 +169,7 @@
                         <th style="width: 10%"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="small">
                     @foreach($replacementStaff->trainings as $training)
                     <tr>
                         <td>{{ $training->updated_at->format('d-m-Y H:i:s') }}</td>
@@ -204,6 +189,7 @@
                     @endforeach
                 </tbody>
             </table>
+          </div>
         @endif
     </div>
 </div>
@@ -211,14 +197,5 @@
 @endsection
 
 @section('custom_js')
-
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 @endsection
