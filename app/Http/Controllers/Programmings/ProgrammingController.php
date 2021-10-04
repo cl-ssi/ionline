@@ -23,7 +23,7 @@ class ProgrammingController extends Controller
 {
     public function index(Request $request)
     {
-        $programmings = Programming::with('items.reviewItems', 'items.activityItem')->where('year', $request->year)->get();
+        $programmings = Programming::with('items.reviewItems', 'items.activityItem')->where('year', $request->year ?? Carbon::now()->year)->get();
         $communes = Commune::where('name', $request->name)->get();
 
         //dd($programmings);
