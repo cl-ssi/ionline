@@ -25,9 +25,10 @@ class ReplacementStaffController extends Controller
      */
     public function index(Request $request)
     {
-        $replacementStaff = ReplacementStaff::search($request->input('search'),
-                                                     $request->input('profile_search'),
-                                                     $request->input('profession_search'))
+        $replacementStaff = ReplacementStaff::latest()
+            ->search($request->input('search'),
+                      $request->input('profile_search'),
+                      $request->input('profession_search'))
             ->paginate(15);
 
         $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();

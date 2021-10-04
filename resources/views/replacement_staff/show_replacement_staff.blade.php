@@ -70,19 +70,7 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col">
-            <label for="for_commune_id">Comuna</label>
-            <select name="commune" id="for_commune" class="form-control" required readonly>
-                <option value="">Seleccione...</option>
-                <option value="alto hospicio" {{ ($replacementStaff->commune == 'alto hospicio')?'selected':'' }}>Alto Hospicio</option>
-                <option value="camina" {{ ($replacementStaff->commune == 'camina')?'selected':'' }}>Camiña</option>
-                <option value="colchane" {{ ($replacementStaff->commune == 'colchane')?'selected':'' }}>Colchane</option>
-                <option value="huara" {{ ($replacementStaff->commune == 'huara')?'selected':'' }}>Huara</option>
-                <option value="iquique" {{ ($replacementStaff->commune == 'iquique')?'selected':'' }}>Iquique</option>
-                <option value="pica" {{ ($replacementStaff->commune == 'pica')?'selected':'' }}>Pica</option>
-                <option value="pozo almonte" {{ ($replacementStaff->commune == 'pozo almonte')?'selected':'' }}>Pozo Almonte</option>
-            </select>
-        </fieldset>
+        @livewire('replacement-staff.commune-region-select', ['replacementStaff' => $replacementStaff])
 
         <fieldset class="form-group col">
             <label for="for_address">Dirección</label>
@@ -132,8 +120,9 @@
     </div>
     <div class="card-body">
         @if($replacementStaff->profiles->count() > 0)
-            <table class="table small table-striped table-bordered">
-                <thead class="text-center">
+          <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered">
+                <thead class="text-center small">
                     <tr>
                         <th style="width: 11%">Fecha Registro</th>
                         <th>Estamento</th>
@@ -162,6 +151,7 @@
                     @endforeach
                 </tbody>
             </table>
+          </div>
         @endif
     </div>
 </div>
@@ -174,8 +164,9 @@
     </div>
     <div class="card-body">
         @if($replacementStaff->trainings->count() > 0)
-            <table class="table small table-striped table-bordered">
-                <thead class="text-center">
+          <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered">
+                <thead class="text-center small">
                     <tr>
                         <th style="width: 11%">Fecha Registro</th>
                         <th>Nombre de Capacitación</th>
@@ -204,6 +195,7 @@
                     @endforeach
                 </tbody>
             </table>
+          </div>
         @endif
     </div>
 </div>
