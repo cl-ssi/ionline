@@ -58,6 +58,7 @@
 </div>
 
 <div class="col">
+  <div class="table-responsive">
     <table class="table table-sm table-striped table-bordered">
         <thead class="text-center small">
             <tr>
@@ -120,6 +121,7 @@
             @endforeach
         </tbody>
     </table>
+  </div>
 </div>
 
 {{ $replacementStaff->links() }}
