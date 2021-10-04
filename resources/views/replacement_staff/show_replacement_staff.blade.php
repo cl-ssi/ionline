@@ -87,12 +87,6 @@
               <option value="working_external" {{ ($replacementStaff->status == 'working_external')?'selected':'' }}>Trabajando</option>
           </select>
       </fieldset>
-      <!-- <fieldset class="form-group col-5">
-          <div class="mb-3">
-            <label for="forcv_file" class="form-label">Actualizar Curriculum Vitae</label>
-            <input class="form-control" type="file" name="cv_file" accept="application/pdf" readonly>
-          </div>
-      </fieldset> -->
       <div class="col">
         <p>Curriculum Vitae</p>
         <a href="{{ route('replacement_staff.view_file', $replacementStaff) }}"
@@ -133,7 +127,7 @@
                         <th style="width: 10%"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="small">
                     @foreach($replacementStaff->profiles as $profile)
                     <tr>
                         <td>{{ $profile->updated_at->format('d-m-Y H:i:s') }}</td>
@@ -175,7 +169,7 @@
                         <th style="width: 10%"></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="small">
                     @foreach($replacementStaff->trainings as $training)
                     <tr>
                         <td>{{ $training->updated_at->format('d-m-Y H:i:s') }}</td>
@@ -203,14 +197,5 @@
 @endsection
 
 @section('custom_js')
-
-<!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
-
-<!-- Latest compiled and minified JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
-
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 @endsection
