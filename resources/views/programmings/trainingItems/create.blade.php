@@ -48,7 +48,7 @@ Nuevo Item de Capacitación </h4>
     <div class="form-row">
 
         <div class="form-group col-md-12">
-            <label for="forprogram">Objetivos Educativos</label>
+            <label for="forprogram">Resultados Esperados</label>
             <textarea class="form-control rounded-1" name="objetivos_educativos" id="objetivos_educativos" rows="3"></textarea>
         </div>
     </div>
