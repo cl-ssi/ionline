@@ -6,35 +6,29 @@
 
 @include('programmings/nav')
 
-<h3 class="mb-3">Programación Numérica</h3> 
+<h3 class="mb-3">Programación Numérica 
+<form class="form-inline float-right small" method="GET" action="{{ route('programmings.index') }}">
+    <select name="year" class="form-control" onchange="this.form.submit()">
+                    @foreach(range(2021, date('Y') + 1) as $year)
+                        <option value="{{ $year }}" {{ request()->year == $year ? 'selected' : '' }}>{{ $year }}</option>
+                    @endforeach
+    </select>
+</form>
+</h3> 
  <!-- Permiso para crear nueva programación númerica -->
  @can('Programming: create')
     <a href="{{ route('programmings.create') }}" class="btn btn-info mb-4">Comenzar Nueva Programación</a>
  @endcan
- <form method="GET" class="form-horizontal" action="{{ route('programmings.index') }}">
- <div class="input-group mb-3">
-        <div class="input-group-append">
-            <span class="input-group-text">Filtrar por Año</span>
-        </div>
-        <select name="year" id="for_year" class="form-control">
-        <option value=""></option>
-            <option value="2021" selected {{ $request->get('year') == "2021" ? 'selected' : '' }}>2021</option>
-            <option value="2022" {{ $request->get('year') == "2022" ? 'selected' : '' }}>2022</option>
-        </select>
-        <div>
-        <button type="submit" class="btn btn-primary" >Submit</button>
-        </div>
-</div>
- </form>
 
+ @if($request->year == 2022 || \Carbon\Carbon::now()->year == 2022)
 <div class="float-right text-center">
 <h5>Tiempo Restante</h5>
 <div id="timer"></div>
 </div>
+@endif
 
-
-<div class="table-responsive"> 
-    <table class="table table-sm " width="100%">
+<div class="table-responsive">
+    <table class="table table-sm">
         <thead>
             <tr class="small ">
                 @can('Programming: status')<th class="text-left align-middle table-dark" >Estado</th>@endcan
@@ -132,7 +126,7 @@ $('#updateModalRect').on('show.bs.modal', function (event) {
 })
 
 // Set the date we're counting down to
-var countDownDate = new Date("Dec 21, 2020 00:00:00").getTime();
+var countDownDate = new Date("Dec 21, 2021 00:00:00").getTime();
 
 function timePart(val,text,color="black"){
   return `<h6 class="timer" style="color:${color};">${val}<div>${text}</div></h6>`

@@ -11,15 +11,15 @@ use App\Programmings\Review;
 use App\Models\Commune;
 use App\Establishment;
 use App\User;
-
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class CommuneFileController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         
-        $year = '';
+        $year = $request->year ?? Carbon::now()->year;
         if(Auth()->user()->hasAllRoles('Programming: Review') == True || Auth()->user()->hasAllRoles('Programming: Admin') == True )
         {
         
@@ -63,7 +63,7 @@ class CommuneFileController extends Controller
         }
         
         
-        return view('programmings/communeFiles/index')->withCommuneFiles($communeFiles);
+        return view('programmings/communeFiles/index')->withCommuneFiles($communeFiles)->withRequest($request);
     }
 
     public function create() 
