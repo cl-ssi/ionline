@@ -13,7 +13,7 @@ class ProgrammingItem extends Model
                            'cant_target_population', 'prevalence_rate', 'source_prevalence','coverture', 'population_attend', 'concentration',
                            'activity_group','workshop_number', 'workshop_session_number', 'workshop_session_time',
                            'activity_total', 'professional', 'activity_performance','hours_required_year', 'hours_required_day', 'direct_work_year',
-                           'direct_work_hour', 'information_source', 'prap_financed','observation','workshop','active'];
+                           'direct_work_hour', 'information_source', 'prap_financed','observation','workshop','active', 'user_id', 'programming_id'];
 
     
     public function reviewItems()
@@ -30,6 +30,4 @@ class ProgrammingItem extends Model
     public function activityItem(){
         return $this->belongsTo('App\Programmings\ActivityItem', 'activity_id');
     }
-
-    
 }
