@@ -18,6 +18,97 @@ class MonthlyQuotes extends Component
     public $resultadoEnNumero = false;
     public $string;
 
+
+    // funcion que calcula monto considerando inasistencias del período indicado
+    public function monto_con_inasistencias($mes_completo, $mes, $monto)
+    {
+      $fulfillment = $this->serviceRequest->fulfillments->where('month',$mes)->first();
+
+      $total_dias_trabajados = 0;
+      $mes_completo = true;
+
+      /* si tiene una "Renuncia voluntaria", el termino del contrato es ahí */
+      if ($renuncia = $fulfillment->fulfillmentItems->where('type', 'Renuncia voluntaria')->first()) {
+          $fulfillment->end_date = $renuncia->end_date;
+      }
+
+      /* si inicio de contrato coincide con inicio de mes y término de contrato coincide con fin de mes */
+      if ($fulfillment->start_date and $fulfillment->end_date) {
+          if (
+              $fulfillment->start_date->toDateString() == $fulfillment->start_date->startOfMonth()->toDateString()
+              and $fulfillment->end_date->toDateString() == $fulfillment->end_date->endOfMonth()->toDateString()
+          ) {
+              $total_dias_trabajados = 30;
+              $mes_completo = true;
+          }
+
+          /* De lo contrario es la diferencia entre el primer y último día */ else {
+              $total_dias_trabajados = $fulfillment->start_date->diff($fulfillment->end_date)->days + 1;
+              $mes_completo = false;
+          }
+      }
+
+      /* Restar las ausencias */
+      $dias_descuento = 0;
+      $dias_trabajado_antes_retiro = 0;
+
+      foreach ($fulfillment->fulfillmentItems as $item) {
+          switch ($item->type) {
+              case 'Inasistencia Injustificada':
+                  $mes_completo = false;
+                  $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
+                  break;
+              case 'Licencia no covid':
+                  $mes_completo = false;
+                  $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
+                  break;
+              case 'Abandono de funciones':
+                  $mes_completo = false;
+                  $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
+                  //dd((int)$item->end_date->format("d"));
+                  //dd($fulfillment->start_date->format("d"));
+                  $dias_trabajado_antes_retiro = ((int)$item->end_date->format("d"))-(int)$fulfillment->start_date->format("d") ;
+                  //dd($dias_trabajado_antes_retiro);
+
+                  break;
+              case 'Renuncia voluntaria':
+                  $mes_completo = false;
+                  $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
+                  $dias_descuento += 1;
+                  break;
+              case 'Término de contrato anticipado':
+                      $mes_completo = false;
+                      $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
+                      $dias_descuento += 1;
+                      //dd('soy termino de contrato');
+                      break;
+          }
+      }
+
+      $total_dias_trabajados -= $dias_descuento;
+
+      // se verifica si hay retiro para calcular la cantidad de dias trabajados
+      if ($mes_completo) {
+          $total = $monto - ($dias_descuento * ($monto / 30));
+      } else {
+          if ($dias_trabajado_antes_retiro == 0) {
+
+          }
+          if ($dias_trabajado_antes_retiro != 0) {
+
+              $total_dias_trabajados = $dias_trabajado_antes_retiro;
+          }
+
+          // if ($mes == 9) {
+          //   dd($monto, $total_dias_trabajados, $monto);
+          // }
+          $total = $total_dias_trabajados * ($monto / 30);
+      }
+
+      return $total;
+      // return number_format(round($total), 0, ',', '.');
+    }
+
     public function render()
     {
         // dd('entre aca');
@@ -188,6 +279,11 @@ class MonthlyQuotes extends Component
             //     }
             //
             // }
+
+            // obtiene descuentos
+            // $serviceRequest
+
+
             $valores_mensualizados = array();
             if ($serviceRequest->start_date->format('Y-m-d') == $serviceRequest->start_date->firstOfMonth()->format('Y-m-d') and $serviceRequest->end_date->format('Y-m-d') == $serviceRequest->end_date->endOfMonth()->format('Y-m-d')) {
 
@@ -200,13 +296,13 @@ class MonthlyQuotes extends Component
                 foreach ($periods as $key => $period) {
                     if ($key === array_key_first($periods)) {
                         $string .= " una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
-                        $valores_mensualizados[$period->month] = number_format($valor_mensual);
+                        $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
                     } else if ($key === array_key_last($periods)) {
                         $string .= " y una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName . ";";
-                        $valores_mensualizados[$period->month] = number_format($valor_mensual);
+                        $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
                     } else {
                         $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
-                        $valores_mensualizados[$period->month] = number_format($valor_mensual);
+                        $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
                     }
                 }
             } else
@@ -218,7 +314,7 @@ class MonthlyQuotes extends Component
                 if ($diff_in_months < 1) {
                     $string = "1 cuota de $";
                     $string .= number_format($serviceRequest->gross_amount);
-                    $valores_mensualizados[$serviceRequest->start_date->month] = number_format($serviceRequest->gross_amount);
+                    $valores_mensualizados[$serviceRequest->start_date->month] = number_format($this->monto_con_inasistencias(false, $serviceRequest->start_date->month, $serviceRequest->gross_amount));
 
                 } else {
 
@@ -241,13 +337,13 @@ class MonthlyQuotes extends Component
                         foreach ($periods as $key => $period) {
                             if ($key === array_key_first($periods)) {
                                 $string .= " una de $" . number_format($valor_diferente1) . " el mes de " . $period->monthName;
-                                $valores_mensualizados[$period->month] = number_format($valor_diferente1);
+                                $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(false, $period->month, $valor_diferente1));
                             } else if ($key === array_key_last($periods)) {
                                 $string .= " y una de $" . number_format($valor_diferente2) . " el mes de " . $period->monthName . ";";
-                                $valores_mensualizados[$period->month] = number_format($valor_diferente2);
+                                $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(false, $period->month, $valor_diferente2));
                             } else {
                                 $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
-                                $valores_mensualizados[$period->month] = number_format($valor_mensual);
+                                $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
                             }
                         }
                     } elseif ($serviceRequest->start_date->format('Y-m-d') != $serviceRequest->start_date->firstOfMonth()->format('Y-m-d')) {
@@ -271,13 +367,13 @@ class MonthlyQuotes extends Component
                         foreach ($periods as $key => $period) {
                             if ($key === array_key_first($periods)) {
                                 $string .= " una de $" . number_format($valor_diferente) . " el mes de " . $period->monthName;
-                                $valores_mensualizados[$period->month] = number_format($valor_diferente);
+                                $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(false, $period->month, $valor_diferente));
                             } else if ($key === array_key_last($periods)) {
                                 $string .= " y una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName . ";";
-                                $valores_mensualizados[$period->month] = number_format($valor_mensual);
+                                $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
                             } else {
                                 $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
-                                $valores_mensualizados[$period->month] = number_format($valor_mensual);
+                                $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
                             }
                         }
                     }
@@ -302,13 +398,13 @@ class MonthlyQuotes extends Component
                         foreach ($periods as $key => $period) {
                             if ($key === array_key_first($periods)) {
                                 $string .= " una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
-                                $valores_mensualizados[$period->month] = number_format($valor_mensual);
+                                $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
                             } else if ($key === array_key_last($periods)) {
                                 $string .= " y una de $" . number_format($valor_diferente) . " el mes de " . $period->monthName . ";";
-                                $valores_mensualizados[$period->month] = number_format($valor_diferente);
+                                $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(false, $period->month, $valor_diferente));
                             } else {
                                 $string .= ", una de $" . number_format($valor_mensual) . " el mes de " . $period->monthName;
-                                $valores_mensualizados[$period->month] = number_format($valor_mensual);
+                                $valores_mensualizados[$period->month] = number_format($this->monto_con_inasistencias(true, $period->month, $valor_mensual));
                             }
                         }
                     }
@@ -317,7 +413,10 @@ class MonthlyQuotes extends Component
 
             // se devuelve array para mostrar monto de un mes determinado por parámetro
             if($this->parametroMes != null){
-              $this->array_valores_mensualizados = $valores_mensualizados;
+              // devuelve valor solo si existe en array
+              if (array_key_exists($this->parametroMes, $valores_mensualizados)) {
+                $this->array_valores_mensualizados = $valores_mensualizados;
+              }
             }
 
             // $string .= $aguinaldo;
