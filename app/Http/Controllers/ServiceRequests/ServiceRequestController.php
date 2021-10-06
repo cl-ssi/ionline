@@ -267,6 +267,10 @@ class ServiceRequestController extends Controller
       }
     }
 
+    if (count($request->users) <= 1) {
+      session()->flash('danger', 'Ocurrió un error al crear el flujo de firmas. Intente nuevamente, si vuelve a ocurrir contacte al área de RRHH.');
+      return redirect()->back();
+    }
 
     //validate, user has ou
     if ($request->users <> null) {
