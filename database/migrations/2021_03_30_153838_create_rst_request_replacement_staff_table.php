@@ -33,6 +33,7 @@ class CreateRstRequestReplacementStaffTable extends Migration
             $table->string('name_to_replace')->nullable();
             $table->string('budget_item')->nullable();
             $table->string('budgetary_provision')->nullable();
+            $table->enum('request_status',['pending', 'complete', 'rejected']);
 
             $table->foreignId('user_id');
             $table->foreignId('organizational_unit_id');
