@@ -317,8 +317,11 @@ class ShowTotalHours extends Component
                 // dd($this->totalHoursNight);
                 //dd($this->refundHours);
                 // dd($value->amount);
-                $totalAmountNight = $this->totalHoursNight * ($value->amount * 1.5);
-                $totalAmountDayRefund = $this->refundHours * $value->amount;
+                // $totalAmountNight = $this->totalHoursNight * ($value->amount * 1.5);
+                // $totalAmountDayRefund = $this->refundHours * $value->amount;
+                $totalAmountNight = $this->totalHoursNight * $value * 1.5;
+                $totalAmountDayRefund = $this->refundHours * $value;
+                
                 $this->totalAmount = $totalAmountNight - $totalAmountDayRefund;
                 break;
         }
