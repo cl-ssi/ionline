@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\ServiceRequest;
 
 use App\Holiday;
-use App\Models\ServiceRequests\Value;
+// use App\Models\ServiceRequests\Value;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Facades\Auth;
@@ -36,23 +36,23 @@ class ShowTotalHours extends Component
     {
         //TODO HORA MÉDICA ya no obtiene el valor hora de value
         $value = $this->fulfillment->serviceRequest->net_amount;
-        if( $this->fulfillment->serviceRequest->type == 'Covid' )
-        {
-        $value = Value::where('contract_type', $this->fulfillment->serviceRequest->program_contract_type)
-            ->where('work_type', $this->fulfillment->serviceRequest->working_day_type)
-            ->where('type', $this->fulfillment->serviceRequest->type)
-            ->where('estate', $this->fulfillment->serviceRequest->estate)
-            ->whereDate('validity_from', '<=', now())->first();
-        }
-
-        if (!$value) {
-            $this->errorMsg = "No se encuentra valor Hora/Jornada vigente para la solicitud de servicio:
-            Tipo de Contrato: {$this->fulfillment->serviceRequest->program_contract_type}
-            , Tipo: {$this->fulfillment->serviceRequest->type}
-            , Jornada: {$this->fulfillment->serviceRequest->working_day_type}
-            , Estamento: {$this->fulfillment->serviceRequest->estate}";
-            return view('livewire.service-request.show-total-hours');
-        }
+        // if( $this->fulfillment->serviceRequest->type == 'Covid' )
+        // {
+        // $value = Value::where('contract_type', $this->fulfillment->serviceRequest->program_contract_type)
+        //     ->where('work_type', $this->fulfillment->serviceRequest->working_day_type)
+        //     ->where('type', $this->fulfillment->serviceRequest->type)
+        //     ->where('estate', $this->fulfillment->serviceRequest->estate)
+        //     ->whereDate('validity_from', '<=', now())->first();
+        // }
+        //
+        // if (!$value) {
+        //     $this->errorMsg = "No se encuentra valor Hora/Jornada vigente para la solicitud de servicio:
+        //     Tipo de Contrato: {$this->fulfillment->serviceRequest->program_contract_type}
+        //     , Tipo: {$this->fulfillment->serviceRequest->type}
+        //     , Jornada: {$this->fulfillment->serviceRequest->working_day_type}
+        //     , Estamento: {$this->fulfillment->serviceRequest->estate}";
+        //     return view('livewire.service-request.show-total-hours');
+        // }
 
         switch ($this->fulfillment->serviceRequest->working_day_type) {
             case 'HORA MÉDICA':
@@ -174,15 +174,16 @@ class ShowTotalHours extends Component
                 }
 
                 $this->totalHours = floor($totalMinutes / 60);
-                if( $this->fulfillment->serviceRequest->type == 'Covid' )
-                {
-                    $this->totalAmount = $this->totalHours * $value->amount;
-                }
-                else
-                {
-                    $this->totalAmount = $this->totalHours * $value;
-
-                }
+                // if( $this->fulfillment->serviceRequest->type == 'Covid' )
+                // {
+                //     $this->totalAmount = $this->totalHours * $value->amount;
+                // }
+                // else
+                // {
+                //     $this->totalAmount = $this->totalHours * $value;
+                //
+                // }
+                $this->totalAmount = $this->totalHours * $value;
 
                 break;
             case 'DIURNO PASADO A TURNO':
@@ -316,8 +317,11 @@ class ShowTotalHours extends Component
                 // dd($this->totalHoursNight);
                 //dd($this->refundHours);
                 // dd($value->amount);
-                $totalAmountNight = $this->totalHoursNight * ($value->amount * 1.5);
-                $totalAmountDayRefund = $this->refundHours * $value->amount;
+                // $totalAmountNight = $this->totalHoursNight * ($value->amount * 1.5);
+                // $totalAmountDayRefund = $this->refundHours * $value->amount;
+                $totalAmountNight = $this->totalHoursNight * $value * 1.5;
+                $totalAmountDayRefund = $this->refundHours * $value;
+                
                 $this->totalAmount = $totalAmountNight - $totalAmountDayRefund;
                 break;
         }
