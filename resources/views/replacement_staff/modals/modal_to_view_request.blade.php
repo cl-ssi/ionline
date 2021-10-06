@@ -51,6 +51,11 @@
                       <td colspan="2">{{ $requestReplacementStaff->other_fundament }}</td>
                   </tr>
                   <tr>
+                      <th class="table-active">Periodo</th>
+                      <td style="width: 33%">{{ $requestReplacementStaff->start_date->format('d-m-Y') }}</td>
+                      <td style="width: 33%">{{ $requestReplacementStaff->end_date->format('d-m-Y') }}</td>
+                  </tr>
+                  <tr>
                       <td colspan="3">El documento debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
                   </tr>
                   <tr>

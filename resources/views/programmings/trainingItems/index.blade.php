@@ -24,8 +24,8 @@
         </tr>
         <tr style="font-size:45%;">
             <th class="text-center align-middle">LINEAMIENTOS ESTRATEGICOS</th>
-            <th class="text-center align-middle">ACTIVIDADES DE CAPACITACION (TEMAS)</th>
             <th class="text-center align-middle">RESULTADOS ESPERADOS</th>
+            <th class="text-center align-middle">ACTIVIDADES DE CAPACITACION (TEMAS)</th>
             <th class="text-center align-middle">A (Médicos, Odont, QF,etc.)</th>
             <th class="text-center align-middle">B (Otros Profesio-nales)</th>
             <th class="text-center align-middle">C (Técnicos Nivel Superior) </th>
@@ -49,8 +49,8 @@
         @foreach($trainingItems as $trainingItem)
         <tr class="small">
             <td class="text-center align-middle"><strong>{{ $trainingItem->linieamiento_estrategico}}</strong></td>
-            <td class="text-center align-middle">{{ $trainingItem->temas }}</td>
             <td class="text-center align-middle">{{ $trainingItem->objetivos_educativos }}</td>
+            <td class="text-center align-middle">{{ $trainingItem->temas }}</td>
             <td class="text-center align-middle">{{ $trainingItem->med_odont_qf }}</td>
             <td class="text-center align-middle">{{ $trainingItem->otros_profesionales }}</td>
             <td class="text-center align-middle">{{ $trainingItem->tec_nivel_superior }}</td>
