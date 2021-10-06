@@ -47,6 +47,11 @@
                 <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->other_fundament }}</td>
             </tr>
             <tr>
+                <th class="table-active">Periodo</th>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->start_date->format('d-m-Y') }}</td>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->end_date->format('d-m-Y') }}</td>
+            </tr>
+            <tr>
                 <td colspan="3">El documento debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
             </tr>
             <tr>
@@ -86,9 +91,11 @@
                               </div>
                           </div>
                       @elseif($requestSign->request_status == 'accepted' || $requestSign->request_status == 'rejected')
+                        <span style="color: green;">
                           <i class="fas fa-check-circle"></i> {{ $requestSign->StatusValue }} <br>
-                          <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
-                          <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($requestSign->date_sign)->format('d-m-Y H:i:s') }}<br>
+                        </span>
+                        <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
+                        <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($requestSign->date_sign)->format('d-m-Y H:i:s') }}<br>
                       @else
                           @if($requestSign->request_status == NULL)
                               <i class="fas fa-ban"></i> No disponible para Aprobación.<br>
