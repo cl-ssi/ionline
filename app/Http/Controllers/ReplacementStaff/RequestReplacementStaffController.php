@@ -28,14 +28,12 @@ class RequestReplacementStaffController extends Controller
     public function index()
     {
         $pending_requests = RequestReplacementStaff::latest()
+            ->where('request_status', 'pending')
             ->where(function ($q){
                 $q->doesntHave('technicalEvaluation')
                 ->orWhereHas('technicalEvaluation', function( $query ) {
                   $query->where('technical_evaluation_status','pending');
                 });
-            })
-            ->OrWhereHas('requestSign', function($j) {
-              $j->Where('request_status', 'pending');
             })
             ->get();
 
@@ -86,29 +84,31 @@ class RequestReplacementStaffController extends Controller
     {
         $my_pending_requests = RequestReplacementStaff::latest()
             ->where('user_id', Auth::user()->id)
-            ->where(function ($q){
-              	$q->doesntHave('technicalEvaluation')
-                ->orWhereHas('technicalEvaluation', function( $query ) {
-                  $query->where('technical_evaluation_status','pending');
-                })
-                ->orWhereHas('requestSign', function($j) {
-                  $j->Where('request_status', 'pending');
-                });
-            })
-
+            ->where('request_status', 'pending')
             ->get();
 
         $my_request = RequestReplacementStaff::latest()
             ->where('user_id', Auth::user()->id)
+            // ->where(function ($q){
+            //   $q->whereHas('requestSign', function($j) {
+            //     $j->Where('request_status', 'rejected');
+            //   })
+            //   ->orWhereHas('technicalEvaluation', function($y){
+            //       $y->Where('technical_evaluation_status', 'complete')
+            //       ->OrWhere('technical_evaluation_status', 'rejected');
+            //   });
+            // })
             ->where(function ($q){
-              $q->whereHas('requestSign', function($j) {
-                $j->Where('request_status', 'rejected');
-              })
-              ->orWhereHas('technicalEvaluation', function($y){
-                  $y->Where('technical_evaluation_status', 'complete')
-                  ->OrWhere('technical_evaluation_status', 'rejected');
-              });
+              $q->where('request_status', 'complete')
+                ->orWhere('request_status', 'rejected');
             })
+            //   ->orWhereHas('technicalEvaluation', function($y){
+            //       $y->Where('technical_evaluation_status', 'complete')
+            //       ->OrWhere('technical_evaluation_status', 'rejected');
+            //   });
+            // })
+            // ->where('request_status', 'complete')
+            // ->orWhere('request_status', 'rejected')
             ->get();
 
         return view('replacement_staff.request.own_index', compact('my_request', 'my_pending_requests'));
@@ -185,6 +185,7 @@ class RequestReplacementStaffController extends Controller
         $request_replacement = new RequestReplacementStaff($request->All());
         $request_replacement->user()->associate(Auth::user());
         $request_replacement->organizational_unit_id = Auth::user()->organizationalUnit->id;
+        $request_replacement->request_status = 'pending';
         $request_replacement->save();
 
         $uo_request = OrganizationalUnit::where('id', $request_replacement->organizational_unit_id)

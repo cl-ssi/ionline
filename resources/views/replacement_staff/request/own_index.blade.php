@@ -61,11 +61,26 @@
               @foreach($my_pending_requests as $requestReplacementStaff)
               <tr class="small">
                   <td>{{ $requestReplacementStaff->id }}<br>
-                      @if($requestReplacementStaff->TechnicalEvaluation)
-                          <i class="fas fa-clock" title="Evaluación Técnica: {{ $requestReplacementStaff->TechnicalEvaluation->StatusValue }}"></i>
-                      @else
-                          <i class="fas fa-clock" title="Evaluación Técnica: Pendiente"></i>
-                      @endif
+                    @switch($requestReplacementStaff->request_status)
+                        @case('pending')
+                            <i class="fas fa-clock"></i>
+                            @break
+
+                        @case('complete')
+                            <span style="color: green;">
+                              <i class="fas fa-check-circle"></i>
+                            </span>
+                            @break
+
+                        @case('rejected')
+                            <span style="color: Tomato;">
+                              <i class="fas fa-times-circle"></i>
+                            </span>
+                            @break
+
+                        @default
+                            Default case...
+                    @endswitch
                   </td>
                   <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                   <td>{{ $requestReplacementStaff->name }}</td>
@@ -96,22 +111,23 @@
                       @endforeach
                   </td>
                   <td>
-                      {{-- @if($requestReplacementStaff->requestSign->first()->request_status == 'pending') --}}
+                      @if($requestReplacementStaff->requestSign->first()->request_status == 'pending')
                       <a href="{{ route('replacement_staff.request.edit', $requestReplacementStaff) }}"
                           class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-                      {{-- @else --}}
-                      <!-- <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                      @else
+                      <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
                           data-target="#exampleModalCenter-req-{{ $requestReplacementStaff->id }}">
                         <i class="fas fa-eye"></i>
-                      </button> -->
+                      </button>
                       @include('replacement_staff.modals.modal_to_view_request')
-                      {{-- @endif --}}
+                      @endif
                   </td>
               </tr>
               @endforeach
           </tbody>
       </table>
     </div>
+    {{-- dd($requestReplacementStaff->first()->requestSign->first()) --}}
 </div>
 
 <div class="col">
@@ -136,21 +152,33 @@
                   <th>Fundamento</th>
                   <th>Solicitante</th>
                   <th>Estado</th>
-                  <th></th>
+                  <th style="width: 2%"></th>
               </tr>
           </thead>
           <tbody class="small">
               @foreach($my_request as $requestReplacementStaff)
               <tr>
                   <td>{{ $requestReplacementStaff->id }} <br>
-                    @if($requestReplacementStaff->TechnicalEvaluation)
-                      @if($requestReplacementStaff->TechnicalEvaluation->technical_evaluation_status == 'complete')
-                          <i class="fas fa-check-circle" title="Evaluación Técnica: {{ $requestReplacementStaff->TechnicalEvaluation->StatusValue }}"></i>
-                      @endif
-                      {{-- @if($requestReplacementStaff->TechnicalEvaluation->technical_evaluation_status == 'rejected') --}}
-                          <!-- <i class="fas fa-times-circle" title="Evaluación Técnica: {{ $requestReplacementStaff->TechnicalEvaluation->StatusValue }}"></i> -->
-                      {{-- @endif --}}
-                    @endif
+                    @switch($requestReplacementStaff->request_status)
+                        @case('pending')
+                            <i class="fas fa-clock"></i>
+                            @break
+
+                        @case('complete')
+                            <span style="color: green;">
+                              <i class="fas fa-check-circle"></i>
+                            </span>
+                            @break
+
+                        @case('rejected')
+                            <span style="color: Tomato;">
+                              <i class="fas fa-times-circle"></i>
+                            </span>
+                            @break
+
+                        @default
+                            Default case...
+                    @endswitch
                   </td>
                   <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                   <td>{{ $requestReplacementStaff->name }}</td>
