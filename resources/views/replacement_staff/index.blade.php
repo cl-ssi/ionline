@@ -124,7 +124,9 @@
   </div>
 </div>
 
-{{ $replacementStaff->links() }}
+<div class="col">
+  {{ $replacementStaff->links() }}
+</div>
 
 @endsection
 
