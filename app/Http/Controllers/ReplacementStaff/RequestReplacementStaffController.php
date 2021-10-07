@@ -89,26 +89,10 @@ class RequestReplacementStaffController extends Controller
 
         $my_request = RequestReplacementStaff::latest()
             ->where('user_id', Auth::user()->id)
-            // ->where(function ($q){
-            //   $q->whereHas('requestSign', function($j) {
-            //     $j->Where('request_status', 'rejected');
-            //   })
-            //   ->orWhereHas('technicalEvaluation', function($y){
-            //       $y->Where('technical_evaluation_status', 'complete')
-            //       ->OrWhere('technical_evaluation_status', 'rejected');
-            //   });
-            // })
             ->where(function ($q){
               $q->where('request_status', 'complete')
                 ->orWhere('request_status', 'rejected');
             })
-            //   ->orWhereHas('technicalEvaluation', function($y){
-            //       $y->Where('technical_evaluation_status', 'complete')
-            //       ->OrWhere('technical_evaluation_status', 'rejected');
-            //   });
-            // })
-            // ->where('request_status', 'complete')
-            // ->orWhere('request_status', 'rejected')
             ->get();
 
         return view('replacement_staff.request.own_index', compact('my_request', 'my_pending_requests'));
