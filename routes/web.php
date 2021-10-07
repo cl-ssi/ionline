@@ -56,6 +56,9 @@ use App\Http\Controllers\ServiceRequests\DenominationFormulaController;
 use App\Http\Controllers\Parameters\ProfessionController;
 use App\Http\Controllers\Pharmacies\PurchaseController;
 use App\Pharmacies\Purchase;
+use App\User;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -131,6 +134,17 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 /** Para testing, no he probado pero me la pedian en clave única */
 Route::get('logout-testing', 'Auth\LoginController@logout')->name('logout-testing');
 
+Route::post('/email/verification-notification/{user}', function (User $user) {
+    $user->sendEmailVerificationNotification();
+
+    return back()->with('success', 'El enlace de verificación se ha enviado al correo personal <b>'. $user->email_personal .'</b> para su confirmación.');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.resend');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+
+    return redirect('/home');
+})->middleware(['auth', 'signed'])->name('verification.verify');
 
 
 
