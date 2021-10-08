@@ -35,10 +35,12 @@ class MammographyController extends Controller
                     $mammography->personal_email = $user_cu->email;
                     $mammography->inform_method = 1;
                     $mammography->save();
+
+                    return $this->show($mammography);
                 }
-                // else {
-                //     $vaccination = new Vaccination();
-                // }
+
+                return redirect()->back()->with('danger', 'Estimado Usuario, ud. no se encuentra en nuestros registros.');;
+
             } elseif (env('APP_ENV') == 'local') {
                 $mammography = mammography::where('run',16966444)->first();
                 if($mammography) {
@@ -47,12 +49,14 @@ class MammographyController extends Controller
                     $mammography->fathers_family = "Miranda";
                     $mammography->mothers_family = "López";
                     $mammography->personal_email = "email@email.com";
+
+                    return $this->show($mammography);
                 }
                 else {
                     $mammography = new mammography();
                 }
             }
-            return $this->show($mammography);
+
         }
     }
 
