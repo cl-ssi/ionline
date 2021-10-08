@@ -6,6 +6,7 @@ use App\Models\Mammography\Mammography;
 use App\Models\Mammography\MammographySlot;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 
 class MammographyController extends Controller
 {
