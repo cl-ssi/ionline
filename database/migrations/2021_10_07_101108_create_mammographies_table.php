@@ -15,12 +15,13 @@ class CreateMammographiesTable extends Migration
     {
         Schema::create('mammographies', function (Blueprint $table) {
             $table->id();
-
             $table->integer('run');
             $table->char('dv');
             $table->string('name');
             $table->string('fathers_family');
             $table->string('mothers_family');
+            $table->date('birth_date');
+            $table->integer('age');
             $table->string('email')->nullable();
             $table->string('personal_email')->nullable();
             $table->unsignedInteger('establishment_id'); //Confirmar
