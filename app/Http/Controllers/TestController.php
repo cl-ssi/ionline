@@ -25,6 +25,7 @@ class TestController extends Controller
             echo '<br>';
             echo "<li>GanttStart: " . $this->getStart($issue) . "</li>";
             echo "<li>GanttDue: " . $this->getDue($issue) . "</li>";
+            echo "<li>GanttProgress: " . $this->getProgress($issue) . "</li>";
         }
     }
 
@@ -35,5 +36,13 @@ class TestController extends Controller
     public function getDue($issue) {
         preg_match_all('/GanttDue: (?P<value>\d{4}-\d{2}-\d{2})/', $issue->body, $result);
         return ($result['value']) ? $result['value'][0] : null;
+    }
+    public function getProgress($issue) {
+        /* Si esl issue está cerrado, se asume un 100% */
+        if($issue->state == 'closed') return '100';
+        else {
+            preg_match_all('/GanttProgress: (?P<value>\d+)/', $issue->body, $result);
+            return ($result['value']) ? $result['value'][0] : '0';
+        }
     }
 }
