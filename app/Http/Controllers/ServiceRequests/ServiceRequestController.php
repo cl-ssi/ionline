@@ -578,7 +578,7 @@ class ServiceRequestController extends Controller
     // if (isset($request->hsa_schedule_detail)) {
     //   $serviceRequest->schedule_detail = $request->hsa_schedule_detail;
     // }
-
+    $serviceRequest->schedule_detail = $request->hsa_schedule_detail;
     $serviceRequest->save();
 
     //guarda control de turnos
