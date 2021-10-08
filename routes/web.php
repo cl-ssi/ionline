@@ -59,6 +59,8 @@ use App\Http\Controllers\Parameters\ProfessionController;
 use App\Http\Controllers\Pharmacies\PurchaseController;
 use App\Pharmacies\Purchase;
 use App\User;
+use App\Http\Controllers\TestController;
+
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -1403,3 +1405,5 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 
 
 Route::view('/some', 'some');
+
+Route::get('test',[TestController::class,'index']);
