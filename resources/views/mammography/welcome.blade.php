@@ -25,7 +25,7 @@
 
 
 <div class="alert alert-secondary mt-3 text-center" role="alert">
-    <h4 class="alert-heading">Consultar fecha de vacunación </h4>
+    <h4 class="alert-heading">Agenda o Consulta tu hora de examen aquí.</h4>
     <!-- Código para visualizar botón oficial iniciar sesión con ClaveÚnica-->
     <div class="row justify-content-center">
         <a class="btn-cu btn-m btn-color-estandar" title="Este es el botón Iniciar sesión de ClaveÚnica"
