@@ -39,7 +39,8 @@ class MammographyController extends Controller
                     return $this->show($mammography);
                 }
 
-                return view('mammography.welcome')->with('danger', 'Estimado Usuario, ud. no se encuentra en nuestros registros.');;
+                session()->flash('danger', 'Estimada Usuaria: ud, no se encuentra en nuestros registros');
+                return redirect()->route('mammography.welcome');
 
             } elseif (env('APP_ENV') == 'local') {
                 $mammography = mammography::where('run',16966444)->first();
