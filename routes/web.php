@@ -40,6 +40,8 @@ use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationFileController;
 
 use App\Http\Controllers\VaccinationController;
 
+use App\Http\Controllers\Mammography\MammographyController;
+
 use App\Http\Controllers\ServiceRequests\InvoiceController;
 use App\Http\Controllers\ServiceRequests\ValueController;
 
@@ -1273,6 +1275,24 @@ Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::put('/dome/{vaccination}/{reverse?}',[VaccinationController::class,'dome'])->name('dome')->middleware('auth');
 });
 
+Route::prefix('mammography')->as('mammography.')->group(function () {
+    Route::get('/welcome',[MammographyController::class,'welcome'])->name('welcome');
+    Route::get('/login/{access_token}',[MammographyController::class,'login'])->name('login');
+    Route::get('/',[MammographyController::class,'index'])->name('index')->middleware('auth');
+    Route::get('/create',[MammographyController::class,'create'])->name('create')->middleware('auth');
+    Route::post('/',[MammographyController::class,'store'])->name('store')->middleware('auth');
+    Route::post('/show',[MammographyController::class,'show'])->name('show');
+    Route::get('/{mammography}/edit',[MammographyController::class,'edit'])->name('edit')->middleware('auth');
+    Route::put('/{mammography}',[MammographyController::class,'update'])->name('update')->middleware('auth');
+    // Route::get('/report',[VaccinationController::class,'report'])->name('report')->middleware('auth');
+    // Route::get('/export',[VaccinationController::class,'export'])->name('export')->middleware('auth');
+    // Route::put('/vaccinate/{vaccination}/{dose}',[VaccinationController::class,'vaccinate'])->name('vaccinate')->middleware('auth');
+    // Route::get('/vaccinate/remove-booking/{vaccination}',[VaccinationController::class,'removeBooking'])->name('removeBooking')->middleware('auth');
+    // Route::get('/card/{vaccination}',[VaccinationController::class,'card'])->name('card')->middleware('auth');
+    Route::get('/slots',[MammographyController::class,'slots'])->name('slots')->middleware('auth');
+    // Route::put('/arrival/{vaccination}/{reverse?}',[VaccinationController::class,'arrival'])->name('arrival')->middleware('auth');
+    // Route::put('/dome/{vaccination}/{reverse?}',[VaccinationController::class,'dome'])->name('dome')->middleware('auth');
+});
 
 Route::prefix('invoice')->as('invoice.')->group(function () {
     Route::get('/welcome',[InvoiceController::class,'welcome'])->name('welcome');
