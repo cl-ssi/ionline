@@ -1,7 +1,14 @@
 <div>
     @if($mammography->exam_date)
-        <p><strong>Fecha:</strong> <i class="fas fa-calendar-day"></i> {{ $mammography->exam_date->format('d-m-Y H:i:s') }}.</p>
-
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-info-circle"></i> Reserva</strong>
+            </div>
+            <div class="card-body">
+                <p><strong>Fecha:</strong> <i class="fas fa-calendar-day"></i> {{ $mammography->exam_date->format('d-m-Y H:i:s') }}.</p>
+                <p><strong>Lugar:</strong> <i class="fas fa-hospital"></i> Servicio de Imageneología Hospital Dr. Ernesto Torres G. - Iquique.</p>
+            </div>
+        </div>
     {{--@elseif($mammography->first_dose) --}}
         <!-- <h5>Primera dósis:</h5>
         <p>Programada para el día <strong>{{-- $mammography->first_dose->format('d-m-Y \a \l\a\s H:i') --}} horas.</strong>
