@@ -44,6 +44,7 @@ class Mammography extends Model implements Auditable
 
     public function scopeSearch($query, $search)
     {
+        //dd('aqui');
         if ($search) {
             $array_search = explode(' ', $search);
             foreach($array_search as $word){

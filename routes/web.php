@@ -1301,7 +1301,7 @@ Route::prefix('mammography')->as('mammography.')->group(function () {
     Route::get('/{mammography}/edit',[MammographyController::class,'edit'])->name('edit')->middleware('auth');
     Route::put('/{mammography}',[MammographyController::class,'update'])->name('update')->middleware('auth');
     // Route::get('/report',[VaccinationController::class,'report'])->name('report')->middleware('auth');
-    // Route::get('/export',[VaccinationController::class,'export'])->name('export')->middleware('auth');
+    Route::get('/export',[MammographyController::class,'export'])->name('export')->middleware('auth');
     // Route::put('/vaccinate/{vaccination}/{dose}',[VaccinationController::class,'vaccinate'])->name('vaccinate')->middleware('auth');
     // Route::get('/vaccinate/remove-booking/{vaccination}',[VaccinationController::class,'removeBooking'])->name('removeBooking')->middleware('auth');
     // Route::get('/card/{vaccination}',[VaccinationController::class,'card'])->name('card')->middleware('auth');
