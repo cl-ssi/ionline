@@ -169,4 +169,47 @@ class MammographyController extends Controller
             ->get();
         return view('vaccination.slots',compact('slots','arrivals','records'));
     }
+
+    public function export(){
+
+        $headers = array(
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=listado_personal_con_reserva_mamografia.csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        );
+
+        $filas = Mammography::where('exam_date', '!=', NULL)
+            ->orderBy('exam_date', 'ASC')
+            ->get();
+
+        $columnas = array(
+            'ID',
+            'RUN',
+            'Nombre',
+            'A.Paterno',
+            'A.Materno',
+            'Dia de Reserva'
+        );
+
+        $callback = function() use ($filas, $columnas)
+        {
+            $file = fopen('php://output', 'w');
+            fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+            fputcsv($file, $columnas,';');
+            foreach($filas as $fila) {
+                fputcsv($file, array(
+                    $fila->id,
+                    $fila->runFormat,
+                    $fila->name,
+                    $fila->fathers_family,
+                    $fila->mothers_family,
+                    $fila->exam_date,
+                ),';');
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
+    }
 }

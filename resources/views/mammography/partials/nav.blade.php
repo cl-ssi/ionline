@@ -11,19 +11,20 @@
             <i class="fas fa-plus-circle"></i> Nuevo</a>
     </li>
 
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link"
             href="{{ route('vaccination.report') }}">
             <i class="fas fa-chart-line"></i> Reporte</a>
-    </li>
+    </li> -->
+    
     <li class="nav-item">
         <a class="nav-link"
-            href="{{ route('vaccination.export') }}">
+            href="{{ route('mammography.export') }}">
             <i class="fas fa-file-csv"></i> Exportar</a>
     </li>
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link"
             href="{{ route('mammography.slots') }}">
             <i class="fas fa-running"></i> Llegadas</a>
-    </li>
+    </li> -->
 </ul>
