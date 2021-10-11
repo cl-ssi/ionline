@@ -27,6 +27,7 @@ class TestController extends Controller
             echo "<li>GanttDue: " . $this->getDue($issue) . "</li>";
             echo "<li>GanttProgress: " . $this->getProgress($issue) . "</li>";
         }
+	return view('test.gantt');
     }
 
     public function getStart($issue) {
