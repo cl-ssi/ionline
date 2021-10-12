@@ -1295,6 +1295,7 @@ Route::prefix('mammography')->as('mammography.')->group(function () {
     Route::get('/welcome',[MammographyController::class,'welcome'])->name('welcome');
     Route::get('/login/{access_token}',[MammographyController::class,'login'])->name('login');
     Route::get('/',[MammographyController::class,'index'])->name('index')->middleware('auth');
+    Route::get('/schedule',[MammographyController::class,'schedule'])->name('schedule')->middleware('auth');
     Route::get('/create',[MammographyController::class,'create'])->name('create')->middleware('auth');
     Route::post('/',[MammographyController::class,'store'])->name('store')->middleware('auth');
     Route::post('/show',[MammographyController::class,'show'])->name('show');

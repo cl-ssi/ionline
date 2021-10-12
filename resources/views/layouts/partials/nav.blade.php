@@ -292,6 +292,7 @@
                 @endcan
 
                 @can('Mammography: admin')
+
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('mammography.index') }}">Booking Mamografías</a>
                 </li>
