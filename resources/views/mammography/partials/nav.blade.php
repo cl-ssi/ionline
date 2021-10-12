@@ -4,6 +4,12 @@
             href="{{ route('mammography.index') }}">
             <i class="fas fa-home"></i> Listado</a>
     </li>
+    
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('mammography.schedule') }}">
+            <i class="fas fa-calendar-alt"></i> Agenda</a>
+    </li>
 
     <li class="nav-item">
         <a class="nav-link"
@@ -16,12 +22,13 @@
             href="{{ route('vaccination.report') }}">
             <i class="fas fa-chart-line"></i> Reporte</a>
     </li> -->
-    
+
     <li class="nav-item">
         <a class="nav-link"
             href="{{ route('mammography.export') }}">
             <i class="fas fa-file-csv"></i> Exportar</a>
     </li>
+
     <!-- <li class="nav-item">
         <a class="nav-link"
             href="{{ route('mammography.slots') }}">
