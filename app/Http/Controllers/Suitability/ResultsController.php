@@ -19,6 +19,7 @@ class ResultsController extends Controller
     {
         
         $school_id = $request->colegio;
+        $estado = $request->estado;
 
         $results = Result::when($school_id != null, function ($q) use ($school_id) 
         {
@@ -27,12 +28,20 @@ class ResultsController extends Controller
               });
 
         })
+        ->when($estado, function($q) use ($estado){
+            return $q->whereHas("psirequest", function ($subQuery) use ($estado) {
+                $subQuery->where('status', $estado);
+              });
+        })
+        ->with('psirequest.school', 'user')
         ->get();
+
+        $count = $results->countBy('psirequest.status');
         
         $schools = School::orderBy("name", "asc")->get();
         
 
-        return view('suitability.results.index', compact('results','schools','school_id'));
+        return view('suitability.results.index', compact('results','schools','school_id', 'estado', 'count'));
     }
 
     /**
