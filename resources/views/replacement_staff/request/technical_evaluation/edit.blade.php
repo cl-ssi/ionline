@@ -10,7 +10,7 @@
     <table class="table table-sm table-striped table-bordered">
         <thead class="small">
             <tr class="table-active">
-                <th colspan="3">Formulario Solicitud Contratación de Personal</th>
+                <th colspan="3">Formulario Contratación de Personal - Solicitud Nº {{ $technicalEvaluation->requestReplacementStaff->id }}</th>
             </tr>
         </thead>
         <tbody class="small">
@@ -45,6 +45,11 @@
             <tr>
                 <th class="table-active">Otros (especifique)</th>
                 <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->other_fundament }}</td>
+            </tr>
+            <tr>
+                <th class="table-active">Periodo</th>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->start_date->format('d-m-Y') }}</td>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->end_date->format('d-m-Y') }}</td>
             </tr>
             <tr>
                 <td colspan="3">El documento debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
@@ -86,9 +91,11 @@
                               </div>
                           </div>
                       @elseif($requestSign->request_status == 'accepted' || $requestSign->request_status == 'rejected')
+                        <span style="color: green;">
                           <i class="fas fa-check-circle"></i> {{ $requestSign->StatusValue }} <br>
-                          <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
-                          <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($requestSign->date_sign)->format('d-m-Y H:i:s') }}<br>
+                        </span>
+                        <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
+                        <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($requestSign->date_sign)->format('d-m-Y H:i:s') }}<br>
                       @else
                           @if($requestSign->request_status == NULL)
                               <i class="fas fa-ban"></i> No disponible para Aprobación.<br>
@@ -365,119 +372,10 @@
       <h6>Busqueda de Postulantes</h6>
 
       @if($technicalEvaluation->technical_evaluation_status == 'pending')
-      <div class="card card-body">
-          <form method="GET" class="form-horizontal"
-              action="{{ route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation) }}">
-              <div class="form-row">
-                  <fieldset class="form-group col-5">
-                      <label for="for_name">Nombres / Identificación</label>
-                      <input class="form-control" type="text" name="search" autocomplete="off" style="text-transform: uppercase;" placeholder="RUN (sin dígito verificador) / NOMBRE" value="{{$request->search}}">
-                  </fieldset>
 
-                  <fieldset class="form-group col-2">
-                      <label for="for_profile_search">Estamento</label>
-                      <select name="profile_search" class="form-control">
-                          <option value="0">Seleccione...</option>
-                          @foreach($profileManage as $profile)
-                              <option value="{{ $profile->id }}" {{ ($request->profile_search == $profile->id)?'selected':'' }}>{{ $profile->name }}</option>
-                          @endforeach
-                      </select>
-                  </fieldset>
+      @livewire('replacement-staff.search-select-applicants',
+          ['technicalEvaluation' => $technicalEvaluation])
 
-                  <fieldset class="form-group col-5">
-                      <label for="for_profession_search">Profesión</label>
-                      <select name="profession_search" class="form-control">
-                          <option value="0">Seleccione...</option>
-                          @foreach($professionManage as $profession)
-                              <option value="{{ $profession->id }}" {{ ($request->profession_search == $profession->id)?'selected':'' }}>{{ $profession->name }}</option>
-                          @endforeach
-                      </select>
-                  </fieldset>
-              </div>
-
-              <button type="submit" class="btn btn-primary float-right">
-                  <i class="fas fa-search"></i> Buscar
-              </button>
-          </form>
-      </div>
-
-      <br>
-
-      <div class="table-responsive">
-          <table class="table table-sm table-striped table-bordered">
-              <thead class="text-center small">
-                  <tr>
-                      <th>Nombre Completo</th>
-                      <th>Run</th>
-                      <th>Estamento</th>
-                      <th>Título</th>
-                      <th>Fecha Titulación</th>
-                      <th>Años Exp.</th>
-                      <th>Estado</th>
-                      <th style="width: 10%"></th>
-                      <th></th>
-                  </tr>
-              </thead>
-              <tbody class="small">
-                  <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.store', $technicalEvaluation) }}">
-                  @csrf
-                  @method('POST')
-
-                  @foreach($replacementStaff as $staff)
-                  <tr>
-                      <td>{{ $staff->FullName }}</td>
-                      <td>{{ $staff->Identifier }}</td>
-                      <td>
-                          @foreach($staff->profiles as $title)
-                              <h6><span class="badge rounded-pill bg-light">{{ $title->profile_manage->name }}</span></h6>
-                          @endforeach
-                      </td>
-                      <td>
-                          @foreach($staff->profiles as $title)
-                              <h6><span class="badge rounded-pill bg-light">{{ ($title->profession_manage) ? $title->profession_manage->name : '' }}</span></h6>
-                          @endforeach
-                      </td>
-                      <td>
-                          @foreach($staff->profiles as $title)
-                              <h6><span class="badge rounded-pill bg-light">{{ Carbon\Carbon::parse($title->degree_date)->format('d-m-Y') }}</span></h6>
-                          @endforeach
-                      </td>
-                      <td>
-                          @foreach($staff->profiles as $title)
-                              <h6><span class="badge rounded-pill bg-light">{{ $title->YearsOfDegree }}</span></h6>
-                          @endforeach
-                      </td>
-                      <td>{{ $staff->StatusValue }}</td>
-                      <td>
-                          <a href="{{ route('replacement_staff.show_replacement_staff', $staff) }}"
-                            class="btn btn-outline-secondary btn-sm"
-                            title="Ir"
-                            target="_blank"> <i class="far fa-eye"></i></a>
-                          <a href="{{ route('replacement_staff.show_file', $staff) }}"
-                            class="btn btn-outline-secondary btn-sm"
-                            title="Ir"
-                            target="_blank"> <i class="far fa-file-pdf"></i></a>
-                      </td>
-                      <td>
-                          <fieldset class="form-group">
-                              <div class="form-check">
-                                  <input class="form-check-input" type="checkbox" name="replacement_staff_id[]"
-                                      value="{{ $staff->id }}">
-                              </div>
-                          </fieldset>
-                      </td>
-                  </tr>
-                  @endforeach
-
-              </tbody>
-          </table>
-          @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
-              Auth::user()->hasRole('Replacement Staff: admin'))
-            <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Seleccionar</button>
-          @endif
-          </form>
-          {{ $replacementStaff->links() }}
-      </div>
       @endif
 
     </div>

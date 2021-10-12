@@ -59,17 +59,26 @@
             <tr>
                 <td>
                     {{ $requestReplacementStaff->id }} <br>
-                    @if($requestReplacementStaff->TechnicalEvaluation)
-                      @if($requestReplacementStaff->TechnicalEvaluation->technical_evaluation_status == 'complete')
-                        <span style="color: green;">
-                          <i class="fas fa-check-circle " title="Evaluación Técnica: {{ $request->TechnicalEvaluation->StatusValue }}"></i>
-                        </span>
-                      @else
-                        <i class="fas fa-clock" title="Evaluación Técnica: Pendiente"></i>
-                      @endif
-                    @else
-                        <i class="fas fa-clock" title="Evaluación Técnica: Pendiente"></i>
-                    @endif
+                    @switch($requestReplacementStaff->request_status)
+                        @case('pending')
+                            <i class="fas fa-clock"></i>
+                            @break
+
+                        @case('complete')
+                            <span style="color: green;">
+                              <i class="fas fa-check-circle"></i>
+                            </span>
+                            @break
+
+                        @case('rejected')
+                            <span style="color: Tomato;">
+                              <i class="fas fa-times-circle"></i>
+                            </span>
+                            @break
+
+                        @default
+                            Default case...
+                    @endswitch
                 </td>
                 <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                 <td>{{ $requestReplacementStaff->name }}</td>
@@ -153,18 +162,26 @@
             <tr>
                 <td>
                     {{ $requestReplacementStaff->id }} <br>
-                    @if($requestReplacementStaff->TechnicalEvaluation)
-                      @if($requestReplacementStaff->TechnicalEvaluation->technical_evaluation_status == 'complete')
-                        <span style="color: green;">
-                          <i class="fas fa-check-circle " title="Evaluación Técnica: {{ $requestReplacementStaff->TechnicalEvaluation->StatusValue }}"></i>
-                        </span>
-                      {{-- @else --}}
-                        <!-- <i class="fas fa-clock" title="Evaluación Técnica: Pendiente"></i> -->
-                      @endif
-                    {{-- @else --}}
-                        <!-- <i class="fas fa-clock" title="Evaluación Técnica: Pendiente"></i> -->
-                    @endif
+                    @switch($requestReplacementStaff->request_status)
+                        @case('pending')
+                            <i class="fas fa-clock"></i>
+                            @break
 
+                        @case('complete')
+                            <span style="color: green;">
+                              <i class="fas fa-check-circle"></i>
+                            </span>
+                            @break
+
+                        @case('rejected')
+                            <span style="color: Tomato;">
+                              <i class="fas fa-times-circle"></i>
+                            </span>
+                            @break
+
+                        @default
+                            Default case...
+                    @endswitch
                 </td>
                 <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                 <td>{{ $requestReplacementStaff->name }}</td>
@@ -195,16 +212,16 @@
                     @endforeach
                 </td>
                 <td>
-                    @foreach($requestReplacementStaff->RequestSign as $sign)
-                        @if($sign->position == 3 && $sign->request_status == "accepted" && !$requestReplacementStaff->technicalEvaluation)
-                            <a href="{{ route('replacement_staff.request.technical_evaluation.store', $requestReplacementStaff) }}"
-                                onclick="return confirm('¿Está seguro de iniciar el proceso de selección?')"
+                  @if($requestReplacementStaff->technicalEvaluation)
+                    <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
                                 class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-                        @elseif($sign->position == 3 && $sign->request_status == "accepted" && $requestReplacementStaff->technicalEvaluation)
-                            <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
-                                class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-                        @endif
-                    @endforeach
+                  @else
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                        data-target="#exampleModalCenter-req-{{ $requestReplacementStaff->id }}">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    @include('replacement_staff.modals.modal_to_view_request')
+                  @endif
                 </td>
             </tr>
             @endforeach

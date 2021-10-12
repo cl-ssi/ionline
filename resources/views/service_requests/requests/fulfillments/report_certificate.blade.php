@@ -153,15 +153,15 @@
           @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
             @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
               Consultorio General Urbano Dr. Hector Reyno,
-              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b> 
+              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
               @if($fulfillment->serviceRequest->type == 'Covid')
-              durante el periodo de contingencia COVID  
+              durante el periodo de contingencia COVID
               @endif
             @else
               Servicio Salud Iquique,
               <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
               @if($fulfillment->serviceRequest->type == 'Covid')
-              durante el periodo de contingencia COVID  
+              durante el periodo de contingencia COVID
               @endif
             @endif
           @else
@@ -192,8 +192,7 @@
           @livewire('service-request.show-total-hours', ['fulfillment' => $fulfillment,
                                                          'forCertificate' => true])
 
-          <br><br>Se extiende el presente certificado para ser presentado en recursos humanos, para que éste acredite la asistencia del funcionario.
-          Para posteriormente finanzas y contabilidad realice la gestión de pago.
+          <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
       </div>
   </div>
 
@@ -214,7 +213,7 @@
             @else
               Hospital Dr.Ernesto Torres Galdames
             @endif
-            durante el periodo 
+            durante el periodo
             @if($fulfillment->serviceRequest->type == 'Covid')
             de contingencia COVID
             @endif
@@ -233,10 +232,10 @@
             @else
               <!-- ASI ESTABA ANTERIORMENTE ANTES DE LO PROPUESTO POR NATALY
               Junto con saludar, se adjunta renuncia voluntaria a honorarios de funcionario <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b>,
-              a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->add(1, 'day')->format('d/m/Y')}}</b>. 
+              a contar del <b>{{$fulfillment->FulfillmentItems->where('type','Renuncia voluntaria')->first()->end_date->add(1, 'day')->format('d/m/Y')}}</b>.
               -->
-              Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas en su convenio de prestación de servicios con el 
-              <b><span class="uppercase">{{$fulfillment->serviceRequest->establishment->name}}</span></b>, 
+              Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas en su convenio de prestación de servicios con el
+              <b><span class="uppercase">{{$fulfillment->serviceRequest->establishment->name}}</span></b>,
               @if($fulfillment->serviceRequest->type == 'Covid')
               durante el periodo de
               contingencia COVID
@@ -264,33 +263,33 @@
             <br>
 
             Se deja constancia que el prestador de servicio Abandonó sus funciones a contar del día <b>{{$fulfillment->FulfillmentItems->where('type','Abandono de funciones')->first()->end_date->format('d/m/Y')}}</b>.
-            
+
               <!-- El prestador de servicios Honorario Suma Alzada , manifestó  de forma verbal o por escrito sin mediar renuncia voluntaria , su intención de no perseverar el contrato de honorarios suscrito con el Hospital , lo que materializo a contar de la fecha de su ausencia al lugar de trabajo desde el día {{$fulfillment->FulfillmentItems->where('type','Abandono de funciones')->first()->end_date->format('d/m/Y')}}. -->
-            @endif            
+            @endif
             @elseif($fulfillment->FulfillmentItems->where('type','Término de contrato anticipado')->count() > 0)
             @if($fulfillment->FulfillmentItems->where('type','!=','Término de contrato anticipado')->count() > 0)
             Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las     actividades estipuladas en su convenio de prestación de servicios con el <b>{{$fulfillment->serviceRequest->establishment->name ?? ''}}</b> del periodo del
             <b>
             {{$fulfillment->start_date->format('d/m/Y')}}
-            al {{$fulfillment->FulfillmentItems->where('type','Término de contrato anticipado')->first()->end_date->sub(1, 'day')->format('d/m/Y')}} 
+            al {{$fulfillment->FulfillmentItems->where('type','Término de contrato anticipado')->first()->end_date->sub(1, 'day')->format('d/m/Y')}}
             </b>
             <br>
             <br>
-            Se deja constancia que el prestador de servicio se le realizó por parte de su jefatura directa un Término de contrato anticipado a contar del día            
+            Se deja constancia que el prestador de servicio se le realizó por parte de su jefatura directa un Término de contrato anticipado a contar del día
             <b>{{$fulfillment->FulfillmentItems->where('type','Término de contrato anticipado')->first()->end_date->format('d/m/Y')}}</b>
             @else
             Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las     actividades estipuladas en su convenio de prestación de servicios con el <b>{{$fulfillment->serviceRequest->establishment->name ?? ''}}</b> del periodo del
             <b>
             {{$fulfillment->start_date->format('d/m/Y')}}
-            al {{$fulfillment->FulfillmentItems->where('type','Término de contrato anticipado')->first()->end_date->sub(1, 'day')->format('d/m/Y')}} 
+            al {{$fulfillment->FulfillmentItems->where('type','Término de contrato anticipado')->first()->end_date->sub(1, 'day')->format('d/m/Y')}}
             </b>
             <br>
             <br>
             Se deja constancia que el prestador de servicio se le realizó por parte de su jefatura directa un Término de contrato anticipado a contar del día
             <b>{{$fulfillment->FulfillmentItems->where('type','Término de contrato anticipado')->first()->end_date->format('d/m/Y')}}</b>
             @endif
-            
-            
+
+
           @else
             Mediante el presente certifico que <b><span class="uppercase">{{$fulfillment->serviceRequest->employee->fullName}}</span></b> ha desempeñado las actividades estipuladas
             en su convenio de prestación de servicios con el
@@ -305,9 +304,9 @@
             @endif
 
             @if($fulfillment->serviceRequest->type == 'Covid')
-              durante el periodo de contingencia COVID  
+              durante el periodo de contingencia COVID
             @endif
-            
+
             <!-- contingencia COVID del  -->
             <b>{{$fulfillment->start_date->format('d/m/Y')}}</b> al <b>{{$fulfillment->end_date->format('d/m/Y')}}</b>,
             registrando las siguientes ausencias:
@@ -382,15 +381,15 @@
           @if($fulfillment->serviceRequest->responsabilityCenter->establishment_id == 38)
             @if($fulfillment->serviceRequest->employee->organizationalUnit->id == 24)
               Consultorio General Urbano Dr. Hector Reyno,
-              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b> 
+              <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
               @if($fulfillment->serviceRequest->type == 'Covid')
-              durante el periodo de contingencia COVID  
+              durante el periodo de contingencia COVID
               @endif
             @else
               Servicio Salud Iquique,
               <b> en el mes de {{$fulfillment->start_date->monthName}} del {{$fulfillment->start_date->year}}</b>
               @if($fulfillment->serviceRequest->type == 'Covid')
-              durante el periodo de contingencia COVID  
+              durante el periodo de contingencia COVID
               @endif
             @endif
           @else
@@ -421,8 +420,7 @@
           @livewire('service-request.show-total-hours', ['fulfillment' => $fulfillment,
                                                          'forCertificate' => true])
 
-          <br><br>Se extiende el presente certificado para ser presentado en recursos humanos, para que éste acredite la asistencia del funcionario.
-          Para posteriormente finanzas y contabilidad realice la gestión de pago.
+          <br><br>Se extiende el presente certificado para ser presentado en la oficina de finanzas y contabilidad para gestión de pago.
       </div>
   </div>
 @endif

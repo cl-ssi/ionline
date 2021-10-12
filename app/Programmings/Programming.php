@@ -2,6 +2,7 @@
 
 namespace App\Programmings;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
 class Programming extends Model
@@ -20,11 +21,11 @@ class Programming extends Model
     }
 
     public function days(){
-        return $this->hasMany('App\Models\Programmings\ProgrammingDay');
+        return $this->hasMany('App\Programmings\ProgrammingDay');
     }
 
     public function professionalHours(){
-        return $this->hasMany('App\Models\Programmings\ProfessionalHour');
+        return $this->hasMany('App\Programmings\ProfessionalHour');
     }
 
     public function establishment() {
@@ -46,20 +47,10 @@ class Programming extends Model
                 $activities->add($item->activityItem);
             }
         }
-        //dd($activities->unique('int_code'));
-         $uniqueAct=$activities->unique('int_code');
-        // if($this->id==2){
-        //     dd($uniqueAct);
-        // }
-        
-        return count($uniqueAct);
+        return count($activities->unique('int_code'));
     }
 
     protected $casts = [
         'access' => 'array'
     ];
-
-    // public function programming_reviews() {
-    //     return $this->hasMany('App\Models\Programmings\Review');
-    // }
 }

@@ -56,18 +56,18 @@
 
         <fieldset class="form-group col-12 col-md-2">
             <label for="for_phone_number">Número telefónico*</label>
-            <input type="text" class="form-control" id="for_phone_number" 
+            <input type="text" class="form-control" id="for_phone_number"
               name="phone_number" required @if($user) value="{{$user->phone_number}}" @endif>
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_email">Correo electrónico*</label>
-            <input type="text" class="form-control" id="for_email" required
+            <input type="text" class="form-control" id="for_email" required wire:model.lazy="email"
               name="email" @if($user) value="{{$user->email}}" @endif>
         </fieldset>
 
       </div>
     </div>
   </div>
-  
+
 </div>

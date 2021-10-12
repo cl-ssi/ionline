@@ -267,6 +267,10 @@ class ServiceRequestController extends Controller
       }
     }
 
+    if (count($request->users) <= 1) {
+      session()->flash('danger', 'Ocurrió un error al crear el flujo de firmas. Intente nuevamente, si vuelve a ocurrir contacte al área de RRHH.');
+      return redirect()->back();
+    }
 
     //validate, user has ou
     if ($request->users <> null) {
@@ -571,10 +575,10 @@ class ServiceRequestController extends Controller
   {
     //se guarda información de la solicitud
     $serviceRequest->fill($request->all());
-    if (isset($request->hsa_schedule_detail)) {
-      $serviceRequest->schedule_detail = $request->hsa_schedule_detail;
-    }
-
+    // if (isset($request->hsa_schedule_detail)) {
+    //   $serviceRequest->schedule_detail = $request->hsa_schedule_detail;
+    // }
+    $serviceRequest->schedule_detail = $request->hsa_schedule_detail;
     $serviceRequest->save();
 
     //guarda control de turnos
@@ -600,6 +604,11 @@ class ServiceRequestController extends Controller
   {
     //se guarda información de la solicitud
     $serviceRequest->fill($request->all());
+    if($request->has('signature_page_break')){
+      $serviceRequest->signature_page_break = 1;
+    }else{
+      $serviceRequest->signature_page_break = 0;
+    }
     $serviceRequest->save();
 
     //devuelve UserBankAccount o crea

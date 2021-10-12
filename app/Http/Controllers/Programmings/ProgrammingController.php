@@ -23,11 +23,17 @@ class ProgrammingController extends Controller
 {
     public function index(Request $request)
     {
-        $programmings = Programming::with('items.reviewItems', 'items.activityItem')->where('year', $request->year)->get();
+        $programmings = Programming::with('items.reviewItems', 'items.activityItem')
+            ->where('year', $request->year ?? Carbon::now()->year)
+            ->when(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False, function($q){
+                $q->Where('status','=','active')->Where('access','LIKE','%'.Auth()->user()->id.'%');
+            })
+            ->get();
+            
         $communes = Commune::where('name', $request->name)->get();
 
         //dd($programmings);
-         $year = '';
+        //  $year = '';
         // Indicador de revisiones
         // $reviewIndicators = ReviewItem::select(
         //             'T2.id'

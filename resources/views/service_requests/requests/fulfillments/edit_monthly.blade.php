@@ -1,4 +1,4 @@
-@foreach($serviceRequest->fulfillments as $fulfillment)
+@foreach($serviceRequest->fulfillments->sortBy('month') as $fulfillment)
 <div class="card border-dark">
 	<div class="card-header">
 		<h4>Información del período: {{$fulfillment->year}}-{{$fulfillment->month}} ({{Carbon\Carbon::parse($fulfillment->year . "-" . $fulfillment->month)->monthName}}) <span class="small text-muted float-right">{{ $fulfillment->id}}</span></h4>
@@ -45,14 +45,14 @@
 				@endif
 				@endcan -->
 
-				
+
 				<fieldset class="form-group col-2">
 					<label for="for_estate"><br /></label>
 					@can('Service Request: fulfillments rrhh')
 					<button type="submit" class="form-control btn btn-primary">Guardar</button>
 					@endcan
 				</fieldset>
-				
+
 
 				<!-- @can('Service Request: fulfillments finance')
 				@if($fulfillment->finances_approver_id == NULL)
@@ -392,7 +392,9 @@
 					<div class="col-12 col-md-4">
 						<strong>Valor de la boleta</strong>
 						<div>
-							$ @livewire('service-request.monthly-value',['fulfillment' => $fulfillment])
+							<!-- $ @livewire('service-request.monthly-value',['fulfillment' => $fulfillment]) -->
+
+							$ @livewire('service-request.monthly-quotes', ['serviceRequest' => $fulfillment->serviceRequest, 'parametroMes' => $fulfillment->month])
 						</div>
 					</div>
 				</div>

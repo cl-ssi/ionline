@@ -2,6 +2,24 @@
 
 @section('title', 'Lista de Usuarios')
 
+@section('custom_css')
+<style>
+	.tooltip-wrapper {
+	display: inline-block; /* display: block works as well */
+	}
+
+	.tooltip-wrapper .btn[disabled] {
+	/* don't let button block mouse events from reaching wrapper */
+	pointer-events: none;
+	}
+
+	.tooltip-wrapper.disabled {
+	/* OPTIONAL pointer-events setting above blocks cursor setting, so set it here */
+	cursor: not-allowed;
+	}
+</style>
+@endsection
+
 @section('content')
 
 @can('Users: create')
@@ -46,6 +64,20 @@
 				@can('Users: edit')
 					<a href="{{ route('rrhh.users.edit',$user->id) }}" class="btn btn-outline-primary">
 					<span class="fas fa-edit" aria-hidden="true"></span></a>
+					@if(!$user->hasVerifiedEmail())
+						@if($user->email_personal)
+						<form class="d-inline" method="POST" action="{{ route('verification.resend', $user->id) }}">
+							@csrf
+							<div class="tooltip-wrapper" data-title="Verificar correo electrónico personal">
+							<button class="btn btn-outline-primary"><span class="fas fa-user-check" aria-hidden="true"></span></button>
+							</div>
+						</form>
+						@else
+						<div class="tooltip-wrapper disabled" data-title="No existe registro de correo electrónico personal para ser verificada">
+							<button class="btn btn-outline-primary" disabled><span class="fas fa-user-check" aria-hidden="true"></span></button>
+						</div>
+						@endif
+					@endif
 				@endcan
 
 				@role('god')
@@ -61,4 +93,12 @@
 
 {{ $users->links() }}
 
+@endsection
+
+@section('custom_js')
+<script>
+$(function() {
+	$('.tooltip-wrapper').tooltip({position: "bottom"});
+});
+</script>
 @endsection

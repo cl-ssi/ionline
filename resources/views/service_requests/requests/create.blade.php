@@ -269,6 +269,7 @@
 				<option value="HORA EXTRA">HORA EXTRA</option>
 				<option value="TURNO EXTRA">TURNO EXTRA</option>
 				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
+				<option value="QUIRURGICO">QUIRÚRGICO</option>
 				<!-- <option value="OTRO">OTRO</option> -->
 				<option value=""></option>
 				<option value="DIARIO">DIARIO</option>
@@ -406,11 +407,16 @@
 	</div>
 	@endif
 
-
+	<div class="form-row">
+		<fieldset class="form-group col">
+				<label for="for_estate">Aguinaldos (se inserta en cláusula 8va)</label>
+				<textarea name="bonus_indications" class="form-control" rows="4" cols="50" placeholder="ej: en septiembre un bono de 53.000 por concepto de aguinaldo de fiestas patrias"></textarea>
+		</fieldset>
+	</div>
 
 	<div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_estate">Beneficios adicionales</label>
+				<label for="for_estate">Beneficios adicionales (se inserta en cláusula 14)</label>
 				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50" disabled></textarea>
 
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
@@ -492,6 +498,7 @@
 				$("#working_day_type option[value='CUARTO TURNO']").hide();
 				$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").hide();
 				$("#working_day_type option[value='DIARIO']").hide();
+				$("#working_day_type option[value='QUIRURGICO']").hide();
 
 				$("#working_day_type option[value='DIURNO PASADO A TURNO']").show();
 				$("#working_day_type option[value='HORA MÉDICA']").show();
@@ -512,6 +519,7 @@
 				$("#working_day_type option[value='CUARTO TURNO']").show();
 				$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").show();
 				$("#working_day_type option[value='DIARIO']").show();
+				$("#working_day_type option[value='QUIRURGICO']").show();
 
 				$("#working_day_type option[value='DIURNO PASADO A TURNO']").hide();
 				$("#working_day_type option[value='HORA MÉDICA']").hide();

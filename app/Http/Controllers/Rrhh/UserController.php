@@ -161,8 +161,15 @@ class UserController extends Controller
                 $user->organizationalunit()->dissociate();
             }
         }
-
-        $user->save();
+    
+        if ($user->isDirty('email_personal')) {
+            // dd('full cocaina');
+            $user->email_verified_at = null;
+            $user->save();
+            $user->sendEmailVerificationNotification();
+        } else {
+            $user->save();
+        }
 
         session()->flash('success', 'El usuario '.$user->name.' ha sido actualizado.');
 

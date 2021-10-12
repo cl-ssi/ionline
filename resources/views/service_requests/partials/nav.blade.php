@@ -205,7 +205,7 @@
         </div>
     </li>
 
-    @canany(['Service Request: maintainers'])
+    <!-- @canany(['Service Request: maintainers'])
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle {{ active('parameters.values.report.*') }}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-cog"></i> Valores Horas
@@ -224,6 +224,6 @@
 
         </div>
     </li>
-    @endcan
+    @endcan -->
 
 </ul>

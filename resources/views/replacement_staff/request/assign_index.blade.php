@@ -60,17 +60,26 @@
             <tr>
                 <td>
                     {{ $requestReplacementStaff->id }} <br>
-                    @if($requestReplacementStaff->TechnicalEvaluation)
-                      @if($requestReplacementStaff->TechnicalEvaluation->technical_evaluation_status == 'complete')
-                        <span style="color: green;">
-                          <i class="fas fa-check-circle " title="Evaluación Técnica: {{ $request->TechnicalEvaluation->StatusValue }}"></i>
-                        </span>
-                      @else
-                        <i class="fas fa-clock" title="Evaluación Técnica: Pendiente"></i>
-                      @endif
-                    @else
-                        <i class="fas fa-clock" title="Evaluación Técnica: Pendiente"></i>
-                    @endif
+                    @switch($requestReplacementStaff->request_status)
+                        @case('pending')
+                            <i class="fas fa-clock"></i>
+                            @break
+
+                        @case('complete')
+                            <span style="color: green;">
+                              <i class="fas fa-check-circle"></i>
+                            </span>
+                            @break
+
+                        @case('rejected')
+                            <span style="color: Tomato;">
+                              <i class="fas fa-times-circle"></i>
+                            </span>
+                            @break
+
+                        @default
+                            Default case...
+                    @endswitch
                 </td>
                 <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                 <td>{{ $requestReplacementStaff->name }}</td>
@@ -152,18 +161,26 @@
             <tr>
                 <td>
                     {{ $requestReplacementStaff->id }} <br>
-                    @if($requestReplacementStaff->TechnicalEvaluation)
-                      @if($requestReplacementStaff->TechnicalEvaluation->technical_evaluation_status == 'complete')
-                        <span style="color: green;">
-                          <i class="fas fa-check-circle " title="Evaluación Técnica: {{ $requestReplacementStaff->TechnicalEvaluation->StatusValue }}"></i>
-                        </span>
-                      {{-- @else --}}
-                        <!-- <i class="fas fa-clock" title="Evaluación Técnica: Pendiente"></i> -->
-                      @endif
-                    {{-- @else --}}
-                        <!-- <i class="fas fa-clock" title="Evaluación Técnica: Pendiente"></i> -->
-                    @endif
+                    @switch($requestReplacementStaff->request_status)
+                        @case('pending')
+                            <i class="fas fa-clock"></i>
+                            @break
 
+                        @case('complete')
+                            <span style="color: green;">
+                              <i class="fas fa-check-circle"></i>
+                            </span>
+                            @break
+
+                        @case('rejected')
+                            <span style="color: Tomato;">
+                              <i class="fas fa-times-circle"></i>
+                            </span>
+                            @break
+
+                        @default
+                            Default case...
+                    @endswitch
                 </td>
                 <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                 <td>{{ $requestReplacementStaff->name }}</td>
