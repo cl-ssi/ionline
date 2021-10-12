@@ -29,7 +29,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'id', 'dv', 'name', 'fathers_family','mothers_family','gender','address','phone_number','email',
-        'password','birthday','position','active','external','country_id', 'organizational_unit_id'
+        'password','birthday','position','active','external','country_id', 'organizational_unit_id', 'email_personal', 'email_verified_at'
     ];
 
     /**
@@ -311,7 +311,16 @@ class User extends Authenticatable
         }// End getPatientsBySearch
 
 
-
+    /**
+     * Route notifications for the mail channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return array|string
+     */
+    public function routeNotificationForMail($notification)
+    {
+        return $this->email_personal;
+    }
 
     /**computers
      * The attributes that should be cast to native types.

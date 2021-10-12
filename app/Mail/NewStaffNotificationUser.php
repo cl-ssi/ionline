@@ -32,6 +32,6 @@ class NewStaffNotificationUser extends Mailable
     public function build()
     {
         return $this->view('replacement_staff.mail.newstaffnotificationuser')
-          ->subject('Nuevo Formulario Nº2');
+          ->subject('Registro Ingreso Staff SS Iquique');
     }
 }

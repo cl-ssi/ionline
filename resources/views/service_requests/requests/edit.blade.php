@@ -587,9 +587,16 @@
 		</fieldset>
 	</div>
 
+  <div class="form-row">
+		<fieldset class="form-group col">
+				<label for="for_estate">Aguinaldos (se inserta en cláusula 8va)</label>
+				<textarea name="bonus_indications" class="form-control" rows="4" cols="50">{{ html_entity_decode($serviceRequest->bonus_indications) }}</textarea>
+		</fieldset>
+	</div>
+
   <div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_estate">Beneficios adicionales</label>
+				<label for="for_estate">Beneficios adicionales (se inserta en cláusula 14)</label>
 				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50">{{ html_entity_decode($serviceRequest->additional_benefits) }}</textarea>
 
         <button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
@@ -740,7 +747,15 @@
 
         </div>
 
+        <fieldset class="form-group form-check">
+          <input type="checkbox"
+            class="form-check-input"
+            name="signature_page_break"
+            value="1" id="forbreakPage"
+            {{ ($serviceRequest->signature_page_break)?'checked':'' }}>
 
+          <label class="form-check-label" for="forbreakPage">Salto de página en firmas</label>
+        </fieldset>
 
       </div>
 

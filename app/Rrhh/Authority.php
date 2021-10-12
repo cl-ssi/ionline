@@ -49,8 +49,10 @@ class Authority extends Model
                                         is_array($type) ? $q->whereIn('type', $type) : $q->where('type', $type);
                                       })
                                       ->where('from','<=',$date)->where('to','>=',$date);
-                                })->get();
-        
+                                })
+                                ->orderBy('organizational_unit_id','ASC')
+                                ->get();
+
         // Ahora que se que unidades organizacionales pertenece uder_id pregunto si por cada unidad organizacional se encuetra primero en la lista de autoridad/es, de ser correcto guardo en un array de autoridades a retornar
         $authorities = array();
         foreach($ous as $ou){

@@ -74,7 +74,7 @@
             @else
               @switch($created->status)
                   @case('creado')
-                      @if($created->user == Auth::user())
+                      @if($created->user_id == Auth::user()->id)
                           <tr class="alert-info">
                       @else
                           <tr class="alert-light">
@@ -129,7 +129,7 @@
 					<a href="{{ route('requirements.show',$created->id) }}" class="btn btn-sm btn-link">
           <span class="fas fa-edit" aria-hidden="true"></span>
 					</a>
-                  
+
 					<a href="{{ route('requirements.archive_requirement',$created) }}" class="btn btn-sm btn-link">
 						<span class="fas fa-arrow-down"></span>
 					</a>
@@ -198,7 +198,7 @@
           @else
             @switch($archived->status)
                 @case('creado')
-                    @if($archived->user == Auth::user())
+                    @if($archived->user_id == Auth::user()->id)
                         <tr class="alert-info">
                     @else
                         <tr class="alert-light">

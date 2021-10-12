@@ -4,7 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Establishment;
-use App\Rrhh\organizationalunit;
+use App\Rrhh\OrganizationalUnit;
 
 use App\User;
 

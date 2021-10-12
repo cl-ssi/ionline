@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="exampleModalCenter-req-{{ $request->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="exampleModalCenter-req-{{ $requestReplacementStaff->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-xl" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -12,56 +12,61 @@
           <table class="table table-sm table-bordered">
               <thead>
                   <tr class="table-active">
-                    <th colspan="3">Formulario Solicitud Contratación de Personal</th>
+                    <th colspan="3">Formulario Contratación de Personal - Solicitud Nº {{ $requestReplacementStaff->id }}</th>
                   </tr>
               </thead>
               <tbody>
                   <tr>
                       <th class="table-active">Por medio del presente, la</th>
                       <td colspan="2">
-                          {{ $request->organizationalUnit->name }}
+                          {{ $requestReplacementStaff->organizationalUnit->name }}
                       </td>
                   </tr>
                   <tr>
                       <th class="table-active">Solicita autorizar el llamado a presentar antecedentes al cargo de</th>
                       <td colspan="2">
-                          {{ $request->name }}
+                          {{ $requestReplacementStaff->name }}
                       </td>
                   </tr>
                   <tr>
                       <th class="table-active">En el grado</th>
-                      <td colspan="2">{{ $request->degree }}</td>
+                      <td colspan="2">{{ $requestReplacementStaff->degree }}</td>
                   </tr>
                   <tr>
                       <th class="table-active">Calidad Jurídica</th>
-                      <td colspan="2">{{ $request->LegalQualityValue }}</td>
+                      <td colspan="2">{{ $requestReplacementStaff->LegalQualityValue }}</td>
                   </tr>
                   <tr>
                       <th class="table-active">La Persona cumplirá labores en Jornada</th>
-                      <td style="width: 33%">{{ $request->WorkDayValue }}</td>
-                      <td style="width: 33%">{{ $request->other_work_day }}</td>
+                      <td style="width: 33%">{{ $requestReplacementStaff->WorkDayValue }}</td>
+                      <td style="width: 33%">{{ $requestReplacementStaff->other_work_day }}</td>
                   </tr>
                   <tr>
                       <th class="table-active">Justificación o fundamento de la Contratación</th>
-                      <td style="width: 33%">{{ $request->FundamentValue }}</td>
-                      <td style="width: 33%">De funcionario: {{ $request->name_to_replace }}</td>
+                      <td style="width: 33%">{{ $requestReplacementStaff->FundamentValue }}</td>
+                      <td style="width: 33%">De funcionario: {{ $requestReplacementStaff->name_to_replace }}</td>
                   </tr>
                   <tr>
                       <th class="table-active">Otros (especifique)</th>
-                      <td colspan="2">{{ $request->other_fundament }}</td>
+                      <td colspan="2">{{ $requestReplacementStaff->other_fundament }}</td>
+                  </tr>
+                  <tr>
+                      <th class="table-active">Periodo</th>
+                      <td style="width: 33%">{{ $requestReplacementStaff->start_date->format('d-m-Y') }}</td>
+                      <td style="width: 33%">{{ $requestReplacementStaff->end_date->format('d-m-Y') }}</td>
                   </tr>
                   <tr>
                       <td colspan="3">El documento debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
                   </tr>
                   <tr>
-                      @foreach($request->RequestSign as $sign)
+                      @foreach($requestReplacementStaff->RequestSign as $sign)
                         <td class="table-active text-center">
                             {{ $sign->organizationalUnit->name }}<br>
                         </td>
                       @endforeach
                   </tr>
                   <tr>
-                      @foreach($request->RequestSign as $requestSign)
+                      @foreach($requestReplacementStaff->RequestSign as $requestSign)
                         <td align="center">
                             @if($requestSign->request_status == 'accepted')
                                 <span style="color: green;">
@@ -85,6 +90,18 @@
                   </tr>
               </tbody>
           </table>
+
+          <div class="row">
+              <div class="col">
+                  @if($requestReplacementStaff->technicalEvaluation &&
+                    $requestReplacementStaff->end_date < now()->toDateString() &&
+                      $requestReplacementStaff->technicalEvaluation->date_end != null &&
+                        $requestReplacementStaff->user_id == Auth::user()->id)
+                      <a class="btn btn-success float-right" href="{{ route('replacement_staff.request.create_extension', $requestReplacementStaff) }}">
+                          <i class="fas fa-plus"></i> Extender en Nueva Solicitud</a>
+                  @endif
+              </div>
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

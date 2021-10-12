@@ -123,6 +123,9 @@ class RequestSignController extends Controller
           $requestSign->date_sign = Carbon::now();
           $requestSign->save();
 
+          $requestReplacementStaff->request_status = 'rejected';
+          $requestReplacementStaff->save();
+
           session()->flash('danger', 'Su solicitud ha sido Rechazada con éxito.');
           return redirect()->route('replacement_staff.request.to_sign');
         }

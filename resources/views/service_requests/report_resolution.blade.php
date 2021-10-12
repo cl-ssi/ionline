@@ -121,17 +121,8 @@
       clear: both;
     }
 
-    @media all {
-      .page-break {
-        display: none;
-      }
-    }
-
-    @media print {
-      .page-break {
-        display: block;
-        page-break-before: always;
-      }
+    .page-break {
+      page-break-after: always;
     }
   </style>
 </head>
@@ -652,6 +643,10 @@
       @else
 
       @endif
+      @endif
+
+      @if($ServiceRequest->signature_page_break)
+      <div class="page-break"></div>
       @endif
 
       Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribute()}} <br><br>

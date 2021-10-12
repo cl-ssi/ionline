@@ -40,6 +40,8 @@ use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationFileController;
 
 use App\Http\Controllers\VaccinationController;
 
+use App\Http\Controllers\Mammography\MammographyController;
+
 use App\Http\Controllers\ServiceRequests\InvoiceController;
 use App\Http\Controllers\ServiceRequests\ValueController;
 
@@ -56,6 +58,11 @@ use App\Http\Controllers\ServiceRequests\DenominationFormulaController;
 use App\Http\Controllers\Parameters\ProfessionController;
 use App\Http\Controllers\Pharmacies\PurchaseController;
 use App\Pharmacies\Purchase;
+use App\User;
+use App\Http\Controllers\TestController;
+
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -131,6 +138,17 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 /** Para testing, no he probado pero me la pedian en clave única */
 Route::get('logout-testing', 'Auth\LoginController@logout')->name('logout-testing');
 
+Route::post('/email/verification-notification/{user}', function (User $user) {
+    $user->sendEmailVerificationNotification();
+
+    return back()->with('success', 'El enlace de verificación se ha enviado al correo personal <b>'. $user->email_personal .'</b> para su confirmación.');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.resend');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+
+    return redirect('/home');
+})->middleware(['auth', 'signed'])->name('verification.verify');
 
 
 
@@ -169,7 +187,9 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/own_index', [RequestReplacementStaffController::class, 'own_index'])->name('own_index');
         Route::get('/ou_index', [RequestReplacementStaffController::class, 'ou_index'])->name('ou_index');
         Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
+        Route::get('/{requestReplacementStaff}/create_extension', [RequestReplacementStaffController::class, 'create_extension'])->name('create_extension');
         Route::post('/store', [RequestReplacementStaffController::class, 'store'])->name('store');
+        Route::post('/{requestReplacementStaff}/store_extension', [RequestReplacementStaffController::class, 'store_extension'])->name('store_extension');
         Route::get('/{requestReplacementStaff}/edit', [RequestReplacementStaffController::class, 'edit'])->name('edit');
         Route::put('/{requestReplacementStaff}/update', [RequestReplacementStaffController::class, 'update'])->name('update');
         Route::get('/to_select/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_select'])->name('to_select');
@@ -1271,6 +1291,25 @@ Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::put('/dome/{vaccination}/{reverse?}',[VaccinationController::class,'dome'])->name('dome')->middleware('auth');
 });
 
+Route::prefix('mammography')->as('mammography.')->group(function () {
+    Route::get('/welcome',[MammographyController::class,'welcome'])->name('welcome');
+    Route::get('/login/{access_token}',[MammographyController::class,'login'])->name('login');
+    Route::get('/',[MammographyController::class,'index'])->name('index')->middleware('auth');
+    Route::get('/schedule',[MammographyController::class,'schedule'])->name('schedule')->middleware('auth');
+    Route::get('/create',[MammographyController::class,'create'])->name('create')->middleware('auth');
+    Route::post('/',[MammographyController::class,'store'])->name('store')->middleware('auth');
+    Route::post('/show',[MammographyController::class,'show'])->name('show');
+    Route::get('/{mammography}/edit',[MammographyController::class,'edit'])->name('edit')->middleware('auth');
+    Route::put('/{mammography}',[MammographyController::class,'update'])->name('update')->middleware('auth');
+    // Route::get('/report',[VaccinationController::class,'report'])->name('report')->middleware('auth');
+    Route::get('/export',[MammographyController::class,'export'])->name('export')->middleware('auth');
+    // Route::put('/vaccinate/{vaccination}/{dose}',[VaccinationController::class,'vaccinate'])->name('vaccinate')->middleware('auth');
+    // Route::get('/vaccinate/remove-booking/{vaccination}',[VaccinationController::class,'removeBooking'])->name('removeBooking')->middleware('auth');
+    // Route::get('/card/{vaccination}',[VaccinationController::class,'card'])->name('card')->middleware('auth');
+    Route::get('/slots',[MammographyController::class,'slots'])->name('slots')->middleware('auth');
+    // Route::put('/arrival/{vaccination}/{reverse?}',[VaccinationController::class,'arrival'])->name('arrival')->middleware('auth');
+    // Route::put('/dome/{vaccination}/{reverse?}',[VaccinationController::class,'dome'])->name('dome')->middleware('auth');
+});
 
 Route::prefix('invoice')->as('invoice.')->group(function () {
     Route::get('/welcome',[InvoiceController::class,'welcome'])->name('welcome');
@@ -1367,3 +1406,5 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 
 
 Route::view('/some', 'some');
+
+Route::get('test',[TestController::class,'index']);

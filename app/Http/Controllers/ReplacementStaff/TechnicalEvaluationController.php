@@ -5,8 +5,6 @@ namespace App\Http\Controllers\ReplacementStaff;
 use App\Models\ReplacementStaff\TechnicalEvaluation;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 use App\Models\ReplacementStaff\ReplacementStaff;
-use App\Models\ReplacementStaff\ProfessionManage;
-use App\Models\ReplacementStaff\ProfileManage;
 use App\Models\ReplacementStaff\AssignEvaluation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -98,27 +96,29 @@ class TechnicalEvaluationController extends Controller
 
         $users_rys = User::where('organizational_unit_id', 48)->get();
 
-        $replacementStaff = ReplacementStaff::search($request->input('search'),
-                                                     $request->input('profile_search'),
-                                                     $request->input('profession_search'))
-            ->paginate(15);
-
-        $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
-        $profileManage = ProfileManage::orderBy('name', 'ASC')->get();
+        $replacementStaff = ReplacementStaff::latest()
+            ->search($request->input('search'),
+                    $request->input('profile_search'),
+                    $request->input('profession_search'))
+            ->paginate(5);
 
         if($request->search != NULL || $request->profile_search != 0 || $request->profession_search != 0){
-            return view('replacement_staff.request.technical_evaluation.edit',
-                compact('technicalEvaluation', 'users', 'request', 'replacementStaff',
-                        'professionManage', 'profileManage', 'users_rys'));
-            //return redirect()->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#applicant');
-            // return redirect()
-            //   ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#applicant')
-            //   ->withInput();
+            // return view('replacement_staff.request.technical_evaluation.edit',
+            //     compact('technicalEvaluation', 'users', 'request', 'replacementStaff',
+            //             'professionManage', 'profileManage', 'users_rys'));
+
+            //return \Redirect::route('regions', ['id'=>$id,'OTHER_PARAM'=>'XXX',...])->with('message', 'State saved correctly!!!');
+
+            return redirect()
+               ->to(route('replacement_staff.request.technical_evaluation.edit',['technicalEvaluation' => $technicalEvaluation]).'#applicant');
+
+
+            // return redirect('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation)->withInput();
         }
         else{
             return view('replacement_staff.request.technical_evaluation.edit',
                 compact('technicalEvaluation', 'users', 'request', 'replacementStaff',
-                        'professionManage', 'profileManage', 'users_rys'));
+                        'users_rys'));
         }
     }
 
