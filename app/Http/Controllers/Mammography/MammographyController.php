@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Mammography;
 
 use App\Models\Mammography\Mammography;
 use App\Models\Mammography\MammographySlot;
+use App\Models\Mammography\MammographyDay;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
@@ -153,21 +154,21 @@ class MammographyController extends Controller
     }
 
     public function slots(Request $request) {
-        $records=null;
-        if($request->input('search'))
-        {
-        $records = Mammography::search($request->input('search'))->get();
-        }
-        $slots = MammographySlot::whereBetween('start_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])->get();
-        foreach($slots as $slot) {
-            $bookings = Vaccination::where('first_dose',$slot->start_at)->orWhere('second_dose',$slot->start_at)->get();
-            $slot->bookings = $bookings;
-        }
-
-        $arrivals = Mammography::orderBy('arrival_at')
-            ->whereBetween('arrival_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])
-            ->get();
-        return view('vaccination.slots',compact('slots','arrivals','records'));
+        // $records=null;
+        // if($request->input('search'))
+        // {
+        // $records = Mammography::search($request->input('search'))->get();
+        // }
+        // $slots = MammographySlot::whereBetween('start_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])->get();
+        // foreach($slots as $slot) {
+        //     $bookings = Vaccination::where('first_dose',$slot->start_at)->orWhere('second_dose',$slot->start_at)->get();
+        //     $slot->bookings = $bookings;
+        // }
+        //
+        // $arrivals = Mammography::orderBy('arrival_at')
+        //     ->whereBetween('arrival_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])
+        //     ->get();
+        // return view('vaccination.slots',compact('slots','arrivals','records'));
     }
 
     public function export(){
@@ -211,5 +212,13 @@ class MammographyController extends Controller
             fclose($file);
         };
         return response()->stream($callback, 200, $headers);
+    }
+
+    public function schedule(Request $request){
+        $mammograms = Mammography::whereDate('exam_date', $request->search)->get();
+
+        $day = MammographyDay::whereDate('day', $request->search)->first();
+
+        return view('mammography.schedule',compact('day', 'request', 'mammograms'));
     }
 }
