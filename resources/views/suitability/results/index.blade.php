@@ -18,6 +18,17 @@
             </select>
         </fieldset>
 
+        <fieldset class="form-group col-2 col-md-2">
+            <label for="for_year">Estados</label>
+            <select name="estado" class="form-control selectpicker" >
+                <option value="">Todos los estados</option>
+                @php($states = array('Aprobado', 'Esperando Test', 'Test Finalizado'))
+                @foreach($states as $state)
+                <option value="{{$state}}" @if(isset($estado) && $estado == $state) selected @endif >{{$state}}</option>
+                @endforeach
+            </select>
+        </fieldset>
+
         <fieldset class="form-group col-2 col-md-1">
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
@@ -38,7 +49,8 @@
                 <th>Cargo</th>
                 <th>Total de Puntos</th>
                 <th>Hora de Termino de Test</th>
-                <th>Estado</th>
+                <th>Estado <a tabindex="0" role="button" data-toggle="popover" data-trigger="hover" data-html="true" title="" data-content="Aprobados:  {{$count['Aprobado'] ?? 0}} <br> Esperando Test: {{$count['Esperando Test'] ?? 0}} <br> Test Finalizados: {{$count['Test Finalizado'] ?? 0}}">
+            <i class="fas fa-info-circle" aria-hidden="true"></i></a></th>
                 <th>Ver Test</th>
                 <!-- <th>Ver Certificado (Aprobados)</th> -->
                 <!-- <th>Enviar a Firmar</th> -->
@@ -101,6 +113,10 @@
     @endsection
 
     @section('custom_js')
-
+    <script>
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+    </script>
 
     @endsection
