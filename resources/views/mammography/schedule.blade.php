@@ -17,27 +17,29 @@
     </div>
 </form>
 
-@foreach($day->slots as $slot)
-<div class="card">
-    <div class="card-header">
-        <i class="fas fa-clock"></i> {{ $slot->start_at->format('H:i:s') }} - <span class="badge bg-warning text-dark">Nº Cupos {{ $slot->available }}</span>
+@if($day)
+  @foreach($day->slots as $slot)
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-clock"></i> {{ $slot->start_at->format('H:i:s') }} - <span class="badge bg-warning text-dark">Nº Cupos {{ $slot->available }}</span>
+        </div>
+        <div class="card-body">
+            @foreach($mammograms as $mammography)
+
+                @if($slot->start_at == $mammography->exam_date)
+
+                  <div class="list-group">
+                    <a class="list-group-item list-group-item-action">
+                      <i class="fas fa-user"></i> {{ $mammography->runFormat }} - {{ $mammography->fullName() }}
+                    </a>
+                  </div>
+                @endif
+            @endforeach
+
+        </div>
     </div>
-    <div class="card-body">
-        @foreach($mammograms as $mammography)
-
-            @if($slot->start_at == $mammography->exam_date)
-
-              <div class="list-group">
-                <a class="list-group-item list-group-item-action">
-                  <i class="fas fa-user"></i> {{ $mammography->runFormat }} - {{ $mammography->fullName() }}
-                </a>
-              </div>
-            @endif
-        @endforeach
-
-    </div>
-</div>
-@endforeach
+  @endforeach
+@endif
 
 @endsection
 
