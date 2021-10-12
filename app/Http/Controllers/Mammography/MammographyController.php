@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Mammography;
 
 use App\Models\Mammography\Mammography;
 use App\Models\Mammography\MammographySlot;
+use App\Models\Mammography\MammographyDay;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
@@ -153,20 +154,71 @@ class MammographyController extends Controller
     }
 
     public function slots(Request $request) {
-        $records=null;
-        if($request->input('search'))
-        {
-        $records = Mammography::search($request->input('search'))->get();
-        }
-        $slots = MammographySlot::whereBetween('start_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])->get();
-        foreach($slots as $slot) {
-            $bookings = Vaccination::where('first_dose',$slot->start_at)->orWhere('second_dose',$slot->start_at)->get();
-            $slot->bookings = $bookings;
-        }
+        // $records=null;
+        // if($request->input('search'))
+        // {
+        // $records = Mammography::search($request->input('search'))->get();
+        // }
+        // $slots = MammographySlot::whereBetween('start_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])->get();
+        // foreach($slots as $slot) {
+        //     $bookings = Vaccination::where('first_dose',$slot->start_at)->orWhere('second_dose',$slot->start_at)->get();
+        //     $slot->bookings = $bookings;
+        // }
+        //
+        // $arrivals = Mammography::orderBy('arrival_at')
+        //     ->whereBetween('arrival_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])
+        //     ->get();
+        // return view('vaccination.slots',compact('slots','arrivals','records'));
+    }
 
-        $arrivals = Mammography::orderBy('arrival_at')
-            ->whereBetween('arrival_at',[date('Y-m-d 00:00:00'),date('Y-m-d 23:59:59')])
+    public function export(){
+
+        $headers = array(
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=listado_personal_con_reserva_mamografia.csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        );
+
+        $filas = Mammography::where('exam_date', '!=', NULL)
+            ->orderBy('exam_date', 'ASC')
             ->get();
-        return view('vaccination.slots',compact('slots','arrivals','records'));
+
+        $columnas = array(
+            'ID',
+            'RUN',
+            'Nombre',
+            'A.Paterno',
+            'A.Materno',
+            'Dia de Reserva'
+        );
+
+        $callback = function() use ($filas, $columnas)
+        {
+            $file = fopen('php://output', 'w');
+            fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+            fputcsv($file, $columnas,';');
+            foreach($filas as $fila) {
+                fputcsv($file, array(
+                    $fila->id,
+                    $fila->runFormat,
+                    $fila->name,
+                    $fila->fathers_family,
+                    $fila->mothers_family,
+                    $fila->exam_date,
+                ),';');
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function schedule(Request $request){
+        $mammograms = Mammography::whereDate('exam_date', $request->search)->get();
+
+        $day = MammographyDay::whereDate('day', $request->search)->first();
+
+        return view('mammography.schedule',compact('day', 'request', 'mammograms'));
     }
 }
