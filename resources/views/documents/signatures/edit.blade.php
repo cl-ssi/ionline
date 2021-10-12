@@ -55,9 +55,9 @@
 
     <div class="form-row">
         <fieldset class="form-group col">
-            <label for="for_document">Documento a distribuir</label>
+            <label for="for_document">Documento a distribuir (pdf)</label>
             <input type="file" class="form-control" id="for_document" accept="application/pdf" name="document">
-            <a href="{{route('documents.signatures.showPdf', [$signature->signaturesFileDocument, time()]           
+            <a href="{{route('documents.signatures.showPdf', [$signature->signaturesFileDocument, time()]
                 )}}" target="_blank" data-toggle="tooltip" data-placement="top" data-original-title="">Documento <i class="fas fa-paperclip"></i>&nbsp
             </a>
         </fieldset>
@@ -88,7 +88,7 @@
 
     <div class="form-row">
 
-      
+
 
         <fieldset class="form-group col">
             <label for="for_distribution">Distribución del documento (separados por coma)</label>
@@ -164,5 +164,31 @@
 @endsection
 
 @section('custom_js')
+    <script type="text/javascript">
+        $('#for_document').bind('change', function() {
+            //Validación de tamaño
+            if((this.files[0].size / 1024 / 1024) > 3){
+                alert('No puede cargar un pdf de mas de 3 MB.');
+                $('#for_document').val('');
+            }
 
+            //Validación de pdf
+            const allowedExtension = ".pdf";
+            let hasInvalidFiles = false;
+
+            for (let i = 0; i < this.files.length; i++) {
+                let file = this.files[i];
+
+                if (!file.name.endsWith(allowedExtension)) {
+                    hasInvalidFiles = true;
+                }
+            }
+
+            if(hasInvalidFiles) {
+                $('#for_document').val('');
+                alert("Debe seleccionar un archivo pdf.");
+            }
+        });
+
+    </script>
 @endsection

@@ -81,7 +81,7 @@
                            form="showPdf">
                     <input type="hidden" name="md5_file" value="{{$signature->signaturesFileDocument->md5_file}}">
                 @else
-                    <label for="for_document">Documento a distribuir</label>
+                    <label for="for_document">Documento a distribuir (pdf)</label>
                     <input type="file" class="form-control" id="for_document" name="document" accept="application/pdf" required>
                 @endif
 
@@ -119,7 +119,7 @@
 
         <div class="form-row">
 
-       
+
 
             <fieldset class="form-group col">
                 <label for="for_distribution">Distribución del documento (separados por coma)</label>
@@ -157,10 +157,29 @@
         }
 
         $('#for_document').bind('change', function() {
+            //Validación de tamaño
             if((this.files[0].size / 1024 / 1024) > 3){
                 alert('No puede cargar un pdf de mas de 3 MB.');
                 $('#for_document').val('');
             }
+
+            //Validación de pdf
+            const allowedExtension = ".pdf";
+            let hasInvalidFiles = false;
+
+            for (let i = 0; i < this.files.length; i++) {
+                let file = this.files[i];
+
+                if (!file.name.endsWith(allowedExtension)) {
+                    hasInvalidFiles = true;
+                }
+            }
+
+            if(hasInvalidFiles) {
+                $('#for_document').val('');
+                alert("Debe seleccionar un archivo pdf.");
+            }
+
         });
 
     </script>
