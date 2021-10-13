@@ -126,7 +126,7 @@ class ProgrammingController extends Controller
 
         //     }
         // }
-        return view('programmings/programmings/index')->withProgrammings($programmings)->withRequest($request)->withCommunes($communes);
+        return view('programmings/programmings/index', compact('programmings', 'request', 'communes'));
     }
 
     public function create() 
@@ -134,8 +134,7 @@ class ProgrammingController extends Controller
         $establishments = Establishment::whereIn('type',['CESFAM','CGR']) // Solo centros de salud familiar
                                        ->OrderBy('name')->get(); 
         $users = User::where('position', 'Funcionario Programación')->OrderBy('name')->get(); // Sólo funcionario Programación
-        return view('programmings/programmings/create')->withEstablishments($establishments)
-                                                       ->withUsers($users);
+        return view('programmings/programmings/create', compact('establishments', 'users'));
     }
 
     public function store(Request $request)
@@ -172,12 +171,8 @@ class ProgrammingController extends Controller
         $users = User::with('organizationalUnit')->where('position', 'Funcionario Programación')->OrderBy('name')->get(); // Sólo Funcionario Programación
         $access_list = unserialize($programming->access);
         $user = $programming->user;
-        return view('programmings/programmings/show')->withProgramming($programming)
-                                                    ->with('access_list', $access_list)
-                                                    ->with('user', $user)
-                                                    ->withEstablishments($establishments)
-                                                    ->withCommunes($communes)
-                                                    ->withUsers($users);
+
+        return view('programmings/programmings/show', compact('programming', 'access_list', 'user', 'establishments', 'communes', 'users'));
     }
 
     public function update(Request $request, Programming $programming)
@@ -187,6 +182,7 @@ class ProgrammingController extends Controller
         $programming->user_id  = $request->user;
         $programming->access   = serialize($request->access);
         $programming->save();
+        
         return redirect()->back();
     }
 

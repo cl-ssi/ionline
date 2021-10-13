@@ -424,12 +424,12 @@ class ProgrammingItemController extends Controller
             $activityItemsSelect = null;
         }
         $establishments      = Establishment::where('type','CESFAM')->OrderBy('name')->get();
-        $communes            = Commune::All()->SortBy('name');
+        // $communes            = Commune::All()->SortBy('name');
         $ministerialPrograms = MinisterialProgram::All()->SortBy('name');
         $actionTypes         = ActionType::All()->SortBy('name');
         $activityItems       = ActivityItem::All()->SortBy('name');
         $programmingDay      = ProgrammingDay::where('programming_id',$programmingitem->programming_id)->first();
-        $programmingItem     = ProgrammingItem::where('id',$request->id)->first();
+        // $programmingItem     = ProgrammingItem::where('id',$request->id)->first();
         //dd($programmingitem);
 
         $professionalHoursSel = ProfessionalHour::select(
@@ -499,8 +499,8 @@ class ProgrammingItemController extends Controller
 
     public function update(Request $request, ProgrammingItem $programmingitem)
     {
-        $programmingitem->fill($request->all());
-        $programmingitem->save();
+        $programmingitem->update($request->all());
+        session()->flash('success', 'El registro se ha editado correctamente');
         return redirect()->back();
     }
 
