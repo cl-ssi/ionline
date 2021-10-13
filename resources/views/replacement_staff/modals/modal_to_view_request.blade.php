@@ -72,7 +72,7 @@
                                 <span style="color: green;">
                                   <i class="fas fa-check-circle"></i> {{ $requestSign->StatusValue }} </span><br>
                                 <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
-                                <i class="fas fa-calendar-alt"></i> {{ $requestSign->date_sign->format('d-m-Y H:i:s') }}<br>
+                                <i class="fas fa-calendar-alt"></i> {{ ($requestSign->date_sign) ? $requestSign->date_sign->format('d-m-Y H:i:s') : '' }}<br>
                             @endif
                             @if($requestSign->request_status == 'rejected')
                                 <span style="color: Tomato;">

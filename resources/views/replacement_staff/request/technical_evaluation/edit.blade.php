@@ -16,13 +16,11 @@
         <tbody class="small">
             <tr>
                 <th class="table-active">Por medio del presente, la Subdirección</th>
-                <td colspan="2">
-                    @foreach($technicalEvaluation->requestReplacementStaff->RequestSign as $sing)
-                        @if($sing->ou_alias == 'sub')
-                            {{ $sing->organizationalUnit->name }}
-                        @endif
-                    @endforeach
-                </td>
+                <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->organizationalUnit->name }}</td>
+            </tr>
+            <tr>
+                <th class="table-active">Nombre de Cargo</th>
+                <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->name }}</td>
             </tr>
             <tr>
                 <th class="table-active">En el grado</th>
@@ -56,8 +54,8 @@
             </tr>
             <tr>
                 @foreach($technicalEvaluation->requestReplacementStaff->RequestSign as $sign)
-                  <td class="table-active">
-                      {{ $sign->organizationalUnit->name }}<br>
+                  <td class="table-active text-center">
+                      <strong>{{ $sign->organizationalUnit->name }}
                   </td>
                 @endforeach
             </tr>

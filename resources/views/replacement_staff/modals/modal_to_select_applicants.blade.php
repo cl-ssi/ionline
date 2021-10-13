@@ -46,18 +46,20 @@
                     </table>
                 </div>
 
-                <hr>
-
+                <div class="card">
+                  <div class="card-body">
+                    <h6>Fecha Efectiva de Ingreso</h6>
+                    <br>
                     <div class="form-row">
                         <fieldset class="form-group col-3">
                             <label for="for_start_date">Desde</label>
                             <input type="date" class="form-control" name="start_date"
-                              id="for_start_date" required>
+                                  id="for_start_date" value="{{ $technicalEvaluation->requestReplacementStaff->start_date->format('Y-m-d')  }}" required>
                         </fieldset>
                         <fieldset class="form-group col-3">
                             <label for="for_end_date">Hasta</label>
                             <input type="date" class="form-control" name="end_date"
-                              id="for_end_date" required>
+                                id="for_end_date" required>
                         </fieldset>
                         <fieldset class="form-group col-sm-6">
                             <label for="for_place_of_performance">Lugar de Desempeño</label>
@@ -72,11 +74,14 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>
-                </form>
-                <br><br>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                  </div>
                 </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
