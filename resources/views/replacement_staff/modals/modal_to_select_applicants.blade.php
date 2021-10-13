@@ -35,7 +35,7 @@
                                 <td>
                                   <fieldset class="form-group">
                                       <div class="form-check">
-                                          <input class="form-check-input" type="checkbox" name="applicant_id[]"
+                                          <input class="form-check-input" type="checkbox" name="applicant_id[]" onclick="myFunction()" id="for_applicant_id"
                                               value="{{ $applicant->id }}">
                                       </div>
                                   </fieldset>
@@ -59,11 +59,11 @@
                         <fieldset class="form-group col-3">
                             <label for="for_end_date">Hasta</label>
                             <input type="date" class="form-control" name="end_date"
-                                id="for_end_date" required>
+                                id="for_end_date" value="{{ $technicalEvaluation->requestReplacementStaff->end_date->format('Y-m-d')  }}" required>
                         </fieldset>
                         <fieldset class="form-group col-sm-6">
                             <label for="for_place_of_performance">Lugar de Desempeño</label>
-                            <input type="text" class="form-control" name="place_of_performance" id="for_rplace_of_performance" value="{{ $applicant->place_of_performance }}">
+                            <input type="text" class="form-control" name="place_of_performance" id="for_replace_of_performance" value="{{ $applicant->place_of_performance }}">
                         </fieldset>
                     </div>
                     <div class="form-row">
@@ -73,7 +73,7 @@
                         </fieldset>
                     </div>
 
-                    <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>
+                    <button type="submit" class="btn btn-primary float-right" id="save_btn"><i class="fas fa-save"></i> Guardar</button>
                   </div>
                 </div>
 
@@ -86,3 +86,20 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+
+document.getElementById("save_btn").disabled = true;
+
+function myFunction() {
+  // Get the checkbox
+  var checkBox = document.getElementById("for_applicant_id");
+
+  // If the checkbox is checked, display the output text
+  if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){
+    document.getElementById("save_btn").disabled = false;
+  } else {
+    document.getElementById("save_btn").disabled = true;
+  }
+}
+</script>
