@@ -45,7 +45,7 @@
         @endcan
             <td >{{ $communeFile->id }}</td>
             <td>{{ $communeFile->year }}</td>
-            <td>{{ $communeFile->commune }}</td>
+            <td>{{ $communeFile->commune->name }}</td>
             <td>{{ $communeFile->description }}</td>
             <td>
                 <label for="for">
