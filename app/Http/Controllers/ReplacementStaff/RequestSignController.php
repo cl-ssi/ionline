@@ -84,8 +84,8 @@ class RequestSignController extends Controller
             $requestSign->save();
 
             $nextRequestSign = $requestSign->requestReplacementStaff->requestSign->where('position', $requestSign->position + 1);
-
             if(!$nextRequestSign->isEmpty()){
+
               $nextRequestSign = $requestSign->requestReplacementStaff->requestSign->where('position', $requestSign->position + 1)->first();
               $nextRequestSign->request_status = 'pending';
               $nextRequestSign->save();
