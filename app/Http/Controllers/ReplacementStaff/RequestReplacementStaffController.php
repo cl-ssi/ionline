@@ -321,17 +321,34 @@ class RequestReplacementStaffController extends Controller
                         $request_sing->position = '1';
                         $request_sing->ou_alias = 'leadership';
                         $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
+                        $request_sing->user_id = $user_id;
                         $request_sing->request_status = 'accepted';
+                        $request_sing->date_sign = Carbon::now();
                     }
                     if ($i == 2) {
                       $request_sing->position = '2';
                       $request_sing->ou_alias = 'sub';
                       $request_sing->organizational_unit_id = $uo_request->father->id;
                       $request_sing->request_status = 'pending';
+
+                      // AQUI ENVIAR NOTIFICACIÓN DE CORREO ELECTRONICO AL NUEVO VISADOR.
+
+                      //manager
+                      $type = 'manager';
+                      $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, Carbon::now(), $type);
+                      //secretary
+                      $type_adm = 'secretary';
+                      $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, Carbon::now(), $type_adm);
+
+                      $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
+
+                      Mail::to($emails)
+                        ->cc(env('APP_RYS_MAIL'))
+                        ->send(new NotificationSign($request_replacement));
                     }
 
                     if ($i == 3) {
-                        $request_sing->position = '2';
+                        $request_sing->position = '3';
                         $request_sing->ou_alias = 'sub_rrhh';
                         $request_sing->organizational_unit_id = 44;
                     }

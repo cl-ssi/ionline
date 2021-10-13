@@ -38,7 +38,6 @@ class ApplicantController extends Controller
      */
     public function store(Request $request, TechnicalEvaluation $technicalEvaluation)
     {
-
         if ($request->missing('replacement_staff_id')) {
             return redirect()
               ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#applicant')
@@ -46,9 +45,10 @@ class ApplicantController extends Controller
         }
         else{
             foreach ($request->replacement_staff_id as $key_file => $req) {
-                $exist = Applicant::where('replacement_staff_id', $req)->
-                    Where('technical_evaluation_id', $technicalEvaluation->id)->
-                    get();
+                $exist = Applicant::where('replacement_staff_id', $req)
+                    ->Where('technical_evaluation_id', $technicalEvaluation->id)
+                    ->get();
+
                 if($exist->isEmpty()){
                     $applicant = new Applicant();
                     $applicant->replacement_staff_id = $req;
