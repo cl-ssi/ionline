@@ -233,7 +233,7 @@ class ShowTotalHours extends Component
                 $businessDays = $this->fulfillment->serviceRequest->start_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
                     return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
                 }, $this->fulfillment->serviceRequest->end_date);
-                $businessDays = $businessDays+1;
+                // $businessDays = $businessDays+1;
                 //dd($businessDays);
 
                 //$prueba = $this->fulfillment->serviceRequest->start_date->diffInDays()
@@ -314,15 +314,15 @@ class ShowTotalHours extends Component
 
                 $this->refundHours = round(($workingHoursInMonth - $this->totalHoursDay), 0);
                 $this->totalHours = $this->refundHours + $this->totalHoursNight;
-                // dd($this->totalHoursNight);
-                //dd($this->refundHours);
-                // dd($value->amount);
+
                 // $totalAmountNight = $this->totalHoursNight * ($value->amount * 1.5);
                 // $totalAmountDayRefund = $this->refundHours * $value->amount;
-                $totalAmountNight = $this->totalHoursNight * $value * 1.5;
-                $totalAmountDayRefund = $this->refundHours * $value;
+                // dd($this->totalHoursNight, $this->refundHours);
                 
-                $this->totalAmount = $totalAmountNight - $totalAmountDayRefund;
+                $totalAmountNight = $this->totalHoursNight * $value;
+                $totalAmountDayRefund = $this->refundHours * $value / 1.5;
+
+                $this->totalAmount = ($totalAmountNight - $totalAmountDayRefund);
                 break;
         }
         return view('livewire.service-request.show-total-hours');

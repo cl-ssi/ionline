@@ -125,6 +125,12 @@
                         <a href="{{ route('replacement_staff.request.technical_evaluation.edit', $requestReplacementStaff->technicalEvaluation) }}"
                               class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i></a>
                         </span>
+                    @else
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                            data-target="#exampleModalCenter-req-{{ $requestReplacementStaff->id }}">
+                          <i class="fas fa-eye"></i>
+                        </button>
+                        @include('replacement_staff.modals.modal_to_view_request')
                     @endif
                 </td>
             </tr>
