@@ -204,7 +204,7 @@ class SignatureController extends Controller
         $dest_vec = array_map('trim', explode(',', $destinatarios));
 
         foreach($dest_vec as $dest){
-            if($dest== 'director.ssi@redsalud.gob.cl' or $dest=='director.ssi@redsalud.gov.cl')
+            if($dest== 'director.ssi@redsalud.gob.cl' or $dest=='director.ssi@redsalud.gov.cl' or $dest=='director.ssi1@redsalud.gob.cl')
             {
                 $tipo = null;
                 $generador = Auth::user()->full_name;
