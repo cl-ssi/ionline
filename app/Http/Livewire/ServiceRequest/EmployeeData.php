@@ -20,9 +20,9 @@ class EmployeeData extends Component
 
         if ($this->user_id > 3000000) {
           $user = User::find($this->user_id);
-          $this->email = $user->email;
-          
-          if ($user == null) {
+          if ($user) {
+            $this->email = $user->email;
+          }else{
             // validación correo
             if ($this->email != null) {
               $user = User::where('email',$this->email)->first();

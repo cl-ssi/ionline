@@ -13,10 +13,10 @@
     <div class="form-row">
         <fieldset class="form-group col-6 col-md-6">
             <label for="for_year">Colegios</label>
-            <select name="colegio" class="form-control selectpicker" data-live-search="true" >
+            <select name="colegio" class="form-control selectpicker" data-live-search="true">
                 <option value="">Todos Los Colegios</option>
                 @foreach($schools as $school)
-                <option value="{{$school->id}}" @if($school_id == $school->id) selected @endif >{{$school->name}}</option>
+                <option value="{{$school->id}}" @if($school_id==$school->id) selected @endif >{{$school->name}}</option>
                 @endforeach
             </select>
         </fieldset>
@@ -27,43 +27,55 @@
         </fieldset>
     </div>
 
-</forn>
+    </forn>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Solicitud N°</th>
-            <th>Colegio</th>
-            <th>Run</th>
-            <th>Nombre Completo</th>
-            <th>Cargo</th>
-            <th>Correo</th>
-            <th>Telefono</th>
-            <th>Estado</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach($psirequests as $psirequest)
-        <tr>
-            <td>{{$psirequest->id}}</td>
-            <td>{{$psirequest->school->name}}</td>
-            <td>{{$psirequest->user_external_id}}</td>
-            <td>{{$psirequest->user->fullName}}</td>
-            <td>{{$psirequest->job}}</td>
-            <td>{{$psirequest->user->email}}</td>
-            <td>{{$psirequest->user->phone_number}}</td>
-            <td>{{$psirequest->status}}</td>
-        </tr>
-    @endforeach
-        
-    </tbody>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Solicitud N°</th>
+                <th>Colegio</th>
+                <th>Run</th>
+                <th>Nombre Completo</th>
+                <th>Cargo</th>
+                <th>Correo</th>
+                <th>Telefono</th>
+                <th>Estado</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($psirequests as $psirequest)
+            <tr>
+                <td>{{$psirequest->id}}</td>
+                <td>{{$psirequest->school->name}}</td>
+                <td>{{$psirequest->user_external_id}}</td>
+                <td>{{$psirequest->user->fullName}}</td>
+                <td>{{$psirequest->job}}</td>
+                <td>{{$psirequest->user->email}}</td>
+                <td>{{$psirequest->user->phone_number}}</td>
+                <td>{{$psirequest->status}}</td>
+                <td>
+                    @if($psirequest->status == 'Esperando Test')
+                    <form method="POST" action="{{ route('suitability.destroy', $psirequest) }}" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('¿Está seguro de eliminar esta solicitud de idoneidad?')">
+                            <span class="fas fa-trash-alt" aria-hidden="true"></span>
+                        </button>
+                    </form>
+                    @endif
 
-</table>
+                </td>
+            </tr>
+            @endforeach
+
+        </tbody>
+
+    </table>
 
 
-@endsection
+    @endsection
 
-@section('custom_js')
+    @section('custom_js')
 
-@endsection
+    @endsection
