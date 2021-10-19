@@ -63,15 +63,18 @@ class SignatureController extends Controller
         if ($tab == 'pendientes') {
             $pendingSignaturesFlows = SignaturesFlow::whereIn('user_id', $users)
                 ->whereNull('status')
-                ->whereHas('signaturesFile', function ($q) {
-                    $q->whereHas('signature', function ($q) {
-                        $q->whereNull('rejected_at');
-                    });
+                ->whereHas('signaturesFile.signature', function ($q) {
+                    $q->whereNull('rejected_at');
                 })
                 ->get();
 
             $signedSignaturesFlows = SignaturesFlow::whereIn('user_id', $users)
-                ->whereNotNull('status')
+                ->where(function ($q) {
+                    $q->whereNotNull('status')
+                        ->orWhereHas('signaturesFile.signature', function ($q) {
+                            $q->whereNotNull('rejected_at');
+                        });
+                })
                 ->orderByDesc('id')
                 ->paginate(20);
         }
@@ -187,7 +190,7 @@ class SignatureController extends Controller
                     Mail::to($signaturesFlow->userSigner->email)
                         ->send(new NewSignatureRequest($signaturesFlow));
                 }
-            }elseif($signature->signaturesFlowVisator->where('sign_position',1)->count() === 1){
+            } elseif ($signature->signaturesFlowVisator->where('sign_position', 1)->count() === 1) {
                 $firstVisatorFlow = $signature->signaturesFlowVisator->where('sign_position', 1)->first();
                 Mail::to($firstVisatorFlow->userSigner->email)
                     ->send(new NewSignatureRequest($firstVisatorFlow));
@@ -208,49 +211,47 @@ class SignatureController extends Controller
         $destinatarios = $request->recipients;
         $dest_vec = array_map('trim', explode(',', $destinatarios));
 
-        foreach($dest_vec as $dest){
-            if($dest== 'director.ssi@redsalud.gob.cl' or $dest=='director.ssi@redsalud.gov.cl' or $dest=='director.ssi1@redsalud.gob.cl')
-            {
+        foreach ($dest_vec as $dest) {
+            if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl') {
                 $tipo = null;
                 $generador = Auth::user()->full_name;
                 $unidad = Auth::user()->organizationalUnit->name;
 
-                switch($request->document_type)
-                    {
-                        case 'Memorando':
-                            $this->tipo ='Memo';
+                switch ($request->document_type) {
+                    case 'Memorando':
+                        $this->tipo = 'Memo';
                         break;
-                        case 'Resoluciones':
-                            $this->tipo ='Resolución';
+                    case 'Resoluciones':
+                        $this->tipo = 'Resolución';
                         break;
-                        default:
+                    default:
                         $this->tipo = $request->document_type;
                         break;
-                    }
+                }
 
                 $parte = Parte::create([
                     'entered_at' => Carbon::now(),
                     'type' => $this->tipo,
                     'date' => $request->request_date,
                     'subject' => $request->subject,
-                    'origin' => $unidad.' (Parte generado desde Solicitud de Firma N°'.$signature->id.' por '.$generador.')',
+                    'origin' => $unidad . ' (Parte generado desde Solicitud de Firma N°' . $signature->id . ' por ' . $generador . ')',
                 ]);
 
                 $distribucion = SignaturesFile::where('signature_id', $signature->id)->where('file_type', 'documento')->get();
                 ParteFile::create([
                     'parte_id' => $parte->id,
                     'file' => $distribucion->first()->file,
-                    'name' => $distribucion->first()->id.'.pdf',
+                    'name' => $distribucion->first()->id . '.pdf',
                 ]);
 
                 $signaturesFiles = SignaturesFile::where('signature_id', $signature->id)->where('file_type', 'anexo')->get();
-                    foreach ($signaturesFiles as $key => $sf) {
-                        ParteFile::create([
-                            'parte_id' => $parte->id,
-                            'file' => $sf->file,
-                            'name' => $sf->id.'.pdf',
-                            'signature_file_id' => $sf->id,
-                        ]);
+                foreach ($signaturesFiles as $key => $sf) {
+                    ParteFile::create([
+                        'parte_id' => $parte->id,
+                        'file' => $sf->file,
+                        'name' => $sf->id . '.pdf',
+                        'signature_file_id' => $sf->id,
+                    ]);
                 }
             }
         }
