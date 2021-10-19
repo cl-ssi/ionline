@@ -62,7 +62,12 @@ class SignatureController extends Controller
 
         if ($tab == 'pendientes') {
             $pendingSignaturesFlows = SignaturesFlow::whereIn('user_id', $users)
-                ->where('status', null)
+                ->whereNull('status')
+                ->whereHas('signaturesFile', function ($q) {
+                    $q->whereHas('signature', function ($q) {
+                        $q->whereNull('rejected_at');
+                    });
+                })
                 ->get();
 
             $signedSignaturesFlows = SignaturesFlow::whereIn('user_id', $users)
@@ -209,7 +214,7 @@ class SignatureController extends Controller
                 $tipo = null;
                 $generador = Auth::user()->full_name;
                 $unidad = Auth::user()->organizationalUnit->name;
-                
+
                 switch($request->document_type)
                     {
                         case 'Memorando':
@@ -223,8 +228,8 @@ class SignatureController extends Controller
                         break;
                     }
 
-                $parte = Parte::create([                    
-                    'entered_at' => Carbon::now(),           
+                $parte = Parte::create([
+                    'entered_at' => Carbon::now(),
                     'type' => $this->tipo,
                     'date' => $request->request_date,
                     'subject' => $request->subject,
@@ -237,9 +242,9 @@ class SignatureController extends Controller
                     'file' => $distribucion->first()->file,
                     'name' => $distribucion->first()->id.'.pdf',
                 ]);
-                
+
                 $signaturesFiles = SignaturesFile::where('signature_id', $signature->id)->where('file_type', 'anexo')->get();
-                    foreach ($signaturesFiles as $key => $sf) {                        
+                    foreach ($signaturesFiles as $key => $sf) {
                         ParteFile::create([
                             'parte_id' => $parte->id,
                             'file' => $sf->file,
@@ -403,8 +408,8 @@ class SignatureController extends Controller
                 $signaturesFile->parteFile->event->delete();
             }
             $signaturesFile->delete();
-            
-            
+
+
         }
         $signature->delete();
 
@@ -484,8 +489,10 @@ class SignatureController extends Controller
 
     public function rejectSignature(Request $request, $idSignatureFlow)
     {
-        $idSigFlow = SignaturesFlow::find($idSignatureFlow);
-        $idSigFlow->update(['status' => 0, 'observation' => $request->observacion]);
+        $signatureFlow = SignaturesFlow::find($idSignatureFlow);
+        $signatureFlow->update(['status' => 0, 'observation' => $request->observacion]);
+        $signatureFlow->signature()->update(['rejected_at' => now()]);
+
         session()->flash('success', "La solicitud ha sido rechazada");
         return redirect()->route('documents.signatures.index', ['pendientes']);
     }
