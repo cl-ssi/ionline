@@ -71,6 +71,13 @@ class SuitabilityController extends Controller
         return view('suitability.rejected', compact('psirequests'));
     }
 
+    public function destroy(PsiRequest $psirequest)
+    {
+        $psirequest->delete();
+        session()->flash('danger', 'La solicitud de idoneidad ha sido eliminado');
+        return redirect()->back();
+    }
+
     public function finalresult(PsiRequest $psirequest, $result)
     {
 

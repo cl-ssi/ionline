@@ -9,12 +9,11 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Suitability\Result;
 use App\Models\ServiceRequests\ServiceRequest;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
-    use Notifiable;
-    use HasRoles;
-    use SoftDeletes;
+    use Notifiable, HasRoles, SoftDeletes, HasFactory;
 
     /**
     * El id no es incremental ya que es el run sin digito verificador
