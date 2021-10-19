@@ -23,11 +23,6 @@ class EmployeeData extends Component
           if ($user) {
             $this->email = $user->email;
           }else{
-            $this->email = "";
-          }
-
-
-          if ($user == null) {
             // validación correo
             if ($this->email != null) {
               $user = User::where('email',$this->email)->first();
