@@ -55,7 +55,7 @@
                 <td>{{$psirequest->user->phone_number}}</td>
                 <td>{{$psirequest->status}}</td>
                 <td>
-                    @if($psirequest->status == 'Esperando Test')
+                    @if($psirequest->status == 'Esperando Test' or $psirequest->status == 'Test Finalizado')
                     <form method="POST" action="{{ route('suitability.destroy', $psirequest) }}" class="d-inline">
                         @csrf
                         @method('DELETE')
