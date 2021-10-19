@@ -157,7 +157,9 @@
             </tbody>
         </table>
 
-        <h4>Firmados</h4>
+        <br/>
+
+        <h4>Firmados/Rechazados</h4>
 
         <table class="table table-striped table-sm table-bordered">
             <thead>
@@ -186,10 +188,10 @@
                     <td>
                         @if($signedSignaturesFlow->status === 1)
                             <p class="text-success">Aceptada</p>
-                        @elseif($signedSignaturesFlow->status === 0)
+                        @elseif($signedSignaturesFlow->status === 0 or $signedSignaturesFlow->signature->rejected_at != null)
                             <p class="text-danger">Rechazada</p>
                         @else Pendiente @endif
-                    </td>                    
+                    </td>
                     <td>
                     @if($signedSignaturesFlow->signature)
                         <button id="btnFlowsModal" type="button" class="btn btn-sm btn-outline-primary"
@@ -214,10 +216,10 @@
                     </td>
                    <td>@if($signedSignaturesFlow->signature)
                         @foreach($signedSignaturesFlow->signature->signaturesFiles->where('file_type', 'anexo') as $anexo)
-                        
+
                             <a href="{{route('documents.signatures.showPdfAnexo', $anexo)}}"
                                target="_blank"><i class="fas fa-paperclip" title="anexo"></i>&nbsp
-                            </a>                        
+                            </a>
                         @endforeach
                         @endif
                     </td>
