@@ -22,17 +22,11 @@ class TestController extends Controller
             $ip = $_SERVER['REMOTE_ADDR'];
         }
         
-        Storage::disk('local')->prepend('log_ips.txt', $ip);
+        //Storage::disk('local')->prepend('log_ips.txt', $ip);
 
         return $ip;
 
-        //dd($events);
-	    // return view('test.ip')
-        //     ->withResources($resources)
-        //     ->withEvents($events);
     }
-
-
 
     /*
     curl -X PATCH -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/cl-ssi/urgency/issues/22 -d '{"title":"Second Up"}'
