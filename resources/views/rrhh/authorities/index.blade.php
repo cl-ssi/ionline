@@ -75,9 +75,8 @@
                 margin-bottom: 5px;
             }
         </style>
-
         @foreach($calendar as $item)
-          @if($item['manager']->user)
+          @if($item['manager'])
             <div class="dia_calendario small p-2" {!! ($today->format('Y-m-d') == $item['date'])?'style="border: 2px solid black;"':'' !!}>
                 <center>
                     {{ $item['date'] }}
