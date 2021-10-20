@@ -20,7 +20,7 @@ class TestController extends Controller
             // Get IP address from remote address.
             $ip = $_SERVER['REMOTE_ADDR'];
         }
-        print_r($ip);
+        return $ip;
 
         //dd($events);
 	    // return view('test.ip')
