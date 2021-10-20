@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Storage;
 
 class TestController extends Controller
 {
@@ -20,6 +21,9 @@ class TestController extends Controller
             // Get IP address from remote address.
             $ip = $_SERVER['REMOTE_ADDR'];
         }
+        
+        Storage::disk('local')->prepend('log_ips.txt', $ip);
+
         return $ip;
 
         //dd($events);
