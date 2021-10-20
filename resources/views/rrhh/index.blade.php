@@ -43,7 +43,7 @@
 
 <br>
 
-<table class="table table-striped table-sm">
+<table class="table table-responsive table-striped table-sm">
 	<thead class="thead-dark">
 		<tr>
 			<th scope="col">RUN</th>
