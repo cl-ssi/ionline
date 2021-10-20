@@ -1408,4 +1408,4 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 
 Route::view('/some', 'some');
 
-Route::get('test',[TestController::class,'index']);
+Route::get('/test/getip',[TestController::class,'getIp']);
