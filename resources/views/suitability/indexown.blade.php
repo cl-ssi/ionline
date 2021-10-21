@@ -29,7 +29,7 @@
 
     </forn>
 
-    <table class="table table-responsive">
+    <table class="table table-sm">
         <thead>
             <tr>
                 <th>Solicitud N°</th>
