@@ -11,6 +11,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        //Cambie el formato de comentario a /**/
+        //Aqui habia una linea repetida que causaba errores, asi que la elimine.
         /*$this->call(OrganizationalUnitSeeder::class);
         $this->call(RoleAndPermissionSeeder::class);
         $this->call(UserSeeder::class);
