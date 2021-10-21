@@ -43,7 +43,7 @@
 
 <br>
 
-//Ahora esta tabla es responsiva
+<!-- Ahora esta tabla es responsiva -->
 <table class="table table-responsive table-striped table-sm">
 	<thead class="thead-dark">
 		<tr>
