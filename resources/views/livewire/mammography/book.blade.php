@@ -16,7 +16,7 @@
 
     @else
         <div class="accordion" id="accordionExample">
-        @foreach($days as $key => $day)
+        @foreach($days->where('day', '>=', \Carbon\Carbon::now()) as $key => $day)
             @if($day->exam_available > $day->exam_used)
                   <div class="card">
                     <div class="card-header" id="headingOne-{{$key}}">
@@ -30,11 +30,21 @@
                     <div id="collapseOne-{{$key}}" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
                       <div class="card-body">
                         <ul class="list-group">
-                        @foreach($day->slots as $slot)
+                        @foreach($day->slots as $key => $slot)
                             <li class="list-group-item">
-                                <i class="fas fa-clock"></i> {{ $slot->start_at->format('H:i') }} -
+                                <i class="fas fa-clock"></i> {{ $slot->start_at->format('H:i') }}
                                 @if($slot->available > $slot->used)
-                                    <button class="btn btn-sm btn-primary ml-3" wire:click="booking({{ $slot->id }})">Reservar</button>
+                                    <form wire:submit.prevent="booking({{ $slot->id }})" method="POST">
+                                        <div class="form-row col-md-4">
+                                          <label for="for_legal_quality" >Teléfono</label>
+                                          <div class="input-group">
+                                              <input type="text" class="form-control" name="telephone" id="for_telephone"  placeholder="+569xxxxxxxx"
+                                                  wire:model="telephone" required>
+                                              <button class="btn btn-sm btn-primary ml-3">Reservar</button>
+                                          </div>
+                                        </div>
+                                    </form>
+                                    <!-- <button class="btn btn-sm btn-primary ml-3" wire:click="booking({{ $slot->id }})">Reservar</button> -->
                                 @else
                                     <div style=""></div>
                                 @endif
