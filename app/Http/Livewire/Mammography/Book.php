@@ -11,12 +11,19 @@ class Book extends Component
 {
     public $mammography;
     public $slot;
+    public $telephone;
+    public $key;
 
     public function booking($slot){
         $this->slot = MammographySlot::find($slot);
         $this->slot->update(['used' => $this->slot->used + 1]);
         $this->slot->day->update(['exam_used' => $this->slot->day->exam_used + 1]);
-        $this->mammography->update(['exam_date' => $this->slot->start_at]);
+        // $this->mammography->update(['exam_date' => $this->slot->start_at,
+        //                             'telephone' => $this->telephone]);
+
+        $this->mammography->exam_date = $this->slot->start_at;
+        $this->mammography->telephone = $this->telephone;
+        $this->mammography->save();
     }
 
     public function render()
