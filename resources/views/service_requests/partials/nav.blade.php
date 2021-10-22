@@ -32,8 +32,7 @@
             @canany(['Service Request: fulfillments'])
                 <a class="dropdown-item"
                     href="{{ route('rrhh.service-request.fulfillment.index') }}">
-                    <i class="fas fa-clipboard-check"></i>
-                    <i class="fas fa-clipboard-check"></i>
+                    <i class="fas fa-clipboard-check"></i> Solicitudes Contratacion
                 </a>
             @endcan
 
@@ -41,8 +40,7 @@
                 <a class="dropdown-item"
                     href="{{ route('rrhh.service-request.report.fulfillment-pending','responsable') }}"
                     title="Cumplimientos pendientes por aprobar de Responsable">
-                    <i class="fas fa-clipboard-check"></i>
-                    <i class="fas fa-chess-king"></i>
+                    <i class="fas fa-chess-king"></i> Pendientes Responsable
                 </a>
             @endcan
 
@@ -50,8 +48,7 @@
                 <a class="dropdown-item"
                     href="{{ route('rrhh.service-request.report.fulfillment-pending','rrhh') }}"
                     title="Cumplimientos pendientes por aprobar de RRHH">
-                    <i class="fas fa-clipboard-check"></i>
-                    <i class="fas fa-user-shield"></i>
+                    <i class="fas fa-user-shield"></i> Pendientes RRHH
                 </a>
             @endcan
 
@@ -59,8 +56,7 @@
                 <a class="dropdown-item"
                     href="{{ route('rrhh.service-request.report.fulfillment-pending','finance') }}"
                     title="Cumplimientos pendientes por aprobar de finanzas">
-                    <i class="fas fa-clipboard-check"></i>
-                    <i class="fas fa-piggy-bank"></i>
+                    <i class="fas fa-piggy-bank"></i> Pendientes Finanzas
                 </a>
             @endcan
 
