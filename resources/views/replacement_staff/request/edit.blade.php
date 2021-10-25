@@ -12,7 +12,7 @@
     </div>
     <div class="card-body">
 
-        <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.update', $requestReplacementStaff) }}">
+        <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.update', $requestReplacementStaff) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -87,7 +87,7 @@
                     <div class="mb-3">
                       <label for="for_job_profile_file" class="form-label">Perfil de Cargo</label>
                       <input class="form-control" type="file" name="job_profile_file"
-                          accept="application/pdf" required>
+                          accept="application/pdf">
                     </div>
                 </fieldset>
 
