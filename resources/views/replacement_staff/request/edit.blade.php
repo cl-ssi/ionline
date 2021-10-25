@@ -17,26 +17,29 @@
             @method('PUT')
 
             <div class="form-row">
-                <fieldset class="form-group col-6">
+                <fieldset class="form-group col-4">
                     <label for="for_name">Nombre de Cargo</label>
                     <input type="text" class="form-control" name="name"
                         id="for_name" value="{{ $requestReplacementStaff->name }}" required>
                 </fieldset>
 
+                @livewire('replacement-staff.show-profile-request', ['requestReplacementStaff' => $requestReplacementStaff])
+
                 <fieldset class="form-group col-2">
-                    <label for="degree">Grado</label>
-                    <input type="number" class="form-control" name="degree"
-                        id="for_degree" min="1" max="26" value="{{ $requestReplacementStaff->degree }}" required>
+                    <label for="for_start_date">Desde</label>
+                    <input type="date" class="form-control" name="start_date"
+                        id="for_start_date" value="{{ $requestReplacementStaff->start_date->format('Y-m-d')  }}" required>
                 </fieldset>
 
-                <fieldset class="form-group col-4">
-                    <label for="for_legal_quality" >Calidad Jurídica</label>
-                    <select name="legal_quality" id="for_legal_quality" class="form-control" required>
-                        <option value="">Seleccione...</option>
-                        <option value="to hire" {{ ($requestReplacementStaff->legal_quality == 'to hire')?'selected':'' }}>Contrata</option>
-                        <option value="fee" {{ ($requestReplacementStaff->legal_quality == 'fee')?'selected':'' }}>Honorarios</option>
-                    </select>
+                <fieldset class="form-group col-2">
+                    <label for="for_end_date">Hasta</label>
+                    <input type="date" class="form-control" name="end_date"
+                        id="for_end_date" value="{{ $requestReplacementStaff->end_date->format('Y-m-d')  }}" required>
                 </fieldset>
+            </div>
+
+            <div class="form-row">
+                @livewire('replacement-staff.show-legal-quality-request', ['requestReplacementStaff' => $requestReplacementStaff])
             </div>
 
             <div class="form-row">
@@ -66,55 +69,34 @@
                     </div>
                 </fieldset>
 
-                <fieldset class="form-group col-6">
-                    <label for="for_name">&nbsp;</label>
+                <fieldset class="form-group col-4">
+                    <label for="for_name">Otra Jornada</label>
                     <input type="text" class="form-control" name="other_work_day"
                         id="for_other_work_day" placeholder="Otro" value="{{ $requestReplacementStaff->other_work_day }}">
                 </fieldset>
-            </div>
 
-            <div class="form-row">
-                <fieldset class="form-group col-3">
-                    <label for="for_start_date">Desde</label>
-                    <input type="date" class="form-control" name="start_date"
-                        id="for_start_date" value="{{ $requestReplacementStaff->start_date->format('Y-m-d')  }}" required>
-                </fieldset>
-
-                <fieldset class="form-group col-3">
-                    <label for="for_end_date">Hasta</label>
-                    <input type="date" class="form-control" name="end_date"
-                        id="for_end_date" value="{{ $requestReplacementStaff->end_date->format('Y-m-d')  }}" required>
+                <fieldset class="form-group col-2">
+                    <label for="for_charges_number">Nº Cargos</label>
+                    <input type="number" class="form-control" name="charges_number"
+                        id="for_charges_number" placeholder="Otro" value="{{ $requestReplacementStaff->charges_number }}">
                 </fieldset>
             </div>
 
             <div class="form-row">
-                <fieldset class="form-group col-3">
-                    <label for="for_fundament">Fundamento</label>
-                    <select name="fundament" id="for_fundament" class="form-control">
-                        <option value="">Seleccione...</option>
-                        <option value="replacement" {{ ($requestReplacementStaff->fundament == 'replacement')?'selected':'' }}>Reemplazo o suplencia</option>
-                        <option value="quit" {{ ($requestReplacementStaff->fundament == 'quit')?'selected':'' }}>Renuncia</option>
-                        <option value="allowance without payment" {{ ($requestReplacementStaff->fundament == 'allowance without payment')?'selected':'' }}>Permiso sin goce de sueldo</option>
-                        <option value="regularization work position" {{ ($requestReplacementStaff->fundament == 'regularization work position')?'selected':'' }}>Regulación de cargos</option>
-                        <option value="expand work position" {{ ($requestReplacementStaff->fundament == 'expand work position')?'selected':'' }}>Cargo expansión</option>
-                        <option value="vacations" {{ ($requestReplacementStaff->fundament == 'vacations')?'selected':'' }}>Feriado legal</option>
-                        <option value="other" {{ ($requestReplacementStaff->fundament == 'other')?'selected':'' }}>Otro</option>
-                    </select>
+                <fieldset class="form-group col-md-6">
+                    <div class="mb-3">
+                      <label for="for_job_profile_file" class="form-label">Perfil de Cargo</label>
+                      <input class="form-control" type="file" name="job_profile_file"
+                          accept="application/pdf" required>
+                    </div>
                 </fieldset>
 
-                <fieldset class="form-group col-3">
-                    <label for="for_name_to_replace">&nbsp;</label>
-                    <input type="text" class="form-control" name="name_to_replace"
-                        id="for_name_to_replace" placeholder="Nombre de Reemplazo"
-                        value="{{ $requestReplacementStaff->name_to_replace }}">
-                </fieldset>
-
-                <fieldset class="form-group col-6">
-                    <label for="for_other_fundament">&nbsp;</label>
-                    <input type="text" class="form-control" name="other_fundament"
-                        id="for_other_fundament" placeholder="Otro fundamento..."
-                        value="{{ $requestReplacementStaff->other_fundament }}">
-                </fieldset>
+                <div class="col-1">
+                    <p>&nbsp;</p>
+                    <a href="{{ route('replacement_staff.request.show_file', $requestReplacementStaff) }}" class="btn btn-outline-secondary btn-sm" title="Ir" target="_blank"> <i class="far fa-eye"></i></a>
+                    <a class="btn btn-outline-secondary btn-sm" href="{{ route('replacement_staff.request.download', $requestReplacementStaff) }}" target="_blank"><i class="fas fa-download"></i>
+                    </a>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>

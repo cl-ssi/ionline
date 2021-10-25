@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewRequestReplacementStaff;
 use App\Mail\NotificationSign;
+use Illuminate\Support\Facades\Storage;
 
 
 class RequestReplacementStaffController extends Controller
@@ -170,6 +171,12 @@ class RequestReplacementStaffController extends Controller
         $request_replacement->user()->associate(Auth::user());
         $request_replacement->organizational_unit_id = Auth::user()->organizationalUnit->id;
         $request_replacement->request_status = 'pending';
+
+        $now = Carbon::now()->format('Y_m_d_H_i_s');
+        $file = $request->file('job_profile_file');
+        $file_name = $now.'_job_profile';
+        $request_replacement->job_profile_file = $file->storeAs('/ionline/replacement_staff_dev/request_job_profile/', $file_name.'.'.$file->extension(), 'gcs');
+
         $request_replacement->save();
 
         $uo_request = OrganizationalUnit::where('id', $request_replacement->organizational_unit_id)
@@ -480,5 +487,15 @@ class RequestReplacementStaffController extends Controller
     public function destroy(RequestReplacementStaff $requestReplacementStaff)
     {
         //
+    }
+
+    public function show_file(RequestReplacementStaff $requestReplacementStaff)
+    {
+        return Storage::disk('gcs')->response($requestReplacementStaff->job_profile_file);
+    }
+
+    public function download(RequestReplacementStaff $requestReplacementStaff)
+    {
+        return Storage::disk('gcs')->download($requestReplacementStaff->job_profile_file);
     }
 }

@@ -4,9 +4,12 @@ namespace App\Http\Controllers\ReplacementStaff;
 
 use App\Models\ReplacementStaff\Applicant;
 use App\Models\ReplacementStaff\TechnicalEvaluation;
+use App\Rrhh\Authority;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EndSelectionNotification;
 
 class ApplicantController extends Controller
 {
@@ -126,22 +129,39 @@ class ApplicantController extends Controller
             if($applicant_evaluated->psycholabor_evaluation_score == 0 || $applicant_evaluated->technical_evaluation_score == 0){
                 return redirect()
                   ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technicalEvaluation).'#applicant')
-                  ->with('message-danger-aplicant-no-evaluated', 'Estimado usuario, favor ingresar evaluacion de todos los postulantes');
+                  ->with('message-danger-aplicant-no-evaluated', 'Estimado usuario, favor ingresar evaluacion de postulante(s) seleccionado(s).');
             }
         }
 
-        foreach ($request->applicant_id as $key_file => $app_id) {
-            $applicant_evaluated = Applicant::Find($app_id)->first();
+        foreach ($request->applicant_id as $app_id) {
+            $applicant_evaluated = Applicant::where('id', $app_id)->first();
 
             $applicant_evaluated->fill($request->all());
             $applicant_evaluated->selected = 1;
-            $applicant->save();
+            $applicant_evaluated->save();
 
             $technicalEvaluation = TechnicalEvaluation::Find($applicant->technicalEvaluation)->first();
             $now = Carbon::now();
             $technicalEvaluation->date_end = $now;
             $technicalEvaluation->technical_evaluation_status = 'complete';
             $technicalEvaluation->save();
+
+            $technicalEvaluation->applicants->find($applicant_evaluated)->replacement_staff->status = 'selected';
+            $technicalEvaluation->applicants->find($applicant_evaluated)->replacement_staff->save();
+
+            $technicalEvaluation->requestReplacementStaff->request_status = 'complete';
+            $technicalEvaluation->requestReplacementStaff->save();
+
+            //Request
+            $mail_request = $technicalEvaluation->requestReplacementStaff->user->email;
+            //Manager
+            $type = 'manager';
+            $mail_notification_ou_manager = Authority::getAuthorityFromDate($technicalEvaluation->requestReplacementStaff->user->organizational_unit_id, $now, $type);
+            $emails = [$mail_request, $mail_notification_ou_manager->user->email];
+
+            Mail::to($emails)
+              ->cc(env('APP_RYS_MAIL'))
+              ->send(new EndSelectionNotification($technicalEvaluation));
         }
 
         return redirect()

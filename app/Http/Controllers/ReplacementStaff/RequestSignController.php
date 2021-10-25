@@ -78,6 +78,7 @@ class RequestSignController extends Controller
     public function update(Request $request, RequestSign $requestSign, $status, RequestReplacementStaff $requestReplacementStaff)
     {
         if($status == 'accepted'){
+            //dd($requestSign);
             $requestSign->user_id = Auth::user()->id;
             $requestSign->request_status = $status;
             $requestSign->date_sign = Carbon::now();
@@ -105,13 +106,13 @@ class RequestSignController extends Controller
                 ->cc(env('APP_RYS_MAIL'))
                 ->send(new NotificationSign($requestReplacementStaff));
 
-              session()->flash('success', 'Su la solicitud ha sido Aceptada con exito.');
+              session()->flash('success', 'Su solicitud ha sido Aceptada con exito.');
               return redirect()->route('replacement_staff.request.to_sign');
             }
             else{
                 Mail::to(explode(',', env('APP_RYS_MAIL')))->send(new NotificationEndSigningProcess($requestReplacementStaff));
 
-                session()->flash('success', 'Su la solicitud ha sido Aceptada en su totalidad.');
+                session()->flash('success', 'Su solicitud ha sido Aceptada en su totalidad.');
                 return redirect()->route('replacement_staff.request.to_sign');
             }
 
