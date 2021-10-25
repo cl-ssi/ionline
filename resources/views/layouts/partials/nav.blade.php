@@ -199,7 +199,7 @@
 
                             <a class="dropdown-item @active('replacement_staff.request.index')"
                                href="{{ route('replacement_staff.request.index') }}">
-                                <i class="far fa-id-card"></i> Staff de Reemplazos
+                                <i class="far fa-id-card"></i> Solicitudes de Contratación
                             </a>
                         @endif
 
@@ -208,7 +208,7 @@
 
                             <a class="dropdown-item @active('replacement_staff.request.assign_index')"
                                href="{{ route('replacement_staff.request.assign_index') }}">
-                                <i class="far fa-id-card"></i> Staff de Reemplazos
+                                <i class="far fa-id-card"></i> Solicitudes de Contratación
                             </a>
                         @endif
 
@@ -219,7 +219,7 @@
 
                             <a class="dropdown-item @active('replacement_staff.request.own_index')"
                                href="{{ route('replacement_staff.request.own_index') }}">
-                                <i class="far fa-id-card"></i> Staff de Reemplazos
+                                <i class="far fa-id-card"></i> Solicitudes de Contratación
                                 @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
                                     <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span>
                                 @endif

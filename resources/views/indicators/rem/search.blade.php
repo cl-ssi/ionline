@@ -21,9 +21,9 @@
     })()
 </script>
 
-<div class="alert alert-warning" role="alert">
+<!-- <div class="alert alert-warning" role="alert">
     <i class="fas fa-info-circle"></i> Datos preliminares correspondiente al mes de septiembre 2021.
-</div>
+</div> -->
 
 <div class="form-group">
     <form method="GET" action="{{ route('indicators.rem.show', [$year, $prestacion->serie, $prestacion->Nserie]) }}">
