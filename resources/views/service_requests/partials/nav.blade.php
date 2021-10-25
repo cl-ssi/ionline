@@ -23,20 +23,26 @@
     </li>
 
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle {{ active('rrhh.service-request.fulfillment.index') }}"
+        <a class="nav-link dropdown-toggle {{
+            active('rrhh.service-request.fulfillment.index'),
+            active('rrhh.service-request.report.fulfillment-pending')
+        }}"
         data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-clipboard-check"></i> Cumplimientos
         </a>
         <div class="dropdown-menu">
 
             @canany(['Service Request: fulfillments'])
-                <a class="dropdown-item"
+                <a class="dropdown-item {{ active('rrhh.service-request.fulfillment.index') }}"
                     href="{{ route('rrhh.service-request.fulfillment.index') }}">
                     <i class="fas fa-clipboard-check"></i> Solicitudes Contratacion
                 </a>
             @endcan
 
             @can('Service Request: fulfillments responsable')
+                <!--
+                <a class="dropdown-item {{ active('rrhh.service-request.report.fulfillment-pending','responsable') }}"
+                -->
                 <a class="dropdown-item"
                     href="{{ route('rrhh.service-request.report.fulfillment-pending','responsable') }}"
                     title="Cumplimientos pendientes por aprobar de Responsable">
@@ -45,6 +51,9 @@
             @endcan
 
             @can('Service Request: fulfillments rrhh')
+                <!--
+                <a class="dropdown-item {{ active('rrhh.service-request.report.fulfillment-pending','rrhh') }}"
+                -->
                 <a class="dropdown-item"
                     href="{{ route('rrhh.service-request.report.fulfillment-pending','rrhh') }}"
                     title="Cumplimientos pendientes por aprobar de RRHH">
@@ -53,6 +62,9 @@
             @endcan
 
             @can('Service Request: fulfillments finance')
+                <!--
+                <a class="dropdown-item {{ active('rrhh.service-request.report.fulfillment-pending','finance') }}"
+                -->
                 <a class="dropdown-item"
                     href="{{ route('rrhh.service-request.report.fulfillment-pending','finance') }}"
                     title="Cumplimientos pendientes por aprobar de finanzas">
@@ -91,21 +103,35 @@
     @endcan
 
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle {{ active('rrhh.service-request.report.*') }}"
+        <a class="nav-link dropdown-toggle {{
+            active('rrhh.service-request.report.consolidated_data'),
+            active('rrhh.service-request.report.export_sirh'),
+            active('rrhh.service-request.pending-requests'),
+            active('rrhh.service-request.report.to-pay'),
+            active('rrhh.service-request.report.payed'),
+            active('rrhh.service-request.report.compliance'),
+            active('rrhh.service-request.report.pay-rejected'),
+            active('rrhh.service-request.report.with-bank-details'),
+            active('rrhh.service-request.report.pending-resolutions'),
+            active('rrhh.service-request.report.contract'),
+            active('rrhh.service-request.report.duplicate-contracts'),
+            active('rrhh.service-request.report.with-resolution-file'),
+            active('rrhh.service-request.report.without-resolution-file')
+        }}"
         data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-archive"></i> Reportes
         </a>
         <div class="dropdown-menu">
 
             @can('Service Request: consolidated data')
-            <a class="dropdown-item"
+            <a class="dropdown-item {{ active('rrhh.service-request.report.consolidated_data') }}"
                 href="{{ route('rrhh.service-request.report.consolidated_data') }}">
                 <i class="far fa-file-excel"></i> Consolidado
             </a>
             @endcan
 
-            @can('Service Request: consolidated data')
-            <a class="dropdown-item"
+            @can('Service Request: export sirh')
+            <a class="dropdown-item  {{ active('rrhh.service-request.report.export_sirh') }}"
                 href="{{ route('rrhh.service-request.report.export_sirh') }}">
                 <i class="far fa-file"></i> Formato SIRH <small>(para hospital)</small>
             </a>
