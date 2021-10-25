@@ -7,7 +7,6 @@
 @include('service_requests.partials.nav')
 
 <div class="jumbotron mt-3">
-    <!--Se modifico el tamaño-->
     <h1 class="display-4">Phuqhaña</h1>
     <p class="lead">Bienvenido el sistema de honorarios Phuqhaña, palabra Aymara que significa "Cumplir".</p>
     <p>Si alguna duda, respecto a algún contrato, puedes ponerte en contacto con el área de RRHH a través de  
