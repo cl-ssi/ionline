@@ -32,7 +32,7 @@
             @canany(['Service Request: fulfillments'])
                 <a class="dropdown-item"
                     href="{{ route('rrhh.service-request.fulfillment.index') }}">
-                    <i class="fas fa-clipboard-check"></i> Solicitudes Contratacion
+                    <i class="fas fa-clipboard-check"></i> Cumplimientos
                 </a>
             @endcan
 
