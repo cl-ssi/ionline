@@ -12,8 +12,8 @@ use App\Models\Rrhh\ShiftTypes;
 use App\Models\Rrhh\ShiftUser;
 use App\Models\Rrhh\ShiftUserDay;
 use App\Models\Rrhh\UserShiftTypeMonths;
-use App\Models\Rrhh\ShiftDayHistoryOfChanges;  
-use App\Models\Rrhh\UserRequestOfDay; 
+use App\Models\Rrhh\ShiftDayHistoryOfChanges;
+use App\Models\Rrhh\UserRequestOfDay;
 use App\Models\Rrhh\ShiftDateOfClosing;
 use App\Models\Rrhh\ShiftClose;
 use App\Rrhh\OrganizationalUnit;
@@ -26,7 +26,7 @@ use Session;
 
 
 class ShiftManagementController extends Controller
-{   
+{
 
     private $months = array(
 
@@ -99,9 +99,9 @@ class ShiftManagementController extends Controller
         16 => "Cambiado por necesidad de servicio",
         17 => "Abandono de funciones",
 
-    );   
+    );
     public $timePerDay = array(
-       
+
         'L' => array("from"=>"08:00","to"=>"20:00","time"=>12),
         'N' => array("from"=>"20:00","to"=>"08:00","time"=>12),
         'D' => array("from"=>"08:00","to"=>"17:00","time"=>8),
@@ -149,7 +149,7 @@ class ShiftManagementController extends Controller
             $actuallyDay = Session::get('actuallyDay');
         else
             $actuallyDay = Carbon::now()->format('d');
-        
+
         if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
             $actuallyYear = Session::get('actuallyYear');
         else
@@ -158,7 +158,7 @@ class ShiftManagementController extends Controller
         if(Session::has('sTypes') && Session::get('sTypes') != "")
             $sTypes = Session::get('sTypes');
         else
-            $sTypes = ShiftTypes::all(); 
+            $sTypes = ShiftTypes::all();
 
         if(Session::has('users') && Session::get('users') != "")
             $users = Session::get('users');
@@ -169,10 +169,10 @@ class ShiftManagementController extends Controller
             $cargos = Session::get('cargos');
         else
     	   $cargos = OrganizationalUnit::all();
-        
+
         if(Session::has('actuallyOrgUnit') && Session::get('actuallyOrgUnit') != "")
             $actuallyOrgUnit = Session::get('actuallyOrgUnit');
-        else    
+        else
             $actuallyOrgUnit = $cargos->first();
 
         if(Session::has('actuallyShift') && Session::get('actuallyShift') != "")
@@ -180,13 +180,13 @@ class ShiftManagementController extends Controller
         else
             $actuallyShift=$sTypes->first();
         // Inicio groupname dinamico
-        
+
         // Fin groupname dinamico
 
-     
+
         $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
 
-        /* TODO: armar la query 
+        /* TODO: armar la query
         $staffInShift->where(x);
         $staffInShift->where(x);
         $staffInShfit->get();
@@ -195,14 +195,14 @@ class ShiftManagementController extends Controller
         $staffInShift = ShiftUser::query();
         if($actuallyShift->id != 0){ // un turno en especifico
 
-            $this->groupsnames = array(); 
+            $this->groupsnames = array();
             // array_push($this->groupsnames, ""); //agregos los sin grupo
 
-            // $groupsnames = array(); 
+            // $groupsnames = array();
             // TODO: Traer los shfituser que pertenezcan al mes que estás buscando
             // TODO: ShiftUser::where('organizational_units_id',141)->where('shift_types_id',8)->groupBy("groupname")->pluck('groupname')
             // foreach(ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->groupBy("groupname")->get() as $g){
-                    
+
             //         array_push($this->groupsnames, $g->groupname);
             //     // echo json_encode($g->groupname);
             // }
@@ -210,10 +210,11 @@ class ShiftManagementController extends Controller
             $this->groupsnames = ShiftUser::where('organizational_units_id',141)->where('shift_types_id',8)->groupBy("groupname")->pluck('groupname');
 
             $staffInShift = $staffInShift->where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->where('groupname',htmlentities($groupname))->get();
-       
+
         }else{ // Todos los turnos
 
-          
+            $this->groupsnames = array();
+            
             $staffInShift = $staffInShift->where('organizational_units_id', $actuallyOrgUnit->id )
                 ->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)
                 ->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)
@@ -222,7 +223,7 @@ class ShiftManagementController extends Controller
 
         }
         // echo "SISH: ". $staffInShift;
-        
+
         // TODO: Ver si es necesario asignar a una variable local
         // TODO: Pasar el select de Series a un livewire
         $months = $this->months;
@@ -247,7 +248,7 @@ class ShiftManagementController extends Controller
             }else{
 
                 array_push($actuallyShiftMonthsList,$actuallyShiftMonths);
-            } 
+            }
         };
         $actuallyShiftMonthsList = (object) $actuallyShiftMonthsList;
         $filter ="";
@@ -267,7 +268,7 @@ class ShiftManagementController extends Controller
 
         Session::put('groupname',$groupname);
 
-        // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
+        // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');
         if( (!isset($groupname) || $groupname =="") && isset($this->groupsnames[0]) )
             $groupname = $this->groupsnames[0];
         elseif( (!isset($groupname) || $groupname =="") && !isset($this->groupsnames[0]) )
@@ -279,12 +280,12 @@ class ShiftManagementController extends Controller
     }
 
  	public function indexfiltered(Request $r){
-        
-     
+
+
         // echo "filteresd";
         $months = (object) $this->months;
         $actuallyDay = Carbon::now()->format('d');
-        $sTypes = ShiftTypes::all(); 
+        $sTypes = ShiftTypes::all();
         $cargos = OrganizationalUnit::all();
         $filter = "on";
 
@@ -292,16 +293,16 @@ class ShiftManagementController extends Controller
 
         // dd(  $r->monthYearFilter );
         $dateFiltered = Carbon::createFromFormat('Y-m-d',  $r->monthYearFilter."-".$actuallyDay, 'Europe/London');
-        
+
         // explode("delimiter", string)
-        
+
         $days = $dateFiltered->daysInMonth;
         $actuallyMonth = $dateFiltered->format('m');
         $actuallyYear = $dateFiltered->format('Y');
-        
-        
 
-         
+
+
+
         $actuallyOrgUnit =  OrganizationalUnit::find($r->orgunitFilter);
         $staff = User::where('organizational_unit_id', $actuallyOrgUnit->id )->get();
 
@@ -320,7 +321,7 @@ class ShiftManagementController extends Controller
             $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->get();
         }
 
-        // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');   
+        // $dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$actuallyDay, 'Europe/London');
         Session::put('cargos',$cargos);
         Session::put('sTypes',$sTypes);
         Session::put('days',$days);
@@ -332,7 +333,7 @@ class ShiftManagementController extends Controller
         Session::put('staff',$staff);
         Session::put('actuallyShift',$actuallyShift);
         Session::put('staffInShift',$staffInShift);
-        
+
         return redirect()->route('rrhh.shiftManag.index',["groupname"=>Session::get('groupname')]);
 
             // return redirect('/rrhh/shift-management/'.Session::get('groupname'));
@@ -341,17 +342,17 @@ class ShiftManagementController extends Controller
  	}
 
     // TODO: Cambiar todos los shifttype actions a su propio controller
- 	public function shiftstypesindex(){ // pantalla principal tipos de series, 
+ 	public function shiftstypesindex(){ // pantalla principal tipos de series,
         // return view('rrhh.shift_management.shiftstypes', compact('users'));
-        $sTypes = ShiftTypes::all(); 
+        $sTypes = ShiftTypes::all();
         // $sTypes = 1;
         return view('rrhh.shift_management.shiftstypes', compact('sTypes'));
     }
 
-    public function editshifttype(Request $r){	
+    public function editshifttype(Request $r){
 
     	$tiposJornada =   $this->tiposJornada;
-        $sType = ShiftTypes::findOrFail($r->id); 
+        $sType = ShiftTypes::findOrFail($r->id);
         $idUser = Auth()->user()->id;
         $actuallyMonths = UserShiftTypeMonths::where("user_id",Auth()->user()->id)->where("shift_type_id",$r->id)->get();
         $months = (object) $this->months;
@@ -362,7 +363,7 @@ class ShiftManagementController extends Controller
             for($i=1;$i<13;$i++){
 
                 $aMonth = (object) array('month' => $i,'user_id' =>Auth()->user()->id ,'shift_type_id' => $r->id );
-              
+
                 // $aMonth =  $actuallyMonths;
 
                 array_push($actuallyMonths,$aMonth);
@@ -376,14 +377,14 @@ class ShiftManagementController extends Controller
     public function newshifttype(){
     	// echo "create";
         $tiposJornada =   $this->tiposJornada;
-    	
+
         return view('rrhh.shift_management.createshifttype', compact('tiposJornada'));
     }
 
     public function storenewshift(Request $r){
 
         // dd($r->months);
-        $nSType = new ShiftTypes; 
+        $nSType = new ShiftTypes;
         $nSType->name = $r->name;
         $nSType->shortname = $r->shortname;
         $nSType->day_series = implode(",", $r->day_series);
@@ -392,7 +393,7 @@ class ShiftManagementController extends Controller
         for($i=0;$i<sizeof($r->months);$i++){
             $nUShiftTypesMonts = new UserShiftTypeMonths;
             $nUShiftTypesMonts->month =$r->months[$i] ;
-            $nUShiftTypesMonts->user_id =  Auth()->user()->id; 
+            $nUShiftTypesMonts->user_id =  Auth()->user()->id;
             $nUShiftTypesMonts->shift_type_id = $nSType->id;
             $nUShiftTypesMonts->save();
         }
@@ -401,7 +402,7 @@ class ShiftManagementController extends Controller
     }
 
     public function updateshifttype(Request $r){
-    	// echo "updateshifttype ".implode(",", $r->day_series); 
+    	// echo "updateshifttype ".implode(",", $r->day_series);
 
     	$fSType = ShiftTypes::find($r->id);
     	$fSType->name = $r->name;
@@ -416,20 +417,20 @@ class ShiftManagementController extends Controller
         for($i=0;$i<sizeof($r->months);$i++){
             $nUShiftTypesMonths = new UserShiftTypeMonths;
             $nUShiftTypesMonths->month =$r->months[$i] ;
-            $nUShiftTypesMonths->user_id =  Auth()->user()->id; 
+            $nUShiftTypesMonths->user_id =  Auth()->user()->id;
             $nUShiftTypesMonths->shift_type_id = $fSType->id;
             $nUShiftTypesMonths->save();
         }
         session()->flash('info', 'El Turno tipo <i>"'.$r->name.'"</i> ha sido modificado.');
         return redirect()->route('rrhh.shiftsTypes.index');
-    } 
+    }
 
     public function assignStaff(Request $r){ // crea un shift user y le crea dias de acuerdo al sifttype
         $nShift = new ShiftUser;
         $nShift->date_from = $r->dateFromAssign;
         $nShift->date_up = $r->dateUpAssign;
         // TODO: Auth()->id(); <- chequear
-        $nShift->asigned_by = Auth()->user()->id; 
+        $nShift->asigned_by = Auth()->user()->id;
         $nShift->user_id = $r->slcStaff;
         $nShift->shift_types_id = $r->shiftId;
         $nShift->organizational_units_id = $r->orgUnitId;
@@ -439,7 +440,7 @@ class ShiftManagementController extends Controller
         $nUser = User::find($nShift->user_id);
         $ranges = CarbonPeriod::create($nShift->date_from, $nShift->date_up);
         $actuallyShift = ShiftTypes::find( $r->shiftId );
-        $currentSeries =  explode(",", $actuallyShift->day_series); 
+        $currentSeries =  explode(",", $actuallyShift->day_series);
         $i = 0;
         $i = $r->initialSerie;
         if($r->shiftId != 99 ){ // si no es turno personalizado, agrego los dias segun las serie
@@ -450,10 +451,10 @@ class ShiftManagementController extends Controller
                 $nShiftD = new ShiftUserDay;
                 $nShiftD->day = $date->format('Y-m-d');
                 $nShiftD->status = 1;//assgined
-               
+
 
                 if(isset($currentSeries[$i]) && $currentSeries[$i] != ""){
-                    $nShiftD->working_day = $currentSeries[$i]; 
+                    $nShiftD->working_day = $currentSeries[$i];
                     // echo "if";
 
                 }
@@ -470,13 +471,13 @@ class ShiftManagementController extends Controller
                         }
                     }
                     if(isset($currentSeries[$i]) && $currentSeries[$i] != "")
-                        $nShiftD->working_day = $currentSeries[$i]; 
+                        $nShiftD->working_day = $currentSeries[$i];
                     else
                         $nShiftD->working_day =$previous;
 
                 }
                 // TODO: cambiar a español o esperanto
-                $nShiftD->commentary = "// Automatically added by the shift ".$nShift->id."//"; 
+                $nShiftD->commentary = "// Automatically added by the shift ".$nShift->id."//";
                 $nShiftD->shift_user_id = $nShift->id;
                 $nShiftD->save();
 
@@ -489,7 +490,7 @@ class ShiftManagementController extends Controller
                 $nHistory->previous_value = "";
                 $nHistory->current_value = "1";
                 $nHistory->save();
-           
+
             if( $i <  ( sizeof($currentSeries) - 1) ){
                 $i++;
             }else{
@@ -503,12 +504,12 @@ class ShiftManagementController extends Controller
     }
 
     public function downloadShiftInXls(Request $r){// Funcion para descargar los turnos en formato excel
-        
-        $this->groupsnames = array(); 
+
+        $this->groupsnames = array();
         $hojas = 1;
 
         $holidays = Holiday::all();
-   
+
 
         $users = Session::get('users');
         $cargos = Session::get('cargos');
@@ -522,30 +523,30 @@ class ShiftManagementController extends Controller
         $staff = Session::get('staff');
         $actuallyShift = Session::get('actuallyShift');
         $staffInShift = Session::get('staffInShift');
-        
+
         foreach(ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->groupBy("groupname")->get() as $g){
-            
+
                 if($g->groupname != ""){
 
                     array_push($this->groupsnames, $g->groupname);
 
                     $hojas++;
-                
+
                 }
         }
 
         $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('shift_types_id',$actuallyShift->id)->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)->where('groupname',"")->get();
         // Session::flush();
-        
 
 
-        $spreadsheet = new Spreadsheet(); 
+
+        $spreadsheet = new Spreadsheet();
 
 
 
         $sheet = $spreadsheet->getActiveSheet();
         // $sheet =  new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Sin grupo');
-        
+
         $sheet->setCellValue('A1',  strtoupper($months[$actuallyMonth]).' '.$actuallyYear);
         if($days==28)
             $sheet->MergeCells('A1:AE1');
@@ -563,8 +564,8 @@ class ShiftManagementController extends Controller
         $index = 68;
         $index2 = 65;
         $cell = "";
-        for ($i=1; $i < ($days+1) ; $i++) { 
-           
+        for ($i=1; $i < ($days+1) ; $i++) {
+
             if($index<91){
                 $cell = chr($index);
                 $index++;
@@ -576,10 +577,10 @@ class ShiftManagementController extends Controller
             $sheet->getColumnDimension($cell)->setAutoSize(true);
             $sheet->getStyle($cell."2")->getAlignment()->setHorizontal('center');
 
-            $dateFiltered = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$i, 'Europe/London'); 
+            $dateFiltered = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$i, 'Europe/London');
             $dayCellColor =  "";
             if( $dateFiltered->isWeekend()  || count( $holidays->where('date',$dateFiltered) ) > 0  ){
-                $dayCellColor = 'FF0000'; 
+                $dayCellColor = 'FF0000';
 
             }
             if( $dayCellColor != "" ){
@@ -593,7 +594,7 @@ class ShiftManagementController extends Controller
                 )
             );
             }
-        }   
+        }
 
 
 
@@ -617,17 +618,17 @@ class ShiftManagementController extends Controller
         foreach ($staffInShift->sortBy('position') as $sis) {
             $sheet->setCellValue("A".$i,$sis->position);
             $sheet->setCellValue("B".$i, $sis->user->runFormat()." - ".$sis->user->name." ".$sis->user->fathers_family);
-            
+
             $staffType=str_replace( "(","",$sis->esSuplencia() );
             $staffType=str_replace( ")","",$staffType );
            $staffType= substr($staffType,0,5);
             $sheet->setCellValue("C".$i, strtoupper($staffType) );
-            
+
             $index = 68;// lleter C in ascii
             $index2 = 65; //letter A in ascii
             $cell = "";
-            for ($j=1; $j < ($days+1) ; $j++) { 
-           
+            for ($j=1; $j < ($days+1) ; $j++) {
+
                 if($index<91){
                     $cell = chr($index);
                     $index++;
@@ -639,13 +640,13 @@ class ShiftManagementController extends Controller
                 $date =explode(" ",$date);
                 $d = $sis->days->where('day',$date[0]);
 
-                /* $sheet->setCellValue($cell.$i, 
+                /* $sheet->setCellValue($cell.$i,
                  ( ( isset($d) && count($d) )? ( ($d->first()->working_day!="F")?$d->first()->working_day:"-" ) :"n/a" )
                   );*/ // funcionando con 1 joranda por dia
 
                 /*actualizacion, por si tiene mas de 1 jornada x dia*/
                 $cellTextValue = "";
-                if(isset($d) && count($d)){ 
+                if(isset($d) && count($d)){
                     $cellTextValue ="";
                     $count = 0;
                     foreach($d as $dd){
@@ -664,14 +665,14 @@ class ShiftManagementController extends Controller
                 $sheet->setCellValue($cell.$i, $cellTextValue);
                 $sheet->getColumnDimension($cell)->setAutoSize(true);
                 $sheet->getStyle($cell.$i)->getAlignment()->setHorizontal('center');
-                
-                if(isset($d) && count($d)){ 
+
+                if(isset($d) && count($d)){
                     foreach($d as $dd){
                         if($dd->status != 1) // con esto dejo los estado 1 asfginado o cumplido sin
                             $sheet->getStyle($cell.$i)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB($this->colorsRgb[$dd->status]);
-                    
+
                     }
-                    
+
                 }else{
                     $sheet->getStyle($cell.$i)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('000000');
                 }
@@ -680,9 +681,9 @@ class ShiftManagementController extends Controller
 
                 //     $sheet->getStyle($cell.$i)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('FFFF0000');
                 // }
-            }   
+            }
             $i++;
-            
+
         }
 
          $sheet->getColumnDimension("A")->setAutoSize(true);
@@ -696,7 +697,7 @@ class ShiftManagementController extends Controller
          $index = 1;
         foreach($this->groupsnames as $gName){
 
-            $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, strtoupper($gName)); 
+            $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, strtoupper($gName));
             $spreadsheet->addSheet($myWorkSheet, $index);
 
             // Attach the "My Data" worksheet as the first worksheet in the Spreadsheet object
@@ -704,7 +705,7 @@ class ShiftManagementController extends Controller
 
             // $sheet = $spreadsheet->getActiveSheet();
             // $sheet =  new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Sin grupo');
-        
+
             $myWorkSheet->setCellValue('A1',  strtoupper($months[$actuallyMonth]).' '.$actuallyYear);
             if($days==28)
                 $myWorkSheet->MergeCells('A1:AE1');
@@ -722,8 +723,8 @@ class ShiftManagementController extends Controller
             $index = 68;
             $index2 = 65;
             $cell = "";
-            for ($i=1; $i < ($days+1) ; $i++) { 
-               
+            for ($i=1; $i < ($days+1) ; $i++) {
+
                 if($index<91){
                     $cell = chr($index);
                     $index++;
@@ -735,10 +736,10 @@ class ShiftManagementController extends Controller
                 $myWorkSheet->getColumnDimension($cell)->setAutoSize(true);
                 $myWorkSheet->getStyle($cell."2")->getAlignment()->setHorizontal('center');
 
-                 $dateFiltered = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$i, 'Europe/London'); 
+                 $dateFiltered = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$i, 'Europe/London');
                 $dayCellColor =  "";
                 if( $dateFiltered->isWeekend()  || count( $holidays->where('date',$dateFiltered) ) > 0  ){
-                    $dayCellColor = 'FF0000'; 
+                    $dayCellColor = 'FF0000';
 
                 }
                 if( $dayCellColor != "" ){
@@ -752,7 +753,7 @@ class ShiftManagementController extends Controller
                         )
                     );
                 }
-            }   
+            }
             $myWorkSheet->getStyle('A1:AH1')->applyFromArray(
                     array(
                         'font' => array(
@@ -779,8 +780,8 @@ class ShiftManagementController extends Controller
                 $index = 68;// lleter C in ascii
                 $index2 = 65; //letter A in ascii
                 $cell = "";
-                for ($j=1; $j < ($days+1) ; $j++) { 
-           
+                for ($j=1; $j < ($days+1) ; $j++) {
+
                     if($index<91){
                         $cell = chr($index);
                         $index++;
@@ -791,10 +792,10 @@ class ShiftManagementController extends Controller
                     $date = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$j);
                     $date =explode(" ",$date);
                     $d = $sis->days->where('day',$date[0]);
-                
+
                     /*actualizacion, por si tiene mas de 1 jornada x dia*/
                     $cellTextValue = "";
-                    if(isset($d) && count($d)){ 
+                    if(isset($d) && count($d)){
                         $cellTextValue ="";
                         $count = 0;
                         foreach($d as $dd){
@@ -812,20 +813,20 @@ class ShiftManagementController extends Controller
                     $myWorkSheet->setCellValue($cell.$i, $cellTextValue);
                     $myWorkSheet->getColumnDimension($cell)->setAutoSize(true);
                     $myWorkSheet->getStyle($cell.$i)->getAlignment()->setHorizontal('center');
-                
-                    if(isset($d) && count($d)){ 
+
+                    if(isset($d) && count($d)){
                         foreach($d as $dd){
                             if($dd->status != 1) // con esto dejo los estado 1 asfginado o cumplido sin
                                 $myWorkSheet->getStyle($cell.$i)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB($this->colorsRgb[$dd->status]);
-                    
+
                         }
-                    
+
                     }else{
                         $myWorkSheet->getStyle($cell.$i)->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setARGB('000000');
                     }
-                }   
+                }
                 $i++;
-                
+
             }
 
             $myWorkSheet->getColumnDimension("A")->setAutoSize(true);
@@ -850,8 +851,8 @@ class ShiftManagementController extends Controller
             if(Session::get("actuallyMonth") != 12){
 
                 $nMonth  = intval(Session::get('actuallyMonth')) + 1;
-                
-                
+
+
             }else{
                 $nMonth = 1;
             }
@@ -859,20 +860,20 @@ class ShiftManagementController extends Controller
             $dateFormat = Carbon::createFromFormat('Y-m-d',  "2021-".$nMonth."-01", 'Europe/London');
             $nMonth = $dateFormat->format('m');
             Session::put('actuallyMonth',$nMonth);
-                
+
 
         }
         return redirect()->route('rrhh.shiftManag.index',["groupname"=>Session::get("groupname") ]);
     }
     //function for move to the previous month with arrow in shiftManagement.index
     public function goToPreviousMonth(){
-        
+
         if(Session::get('actuallyMonth')){
-            if(Session::get("actuallyMonth") != 1 ) {  
+            if(Session::get("actuallyMonth") != 1 ) {
 
                 $pMonth  = intval(Session::get('actuallyMonth')) - 1;
             }else{
-                
+
                 $pMonth = 12;
             }
             // TODO: No poner fecha estática
@@ -881,7 +882,7 @@ class ShiftManagementController extends Controller
             Session::put('actuallyMonth',$pMonth);
 
         }
-                
+
         return redirect()->route('rrhh.shiftManag.index',["groupname"=>Session::get("groupname") ]);
     }
 
@@ -910,13 +911,13 @@ class ShiftManagementController extends Controller
         // $actuallyUser =  str_replace("}","", $actuallyUser);
 
         // $actuallyUser =  str_replace('"',"", $actuallyUser[0]);
-        
+
         $usr = User::find($actuallyUser->id);
         // $shifsUsr = ShiftUser::where('date_up','>=',$actuallyYears."-".$actuallyMonth."-".$days)->where('date_from','<=',$actuallyYears."-".$actuallyMonth."-".$days)->where("user_id",$actuallyUser->id)->first();
         $shifsUsr = ShiftUser::where('date_up','>=',$actuallyYears."-".$actuallyMonth."-".$days)->where("user_id",$actuallyUser)->first();
 
         $shifsUsr = ShiftUser::where('date_up','>=',$actuallyYears."-".$actuallyMonth."-".$days)->where("user_id",$actuallyUser->id)->first();
-      
+
         // dd($actuallyUser);
             $months = $this->months ;
 
@@ -928,7 +929,7 @@ class ShiftManagementController extends Controller
             $cierreDelMes = ShiftDateOfClosing::find($close);
             $id = $r->actuallyUser;
             $daysForClose = ShiftUserDay::where('day','>=',$cierreDelMes->init_date)->where('day','<=',$cierreDelMes->close_date)->whereHas("ShiftUser",  function($q) use($id){
-                
+
                     $q->where('user_id',$id); // Para filtrar solo los dias de la unidad organizacional del usuario
             })->get();
         }
@@ -956,7 +957,7 @@ class ShiftManagementController extends Controller
             $actuallyDay = Session::get('actuallyDay');
         else
             $actuallyDay = Carbon::now()->format('d');
-        
+
         if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
             $actuallyYear = Session::get('actuallyYear');
         else
@@ -965,14 +966,14 @@ class ShiftManagementController extends Controller
         if(Session::has('sTypes') && Session::get('sTypes') != "")
             $sTypes = Session::get('sTypes');
         else
-            $sTypes = ShiftTypes::all(); 
+            $sTypes = ShiftTypes::all();
 
         if(Session::has('users') && Session::get('users') != "")
             $users = Session::get('users');
         else
            $users = "";//User::Search($r->get('name'))->orderBy('name','Asc')->paginate(500);
 
-        $status = 4;    
+        $status = 4;
         $userId = Auth()->user()->id;
         // echo "aut: ". Auth()->user()->id;
         //v1
@@ -990,15 +991,15 @@ class ShiftManagementController extends Controller
         //     })->whereHas("shiftUserDayLog",  function($q) use($status){
         //         $q->without('change_type,"4');
         //     })->get();
-        
+
         // $myConfirmationEarrings = ShiftUserDay::where("status",3)->whereHas("ShiftUser",  function($q) use($userId){
         //         $q->where('user_id',$userId);
         //     })->get();
 
         $myConfirmationEarrings = array();
-        foreach (ShiftUserDay::where("status",3)->whereHas("ShiftUser",  function($q) use($userId){ // Busco todos los dias que esten en estado 3 que es turno extra,  
+        foreach (ShiftUserDay::where("status",3)->whereHas("ShiftUser",  function($q) use($userId){ // Busco todos los dias que esten en estado 3 que es turno extra,
                 $q->where('user_id',$userId);
-            })->get() as $myChangeDay) 
+            })->get() as $myChangeDay)
             {
             // if(  $myChangeDay->whereHas("shiftUserDayLog",  function($q) use($status){
             //     $q->where('change_type',4);
@@ -1033,7 +1034,7 @@ class ShiftManagementController extends Controller
     public function myShiftConfirm($day){
 
         $d = ShiftUserDay::find($day);
-        echo "R".json_encode($d); 
+        echo "R".json_encode($d);
 
         $nHistory = new ShiftDayHistoryOfChanges;
         $nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family."\" ha <b>confirmado la jornada</b> del \"".$d->day;
@@ -1044,14 +1045,14 @@ class ShiftManagementController extends Controller
         $nHistory->previous_value = "";
         $nHistory->current_value = "";
         $nHistory->save();
-        
+
            session()->flash('success', 'Se ha confirmado el turno extra del dia '.$d->day);
         return redirect()->route('rrhh.shiftManag.myshift');
     }
-      
+
     public function myShiftReject($day){
         $d = ShiftUserDay::find($day);
-       // echo "C".json_encode($d); 
+       // echo "C".json_encode($d);
 
         $nHistory = new ShiftDayHistoryOfChanges;
         $nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family." ". Auth()->user()->mothers_family."\" ha <b>rechazado la jornada</b> del \"".$d->day;
@@ -1069,7 +1070,7 @@ class ShiftManagementController extends Controller
     public function adminShiftConfirm($day){
 
         $d = ShiftUserDay::find($day);
-        // echo "R".json_encode($day); 
+        // echo "R".json_encode($day);
 
         $nHistory = new ShiftDayHistoryOfChanges;
         $nHistory->commentary = "El administrador ha <b>confirmado la jornada</b> del \"".$d->day;
@@ -1080,10 +1081,10 @@ class ShiftManagementController extends Controller
         $nHistory->previous_value = $d->status;
         $nHistory->current_value = $d->status;
         $nHistory->save();
-        
+
         return redirect()->route('rrhh.shiftManag.index');
     }
-    
+
     public function closeShift(Request $r){ // direcciona a vista para cerrar los turnos, utilizado por rrhh del hospital.
 
         $onlyClosedByMe= 0 ;
@@ -1103,13 +1104,13 @@ class ShiftManagementController extends Controller
         $months = $this->months;
 
         if( $r->yearFilter &&  $r->yearFilter != "")
-            $actuallyYear =  $r->yearFilter; 
+            $actuallyYear =  $r->yearFilter;
          else
             $actuallyYear = Carbon::now()->format('Y');
-        
+
         if($r->orgunitFilter && $r->orgunitFilter != "")
             $actuallyOrgUnit = OrganizationalUnit::find($r->orgunitFilter);
-        else    
+        else
             $actuallyOrgUnit = $cargos->first();
 
         if( $r->monthFilter &&  $r->monthFilter != "")
@@ -1141,17 +1142,17 @@ class ShiftManagementController extends Controller
         }
         $staffInShift = array(); // pendientes
         if($cierreDelMes->id != 0){
-           
+
                 $staffInShift = ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->whereHas("days",  function($q) use($cierreDelMes){
-                
+
                         $q->where('day','<=',$cierreDelMes->close_date)->where('day','>=',$cierreDelMes->init_date)->whereNull('shift_close_id'); // Para filtrar solo los dias de la unidad organizacional del usuario
-            
-                })->groupBy("user_id")->get(); // busco todos aqellos dias entre las fechas de cierre la unidad or qe  
-            
-                
+
+                })->groupBy("user_id")->get(); // busco todos aqellos dias entre las fechas de cierre la unidad or qe
+
+
 
         }
-        // hacer foreach y revisar quien se cierra 
+        // hacer foreach y revisar quien se cierra
         if( $onlyConfirmedByMe == 0 )
             $firstConfirmations = ShiftClose::whereNotNull("first_confirmation_date")->whereNull("close_date")->where("first_confirmation_status",">",0)->get();
         else
@@ -1187,11 +1188,11 @@ class ShiftManagementController extends Controller
         return view('rrhh.shift_management.close-shift', compact('ouRoots','actuallyOrgUnit','actuallyYear','months','actuallyMonth','staffInShift','closed','cierreDelMes','firstConfirmations',"cierres","onlyConfirmedByMe","onlyClosedByMe","onlyRejectedForMe","rejected" ));
     }
     public function downloadCloseInXls($id){
-            // echo "downloadCloseInXls".$id;   
-            $spreadsheet = new Spreadsheet(); 
+            // echo "downloadCloseInXls".$id;
+            $spreadsheet = new Spreadsheet();
             $sheet = $spreadsheet->getActiveSheet();
             $reportResult = (object) array();
-            
+
             if($id == "closed")
                 $reportResult = Session::get("staffInShift_close");
             elseif($id == "confirmed")
@@ -1228,11 +1229,11 @@ class ShiftManagementController extends Controller
                 $sheet->setCellValue('G'.$index,  strtoupper($r->first_confirmation_date) );
                 $sheet->setCellValue('H'.$index,  strtoupper($r->close_user_id) );
                 $sheet->setCellValue('I'.$index,  strtoupper($r->close_date) );
-                
+
                 $index++;
 
             }
-       
+
         $name= Carbon::now()->format('Ymd-H:i');
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -1246,12 +1247,12 @@ class ShiftManagementController extends Controller
                     )
                 );
         $writer = new Xlsx($spreadsheet);
-        $writer->save('php://output'); 
+        $writer->save('php://output');
 
     }
     public function shiftReports(Request $r){
         // echo "shiftReports";
-       
+
 
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
         $cargos = OrganizationalUnit::all();
@@ -1262,20 +1263,20 @@ class ShiftManagementController extends Controller
 
             array_push($shiftDayPerStatus,  array('name' =>  $s,'cant'=>10 ));
 
-            
+
         };
 
         foreach($this->tiposJornada  as $index => $s){
            array_push($shiftDayPerJournalType,  array('name' =>$s,'id' =>  $index,'cant'=>10 ));
 
         };
-        
+
         $chartpeoplecant = array();
         foreach($this->weekMap as $index => $w){
-            
+
             array_push($chartpeoplecant,  array('id' => $index,'name' =>  $w,'cant'=>random_int(5, 18) ));
 
-            
+
         };
         if( Session::has('actuallyShift') && Session::get('actuallyShift') )
             $actuallyShift =  Session::get('actuallyShift');
@@ -1286,12 +1287,12 @@ class ShiftManagementController extends Controller
             $actuallyYear = Session::get('actuallyYear');
         else
             $actuallyYear = Carbon::now()->format('Y');
-        
+
         // if(Session::has('actuallyOrgUnit') && Session::get('actuallyOrgUnit') != "")
         //     $actuallyOrgUnit = Session::get('actuallyOrgUnit');
-        // else    
+        // else
         //     $actuallyOrgUnit = $cargos->first();
-        
+
 
         if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
             $actuallyMonth = Session::get('actuallyMonth');
@@ -1306,7 +1307,7 @@ class ShiftManagementController extends Controller
         if(Session::has('sTypes') && Session::get('sTypes') != "")
             $sTypes = Session::get('sTypes');
         else
-            $sTypes = ShiftTypes::all(); 
+            $sTypes = ShiftTypes::all();
 
 
 
@@ -1320,7 +1321,7 @@ class ShiftManagementController extends Controller
             $actuallyOrgUnit =  OrganizationalUnit::find($r->orgunitFilter);
         // elseif(isset($r) && $r->orgunitFilter && $r->orgunitFilter == 0)
         //     $actuallyOrgUnit = (object) array('id' => 0,'name'  => 'Todos');
-        // else    
+        // else
         //     $actuallyOrgUnit = $cargos->first();
         else
             $actuallyOrgUnit = (object) array('id' => 0,'name'  => 'Todos');
@@ -1337,30 +1338,30 @@ class ShiftManagementController extends Controller
             $actuallyJournalType =  "0";
 
         if( isset($r) && $r->datefrom )
-            $datefrom = $r->datefrom;   
+            $datefrom = $r->datefrom;
         else
             $datefrom = Carbon::now()->format("Y-m-d");
 
-        if(isset($r) && $r->dateto ) 
-            $dateto = $r->dateto; 
+        if(isset($r) && $r->dateto )
+            $dateto = $r->dateto;
         else
-            $dateto = Carbon::now()->format("Y-m-d"); 
+            $dateto = Carbon::now()->format("Y-m-d");
 
         $staffInShift = 1;//ShiftUser::where('organizational_units_id', $actuallyOrgUnit->id )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',  {{{$actuallyYear."-".$actuallyMonth."-".$days)->get();
-        
+
         $tiposJornada = $this->tiposJornada;
         $shiftStatus = $this->shiftStatus;
-        
+
         // echo $actuallyJournalType;
         // echo "gere";
         if($actuallyOrgUnit->id!="0"){
 
-            $reportResult = ShiftUserDay::where('day','>=',$datefrom)->where('day','<=',$dateto)->orderBy("day","ASC")->whereHas("ShiftUser",  function($q) use($actuallyOrgUnit){ // Busco todos los dias que esten en estado 3 que es turno extra,  
+            $reportResult = ShiftUserDay::where('day','>=',$datefrom)->where('day','<=',$dateto)->orderBy("day","ASC")->whereHas("ShiftUser",  function($q) use($actuallyOrgUnit){ // Busco todos los dias que esten en estado 3 que es turno extra,
                 $q->where('organizational_units_id',$actuallyOrgUnit->id);
             })->get();
         }else{
 
-            $reportResult = ShiftUserDay::where('day','>=',$datefrom)->where('day','<=',$dateto)->orderBy("day","ASC")->get();  
+            $reportResult = ShiftUserDay::where('day','>=',$datefrom)->where('day','<=',$dateto)->orderBy("day","ASC")->get();
         }
 
         if($actuallyJournalType!="0")
@@ -1376,7 +1377,7 @@ class ShiftManagementController extends Controller
 
     public function shiftReportsXLSDownload(){
 
-        $spreadsheet = new Spreadsheet(); 
+        $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $reportResult = (object) array();
         if( null !== Session::get('reportResult')  )
@@ -1389,19 +1390,19 @@ class ShiftManagementController extends Controller
             $sheet->setCellValue('B'.$index,  strtoupper($r->ShiftUser->user->getFullNameAttribute()) );
             $sheet->setCellValue('C'.$index,  strtoupper(isset($r->ShiftUser->user->organizationalUnit) && $r->ShiftUser->user->organizationalUnit !="" && isset($r->ShiftUser->user->organizationalUnit->name) ) ? $r->ShiftUser->user->organizationalUnit->name:"");
             $sheet->setCellValue('D'.$index,  strtoupper($r->day));
-                
-            if ( substr( $r->working_day,0, 1) != "+" ) 
-                        
-                $sheet->setCellValue('E'.$index,  $this->tiposJornada[$r->working_day]); 
-                                   
+
+            if ( substr( $r->working_day,0, 1) != "+" )
+
+                $sheet->setCellValue('E'.$index,  $this->tiposJornada[$r->working_day]);
+
             elseif(  substr( $r->working_day,0, 1) == "+" )
-                        
+
                 $sheet->setCellValue('E'.$index,  $r->working_day);
-                    
+
             else
-                    
+
                 $sheet->setCellValue('E'.$index,  "N/A");
-                    
+
 
             $dayF = Carbon::createFromFormat('Y-m-d',  $r->day, 'Europe/London');
             $sheet->setCellValue('F'.$index, ucfirst ( ( $r->status == 1 && $dayF->isPast() ) ? "Completado" : $this->shiftStatus [ $r->status ]  ) );
@@ -1417,7 +1418,7 @@ class ShiftManagementController extends Controller
         header('Cache-Control: max-age=0');
 
         $writer = new Xlsx($spreadsheet);
-        $writer->save('php://output'); 
+        $writer->save('php://output');
     }
 
     public function shiftDashboard(){
@@ -1431,20 +1432,20 @@ class ShiftManagementController extends Controller
 
             array_push($shiftDayPerStatus,  array('name' =>  $s,'cant'=>10 ));
 
-            
+
         };
 
         foreach($this->tiposJornada  as $index => $s){
            array_push($shiftDayPerJournalType,  array('name' =>$s,'id' =>  $index,'cant'=>10 ));
 
         };
-        
+
         $chartpeoplecant = array();
         foreach($this->weekMap as $index => $w){
-            
+
             array_push($chartpeoplecant,  array('id' => $index,'name' =>  $w,'cant'=>random_int(5, 18) ));
 
-            
+
         };
 
 
@@ -1452,10 +1453,10 @@ class ShiftManagementController extends Controller
             $actuallyYear = Session::get('actuallyYear');
         else
             $actuallyYear = Carbon::now()->format('Y');
-        
+
         if(Session::has('actuallyOrgUnit') && Session::get('actuallyOrgUnit') != "")
             $actuallyOrgUnit = Session::get('actuallyOrgUnit');
-        else    
+        else
             $actuallyOrgUnit = $cargos->first();
 
         if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
@@ -1473,7 +1474,7 @@ class ShiftManagementController extends Controller
     }
 
     public function availableShifts(){
-        
+
         $ouRoots = OrganizationalUnit::where('level', 1)->get();
         $cargos = OrganizationalUnit::all();
         $months = $this->months;
@@ -1481,10 +1482,10 @@ class ShiftManagementController extends Controller
             $actuallyYear = Session::get('actuallyYear');
         else
             $actuallyYear = Carbon::now()->format('Y');
-        
+
         if(Session::has('actuallyOrgUnit') && Session::get('actuallyOrgUnit') != "")
             $actuallyOrgUnit = Session::get('actuallyOrgUnit');
-        else    
+        else
             $actuallyOrgUnit = $cargos->first();
 
         $actuallyOrgUnit =    Auth()->user()->organizationalUnit; // porque solo puedo ver los turnos disponibles de mi unidad (momentaneamente)
@@ -1505,20 +1506,20 @@ class ShiftManagementController extends Controller
         $timePerDay = $this->timePerDay;
         $dummyVar ="only for recordatory";
 
-        // $availableDays = ShiftUserDay::where("status",4) .... antes 
+        // $availableDays = ShiftUserDay::where("status",4) .... antes
         //aora
         $availableDays = ShiftUserDay::where('day','>=',$actuallyYear."-".$actuallyMonth."-01")->where('day','<=',$actuallyYear."-".$actuallyMonth."-".$days)->whereHas("shiftUserDayLog",  function($q) use($dummyVar){
-                // Busco todos los dias que esten en estado 4 que cambio turno con,  
+                // Busco todos los dias que esten en estado 4 que cambio turno con,
                 $q->where('change_type',7); // este mismo cambiar  el change type y agregarle una "nuevo salto de linea" para escribir un nuevo mensaje qe ya fue confirmado
         })->whereHas("ShiftUser",  function($q) use($actuallyOrgUnit){
-                
+
                 $q->where('organizational_units_id',$actuallyOrgUnit->id); // Para filtrar solo los dias de la unidad organizacional del usuario
         })->get();//aqui faltan agregar los turnos qe dejan disponibles a partir de otro estado
-        
+
              /*doesntHave("shiftUserDayLog",  function($q) use($userId){
-                
+
                 $q->where('change_type',8);
-        
+
             })->get();*/
 
           $misSolicitudes =   UserRequestOfDay::where("user_id",Auth()->user()->id)->where("created_at",">=", $actuallyYear."-".$actuallyMonth."-01")->where("created_at","<=", $actuallyYear."-".$actuallyMonth."-31")->get();
@@ -1526,17 +1527,17 @@ class ShiftManagementController extends Controller
         // if( $user->can("Shift Management: approval extra day request") ){
             $orgForAprove = Auth()->user()->organizational_unit_id;
             $solicitudesPorAprobar =  UserRequestOfDay::where("created_at",">=", $actuallyYear."-".$actuallyMonth."-01")->where("created_at","<=", $actuallyYear."-".$actuallyMonth."-31")->whereHas("ShiftUserDay",  function($q) use($orgForAprove){
-                
+
                 // $q->where('organizational_units_id',$actuallyOrgUnit->id);
 
                 $q->whereHas("ShiftUser",  function($r) use($orgForAprove){
-                
+
                             $r->where('organizational_units_id',$orgForAprove);
-           
+
                 });
-           
-            })->get(); 
-            
+
+            })->get();
+
 
         // }
 
@@ -1576,7 +1577,7 @@ class ShiftManagementController extends Controller
         $fSolicitud->status = "confirmado";
         $fSolicitud->status_change_by  = Auth()->user()->id;
         $fSolicitud->save();
-        
+
         // 2) buscar solicitudes del mismo dia y rechazarlas
         $fSolicitudARechazar =  UserRequestOfDay::where("shift_user_day_id",$fSolicitud->shift_user_day_id)->where("status","pendiente")->get();
         foreach($fSolicitudARechazar as $sol){
@@ -1584,22 +1585,22 @@ class ShiftManagementController extends Controller
             $sol->status = "rechazado";
             $sol->status_change_by  = Auth()->user()->id;
             $sol->save();
-        
+
         }
 
         // agregar dia extra a usuario correspondiente a la solicitud aprobada
         // $fSolicitud->ShiftUserDay->shiftUserDayLog->where(); // cambiar cahge_tyoe al id
-       
+
         $daysOfMonth = Carbon::createFromFormat('Y-m-d',  $fSolicitud->ShiftUserDay->day, 'Europe/London');
         $splitDay = explode("-", $fSolicitud->ShiftUserDay->day);
         $from = date($splitDay[0].'-'.$splitDay[1].'-01');
         $to = date($splitDay[0].'-'.$splitDay[1].'-'.$daysOfMonth->daysInMonth);
         $days = $daysOfMonth->daysInMonth;
-        $bTurno = ShiftUser::where("user_id",$fSolicitud->user_id)->where("date_from",">=",$from)->where("date_up","<=",$to)->where("organizational_units_id",$fSolicitud->ShiftUserDay->ShiftUser->organizational_units_id)->first(); 
+        $bTurno = ShiftUser::where("user_id",$fSolicitud->user_id)->where("date_from",">=",$from)->where("date_up","<=",$to)->where("organizational_units_id",$fSolicitud->ShiftUserDay->ShiftUser->organizational_units_id)->first();
         if( !isset($bTurno) || $bTurno == ""){ // si no tiene ningun turno asociado a ese rango, se le crea
             $bTurno = new ShiftUser;
             $bTurno->date_from = $from;
-            $bTurno->date_up = $to; 
+            $bTurno->date_up = $to;
             $bTurno->asigned_by = Auth::user()->id;
             $bTurno->user_id = $fSolicitud->user_id;
             $bTurno->shift_types_id = $fSolicitud->ShiftUserDay->ShiftUser->shift_types_id;
@@ -1615,7 +1616,7 @@ class ShiftManagementController extends Controller
         $nDay->shift_user_id = $bTurno->id;
         $nDay->working_day = $fSolicitud->ShiftUserDay->working_day;
         $nDay->derived_from = $fSolicitud->ShiftUserDay->id;
-        $nDay->save();  
+        $nDay->save();
         //si tiene turno creado para ese mes y ese tipo de turno
 
         $nHistory = new ShiftDayHistoryOfChanges;
@@ -1631,7 +1632,7 @@ class ShiftManagementController extends Controller
         session()->flash('success', 'Se ha confirmado la solicitud del día extra del '.$fSolicitud->ShiftUserDay->day);
         return redirect()->route('rrhh.shiftManag.availableShifts');
     }
-    
+
     public function rejectShiftRequest(Request $r){
         // dd($r->input("solicitudId"));
         $fSolicitud = UserRequestOfDay::find($r->input("solicitudId"));
@@ -1642,22 +1643,22 @@ class ShiftManagementController extends Controller
         session()->flash('warning', 'Se ha rechazado la solicitud del día extra del '.$fSolicitud->ShiftUserDay->day);
         return redirect()->route('rrhh.shiftManag.availableShifts');
     }
-    
+
     public function firstConfirmation(Request $r){
         // dd($r->input("comment"));
         $total_hours = 0;
         $cierreDelMes = ShiftDateOfClosing::find($r->input("cierreId"));
         $idUser = $r->input("userId");
         $daysForClose = ShiftUserDay::where('day','>=',$cierreDelMes->init_date)->where('day','<=',$cierreDelMes->close_date)->whereNull('shift_close_id')->whereHas("ShiftUser",  function($q) use($idUser){
-                
+
                     $q->where('user_id',$idUser); // Para filtrar solo los dias de la unidad organizacional del usuario
         })->get();
-        
-       
+
+
         foreach($daysForClose as $dd){
-        
+
             $date = Carbon::createFromFormat('Y-m-d',  $dd->day, 'Europe/London');
-            if( $date->isPast() ){ // aqui comparar la fecha con que fue  cerrado con la fecha del dia 
+            if( $date->isPast() ){ // aqui comparar la fecha con que fue  cerrado con la fecha del dia
 
                 if(  substr($dd->working_day,0, 1) != "+" )
                     $total_hours+=   (isset($this->timePerDay[$dd->working_day]))?$this->timePerDay[$dd->working_day]["time"]:0  ;
@@ -1682,7 +1683,7 @@ class ShiftManagementController extends Controller
 
         }
         $n->first_confirmation_date =  Carbon::now();
-        $n->first_confirmation_user_id = Auth()->user()->id; 
+        $n->first_confirmation_user_id = Auth()->user()->id;
         $n->date_of_closing_id = $r->input("cierreId");
         $n->owner_of_the_days_id = $r->input("userId");
         $n->save();
@@ -1716,16 +1717,16 @@ class ShiftManagementController extends Controller
         $f->close_commentary = "";
         $f->close_status = 2;
         $f->close_date = Carbon::now()->format('Y-m-d');;
-        $f->close_user_id =  Auth()->user()->id; 
+        $f->close_user_id =  Auth()->user()->id;
         $f->save();
         session()->flash('success', 'Se han cerrado los días ');
         return redirect()->route('rrhh.shiftManag.closeShift');
     }
-    
+
     public function transferUser(){
 
         $a = 0;
-        for ($i=0; $i < 3 ; $i++) { 
+        for ($i=0; $i < 3 ; $i++) {
             $a += $i*$a;
             // echo $a;
 
@@ -1741,14 +1742,14 @@ class ShiftManagementController extends Controller
                 $bDate = new ShiftDateOfClosing;
             else // actualizar
                 $bDate = ShiftDateOfClosing::find($r->id);
-        
+
             $bDate->init_date = $r->initDate;
             $bDate->close_date = $r->closeDate;
             $bDate->user_id = Auth()->user()->id;
             if($r->id == 0) //crear
-                $bDate->save() ; 
+                $bDate->save() ;
             else // actualizar
-                $bDate->update() ; 
+                $bDate->update() ;
 
             session()->flash('success', 'Se han '.( ($r->id == 0)?'creado':'modificado' ).' el dia de cierre ');
         }else{
@@ -1756,17 +1757,17 @@ class ShiftManagementController extends Controller
                 $bDate->init_date = $r->initDate;
                 $bDate->close_date = $r->closeDate;
                 $bDate->user_id = Auth()->user()->id;
-                $bDate->save() ; 
+                $bDate->save() ;
                 session()->flash('success', 'Se han creado el dia de cierre ');
 
         }
 
-        return redirect()->route('rrhh.shiftManag.closeShift');    
+        return redirect()->route('rrhh.shiftManag.closeShift');
     }
 
     public function changeShiftUserCommentary(Request $r){
         $bShiftUser = ShiftUser::find( $r->id );
-        $bShiftUser->commentary = $r->commentary; 
+        $bShiftUser->commentary = $r->commentary;
         $bShiftUser->update();
          session()->flash('success', 'Se ha modificado el turno ID #'. $r->id);
 
