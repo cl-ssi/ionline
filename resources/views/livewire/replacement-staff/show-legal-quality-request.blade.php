@@ -8,7 +8,7 @@
         </select>
 
         <input type="number" class="form-control" name="salary"
-            id="for_salary" placeholder="$" {{ $salaryStateInput }} value="{{$requestReplacementStaff->salary}}">
+            id="for_salary" placeholder="$" {{ $salaryStateInput }} @if($requestReplacementStaff) value="{{ $requestReplacementStaff->salary }}" @endif>
 
         <select name="fundament" id="for_fundament" class="form-control" wire:model="selectedFundament" {{ $fundamentStateSelect }}>
             <option value="" {{ $fundamentOptionState }}>Seleccione...</option>
@@ -22,9 +22,9 @@
         </select>
 
         <input type="text" class="form-control" name="name_to_replace"
-            id="for_name_to_replace" placeholder="Nombre de Reemplazo" value="{{$requestReplacementStaff->name_to_replace}}" {{ $nameToReplaceInput }}>
+            id="for_name_to_replace" placeholder="Nombre de Reemplazo" @if($requestReplacementStaff) value="{{$requestReplacementStaff->name_to_replace}}" @endif {{ $nameToReplaceInput }}>
 
         <input type="text" class="form-control" name="other_fundament"
-            id="for_other_fundament" placeholder="Otro fundamento..." value="{{$requestReplacementStaff->other_fundament}}" {{ $nameOtherFundament }}>
+            id="for_other_fundament" placeholder="Otro fundamento..." @if($requestReplacementStaff) value="{{$requestReplacementStaff->other_fundament}}" @endif {{ $nameOtherFundament }}>
     </div>
 </fieldset>
