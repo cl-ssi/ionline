@@ -59,6 +59,10 @@ class ReplacementStaff extends Model
         return $this->hasMany('\App\Models\ReplacementStaff\Language');
     }
 
+    public function applicants() {
+        return $this->hasMany('\App\Models\ReplacementStaff\Applicant');
+    }
+
     public function getStatusValueAttribute(){
         switch ($this->status) {
             case 'immediate_availability':
@@ -66,6 +70,9 @@ class ReplacementStaff extends Model
               break;
             case 'working_external':
               return 'Trabajando';
+              break;
+            case 'selected':
+              return 'Seleccionado';
               break;
             default:
               return '';
