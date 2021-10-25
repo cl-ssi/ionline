@@ -11,20 +11,10 @@ class ProfessionalHourController extends Controller
 {
     public function index(Request $request)
     {
-        $professionalHours = Professional::select(
-                                                'pro_professionals.id'
-                                                ,'pro_professionals.name'
-                                                ,'T1.id AS professionalHour_id'
-                                                ,'T1.value'
-                                                ,'T1.programming_id')
-                                        ->leftjoin('pro_professional_hours AS T1', 'pro_professionals.id', '=', 'T1.professional_id')
-                                        ->where('T1.programming_id',$request->programming_id)
-                                        ->get();
-
-        $professionals = Professional::All()->SortBy('id');
+        $professionalHours = ProfessionalHour::with('professional')->where('programming_id', $request->programming_id)->get();
+        $professionals = Professional::All();
         
-        return view('programmings/professionalHours/index')->withProfessionalHours($professionalHours)
-                                                           ->withProfessionals($professionals);
+        return view('programmings/professionalHours/index', compact('professionalHours', 'professionals'));
     }
 
     public function store(Request $request)
@@ -57,23 +47,5 @@ class ProfessionalHourController extends Controller
 
       session()->flash('success', 'El registro ha sido eliminado de este listado');
        return redirect()->back();
-    }
-
-    public function show(Request $request, $id)
-    {
-        $professionalHours = Professional::select(
-                                                'pro_professionals.id'
-                                                ,'pro_professionals.name'
-                                                ,'T1.id AS professionalHour_id'
-                                                ,'T1.value'
-                                                ,'T1.programming_id')
-                                        ->leftjoin('pro_professional_hours AS T1', 'pro_professionals.id', '=', 'T1.professional_id')
-                                        ->where('T1.programming_id',$id)
-                                        ->orderBy('pro_professionals.id')
-                                        ->get();
-
-        $professionals = Professional::All()->SortBy('id');
-        
-        return view('programmings/professionalHours/index')->withProfessionalHours($professionalHours)->withProfessionals($professionals);
     }
 }

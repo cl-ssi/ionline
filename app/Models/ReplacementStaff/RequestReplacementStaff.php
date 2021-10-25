@@ -15,9 +15,9 @@ class RequestReplacementStaff extends Model
     use softDeletes;
 
     protected $fillable = [
-        'name', 'degree', 'legal_quality', 'work_day', 'other_work_day', 'start_date',
-        'end_date', 'fundament', 'other_fundament', 'name_to_replace',
-        'budget_item','budgetary_provision'
+        'name', 'profile_manage_id', 'degree', 'start_date', 'end_date',
+        'legal_quality', 'salary', 'fundament', 'name_to_replace', 'other_fundament',
+        'work_day', 'other_work_day','charges_number','job_profile_file'
     ];
 
     public function user() {
