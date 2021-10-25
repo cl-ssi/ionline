@@ -30,7 +30,7 @@
 
 <br>
 
-<form class="form-inline float-right" method="GET" action="{{ route('rrhh.users.index') }}">
+<form class="form-inline float-left" method="GET" action="{{ route('rrhh.users.index') }}">
 	<div class="input-group mb-3">
 		<input type="text" name="name" class="form-control" placeholder="Nombres, Apellidos o RUN sin DV" autofocus>
 		<div class="input-group-append">
@@ -43,8 +43,7 @@
 
 <br>
 
-<!-- Ahora esta tabla es responsiva -->
-<table class="table table-responsive table-striped table-sm">
+<table class="table table-responsive-xl table-striped table-sm">
 	<thead class="thead-dark">
 		<tr>
 			<th scope="col">RUN</th>

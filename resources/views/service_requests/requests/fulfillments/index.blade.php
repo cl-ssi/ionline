@@ -9,7 +9,7 @@
 <h3 class="mb-3">Cumplimiento solicitudes de contratación</h3>
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.fulfillment.index') }}">
-  <div class="input-group mb-3">
+  <div class="input-group mb-2">
     <div class="input-group-prepend">
       <span class="input-group-text">Unidad</span>
     </div>
@@ -27,11 +27,14 @@
       <option value="Mensual" @if($request->program_contract_type == "Mensual") selected @endif>Mensual</option>
       <option value="Horas" @if($request->program_contract_type == "Horas") selected @endif>Horas</option>
     </select>
+  </div>
+
+  <div class="input-group mb-2">
     <div class="input-group-prepend">
       <span class="input-group-text">Estam.</span>
     </div>
     <select class="form-control selectpicker" data-live-search="true" name="estate" data-size="5">
-      <option value=""></option>
+      <option value="">Ninguno</option>
       <option value="Profesional Médico" @if($request->estate == "Profesional Médico") selected @endif>Profesional Médico</option>
       <option value="Profesional" @if($request->estate == "Profesional") selected @endif>Profesional</option>
       <option value="Técnico" @if($request->estate == "Técnico") selected @endif>Técnico</option>
@@ -50,16 +53,19 @@
       <option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option>
       <option value="0" @if($request->establishment_id == "0") selected @endif>Dirección SSI</option>
     </select>
+  </div>
+
+  <div class="input-group mb-2">
     <div class="input-group-prepend">
-      <span class="input-group-text">Id</span>
-    </div>
-    <input type="text" class="form-control " name="id" value="{{$request->id}}">
-    <div class="input-group-prepend">
-      <span class="input-group-text">Profesional</span>
-    </div>
-    <input type="text" class="form-control " name="name" value="{{$request->name}}">
-    <div class="input-group-append">
-        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+        <span class="input-group-text">Id</span>
+      </div>
+      <input type="text" class="form-control " name="id" value="{{$request->id}}">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Profesional</span>
+      </div>
+      <input type="text" class="form-control " name="name" value="{{$request->name}}">
+      <div class="input-group-append">
+          <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
     </div>
   </div>
 </form>
