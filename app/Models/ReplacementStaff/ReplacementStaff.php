@@ -16,7 +16,7 @@ class ReplacementStaff extends Model
         'run', 'dv', 'birthday', 'name', 'fathers_family',
         'mothers_family', 'gender', 'email', 'telephone',
         'telephone2', 'region_id','commune_id', 'address', 'observations',
-        'file', 'status', 'cv_file'
+        'status', 'cv_file'
     ];
 
     /**
