@@ -56,7 +56,11 @@
                       <td style="width: 33%">{{ $requestReplacementStaff->end_date->format('d-m-Y') }}</td>
                   </tr>
                   <tr>
-                      <td colspan="3">El documento debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
+                      <th class="table-active">Perfil del Cargo</th>
+                      <td colspan="2"><a href="{{ route('replacement_staff.request.show_file', $requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a></td>
+                  </tr>
+                  <tr>
+                      <td colspan="3">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
                   </tr>
                   <tr>
                       @foreach($requestReplacementStaff->RequestSign as $sign)

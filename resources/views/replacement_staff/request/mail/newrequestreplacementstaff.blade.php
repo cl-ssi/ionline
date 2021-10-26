@@ -8,7 +8,7 @@
 
   <br>
 
-  <p>A través del presente, se informa ingreso de nueva solicitud de reemplazo:</p>
+  <p>A través del presente, se informa ingreso de nueva solicitud de contración:</p>
 
   <ul>
       <li><strong>Nº Solicitud</strong>: {{ $requestReplacementStaff->id }}</li>
