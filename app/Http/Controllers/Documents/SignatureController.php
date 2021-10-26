@@ -376,43 +376,53 @@ class SignatureController extends Controller
      * @param Signature $signature
      * @return RedirectResponse
      * @throws Exception
+     * @throws Throwable
      */
     public function destroy(Signature $signature): RedirectResponse
     {
-        foreach ($signature->signaturesFiles as $signaturesFile) {
+        DB::beginTransaction();
 
-            if ($signaturesFile->document) {
-                $signaturesFile->document->update(['file_to_sign_id' => null,
-                ]);
+        try {
+            foreach ($signature->signaturesFiles as $signaturesFile) {
+
+                if ($signaturesFile->document) {
+                    $signaturesFile->document->update(['file_to_sign_id' => null,
+                    ]);
+                }
+
+                if ($signaturesFile->suitabilityResult) {
+                    $signaturesFile->suitabilityResult->update(['signed_certificate_id' => null,
+                    ]);
+                }
+
+                foreach ($signaturesFile->signaturesFlows as $signaturesFlow) {
+                    $signaturesFlow->delete();
+                }
+
+                if ($signaturesFile->file) {
+                    Storage::disk('gcs')->delete($signaturesFile->file);
+                }
+
+                if ($signaturesFile->signed_file) {
+                    Storage::disk('gcs')->delete($signaturesFile->signed_file);
+                }
+
+                // borro partes files y partes
+                if ($signaturesFile->parteFile) {
+                    $signaturesFile->parteFile->delete();
+                    $signaturesFile->parteFile->event->delete();
+                }
+                $signaturesFile->delete();
+
+
             }
+            $signature->delete();
 
-            if ($signaturesFile->suitabilityResult) {
-                $signaturesFile->suitabilityResult->update(['signed_certificate_id' => null,
-                ]);
-            }
-
-            foreach ($signaturesFile->signaturesFlows as $signaturesFlow) {
-                $signaturesFlow->delete();
-            }
-
-            if ($signaturesFile->file) {
-                Storage::disk('gcs')->delete($signaturesFile->file);
-            }
-
-            if ($signaturesFile->signed_file) {
-                Storage::disk('gcs')->delete($signaturesFile->signed_file);
-            }
-
-            // borro partes files y partes
-            if ($signaturesFile->parteFile) {
-                $signaturesFile->parteFile->delete();
-                $signaturesFile->parteFile->event->delete();
-            }
-            $signaturesFile->delete();
-
-
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
         }
-        $signature->delete();
 
         session()->flash('info', "La solicitud de firma $signature->id ha sido eliminada.");
         return redirect()->route('documents.signatures.index', ['mis_documentos']);
