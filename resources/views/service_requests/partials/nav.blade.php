@@ -22,48 +22,47 @@
         </a>
     </li>
 
-    @canany(['Service Request: fulfillments'])
-    <li class="nav-item">
-        <a class="nav-link {{ active('rrhh.service-request.fulfillment.index') }}"
-            href="{{ route('rrhh.service-request.fulfillment.index') }}">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle {{ active('rrhh.service-request.fulfillment.index') }}"
+        data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-clipboard-check"></i> Cumplimientos
         </a>
+        <div class="dropdown-menu">
+
+            @canany(['Service Request: fulfillments'])
+                <a class="dropdown-item"
+                    href="{{ route('rrhh.service-request.fulfillment.index') }}">
+                    <i class="fas fa-clipboard-check"></i> Cumplimientos
+                </a>
+            @endcan
+
+            @can('Service Request: fulfillments responsable')
+                <a class="dropdown-item"
+                    href="{{ route('rrhh.service-request.report.fulfillment-pending','responsable') }}"
+                    title="Cumplimientos pendientes por aprobar de Responsable">
+                    <i class="fas fa-chess-king"></i> Pendientes Responsable
+                </a>
+            @endcan
+
+            @can('Service Request: fulfillments rrhh')
+                <a class="dropdown-item"
+                    href="{{ route('rrhh.service-request.report.fulfillment-pending','rrhh') }}"
+                    title="Cumplimientos pendientes por aprobar de RRHH">
+                    <i class="fas fa-user-shield"></i> Pendientes RRHH
+                </a>
+            @endcan
+
+            @can('Service Request: fulfillments finance')
+                <a class="dropdown-item"
+                    href="{{ route('rrhh.service-request.report.fulfillment-pending','finance') }}"
+                    title="Cumplimientos pendientes por aprobar de finanzas">
+                    <i class="fas fa-piggy-bank"></i> Pendientes Finanzas
+                </a>
+            @endcan
+
+        </div>
     </li>
-    @endcan
-
-    @can('Service Request: fulfillments responsable')
-        <li class="nav-item">
-            <a class="nav-link {{ active('rrhh.service-request.report.fulfillment-pending') }}"
-                href="{{ route('rrhh.service-request.report.fulfillment-pending','responsable') }}"
-                title="Cumplimientos pendientes por aprobar de Responsable">
-                <i class="fas fa-clipboard-check"></i>
-                <i class="fas fa-chess-king"></i>
-            </a>
-        </li>
-    @endcan
-
-    @can('Service Request: fulfillments rrhh')
-        <li class="nav-item">
-            <a class="nav-link {{ active('rrhh.service-request.report.fulfillment-pending') }}"
-                href="{{ route('rrhh.service-request.report.fulfillment-pending','rrhh') }}"
-                title="Cumplimientos pendientes por aprobar de RRHH">
-                <i class="fas fa-clipboard-check"></i>
-                <i class="fas fa-user-shield"></i>
-            </a>
-        </li>
-    @endcan
-
-    @can('Service Request: fulfillments finance')
-        <li class="nav-item">
-            <a class="nav-link {{ active('rrhh.service-request.report.fulfillment-pending') }}"
-                href="{{ route('rrhh.service-request.report.fulfillment-pending','finance') }}"
-                title="Cumplimientos pendientes por aprobar de finanzas">
-                <i class="fas fa-clipboard-check"></i>
-                <i class="fas fa-piggy-bank"></i>
-            </a>
-        </li>
-    @endcan
-
+    
     @canany(['Service Request: additional data'])
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.service-request.aditional_data_list') }}"
@@ -92,7 +91,8 @@
     @endcan
 
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle {{ active('rrhh.service-request.report.*') }}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle {{ active('rrhh.service-request.report.*') }}"
+        data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-archive"></i> Reportes
         </a>
         <div class="dropdown-menu">

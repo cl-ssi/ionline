@@ -194,6 +194,8 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::put('/{requestReplacementStaff}/update', [RequestReplacementStaffController::class, 'update'])->name('update');
         Route::get('/to_select/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_select'])->name('to_select');
         Route::get('/to_sign', [RequestReplacementStaffController::class, 'to_sign'])->name('to_sign');
+        Route::get('/show_file/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'show_file'])->name('show_file');
+        Route::get('/download/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'download'])->name('download');
         Route::prefix('sign')->name('sign.')->group(function(){
             Route::put('/{requestSign}/{status}/{requestReplacementStaff}/update', [RequestSignController::class, 'update'])->name('update');
         });
@@ -1408,4 +1410,4 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 
 Route::view('/some', 'some');
 
-Route::get('test',[TestController::class,'index']);
+Route::get('/test-getip',[TestController::class,'getIp']);

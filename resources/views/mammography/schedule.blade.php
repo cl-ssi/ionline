@@ -30,7 +30,7 @@
 
                   <div class="list-group">
                     <a class="list-group-item list-group-item-action">
-                      <i class="fas fa-user"></i> {{ $mammography->runFormat }} - {{ $mammography->fullName() }}
+                      <i class="fas fa-user"></i> {{ $mammography->runFormat }} - {{ $mammography->fullName() }} @if($mammography->telephone) | <i class="fas fa-phone-alt"></i> {{ $mammography->telephone }} @endif
                     </a>
                   </div>
                 @endif

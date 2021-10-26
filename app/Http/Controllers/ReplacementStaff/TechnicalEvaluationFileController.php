@@ -48,7 +48,7 @@ class TechnicalEvaluationFileController extends Controller
             $now = Carbon::now()->format('Y_m_d_H_i_s');
             $id_file = $key_file + 1;
             $file_name = $now.'_'.$id_file.'_'.$technicalEvaluation->id;
-            $files->file = $file->storeAs('/ionline/replacement_staff_dev/technical_evaluation_docs/', $file_name.'.'.$file->extension(), 'gcs');
+            $files->file = $file->storeAs('/ionline/replacement_staff/technical_evaluation_docs/', $file_name.'.'.$file->extension(), 'gcs');
 
             $files->user()->associate(Auth::user());
             $files->technicalEvaluation()->associate($technicalEvaluation);

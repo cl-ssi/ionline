@@ -4,10 +4,11 @@
 
 @section('content')
 @foreach($ouTopLevels as $ouTopLevel)
-<h3 class="mb-3">Autoridades del {{($ouTopLevel->establishment->name)}}</h3>
+<h3 class="mb-3">Autoridades</h3>
+<h4 class="mb-3">{{($ouTopLevel->establishment->name)}}</h4>
 @can('Authorities: manager')
 @if($ouTopLevel->establishment_id == Auth::user()->organizationalUnit->establishment->id)
-<a href="{{ route('rrhh.authorities.create') }}?establishment_id={{$ouTopLevel->establishment_id}}" class="btn btn-primary">Crear Autoridad del {{($ouTopLevel->establishment->name)}}</a>
+<a href="{{ route('rrhh.authorities.create') }}?establishment_id={{$ouTopLevel->establishment_id}}" class="btn btn-primary">Crear Autoridad del {{($ouTopLevel->establishment->name)}}</a><br><br>
 @endif
 @endcan
 
@@ -75,9 +76,8 @@
                 margin-bottom: 5px;
             }
         </style>
-
         @foreach($calendar as $item)
-          @if($item['manager']->user)
+          @if($item['manager'])
             <div class="dia_calendario small p-2" {!! ($today->format('Y-m-d') == $item['date'])?'style="border: 2px solid black;"':'' !!}>
                 <center>
                     {{ $item['date'] }}
