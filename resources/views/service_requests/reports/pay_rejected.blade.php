@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Reporte para pagos')
+@section('title', 'Pagos rechazados')
 
 @section('content')
 
