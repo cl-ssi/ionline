@@ -21,25 +21,28 @@
 @endsection
 
 @section('content')
-
-@can('Users: create')
-<h3 class="inline mt-3">Usuarios
-	<a href="{{ route('rrhh.users.create') }}" class="btn btn-primary">Crear</a>
-</h3>
-@endcan
-
-<br>
-
-<form class="form-inline float-left" method="GET" action="{{ route('rrhh.users.index') }}">
-	<div class="input-group mb-3">
-		<input type="text" name="name" class="form-control" placeholder="Nombres, Apellidos o RUN sin DV" autofocus>
-		<div class="input-group-append">
-			<button class="btn btn-outline-secondary" type="submit">
-				<i class="fas fa-search" aria-hidden="true"></i>
-			</button>
-		</div>
+<div>
+	<div class="float-left">
+		<h3>Usuarios
+			@can('Users: create')
+				<a href="{{ route('rrhh.users.create') }}" class="btn btn-primary">Crear</a>
+			@endcan
+		</h3><br>
 	</div>
-</form>
+
+	<div>
+		<form class="form-inline float-right" method="GET" action="{{ route('rrhh.users.index') }}">
+			<div class="input-group mb-3">
+				<input type="text" name="name" class="form-control" placeholder="Nombres, Apellidos o RUN sin DV" autofocus>
+				<div class="input-group-append">
+					<button class="btn btn-outline-secondary" type="submit">
+						<i class="fas fa-search" aria-hidden="true"></i>
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
 
 <br>
 

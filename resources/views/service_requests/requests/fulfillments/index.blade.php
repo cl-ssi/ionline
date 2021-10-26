@@ -9,65 +9,67 @@
 <h3 class="mb-3">Cumplimiento solicitudes de contratación</h3>
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.fulfillment.index') }}">
-  <div class="input-group mb-2">
-    <div class="input-group-prepend">
-      <span class="input-group-text">Unidad</span>
-    </div>
-    <select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" data-size="5">
-      <option value="">Todos</option>
-      @foreach($responsabilityCenters as $key => $responsabilityCenter)
-        <option value="{{$responsabilityCenter->id}}" @if($responsabilityCenter->id == $request->responsability_center_ou_id) selected @endif>{{$responsabilityCenter->name}}</option>
-      @endforeach
-    </select>
-    <div class="input-group-prepend">
-      <span class="input-group-text">Tipo</span>
-    </div>
-    <select class="form-control selectpicker" data-live-search="true" name="program_contract_type" data-size="5">
-      <option value="">Todos</option>
-      <option value="Mensual" @if($request->program_contract_type == "Mensual") selected @endif>Mensual</option>
-      <option value="Horas" @if($request->program_contract_type == "Horas") selected @endif>Horas</option>
-    </select>
-  </div>
 
-  <div class="input-group mb-2">
-    <div class="input-group-prepend">
-      <span class="input-group-text">Estam.</span>
-    </div>
-    <select class="form-control selectpicker" data-live-search="true" name="estate" data-size="5">
-      <option value="">Ninguno</option>
-      <option value="Profesional Médico" @if($request->estate == "Profesional Médico") selected @endif>Profesional Médico</option>
-      <option value="Profesional" @if($request->estate == "Profesional") selected @endif>Profesional</option>
-      <option value="Técnico" @if($request->estate == "Técnico") selected @endif>Técnico</option>
-      <option value="Administrativo" @if($request->estate == "Administrativo") selected @endif>Administrativo</option>
-      <option value="Farmaceutico" @if($request->estate == "Farmaceutico") selected @endif>Farmaceutico</option>
-      <option value="Odontólogo" @if($request->estate == "Odontólogo") selected @endif>Odontólogo</option>
-      <option value="Bioquímico" @if($request->estate == "Bioquímico") selected @endif>Bioquímico</option>
-      <option value="Auxiliar" @if($request->estate == "Auxiliar") selected @endif>Auxiliar</option>
-    </select>
-    <div class="input-group-prepend">
-      <span class="input-group-text">Estab.</span>
-    </div>
-    <select class="form-control selectpicker" data-live-search="true" name="establishment_id" data-size="5">
-      <option value="">Todos</option>
-      <option value="1" @if($request->establishment_id == "1") selected @endif>Hospital Ernesto Torres Galdames</option>
-      <option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option>
-      <option value="0" @if($request->establishment_id == "0") selected @endif>Dirección SSI</option>
-    </select>
-  </div>
+    <div class="form-row">
+        <fieldset class="form-group col-6 col-md">
+            <label>Unidad</label>
+            <select class="form-control" data-live-search="true" name="responsability_center_ou_id" data-size="5">
+                <option value="">Todos</option>
+                @foreach($responsabilityCenters as $key => $responsabilityCenter)
+                  <option value="{{$responsabilityCenter->id}}" @if($responsabilityCenter->id == $request->responsability_center_ou_id) selected @endif>{{$responsabilityCenter->name}}</option>
+                @endforeach
+            </select>
+        </fieldset>
 
-  <div class="input-group mb-2">
-    <div class="input-group-prepend">
-        <span class="input-group-text">Id</span>
-      </div>
-      <input type="text" class="form-control " name="id" value="{{$request->id}}">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Profesional</span>
-      </div>
-      <input type="text" class="form-control " name="name" value="{{$request->name}}">
-      <div class="input-group-append">
-          <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+        <fieldset class="form-group col-6 col-md">
+            <label>Tipo</label>
+            <select class="form-control" data-live-search="true" name="program_contract_type" data-size="5">
+                <option value="">Todos</option>
+                <option value="Mensual" @if($request->program_contract_type == "Mensual") selected @endif>Mensual</option>
+                <option value="Horas" @if($request->program_contract_type == "Horas") selected @endif>Horas</option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-6 col-md">
+            <label>Estam.</label>
+            <select class="form-control" data-live-search="true" name="estate" data-size="5">
+                <option value="">Ninguno</option>
+                <option value="Profesional Médico" @if($request->estate == "Profesional Médico") selected @endif>Profesional Médico</option>
+                <option value="Profesional" @if($request->estate == "Profesional") selected @endif>Profesional</option>
+                <option value="Técnico" @if($request->estate == "Técnico") selected @endif>Técnico</option>
+                <option value="Administrativo" @if($request->estate == "Administrativo") selected @endif>Administrativo</option>
+                <option value="Farmaceutico" @if($request->estate == "Farmaceutico") selected @endif>Farmaceutico</option>
+                <option value="Odontólogo" @if($request->estate == "Odontólogo") selected @endif>Odontólogo</option>
+                <option value="Bioquímico" @if($request->estate == "Bioquímico") selected @endif>Bioquímico</option>
+                <option value="Auxiliar" @if($request->estate == "Auxiliar") selected @endif>Auxiliar</option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-6 col-md">
+            <label>Establecimiento</label>
+            <select class="form-control" data-live-search="true" name="establishment_id" data-size="5">
+                <option value="">Todos</option>
+                <option value="1" @if($request->establishment_id == "1") selected @endif>Hospital Ernesto Torres Galdames</option>
+                <option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option>
+                <option value="0" @if($request->establishment_id == "0") selected @endif>Dirección SSI</option>
+            </select>
+        </fieldset>
+
+        <fieldset class="form-group col-4 col-md-1">
+            <label>ID</label>
+            <input class="form-control" type="text" name="id" value="{{$request->id}}">
+        </fieldset>
+
+        <fieldset class="form-group col-4 col-md-1">
+            <label>Profesional</label>
+            <input class="form-control" type="text" name="name" value="{{$request->name}}">
+        </fieldset>
+
+        <fieldset class="form-group col-4 col-md-1">
+            <label>&nbsp;</label>
+            <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
+        </fieldset>
     </div>
-  </div>
 </form>
 
 <hr>
