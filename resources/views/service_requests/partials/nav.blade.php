@@ -62,7 +62,7 @@
 
         </div>
     </li>
-    
+
     @canany(['Service Request: additional data'])
     <li class="nav-item">
         <a class="nav-link {{ active('rrhh.service-request.aditional_data_list') }}"
@@ -121,7 +121,7 @@
             @canany(['Service Request: report to pay'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.to-pay') }}"
                 href="{{ route('rrhh.service-request.report.to-pay') }}">
-                <i class="fas fa-piggy-bank"></i> Reporte para pagos
+                <i class="fas fa-piggy-bank"></i> Reporte pendientes de pago
             </a>
             @endcan
 
