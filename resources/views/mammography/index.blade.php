@@ -26,6 +26,7 @@
             <th>Run</th>
             <th>Nombre</th>
             <th>Fecha de Reserva</th>
+            <th>Teléfono</th>
         </tr>
     </thead>
     <tbody>
@@ -39,6 +40,7 @@
                 <td nowrap>
                     {{ optional($vaccination->exam_date)->format('d-m-Y H:i') }}
                 </td>
+                <td nowrap>{{ $vaccination->telephone }}</td>
             </tr>
         @endforeach
     </tbody>

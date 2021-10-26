@@ -138,6 +138,7 @@
             </table>
         </div>
 
+        @if($technicalEvaluation->technical_evaluation_status == 'pending')
         <!-- Button trigger modal -->
         @can('Replacement Staff: assign request')
         <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal"
@@ -147,6 +148,8 @@
 
         @include('replacement_staff.modals.modal_to_re_assign')
         @endcan
+
+        @endif
     </div>
 </div>
 
@@ -287,8 +290,8 @@
         </div>
       @endif
 
-      <h6>Postulantes a cargo(s)</h6>
       @if($technicalEvaluation->applicants->count() > 0)
+      <h6>Postulantes a cargo(s)</h6>
         <div class="table-responsive">
             <table class="table table-sm table-striped table-bordered">
                 <thead class="text-center small">
@@ -297,7 +300,8 @@
                       <th style="width: 22%">Calificación Evaluación Psicolaboral</th>
                       <th style="width: 22%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
                       <th style="width: 22%">Observaciones</th>
-                      @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
+                      @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+                          Auth::user()->hasRole('Replacement Staff: admin'))
                       <th colspan="2"></th>
                       @endif
                     </tr>
@@ -309,7 +313,8 @@
                         <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
                         <td class="text-center">{{ $applicant->technical_evaluation_score }} <br> {{ $applicant->TechEvaScore }}</td>
                         <td>{{ $applicant->observations }}</td>
-                        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
+                        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+                            Auth::user()->hasRole('Replacement Staff: admin'))
                         <td style="width: 4%">
                             @if($technicalEvaluation->date_end == NULL &&
                               ($applicant->psycholabor_evaluation_score == null || $applicant->technical_evaluation_score == null || $applicant->observations == null))
@@ -333,12 +338,20 @@
                             @endif
                         </td>
                         <td style="width: 4%">
+                            @if($technicalEvaluation->date_end == NULL)
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
                               data-target="#exampleModal-to-evaluate-applicant-{{ $applicant->id }}">
                                 <i class="fas fa-edit"></i>
                             </button>
                             @include('replacement_staff.modals.modal_to_evaluate_applicant')
+                            @else
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                              data-target="#exampleModal-to-evaluate-applicant-{{ $applicant->id }}" disabled>
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            @endif
                         </td>
                         @endif
                     </tr>
@@ -365,11 +378,11 @@
           @endif
       @endif
 
+      @if($technicalEvaluation->technical_evaluation_status == 'pending')
+
       <hr>
 
       <h6>Busqueda de Postulantes</h6>
-
-      @if($technicalEvaluation->technical_evaluation_status == 'pending')
 
       @livewire('replacement-staff.search-select-applicants',
           ['technicalEvaluation' => $technicalEvaluation])

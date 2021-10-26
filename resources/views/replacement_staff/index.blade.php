@@ -62,7 +62,7 @@
     <table class="table table-sm table-striped table-bordered">
         <thead class="text-center small">
             <tr>
-                <th>Ingreso</th>
+                <th>Ingreso Antecedentes</th>
                 <th>Nombre Completo</th>
                 <th>Run</th>
                 <th>Estamento</th>
@@ -71,6 +71,7 @@
                 <th>Fecha Titulación</th>
                 <th>Años Exp.</th>
                 <th>Estado</th>
+                <!-- <th>Periodo Efectivo</th> -->
                 <th style="width: 8%"></th>
             </tr>
         </thead>
@@ -108,6 +109,7 @@
                     @endforeach
                 </td>
                 <td>{{ $staff->StatusValue }}</td>
+                <!-- <td>{{-- $staff->applicants->first()->start_date->format('d-m-Y') --}}</td> -->
                 <td>
                     <a href="{{ route('replacement_staff.show_replacement_staff', $staff) }}"
                       class="btn btn-outline-secondary btn-sm"

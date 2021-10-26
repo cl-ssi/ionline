@@ -43,7 +43,8 @@
 
 <br>
 
-<table class="table table-striped table-sm">
+<!-- Ahora esta tabla es responsiva -->
+<table class="table table-responsive table-striped table-sm">
 	<thead class="thead-dark">
 		<tr>
 			<th scope="col">RUN</th>
