@@ -19,7 +19,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col col-md">
+        <fieldset class="form-group col-4 col-md-1">
             <label for="for_establishment_id">Unidad</label>
             <select name="responsability_center" class="form-control" id="for_responsability_center">
                 <option value="">Seleccionar</option>
@@ -38,7 +38,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-4 col-md-2">
+        <fieldset class="form-group col-4 col-md-1">
             <label for="for_month">Mes</label>
             <select name="month" class="form-control">
                 <option value=""></option>
@@ -60,8 +60,8 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-12 col-md-4">
-            <label for="for_type">Origen Financiamiento</label>
+        <fieldset class="form-group col-6 col-md-3">
+            <label for="for_type">Origen Financiacion</label>
             <select name="type" class="form-control">
                 <option value=""></option>
                 <option value="Covid" @if($request->input('type')=='Covid') selected @endif>Covid</option>
@@ -69,7 +69,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md-4">
+        <fieldset class="form-group col-6 col-md-3">
             <label for="for_program_contract_type">Tipo de contrato</label>
             <select name="program_contract_type" class="form-control">
                 <option value=""></option>
@@ -77,9 +77,7 @@
                 <option value="Horas" @if($request->input('program_contract_type')=='Horas') selected @endif>Horas</option>
             </select>
         </fieldset>
-    </div>
 
-    <div class="form-row">
         <fieldset class="form-group col-3 col-md-1">
             <label for="for_program_contract_type">ID</label>
             <input class="form-control" type="text" name="sr_id" value="{{ old('sr_id') }}">
@@ -92,7 +90,7 @@
         </fieldset>
 
         <fieldset class="form-group col-2 col-md-1">
-            <label for="">&nbsp;</label>
+            <label>&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
         </fieldset>
     </div>
