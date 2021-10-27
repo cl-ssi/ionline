@@ -74,7 +74,7 @@
                 <fieldset class="form-group col-2">
                     <label for="for_charges_number">Nº Cargos</label>
                     <input type="number" class="form-control" name="charges_number"
-                        id="for_charges_number" placeholder="Otro">
+                        id="for_charges_number">
                 </fieldset>
             </div>
 

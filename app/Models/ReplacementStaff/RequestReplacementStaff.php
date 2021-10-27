@@ -20,6 +20,10 @@ class RequestReplacementStaff extends Model
         'work_day', 'other_work_day','charges_number','job_profile_file'
     ];
 
+    public function profile_manage() {
+        return $this->belongsTo('App\Models\ReplacementStaff\ProfileManage');
+    }
+
     public function user() {
         return $this->belongsTo('App\User');
     }

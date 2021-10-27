@@ -15,20 +15,27 @@
         </thead>
         <tbody class="small">
             <tr>
-                <th class="table-active">Por medio del presente, la Subdirección</th>
+                <th class="table-active">Por medio del presente</th>
                 <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->organizationalUnit->name }}</td>
             </tr>
             <tr>
-                <th class="table-active">Nombre de Cargo</th>
-                <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->name }}</td>
+                <th class="table-active">Nombre / Nº de Cargos</th>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->name }}</td>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->charges_number }}</td>
             </tr>
             <tr>
-                <th class="table-active">En el grado</th>
-                <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->degree }}</td>
+                <th class="table-active">Estamento / Grado</th>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->profile_manage->name }}</td>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->degree }}</td>
             </tr>
             <tr>
-                <th class="table-active">Calidad Jurídica</th>
-                <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->LegalQualityValue }}</td>
+                <th class="table-active">Calidad Jurídica / $ Honorarios</th>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->LegalQualityValue }}</td>
+                <td style="width: 33%">
+                  @if($technicalEvaluation->requestReplacementStaff->LegalQualityValue == 'Honorarios')
+                      ${{ number_format($technicalEvaluation->requestReplacementStaff->salary,0,",",".") }}
+                  @endif
+                </td>
             </tr>
             <tr>
                 <th class="table-active">La Persona cumplirá labores en Jornada</th>
@@ -41,7 +48,7 @@
                 <td style="width: 33%">De funcionario: {{ $technicalEvaluation->requestReplacementStaff->name_to_replace }}</td>
             </tr>
             <tr>
-                <th class="table-active">Otros (especifique)</th>
+                <th class="table-active">Fundamento (especifique)</th>
                 <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->other_fundament }}</td>
             </tr>
             <tr>
@@ -50,7 +57,11 @@
                 <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->end_date->format('d-m-Y') }}</td>
             </tr>
             <tr>
-                <td colspan="3">El documento debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
+                <th class="table-active">Perfil del Cargo</th>
+                <td colspan="2"><a href="{{ route('replacement_staff.request.show_file', $technicalEvaluation->requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a></td>
+            </tr>
+            <tr>
+                <td colspan="3">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
             </tr>
             <tr>
                 @foreach($technicalEvaluation->requestReplacementStaff->RequestSign as $sign)
