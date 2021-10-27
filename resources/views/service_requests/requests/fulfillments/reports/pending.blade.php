@@ -9,7 +9,7 @@
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.fulfillment-pending',$who) }}">
 
     <div class="form-row">
-        <fieldset class="form-group col-12 col-md">
+        <fieldset class="form-group col-12 col-md-4">
             <label for="for_establishment_id">Establecimiento</label>
             <select name="establishment" class="form-control" id="for_establishment_id">
                 <option value="">Seleccionar</option>
@@ -19,7 +19,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-4 col-md-1">
+        <fieldset class="form-group col-4 col-md-5">
             <label for="for_establishment_id">Unidad</label>
             <select name="responsability_center" class="form-control" id="for_responsability_center">
                 <option value="">Seleccionar</option>
@@ -38,7 +38,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-4 col-md-1">
+        <fieldset class="form-group col-4 col-md-2">
             <label for="for_month">Mes</label>
             <select name="month" class="form-control">
                 <option value=""></option>
