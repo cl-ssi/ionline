@@ -45,6 +45,8 @@
     @endforeach
 </table>
 
+{{ $serviceRequests->links() }}
+
 @endsection
 
 @section('custom_js')

@@ -317,7 +317,8 @@ class ReportController extends Controller
   public function pendingResolutions(Request $request)
   {
     $serviceRequests = ServiceRequest::whereNull('has_resolution_file')->orWhere('has_resolution_file', '===', 0)
-      ->get();
+    ->paginate(100);
+      //->get();
     foreach ($serviceRequests as $key => $serviceRequest) {
       //only completed
       if ($serviceRequest->SignatureFlows->where('status', '===', 0)->count() == 0 && $serviceRequest->SignatureFlows->whereNull('status')->count() == 0) {
