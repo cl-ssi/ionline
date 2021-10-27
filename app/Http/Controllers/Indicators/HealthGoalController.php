@@ -30,6 +30,7 @@ class HealthGoalController extends Controller
     {
         if($law == '19813'){
             $indicator = Indicator::findOrFail($health_goal);
+            $indicator->load('values');
             $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->orderBy('comuna')->get();
             $this->loadValuesWithRemSourceLaw19813($year, $indicator);
         } else {
