@@ -22,32 +22,34 @@
               <table class="table table-sm table-bordered">
                   <thead>
                       <tr class="table-active">
-                        <th>Nº Solicitud Contratación de Personal</th>
-                        <td colspan="2">
-                            {{ $requestReplacementStaff->id }}
-                        </td>
+                          <th colspan="3">Formulario Contratación de Personal - Solicitud Nº {{ $requestReplacementStaff->id }}</th>
                       </tr>
                   </thead>
                   <tbody>
                       <tr>
-                          <th class="table-active">Por medio del presente, la</th>
+                          <th class="table-active">Por medio del presente</th>
                           <td colspan="2">
                               {{ $requestReplacementStaff->organizationalUnit->name }}
                           </td>
                       </tr>
                       <tr>
-                          <th class="table-active">Solicita autorizar el llamado a presentar antecedentes al cargo de</th>
-                          <td colspan="2">
-                              {{ $requestReplacementStaff->name }}
+                          <th class="table-active">Nombre / Nº de Cargos</th>
+                          <td style="width: 33%">{{ $requestReplacementStaff->name }}</td>
+                          <td style="width: 33%">{{ $requestReplacementStaff->charges_number }}</td>
+                      </tr>
+                      <tr>
+                          <th class="table-active">Estamento / Grado</th>
+                          <td style="width: 33%">{{ $requestReplacementStaff->profile_manage->name }}</td>
+                          <td style="width: 33%">{{ $requestReplacementStaff->degree }}</td>
+                      </tr>
+                      <tr>
+                          <th class="table-active">Calidad Jurídica / $ Honorarios</th>
+                          <td style="width: 33%">{{ $requestReplacementStaff->LegalQualityValue }}</td>
+                          <td style="width: 33%">
+                            @if($requestReplacementStaff->LegalQualityValue == 'Honorarios')
+                                ${{ number_format($requestReplacementStaff->salary,0,",",".") }}
+                            @endif
                           </td>
-                      </tr>
-                      <tr>
-                          <th class="table-active">En el grado</th>
-                          <td colspan="2">{{ $requestReplacementStaff->degree }}</td>
-                      </tr>
-                      <tr>
-                          <th class="table-active">Calidad Jurídica</th>
-                          <td colspan="2">{{ $requestReplacementStaff->LegalQualityValue }}</td>
                       </tr>
                       <tr>
                           <th class="table-active">La Persona cumplirá labores en Jornada</th>
@@ -60,7 +62,7 @@
                           <td style="width: 33%">De funcionario: {{ $requestReplacementStaff->name_to_replace }}</td>
                       </tr>
                       <tr>
-                          <th class="table-active">Otros (especifique)</th>
+                          <th class="table-active">Fundamento (especifique)</th>
                           <td colspan="2">{{ $requestReplacementStaff->other_fundament }}</td>
                       </tr>
                       <tr>

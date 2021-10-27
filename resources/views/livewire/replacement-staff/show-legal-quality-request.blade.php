@@ -16,7 +16,7 @@
             <option value="quit" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionStateDisabled }}>Renuncia</option>
             <option value="allowance without payment" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Permiso sin goce de sueldo</option>
             <option value="regularization work position" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Regulación de cargos</option>
-            <option value="expand work position" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Cargo expansión</option>
+            <option value="expand work position" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionStateDisabled }}>Cargo expansión</option>
             <option value="vacations" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Feriado legal</option>
             <option value="other" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionStateDisabled }}>Otro</option>
         </select>
@@ -25,6 +25,6 @@
             id="for_name_to_replace" placeholder="Nombre de Reemplazo" @if($requestReplacementStaff) value="{{$requestReplacementStaff->name_to_replace}}" @endif {{ $nameToReplaceInput }}>
 
         <input type="text" class="form-control" name="other_fundament"
-            id="for_other_fundament" placeholder="Otro fundamento..." @if($requestReplacementStaff) value="{{$requestReplacementStaff->other_fundament}}" @endif {{ $nameOtherFundament }}>
+            id="for_other_fundament" placeholder="Fundamento..." @if($requestReplacementStaff) value="{{$requestReplacementStaff->other_fundament}}" @endif {{ $nameOtherFundament }}>
     </div>
 </fieldset>
