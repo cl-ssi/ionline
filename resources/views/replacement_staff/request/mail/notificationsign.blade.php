@@ -9,8 +9,8 @@
   <br>
 
   <p>A través del presente, se informa que se encuentra disponible en {{ env('APP_NAME') }}
-    una solicitud de reemplazo correspondiente a su Unidad Organizacional, favor ingresar
-    al módulo de reemplazos para aceptar o declinar la solicitud.
+    una solicitud de contratación correspondiente a su Unidad Organizacional, favor ingresar
+    al módulo <strong>Solicitud de Contratación</strong> para aceptar o declinar el requerimiento.
   </p>
 
   <ul>

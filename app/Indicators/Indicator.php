@@ -3,11 +3,14 @@
 namespace App\Indicators;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 
 class Indicator extends Model
 {
+    use SoftDeletes;
+    
     protected $fillable = ['number', 'name', 'weighting_by_section', 'evaluated_section_states', 'numerator',  
                            'numerator_source','denominator', 'denominator_source',
                            'numerator_cods','numerator_cols','denominator_cods',

@@ -8,13 +8,16 @@
         </a>
     @else
 
-        <strong>Boleta:</strong> <small>(Fecha de Boleta debe ser último día del mes trabajado)</small>
+        <strong>Boleta:</strong> 
         <input type="file" wire:model="invoiceFile">
         @error('invoiceFile') <span class="error">{{ $message }}</span> @enderror
         <div wire:loading wire:target="invoiceFile"><strong>Cargando</strong></div>
         <button type="button" wire:click="save()" class="btn btn-sm btn-outline-primary">
             <i class="fas fa-save"></i>
-        </button>
-
+        </button><br>
+        <small>
+        Fecha de boleta mensual: último día del mes.<br>
+        Fecha de boleta extra: debe ser igual o posterior a la resolución. 
+        </small>
     @endif
 </span>

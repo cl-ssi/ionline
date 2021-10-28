@@ -10,31 +10,36 @@
       </div>
       <div class="modal-body">
           <table class="table table-sm table-bordered">
-              <thead>
-                  <tr class="table-active">
+            <thead>
+                <tr class="table-active">
                     <th colspan="3">Formulario Contratación de Personal - Solicitud Nº {{ $requestReplacementStaff->id }}</th>
-                  </tr>
-              </thead>
+                </tr>
+            </thead>
               <tbody>
                   <tr>
-                      <th class="table-active">Por medio del presente, la</th>
+                      <th class="table-active">Por medio del presente</th>
                       <td colspan="2">
                           {{ $requestReplacementStaff->organizationalUnit->name }}
                       </td>
                   </tr>
                   <tr>
-                      <th class="table-active">Solicita autorizar el llamado a presentar antecedentes al cargo de</th>
-                      <td colspan="2">
-                          {{ $requestReplacementStaff->name }}
+                      <th class="table-active">Nombre / Nº de Cargos</th>
+                      <td style="width: 33%">{{ $requestReplacementStaff->name }}</td>
+                      <td style="width: 33%">{{ $requestReplacementStaff->charges_number }}</td>
+                  </tr>
+                  <tr>
+                      <th class="table-active">Estamento / Grado</th>
+                      <td style="width: 33%">{{ $requestReplacementStaff->profile_manage->name }}</td>
+                      <td style="width: 33%">{{ $requestReplacementStaff->degree }}</td>
+                  </tr>
+                  <tr>
+                      <th class="table-active">Calidad Jurídica / $ Honorarios</th>
+                      <td style="width: 33%">{{ $requestReplacementStaff->LegalQualityValue }}</td>
+                      <td style="width: 33%">
+                        @if($requestReplacementStaff->LegalQualityValue == 'Honorarios')
+                            ${{ number_format($requestReplacementStaff->salary,0,",",".") }}
+                        @endif
                       </td>
-                  </tr>
-                  <tr>
-                      <th class="table-active">En el grado</th>
-                      <td colspan="2">{{ $requestReplacementStaff->degree }}</td>
-                  </tr>
-                  <tr>
-                      <th class="table-active">Calidad Jurídica</th>
-                      <td colspan="2">{{ $requestReplacementStaff->LegalQualityValue }}</td>
                   </tr>
                   <tr>
                       <th class="table-active">La Persona cumplirá labores en Jornada</th>
@@ -47,7 +52,7 @@
                       <td style="width: 33%">De funcionario: {{ $requestReplacementStaff->name_to_replace }}</td>
                   </tr>
                   <tr>
-                      <th class="table-active">Otros (especifique)</th>
+                      <th class="table-active">Fundamento (especifique)</th>
                       <td colspan="2">{{ $requestReplacementStaff->other_fundament }}</td>
                   </tr>
                   <tr>
@@ -56,7 +61,11 @@
                       <td style="width: 33%">{{ $requestReplacementStaff->end_date->format('d-m-Y') }}</td>
                   </tr>
                   <tr>
-                      <td colspan="3">El documento debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
+                      <th class="table-active">Perfil del Cargo</th>
+                      <td colspan="2"><a href="{{ route('replacement_staff.request.show_file', $requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a></td>
+                  </tr>
+                  <tr>
+                      <td colspan="3">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
                   </tr>
                   <tr>
                       @foreach($requestReplacementStaff->RequestSign as $sign)
@@ -102,7 +111,120 @@
                   @endif
               </div>
           </div>
+
+          @if($requestReplacementStaff->technicalEvaluation &&
+                  $requestReplacementStaff->technicalEvaluation->commissions->count() > 0)
+          <div class="card" id="commission">
+              <div class="card-header">
+                  <h6>Integrantes Comisión</h6>
+              </div>
+              <div class="card-body">
+                  <div class="table-responsive">
+                      <table class="table table-sm table-bordered">
+                          <thead class="text-center">
+                              <tr>
+                                <th>Nombre</th>
+                                <th>Unidad Organizacional</th>
+                                <th>Cargo</th>
+                              </tr>
+                          </thead>
+                          <tbody >
+                              @foreach($requestReplacementStaff->technicalEvaluation->commissions as $commission)
+                              <tr>
+                                  <td>{{ $commission->user->FullName }}</td>
+                                  <td>{{ $commission->user->organizationalUnit->name }}</td>
+                                  <td>{{ $commission->job_title }}</td>
+                              </tr>
+                              @endforeach
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+              <br>
+          </div>
+
+          <br>
+
+          @endif
+
+          @if($requestReplacementStaff->technicalEvaluation &&
+                  $requestReplacementStaff->technicalEvaluation->applicants->count() > 0)
+
+          <div class="card" id="applicant">
+              <div class="card-header">
+                  <h6>Selección de RR.HH.</h6>
+              </div>
+              <div class="card-body">
+                <h6>Postulantes a cargo(s)</h6>
+                  <div class="table-responsive">
+                      <table class="table table-sm table-striped table-bordered">
+                          <thead class="text-center">
+                              <tr>
+                                <th style="width: 22%">Nombre</th>
+                                <th style="width: 22%">Calificación Evaluación Psicolaboral</th>
+                                <th style="width: 22%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
+                                <th style="width: 22%">Observaciones</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              @foreach($requestReplacementStaff->technicalEvaluation->applicants->sortByDesc('score') as $applicant)
+                              <tr class="{{ ($applicant->selected == 1)?'table-success':''}}">
+                                  <td>{{ $applicant->replacement_staff->FullName }}</td>
+                                  <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
+                                  <td class="text-center">{{ $applicant->technical_evaluation_score }} <br> {{ $applicant->TechEvaScore }}</td>
+                                  <td>{{ $applicant->observations }}</td>
+                              </tr>
+                              @endforeach
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+
+          <br>
+          @endif
+
+          @if($requestReplacementStaff->technicalEvaluation &&
+                  $requestReplacementStaff->technicalEvaluation->technicalEvaluationFiles->count() > 0)
+          <div class="card" id="file">
+              <div class="card-header">
+                  <h6>Adjuntos </h6>
+              </div>
+              <div class="card-body">
+                  <div class="table-responsive">
+
+                      <table class="table table-sm table-striped table-bordered">
+                          <thead class="text-center">
+                              <tr>
+                                <th>Nombre Archivo</th>
+                                <th>Cargado por</th>
+                                <th>Fecha</th>
+                                <th></th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                            @foreach($requestReplacementStaff->technicalEvaluation->technicalEvaluationFiles->sortByDesc('created_at') as $technicalEvaluationFiles)
+                              <tr>
+                                <td>{{ $technicalEvaluationFiles->name }}</td>
+                                <td>{{ $technicalEvaluationFiles->user->FullName }}</td>
+                                <td>{{ $technicalEvaluationFiles->created_at->format('d-m-Y H:i:s') }}</td>
+                                <td style="width: 4%">
+                                    <a href="{{ route('replacement_staff.request.technical_evaluation.file.show_file', $technicalEvaluationFiles) }}"
+                                      class="btn btn-outline-secondary btn-sm"
+                                      title="Ir"
+                                      target="_blank"> <i class="far fa-eye"></i></a>
+                                </td>
+                              </tr>
+                            @endforeach
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+              <br>
+          </div>
+          @endif
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
       </div>

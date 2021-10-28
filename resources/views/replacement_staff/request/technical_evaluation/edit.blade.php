@@ -15,20 +15,27 @@
         </thead>
         <tbody class="small">
             <tr>
-                <th class="table-active">Por medio del presente, la Subdirección</th>
+                <th class="table-active">Por medio del presente</th>
                 <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->organizationalUnit->name }}</td>
             </tr>
             <tr>
-                <th class="table-active">Nombre de Cargo</th>
-                <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->name }}</td>
+                <th class="table-active">Nombre / Nº de Cargos</th>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->name }}</td>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->charges_number }}</td>
             </tr>
             <tr>
-                <th class="table-active">En el grado</th>
-                <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->degree }}</td>
+                <th class="table-active">Estamento / Grado</th>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->profile_manage->name }}</td>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->degree }}</td>
             </tr>
             <tr>
-                <th class="table-active">Calidad Jurídica</th>
-                <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->LegalQualityValue }}</td>
+                <th class="table-active">Calidad Jurídica / $ Honorarios</th>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->LegalQualityValue }}</td>
+                <td style="width: 33%">
+                  @if($technicalEvaluation->requestReplacementStaff->LegalQualityValue == 'Honorarios')
+                      ${{ number_format($technicalEvaluation->requestReplacementStaff->salary,0,",",".") }}
+                  @endif
+                </td>
             </tr>
             <tr>
                 <th class="table-active">La Persona cumplirá labores en Jornada</th>
@@ -41,7 +48,7 @@
                 <td style="width: 33%">De funcionario: {{ $technicalEvaluation->requestReplacementStaff->name_to_replace }}</td>
             </tr>
             <tr>
-                <th class="table-active">Otros (especifique)</th>
+                <th class="table-active">Fundamento (especifique)</th>
                 <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->other_fundament }}</td>
             </tr>
             <tr>
@@ -50,7 +57,11 @@
                 <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->end_date->format('d-m-Y') }}</td>
             </tr>
             <tr>
-                <td colspan="3">El documento debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
+                <th class="table-active">Perfil del Cargo</th>
+                <td colspan="2"><a href="{{ route('replacement_staff.request.show_file', $technicalEvaluation->requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a></td>
+            </tr>
+            <tr>
+                <td colspan="3">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
             </tr>
             <tr>
                 @foreach($technicalEvaluation->requestReplacementStaff->RequestSign as $sign)
@@ -138,6 +149,7 @@
             </table>
         </div>
 
+        @if($technicalEvaluation->technical_evaluation_status == 'pending')
         <!-- Button trigger modal -->
         @can('Replacement Staff: assign request')
         <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal"
@@ -147,6 +159,8 @@
 
         @include('replacement_staff.modals.modal_to_re_assign')
         @endcan
+
+        @endif
     </div>
 </div>
 
@@ -287,8 +301,8 @@
         </div>
       @endif
 
-      <h6>Postulantes a cargo(s)</h6>
       @if($technicalEvaluation->applicants->count() > 0)
+      <h6>Postulantes a cargo(s)</h6>
         <div class="table-responsive">
             <table class="table table-sm table-striped table-bordered">
                 <thead class="text-center small">
@@ -297,7 +311,8 @@
                       <th style="width: 22%">Calificación Evaluación Psicolaboral</th>
                       <th style="width: 22%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
                       <th style="width: 22%">Observaciones</th>
-                      @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
+                      @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+                          Auth::user()->hasRole('Replacement Staff: admin'))
                       <th colspan="2"></th>
                       @endif
                     </tr>
@@ -309,7 +324,8 @@
                         <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
                         <td class="text-center">{{ $applicant->technical_evaluation_score }} <br> {{ $applicant->TechEvaScore }}</td>
                         <td>{{ $applicant->observations }}</td>
-                        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id)
+                        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+                            Auth::user()->hasRole('Replacement Staff: admin'))
                         <td style="width: 4%">
                             @if($technicalEvaluation->date_end == NULL &&
                               ($applicant->psycholabor_evaluation_score == null || $applicant->technical_evaluation_score == null || $applicant->observations == null))
@@ -333,12 +349,20 @@
                             @endif
                         </td>
                         <td style="width: 4%">
+                            @if($technicalEvaluation->date_end == NULL)
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
                               data-target="#exampleModal-to-evaluate-applicant-{{ $applicant->id }}">
                                 <i class="fas fa-edit"></i>
                             </button>
                             @include('replacement_staff.modals.modal_to_evaluate_applicant')
+                            @else
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                              data-target="#exampleModal-to-evaluate-applicant-{{ $applicant->id }}" disabled>
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            @endif
                         </td>
                         @endif
                     </tr>
@@ -365,11 +389,11 @@
           @endif
       @endif
 
+      @if($technicalEvaluation->technical_evaluation_status == 'pending')
+
       <hr>
 
       <h6>Busqueda de Postulantes</h6>
-
-      @if($technicalEvaluation->technical_evaluation_status == 'pending')
 
       @livewire('replacement-staff.search-select-applicants',
           ['technicalEvaluation' => $technicalEvaluation])
