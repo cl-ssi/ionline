@@ -28,9 +28,13 @@ class MonthlyQuotes extends Component
       $mes_completo = true;
 
       /* si tiene una "Renuncia voluntaria", el termino del contrato es ahí */
+      if($fulfillment->fulfillmentItems)
+      {
+
       if ($renuncia = $fulfillment->fulfillmentItems->where('type', 'Renuncia voluntaria')->first()) {
           $fulfillment->end_date = $renuncia->end_date;
       }
+    }
 
       /* si inicio de contrato coincide con inicio de mes y término de contrato coincide con fin de mes */
       if ($fulfillment->start_date and $fulfillment->end_date) {
