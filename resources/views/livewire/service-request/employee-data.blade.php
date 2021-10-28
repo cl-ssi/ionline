@@ -4,7 +4,7 @@
     <div class="card-body">
       <div class="form-row">
 
-        <fieldset class="form-group col-6 col-md-2">
+        <fieldset class="form-group col-5 col-md-2">
             <label for="for_run">Run (sin DV)</label>
             <input type="number" min="1" max="50000000" class="form-control" id="for_user_id" name="user_id" wire:model.lazy="user_id" required>
         </fieldset>

@@ -8,7 +8,7 @@
 
 <h3 class="mb-3">Establecimientos</h3>
 
-<table class="table">
+<table class="table table-responsive">
     <thead>
         <tr>
             <th>Id</th>
