@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Pagados')
+@section('title', 'Reporte pagados')
 
 @section('content')
 
 @include('service_requests.partials.nav')
 
-<h4 class="mb-3">Pagados</h4>
+<h4 class="mb-3">Reporte pagados</h4>
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.payed') }}">
 
-<div class="row">
-	<fieldset class="form-group col-md-3">
+<div class="form-row">
+	<fieldset class="form-group col-md">
 			<label for="for_working_day_type">Jornada de Trabajo</label>
 			<select name="working_day_type" class="form-control">
 					<option value="">Todas</option>
@@ -29,12 +29,12 @@
 			</select>
 	</fieldset>
 
-	<fieldset class="form-group col-md-3">
+	<fieldset class="form-group col-md">
 			<label for="for_working_day_type">Desde</label>
 			<input type="date" class="form-control" name="from" @if($request->from) value={{$request->from}} @endif>
 	</fieldset>
 
-	<fieldset class="form-group col-md-3">
+	<fieldset class="form-group col-md">
 			<label for="for_working_day_type">Hasta</label>
 			<input type="date" class="form-control" name="to" @if($request->to) value={{$request->to}} @endif>
 	</fieldset>
@@ -43,7 +43,7 @@
 
 <div class="form-row">
 
-	<div class="col-10">
+	<div class="col-12">
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<span class="input-group-text">Establecimiento</span>
@@ -59,20 +59,22 @@
 			<div class="input-group-append">
 				<button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
 			</div>
-			<div class="input-group-append">
+			<!-- <div class="input-group-append">
 				<button type="submit" class="btn btn-outline-success form-control" title="Descargar Excel" name="excel"><i class="fas fa-file-excel"></i></button>
-			</div>
+			</div> -->
 		</div>
 	</div>
 
-    <div class="col-2">
-    	@if($request->establishment_id)
-      	<a class="btn btn-outline-success" href="{{route('rrhh.service-request.report.bank-payment-file',$request->establishment_id)}}">
-        	<i class="fas fa-file"></i>Archivo de pago banco
-		</a>
-      	@endif
-    </div>
+  <div class="col-2">
+  	@if($request->establishment_id)
+    	<a class="btn btn-outline-success" href="{{route('rrhh.service-request.report.bank-payment-file',$request->establishment_id)}}">
+      	<i class="fas fa-file"></i>Archivo de pago banco
+	</a>
+    	@endif
+  </div>
 </div>
+
+<button type="submit" class="btn btn-outline-success " title="Descargar Excel" name="excel">Descargar <i class="fas fa-file-excel"></i></button>
 
 </form>
 
