@@ -26,11 +26,7 @@
         @foreach($activityItems as $activityItem)
         <tr class="small">
             <td>{{ $activityItem->id }}</td>
-            @if($activityItem->tracer =='Y')     
-                <td class="text-center"><i class="fas fa-thumbtack text-info"></i></td>
-            @else
-                <td></td>        
-            @endif
+            <td>{{ $activityItem->tracer }}</td>
             <td>{{ $activityItem->vital_cycle }}</td>
             <td>{{ $activityItem->action_type }}</td>
             <td>{{ $activityItem->activity_name }}</td>

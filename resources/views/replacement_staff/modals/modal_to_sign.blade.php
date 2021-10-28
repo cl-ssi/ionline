@@ -9,45 +9,47 @@
         </button>
       </div>
       <div class="modal-body">
-          @if($requestReplacementStaff->request_id != NULL)
-              <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          {{-- @if($requestReplacementStaff->request_id != NULL) --}}
+              <!-- <div class="alert alert-warning alert-dismissible fade show" role="alert">
                   <strong>Holy guacamole!</strong> You should check in on some of those fields below.
                   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
-              </div>
-          @endif
+              </div> -->
+          {{-- @endif --}}
           @if(!$pending_requests_to_sign->Where('id', $requestReplacementStaff->id)->isEmpty())
           @foreach($pending_requests_to_sign->Where('id', $requestReplacementStaff->id) as $requestReplacementStaff)
               <table class="table table-sm table-bordered">
                   <thead>
                       <tr class="table-active">
-                        <th>Nº Solicitud Contratación de Personal</th>
-                        <td colspan="2">
-                            {{ $requestReplacementStaff->id }}
-                        </td>
+                          <th colspan="3">Formulario Contratación de Personal - Solicitud Nº {{ $requestReplacementStaff->id }}</th>
                       </tr>
                   </thead>
                   <tbody>
                       <tr>
-                          <th class="table-active">Por medio del presente, la</th>
+                          <th class="table-active">Por medio del presente</th>
                           <td colspan="2">
                               {{ $requestReplacementStaff->organizationalUnit->name }}
                           </td>
                       </tr>
                       <tr>
-                          <th class="table-active">Solicita autorizar el llamado a presentar antecedentes al cargo de</th>
-                          <td colspan="2">
-                              {{ $requestReplacementStaff->name }}
+                          <th class="table-active">Nombre / Nº de Cargos</th>
+                          <td style="width: 33%">{{ $requestReplacementStaff->name }}</td>
+                          <td style="width: 33%">{{ $requestReplacementStaff->charges_number }}</td>
+                      </tr>
+                      <tr>
+                          <th class="table-active">Estamento / Grado</th>
+                          <td style="width: 33%">{{ $requestReplacementStaff->profile_manage->name }}</td>
+                          <td style="width: 33%">{{ $requestReplacementStaff->degree }}</td>
+                      </tr>
+                      <tr>
+                          <th class="table-active">Calidad Jurídica / $ Honorarios</th>
+                          <td style="width: 33%">{{ $requestReplacementStaff->LegalQualityValue }}</td>
+                          <td style="width: 33%">
+                            @if($requestReplacementStaff->LegalQualityValue == 'Honorarios')
+                                ${{ number_format($requestReplacementStaff->salary,0,",",".") }}
+                            @endif
                           </td>
-                      </tr>
-                      <tr>
-                          <th class="table-active">En el grado</th>
-                          <td colspan="2">{{ $requestReplacementStaff->degree }}</td>
-                      </tr>
-                      <tr>
-                          <th class="table-active">Calidad Jurídica</th>
-                          <td colspan="2">{{ $requestReplacementStaff->LegalQualityValue }}</td>
                       </tr>
                       <tr>
                           <th class="table-active">La Persona cumplirá labores en Jornada</th>
@@ -60,7 +62,7 @@
                           <td style="width: 33%">De funcionario: {{ $requestReplacementStaff->name_to_replace }}</td>
                       </tr>
                       <tr>
-                          <th class="table-active">Otros (especifique)</th>
+                          <th class="table-active">Fundamento (especifique)</th>
                           <td colspan="2">{{ $requestReplacementStaff->other_fundament }}</td>
                       </tr>
                       <tr>
@@ -69,7 +71,11 @@
                           <td style="width: 33%">{{ $requestReplacementStaff->end_date->format('d-m-Y') }}</td>
                       </tr>
                       <tr>
-                          <td colspan="3">El documento debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
+                          <th class="table-active">Perfil del Cargo</th>
+                          <td colspan="2"><a href="{{ route('replacement_staff.request.show_file', $requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a></td>
+                      </tr>
+                      <tr>
+                          <td colspan="3">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
                       </tr>
                       <tr>
                           @foreach($requestReplacementStaff->RequestSign as $sign)

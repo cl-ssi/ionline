@@ -36,7 +36,7 @@
                                   <fieldset class="form-group">
                                       <div class="form-check">
                                           <input class="form-check-input" type="checkbox" name="applicant_id[]" onclick="myFunction()" id="for_applicant_id"
-                                              value="{{ $applicant->id }}">
+                                            value="{{ $applicant->id }}">
                                       </div>
                                   </fieldset>
                                 </td>
@@ -63,17 +63,19 @@
                         </fieldset>
                         <fieldset class="form-group col-sm-6">
                             <label for="for_place_of_performance">Lugar de Desempeño</label>
-                            <input type="text" class="form-control" name="place_of_performance" id="for_replace_of_performance" value="{{ $applicant->place_of_performance }}">
+                            <input type="text" class="form-control" name="place_of_performance" id="for_replace_of_performance">
                         </fieldset>
                     </div>
                     <div class="form-row">
                         <fieldset class="form-group col">
                             <label for="for_replacement_reason">Motivo de Reemplazo</label>
-                            <input type="text" class="form-control" name="replacement_reason" id="for_replacement_reason" value="{{ $applicant->replacement_reason }}">
+                            <input type="text" class="form-control" name="replacement_reason" id="for_replacement_reason" value="{{ $technicalEvaluation->requestReplacementStaff->FundamentValue }}">
                         </fieldset>
                     </div>
 
-                    <button type="submit" class="btn btn-primary float-right" id="save_btn"><i class="fas fa-save"></i> Guardar</button>
+                    <button type="submit" class="btn btn-primary float-right" id="save_btn"
+                        onclick="return confirm('¿Está seguro que desea terminar el proceso de selección?')">
+                        <i class="fas fa-save"></i> Guardar</button>
                   </div>
                 </div>
 
