@@ -16,7 +16,7 @@
 
 	<div class="row">
 
-		<div class="col-4">
+		<div class="col-12 col-md-5">
 
 			<h4>Permisos</h4>
 
@@ -47,6 +47,7 @@
 							value="{{ $permission->name }}" id="{{$permission->name}}"
 							{{ $user->can($permission->name)? 'checked':'' }}>
 						<label class="form-check-label" for="{{$permission->name}}">{{$permission->name}}</label>
+						<label><small>({{ $permission->descripcion }})</small></label>
 					</div>
 				@endif
 			@endforeach
@@ -56,7 +57,7 @@
 		<div class="col-2">
 		</div>
 
-		<div class="col-4">
+		<div class="col-12 col-md-5">
 
 			<h4>Roles</h4>
 
