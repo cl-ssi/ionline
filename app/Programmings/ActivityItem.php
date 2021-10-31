@@ -16,4 +16,8 @@ class ActivityItem extends Model
     public function program(){
         return $this->belongsTo('App\Programmings\ActivityProgram', 'activity_id');
     }
+
+    public function programItems(){
+        return $this->hasMany('App\Programmings\ProgrammingItem')->orderBy('activity_id', 'ASC');
+    }
 }

@@ -17,7 +17,7 @@ class Programming extends Model
     }
 
     public function items(){
-        return $this->hasMany('App\Programmings\ProgrammingItem');
+        return $this->hasMany('App\Programmings\ProgrammingItem')->orderBy('activity_id', 'ASC');
     }
 
     public function days(){
@@ -32,10 +32,10 @@ class Programming extends Model
         return $this->belongsTo('App\Establishment');
     }
 
-    public function countTotalNOTRectifiedReviews() {
+    public function countTotalReviewsBy($status) {
         $total=0;
         foreach($this->items as $item){
-            $total += $item->getCountNOTRectifiedReviews();
+            $total += $item->getCountReviewsBy($status);
         }
         return $total;
     }
@@ -48,6 +48,15 @@ class Programming extends Model
             }
         }
         return count($activities->unique('int_code'));
+    }
+
+    public function itemsBy($type)
+    {
+        return $this->items
+        ->where('workshop',$type == 'Workshop' ? '=' : '!=','SI')
+        ->when($type != 'Workshop', function($q) use ($type){
+            return $q->where('activity_type',$type == 'Indirect' ? '=' : '!=','Indirecta');
+        });
     }
 
     protected $casts = [
