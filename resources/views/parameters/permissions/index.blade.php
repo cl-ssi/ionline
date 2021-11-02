@@ -15,7 +15,7 @@
 
 <a class="btn btn-primary mb-3" href="{{ route('parameters.permissions.create', $guard) }}">Crear</a>
 
-<table class="table table-sm">
+<table class="table table-responsive table-sm">
     <thead>
         <tr>
             <th>ID</th>
