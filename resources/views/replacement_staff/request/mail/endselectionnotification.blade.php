@@ -8,7 +8,7 @@
 
   <br>
 
-  <p>A través del presente, se informa ...:</p>
+  <p>A través del presente, se informa la finalización de la <strong>Solicitud de Contratación</strong>:</p>
 
   <ul>
       <li><strong>Nº Solicitud</strong>: {{ $technicalEvaluation->requestReplacementStaff->id }}</li>
