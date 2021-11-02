@@ -117,11 +117,10 @@
         @endcan
             <td class="text-center align-middle">{{ $programmingitem->activityItem->tracer ?? '' }}</td>
             <td class="text-center align-middle">{{ $programmingitem->activityItem->int_code ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->activityItem->vital_cycle ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->activityItem->action_type ?? '' }}</td>
-            <!--<td class="text-center align-middle">{{ $programmingitem->ministerial_program }}</td>-->
+            <td class="text-center align-middle">{{ $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->cycle : $programmingitem->activityItem->vital_cycle ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->action_type : $programmingitem->activityItem->action_type ?? '' }}</td>
             <td class="text-center align-middle">{{ $programmingitem->activityItem->activity_name ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->activityItem->def_target_population ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->def_target_population : $programmingitem->activityItem->def_target_population ?? '' }}</td>
             <td class="text-center align-middle">{{ $programmingitem->source_population }}</td>
             <td class="text-center align-middle">{{ $programmingitem->cant_target_population }}</td>
             <td class="text-center align-middle">{{ $programmingitem->prevalence_rate }}</td>
@@ -224,10 +223,10 @@
         @endcan
             <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->tracer ?? '' }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->int_code ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->vital_cycle ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->action_type ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->cycle : $programmingitemsIndirect->activityItem->vital_cycle ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->action_type : $programmingitemsIndirect->activityItem->action_type ?? '' }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->activity_name ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->def_target_population ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->def_target_population : $programmingitemsIndirect->activityItem->def_target_population ?? '' }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->source_population }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->cant_target_population }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->prevalence_rate }}</td>
@@ -330,10 +329,10 @@
             <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->tracer ?? '' }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->int_code ?? '' }}</td>
             <td class="text-center align-middle">TALLER</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->vital_cycle ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->action_type ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->cycle : $programmingItemworkshop->activityItem->vital_cycle ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->action_type : $programmingItemworkshop->activityItem->action_type ?? '' }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->activity_name ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->def_target_population ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->def_target_population : $programmingItemworkshop->activityItem->def_target_population ?? '' }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->source_population }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->cant_target_population }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->coverture }}</td>
