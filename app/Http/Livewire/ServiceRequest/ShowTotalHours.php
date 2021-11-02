@@ -131,10 +131,9 @@ class ShowTotalHours extends Component
             case 'DIURNO':
             case 'TERCER TURNO - MODIFICADO':
             case 'CUARTO TURNO - MODIFICADO':
-            case 'HORA EXTRA':
-            case 'TURNO EXTRA':
+            case (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) < Carbon::parse('01-10-2021 00:00')) && 'HORA EXTRA':
+            case (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) < Carbon::parse('01-10-2021 00:00')) && 'TURNO EXTRA':
             case 'OTRO':
-
                 $totalMinutes = 0;
                 $totalMinutesDay = 0;
                 $totalMinutesNight = 0;
@@ -184,8 +183,65 @@ class ShowTotalHours extends Component
                 //
                 // }
                 $this->totalAmount = $this->totalHours * $value;
-
                 break;
+
+
+            case (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) >= Carbon::parse('01-10-2021 00:00')) && 'HORA EXTRA':
+              $holidays = Holiday::whereYear('date', '=', $this->fulfillment->serviceRequest->start_date->year)
+                  ->whereMonth('date', '=', $this->fulfillment->serviceRequest->start_date->month)
+                  ->get();
+
+              $holidaysArray = array();
+              foreach ($holidays as $holiday) {
+                  array_push($holidaysArray, $holiday->date);
+              }
+              // dd($holidays);
+
+              foreach ($this->fulfillment->shiftControls as $keyShiftControl => $shiftControl) {
+                  $hoursDay = $shiftControl->start_date->diffInHoursFiltered(
+                      function ($date) use ($holidaysArray) {
+                          if (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray))
+                              return true;
+                          else return false;
+                      },
+                      $shiftControl->end_date
+                  );
+
+                  $hoursNight = $shiftControl->start_date->diffInHoursFiltered(
+                      function ($date) use ($holidaysArray) {
+                          if (
+                              in_array($date->hour, [21, 22, 23, 0, 1, 2, 3, 4, 5, 6]) ||
+                              (in_array($date->hour, [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]) && ($date->dayOfWeek == 6 || $date->dayOfWeek == 0 || in_array($date->toDateString(), $holidaysArray)))
+                          )
+                              return true;
+                          else return false;
+                      },
+                      $shiftControl->end_date
+                  );
+
+                  $this->hoursDetailArray[$keyShiftControl]['start_date'] = $shiftControl->start_date->format('d-m-Y H:i');
+                  $this->hoursDetailArray[$keyShiftControl]['end_date'] = $shiftControl->end_date->format('d-m-Y H:i');
+                  $this->hoursDetailArray[$keyShiftControl]['hours_day'] = $hoursDay;
+                  $this->hoursDetailArray[$keyShiftControl]['hours_night'] = $hoursNight;
+                  $this->hoursDetailArray[$keyShiftControl]['observation'] = $shiftControl->observation;
+                  $this->hoursDetailArray[$keyShiftControl]['is_start_date_holiday'] = $shiftControl->start_date->dayOfWeek == 6 || $shiftControl->start_date->dayOfWeek == 0 || in_array($shiftControl->start_date->toDateString(), $holidaysArray);
+                  $this->hoursDetailArray[$keyShiftControl]['is_end_date_holiday'] = $shiftControl->end_date->dayOfWeek == 6 || $shiftControl->end_date->dayOfWeek == 0 || in_array($shiftControl->end_date->toDateString(), $holidaysArray);
+
+                  $this->totalHoursDay = $this->totalHoursDay + $hoursDay;
+                  $this->totalHoursNight = $this->totalHoursNight + $hoursNight;
+              }
+              // dd($this->hoursDetailArray);
+              $totalAmountNight = $this->totalHoursNight * $value;
+              $totalAmountDayRefund = $this->refundHours * $value * 1.5;
+
+              $this->totalAmount = ($totalAmountNight - $totalAmountDayRefund);
+
+              $this->totalHoursDay = $this->totalHoursDay . " x " . $value;
+              $this->totalHoursNight = $this->totalHoursNight . " x 1.5 x " . $value;
+
+              break;
+
+
             case 'DIURNO PASADO A TURNO':
                 $holidays = Holiday::whereYear('date', '=', $this->fulfillment->serviceRequest->start_date->year)
                     ->whereMonth('date', '=', $this->fulfillment->serviceRequest->start_date->month)
@@ -195,6 +251,7 @@ class ShowTotalHours extends Component
                 foreach ($holidays as $holiday) {
                     array_push($holidaysArray, $holiday->date);
                 }
+                // dd($holidays);
 
                 foreach ($this->fulfillment->shiftControls as $keyShiftControl => $shiftControl) {
                     $hoursDay = $shiftControl->start_date->diffInHoursFiltered(
@@ -229,12 +286,13 @@ class ShowTotalHours extends Component
                     $this->totalHoursDay = $this->totalHoursDay + $hoursDay;
                     $this->totalHoursNight = $this->totalHoursNight + $hoursNight;
                 }
+                // dd($this->hoursDetailArray);
 
                 $businessDays = $this->fulfillment->serviceRequest->start_date->diffInDaysFiltered(function (Carbon $date) use ($holidaysArray) {
                     return $date->isWeekday() && !in_array($date->toDateString(), $holidaysArray);
                 }, $this->fulfillment->serviceRequest->end_date);
                 // $businessDays = $businessDays+1;
-                //dd($businessDays);
+                // dd($businessDays);
 
                 //$prueba = $this->fulfillment->serviceRequest->start_date->diffInDays()
 
@@ -318,7 +376,7 @@ class ShowTotalHours extends Component
                 // $totalAmountNight = $this->totalHoursNight * ($value->amount * 1.5);
                 // $totalAmountDayRefund = $this->refundHours * $value->amount;
                 // dd($this->totalHoursNight, $this->refundHours);
-                
+
                 $totalAmountNight = $this->totalHoursNight * $value;
                 $totalAmountDayRefund = $this->refundHours * $value / 1.5;
 
