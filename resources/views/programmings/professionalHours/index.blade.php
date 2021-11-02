@@ -66,15 +66,11 @@
         <tbody style="font-size:80%;">
             @foreach($professionalHours as $professionalHour)
             <tr class="small">
-                <td>{{ $professionalHour->id }}</td>
-                <td>{{ $professionalHour->name }}</td>
+                <td>{{ $professionalHour->professional->id }}</td>
+                <td>{{ $professionalHour->professional->name }}</td>
                 <td  class="text-right">{{ $professionalHour->value }}</td>
                 <td class="text-right">
-                    <!--<form method="POST" action="{{ route('professionalhours.destroy', $professionalHour->professionalHour_id) }}" class=" d-inline">
-                        {{ method_field('DELETE') }} {{ csrf_field() }}
-                        <button class="btn btb-flat btn-sm btn-light"><span class="fas fa-edit text-dark" aria-hidden="true"></span></button>
-                    </form>-->
-                    <form method="POST" action="{{ route('professionalhours.destroy', $professionalHour->professionalHour_id) }}" class=" d-inline">
+                    <form method="POST" action="{{ route('professionalhours.destroy', $professionalHour->id) }}" class=" d-inline">
                         {{ method_field('DELETE') }} {{ csrf_field() }}
                         <button class="btn btb-flat btn-sm btn-light"><span class="fas fa-times-circle text-dark" aria-hidden="true"></span></button>
                     </form>

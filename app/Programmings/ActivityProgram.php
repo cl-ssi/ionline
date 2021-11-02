@@ -8,6 +8,10 @@ class ActivityProgram extends Model
 {
     protected $table = 'pro_activity_programs';
     protected $fillable = [
-        'year', 'description'
+        'id', 'year', 'description', 'user_id'
     ];
+
+    public function items(){
+        return $this->hasMany('App\Programmings\ActivityItem', 'activity_id');
+    }
 }

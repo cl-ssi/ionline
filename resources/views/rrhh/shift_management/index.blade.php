@@ -101,7 +101,7 @@
     }
     .cellbutton {
         width: 30px;
-        font-weight: bold;
+       font-size: 13px;
     }
     .btn-full {
         display: block;
@@ -111,24 +111,19 @@
         padding: 1000px;
         font-weight: bold;
     }
+  .deleteButton {
+    color: red;
+  }
+  .deleteButton:hover {
+        opacity: 0.5;
+        filter:  alpha(opacity=50);
+  }
 </style>
 
 
 <!--Menu de Filtros  -->
-<ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link active" aria-current="page" href="{{ route('rrhh.shiftManag.index') }}">Gestión de Turnos</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link"  href="{{ route('rrhh.shiftsTypes.index') }}">Tipos de Turnos</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">Mi Turno</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Turnos Disponibles</a>
-  </li>
-</ul>
+
+@include("rrhh.shift_management.tabs", array('actuallyMenu' => 'indexTab'))
 <!-- TODO: Que hace este div? -->
 <div id="shiftapp">
 
@@ -153,51 +148,84 @@
         <div class="form-row">
             <div class="form-group col-md-5" >
                 <label for="for_name">Unidad organizacional</label>
-                <select class="form-control" id="for_orgunitFilter" name="orgunitFilter">
-                    <!-- <option>0 - Todos</option> -->
-                    @foreach($cargos as $c)
-                        <option value=" {{old('orgunitFilter', $c->id)}}" {{($c->id==$actuallyOrgUnit->id)?'selected':''}}>{{$loop->iteration}} - {{$c->name}} </option>
-                    @endforeach
-                </select>
+                <select class="form-control selectpicker"  id="for_orgunitFilter" name="orgunitFilter" data-live-search="true" required
+                            data-size="5" onchange="this.form.submit()">
+                        @foreach($ouRoots as $ouRoot)
+                            @if($ouRoot->name != 'Externos')
+                                <option value="{{ $ouRoot->id }}"  {{($ouRoot->id==$actuallyOrgUnit->id)?'selected':''}}> 
+                                {{($ouRoot->id ?? '')}}-{{ $ouRoot->name }}
+                                </option>
+                                @foreach($ouRoot->childs as $child_level_1)
+
+                                    <option value="{{ $child_level_1->id }}" {{($child_level_1->id==$actuallyOrgUnit->id)?'selected':''}}>
+                                        &nbsp;&nbsp;&nbsp;
+                                        {{($child_level_1->id ?? '')}}-{{ $child_level_1->name }}
+                                    </option>
+                                    @foreach($child_level_1->childs as $child_level_2)
+                                        <option value="{{ $child_level_2->id }}" {{($child_level_2->id==$actuallyOrgUnit->id)?'selected':''}}>
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            {{($child_level_2->id ?? '')}}-{{ $child_level_2->name }}
+                                        </option>
+                                        @foreach($child_level_2->childs as $child_level_3)
+                                            <option value="{{ $child_level_3->id }}" {{($child_level_3->id==$actuallyOrgUnit->id)?'selected':''}}>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                {{($child_level_3->id ?? '')}}-{{ $child_level_3->name }}
+                                            </option>
+                                            @foreach($child_level_3->childs as $child_level_4)
+                                                <option value="{{ $child_level_4->id }}" {{($child_level_4->id==$actuallyOrgUnit->id)?'selected':''}}>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    {{($child_level_4->id ?? '')}}-{{ $child_level_4->name }}
+                                                </option>
+                                            @endforeach
+                                        @endforeach
+                                    @endforeach
+                                @endforeach
+                            @endif
+                        @endforeach
+                    </select>
             </div>
 
-            <div class="form-group col-md-2">
-                <label for="for_name" class="input-group-addon">Turnos</label>
-                <select class="form-control" id="for_turnFilter" name="turnFilter" >
+            <div class="form-group col-md-3">
+                <label for="for_name" class="input-group-addon">Series</label>
+              
+
+                               
+                <select class="form-control" id="for_turnFilter" name="turnFilter" onchange="this.form.submit()">
+
                     <option value="0">0 - Todos</option>
+                    @php
+                        $index = 0;
+                    @endphp
                     @foreach($sTypes as $st)
-                        <option value="{{$st->id}}" {{($st->id==$actuallyShift->id)?'selected':''}}>{{$loop->iteration}} - Solo {{$st->name}}</option>
+                       
+                        @foreach($actuallyShiftMonthsList  as $key =>  $shiftMonth)
+                            @foreach($shiftMonth as $sMonth)
+                                @if($sMonth->shift_type_id == $st->id && $sMonth->user_id == auth()->user()->id && $sMonth->month == $actuallyMonth)
+                                
+                                    <option value="{{$st->id}}" {{($st->id==$actuallyShift->id)?'selected':''}}>{{$index}} - Solo {{$st->name}}</option>
+                                    {{--json_encode($sMonth)--}}
+                                @endif
+                            @endforeach
+                        @endforeach
+                        @php
+                            $index++;
+                        @endphp
                     @endforeach
-                    <option value="99">99 - Solo Turno Personalizado</option>
+                    <!-- <option value="99">99 - Solo Turno Personalizado</option> -->
                 </select>
             </div>
 
-            <div class="form-group col-md-2">	
-                <label for="for_name">Año</label>
-                <select class="form-control" id="for_yearFilter" name="yearFilter">
-                    @for($i = (intval($actuallyYear)-2); $i< (intval($actuallyYear) + 4); $i++)
-                        <option value="{{$i}}" {{ ($i == $actuallyYear )?"selected":"" }}> {{$i}}</option>
-                    @endfor	
-                </select>
+            <div class="form-group col-md-4">	
+                <label for="for_name">Fecha</label>
+                <input type="month" class="form-control" onchange="this.form.submit()" name="monthYearFilter" value="{{ $actuallyYear."-".$actuallyMonth }}">
+              
             </div>
 
-            <div class="form-group col-md-2">    	
-                <label for="for_name">Mes</label>
-                <select class="form-control" id="for_monthFilter" name="monthFilter">
-                    @foreach($months AS $index => $month)
-                        <option value="{{ $index }}" {{ ($index == $actuallyMonth )?"selected":"" }}>{{$loop->iteration}} - {{$month}} </option>
-                    @endforeach
-                </select> 		
-            </div>
-
-            <div class="form-group col-md-1">
-                <label for="for_submit">&nbsp;</label>
-                <button type="submit" class="btn btn-primary form-control">Filtrar</button>
-            </div>
+           
 
         </div>
-
     </form>
+
 
 
     <!-- Select con personal de la unidad  -->
@@ -211,12 +239,13 @@
         <input hidden name="dateUp" value="{{$actuallyYear}}-{{$actuallyMonth}}-{{$days}}">
         <input hidden name="shiftId" value="{{$actuallyShift->id}}">
         <input hidden name="orgUnitId" value="{{$actuallyOrgUnit->id}}">
-                
+        
+       
         <div class="form-row"> 	
-            <div class="col-md-5">
-                <label>Personal de"{{$actuallyOrgUnit->name}}"</label>
-                <select class="selectpicker form-control" data-live-search="true" name="slcStaff">
-                    <option> - </option>
+            <div class="col-md-4">
+                <label>Personal de "{{$actuallyOrgUnit->name}}"</label>
+                <select class="selectpicker form-control"  data-live-search="true" name="slcStaff" required>
+                    <option value=""> - </option>
                     @foreach($staff as $user)
                         <option value="{{$user->id}}">
                             {{$user->runFormat() }} - {{ $user->fullName }}
@@ -224,19 +253,35 @@
                     @endforeach
                 </select>
             </div>
-
+            <div class="col-md-2">
+                <label>Grupo</label>
+                <input type="text" class="form-control" name="groupname" 
+                    value="{{strtoupper(html_entity_decode ($groupname))}}" placeholder="Sin grupo">
+            </div>
+            <div class="col-md-1">
+                <label>Inicio</label>
+                <select class="form-control" name="initialSerie">
+                @if(isset($actuallyShift->day_series))
+                    @php $currentSeries =  explode(",", $actuallyShift->day_series); @endphp
+                    @for(  $i=0;$i< sizeof($currentSeries);$i++  )
+                        
+                       @if($currentSeries[$i]!="") 
+                            <option value="{{$i}}">{{intval($i+1)}} - {{$currentSeries[$i]}}</option>
+                        @endif
+                    @endfor
+                 @endif 
+                </select>
+            </div>
             <div class="col-md-2">
                 <label>De</label>
                 <input type="date" class="form-control" name="dateFromAssign" 
                     value="{{$actuallyYear}}-{{$actuallyMonth}}-01">
             </div>
-
             <div class="col-md-2 ">
                 <label>Hasta</label>
                 <input type="date" class="form-control" name="dateUpAssign" 
                     value="{{$actuallyYear}}-{{$actuallyMonth}}-{{$days}}">
             </div>
-            
             <div class="col-md-1">
                 <label>&nbsp;</label>
                 <button class="btn btn-success form-control">
@@ -246,8 +291,14 @@
         </div>
 
     </form>
+    
+
+    @for( $i = 1 ; $i < (sizeof($shiftStatus)+1); $i++ )
+
+        <a href="#" class="badge badge-secondary" style="background-color:#{{$colorsRgb[$i]}}">{{ucfirst($shiftStatus[$i])}}</a>
 
 
+    @endfor
     <div class="row" class="small" style=" overflow: auto;white-space: nowrap;">
         <div class="col-md-2">
             
@@ -257,6 +308,9 @@
                         <tr>
                             <th rowspan="2">Personal</th>
                             <th class="calendar-day" colspan="{{$days}}">
+
+                                <a href="{{route('rrhh.shiftManag.prevMonth')}}"><-</a>
+
                                 @foreach($months AS $index => $month)
                                     {{ ($index == $actuallyMonth )?$month:"" }}
                                 @endforeach
@@ -264,6 +318,8 @@
                                 {{$actuallyYear}}
                                 -  
                                 {{$actuallyShift->name}}
+
+                                <a href=" {{route('rrhh.shiftManag.nextMonth')}}"  >-></a>        
                             </th> 
                         </tr>
                         <tr>
@@ -272,9 +328,9 @@
                                     $dateFiltered = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$i, 'Europe/London');  
                                 @endphp
                                 <th class="brless dia" 
-                                    style="color:{{ ($dateFiltered->isWeekend() )?'red':'white'}}" >
-                                    <p style="font-size: 10px">{{$i}}</p>
-                                </th>
+                                    style="color:{{ ( ($dateFiltered->isWeekend() )?'red':( ( sizeof($holidays->where('date',$actuallyYear.'-'.$actuallyMonth.'-'.$i)) > 0 ) ? 'red':'white' ))}}" >
+                                    <p style="font-size: 8px">{{$i}}</p>
+                                </th>   
                                 <!-- <th class="brless dia">🌞</th> -->
                                 <!-- <th class="noche">🌒</th> -->
                             @endfor
@@ -307,9 +363,10 @@
                                     @php
                                         $dateFiltered = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$i, 'Europe/London');  
                                     @endphp
+
                                     <th class="brless dia" 
-                                        style="color:{{ ($dateFiltered->isWeekend() )?'red':'white'}}" >
-                                        {{$i}}
+                                        style="color:{{ ( ($dateFiltered->isWeekend() )?'red':( ($holidays->where('date',$dateFiltered)) ? 'red':'white')  )}}" >
+                                       {{$i}}
                                     </th>
                                     <!-- <th class="brless dia">🌞</th> -->
                                     <!-- <th class="noche">🌒</th> -->
@@ -317,8 +374,7 @@
                             </tr>
                         </thead>
                         <tbody>
-
-                            @livewire('rrhh.list-of-shifts'
+                            @livewire('rrhh.list-of-shifts',["actuallyShift"=>$st]
                             )
 
                         </tbody>
@@ -327,6 +383,19 @@
             @endif
         </div>
     </div>
+
+
+     <ul class="nav nav-pills justify-content-end">
+        @for($i=0;$i<sizeof($groupsnames);$i++)
+            <li class="nav-item">
+
+                    <a class="nav-link {{ (isset($groupname)  && $groupname == htmlentities($groupsnames[$i]))?'active':'' }}" aria-current="page" href="{{route('rrhh.shiftManag.index',htmlentities($groupsnames[$i]))}}">{{ ($groupsnames[$i]  == "")?"SIN GRUPO": strtoupper($groupsnames[$i] )}}</a>
+
+            </li>
+
+        @endfor
+           
+        </ul>
 
 </div>
 
@@ -343,208 +412,29 @@
         overflow:hidden;
     }
     .cellbutton {
-        width: 30px;
-        font-weight: bold;
+         width: 30px;
+       font-size: 13px;
     }
     .btn-full {
-        display: block;
+        display: inherit;
         width: 100%;
         height: 100%;
         margin:-1000px;
         padding: 1000px;
         font-weight: bold;
     }
+    .btn-full2 {
+        display: inline;
+        /*width: 100%;*/
+        height: 100%;
+        margin:-1000px;
+        /*padding: 10px;*/
+        font-weight: bold;
+        /*font-size: 15px;*/
+    }
 </style>
 
 
-<table class="table table-sm table-bordered mt-4">
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>1</th>
-            <th>2</th>
-            <th class="text-danger">3</th>
-            <th class="text-danger">4</th>
-            <th>5</th>
-            <th>6</th>
-            <th>7</th>
-            <th>8</th>
-            <th>9</th>
-            <th>10</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>15.456.789-1 - Alvaro Torres Fuchslocher</td>
-            <td class="cellbutton">
-                <button class="btn btn-danger btn-full">
-                    +
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-warning btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-warning btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-        </tr>
-
-
-        <tr>
-            <td>18.123.123-9 - Armando Birra Xxxxx</td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-warning btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-        </tr>
-
-
-        <tr>
-            <td> 15.123.123-2 - Angelina Jolie Voight</td>
-            <td class="cellbutton">
-                <button class="btn btn-success btn-full">
-                    +
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-success btn-full">
-                    +
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    N
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-secondary btn-full">
-                    -
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-            <td class="cellbutton">
-                <button class="btn btn-info btn-full">
-                    L
-                </button>
-            </td>
-        </tr>
-    </tbody>
-</table>
 @endsection
 
 
-@section('custom_js')
-
-<!-- TODO: que hace esto? -->
-
-
-@endsection

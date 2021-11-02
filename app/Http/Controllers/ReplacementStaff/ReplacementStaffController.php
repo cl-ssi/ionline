@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewStaffNotificationUser;
 
 class ReplacementStaffController extends Controller
 {
@@ -23,9 +25,10 @@ class ReplacementStaffController extends Controller
      */
     public function index(Request $request)
     {
-        $replacementStaff = ReplacementStaff::search($request->input('search'),
-                                                     $request->input('profile_search'),
-                                                     $request->input('profession_search'))
+        $replacementStaff = ReplacementStaff::latest()
+            ->search($request->input('search'),
+                      $request->input('profile_search'),
+                      $request->input('profession_search'))
             ->paginate(15);
 
         $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
@@ -61,29 +64,44 @@ class ReplacementStaffController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->hasFile('cv_file'))
-        {
-            $replacementStaff = new ReplacementStaff($request->All());
-            $now = Carbon::now()->format('Y_m_d_H_i_s');
-            $file_name = $now.'_cv_'.$replacementStaff->run;
-            $file = $request->file('cv_file');
-            $replacementStaff->cv_file = $file->storeAs('/ionline/replacement_staff/cv_docs/', $file_name.'.'.$file->extension(), 'gcs');
-            // $fileModel->file = $file->store('ionline/documents/partes',['disk' => 'gcs']);
-            $replacementStaff->save();
+        //SE GUARDA STAFF
+        $replacementStaff = new ReplacementStaff($request->All());
+        $now = Carbon::now()->format('Y_m_d_H_i_s');
+        $file_name = $now.'_cv_'.$replacementStaff->run;
+        $file = $request->file('cv_file');
+        $replacementStaff->cv_file = $file->storeAs('/ionline/replacement_staff/cv_docs/', $file_name.'.'.$file->extension(), 'gcs');
+        $replacementStaff->save();
+
+        //SE GUARDA PERFIL OBLIGATORIO
+        $profile = new Profile();
+        $profile->degree_date = $request->degree_date;
+        $profile->profile_manage_id = $request->profile;
+        $profile->profession_manage_id = $request->profession;
+        if($request->profile == 3 or $request->profile == 4){
+            $profile->experience = $request->experience;
         }
+        $profile->replacement_staff()->associate($replacementStaff);
+        $now = Carbon::now()->format('Y_m_d_H_i_s');
+        $file = $request->file('file');
+        $file_name = $now.'_'.$replacementStaff->run;
+        $profile->file = $file->storeAs('/ionline/replacement_staff/profile_docs/', $file_name.'.'.$file->extension(), 'gcs');
+        $profile->save();
+
+        Mail::to($replacementStaff->email)
+            ->cc(env('APP_RYS_MAIL'))
+            ->send(new NewStaffNotificationUser($replacementStaff));
 
         session()->flash('success', 'Se ha creado el postulante exitosamente');
-        //return redirect()->back();
         return redirect()->route('replacement_staff.edit', $replacementStaff);
     }
 
     public function edit(ReplacementStaff $replacementStaff)
     {
-        $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
+        //$professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
         $profileManage = ProfileManage::orderBy('name', 'ASC')->get();
         // dd(Auth()->user());
         if($replacementStaff->run == Auth()->user()->id){
-          return view('replacement_staff.edit', compact('replacementStaff', 'professionManage', 'profileManage'));
+          return view('replacement_staff.edit', compact('replacementStaff'));
         }
         else{
             return redirect()->back();

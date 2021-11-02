@@ -15,8 +15,8 @@ class ReplacementStaff extends Model
     protected $fillable = [
         'run', 'dv', 'birthday', 'name', 'fathers_family',
         'mothers_family', 'gender', 'email', 'telephone',
-        'telephone2', 'commune', 'address', 'observations',
-        'file', 'status', 'cv_file'
+        'telephone2', 'region_id','commune_id', 'address', 'observations',
+        'status', 'cv_file'
     ];
 
     /**
@@ -27,12 +27,20 @@ class ReplacementStaff extends Model
 
     public function getFullNameAttribute()
     {
-        return strtoupper("{$this->name} {$this->fathers_family} {$this->mothers_family}");
+        return $this->name.' '.$this->fathers_family.' '.$this->mothers_family;
     }
 
     public function getIdentifierAttribute()
     {
         return strtoupper("{$this->run}-{$this->dv}");
+    }
+
+    public function region() {
+        return $this->belongsTo('\App\Models\ClRegion');
+    }
+
+    public function commune() {
+        return $this->belongsTo('\App\Models\ClCommune');
     }
 
     public function profiles() {
@@ -51,6 +59,10 @@ class ReplacementStaff extends Model
         return $this->hasMany('\App\Models\ReplacementStaff\Language');
     }
 
+    public function applicants() {
+        return $this->hasMany('\App\Models\ReplacementStaff\Applicant');
+    }
+
     public function getStatusValueAttribute(){
         switch ($this->status) {
             case 'immediate_availability':
@@ -58,6 +70,9 @@ class ReplacementStaff extends Model
               break;
             case 'working_external':
               return 'Trabajando';
+              break;
+            case 'selected':
+              return 'Seleccionado';
               break;
             default:
               return '';

@@ -6,7 +6,7 @@
 
     <h3 class="mb-3">Verificar documento firmado</h3>
 
-    <form method="GET" action="{{route('documents.signatures.verify')}}">
+    <form method="GET" action="{{route('verifyDocument')}}">
 
         <div class="form-row">
             <div class="form-group col-4">

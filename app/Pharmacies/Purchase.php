@@ -56,6 +56,11 @@ class Purchase extends Model
     return $this->belongsTo('App\User');
   }
 
+  public function signedRecord()
+  {
+      return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signed_record_id');
+  }
+
   protected $dates = ['date','invoice_date', 'purchase_order_date', 'doc_date'];
 
 }

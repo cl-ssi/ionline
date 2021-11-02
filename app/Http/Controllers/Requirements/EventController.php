@@ -3,15 +3,19 @@
 namespace App\Http\Controllers\Requirements;
 
 use App\Documents\Document;
+use App\Mail\RequirementEventNotification;
+use App\Mail\RequirementNotification;
 use App\Requirements\RequirementCategory;
 use App\Requirements\Category;
 use App\Requirements\Requirement;
 use App\Requirements\Event;
 use App\Requirements\File;
+use App\Rrhh\Authority;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Rrhh\OrganizationalUnit;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 use App\User;
@@ -194,6 +198,13 @@ class EventController extends Controller
             }
           }
 
+        }
+
+        //Envía correo si destinatario es director
+        $directorAuthority = Authority::getAuthorityFromDate(1, date('Y-m-d'), 'manager');
+        if ($request->to_user_id == $directorAuthority->user_id) {
+            Mail::to($directorAuthority->user->email)
+                ->send(new RequirementEventNotification($requirementEvent));
         }
 
         session()->flash('info', 'El evento '.$requirementEvent->id.' ha sido ingresado.');

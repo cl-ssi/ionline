@@ -3,6 +3,7 @@
 namespace App\Documents;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ParteFile extends Model
 {
@@ -12,7 +13,7 @@ class ParteFile extends Model
    * @var array
    */
     protected $fillable = [
-      'id','file','name'
+      'id','file','name','signature_file_id','parte_id'
     ];
 
 
@@ -21,10 +22,20 @@ class ParteFile extends Model
         return $this->belongsTo('App\Documents\Parte');
     }
 
+    
+    public function signatureFile() {
+      return $this->belongsTo('App\Models\SignatureFile');
+  }
+
+
+    use SoftDeletes;
+
     /**
     * The table associated with the model.
     *
     * @var string
     */
+
+
     protected $table = 'parte_files';
 }

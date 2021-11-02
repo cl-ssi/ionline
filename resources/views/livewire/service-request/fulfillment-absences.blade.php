@@ -4,15 +4,16 @@
     <div class="form-row">
       <fieldset class="form-group col-12 col-md-4">
         <label for="for_type">Tipo</label>
-        <select name="type" wire:model="type" class="form-control for_type" required>
+        <select name="type" wire:model.lazy="type" class="form-control for_type" required>
           <option value=""></option>
           <option value="Inasistencia Injustificada">INASISTENCIA INJUSTIFICADA</option>
-          <option value="Licencia médica">LICENCIA MÉDICA</option>
+          <option value="Licencia médica">LICENCIA MÉDICA COVID</option>
           <option value="Licencia no covid">LICENCIA MÉDICA - NO COVID</option>
           <option value="Renuncia voluntaria">RENUNCIA VOLUNTARIA (EFECTIVA DESDE)</option>
           <option value="Abandono de funciones">ABANDONO DE FUNCIONES</option>
           <option value="Permiso">PERMISO</option>
           <option value="Feriado">FERIADO</option>
+          <option value="Término de contrato anticipado">TÉRMINO DE CONTRATO ANTICIPADO (EFECTIVA DESDE)</option>
         </select>
       </fieldset>
       <fieldset class="form-group col-12 col-md">
@@ -79,7 +80,7 @@
       @foreach($fulfillment->FulfillmentItems as $key => $FulfillmentItem)
       <tr>
         <td>
-          @can('Service Request: fulfillments responsable')
+          @canany(['Service Request: fulfillments responsable','Service Request: fulfillments rrhh'])
           @if($fulfillment->responsable_approver_id == NULL)
           <!-- <form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.destroy', $FulfillmentItem) }}" class="d-inline">
             @csrf

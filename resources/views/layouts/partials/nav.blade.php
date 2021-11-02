@@ -13,7 +13,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('rrhh.users.directory') }}">
-                        <i class="fas fa-address-book" title="Teléfonos"></i> Tel. 
+                        <i class="fas fa-address-book" title="Teléfonos"></i> Tel.
                     </a>
                 </li>
 
@@ -108,7 +108,7 @@
                         <i class="fas fa-file-powerpoint"></i> Planes Comunales
                     </a>
 
-                    
+
 
                     </div>
                 </li>
@@ -173,10 +173,17 @@
                         @endcan
 
 
-                        @canany(['Service Request'])
+                        @canany(['Service Request', 'Service Request: report excel'])
                         <a class="dropdown-item"
                             href="{{ route('rrhh.service-request.home') }}">
                             <i class="fas fa-child fa-fw"></i> Contratación Honorarios
+                        </a>
+                        @endcan
+
+                        @canany(['Shift Management: view'])
+                        <a class="dropdown-item @active('rrhh.users.index')"
+                            href="{{ route('rrhh.shiftManag.index') }}">
+                            <i class="fa fa-calendar fa-fw"></i> Modulo Turnos
                         </a>
                         @endcan
 
@@ -187,27 +194,37 @@
                         </a>
                         @endcan
 
-                        @role('Replacement Staff: admin')
-                            <div class="dropdown-divider"></div>
-
-                            <a class="dropdown-item @active('replacement_staff.index')"
-                               href="{{ route('replacement_staff.index') }}">
-                                <i class="far fa-id-card"></i> Staff de Reemplazos
-                            </a>
-                        @endrole
-
-                        @role('Replacement Staff: user')
+                        @if(Auth::user()->hasRole('Replacement Staff: admin'))
                             <div class="dropdown-divider"></div>
 
                             <a class="dropdown-item @active('replacement_staff.request.index')"
+                               href="{{ route('replacement_staff.request.index') }}">
+                                <i class="far fa-id-card"></i> Solicitudes de Contratación
+                            </a>
+                        @endif
+
+                        @if(Auth::user()->hasRole('Replacement Staff: user rys'))
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item @active('replacement_staff.request.assign_index')"
+                               href="{{ route('replacement_staff.request.assign_index') }}">
+                                <i class="far fa-id-card"></i> Solicitudes de Contratación
+                            </a>
+                        @endif
+
+                        @if(Auth::user()->hasRole('Replacement Staff: user') ||
+                            App\Rrhh\Authority::getAmIAuthorityFromOu(Carbon\Carbon::now(), 'manager', Auth::user()->id))
+
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item @active('replacement_staff.request.own_index')"
                                href="{{ route('replacement_staff.request.own_index') }}">
-                                <i class="far fa-id-card"></i> Staff de Reemplazos
+                                <i class="far fa-id-card"></i> Solicitudes de Contratación
                                 @if(App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() > 0)
                                     <span class="badge badge-secondary">{{ App\Models\ReplacementStaff\RequestReplacementStaff::getPendingRequestToSign() }} </span>
                                 @endif
                             </a>
-                        @endrole
-
+                        @endif
                     </div>
 
                 </li>
@@ -271,6 +288,13 @@
                         </a>
 
                     </div>
+                </li>
+                @endcan
+
+                @can('Mammography: admin')
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('mammography.index') }}">Booking Mamografías</a>
                 </li>
                 @endcan
 

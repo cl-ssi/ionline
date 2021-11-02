@@ -1,28 +1,30 @@
 @extends('layouts.app')
 
-@section('title', 'Reporte COVID-19')
+@section('title', 'Reporte estado de firmas')
 
 @section('content')
 
 @include('service_requests.partials.nav')
 
-<h3 class="mb-3">Reporte estado de solicitudes</h3>
+<h3 class="mb-3">Reporte estado de firmas</h3>
 
-<form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.consolidated_data') }}">
+<!-- <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.consolidated_data') }}">
 	<div class="input-group mb-3">
 		<div class="input-group-prepend">
 			<span class="input-group-text">Rango de fechas (Inicio de contrato)</span>
 		</div>
-		<!-- <input type="date" class="form-control" id="for_dateFrom" name="dateFrom" value="2021-01-01" required >
-		<input type="date" class="form-control" id="for_dateTo" name="dateTo" value="2021-01-31" required> -->
+
 		<input type="text" value="Todos los datos" disabled>
     <div class="input-group-append">
         <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
     </div>
 	</div>
-</form>
+</form> -->
 
-<!-- <hr> -->
+<!-- <input type="date" class="form-control" id="for_dateFrom" name="dateFrom" value="2021-01-01" required >
+<input type="date" class="form-control" id="for_dateTo" name="dateTo" value="2021-01-31" required> -->
+
+<hr>
 
 <h4>Usuarios con hojas de ruta pendientes por visar</h4>
 <!-- <hr> -->
@@ -51,8 +53,9 @@
     </tbody>
 </table>
 
+<hr>
 <h4>Cumplimientos pendientes por ingresar</h4>
-<!-- <hr> -->
+
 <table class="table table-sm small table-striped" >
     <thead>
         <tr>

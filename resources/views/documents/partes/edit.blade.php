@@ -34,6 +34,7 @@
                 <option {{ ($parte->type == 'Circular')?'selected':'' }} value="Circular">Circular</option>
                 <option {{ ($parte->type == 'Decreto')?'selected':'' }} value="Decreto">Decreto</option>
                 <option {{ ($parte->type == 'Demanda')?'selected':'' }} value="Demanda">Demanda</option>
+                <option {{ ($parte->type == 'Informe')?'selected':'' }} value="Informe">Informe</option>
                 <option {{ ($parte->type == 'Memo')?'selected':'' }} value="Memo">Memo</option>
                 <option {{ ($parte->type == 'Oficio')?'selected':'' }} value="Oficio">Oficio</option>
                 <option {{ ($parte->type == 'Ordinario')?'selected':'' }} value="Ordinario">Ordinario</option>
@@ -124,7 +125,7 @@
                         data-original-title="{{ $file->name }}">
                         <i class="fas fa-paperclip"></i>
                     </a>
-                    @if($parte->created_at->diffInDays('now') <= 1)
+                    @if($parte->created_at->diffInDays('now') <= 7)
 
 
                     <form method="POST" style="display:inline-block;"

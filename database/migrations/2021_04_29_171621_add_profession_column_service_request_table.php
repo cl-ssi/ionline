@@ -18,7 +18,7 @@ class AddProfessionColumnServiceRequestTable extends Migration
         $table->foreign('profession_id')->references('id')->on('cfg_professions');
         $table->string('objectives')->after('profession_id')->nullable();
         $table->string('resolve')->after('objectives')->nullable();
-        $table->string('additional_benefits')->after('resolve')->nullable();
+        $table->string('additional_benefits', 2000)->after('resolve')->nullable();
       });
     }
 

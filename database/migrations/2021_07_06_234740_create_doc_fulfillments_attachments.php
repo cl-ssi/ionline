@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProfessionManagesTable extends Migration
+class CreateDocFulfillmentsAttachments extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,12 @@ class CreateProfessionManagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('rst_profession_manages', function (Blueprint $table) {
+        Schema::create('doc_fulfillments_attachments', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-
+            $table->string('name');
+            $table->string('file');
+            $table->foreignId('fulfillment_id');
+            $table->foreign('fulfillment_id')->references('id')->on('doc_fulfillments');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +31,6 @@ class CreateProfessionManagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rst_profession_manages');
+        Schema::dropIfExists('doc_fulfillments_attachments');
     }
 }

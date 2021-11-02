@@ -155,7 +155,7 @@
 </table>
 </div>
 
-{{ $serviceRequests->links() }}
+{{ $serviceRequests->appends(request()->query())->links() }}
 
 @endsection
 

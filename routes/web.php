@@ -40,18 +40,29 @@ use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationFileController;
 
 use App\Http\Controllers\VaccinationController;
 
+use App\Http\Controllers\Mammography\MammographyController;
+
 use App\Http\Controllers\ServiceRequests\InvoiceController;
 use App\Http\Controllers\ServiceRequests\ValueController;
+
+use App\Http\Controllers\ServiceRequests\AttachmentController;
 
 use App\Http\Controllers\ServiceRequests\ServiceRequestController;
 use App\Http\Controllers\ServiceRequests\FulfillmentController;
 use App\Http\Controllers\ServiceRequests\SignatureFlowController;
 use App\Http\Controllers\ServiceRequests\FulfillmentItemController;
 use App\Http\Controllers\ServiceRequests\ReportController;
-
-
+use App\Http\Controllers\ServiceRequests\Denomination1121Controller;
+use App\Http\Controllers\ServiceRequests\DenominationFormulaController;
 
 use App\Http\Controllers\Parameters\ProfessionController;
+use App\Http\Controllers\Pharmacies\PurchaseController;
+use App\Pharmacies\Purchase;
+use App\User;
+use App\Http\Controllers\TestController;
+
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -97,6 +108,7 @@ Route::group(['middleware' => 'auth:external'], function () {
     Route::patch('/update/{psi_request_id?}', [TestsController::class, 'updateStatus'])->name('updateStatus');
     Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
     Route::post('/test', [TestsController::class, 'storeExternal'])->name('storeExternal');
+    Route::get('/signed-suitability-certificate-pdf/{id}', [SuitabilityController::class, 'signedSuitabilityCertificatePDF'])->name('signedSuitabilityCertificate');
     });
 
     Route::prefix('replacement_staff')->as('replacement_staff.')->group(function(){
@@ -123,12 +135,26 @@ Route::group(['middleware' => 'auth:external'], function () {
 });
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
+/** Para testing, no he probado pero me la pedian en clave única */
+Route::get('logout-testing', 'Auth\LoginController@logout')->name('logout-testing');
 
+Route::post('/email/verification-notification/{user}', function (User $user) {
+    $user->sendEmailVerificationNotification();
+
+    return back()->with('success', 'El enlace de verificación se ha enviado al correo personal <b>'. $user->email_personal .'</b> para su confirmación.');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.resend');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+
+    return redirect('/home');
+})->middleware(['auth', 'signed'])->name('verification.verify');
 
 
 
 Route::post('/{signaturesFlow}/firma', 'FirmaDigitalController@signPdfFlow')->name('signPdfFlow');
 Route::post('/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
+Route::get('/validador', 'Documents\SignatureController@verify')->name('verifyDocument');
 Route::get('/test-firma/{otp}', 'FirmaDigitalController@test');
 
 
@@ -143,7 +169,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 /* Nuevas rutas, Laravel 8.0 */
 Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')->group(function(){
-    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware(['role:Replacement Staff: admin']);
+    Route::get('/', [ReplacementStaffController::class, 'index'])->name('index')->middleware(['role:Replacement Staff: admin|Replacement Staff: user rys']);
     Route::get('/{replacement_staff}/show_replacement_staff', [ReplacementStaffController::class, 'show_replacement_staff'])->name('show_replacement_staff');
     Route::get('/download_file/{replacement_staff}', [ReplacementStaffController::class, 'download'])->name('download_file');
     Route::get('/view_file/{replacement_staff}', [ReplacementStaffController::class, 'show_file'])->name('view_file');
@@ -156,21 +182,26 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/show_file/{training}', [TrainingController::class, 'show_file'])->name('show_file');
     });
     Route::prefix('request')->name('request.')->group(function(){
-        Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index');
+        Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index')->middleware('permission:Replacement Staff: assign request');
+        Route::get('/assign_index', [RequestReplacementStaffController::class, 'assign_index'])->name('assign_index')->middleware('permission:Replacement Staff: technical evaluation');
         Route::get('/own_index', [RequestReplacementStaffController::class, 'own_index'])->name('own_index');
         Route::get('/ou_index', [RequestReplacementStaffController::class, 'ou_index'])->name('ou_index');
         Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
+        Route::get('/{requestReplacementStaff}/create_extension', [RequestReplacementStaffController::class, 'create_extension'])->name('create_extension');
         Route::post('/store', [RequestReplacementStaffController::class, 'store'])->name('store');
+        Route::post('/{requestReplacementStaff}/store_extension', [RequestReplacementStaffController::class, 'store_extension'])->name('store_extension');
         Route::get('/{requestReplacementStaff}/edit', [RequestReplacementStaffController::class, 'edit'])->name('edit');
         Route::put('/{requestReplacementStaff}/update', [RequestReplacementStaffController::class, 'update'])->name('update');
         Route::get('/to_select/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'to_select'])->name('to_select');
         Route::get('/to_sign', [RequestReplacementStaffController::class, 'to_sign'])->name('to_sign');
+        Route::get('/show_file/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'show_file'])->name('show_file');
+        Route::get('/download/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'download'])->name('download');
         Route::prefix('sign')->name('sign.')->group(function(){
-            Route::put('/{requestSign}/{status}/update', [RequestSignController::class, 'update'])->name('update');
+            Route::put('/{requestSign}/{status}/{requestReplacementStaff}/update', [RequestSignController::class, 'update'])->name('update');
         });
         Route::prefix('technical_evaluation')->name('technical_evaluation.')->group(function(){
             Route::get('/{technicalEvaluation}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
-            Route::get('/store/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'store'])->name('store');
+            Route::post('/store/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'store'])->name('store');
             Route::prefix('commission')->name('commission.')->group(function(){
                 Route::post('/store/{technicalEvaluation}', [CommissionController::class, 'store'])->name('store');
                 Route::delete('{commission}/destroy', [CommissionController::class, 'destroy'])->name('destroy');
@@ -298,8 +329,19 @@ Route::prefix('agreements')->as('agreements.')->middleware('auth')->group(functi
     Route::get('/preview/{agreement}', 'Agreements\AgreementController@preview')->name('preview');
 
     Route::resource('addendums', 'Agreements\AddendumController');
-    Route::get('/addendum/{file}', 'Agreements\AddendumController@download')->name('addendum.download');
+    Route::post('/addendum/createWord/{addendum}/type/{type}', 'Agreements\WordTestController@createWordDocxAddendum')->name('addendum.createWord');
+    Route::get('/addendum/downloadRes/{addendum}', 'Agreements\AddendumController@downloadRes')->name('addendum.downloadRes');
+    Route::get('/addendum/sign/{addendum}/type/{type}', 'Agreements\AddendumController@sign')->name('addendum.sign');
+    Route::get('/addendum/preview/{addendum}', 'Agreements\AddendumController@preview')->name('addendum.preview');
     Route::resource('programs', 'Agreements\ProgramController');
+    Route::prefix('programs')->name('programs.')->group(function () {
+        Route::resource('resolutions', 'Agreements\ProgramResolutionController');
+        Route::get('resolution/createWord/{program_resolution}', 'Agreements\WordTestController@createWordDocxResProgram')->name('resolution.createWord');
+        Route::get('resolution/download/{program_resolution}', 'Agreements\ProgramResolutionController@download')->name('resolution.download');
+        Route::post('resolution/amount/{program_resolution}', 'Agreements\ProgramResolutionController@storeAmount')->name('resolution.amount.store');
+        Route::put('resolution/amount/{resolution_amount}', 'Agreements\ProgramResolutionController@updateAmount')->name('resolution.amount.update');
+        Route::delete('resolution/amount/{resolution_amount}', 'Agreements\ProgramResolutionController@destroyAmount')->name('resolution.amount.destroy');
+    });
     Route::resource('municipalities', 'MunicipalityController');
     Route::resource('signers', 'Agreements\SignerController');
     Route::put('/amount/{agreement_amount}', 'Agreements\AgreementController@updateAmount')->name('amount.update');
@@ -365,8 +407,50 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
     Route::post('{user}/roles', 'Rrhh\RoleController@attach')->name('roles.attach')->middleware('auth');
 
 
-    Route::prefix('shiftManagement')->group(function () {
-        Route::get('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftManag.index')->middleware('auth');
+    Route::prefix('shift-management')->group(function () {
+
+        Route::get('/next', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'goToNextMonth'])->name('shiftManag.nextMonth')->middleware('auth');
+        Route::get('/prev', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'goToPreviousMonth'])->name('shiftManag.prevMonth')->middleware('auth');
+
+           Route::get('/myshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShift'])->name('shiftManag.myshift')->middleware('auth');
+
+           Route::get('/closeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeShift'])->name('shiftManag.closeShift')->middleware('auth');
+           Route::post('/closeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeShift'])->name('shiftManag.closeShift')->middleware('auth');
+           Route::get('/closeshift/download/{id}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'downloadCloseInXls'])->name('shiftManag.closeShift.download')->middleware('auth');
+
+           Route::post('/closeshift/first', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'firstConfirmation'])->name('shiftManag.closeShift.firstConfirmation')->middleware('auth');
+           Route::post('/closeshift/close', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeDaysConfirmation'])->name('shiftManag.closeShift.closeConfirmation')->middleware('auth');
+
+           Route::post('/closeshift/saveclosedate/{new?}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'saveClose'])->name('shiftManag.closeShift.saveDate')->middleware('auth');
+
+           Route::post('/shiftupdate', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'changeShiftUserCommentary'])->name('shiftManag.shiftupdate')->middleware('auth');
+
+
+
+           Route::get('/shiftreports', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReports'])->name('shiftManag.shiftReports')->middleware('auth');
+           Route::post('/shiftreports', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReports'])->name('shiftManag.shiftReports')->middleware('auth');
+           Route::get('/shiftreports/XLSdownload', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftReportsXLSDownload'])->name('shiftManag.shiftReportsXLSdownload')->middleware('auth');
+
+
+           Route::get('/shiftdashboard', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'shiftDashboard'])->name('shiftManag.shiftDashboard')->middleware('auth');
+           Route::get('/available-shifts', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'availableShifts'])->name('shiftManag.availableShifts')->middleware('auth');
+            Route::post('/available-shifts/applyfor', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'applyForAvailableShifts'])->name('shiftManag.availableShifts.applyfor')->middleware('auth');
+            Route::post('/available-shifts/cancelDay', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'cancelShiftRequest'])->name('shiftManag.availableShifts.cancelRequest')->middleware('auth');
+            Route::post('/available-shifts/approvalRequest', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'approveShiftRequest'])->name('shiftManag.availableShifts.approvalRequest')->middleware('auth');
+           Route::post('/available-shifts/rejectRequest', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'rejectShiftRequest'])->name('shiftManag.availableShifts.rejectRequest')->middleware('auth');
+           Route::get('/myshift/confirm/{day}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShiftConfirm'])->name('shiftManag.myshift.confirmDay')->middleware('auth');
+           Route::get('/myshift/reject/{day}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShiftReject'])->name('shiftManag.myshift.rejectDay')->middleware('auth');
+
+           Route::get('/reject/{day}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'adminShiftConfirm'])->name('shiftManag.confirmDay')->middleware('auth');
+
+
+        Route::post('/myshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShift'])->name('shiftManag.myshiftfiltered')->middleware('auth');
+
+
+
+        Route::post('/shift-control-form/download', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'downloadShiftControlInPdf'])->name('shiftManag.downloadform')->middleware('auth');
+
+
         Route::post('/', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'indexfiltered'])->name('shiftManag.indexF')->middleware('auth');
         Route::post('/assign', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'assignStaff'])->name('shiftsTypes.assign')->middleware('auth');
         Route::post('/deleteassign', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'assignStaff'])->name('shiftsTypes.deleteassign')->middleware('auth');
@@ -378,6 +462,10 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/editshifttype/{id}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'editshifttype'])->name('shiftsTypes.edit')->middleware('auth');
         Route::post('/updateshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'updateshifttype'])->name('shiftsTypes.update')->middleware('auth');
         Route::post('/storeshifttype', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'storenewshift'])->name('shiftsTypes.store')->middleware('auth');
+
+
+
+        Route::get('/{groupname?}', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'index'])->name('shiftManag.index')->middleware('auth');
     });
 
     Route::prefix('attendance')->name('attendance.')->middleware('auth')->group(function() {
@@ -416,6 +504,29 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/callback-firma-budget-availability/{message}/{modelId}/{signaturesFile?}', [ServiceRequestController::class, 'callbackFirmaBudgetAvailability'])->name('callbackFirmaBudgetAvailability');
 
 
+        Route::prefix('parameters')->name('parameters.')->middleware('auth')->group(function () {
+
+          Route::prefix('1121')->name('1121.')->group(function () {
+                Route::get('/', [Denomination1121Controller::class, 'index'])->name('index');
+                Route::get('/create', [Denomination1121Controller::class, 'create'])->name('create');
+                Route::post('/store', [Denomination1121Controller::class, 'store'])->name('store');
+                Route::get('/{denomination1121}/edit', [Denomination1121Controller::class, 'edit'])->name('edit');
+                Route::put('/{denomination1121}/update', [Denomination1121Controller::class, 'update'])->name('update');
+                Route::delete('{denomination1121}/destroy', [Denomination1121Controller::class, 'destroy'])->name('destroy');
+              });
+
+          Route::prefix('formula')->name('formula.')->group(function () {
+                Route::get('/', [DenominationFormulaController::class, 'index'])->name('index');
+                Route::get('/create', [DenominationFormulaController::class, 'create'])->name('create');
+                Route::post('/store', [DenominationFormulaController::class, 'store'])->name('store');
+                Route::get('/{denominationFormula}/edit', [DenominationFormulaController::class, 'edit'])->name('edit');
+                Route::put('/{denominationFormula}/update', [DenominationFormulaController::class, 'update'])->name('update');
+                Route::delete('{denominationFormula}/destroy', [DenominationFormulaController::class, 'destroy'])->name('destroy');
+              });
+        });
+
+
+
         Route::prefix('fulfillment')->name('fulfillment.')->group(function () {
             // descomposición del resource
             Route::get('/', [FulfillmentController::class, 'index'])->name('index');
@@ -430,6 +541,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/download-resolution/{serviceRequest}', [FulfillmentController::class, 'downloadResolution'])->name('download_resolution');
             Route::get('/certificate-pdf/{fulfillment}/{user?}', [FulfillmentController::class, 'certificatePDF'])->name('certificate-pdf');
             Route::get('/signed-certificate-pdf/{fulfillment}/{timestamp?}', [FulfillmentController::class, 'signedCertificatePDF'])->name('signed-certificate-pdf');
+            Route::get('/delete-signed-certificate-pdf/{fulfillment}', [FulfillmentController::class, 'deletesignedCertificatePDF'])->name('delete-signed-certificate-pdf');
+            Route::get('/delete-responsable-vb/{fulfillment}', [FulfillmentController::class, 'deleteResponsableVB'])->name('delete-responsable-vb');
             //eliminar palabra fulfiment en URL y en metodo
             Route::get('/confirm-fulfillment/{fulfillment}', [FulfillmentController::class, 'confirmFulfillment'])->name('confirm-Fulfillment');
             Route::get('/refuse-fulfillment/{fulfillment}', [FulfillmentController::class, 'refuseFulfillment'])->name('refuse-Fulfillment');
@@ -445,6 +558,16 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             });
 
 
+            Route::prefix('attachment')->name('attachment.')->group(function () {
+                //descomposición del attachment
+                Route::post('/{var}/store', [AttachmentController::class, 'store'])->name('store');
+                Route::get('/{attachment}/show', [AttachmentController::class, 'show'])->name('show');
+                Route::get('/{attachment}/download', [AttachmentController::class, 'download'])->name('download');
+                Route::delete('/{attachment}/destroy', [AttachmentController::class, 'destroy'])->name('destroy');
+
+            });
+
+
 
         });
 
@@ -454,7 +577,11 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/payed', [ReportController::class, 'payed'])->name('payed');
             Route::get('/pay-rejected', [ReportController::class, 'payRejected'])->name('pay-rejected');
             Route::get('/without-bank-details', [ReportController::class, 'withoutBankDetails'])->name('without-bank-details');
+            Route::get('/with-bank-details', [ReportController::class, 'withBankDetails'])->name('with-bank-details');
+            Route::get('/exportCsv', [ReportController::class, 'exportCsv'])->name('exportCsv');
             Route::get('/pending-resolutions', [ReportController::class, 'pendingResolutions'])->name('pending-resolutions');
+            Route::get('/contract', [ReportController::class, 'contract'])->name('contract');
+            Route::get('/duplicate-contracts', [ReportController::class, 'duplicateContracts'])->name('duplicate-contracts');
             Route::get('/resolution-pdf/{ServiceRequest}', [ReportController::class, 'resolutionPDF'])->name('resolution-pdf');
             Route::get('/resolution-pdf-hsa/{ServiceRequest}', [ReportController::class, 'resolutionPDFhsa'])->name('resolution-pdf-hsa');
             Route::get('/bank-payment-file/{establishment_id?}', [ReportController::class, 'bankPaymentFile'])->name('bank-payment-file');
@@ -462,6 +589,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/without-resolution-file', [ReportController::class, 'indexWithoutResolutionFile'])->name('without-resolution-file');
             Route::get('/budget-availability/{serviceRequest}', [ReportController::class, 'budgetAvailability'])->name('budget-availability');
             Route::get('/compliance', [ReportController::class, 'compliance'])->name('compliance');
+            Route::get('/compliance-export', [ReportController::class, 'complianceExport'])->name('compliance-export');
 
             Route::get('/fulfillment/pending/{who}', [ReportController::class, 'pending'])->name('fulfillment-pending');
             // Route::get('/fulfillment/rrhh', [ReportController::class, 'pendingRrhh'])->name('pending-rrhh');
@@ -702,9 +830,9 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     });
     Route::resource('partes', 'Documents\ParteController');
 
-    Route::get('signatures/verify', 'Documents\SignatureController@verify')->name('signatures.verify');
     Route::get('signatures/index/{tab}', 'Documents\SignatureController@index')->name('signatures.index');
-    Route::resource('signatures', 'Documents\SignatureController')->except(['index']);
+    Route::get('signatures/create/{xAxis?}/{yAxis?}', 'Documents\SignatureController@create')->name('signatures.create');
+    Route::resource('signatures', 'Documents\SignatureController')->except(['index', 'create']);
     Route::get('/showPdf/{signaturesFile}/{timestamp?}', 'Documents\SignatureController@showPdf')->name('signatures.showPdf');
     Route::post('/showPdfFromFile', 'Documents\SignatureController@showPdfFromFile')->name('signatures.showPdfFromFile');
     Route::get('/showPdfAnexo/{anexo}', 'Documents\SignatureController@showPdfAnexo')->name('signatures.showPdfAnexo');
@@ -731,7 +859,7 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
     Route::get('report1', 'Requirements\RequirementController@report1')->name('report1');
     // Route::get('report_reqs_by_org', 'Requirements\RequirementController@report_reqs_by_org')->name('report_reqs_by_org');
 });
-Route::resource('requirements', 'Requirements\RequirementController');
+Route::resource('requirements', 'Requirements\RequirementController')->middleware('auth');
 
 Route::view('calendars', 'calendars.index')->name('calendars');
 
@@ -772,6 +900,12 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
         Route::get('/', 'Indicators\ApsController@index')->name('index');
         Route::get('/{year}', 'Indicators\ApsController@list')->name('list');
         Route::get('/{year}/{slug}/{establishment_type}', 'Indicators\ApsController@show')->name('show');
+    });
+
+    Route::prefix('iiaaps')->as('iiaaps.')->group(function () {
+        Route::get('/', 'Indicators\IaapsController@index')->name('index');
+        Route::get('/{year}', 'Indicators\IaapsController@list')->name('list');
+        Route::get('/{year}/{commune}', 'Indicators\IaapsController@show')->name('show');
     });
 
     Route::prefix('19813')->as('19813.')->group(function () {
@@ -1099,13 +1233,18 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
         Route::get('dispatch/{dispatch}/file', 'Pharmacies\DispatchController@openFile')->name('dispatch.openFile');
         Route::resource('purchase', 'Pharmacies\PurchaseController');
         Route::resource('purchase_item', 'Pharmacies\PurchaseItemController');
+        Route::get('purchase/sendForSignature/{purchase}/', 'Pharmacies\PurchaseController@sendForSignature')->name('purchase.sendForSignature');
         Route::get('purchase/record/{purchase}', 'Pharmacies\PurchaseController@record')->name('purchase.record');
+        Route::get('purchase/record-pdf/{purchase}', 'Pharmacies\PurchaseController@recordPdf')->name('purchase.record_pdf');
+        Route::get('/callback-firma-record/{message}/{modelId}/{signaturesFile?}', [PurchaseController::class, 'callbackFirmaRecord'])->name('callbackFirmaRecord');
+        Route::get('/signed-record-pdf/{purchase}', [PurchaseController::class, 'signedRecordPdf'])->name('signed_record_pdf');
 
         Route::resource('transfer', 'Pharmacies\TransferController');
         Route::get('transfer/{establishment}/auth', 'Pharmacies\TransferController@auth')->name('transfer.auth');
         Route::resource('deliver', 'Pharmacies\DeliverController');
         Route::put('deliver/{deliver}/confirm', 'Pharmacies\DeliverController@confirm')->name('deliver.confirm');
         Route::put('deliver/{deliver}/saveDocId', 'Pharmacies\DeliverController@saveDocId')->name('deliver.saveDocId');
+        Route::delete('deliver/{deliver}/restore', 'Pharmacies\DeliverController@restore')->name('deliver.restore');
     });
     Route::resource('products', 'Pharmacies\ProductController');
 
@@ -1248,6 +1387,25 @@ Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::put('/dome/{vaccination}/{reverse?}',[VaccinationController::class,'dome'])->name('dome')->middleware('auth');
 });
 
+Route::prefix('mammography')->as('mammography.')->group(function () {
+    Route::get('/welcome',[MammographyController::class,'welcome'])->name('welcome');
+    Route::get('/login/{access_token}',[MammographyController::class,'login'])->name('login');
+    Route::get('/',[MammographyController::class,'index'])->name('index')->middleware('auth');
+    Route::get('/schedule',[MammographyController::class,'schedule'])->name('schedule')->middleware('auth');
+    Route::get('/create',[MammographyController::class,'create'])->name('create')->middleware('auth');
+    Route::post('/',[MammographyController::class,'store'])->name('store')->middleware('auth');
+    Route::post('/show',[MammographyController::class,'show'])->name('show');
+    Route::get('/{mammography}/edit',[MammographyController::class,'edit'])->name('edit')->middleware('auth');
+    Route::put('/{mammography}',[MammographyController::class,'update'])->name('update')->middleware('auth');
+    // Route::get('/report',[VaccinationController::class,'report'])->name('report')->middleware('auth');
+    Route::get('/export',[MammographyController::class,'export'])->name('export')->middleware('auth');
+    // Route::put('/vaccinate/{vaccination}/{dose}',[VaccinationController::class,'vaccinate'])->name('vaccinate')->middleware('auth');
+    // Route::get('/vaccinate/remove-booking/{vaccination}',[VaccinationController::class,'removeBooking'])->name('removeBooking')->middleware('auth');
+    // Route::get('/card/{vaccination}',[VaccinationController::class,'card'])->name('card')->middleware('auth');
+    Route::get('/slots',[MammographyController::class,'slots'])->name('slots')->middleware('auth');
+    // Route::put('/arrival/{vaccination}/{reverse?}',[VaccinationController::class,'arrival'])->name('arrival')->middleware('auth');
+    // Route::put('/dome/{vaccination}/{reverse?}',[VaccinationController::class,'dome'])->name('dome')->middleware('auth');
+});
 
 Route::prefix('invoice')->as('invoice.')->group(function () {
     Route::get('/welcome',[InvoiceController::class,'welcome'])->name('welcome');
@@ -1261,6 +1419,7 @@ Route::prefix('invoice')->as('invoice.')->group(function () {
 /* Nuevas rutas, Laravel 8.0. */
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
+    Route::delete('{psirequest}/destroy', [SuitabilityController::class, 'destroy'])->name('destroy');
     Route::post('/', [SuitabilityController::class, 'store'])->name('store');
     Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');
     Route::get('/validaterequest', [SuitabilityController::class, 'validaterequest'])->name('validaterequest');
@@ -1341,3 +1500,8 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 
 
 });
+
+
+Route::view('/some', 'some');
+
+Route::get('/test-getip',[TestController::class,'getIp']);

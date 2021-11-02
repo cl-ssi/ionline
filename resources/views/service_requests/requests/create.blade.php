@@ -13,59 +13,6 @@
 
 @livewire('service-request.create-types',['subdirections' => $subdirections,
                                           'responsabilityCenters' => $responsabilityCenters])
-	<!--<div class="form-row">
-
-		 <div class="form-group col-6">
-			@livewire('service-request.create-types')
-		</div>
-
-    	<fieldset class="form-group col">
-		    <label for="for_subdirection_ou_id">Subdirección</label>
-			<select class="form-control selectpicker" data-live-search="true" id="subdirection_ou_id" name="subdirection_ou_id" required data-size="5">
-				<option value=""></option>
-				@foreach($subdirections as $key => $subdirection)
-					<option value="{{$subdirection->id}}">{{$subdirection->name}}</option>
-				@endforeach
-			</select>
-		</fieldset>
-
-    	<fieldset class="form-group col">
-		    <label for="for_responsability_center_ou_id">Centro de Responsabilidad</label>
-				<select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" id="responsability_center_ou_id" required data-size="5">
-					<option value=""></option>
-          @foreach($responsabilityCenters as $key => $responsabilityCenter)
-            <option value="{{$responsabilityCenter->id}}">{{$responsabilityCenter->name}}</option>
-          @endforeach
-        </select>
-		</fieldset>
-
-	</div>-->
-
-	<!-- <div class="form-row">
-
-		<fieldset class="form-group col">
-			<label for="for_users">Responsable</label>
-			<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" data-size="5" required>
-				<option value=""></option>
-				@foreach($users as $key => $user)
-					<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
-				@endforeach
-			</select>
-		</fieldset>
-
-		<fieldset class="form-group col">
-			<label for="for_users">Supervisor</label>
-			<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" data-size="5" required>
-				<option value=""></option>
-				@foreach($users as $key => $user)
-					<option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
-				@endforeach
-			</select>
-		</fieldset>
-
-	</div>
-
-	@livewire('service-request.signature-flows') -->
 
 	<br>
 
@@ -75,7 +22,7 @@
 
   	<div class="form-row">
 
-		<fieldset class="form-group col-6 col-md-2">
+		<fieldset class="form-group col-6 col-md-3">
 			<label for="for_contract_type">Tipo de Contrato</label>
 			<select name="contract_type" class="form-control" required>
 			<option value=""></option>
@@ -92,14 +39,14 @@
 				name="request_date" max="2022-12-31" required>
 		</fieldset>
 
-    	<fieldset class="form-group col-6 col-md-3">
-		    <label for="for_start_date">F.Inicio de Contrato</label>
+    	<fieldset class="form-group col-12 col-md-3">
+		    <label for="for_start_date">Fecha Inicio de Contrato</label>
 		    <input type="date" class="form-control" id="for_start_date"
 				name="start_date" min="2020-01-01" max="2022-12-31" required>
 		</fieldset>
 
-    	<fieldset class="form-group col-6 col-md-3">
-		    <label for="for_end_date">F.Término de Contrato</label>
+    	<fieldset class="form-group col-12 col-md-3">
+		    <label for="for_end_date">Fecha Término de Contrato</label>
 		    <input type="date" class="form-control" id="for_end_date"
 				name="end_date" min="2020-01-01" max="2022-12-31" required>
 		</fieldset>
@@ -110,21 +57,24 @@
 
   <div class="form-row">
 
-    <fieldset class="form-group col">
-        <label for="for_service_description">Descripción Servicio</label>
-        <textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50"></textarea>
+    <fieldset class="form-group col-12">
+        <label for="for_service_description">Descripción Servicio*</label>
+        <textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50" required></textarea>
 
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_enfermeros">Enfermeras/os</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_kinesiologos">Kinesiólogos/as</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_paramedicos">Técnicos paraméricos</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_auxiliares">Auxiliares de servicio</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_administrativos">Administrativos/as</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_matronas">Matronas</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_tm_imageneologia">T.M. Imagenología</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_medico">Médico</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fonoaudiologas">Fonoaudiologas</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_terapeuta_ocupacional">Terapeuta Ocupacional</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_psicologo">Psicólogo</button>
+		<div id="id_descripcion_servicio">
+		<br>
+		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_enfermeros">Enfermeras/os</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-5" id="alias_kinesiologos">Kinesiólogos/as</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_paramedicos">Técnicos paraméricos</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-5" id="alias_medico">Médico</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_auxiliares">Auxiliares de servicio</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-5" id="alias_psicologo">Psicólogo</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_administrativos">Administrativos/as</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-5" id="alias_matronas">Matronas</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_tm_imageneologia">T.M. Imagenología</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-5" id="alias_fonoaudiologas">Fonoaudiologas</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_terapeuta_ocupacional">Terapeuta Ocupacional</button>
+		</div>
 
     </fieldset>
 
@@ -189,22 +139,7 @@
 	</div>
 
   <div class="form-row">
-
-	<fieldset class="form-group col">
-		<label for="for_contractual_condition">Calidad Contractual</label>
-		<select name="contractual_condition" class="form-control" id="contractual_condition" disabled>
-		<option value=""></option>
-		<option value="SUPLENTE" >SUPLENTE</option>
-		<option value="CONTRATA" >CONTRATA</option>
-		<option value="TITULAR" >TITULAR</option>
-		<!--
-		<option value="HONORARIO COVID" >HONORARIO COVID</option>
-		<option value="SUMA ALZADA" >SUMA ALZADA</option>
-		-->
-		</select>
-	</fieldset>
-
-	<fieldset class="form-group col">
+	<fieldset class="form-group col-12 col-md-3">
 		<label for="for_estate">Estamento al que corresponde CS</label>
 		<select name="estate" class="form-control" required id="estate">
 			<option value=""></option>
@@ -222,15 +157,39 @@
 		</select>
 	</fieldset>
 
-	<fieldset class="form-group col">
+	<fieldset class="form-group col-6 col-md-3">
+		<label for="for_contractual_condition">Calidad Contractual</label>
+		<select name="contractual_condition" class="form-control" id="contractual_condition" disabled>
+		<option value=""></option>
+		<option value="SUPLENTE" >SUPLENTE</option>
+		<option value="CONTRATA" >CONTRATA</option>
+		<option value="TITULAR" >TITULAR</option>
+		<!--
+		<option value="HONORARIO COVID" >HONORARIO COVID</option>
+		<option value="SUMA ALZADA" >SUMA ALZADA</option>
+		-->
+		</select>
+	</fieldset>
+
+	<fieldset class="form-group col-6 col-md-2">
 		<label for="for_weekly_hours">Hrs.Semanales</label>
 		<select name="weekly_hours" class="form-control" id="for_weekly_hours">
 			<option value=""></option>
 			<option value="44">44</option>
 			<option value="33">33</option>
+			<option value="30">30</option>
 			<option value="28">28</option>
 			<option value="22">22</option>
+			<option value="20">20</option>
+			<option value="16">16</option>
+			<option value="15">15</option>
 			<option value="11">11</option>
+			<option value="9">9</option>
+			<option value="8.5">8.5</option>
+			<option value="7.5">7.5</option>
+			<option value="5">5</option>
+			<option value="4">4</option>
+			<option value="3">3</option>
 		</select>
 	</fieldset>
 
@@ -249,8 +208,8 @@
 
 	<div class="form-row">
 
-		<fieldset class="form-group col">
-			<label for="for_programm_name">Nombre del programa</label>
+		<fieldset class="form-group col-6 col-md-3">
+			<label for="for_programm_name">Nombre Programa</label>
 			<!-- <input type="text" class="form-control" id="for_programm_name" placeholder="" name="programm_name"> -->
 			<select name="programm_name" class="form-control" required id="programm_name">
 				<option value=""></option>
@@ -269,6 +228,7 @@
 					<option value="PABELLON TARDE">PABELLON TARDE</option>
 					<option value="PABELLON GINE">PABELLON GINE</option>
 					<option value="TURNO DE RESIDENCIA">TURNO DE RESIDENCIA</option>
+					<option value="SENDA">SENDA</option>
 				@else
 					<option value="PRAPS">PRAPS</option>
 					<option value="PESPI">PESPI</option>
@@ -288,16 +248,12 @@
 			</select>
 		</fieldset>
 
-		<fieldset class="form-group col">
-			<label for="for_estate_other">Detalle estamento</label>
-			<input type="text" class="form-control" id="for_estate_other" placeholder="" name="estate_other">
-		</fieldset>
-
-		<fieldset class="form-group col">
+		<fieldset class="form-group col-6 col-md-3">
 			<label for="for_working_day_type">Jornada de Trabajo</label>
 			<select name="working_day_type" class="form-control" required id="working_day_type">
 				<option value=""></option>
 				<option value="DIURNO">DIURNO</option>
+				<option value="VESPERTINO">VESPERTINO</option>
 				<option value="TERCER TURNO">TERCER TURNO</option>
 				<option value="TERCER TURNO - MODIFICADO">TERCER TURNO - MODIFICADO</option>
 				<option value="CUARTO TURNO">CUARTO TURNO</option>
@@ -307,19 +263,27 @@
 				<option value="HORA EXTRA">HORA EXTRA</option>
 				<option value="TURNO EXTRA">TURNO EXTRA</option>
 				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
+				<option value="QUIRURGICO">QUIRÚRGICO</option>
 				<!-- <option value="OTRO">OTRO</option> -->
+				<option value=""></option>
+				<option value="DIARIO">DIARIO</option>
 			</select>
 		</fieldset>
 
-		<fieldset class="form-group col">
-			<label for="for_working_day_type_other">Otro</label>
+		<fieldset class="form-group col-12 col-md-6">
+			<label for="for_estate_other">Detalle estamento</label>
+			<input type="text" class="form-control" id="for_estate_other" placeholder="" name="estate_other">
+		</fieldset>
+
+		<fieldset class="form-group col-12 col-md-12">
+			<label for="for_working_day_type_other">Otro<small> (Saldrá en la resolución luego del horario)</small></label>
 			<input type="text" class="form-control" id="for_working_day_type_other" placeholder="" name="working_day_type_other">
 		</fieldset>
 
   	</div>
 
 	<div class="form-row">
-		<fieldset class="form-group col">
+		<fieldset class="form-group col-6 col-md-3">
 			<label for="for_profession_id">Profesión</label>
 			<select name="profession_id" class="form-control" required id="profession_id">
 				<option value=""></option>
@@ -329,7 +293,7 @@
 			</select>
 		</fieldset>
 
-		<fieldset class="form-group col-3 col-md-3">
+		<fieldset class="form-group col-6 col-md-3">
 			<label for="for_rrhh_team">Equipo RRHH*</label>
 			<select name="rrhh_team" class="form-control" id="rrhh_team" required>
 				<option value=""></option>
@@ -363,11 +327,22 @@
 				<option value="Prevencionista de Riesgo" >Prevencionista de Riesgo</option>
 				<option value="Nutricionista turno" >Nutricionista turno</option>
 				<option value="Informático">Informático</option>
+				<option value="Ingeniero">Ingeniero</option>
+				<option value="Constructor civil">Constructor civil</option>
+				<option value="Arquitecto">Arquitecto</option>
+				<option value="Dibujante técnico proyectista">Dibujante técnico proyectista</option>
+				<option value="Técnico en rehabilitación">Técnico en rehabilitación</option>
+				<option value="Psiquiatra">Psiquiatra</option>
+				<option value="Monitor/a">Monitor/a</option>
+				<option value="Preparador físico">Preparador físico</option>
+				<option value="Otros técnicos">Otros técnicos</option>
+				<option value="Otros profesionales">Otros profesionales</option>
+				<option value="Médico por prestación">Médico por prestación</option>
 			</select>
 		</fieldset>
 
-		<fieldset class="form-group col-3 col-md-3">
-			<label for="for_digera_strategy">Estrategia Digera Covid</label>
+		<fieldset class="form-group col-6 col-md-3">
+			<label for="for_digera_strategy">Estrategia Digera C.</label>
 			<select name="digera_strategy" class="form-control" id="digera_strategy" required>
 				<option value=""></option>
 				<option value="Camas MEDIAS Aperturadas" >Camas MEDIAS Aperturadas</option>
@@ -387,10 +362,11 @@
 			</select>
 		</fieldset>
 
-		<fieldset class="form-group col-3" id="div_covid_schedule">
+		<fieldset class="form-group col-6 col-md-3" id="div_covid_schedule">
 			<label for="for_schedule_detail">Detalle de horario</label>
 			<select name="schedule_detail" class="form-control" id="schedule_detail">
 				<option value=""></option>
+				<option value="DIURNO DE LUNES A VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:48 HRS)">DIURNO DE LUNES A VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:48 HRS)</option>
 				<option value="DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)">DIURNO DE LUNES A JUEVES (DESDE LAS 08:00 HRS HASTA LAS 17:00 HRS) Y VIERNES (DESDE LAS 08:00 HRS HASTA LAS 16:00 HRS)</option>
 				<option value="DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)">DIURNO DE LUNES A JUEVES (DESDE LAS 08:30 HRS HASTA LAS 17:30 HRS) Y VIERNES (DESDE LAS 08:30 HRS HASTA LAS 16:30 HRS)</option>
 				<option value="FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)">FLEXIBILIDAD HORARIA DE LUNES A VIERNES (INGRESO ENTRE 07:30 HRS A 09:00 HRS Y SALIDA DEPENDIENDO DE LA HORA DE LLEGADA)</option>
@@ -407,7 +383,7 @@
 
 	<div class="form-row" id="div_objectives" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_estate">Objetivos</label>
+				<label for="for_estate">Objetivos*</label>
 				<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50" disabled></textarea>
 		</fieldset>
 	</div>
@@ -419,16 +395,42 @@
 		</fieldset>
 	</div> -->
 
+	
+	@if(Auth::user()->organizationalUnit->establishment_id == 1)
+
+	@else
+	<div class="form-row" id="div_subt31" style="display: none">
+		<fieldset class="form-group col">
+				<label for="for_subt31">Subtitulo 31 <small>(Aparecerá en resolución, luego del texto "El gasto corresponde")</small></label>
+				<textarea id="subt31" name="subt31" class="form-control" rows="4" cols="50" disabled></textarea>
+		</fieldset>
+	</div>
+	@endif
+
+	<div class="form-row">
+		<fieldset class="form-group col">
+				<label for="for_estate">Aguinaldos (se inserta en cláusula 8va)</label>
+				<textarea name="bonus_indications" class="form-control" rows="4" cols="50" placeholder="ej: en septiembre un bono de 53.000 por concepto de aguinaldo de fiestas patrias"></textarea>
+		</fieldset>
+	</div>
+
 	<div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_estate">Beneficios adicionales</label>
+				<label for="for_estate">Beneficios adicionales (se inserta en cláusula 14)</label>
 				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50" disabled></textarea>
 
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanzo</button>
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
+
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
+				@if(Auth::user()->organizationalUnit->establishment_id == 1)
+				@else
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
 				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
+				@endif
+				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_devolucion">Devolución de tiempo</button>
+
+
 		</fieldset>
 	</div>
 
@@ -457,6 +459,7 @@
 		$("#programm_name option[value='OTROS PROGRAMAS SSI']").hide();
 		$("#programm_name option[value='LISTA ESPERA']").hide();
 		$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+		$("#programm_name option[value='SENDA']").hide();
 
 		$("#programm_name option[value='ADP DIRECTOR']").hide();
 		$("#programm_name option[value='SENDA']").hide();
@@ -475,6 +478,7 @@
 		$("#programm_name option[value='PABELLON TARDE']").hide();
 		$("#programm_name option[value='PABELLON GINE']").hide();
 		$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+		$("#programm_name option[value='SENDA']").hide();
 
 
 
@@ -493,6 +497,8 @@
 				$("#working_day_type option[value='TERCER TURNO - MODIFICADO']").hide();
 				$("#working_day_type option[value='CUARTO TURNO']").hide();
 				$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").hide();
+				$("#working_day_type option[value='DIARIO']").hide();
+				$("#working_day_type option[value='QUIRURGICO']").hide();
 
 				$("#working_day_type option[value='DIURNO PASADO A TURNO']").show();
 				$("#working_day_type option[value='HORA MÉDICA']").show();
@@ -512,6 +518,8 @@
 				$("#working_day_type option[value='TERCER TURNO - MODIFICADO']").show();
 				$("#working_day_type option[value='CUARTO TURNO']").show();
 				$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").show();
+				$("#working_day_type option[value='DIARIO']").show();
+				$("#working_day_type option[value='QUIRURGICO']").show();
 
 				$("#working_day_type option[value='DIURNO PASADO A TURNO']").hide();
 				$("#working_day_type option[value='HORA MÉDICA']").hide();
@@ -551,6 +559,13 @@
 			if (this.value == "DIURNO") {
 				$('#schedule_detail').removeAttr('disabled');
 			}
+
+			if (this.value == "DIARIO") {
+				$('#for_weekly_hours').attr('disabled', 'disabled');
+			}
+			// else{
+			// 	$('#for_weekly_hours').removeAttr('disabled');
+			// }
 		});
 
 		$('#responsability_center_ou_id').on('change', function() {
@@ -628,10 +643,10 @@
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 		if (value != 85) {
-			$('#Subdirector').val(9882506); //PERDRO IRIONDO: 9882506
+			$('#Subdirector').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
 			$('#Subdirector').selectpicker('refresh');
 
-			$('#SubdirectorTurnos').val(9882506); //PERDRO IRIONDO: 9882506
+			$('#SubdirectorTurnos').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
 			$('#SubdirectorTurnos').selectpicker('refresh');
 		}
 	});
@@ -646,11 +661,18 @@
 			$("#programm_name option[value='Covid19 Médicos']").hide();
 			$('#digera_strategy').attr('disabled', 'disabled');
 
-			
+
+			$("#id_descripcion_servicio").hide();
+
+
 			$("#div_hsa_schedule").show();
 			$("#div_covid_schedule").hide();
 
 			$('#objectives').removeAttr('disabled');
+			$("#objectives").prop('required',true);
+			//$('#objectives').removeAttr('disabled');
+			$('#subt31').removeAttr('disabled');
+			$("#div_subt31").show();
 			// $('#resolve').removeAttr('disabled');
 			$('#additional_benefits').removeAttr('disabled');
 			$("#div_objectives").show();
@@ -683,6 +705,8 @@
 				$("#programm_name option[value='PABELLON TARDE']").show();
 				$("#programm_name option[value='PABELLON GINE']").show();
 				$("#programm_name option[value='TURNO DE RESIDENCIA']").show();
+				$("#programm_name option[value='SENDA']").show();
+
 
 
 			}else{
@@ -710,6 +734,7 @@
 				$("#programm_name option[value='PABELLON TARDE']").hide();
 				$("#programm_name option[value='PABELLON GINE']").hide();
 				$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+//				$("#programm_name option[value='SENDA']").hide();
 			}
 		}
 		else
@@ -722,7 +747,11 @@
 			$("#programm_name option[value='Covid19 Médicos']").show();
 			$('#digera_strategy').removeAttr('disabled');
 
+
+			$("#id_descripcion_servicio").show();
+
 			$('#objectives').attr('disabled', 'disabled');
+			$("#objectives").prop('required',false);
 			// $('#resolve').attr('disabled', 'disabled');
 			$('#additional_benefits').attr('disabled', 'disabled');
 			$("#div_objectives").hide();
@@ -892,6 +921,12 @@
 	});
 	$("#alias_navidad").click(function(){
 		$('#additional_benefits').append("Aguinaldo de Navidad, homologado al monto establecido en la ley de reajuste vigente en el mes de pago (diciembre).\n\n");
+	});
+	$("#alias_viaticos").click(function(){
+		$('#additional_benefits').append("El profesional tendrá derecho al pago de un honorario adicional cuando para el desarrollo de sus prestaciones deba ausentarse del lugar de desempeño, autorizado por la Dirección del Servicio de Salud Iquique.\n\n");
+	});
+	$("#alias_devolucion").click(function(){
+		$('#additional_benefits').append("El prestador de servicios, podrá solicitar permisos de descansos complementarios para ausentarse de sus labores por motivos particulares, siempre qué por la naturaleza de sus servicios y previa autorización de su Jefatura, deban realizar prestaciones de servicios, fuera de la jornada  que estas estén ajustadas a los procedimientos de programación y autorización de los funcionarios.\n\n");
 	});
 
 </script>

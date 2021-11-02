@@ -29,7 +29,7 @@
                     @endforeach
                 </ul>
             </td>
-            <td></td>
+            <td><a href="{{ route('agreements.programs.show', $program->id) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit" aria-hidden="true"></i></a></td>
         </tr>
         @endforeach
     </tbody>

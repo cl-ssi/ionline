@@ -5,72 +5,32 @@ namespace App\Http\Controllers\Programmings;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Programmings\Programming;
 use App\Models\Programmings\CommuneFile;
-use App\Programmings\Review;
 use App\Models\Commune;
-use App\Establishment;
 use App\User;
-
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class CommuneFileController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        
-        $year = '';
-        if(Auth()->user()->hasAllRoles('Programming: Review') == True || Auth()->user()->hasAllRoles('Programming: Admin') == True )
-        {
-        
-        $communeFiles = CommuneFile::select(
-                             'pro_commune_files.id'
-                            ,'pro_commune_files.year'
-                            ,'pro_commune_files.user_id'
-                            ,'pro_commune_files.description'
-                            ,'pro_commune_files.created_at'
-                            ,'pro_commune_files.file_a'
-                            ,'pro_commune_files.file_b'
-                            ,'pro_commune_files.file_c'
-                            ,'T2.name AS commune'
-                            ,'T3.name' 
-                            ,'T3.fathers_family'
-                            ,'T3.mothers_family')
-                ->leftjoin('communes AS T2', 'pro_commune_files.commune_id', '=', 'T2.id')
-                ->leftjoin('users AS T3', 'pro_commune_files.user_id', '=', 'T3.id')
-                ->Where('pro_commune_files.year','LIKE','%'.$year.'%')
-                ->orderBy('T2.name','ASC')->get();
-        }
-        else {
-            $communeFiles = CommuneFile::select(
-                        'pro_commune_files.id'
-                        ,'pro_commune_files.year'
-                        ,'pro_commune_files.user_id'
-                        ,'pro_commune_files.description'
-                        ,'pro_commune_files.created_at'
-                        ,'pro_commune_files.file_a'
-                        ,'pro_commune_files.file_b'
-                        ,'pro_commune_files.file_c'
-                        ,'T2.name AS commune'
-                        ,'T3.name' 
-                        ,'T3.fathers_family'
-                        ,'T3.mothers_family')
-            ->leftjoin('communes AS T2', 'pro_commune_files.commune_id', '=', 'T2.id')
-            ->leftjoin('users AS T3', 'pro_commune_files.user_id', '=', 'T3.id')
-            ->Where('pro_commune_files.year','LIKE','%'.$year.'%')
-            ->Where('pro_commune_files.access','LIKE','%'.Auth()->user()->id.'%')
-            ->orderBy('T2.name','ASC')->get();
-        }
-        
-        
-        return view('programmings/communeFiles/index')->withCommuneFiles($communeFiles);
+        $year = $request->year ?? Carbon::now()->year + 1;
+        $communeFiles = CommuneFile::with('commune', 'user')
+            ->where('year', $year)
+            ->when(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False, function($q){
+                $q->Where('access','LIKE','%'.Auth()->user()->id.'%');
+            })
+            ->get();
+
+        return view('programmings/communeFiles/index', compact('communeFiles', 'request', 'year'));
     }
 
     public function create() 
     {   
         $communes = Commune::get();
         $users = User::where('position', 'Funcionario Programación')->OrderBy('name')->get(); // Sólo Funcionario Programación
-        return view('programmings/communeFiles/create')->withCommunes($communes)->withUsers($users);
+        return view('programmings/communeFiles/create', compact('communes', 'users'));
     }
 
     public function store(Request $request)

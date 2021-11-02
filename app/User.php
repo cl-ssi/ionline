@@ -10,13 +10,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Suitability\Result;
 use App\Models\RequestForms\RequestForm;
 use App\Models\ServiceRequests\ServiceRequest;
-use App\Models\RequestForms\EventRequestForm;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class User extends Authenticatable
 {
-    use Notifiable;
-    use HasRoles;
-    use SoftDeletes;
+    use Notifiable, HasRoles, SoftDeletes, HasFactory;
 
     /**
     * El id no es incremental ya que es el run sin digito verificador
@@ -31,7 +29,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'id', 'dv', 'name', 'fathers_family','mothers_family','gender','address','phone_number','email',
-        'password','birthday','position','active','external','country_id'
+        'password','birthday','position','active','external','country_id', 'organizational_unit_id', 'email_personal', 'email_verified_at'
     ];
 
     /**
@@ -114,6 +112,11 @@ class User extends Authenticatable
     public function getFullNameAttribute()
     {
         return mb_convert_case(mb_strtolower("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_TITLE, "UTF-8");
+    }
+
+    public function getFullNameUpperAttribute()
+    {
+        return mb_convert_case(mb_strtoupper("{$this->name} {$this->fathers_family} {$this->mothers_family}"), MB_CASE_UPPER, "UTF-8");
     }
 
     public function getShortNameAttribute()
@@ -353,6 +356,16 @@ class User extends Authenticatable
           }
     }
 
+    /**
+     * Route notifications for the mail channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return array|string
+     */
+    public function routeNotificationForMail($notification)
+    {
+        return $this->email_personal;
+    }
 
     /**computers
      * The attributes that should be cast to native types.

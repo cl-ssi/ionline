@@ -80,8 +80,7 @@
             <div class="right" style="float: right; width: 340px; padding-top: 76px;">
                 <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;">
                     <strong style="text-transform: uppercase;">{{ $document->type }} {{ $document->subject }} N°:</strong> {{ $document->number }}<br>
-                    <div style="padding-top:26px">Iquique, {{ $document->date->day }} de 
-                        {{ $document->date->monthName }} de {{ $document->date->year }}</div>
+                    <div style="padding-top:26px">Iquique.</div>
                 </div>
             </div>
 

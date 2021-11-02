@@ -19,6 +19,18 @@
             <button class="btn text-white btn-info btn-block" wire:click.prevent="add({{$i}})">Agregar</button>
 {{--            <button class="btn text-white btn-info btn-block" wire:click.prevent="add({{$i}})" {{$disabledAddButton}}>Agregar</button>--}}
         </fieldset>
+
+        <fieldset class="form-group offset-3 col-3">
+            <label for=""></label>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input"
+                       name="visatorAsSignature" id="for_visatorAsSignature" value="1" >
+                <label class="form-check-label" for="for_visatorAsSignature">Visadores como firmantes</label>
+               <small id="presumend_help" class="form-text text-muted">
+                   Si se selecciona, los usuarios visadores pasarán a ser firmantes. Igualmente se debe seleccionar un usuario en firmante. </small>
+            </div>
+        </fieldset>
+
     </div>
     <div class="form-row">
         <div class="col-5">
@@ -37,27 +49,27 @@
 
                     @foreach($ouRoots as $ouRoot)
                         <option value="{{ $ouRoot->id }}">
-                            {{ $ouRoot->name }}
+                            {{ $ouRoot->name  . ' - ' . $ouRoot->establishment->alias}}
                         </option>
                         @foreach($ouRoot->childs as $child_level_1)
                             <option value="{{ $child_level_1->id }}">
                                 &nbsp;&nbsp;&nbsp;
-                                {{ $child_level_1->name }}
+                                {{ $child_level_1->name  . ' - ' . $ouRoot->establishment->alias}}
                             </option>
                             @foreach($child_level_1->childs as $child_level_2)
                                 <option value="{{ $child_level_2->id }}">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    {{ $child_level_2->name }}
+                                    {{ $child_level_2->name  . ' - ' . $ouRoot->establishment->alias}}
                                 </option>
                                 @foreach($child_level_2->childs as $child_level_3)
                                     <option value="{{ $child_level_3->id }}">
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        {{ $child_level_3->name }}
+                                        {{ $child_level_3->name  . ' - ' . $ouRoot->establishment->alias}}
                                     </option>
                                     @foreach($child_level_3->childs as $child_level_4)
                                         <option value="{{ $child_level_4->id }}">
                                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                            {{ $child_level_4->name }}
+                                            {{ $child_level_4->name  . ' - ' . $ouRoot->establishment->alias}}
                                         </option>
                                     @endforeach
                                 @endforeach

@@ -4,14 +4,14 @@
     <div class="card-body">
       <div class="form-row">
 
-        <fieldset class="form-group col-6 col-md-2">
+        <fieldset class="form-group col-5 col-md-2">
             <label for="for_run">Run (sin DV)</label>
             <input type="number" min="1" max="50000000" class="form-control" id="for_user_id" name="user_id" wire:model.lazy="user_id" required>
         </fieldset>
 
         <fieldset class="form-group col-3 col-md-1">
             <label for="for_dv">Digito</label>
-            <input type="text" class="form-control" id="for_dv" name="dv" readonly>
+            <input type="text" class="form-control" id="for_dv" name="dv" required="required" readonly>
         </fieldset>
 
         <fieldset class="form-group col-3 col-md-1">
@@ -49,25 +49,25 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-5">
-            <label for="for_address">Dirección</label>
-            <input type="text" class="form-control" id="foraddress" placeholder="Dirección, comuna"
+            <label for="for_address">Dirección*</label>
+            <input type="text" class="form-control" id="foraddress" placeholder="Dirección, comuna" required
               name="address" @if($user) value="{{$user->address}}" @endif>
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-2">
             <label for="for_phone_number">Número telefónico*</label>
-            <input type="text" class="form-control" id="for_phone_number" 
+            <input type="text" class="form-control" id="for_phone_number"
               name="phone_number" required @if($user) value="{{$user->phone_number}}" @endif>
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
             <label for="for_email">Correo electrónico*</label>
-            <input type="text" class="form-control" id="for_email" required
+            <input type="text" class="form-control" id="for_email" required wire:model.lazy="email"
               name="email" @if($user) value="{{$user->email}}" @endif>
         </fieldset>
 
       </div>
     </div>
   </div>
-  
+
 </div>

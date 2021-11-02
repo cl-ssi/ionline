@@ -30,28 +30,33 @@ class DocumentController extends Controller
     {
         //$users = User::Search($request->get('name'))->orderBy('name','Asc')->paginate(30);
         //$documents = Document::Search($request)->latest()->paginate(50);
-        $childs = array(Auth()->user()->OrganizationalUnit->id);
+        if (Auth()->user()->OrganizationalUnit) {
+            $childs = array(Auth()->user()->OrganizationalUnit->id);
 
-        $childs = array_merge($childs, Auth()->user()->OrganizationalUnit->childs->pluck('id')->toArray());
-        foreach(Auth()->user()->OrganizationalUnit->childs as $child) {
-            $childs = array_merge($childs, $child->childs->pluck('id')->toArray());
+            $childs = array_merge($childs, Auth()->user()->OrganizationalUnit->childs->pluck('id')->toArray());
+            foreach (Auth()->user()->OrganizationalUnit->childs as $child) {
+                $childs = array_merge($childs, $child->childs->pluck('id')->toArray());
+            }
+
+            $ownDocuments = Document::Search($request)->latest()
+                ->where('user_id', Auth()->user()->id)
+                //->whereIn('organizational_unit_id',$childs)
+                // ->withTrashed()
+                ->paginate(100);
+
+            $otherDocuments = Document::Search($request)->latest()
+                ->where('user_id', '<>', Auth()->user()->id)
+                ->where('type', '<>', 'Reservado')
+                ->whereIn('organizational_unit_id', $childs)
+                // ->withTrashed()
+                ->paginate(100);
+
+            $users = User::orderBy('name')->orderBy('fathers_family')->withTrashed()->get();
+            return view('documents.index', compact('ownDocuments', 'otherDocuments', 'users'));
+        } 
+        else {
+            return redirect()->back()->with('danger', 'Usted no posee asignada una unidad organizacional favor contactar a su administrador');
         }
-
-        $ownDocuments = Document::Search($request)->latest()
-                    ->where('user_id', Auth()->user()->id)
-                    //->whereIn('organizational_unit_id',$childs)
-                    // ->withTrashed()
-                    ->paginate(100);
-
-        $otherDocuments = Document::Search($request)->latest()
-                    ->where('user_id', '<>', Auth()->user()->id)
-                    ->where('type','<>','Reservado')
-                    ->whereIn('organizational_unit_id',$childs)
-                    // ->withTrashed()
-                    ->paginate(100);
-
-        $users = User::orderBy('name')->orderBy('fathers_family')->withTrashed()->get();
-        return view('documents.index', compact('ownDocuments','otherDocuments','users'));
     }
 
     /**
@@ -78,11 +83,13 @@ class DocumentController extends Controller
         $document->organizationalUnit()->associate(Auth::user()->organizationalUnit);
 
         /* Agrega uno desde el correlativo */
-        if(!$request->number) {
-            if($request->type == 'Memo' OR
-                $request->type == 'Acta de recepción' OR
-                $request->type == 'Circular') {
-        
+        if (!$request->number) {
+            if (
+                $request->type == 'Memo' or
+                $request->type == 'Acta de recepción' or
+                $request->type == 'Circular'
+            ) {
+
                 $document->number = Correlative::getCorrelativeFromType($request->type);
             }
         }
@@ -98,20 +105,16 @@ class DocumentController extends Controller
      */
     public function show(Document $document)
     {
-        if($document->type == 'Acta de recepción') {
+        if ($document->type == 'Acta de recepción') {
             return view('documents.reception')->withDocument($document);
-        }
-        else if($document->type == 'Resolución') {
+        } else if ($document->type == 'Resolución') {
             return view('documents.resolution')->withDocument($document);
-        }
-        else if($document->type == 'Circular') {
+        } else if ($document->type == 'Circular') {
             //centrada la materia en negrita y sin de para
             return view('documents.circular')->withDocument($document);
-        }
-        else {
+        } else {
             return view('documents.show')->withDocument($document);
         }
-
     }
 
     /**
@@ -123,12 +126,11 @@ class DocumentController extends Controller
     public function edit(Document $document)
     {
         /* Si tiene número de parte entonces devuelve al index */
-        if($document->file) {
+        if ($document->file) {
             session()->flash('danger', 'Lo siento, el documento ya tiene un archivo adjunto');
             return redirect()->route('documents.index');
         }
-        /* De lo contrario retorna para editar el documento */
-        else {
+        /* De lo contrario retorna para editar el documento */ else {
             return view('documents.edit', compact('document'));
         }
     }
@@ -144,11 +146,13 @@ class DocumentController extends Controller
     {
         $document->fill($request->all());
         /* Agrega uno desde el correlativo */
-        if(!$request->number) {
-            if($request->type == 'Memo' OR
-                $request->type == 'Acta de recepción' OR
-                $request->type == 'Circular') {
-        
+        if (!$request->number) {
+            if (
+                $request->type == 'Memo' or
+                $request->type == 'Acta de recepción' or
+                $request->type == 'Circular'
+            ) {
+
                 $document->number = Correlative::getCorrelativeFromType($request->type);
             }
         }
@@ -159,7 +163,7 @@ class DocumentController extends Controller
         $document->save();
 
         session()->flash('info', 'El documento ha sido actualizado.
-            <a href="'.route('documents.show', $document->id).'" target="_blank">
+            <a href="' . route('documents.show', $document->id) . '" target="_blank">
             Previsualizar</a>');
 
         return redirect()->route('documents.index');
@@ -207,22 +211,21 @@ class DocumentController extends Controller
     public function storeNumber(Request $request, Document $document)
     {
         $document->fill($request->all());
-        if($request->hasFile('file')){
+        if ($request->hasFile('file')) {
             $filename = $document->id . '-' .
-                        $document->type . '_' .
-                        $document->number . '.' .
-                        $request->file->getClientOriginalExtension();
-            $document->file = $request->file->storeAs('ionline/documents/documents',$filename,['disk'=>'gcs']);
-
+                $document->type . '_' .
+                $document->number . '.' .
+                $request->file->getClientOriginalExtension();
+            $document->file = $request->file->storeAs('ionline/documents/documents', $filename, ['disk' => 'gcs']);
         }
         $document->save();
         //unset($document->number);
 
         session()->flash('info', 'El documento ha sido actualizado.
-            <a href="'.route('documents.show', $document->id).'" target="_blank">
+            <a href="' . route('documents.show', $document->id) . '" target="_blank">
             Previsualizar</a>');
 
-        if($request->has('sendMail')) {
+        if ($request->has('sendMail')) {
             /* Enviar a todos los email que aparecen en distribución */
             preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $document->distribution, $emails);
             //dd($emails[0]);
@@ -243,7 +246,7 @@ class DocumentController extends Controller
     {
         $document = Document::findOrNew($request->document_id);
         $document->type = null;
-        if( $document->user_id != Auth::id() ) {
+        if ($document->user_id != Auth::id()) {
             $document = new Document();
         }
         return view('documents.create', compact('document'));
@@ -252,8 +255,8 @@ class DocumentController extends Controller
     public function download(Document $document)
     {
         $filename = $document->type . ' ' .
-                    $document->number . '.' .
-                    File::extension($document->file);
+            $document->number . '.' .
+            File::extension($document->file);
         //return Storage::download($document->file, $filename);
         return Storage::disk('gcs')->response($document->file, $filename);
     }
@@ -263,7 +266,7 @@ class DocumentController extends Controller
         $users = User::orderBy('name')->has('documents')->with('documents')->get();
         $ct = Document::count();
         $ous = OrganizationalUnit::has('documents')->get();
-        return view('documents.report', compact('users','ct','ous'));
+        return view('documents.report', compact('users', 'ct', 'ous'));
     }
 
     public function sendForSignature(Document $document)
@@ -294,21 +297,21 @@ class DocumentController extends Controller
                 break;
         }
 
-        if($signature->document_type = 'Memorando')
+        if ($signature->document_type = 'Memorando')
 
-//        $signature->endorse_type = 'Visación en cadena de responsabilidad';
-//        $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;
+            //        $signature->endorse_type = 'Visación en cadena de responsabilidad';
+            //        $signature->distribution = 'División de Atención Primaria MINSAL,Oficina de Partes SSI,'.$municipio;
 
 
-        if($document->type == 'Acta de recepción') {
-            $documentFile = \PDF::loadView('documents.reception', compact('document'));
-        }
-        else if($document->type == 'Resolución') {
-            $documentFile = \PDF::loadView('documents.resolution', compact('document'));
-        }
-        else {
-            $documentFile = \PDF::loadView('documents.show', compact('document'));
-        }
+            if ($document->type == 'Acta de recepción') {
+                $documentFile = \PDF::loadView('documents.reception', compact('document'));
+            } else if ($document->type == 'Resolución') {
+                $documentFile = \PDF::loadView('documents.resolution', compact('document'));
+            } else if ($document->type == 'Circular') {
+                $documentFile = \PDF::loadView('documents.circular', compact('document'));
+            } else {
+                $documentFile = \PDF::loadView('documents.show', compact('document'));
+            }
 
         $signaturesFile = new SignaturesFile();
         $signaturesFile->file = base64_encode($documentFile->output());
@@ -318,20 +321,16 @@ class DocumentController extends Controller
         $signature->signaturesFiles->add($signaturesFile);
         $documentId = $document->id;
 
-        return view('documents.signatures.create', compact('signature', 'documentId' ));
+        return view('documents.signatures.create', compact('signature', 'documentId'));
     }
 
     public function signedDocumentPdf($id)
     {
         $document = Document::find($id);
         return Storage::disk('gcs')->response($document->fileToSign->signed_file);
-//        header('Content-Type: application/pdf');
-//        if (isset($document->fileToSign)) {
-//            echo base64_decode($document->fileToSign->signed_file);
-//        }
+        //        header('Content-Type: application/pdf');
+        //        if (isset($document->fileToSign)) {
+        //            echo base64_decode($document->fileToSign->signed_file);
+        //        }
     }
-
-
-
-
 }
