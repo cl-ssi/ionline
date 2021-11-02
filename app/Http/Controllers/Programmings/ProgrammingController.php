@@ -14,8 +14,9 @@ class ProgrammingController extends Controller
 {
     public function index(Request $request)
     {
+        $year = $request->year ?? Carbon::now()->year + 1;
         $programmings = Programming::with('items.reviewItems', 'items.activityItem')
-            ->where('year', $request->year ?? Carbon::now()->year)
+            ->where('year', $year)
             ->when(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False, function($q){
                 $q->Where('status','=','active')->Where('access','LIKE','%'.Auth()->user()->id.'%');
             })
@@ -23,7 +24,7 @@ class ProgrammingController extends Controller
             
         $communes = Commune::where('name', $request->name)->get();
 
-        return view('programmings/programmings/index', compact('programmings', 'request', 'communes'));
+        return view('programmings/programmings/index', compact('programmings', 'request', 'communes', 'year'));
     }
 
     public function create() 
