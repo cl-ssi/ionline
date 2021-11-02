@@ -11,12 +11,6 @@
             <i class="fas fa-hospital"></i> Establecimientos</a>
     </li>
 
-    <li class="nav-item">
-        <a class="nav-link {{active('parameters.holidays.index')}}"
-            href="{{ route('parameters.holidays.index') }}">
-            <i class="fas fa-suitcase"></i> Feriados</a>
-    </li>
-
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle {{active('parameters.permissions.index')}}"
             data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -34,6 +28,12 @@
                 <i class="fas fa-external-link-alt"></i> Externos
             </a>
         </div>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link {{active('parameters.holidays.index')}}"
+            href="{{ route('parameters.holidays.index') }}">
+            <i class="fas fa-suitcase"></i> Feriados</a>
     </li>
 
     <li class="nav-item">
