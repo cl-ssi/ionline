@@ -33,7 +33,7 @@ Editar Item Programación Operativa </h4>
                 @endforeach      
             </select>
         </div>
-        <div class="form-group col-md-6">
+        {{--<div class="form-group col-md-6">
             <label for="forprogram">Ciclo Vital</label>
             <select name="cycle" id="formprogram" class="form-control">
                 @php($cycle_types = array('INFANTIL', 'ADOLESCENTE', 'ADULTO', 'ADULTO MAYOR', 'TRANSVERSAL'))
@@ -41,27 +41,31 @@ Editar Item Programación Operativa </h4>
                 <option value="{{$cycle_type}}" @if($cycle_type == $programmingItem->cycle) selected @endif>{{$cycle_type}}</option>
                 @endforeach
             </select>
+        </div>--}}
+        <div class="form-group col-md-6">
+            <label for="forprogram">Ciclo Vital</label>
+            <input type="input" class="form-control" id="cycle_type" name="cycle_type" value="{{ $programmingItem->activityItem->vital_cycle ?? '' }}" required="" readonly>
         </div>
         
-        <!--<div class="form-group col-md-8">
+        {{--<div class="form-group col-md-8">
             <label for="forprogram">Programa Ministerial</label>
             <select name="ministerial_program" id="formprogram" class="form-control selectpicker " data-live-search="true" required>
                 @foreach($ministerialPrograms as $ministerialProgram)
                     <option value="{{ $ministerialProgram->id }}">{{ $ministerialProgram->name }}</option>
                 @endforeach
             </select>
-        </div>-->
+        </div>--}}
     </div>
     <div class="form-row">
 
     <div class="form-group col-md-3">
             <label for="forprogram">Acción</label>
-            <input type="input" class="form-control" id="action_type" name="action_type" value="{{$programmingItem->action_type ?? '' }}" required="" disabled>
+            <input type="input" class="form-control" id="action_type" name="action_type" value="{{$programmingItem->activityItem->action_type ?? '' }}" required="" disabled>
         </div>
     
         <div class="form-group col-md-9">
             <label for="forprogram">Actividad o Prestación</label>
-            <input type="input" class="form-control" id="activity_name" name="activity_name" value="{{$programmingItem->activity_name ?? '' }}" required="" disabled>
+            <input type="input" class="form-control" id="activity_name" name="activity_name" value="{{$programmingItem->activityItem->activity_name ?? '' }}" required="" disabled>
         </div>
         <input type="hidden" class="form-control" id="activity_id" name="activity_id" value="{{$programmingItem->activity_id ?? '' }}" required="">
 
@@ -152,7 +156,7 @@ Editar Item Programación Operativa </h4>
     <div class="form-row">
     
         <div class="form-group col-md-6">
-            <label for="forprogram">Profesional/Funcionario <span class="text-danger">{{ $activityItemsSelect ? '- Rec. '.$activityItemsSelect->professional : '' }}</span></label>
+            <label for="forprogram">Profesional/Funcionario <span class="text-danger"></span></label>
             <a tabindex="0"  role="button" data-toggle="popover" data-trigger="focus" 
             title="Profesional/Funcionario" 
             data-content="Funcionario que otorga la prestación, Si es más de un funcionario para la actividad programada se debe repetir en otro registro">
@@ -231,7 +235,7 @@ Editar Item Programación Operativa </h4>
 
         <div class="form-group col-md-6">
             <label for="forprogram">Fuente Información</label>
-            <input type="input" class="form-control" id="information_source" name="information_source"  value="{{$programmingItem->information_source ?? '' }}" >
+            <input type="input" class="form-control" id="information_source" name="information_source"  value="{{$programmingItem->activityItem->verification_rem ?? '' }}" disabled>
         </div>
 
         <div class="form-group col-md-3">
