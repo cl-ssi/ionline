@@ -6,11 +6,11 @@
 
 @include('programmings/nav')
 
-<h3 class="mb-3">Programación Numérica 
+<h3 class="mb-3">Programación Numérica {{$year}}
 <form class="form-inline float-right small" method="GET" action="{{ route('programmings.index') }}">
     <select name="year" class="form-control" onchange="this.form.submit()">
-                    @foreach(range(2021, date('Y') + 1) as $year)
-                        <option value="{{ $year }}" {{ request()->year == $year ? 'selected' : '' }}>{{ $year }}</option>
+                    @foreach(range(2021, date('Y') + 1) as $anio)
+                        <option value="{{ $anio }}" {{ request()->year == $anio || $year == $anio ? 'selected' : '' }}>{{ $anio }}</option>
                     @endforeach
     </select>
 </form>
