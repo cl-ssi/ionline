@@ -578,6 +578,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/pay-rejected', [ReportController::class, 'payRejected'])->name('pay-rejected');
             Route::get('/without-bank-details', [ReportController::class, 'withoutBankDetails'])->name('without-bank-details');
             Route::get('/with-bank-details', [ReportController::class, 'withBankDetails'])->name('with-bank-details');
+            Route::get('/exportCsv', [ReportController::class, 'exportCsv'])->name('exportCsv');
             Route::get('/pending-resolutions', [ReportController::class, 'pendingResolutions'])->name('pending-resolutions');
             Route::get('/contract', [ReportController::class, 'contract'])->name('contract');
             Route::get('/duplicate-contracts', [ReportController::class, 'duplicateContracts'])->name('duplicate-contracts');

@@ -8,8 +8,8 @@
 
 <h3 class="mb-3">Funcionario a Honorario con Datos Bancarios</h3>
 
-<a class="btn btn-outline-success btn-sm mb-3" id="downloadLink" onclick="exportF(this)">Descargar en excel</a>
-
+<!-- <a class="btn btn-outline-success btn-sm mb-3" id="downloadLink" onclick="exportF(this)">Descargar en excel</a> -->
+<a class="btn btn-outline-success btn-sm mb-3" href="{{ route('rrhh.service-request.report.exportCsv') }}">Descargar</a>
 
 <table class="table table-sm table-bordered" id="tabla_correctora">
     <tr>
@@ -37,6 +37,8 @@
 
     @endforeach
 </table>
+
+{{ $userbankaccounts->links() }}
 
 @endsection
 
