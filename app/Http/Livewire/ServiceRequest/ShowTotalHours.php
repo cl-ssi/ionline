@@ -185,8 +185,8 @@ class ShowTotalHours extends Component
                 $this->totalAmount = $this->totalHours * $value;
                 break;
 
-
             case (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) >= Carbon::parse('01-10-2021 00:00')) && 'HORA EXTRA':
+            case (Carbon::parse('01-'. $this->fulfillment->month ."-". $this->fulfillment->year) >= Carbon::parse('01-10-2021 00:00')) && 'TURNO EXTRA':
               $holidays = Holiday::whereYear('date', '=', $this->fulfillment->serviceRequest->start_date->year)
                   ->whereMonth('date', '=', $this->fulfillment->serviceRequest->start_date->month)
                   ->get();
