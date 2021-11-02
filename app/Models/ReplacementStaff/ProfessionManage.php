@@ -12,17 +12,11 @@ class ProfessionManage extends Model
     use softDeletes;
 
     protected $fillable = [
-        'name'
+        'name', 'profile_manage_id'
     ];
 
-    public function setNameAttribute($value)
-    {
-        $this->attributes['name'] = strtolower($value);
-    }
-
-    public function getNameAttribute()
-    {
-        return ucwords(strtolower($this->attributes['name']));
+    public function profileManage() {
+        return $this->belongsTo('App\Models\ReplacementStaff\ProfileManage');
     }
 
     protected $hidden = [

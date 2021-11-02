@@ -23,6 +23,10 @@ class CommuneFile extends Model
         return $this->belongsTo('\App\Models\Commune');
     }
 
+    public function user() {
+        return $this->belongsTo('\App\User');
+    }
+
     public function programming_reviews() {
         return $this->hasMany('App\Models\Programmings\Review');
     }

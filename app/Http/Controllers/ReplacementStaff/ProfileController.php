@@ -14,30 +14,19 @@ class ProfileController extends Controller
 
     public function store(Request $request, ReplacementStaff $replacementStaff)
     {
-        // ID (1,3)
-        if($request->profile == 1 or $request->profile == 3){
-            $profile = new Profile();
-            $profile->profile_manage_id = $request->profile;
-            $profile->replacement_staff()->associate($replacementStaff);
-            $now = Carbon::now()->format('Y_m_d_H_i_s');
-            $file = $request->file('file');
-            $file_name = $now.'_'.$replacementStaff->run;
-            $profile->file = $file->storeAs('/ionline/replacement_staff/profile_docs/', $file_name.'.'.$file->extension(), 'gcs');
-            $profile->save();
-        }
-        else{
-            $profile = new Profile();
-            $profile->degree_date = $request->degree_date;
-            $profile->profile_manage_id = $request->profile;
-            $profile->profession_manage_id = $request->profession;
+        $profile = new Profile();
+        $profile->degree_date = $request->degree_date;
+        $profile->profile_manage_id = $request->profile;
+        $profile->profession_manage_id = $request->profession;
+        if($request->profile == 3 or $request->profile == 4){
             $profile->experience = $request->experience;
-            $profile->replacement_staff()->associate($replacementStaff);
-            $now = Carbon::now()->format('Y_m_d_H_i_s');
-            $file = $request->file('file');
-            $file_name = $now.'_'.$replacementStaff->run;
-            $profile->file = $file->storeAs('/ionline/replacement_staff/profile_docs/', $file_name.'.'.$file->extension(), 'gcs');
-            $profile->save();
         }
+        $profile->replacement_staff()->associate($replacementStaff);
+        $now = Carbon::now()->format('Y_m_d_H_i_s');
+        $file = $request->file('file');
+        $file_name = $now.'_'.$replacementStaff->run;
+        $profile->file = $file->storeAs('/ionline/replacement_staff/profile_docs/', $file_name.'.'.$file->extension(), 'gcs');
+        $profile->save();
 
         session()->flash('success', 'Su perfil profesional ha sido ingresado.');
         return redirect()->back();

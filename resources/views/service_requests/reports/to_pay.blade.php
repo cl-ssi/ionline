@@ -1,12 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Reporte para pagos')
+@section('title', 'Pendientes de pago')
 
 @section('content')
 <div class="d-print-none">
 @include('service_requests.partials.nav')
 </div>
 <h4 class="mb-3">Pendientes de pago</h4>
+
+<div class="alert alert-warning" role="alert">
+  A todos los pagos aceptados, se debe cargar la información de pago para cerrar el proceso en el símbolo de $ de color verde, de lo contario quedaran en la bandeja como pendientes
+</div>
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.to-pay') }}">
 
@@ -23,6 +27,15 @@
 				<option value="12" @if($request->establishment_id == 12) selected @endif>Dr. Héctor Reyno G.</option>
 				<option value="38" @if($request->establishment_id === 0) selected @endif>Dirección SSI</option>
 			</select>
+      <span class="input-group-text">Tipo de Contrato</span>
+
+        <select class="form-control selectpicker border border-secondary"  name="type" data-size="5">
+                <option value=""></option>
+                <option value="Covid" @if($request->input('type')=='Covid') selected @endif>Covid</option>
+                <option value="Suma Alzada" @if($request->input('type')=='Suma Alzada') selected @endif>Suma Alzada</option>
+            </select>
+
+
 			<div class="input-group-append">
 				<button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
 			</div>
@@ -46,6 +59,8 @@
     <tr>
         <th>Id</th>
         <th>Estab</th>
+        <th>Centro de Resp</th>
+        <th>Tipo de Contrato</th>
         <th>Periodo</th>
         <th>Tipo/Jornada</th>
         <th>Nombre</th>
@@ -65,6 +80,8 @@
       				</a>
           </td>
           <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
+          <td class="small">{{$fulfillment->serviceRequest->responsabilityCenter->name ?? ''}}</td>
+          <td>{{$fulfillment->serviceRequest->type ?? ''}}</td>
           <td>
             @if($fulfillment->year)
               {{ $fulfillment->year }}-{{ $fulfillment->month }}

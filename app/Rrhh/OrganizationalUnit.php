@@ -31,6 +31,10 @@ class OrganizationalUnit extends Model
         return $this->hasMany('\App\Rrhh\OrganizationalUnit', 'organizational_unit_id');
     }
 
+    public function authorities() {
+        return $this->hasMany('\App\Rrhh\Authority');
+    }
+
     public function documents() {
         return $this->hasMany('\App\Documents\Document');
     }
@@ -67,9 +71,7 @@ class OrganizationalUnit extends Model
         return $initials;
     }
 
-    public static function getName($id){
-      return OrganizationalUnit::where('id', $id)->first()->name;
-    }
+    protected $table = 'organizational_units';
 
     /**
      * The attributes that should be mutated to dates.

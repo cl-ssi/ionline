@@ -23,4 +23,22 @@ class UserBankAccount extends Model
         return $this->belongsTo('\App\User','user_id');
     }
 
+
+
+
+    public function getTypeText() {
+        switch($this->type) {
+          case '01':
+            return 'CTA CORRIENTE / CTA VISTA';
+            break;
+          case '02':
+            return 'CTA AHORRO';
+            break;
+          case '30':
+            return 'CUENTA RUT';
+            break;
+        }
+    }
+
+
 }

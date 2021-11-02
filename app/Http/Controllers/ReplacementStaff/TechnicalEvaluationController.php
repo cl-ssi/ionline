@@ -5,8 +5,7 @@ namespace App\Http\Controllers\ReplacementStaff;
 use App\Models\ReplacementStaff\TechnicalEvaluation;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 use App\Models\ReplacementStaff\ReplacementStaff;
-use App\Models\ReplacementStaff\ProfessionManage;
-use App\Models\ReplacementStaff\ProfileManage;
+use App\Models\ReplacementStaff\AssignEvaluation;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -44,17 +43,34 @@ class TechnicalEvaluationController extends Controller
      */
     public function store(Request $request, RequestReplacementStaff $requestReplacementStaff)
     {
-        $technicalEvaluation = new TechnicalEvaluation();
-        // $date = Carbon::now();
-        $technicalEvaluation->technical_evaluation_status = 'pending';
-        $technicalEvaluation->user()->associate(Auth::user());
-        $technicalEvaluation->organizational_unit_id = Auth::user()->organizationalUnit->id;
-        $technicalEvaluation->request_replacement_staff_id = $requestReplacementStaff->id;
-        $technicalEvaluation->save();
+        if($requestReplacementStaff->assignEvaluations->count() > 0){
+          $previous_assign = $requestReplacementStaff->assignEvaluations->last();
+          $previous_assign->status = NULL;
+          $previous_assign->save();
 
-        session()->flash('success', 'Se ha creado Exitosamente el Proceso de Selección');
-        return redirect()->route('replacement_staff.request.technical_evaluation.edit', compact('technicalEvaluation',
-            'requestReplacementStaff'));
+          $assign_evaluation = new AssignEvaluation($request->All());
+          $assign_evaluation->user()->associate(Auth::user());
+          $assign_evaluation->requestReplacementStaff()->associate($requestReplacementStaff);
+          $assign_evaluation->status = 'assigned';
+          $assign_evaluation->save();
+        }
+        else{
+            $assign_evaluation = new AssignEvaluation($request->All());
+            $assign_evaluation->user()->associate(Auth::user());
+            $assign_evaluation->requestReplacementStaff()->associate($requestReplacementStaff);
+            $assign_evaluation->status = 'assigned';
+            $assign_evaluation->save();
+
+            $technicalEvaluation = new TechnicalEvaluation();
+            $technicalEvaluation->technical_evaluation_status = 'pending';
+            $technicalEvaluation->user()->associate(Auth::user());
+            $technicalEvaluation->organizational_unit_id = Auth::user()->organizationalUnit->id;
+            $technicalEvaluation->request_replacement_staff_id = $requestReplacementStaff->id;
+            $technicalEvaluation->save();
+        }
+
+        session()->flash('success', 'Se ha asignado exitosamente el Proceso de Selección');
+        return redirect()->route('replacement_staff.request.index');
     }
 
     /**
@@ -78,23 +94,31 @@ class TechnicalEvaluationController extends Controller
     {
         $users = User::orderBy('name', 'ASC')->get();
 
-        $replacementStaff = ReplacementStaff::search($request->input('search'),
-                                                     $request->input('profile_search'),
-                                                     $request->input('profession_search'))
-            ->paginate(15);
+        $users_rys = User::where('organizational_unit_id', 48)->get();
 
-        $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
-        $profileManage = ProfileManage::orderBy('name', 'ASC')->get();
+        $replacementStaff = ReplacementStaff::latest()
+            ->search($request->input('search'),
+                    $request->input('profile_search'),
+                    $request->input('profession_search'))
+            ->paginate(5);
 
         if($request->search != NULL || $request->profile_search != 0 || $request->profession_search != 0){
-            return view('replacement_staff.request.technical_evaluation.edit',
-                compact('technicalEvaluation', 'users', 'request', 'replacementStaff',
-                        'professionManage', 'profileManage'));
+            // return view('replacement_staff.request.technical_evaluation.edit',
+            //     compact('technicalEvaluation', 'users', 'request', 'replacementStaff',
+            //             'professionManage', 'profileManage', 'users_rys'));
+
+            //return \Redirect::route('regions', ['id'=>$id,'OTHER_PARAM'=>'XXX',...])->with('message', 'State saved correctly!!!');
+
+            return redirect()
+               ->to(route('replacement_staff.request.technical_evaluation.edit',['technicalEvaluation' => $technicalEvaluation]).'#applicant');
+
+
+            // return redirect('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation)->withInput();
         }
         else{
             return view('replacement_staff.request.technical_evaluation.edit',
                 compact('technicalEvaluation', 'users', 'request', 'replacementStaff',
-                        'professionManage', 'profileManage'));
+                        'users_rys'));
         }
     }
 

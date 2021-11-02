@@ -6,22 +6,33 @@
 
 @include('programmings/nav')
 
-<h3 class="mb-3">Programación Numérica</h3> 
+<h3 class="mb-3">Programación Numérica {{$year}}
+<form class="form-inline float-right small" method="GET" action="{{ route('programmings.index') }}">
+    <select name="year" class="form-control" onchange="this.form.submit()">
+                    @foreach(range(2021, date('Y') + 1) as $anio)
+                        <option value="{{ $anio }}" {{ request()->year == $anio || $year == $anio ? 'selected' : '' }}>{{ $anio }}</option>
+                    @endforeach
+    </select>
+</form>
+</h3> 
  <!-- Permiso para crear nueva programación númerica -->
  @can('Programming: create')
     <a href="{{ route('programmings.create') }}" class="btn btn-info mb-4">Comenzar Nueva Programación</a>
  @endcan
+
+ @if($request->year == 2022 || $year == 2022)
 <div class="float-right text-center">
 <h5>Tiempo Restante</h5>
 <div id="timer"></div>
 </div>
+@endif
 
-<div class="table-responsive"> 
-    <table class="table table-sm " width="100%">
+<div class="table-responsive">
+    <table class="table table-sm">
         <thead>
             <tr class="small ">
                 @can('Programming: status')<th class="text-left align-middle table-dark" >Estado</th>@endcan
-                @can('Programming: edit')<th class="text-left align-middle table-dark" ></th>@endcan
+                @can('Programming: edit')<th class="text-left align-middle table-dark" >Editar</th>@endcan
                 <th class="text-left align-middle table-dark" >%</th> 
                 <th class="text-left align-middle table-dark" >Obs.</th> 
                 <th class="text-left align-middle table-dark" >Id</th> 
@@ -57,12 +68,12 @@
                     <i class="fas fa-edit"></i></a>
                 </td>
             @endcan
-                <td > <span class="badge badge-info">{{ number_format(($programming->qty_traz/51) *100, 0, ',', ' ')}}%</span> </td>
-                <td > <span class="badge badge-danger">{{ number_format($programming->qty_reviews, 0, ',', ' ')}}</span> </td>
+                <td > <span class="badge badge-info">{{ number_format(($programming->getCountActivities()/51) *100, 0, ',', ' ')}}%</span> </td>
+                <td > <span class="badge badge-danger">{{ number_format($programming->countTotalReviewsBy('Not rectified'), 0, ',', ' ')}}</span> </td>
                 <td >
                 {{ $programming->id }}</td>
-                <td>{{ $programming->commune }}</td>
-                <td>{{ $programming->establishment_type }} {{ $programming->establishment }}</td>
+                <td>{{ $programming->establishment->commune->name}}</td>
+                <td>{{ $programming->establishment->type }} {{ $programming->establishment->name }}</td>
                 <td>{{ $programming->year }}</td>
                 <td class="text-right ">
                 <!-- Permiso para asignar profesionales a la programación númerica en proceso -->
@@ -115,7 +126,7 @@ $('#updateModalRect').on('show.bs.modal', function (event) {
 })
 
 // Set the date we're counting down to
-var countDownDate = new Date("Dec 21, 2020 00:00:00").getTime();
+var countDownDate = new Date("Dec 21, 2021 00:00:00").getTime();
 
 function timePart(val,text,color="black"){
   return `<h6 class="timer" style="color:${color};">${val}<div>${text}</div></h6>`

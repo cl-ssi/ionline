@@ -9,17 +9,21 @@
 	.tblShiftControlForm td, .tblShiftControlForm th {
 		font-size: 10px;
 	}
-	
+	.table-wrapper {
+        max-height: 150px;
+        overflow: auto;
+        display:inline-block;
+    }
 </style>
 <div style=" display: inline;">
 @if( isset($usr) && $usr != "" )
-    <button class="only-icon seeBtn" wire:click="setValues({{$usr->id}})"data-toggle="modal" data-target="#shiftcontrolformmodal"  data-keyboard= "false" data-backdrop= "static" >
-    	<i class="fa fa-eye seeBtn" ></i>
+    <button class="only-icon seeBtn"  data-toggle="modal" data-target="#shiftcontrolformmodal{{$usr->id}}"    data-backdrop= "static" >
+    	<i class="fa fa-eye seeBtn" wire:click.prevent="setValues({{$usr->id}})"></i>
 	</button> 
 @endif
 </div>
 
-<div   wire:ignore.self class="modal fade" id="shiftcontrolformmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div   wire:ignore.self class="modal fade" id="shiftcontrolformmodal{{$usr->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
     <div class="modal-dialog" role="document" >
 
@@ -27,7 +31,7 @@
 
             <div class="modal-header" style="background-color:#006cb7;color:white   ">
 
-                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-clock"></i> Control de Turnos de personal L:{{ $log }}</h5>
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-clock"></i> Planilla de control de Turnos <small><b>#ID</b> </small></h5>
 
                 <button type="button" class="close" data-dismiss="modal" wire:click.prevent="cancel()" aria-label="Close">
 
@@ -39,7 +43,7 @@
 
             <div class="modal-body">
                 
-                  <table class="table tblShiftControlForm table-striped"> 
+                    <table class="table tblShiftControlForm table-striped"> 
                         <thead> 
 
                         	<tr>
@@ -50,19 +54,15 @@
                                     @else
                                         <i class="fas fa-spinner fa-pulse"></i>
                                     @endif
-                                    
-
-                                 </td>
+                                </td>
                                 <th style="text-align: left;">CARGO</th>
                                 <td>
     								@if( isset( $usr ) )
                                     	N/A
                                     @else
-                           actuallyMonth             <i class="fas fa-spinner fa-pulse"></i>
+                                        <i class="fas fa-spinner fa-pulse"></i>
                                     @endif
-                                                                	
                                 </td>
-
                             </tr>
                             <tr>
                                 <th style="text-align: left;">MES</th>
@@ -86,7 +86,6 @@
                                     @endif
                                 	
                                 </td>
-
                             </tr>
                             <tr>
                                 <th style="text-align: left;">SERVICIO</th>
@@ -112,7 +111,6 @@
                                     @endif
                                 	
                                 </td>
-
                             </tr>
                             <tr>
                                 <th style="text-align: left;">TURNO  </th>
@@ -137,7 +135,6 @@
                                        
                                 	
                                 </td>
-
                             </tr>
                             <tr>
                                 <th style="text-align: left;">APELLIDOS  </th>
@@ -164,17 +161,15 @@
                                     @endif
                                 	
                                 </td>
-
                             </tr>
-                        	</tr>
                         	<tr>
+                        	</tr>
                      
                         </thead>
                         <tbody>
-                        	
-                        </tbody> 
-                        </table>
-                        <div class="table-responsive">
+                        </tbody>     	
+                    </table>
+                        <div class="table-responsive table-wrapper">
                         	
  							<table class="table tblShiftControlForm"> 
                 				<thead> 
@@ -192,16 +187,88 @@
 										<th></th>
 									</tr>
 								</thead>
+                                                @php
+                                                    $total = 0;
+                                                @endphp
+
                 				<tbody>
-                        			@if($days > 0)	
+                                @if(  $close != 0 )
+                                    
+                                    @php
+                                        $ranges = \Carbon\CarbonPeriod::create($cierreDelMes->init_date, $cierreDelMes->close_date);
+
+                                    @endphp
+                                 
+                                    @foreach ($ranges as $date) 
+
+                                            @php
+                                                $d = $daysForClose->where('day',$date->format("Y-m-d"));
+                                            @endphp
+                                            @foreach($d as $dd)
+                                        <tr>
+                                                <td>{{$date->format("d/m")}}    </td>
+                                                <td> {{ ($dd->working_day!="F")?$dd->working_day:"-"  }} </td>
+                                                @if($date->isPast())
+                                                    <td>{{ (isset($timePerDay[$dd->working_day]))?$timePerDay[$dd->working_day]["from"]:""  }}</td>
+                                                    <td>{{  (isset($timePerDay[$dd->working_day]))?$timePerDay[$dd->working_day]["to"]:"" }}</td>
+                                                    <td>{{  (( isset($timePerDay[$dd->working_day]) )? ( ($dd->status == 1 )?"Completado":ucfirst($shiftStatus[$dd->status] )  ):""  )   }} - <small style="color:{{ ( $dd->confirmationStatus() == 1 ) ? 'green;':'red;'    }}"> {{ ( $dd->confirmationStatus() == 1 ) ? 'Confirmado':'Sin Confirmar'    }}</small></td>
+                                                        @if( $dd->confirmationStatus() == 1 )
+                                                            @php
+                                                                if(  substr($dd->working_day,0, 1) != "+" )
+                                                                    $total+=   (isset($timePerDay[$dd->working_day]))?$timePerDay[$dd->working_day]["time"]:0  ;
+                                                                else
+                                                                    $total+= intval( substr( $dd->working_day,1,2) );
+                                                            @endphp
+                                                        @endif
+                                                @else
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                @endif
+                                        </tr>
+
+                                            @endforeach
+                                           
+
+
+                                    @endforeach
+                                @else
+                        			@if(isset( $days ) && $days > 0)	
                         				@for($i = 1; $i < ($days+1); $i++ )
-                        					<tr>
-                        						<td>{{$i}}	</td>
-                        						<td></td>
-                        						<td></td>
-                        						<td></td>
-                        						<td></td>
-                        					</tr>
+                                            @php
+                                                $date2 = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYears."-".$actuallyMonth."-".$i);  
+                                                $date =explode(" ",$date2);
+
+                                                if(isset($shifsUsr) && isset($shifsUsr->days))
+                                                    $d = $shifsUsr->days->where('day',$date[0]);
+                                                else
+                                                    $d = array();
+                                            @endphp
+                                            @foreach($d as $dd)
+                        					   <tr>
+                        						  <td>{{$i}}	</td>
+                        						  <td>
+                                                         {{ ($dd["working_day"]!="F")?$dd["working_day"]:"-"  }}                    
+                                                    </td>
+                                                    @if($date2->isPast())
+                                                        <td>{{ (isset($timePerDay[$dd["working_day"]]))?$timePerDay[$dd["working_day"]]["from"]:""  }}</td>
+                        						      <td>{{  (isset($timePerDay[$dd["working_day"]]))?$timePerDay[$dd["working_day"]]["to"]:"" }}</td>
+                                                        <td>{{  (( isset($timePerDay[$dd["working_day"]]) )? ( ($shiftStatus[$dd["status"]] == "asignado" )?"Completado":ucfirst($shiftStatus[$dd["status"]] )  ):""  )   }} - <small style="color:{{ ( $dd->confirmationStatus() == 1 ) ? 'green;':'red;'    }}"> {{ ( $dd->confirmationStatus() == 1 ) ? 'Confirmado':'Sin Confirmar'    }}</small></td>
+                                                        @if( $dd->confirmationStatus() == 1 )
+                                                            @php
+                                                                if(  substr($dd["working_day"],0, 1) != "+" )
+                                                                    $total+=   (isset($timePerDay[$dd["working_day"]]))?$timePerDay[$dd["working_day"]]["time"]:0  ;
+                                                                else
+                                                                    $total+= intval( substr( $dd["working_day"],1,2) );
+                                                            @endphp
+                                                        @endif
+                                                    @else
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    @endif
+                        					   </tr>
+                                            @endforeach
                         				@endfor
                         			@else
                                         <tr><td>
@@ -211,9 +278,11 @@
                                         </tr>
 
                         			@endif
+                                @endif
+
                         			<tr>
                         				<th>TOTAL</th>	
-                        				<td></td>	
+                        				<td>{{$total}}</td>	
                         				<td></td>	
                         				<td></td>	
                         				<td></td>	
@@ -226,10 +295,22 @@
             </div>
             <div class="modal-footer">
 
-                <button type="button" wire:click.prevent="cancel()" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" wire:click.prevent="cancel()" class="btn" data-dismiss="modal">Cerrar</button>
 
-                <button type="button" wire:click.prevent="downloadShiftControlForm()" class="btn btn-primary" >Descargar <i class="fa fa-download "></i>
-                </button>
+                
+                <form method="post" action="{{ route('rrhh.shiftManag.downloadform') }}" >
+                    @csrf
+                    {{ method_field('post') }} 
+                    <input style=" display:none;" name="days" value="{{ $days }}">
+                    <input style=" display:none;" name="actuallyMonth" value="{{ $actuallyMonth }}">
+                    <input style=" display:none;" name="actuallyYears" value="{{ $actuallyYears }}">
+                    <input style=" display:none;" name="shifsUsr" value="{{ $shifsUsr }}">
+                    <input style=" display:none;" name="close" value="{{ $close }}">
+                   
+                    <input style=" display:none;" name="actuallyUser" value="{{ $usr->id }}">
+                  <button class="btn btn-success " target="_blank">Descargar <i class="fa fa-check"></i></button>
+                </form>
+
             </div>
 
        </div>

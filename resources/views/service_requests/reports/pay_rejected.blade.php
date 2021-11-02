@@ -1,18 +1,30 @@
 @extends('layouts.app')
 
-@section('title', 'Reporte para pagos')
+@section('title', 'Pagos rechazados')
 
 @section('content')
 
 @include('service_requests.partials.nav')
 
-<h3 class="mb-3">Pagos rechazados 
-@canany(['Service Request: report excel'])
-<a class="btn btn-outline-success btn-sm mb-3" id="downloadLink" onclick="exportF(this)">Descargar en excel Resultado Busqueda</a>
-@endcan
+<h3 class="mb-3">Pagos rechazados
+  @canany(['Service Request: report excel'])
+  <a class="btn btn-outline-success btn-sm mb-3" id="downloadLink" onclick="exportF(this)">Descargar en excel Resultado Busqueda</a>
+  @endcan
 </h3>
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.pay-rejected') }}">
+
   <div class="input-group mb-3">
+
+    <div class="input-group-prepend">
+      <span class="input-group-text">Origen Financiamiento</span>
+    </div>
+    <select class="form-control selectpicker" data-live-search="true" name="type" data-size="5">
+      <option value="">Todos</option>
+      <option value="Covid" @if($request->type == "Covid") selected @endif>Honorarios - Covid</option>
+      <option value="Suma alzada" @if($request->type == "Suma alzada") selected @endif>Suma alzada</option>
+    </select>
+
+
     <div class="input-group-prepend">
       <span class="input-group-text">Tipo de Contrato</span>
     </div>
@@ -36,14 +48,42 @@
       <option value="HORA MÉDICA" @if($request->working_day_type == "HORA MÉDICA") selected @endif>HORA MÉDICA</option>
       <option value="HORA EXTRA" @if($request->working_day_type == "HORA EXTRA") selected @endif>HORA EXTRA</option>
       <option value="TURNO EXTRA" @if($request->working_day_type == "TURNO EXTRA") selected @endif>TURNO EXTRA</option>
-      <option value="TURNO DE REEMPLAZO" @if($request->working_day_type == "TURNO DE REEMPLAZO") selected @endif>TURNO DE REEMPLAZO</option>      
+      <option value="TURNO DE REEMPLAZO" @if($request->working_day_type == "TURNO DE REEMPLAZO") selected @endif>TURNO DE REEMPLAZO</option>
+    </select>
+
+    <div class="input-group-prepend">
+      <span class="input-group-text">Establecimiento</span>
+    </div>
+    <select class="form-control selectpicker" data-live-search="true" name="establishment_id" data-size="5">
+      <option value=""></option>
+      @if($establishments)
+      @foreach($establishments as $key => $establishment)
+      <option value="{{$establishment->id}}" {{ (old('establishment_id')==$establishment->id)?'selected':''}}>{{$establishment->name}}</option>
+      @endforeach
+      @endif
+
+    </select>
+
+
+
+    <div class="input-group-prepend">
+      <span class="input-group-text">Centro de Responsabilidad</span>
+    </div>
+    <select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" data-size="5">
+      <option value=""></option>
+      @if($responsabilityCenters)
+      @foreach($responsabilityCenters as $key => $responsabilityCenter)
+      <option value="{{$responsabilityCenter->id}}" {{ (old('responsability_center_ou_id')==$responsabilityCenter->id)?'selected':''}}>{{$responsabilityCenter->name}}</option>
+      @endforeach
+      @endif
+
     </select>
 
     <div class="input-group-append">
-        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+      <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
     </div>
 
-    
+
 
   </div>
 
@@ -55,6 +95,8 @@
     <th></th>
     <th>Id</th>
     <th>Establecimiento</th>
+    <th>C.Responsabilidad</th>
+    <th>Tipo de Contrato</th>
     <th>Tipo/Jornada</th>
     <th>Nombre</th>
     <th nowrap>Rut</th>
@@ -72,20 +114,22 @@
     <td>
       @if($fulfillment->serviceRequest != null)
       <a href="{{ route('rrhh.service-request.fulfillment.edit',$fulfillment->serviceRequest) }}" title="Editar">
-        {{$fulfillment->serviceRequest->id}}
+        {{$fulfillment->serviceRequest->id ?? ''}}
       </a>
       @else
 
       @endif
     </td>
-    <td class="small">{{$fulfillment->serviceRequest->establishment->name}}</td>
+    <td class="small">{{$fulfillment->serviceRequest->establishment->name?? ''}}</td>
+    <td class="small">{{$fulfillment->serviceRequest->responsabilityCenter->name?? ''}}</td>
+    <td class="small">{{$fulfillment->serviceRequest->type ?? ''}}</td>
     <td>
-      {{$fulfillment->serviceRequest->program_contract_type}}
+      {{$fulfillment->serviceRequest->program_contract_type??''}}
       <br>
-      {{$fulfillment->serviceRequest->working_day_type}}
+      {{$fulfillment->serviceRequest->working_day_type??''}}
     </td>
-    <td>{{$fulfillment->serviceRequest->employee->fullName}}</td>
-    <td nowrap>{{$fulfillment->serviceRequest->employee->runFormat()}}</td>
+    <td>{{$fulfillment->serviceRequest ? $fulfillment->serviceRequest->employee->fullName : ''}}</td>
+    <td nowrap>{{$fulfillment->serviceRequest ? $fulfillment->serviceRequest->employee->runFormat() : ''}}</td>
     <td>
       @if($fulfillment->year)
       {{ $fulfillment->year }}-{{ $fulfillment->month }}
@@ -114,10 +158,12 @@
       @endif
     </td>
     <td>
+      @if($fulfillment->serviceRequest)
       @if($fulfillment->serviceRequest->has_resolution_file)
       <a href="{{route('rrhh.service-request.fulfillment.download_resolution', $fulfillment->serviceRequest)}}" target="_blank" title="Resolución">
         <i class="fas fa-paperclip"></i>
       </a>
+      @endif
       @endif
     </td>
     <td>
@@ -133,21 +179,22 @@
 @section('custom_js')
 
 <script type="text/javascript">
-let date = new Date()
-let day = date.getDate()
-let month = date.getMonth() + 1
-let year = date.getFullYear()
-let hour = date.getHours()
-let minute = date.getMinutes()
-    function exportF(elem) {
-        var table = document.getElementById("tabla_rechazado");
-        var html = table.outerHTML;
-        var html_no_links = html.replace(/<a[^>]*>|<\/a>/g, ""); //remove if u want links in your table
-        var url = 'data:application/vnd.ms-excel,' + escape(html_no_links); // Set your html table into url
-        elem.setAttribute("href", url);
-        elem.setAttribute("download", "tabla_rechazado.xls"); // Choose the file name
-        return false;
-    }
+  let date = new Date()
+  let day = date.getDate()
+  let month = date.getMonth() + 1
+  let year = date.getFullYear()
+  let hour = date.getHours()
+  let minute = date.getMinutes()
+
+  function exportF(elem) {
+    var table = document.getElementById("tabla_rechazado");
+    var html = table.outerHTML;
+    var html_no_links = html.replace(/<a[^>]*>|<\/a>/g, ""); //remove if u want links in your table
+    var url = 'data:application/vnd.ms-excel,' + escape(html_no_links); // Set your html table into url
+    elem.setAttribute("href", url);
+    elem.setAttribute("download", "tabla_rechazado.xls"); // Choose the file name
+    return false;
+  }
 </script>
 
 

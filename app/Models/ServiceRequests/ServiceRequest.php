@@ -25,11 +25,12 @@ class ServiceRequest extends Model implements Auditable
         'program_contract_type', 'weekly_hours', 'daily_hours', 'nightly_hours', 'estate',
         'estate_other', 'working_day_type','schedule_detail', 'working_day_type_other', 'subdirection_id',
         'responsability_center_id','budget_cdp_number', 'budget_item', 'budget_amount',
-        'budget_date', 'contract_number','month_of_payment','establishment_id','profession_id','objectives','resolve','additional_benefits',
+        'budget_date', 'contract_number','month_of_payment','establishment_id','profession_id','objectives','resolve','subt31',
+        'additional_benefits','bonus_indications',
         'digera_strategy','rrhh_team','gross_amount', 'net_amount','sirh_contract_registration',
         'resolution_number','resolution_date','bill_number','total_hours_paid','total_paid',
         'has_resolution_file','payment_date','verification_code','observation','creator_id',
-        'address','phone_number','email'
+        'address','phone_number','email','signature_page_break'
         // 'rut', 'name','bank_id','account_number','pay_method','nationality',
     ];
 
@@ -135,8 +136,12 @@ class ServiceRequest extends Model implements Auditable
       $user_id = Auth::user()->id;
       $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
                                            $subQuery->where('responsable_id',$user_id);
+                                           //$subQuery->where('status', '<>', 2);
                                            $subQuery->orwhere('user_id',$user_id);
-                                         })
+                                           //$subQuery->whereNull('derive_date');
+
+                                         })->with("SignatureFlows")
+
                                          ->orderBy('id','asc')
                                          ->get();
       $cont = 0;
@@ -145,8 +150,9 @@ class ServiceRequest extends Model implements Auditable
           foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
             if ($user_id == $signatureFlow->responsable_id) {
               if ($signatureFlow->status == NULL) {
-                if ($serviceRequest->SignatureFlows->where('sign_position',$signatureFlow->sign_position-1)->first()->status == NULL) {
+                if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()->status == NULL) {
                 }else{
+                  //var_dump($serviceRequest->id);
                   $cont += 1;
                 }
 

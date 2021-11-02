@@ -34,7 +34,7 @@ class TransferController extends Controller
             ->where('pharmacy_id',session('pharmacy_id'))
             ->where('program_id', 46) //APS ORTESIS
             ->whereNotIn('id', [1185, 1186, 1231])
-            ->orderBy('name','ASC')->paginate(10, ['*'], 'p1');
+            ->orderBy('name','ASC')->paginate(15, ['*'], 'p1');
 
             $product_ortesis_list = Product::where('pharmacy_id',session('pharmacy_id'))
                                     ->where('program_id', 46) //APS ORTESIS
@@ -55,9 +55,9 @@ class TransferController extends Controller
                                             ->where('pharmacy_id',session('pharmacy_id'))
                                             ->where('program_id', 46) //APS ORTESIS
                                             ->whereNotIn('id', [1185, 1186, 1231])
-                                            ->orderBy('name', 'ASC')->paginate(10, ['*'], 'p2');
+                                            ->orderBy('name', 'ASC')->paginate(15, ['*'], 'p2');
 
-            $transfers = Transfer::with('establishment_from:id,name', 'establishment_to:id,name', 'product:id,name', 'user:id,name,fathers_family')->orderBy('id','DESC')->paginate(10, ['*'], 'p3');
+            $transfers = Transfer::with('establishment_from:id,name', 'establishment_to:id,name', 'product:id,name', 'user:id,name,fathers_family')->orderBy('id','DESC')->paginate(15, ['*'], 'p3');
         } else {
             $filter = Auth::user()->establishments->first()->id;
             $establishment = Establishment::find($filter);
@@ -69,11 +69,11 @@ class TransferController extends Controller
                                             ->where('pharmacy_id',session('pharmacy_id'))
                                             ->where('program_id', 46) //APS ORTESIS
                                             ->whereNotIn('id', [1185, 1186, 1231])
-                                            ->orderBy('name', 'ASC')->paginate(10, ['*'], 'p2');
+                                            ->orderBy('name', 'ASC')->paginate(15, ['*'], 'p2');
 
             $transfers = Transfer::with('establishment_from:id,name', 'establishment_to:id,name', 'product:id,name', 'user:id,name,fathers_family')
                                  ->where('from', $filter)->orWhere('to', $filter)
-                                 ->orderBy('id','DESC')->paginate(10, ['*'], 'p3');
+                                 ->orderBy('id','DESC')->paginate(15, ['*'], 'p3');
         }
 
         $pending_deliveries = Deliver::with('establishment:id,name', 'product:id,name')

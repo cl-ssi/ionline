@@ -16,8 +16,9 @@ class SignerController extends Controller
      */
     public function index()
     {
-        $signers = Signer::with('user')->get();
-        return view('agreements.signers.index', compact('signers'));
+        $signers = Signer::with('user')->orderBy('created_at', 'DESC')->get();
+        $users = User::all();
+        return view('agreements.signers.index', compact('signers', 'users'));
     }
 
     /**
@@ -38,7 +39,8 @@ class SignerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Signer::create($request->all());
+        return redirect()->route('agreements.signers.index')->with('success', 'Se han guardado el nuevo firmante satisfactoriamente');
     }
 
     /**

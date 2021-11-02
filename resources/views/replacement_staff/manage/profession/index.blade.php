@@ -11,7 +11,7 @@
 <br>
 
 <div class="row">
-    <div class="col-sm">
+    <div class="col-sm-4">
       <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.manage.profession.store') }}">
           @csrf
           @method('POST')
@@ -19,26 +19,37 @@
               <label for="for_name">Nombre de Profesión</label>
                   <input type="text" class="form-control" name="name">
           </fieldset>
+          <fieldset class="form-group col mt">
+              <label for="for_profile_manage_id">Estamento</label>
+              <select name="profile_manage_id" class="form-control" wire:model="profileSelected" required>
+                  <option value="">Seleccione</option>
+                  @foreach($profiles as $profile)
+                      <option value="{{ $profile->id }}">{{ $profile->name }}</option>
+                  @endforeach
+              </select>
+          </fieldset>
           <button type="submit" class="btn btn-primary float-right">Guardar</button>
       </form>
     </div>
 
-    <div class="col-sm">
+    <div class="col-sm-8">
         <br>
-        <table class="table small">
-            <thead>
+        <table class="table table-sm table-striped table-bordered">
+            <thead class="text-center small">
                 <tr>
                     <th>#</th>
+                    <th>Nombre Profesión</th>
                     <th>Nombre Perfil</th>
                     <th style="width: 5%"></th>
                     <th style="width: 5%"></th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="small">
                 @foreach($professionManage as $key => $profession)
                 <tr>
                     <td>{{ $key + 1 }}</td>
-                    <td>{{ $profession->Name }}</td>
+                    <td>{{ $profession->name }}</td>
+                    <td>{{ $profession->profileManage->name }}</td>
                     <td>
                         <a href="{{ route('replacement_staff.manage.profession.edit', $profession) }}"
                           class="btn btn-outline-secondary btn-sm"

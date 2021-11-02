@@ -5,7 +5,15 @@
 @section('content')
 
 
-<h3 class="mb-3">Documentos Comunales - Evaluación General</h3> 
+<h3 class="mb-3">Documentos Comunales {{$year}} - Evaluación General
+<form class="form-inline float-right small" method="GET" action="{{ route('communefiles.index') }}">
+    <select name="year" class="form-control" onchange="this.form.submit()">
+                    @foreach(range(2021, date('Y') + 1) as $anio)
+                        <option value="{{ $anio }}" {{ request()->anio == $anio || $year == $anio ? 'selected' : '' }}>{{ $anio }}</option>
+                    @endforeach
+    </select>
+</form>
+</h3> 
  <!-- Permiso para crear nueva programación númerica -->
  @can('Communefiles: create')
     <a href="{{ route('communefiles.create') }}" class="btn btn-info mb-4">Comenzar Documentos Comunales</a>
@@ -23,7 +31,7 @@
             <th class="text-left align-middle table-dark" >Diagnostico</th>
             <th class="text-left align-middle table-dark" >Matriz de Cuidado</th>
             <th class="text-left align-middle table-dark" >Documento Alcaldicio</th>
-            <th class="text-right align-middle table-dark">Opciones</th>
+            <th class="text-center align-middle table-dark">Opciones</th>
         </tr>
     </thead>
     <tbody class="small align-middle  ">
@@ -37,7 +45,7 @@
         @endcan
             <td >{{ $communeFile->id }}</td>
             <td>{{ $communeFile->year }}</td>
-            <td>{{ $communeFile->commune }}</td>
+            <td>{{ $communeFile->commune->name }}</td>
             <td>{{ $communeFile->description }}</td>
             <td>
                 <label for="for">

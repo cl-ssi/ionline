@@ -22,47 +22,58 @@
         </a>
     </li>
 
-    @canany(['Service Request: fulfillments'])
-    <li class="nav-item">
-        <a class="nav-link {{ active('rrhh.service-request.fulfillment.index') }}"
-            href="{{ route('rrhh.service-request.fulfillment.index') }}">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle {{
+            active('rrhh.service-request.fulfillment.index'),
+            active('rrhh.service-request.report.fulfillment-pending')
+        }}"
+        data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-clipboard-check"></i> Cumplimientos
         </a>
+        <div class="dropdown-menu">
+
+            @canany(['Service Request: fulfillments'])
+                <a class="dropdown-item {{ active('rrhh.service-request.fulfillment.index') }}"
+                    href="{{ route('rrhh.service-request.fulfillment.index') }}">
+                    <i class="fas fa-clipboard-check"></i> Cumplimientos
+                </a>
+            @endcan
+
+            @can('Service Request: fulfillments responsable')
+                <!--
+                <a class="dropdown-item {{ active('rrhh.service-request.report.fulfillment-pending','responsable') }}"
+                -->
+                <a class="dropdown-item"
+                    href="{{ route('rrhh.service-request.report.fulfillment-pending','responsable') }}"
+                    title="Cumplimientos pendientes por aprobar de Responsable">
+                    <i class="fas fa-chess-king"></i> Pendientes Responsable
+                </a>
+            @endcan
+
+            @can('Service Request: fulfillments rrhh')
+                <!--
+                <a class="dropdown-item {{ active('rrhh.service-request.report.fulfillment-pending','rrhh') }}"
+                -->
+                <a class="dropdown-item"
+                    href="{{ route('rrhh.service-request.report.fulfillment-pending','rrhh') }}"
+                    title="Cumplimientos pendientes por aprobar de RRHH">
+                    <i class="fas fa-user-shield"></i> Pendientes RRHH
+                </a>
+            @endcan
+
+            @can('Service Request: fulfillments finance')
+                <!--
+                <a class="dropdown-item {{ active('rrhh.service-request.report.fulfillment-pending','finance') }}"
+                -->
+                <a class="dropdown-item"
+                    href="{{ route('rrhh.service-request.report.fulfillment-pending','finance') }}"
+                    title="Cumplimientos pendientes por aprobar de finanzas">
+                    <i class="fas fa-piggy-bank"></i> Pendientes Finanzas
+                </a>
+            @endcan
+
+        </div>
     </li>
-    @endcan
-
-    @can('Service Request: fulfillments responsable')
-        <li class="nav-item">
-            <a class="nav-link {{ active('rrhh.service-request.report.fulfillment-pending') }}"
-                href="{{ route('rrhh.service-request.report.fulfillment-pending','responsable') }}"
-                title="Cumplimientos pendientes por aprobar de Responsable">
-                <i class="fas fa-clipboard-check"></i>
-                <i class="fas fa-chess-king"></i>
-            </a>
-        </li>
-    @endcan
-
-    @can('Service Request: fulfillments rrhh')
-        <li class="nav-item">
-            <a class="nav-link {{ active('rrhh.service-request.report.fulfillment-pending') }}"
-                href="{{ route('rrhh.service-request.report.fulfillment-pending','rrhh') }}"
-                title="Cumplimientos pendientes por aprobar de RRHH">
-                <i class="fas fa-clipboard-check"></i>
-                <i class="fas fa-user-shield"></i>
-            </a>
-        </li>
-    @endcan
-
-    @can('Service Request: fulfillments finance')
-        <li class="nav-item">
-            <a class="nav-link {{ active('rrhh.service-request.report.fulfillment-pending') }}"
-                href="{{ route('rrhh.service-request.report.fulfillment-pending','finance') }}"
-                title="Cumplimientos pendientes por aprobar de finanzas">
-                <i class="fas fa-clipboard-check"></i>
-                <i class="fas fa-piggy-bank"></i>
-            </a>
-        </li>
-    @endcan
 
     @canany(['Service Request: additional data'])
     <li class="nav-item">
@@ -92,22 +103,37 @@
     @endcan
 
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle {{ active('rrhh.service-request.report.*') }}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle {{
+            active('rrhh.service-request.report.consolidated_data'),
+            active('rrhh.service-request.report.export_sirh'),
+            active('rrhh.service-request.pending-requests'),
+            active('rrhh.service-request.report.to-pay'),
+            active('rrhh.service-request.report.payed'),
+            active('rrhh.service-request.report.compliance'),
+            active('rrhh.service-request.report.pay-rejected'),
+            active('rrhh.service-request.report.with-bank-details'),
+            active('rrhh.service-request.report.pending-resolutions'),
+            active('rrhh.service-request.report.contract'),
+            active('rrhh.service-request.report.duplicate-contracts'),
+            active('rrhh.service-request.report.with-resolution-file'),
+            active('rrhh.service-request.report.without-resolution-file')
+        }}"
+        data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-archive"></i> Reportes
         </a>
         <div class="dropdown-menu">
 
             @can('Service Request: consolidated data')
-            <a class="dropdown-item"
+            <a class="dropdown-item {{ active('rrhh.service-request.report.consolidated_data') }}"
                 href="{{ route('rrhh.service-request.report.consolidated_data') }}">
                 <i class="far fa-file-excel"></i> Consolidado
             </a>
             @endcan
 
-            @can('Service Request: consolidated data')
-            <a class="dropdown-item"
+            @can('Service Request: export sirh')
+            <a class="dropdown-item  {{ active('rrhh.service-request.report.export_sirh') }}"
                 href="{{ route('rrhh.service-request.report.export_sirh') }}">
-                <i class="far fa-file"></i> Formato SIRH
+                <i class="far fa-file"></i> Formato SIRH <small>(para hospital)</small>
             </a>
             @endcan
 
@@ -121,7 +147,7 @@
             @canany(['Service Request: report to pay'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.to-pay') }}"
                 href="{{ route('rrhh.service-request.report.to-pay') }}">
-                <i class="fas fa-piggy-bank"></i> Reporte para pagos
+                <i class="fas fa-piggy-bank"></i> Reporte pendientes de pago
             </a>
             @endcan
 
@@ -132,7 +158,7 @@
             </a>
             @endcan
 
-            @canany(['Service Request: fulfillments rrhh','Service Request: fulfillments finance'])
+            @canany(['Service Request: fulfillments rrhh','Service Request: fulfillments finance', 'Service Request: compliance'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.compliance') }}"
                 href="{{ route('rrhh.service-request.report.compliance') }}">
                 <i class="fas fa-flag-checkered"></i> Reporte de cumplimientos
@@ -154,10 +180,32 @@
             </a>
             @endcan -->
 
+
+            @canany(['Service Request: pending requests'])
+            <a class="dropdown-item {{ active('rrhh.service-request.report.with-bank-details') }}"
+                href="{{ route('rrhh.service-request.report.with-bank-details') }}">
+                <i class="fas fa-money-check-alt"></i> Cuentas Bancarias Honorarios
+            </a>
+            @endcan
+
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.pending-resolutions') }}"
                 href="{{ route('rrhh.service-request.report.pending-resolutions') }}">
                 <i class="fas fa-exclamation-circle"></i> Resoluciones pendientes
+            </a>
+            @endcan
+
+            @canany(['Service Request: pending requests'])
+            <a class="dropdown-item {{ active('rrhh.service-request.report.contract') }}"
+                href="{{ route('rrhh.service-request.report.contract') }}">
+                <i class="fas fa-file-contract"></i> Reporte de contratos
+            </a>
+            @endcan
+
+            @canany(['Service Request: pending requests'])
+            <a class="dropdown-item {{ active('rrhh.service-request.report.duplicate-contracts') }}"
+                href="{{ route('rrhh.service-request.report.duplicate-contracts') }}">
+                <i class="fas fa-clone"></i> Contratos Solapados
             </a>
             @endcan
 
@@ -183,20 +231,25 @@
         </div>
     </li>
 
-    @canany(['Service Request: maintainers'])
+    <!-- @canany(['Service Request: maintainers'])
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle {{ active('parameters.values.report.*') }}" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-cog"></i>
+            <i class="fas fa-cog"></i> Valores Horas
         </a>
         <div class="dropdown-menu">
 
           <a class="dropdown-item {{ active('parameters.values.index') }}"
               href="{{ route('parameters.values.index') }}">
-              <i class="fas fa-money-bill-alt"></i> Valor Hora/Jornada</a>
+              <i class="fas fa-money-bill-alt"></i> Valor Hora/Jornada
+          </a>
+
+          <a class="dropdown-item {{ active('parameters.values.index') }}"
+              href="{{ route('parameters.values.index') }}">
+              <i class="fas fa-clipboard"></i> Algo más
           </a>
 
         </div>
     </li>
-    @endcan
+    @endcan -->
 
 </ul>

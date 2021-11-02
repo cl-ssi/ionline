@@ -6,10 +6,8 @@
 
 <br>
 
-<h5>Ingreso de nuevo staff</h5>
-
+<h5>Antecedentes Personales / Contacto</h5>
 <br>
-
 <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.store') }}" enctype="multipart/form-data">
     @csrf
     @method('POST')
@@ -58,7 +56,7 @@
     <div class="form-row">
         <fieldset class="form-group col-6">
             <label for="for_email">Correo Electrónico</label>
-            <input type="text" class="form-control" name="email" id="for_email" required>
+            <input type="email" class="form-control" name="email" id="for_email" required>
         </fieldset>
         <fieldset class="form-group col-3">
             <label for="for_telephone">Teléfono Movil</label>
@@ -71,19 +69,7 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col">
-            <label for="for_commune_id">Comuna</label>
-            <select name="commune" id="for_commune" class="form-control" required>
-                <option value="">Seleccione...</option>
-                <option value="alto hospicio">Alto Hospicio</option>
-                <option value="camina">Camiña</option>
-                <option value="colchane">Colchane</option>
-                <option value="huara">Huara</option>
-                <option value="iquique">Iquique</option>
-                <option value="pica">Pica</option>
-                <option value="pozo almonte">Pozo Almonte</option>
-            </select>
-        </fieldset>
+        @livewire('replacement-staff.commune-region-select')
 
         <fieldset class="form-group col">
             <label for="for_address">Dirección</label>
@@ -108,95 +94,17 @@
       </fieldset>
     </div>
 
+    <hr>
+    <h5>Perfil Profesional</h5>
+    <br>
+    
+    @livewire('replacement-staff.profile')
+
     <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Guardar</button>
 
 </form>
 
-<br><br>
-
-
-    <!-- <div class="form-row">
-        <div class="form-group col mt">
-            <label for="for_profession">Profesión</label>
-            <select name="profession" id="for_profession" class="form-control selectpicker">
-                <option value="Enfermera">Enfermera</option>
-                <option value="Informatica">Informática</option>
-            </select>
-        </div>
-
-        <div class="form-group col mt">
-            <label for="for_profession"><br></label>
-            <div class="form-group custom-file col mt">
-                <input type="file" class="custom-file-input"  name="file" required>
-                <label class="custom-file-label" for="customFile">Seleccione el archivo</label>
-            </div>
-        </div>
-    </div> -->
-
-    <!-- <hr>
-
-    <h5>Experiencia </h5>
-
-    <br>
-
-    <div class="form-row">
-        <fieldset class="form-group col">
-            <label for="for_experiencias_anteriores">Experiencias Anteriores (2*)</label>
-            <input type="text" class="form-control" name="experiencias_anteriores" id="for_experiencias_anteriores" placeholder="">
-        </fieldset>
-
-        <fieldset class="form-group col">
-            <label for="for_funciones_realizada">Funciones Realizadas</label>
-            <input type="text" class="form-control" name="funciones_realizada" id="for_funciones_realizada" placeholder="">
-        </fieldset>
-
-        <fieldset class="form-group col">
-            <label for="for_funciones_realizada">Referencia</label>
-            <input type="text" class="form-control" name="referencia" id="for_funciones_realizada" placeholder="">
-        </fieldset>
-
-        <fieldset class="form-group col">
-            <label for="for_profession">Certificado de Experiencia Laboral</label>
-            <input type="file" class="form-control" name="direccion" id="for_direccion" placeholder="">
-        </fieldset>
-    </div>
-
-    <hr>
-    <legend>PERFECCIONAMIENTO/CAPACITACIONES: <i class="fas fa-plus"></i></legend>
-    <div class="form-row">
-        <fieldset class="form-group col">
-            <label for="for_experiencias_anteriores">Nombre Capacitación</label>
-            <input type="text" class="form-control" name="experiencias_anteriores" id="for_experiencias_anteriores" placeholder="">
-        </fieldset>
-
-        <fieldset class="form-group col">
-            <label for="for_funciones_realizada">Número de horas</label>
-            <input type="text" class="form-control" name="funciones_realizada" id="for_funciones_realizada" placeholder="">
-        </fieldset>
-
-        <fieldset class="form-group col">
-            <label for="for_funciones_realizada">Certificado</label>
-            <input type="file" class="form-control"  placeholder="">
-        </fieldset>
-    </div>
-    <hr>
-
-    <div class="form-row">
-        <fieldset class="form-group col">
-            <label for="for_experiencias_anteriores">Otra Observación</label>
-            <textarea class="form-control"></textarea>
-        </fieldset>
-    </div>
-
-    <fieldset class="form-group col">
-            <label for="for_etamento">Idioma</label>
-            <select name="etamento" id="for_etamento" class="form-control">
-                <option value=""></option>
-                <option value="">Inglés</option>
-                <option value="">Frances</option>
-                <option value="">Aleman</option>
-            </select>
-        </fieldset> -->
+<br><br><br>
 
 @endsection
 

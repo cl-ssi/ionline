@@ -25,13 +25,15 @@ class ParteController extends Controller
     public function index(Request $request)
     {
 
-        $partes = Parte::Search($request)->latest()->paginate('100');
+        $partes = Parte::Search($request)
+            ->with(['requirements','files','requirements.events','requirements.events.to_user'])
+            ->latest()->paginate('100');
         //$d->events()->doesntHave('father')->get()
         // $partes = Parte::whereHas('events', function ($query) {
         //     $query->where('active', 1)
         //           ->where('user_id', Auth::id());
         // })->get();
-        return view('documents.partes.index', compact('partes'));
+        return view('documents.partes.index', compact('partes', 'request'));
     }
 
     public function outbox(Request $request)

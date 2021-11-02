@@ -55,7 +55,7 @@ class FulfillmentAbsences extends Component
       //   }
       // }
 
-      if ($this->type != "Renuncia voluntaria" && $this->type != "Abandono de funciones") {
+      if ($this->type != "Renuncia voluntaria" && $this->type != "Abandono de funciones" && $this->type != "Término de contrato anticipado") {
         $start = Carbon::parse($this->start_date . " " .$this->start_hour);
         $end = Carbon::parse($this->end_date . " " .$this->end_hour);
   			if ($start > $end) {
@@ -71,19 +71,21 @@ class FulfillmentAbsences extends Component
       $fulfillmentItem->type = $this->type;
       switch($this->type) {
         case 'Inasistencia Injustificada':
+        case 'Permiso':
         case 'Turno':
           $fulfillmentItem->start_date = $this->start_date . " " .$this->start_hour;
           $fulfillmentItem->end_date = $this->end_date . " " .$this->end_hour;
           break;
         case 'Licencia médica':
         case 'Licencia no covid':
-        case 'Permiso':
+        //case 'Permiso':
         case 'Feriado':
           $fulfillmentItem->start_date = $this->start_date;
           $fulfillmentItem->end_date = $this->end_date;
           break;
         case 'Renuncia voluntaria':
         case 'Abandono de funciones':
+        case 'Término de contrato anticipado':
           $fulfillmentItem->end_date = $this->end_date;
           break;
 
@@ -127,14 +129,18 @@ class FulfillmentAbsences extends Component
 
         switch($this->type) {
           case 'Licencia médica':
-          case 'Licencia no covid':
-          case 'Permiso':
+          case 'Licencia no covid':          
           case 'Feriado':
             $this->select_start_hour = 'disabled';
             $this->select_end_hour = 'disabled';
             break;
           case 'Renuncia voluntaria':
           case 'Abandono de funciones':
+            $this->select_start_date = 'disabled';
+            $this->select_start_hour = 'disabled';
+            $this->select_end_hour = 'disabled';
+            break;
+          case 'Término de contrato anticipado':
             $this->select_start_date = 'disabled';
             $this->select_start_hour = 'disabled';
             $this->select_end_hour = 'disabled';

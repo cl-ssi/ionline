@@ -22,13 +22,14 @@
 </form>
 
 
-
+@if($created_requirements->isNotEmpty())
 <div class="alert alert-info alert-dismissible fade show" role="alert">
   <strong>¡Es importante que cierres tus requerimientos!</strong> Requerimientos abiertos producen demoras en tus tiempos productivos.
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
+@endif
 
 <h3 class="mb-3">Pendientes por atender</h3>
 
@@ -73,7 +74,7 @@
             @else
               @switch($created->status)
                   @case('creado')
-                      @if($created->user == Auth::user())
+                      @if($created->user_id == Auth::user()->id)
                           <tr class="alert-info">
                       @else
                           <tr class="alert-light">
@@ -128,7 +129,7 @@
 					<a href="{{ route('requirements.show',$created->id) }}" class="btn btn-sm btn-link">
           <span class="fas fa-edit" aria-hidden="true"></span>
 					</a>
-                  
+
 					<a href="{{ route('requirements.archive_requirement',$created) }}" class="btn btn-sm btn-link">
 						<span class="fas fa-arrow-down"></span>
 					</a>
@@ -197,7 +198,7 @@
           @else
             @switch($archived->status)
                 @case('creado')
-                    @if($archived->user == Auth::user())
+                    @if($archived->user_id == Auth::user()->id)
                         <tr class="alert-info">
                     @else
                         <tr class="alert-light">

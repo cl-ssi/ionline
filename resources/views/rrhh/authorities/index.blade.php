@@ -4,10 +4,11 @@
 
 @section('content')
 @foreach($ouTopLevels as $ouTopLevel)
-<h3 class="mb-3">Autoridades del {{($ouTopLevel->establishment->name)}}</h3>
+<h3 class="mb-3">Autoridades</h3>
+<h4 class="mb-3">{{($ouTopLevel->establishment->name)}}</h4>
 @can('Authorities: manager')
 @if($ouTopLevel->establishment_id == Auth::user()->organizationalUnit->establishment->id)
-<a href="{{ route('rrhh.authorities.create') }}?establishment_id={{$ouTopLevel->establishment_id}}" class="btn btn-primary">Crear Autoridad del {{($ouTopLevel->establishment->name)}}</a>
+<a href="{{ route('rrhh.authorities.create') }}?establishment_id={{$ouTopLevel->establishment_id}}" class="btn btn-primary">Crear Autoridad del {{($ouTopLevel->establishment->name)}}</a><br><br>
 @endif
 @endcan
 
@@ -17,7 +18,7 @@
     <div class="col-md-5 small">
         <b>+</b> <a href="{{ route('rrhh.authorities.index') }}?ou={{$ouTopLevel->id}}">{{ $ouTopLevel->name }}</a>
         <ul>
-        
+
             @foreach($ouTopLevel->childs as $child_level_1)
                 <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_1->id}}"> {{$child_level_1->name}} </a></li>
                 <ul>
@@ -28,7 +29,7 @@
                                     <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_3->id}}">{{ $child_level_3->name }}</a></li>
                                     @foreach($child_level_3->childs as $child_level_4)
                                     <ul>
-                                    <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_4->id}}">{{ $child_level_4->name }}</a></li>                                    
+                                    <li><a href="{{ route('rrhh.authorities.index') }}?ou={{$child_level_4->id}}">{{ $child_level_4->name }}</a></li>
                                     </ul>
                                     @endforeach
                                 @endforeach
@@ -36,7 +37,7 @@
                     @endforeach
                 </ul>
             @endforeach
-        
+
         </ul>
     </div>
 
@@ -75,21 +76,38 @@
                 margin-bottom: 5px;
             }
         </style>
-
-        @foreach($calendar as $key => $entry)
-
-            <div class="dia_calendario small p-2" {!! ($today->format('Y-m-d') == $key)?'style="border: 2px solid black;"':'' !!}>
+        @foreach($calendar as $item)
+          @if($item['manager'])
+            <div class="dia_calendario small p-2" {!! ($today->format('Y-m-d') == $item['date'])?'style="border: 2px solid black;"':'' !!}>
                 <center>
-                    {{ $key }}                    
+                    {{ $item['date'] }}
+                    @if($item['manager'])
                     <hr class="mt-1 mb-1" >
-                    @if($entry) {{ $entry->user->name }} @endif <br>
-                    @if($entry) {{ $entry->user->fathers_family }} @endif <br>
-                    @if($entry) {{ $entry->user->mothers_family }} @endif <br>
-                    <hr class="mt-1 mb-1">
-                    @if($entry) <em class="text-muted">{{ $entry->position }}</em> @endif <br>
+                    {{ $item['manager']->user->name }} <br>
+                    {{ $item['manager']->user->fathers_family }} <br>
+                    {{ $item['manager']->user->mothers_family }} <br>
+                    <!-- <hr class="mt-1 mb-1"> -->
+                    <em class="text-muted">{{ $item['manager']->position }}</em><br>
+                    @endif
+                    @if($item['delegate'])
+                    <hr class="mt-1 mb-1" >
+                    {{ $item['delegate']->user->name }} <br>
+                    {{ $item['delegate']->user->fathers_family }} <br>
+                    {{ $item['delegate']->user->mothers_family }} <br>
+                    <!-- <hr class="mt-1 mb-1"> -->
+                    <em class="text-muted">{{ $item['delegate']->position }}</em><br>
+                    @endif
+                    @if($item['secretary'])
+                    <hr class="mt-1 mb-1" >
+                    {{ $item['secretary']->user->name }} <br>
+                    {{ $item['secretary']->user->fathers_family }} <br>
+                    {{ $item['secretary']->user->mothers_family }} <br>
+                    <!-- <hr class="mt-1 mb-1"> -->
+                    <em class="text-muted">{{ $item['secretary']->position }}</em> <br>
+                    @endif
                 </center>
             </div>
-
+          @endif
         @endforeach
 
 
@@ -107,6 +125,7 @@
             <tbody>
                 @foreach($authorities as $authority)
                     @if($authority)
+                    @if($authority->user)
                     <tr class="small">
                         <td>{{ $authority->user->fullName }}</td>
                         <td nowrap>{{ $authority->from->format('d-m-Y') }}</td>
@@ -117,12 +136,13 @@
                             <small>{{ $authority->creator->fullName }}</small>
                         </td>
                         <th>
-                            @can('Authorities: manager')
+                            @can('be god')
                             <a href="{{ route('rrhh.authorities.edit', $authority->id) }}" class="btn btn-outline-secondary btn-sm">
     					        <span class="fas fa-edit" aria-hidden="true"></span></a>
                             @endcan
                         </th>
                     </tr>
+                    @endif
                     @endif
                 @endforeach
 

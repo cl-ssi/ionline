@@ -40,14 +40,14 @@ class DeliverController extends Controller
                                             $q->whereHas('establishment', $filterEstablishment);
                                         })
                                         ->where('remarks', 'PENDIENTE')
-                                        ->orderBy('request_date','DESC')->paginate(10, ['*'], 'p1');
+                                        ->orderBy('request_date','DESC')->paginate(15, ['*'], 'p1');
 
             $confirmed_deliveries = Deliver::with('establishment:id,name', 'product:id,name')
                                         ->when($filter, function ($q) use ($filterEstablishment) {
                                             $q->whereHas('establishment', $filterEstablishment);
                                         })
                                         ->where('remarks', 'NOT LIKE', 'PENDIENTE')
-                                        ->orderBy('updated_at','DESC')->paginate(10, ['*'], 'p2');
+                                        ->orderBy('updated_at','DESC')->paginate(15, ['*'], 'p2');
 
             $products_by_establishment = Product::where('pharmacy_id',session('pharmacy_id'))
                                             ->where('program_id', 46) //APS ORTESIS
@@ -63,17 +63,17 @@ class DeliverController extends Controller
                                             ->where('pharmacy_id',session('pharmacy_id'))
                                             ->where('program_id', 46) //APS ORTESIS
                                             ->whereNotIn('id', [1185, 1186, 1231])
-                                            ->orderBy('name', 'ASC')->paginate(10, ['*'], 'p3');
+                                            ->orderBy('name', 'ASC')->paginate(15, ['*'], 'p3');
 
             $pending_deliveries = Deliver::with('establishment:id,name', 'product:id,name')
                                         ->where('remarks', 'PENDIENTE')
                                         ->where('establishment_id', $filter->id)
-                                        ->orderBy('created_at','ASC')->paginate(10, ['*'], 'p1');
+                                        ->orderBy('created_at','ASC')->paginate(15, ['*'], 'p1');
 
             $confirmed_deliveries = Deliver::with('establishment:id,name', 'product:id,name')
                                         ->where('remarks', 'NOT LIKE', 'PENDIENTE')
                                         ->where('establishment_id', $filter->id)
-                                        ->orderBy('created_at','DESC')->paginate(10, ['*'], 'p2');
+                                        ->orderBy('created_at','DESC')->paginate(15, ['*'], 'p2');
 
             $pending_deliveries_list = Deliver::with('establishment:id,name', 'product:id,name')
                                         ->where('remarks', 'PENDIENTE')
@@ -197,6 +197,24 @@ class DeliverController extends Controller
     {
         $deliver->delete();
         session()->flash('success', 'Se ha borrado registro de entrega pendiente satisfactoriamente.');
+        return redirect()->route('pharmacies.products.deliver.index');
+    }
+
+    public function restore(Deliver $deliver)
+    {
+        $product = Product::with('establishments')->find($deliver->product_id);
+        $pass = false;
+        foreach($product->establishments as $establishment)
+          if($establishment->id == $deliver->establishment_id){
+              $establishment->pivot->increment('stock', $deliver->quantity);
+              $pass = true;
+          }
+        if(!$pass){
+          $product->establishments()->attach($deliver->establishment_id, ['stock' => $deliver->quantity]);
+        }
+
+        $deliver->delete();
+        session()->flash('success', 'Se ha reestablecido ayuda técnica al establecimiento satisfactoriamente.');
         return redirect()->route('pharmacies.products.deliver.index');
     }
 }

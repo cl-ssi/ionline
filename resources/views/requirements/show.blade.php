@@ -224,10 +224,11 @@ bottom: 5px;
 
   	 $(document).ready(function(){
        var array = new Array;
-       $("#ou").val({{$lastEvent->from_user->organizationalUnit->id}}); //select que se actualiza automáticamente
-       $("#ou").trigger("change");
-       $("#user").val({{$lastEvent->from_user->id}}); //select que se actualiza automáticamente
-       $("#user").trigger("change");
+      //  $("#ou").val({{$lastEvent->from_user->organizationalUnit->id}}); //select que se actualiza automáticamente
+      //  $("#ou").trigger("change", [true]);
+      //  $("#user").val({{$lastEvent->from_user->id}}); //select que se actualiza automáticamente
+      //  $("#user").trigger("change");
+       $("#status").trigger("change", [true]);
 
        // document.getElementById("div_ou").style.display = "none";
        // document.getElementById("div_destinatario").style.display = "none";
@@ -348,9 +349,17 @@ bottom: 5px;
       }
 
       //evento al cambiar select
-      $('#ou').on('change', function(e){
+      $('#ou').on('change', function(e, is_implicit_call){
         console.log(e);
         funcionDeferred().done(function() {
+          if(!is_implicit_call){
+            var ou_id = e.target.value;
+                $.get('{{ route('rrhh.users.get.autority.from.ou')}}/'+ou_id, function(data) {
+                    console.log(data);
+                    //alert(data.user_id);
+                    document.getElementById("user").value = data.user_id;
+                });
+          }else{
             if(document.getElementById("status").value == "respondido" || document.getElementById("status").value == "reabierto"){
               $("#user").val({{$lastEvent->from_user->id}});
               $('#to').val({{$lastEvent->from_user->id}});
@@ -368,6 +377,7 @@ bottom: 5px;
                     document.getElementById("user").value = data.user_id;
                 });
             }
+          }
         });
       });
 
@@ -391,12 +401,12 @@ bottom: 5px;
 
           $("#ou").val(1);
           $('#organizational_unit_id').val(1);
-          $("#ou").trigger("change");
+          $("#ou").trigger("change", [true]);
         }else if(document.getElementById("status").value == "respondido" || document.getElementById("status").value == "reabierto"){
           @if($lastEvent <> null)
             $("#ou").val({{$lastEvent->from_user->organizationalUnit->id}});
             $('#organizational_unit_id').val({{$lastEvent->from_user->organizationalUnit->id}});
-            $("#ou").trigger("change");
+            $("#ou").trigger("change", [true]);
           @endif
           // document.getElementById("ou").disabled  = true;
           // document.getElementById("user").disabled  = true;
@@ -407,7 +417,7 @@ bottom: 5px;
           @if($firstEvent <> null)
             $("#ou").val({{$firstEvent->from_user->organizationalUnit->id}});
             $('#organizational_unit_id').val({{$firstEvent->from_user->organizationalUnit->id}});
-            $("#ou").trigger("change");
+            $("#ou").trigger("change", [true]);
           @endif
           document.getElementById("ou").disabled  = true;
           document.getElementById("user").disabled  = true;

@@ -62,6 +62,16 @@
 			</select>
         </fieldset>
     </div>
+    <div class="form-row">
+        <fieldset class="form-group col-12">
+            <label for="forrepresentative">Director/a a cargo quien firmará convenio</label>
+            <select name="director_signer_id" class="form-control selectpicker" title="Seleccione..." required>
+                @foreach($signers as $signer)
+                <option value="{{$signer->id}}">{{$signer->appellative}} {{$signer->user->fullName}}, {{$signer->decree}}</option>
+                @endforeach
+            </select>
+        </fieldset>
+    </div>
     <button type="submit" class="btn btn-primary mb-4">Guardar</button>
 
 </form>

@@ -59,6 +59,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Tickets: TI']);
 
         Permission::create(['name' => 'Calendar: view']);
+        Permission::create(['name' => 'Calendar: aps']);
 
         Permission::create(['name' => 'Integrity: manage complaints']);
 
@@ -112,7 +113,10 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Service Request: report to pay']);
         Permission::create(['name' => 'Service Request: sign document']);
         Permission::create(['name' => 'Service Request: transfer requests']);
+        Permission::create(['name' => 'Service Request: view']);
         Permission::create(['name' => 'Service Request: with resolution']);
+
+        Permission::create(['name' => 'Shift Management: view']);
 
         Permission::create(['name' => 'Suitability: admin']);
         Permission::create(['name' => 'Suitability: test']);
@@ -125,6 +129,18 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Partes: user']);
         Permission::create(['name' => 'Partes: director']);
         Permission::create(['name' => 'Partes: oficina']);
+
+
+        Permission::create(['name' => 'Replacement Staff: create request']);
+        Permission::create(['name' => 'Replacement Staff: list rrhh']);
+        Permission::create(['name' => 'Replacement Staff: manage']);
+        Permission::create(['name' => 'Replacement Staff: technical evaluation']);
+        Permission::create(['name' => 'Replacement Staff: assign request']);
+
+        // @role(
+        //   'Replacement Staff: admin |
+        //   Replacement Staff: user'
+        // )
 
         // create roles and assign created permissions
         // GOD LIKE
@@ -170,6 +186,6 @@ class RoleAndPermissionSeeder extends Seeder
         $role->givePermissionTo(['Resources: create', 'Resources: edit', 'Resources: delete']);
 
         $role = Role::create(['name' => 'Tickets: admin']);
-        $role->givePermissionTo(['Tickets: create', 'Tickets: manage','Tickets: TI']);        
+        $role->givePermissionTo(['Tickets: create', 'Tickets: manage','Tickets: TI']);
     }
 }

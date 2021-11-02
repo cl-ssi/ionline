@@ -48,6 +48,63 @@
         		    @endfor
         		</fieldset>
     		</div>
+    		<div class="row">
+        		<fieldset class="form-group col-6 col-md-2">
+        		    <label for="for_mostrar">Visible en </label>
+        		     <div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" name="months[]" checked value="1" />
+  					<label class="form-check-label" for="inlineCheckbox1">Ene</label>
+				</div>
+
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" name="months[]" checked value="2" />
+  					<label class="form-check-label" for="inlineCheckbox2">Feb</label>
+				</div>
+        			
+        			<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" name="months[]" checked value="3" />
+  					<label class="form-check-label" for="inlineCheckbox2">Mar</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" name="months[]" checked value="4" />
+  					<label class="form-check-label" for="inlineCheckbox2">Abr</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" name="months[]" checked value="5" />
+  					<label class="form-check-label" for="inlineCheckbox2">May</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" name="months[]" checked value="6" />
+  					<label class="form-check-label" for="inlineCheckbox2">Jun</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" name="months[]" checked value="7" />
+  					<label class="form-check-label" for="inlineCheckbox2">Jul</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" name="months[]" checked value="8" />
+  					<label class="form-check-label" for="inlineCheckbox2">Ago</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" name="months[]" checked value="9" />
+  					<label class="form-check-label" for="inlineCheckbox2">Sep</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" name="months[]" checked value="10" />
+  					<label class="form-check-label" for="inlineCheckbox2">Oct</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" name="months[]" checked value="11" />
+  					<label class="form-check-label" for="inlineCheckbox2">Nov</label>
+				</div>
+				<div class="form-check form-check-inline">
+  					<input class="form-check-input" type="checkbox" name="months[]" checked value="12" />
+  					<label class="form-check-label" for="inlineCheckbox2">Dic</label>
+				</div>
+
+        		</fieldset>
+    		</div>
+
     		<input hidden id="for_id" name="id" value="">	
     		<button type="submit" class="btn btn-primary">Crear</button>
     		<button type="button" onclick="cancelar();" class="btn btn-danger">Cancelar</button>

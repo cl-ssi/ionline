@@ -6,15 +6,34 @@
 
 @include('service_requests.partials.nav')
 
-<h3>Cumplimiento de solicitud:
-  <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}">{{ $serviceRequest->id }}</a>
-</h3>
+<div class="form-row">
+    <fieldset class="form-group col-12 col-md-7">
+          <h3>Cumplimiento de solicitud:
+            <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}">{{ $serviceRequest->id }}</a>
+          </h3>
+    </fieldset>
+
+    <div class="row col-md-5">
+        <div class="col-md-7">
+            <span class="form-text">
+            Origen de Financiamiento :
+            </span>
+        </div>
+        <div class="col-md-5">
+            <input type="text" class="form-control" value="{{$serviceRequest->type}}"@if($serviceRequest->type=='Covid')style="background-color:#F5A7A7;" @else style="background-color:#8fbc8f;" @endif disabled>
+        </div>
+    </div>
+
+  </div>
+
+
 
 <div class="form-row">
   <fieldset class="form-group col-12 col-md-2">
       <label for="for_request_date">ID Solicitud</label>
       <input type="text" class="form-control" value="{{$serviceRequest->id}}" disabled>
   </fieldset>
+
 
   <fieldset class="form-group col-12 col-md-4">
       <label for="for_request_date">C.Responsabilidad</label>
@@ -99,7 +118,7 @@
 @if($serviceRequest->program_contract_type == "Mensual")
     @include('service_requests.requests.fulfillments.edit_monthly',['serviceRequest' => $serviceRequest])
 @else
-    @if($serviceRequest->working_day_type == "HORA MÉDICA")
+    @if($serviceRequest->working_day_type == "HORA MÉDICA" or $serviceRequest->working_day_type == "TURNO DE REEMPLAZO")
         @include('service_requests.requests.fulfillments.edit_hours_medics',['serviceRequest' => $serviceRequest])
     @else
         @include('service_requests.requests.fulfillments.edit_hours_others',['serviceRequest' => $serviceRequest])
@@ -113,6 +132,21 @@
     @include('service_requests.requests.partials.audit', ['audits' => $fulfillment->audits] )
   @endforeach
 </div>
+@endcanany
+
+@canany(['Service Request: audit'])
+<br /><hr />
+<div style="height: 300px; overflow-y: scroll;">
+  @foreach($serviceRequest->fulfillments as $fulfillment)
+    @foreach($fulfillment->FulfillmentItems as $fulfillmentItem)
+      @include('service_requests.requests.partials.audit', ['audits' => $fulfillmentItem->audits] )
+    @endforeach
+    @foreach($fulfillment->shiftControls as $shiftControl)
+      @include('service_requests.requests.partials.audit', ['audits' => $shiftControl->audits] )
+    @endforeach
+  @endforeach
+</div>
+<br /><hr />
 @endcanany
 
 @endsection
@@ -141,7 +175,7 @@
   //     });
   // });
 
-  $('.for_type').on('change', function() {    
+  $('.for_type').on('change', function() {
     $('.start_date').attr('readonly', false);
     $(".start_date").val('');
     $('.start_hour').attr('readonly', false);
@@ -150,7 +184,7 @@
     $(".end_date").val('');
     $('.end_hour').attr('readonly', false);
     $('.end_hour').val('');
-    if (this.value == "Inasistencia Injustificada") {      
+    if (this.value == "Inasistencia Injustificada" || this.value == "Permiso") {
     }
     if (this.value == "Licencia no covid") {
       $('.start_hour').attr('readonly', true);
@@ -160,16 +194,25 @@
     if (this.value == "Renuncia voluntaria") {
       $('.start_date').attr('readonly', true);
       $('.start_hour').attr('readonly', true);
-      $('.end_hour').attr('readonly', true);            
-      $('.salida').append(' (último día trabajado)');
-      
-      
+      $('.end_hour').attr('readonly', true);
+
+
     }
-    if (this.value == "Abandono de funciones") {
+    if (this.value == "Abandono de funciones" || this.value == "Término de contrato anticipado") {
       $('.start_date').attr('readonly', true);
       $('.start_hour').attr('readonly', true);
       $('.end_hour').attr('readonly', true);
     }
+
+    // if (this.value == "Término de contrato anticipado") {
+    //   alert('entre');
+    //   $('.start_date').attr('readonly', true);
+    //   $('.start_hour').attr('readonly', true);
+    //   $('.end_hour').attr('readonly', true);
+
+
+
+    // }
 
     // start_date
     // start_hour

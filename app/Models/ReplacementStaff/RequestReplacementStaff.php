@@ -15,10 +15,14 @@ class RequestReplacementStaff extends Model
     use softDeletes;
 
     protected $fillable = [
-        'name', 'degree', 'legal_quality', 'work_day', 'other_work_day', 'start_date',
-        'end_date', 'fundament', 'other_fundament', 'name_to_replace',
-        'budget_item','budgetary_provision'
+        'name', 'profile_manage_id', 'degree', 'start_date', 'end_date',
+        'legal_quality', 'salary', 'fundament', 'name_to_replace', 'other_fundament',
+        'work_day', 'other_work_day','charges_number','job_profile_file'
     ];
+
+    public function profile_manage() {
+        return $this->belongsTo('App\Models\ReplacementStaff\ProfileManage');
+    }
 
     public function user() {
         return $this->belongsTo('App\User');
@@ -34,6 +38,10 @@ class RequestReplacementStaff extends Model
 
     public function technicalEvaluation() {
         return $this->hasOne('App\Models\ReplacementStaff\TechnicalEvaluation');
+    }
+
+    public function assignEvaluations() {
+        return $this->hasMany('App\Models\ReplacementStaff\AssignEvaluation');
     }
 
     public function getLegalQualityValueAttribute() {
@@ -97,11 +105,15 @@ class RequestReplacementStaff extends Model
 
         $authorities = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
 
+        foreach ($authorities as $authority){
+            $iam_authorities_in[] = $authority->organizational_unit_id;
+        }
+
         if(!empty($authorities)){
             foreach ($authorities as $authority) {
                 $request_to_sign = RequestReplacementStaff::latest()
-                    ->whereHas('requestSign', function($q) use ($authority){
-                        $q->Where('organizational_unit_id', $authority->organizational_unit_id)
+                    ->whereHas('requestSign', function($q) use ($authority, $iam_authorities_in){
+                        $q->Where('organizational_unit_id', $iam_authorities_in)
                         ->Where('request_status', 'pending');
                     })
                     ->paginate(10)
@@ -112,8 +124,6 @@ class RequestReplacementStaff extends Model
         else{
             return $request_to_sign = 0;
         }
-
-
     }
 
     /**

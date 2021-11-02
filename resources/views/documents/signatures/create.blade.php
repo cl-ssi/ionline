@@ -18,6 +18,16 @@
             <input type="hidden" name="signature_type" value="{{$signature->type}}">
         @endif
 
+        @if(isset($signature->addendum_id))
+            <input type="hidden" name="addendum_id" value="{{$signature->addendum_id}}">
+            <input type="hidden" name="signature_type" value="{{$signature->type}}">
+        @endif
+
+        @if(isset($xAxis) && isset($yAxis))
+            <input type="hidden" name='custom_x_axis' value="{{$xAxis}}">
+            <input type="hidden" name='custom_y_axis' value="{{$yAxis}}">
+        @endif
+
         <div class="form-row">
 
             <fieldset class="form-group col-3">
@@ -71,7 +81,7 @@
                            form="showPdf">
                     <input type="hidden" name="md5_file" value="{{$signature->signaturesFileDocument->md5_file}}">
                 @else
-                    <label for="for_document">Documento a distribuir</label>
+                    <label for="for_document">Documento a distribuir (pdf)</label>
                     <input type="file" class="form-control" id="for_document" name="document" accept="application/pdf" required>
                 @endif
 
@@ -80,6 +90,14 @@
             <fieldset class="form-group col">
                 <label for="for_annexed">Anexos</label>
                 <input type="file" class="form-control" id="for_annexed" name="annexed[]" multiple>
+            </fieldset>
+        </div>
+
+        <div class="form-row">
+            <fieldset class="form-group col">
+                <label for="for_url">Link o Url asociado</label>
+                <input type="url" class="form-control" id="for_url" name="url"
+                       value="{{isset($signature) ? $signature->url : ''}}" >
             </fieldset>
         </div>
 
@@ -101,15 +119,19 @@
 
         <div class="form-row">
 
-            <fieldset class="form-group col">
-                <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
-                <textarea type="text" class="form-control" id="for_recipients" name="recipients" rows="6"></textarea>
-            </fieldset>
+
 
             <fieldset class="form-group col">
                 <label for="for_distribution">Distribución del documento (separados por coma)</label>
-                <textarea class="form-control" id="for_distribution" name="distribution"
+                <textarea class="form-control red-tooltip" id="for_distribution" name="distribution"
                           rows="6">{{  isset($signature) ?  str_replace(PHP_EOL, ",", $signature->recipients)  : ''}}</textarea>
+            </fieldset>
+
+            <fieldset class="form-group col">
+                <label for="for_recipients">Destinatarios del documento (separados por coma)</label>
+                <textarea type="text" class="form-control red-tooltip" id="for_recipients" name="recipients" rows="6"
+
+                ></textarea>
             </fieldset>
 
         </div>
@@ -133,6 +155,33 @@
             form.submitBtn.disabled = true;
             return true;
         }
+
+        $('#for_document').bind('change', function() {
+            //Validación de tamaño
+            if((this.files[0].size / 1024 / 1024) > 3){
+                alert('No puede cargar un pdf de mas de 3 MB.');
+                $('#for_document').val('');
+            }
+
+            //Validación de pdf
+            const allowedExtension = ".pdf";
+            let hasInvalidFiles = false;
+
+            for (let i = 0; i < this.files.length; i++) {
+                let file = this.files[i];
+
+                if (!file.name.endsWith(allowedExtension)) {
+                    hasInvalidFiles = true;
+                }
+            }
+
+            if(hasInvalidFiles) {
+                $('#for_document').val('');
+                alert("Debe seleccionar un archivo pdf.");
+            }
+
+        });
+
     </script>
 
 @endsection

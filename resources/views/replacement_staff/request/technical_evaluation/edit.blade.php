@@ -6,32 +6,36 @@
 
 @include('replacement_staff.nav')
 
-
 <div class="table-responsive">
-    <table class="table table-sm table-bordered">
-        <thead>
+    <table class="table table-sm table-striped table-bordered">
+        <thead class="small">
             <tr class="table-active">
-                <th colspan="3">Formulario Solicitud Contratación de Personal</th>
+                <th colspan="3">Formulario Contratación de Personal - Solicitud Nº {{ $technicalEvaluation->requestReplacementStaff->id }}</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="small">
             <tr>
-                <th class="table-active">Por medio del presente, la Subdirección</th>
-                <td colspan="2">
-                    @foreach($technicalEvaluation->requestReplacementStaff->RequestSign as $sing)
-                        @if($sing->ou_alias == 'sub')
-                            {{ $sing->organizationalUnit->name }}
-                        @endif
-                    @endforeach
+                <th class="table-active">Por medio del presente</th>
+                <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->organizationalUnit->name }}</td>
+            </tr>
+            <tr>
+                <th class="table-active">Nombre / Nº de Cargos</th>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->name }}</td>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->charges_number }}</td>
+            </tr>
+            <tr>
+                <th class="table-active">Estamento / Grado</th>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->profile_manage->name }}</td>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->degree }}</td>
+            </tr>
+            <tr>
+                <th class="table-active">Calidad Jurídica / $ Honorarios</th>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->LegalQualityValue }}</td>
+                <td style="width: 33%">
+                  @if($technicalEvaluation->requestReplacementStaff->LegalQualityValue == 'Honorarios')
+                      ${{ number_format($technicalEvaluation->requestReplacementStaff->salary,0,",",".") }}
+                  @endif
                 </td>
-            </tr>
-            <tr>
-                <th class="table-active">En el grado</th>
-                <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->degree }}</td>
-            </tr>
-            <tr>
-                <th class="table-active">Calidad Jurídica</th>
-                <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->LegalQualityValue }}</td>
             </tr>
             <tr>
                 <th class="table-active">La Persona cumplirá labores en Jornada</th>
@@ -44,16 +48,25 @@
                 <td style="width: 33%">De funcionario: {{ $technicalEvaluation->requestReplacementStaff->name_to_replace }}</td>
             </tr>
             <tr>
-                <th class="table-active">Otros (especifique)</th>
+                <th class="table-active">Fundamento (especifique)</th>
                 <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->other_fundament }}</td>
             </tr>
             <tr>
-                <td colspan="3">El documento debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
+                <th class="table-active">Periodo</th>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->start_date->format('d-m-Y') }}</td>
+                <td style="width: 33%">{{ $technicalEvaluation->requestReplacementStaff->end_date->format('d-m-Y') }}</td>
+            </tr>
+            <tr>
+                <th class="table-active">Perfil del Cargo</th>
+                <td colspan="2"><a href="{{ route('replacement_staff.request.show_file', $technicalEvaluation->requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a></td>
+            </tr>
+            <tr>
+                <td colspan="3">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>
             </tr>
             <tr>
                 @foreach($technicalEvaluation->requestReplacementStaff->RequestSign as $sign)
-                  <td class="table-active">
-                      {{ $sign->organizationalUnit->name }}<br>
+                  <td class="table-active text-center">
+                      <strong>{{ $sign->organizationalUnit->name }}
                   </td>
                 @endforeach
             </tr>
@@ -87,9 +100,11 @@
                               </div>
                           </div>
                       @elseif($requestSign->request_status == 'accepted' || $requestSign->request_status == 'rejected')
+                        <span style="color: green;">
                           <i class="fas fa-check-circle"></i> {{ $requestSign->StatusValue }} <br>
-                          <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
-                          <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($requestSign->date_sign)->format('d-m-Y H:i:s') }}<br>
+                        </span>
+                        <i class="fas fa-user"></i> {{ $requestSign->user->FullName }}<br>
+                        <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($requestSign->date_sign)->format('d-m-Y H:i:s') }}<br>
                       @else
                           @if($requestSign->request_status == NULL)
                               <i class="fas fa-ban"></i> No disponible para Aprobación.<br>
@@ -106,28 +121,47 @@
 
 <br>
 
-<div class="table-responsive">
-    <table class="table table-sm table-bordered">
-        <thead>
-            <tr class="table-active">
-                <th colspan="6">Evaluación Técnica</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th rowspan="2" class="table-active text-center"><i class="fas fa-user"></i></th>
-                <td>{{ $technicalEvaluation->user->FullName }}</td>
-                <th rowspan="2" class="table-active text-center"><i class="fas fa-calendar-alt"></i></th>
-                <td>{{ $technicalEvaluation->created_at->format('d-m-Y H:i:s') }}</td>
-                <th rowspan="2" class="table-active text-center">Estado</th>
-                <td rowspan="2">{{ $technicalEvaluation->StatusValue }}</td>
-            </tr>
-            <tr>
-                <td>{{ $technicalEvaluation->user->organizationalUnit->name }}</td>
-                <td>{{ (isset($technicalEvaluation->date_end)) ? $technicalEvaluation->date_end->format('d-m-Y H:i:s'):''}}</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="card" id="commission">
+    <div class="card-header">
+        <h6>Funcionario(s) asignados a esta solicitud</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered">
+                <thead class="small">
+                    <tr class="table-active">
+                        <th><i class="fas fa-calendar-alt"></i> Fecha</th>
+                        <th><i class="fas fa-user"></i> De</th>
+                        <th><i class="fas fa-user"></i> Para</th>
+                        <th><i class="fas fa-info"></i> Observaciones</th>
+                    </tr>
+                </thead>
+                <tbody class="small">
+                  @foreach($technicalEvaluation->requestReplacementStaff->assignEvaluations as $assignEvaluation)
+                    <tr>
+                        <td>{{ $assignEvaluation->created_at->format('d-m-Y H:i:s') }}</th>
+                        <td>{{ $assignEvaluation->user->FullName }}</td>
+                        <td>{{ $assignEvaluation->userAssigned->FullName }}</td>
+                        <td>{{ $assignEvaluation->observation }}</td>
+                    </tr>
+                  @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        @if($technicalEvaluation->technical_evaluation_status == 'pending')
+        <!-- Button trigger modal -->
+        @can('Replacement Staff: assign request')
+        <button type="button" class="btn btn-primary btn-sm float-right" data-toggle="modal"
+          data-target="#exampleModal-assign-{{ $technicalEvaluation->requestReplacementStaff->id }}">
+            <i class="fas fa-user-tag"></i> Asignar nuevamente
+        </button>
+
+        @include('replacement_staff.modals.modal_to_re_assign')
+        @endcan
+
+        @endif
+    </div>
 </div>
 
 <br>
@@ -137,9 +171,26 @@
         <h6>Integrantes Comisión</h6>
     </div>
     <div class="card-body">
+        @if (session('message-success-commission'))
+          <div class="alert alert-success alert-dismissible fade show">
+              {{ session('message-success-commission') }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+        @endif
+        @if (session('message-danger-commission'))
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              {{ session('message-danger-commission') }}
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+        @endif
+
         <div class="table-responsive">
-            <table class="table small table-striped table-bordered">
-                <thead class="text-center">
+            <table class="table table-sm table-striped table-bordered">
+                <thead class="text-center small">
                     <tr>
                       <th>Nombre</th>
                       <th>Unidad Organizacional</th>
@@ -147,7 +198,7 @@
                       <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="small">
                     @foreach($technicalEvaluation->commissions as $commission)
                     <tr>
                         <td>{{ $commission->user->FullName }}</td>
@@ -179,8 +230,12 @@
                 </tbody>
             </table>
         </div>
-        @livewire('replacement-staff.commission', ['users' => $users,
-                  'technicalEvaluation' => $technicalEvaluation])
+
+        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+          Auth::user()->hasRole('Replacement Staff: admin'))
+            @livewire('replacement-staff.commission', ['users' => $users,
+                      'technicalEvaluation' => $technicalEvaluation])
+        @endif
     </div>
     <br>
 </div>
@@ -189,28 +244,91 @@
 
 <div class="card" id="applicant">
     <div class="card-header">
-        <h6>Postulantes </h6>
+        <h6>Selección de RR.HH.</h6>
     </div>
     <div class="card-body">
+      @if (session('message-danger-without-applicants'))
+        <div class="alert alert-danger alert-dismissible fade show">
+            {{ session('message-danger-without-applicants') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      @endif
+
+      @if (session('message-danger-delete-applicants'))
+        <div class="alert alert-danger alert-dismissible fade show">
+            {{ session('message-danger-delete-applicants') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      @endif
+
+      @if (session('message-success-applicants'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('message-success-applicants') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      @endif
+
+      @if (session('message-success-evaluate-applicants'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('message-success-evaluate-applicants') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      @endif
+
+      @if (session('message-danger-aplicant-no-evaluated'))
+        <div class="alert alert-danger alert-dismissible fade show">
+            {{ session('message-danger-aplicant-no-evaluated') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      @endif
+
+      @if (session('message-success-aplicant-finish'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('message-success-aplicant-finish') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      @endif
+
       @if($technicalEvaluation->applicants->count() > 0)
+      <h6>Postulantes a cargo(s)</h6>
         <div class="table-responsive">
-            <table class="table small table-striped table-bordered">
-                <thead class="text-center">
+            <table class="table table-sm table-striped table-bordered">
+                <thead class="text-center small">
                     <tr>
-                      <th>Nombre</th>
-                      <th>Calificación</th>
-                      <th>Observaciones</th>
+                      <th style="width: 22%">Nombre</th>
+                      <th style="width: 22%">Calificación Evaluación Psicolaboral</th>
+                      <th style="width: 22%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
+                      <th style="width: 22%">Observaciones</th>
+                      @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+                          Auth::user()->hasRole('Replacement Staff: admin'))
                       <th colspan="2"></th>
+                      @endif
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="small">
                     @foreach($technicalEvaluation->applicants->sortByDesc('score') as $applicant)
                     <tr class="{{ ($applicant->selected == 1)?'table-success':''}}">
                         <td>{{ $applicant->replacement_staff->FullName }}</td>
-                        <td>{{ $applicant->score }}</td>
+                        <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
+                        <td class="text-center">{{ $applicant->technical_evaluation_score }} <br> {{ $applicant->TechEvaScore }}</td>
                         <td>{{ $applicant->observations }}</td>
+                        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+                            Auth::user()->hasRole('Replacement Staff: admin'))
                         <td style="width: 4%">
-                            @if($technicalEvaluation->date_end == NULL)
+                            @if($technicalEvaluation->date_end == NULL &&
+                              ($applicant->psycholabor_evaluation_score == null || $applicant->technical_evaluation_score == null || $applicant->observations == null))
                             <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.destroy', $applicant) }}">
                                 @csrf
                                 @method('DELETE')
@@ -231,13 +349,22 @@
                             @endif
                         </td>
                         <td style="width: 4%">
+                            @if($technicalEvaluation->date_end == NULL)
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
-                              data-target="#exampleModal-applicant-{{ $applicant->id }}">
+                              data-target="#exampleModal-to-evaluate-applicant-{{ $applicant->id }}">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            @include('replacement_staff.modals.modal_to_select_applicant')
+                            @include('replacement_staff.modals.modal_to_evaluate_applicant')
+                            @else
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-outline-secondary btn-sm" data-toggle="modal"
+                              data-target="#exampleModal-to-evaluate-applicant-{{ $applicant->id }}" disabled>
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            @endif
                         </td>
+                        @endif
                     </tr>
                     @endforeach
                 </tbody>
@@ -245,120 +372,32 @@
         </div>
       @endif
 
-      <br>
+      @if($technicalEvaluation->applicants->count() > 0 && $technicalEvaluation->date_end == NULL)
+
+          @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+            Auth::user()->hasRole('Replacement Staff: admin'))
+              <div class="row">
+                  <div class="col">
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-success btn-sm float-right" data-toggle="modal"
+                      data-target="#exampleModal-to-select-applicants">
+                        <i class="fas fa-user-check"></i> Finalizar Selección
+                    </button>
+                    @include('replacement_staff.modals.modal_to_select_applicants')
+                  </div>
+              </div>
+          @endif
+      @endif
 
       @if($technicalEvaluation->technical_evaluation_status == 'pending')
-      <div class="card card-body">
-          <form method="GET" class="form-horizontal"
-              action="{{ route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation) }}">
-              <div class="form-row">
-                  <fieldset class="form-group col-4">
-                      <label for="for_name">Nombres</label>
-                      <input class="form-control" type="text" name="search" autocomplete="off" style="text-transform: uppercase;" placeholder="RUN (sin dígito verificador) / NOMBRE" value="{{$request->search}}">
-                  </fieldset>
 
-                  <fieldset class="form-group col-4">
-                      <label for="for_profile_search">Estamento</label>
-                      <select name="profile_search" class="form-control">
-                          <option value="0">Seleccione...</option>
-                          @foreach($profileManage as $profile)
-                              <option value="{{ $profile->id }}" {{ ($request->profile_search == $profile->id)?'selected':'' }}>{{ $profile->Name }}</option>
-                          @endforeach
-                      </select>
-                  </fieldset>
+      <hr>
 
-                  <fieldset class="form-group col-4">
-                      <label for="for_profession_search">Profesión</label>
-                      <select name="profession_search" class="form-control">
-                          <option value="0">Seleccione...</option>
-                          @foreach($professionManage as $profession)
-                              <option value="{{ $profession->id }}" {{ ($request->profession_search == $profession->id)?'selected':'' }}>{{ $profession->Name }}</option>
-                          @endforeach
-                      </select>
-                  </fieldset>
+      <h6>Busqueda de Postulantes</h6>
 
-                  <button type="submit" class="btn btn-primary float-right">
-                      <i class="fas fa-search"></i> Buscar
-                  </button>
-              </div>
-          </form>
-      </div>
+      @livewire('replacement-staff.search-select-applicants',
+          ['technicalEvaluation' => $technicalEvaluation])
 
-      <br>
-
-      <div class="table-responsive">
-          <table class="table small table-striped table-bordered">
-              <thead>
-                  <tr>
-                      <th>Nombre Completo</th>
-                      <th>Run</th>
-                      <th>Estamento</th>
-                      <th>Título</th>
-                      <th>Fecha Titulación</th>
-                      <th>Años Exp.</th>
-                      <th>Estado</th>
-                      <th style="width: 10%"></th>
-                      <th></th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.store', $technicalEvaluation) }}">
-                  @csrf
-                  @method('POST')
-
-                  @foreach($replacementStaff as $staff)
-                  <tr>
-                      <td>{{ $staff->FullName }}</td>
-                      <td>{{ $staff->Identifier }}</td>
-                      <td>
-                          @foreach($staff->profiles as $title)
-                              <h6><span class="badge rounded-pill bg-light">{{ $title->profile_manage->name }}</span></h6>
-                          @endforeach
-                      </td>
-                      <td>
-                          @foreach($staff->profiles as $title)
-                              <h6><span class="badge rounded-pill bg-light">{{ ($title->profession_manage) ? $title->profession_manage->name : '' }}</span></h6>
-                          @endforeach
-                      </td>
-                      <td>
-                          @foreach($staff->profiles as $title)
-                              <h6><span class="badge rounded-pill bg-light">{{ Carbon\Carbon::parse($title->degree_date)->format('d-m-Y') }}</span></h6>
-                          @endforeach
-                      </td>
-                      <td>
-                          @foreach($staff->profiles as $title)
-                              <h6><span class="badge rounded-pill bg-light">{{ $title->YearsOfDegree }}</span></h6>
-                          @endforeach
-                      </td>
-                      <td>{{ $staff->StatusValue }}</td>
-                      <td>
-                          <a href="{{ route('replacement_staff.show_replacement_staff', $staff) }}"
-                            class="btn btn-outline-secondary btn-sm"
-                            title="Ir"
-                            target="_blank"> <i class="far fa-eye"></i></a>
-                          <a href="{{ route('replacement_staff.show_file', $staff) }}"
-                            class="btn btn-outline-secondary btn-sm"
-                            title="Ir"
-                            target="_blank"> <i class="far fa-file-pdf"></i></a>
-                      </td>
-                      <td>
-                          <fieldset class="form-group">
-                              <div class="form-check">
-                                  <input class="form-check-input" type="checkbox" name="replacement_staff_id[]"
-                                      value="{{ $staff->id }}">
-                              </div>
-                          </fieldset>
-                      </td>
-                  </tr>
-                  @endforeach
-
-              </tbody>
-          </table>
-
-          <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Seleccionar</button>
-          </form>
-          {{ $replacementStaff->links() }}
-      </div>
       @endif
 
     </div>
@@ -372,8 +411,25 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table small table-striped table-bordered">
-                <thead class="text-center">
+            @if (session('message-success-file'))
+              <div class="alert alert-success alert-dismissible fade show">
+                  {{ session('message-success-file') }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+            @endif
+
+            @if (session('message-danger-file'))
+              <div class="alert alert-danger alert-dismissible fade show">
+                  {{ session('message-danger-file') }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+            @endif
+            <table class="table table-sm table-striped table-bordered">
+                <thead class="text-center small">
                     <tr>
                       <th>Nombre Archivo</th>
                       <th>Cargado por</th>
@@ -381,8 +437,8 @@
                       <th colspan="2"></th>
                     </tr>
                 </thead>
-                <tbody>
-                  @foreach($technicalEvaluation->technical_evaluation_files->sortByDesc('created_at') as $technicalEvaluationFiles)
+                <tbody class="small">
+                  @foreach($technicalEvaluation->technicalEvaluationFiles->sortByDesc('created_at') as $technicalEvaluationFiles)
                     <tr>
                       <td>{{ $technicalEvaluationFiles->name }}</td>
                       <td>{{ $technicalEvaluationFiles->user->FullName }}</td>
@@ -395,20 +451,20 @@
                       </td>
                       <td style="width: 4%">
                           @if($technicalEvaluation->technical_evaluation_status == 'pending')
-                          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.destroy', $applicant) }}">
+                          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.file.destroy', $technicalEvaluationFiles) }}">
                               @csrf
                               @method('DELETE')
                                   <button type="submit" class="btn btn-outline-danger btn-sm"
-                                      onclick="return confirm('¿Está seguro que desea eliminar el Postulante?')">
+                                      onclick="return confirm('¿Está seguro que desea eliminar el Archivo Adjunto?')">
                                       <i class="fas fa-trash"></i>
                                   </button>
                           </form>
                           @else
-                          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.destroy', $applicant) }}">
+                          <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.file.destroy', $technicalEvaluationFiles) }}">
                               @csrf
                               @method('DELETE')
                                   <button type="submit" class="btn btn-outline-danger btn-sm"
-                                      onclick="return confirm('¿Está seguro que desea eliminar el Postulante?')" disabled>
+                                      onclick="return confirm('¿Está seguro que desea eliminar el Archivo Adjunto?')" disabled>
                                       <i class="fas fa-trash"></i>
                                   </button>
                           </form>
@@ -419,8 +475,11 @@
                 </tbody>
             </table>
         </div>
-        @livewire('replacement-staff.files', ['users' => $users,
-                  'technicalEvaluation' => $technicalEvaluation])
+        @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+          Auth::user()->hasRole('Replacement Staff: admin'))
+            @livewire('replacement-staff.files', ['users' => $users,
+                      'technicalEvaluation' => $technicalEvaluation])
+        @endif
     </div>
     <br>
 </div>
