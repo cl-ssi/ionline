@@ -20,7 +20,7 @@
     <a href="{{ route('programmings.create') }}" class="btn btn-info mb-4">Comenzar Nueva Programación</a>
  @endcan
 
- @if($request->year == 2022 || \Carbon\Carbon::now()->year == 2022)
+ @if($request->year == 2022 || $year == 2022)
 <div class="float-right text-center">
 <h5>Tiempo Restante</h5>
 <div id="timer"></div>
