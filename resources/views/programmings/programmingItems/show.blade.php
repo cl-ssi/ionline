@@ -33,7 +33,8 @@ Editar Item Programación Operativa </h4>
                 @endforeach      
             </select>
         </div>
-        {{--<div class="form-group col-md-6">
+        @if($programmingItem->activityItem->tracer == 'NO')
+        <div class="form-group col-md-6">
             <label for="forprogram">Ciclo Vital</label>
             <select name="cycle" id="formprogram" class="form-control">
                 @php($cycle_types = array('INFANTIL', 'ADOLESCENTE', 'ADULTO', 'ADULTO MAYOR', 'TRANSVERSAL'))
@@ -41,11 +42,13 @@ Editar Item Programación Operativa </h4>
                 <option value="{{$cycle_type}}" @if($cycle_type == $programmingItem->cycle) selected @endif>{{$cycle_type}}</option>
                 @endforeach
             </select>
-        </div>--}}
+        </div>
+        @else
         <div class="form-group col-md-6">
             <label for="forprogram">Ciclo Vital</label>
             <input type="input" class="form-control" id="cycle_type" name="cycle_type" value="{{ $programmingItem->activityItem->vital_cycle ?? '' }}" required="" readonly>
         </div>
+        @endif
         
         {{--<div class="form-group col-md-8">
             <label for="forprogram">Programa Ministerial</label>
@@ -58,11 +61,22 @@ Editar Item Programación Operativa </h4>
     </div>
     <div class="form-row">
 
+    @if($programmingItem->activityItem->tracer == 'NO')
+    <div class="form-group col-md-3">
+            <label for="forprogram">Acción</label>
+            <select name="action_type" id="action_type" class="form-control">
+            @php($action_types = array('Prevención', 'Diagnóstico', 'Tratamiento', 'Promoción'))
+                @foreach($action_types as $action_type)
+                <option value="{{$action_type}}" @if($action_type == $programmingItem->cycle) selected @endif>{{$action_type}}</option>
+                @endforeach           
+            </select>
+        </div>
+    @else
     <div class="form-group col-md-3">
             <label for="forprogram">Acción</label>
             <input type="input" class="form-control" id="action_type" name="action_type" value="{{$programmingItem->activityItem->action_type ?? '' }}" required="" disabled>
         </div>
-    
+    @endif
         <div class="form-group col-md-9">
             <label for="forprogram">Actividad o Prestación</label>
             <input type="input" class="form-control" id="activity_name" name="activity_name" value="{{$programmingItem->activityItem->activity_name ?? '' }}" required="" disabled>
@@ -75,7 +89,7 @@ Editar Item Programación Operativa </h4>
     
         <div class="form-group col-md-8">
             <label for="forprogram">Def. Población Objetivo</label>
-            <input type="input" class="form-control" id="forreferente" name="def_target_population" value="{{$programmingItem->def_target_population ?? '' }}" required="" disabled>
+            <input type="input" class="form-control" id="forreferente" name="def_target_population" value="{{$programmingItem->activityItem->def_target_population ?? $programmingItem->def_target_population }}" required="" {{ $programmingItem && $programmingItem->activityItem->tracer != 'NO' ? 'readonly' : '' }}>
         </div>
 
         <div class="form-group col-md-4">
