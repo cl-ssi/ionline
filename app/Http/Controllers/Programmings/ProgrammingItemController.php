@@ -66,6 +66,11 @@ class ProgrammingItemController extends Controller
 
     public function show(Request $request, ProgrammingItem $programmingitem)
     {
+        $year = Programming::find($programmingitem->programming_id)->year;
+        $activityItems = ActivityItem::whereHas('program', function($q) use ($year){
+                            return $q->where('year', $year);
+                        })->where('tracer', 'NO')->get();
+
         $programmingDays      = ProgrammingDay::where('programming_id',$programmingitem->programming_id)->first();
 
         $professionalHoursSel = ProfessionalHour::select(
@@ -94,7 +99,9 @@ class ProgrammingItemController extends Controller
         ->orderBy('T1.alias','ASC')
         ->get();
 
-        return view('programmings/programmingItems/show', compact('programmingDays', 'professionalHoursSel', 'professionalHours'))->withProgrammingItem($programmingitem);
+
+
+        return view('programmings/programmingItems/show', compact('programmingDays', 'professionalHoursSel', 'professionalHours', 'activityItems'))->withProgrammingItem($programmingitem);
 
      }
 

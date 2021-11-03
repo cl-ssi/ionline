@@ -41,13 +41,13 @@
                 </tr>
             </thead>
             <tbody  style="font-size:75%;">
-                <tr >
+                <tr>
                     <td class="text-center align-middle">{{$programmingItem->id}}</td>
                     <td class="text-center align-middle">{{$programmingItem->activityItem->tracer ?? ''}}</td>
                     <td class="text-center align-middle font-weight-bold">{{$programmingItem->activityItem->int_code ?? ''}}</td>
-                    <td class="text-center align-middle">{{ $programmingItem->activityItem->tracer == 'NO' ? $programmingItem->cycle : $programmingItem->activityItem->vital_cycle ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingItem->activityItem->tracer == 'NO' ? $programmingItem->action_type : $programmingItem->activityItem->action_type ?? '' }}</td>
-                    <td class="text-center align-middle">{{$programmingItem->activityItem->activity_name ?? ''}}</td>
+                    <td class="text-center align-middle">{{ $programmingItem->activityItem && $programmingItem->activityItem->tracer == 'NO' ? $programmingItem->cycle : ($programmingItem->activityItem->vital_cycle ?? $programmingItem->cycle) }}</td>
+                    <td class="text-center align-middle">{{ $programmingItem->activityItem && $programmingItem->activityItem->tracer == 'NO' ? $programmingItem->action_type : ($programmingItem->activityItem->activityItem->action_type ?? $programmingItem->action_type) }}</td>
+                    <td class="text-center align-middle">{{ $programmingItem->activityItem->activity_name ?? $programmingItem->activity_name }}</td>
                 </tr>
             </tbody>
         </table>
@@ -68,7 +68,7 @@
             </thead>
             <tbody  style="font-size:75%;">
                 <tr>
-                <td class="text-center align-middle">{{ $programmingItem->activityItem->tracer == 'NO' ? $programmingItem->def_target_population : $programmingItem->activityItem->def_target_population ?? '' }}</td>
+                    <td class="text-center align-middle">{{$programmingItem->activityItem && $programmingItem->activityItem->tracer == 'NO' ? $programmingItem->def_target_population : ($programmingItem->activityItem->def_target_population ?? $programmingItem->def_target_population) }}</td>
                     <td class="text-center align-middle">{{$programmingItem->source_population}}</td>
                     <td class="text-center align-middle">{{number_format($programmingItem->cant_target_population,0, ",", ".")}}</td>
                     <td class="text-center align-middle">{{$programmingItem->prevalence_rate}} %</td>
@@ -118,7 +118,7 @@
             </thead>
             <tbody  style="font-size:75%;">
                 <tr>
-                    <td class="text-center align-middle">{{$programmingItem->activityItem->verification_rem ?? ''}}</td>
+                    <td class="text-center align-middle">{{$programmingItem->activityItem->verification_rem ?? $programmingItem->information_source }}</td>
                     <td class="text-center align-middle">{{$programmingItem->prap_financed}}</td>
                     <td class="text-center align-middle">{{$programmingItem->observation}}</td>
                 </tr>
