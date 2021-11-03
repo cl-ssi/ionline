@@ -11,7 +11,7 @@
     <tbody>
         @foreach($audits->sortByDesc('updated_at') as $audit)
         <tr>
-            <td nowrap>{{ $audit->created_at }}</td>
+            <td nowrap>{{ $audit->created_at ?? }}</td>
             <td nowrap>{{ optional($audit->user)->fullName }}</td>
             <td>
             @foreach($audit->getModified() as $attribute => $modified)
