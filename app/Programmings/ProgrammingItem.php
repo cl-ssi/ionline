@@ -3,9 +3,11 @@
 namespace App\Programmings;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProgrammingItem extends Model
 {
+    use SoftDeletes;
     protected $table = 'pro_programming_items';
 
     //protected $fillable = ['_token'];
