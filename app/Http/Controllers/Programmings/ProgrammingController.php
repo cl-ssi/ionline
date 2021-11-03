@@ -6,25 +6,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Programmings\Programming;
-use App\Programmings\ProgrammingItem;
 use App\Establishment;
 use App\Models\Commune;
-use App\Models\Programmings\Review AS Rev;
-use App\Programmings\Review;
-use App\Models\Programmings\ReviewItem;
 use App\User;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Auth;
-
-use Illuminate\Support\Facades\DB;
-
 
 class ProgrammingController extends Controller
 {
     public function index(Request $request)
     {
+        $year = $request->year ?? Carbon::now()->year + 1;
         $programmings = Programming::with('items.reviewItems', 'items.activityItem')
-            ->where('year', $request->year ?? Carbon::now()->year)
+            ->where('year', $year)
             ->when(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False, function($q){
                 $q->Where('status','=','active')->Where('access','LIKE','%'.Auth()->user()->id.'%');
             })
@@ -32,101 +24,7 @@ class ProgrammingController extends Controller
             
         $communes = Commune::where('name', $request->name)->get();
 
-        //dd($programmings);
-        //  $year = '';
-        // Indicador de revisiones
-        // $reviewIndicators = ReviewItem::select(
-        //             'T2.id'
-        //         , DB::raw('count(pro_review_items.programming_item_id) AS qty'))
-        //         ->leftjoin('pro_programming_items AS T1', 'pro_review_items.programming_item_id', '=', 'T1.id')
-        //         ->leftjoin('pro_programmings AS T2', 'T1.programming_id', '=', 'T2.id')
-        //         ->Where('pro_review_items.rectified','=','NO')
-        //         ->Where('pro_review_items.answer','=','NO')
-        //         ->Where('T2.year','=',2021)
-        //         ->groupBy('T2.id')
-        //         ->orderBy('T2.id')->get();
-                // return($reviewIndicators);
-    
-        // $indicatorCompletes = ProgrammingItem::select(
-        //             'T1.id'
-        //         , DB::raw('count(DISTINCT T2.int_code) AS qty'))
-        //         ->leftjoin('pro_programmings AS T1', 'pro_programming_items.programming_id', '=', 'T1.id')
-        //         ->leftjoin('pro_activity_items AS T2', 'pro_programming_items.activity_id', '=', 'T2.id')
-        //         ->Where('T1.year','=',2021)
-        //         ->groupBy('T1.id')
-        //         ->orderBy('T1.id')->get();
-                // return($indicatorCompletes);
-        
-
-
-    //     // Solo si poseen perfil como administrador o revisor pueden ver todas las comunas del año.
-    //    if(Auth()->user()->hasAllRoles('Programming: Review') == True || Auth()->user()->hasAllRoles('Programming: Admin') == True )
-    //    {
-    //         $programmings = Programming::select(
-    //                          'pro_programmings.id'
-    //                         ,'pro_programmings.year'
-    //                         ,'pro_programmings.user_id'
-    //                         ,'pro_programmings.description'
-    //                         ,'pro_programmings.created_at'
-    //                         ,'pro_programmings.status'
-    //                         ,'T1.type AS establishment_type'
-    //                         ,'T1.name AS establishment'
-    //                         ,'T2.name AS commune'
-    //                         ,'T3.name' 
-    //                         ,'T3.fathers_family'
-    //                         ,'T3.mothers_family')
-    //             ->leftjoin('establishments AS T1', 'pro_programmings.establishment_id', '=', 'T1.id')
-    //             ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
-    //             ->leftjoin('users AS T3', 'pro_programmings.user_id', '=', 'T3.id')
-    //             ->Where('pro_programmings.year','LIKE','%'.$year.'%')
-    //             ->orderBy('pro_programmings.id')->get();
-    //     }
-
-    //     // Si no, sólo muestra el establecimiento asignado al usuario
-    //     else {
-    //         $programmings = Programming::select(
-    //                     'pro_programmings.id'
-    //                     ,'pro_programmings.year'
-    //                     ,'pro_programmings.user_id'
-    //                     ,'pro_programmings.description'
-    //                     ,'pro_programmings.created_at'
-    //                     ,'pro_programmings.status'
-    //                     ,'T1.type AS establishment_type'
-    //                     ,'T1.name AS establishment'
-    //                     ,'T2.name AS commune'
-    //                     ,'T3.name' 
-    //                     ,'T3.fathers_family'
-    //                     ,'T3.mothers_family')
-    //         ->leftjoin('establishments AS T1', 'pro_programmings.establishment_id', '=', 'T1.id')
-    //         ->leftjoin('communes AS T2', 'T1.commune_id', '=', 'T2.id')
-    //         ->leftjoin('users AS T3', 'pro_programmings.user_id', '=', 'T3.id')
-    //         ->Where('pro_programmings.year','LIKE','%'.$year.'%')
-    //         ->Where('pro_programmings.status','=','active')
-    //         ->Where('pro_programmings.access','LIKE','%'.Auth()->user()->id.'%')
-    //         ->orderBy('pro_programmings.id')->get();
-    //     }
-
-        // foreach ($programmings as $programming) {
-        //     foreach ($indicatorCompletes as $indicatorComplete ) {
-
-        //         if($programming->id == $indicatorComplete->id) {
-        //             $programming['qty_traz'] = $indicatorComplete->qty;
-
-        //         }
-
-        //     }
-        // }
-
-        // foreach ($programmings as $programming) {
-        //     foreach ($reviewIndicators as $reviewIndicator) {
-
-        //         if($programming->id == $reviewIndicator->id) {
-        //             $programming['qty_reviews'] = $reviewIndicator->qty;
-        //         }
-
-        //     }
-        // }
-        return view('programmings/programmings/index', compact('programmings', 'request', 'communes'));
+        return view('programmings/programmings/index', compact('programmings', 'request', 'communes', 'year'));
     }
 
     public function create() 
@@ -198,6 +96,4 @@ class ProgrammingController extends Controller
 
         return redirect()->back();
     }
-    
-
 }

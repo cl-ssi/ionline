@@ -1,5 +1,5 @@
 <fieldset class="form-group col">
-    <label for="for_legal_quality" >Calidad Jurídica / Renta / Fundamento</label>
+    <label for="for_legal_quality" >Calidad Jurídica / Renta / Fundamento / Detalle Fundamento</label>
     <div class="input-group">
         <select name="legal_quality" id="for_legal_quality" class="form-control" wire:model="selectedLegalQuality" required>
             <option value="">Seleccione...</option>
@@ -14,11 +14,22 @@
             <option value="" {{ $fundamentOptionState }}>Seleccione...</option>
             <option value="replacement" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Reemplazo</option>
             <option value="quit" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionStateDisabled }}>Renuncia</option>
-            <option value="allowance without payment" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Permiso sin goce de sueldo</option>
-            <option value="regularization work position" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Regulación de cargos</option>
             <option value="expand work position" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionStateDisabled }}>Cargo expansión</option>
-            <option value="vacations" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Feriado legal</option>
+            <!-- <option value="allowance without payment" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Permiso sin goce de sueldo</option>
+            <option value="regularization work position" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Regulación de cargos</option>
+            <option value="vacations" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Feriado legal</option> -->
             <option value="other" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionStateDisabled }}>Otro</option>
+        </select>
+
+        <select name="fundament_detail" id="for_fundament_detail" class="form-control" wire:model="selectedFundamentDetail" {{ $fundamentStateSelect }}>
+            <option value="" {{ $fundamentOptionState }}>Seleccione...</option>
+            <option value="quit" @if($requestReplacementStaff) {{-- ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' --}} @endif {{-- $fundamentOptionStateDisabled --}}>Renuncia</option>
+            <option value="allowance without payment" @if($requestReplacementStaff) {{-- ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' --}} @endif {{-- $fundamentOptionState --}}>Permiso sin goce de sueldo</option>
+            <option value="vacations" @if($requestReplacementStaff) {{-- ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' --}} @endif {{-- $fundamentOptionState --}}>Feriado legal</option>
+            <option value="medical license" @if($requestReplacementStaff) {{-- ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' --}} @endif {{-- $fundamentOptionState --}}>Licencia médica</option>
+
+            <!-- <option value="regularization work position" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Regulación de cargos</option>
+            <option value="vacations" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Feriado legal</option> -->
         </select>
 
         <input type="text" class="form-control" name="name_to_replace"

@@ -35,17 +35,17 @@
      @foreach($reviewItems as $reviewItem)
         <tr class="small">
             <td class="text-center align-middle">{{ $reviewItem->id }}</td>
-            <td class="text-center align-middle">{{ $reviewItem->int_code }}</td>
-            <td class="text-center align-middle">{{ $reviewItem->activity_name }}</td>
-            <td class="text-center align-middle">{{ $reviewItem->cycle }}</td>
-            <td class="text-center align-middle">{{ $reviewItem->action_type }}</td>
-            <td class="text-center align-middle">{{ $reviewItem->def_target_population }}</td>
+            <td class="text-center align-middle">{{ $reviewItem->programItem->activityItem->int_code ?? '' }}</td>
+            <td class="text-center align-middle">{{ $reviewItem->programItem->activityItem->activity_name ?? '' }}</td>
+            <td class="text-center align-middle">{{ $reviewItem->programItem->activityItem->vital_cycle ?? '' }}</td>
+            <td class="text-center align-middle">{{ $reviewItem->programItem->activityItem->action_type ?? '' }}</td>
+            <td class="text-center align-middle">{{ $reviewItem->programItem->activityItem->def_target_population ?? '' }}</td>
             <td class="text-center align-middle">{{ $reviewItem->review }}</td>
             <td class="text-center align-middle">{{ $reviewItem->answer }}</td>
             <td class="text-center align-middle">{{ $reviewItem->observation }}</td>
-            <td class="text-center align-middle">{{ $reviewItem->name_rev }} {{ $reviewItem->fathers_family_rev }} {{ $reviewItem->mothers_family_rev }}</td>
+            <td class="text-center align-middle">{{ $reviewItem->user->fullName ?? '' }}</td>
             @can('ProgrammingItem: evaluate')
-            <td class="text-center align-middle" ><a href="{{ route('reviewItems.index', ['programmingItem_id' => $reviewItem->id_programmingItems]) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-clipboard-check"></i></a></td>
+            <td class="text-center align-middle" ><a href="{{ route('reviewItems.index', ['programmingItem_id' => $reviewItem->programItem->id]) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-clipboard-check"></i></a></td>
         @endcan
         </tr>
         @endforeach
