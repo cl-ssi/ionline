@@ -19,4 +19,14 @@ class ReviewItem extends Model
     {
         return $this->belongsTo('App\Programmings\ProgrammingItem', 'programming_item_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }
+
+    public function reviewer()
+    {
+        return $this->belongsTo('App\User', 'updated_by');
+    }
 }

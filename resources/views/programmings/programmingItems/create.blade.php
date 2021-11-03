@@ -65,9 +65,10 @@ Nuevo Item Programación Operativa </h4>
                 
             </select>
         </div>
+        @if($activityItemsSelect && $activityItemsSelect->tracer == 'NO')
         <div class="form-group col-md-4">
             <label for="forprogram">Ciclo Vital</label>
-            <select name="cycle" id="formprogram"  class="form-control">
+            <select name="cycle" id="cycle" class="form-control">
                     <option value="INFANTIL">INFANTIL</option>
                     <option value="ADOLESCENTE">ADOLESCENTE</option>
                     <option value="ADULTO">ADULTO</option>
@@ -76,41 +77,54 @@ Nuevo Item Programación Operativa </h4>
                
             </select>
         </div>
-
         <div class="form-group col-md-5">
             <label for="forprogram">Acción</label>
-            <input type="input" class="form-control" id="action_type" name="action_type" value="{{ $activityItemsSelect ? $activityItemsSelect->action_type : '' }}" required="">
+            <select name="action_type" id="action_type" class="form-control">
+                    <option value="Prevención">Prevención</option>
+                    <option value="Diagnóstico">Diagnóstico</option>
+                    <option value="Tratamiento">Tratamiento</option>
+                    <option value="Promoción">Promoción</option>           
+            </select>
         </div>
-        <!--<div class="form-group col-md-8">
+        @else
+        <div class="form-group col-md-4">
+            <label for="forprogram">Ciclo Vital</label>
+            <input type="input" class="form-control" id="cycle" name="cycle" value="{{ $activityItemsSelect ? $activityItemsSelect->vital_cycle : '' }}" required="" readonly>
+        </div>
+        <div class="form-group col-md-5">
+            <label for="forprogram">Acción</label>
+            <input type="input" class="form-control" id="action_type" name="action_type" value="{{ $activityItemsSelect ? $activityItemsSelect->action_type : '' }}" required="" readonly>
+        </div>
+        @endif
+        {{--<div class="form-group col-md-8">
             <label for="forprogram">Programa Ministerial</label>
             <select name="ministerial_program" id="formprogram" class="form-control selectpicker " data-live-search="true" required>
                 @foreach($ministerialPrograms as $ministerialProgram)
                     <option value="{{ $ministerialProgram->id }}">{{ $ministerialProgram->name }}</option>
                 @endforeach
             </select>
-        </div>-->
+        </div>--}}
     </div>
 
     <div class="form-row">
 
-        <div class="form-group col-md-3">
+        <div class="form-group col-md-1">
             <label for="forprogram">Trazadora</label>
-            <input type="input" class="form-control" id="tracer" name="tracer" value="{{ $activityItemsSelect ? $activityItemsSelect->tracer : '' }}" required="">
+            <input type="input" class="form-control" id="tracer" name="tracer" value="{{ $activityItemsSelect ? $activityItemsSelect->tracer : '' }}" required="" readonly>
         </div>
     
-        <div class="form-group col-md-9">
+        <div class="form-group col-md-11">
             <label for="forprogram">Actividad o Prestación</label>
-            <input type="input" class="form-control" id="activity_name" name="activity_name" value="{{ $activityItemsSelect ? $activityItemsSelect->activity_name : '' }}" required="">
+            <input type="input" class="form-control" id="activity_name" name="activity_name" value="{{ $activityItemsSelect ? $activityItemsSelect->activity_name : '' }}" required="" readonly>
         </div>
         <input type="hidden" class="form-control" id="activity_id" name="activity_id" value="{{ $activityItemsSelect ? $activityItemsSelect->id : '' }}" required="">
-
     </div>
 
     <div class="form-row">
     
         <div class="form-group col-md-8">
             <label for="forprogram">Def. Población Objetivo</label>
-            <input type="input" class="form-control" id="forreferente" name="def_target_population" value="{{ $activityItemsSelect ? $activityItemsSelect->def_target_population : '' }}" required="">
+            <input type="input" class="form-control" id="forreferente" name="def_target_population" value="{{ $activityItemsSelect ? $activityItemsSelect->def_target_population : '' }}" {{ $activityItemsSelect && $activityItemsSelect->tracer != 'NO' ? 'readonly' : '' }} required>
         </div>
 
         <div class="form-group col-md-4">
@@ -216,7 +230,7 @@ Nuevo Item Programación Operativa </h4>
             <i class="fas fa-info-circle"></i></a>
             <select name="professional" id="formprogram" class="form-control">
                 @foreach($professionalHours as $professionalHour)
-                    <option value="{{ $professionalHour->id }}">{{ $professionalHour->alias }}</option>
+                    <option value="{{ $professionalHour->id }}">{{ $professionalHour->professional->alias ?? '' }}</option>
                 @endforeach
             </select>
         </div>
@@ -287,7 +301,7 @@ Nuevo Item Programación Operativa </h4>
 
         <div class="form-group col-md-6">
             <label for="forprogram">Fuente Información</label>
-            <input type="input" class="form-control" id="information_source" value="{{ $activityItemsSelect ? $activityItemsSelect->verification_rem : '' }}" name="information_source" >
+            <input type="input" class="form-control" id="information_source" value="{{ $activityItemsSelect ? $activityItemsSelect->verification_rem : '' }}" name="information_source" readonly>
         </div>
 
         <div class="form-group col-md-3">

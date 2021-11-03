@@ -60,7 +60,7 @@ class ApplicantController extends Controller
                 }
             }
             return redirect()
-                ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technical_evaluation_id).'#applicant')
+                ->to(route('replacement_staff.request.technical_evaluation.edit', $technicalEvaluation).'#applicant')
                 ->with('message-success-applicants', 'El postulante ha sido correctamente ingresado/s.');
         }
     }

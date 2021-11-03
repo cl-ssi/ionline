@@ -5,11 +5,11 @@
 @section('content')
 
 
-<h3 class="mb-3">Documentos Comunales - Evaluación General
+<h3 class="mb-3">Documentos Comunales {{$year}} - Evaluación General
 <form class="form-inline float-right small" method="GET" action="{{ route('communefiles.index') }}">
     <select name="year" class="form-control" onchange="this.form.submit()">
-                    @foreach(range(2021, date('Y') + 1) as $year)
-                        <option value="{{ $year }}" {{ request()->year == $year ? 'selected' : '' }}>{{ $year }}</option>
+                    @foreach(range(2021, date('Y') + 1) as $anio)
+                        <option value="{{ $anio }}" {{ request()->anio == $anio || $year == $anio ? 'selected' : '' }}>{{ $anio }}</option>
                     @endforeach
     </select>
 </form>
