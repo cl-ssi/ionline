@@ -13,7 +13,7 @@ class CreateRstLegalQualityManagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('legal_quality_manages', function (Blueprint $table) {
+        Schema::create('rst_legal_quality_manages', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
 
@@ -29,6 +29,6 @@ class CreateRstLegalQualityManagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('legal_quality_manages');
+        Schema::dropIfExists('rst_legal_quality_manages');
     }
 }
