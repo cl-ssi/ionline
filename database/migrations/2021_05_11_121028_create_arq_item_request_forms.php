@@ -34,7 +34,7 @@ class CreateArqItemRequestForms extends Migration
             $table->timestamps();
 
             $table->foreign('request_form_id')->references('id')->on('arq_request_forms');
-            $table->foreign('budget_item_id')->references('id')->on('arq_budget_items');
+            $table->foreign('budget_item_id')->references('id')->on('cfg_budget_items');
         });
     }
     /**

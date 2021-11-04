@@ -4,7 +4,6 @@ namespace App\Models\Parameters;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\RequestFormDocuments\RequestService;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UnitOfMeasurement extends Model
@@ -19,9 +18,9 @@ class UnitOfMeasurement extends Model
     protected $fillable = ['name', 'prefix'];
 
 
-    public function RequestServices() {
-        return $this->hasMany(RequestService::class);
-    }
+    // public function RequestServices() {
+    //     return $this->hasMany(RequestService::class);
+    // }
 
     use SoftDeletes;
     /**
@@ -29,6 +28,7 @@ class UnitOfMeasurement extends Model
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    //protected $dates = ['deleted_at'];
+
     protected $table = 'cfg_unit_of_measurements';
 }

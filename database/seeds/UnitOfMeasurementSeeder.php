@@ -1,11 +1,7 @@
 <?php
-//namespace Database\Seeds;
 
 use Illuminate\Database\Seeder;
-//use Illuminate\Support\Facades\DB;
-//use Illuminate\Support\Facades\Hash;
-use app\Models\Parameters\UnitOfMeasurement;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Parameters\UnitOfMeasurement;
 
 class UnitOfMeasurementSeeder extends Seeder
 {

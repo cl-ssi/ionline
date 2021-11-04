@@ -30,7 +30,16 @@ class DatabaseSeeder extends Seeder
         $this->call(ProfessionalTableSeeder::class);
         $this->call(MinisterialProgramTableSeeder::class);
         $this->call(ActionTypeTableSeeder::class);
-        $this->call(ProfileManageSeeder::class);
-        $this->call(ProfessionManageSeeder::class);*/
+
+        /* SEED PARA MANTENEDORES DE REPLACEMENT STAFF */
+        // $this->call(ProfileManageSeeder::class);
+        // $this->call(ProfessionManageSeeder::class);
+
+        /* SEED PARA MANTENEDORES DE ABASTECIEMIENTOS */
+        $this->call(PurchaseMechanismSeeder::class);
+        $this->call(PurchaseTypeSeeder::class);
+        $this->call(UnitOfMeasurementSeeder::class);
+        $this->call(BudgetItemSeeder::class);
+        $this->call(PurchaseUnitSeeder::class);
     }
 }
