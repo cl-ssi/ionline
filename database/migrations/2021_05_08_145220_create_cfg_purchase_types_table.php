@@ -18,6 +18,7 @@ class CreateCfgPurchaseTypesTable extends Migration
             $table->string('name');
             $table->unsignedInteger('finance_business_day');
             $table->unsignedInteger('supply_continuous_day');
+            $table->unsignedInteger('year');
             $table->timestamps();
             $table->softDeletes();
         });

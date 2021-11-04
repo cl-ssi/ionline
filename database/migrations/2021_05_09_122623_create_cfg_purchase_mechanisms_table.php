@@ -38,6 +38,7 @@ class CreateCfgPurchaseMechanismsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('cfg_purchase_mechanism_type');
         Schema::dropIfExists('cfg_purchase_mechanisms');
     }
 }

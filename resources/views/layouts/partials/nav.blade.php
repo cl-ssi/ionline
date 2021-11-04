@@ -107,10 +107,13 @@
                         href="{{ route('health_plan.index', ['iquique']) }}">
                         <i class="fas fa-file-powerpoint"></i> Planes Comunales
                     </a>
-
-
-
                     </div>
+                </li>
+
+                <li class="nav-item {{ active('request_forms') }}">
+                    <a class="nav-link" href="{{ route('request_forms.index') }}">
+                        <i class="fas fa-shopping-cart"></i> Abastecimiento
+                    </a>
                 </li>
                 @endauth
 

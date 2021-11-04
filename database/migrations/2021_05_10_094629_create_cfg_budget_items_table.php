@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArqBudgetItemsTable extends Migration
+class CreateCfgBudgetItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateArqBudgetItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('arq_budget_items', function (Blueprint $table) {
+        Schema::create('cfg_budget_items', function (Blueprint $table) {
             $table->id();
             $table->string('code');
             $table->string('name');
@@ -29,6 +29,6 @@ class CreateArqBudgetItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('arq_budget_items');
+        Schema::dropIfExists('cfg_budget_items');
     }
 }

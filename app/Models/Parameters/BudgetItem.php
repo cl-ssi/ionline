@@ -20,5 +20,5 @@ class BudgetItem extends Model
       return $this->code.' '.$this->name;
     }
 
-    protected $table = 'arq_budget_items';
+    protected $table = 'cfg_budget_items';
 }
