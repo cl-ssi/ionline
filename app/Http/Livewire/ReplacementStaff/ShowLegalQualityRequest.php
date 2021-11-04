@@ -8,14 +8,20 @@ class ShowLegalQualityRequest extends Component
 {
     public $selectedLegalQuality = null;
     public $selectedFundament = null;
+    public $selectedFundamentDetail = null;
 
     public $salaryStateInput = 'readonly';
-    public $fundamentOptionState = 'disabled';
-    public $fundamentStateSelect = 'disabled';
-    public $fundamentOptionStateDisabled = 'disabled';
+    public $fundamentSelectState = 'disabled';
+    public $fundamentOptionState = '';
+    public $fundamentDetailSelectState = 'disabled';
+    public $fundamentDetailOptionState = '';
 
-    public $nameToReplaceInput = 'disabled';
-    public $nameOtherFundament = 'disabled';
+    // public $fundamentOptionStateDisabled = '';
+
+    // public $fundamentDetailOptionState = 'disabled';
+    //
+    // public $nameToReplaceInput = 'disabled';
+    // public $nameOtherFundament = 'disabled';
 
     public $requestReplacementStaff;
 
@@ -26,27 +32,26 @@ class ShowLegalQualityRequest extends Component
     public function mount(){
         if($this->requestReplacementStaff) {
             $this->selectedLegalQuality = $this->requestReplacementStaff->legal_quality;
-
             switch ($this->requestReplacementStaff->legal_quality) {
                 case 'to hire':
-                    $this->salaryStateInput = 'readonly';
-                    $this->fundamentStateSelect = '';
-                    $this->fundamentOptionState = '';
-                    $this->fundamentOptionStateDisabled = '';
+                    // $this->salaryStateInput = 'readonly';
+                    // $this->fundamentStateSelect = '';
+                    // $this->fundamentOptionState = '';
+                    // $this->fundamentOptionStateDisabled = '';
 
                     break;
                 case 'fee':
-                    $this->salaryStateInput = '';
-                    $this->fundamentStateSelect = '';
-                    $this->fundamentOptionState = 'disabled';
-                    $this->fundamentOptionStateDisabled = '';
+                    // $this->salaryStateInput = '';
+                    // $this->fundamentStateSelect = '';
+                    // $this->fundamentOptionState = 'disabled';
+                    // $this->fundamentOptionStateDisabled = '';
 
                     break;
                 case '':
-                    $this->salaryStateInput = 'readonly';
-                    $this->fundamentStateSelect = 'disabled';
-                    $this->fundamentOptionState = '';
-                    break;
+                    // $this->salaryStateInput = 'readonly';
+                    // $this->fundamentStateSelect = 'disabled';
+                    // $this->fundamentOptionState = '';
+                    // break;
             }
 
             $this->selectedFundament = $this->requestReplacementStaff->fundament;
@@ -104,27 +109,42 @@ class ShowLegalQualityRequest extends Component
         switch ($selected_legal_quality_id) {
             case 'to hire':
                 $this->salaryStateInput = 'readonly';
-                $this->fundamentStateSelect = '';
+                $this->fundamentSelectState = '';
                 $this->fundamentOptionState = '';
-                $this->fundamentOptionStateDisabled = '';
 
                 break;
             case 'fee':
                 $this->salaryStateInput = '';
-                $this->fundamentStateSelect = '';
+                $this->fundamentSelectState = '';
                 $this->fundamentOptionState = 'disabled';
-                $this->fundamentOptionStateDisabled = '';
 
                 break;
             case '':
                 $this->salaryStateInput = 'readonly';
-                $this->fundamentStateSelect = 'disabled';
+                $this->fundamentSelectState = 'disabled';
                 $this->fundamentOptionState = '';
+
                 break;
         }
     }
 
-    public function updatedselectedFundament($selected_fundament_id){
+    public function updatedselectedFundament($selected_fundament_detail_id){
+        switch ($selected_fundament_detail_id) {
+            case 'replacement':
+                $this->fundamentDetailSelectState = '';
+                $this->fundamentDetailOptionStateDisabled = 'disabled';
+
+                break;
+
+            case '':
+
+
+                break;
+        }
+    }
+
+    public function updatedselectedFundamentDetail($selected_fundament_id){
+        dd($selected_fundament_id);
         switch ($selected_fundament_id) {
             case 'replacement':
                 $this->nameToReplaceInput = '';

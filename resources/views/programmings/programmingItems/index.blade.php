@@ -86,7 +86,6 @@
     </thead>
     <tbody style="font-size:65%;">
         @foreach($programming->itemsBy('Direct') as $programmingitem)
-        @if($programmingitem->activityItem != null)
         <tr class="small">
         @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" >
@@ -117,11 +116,10 @@
         @endcan
             <td class="text-center align-middle">{{ $programmingitem->activityItem->tracer ?? '' }}</td>
             <td class="text-center align-middle">{{ $programmingitem->activityItem->int_code ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->activityItem->vital_cycle ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->activityItem->action_type ?? '' }}</td>
-            <!--<td class="text-center align-middle">{{ $programmingitem->ministerial_program }}</td>-->
-            <td class="text-center align-middle">{{ $programmingitem->activityItem->activity_name ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->activityItem->def_target_population ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->activityItem && $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->cycle : ($programmingitem->activityItem->vital_cycle ?? $programmingitem->cycle) }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->activityItem && $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->action_type : ($programmingitem->activityItem->activityItem->action_type ?? $programmingitem->action_type) }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->activityItem->activity_name ?? $programmingitem->activity_name }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->activityItem && $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->def_target_population : ($programmingitem->activityItem->def_target_population ?? $programmingitem->def_target_population) }}</td>
             <td class="text-center align-middle">{{ $programmingitem->source_population }}</td>
             <td class="text-center align-middle">{{ $programmingitem->cant_target_population }}</td>
             <td class="text-center align-middle">{{ $programmingitem->prevalence_rate }}</td>
@@ -136,7 +134,7 @@
             <td class="text-center align-middle">{{ $programmingitem->hours_required_day }}</td>
             <td class="text-center align-middle">{{ $programmingitem->direct_work_year }}</td>
             <td class="text-center align-middle">{{ $programmingitem->direct_work_hour }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->activityItem->verification_rem ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->activityItem->verification_rem ?? $programmingitem->information_source }}</td>
             <td class="text-center align-middle">{{ $programmingitem->prap_financed }}</td>
             @can('ProgrammingItem: duplicate')
             <td class="text-center align-middle">
@@ -159,7 +157,6 @@
             </td>
             @endcan
         </tr>
-        @endif
         @endforeach
     </tbody>
 </table>
@@ -224,10 +221,10 @@
         @endcan
             <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->tracer ?? '' }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->int_code ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->vital_cycle ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->action_type ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->activity_name ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->def_target_population ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem && $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->cycle : ($programmingitemsIndirect->activityItem->vital_cycle ?? $programmingitemsIndirect->cycle) }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem && $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->action_type : ($programmingitemsIndirect->activityItem->activityItem->action_type ?? $programmingitemsIndirect->action_type) }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->activity_name ?? $programmingitemsIndirect->activity_name }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem && $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->def_target_population : ($programmingitemsIndirect->activityItem->def_target_population ?? $programmingitemsIndirect->def_target_population) }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->source_population }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->cant_target_population }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->prevalence_rate }}</td>
@@ -242,7 +239,7 @@
             <td class="text-center align-middle">{{ $programmingitemsIndirect->hours_required_day }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_year }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_hour }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->verification_rem ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->verification_rem ?? $programmingitemsIndirect->information_source }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->prap_financed }}</td>
             @can('ProgrammingItem: duplicate')
             <td class="text-center align-middle">
@@ -330,10 +327,10 @@
             <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->tracer ?? '' }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->int_code ?? '' }}</td>
             <td class="text-center align-middle">TALLER</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->vital_cycle ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->action_type ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->activity_name ?? '' }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->def_target_population ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->cycle : ($programmingItemworkshop->activityItem->vital_cycle ?? $programmingItemworkshop->cycle) }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->action_type : ($programmingItemworkshop->activityItem->activityItem->action_type ?? $programmingItemworkshop->action_type) }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->activity_name ?? $programmingItemworkshop->activity_name }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->def_target_population : ($programmingItemworkshop->activityItem->def_target_population ?? $programmingItemworkshop->def_target_population) }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->source_population }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->cant_target_population }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->coverture }}</td>
@@ -351,7 +348,7 @@
             <td class="text-center align-middle">{{ $programmingItemworkshop->hours_required_day }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_year }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_hour }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->verification_rem ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->verification_rem ?? $programmingItemworkshop->information_source }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->prap_financed }}</td>
             @can('ProgrammingItem: duplicate')
             <td class="text-center align-middle">
