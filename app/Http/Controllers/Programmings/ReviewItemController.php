@@ -26,7 +26,11 @@ class ReviewItemController extends Controller
         $programmingDay = ProgrammingDay::where('programming_id',$programmingItem->programming_id)->first();
 
         $ph = ProfessionalHour::find($programmingItem->professional);
-        $professional = Professional::find($ph->professional_id)->name;
+        if($ph){
+            $professional = Professional::find($ph->professional_id);
+            $professional = $professional->name ?? null;
+        }
+        else $professional = null;
 
         return view('programmings/reviewItems/index', compact('programmingItem', 'reviewItems', 'programmingDay', 'professional'));
     }

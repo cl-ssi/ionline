@@ -65,9 +65,10 @@ Nuevo Item Programación Operativa </h4>
                 
             </select>
         </div>
-        <!-- <div class="form-group col-md-4">
+        @if($activityItemsSelect && $activityItemsSelect->tracer == 'NO')
+        <div class="form-group col-md-4">
             <label for="forprogram">Ciclo Vital</label>
-            <select name="cycle" id="formprogram"  class="form-control">
+            <select name="cycle" id="cycle" class="form-control">
                     <option value="INFANTIL">INFANTIL</option>
                     <option value="ADOLESCENTE">ADOLESCENTE</option>
                     <option value="ADULTO">ADULTO</option>
@@ -75,16 +76,26 @@ Nuevo Item Programación Operativa </h4>
                     <option value="TRANSVERSAL">TRANSVERSAL</option>
                
             </select>
-        </div> -->
+        </div>
+        <div class="form-group col-md-5">
+            <label for="forprogram">Acción</label>
+            <select name="action_type" id="action_type" class="form-control">
+                    <option value="Prevención">Prevención</option>
+                    <option value="Diagnóstico">Diagnóstico</option>
+                    <option value="Tratamiento">Tratamiento</option>
+                    <option value="Promoción">Promoción</option>           
+            </select>
+        </div>
+        @else
         <div class="form-group col-md-4">
             <label for="forprogram">Ciclo Vital</label>
             <input type="input" class="form-control" id="cycle" name="cycle" value="{{ $activityItemsSelect ? $activityItemsSelect->vital_cycle : '' }}" required="" readonly>
         </div>
-
         <div class="form-group col-md-5">
             <label for="forprogram">Acción</label>
             <input type="input" class="form-control" id="action_type" name="action_type" value="{{ $activityItemsSelect ? $activityItemsSelect->action_type : '' }}" required="" readonly>
         </div>
+        @endif
         {{--<div class="form-group col-md-8">
             <label for="forprogram">Programa Ministerial</label>
             <select name="ministerial_program" id="formprogram" class="form-control selectpicker " data-live-search="true" required>
@@ -107,14 +118,13 @@ Nuevo Item Programación Operativa </h4>
             <input type="input" class="form-control" id="activity_name" name="activity_name" value="{{ $activityItemsSelect ? $activityItemsSelect->activity_name : '' }}" required="" readonly>
         </div>
         <input type="hidden" class="form-control" id="activity_id" name="activity_id" value="{{ $activityItemsSelect ? $activityItemsSelect->id : '' }}" required="">
-
     </div>
 
     <div class="form-row">
     
         <div class="form-group col-md-8">
             <label for="forprogram">Def. Población Objetivo</label>
-            <input type="input" class="form-control" id="forreferente" name="def_target_population" value="{{ $activityItemsSelect ? $activityItemsSelect->def_target_population : '' }}" required="" readonly>
+            <input type="input" class="form-control" id="forreferente" name="def_target_population" value="{{ $activityItemsSelect ? $activityItemsSelect->def_target_population : '' }}" {{ $activityItemsSelect && $activityItemsSelect->tracer != 'NO' ? 'readonly' : '' }} required>
         </div>
 
         <div class="form-group col-md-4">

@@ -12,7 +12,7 @@
   <fieldset class="form-group col-6 col-md-4">
     <label for="for_subdirection_ou_id">Subdirección</label>
     <div id="div_subdirection_ou_id" wire:ignore>
-      <select class="form-control selectpicker" data-live-search="true" id="subdirection_ou_id" name="subdirection_ou_id" required data-size="5" data-container="#div_subdirection_ou_id">
+      <select class="form-control selectpicker" data-live-search="true" wire:model.lazy="subdirection_ou_id" id="subdirection_ou_id" name="subdirection_ou_id" required data-size="5" data-container="#div_subdirection_ou_id">
         <option value=""></option>
         @if($subdirections)
         @foreach($subdirections as $key => $subdirection)
@@ -45,7 +45,7 @@
       </select>
     </div>
   </fieldset>
-  
+
   <fieldset class="form-group col col-md-4">
     <label for="for_users">Responsable</label>
     <div id="div_responsable_id" wire:ignore>
