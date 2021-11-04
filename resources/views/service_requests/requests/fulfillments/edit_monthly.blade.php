@@ -193,32 +193,38 @@
 
 		<div class="form-row">
 			<fieldset class="form-group col">
-				@if($fulfillment->responsable_approbation != NULL)
-				<a type="button" class="btn btn-outline-primary" href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank">
-					Ver certificado
-					<i class="fas fa-file"></i>
-				</a>
-				@if($fulfillment->signatures_file_id)
-				<a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',[$fulfillment, time()]) }}" target="_blank" title="Certificado">
-					Certificado firmado <i class="fas fa-signature"></i>
-				</a>
-				@can('Service Request: delete signed certificate')
-				<a class="btn btn-outline-danger" href="{{ route('rrhh.service-request.fulfillment.delete-signed-certificate-pdf',$fulfillment) }}" title="Borrar Certificado" onclick="return confirm('¿Está seguro que desea eliminar el certificado de cumplimiento firmado?')">
-				<i class="fas fa-trash"></i> Certificado
-				</a>
-				@endcan
-				@else
-				@php
-				$idModelModal = $fulfillment->id;
-				$routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal/".auth()->id();
-				$routeCallbackSignModal = 'documents.callbackFirma';
-				@endphp
-				@include('documents.signatures.partials.sign_file')
-				<button type="button" data-toggle="modal" class="btn btn-outline-info" data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
-					Firmar certificado <i class="fas fa-signature"></i>
-				</button>
-				@endif
-				@endif
+					@if($fulfillment->responsable_approbation != NULL)
+						<a type="button" class="btn btn-outline-primary" href="{{ route('rrhh.service-request.fulfillment.certificate-pdf',$fulfillment) }}" target="_blank">
+							Ver certificado
+							<i class="fas fa-file"></i>
+						</a>
+
+						@if($fulfillment->signatures_file_id)
+							<a class="btn btn-info" href="{{ route('rrhh.service-request.fulfillment.signed-certificate-pdf',[$fulfillment, time()]) }}" target="_blank" title="Certificado">
+								Certificado firmado <i class="fas fa-signature"></i>
+							</a>
+
+							@can('Service Request: delete signed certificate')
+								<a class="btn btn-outline-danger" href="{{ route('rrhh.service-request.fulfillment.delete-signed-certificate-pdf',$fulfillment) }}" title="Borrar Certificado" onclick="return confirm('¿Está seguro que desea eliminar el certificado de cumplimiento firmado?')">
+								<i class="fas fa-trash"></i> Certificado
+								</a>
+							@endcan
+						@else
+							@php
+							$idModelModal = $fulfillment->id;
+							$routePdfSignModal = "/rrhh/service-request/fulfillment/certificate-pdf/$idModelModal/".auth()->id();
+							$routeCallbackSignModal = 'documents.callbackFirma';
+							@endphp
+							@include('documents.signatures.partials.sign_file')
+							<button type="button" data-toggle="modal" class="btn btn-outline-info" data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
+								Firmar certificado <i class="fas fa-signature"></i>
+							</button>
+						@endif
+					@else
+						<div class="alert alert-warning" role="alert">
+						  Falta que firme supervisor para realizar proceso de Certificado.
+						</div>
+				  @endif
 			</fieldset>
 			<fieldset class="form-group col text-right">
 				@can('Service Request: fulfillments responsable')
