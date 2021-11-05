@@ -11,7 +11,7 @@ class FulfillmentSeeder extends Seeder
      *
      * @return void
      */
-    public function create_table($mo,$ty,$sd,$ed,$id)
+    public function insert_seed($mo,$ty,$sd,$ed,$id)
     {
         $SRID_Select = DB::table('doc_service_requests')->pluck('id');
         $UID_Select = DB::table('users')->pluck('id');
@@ -31,8 +31,8 @@ class FulfillmentSeeder extends Seeder
     
     public function run()
     {
-        FulfillmentSeeder::create_table('10','Mensual','2021-10-29','2021-10-31',15287582);
-        FulfillmentSeeder::create_table('11','Mensual','2021-11-01','2021-11-30',15287582);
-        FulfillmentSeeder::create_table('12','Parcial','2021-12-01','2021-12-01',15287582);
+        FulfillmentSeeder::insert_seed('10','Mensual','2021-10-29','2021-10-31',15287582);
+        FulfillmentSeeder::insert_seed('11','Mensual','2021-11-01','2021-11-30',15287582);
+        FulfillmentSeeder::insert_seed('12','Parcial','2021-12-01','2021-12-01',15287582);
     }
 }
