@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Models\Parameters\Proffesional;
+use App\Models\Parameters\Proffesion;
 
 class ProffesionalSeeder extends Seeder
 {

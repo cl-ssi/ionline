@@ -1,11 +1,7 @@
-<?php //Laravel 8.x
-
-namespace Database\Seeders;
+<?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use App\Rrhh\Authority;
 use Carbon\Carbon;
 
 class AuthoritySeeder extends Seeder
@@ -15,12 +11,13 @@ class AuthoritySeeder extends Seeder
      *
      * @return void
      */
-    private function create_table($id,$pos,$ouid)
+    
+    private function insert_seed($id,$pos,$ouid)
     {
         $ID_Select = DB::table('users')->pluck('id');
-        //$OUID_Select = collect(DB::table('organizational_units')->pluck('id'));
-
-        DB::table('rrhh_authorities')->insert([
+        
+        //DB::table('rrhh_authorities')->insert([
+        Authority::create([
             'user_id' => $ID_Select[ $ID_Select->search($id) ],
             'from' => carbon::now()->toDateString(),
             'to' => carbon::now()->addYear()->toDateString(),
@@ -33,9 +30,12 @@ class AuthoritySeeder extends Seeder
         ]);
     }
     
+    
     public function run()
     {
-        DB::table('rrhh_authorities')->insert([
+        
+        //DB::table('rrhh_authorities')->insert([
+        Authority::create([
             'user_id' => '13835321',
             'from' => carbon::now()->toDateString(),
             'to' => carbon::now()->addYear()->toDateString(),
@@ -48,13 +48,13 @@ class AuthoritySeeder extends Seeder
             'updated_at' => carbon::now()
         ]);
 
-        AuthoritySeeder::create_table(15287582,'Director','1');
-        AuthoritySeeder::create_table(15287582,'Jefe','2');
-        AuthoritySeeder::create_table(15287582,'Jefe','24');
-        AuthoritySeeder::create_table(15287582,'Jefe','40');
-        AuthoritySeeder::create_table(15287582,'Jefe','44');
-        AuthoritySeeder::create_table(15287582,'Jefe','59');
-        AuthoritySeeder::create_table(15287582,'Subdirector','88');
+        AuthoritySeeder::insert_seed(15287582,'Director','1');
+        AuthoritySeeder::insert_seed(15287582,'Jefe','2');
+        AuthoritySeeder::insert_seed(15287582,'Jefe','24');
+        AuthoritySeeder::insert_seed(15287582,'Jefe','40');
+        AuthoritySeeder::insert_seed(15287582,'Jefe','44');
+        AuthoritySeeder::insert_seed(15287582,'Jefe','59');
+        AuthoritySeeder::insert_seed(15287582,'Subdirector','88');
         
     }
 }
