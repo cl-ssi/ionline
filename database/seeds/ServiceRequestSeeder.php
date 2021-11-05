@@ -1,11 +1,7 @@
-<?php //Laravel 8.x
-
-namespace Database\Seeders;
+<?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use App\Models\ServiceRequest\ServiceRequest;
 use Carbon\Carbon;
 
 class ServiceRequestSeeder extends Seeder
@@ -19,7 +15,7 @@ class ServiceRequestSeeder extends Seeder
     {
         $UID_Select = DB::table('users')->pluck('id');
 
-        DB::table('doc_service_requests')->insert([
+        ServiceRequest::create([
             'type' => 'Covid',
             'subdirection_ou_id' => '1',
             'responsability_center_ou_id' => '222',

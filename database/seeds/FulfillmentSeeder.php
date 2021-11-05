@@ -1,11 +1,7 @@
-<?php //Laravel 8.x
-
-namespace Database\Seeders;
+<?php
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+use App\Models\ServiceRequest\Fulfillment;
 use Carbon\Carbon;
 
 class FulfillmentSeeder extends Seeder
@@ -20,7 +16,7 @@ class FulfillmentSeeder extends Seeder
         $SRID_Select = DB::table('doc_service_requests')->pluck('id');
         $UID_Select = DB::table('users')->pluck('id');
 
-        DB::table('doc_fulfillments')->insert([
+        Fulfillment::create([
             'service_request_id' => $SRID_Select[ $SRID_Select->search(1) ],
             'year' => '2021',
             'month' => $mo,
