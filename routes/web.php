@@ -36,7 +36,8 @@ use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationController;
 use App\Http\Controllers\ReplacementStaff\CommissionController;
 use App\Http\Controllers\ReplacementStaff\ApplicantController;
 use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationFileController;
-
+use App\Http\Controllers\ReplacementStaff\Manage\LegalQualityManageController;
+use App\Http\Controllers\ReplacementStaff\Manage\RstFundamentManageController;
 
 use App\Http\Controllers\VaccinationController;
 
@@ -257,6 +258,20 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
               Route::get('/{profileManage}/edit', [ProfileManageController::class, 'edit'])->name('edit');
               Route::put('{profileManage}/update', [ProfileManageController::class, 'update'])->name('update');
               Route::delete('{profileManage}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
+          });
+          Route::prefix('legal_quality')->name('legal_quality.')->group(function(){
+              Route::get('/', [LegalQualityManageController::class, 'index'])->name('index');
+              Route::post('/store', [LegalQualityManageController::class, 'store'])->name('store');
+              Route::get('/{legalQualityManage}/edit', [LegalQualityManageController::class, 'edit'])->name('edit');
+              Route::post('{legalQualityManage}/assign_fundament', [LegalQualityManageController::class, 'assign_fundament'])->name('assign_fundament');
+              // Route::delete('{profileManage}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
+          });
+          Route::prefix('fundament')->name('fundament.')->group(function(){
+              Route::get('/', [RstFundamentManageController::class, 'index'])->name('index');
+              Route::post('/store', [RstFundamentManageController::class, 'store'])->name('store');
+              Route::get('/{rstFundamentManage}/edit', [RstFundamentManageController::class, 'edit'])->name('edit');
+              Route::post('{rstFundamentManage}/assign_fundament', [RstFundamentManageController::class, 'assign_fundament'])->name('assign_fundament');
+              // Route::delete('{profileManage}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
           });
       });
     });

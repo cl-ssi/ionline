@@ -77,6 +77,9 @@
            @can('Replacement Staff: manage')
            <a class="dropdown-item" href="{{ route('replacement_staff.manage.profession.index') }}">Profesiones</a>
            <a class="dropdown-item" href="{{ route('replacement_staff.manage.profile.index') }}">Perfiles</a>
+           <div class="dropdown-divider"></div>
+           <a class="dropdown-item" href="{{ route('replacement_staff.manage.legal_quality.index') }}">Calidad Jurídica</a>
+           <a class="dropdown-item" href="{{ route('replacement_staff.manage.fundament.index') }}">Fundamentos</a>
            @endcan
        </div>
   </li>

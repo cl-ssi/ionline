@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class LegalQualityManage extends Model
+class RstFundamentManage extends Model
 {
     use HasFactory;
     use softDeletes;
@@ -15,17 +15,23 @@ class LegalQualityManage extends Model
         'name'
     ];
 
-    public function fundamentLegalQuality() {
-        return $this->hasMany('App\Models\ReplacementStaff\FundamentLegalQuality');
+    public function rstDetailFundament() {
+        return $this->hasMany('App\Models\ReplacementStaff\RstDetailFundament');
     }
 
     public function getNameValueAttribute(){
         switch ($this->name) {
-            case 'to hire':
-              return 'Contrata';
+            case 'replacement':
+              return 'Reemplazo';
               break;
-            case 'fee':
-              return 'Honorarios';
+            case 'quit':
+              return 'Renuncia';
+              break;
+            case 'expand work position':
+              return 'Cargo expansión';
+              break;
+            case 'other':
+              return 'Otro';
               break;
             case '':
               return '';
@@ -37,5 +43,5 @@ class LegalQualityManage extends Model
         'created_at', 'updated_at'
     ];
 
-    protected $table = 'rst_legal_quality_manages';
+    protected $table = 'rst_fundament_manages';
 }

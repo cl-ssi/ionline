@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LegalQualityManage;
+use App\Models\FundamentDetailManage;
 use Illuminate\Http\Request;
 
-class LegalQualityManageController extends Controller
+class FundamentDetailManageController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class LegalQualityManageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\LegalQualityManage  $legalQualityManage
+     * @param  \App\Models\FundamentDetailManage  $fundamentDetailManage
      * @return \Illuminate\Http\Response
      */
-    public function show(LegalQualityManage $legalQualityManage)
+    public function show(FundamentDetailManage $fundamentDetailManage)
     {
         //
     }
@@ -52,10 +52,10 @@ class LegalQualityManageController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\LegalQualityManage  $legalQualityManage
+     * @param  \App\Models\FundamentDetailManage  $fundamentDetailManage
      * @return \Illuminate\Http\Response
      */
-    public function edit(LegalQualityManage $legalQualityManage)
+    public function edit(FundamentDetailManage $fundamentDetailManage)
     {
         //
     }
@@ -64,10 +64,10 @@ class LegalQualityManageController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\LegalQualityManage  $legalQualityManage
+     * @param  \App\Models\FundamentDetailManage  $fundamentDetailManage
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, LegalQualityManage $legalQualityManage)
+    public function update(Request $request, FundamentDetailManage $fundamentDetailManage)
     {
         //
     }
@@ -75,10 +75,10 @@ class LegalQualityManageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\LegalQualityManage  $legalQualityManage
+     * @param  \App\Models\FundamentDetailManage  $fundamentDetailManage
      * @return \Illuminate\Http\Response
      */
-    public function destroy(LegalQualityManage $legalQualityManage)
+    public function destroy(FundamentDetailManage $fundamentDetailManage)
     {
         //
     }
