@@ -180,7 +180,7 @@ class FirmaDigitalController extends Controller
 
             $destinatarios = $signaturesFlow->signature->recipients;
 
-            $dest_vec=0;
+            $dest_vec=array();
             $cont=0;
 
 
@@ -197,7 +197,7 @@ class FirmaDigitalController extends Controller
                 {
                     $cont=$cont+1;
                     $tipo = null;
-                    $generador = $signaturesFlow->signature->responsable->fullname();
+                    $generador = $signaturesFlow->signature->responsable->fullname;
                     $unidad = $signaturesFlow->signature->organizationalUnit->name;
     
                     switch ($signaturesFlow->signature->document_type) {
