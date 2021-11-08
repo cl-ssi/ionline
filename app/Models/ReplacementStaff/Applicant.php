@@ -14,7 +14,7 @@ class Applicant extends Model
     protected $fillable = [
         'replacement_staff_id', 'psycholabor_evaluation_score', 'technical_evaluation_score',
         'observations', 'selected', 'start_date', 'end_date', 'name_to_replace',
-        'replacement_reason', 'place_of_performance'
+        'replacement_reason', 'ou_of_performance_id'
     ];
 
     public function replacement_staff() {
@@ -23,6 +23,10 @@ class Applicant extends Model
 
     public function technicalEvaluation() {
         return $this->belongsTo('App\Models\ReplacementStaff\TechnicalEvaluation');
+    }
+
+    public function ouPerformance() {
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'ou_of_performance_id');
     }
 
     public function getPsyEvaScoreAttribute() {

@@ -34,9 +34,9 @@ class DatabaseSeeder extends Seeder
         /* SEED PARA MANTENEDORES DE REPLACEMENT STAFF */
         // $this->call(ProfileManageSeeder::class);
         // $this->call(ProfessionManageSeeder::class);
-        $this->call(LegalQualityManageSeeder::class);
-        $this->call(RstFundamentSeeder::class);
-        $this->call(RstFundamentDetailSeeder::class);
+        // $this->call(LegalQualityManageSeeder::class);
+        // $this->call(RstFundamentSeeder::class);
+        // $this->call(RstFundamentDetailSeeder::class);
 
         /* SEED PARA MANTENEDORES DE ABASTECIEMIENTOS */
         // $this->call(PurchaseMechanismSeeder::class);
