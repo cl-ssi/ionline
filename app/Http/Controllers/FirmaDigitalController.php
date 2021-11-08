@@ -180,16 +180,25 @@ class FirmaDigitalController extends Controller
 
             $destinatarios = $signaturesFlow->signature->recipients;
 
-            $dest_vec = array_map('trim', explode(',', $destinatarios));
+            $dest_vec=0;
             $cont=0;
+
+
+            if (strpos($destinatarios, ',') !== false) {
+                $dest_vec = array_map('trim', explode(',', $destinatarios));
+            }
+            else{
+                $dest_vec[0] = $destinatarios;
+            }
+
 
             foreach ($dest_vec as $dest) {
                 if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl'and $cont===0) 
                 {
                     $cont=$cont+1;
                     $tipo = null;
-                    $generador = $signaturesFlow->signature->responsable_id;
-                    $unidad = $signaturesFlow->signature->ou_id;
+                    $generador = $signaturesFlow->signature->responsable->fullname();
+                    $unidad = $signaturesFlow->signature->organizationalUnit->name;
     
                     switch ($signaturesFlow->signature->document_type) {
                         case 'Memorando':
