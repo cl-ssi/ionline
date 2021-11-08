@@ -85,11 +85,14 @@
                   <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                   <td>{{ $requestReplacementStaff->name }}</td>
                   <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
-                  <td class="text-center">{{ $requestReplacementStaff->LegalQualityValue }}</td>
+                  <td>{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
                   <td>{{ Carbon\Carbon::parse($requestReplacementStaff->start_date)->format('d-m-Y') }} <br>
                       {{ Carbon\Carbon::parse($requestReplacementStaff->end_date)->format('d-m-Y') }}
                   </td>
-                  <td>{{ $requestReplacementStaff->FundamentValue }}</td>
+                  <td>
+                      {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
+                      {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                  </td>
                   <td>{{ $requestReplacementStaff->user->FullName }}<br>
                       {{ $requestReplacementStaff->organizationalUnit->name }}
                   </td>
@@ -111,6 +114,7 @@
                       @endforeach
                   </td>
                   <td>
+                    @if($requestReplacementStaff->fundament_detail_manage_id != 6 && $requestReplacementStaff->fundament_detail_manage_id != 7)
                       @if($requestReplacementStaff->requestSign->first()->request_status == 'pending')
                       <a href="{{ route('replacement_staff.request.edit', $requestReplacementStaff) }}"
                           class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
@@ -121,6 +125,7 @@
                       </button>
                       @include('replacement_staff.modals.modal_to_view_request')
                       @endif
+                    @endif
                   </td>
               </tr>
               @endforeach
@@ -183,11 +188,14 @@
                   <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                   <td>{{ $requestReplacementStaff->name }}</td>
                   <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
-                  <td class="text-center">{{ $requestReplacementStaff->LegalQualityValue }}</td>
+                  <td>{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
                   <td>{{ Carbon\Carbon::parse($requestReplacementStaff->start_date)->format('d-m-Y') }} <br>
                       {{ Carbon\Carbon::parse($requestReplacementStaff->end_date)->format('d-m-Y') }}
                   </td>
-                  <td>{{ $requestReplacementStaff->FundamentValue }}</td>
+                  <td>
+                    {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
+                    {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                  </td>
                   <td>{{ $requestReplacementStaff->user->FullName }}<br>
                       {{ $requestReplacementStaff->organizationalUnit->name }}
                   </td>

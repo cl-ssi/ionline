@@ -84,11 +84,14 @@
                 <td>{{ $requestReplacementStaff->created_at->format('d-m-Y H:i:s') }}</td>
                 <td>{{ $requestReplacementStaff->name }}</td>
                 <td class="text-center">{{ $requestReplacementStaff->degree }}</td>
-                <td class="text-center">{{ $requestReplacementStaff->LegalQualityValue }}</td>
+                <td>{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
                 <td>{{ $requestReplacementStaff->start_date->format('d-m-Y') }} <br>
                     {{ $requestReplacementStaff->end_date->format('d-m-Y') }}
                 </td>
-                <td>{{ $requestReplacementStaff->FundamentValue }}</td>
+                <td>
+                    {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
+                    {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                </td>
                 <td>{{ $requestReplacementStaff->user->FullName }}<br>
                     {{ $requestReplacementStaff->organizationalUnit->name }}
                 </td>

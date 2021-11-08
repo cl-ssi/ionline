@@ -16,6 +16,10 @@ class ShowLegalQualityRequest extends Component
     public $selectedFundament = null;
     public $detailFundaments = null;
 
+    public $selectedFundamentDetail = null;
+    public $otherFundamentInput = 'readonly';
+    //public $detailFundaments = null;
+
     public $requestReplacementStaff;
 
     public function render()
@@ -38,5 +42,8 @@ class ShowLegalQualityRequest extends Component
 
     public function updatedselectedFundament($selected_fundament_id){
         $this->detailFundaments = RstDetailFundament::where('fundament_manage_id', $selected_fundament_id)->get();
+        if($selected_fundament_id == 4){
+            $this->otherFundamentInput = '';
+        }
     }
 }
