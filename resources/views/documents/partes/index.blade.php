@@ -10,7 +10,7 @@
 
 <form method="GET" class="form-horizontal" action="{{ route('documents.partes.index') }}">
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-1">
             <label for="for_id">Cód Int</label>
             <input type="number" class="form-control" id="for_id" name="id" value="{{$request->id}}" autocomplete="off">
