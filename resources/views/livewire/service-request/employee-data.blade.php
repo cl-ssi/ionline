@@ -4,14 +4,14 @@
     <div class="card-body">
       <div class="form-row">
 
-        <fieldset class="form-group col-6 col-md-2">
+        <fieldset class="form-group col-5 col-md-2">
             <label for="for_run">Run (sin DV)</label>
             <input type="number" min="1" max="50000000" class="form-control" id="for_user_id" name="user_id" wire:model.lazy="user_id" required>
         </fieldset>
 
         <fieldset class="form-group col-3 col-md-1">
             <label for="for_dv">Digito</label>
-            <input type="text" class="form-control" id="for_dv" name="dv" readonly>
+            <input type="text" class="form-control" id="for_dv" name="dv" required="required" readonly>
         </fieldset>
 
         <fieldset class="form-group col-3 col-md-1">

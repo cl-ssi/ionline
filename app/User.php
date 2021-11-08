@@ -6,13 +6,16 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Suitability\Result;
+use App\Models\RequestForms\RequestForm;
 use App\Models\ServiceRequests\ServiceRequest;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     use Notifiable, HasRoles, SoftDeletes, HasFactory;
 
     /**
@@ -68,6 +71,29 @@ class User extends Authenticatable
         return $this->hasOne('\App\Models\Rrhh\UserBankAccount','user_id');
     }
 
+    public function creatorRequestForms(){
+      return $this->hasMany(RequestForm::class, 'creator_user_id');
+    }
+
+    public function applicantRequestForms(){
+      return $this->hasMany(RequestForm::class, 'applicant_user_id');
+    }
+
+    public function supervisorRequestForms(){
+      return $this->hasMany(RequestForm::class, 'supervisor_user_id');
+    }
+
+    public function eventRequestForms(){
+      return $this->hasMany(EventRequestForm::class, 'signer_user_id');
+    }
+
+    public function getPosition(){
+      if(is_null($this->position)){
+        return "";}
+      else{
+        return $this->position;}
+      }
+
 
     public function scopeSearch($query, $name) {
         if($name != "") {
@@ -98,6 +124,14 @@ class User extends Authenticatable
     public function getShortNameAttribute()
     {
         return ucwords(strtolower("{$this->name} {$this->fathers_family}"));
+    }
+
+    public function tinnyName() {
+        if(!is_null($this->name)){
+          $name = explode(" ", $this->name)[0];
+          return $name.' '.$this->fathers_family;}
+        else
+          return "";
     }
 
     public function getFirstNameAttribute() {
@@ -309,6 +343,20 @@ class User extends Authenticatable
               return $users;
         }// End getPatientsBySearch
 
+
+    public static function dvCalculate($num){
+        if(is_numeric($num)){
+          $run = intval($num);
+          $s=1;
+          for($m=0;$run!=0;$run/=10)
+              $s=($s+$run%10*(9-$m++%6))%11;
+          $dv = chr($s?$s+47:75);
+          return $dv;
+        }
+          else{
+            return "Run no Válido";
+          }
+    }
 
     /**
      * Route notifications for the mail channel.

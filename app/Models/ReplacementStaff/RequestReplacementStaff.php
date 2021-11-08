@@ -16,12 +16,26 @@ class RequestReplacementStaff extends Model
 
     protected $fillable = [
         'name', 'profile_manage_id', 'degree', 'start_date', 'end_date',
-        'legal_quality', 'salary', 'fundament', 'name_to_replace', 'other_fundament',
-        'work_day', 'other_work_day','charges_number','job_profile_file'
+        'legal_quality_manage_id', 'salary', 'fundament_manage_id', 'fundament_detail_manage_id',
+        'name_to_replace', 'other_fundament', 'work_day', 'other_work_day',
+        'charges_number','job_profile_file', 'request_verification_file',
+        'ou_of_performance_id'
     ];
 
     public function profile_manage() {
         return $this->belongsTo('App\Models\ReplacementStaff\ProfileManage');
+    }
+
+    public function legalQualityManage() {
+        return $this->belongsTo('App\Models\ReplacementStaff\legalQualityManage');
+    }
+
+    public function fundamentManage() {
+        return $this->belongsTo('App\Models\ReplacementStaff\RstFundamentManage');
+    }
+
+    public function fundamentDetailManage() {
+        return $this->belongsTo('App\Models\ReplacementStaff\fundamentDetailManage');
     }
 
     public function user() {
@@ -30,6 +44,10 @@ class RequestReplacementStaff extends Model
 
     public function organizationalUnit() {
         return $this->belongsTo('App\Rrhh\OrganizationalUnit');
+    }
+
+    public function ouPerformance() {
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'ou_of_performance_id');
     }
 
     public function requestSign() {

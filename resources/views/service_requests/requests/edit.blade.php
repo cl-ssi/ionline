@@ -34,7 +34,7 @@
 
 	<div class="form-row">
 
-    <fieldset class="form-group col-6 col-md">
+    <fieldset class="form-group col-6 col-md-4">
 		    <label for="for_program_contract_type">Tipo</label>
 		    <select name="program_contract_type" id="program_contract_type" class="form-control" required>
           <!-- <option value="Semanal" @if($serviceRequest->program_contract_type == 'Semanal') selected @endif >Semanal</option> -->
@@ -44,7 +44,16 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col-6 col-md">
+    <fieldset class="form-group col-6 col-md-4">
+		    <label for="for_subdirection_ou_id">Subdirección</label>
+				<select class="form-control selectpicker" data-live-search="true" name="subdirection_ou_id" required="" data-size="5" id="subdirection_ou_id">
+          @foreach($subdirections as $key => $subdirection)
+            <option value="{{$subdirection->id}}" @if($serviceRequest->subdirection_ou_id == $subdirection->id) selected @endif >{{$subdirection->name}}</option>
+          @endforeach
+        </select>
+		</fieldset>
+
+    <fieldset class="form-group col-6 col-md-4">
 		    <label for="for_name">Origen de Financiamiento</label>
 		    <select name="type" class="form-control" id="type" required>
           <option style="background-color:#F5A7A7;" value="Covid" @if($serviceRequest->type == 'Covid') selected @endif>Honorarios - Covid</option>
@@ -53,15 +62,7 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col-6 col-md">
-		    <label for="for_subdirection_ou_id">Subdirección</label>
-				<select class="form-control selectpicker" data-live-search="true" name="subdirection_ou_id" required="" data-size="5" id="subdirection_ou_id">
-          @foreach($subdirections as $key => $subdirection)
-            <option value="{{$subdirection->id}}" @if($serviceRequest->subdirection_ou_id == $subdirection->id) selected @endif >{{$subdirection->name}}</option>
-          @endforeach
-        </select>
-		</fieldset>
-    <fieldset class="form-group col-6 col-md">
+    <fieldset class="form-group col-6 col-md-4">
 		    <label for="for_responsability_center_ou_id">Centro de Responsabilidad</label>
 				<select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" required="" data-size="5" id="responsability_center_ou_id">
           @foreach($responsabilityCenters as $key => $responsabilityCenter)
@@ -70,11 +71,7 @@
         </select>
 		</fieldset>
 
-	</div>
-
-  <div class="form-row">
-
-    <fieldset class="form-group col-12 col-md">
+    <fieldset class="form-group col-6 col-md-4">
 				<label for="for_users">Responsable</label>
 				<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
           @foreach($users as $key => $user)
@@ -83,7 +80,7 @@
 				</select>
 		</fieldset>
 
-		<fieldset class="form-group col-12 col-md">
+		<fieldset class="form-group col-6 col-md-4">
 				<label for="for_users">Supervisor</label>
 				<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 					@foreach($users as $key => $user)
@@ -117,7 +114,7 @@
     <div class="card-body">
       <div class="form-row">
 
-        <fieldset class="form-group col-8 col-md-2">
+        <fieldset class="form-group col-8 col-md-3">
             <label for="for_rut">Rut</label>
             <input type="text" class="form-control" id="for_rut" required="required"
               value="{{ $serviceRequest->employee->id }}" disabled>
@@ -129,7 +126,7 @@
               value="{{ $serviceRequest->employee->dv }}">
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md-9">
+        <fieldset class="form-group col-12 col-md-8">
             <label for="for_name">Nombre completo</label>
             <input type="text" class="form-control" id="for_name" required="required"
               value="{{ $serviceRequest->employee->getFullNameAttribute() }}" disabled>
@@ -193,7 +190,7 @@
 		</fieldset>
 
     <fieldset class="form-group col-6 col-md-3">
-		    <label for="for_end_date">F.Término de Contrato</label>
+		    <label for="for_end_date">F.Fin de Contrato</label>
 		    <input type="date" class="form-control" id="for_end_date" name="end_date" required value="{{\Carbon\Carbon::parse($serviceRequest->end_date)->format('Y-m-d')}}" min="2020-01-01" max="2022-12-31">
 		</fieldset>
 
@@ -318,19 +315,7 @@
 
   <div class="form-row">
 
-    <fieldset class="form-group col-6 col-md">
-		    <label for="for_contractual_condition">Calidad Contractual</label>
-        <select name="contractual_condition" class="form-control">
-          <option value=""></option>
-          <option value="SUPLENTE" @if($serviceRequest->contractual_condition == 'SUPLENTE') selected @endif >SUPLENTE</option>
-          <option value="CONTRATA" @if($serviceRequest->contractual_condition == 'CONTRATA') selected @endif>CONTRATA</option>
-          <option value="TITULAR" @if($serviceRequest->contractual_condition == 'TITULAR') selected @endif>TITULAR</option>
-          <!-- <option value="HONORARIO COVID" @if($serviceRequest->contractual_condition == 'HONORARIO COVID') selected @endif>HONORARIO COVID</option>
-          <option value="SUMA ALZADA" @if($serviceRequest->contractual_condition == 'SUMA ALZADA') selected @endif>SUMA ALZADA</option> -->
-        </select>
-		</fieldset>
-
-    <fieldset class="form-group col-6 col-md">
+    <fieldset class="form-group col-12 col-md">
 		    <label for="for_estate">Estamento al que corresponde CS</label>
 		    <select name="estate" class="form-control" required>
           <option value="Profesional Médico" @if($serviceRequest->estate == 'Profesional Médico') selected @endif >Profesional Médico</option>
@@ -342,6 +327,18 @@
           <option value="Bioquímico" @if($serviceRequest->estate == 'Bioquímico') selected @endif >Bioquímico</option>
           <option value="Auxiliar" @if($serviceRequest->estate == 'Auxiliar') selected @endif >Auxiliar</option>
           <option value="Otro (justificar)" @if($serviceRequest->estate == 'Otro (justificar)') selected @endif >Otro (justificar)</option>
+        </select>
+		</fieldset>
+
+    <fieldset class="form-group col-6 col-md">
+		    <label for="for_contractual_condition">Calidad Contractual</label>
+        <select name="contractual_condition" class="form-control">
+          <option value=""></option>
+          <option value="SUPLENTE" @if($serviceRequest->contractual_condition == 'SUPLENTE') selected @endif >SUPLENTE</option>
+          <option value="CONTRATA" @if($serviceRequest->contractual_condition == 'CONTRATA') selected @endif>CONTRATA</option>
+          <option value="TITULAR" @if($serviceRequest->contractual_condition == 'TITULAR') selected @endif>TITULAR</option>
+          <!-- <option value="HONORARIO COVID" @if($serviceRequest->contractual_condition == 'HONORARIO COVID') selected @endif>HONORARIO COVID</option>
+          <option value="SUMA ALZADA" @if($serviceRequest->contractual_condition == 'SUMA ALZADA') selected @endif>SUMA ALZADA</option> -->
         </select>
 		</fieldset>
 
@@ -367,7 +364,7 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col-6 col-md">
+    <fieldset class="form-group col-12 col-md">
         <label for="for_establishment_id">Establecimiento</label>
         <select name="establishment_id" class="form-control" required>
           <option value=""></option>
@@ -381,8 +378,8 @@
 
   <div class="form-row">
 
-    <fieldset class="form-group col-12 col-md">
-		    <label for="for_programm_name">Nombre del programa</label>
+    <fieldset class="form-group col-6 col-md">
+		    <label for="for_programm_name">Nombre Programa</label>
 		    <!-- <input type="text" class="form-control" id="for_programm_name" placeholder="" name="programm_name" value="{{ $serviceRequest->programm_name }}"> -->
         <select name="programm_name" class="form-control">
           <option value=""></option>
@@ -423,11 +420,6 @@
         </select>
 		</fieldset>
 
-    <fieldset class="form-group col-12 col-md-3">
-		    <label for="for_estate_other">Detalle estamento</label>
-		    <input type="text" class="form-control" id="for_estate_other" placeholder="" name="estate_other" value="{{ $serviceRequest->estate_other }}">
-		</fieldset>
-
     <fieldset class="form-group col-6 col-md-3">
 		    <label for="for_working_day_type">Jornada de Trabajo</label>
 		    <select name="working_day_type" class="form-control" id="working_day_type" required>
@@ -454,15 +446,20 @@
 
 		</fieldset>
 
-    <fieldset class="form-group col-6 col-md-3">
-		    <label for="for_working_day_type_other">Otro<small>(Saldrá en la resolución luego del horario)</small></label>
+    <fieldset class="form-group col-12 col-md-6">
+		    <label for="for_estate_other">Detalle estamento</label>
+		    <input type="text" class="form-control" id="for_estate_other" placeholder="" name="estate_other" value="{{ $serviceRequest->estate_other }}">
+		</fieldset>
+
+    <fieldset class="form-group col-12 col-md-12">
+		    <label for="for_working_day_type_other">Otro <small>(Saldrá en la resolución luego del horario)</small></label>
 		    <input type="text" class="form-control" id="for_working_day_type_other" placeholder="" name="working_day_type_other" value="{{ $serviceRequest->working_day_type_other }}">
 		</fieldset>
 
   </div>
 
   <div class="form-row">
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-6 col-md-3">
       <label for="for_profession_id">Profesión</label>
       <select name="profession_id" class="form-control" required id="profession_id">
         <option value=""></option>
@@ -472,7 +469,7 @@
       </select>
     </fieldset>
 
-    <fieldset class="form-group col-12 col-md-3">
+    <fieldset class="form-group col-6 col-md-3">
         <label for="for_rrhh_team">Equipo RRHH</label>
         <select name="rrhh_team" class="form-control">
           <option value=""></option>
@@ -558,7 +555,7 @@
 		</fieldset>
 
     @else
-    <fieldset class="form-group col-3" id="div_hsa_schedule">
+    <fieldset class="form-group col-12 col-md-3" id="div_hsa_schedule">
 			<label for="for_hsa_schedule_detail">Detalle de Horario HSA</label>
 			<input type="text" class="form-control" id="for_hsa_schedule_detail" value="{{$serviceRequest->schedule_detail}}" name="hsa_schedule_detail">
 		</fieldset>
@@ -915,8 +912,8 @@
                   <tr class="bg-warning">
                 @endif
                    <td>{{ $SignatureFlow->signature_date}}</td>
-                   <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
-                   <td>{{ $SignatureFlow->employee }}</td>
+                   <td>{{ $SignatureFlow->user->organizationalUnit->name}}</td>
+                   <td>{{ $SignatureFlow->user->position }}</td>
                    <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
                    @if($SignatureFlow->sign_position == 1)
                     <td>Responsable</td>

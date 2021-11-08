@@ -36,7 +36,8 @@ use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationController;
 use App\Http\Controllers\ReplacementStaff\CommissionController;
 use App\Http\Controllers\ReplacementStaff\ApplicantController;
 use App\Http\Controllers\ReplacementStaff\TechnicalEvaluationFileController;
-
+use App\Http\Controllers\ReplacementStaff\Manage\LegalQualityManageController;
+use App\Http\Controllers\ReplacementStaff\Manage\RstFundamentManageController;
 
 use App\Http\Controllers\VaccinationController;
 
@@ -196,6 +197,8 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/to_sign', [RequestReplacementStaffController::class, 'to_sign'])->name('to_sign');
         Route::get('/show_file/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'show_file'])->name('show_file');
         Route::get('/download/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'download'])->name('download');
+        Route::get('/show_verification_file/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'show_verification_file'])->name('show_verification_file');
+        Route::get('/download_verification/{requestReplacementStaff}', [RequestReplacementStaffController::class, 'download_verification'])->name('download_verification');
         Route::prefix('sign')->name('sign.')->group(function(){
             Route::put('/{requestSign}/{status}/{requestReplacementStaff}/update', [RequestSignController::class, 'update'])->name('update');
         });
@@ -257,6 +260,20 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
               Route::get('/{profileManage}/edit', [ProfileManageController::class, 'edit'])->name('edit');
               Route::put('{profileManage}/update', [ProfileManageController::class, 'update'])->name('update');
               Route::delete('{profileManage}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
+          });
+          Route::prefix('legal_quality')->name('legal_quality.')->group(function(){
+              Route::get('/', [LegalQualityManageController::class, 'index'])->name('index');
+              Route::post('/store', [LegalQualityManageController::class, 'store'])->name('store');
+              Route::get('/{legalQualityManage}/edit', [LegalQualityManageController::class, 'edit'])->name('edit');
+              Route::post('{legalQualityManage}/assign_fundament', [LegalQualityManageController::class, 'assign_fundament'])->name('assign_fundament');
+              // Route::delete('{profileManage}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
+          });
+          Route::prefix('fundament')->name('fundament.')->group(function(){
+              Route::get('/', [RstFundamentManageController::class, 'index'])->name('index');
+              Route::post('/store', [RstFundamentManageController::class, 'store'])->name('store');
+              Route::get('/{rstFundamentManage}/edit', [RstFundamentManageController::class, 'edit'])->name('edit');
+              Route::post('{rstFundamentManage}/assign_fundament', [RstFundamentManageController::class, 'assign_fundament'])->name('assign_fundament');
+              // Route::delete('{profileManage}/destroy', [ProfileManageController::class, 'destroy'])->name('destroy');
           });
       });
     });
@@ -578,6 +595,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/pay-rejected', [ReportController::class, 'payRejected'])->name('pay-rejected');
             Route::get('/without-bank-details', [ReportController::class, 'withoutBankDetails'])->name('without-bank-details');
             Route::get('/with-bank-details', [ReportController::class, 'withBankDetails'])->name('with-bank-details');
+            Route::get('/exportCsv', [ReportController::class, 'exportCsv'])->name('exportCsv');
             Route::get('/pending-resolutions', [ReportController::class, 'pendingResolutions'])->name('pending-resolutions');
             Route::get('/contract', [ReportController::class, 'contract'])->name('contract');
             Route::get('/duplicate-contracts', [ReportController::class, 'duplicateContracts'])->name('duplicate-contracts');
@@ -763,6 +781,48 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::put('/update/{phrase}', 'Parameters\PhraseOfTheDayController@update')->name('update');
         Route::post('/store', 'Parameters\PhraseOfTheDayController@store')->name('store');
     });
+
+    Route::prefix('measurements')->as('measurements.')->group(function () {
+        Route::get('/', 'Parameters\UnitOfMeasurementController@index')->name('index');
+        Route::get('/create', 'Parameters\UnitOfMeasurementController@create')->name('create');
+        Route::get('/edit/{measurement}', 'Parameters\UnitOfMeasurementController@edit')->name('edit');
+        Route::put('/update/{measurement}', 'Parameters\UnitOfMeasurementController@update')->name('update');
+        Route::post('/store', 'Parameters\UnitOfMeasurementController@store')->name('store');
+    });
+
+    Route::prefix('budgetitems')->as('budgetitems.')->group(function () {
+        Route::get('/', 'Parameters\BudgetItemController@index')->name('index');
+        Route::get('/create', 'Parameters\BudgetItemController@create')->name('create');
+        Route::get('/edit/{budgetItem}', 'Parameters\BudgetItemController@edit')->name('edit');
+        Route::put('/update/{budgetItem}', 'Parameters\BudgetItemController@update')->name('update');
+        Route::post('/store', 'Parameters\BudgetItemController@store')->name('store');
+    });
+
+    Route::prefix('purchasemechanisms')->as('purchasemechanisms.')->group(function () {
+        Route::get('/', 'Parameters\PurchaseMechanismController@index')->name('index');
+        Route::get('/create', 'Parameters\PurchaseMechanismController@create')->name('create');
+        Route::get('/edit/{purchaseMechanism}', 'Parameters\PurchaseMechanismController@edit')->name('edit');
+        Route::put('/update/{purchaseMechanism}', 'Parameters\PurchaseMechanismController@update')->name('update');
+        Route::post('/store', 'Parameters\PurchaseMechanismController@store')->name('store');
+    });
+
+    Route::prefix('purchasetypes')->as('purchasetypes.')->group(function () {
+        Route::get('/', 'Parameters\PurchaseTypeController@index')->name('index');
+        Route::get('/create', 'Parameters\PurchaseTypeController@create')->name('create');
+        Route::get('/edit/{purchaseType}', 'Parameters\PurchaseTypeController@edit')->name('edit');
+        Route::put('/update/{purchaseType}', 'Parameters\PurchaseTypeController@update')->name('update');
+        Route::post('/store', 'Parameters\PurchaseTypeController@store')->name('store');
+    });
+
+    Route::prefix('purchaseunits')->as('purchaseunits.')->group(function () {
+        Route::get('/', 'Parameters\PurchaseUnitController@index')->name('index');
+        Route::get('/create', 'Parameters\PurchaseUnitController@create')->name('create');
+        Route::get('/edit/{purchaseUnit}', 'Parameters\PurchaseUnitController@edit')->name('edit');
+        Route::put('/update/{purchaseUnit}', 'Parameters\PurchaseUnitController@update')->name('update');
+        Route::post('/store', 'Parameters\PurchaseUnitController@store')->name('store');
+    });
+
+
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {
@@ -1217,7 +1277,7 @@ Route::prefix('pharmacies')->as('pharmacies.')->middleware('auth')->group(functi
 });
 
 /*formulario de requerimiento compra o servicio */
-
+/*
 Route::get('request_forms/my_request_inbox', 'RequestForms\RequestFormController@myRequestInbox')->name('request_forms.my_request_inbox')->middleware('auth');
 Route::get('request_forms/authorize_inbox', 'RequestForms\RequestFormController@authorizeInbox')->name('request_forms.authorize_inbox')->middleware('auth');
 Route::get('request_forms/{requestForm}/record', 'RequestForms\RequestFormController@record')->name('request_forms.record')->middleware('auth');
@@ -1230,7 +1290,7 @@ Route::put('request_forms/store_finance_data/{request_form}', 'RequestForms\Requ
 Route::put('request_forms/add_item_form/{request_form}', 'RequestForms\RequestFormController@addItemForm')->name('request_forms.add_item_form')->middleware('auth');
 Route::put('request_forms/store_approved_finance/{request_form}', 'RequestForms\RequestFormController@storeApprovedFinance')->name('request_forms.store_approved_finance')->middleware('auth');
 Route::put('request_forms/store_reject/{request_form}', 'RequestForms\RequestFormController@storeReject')->name('request_forms.store_reject')->middleware('auth');
-
+*/
 //Route::resource('request_forms', 'RequestForms\RequestFormController')->middleware('auth');
 /*
 Route::prefix('request_forms')->name('request_forms.')->group(function () {
@@ -1246,13 +1306,61 @@ Route::prefix('request_forms')->name('request_forms.')->group(function () {
 Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(function () {
     Route::get('/', [RequestFormController::class, 'index'])->name('index');
     Route::get('/{requestForm}/edit', [RequestFormController::class, 'edit'])->name('edit');
+
+    Route::get('/leadership_index', [RequestFormController::class, 'leadershipIndex'])->name('leadership_index');
+    Route::get('/{requestForm}/leadership_sign', [RequestFormController::class, 'leadershipSign'])->name('leadership_sign');
+
+    Route::get('/finance_index', [RequestFormController::class, 'financeIndex'])->name('finance_index');
+    Route::get('/{requestForm}/finance_sign', [RequestFormController::class, 'financeSign'])->name('finance_sign');
+
+    Route::get('/prefinance_index', [RequestFormController::class, 'prefinanceIndex'])->name('prefinance_index');
+    Route::get('/{requestForm}/prefinance_sign', [RequestFormController::class, 'prefinanceSign'])->name('prefinance_sign');
+
+    Route::get('/supply_index', [RequestFormController::class, 'supplyIndex'])->name('supply_index');
+    Route::get('/{requestForm}/supply_sign', [RequestFormController::class, 'supplySign'])->name('supply_sign');
+
+    Route::get('/supervisor_user_index', [RequestFormController::class, 'supervisorUserIndex'])->name('supervisor_user_index');
+    Route::get('/{requestForm}/purchasing_process', [RequestFormController::class, 'purchasingProcess'])->name('purchasing_process');
+
+    Route::get('/{requestForm}/destroy', [RequestFormController::class, 'destroy'])->name('destroy');
+    Route::get('/{requestForm}/show', [RequestFormController::class, 'show'])->name('show');
+
     Route::post('/store', [RequestFormController::class, 'store'])->name('store');
     Route::put('/update', [RequestFormController::class, 'update'])->name('update');
+    Route::get('/my_request_inbox', [RequestFormController::class, 'myRequestInbox'])->name('my_request_inbox');
+    //Route::get('/authorize_inbox', [RequestFormController::class, 'authorizeInbox'])->name('authorize_inbox');
+    Route::get('/create', [RequestFormController::class, 'create'])->name('create');
+    //Route::get('/finance_inbox', [RequestFormController::class, 'financeInbox'])->name('finance_inbox');
+    //Route::get('/tesseract', [RequestFormController::class, 'financeIndex'])->name('tesseract');
+    Route::get('/saludo/{name}/{nickname?}', function ($name, $nickname = null) {
+      if ($nickname) {
+          return "Bienvenido {$name}, tu apodo es {$nickname}";
+        } else {
+            return "Bienvenido {$name}, no tienes apodo";
+          }
+    });
+
+    Route::get('/tesseract', function() {
+    return File::get(public_path() . '\tesseract.html');
+    });
+
+    //return File::get(public_path() . '/to new folder name/index.html');
+
     //Route::get('/own', [RequestFormController::class, 'indexOwn'])->name('own');
     //Route::get('/validaterequest', [RequestFormController::class, 'validaterequest'])->name('validaterequest');
-    Route::get('/create', [RequestFormController::class, 'create'])->name('create');
+
+
+    Route::prefix('passages')->as('passages.')->middleware('auth')->group(function () {
+        Route::get('/', [PassageController::class, 'index'])->name('index');
+        Route::get('/create', [PassageController::class, 'create'])->name('create');
+        //Route::get('/create', [CategoriesController::class, 'create'])->name('create');
+        //Route::post('/store', [CategoriesController::class, 'store'])->name('store');
+    });
 });
 
+
+
+/*
 Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(function () {
     //Route::get('{requestForm}/edit', 'RequestFormController@edit')->name('edit');
     //Route::get('{requestForm}/edit', [ItemController::class, 'edit'])->name('edit');
@@ -1260,17 +1368,20 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     //Route::post('/items/{requestForm}', 'RequestForms\ItemController@store')->name('items.store')->middleware('auth');
     Route::post('items/{requestForm}', [ItemController::class, 'store'])->name('items.store');
 
-/************** COMENTAR ****************/
+
     Route::delete('/items/{item}', 'RequestForms\ItemController@destroy')->name('items.destroy')->middleware('auth');
-    Route::get('/passages', 'RequestForms\PassageController@create')->name('passages.create')->middleware('auth');
+    //Route::get('/passages', 'RequestForms\PassageController@create')->name('passages.create')->middleware('auth');
+    Route::get('/passages', 'RequestForms\PassageController@index')->name('index')->middleware('auth');
     Route::post('/passages/create_from_previous/{request_form}', 'RequestForms\PassageController@createFromPrevious')->name('passages.createFromPrevious')->middleware('auth');
     Route::post('/passages/{requestForm}', 'RequestForms\PassageController@store')->name('passages.store')->middleware('auth');
     Route::delete('/passages/{passage}', 'RequestForms\PassageController@destroy')->name('passages.destroy')->middleware('auth');
-    //** F I L E S **//
+
     Route::get('/files', 'RequestForms\RequestFormFileController@create')->name('files.create')->middleware('auth');
     Route::post('/files/{requestForm}', 'RequestForms\RequestFormFileController@store')->name('files.store')->middleware('auth');
-/************** COMENTAR ****************/
-});
+
+});*/
+
+
 
 Route::get('/yomevacuno',[VaccinationController::class,'welcome'])->name('welcome');
 

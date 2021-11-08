@@ -9,6 +9,7 @@
         </tr>
     </thead>
     <tbody>
+        @if($audits->count() > 0)
         @foreach($audits->sortByDesc('updated_at') as $audit)
         <tr>
             <td nowrap>{{ $audit->created_at }}</td>
@@ -22,6 +23,7 @@
             </td>
         </tr>
         @endforeach
+        @endif
     </tbody>
 </table>
 </div>

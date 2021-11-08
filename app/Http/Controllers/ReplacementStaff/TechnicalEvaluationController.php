@@ -6,6 +6,7 @@ use App\Models\ReplacementStaff\TechnicalEvaluation;
 use App\Models\ReplacementStaff\RequestReplacementStaff;
 use App\Models\ReplacementStaff\ReplacementStaff;
 use App\Models\ReplacementStaff\AssignEvaluation;
+use App\Rrhh\OrganizationalUnit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -92,6 +93,7 @@ class TechnicalEvaluationController extends Controller
      */
     public function edit(Request $request, TechnicalEvaluation $technicalEvaluation)
     {
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
         $users = User::orderBy('name', 'ASC')->get();
 
         $users_rys = User::where('organizational_unit_id', 48)->get();
@@ -118,7 +120,7 @@ class TechnicalEvaluationController extends Controller
         else{
             return view('replacement_staff.request.technical_evaluation.edit',
                 compact('technicalEvaluation', 'users', 'request', 'replacementStaff',
-                        'users_rys'));
+                        'users_rys', 'ouRoots'));
         }
     }
 

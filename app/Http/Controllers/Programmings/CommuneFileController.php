@@ -15,14 +15,15 @@ class CommuneFileController extends Controller
 {
     public function index(Request $request)
     {
+        $year = $request->year ?? Carbon::now()->year + 1;
         $communeFiles = CommuneFile::with('commune', 'user')
-            ->where('year', $request->year ?? Carbon::now()->year)
+            ->where('year', $year)
             ->when(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False, function($q){
                 $q->Where('access','LIKE','%'.Auth()->user()->id.'%');
             })
             ->get();
 
-        return view('programmings/communeFiles/index', compact('communeFiles', 'request'));
+        return view('programmings/communeFiles/index', compact('communeFiles', 'request', 'year'));
     }
 
     public function create() 

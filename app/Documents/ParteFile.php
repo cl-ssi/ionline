@@ -24,7 +24,8 @@ class ParteFile extends Model
 
     
     public function signatureFile() {
-      return $this->belongsTo('App\Models\SignatureFile');
+      return $this->belongsTo('App\Models\Documents\SignaturesFile');
+      //return $this->belongsTo('App\Models\Documents\SignaturesFile', 'file_to_sign_id');
   }
 
 

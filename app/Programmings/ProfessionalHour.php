@@ -15,4 +15,8 @@ class ProfessionalHour extends Model
     public function professional(){
         return $this->belongsTo('App\Programmings\Professional');
     }
+
+    public function programming(){
+        return $this->belongsTo('App\Programmings\Programming');
+    }
 }
