@@ -210,9 +210,11 @@ class SignatureController extends Controller
         //se crea documento si va de Destinatarios del documento al director
         $destinatarios = $request->recipients;
         $dest_vec = array_map('trim', explode(',', $destinatarios));
+        $cont=0;
 
         foreach ($dest_vec as $dest) {
-            if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl') {
+            if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl' and $cont===0) {
+                $cont=$cont+1;
                 $tipo = null;
                 $generador = Auth::user()->full_name;
                 $unidad = Auth::user()->organizationalUnit->name;
