@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Http;
 use Firebase\JWT\JWT;
 use Illuminate\Support\Facades\Mail;
 use SimpleSoftwareIO\QrCode\Generator;
+use App\Documents\Parte;
+use App\Documents\ParteFile;
+use Carbon\Carbon;
 
 /* No se si son necesarias, las puse para el try catch */
 
@@ -174,6 +177,62 @@ class FirmaDigitalController extends Controller
             preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $emails);
             Mail::to($emails[0])
                 ->send(new SignedDocument($signaturesFlow->signature));
+
+            $destinatarios = $signaturesFlow->signature->recipients;
+
+            $dest_vec = array_map('trim', explode(',', $destinatarios));
+            $cont=0;
+
+            foreach ($dest_vec as $dest) {
+                if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl'and $cont===0) 
+                {
+                    $cont=$cont+1;
+                    $tipo = null;
+                    $generador = $signaturesFlow->signature->responsable_id;
+                    $unidad = $signaturesFlow->signature->ou_id;
+    
+                    switch ($signaturesFlow->signature->document_type) {
+                        case 'Memorando':
+                            $this->tipo = 'Memo';
+                            break;
+                        case 'Resoluciones':
+                            $this->tipo = 'Resolución';
+                            break;
+                        default:
+                            $this->tipo = $signaturesFlow->signature->document_type;
+                            break;
+                    }
+    
+                    $parte = Parte::create([
+                        'entered_at' => Carbon::now(),
+                        'type' => $this->tipo,
+                        'date' => $signaturesFlow->signature->request_date,
+                        'subject' => $signaturesFlow->signature->subject,
+                        'origin' => $unidad . ' (Parte generado desde Solicitud de Firma N°' . $signaturesFlow->signature->id . ' por ' . $generador . ')',
+                    ]);
+    
+                    $distribucion = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)->where('file_type', 'documento')->get();
+                    ParteFile::create([
+                        'parte_id' => $parte->id,
+                        'file' => $distribucion->first()->file,
+                        'name' => $distribucion->first()->id . '.pdf',
+                        'signature_file_id' => $distribucion->first()->id,
+                    ]);
+    
+                    $signaturesFiles = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)->where('file_type', 'anexo')->get();
+                    foreach ($signaturesFiles as $key => $sf) {
+                        ParteFile::create([
+                            'parte_id' => $parte->id,
+                            'file' => $sf->file,
+                            'name' => $sf->id . '.pdf',
+                            //'signature_file_id' => $sf->id,
+                        ]);
+                    }
+                }
+            }
+
+
+            
         }
 
         //Si es visación en cadena, se envía notificación por correo al siguiente firmador
