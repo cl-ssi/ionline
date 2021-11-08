@@ -242,6 +242,7 @@ class SignatureController extends Controller
                     'parte_id' => $parte->id,
                     'file' => $distribucion->first()->file,
                     'name' => $distribucion->first()->id . '.pdf',
+                    'signature_file_id' => $distribucion->id,
                 ]);
 
                 $signaturesFiles = SignaturesFile::where('signature_id', $signature->id)->where('file_type', 'anexo')->get();
@@ -250,7 +251,7 @@ class SignatureController extends Controller
                         'parte_id' => $parte->id,
                         'file' => $sf->file,
                         'name' => $sf->id . '.pdf',
-                        'signature_file_id' => $sf->id,
+                        //'signature_file_id' => $sf->id,
                     ]);
                 }
             }
