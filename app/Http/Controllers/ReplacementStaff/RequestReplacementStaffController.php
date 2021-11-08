@@ -39,7 +39,8 @@ class RequestReplacementStaffController extends Controller
             ->get();
 
         $requests = RequestReplacementStaff::latest()
-            ->where(function ($q){
+            ->where('request_status', 'complete')
+            ->orWhere(function ($q){
                 $q->whereHas('requestSign', function($j) {
                     $j->Where('request_status', 'rejected');
                 })
@@ -151,7 +152,8 @@ class RequestReplacementStaffController extends Controller
      */
     public function create()
     {
-        return view('replacement_staff.request.create');
+        $ouRoots = OrganizationalUnit::where('level', 1)->get();
+        return view('replacement_staff.request.create', compact('ouRoots'));
     }
 
     public function create_extension(RequestReplacementStaff $requestReplacementStaff)
@@ -170,12 +172,24 @@ class RequestReplacementStaffController extends Controller
         $request_replacement = new RequestReplacementStaff($request->All());
         $request_replacement->user()->associate(Auth::user());
         $request_replacement->organizational_unit_id = Auth::user()->organizationalUnit->id;
-        $request_replacement->request_status = 'pending';
+
+        if($request->fundament_detail_manage_id != 6 && $request->fundament_detail_manage_id != 7){
+            $request_replacement->request_status = 'pending';
+        }
+        else{
+            $request_replacement->request_status = 'complete';
+        }
 
         $now = Carbon::now()->format('Y_m_d_H_i_s');
-        $file = $request->file('job_profile_file');
-        $file_name = $now.'_job_profile';
-        $request_replacement->job_profile_file = $file->storeAs('/ionline/replacement_staff/request_job_profile/', $file_name.'.'.$file->extension(), 'gcs');
+        if($request->hasFile('job_profile_file')){
+            $file = $request->file('job_profile_file');
+            $file_name = $now.'_job_profile';
+            $request_replacement->job_profile_file = $file->storeAs('/ionline/replacement_staff/request_job_profile/', $file_name.'.'.$file->extension(), 'gcs');
+        }
+
+        $file_verification = $request->file('request_verification_file');
+        $file_name_verification = $now.'_request_verification';
+        $request_replacement->request_verification_file = $file_verification->storeAs('/ionline/replacement_staff/request_verification_file/', $file_name_verification.'.'.$file_verification->extension(), 'gcs');
 
         $request_replacement->save();
 
@@ -183,219 +197,221 @@ class RequestReplacementStaffController extends Controller
             ->get()
             ->last();
 
-        // UO Nivel 1  Director
-        if($uo_request->level == 1){
 
-            for ($i = 1; $i <= 2; $i++) {
+        if($request->fundament_detail_manage_id != 6 && $request->fundament_detail_manage_id != 7){
+            // UO Nivel 1  Director
+            if($uo_request->level == 1){
 
-                $request_sing = new RequestSign();
+                for ($i = 1; $i <= 2; $i++) {
 
-                $date = Carbon::now()->format('Y_m_d_H_i_s');
-                $type = 'manager';
-                $type_adm = 'secretary';
-                $user_id = Auth::user()->id;
+                    $request_sing = new RequestSign();
 
-                $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
+                    $date = Carbon::now()->format('Y_m_d_H_i_s');
+                    $type = 'manager';
+                    $type_adm = 'secretary';
+                    $user_id = Auth::user()->id;
 
-                if(!empty($iam_authority)){
-                    if ($i == 1) {
-                        $request_sing->position = '1';
-                        $request_sing->ou_alias = 'sub_rrhh';
-                        $request_sing->organizational_unit_id = 44;
-                        $request_sing->request_status = 'pending';
+                    $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
+
+                    if(!empty($iam_authority)){
+                        if ($i == 1) {
+                            $request_sing->position = '1';
+                            $request_sing->ou_alias = 'sub_rrhh';
+                            $request_sing->organizational_unit_id = 44;
+                            $request_sing->request_status = 'pending';
+                        }
+
+                        if ($i == 2) {
+                            $request_sing->position = '2';
+                            $request_sing->ou_alias = 'dir';
+                            $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
+                            $request_sing->request_status = 'accepted';
+                        }
                     }
+                    else{
+                      if ($i == 1) {
+                          $request_sing->position = '1';
+                          $request_sing->ou_alias = 'sub_rrhh';
+                          $request_sing->organizational_unit_id = 44;
+                          $request_sing->request_status = 'pending';
 
-                    if ($i == 2) {
-                        $request_sing->position = '2';
-                        $request_sing->ou_alias = 'dir';
-                        $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
-                        $request_sing->request_status = 'accepted';
+                          //manager
+                          $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
+                          //secretary
+                          $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type_adm);
+
+                          $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
+
+                          Mail::to($emails)
+                            ->cc(env('APP_RYS_MAIL'))
+                            ->send(new NotificationSign($request_replacement));
+                      }
+
+                      if ($i == 2) {
+                          $request_sing->position = '2';
+                          $request_sing->ou_alias = 'dir';
+                          $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
+                      }
                     }
+                    $request_sing->request_replacement_staff_id = $request_replacement->id;
+                    $request_sing->save();
                 }
-                else{
-                  if ($i == 1) {
-                      $request_sing->position = '1';
-                      $request_sing->ou_alias = 'sub_rrhh';
-                      $request_sing->organizational_unit_id = 44;
-                      $request_sing->request_status = 'pending';
+            }
 
-                      //manager
-                      $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
-                      //secretary
-                      $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type_adm);
+            //UO Nivel 2 SUB Direcciones - Deptos.
+            if($uo_request->level == 2){
 
-                      $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
+                for ($i = 1; $i <= 3; $i++) {
+                    $request_sing = new RequestSign();
 
-                      Mail::to($emails)
-                        ->cc(env('APP_RYS_MAIL'))
-                        ->send(new NotificationSign($request_replacement));
-                  }
+                    $date = Carbon::now()->format('Y_m_d_H_i_s');
+                    $type = 'manager';
+                    $type_adm = 'secretary';
+                    $user_id = Auth::user()->id;
 
-                  if ($i == 2) {
-                      $request_sing->position = '2';
-                      $request_sing->ou_alias = 'dir';
-                      $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
-                  }
+                    $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
+
+                    if(!empty($iam_authority)){
+                        if($i == 1){
+                            $request_sing->position = '1';
+                            $request_sing->ou_alias = 'leadership';
+                            $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
+                            $request_sing->request_status = 'accepted';
+                        }
+                        if ($i == 2) {
+                            $request_sing->position = '2';
+                            $request_sing->ou_alias = 'sub_rrhh';
+                            $request_sing->organizational_unit_id = 44;
+                            $request_sing->request_status = 'pending';
+                        }
+
+                        if ($i == 3) {
+                            $request_sing->position = '2';
+                            $request_sing->ou_alias = 'dir';
+                            $request_sing->organizational_unit_id = $uo_request->father->id;
+                        }
+                    }
+                    else{
+                        if($i == 1){
+                            $request_sing->position = '1';
+                            $request_sing->ou_alias = 'leadership';
+                            $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
+                            $request_sing->request_status = 'pending';
+
+                            //manager
+                            $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
+                            //secretary
+                            $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type_adm);
+
+                            $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
+
+                            Mail::to($emails)
+                              ->cc(env('APP_RYS_MAIL'))
+                              ->send(new NotificationSign($request_replacement));
+                        }
+                        if ($i == 2) {
+                            $request_sing->position = '2';
+                            $request_sing->ou_alias = 'sub_rrhh';
+                            $request_sing->organizational_unit_id = 44;
+                        }
+
+                        if ($i == 3) {
+                            $request_sing->position = '3';
+                            $request_sing->ou_alias = 'dir';
+                            $request_sing->organizational_unit_id = $uo_request->father->id;
+                        }
+                    }
+                    $request_sing->request_replacement_staff_id = $request_replacement->id;
+                    $request_sing->save();
                 }
-                $request_sing->request_replacement_staff_id = $request_replacement->id;
-                $request_sing->save();
+            }
+
+            //UO Nivel 3 Deptos. bajo SUB Direcciones.
+            if($uo_request->level == 3){
+
+                for ($i = 1; $i <= 3; $i++) {
+                    $request_sing = new RequestSign();
+
+                    $date = Carbon::now()->format('Y_m_d_H_i_s');
+                    $type = 'manager';
+                    $type_adm = 'secretary';
+                    $user_id = Auth::user()->id;
+
+                    $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
+
+                    if(!empty($iam_authority)){
+                        if($i == 1){
+                            $request_sing->position = '1';
+                            $request_sing->ou_alias = 'leadership';
+                            $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
+                            $request_sing->user_id = $user_id;
+                            $request_sing->request_status = 'accepted';
+                            $request_sing->date_sign = Carbon::now();
+                        }
+                        if ($i == 2) {
+                          $request_sing->position = '2';
+                          $request_sing->ou_alias = 'sub';
+                          $request_sing->organizational_unit_id = $uo_request->father->id;
+                          $request_sing->request_status = 'pending';
+
+                          // AQUI ENVIAR NOTIFICACIÓN DE CORREO ELECTRONICO AL NUEVO VISADOR.
+
+                          //manager
+                          $type = 'manager';
+                          $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, Carbon::now(), $type);
+                          //secretary
+                          $type_adm = 'secretary';
+                          $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, Carbon::now(), $type_adm);
+
+                          $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
+
+                          Mail::to($emails)
+                            ->cc(env('APP_RYS_MAIL'))
+                            ->send(new NotificationSign($request_replacement));
+                        }
+
+                        if ($i == 3) {
+                            $request_sing->position = '3';
+                            $request_sing->ou_alias = 'sub_rrhh';
+                            $request_sing->organizational_unit_id = 44;
+                        }
+                    }
+                    else{
+
+                        if($i == 1){
+                            $request_sing->position = '1';
+                            $request_sing->ou_alias = 'leadership';
+                            $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
+                            $request_sing->request_status = 'pending';
+
+                            //manager
+                            $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
+                            //secretary
+                            $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type_adm);
+
+                            $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
+
+                            Mail::to($emails)
+                              ->cc(env('APP_RYS_MAIL'))
+                              ->send(new NotificationSign($request_replacement));
+                        }
+                        if ($i == 2) {
+                          $request_sing->position = '2';
+                          $request_sing->ou_alias = 'sub';
+                          $request_sing->organizational_unit_id = $uo_request->father->id;
+                        }
+
+                        if ($i == 3) {
+                            $request_sing->position = '3';
+                            $request_sing->ou_alias = 'sub_rrhh';
+                            $request_sing->organizational_unit_id = 44;
+                        }
+                    }
+                    $request_sing->request_replacement_staff_id = $request_replacement->id;
+                    $request_sing->save();
+                }
             }
         }
-
-        //UO Nivel 2 SUB Direcciones - Deptos.
-        if($uo_request->level == 2){
-
-            for ($i = 1; $i <= 3; $i++) {
-                $request_sing = new RequestSign();
-
-                $date = Carbon::now()->format('Y_m_d_H_i_s');
-                $type = 'manager';
-                $type_adm = 'secretary';
-                $user_id = Auth::user()->id;
-
-                $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
-
-                if(!empty($iam_authority)){
-                    if($i == 1){
-                        $request_sing->position = '1';
-                        $request_sing->ou_alias = 'leadership';
-                        $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
-                        $request_sing->request_status = 'accepted';
-                    }
-                    if ($i == 2) {
-                        $request_sing->position = '2';
-                        $request_sing->ou_alias = 'sub_rrhh';
-                        $request_sing->organizational_unit_id = 44;
-                        $request_sing->request_status = 'pending';
-                    }
-
-                    if ($i == 3) {
-                        $request_sing->position = '2';
-                        $request_sing->ou_alias = 'dir';
-                        $request_sing->organizational_unit_id = $uo_request->father->id;
-                    }
-                }
-                else{
-                    if($i == 1){
-                        $request_sing->position = '1';
-                        $request_sing->ou_alias = 'leadership';
-                        $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
-                        $request_sing->request_status = 'pending';
-
-                        //manager
-                        $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
-                        //secretary
-                        $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type_adm);
-
-                        $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
-
-                        Mail::to($emails)
-                          ->cc(env('APP_RYS_MAIL'))
-                          ->send(new NotificationSign($request_replacement));
-                    }
-                    if ($i == 2) {
-                        $request_sing->position = '2';
-                        $request_sing->ou_alias = 'sub_rrhh';
-                        $request_sing->organizational_unit_id = 44;
-                    }
-
-                    if ($i == 3) {
-                        $request_sing->position = '3';
-                        $request_sing->ou_alias = 'dir';
-                        $request_sing->organizational_unit_id = $uo_request->father->id;
-                    }
-                }
-                $request_sing->request_replacement_staff_id = $request_replacement->id;
-                $request_sing->save();
-            }
-        }
-
-        //UO Nivel 3 Deptos. bajo SUB Direcciones.
-        if($uo_request->level == 3){
-
-            for ($i = 1; $i <= 3; $i++) {
-                $request_sing = new RequestSign();
-
-                $date = Carbon::now()->format('Y_m_d_H_i_s');
-                $type = 'manager';
-                $type_adm = 'secretary';
-                $user_id = Auth::user()->id;
-
-                $iam_authority = Authority::getAmIAuthorityFromOu($date, $type, $user_id);
-
-                if(!empty($iam_authority)){
-                    if($i == 1){
-                        $request_sing->position = '1';
-                        $request_sing->ou_alias = 'leadership';
-                        $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
-                        $request_sing->user_id = $user_id;
-                        $request_sing->request_status = 'accepted';
-                        $request_sing->date_sign = Carbon::now();
-                    }
-                    if ($i == 2) {
-                      $request_sing->position = '2';
-                      $request_sing->ou_alias = 'sub';
-                      $request_sing->organizational_unit_id = $uo_request->father->id;
-                      $request_sing->request_status = 'pending';
-
-                      // AQUI ENVIAR NOTIFICACIÓN DE CORREO ELECTRONICO AL NUEVO VISADOR.
-
-                      //manager
-                      $type = 'manager';
-                      $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, Carbon::now(), $type);
-                      //secretary
-                      $type_adm = 'secretary';
-                      $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, Carbon::now(), $type_adm);
-
-                      $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
-
-                      Mail::to($emails)
-                        ->cc(env('APP_RYS_MAIL'))
-                        ->send(new NotificationSign($request_replacement));
-                    }
-
-                    if ($i == 3) {
-                        $request_sing->position = '3';
-                        $request_sing->ou_alias = 'sub_rrhh';
-                        $request_sing->organizational_unit_id = 44;
-                    }
-                }
-                else{
-
-                    if($i == 1){
-                        $request_sing->position = '1';
-                        $request_sing->ou_alias = 'leadership';
-                        $request_sing->organizational_unit_id = $request_replacement->organizational_unit_id;
-                        $request_sing->request_status = 'pending';
-
-                        //manager
-                        $mail_notification_ou_manager = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type);
-                        //secretary
-                        $mail_notification_ou_secretary = Authority::getAuthorityFromDate($request_sing->organizational_unit_id, $date, $type_adm);
-
-                        $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
-
-                        Mail::to($emails)
-                          ->cc(env('APP_RYS_MAIL'))
-                          ->send(new NotificationSign($request_replacement));
-                    }
-                    if ($i == 2) {
-                      $request_sing->position = '2';
-                      $request_sing->ou_alias = 'sub';
-                      $request_sing->organizational_unit_id = $uo_request->father->id;
-                    }
-
-                    if ($i == 3) {
-                        $request_sing->position = '3';
-                        $request_sing->ou_alias = 'sub_rrhh';
-                        $request_sing->organizational_unit_id = 44;
-                    }
-                }
-                $request_sing->request_replacement_staff_id = $request_replacement->id;
-                $request_sing->save();
-            }
-        }
-
         Mail::to(explode(',', env('APP_RYS_MAIL')))->send(new NewRequestReplacementStaff($request_replacement));
 
         session()->flash('success', 'Estimados Usuario, se ha creado la Solicitud Exitosamente');
@@ -511,5 +527,15 @@ class RequestReplacementStaffController extends Controller
     public function download(RequestReplacementStaff $requestReplacementStaff)
     {
         return Storage::disk('gcs')->download($requestReplacementStaff->job_profile_file);
+    }
+
+    public function show_verification_file(RequestReplacementStaff $requestReplacementStaff)
+    {
+        return Storage::disk('gcs')->response($requestReplacementStaff->request_verification_file);
+    }
+
+    public function download_verification(RequestReplacementStaff $requestReplacementStaff)
+    {
+        return Storage::disk('gcs')->download($requestReplacementStaff->request_verification_file);
     }
 }

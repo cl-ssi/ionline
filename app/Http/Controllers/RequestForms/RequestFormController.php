@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\RequestForms;
 
-use App\RequestForms\RequestForm;
-use App\RequestForms\Item;
+use App\Models\RequestForms\RequestForm;
+use App\Models\RequestForms\Item;
 use App\RequestForms\Passage;
 use App\RequestForms\RequestFormEvent;
 use App\RequestForms\RequestFormItemCode;
@@ -14,45 +14,257 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 use App\Mail\RequestFormDirectorNotification;
 use Illuminate\Database\Eloquent\Builder;
 
 use App\User;
 
-class RequestFormController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //MIS FORMULARIOS DE REQUERIMIENTO
+class RequestFormController extends Controller {
 
-        $myRequestForms = RequestForm::with(['items','passages', 'requestformfiles', 'requestformevents'])
-            ->where('user_id', Auth::user()->id)->get();
-
-        return view('request_form.index', compact('myRequestForms'));
+    public function index() {
+        $createdRequestForms    = auth()->user()->applicantRequestForms()->where('status', 'created')->get();
+        $inProgressRequestForms = auth()->user()->applicantRequestForms()->where('status', 'in_progress')->get();
+        $approvedRequestForms   = auth()->user()->applicantRequestForms()->where('status', 'approved')->get();
+        $rejectedRequestForms   = auth()->user()->applicantRequestForms()->where('status', 'rejected')->orWhere('status', 'closed')->get();
+        $empty = false;
+        if(count($rejectedRequestForms) == 0 && count($createdRequestForms) == 0 && count($inProgressRequestForms) == 0 && count($approvedRequestForms) ==  0){
+            $empty=true;
+            return view('request_form.index', compact('empty'));}
+        return view('request_form.index', compact('createdRequestForms', 'inProgressRequestForms', 'rejectedRequestForms','approvedRequestForms', 'empty'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $users = User::all()->sortBy('fathers_family');
-        return view('request_form.create', compact('users'));
+
+    public function edit(RequestForm $requestForm) {
+        if($requestForm->applicant_user_id != auth()->user()->id){
+          session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO pertenece a Usuario: '.auth()->user()->getFullNameAttribute());
+          return redirect()->route('request_forms.index');
+        }
+        if($requestForm->status != 'created'){
+          session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO puede ser Modificado!');
+          return redirect()->route('request_forms.index');
+        }
+        //Obtiene la Autoridad de la Unidad Organizacional del usuario registrado, en la fecha actual.
+        $manager = Authority::getAuthorityFromDate(auth()->user()->organizationalUnit->id, Carbon::now(), 'manager');
+        if(is_null($manager))
+            $manager= '<h6 class="text-danger">'.auth()->user()->organizationalUnit->name.', no registra una Autoridad.</h6>';
+        else
+            $manager = $manager->user->getFullNameAttribute();
+        $requestForms = RequestForm::all();
+        return view('request_form.edit', compact('requestForm', 'manager', 'requestForms'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
+    public function leadershipIndex() {
+        $ou = Authority::getAmIAuthorityFromOu( Carbon::now(), 'manager', auth()->user()->id );
+        if(empty($ou)) {
+            session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no es Autoridad en su U.O. ('.auth()->user()->organizationalUnit->name.')');
+            return redirect()->route('request_forms.index');
+        } else {
+              $createdRequestForms   = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)
+                                       ->Where('status','created')->get();
+              $inProgresRequestForms = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)
+                                       ->Where('status','in_progress')->get();
+              $rejectedRequestForms  = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)
+                                       ->Where('status','rejected')->orWhere('status','closed')->get();
+        }
+        return view('request_form.leadership_index', compact('createdRequestForms', 'inProgresRequestForms', 'rejectedRequestForms'));
+    }
+
+
+    public function leadershipSign(RequestForm $requestForm) {
+        $manager              = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
+        $position             = $manager->position;
+        $organizationalUnit   = $manager->organizationalUnit->name;
+        if(is_null($manager))
+            $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
+        else
+            $manager = $manager->user->getFullNameAttribute();
+        $eventType = 'leader_ship_event';
+        return view('request_form.leadership_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit', 'eventType'));
+    }
+
+
+    public function prefinanceIndex() {
+      if(auth()->user()->organizationalUnit->id != '40' ){
+          session()->flash('danger', 'Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('40').'.');
+          return redirect()->route('request_forms.index');
+      }else{
+          $waitingRequestForms = RequestForm::where('status', 'in_progress')
+                                 ->whereHas('eventRequestForms', function ($q) {
+                                 $q->where('event_type','leader_ship_event')
+                                ->where('status', 'approved');})
+
+                                ->whereDoesntHave('eventRequestForms', function ($f) {
+                                $f->where('event_type','pre_finance_event')
+                                ->where('status', 'approved');
+
+                                })->get();
+          $approvedRequestForms = RequestForm::where('status', 'in_progress')
+                                 ->whereHas('eventRequestForms', function ($q) {
+                                 $q->where('event_type','pre_finance_event')
+                                 ->where('status', 'approved');})->get();
+          $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
+
+          return view('request_form.prefinance_index', compact('waitingRequestForms', 'rejectedRequestForms', 'approvedRequestForms'));}
+    }
+
+
+    public function prefinanceSign(RequestForm $requestForm) {
+      $eventType = 'pre_finance_event';
+      return view('request_form.prefinance_sign', compact('requestForm', 'eventType'));
+    }
+
+
+    public function financeIndex(){
+        $ou = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->user()->id);
+        if(empty($ou)){
+            session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no es autoridad.');
+            return redirect()->route('request_forms.index');
+        }elseif($ou[0]->organizational_unit_id != '40' ){
+            session()->flash('danger', 'Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('40').'.');
+            return redirect()->route('request_forms.index');
+        }else{
+            $waitingRequestForms = RequestForm::where('status', 'in_progress')
+                                       ->whereHas('eventRequestForms', function ($q) {
+                                                    $q->where('event_type','pre_finance_event')
+                                                      ->where('status', 'approved');})
+                                       ->whereDoesntHave('eventRequestForms', function ($f) {
+                                                  $f->where('event_type','finance_event')
+                                                  ->where('status', 'approved');
+
+                                                    })->get();
+            $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
+            $createdRequestForms     = RequestForm::all();
+            $approvedRequestForms    = RequestForm::where('status', 'in_progress')
+                                       ->whereHas('eventRequestForms', function ($q) {
+                                                    $q->where('event_type','finance_event')
+                                                      ->where('status', 'approved');
+                                                    })->get();
+            return view('request_form.finance_index', compact('waitingRequestForms', 'rejectedRequestForms', 'approvedRequestForms', 'createdRequestForms'));
+          }
+    }
+
+
+    public function financeSign(RequestForm $requestForm){
+      $manager              = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
+      $position             = $manager->position;
+      $organizationalUnit   = $manager->organizationalUnit->name;
+      if(is_null($manager))
+          $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
+      else
+          $manager = $manager->user->getFullNameAttribute();
+      $eventType = 'finance_event';
+      return view('request_form.finance_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit', 'eventType'));
+    }
+
+
+    public function supplyIndex()
+    {
+      $ou = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->user()->id);
+      if(empty($ou)){
+          session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no es autoridad.');
+          return redirect()->route('request_forms.index');
+      }elseif($ou[0]->organizational_unit_id != '37' ){
+          session()->flash('danger', 'Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('37').'.');
+          return redirect()->route('request_forms.index');
+      }else{
+          $waitingRequestForms = RequestForm::where('status', 'in_progress')
+                                     ->whereHas('eventRequestForms', function ($q) {
+                                                  $q->where('event_type','finance_event')
+                                                    ->where('status', 'approved');})
+
+                                     ->whereDoesntHave('eventRequestForms', function ($f) {
+                                                $f->where('event_type','supply_event')
+                                                ->where('status', 'approved');
+
+                                                  })->get();
+
+          $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
+
+          $approvedRequestForms    = RequestForm::where('status', 'in_progress')
+                                     ->whereHas('eventRequestForms', function ($q) {
+                                                  $q->where('event_type','supply_event')
+                                                    ->where('status', 'approved');
+                                                  })->get();
+
+          $allRequestForms = RequestForm::where('status', 'in_progress')
+                                     //->orWhere('status', 'created')
+                                     //->whereHas('eventRequestForms', function ($q) {
+                                      //            $q->where('event_type','finance_event')
+                                      //              ->where('status', 'approved');})
+
+                                     ->whereDoesntHave('eventRequestForms', function ($f) {
+                                                $f->where('event_type','supply_event')
+                                                ->where('status', 'approved');
+
+                                                  })
+                                     ->orWhere('status', 'created')
+
+                                                  ->get();
+
+
+          return view('request_form.supply_index', compact('waitingRequestForms', 'rejectedRequestForms', 'approvedRequestForms', 'allRequestForms'));
+    }
+  }
+
+    public function supplySign(RequestForm $requestForm){
+      $eventType = 'supply_event';
+      return view('request_form.supply_sign', compact('requestForm', 'eventType'));
+    }
+
+
+    public function create(){
+        $requestForm=null;
+        return  view('request_form.create', compact('requestForm'));
+    }
+
+
+    public function destroy(RequestForm $requestForm)
+    {
+        $id = $requestForm->id;
+        $requestForm->delete();
+        session()->flash('danger', 'El formulario de requerimiento ID '.$id.' ha sido eliminado correctamente.');
+        return redirect()->route('request_forms.index');
+    }
+
+
+    public function supervisorUserIndex()
+    {
+        if(auth()->user()->organizationalUnit->id != '37' ){
+            session()->flash('danger', 'Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('37').'.');
+            return redirect()->route('request_forms.index');
+        }else
+          {
+            $waitingRequestForms = RequestForm::where('status', 'in_progress')
+                                   ->where('supervisor_user_id', auth()->user()->id)
+                                   ->whereHas('eventRequestForms', function ($q) {
+                                   $q->where('event_type','supply_event')
+                                  ->where('status', 'approved');})
+                                  ->get();
+            $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
+            return view('request_form.supervisor_user_index', compact('waitingRequestForms', 'rejectedRequestForms'));
+          }
+    }
+
+    public function purchasingProcess(RequestForm $requestForm){
+      $eventType = 'supply_event';
+      return view('request_form.purchasing_process', compact('requestForm', 'eventType'));
+    }
+
+    public function show(RequestForm $requestForm)
+    {
+        $eventType = 'supply_event';
+        return view('request_form.show', compact('requestForm', 'eventType'));
+    }
+
+
+
+
+/************************ CODIGO PACHA *************************************/
+/************************ CODIGO PACHA *************************************/
+/************************ CODIGO PACHA *************************************/
+
     public function store(Request $request)
     {
         $requestForm = new RequestForm($request->All());
@@ -77,52 +289,7 @@ class RequestFormController extends Controller
         return redirect()->route('request_forms.edit', compact('requestForm'));
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\RequestForm  $requestForm
-     * @return \Illuminate\Http\Response
-     */
-    public function show(RequestForm $requestForm)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\RequestForm  $requestForm
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(RequestForm $requestForm)
-    {
-        $users = User::all()->sortBy('fathers_family');
-        $item_codes = RequestFormItemCode::all();
-        $flag_finance = 0;
-
-        if($requestForm->type_form == 'item'){
-          foreach($requestForm->requestformevents as $key => $event){
-            if($event->type == 'status' && $event->StatusName == 'Aprobado por jefatura'){
-              $flag_finance = 1;
-            }
-            if($event->type == 'message' && $event->status == 'item_record'){
-              $flag_finance = 2;
-            }
-          }
-        return view('request_form.edit', compact('requestForm', 'users', 'item_codes', 'flag_finance'));
-        }
-        else {
-          return view('request_form.edit', compact('requestForm', 'users', 'item_codes', 'flag_finance'));
-        }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\RequestForm  $requestForm
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, RequestForm $requestForm)
     {
         //ASIGNAR UO DE QUIEN SOLICITA.
@@ -197,33 +364,12 @@ class RequestFormController extends Controller
                 }
             }
         }
-
-        // if($requestForm->type_form = 'passage'){
-        //     /*Envío de correo al Manage de sistema.*/
-        //     Mail::to('jorge.mirandal@redsalud.gob.cl')->send(new RequestFormDirectorNotification($requestForm));
-        // }
-
         $id = $requestForm->id;
         session()->flash('info', 'Su formulario de requrimiento fue ingresado con exito, N°: '.$id);
         return redirect()->route('request_forms.edit', compact('id'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\RequestForm  $requestForm
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(RequestForm $requestForm)
-    {
-        //
-    }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function myRequestInbox()
     {
         $myRequestForms = RequestForm::with(['items','passages', 'requestformfiles', 'requestformevents'])
@@ -275,7 +421,6 @@ class RequestFormController extends Controller
         session()->flash('info', 'Su solicitud de formulario de requerimiento fue aprobado con exito, N°: '.$id);
         return redirect()->route('request_forms.edit', compact('id'));
     }
-
 
 
     public function directorPassageInbox()

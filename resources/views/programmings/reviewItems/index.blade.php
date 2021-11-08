@@ -7,17 +7,17 @@
 @include('programmings/nav')
 
 <h4 class="mb-3">Evaluación de Activividad</h4>
-<h6 class="mb-3">{{$programmingItems->description}}</h6>
-<a href="{{ route('programmingitems.index', ['programming_id' => $programmingItems->programming_id]) }}" class="btn btb-flat btn-sm btn-dark" >
+<h6 class="mb-3">{{$programmingItem->programming->description ?? ''}}</h6>
+<a href="{{ route('programmingitems.index', ['programming_id' => $programmingItem->programming_id]) }}" class="btn btb-flat btn-sm btn-dark" >
                     <i class="fas fa-arrow-left small"></i> 
                     <span class="small">Volver</span> 
     </a>
 @can('ProgrammingItem: edit')
-<a target="_blank" href="{{ route('programmingitems.show', $programmingItems->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i> Editar</a>
+<a target="_blank" href="{{ route('programmingitems.show', $programmingItem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i> Editar</a>
 @endcan
 
 @can('ProgrammingItem: delete')
-    <form method="POST" action="{{ route('programmingitems.destroy', $programmingItems->id) }}" class="small d-inline">
+    <form method="POST" action="{{ route('programmingitems.destroy', $programmingItem->id) }}" class="small d-inline">
         {{ method_field('DELETE') }} {{ csrf_field() }}
         <button class="btn btn-sm btn-outline-danger float-right " onclick="return confirm('¿Desea eliminar el registro realmente?')">
         <span class="fas fa-trash-alt " aria-hidden="true"></span> Eliminar
@@ -25,7 +25,7 @@
     </form>
 @endcan
 <!-- 
-{{$programmingItems }} -->
+{{$programmingItem }} -->
 <div class="card mt-3 small">
     <div class="card-body">
 
@@ -41,13 +41,13 @@
                 </tr>
             </thead>
             <tbody  style="font-size:75%;">
-                <tr >
-                    <td class="text-center align-middle">{{$programmingItems->id}}</td>
-                    <td class="text-center align-middle">{{$programmingItems->tracer}}</td>
-                    <td class="text-center align-middle font-weight-bold">{{$programmingItems->tracer_number}}</td>
-                    <td class="text-center align-middle">{{$programmingItems->cycle}}</td>
-                    <td class="text-center align-middle">{{$programmingItems->action_type}}</td>
-                    <td class="text-center align-middle">{{$programmingItems->activity_name}}</td>
+                <tr>
+                    <td class="text-center align-middle">{{$programmingItem->id}}</td>
+                    <td class="text-center align-middle">{{$programmingItem->activityItem->tracer ?? ''}}</td>
+                    <td class="text-center align-middle font-weight-bold">{{$programmingItem->activityItem->int_code ?? ''}}</td>
+                    <td class="text-center align-middle">{{ $programmingItem->activityItem && $programmingItem->activityItem->tracer == 'NO' ? $programmingItem->cycle : ($programmingItem->activityItem->vital_cycle ?? $programmingItem->cycle) }}</td>
+                    <td class="text-center align-middle">{{ $programmingItem->activityItem && $programmingItem->activityItem->tracer == 'NO' ? $programmingItem->action_type : ($programmingItem->activityItem->activityItem->action_type ?? $programmingItem->action_type) }}</td>
+                    <td class="text-center align-middle">{{ $programmingItem->activityItem->activity_name ?? $programmingItem->activity_name }}</td>
                 </tr>
             </tbody>
         </table>
@@ -68,15 +68,15 @@
             </thead>
             <tbody  style="font-size:75%;">
                 <tr>
-                    <td class="text-center align-middle">{{$programmingItems->def_target_population}}</td>
-                    <td class="text-center align-middle">{{$programmingItems->source_population}}</td>
-                    <td class="text-center align-middle">{{number_format($programmingItems->cant_target_population,0, ",", ".")}}</td>
-                    <td class="text-center align-middle">{{$programmingItems->prevalence_rate}} %</td>
-                    <td class="text-center align-middle">{{$programmingItems->source_prevalence}}</td>
-                    <td class="text-center align-middle">{{$programmingItems->coverture}} %</td>
-                    <td class="text-center align-middle">{{number_format($programmingItems->population_attend,0, ",", ".")}}</td>
-                    <td class="text-center align-middle">{{number_format($programmingItems->concentration,0, ",", ".")}}</td>
-                    <td class="text-center align-middle font-weight-bold">{{number_format($programmingItems->activity_total,0, ",", ".")}}</td>
+                    <td class="text-center align-middle">{{$programmingItem->activityItem && $programmingItem->activityItem->tracer == 'NO' ? $programmingItem->def_target_population : ($programmingItem->activityItem->def_target_population ?? $programmingItem->def_target_population) }}</td>
+                    <td class="text-center align-middle">{{$programmingItem->source_population}}</td>
+                    <td class="text-center align-middle">{{number_format($programmingItem->cant_target_population,0, ",", ".")}}</td>
+                    <td class="text-center align-middle">{{$programmingItem->prevalence_rate}} %</td>
+                    <td class="text-center align-middle">{{$programmingItem->source_prevalence}}</td>
+                    <td class="text-center align-middle">{{$programmingItem->coverture}} %</td>
+                    <td class="text-center align-middle">{{number_format($programmingItem->population_attend,0, ",", ".")}}</td>
+                    <td class="text-center align-middle">{{number_format($programmingItem->concentration,0, ",", ".")}}</td>
+                    <td class="text-center align-middle font-weight-bold">{{number_format($programmingItem->activity_total,0, ",", ".")}}</td>
                 </tr>
             </tbody>
         </table>
@@ -96,14 +96,14 @@
             </thead>
             <tbody  style="font-size:75%;">
                 <tr>
-                    <td class="text-center align-middle">{{$programmingItems->professional}}</td>
-                    <td class="text-center align-middle">{{$programmingItems->activity_performance}}</td>
-                    <td class="text-center align-middle">{{number_format($programmingDays->days_programming,0, ",", ".")}}</td>
-                    <td class="text-center align-middle">{{number_format($programmingDays->day_work_hours,0, ",", ".")}}</td>
-                    <td class="text-center align-middle">{{number_format($programmingItems->hours_required_year,2, ",", ".")}}</td>
-                    <td class="text-center align-middle">{{number_format($programmingItems->hours_required_day,2, ",", ".")}} </td>
-                    <td class="text-center align-middle">{{number_format($programmingItems->direct_work_year,2, ",", ".")}}</td>
-                    <td class="text-center align-middle">{{number_format($programmingItems->direct_work_hour,4, ",", ".")}}</td>
+                    <td class="text-center align-middle">{{$professional}}</td>
+                    <td class="text-center align-middle">{{$programmingItem->activity_performance}}</td>
+                    <td class="text-center align-middle">{{number_format($programmingDay->days_programming,0, ",", ".")}}</td>
+                    <td class="text-center align-middle">{{number_format($programmingDay->day_work_hours,0, ",", ".")}}</td>
+                    <td class="text-center align-middle">{{number_format($programmingItem->hours_required_year,2, ",", ".")}}</td>
+                    <td class="text-center align-middle">{{number_format($programmingItem->hours_required_day,2, ",", ".")}} </td>
+                    <td class="text-center align-middle">{{number_format($programmingItem->direct_work_year,2, ",", ".")}}</td>
+                    <td class="text-center align-middle">{{number_format($programmingItem->direct_work_hour,4, ",", ".")}}</td>
                 </tr>
             </tbody>
         </table>
@@ -118,9 +118,9 @@
             </thead>
             <tbody  style="font-size:75%;">
                 <tr>
-                    <td class="text-center align-middle">{{$programmingItems->information_source}}</td>
-                    <td class="text-center align-middle">{{$programmingItems->prap_financed}}</td>
-                    <td class="text-center align-middle">{{$programmingItems->observation}}</td>
+                    <td class="text-center align-middle">{{$programmingItem->activityItem->verification_rem ?? $programmingItem->information_source }}</td>
+                    <td class="text-center align-middle">{{$programmingItem->prap_financed}}</td>
+                    <td class="text-center align-middle">{{$programmingItem->observation}}</td>
                 </tr>
             </tbody>
         </table>
@@ -174,8 +174,8 @@
                         <td>{{ $review->review }}</td>
                         <td  class="text-center align-middle">{{ $review->answer }}</td>
                         <td>{{ $review->observation }}</td>
-                        <td>{{ $review->name }} {{ $review->fathers_family }} {{ $review->mothers_family }}</td>
-                        <td>{{ $review->name_rev }} {{ $review->fathers_family_rev }} {{ $review->mothers_family_rev }}</td>
+                        <td>{{ $review->user->fullName ?? '' }}</td>
+                        <td>{{ $review->reviewer->fullName ?? '' }}</td>
                         <td 
                             @if($review->rectified == 'SI')
                                 class="text-center align-middle table-success"
@@ -245,7 +245,7 @@
 
                     @csrf
                     @method('POST')
-                    <input type="hidden" name="programming_item_id" value="{{$programmingItems->id}}">
+                    <input type="hidden" name="programming_item_id" value="{{$programmingItem->id}}">
                     <input type="hidden" name="active" value="SI">
                     <input type="hidden" name="answer" value="NO">
 

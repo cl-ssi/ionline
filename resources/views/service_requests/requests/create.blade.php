@@ -22,7 +22,7 @@
 
   	<div class="form-row">
 
-		<fieldset class="form-group col-6 col-md-2">
+		<fieldset class="form-group col-6 col-md-3">
 			<label for="for_contract_type">Tipo de Contrato</label>
 			<select name="contract_type" class="form-control" required>
 			<option value=""></option>
@@ -39,14 +39,14 @@
 				name="request_date" max="2022-12-31" required>
 		</fieldset>
 
-    	<fieldset class="form-group col-6 col-md-3">
-		    <label for="for_start_date">F.Inicio de Contrato</label>
+    	<fieldset class="form-group col-12 col-md-3">
+		    <label for="for_start_date">Fecha Inicio de Contrato</label>
 		    <input type="date" class="form-control" id="for_start_date"
 				name="start_date" min="2020-01-01" max="2022-12-31" required>
 		</fieldset>
 
-    	<fieldset class="form-group col-6 col-md-3">
-		    <label for="for_end_date">F.Término de Contrato</label>
+    	<fieldset class="form-group col-12 col-md-3">
+		    <label for="for_end_date">Fecha Término de Contrato</label>
 		    <input type="date" class="form-control" id="for_end_date"
 				name="end_date" min="2020-01-01" max="2022-12-31" required>
 		</fieldset>
@@ -57,23 +57,23 @@
 
   <div class="form-row">
 
-    <fieldset class="form-group col">
+    <fieldset class="form-group col-12">
         <label for="for_service_description">Descripción Servicio*</label>
         <textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50" required></textarea>
 
 		<div id="id_descripcion_servicio">
-
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_enfermeros">Enfermeras/os</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_kinesiologos">Kinesiólogos/as</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_paramedicos">Técnicos paraméricos</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_auxiliares">Auxiliares de servicio</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_administrativos">Administrativos/as</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_matronas">Matronas</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_tm_imageneologia">T.M. Imagenología</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_medico">Médico</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fonoaudiologas">Fonoaudiologas</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_terapeuta_ocupacional">Terapeuta Ocupacional</button>
-		<button type="button" class="btn btn-outline-primary btn-sm" id="alias_psicologo">Psicólogo</button>
+		<br>
+		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_enfermeros">Enfermeras/os</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-5" id="alias_kinesiologos">Kinesiólogos/as</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_paramedicos">Técnicos paraméricos</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-5" id="alias_medico">Médico</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_auxiliares">Auxiliares de servicio</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-5" id="alias_psicologo">Psicólogo</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_administrativos">Administrativos/as</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-5" id="alias_matronas">Matronas</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_tm_imageneologia">T.M. Imagenología</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-5" id="alias_fonoaudiologas">Fonoaudiologas</button>
+		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_terapeuta_ocupacional">Terapeuta Ocupacional</button>
 		</div>
 
     </fieldset>
@@ -139,22 +139,7 @@
 	</div>
 
   <div class="form-row">
-
-	<fieldset class="form-group col">
-		<label for="for_contractual_condition">Calidad Contractual</label>
-		<select name="contractual_condition" class="form-control" id="contractual_condition" disabled>
-		<option value=""></option>
-		<option value="SUPLENTE" >SUPLENTE</option>
-		<option value="CONTRATA" >CONTRATA</option>
-		<option value="TITULAR" >TITULAR</option>
-		<!--
-		<option value="HONORARIO COVID" >HONORARIO COVID</option>
-		<option value="SUMA ALZADA" >SUMA ALZADA</option>
-		-->
-		</select>
-	</fieldset>
-
-	<fieldset class="form-group col">
+	<fieldset class="form-group col-12 col-md-3">
 		<label for="for_estate">Estamento al que corresponde CS</label>
 		<select name="estate" class="form-control" required id="estate">
 			<option value=""></option>
@@ -172,7 +157,21 @@
 		</select>
 	</fieldset>
 
-	<fieldset class="form-group col">
+	<fieldset class="form-group col-6 col-md-3">
+		<label for="for_contractual_condition">Calidad Contractual</label>
+		<select name="contractual_condition" class="form-control" id="contractual_condition" disabled>
+		<option value=""></option>
+		<option value="SUPLENTE" >SUPLENTE</option>
+		<option value="CONTRATA" >CONTRATA</option>
+		<option value="TITULAR" >TITULAR</option>
+		<!--
+		<option value="HONORARIO COVID" >HONORARIO COVID</option>
+		<option value="SUMA ALZADA" >SUMA ALZADA</option>
+		-->
+		</select>
+	</fieldset>
+
+	<fieldset class="form-group col-6 col-md-2">
 		<label for="for_weekly_hours">Hrs.Semanales</label>
 		<select name="weekly_hours" class="form-control" id="for_weekly_hours">
 			<option value=""></option>
@@ -209,8 +208,8 @@
 
 	<div class="form-row">
 
-		<fieldset class="form-group col">
-			<label for="for_programm_name">Nombre del programa</label>
+		<fieldset class="form-group col-6 col-md-3">
+			<label for="for_programm_name">Nombre Programa</label>
 			<!-- <input type="text" class="form-control" id="for_programm_name" placeholder="" name="programm_name"> -->
 			<select name="programm_name" class="form-control" required id="programm_name">
 				<option value=""></option>
@@ -249,12 +248,7 @@
 			</select>
 		</fieldset>
 
-		<fieldset class="form-group col">
-			<label for="for_estate_other">Detalle estamento</label>
-			<input type="text" class="form-control" id="for_estate_other" placeholder="" name="estate_other">
-		</fieldset>
-
-		<fieldset class="form-group col">
+		<fieldset class="form-group col-6 col-md-3">
 			<label for="for_working_day_type">Jornada de Trabajo</label>
 			<select name="working_day_type" class="form-control" required id="working_day_type">
 				<option value=""></option>
@@ -276,15 +270,20 @@
 			</select>
 		</fieldset>
 
-		<fieldset class="form-group col">
-			<label for="for_working_day_type_other">Otro<small>(Saldrá en la resolución luego del horario)</small></label>
+		<fieldset class="form-group col-12 col-md-6">
+			<label for="for_estate_other">Detalle estamento</label>
+			<input type="text" class="form-control" id="for_estate_other" placeholder="" name="estate_other">
+		</fieldset>
+
+		<fieldset class="form-group col-12 col-md-12">
+			<label for="for_working_day_type_other">Otro<small> (Saldrá en la resolución luego del horario)</small></label>
 			<input type="text" class="form-control" id="for_working_day_type_other" placeholder="" name="working_day_type_other">
 		</fieldset>
 
   	</div>
 
 	<div class="form-row">
-		<fieldset class="form-group col">
+		<fieldset class="form-group col-6 col-md-3">
 			<label for="for_profession_id">Profesión</label>
 			<select name="profession_id" class="form-control" required id="profession_id">
 				<option value=""></option>
@@ -294,7 +293,7 @@
 			</select>
 		</fieldset>
 
-		<fieldset class="form-group col-3 col-md-3">
+		<fieldset class="form-group col-6 col-md-3">
 			<label for="for_rrhh_team">Equipo RRHH*</label>
 			<select name="rrhh_team" class="form-control" id="rrhh_team" required>
 				<option value=""></option>
@@ -342,8 +341,8 @@
 			</select>
 		</fieldset>
 
-		<fieldset class="form-group col-3 col-md-3">
-			<label for="for_digera_strategy">Estrategia Digera Covid</label>
+		<fieldset class="form-group col-6 col-md-3">
+			<label for="for_digera_strategy">Estrategia Digera C.</label>
 			<select name="digera_strategy" class="form-control" id="digera_strategy" required>
 				<option value=""></option>
 				<option value="Camas MEDIAS Aperturadas" >Camas MEDIAS Aperturadas</option>
@@ -363,7 +362,7 @@
 			</select>
 		</fieldset>
 
-		<fieldset class="form-group col-3" id="div_covid_schedule">
+		<fieldset class="form-group col-6 col-md-3" id="div_covid_schedule">
 			<label for="for_schedule_detail">Detalle de horario</label>
 			<select name="schedule_detail" class="form-control" id="schedule_detail">
 				<option value=""></option>
@@ -395,6 +394,7 @@
 				<textarea id="resolve" name="resolve" class="form-control" rows="4" cols="50" disabled></textarea>
 		</fieldset>
 	</div> -->
+
 
 	@if(Auth::user()->organizationalUnit->establishment_id == 1)
 
@@ -629,27 +629,27 @@
     });
 	});
 
-	$('#subdirection_ou_id').on('change', function() {
-		var value = this.value;
-
-		//subdirección gestión del cuidado al paciente
-		if (value == 85) {
-			$("#Subdirector option[value=13835321]").removeAttr('disabled');
-			$('#Subdirector').val(13835321);
-			$('#Subdirector').selectpicker('refresh');
-
-			$("#SubdirectorTurnos option[value=13835321]").removeAttr('disabled');
-			$('#SubdirectorTurnos').val(13835321);
-			$('#SubdirectorTurnos').selectpicker('refresh');
-		}
-		if (value != 85) {
-			$('#Subdirector').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
-			$('#Subdirector').selectpicker('refresh');
-
-			$('#SubdirectorTurnos').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
-			$('#SubdirectorTurnos').selectpicker('refresh');
-		}
-	});
+	// $('#subdirection_ou_id').on('change', function() {
+	// 	var value = this.value;
+	//
+	// 	//subdirección gestión del cuidado al paciente
+	// 	if (value == 85) {
+	// 		$("#Subdirector option[value=13835321]").removeAttr('disabled');
+	// 		$('#Subdirector').val(13835321);
+	// 		$('#Subdirector').selectpicker('refresh');
+	//
+	// 		// $("#SubdirectorTurnos option[value=13835321]").removeAttr('disabled');
+	// 		// $('#SubdirectorTurnos').val(13835321);
+	// 		// $('#SubdirectorTurnos').selectpicker('refresh');
+	// 	}
+	// 	if (value != 85) {
+	// 		$('#Subdirector').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
+	// 		$('#Subdirector').selectpicker('refresh');
+	//
+	// 		// $('#SubdirectorTurnos').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
+	// 		// $('#SubdirectorTurnos').selectpicker('refresh');
+	// 	}
+	// });
 
 	$('#type').on('change', function() {
 		var value = this.value;

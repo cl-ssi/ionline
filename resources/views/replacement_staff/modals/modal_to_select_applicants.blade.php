@@ -61,15 +61,50 @@
                             <input type="date" class="form-control" name="end_date"
                                 id="for_end_date" value="{{ $technicalEvaluation->requestReplacementStaff->end_date->format('Y-m-d')  }}" required>
                         </fieldset>
-                        <fieldset class="form-group col-sm-6">
+                        <!-- <fieldset class="form-group col-sm-6">
                             <label for="for_place_of_performance">Lugar de Desempeño</label>
                             <input type="text" class="form-control" name="place_of_performance" id="for_replace_of_performance">
-                        </fieldset>
+                        </fieldset> -->
+                        <fieldset class="form-group col-md-6">
+                    			<label for="for_ou_of_performance_id">Unidad Organizacional</label>
+                    			<select class="form-control selectpicker" data-live-search="true" id="for_ou_of_performance_id" name="ou_of_performance_id" data-size="5" required>
+                    			@foreach($ouRoots as $ouRoot)
+                    				<option value="{{ $ouRoot->id }}" {{ ($technicalEvaluation->requestReplacementStaff->ouPerformance == $ouRoot)?'selected':'' }}>
+                    				{{ $ouRoot->name }} ({{$ouRoot->establishment->name}})
+                    				</option>
+                    				@foreach($ouRoot->childs as $child_level_1)
+                    					<option value="{{ $child_level_1->id }}" {{ ($technicalEvaluation->requestReplacementStaff->ouPerformance == $child_level_1)?'selected':'' }}>
+                    					&nbsp;&nbsp;&nbsp;
+                    					{{ $child_level_1->name }} ({{ $child_level_1->establishment->name }})
+                    					</option>
+                    					@foreach($child_level_1->childs as $child_level_2)
+                    						<option value="{{ $child_level_2->id }}" {{ ($technicalEvaluation->requestReplacementStaff->ouPerformance == $child_level_2)?'selected':'' }}>
+                    						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    						{{ $child_level_2->name }} ({{ $child_level_2->establishment->name }})
+                    						</option>
+                    						@foreach($child_level_2->childs as $child_level_3)
+                    							<option value="{{ $child_level_3->id }}" {{ ($technicalEvaluation->requestReplacementStaff->ouPerformance == $child_level_3)?'selected':'' }}>
+                    								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    								{{ $child_level_3->name }} ({{ $child_level_3->establishment->name }})
+                    							</option>
+                    							@foreach($child_level_3->childs as $child_level_4)
+                    							<option value="{{ $child_level_4->id }}" {{ ($technicalEvaluation->requestReplacementStaff->ouPerformance == $child_level_4)?'selected':'' }}>
+                    	                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    	                            {{ $child_level_4->name }} ({{ $child_level_4->establishment->name }})
+                    	                        </option>
+                    							@endforeach
+                    						@endforeach
+                    					@endforeach
+                    				@endforeach
+                    			@endforeach
+
+                    			</select>
+                    		</fieldset>
                     </div>
                     <div class="form-row">
                         <fieldset class="form-group col">
                             <label for="for_replacement_reason">Motivo de Reemplazo</label>
-                            <input type="text" class="form-control" name="replacement_reason" id="for_replacement_reason" value="{{ $technicalEvaluation->requestReplacementStaff->FundamentValue }}">
+                            <input type="text" class="form-control" name="replacement_reason" id="for_replacement_reason" value="{{ $technicalEvaluation->requestReplacementStaff->fundamentManage->NameValue }}">
                         </fieldset>
                     </div>
 

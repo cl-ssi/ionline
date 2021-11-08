@@ -12,6 +12,7 @@ class CreateTypes extends Component
 {
     public $program_contract_type;
     public $type;
+    public $subdirection_ou_id;
 
     public $subdirections;
     public $responsabilityCenters;
@@ -126,6 +127,10 @@ class CreateTypes extends Component
             $this->signatureFlows['S.G.D.P SSI'] = Authority::getAuthorityFromDate(44,now(),['manager'])->user->id; // 44 - Subdirección de Gestión y Desarrollo de las Personas
             $this->signatureFlows['S.D.A SSI'] = Authority::getAuthorityFromDate(40,now(),['manager'])->user->id; // 31 - Subdirección de Recursos Físicos y Financieros
           }
+        }
+
+        if ($this->subdirection_ou_id == 85) {
+          $this->signatureFlows['Subdirector'] = 13835321;
         }
 
         // $this->emit('listener',$this->program_contract_type, $this->type);

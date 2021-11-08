@@ -3,9 +3,11 @@
 namespace App\Programmings;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProgrammingItem extends Model
 {
+    use SoftDeletes;
     protected $table = 'pro_programming_items';
 
     //protected $fillable = ['_token'];
@@ -21,13 +23,27 @@ class ProgrammingItem extends Model
         return $this->hasMany('App\Models\Programmings\ReviewItem');
     }
 
-    public function getCountNOTRectifiedReviews(){
+    public function getCountReviewsBy($status)
+    {
         return $this->reviewItems
-            ->Where('rectified','=','NO')
-            ->Where('answer','=','NO')->count();
+            ->where('rectified', $status == 'Not rectified' ? 'NO' : 'SI')
+            ->where('answer', $status == 'Rectified' ? 'NO' : ($status == 'Regularly rectified' ? 'REGULAR' : ($status == 'Accepted rectified' ? 'SI' : 'NO')))
+            ->count();
     }
 
     public function activityItem(){
         return $this->belongsTo('App\Programmings\ActivityItem', 'activity_id');
+    }
+
+    public function programming(){
+        return $this->belongsTo('App\Programmings\Programming');
+    }
+
+    public function user(){
+        return $this->belongsTo('App\User');
+    }
+
+    public function professionalHour(){
+        return $this->belongsTo('App\Programmings\ProfessionalHour', 'professional');
     }
 }
