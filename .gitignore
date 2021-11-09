@@ -20,3 +20,4 @@ yarn-error.log
 /.phpstorm.meta.php
 .tic-ssi.json
 app.yaml
+docker-compose.yml

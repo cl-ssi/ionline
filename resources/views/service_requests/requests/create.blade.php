@@ -395,7 +395,7 @@
 		</fieldset>
 	</div> -->
 
-	
+
 	@if(Auth::user()->organizationalUnit->establishment_id == 1)
 
 	@else
@@ -629,27 +629,27 @@
     });
 	});
 
-	$('#subdirection_ou_id').on('change', function() {
-		var value = this.value;
-
-		//subdirección gestión del cuidado al paciente
-		if (value == 85) {
-			$("#Subdirector option[value=13835321]").removeAttr('disabled');
-			$('#Subdirector').val(13835321);
-			$('#Subdirector').selectpicker('refresh');
-
-			$("#SubdirectorTurnos option[value=13835321]").removeAttr('disabled');
-			$('#SubdirectorTurnos').val(13835321);
-			$('#SubdirectorTurnos').selectpicker('refresh');
-		}
-		if (value != 85) {
-			$('#Subdirector').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
-			$('#Subdirector').selectpicker('refresh');
-
-			$('#SubdirectorTurnos').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
-			$('#SubdirectorTurnos').selectpicker('refresh');
-		}
-	});
+	// $('#subdirection_ou_id').on('change', function() {
+	// 	var value = this.value;
+	//
+	// 	//subdirección gestión del cuidado al paciente
+	// 	if (value == 85) {
+	// 		$("#Subdirector option[value=13835321]").removeAttr('disabled');
+	// 		$('#Subdirector').val(13835321);
+	// 		$('#Subdirector').selectpicker('refresh');
+	//
+	// 		// $("#SubdirectorTurnos option[value=13835321]").removeAttr('disabled');
+	// 		// $('#SubdirectorTurnos').val(13835321);
+	// 		// $('#SubdirectorTurnos').selectpicker('refresh');
+	// 	}
+	// 	if (value != 85) {
+	// 		$('#Subdirector').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
+	// 		$('#Subdirector').selectpicker('refresh');
+	//
+	// 		// $('#SubdirectorTurnos').val('{{App\Rrhh\Authority::getAuthorityFromDate(88,now(),['manager'])->user->id}}'); //PERDRO IRIONDO: 9882506
+	// 		// $('#SubdirectorTurnos').selectpicker('refresh');
+	// 	}
+	// });
 
 	$('#type').on('change', function() {
 		var value = this.value;

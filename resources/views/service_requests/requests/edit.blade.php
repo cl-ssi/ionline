@@ -912,8 +912,8 @@
                   <tr class="bg-warning">
                 @endif
                    <td>{{ $SignatureFlow->signature_date}}</td>
-                   <td>{{ $SignatureFlow->organizationalUnit->name}}</td>
-                   <td>{{ $SignatureFlow->employee }}</td>
+                   <td>{{ $SignatureFlow->user->organizationalUnit->name}}</td>
+                   <td>{{ $SignatureFlow->user->position }}</td>
                    <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
                    @if($SignatureFlow->sign_position == 1)
                     <td>Responsable</td>

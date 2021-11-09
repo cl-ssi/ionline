@@ -208,53 +208,57 @@ class SignatureController extends Controller
         }
 
         //se crea documento si va de Destinatarios del documento al director
-        $destinatarios = $request->recipients;
-        $dest_vec = array_map('trim', explode(',', $destinatarios));
+        // $destinatarios = $request->recipients;
+        // $dest_vec = array_map('trim', explode(',', $destinatarios));
+        // $cont=0;
 
-        foreach ($dest_vec as $dest) {
-            if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl') {
-                $tipo = null;
-                $generador = Auth::user()->full_name;
-                $unidad = Auth::user()->organizationalUnit->name;
+        // foreach ($dest_vec as $dest) {
+        //     if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl'and $cont===0) 
+        //     {
+        //         $cont=$cont+1;
+        //         $tipo = null;
+        //         $generador = Auth::user()->full_name;
+        //         $unidad = Auth::user()->organizationalUnit->name;
 
-                switch ($request->document_type) {
-                    case 'Memorando':
-                        $this->tipo = 'Memo';
-                        break;
-                    case 'Resoluciones':
-                        $this->tipo = 'Resolución';
-                        break;
-                    default:
-                        $this->tipo = $request->document_type;
-                        break;
-                }
+        //         switch ($request->document_type) {
+        //             case 'Memorando':
+        //                 $this->tipo = 'Memo';
+        //                 break;
+        //             case 'Resoluciones':
+        //                 $this->tipo = 'Resolución';
+        //                 break;
+        //             default:
+        //                 $this->tipo = $request->document_type;
+        //                 break;
+        //         }
 
-                $parte = Parte::create([
-                    'entered_at' => Carbon::now(),
-                    'type' => $this->tipo,
-                    'date' => $request->request_date,
-                    'subject' => $request->subject,
-                    'origin' => $unidad . ' (Parte generado desde Solicitud de Firma N°' . $signature->id . ' por ' . $generador . ')',
-                ]);
+        //         $parte = Parte::create([
+        //             'entered_at' => Carbon::now(),
+        //             'type' => $this->tipo,
+        //             'date' => $request->request_date,
+        //             'subject' => $request->subject,
+        //             'origin' => $unidad . ' (Parte generado desde Solicitud de Firma N°' . $signature->id . ' por ' . $generador . ')',
+        //         ]);
 
-                $distribucion = SignaturesFile::where('signature_id', $signature->id)->where('file_type', 'documento')->get();
-                ParteFile::create([
-                    'parte_id' => $parte->id,
-                    'file' => $distribucion->first()->file,
-                    'name' => $distribucion->first()->id . '.pdf',
-                ]);
+        //         $distribucion = SignaturesFile::where('signature_id', $signature->id)->where('file_type', 'documento')->get();
+        //         ParteFile::create([
+        //             'parte_id' => $parte->id,
+        //             'file' => $distribucion->first()->file,
+        //             'name' => $distribucion->first()->id . '.pdf',
+        //             'signature_file_id' => $distribucion->first()->id,
+        //         ]);
 
-                $signaturesFiles = SignaturesFile::where('signature_id', $signature->id)->where('file_type', 'anexo')->get();
-                foreach ($signaturesFiles as $key => $sf) {
-                    ParteFile::create([
-                        'parte_id' => $parte->id,
-                        'file' => $sf->file,
-                        'name' => $sf->id . '.pdf',
-                        'signature_file_id' => $sf->id,
-                    ]);
-                }
-            }
-        }
+        //         $signaturesFiles = SignaturesFile::where('signature_id', $signature->id)->where('file_type', 'anexo')->get();
+        //         foreach ($signaturesFiles as $key => $sf) {
+        //             ParteFile::create([
+        //                 'parte_id' => $parte->id,
+        //                 'file' => $sf->file,
+        //                 'name' => $sf->id . '.pdf',
+        //                 //'signature_file_id' => $sf->id,
+        //             ]);
+        //         }
+        //     }
+        // }
 
         session()->flash('info', 'La solicitud de firma ' . $signature->id . ' ha sido creada.');
         return redirect()->route('documents.signatures.index', ['mis_documentos']);
