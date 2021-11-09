@@ -15,16 +15,20 @@
 
     <div class="form-row">
         <div class="form-group col-md-3">
-            <input type="hidden" class="form-control" id="tracer" name="programming_id" value="{{Request::get('programming_id')}}" placeholder="Nro. Trazadora" >
+            <label for="activity" class="sr-only">Nombre actividad</label>
+            <input type="text" class="form-control" id="activity" name="activity" placeholder="Por nombre actividad" value="{{Request::get('activity')}}">
+        </div>
+        <div class="form-group col-md-2">
+            <input type="hidden" class="form-control" id="tracer" name="programming_id" value="{{Request::get('programming_id')}}">
             <!-- <input type="number" class="form-control" id="tracer" name="tracer_number" value="" placeholder="Nro. Trazadora" > -->
       
-            <select name="tracer_number[]" id="tracer_number" class="form-control selectpicker " data-live-search="true" multiple>
+            <select name="tracer_number[]" id="tracer_number" class="form-control selectpicker " data-live-search="true" multiple title="Por N° trazadora">
                 @foreach($tracerNumbers as $tracer)
                     <option value="{{ $tracer }}">{{$tracer}}</option>
                 @endforeach
             </select>
         </div>
-        <button type="submit" class="btn btn-default mb-4">Filtrar</button>
+        <button type="submit" class="btn btn-light mb-4">Filtrar</button>
     </div>
 
 </form>
