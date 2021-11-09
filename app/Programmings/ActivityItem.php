@@ -10,7 +10,7 @@ class ActivityItem extends Model
     use SoftDeletes;
     protected $table = 'pro_activity_items';
     protected $fillable = [
-        'id', 'int_code', 'vitakl_cycle', 'tracer', 'action_type', 'activity_name', 'def_target_population', 'verification_rem', 'professional', 'activity_id'
+        'id', 'int_code', 'vitakl_cycle', 'tracer', 'action_type', 'activity_name', 'def_target_population', 'verification_rem', 'professional', 'activity_id', 'cods', 'cols'
     ];
 
     public function program(){
