@@ -13,8 +13,6 @@ class ServiceRequestSeeder extends Seeder
      */
     public function run()
     {
-        $UID_Select = DB::table('users')->pluck('id');
-
         ServiceRequest::create([
             'type' => 'Covid',
             'subdirection_ou_id' => '1',
