@@ -6,12 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\PurchasingProcess;
 use App\Models\Parameters\BudgetItem;
+use OwenIt\Auditing\Contracts\Auditable;
 //use App\Models\Parameters\PurchaseType;
 //use App\Models\Parameters\PurchaseUnit;
 //use App\Models\Parameters\PurchaseMechanism;
 
-class ItemRequestForm extends Model
+class ItemRequestForm extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
+
     public $table = "arq_item_request_forms";
 
     protected $fillable = [

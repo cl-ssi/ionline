@@ -1,5 +1,11 @@
 <ul class="nav nav-tabs mb-3 d-print-none">
-
+  <li class="nav-item active">
+      <a class="nav-link"
+          href="{{ route('request_forms.index') }}">
+          <i class="fas fa-inbox"></i> Mis Formularios
+      </a>
+  </li>
+  
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-dice-d6"></i> Bienes y/o Servicios
@@ -37,12 +43,7 @@
 
 
 
-    <li class="nav-item active">
-        <a class="nav-link"
-            href="{{ route('request_forms.index') }}">
-            <i class="fas fa-inbox"></i> Mis Formularios
-        </a>
-    </li>
+
     <!--
     <li class="nav-item">
         <a class="nav-link"
