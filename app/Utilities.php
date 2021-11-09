@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use App\Ticket\Ticket;
 use App\Rrhh\Authority;
-use App\RequestForms\RequestForm;
+use App\Models\RequestForms\RequestForm;
 use App\RequestForms\RequestFormEvent;
 use Carbon\Carbon;
 
@@ -77,6 +77,7 @@ class Utilities extends Model
     }
     public static function getPendingDirectorAuthorize()
     {
+/*
         $rfs = RequestForm::whereDoesntHave('requestformevents', function (Builder $query) {
                   $query->where('type', 'director');
               })->where('type_form', 'passage')->count();
@@ -87,5 +88,7 @@ class Utilities extends Model
         else {
             return null;
         }
+*/
+          return 20;
     }
 }

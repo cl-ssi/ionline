@@ -26,11 +26,12 @@ class CreateRstApplicantsTable extends Migration
             $table->date('end_date')->nullable();
             $table->string('name_to_replace')->nullable();
             $table->string('replacement_reason')->nullable();
-            $table->string('place_of_performance')->nullable();
+            $table->foreignId('ou_of_performance_id')->nullable();
             $table->foreignId('technical_evaluation_id');
 
             $table->foreign('replacement_staff_id')->references('id')->on('rst_replacement_staff');
             $table->foreign('technical_evaluation_id')->references('id')->on('rst_technical_evaluations');
+            $table->foreign('ou_of_performance_id')->references('id')->on('organizational_units');
 
             $table->timestamps();
             $table->softDeletes();
