@@ -24,6 +24,10 @@ class RequestForm extends Model implements Auditable
         'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id'
     ];
 
+    public function requestFormFiles() {
+        return $this->hasMany('\App\Models\RequestForms\RequestFormFile');
+    }
+
     public function creator() {
         return $this->belongsTo(User::class, 'creator_user_id');
     }
