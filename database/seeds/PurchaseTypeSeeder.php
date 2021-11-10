@@ -59,10 +59,11 @@ class PurchaseTypeSeeder extends Seeder
                               'supply_continuous_day'=>60,
                               'year'=>2021]);
 
-        PurchaseType::Create(['name'=>'COMPRA SUMINISTRO VIGENTE BIENES Y SERVICIOS',
-                              'finance_business_day'=>2,
-                              'supply_continuous_day'=>5,
-                              'year'=>2021]);
+        // PurchaseType::Create(['name'=>'COMPRA SUMINISTRO VIGENTE BIENES Y SERVICIOS',
+        //                       'finance_business_day'=>2,
+        //                       'supply_continuous_day'=>5,
+        //                       'year'=>2021]);
+        
         PurchaseType::Create(['name'=>'L1 de 10 A 100 UTM',
                               'finance_business_day'=>2,
                               'supply_continuous_day'=>25,
