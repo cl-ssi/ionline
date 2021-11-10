@@ -17,17 +17,27 @@ class ProgrammingItemController extends Controller
     public function index(Request $request)
     {
         $listTracer = $request->tracer_number;
+        $activityFilter = $request->activity;
 
         $programming = Programming::whereId($request->programming_id)
-            ->when(empty($listTracer), function ($q){
-                return $q->with('items.reviewItems', 'items.activityItem', 'items.professionalHour.professional', 'establishment');
+            ->when(!$listTracer && !$activityFilter, function ($q){
+                return $q->with('items.activityItem', 'items.reviewItems', 'items.professionalHour.professional', 'establishment');
             })
-            ->when(!empty($listTracer), function ($q) use ($listTracer) {
-                return $q->whereHas('items.activityItem', $filter = function($q) use ($listTracer){
-                    return $q->Wherein('int_code', $listTracer);
-                })->with(['items.reviewItems', 'items.activityItem' => $filter, 'items.professionalHour.professional', 'establishment'])->get();
+            ->when($listTracer || $activityFilter, function ($q) use ($listTracer, $activityFilter) {
+                return $q->whereHas('items.activityItem', $filter = function($q2) use ($listTracer, $activityFilter) {
+                    return $q2->when(!empty($listTracer), function($q3) use ($listTracer){
+                                return $q3->Wherein('int_code', $listTracer);
+                            })->when($activityFilter != null, function($q3) use ($activityFilter){
+                                return $q3->whereRaw("UPPER(activity_name) LIKE '%". strtoupper($activityFilter)."%'");
+                            });
+                })->with(['items.activityItem' => $filter, 'items.reviewItems', 'items.professionalHour.professional', 'establishment'])->get();
              })
             ->first();
+
+        if(!$programming){
+            $programming = Programming::find($request->programming_id);
+            $programming->items = collect();
+        } 
 
         $tracerNumbers = ActivityItem::whereHas('program', function($q) use ($programming) {
             return $q->where('year', $programming->year);
