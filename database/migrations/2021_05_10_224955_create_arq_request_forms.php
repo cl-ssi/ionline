@@ -21,8 +21,10 @@ class CreateArqRequestForms extends Migration
             $table->foreignId('applicant_ou_id');//u.o. del responsable
             $table->string('applicant_position');
             $table->unsignedInteger('estimated_expense');
+            $table->longText('name');
             $table->string('program')->nullable();
             $table->longText('justification');
+            $table->tinyInteger('chief_approval');
             $table->string('type_form');
             $table->string('sigfe')->nullable();
             $table->string('bidding_number')->nullable();//id nro. de licitación.
