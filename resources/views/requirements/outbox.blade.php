@@ -33,7 +33,7 @@
 
 <h3 class="mb-3">Pendientes por atender</h3>
 
-<table class="table table-sm table-bordered small">
+<table class="table table-sm table-bordered small table-responsive-xl">
     <tr>
         <td class="alert-info text-center">Creados ({{ $legend['creados'] }})</td>
         <td class="alert-light text-center">Recibidos ({{ $legend['recibidos'] }})</td>
@@ -45,7 +45,7 @@
     </tr>
 </table>
 
-<table class="table table-sm table-bordered">
+<table class="table table-sm table-bordered table-responsive-xl">
     <thead>
         <tr>
             <th>N°</th>
@@ -171,7 +171,7 @@
 
 <h3 class="mb-3">Archivados</h3>
 
-<table class="table table-sm table-bordered">
+<table class="table table-sm table-bordered table-responsive-xl">
     <thead>
         <tr>
             <th>N°</th>

@@ -1311,6 +1311,9 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/leadership_index', [RequestFormController::class, 'leadershipIndex'])->name('leadership_index');
     Route::get('/{requestForm}/leadership_sign', [RequestFormController::class, 'leadershipSign'])->name('leadership_sign');
 
+    Route::get('/download/{requestFormFile}', [RequestFormFileController::class, 'download'])->name('download');
+    Route::get('/show_file/{requestFormFile}', [RequestFormFileController::class, 'show_file'])->name('show_file');
+
     Route::get('/finance_index', [RequestFormController::class, 'financeIndex'])->name('finance_index');
     Route::get('/{requestForm}/finance_sign', [RequestFormController::class, 'financeSign'])->name('finance_sign');
 

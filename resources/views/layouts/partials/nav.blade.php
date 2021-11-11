@@ -110,11 +110,13 @@
                     </div>
                 </li>
 
+                @if(env('APP_ENV') == 'local' || env('APP_ENV') == 'testing')
                 <li class="nav-item {{ active('request_forms') }}">
                     <a class="nav-link" href="{{ route('request_forms.index') }}">
                         <i class="fas fa-shopping-cart"></i> Abastecimiento
                     </a>
                 </li>
+                @endif
                 @endauth
 
                 @can('Requirements: create')

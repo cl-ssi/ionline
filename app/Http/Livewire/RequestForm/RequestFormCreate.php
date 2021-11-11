@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\RequestForm;
 use Livewire\Component;
 use App\Models\RequestForms\RequestForm;
+use App\Models\RequestForms\RequestFormFile;
 use App\Models\RequestForms\ItemRequestForm;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\UnitOfMeasurement;
@@ -10,13 +11,14 @@ use App\Models\Parameters\PurchaseMechanism;
 use Illuminate\Support\Collection;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class RequestFormCreate extends Component
 {
     use WithFileUploads;
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $typeOfCurrency,
     $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
-    public $purchaseMechanism, $messagePM, $program, $justify, $totalDocument;
+    public $name, $purchaseMechanism, $messagePM, $program, $fileRequests = [], $justify, $totalDocument;
     public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF;
     public $budget_item_id, $lstPurchaseMechanism;
 
@@ -25,6 +27,7 @@ class RequestFormCreate extends Component
         'quantity'            =>  'required|numeric|min:0.1',
         'article'             =>  'required',
         'unitOfMeasurement'   =>  'required',
+        //'fileItem'            =>  'required',
         'taxes'               =>  'required',
         'typeOfCurrency'      =>  'required'
         //'budget_item_id'      =>  'required',
@@ -61,6 +64,7 @@ class RequestFormCreate extends Component
     }
 
     private function setRequestForm(){
+      $this->name               =   $this->requestForm->name;
       $this->program            =   $this->requestForm->program;
       $this->justify            =   $this->requestForm->justification;
       $this->purchaseMechanism  =   $this->requestForm->purchase_mechanism_id;
@@ -201,14 +205,19 @@ class RequestFormCreate extends Component
     }
 
     public function saveRequestForm(){
+
       $this->validate(
-        [ 'purchaseMechanism'            =>  'required',
+        [ 'name'                         =>  'required',
+          'purchaseMechanism'            =>  'required',
           'program'                      =>  'required',
           'justify'                      =>  'required',
+          'fileRequests'                 =>  'required',
           'items'                        =>  'required'
         ],
-        [ 'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
+        [ 'name.required'                =>  'Debe ingresar un nombre a este formulario.',
+          'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
           'program.required'             =>  'Ingrese un Programa Asociado.',
+          'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
           'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
           'items.required'               =>  'Debe agregar al menos un Item para Bien y/o Servicio'
         ],
@@ -219,6 +228,7 @@ class RequestFormCreate extends Component
           'id'                    =>  $this->idRF,
         ],
         [
+          'name'                  =>  $this->name,
           'justification'         =>  $this->justify,
           'type_form'             =>  '1',
           'creator_user_id'       =>  Auth()->user()->id,
@@ -231,6 +241,21 @@ class RequestFormCreate extends Component
           'program'               =>  $this->program,
           'status'                =>  'created'
       ]);
+
+      // AQUI GUARDAR ARCHIVOS
+      foreach($this->fileRequests as $nFiles => $fileRequest){
+          $reqFile = new RequestFormFile();
+          if(env('APP_ENV') == 'local' || env('APP_ENV') == 'testing'){
+              $now = Carbon::now()->format('Y_m_d_H_i_s');
+              $file_name = $now.'req_file_'.$nFiles;
+              $reqFile->name = $fileRequest->getClientOriginalName();
+              $reqFile->file = $fileRequest->storeAs('/ionline/request_forms_dev/request_files/', $file_name.'.'.$fileRequest->extension(), 'gcs');
+              $reqFile->request_form_id = $req->id;
+              $reqFile->user_id = Auth()->user()->id;
+              $reqFile->save();
+          }
+      }
+      //
 
       foreach($this->items as $item){
         $this->saveItem($item, $req->id);

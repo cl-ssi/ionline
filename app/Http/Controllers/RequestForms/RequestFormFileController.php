@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\RequestForms;
 
-use App\RequestForms\RequestFormFile;
-use App\RequestForms\RequestForm;
-use App\RequestForms\RequestFormEvent;
+use App\Models\RequestForms\RequestFormFile;
+use App\RequestForms\RequestForms\RequestForm;
+use App\RequestForms\RequestForms\RequestFormEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class RequestFormFileController extends Controller
 {
@@ -99,5 +100,15 @@ class RequestFormFileController extends Controller
     public function destroy(RequestFormFile $requestFormFile)
     {
         //
+    }
+
+    public function show_file(RequestFormFile $requestFormFile)
+    {
+        return Storage::disk('gcs')->response($requestFormFile->file);
+    }
+
+    public function download(RequestFormFile $requestFormFile)
+    {
+        return Storage::disk('gcs')->download($requestFormFile->file);
     }
 }
