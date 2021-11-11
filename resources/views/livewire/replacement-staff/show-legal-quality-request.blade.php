@@ -1,30 +1,39 @@
 <fieldset class="form-group col">
-    <label for="for_legal_quality" >Calidad Jurídica / Renta / Fundamento</label>
+    <label for="for_legal_quality_manage_id" >Calidad Jurídica / Renta / Fundamento / Detalle Fundamento</label>
     <div class="input-group">
-        <select name="legal_quality" id="for_legal_quality" class="form-control" wire:model="selectedLegalQuality" required>
-            <option value="">Seleccione...</option>
-            <option value="to hire" @if($requestReplacementStaff) {{ ($requestReplacementStaff->legal_quality == $legalQualitySelected) ? 'selected' : '' }} @endif>Contrata</option>
-            <option value="fee" @if($requestReplacementStaff) {{ ($requestReplacementStaff->legal_quality == $legalQualitySelected) ? 'selected' : '' }} @endif>Honorarios</option>
+        <select name="legal_quality_manage_id" id="for_legal_quality_manage_id" class="form-control" wire:model="selectedLegalQuality" required>
+          <option value="">Seleccione...</option>
+          @foreach($legal_qualities as $legal_quality)
+              <option value="{{ $legal_quality->id }}">{{ $legal_quality->NameValue }}</option>
+          @endforeach
         </select>
 
         <input type="number" class="form-control" name="salary"
             id="for_salary" placeholder="$" {{ $salaryStateInput }} @if($requestReplacementStaff) value="{{ $requestReplacementStaff->salary }}" @endif>
 
-        <select name="fundament" id="for_fundament" class="form-control" wire:model="selectedFundament" {{ $fundamentStateSelect }}>
-            <option value="" {{ $fundamentOptionState }}>Seleccione...</option>
-            <option value="replacement" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Reemplazo</option>
-            <option value="quit" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionStateDisabled }}>Renuncia</option>
-            <option value="allowance without payment" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Permiso sin goce de sueldo</option>
-            <option value="regularization work position" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Regulación de cargos</option>
-            <option value="expand work position" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionStateDisabled }}>Cargo expansión</option>
-            <option value="vacations" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionState }}>Feriado legal</option>
-            <option value="other" @if($requestReplacementStaff) {{ ($requestReplacementStaff->fundament == $legalQualitySelected) ? 'selected' : '' }} @endif {{ $fundamentOptionStateDisabled }}>Otro</option>
+
+        <select name="fundament_manage_id" id="for_fundament_manage_id" class="form-control" wire:model="selectedFundament" required>
+            <option value="">Seleccione...</option>
+            @if(!is_null($fundamentLegalQualities))
+            @foreach($fundamentLegalQualities as $fundamentLegalQuality)
+                <option value="{{ $fundamentLegalQuality->rstFundamentManage->id }}">{{ $fundamentLegalQuality->rstFundamentManage->NameValue }}</option>
+            @endforeach
+            @endif
+        </select>
+
+        <select name="fundament_detail_manage_id" id="for_fundament_detail_manage_id" class="form-control" wire:model="selectedFundamentDetail">
+            <option value="">Seleccione...</option>
+            @if(!is_null($detailFundaments))
+            @foreach($detailFundaments as $detailFundament)
+                <option value="{{ $detailFundament->rstFundamentDetail->id }}">{{ $detailFundament->rstFundamentDetail->NameValue }}</option>
+            @endforeach
+            @endif
         </select>
 
         <input type="text" class="form-control" name="name_to_replace"
-            id="for_name_to_replace" placeholder="Nombre de Reemplazo" @if($requestReplacementStaff) value="{{$requestReplacementStaff->name_to_replace}}" @endif {{ $nameToReplaceInput }}>
+            id="for_name_to_replace" placeholder="Nombre de Reemplazo" @if($requestReplacementStaff) value="{{$requestReplacementStaff->name_to_replace}}" @endif>
 
         <input type="text" class="form-control" name="other_fundament"
-            id="for_other_fundament" placeholder="Fundamento..." @if($requestReplacementStaff) value="{{$requestReplacementStaff->other_fundament}}" @endif {{ $nameOtherFundament }}>
+            id="for_other_fundament" placeholder="Fundamento..." @if($requestReplacementStaff) value="{{$requestReplacementStaff->other_fundament}}" @endif {{ $otherFundamentInput }}>
     </div>
 </fieldset>

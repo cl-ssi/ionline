@@ -125,6 +125,11 @@
 
 	</div>
 
+	<br /><hr />
+	<div style="height: 300px; overflow-y: scroll;">
+			@include('partials.audit', ['audits' => $user->audits] )
+	</div>
+
 @endcan
 
 @endsection

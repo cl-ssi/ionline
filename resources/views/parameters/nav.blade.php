@@ -66,7 +66,35 @@
             <i class="fas fa-external-link-alt"></i> Profesiones</a>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('parameters.budgetitems.index') }}">
+            <i class="fas fa-file-invoice-dollar"></i> Item Presupuestario</a>
+    </li>
 
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('parameters.measurements.index') }}">
+            <i class="fas fa-ruler-combined"></i> Unidades de Medida</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('parameters.purchasemechanisms.index') }}">
+            <i class="fas fa-shopping-cart"></i> Mecanismos de Compra</a>
+    </li
+
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('parameters.purchasetypes.index') }}">
+            <i class="fas fa-shopping-cart"></i> Tipos de Compra</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('parameters.purchaseunits.index') }}">
+            <i class="fas fa-shopping-cart"></i> Unidades de Compra</a>
+    </li>
     <!-- <li class="nav-item">
         <a class="nav-link"
             href="{{ route('parameters.values.index') }}">

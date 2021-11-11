@@ -8,6 +8,7 @@ use App\RequestForms\RequestFormItemCode;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PassageController extends Controller
 {
@@ -18,7 +19,8 @@ class PassageController extends Controller
      */
     public function index()
     {
-        //
+        $user = User::where('id', Auth::user()->id);
+        return view('request_form.passage.index', compact('user'));
     }
 
     /**
@@ -28,6 +30,7 @@ class PassageController extends Controller
      */
     public function create()
     {
+        //$user = User::where('id', Auth::user()->id);
         return  view('request_form.passage.create');
     }
 

@@ -20,21 +20,24 @@ class CreateRstRequestReplacementStaffTable extends Migration
             $table->integer('degree')->nullable();
             $table->date('start_date');
             $table->date('end_date');
-            $table->enum('legal_quality',['to hire', 'fee']);
+
+            //LEGAL QUALITY
+            $table->foreignId('legal_quality_manage_id');
+            $table->foreign('legal_quality_manage_id')->references('id')->on('rst_legal_quality_manages');
             $table->integer('salary')->nullable();
-            $table->enum('fundament',['replacement',
-                                      'quit',
-                                      'allowance without payment',
-                                      'regularization work position',
-                                      'expand work position',
-                                      'vacations',
-                                      'other']);
+            $table->foreignId('fundament_manage_id');
+            $table->foreign('fundament_manage_id')->references('id')->on('rst_fundament_manages');
+            $table->foreignId('fundament_detail_manage_id');
+            $table->foreign('fundament_detail_manage_id')->references('id')->on('rst_fundament_detail_manages');
             $table->string('name_to_replace')->nullable();
             $table->string('other_fundament')->nullable();
+
             $table->enum('work_day',['diurnal', 'third shift', 'fourth shift', 'other']);
             $table->string('other_work_day')->nullable();
             $table->integer('charges_number');
-            $table->string('job_profile_file');
+            $table->string('job_profile_file')->nullable();
+            $table->string('request_verification_file');
+            $table->foreignId('ou_of_performance_id');
 
             $table->enum('request_status',['pending', 'complete', 'rejected']);
 
@@ -46,6 +49,7 @@ class CreateRstRequestReplacementStaffTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('organizational_unit_id')->references('id')->on('organizational_units');
             $table->foreign('request_id')->references('id')->on('rst_request_replacement_staff');
+            $table->foreign('ou_of_performance_id')->references('id')->on('organizational_units');
 
             $table->timestamps();
             $table->softDeletes();
