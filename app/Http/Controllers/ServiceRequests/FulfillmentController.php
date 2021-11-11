@@ -706,11 +706,19 @@ class FulfillmentController extends Controller
 
     public function deleteResponsableVB(Fulfillment $fulfillment)
     {
-      
       $fulfillment->responsable_approbation = null;
       $fulfillment->responsable_approbation_date = null;
       $fulfillment->responsable_approver_id = null;
-      $fulfillment->save();      
+
+      $fulfillment->rrhh_approbation = null;
+      $fulfillment->rrhh_approbation_date = null;
+      $fulfillment->rrhh_approver_id = null;
+
+      $fulfillment->finance_approbation = null;
+      $fulfillment->finance_approbation_date = null;
+      $fulfillment->finance_approver_id = null;
+
+      $fulfillment->save();
       session()->flash('success', 'Se ha borrado exitosamente el visto bueno de responsable.');
       return redirect()->back();
 
