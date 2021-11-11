@@ -6,6 +6,12 @@
         <div class="card-body">
             <div class="form-row">
                 <fieldset class="form-group col-sm-4">
+                    <label for="forRut">Nombre:</label>
+                    <input wire:model.defer="name" name="name" class="form-control form-control-sm" type="text" value="">
+                    {{-- @error('name') <span class="error">{{ $message }}</span> @enderror --}}
+                </fieldset>
+
+                <fieldset class="form-group col-sm-3">
                     <label>Mecanismo de Compra:</label><br>
                     <select wire:model="purchaseMechanism" name="purchaseMechanism" class="form-control form-control-sm" required>
                       <option>Seleccione...</option>
@@ -15,15 +21,15 @@
                     </select>
                 </fieldset>
 
-                <fieldset class="form-group col-sm-4">
+                <fieldset class="form-group col-sm-2">
                     <label for="forRut">Programa Asociado:</label>
                     <input wire:model.defer="program" name="program" class="form-control form-control-sm" type="text" value="">
-                    @error('program') <span class="error">{{ $message }}</span> @enderror
+                    {{-- @error('program') <span class="error">{{ $message }}</span> @enderror --}}
                 </fieldset>
 
-                <fieldset class="form-group col-sm-4">
-                    <label for="formFileSmxx" class="form-label">Documento de Respaldo:</label>
-                    <input class="form-control form-control-sm" id="formFileSmxx" type="file" style="padding:2px 0px 0px 2px;" name="fileDoc[]" multiple>
+                <fieldset class="form-group col-sm-3">
+                    <label for="for_fileRequests" class="form-label">Documento de Respaldo:</label>
+                    <input class="form-control form-control-sm" wire:model.defer="fileRequests" type="file" style="padding:2px 0px 0px 2px;" name="fileRequests[]" multiple>
                 </fieldset>
             </div>
             <div class="form-row">
@@ -50,14 +56,24 @@
 
     <br>
 
-    <div class="card">
+    <!-- <div class="card">
         <div class="card-header">
           </i><i class="fas fa-paperclip"></i> Adjuntos</h6>
         </div>
         <div class="card-body">
-            Lista de Archivos
+          @foreach($messagePM as $nameFile)
+
+          <div class="form-row">
+                  <div class="col-sm-6">
+                    <label for="for_fileName">{{ $nameFile }}</label>
+                  </div>
+                  <div class="col-sm-6">
+                    <input class="form-control form-control-sm" wire:model.defer="fileRequests" type="file" style="padding:2px 0px 0px 2px;" name="fileRequests" required>
+                  </div>
+          </div>
+          @endforeach
         </div>
-    </div>
+    </div> -->
 
     <br>
 

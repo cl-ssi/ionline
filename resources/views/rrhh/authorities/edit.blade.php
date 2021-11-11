@@ -29,24 +29,22 @@
     </div>
 
     <div class="form-row">
-        <fieldset class="form-group col-6">
+        <fieldset class="form-group col-12 col-md-6">
             <label for="for_user_id">Funcionario*</label>
             @livewire('search-select-user', ['user' => $authority->user])
         </fieldset>
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-6 col-md-3">
             <label for="for_from">Desde*</label>
             <input required type="date" class="form-control" id="for_from" name="from" required value="{{ $authority->from->format('Y-m-d') }}">
         </fieldset>
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-6 col-md-3">
             <label for="for_to">Hasta*</label>
             <input required type="date" class="form-control" id="for_to" name="to" required value="{{ $authority->to->format('Y-m-d') }}">
         </fieldset>
     
-    </div>
-    <div class="form-row">
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-6 col-md-3">
             <label for="for_position">Cargo*</label>
             <select name="position" id="for_position" class="form-control" required>
                 <option {{ ($authority->position == 'Director')?'selected':'' }}>Director</option>
@@ -73,7 +71,7 @@
         </fieldset>
 
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-6 col-md-3">
             <label for="for_type">Tipo*</label>
             <select name="type" id="for_type" class="form-control" required>
                 <option value="manager" {{ ($authority->type == 'manager')?'selected':'' }}>Encargado (Jefes)</option>
@@ -82,15 +80,15 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col">
-            <label for="for_decree">Decreto autorización ejercer cargo</label>
+        <fieldset class="form-group col-12 col-md-6">
+            <label for="for_decree">Decreto autorizar ejercer cargo</label>
             <input type="text" class="form-control" id="for_decree" name="decree" value="{{$authority->decree}}">
         </fieldset>
     </div>
 
     <fieldset class="form-group">
 		<button type="submit" class="btn btn-primary">
-			<span class="fas fa-save" aria-hidden="true"></span> Actualizar</button>
+			<span class="fas fa-save" aria-hidden="true"></span> Guardar</button>
 
 		</form>
 

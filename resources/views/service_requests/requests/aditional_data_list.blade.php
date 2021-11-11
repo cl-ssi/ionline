@@ -9,66 +9,70 @@
 <h3>Datos Adicionales - Listado de Solicitudes de Contratación de Servicio</h3><br>
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.aditional_data_list') }}">
-  <div class="input-group mb-3">
-    <div class="input-group-prepend">
-      <span class="input-group-text">Unidad</span>
+  <div class="form-row mb-3">
+    <div class="col-6 col-md-3">
+      <label>Unidad</label>
+      <select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" data-size="5">
+        <option value="">Todos</option>
+        @foreach($responsabilityCenters as $key => $responsabilityCenter)
+          <option value="{{$responsabilityCenter->id}}" @if($responsabilityCenter->id == $request->responsability_center_ou_id) selected @endif>{{$responsabilityCenter->name}}</option>
+        @endforeach
+      </select>
     </div>
-    <select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" data-size="5">
-      <option value="">Todos</option>
-      @foreach($responsabilityCenters as $key => $responsabilityCenter)
-        <option value="{{$responsabilityCenter->id}}" @if($responsabilityCenter->id == $request->responsability_center_ou_id) selected @endif>{{$responsabilityCenter->name}}</option>
-      @endforeach
-    </select>
-    <div class="input-group-prepend">
-      <span class="input-group-text">Tipo</span>
+    <div class="col-6 col-md-3">
+      <label>Tipo</label>
+      <select class="form-control selectpicker" data-live-search="true" name="program_contract_type" data-size="5">
+        <option value="">Todos</option>
+        <option value="Mensual" @if($request->program_contract_type == "Mensual") selected @endif>Mensual</option>
+        <option value="Horas" @if($request->program_contract_type == "Horas") selected @endif>Horas</option>
+      </select>
     </div>
-    <select class="form-control selectpicker" data-live-search="true" name="program_contract_type" data-size="5">
-      <option value="">Todos</option>
-      <option value="Mensual" @if($request->program_contract_type == "Mensual") selected @endif>Mensual</option>
-      <option value="Horas" @if($request->program_contract_type == "Horas") selected @endif>Horas</option>
-    </select>
-    <div class="input-group-prepend">
-      <span class="input-group-text">Covid/HSA</span>
+    <div class="col-6 col-md-3">
+      <label>Origen Financiamiento</label>
+      <select class="form-control selectpicker" data-live-search="true" name="type" data-size="5">
+        <option value="">Todos</option>
+        <option value="Covid" @if($request->type == "Covid") selected @endif>Covid</option>
+        <option value="Suma Alzada" @if($request->type == "Suma Alzada") selected @endif>Suma Alzada</option>
+      </select>
     </div>
-    <select class="form-control selectpicker" data-live-search="true" name="type" data-size="5">
-      <option value="">Todos</option>
-      <option value="Covid" @if($request->type == "Covid") selected @endif>Covid</option>
-      <option value="Suma Alzada" @if($request->type == "Suma Alzada") selected @endif>Suma Alzada</option>
-    </select>
-    <div class="input-group-prepend">
-      <span class="input-group-text">Estam.</span>
+    <div class="col-6 col-md-3">
+      <label>Estamento</label>
+      <select class="form-control selectpicker" data-live-search="true" name="estate" data-size="5">
+        <option value="">Todos</option>
+        <option value="Profesional Médico" @if($request->estate == "Profesional Médico") selected @endif>Profesional Médico</option>
+        <option value="Profesional" @if($request->estate == "Profesional") selected @endif>Profesional</option>
+        <option value="Técnico" @if($request->estate == "Técnico") selected @endif>Técnico</option>
+        <option value="Administrativo" @if($request->estate == "Administrativo") selected @endif>Administrativo</option>
+        <option value="Farmaceutico" @if($request->estate == "Farmaceutico") selected @endif>Farmaceutico</option>
+        <option value="Odontólogo" @if($request->estate == "Odontólogo") selected @endif>Odontólogo</option>
+        <option value="Bioquímico" @if($request->estate == "Bioquímico") selected @endif>Bioquímico</option>
+        <option value="Auxiliar" @if($request->estate == "Auxiliar") selected @endif>Auxiliar</option>
+      </select>
     </div>
-    <select class="form-control selectpicker" data-live-search="true" name="estate" data-size="5">
-      <option value=""></option>
-      <option value="Profesional Médico" @if($request->estate == "Profesional Médico") selected @endif>Profesional Médico</option>
-      <option value="Profesional" @if($request->estate == "Profesional") selected @endif>Profesional</option>
-      <option value="Técnico" @if($request->estate == "Técnico") selected @endif>Técnico</option>
-      <option value="Administrativo" @if($request->estate == "Administrativo") selected @endif>Administrativo</option>
-      <option value="Farmaceutico" @if($request->estate == "Farmaceutico") selected @endif>Farmaceutico</option>
-      <option value="Odontólogo" @if($request->estate == "Odontólogo") selected @endif>Odontólogo</option>
-      <option value="Bioquímico" @if($request->estate == "Bioquímico") selected @endif>Bioquímico</option>
-      <option value="Auxiliar" @if($request->estate == "Auxiliar") selected @endif>Auxiliar</option>
-    </select>
-    <div class="input-group-prepend">
-      <span class="input-group-text">Estab.</span>
+    <div class="col-6 col-md-3">
+      <label>Establecimiento</label>
+      <select class="form-control selectpicker" data-live-search="true" name="establishment_id" data-size="5">
+        <option value="">Todos</option>
+        <option value="1" @if($request->establishment_id == "1") selected @endif>Hospital Ernesto Torres Galdames</option>
+        <option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option>
+        <option value="0" @if($request->establishment_id == "0") selected @endif>Dirección SSI</option>
+      </select>
     </div>
-    <select class="form-control selectpicker" data-live-search="true" name="establishment_id" data-size="5">
-      <option value="">Todos</option>
-      <option value="1" @if($request->establishment_id == "1") selected @endif>Hospital Ernesto Torres Galdames</option>
-      <option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option>
-      <option value="0" @if($request->establishment_id == "0") selected @endif>Dirección SSI</option>
-    </select>
-    <div class="input-group-prepend">
-      <span class="input-group-text">Id</span>
+    <div class="col-6 col-md-3">
+      <label>Id</label>
+      <input type="text" class="form-control " name="id" value="{{$request->id}}">
     </div>
-    <input type="text" class="form-control " name="id" value="{{$request->id}}">
-    <div class="input-group-prepend">
-      <span class="input-group-text">Profesional</span>
+    <div class="col-6 col-md-3">
+      <label>Profesional</label>
+      <input type="text" class="form-control" name="name" value="{{$request->name}}">
     </div>
-    <input type="text" class="form-control " name="name" value="{{$request->name}}">
-    <div class="input-group-append">
-        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+    <div class="col-6 col-md-3">
+      <label>&nbsp;</label>
+      <button type="submit" class="form-control btn btn-primary">
+        <i class="fas fa-search"></i> Buscar
+      </button>
     </div>
+    
   </div>
 </form>
 

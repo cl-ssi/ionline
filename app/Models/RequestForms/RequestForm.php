@@ -18,11 +18,15 @@ class RequestForm extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
-        'applicant_position', 'estimated_expense', 'program', 'justification',
+        'applicant_position', 'estimated_expense', 'program', 'name', 'justification',
         'type_form', 'bidding_number', 'creator_user_id','supervisor_user_id',
         'applicant_user_id', 'applicant_ou_id', 'status', 'sigfe',
         'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id'
     ];
+
+    public function requestFormFiles() {
+        return $this->hasMany('\App\Models\RequestForms\RequestFormFile');
+    }
 
     public function creator() {
         return $this->belongsTo(User::class, 'creator_user_id');

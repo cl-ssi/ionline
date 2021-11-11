@@ -8,80 +8,90 @@
 @include('request_form.nav')
 @if(!$empty)
 
-        <fieldset class="form-group">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
-                </div>
-                <input type="text" class="form-control" id="forsearch" onkeyup="filter(1)" placeholder="Buscar un número de formulario" name="search" required="">
-                <div class="input-group-append">
-                    <a class="btn btn-primary" href="{{ route('request_forms.create') }}"><i class="fas fa-plus"></i> Nuevo Formulario</a>
-                </div>
+    <fieldset class="form-group">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
             </div>
-        </fieldset>
-
-@if(count($createdRequestForms) > 0)
-        <div class="card border border-muted text-black bg-light mb-5">
-          <div class="card-header text-primary h6"><i class="fas fa-list"></i> Formularios sin Aprobaciones</div>
-          <div class="card-body">
-            <table class="table table-striped table-sm small">
-              <thead>
-                <tr>
-                  <th scope="col">Id</th>
-                  <th scope="col">Usuario Gestor</th>
-                  <th scope="col">Justificación</th>
-                  <th scope="col">Items</th>
-                  <th scope="col">Fecha Creación</th>
-                  <th scope="col">Espera</th>
-                  <th scope="col" class="text-center">J</th>
-                  <th scope="col" class="text-center">RP</th>
-                  <th scope="col" class="text-center">F</th>
-                  <th scope="col" class="text-center">A</th>
-                  <th scope="col" colspan="3" class="text-center">Opciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                  @foreach($createdRequestForms as $requestForm)
-                        <tr>
-                            <th class="align-middle brd-b brd-l" scope="row">{{ $requestForm->id }}</td>
-                            <td class="align-middle brd-b">{{ $requestForm->creator ? $requestForm->creator->tinnyName() : 'Usuario eliminado' }}</td>
-                            <td class="align-middle brd-b">{{ $requestForm->justification }}</td>
-                            <td class="align-middle brd-b">{{ $requestForm->quantityOfItems() }}</td>
-                            <td class="align-middle brd-b">{{ $requestForm->created_at }}</td>
-                            <td class="align-middle brd-b">{{ $requestForm->getElapsedTime() }}</td>
-                            <td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                            <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
-                            <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                            <td class="align-middle text-center brd-b brd-r">{!! $requestForm->eventSign('supply_event') !!}</td>
-                            <td class="text-center align-middle brd-b">
-                              <a href="{{ route('request_forms.edit', $requestForm->id) }}"  class="text-primary" title="Editar">
-                              <i class="far fa-edit"></i></a>
-                            </td>
-
-                            <td class="text-center align-middle brd-b">
-                              <a href="{{ route('request_forms.show', $requestForm->id) }}" class="text-info" title="Visualizar">
-                              <i class="fas fa-binoculars"></i></a>
-                            </td>
-
-                            <td class="text-center align-middle brd-r brd-b">
-                              <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
-                              <i class="far fa-trash-alt"></i></a>
-                            </td>
-                        </tr>
-                  @endforeach
-              </tbody>
-            </table>
-          </div>
+            <input type="text" class="form-control" id="forsearch" onkeyup="filter(1)" placeholder="Buscar un número de formulario" name="search" required="">
+            <div class="input-group-append">
+                <a class="btn btn-primary" href="{{ route('request_forms.create') }}"><i class="fas fa-plus"></i> Nuevo Formulario</a>
+            </div>
         </div>
-@else
-        <div class="card mb-3 bg-light">
-          <div class="card-body">
-            Sus formularios están siendo atendidos.
-          </div>
-        </div>
-@endif
+    </fieldset>
 
-@if(count($inProgressRequestForms) > 0)
+    @if(count($createdRequestForms) > 0)
+      </div>
+      <div class="col">
+          <div class="table-responsive">
+              <table class="table table-sm table-striped table-bordered">
+                <thead class="small">
+                  <tr class="text-center">>
+                    <th>ID</th>
+                    <th style="width: 7%">Fecha Creación</th>
+                    <th>Solicitud</th>
+                    <th>Usuario Gestor</th>
+                    <th>Justificación</th>
+                    <th>Items</th>
+                    <th>Espera</th>
+                    <th>J</th>
+                    <th>RP</th>
+                    <th>F</th>
+                    <th>A</th>
+                    <th colspan="3">Opciones</th>
+                  </tr>
+                </thead>
+                <tbody class="small">
+                    @foreach($createdRequestForms as $requestForm)
+                          <tr>
+                              <td>{{ $requestForm->id }}</td>
+                              <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                              <td>{{ $requestForm->name }}</td>
+                              <td>{{ $requestForm->creator->FullName }}<br>
+                                  {{ $requestForm->organizationalUnit->name }}
+                              </td>
+                              <td class="align-middle brd-b">{{ $requestForm->justification }}</td>
+                              <td class="align-middle brd-b">{{ $requestForm->quantityOfItems() }}</td>
+                              <td class="align-middle brd-b">{{ $requestForm->getElapsedTime() }}</td>
+                              <td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                              <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
+                              <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
+                              <td class="align-middle text-center brd-b brd-r">{!! $requestForm->eventSign('supply_event') !!}</td>
+                              <td class="text-center align-middle brd-b">
+                                <a href="{{ route('request_forms.edit', $requestForm->id) }}"  class="text-primary" title="Editar">
+                                <i class="far fa-edit"></i></a>
+                              </td>
+
+                              <td class="text-center align-middle brd-b">
+                                <a href="{{ route('request_forms.show', $requestForm->id) }}" class="text-info" title="Visualizar">
+                                <i class="fas fa-binoculars"></i></a>
+                              </td>
+
+                              <td class="text-center align-middle brd-r brd-b">
+                                <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
+                                <i class="far fa-trash-alt"></i></a>
+                              </td>
+                          </tr>
+                    @endforeach
+                </tbody>
+              </table>
+          </div>
+      </div>
+          <!-- <div class="card border border-muted text-black bg-light mb-5">
+            <div class="card-header text-primary h6"><i class="fas fa-list"></i> Formularios sin Aprobaciones</div>
+            <div class="card-body">
+
+            </div>
+          </div> -->
+      @else
+            <div class="card mb-3 bg-light">
+              <div class="card-body">
+                Sus formularios están siendo atendidos.
+              </div>
+            </div>
+    @endif
+
+    @if(count($inProgressRequestForms) > 0)
         <div class="card border border-muted text-black bg-light mb-5">
           <div class="card-header text-primary h6"><i class="far fa-paper-plane"></i> Formularios en Progreso</div>
           <div class="card-body">
@@ -128,15 +138,15 @@
             </table>
           </div>
         </div>
-@else
+    @else
         <div class="card mb-3 bg-light">
           <div class="card-body">
             No hay formularios de requerimiento en progreso.
           </div>
         </div>
-@endif
+    @endif
 
-@if(count($rejectedRequestForms) > 0)
+    @if(count($rejectedRequestForms) > 0)
         <div class="card border border-muted text-black bg-light mb-5">
           <div class="card-header text-primary h6"><i class="fas fa-archive"></i> Formularios Cerrados o Rechazados</div>
           <div class="card-body">
@@ -176,13 +186,13 @@
             </table>
           </div>
         </div>
-@else
+    @else
         <div class="card mb-3 bg-light">
           <div class="card-body">
             No hay formularios de requerimiento finalizados o rechazados.
           </div>
         </div>
-@endif
+    @endif
 
 @else
         <div class="card">
