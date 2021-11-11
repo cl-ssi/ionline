@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Auth;
 class RequestFormCreate extends Component
 {
     use WithFileUploads;
-    public $article, $unitOfMeasurement, $technicalSpecifications, $quantity,
-    $unitValue, $taxes, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
+    public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $typeOfCurrency,
+    $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
     public $purchaseMechanism, $messagePM, $program, $justify, $totalDocument;
     public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF;
     public $budget_item_id, $lstPurchaseMechanism;
@@ -26,6 +26,7 @@ class RequestFormCreate extends Component
         'article'             =>  'required',
         'unitOfMeasurement'   =>  'required',
         'taxes'               =>  'required',
+        'typeOfCurrency'      =>  'required'
         //'budget_item_id'      =>  'required',
     ];
 
@@ -39,6 +40,7 @@ class RequestFormCreate extends Component
         'article.required'            => 'Debe ingresar un Artículo.',
         'unitOfMeasurement.required'  => 'Debe seleccionar una Unidad de Medida',
         'taxes.required'              => 'Debe seleccionar un Tipo de Impuesto.',
+        'typeOfCurrency.required'              => 'Debe seleccionar un Tipo de Moneda.',
         //'budget_item_id.required'     => 'Debe seleccionar un Item Presupuestario',
     ];
 
@@ -186,7 +188,7 @@ class RequestFormCreate extends Component
               $this->messagePM[] = "Decretos Presupuestarios";
               $this->messagePM[] = "Convenios Mandatos";
               $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
-              break;  
+              break;
           case "":
               break;
       }
@@ -211,6 +213,7 @@ class RequestFormCreate extends Component
           'items.required'               =>  'Debe agregar al menos un Item para Bien y/o Servicio'
         ],
       );
+
       $req = RequestForm::updateOrCreate(
         [
           'id'                    =>  $this->idRF,
@@ -228,9 +231,11 @@ class RequestFormCreate extends Component
           'program'               =>  $this->program,
           'status'                =>  'created'
       ]);
+
       foreach($this->items as $item){
         $this->saveItem($item, $req->id);
       }
+
       if($this->editRF){
         ItemRequestForm::destroy($this->deletedItems);
         session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue editado con exito.');
@@ -242,6 +247,7 @@ class RequestFormCreate extends Component
         EventRequestform::createSupplyEvent($req);
         session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue creado con exito.');
       }
+
       return redirect()->to('/request_forms');
     }
 

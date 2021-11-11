@@ -11,12 +11,17 @@ use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseMechanism;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class RequestForm extends Model
+class RequestForm extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
+
     protected $fillable = [
-        'applicant_position', 'estimated_expense', 'program', 'justification', 'type_form', 'bidding_number', 'creator_user_id',
-        'supervisor_user_id', 'applicant_user_id', 'applicant_ou_id', 'status', 'sigfe', 'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id',
+        'applicant_position', 'estimated_expense', 'program', 'justification',
+        'type_form', 'bidding_number', 'creator_user_id','supervisor_user_id',
+        'applicant_user_id', 'applicant_ou_id', 'status', 'sigfe',
+        'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id'
     ];
 
     public function creator() {

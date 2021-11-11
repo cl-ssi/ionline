@@ -38,6 +38,7 @@ class ItemController extends Controller
     public function store(Request $request, RequestForm $requestForm)
     {
         $item = new Item($request->All());
+        dd('hola');
         //ASOCIAR ID FOLIO.
         $item->request_form()->associate($requestForm->id);
         $item->save();
