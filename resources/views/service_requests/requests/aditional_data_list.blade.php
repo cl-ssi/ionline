@@ -12,7 +12,7 @@
   <div class="form-row mb-3">
     <div class="col-6 col-md-3">
       <label>Unidad</label>
-      <select class="form-control" data-live-search="true" name="responsability_center_ou_id" data-size="5">
+      <select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" data-size="5">
         <option value="">Todos</option>
         @foreach($responsabilityCenters as $key => $responsabilityCenter)
           <option value="{{$responsabilityCenter->id}}" @if($responsabilityCenter->id == $request->responsability_center_ou_id) selected @endif>{{$responsabilityCenter->name}}</option>
@@ -21,24 +21,24 @@
     </div>
     <div class="col-6 col-md-3">
       <label>Tipo</label>
-      <select class="form-control" data-live-search="true" name="program_contract_type" data-size="5">
+      <select class="form-control selectpicker" data-live-search="true" name="program_contract_type" data-size="5">
         <option value="">Todos</option>
         <option value="Mensual" @if($request->program_contract_type == "Mensual") selected @endif>Mensual</option>
         <option value="Horas" @if($request->program_contract_type == "Horas") selected @endif>Horas</option>
       </select>
     </div>
     <div class="col-6 col-md-3">
-      <label>Covid/HSA</label>
-      <select class="form-control" data-live-search="true" name="type" data-size="5">
+      <label>Origen Financiamiento</label>
+      <select class="form-control selectpicker" data-live-search="true" name="type" data-size="5">
         <option value="">Todos</option>
         <option value="Covid" @if($request->type == "Covid") selected @endif>Covid</option>
         <option value="Suma Alzada" @if($request->type == "Suma Alzada") selected @endif>Suma Alzada</option>
       </select>
     </div>
     <div class="col-6 col-md-3">
-      <label>Estam.</label>
-      <select class="form-control" data-live-search="true" name="estate" data-size="5">
-        <option value=""></option>
+      <label>Estamento</label>
+      <select class="form-control selectpicker" data-live-search="true" name="estate" data-size="5">
+        <option value="">Todos</option>
         <option value="Profesional Médico" @if($request->estate == "Profesional Médico") selected @endif>Profesional Médico</option>
         <option value="Profesional" @if($request->estate == "Profesional") selected @endif>Profesional</option>
         <option value="Técnico" @if($request->estate == "Técnico") selected @endif>Técnico</option>
@@ -50,8 +50,8 @@
       </select>
     </div>
     <div class="col-6 col-md-3">
-      <label>Estab.</label>
-      <select class="form-control" data-live-search="true" name="establishment_id" data-size="5">
+      <label>Establecimiento</label>
+      <select class="form-control selectpicker" data-live-search="true" name="establishment_id" data-size="5">
         <option value="">Todos</option>
         <option value="1" @if($request->establishment_id == "1") selected @endif>Hospital Ernesto Torres Galdames</option>
         <option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option>
