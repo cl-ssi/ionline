@@ -210,6 +210,17 @@ class ServiceRequestController extends Controller
     return redirect()->back();
   }
 
+  public function delete_signature_flow(Request $request)
+  {
+    $signatureFlow = SignatureFlow::find($request->signature_flow_id);
+    $signatureFlow->delete();
+
+    session()->flash('success', 'Se ha eliminado el responsable del flujo de firmas.');
+    return redirect()->back();
+  }
+
+
+
 
 
   /**

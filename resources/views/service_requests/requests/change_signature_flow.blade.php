@@ -45,6 +45,13 @@
                 <td><button type="submit" class="btn btn-primary">Cambiar usuario</button>
                 </td>
               </form>
+
+              <form method="POST" enctype="multipart/form-data" action="{{ route('rrhh.service-request.delete_signature_flow') }}">
+              @csrf
+                <input type="hidden" name="signature_flow_id" value="{{$signatureFlow->id}}">
+  							<td><button type="submit" class="btn btn-danger" onclick="return confirm('¿Está seguro/a de eliminar este visador?');">Eliminar usuario</button>
+  						</form>
+
             </tr>
           @endforeach
         </table>
