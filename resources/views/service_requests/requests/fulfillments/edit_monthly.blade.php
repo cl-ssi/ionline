@@ -502,7 +502,7 @@
 		@endcan
 
 
-		@if($fulfillment->responsable_approver_id != NULL)
+		@if($fulfillment->responsable_approver_id != NULL || $fulfillment->rrhh_approver_id != NULL || $fulfillment->finances_approver_id != NULL)
 		<h5>Visaciones</h5>
 		<table class="table table-sm small">
 			<thead>
