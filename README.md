@@ -3,6 +3,14 @@ Sistema desarrollado el Departamento TIC del Servicio de Salud de Iquique.
 
 sistemas.ssi@redsalud.gob.cl
 
+## Cambio de rama de master a main
+```
+git branch -m master main
+git fetch origin
+git branch -u origin/main main
+git remote set-head origin -a
+```
+
 # Instalacion
 > Este proyecto está desarrollado en Laravel 8
 

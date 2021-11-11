@@ -9,7 +9,7 @@
 
 
 <a href="{{ route('programmingitems.create',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
-<h4 class="mb-3"> Programación - Horas Directas - {{$programming->establishment ?? '' }} {{$programming->year ?? '' }} </h4>
+<h4 class="mb-3"> Programación - Horas Directas - {{$programming->establishment->name ?? '' }} {{$programming->year ?? '' }} </h4>
 
 <form method="GET" class="form-horizontal small " action="{{ route('programmingitems.index') }}" enctype="multipart/form-data">
 
@@ -19,8 +19,8 @@
             <!-- <input type="number" class="form-control" id="tracer" name="tracer_number" value="" placeholder="Nro. Trazadora" > -->
       
             <select name="tracer_number[]" id="tracer_number" class="form-control selectpicker " data-live-search="true" multiple>
-                @foreach($activityItems as $activityItem)
-                    <option value="{{ $activityItem->int_code }}">{{$activityItem->int_code}}</option>
+                @foreach($tracerNumbers as $tracer)
+                    <option value="{{ $tracer }}">{{$tracer}}</option>
                 @endforeach
             </select>
         </div>
@@ -36,18 +36,9 @@
     <li class="list-inline-item">
         <a href="{{ route('programming.reportObservation',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-dark mb-1 float-right btn-sm">
         Observaciones 
-            @foreach($reviewIndicators as $reviewIndicator)
-            <span 
-                @if($reviewIndicator->indicator == 'Pendiente')
-                    class="badge badge-danger"
-                @elseif($reviewIndicator->indicator == 'Revisión')
-                    class="badge badge-warning"
-                @elseif($reviewIndicator->indicator == 'Aceptada')
-                    class="badge badge-primary"
-                @endif>
-            
-            {{ $reviewIndicator->qty }}</span>  
-            @endforeach
+            <span class="badge badge-danger">{{$programming->countTotalReviewsBy('Not rectified')}}</span>
+            <span class="badge badge-warning">{{$programming->countTotalReviewsBy('Regularly rectified')}}</span>
+            <span class="badge badge-primary">{{$programming->countTotalReviewsBy('Accepted rectified')}}</span>
         </a>
     </li>
 </ul>
@@ -94,20 +85,25 @@
         </tr>
     </thead>
     <tbody style="font-size:65%;">
-        @foreach($programmingItems as $programmingitem)
+        @foreach($programming->itemsBy('Direct') as $programmingitem)
         <tr class="small">
         @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" >
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitem->id]) }}" class="btn btb-flat btn-sm btn-light">
-                    @if($programmingitem->qty_reviews || $programmingitem->qty_rectify_reviews || $programmingitem->qty_regular_reviews || $programmingitem->qty_accept_reviews)
-                    <i class="fas fa-clipboard-check text-secondary"></i>
-                    <span class="badge badge-danger opacity-1 ml-2 ">{{ $programmingitem->qty_reviews}}</span>
-
-                    <span class="badge badge-success ml-2 ">{{ $programmingitem->qty_rectify_reviews}}</span>
-
-                    <span class="badge badge-warning ml-2 ">{{ $programmingitem->qty_regular_reviews}}</span>
-
-                    <span class="badge badge-primary ml-2 ">{{ $programmingitem->qty_accept_reviews}}</span>
+                    @if($programmingitem->reviewItems->count() != 0)
+                        <i class="fas fa-clipboard-check text-secondary"></i>
+                        @if($programmingitem->getCountReviewsBy('Not rectified') > 0)
+                        <span class="badge badge-danger opacity-1 ml-2 ">{{ $programmingitem->getCountReviewsBy('Not rectified')}}</span>
+                        @endif
+                        @if($programmingitem->getCountReviewsBy('Rectified') > 0)
+                        <span class="badge badge-success ml-2 ">{{ $programmingitem->getCountReviewsBy('Rectified')}}</span>
+                        @endif
+                        @if($programmingitem->getCountReviewsBy('Regularly rectified') > 0)
+                        <span class="badge badge-warning ml-2 ">{{ $programmingitem->getCountReviewsBy('Regularly rectified')}}</span>
+                        @endif
+                        @if($programmingitem->getCountReviewsBy('Accepted rectified') > 0)
+                        <span class="badge badge-primary ml-2 ">{{ $programmingitem->getCountReviewsBy('Accepted rectified')}}</span>
+                        @endif
                     @else
                     <i class="fas fa-clipboard-check "></i>
                     <span class="badge badge-secondary ml-2 ">0</span>
@@ -118,13 +114,12 @@
         @can('ProgrammingItem: edit')
             <td class="text-center align-middle" ><a href="{{ route('programmingitems.show', $programmingitem->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
         @endcan
-            <td class="text-center align-middle">{{ $programmingitem->tracer }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->tracer_code }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->cycle }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->action_type }}</td>
-            <!--<td class="text-center align-middle">{{ $programmingitem->ministerial_program }}</td>-->
-            <td class="text-center align-middle">{{ $programmingitem->activity_name }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->def_target_population }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->activityItem->tracer ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->activityItem->int_code ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->activityItem && $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->cycle : ($programmingitem->activityItem->vital_cycle ?? $programmingitem->cycle) }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->activityItem && $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->action_type : ($programmingitem->activityItem->activityItem->action_type ?? $programmingitem->action_type) }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->activityItem->activity_name ?? $programmingitem->activity_name }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->activityItem && $programmingitem->activityItem->tracer == 'NO' ? $programmingitem->def_target_population : ($programmingitem->activityItem->def_target_population ?? $programmingitem->def_target_population) }}</td>
             <td class="text-center align-middle">{{ $programmingitem->source_population }}</td>
             <td class="text-center align-middle">{{ $programmingitem->cant_target_population }}</td>
             <td class="text-center align-middle">{{ $programmingitem->prevalence_rate }}</td>
@@ -133,13 +128,13 @@
             <td class="text-center align-middle">{{ $programmingitem->population_attend }}</td>
             <td class="text-center align-middle">{{ $programmingitem->concentration }}</td>
             <td class="text-center align-middle">{{ $programmingitem->activity_total }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->professional }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->professionalHour->professional->name ?? '' }}</td>
             <td class="text-center align-middle">{{ $programmingitem->activity_performance }}</td>
             <td class="text-center align-middle">{{ $programmingitem->hours_required_year }}</td>
             <td class="text-center align-middle">{{ $programmingitem->hours_required_day }}</td>
             <td class="text-center align-middle">{{ $programmingitem->direct_work_year }}</td>
             <td class="text-center align-middle">{{ $programmingitem->direct_work_hour }}</td>
-            <td class="text-center align-middle">{{ $programmingitem->information_source }}</td>
+            <td class="text-center align-middle">{{ $programmingitem->activityItem->verification_rem ?? $programmingitem->information_source }}</td>
             <td class="text-center align-middle">{{ $programmingitem->prap_financed }}</td>
             @can('ProgrammingItem: duplicate')
             <td class="text-center align-middle">
@@ -205,14 +200,15 @@
         </tr>
     </thead>
     <tbody style="font-size:65%;">
-        @foreach($programmingItemIndirects as $programmingitemsIndirect)
+        @foreach($programming->itemsBy('Indirect') as $programmingitemsIndirect)
+        @if($programmingitemsIndirect->activityItem != null)
         <tr class="small">
         @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" >
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitemsIndirect->id]) }}" class="btn btb-flat btn-sm btn-light">
-                    @if($programmingitemsIndirect->qty_reviews > 0)
+                    @if($programmingitemsIndirect->getCountReviewsBy('Not rectified') > 0)
                     <i class="fas fa-clipboard-check text-danger"></i>
-                    <span class="badge badge-danger ml-2 ">{{ $programmingitemsIndirect->qty_reviews}}</span>
+                    <span class="badge badge-danger ml-2 ">{{ $programmingitemsIndirect->getCountReviewsBy('Not rectified')}}</span>
                     @else
                     <i class="fas fa-clipboard-check "></i>
                     <span class="badge badge-secondary ml-2 ">0</span>
@@ -223,12 +219,12 @@
         @can('ProgrammingItem: edit')
             <td class="text-center align-middle" ><a href="{{ route('programmingitems.show', $programmingitemsIndirect->id) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-edit"></i></a></td>
         @endcan
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->tracer }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->tracer_code }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->cycle }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->action_type }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->activity_name }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->def_target_population }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->tracer ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->int_code ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem && $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->cycle : ($programmingitemsIndirect->activityItem->vital_cycle ?? $programmingitemsIndirect->cycle) }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem && $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->action_type : ($programmingitemsIndirect->activityItem->activityItem->action_type ?? $programmingitemsIndirect->action_type) }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->activity_name ?? $programmingitemsIndirect->activity_name }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem && $programmingitemsIndirect->activityItem->tracer == 'NO' ? $programmingitemsIndirect->def_target_population : ($programmingitemsIndirect->activityItem->def_target_population ?? $programmingitemsIndirect->def_target_population) }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->source_population }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->cant_target_population }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->prevalence_rate }}</td>
@@ -237,13 +233,13 @@
             <td class="text-center align-middle">{{ $programmingitemsIndirect->population_attend }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->concentration }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->activity_total }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->professional }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->professionalHour->professional->name ?? '' }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->activity_performance }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->hours_required_year }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->hours_required_day }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_year }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->direct_work_hour }}</td>
-            <td class="text-center align-middle">{{ $programmingitemsIndirect->information_source }}</td>
+            <td class="text-center align-middle">{{ $programmingitemsIndirect->activityItem->verification_rem ?? $programmingitemsIndirect->information_source }}</td>
             <td class="text-center align-middle">{{ $programmingitemsIndirect->prap_financed }}</td>
             @can('ProgrammingItem: duplicate')
             <td class="text-center align-middle">
@@ -266,6 +262,7 @@
             </td>
             @endcan
         </tr>
+        @endif
         @endforeach
     </tbody>
 </table>
@@ -311,14 +308,15 @@
         </tr>
     </thead>
     <tbody style="font-size:65%;">
-        @foreach($programmingItemworkshops as $programmingItemworkshop)
+        @foreach($programming->itemsBy('Workshop') as $programmingItemworkshop)
+        @if($programmingItemworkshop->activityItem != null)
         <tr class="small">
         @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" >
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingItemworkshop->id]) }}" class="btn btb-flat btn-sm btn-light">
-                    @if($programmingItemworkshop->qty_reviews > 0)
+                    @if($programmingItemworkshop->getCountReviewsBy('Not rectified') > 0)
                     <i class="fas fa-clipboard-check text-danger"></i>
-                    <span class="badge badge-danger ml-2 ">{{ $programmingItemworkshop->qty_reviews}}</span>
+                    <span class="badge badge-danger ml-2 ">{{ $programmingItemworkshop->getCountReviewsBy('Not rectified')}}</span>
                     @else
                     <i class="fas fa-clipboard-check "></i>
                     <span class="badge badge-secondary ml-2 ">0</span>
@@ -326,13 +324,13 @@
                 </a>
             </td>
         @endcan
-            <td class="text-center align-middle">{{ $programmingItemworkshop->tracer }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->tracer_code }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->tracer ?? '' }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->int_code ?? '' }}</td>
             <td class="text-center align-middle">TALLER</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->cycle }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->action_type }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activity_name }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->def_target_population }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->cycle : ($programmingItemworkshop->activityItem->vital_cycle ?? $programmingItemworkshop->cycle) }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->action_type : ($programmingItemworkshop->activityItem->activityItem->action_type ?? $programmingItemworkshop->action_type) }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->activity_name ?? $programmingItemworkshop->activity_name }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->def_target_population : ($programmingItemworkshop->activityItem->def_target_population ?? $programmingItemworkshop->def_target_population) }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->source_population }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->cant_target_population }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->coverture }}</td>
@@ -344,13 +342,13 @@
 
 
             <td class="text-center align-middle">{{ $programmingItemworkshop->activity_total }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->professional }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->professionalHour->professional->name ?? '' }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->activity_performance }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->hours_required_year }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->hours_required_day }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_year }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->direct_work_hour }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->information_source }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->verification_rem ?? $programmingItemworkshop->information_source }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->prap_financed }}</td>
             @can('ProgrammingItem: duplicate')
             <td class="text-center align-middle">
@@ -363,7 +361,7 @@
             </td>
             @endcan
             @can('ProgrammingItem: delete')
-            <td>
+            <td class="text-center align-middle">
                 <form method="POST" action="{{ route('programmingitems.destroy', $programmingItemworkshop->id) }}" class="small d-inline">
                     {{ method_field('DELETE') }} {{ csrf_field() }}
                     <button class="btn btn-sm btn-outline-danger small" onclick="return confirm('¿Desea eliminar el registro realmente?')">
@@ -373,6 +371,7 @@
             </td>
             @endcan
         </tr>
+        @endif
         @endforeach
     </tbody>
 </table>

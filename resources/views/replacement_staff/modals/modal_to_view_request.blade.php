@@ -34,7 +34,7 @@
                   </tr>
                   <tr>
                       <th class="table-active">Calidad Jurídica / $ Honorarios</th>
-                      <td style="width: 33%">{{ $requestReplacementStaff->LegalQualityValue }}</td>
+                      <td style="width: 33%">{{ $requestReplacementStaff->legalQualityManage->NameValue }}</td>
                       <td style="width: 33%">
                         @if($requestReplacementStaff->LegalQualityValue == 'Honorarios')
                             ${{ number_format($requestReplacementStaff->salary,0,",",".") }}
@@ -47,12 +47,18 @@
                       <td style="width: 33%">{{ $requestReplacementStaff->other_work_day }}</td>
                   </tr>
                   <tr>
-                      <th class="table-active">Justificación o fundamento de la Contratación</th>
-                      <td style="width: 33%">{{ $requestReplacementStaff->FundamentValue }}</td>
+                      <th class="table-active">
+                        Fundamento de la Contratación<br>
+                        Detalle de Fundamento
+                      </th>
+                      <td style="width: 33%">
+                        {{ $requestReplacementStaff->fundamentManage->NameValue }}<br>
+                        {{ $requestReplacementStaff->fundamentDetailManage->NameValue }}
+                      </td>
                       <td style="width: 33%">De funcionario: {{ $requestReplacementStaff->name_to_replace }}</td>
                   </tr>
                   <tr>
-                      <th class="table-active">Fundamento (especifique)</th>
+                      <th class="table-active">Otro Fundamento (especifique)</th>
                       <td colspan="2">{{ $requestReplacementStaff->other_fundament }}</td>
                   </tr>
                   <tr>
@@ -61,8 +67,17 @@
                       <td style="width: 33%">{{ $requestReplacementStaff->end_date->format('d-m-Y') }}</td>
                   </tr>
                   <tr>
-                      <th class="table-active">Perfil del Cargo</th>
-                      <td colspan="2"><a href="{{ route('replacement_staff.request.show_file', $requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a></td>
+                      <th class="table-active">Archivos</th>
+                      <td style="width: 33%">Perfil de Cargo
+                        @if($requestReplacementStaff->job_profile_file)
+                            <a href="{{ route('replacement_staff.request.show_file', $requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a>
+                        @endif
+                      </td>
+                      <td style="width: 33%">Correo (Verificación Solicitud) <a href="{{ route('replacement_staff.request.show_verification_file', $requestReplacementStaff) }}" target="_blank"> <i class="fas fa-paperclip"></i></a></td>
+                  </tr>
+                  <tr>
+                      <th class="table-active">Lugar de Desempeño</th>
+                      <td colspan="2">{{ $requestReplacementStaff->ouPerformance->name }}</td>
                   </tr>
                   <tr>
                       <td colspan="3">El proceso debe contener las firmas y timbres de las personas que dan autorización para que la Unidad Selección inicie el proceso de Llamado de presentación de antecedentes.</td>

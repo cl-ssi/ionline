@@ -346,9 +346,55 @@ class ReportController extends Controller
   public function withBankDetails()
   {
 
-    $userbankaccounts = UserBankAccount::all();
+    $userbankaccounts = UserBankAccount::paginate(50);
 
     return view('service_requests.reports.with_bank_details', compact('userbankaccounts'));
+  }
+
+  public function exportCsv()
+  {
+    $headers = array(
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=exportacion.csv",
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        );
+
+        $filas = UserBankAccount::all();
+
+        $columnas = array(
+            'RUT',
+            'NOMBRE',
+            'DIRECCIÓN',
+            'TELEFONO',
+            'EMAIL',
+            'BANCO',
+            'NUMERO DE CUENTA',
+            'TIPO DE PAGO'
+        );
+
+        $callback = function() use ($filas, $columnas)
+        {
+            $file = fopen('php://output', 'w');
+            fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
+            fputcsv($file, $columnas,';');
+
+            foreach($filas as $fila) {
+                fputcsv($file, array(
+                  $fila->user->runFormat(),
+                  $fila->user->getFullNameAttribute(),
+                  $fila->user->address,
+                  $fila->user->phone_number,
+                  $fila->user->email,
+                  $fila->bank->name,
+                  $fila->number,
+                  $fila->getTypeText()
+                ),';');
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
   }
 
   public function indexWithResolutionFile()

@@ -24,89 +24,92 @@ class MonthlyQuotes extends Component
     {
       $fulfillment = $this->serviceRequest->fulfillments->where('month',$mes)->first();
 
-      $total_dias_trabajados = 0;
-      $mes_completo = true;
+      if ($fulfillment) {
+        $total_dias_trabajados = 0;
+        $mes_completo = true;
 
-      /* si tiene una "Renuncia voluntaria", el termino del contrato es ahí */
-      if ($renuncia = $fulfillment->fulfillmentItems->where('type', 'Renuncia voluntaria')->first()) {
-          $fulfillment->end_date = $renuncia->end_date;
+        /* si tiene una "Renuncia voluntaria", el termino del contrato es ahí */
+        if ($renuncia = $fulfillment->fulfillmentItems->where('type', 'Renuncia voluntaria')->first()) {
+            $fulfillment->end_date = $renuncia->end_date;
+        }
+
+        /* si inicio de contrato coincide con inicio de mes y término de contrato coincide con fin de mes */
+        if ($fulfillment->start_date and $fulfillment->end_date) {
+            if (
+                $fulfillment->start_date->toDateString() == $fulfillment->start_date->startOfMonth()->toDateString()
+                and $fulfillment->end_date->toDateString() == $fulfillment->end_date->endOfMonth()->toDateString()
+            ) {
+                $total_dias_trabajados = 30;
+                $mes_completo = true;
+            }
+
+            /* De lo contrario es la diferencia entre el primer y último día */ else {
+                $total_dias_trabajados = $fulfillment->start_date->diff($fulfillment->end_date)->days + 1;
+                $mes_completo = false;
+            }
+        }
+
+        /* Restar las ausencias */
+        $dias_descuento = 0;
+        $dias_trabajado_antes_retiro = 0;
+
+        foreach ($fulfillment->fulfillmentItems as $item) {
+            switch ($item->type) {
+                case 'Inasistencia Injustificada':
+                    $mes_completo = false;
+                    $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
+                    break;
+                case 'Licencia no covid':
+                    $mes_completo = false;
+                    $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
+                    break;
+                case 'Abandono de funciones':
+                    $mes_completo = false;
+                    $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
+                    //dd((int)$item->end_date->format("d"));
+                    //dd($fulfillment->start_date->format("d"));
+                    $dias_trabajado_antes_retiro = ((int)$item->end_date->format("d"))-(int)$fulfillment->start_date->format("d") ;
+                    //dd($dias_trabajado_antes_retiro);
+
+                    break;
+                case 'Renuncia voluntaria':
+                    $mes_completo = false;
+                    $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
+                    $dias_descuento += 1;
+                    break;
+                case 'Término de contrato anticipado':
+                        $mes_completo = false;
+                        $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
+                        $dias_descuento += 1;
+                        //dd('soy termino de contrato');
+                        break;
+            }
+        }
+
+        $total_dias_trabajados -= $dias_descuento;
+
+        // se verifica si hay retiro para calcular la cantidad de dias trabajados
+        if ($mes_completo) {
+            $total = $monto - ($dias_descuento * ($monto / 30));
+        } else {
+            if ($dias_trabajado_antes_retiro == 0) {
+
+            }
+            if ($dias_trabajado_antes_retiro != 0) {
+
+                $total_dias_trabajados = $dias_trabajado_antes_retiro;
+            }
+
+            // if ($mes == 9) {
+            //   dd($monto, $total_dias_trabajados, $monto);
+            // }
+            $total = $total_dias_trabajados * ($monto / 30);
+        }
+
+        return $total;
+        // return number_format(round($total), 0, ',', '.');
       }
 
-      /* si inicio de contrato coincide con inicio de mes y término de contrato coincide con fin de mes */
-      if ($fulfillment->start_date and $fulfillment->end_date) {
-          if (
-              $fulfillment->start_date->toDateString() == $fulfillment->start_date->startOfMonth()->toDateString()
-              and $fulfillment->end_date->toDateString() == $fulfillment->end_date->endOfMonth()->toDateString()
-          ) {
-              $total_dias_trabajados = 30;
-              $mes_completo = true;
-          }
-
-          /* De lo contrario es la diferencia entre el primer y último día */ else {
-              $total_dias_trabajados = $fulfillment->start_date->diff($fulfillment->end_date)->days + 1;
-              $mes_completo = false;
-          }
-      }
-
-      /* Restar las ausencias */
-      $dias_descuento = 0;
-      $dias_trabajado_antes_retiro = 0;
-
-      foreach ($fulfillment->fulfillmentItems as $item) {
-          switch ($item->type) {
-              case 'Inasistencia Injustificada':
-                  $mes_completo = false;
-                  $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
-                  break;
-              case 'Licencia no covid':
-                  $mes_completo = false;
-                  $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
-                  break;
-              case 'Abandono de funciones':
-                  $mes_completo = false;
-                  $dias_descuento += $item->end_date->diff($item->start_date)->days + 1;
-                  //dd((int)$item->end_date->format("d"));
-                  //dd($fulfillment->start_date->format("d"));
-                  $dias_trabajado_antes_retiro = ((int)$item->end_date->format("d"))-(int)$fulfillment->start_date->format("d") ;
-                  //dd($dias_trabajado_antes_retiro);
-
-                  break;
-              case 'Renuncia voluntaria':
-                  $mes_completo = false;
-                  $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
-                  $dias_descuento += 1;
-                  break;
-              case 'Término de contrato anticipado':
-                      $mes_completo = false;
-                      $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
-                      $dias_descuento += 1;
-                      //dd('soy termino de contrato');
-                      break;
-          }
-      }
-
-      $total_dias_trabajados -= $dias_descuento;
-
-      // se verifica si hay retiro para calcular la cantidad de dias trabajados
-      if ($mes_completo) {
-          $total = $monto - ($dias_descuento * ($monto / 30));
-      } else {
-          if ($dias_trabajado_antes_retiro == 0) {
-
-          }
-          if ($dias_trabajado_antes_retiro != 0) {
-
-              $total_dias_trabajados = $dias_trabajado_antes_retiro;
-          }
-
-          // if ($mes == 9) {
-          //   dd($monto, $total_dias_trabajados, $monto);
-          // }
-          $total = $total_dias_trabajados * ($monto / 30);
-      }
-
-      return $total;
-      // return number_format(round($total), 0, ',', '.');
     }
 
     public function render()

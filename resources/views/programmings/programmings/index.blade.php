@@ -6,11 +6,11 @@
 
 @include('programmings/nav')
 
-<h3 class="mb-3">Programación Numérica 
+<h3 class="mb-3">Programación Numérica {{$year}}
 <form class="form-inline float-right small" method="GET" action="{{ route('programmings.index') }}">
     <select name="year" class="form-control" onchange="this.form.submit()">
-                    @foreach(range(2021, date('Y') + 1) as $year)
-                        <option value="{{ $year }}" {{ request()->year == $year ? 'selected' : '' }}>{{ $year }}</option>
+                    @foreach(range(2021, date('Y') + 1) as $anio)
+                        <option value="{{ $anio }}" {{ request()->year == $anio || $year == $anio ? 'selected' : '' }}>{{ $anio }}</option>
                     @endforeach
     </select>
 </form>
@@ -20,7 +20,7 @@
     <a href="{{ route('programmings.create') }}" class="btn btn-info mb-4">Comenzar Nueva Programación</a>
  @endcan
 
- @if($request->year == 2022 || \Carbon\Carbon::now()->year == 2022)
+ @if($request->year == 2022 || $year == 2022)
 <div class="float-right text-center">
 <h5>Tiempo Restante</h5>
 <div id="timer"></div>
@@ -69,7 +69,7 @@
                 </td>
             @endcan
                 <td > <span class="badge badge-info">{{ number_format(($programming->getCountActivities()/51) *100, 0, ',', ' ')}}%</span> </td>
-                <td > <span class="badge badge-danger">{{ number_format($programming->countTotalNOTRectifiedReviews(), 0, ',', ' ')}}</span> </td>
+                <td > <span class="badge badge-danger">{{ number_format($programming->countTotalReviewsBy('Not rectified'), 0, ',', ' ')}}</span> </td>
                 <td >
                 {{ $programming->id }}</td>
                 <td>{{ $programming->establishment->commune->name}}</td>
