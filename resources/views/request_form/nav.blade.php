@@ -1,12 +1,25 @@
 <ul class="nav nav-tabs mb-3 d-print-none">
-  <li class="nav-item active">
+  <!-- <li class="nav-item active">
       <a class="nav-link"
           href="{{ route('request_forms.index') }}">
           <i class="fas fa-inbox"></i> Mis Formularios
       </a>
-  </li>
-  
+  </li> -->
+
   <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-file-alt"></i> Formularios
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+      <a class="dropdown-item" href="{{ route('request_forms.index') }}"><i class="fas fa-inbox"></i> Mis Formularios</a>
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" href="{{ route('request_forms.create') }}"><i class="fab fa-think-peaks"></i> Bienes y/o Servicios</a>
+      <a class="dropdown-item" href="{{ route('request_forms.passages.create') }}"><i class="fas fa-ticket-alt"></i> Pasajes Aéreos</a>
+      <!-- <a class="dropdown-item" href="{{ route('request_forms.passages.index') }}"><i class="fas fa-archive"></i> Selección de Pasajes Aéreos</a> -->
+    </div>
+  </li>
+
+  <!-- <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-dice-d6"></i> Bienes y/o Servicios
     </a>
@@ -15,7 +28,7 @@
       <a class="dropdown-item" href="#"><i class="fas fa-handshake"></i> Pago de Bienes y Servicios</a>
       <a class="dropdown-item" href="#"><i class="fas fa-hourglass-half"></i> Bienes y/o Servicios (Ejecución en el Tiempo)</a>
     </div>
-  </li>
+  </li> -->
 
 
   <li class="nav-item dropdown">

@@ -18,7 +18,7 @@ class RequestFormCreate extends Component
     use WithFileUploads;
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $typeOfCurrency,
     $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
-    public $purchaseMechanism, $messagePM, $program, $fileRequests = [], $justify, $totalDocument;
+    public $name, $purchaseMechanism, $messagePM, $program, $fileRequests = [], $justify, $totalDocument;
     public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF;
     public $budget_item_id, $lstPurchaseMechanism;
 
@@ -64,6 +64,7 @@ class RequestFormCreate extends Component
     }
 
     private function setRequestForm(){
+      $this->name               =   $this->requestForm->name;
       $this->program            =   $this->requestForm->program;
       $this->justify            =   $this->requestForm->justification;
       $this->purchaseMechanism  =   $this->requestForm->purchase_mechanism_id;
@@ -206,15 +207,17 @@ class RequestFormCreate extends Component
     public function saveRequestForm(){
 
       $this->validate(
-        [ 'purchaseMechanism'            =>  'required',
+        [ 'name'                         =>  'required',
+          'purchaseMechanism'            =>  'required',
           'program'                      =>  'required',
           'justify'                      =>  'required',
           'fileRequests'                 =>  'required',
           'items'                        =>  'required'
         ],
-        [ 'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
+        [ 'name.required'                =>  'Debe ingresar un nombre a este formulario.',
+          'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
           'program.required'             =>  'Ingrese un Programa Asociado.',
-          'fileRequests.required'         =>  'Debe agregar los archivos solicitados',
+          'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
           'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
           'items.required'               =>  'Debe agregar al menos un Item para Bien y/o Servicio'
         ],
@@ -225,6 +228,7 @@ class RequestFormCreate extends Component
           'id'                    =>  $this->idRF,
         ],
         [
+          'name'                  =>  $this->name,
           'justification'         =>  $this->justify,
           'type_form'             =>  '1',
           'creator_user_id'       =>  Auth()->user()->id,
@@ -243,7 +247,7 @@ class RequestFormCreate extends Component
           $reqFile = new RequestFormFile();
           if(env('APP_ENV') == 'local' || env('APP_ENV') == 'testing'){
               $now = Carbon::now()->format('Y_m_d_H_i_s');
-              $file_name = $now.'req_file'.$nFiles;
+              $file_name = $now.'req_file_'.$nFiles;
               $reqFile->name = $fileRequest->getClientOriginalName();
               $reqFile->file = $fileRequest->storeAs('/ionline/request_forms_dev/request_files/', $file_name.'.'.$fileRequest->extension(), 'gcs');
               $reqFile->request_form_id = $req->id;
