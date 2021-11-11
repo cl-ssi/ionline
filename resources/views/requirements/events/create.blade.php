@@ -5,8 +5,8 @@
     @method('POST')
 
 
-    <div class="row">
-        <fieldset class="form-group col-3" id="div_tipo">
+    <div class="form-row">
+        <fieldset class="form-group col-12 col-md-4" id="div_tipo">
             <label for="for_date">Tipo</label>
             <select name="status" id="status" class="form-control">
                 @if($requirement->status == "cerrado")
@@ -20,7 +20,7 @@
         </fieldset>
 
 
-        <fieldset class="form-group col-5" id="div_ou">
+        <fieldset class="form-group col-12 col-md-4" id="div_ou">
             <label for="ou">Unidad Organizacional</label>
             <select id="ou" name="to_ou_id" class="form-control selectpicker" data-live-search="true" required data-size="5">
             @foreach($ouRoots as $ouRoot)
@@ -61,7 +61,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-4" id="div_destinatario">
+        <fieldset class="form-group col-12 col-md-4" id="div_destinatario">
             <label for="for_origin">Destinatario</label>
             <div class="input-group">
                 <select class="form-control" name="to_user_id" id="user" required="">
@@ -99,13 +99,13 @@
         <input type="hidden" value="{{$requirement->id}}" name="requirement_id">
     </div>
 
-    <div class="row">
-        <fieldset class="form-group col-5">
+    <div class="form-row">
+        <fieldset class="form-group col-12 col-md-4">
             <label for="forFile">Adjuntar archivos</label>
             <input type="file" class="form-control-file" id="forfile" name="forfile[]" multiple>
         </fieldset>
 
-        <fieldset class="form-group col-3">
+        <fieldset class="form-group col-12 col-md-4">
             <label for="for_document">Asociar documentos</label>
             <div class="input-group">
                 <input type="number" class="form-control" id="for_document" name="document">
@@ -117,7 +117,7 @@
             </div>
         </fieldset>
 
-        <fieldset class="form-group col-2">
+        <fieldset class="form-group col-12 col-md-4">
             <label for="for_tabla_documents"></br></label></br>
             <table id="tabla_documents" style="display: none">
                 <tr></tr>
