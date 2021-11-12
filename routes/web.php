@@ -154,6 +154,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
 
 Route::post('/{signaturesFlow}/firma', 'FirmaDigitalController@signPdfFlow')->name('signPdfFlow');
+Route::post('/firmas', 'FirmaDigitalController@signPdfFlows')->name('signPdfFlows');
 Route::post('/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
 Route::get('/validador', 'Documents\SignatureController@verify')->name('verifyDocument');
 Route::get('/test-firma/{otp}', 'FirmaDigitalController@test');
@@ -857,6 +858,7 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
     Route::post('/{idSignaturesFlow}/rechazar', 'Documents\SignatureController@rejectSignature')->name('signatures.rejectSignature');
     Route::get('signatures/signatureFlows/{signatureId}', 'Documents\SignatureController@signatureFlows')->name('signatures.signatureFlows');
     Route::get('signatures/signModal/{pendingSignaturesFlowId}', 'Documents\SignatureController@signModal')->name('signatures.signModal');
+    Route::get('signatures/massSignModal/{pendingSignaturesFlowIds}', 'Documents\SignatureController@massSignModal')->name('signatures.massSignModal');
     Route::get('/callback_firma/{message}/{modelId}/{signaturesFile?}', 'Documents\SignatureController@callbackFirma')->name('callbackFirma');
 });
 Route::resource('documents', 'Documents\DocumentController')->middleware('auth');
