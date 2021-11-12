@@ -9,37 +9,34 @@
 
 @include('request_form.nav')
 
-<div class="card mb-4">
-  <h6 class="card-header text-primary"><i class="fas fa-info"></i> Información General</h6>
-  <div class="card-body mx-4 px-0">
-
-    <div class="row mx-1 mt-3 pt-0"> <!-- DIV para TABLA-->
-      <table class="table table-hover table-sm small">
-          <tr>
-              <th scope="row" class="text-muted">Nombre del Solicitante</th>
-              <td class="align-middle">{{ $requestForm->creator->getFullNameAttribute()}}</td>
-          </tr>
-          <tr>
-              <th scope="row" class="text-muted">Unidad Organizacional</th>
-              <td class="align-middle">{{ $requestForm->organizationalUnit->name}}</td>
-          </tr>
-          <tr>
-              <th scope="row" class="text-muted">Jefatura para Aprobación</th>
-              <td class="align-middle">{!! $manager !!}</td>
-          </tr>
-          <tr>
-              <th scope="row" class="text-muted">Fecha de Creación</th>
-              <td class="align-middle">{{ $requestForm->created_at }}</td>
-          </tr>
-          <tr>
-              <th scope="row" class="text-muted">Archivos Asociados</th>
-              <td class="align-middle">FILE01 - FILE02 - FILE03 - FILE04</td>
-          </tr>
-      </table>
-    </div><!-- div para TABLA -->
-
-  </div><!-- card-body -->
-</div><!-- card-principal -->
+<div class="table-responsive">
+    <h6><i class="fas fa-info-circle"></i> Información General</h6>
+    <table class="table table-sm table-striped table-bordered">
+        <!-- <thead>
+            <tr class="table-active">
+                <th colspan="2">Formulario Contratación de Personal </th>
+            </tr>
+        </thead> -->
+        <tbody class="small">
+            <tr>
+                <th class="table-active" style="width: 33%">Nombre del Solicitante</th>
+                <td>{{ $requestForm->creator->getFullNameAttribute() }}</td>
+            </tr>
+            <tr>
+                <th class="table-active" style="width: 33%">Unidad Organizacional</th>
+                <td class="align-middle">{{ $requestForm->organizationalUnit->name}}</td>
+            </tr>
+            <tr>
+                <th class="table-active" style="width: 33%">Fecha de Creación</th>
+                <td class="align-middle">{{ $requestForm->created_at->format('d-m-Y H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th class="table-active" style="width: 33%">Archivos Asociados</th>
+                <td class="align-middle">FILE01 - FILE02 - FILE03 - FILE04</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 <livewire:request-form.request-form-create :requestForm="$requestForm">
 
