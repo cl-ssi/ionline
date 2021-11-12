@@ -28,7 +28,7 @@
         </button>
     </div>
     <form method="POST" class="form-horizontal"
-          action="{{route('signPdfFlows')}}"
+          action="{{route('signPdfFlow', 1)}}"
           onsubmit="disableButton(this);"
           enctype="multipart/form-data">
 

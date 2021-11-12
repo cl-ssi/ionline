@@ -153,8 +153,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
 
 
-Route::post('/{signaturesFlow}/firma', 'FirmaDigitalController@signPdfFlow')->name('signPdfFlow');
-Route::post('/firmas', 'FirmaDigitalController@signPdfFlows')->name('signPdfFlows');
+Route::post('/{signaturesFlowId}/firma', 'FirmaDigitalController@signPdfFlow')->name('signPdfFlow');
 Route::post('/firma', 'FirmaDigitalController@signPdf')->name('signPdf');
 Route::get('/validador', 'Documents\SignatureController@verify')->name('verifyDocument');
 Route::get('/test-firma/{otp}', 'FirmaDigitalController@test');
