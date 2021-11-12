@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Programmings\Review;
 use App\Models\Programmings\CommuneFile;
+use Illuminate\Support\Facades\Auth;
 
 class ProgrammingReviewController extends Controller
 {
@@ -19,6 +20,13 @@ class ProgrammingReviewController extends Controller
 
 
         return view('programmings/reviews/index')->withProgramming($programming)->withReview($reviews)->with('communeFile', $communeFile);
+    }
+
+    public function show($communeFile_id)
+    {
+        $communeFile = CommuneFile::with('programming_reviews.updatedBy:id,name,fathers_family,mothers_family')->findOrFail($communeFile_id);
+        
+        return view('programmings/reviews/show', compact('communeFile'));
     }
 
     public function update(Request $request,$id)
@@ -35,7 +43,10 @@ class ProgrammingReviewController extends Controller
             $review->observation = $request->observation;
         }
 
+        $review->updated_by = Auth::id();
+
         $review->save();
+        session()->flash('info', 'El registro de evaluación se ha actualizado exitosamente');
 
         return redirect()->back();
     }
