@@ -892,7 +892,7 @@ class ReportController extends Controller
           $sirh_program_code = 3903;
           break;
         default:
-          $sirh_program_code = 'sin valor';
+          $sirh_program_code = '';
           break;
       }
 
@@ -1150,6 +1150,10 @@ class ReportController extends Controller
         case "Trabajador Social":
           $sirh_profession_id = 1020;
           $sirh_function_id = 9082; // Atención Clínica
+          break;
+        default:
+          $sirh_profession_id = '';
+          $sirh_function_id = ''; // Atención Clínica
           break;
       }
 
