@@ -104,12 +104,15 @@ class FirmaDigitalController extends Controller
 
 
     public function signPdfFlows(Request $request){
-       
-        // foreach($request->selected_flows as $selectedFlow){
-        //     $this->signPdfFlow();
-        // }
+        $pendingSignaturesFlowsIdsArray = json_decode($request->pendingSignaturesFlowsIds);
+        $pendingSignaturesFlows = SignaturesFlow::findMany($pendingSignaturesFlowsIdsArray);
 
-        dd($request);
+        foreach($pendingSignaturesFlows as $pendingSignaturesFlow){
+            $this->signPdfFlow($request, $pendingSignaturesFlow);
+        }
+        
+
+        // dd($pendingSignaturesFlows);
     }
 
     /**

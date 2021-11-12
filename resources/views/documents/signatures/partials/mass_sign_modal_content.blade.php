@@ -31,6 +31,12 @@
           action="{{route('signPdfFlows')}}"
           onsubmit="disableButton(this);"
           enctype="multipart/form-data">
+
+        <input type="hidden"
+        name="pendingSignaturesFlowsIds"
+        value="{{ json_encode($pendingSignaturesFlows->pluck('id')) }}"
+        >
+
         <div class="modal-body">
         @csrf <!-- input hidden contra ataques CSRF -->
             @method('POST')
