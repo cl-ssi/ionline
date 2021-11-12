@@ -144,32 +144,35 @@
             </a>
             @endcan
 
+            <div class="dropdown-divider"></div>
+
             @canany(['Service Request: report to pay'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.to-pay') }}"
                 href="{{ route('rrhh.service-request.report.to-pay') }}">
-                <i class="fas fa-piggy-bank"></i> Reporte pendientes de pago
+                <i class="fas fa-piggy-bank"></i> Pendientes de pago
             </a>
             @endcan
 
             @canany(['Service Request: report payed'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.payed') }}"
                 href="{{ route('rrhh.service-request.report.payed') }}">
-                <i class="fas fa-piggy-bank"></i> Reporte pagados
+                <i class="fas fa-piggy-bank"></i> Pagados
             </a>
             @endcan
-
-            @canany(['Service Request: fulfillments rrhh','Service Request: fulfillments finance', 'Service Request: compliance'])
-            <a class="dropdown-item {{ active('rrhh.service-request.report.compliance') }}"
-                href="{{ route('rrhh.service-request.report.compliance') }}">
-                <i class="fas fa-flag-checkered"></i> Reporte de cumplimientos
-            </a>
-            @endcan
-
 
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.pay-rejected') }}"
                 href="{{ route('rrhh.service-request.report.pay-rejected') }}">
                 <i class="fas fa-ban"></i> Pagos rechazados
+            </a>
+            @endcan
+
+            <div class="dropdown-divider"></div>
+
+            @canany(['Service Request: fulfillments rrhh','Service Request: fulfillments finance', 'Service Request: compliance'])
+            <a class="dropdown-item {{ active('rrhh.service-request.report.compliance') }}"
+                href="{{ route('rrhh.service-request.report.compliance') }}">
+                <i class="fas fa-flag-checkered"></i> Cumplimientos
             </a>
             @endcan
 

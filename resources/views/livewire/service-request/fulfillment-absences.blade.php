@@ -11,9 +11,11 @@
           <option value="Licencia no covid">LICENCIA MÉDICA - NO COVID</option>
           <option value="Renuncia voluntaria">RENUNCIA VOLUNTARIA (EFECTIVA DESDE)</option>
           <option value="Abandono de funciones">ABANDONO DE FUNCIONES</option>
-          <option value="Permiso">PERMISO</option>
+          <option value="Permiso">PERMISO ADMINISTRATIVO</option>
           <option value="Feriado">FERIADO</option>
           <option value="Término de contrato anticipado">TÉRMINO DE CONTRATO ANTICIPADO (EFECTIVA DESDE)</option>
+          <option value="Atraso">ATRASO</option>
+          <option value="Fuero maternal">FUERO MATERNAL</option>
         </select>
       </fieldset>
       <fieldset class="form-group col-12 col-md">
