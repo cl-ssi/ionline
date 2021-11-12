@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Mail;
 use SimpleSoftwareIO\QrCode\Generator;
 use App\Documents\Parte;
 use App\Documents\ParteFile;
+use App\Indicators\Rem;
+use App\Models\ServiceRequests\SignatureFlow;
 use Carbon\Carbon;
 
 /* No se si son necesarias, las puse para el try catch */
@@ -98,6 +100,16 @@ class FirmaDigitalController extends Controller
         return redirect()->route($callbackRoute, ['message' => "El documento $modelId se ha firmado correctamente.",
             'modelId' => $modelId,
             'signaturesFile' => $signaturesFile->id]);
+    }
+
+
+    public function signPdfFlows(Request $request){
+       
+        // foreach($request->selected_flows as $selectedFlow){
+        //     $this->signPdfFlow();
+        // }
+
+        dd($request);
     }
 
     /**
@@ -239,9 +251,6 @@ class FirmaDigitalController extends Controller
                     }
                 }
             }
-
-
-            
         }
 
         //Si es visación en cadena, se envía notificación por correo al siguiente firmador
@@ -270,7 +279,7 @@ class FirmaDigitalController extends Controller
      * Llamada a la API que firma documento
      * @param string $pdfbase64
      * @param string $checksum_pdf
-     * @param $modo
+     * @param $modo Desatendido, atendido, test o producción
      * @param string $otp
      * @param string $signatureType
      * @param int $docId
@@ -284,7 +293,6 @@ class FirmaDigitalController extends Controller
                                int $docId, string $verificationCode, int $ct_firmas_visator = null, int $posicion_firma = null,
                                bool $visatorAsSignature = null, int $custom_x_axis = null, int $custom_y_axis = null): array
     {
-
 //        dd($pdfbase64, $checksum_pdf, $modo, $otp, $signatureType);
         /* Confección del cuadro imagen de la firma */
         $font_light = public_path('fonts/verdana-italic.ttf');
