@@ -891,6 +891,9 @@ class ReportController extends Controller
         case 'Covid19-APS No Médicos':
           $sirh_program_code = 3903;
           break;
+        default:
+          $sirh_program_code = 'sin valor';
+          break;
       }
 
       switch ($fila->weekly_hours) {
