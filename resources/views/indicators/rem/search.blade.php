@@ -21,9 +21,11 @@
     })()
 </script>
 
-<!-- <div class="alert alert-warning" role="alert">
-    <i class="fas fa-info-circle"></i> Datos preliminares correspondiente al mes de septiembre 2021.
-</div> -->
+@if(in_array($prestacion->serie, array('A')))
+<div class="alert alert-warning" role="alert">
+    <i class="fas fa-info-circle"></i> Datos preliminares correspondiente al mes de Octubre 2021.
+</div>
+@endif
 
 <div class="form-group">
     <form method="GET" action="{{ route('indicators.rem.show', [$year, $prestacion->serie, $prestacion->Nserie]) }}">
