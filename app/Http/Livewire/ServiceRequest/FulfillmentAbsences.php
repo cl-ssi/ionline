@@ -79,6 +79,7 @@ class FulfillmentAbsences extends Component
           break;
         case 'Licencia médica':
         case 'Licencia no covid':
+        case 'Fuero maternal':
         //case 'Permiso':
         case 'Feriado':
           $fulfillmentItem->start_date = $this->start_date;
@@ -131,6 +132,7 @@ class FulfillmentAbsences extends Component
         switch($this->type) {
           case 'Licencia médica':
           case 'Licencia no covid':
+          case 'Fuero maternal':
           case 'Feriado':
             $this->select_start_hour = 'disabled';
             $this->select_end_hour = 'disabled';
