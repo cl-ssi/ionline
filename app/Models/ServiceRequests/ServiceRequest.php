@@ -150,12 +150,13 @@ class ServiceRequest extends Model implements Auditable
           foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
             if ($user_id == $signatureFlow->responsable_id) {
               if ($signatureFlow->status == NULL) {
-                if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()->status == NULL) {
-                }else{
-                  //var_dump($serviceRequest->id);
-                  $cont += 1;
+                if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()) {
+                  if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()->status == NULL) {
+                  }else{
+                    //var_dump($serviceRequest->id);
+                    $cont += 1;
+                  }
                 }
-
               }else{
               }
             }
