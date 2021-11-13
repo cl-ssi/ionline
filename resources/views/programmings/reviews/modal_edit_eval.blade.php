@@ -15,12 +15,22 @@
                     <div class="form-row">
                         <fieldset class="form-group col-12">
                             <label for="forprogram">Evaluación</label>
-                            <select name="answer" id="answer"  class="form-control">
+                            @if(request()->routeIs('reviews.index'))
+                            <select name="answer" id="answer" class="form-control">
                                     <option value="SI">SI</option>
                                     <option value="NO">NO</option>
                                     <option value="REGULAR">REGULAR</option>
                                 
                             </select>
+                            @else
+                            <select name="score" id="score" class="form-control">
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                
+                            </select>
+                            @endif
                         </fieldset>
                     </div>
 
@@ -28,7 +38,8 @@
                         <label for="date_end" class="col-form-label">Observaciones:</label>
                         <textarea class="form-control" id="exampleFormControlTextarea1" name="observation" rows="5"></textarea>
                     </div>
-                    
+
+                    <p><em><small></small></em></p>
                    
                 </div>
                 <div class="modal-footer">

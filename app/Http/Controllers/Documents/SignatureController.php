@@ -524,4 +524,13 @@ class SignatureController extends Controller
         return view('documents.signatures.partials.sign_modal_content', compact('pendingSignaturesFlow'));
     }
 
+
+    public function massSignModal($pendingSignaturesFlowIds)
+    {
+        $pendingSignaturesFlowIdsArray = explode(',', $pendingSignaturesFlowIds);
+        $pendingSignaturesFlows = SignaturesFlow::findMany($pendingSignaturesFlowIdsArray);
+
+        return view('documents.signatures.partials.mass_sign_modal_content', compact('pendingSignaturesFlows'));
+    }
+
 }
