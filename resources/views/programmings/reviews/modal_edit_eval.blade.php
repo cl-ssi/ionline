@@ -17,6 +17,7 @@
                             <label for="forprogram">Evaluación</label>
                             @if(request()->routeIs('reviews.index'))
                             <select name="answer" id="answer" class="form-control">
+                                    <option value=""></option>
                                     <option value="SI">SI</option>
                                     <option value="NO">NO</option>
                                     <option value="REGULAR">REGULAR</option>
@@ -24,11 +25,11 @@
                             </select>
                             @else
                             <select name="score" id="score" class="form-control">
+                                    <option value=""></option>
                                     <option value="0">0</option>
                                     <option value="1">1</option>
                                     <option value="2">2</option>
                                     <option value="3">3</option>
-                                
                             </select>
                             @endif
                         </fieldset>

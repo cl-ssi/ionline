@@ -21,51 +21,12 @@ class ProgrammingReportController extends Controller
     public function reportConsolidated(request $request) 
     {
         
-        $year = $request->year;
-        if(!$year)
-        {
-            $year = date("Y");
-        }
-        $option = $request->commune_filter;
-        //dd($option);
-        if($option == 'hospicio')
-        {
-            $establishment = [37, 10];
-        }
-        else if($option == 'iquique')
-        {
-            $establishment = [2, 5, 4, 3 ];
-        }
-        else if($option == 'pica')
-        {
-            $establishment = [26];
-        }
-        else if($option == 'huara')
-        {
-            $establishment = [20];
-        }
-        else if($option == 'pozoalmonte')
-        {
-            $establishment = [29];
-        }
-        else if($option == 'colchane')
-        {
-            $establishment = [17];
-        }
-        else if($option == 'camiña')
-        {
-            $establishment = [15];
-        }
-        else if($option == 'hectorreyno')
-        {
-            $establishment = [12];
-        }
-        else
-        {
-            $establishment = [37, 10];
-        }
+        $year = $request->year ?? date("Y");
 
-        $programmingitems = ProgrammingItem::select(
+        $option = $request->commune_filter ?? 'hospicio';
+        $establishment = array('hospicio' => [37, 10], 'iquique' => [2, 5, 4, 3], 'pica' => [26], 'huara' => [20], 'pozoalmonte' => [29], 'colchane' => [17], 'camiña' => [15], 'hectorreyno' => [12]);
+
+        $programmingItems = ProgrammingItem::select(
                                  'T6.int_code'
                                 ,'pro_programming_items.activity_name'
                                 ,'pro_programming_items.action_type'
@@ -80,65 +41,24 @@ class ProgrammingReportController extends Controller
                         ->leftjoin('pro_activity_items AS T6', 'pro_programming_items.activity_id', '=', 'T6.id')
                         ->Where('T0.year','LIKE','%'.$year.'%')
                         ->Where('T6.tracer','LIKE','SI')
-                        ->whereIn('T0.establishment_id',$establishment)
+                        ->whereIn('T0.establishment_id',$establishment[$option])
                         ->groupBy('T6.int_code','pro_programming_items.activity_name','pro_programming_items.action_type')
                         ->orderByRaw("CAST(T6.int_code as UNSIGNED) ASC")
                         ->orderBy('pro_programming_items.action_type','ASC')
                         ->orderBy('pro_programming_items.activity_name','ASC')
                         ->get();
 
-         //dd($programmingitems);
-
-        return view('programmings/reports/reportConsolidated')->withProgrammingItems($programmingitems);
+        return view('programmings/reports/reportConsolidated', compact('programmingItems', 'year', 'option'));
     }
 
     public function reportConsolidatedSep(request $request) 
     {
-        
-        $year = $request->year;
-        if(!$year)
-        {
-            $year = date("Y");
-        }
-        $option = $request->commune_filter;
-        if($option == 'hospicio')
-        {
-            $establishment = [37, 10];
-        }
-        else if($option == 'iquique')
-        {
-            $establishment = [2, 5, 4, 3 ];
-        }
-        else if($option == 'pica')
-        {
-            $establishment = [26];
-        }
-        else if($option == 'huara')
-        {
-            $establishment = [20];
-        }
-        else if($option == 'pozoalmonte')
-        {
-            $establishment = [29];
-        }
-        else if($option == 'colchane')
-        {
-            $establishment = [17];
-        }
-        else if($option == 'camiña')
-        {
-            $establishment = [15];
-        }
-        else if($option == 'hectorreyno')
-        {
-            $establishment = [12];
-        }
-        else
-        {
-            $establishment = [37, 10];
-        }
+        $year = $request->year ?? date("Y");
 
-        $programmingitems = ProgrammingItem::select(
+        $option = $request->commune_filter ?? 'hospicio';
+        $establishment = array('hospicio' => [37, 10], 'iquique' => [2, 5, 4, 3], 'pica' => [26], 'huara' => [20], 'pozoalmonte' => [29], 'colchane' => [17], 'camiña' => [15], 'hectorreyno' => [12]);
+
+        $programmingItems = ProgrammingItem::select(
                                  'T6.int_code'
                                 ,'pro_programming_items.activity_name'
                                 ,'pro_programming_items.cycle'
@@ -157,7 +77,7 @@ class ProgrammingReportController extends Controller
                         ->leftjoin('pro_activity_items AS T6', 'pro_programming_items.activity_id', '=', 'T6.id')
                         ->Where('T0.year','LIKE','%'.$year.'%')
                         ->Where('T6.tracer','LIKE','SI')
-                        ->whereIn('T0.establishment_id',$establishment)
+                        ->whereIn('T0.establishment_id',$establishment[$option])
                         ->groupBy('T6.int_code','pro_programming_items.activity_name','pro_programming_items.cycle','pro_programming_items.action_type','pro_programming_items.def_target_population','T4.name')
                         ->orderByRaw("CAST(T6.int_code as UNSIGNED) ASC")
                         ->orderBy('pro_programming_items.cycle','ASC')
@@ -165,9 +85,7 @@ class ProgrammingReportController extends Controller
                         ->orderBy('pro_programming_items.activity_name','ASC')
                         ->get();
 
-        //dd($programmingitems);
-
-        return view('programmings/reports/reportConsolidatedSep')->withProgrammingItems($programmingitems);
+        return view('programmings/reports/reportConsolidatedSep', compact('programmingItems', 'year', 'option'));
     }
 
 
