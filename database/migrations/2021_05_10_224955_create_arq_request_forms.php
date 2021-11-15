@@ -16,12 +16,14 @@ class CreateArqRequestForms extends Migration
         Schema::create('arq_request_forms', function (Blueprint $table) {
             $table->bigIncrements ('id');
             $table->foreignId('creator_user_id');
+            $table->foreignId('contract_manager_id');
             $table->foreignId('applicant_user_id');//solicitante
             $table->foreignId('supervisor_user_id')->nullable();
             $table->foreignId('applicant_ou_id');//u.o. del responsable
             $table->string('applicant_position');
             $table->unsignedInteger('estimated_expense');
             $table->longText('name');
+            $table->tinyInteger('superior_chief');
             $table->string('program')->nullable();
             $table->longText('justification');
             $table->tinyInteger('chief_approval');
@@ -44,6 +46,7 @@ class CreateArqRequestForms extends Migration
             $table->foreign('purchase_type_id')->references('id')->on('cfg_purchase_types');
 
             $table->foreign('creator_user_id')->references('id')->on('users');
+            $table->foreign('contract_manager_id')->references('id')->on('users');
             $table->foreign('applicant_user_id')->references('id')->on('users');
             $table->foreign('supervisor_user_id')->references('id')->on('users');
             $table->foreign('applicant_ou_id')->references('id')->on('organizational_units');

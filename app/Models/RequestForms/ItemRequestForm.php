@@ -18,8 +18,8 @@ class ItemRequestForm extends Model implements Auditable
     public $table = "arq_item_request_forms";
 
     protected $fillable = [
-        'article', 'unit_of_measurement', 'quantity', 'unit_value', 'specification', 'tax','expense', 'request_form_id',
-        'budget_item_id',
+        'article', 'unit_of_measurement', 'quantity', 'unit_value', 'specification',
+        'tax','expense', 'request_form_id', 'budget_item_id', 'article_file', 'type_of_currency'
         //'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id', 'budget_item',
     ];
 
