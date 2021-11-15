@@ -8,6 +8,7 @@ use App\Models\RequestForms\ItemRequestForm;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\UnitOfMeasurement;
 use App\Models\Parameters\PurchaseMechanism;
+use App\User;
 use Illuminate\Support\Collection;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
@@ -16,9 +17,13 @@ use Carbon\Carbon;
 class RequestFormCreate extends Component
 {
     use WithFileUploads;
-    public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $typeOfCurrency,
-    $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
-    public $name, $purchaseMechanism, $messagePM, $program, $fileRequests = [], $justify, $totalDocument;
+
+    public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $typeOfCurrency, $articleFile,
+            $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
+
+    public $name, $contractManagerId, $superiorChief, $purchaseMechanism, $messagePM,
+            $program, $fileRequests = [], $justify, $totalDocument;
+
     public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF;
     public $budget_item_id, $lstPurchaseMechanism;
 
@@ -43,7 +48,7 @@ class RequestFormCreate extends Component
         'article.required'            => 'Debe ingresar un Artículo.',
         'unitOfMeasurement.required'  => 'Debe seleccionar una Unidad de Medida',
         'taxes.required'              => 'Debe seleccionar un Tipo de Impuesto.',
-        'typeOfCurrency.required'              => 'Debe seleccionar un Tipo de Moneda.',
+        'typeOfCurrency.required'     => 'Debe seleccionar un Tipo de Moneda.',
         //'budget_item_id.required'     => 'Debe seleccionar un Item Presupuestario',
     ];
 
@@ -85,7 +90,8 @@ class RequestFormCreate extends Component
             'taxes'                    => $item->tax,
             //'budget_item_id'           => $item->budget_item_id,
             'totalValue'               => $item->quantity * $item->unit_value,
-    ];
+      ];
+
       $this->totalForm();
       $this->cancelRequestService();
     }
@@ -139,7 +145,9 @@ class RequestFormCreate extends Component
             'taxes'                    => $this->taxes,
             //'budget_item_id'           => $this->budget_item_id,
             'totalValue'               => $this->quantity * $this->unitValue,
-    ];
+            'typeOfCurrency'           => $this->typeOfCurrency,
+            'articleFile'              => $this->articleFile,
+      ];
       $this->totalForm();
       $this->cancelRequestService();
     }
@@ -207,7 +215,8 @@ class RequestFormCreate extends Component
     public function saveRequestForm(){
 
       $this->validate(
-        [ 'name'                         =>  'required',
+        [ 'contractManagerId'            =>  'required',
+          'name'                         =>  'required',
           'purchaseMechanism'            =>  'required',
           'program'                      =>  'required',
           'justify'                      =>  'required',
@@ -215,9 +224,10 @@ class RequestFormCreate extends Component
           'items'                        =>  'required'
         ],
         [ 'name.required'                =>  'Debe ingresar un nombre a este formulario.',
+          'contractManagerId.required'   =>  'Debe ingresar un Administrador de Contrato.',
           'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
           'program.required'             =>  'Ingrese un Programa Asociado.',
-          'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
+          //'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
           'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
           'items.required'               =>  'Debe agregar al menos un Item para Bien y/o Servicio'
         ],
@@ -228,7 +238,9 @@ class RequestFormCreate extends Component
           'id'                    =>  $this->idRF,
         ],
         [
+          'contract_manager_id'   =>  $this->contractManagerId,
           'name'                  =>  $this->name,
+          'superior_chief'        =>  $this->superiorChief,
           'justification'         =>  $this->justify,
           'type_form'             =>  '1',
           'creator_user_id'       =>  Auth()->user()->id,
@@ -255,7 +267,6 @@ class RequestFormCreate extends Component
               $reqFile->save();
           }
       }
-      //
 
       foreach($this->items as $item){
         $this->saveItem($item, $req->id);
@@ -281,6 +292,9 @@ class RequestFormCreate extends Component
     }
 
     private function saveItem($item, $id){
+        $now = Carbon::now()->format('Y_m_d_H_i_s');
+        $file_name = $now.'art_file_'.$id;
+
         $req = ItemRequestForm::updateOrCreate(
           [
             'id'                    =>      $item['id'],
@@ -294,12 +308,15 @@ class RequestFormCreate extends Component
             'unit_value'            =>      $item['unitValue'],
             'tax'                   =>      $item['taxes'],
             //'budget_item_id'        =>      '1',
-            'expense'               =>      $item['totalValue']
+            'expense'               =>      $item['totalValue'],
+            'type_of_currency'      =>      $item['typeOfCurrency'],
+            'article_file'          =>      $item['articleFile']->storeAs('/ionline/request_forms_dev/item_files/', $file_name.'.'.$item['articleFile']->extension(), 'gcs')
       ]);
     }
 
     public function render(){
         $this->messageMechanism();
-        return view('livewire.request-form.request-form-create');
+        $users = User::orderBy('name', 'ASC')->get();
+        return view('livewire.request-form.request-form-create', compact('users'));
     }
 }
