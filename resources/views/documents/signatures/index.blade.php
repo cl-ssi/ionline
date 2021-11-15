@@ -44,7 +44,7 @@
 @if($tab == 'pendientes')
 <h4>Pendientes por firmar</h4>
 
-<button class="btn btn-primary mb-2" onclick="getMassSignModalContent()"><i class="fas fa-file-signature"></i>
+<button class="btn btn-primary mb-2" id="massSign" onclick="getMassSignModalContent()" disabled title="Seleccione solicitudes pendientes para firmar de forma masiva."><i class="fas fa-file-signature"></i>
     Firmar</button>
 
 <table class="table table-striped table-sm table-bordered">
@@ -437,6 +437,24 @@ OTP**************************************************************--}}
             form.cancelSignBtn.disabled = true;
             return true;
         }
+
+        //Seleccionar maximo 10 muestras. Habilita botones derivar recepcionar massivos
+        jQuery(function(){
+            var max = 10;
+            var checkboxes = $('input[type="checkbox"]');
+            checkboxes.change(function(){
+                var current = checkboxes.filter(':checked').length;
+                checkboxes.filter(':not(:checked)').prop('disabled', current >= max);
+
+                if(current == 0){
+                    document.getElementById('massSign').disabled = true;
+                }else {
+                    document.getElementById('massSign').disabled = false;
+                }
+
+            });
+        });
+
 
 </script>
 @endsection
