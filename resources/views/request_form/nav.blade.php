@@ -13,7 +13,7 @@
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
       <a class="dropdown-item" href="{{ route('request_forms.index') }}"><i class="fas fa-inbox"></i> Mis Formularios</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="{{ route('request_forms.create') }}"><i class="fab fa-think-peaks"></i> Bienes y/o Servicios</a>
+      <a class="dropdown-item" href="{{ route('request_forms.create') }}"><i class="fas fa-file-alt"></i> Bienes y/o Servicios</a>
       <a class="dropdown-item" href="{{ route('request_forms.passages.create') }}"><i class="fas fa-ticket-alt"></i> Pasajes Aéreos</a>
       <!-- <a class="dropdown-item" href="{{ route('request_forms.passages.index') }}"><i class="fas fa-archive"></i> Selección de Pasajes Aéreos</a> -->
     </div>
@@ -31,7 +31,7 @@
   </li> -->
 
 
-  <li class="nav-item dropdown">
+  <!-- <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-plane"></i> Pasajes Aéreos
     </a>
@@ -39,7 +39,7 @@
       <a class="dropdown-item" href="{{ route('request_forms.passages.create') }}"><i class="fas fa-ticket-alt"></i> Solicitud de Cotización Pasajes Aéreos</a>
       <a class="dropdown-item" href="{{ route('request_forms.passages.index') }}"><i class="fas fa-archive"></i> Selección de Pasajes Aéreos</a>
     </div>
-  </li>
+  </li> -->
 
 <!--
   <li class="nav-item dropdown">

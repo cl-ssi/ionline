@@ -11,7 +11,29 @@
                     {{-- @error('name') <span class="error">{{ $message }}</span> @enderror --}}
                 </fieldset>
 
-                <fieldset class="form-group col-sm-3">
+                <fieldset class="form-group col-sm-4">
+                    <label>Administrador de Contrato:</label><br>
+                    <select wire:model="contractManagerId" name="contractManagerId" class="form-control form-control-sm" required>
+                      <option>Seleccione...</option>
+                      @foreach($users as $user)
+                          <option value="{{ $user->id }}">{{ ucfirst(trans($user->FullName)) }}</option>
+                      @endforeach
+                    </select>
+                </fieldset>
+
+                <fieldset class="form-group col-sm-4">
+                    <label for="for_calidad_juridica">Solicitar Autorización de Jefatura Superior</label>
+                    <div class="mt-1 ml-4">
+                        <input class="form-check-input" type="checkbox" value="1" wire:model="superiorChief" name="superiorChief">
+                        <label class="form-check-label" for="flexCheckDefault">
+                          Sí
+                        </label>
+                    <div>
+                </fieldset>
+            </div>
+
+            <div class="form-row">
+                <fieldset class="form-group col-sm-4">
                     <label>Mecanismo de Compra:</label><br>
                     <select wire:model="purchaseMechanism" name="purchaseMechanism" class="form-control form-control-sm" required>
                       <option>Seleccione...</option>
@@ -21,13 +43,13 @@
                     </select>
                 </fieldset>
 
-                <fieldset class="form-group col-sm-2">
+                <fieldset class="form-group col-sm-4">
                     <label for="forRut">Programa Asociado:</label>
                     <input wire:model.defer="program" name="program" class="form-control form-control-sm" type="text" value="">
                     {{-- @error('program') <span class="error">{{ $message }}</span> @enderror --}}
                 </fieldset>
 
-                <fieldset class="form-group col-sm-3">
+                <fieldset class="form-group col-sm-4">
                     <label for="for_fileRequests" class="form-label">Documento de Respaldo:</label>
                     <input class="form-control form-control-sm" wire:model.defer="fileRequests" type="file" style="padding:2px 0px 0px 2px;" name="fileRequests[]" multiple>
                 </fieldset>
@@ -134,7 +156,7 @@
                   </fieldset>
                   <fieldset class="form-group col-sm-4">
                       <label class="form-label">Documento Informativo (optativo):</label>
-                      <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model.defer="fileItem" name="fileItem">
+                      <input class="form-control form-control-sm" type="file" style="padding:2px 0px 0px 2px;" wire:model.defer="articleFile" name="articleFile">
                   </fieldset>
             </div>
         </div>

@@ -20,46 +20,64 @@
 </fieldset>
 
 @if(count($createdRequestForms) > 0)
-<div class="card border border-muted text-black bg-light mb-3">
-  <div class="card-header text-primary h6"><i class="fas fa-list"></i> Formularios no Revisados</div>
-  <div class="card-body">
-    <table class="table table-striped table-sm small">
-      <thead>
-        <tr>
-          <th scope="col">Id</th>
-          <th scope="col">Usuario Gestor</th>
-          <th scope="col">Justificación</th>
-          <th scope="col">Fecha Creación</th>
-          <th scope="col">Espera</th>
-          <th scope="col" class="text-center">J</th>
-          <th scope="col" class="text-center">RP</th>
-          <th scope="col" class="text-center">F</th>
-          <th scope="col" class="text-center">A</th>
-          <th scope="col" class="text-center">Opciones</th>
-        </tr>
-      </thead>
-      <tbody>
-          @foreach($createdRequestForms as $requestForm)
-                <tr>
-                    <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
-                    <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->tinnyName() : 'Usuario eliminado' }}</td>
-                    <td class="align-middle">{{ $requestForm->justification }}</td>
-                    <td class="align-middle">{{ $requestForm->created_at }}</td>
-                    <td class="align-middle">{{ $requestForm->getElapsedTime() }}</td>
-                    <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                    <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                    <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
-                    <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
-                    <td class="text-center align-middle">
-                      <a href="{{ route('request_forms.leadership_sign', $requestForm->id) }}" class="text-primary" title="Aceptar o Rechazar">
-                      <i class="fas fa-signature"></i></a>
-                    </td>
-                </tr>
-          @endforeach
-      </tbody>
-    </table>
-  </div>
-</div>
+    </div>
+    <div class="col">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered">
+                <thead class="small">
+                    <tr>
+                        <th>ID</th>
+                        <th style="width: 7%">Fecha Creación</th>
+                        <th>Descripción</th>
+                        <th>Usuario Gestor</th>
+                        <th>Mecanismo de Compra</th>
+                        <th>Items</th>
+                        <th>Espera</th>
+                        <th>J</th>
+                        <th>RP</th>
+                        <th>F</th>
+                        <th>A</th>
+                        <th colspan="3">Opciones</th>
+
+                        <!-- <th scope="col">Id</th>
+                        <th scope="col">Usuario Gestor</th>
+                        <th scope="col">Justificación</th>
+                        <th scope="col">Fecha Creación</th>
+                        <th scope="col">Espera</th>
+                        <th scope="col" class="text-center">J</th>
+                        <th scope="col" class="text-center">RP</th>
+                        <th scope="col" class="text-center">F</th>
+                        <th scope="col" class="text-center">A</th>
+                        <th scope="col" class="text-center">Opciones</th> -->
+                    </tr>
+                </thead>
+                <tbody class="small">
+                    @foreach($createdRequestForms as $requestForm)
+                    <tr>
+                        <td>{{ $requestForm->id }}</td>
+                        <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                        <td>{{ $requestForm->name }}</td>
+                        <td>{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}<br>
+                            {{ $requestForm->creator ? $requestForm->organizationalUnit->name : 'Usuario eliminado' }}
+                        </td>
+                        <td>{{ $requestForm->purchaseMechanism->name }}</td>
+                        <td>{{ $requestForm->quantityOfItems() }}</td>
+                        <td>{{ $requestForm->getElapsedTime() }}</td>
+                        <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                        <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
+                        <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
+                        <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
+                        <td class="text-center align-middle">
+                            <a href="{{ route('request_forms.leadership_sign', $requestForm->id) }}" class="text-primary" title="Aceptar o Rechazar">
+                              <i class="fas fa-signature"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 @else
         <div class="card mb-3 bg-light">
           <div class="card-body">
