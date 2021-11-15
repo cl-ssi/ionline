@@ -33,6 +33,17 @@ class EventRequestForm extends Model
         $event->event_type          =   'leader_ship_event';
         $event->requestForm()->associate($requestForm);
         $event->save();
+
+        if($requestForm->superior_chief == 1){
+            $event                      =   new EventRequestForm();
+            $event->ou_signer_user      =   $requestForm->organizationalUnit->father->id;
+            $event->cardinal_number     =   '12';
+            $event->status              =   'created';
+            $event->event_type          =   'leader_ship_event';
+            $event->requestForm()->associate($requestForm);
+            $event->save();
+        }
+
         return true;
     }
 

@@ -49,7 +49,7 @@
                 </tr>
                 <tr>
                     <th class="table-active" scope="row">Fecha de Creación</th>
-                    <td>{{ $requestForm->created_at }}</td>
+                    <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                 </tr>
             </tbody>
         </table>
@@ -76,8 +76,8 @@
 
 <div class="table-responsive">
     <h6><i class="fas fa-info-circle"></i> Lista de Bienes y/o Servicios</h6>
-    <table class="table table-condensed table-hover table-bordered table-sm small">
-      <thead>
+    <table class="table table-condensed table-hover table-bordered table-sm">
+      <thead class="text-center small">
         <tr>
           <th>Item</th>
           <th>ID</th>
@@ -91,23 +91,23 @@
           <th>Total Item</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="text-center small">
         @foreach($requestForm->itemRequestForms as $key => $item)
                 <tr>
-                    <td>{{$key+1}}</td>
-                    <td>{{$item->id}}</td>
-                    <td>{{$item->article}}</td>
-                    <td>{{$item->unit_of_measurement}}</td>
-                    <td>{{$item->specification}}</td>
+                    <td>{{ $key+1 }}</td>
+                    <td>{{ $item->id }}</td>
+                    <td>{{ $item->article }}</td>
+                    <td>{{ $item->unit_of_measurement }}</td>
+                    <td>{{ $item->specification }}</td>
                     <td>FILE</td>
-                    <td>{{$item->quantity}}</td>
-                    <td>{{$item->unit_value}}</td>
-                    <td>{{$item->tax}}</td>
-                    <td>{{$item->expense}}</td>
+                    <td>{{ $item->quantity }}</td>
+                    <td>{{ number_format($item->unit_value,0,",",".") }}</td>
+                    <td>{{ $item->tax }}</td>
+                    <td>{{ number_format($item->expense,0,",",".") }}</td>
                 </tr>
         @endforeach
       </tbody>
-      <tfoot>
+      <tfoot class="text-center small">
         <tr>
           <td colspan="5" rowspan="2"></td>
           <td colspan="3">Cantidad de Items</td>
@@ -115,7 +115,7 @@
         </tr>
         <tr>
           <td colspan="3">Valor Total</td>
-          <td colspan="3">{{$requestForm->estimated_expense}}</td>
+          <td colspan="3">{{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
         </tr>
       </tfoot>
     </table>

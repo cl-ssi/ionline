@@ -20,21 +20,26 @@
         </div>
     </fieldset>
 
+    {{-- dd($createdRequestForms) --}}
+
+
     @if(count($createdRequestForms) > 0)
       </div>
       <div class="col">
           <div class="table-responsive">
               <table class="table table-sm table-striped table-bordered">
                 <thead class="small">
-                  <tr class="text-center">>
+                  <tr class="text-center">
                     <th>ID</th>
                     <th style="width: 7%">Fecha Creación</th>
-                    <th>Solicitud</th>
+                    <th>Descripción</th>
                     <th>Usuario Gestor</th>
-                    <th>Justificación</th>
+                    <th>Mecanismo de Compra</th>
                     <th>Items</th>
                     <th>Espera</th>
+                    {{-- @foreach($createdRequestForms->eventRequestForms as $event) --}}
                     <th>J</th>
+                    {{-- @endforeach --}}
                     <th>RP</th>
                     <th>F</th>
                     <th>A</th>
@@ -50,9 +55,9 @@
                               <td>{{ $requestForm->creator->FullName }}<br>
                                   {{ $requestForm->organizationalUnit->name }}
                               </td>
-                              <td class="align-middle brd-b">{{ $requestForm->justification }}</td>
-                              <td class="align-middle brd-b">{{ $requestForm->quantityOfItems() }}</td>
-                              <td class="align-middle brd-b">{{ $requestForm->getElapsedTime() }}</td>
+                              <td>{{ $requestForm->purchaseMechanism->name }}</td>
+                              <td>{{ $requestForm->quantityOfItems() }}</td>
+                              <td>{{ $requestForm->getElapsedTime() }}</td>
                               <td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
                               <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
                               <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
