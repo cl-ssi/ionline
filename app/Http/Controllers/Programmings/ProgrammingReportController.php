@@ -22,7 +22,7 @@ class ProgrammingReportController extends Controller
     {
         
         $year = $request->year ?? date("Y");
-
+        $isTracer = $request->isTracer ?? 'SI';
         $option = $request->commune_filter ?? 'hospicio';
         $establishment = array('hospicio' => [37, 10], 'iquique' => [2, 5, 4, 3], 'pica' => [26], 'huara' => [20], 'pozoalmonte' => [29], 'colchane' => [17], 'camiña' => [15], 'hectorreyno' => [12]);
 
@@ -40,7 +40,7 @@ class ProgrammingReportController extends Controller
                         ->leftjoin('users AS T5', 'T0.user_id', '=', 'T5.id')
                         ->leftjoin('pro_activity_items AS T6', 'pro_programming_items.activity_id', '=', 'T6.id')
                         ->Where('T0.year','LIKE','%'.$year.'%')
-                        ->Where('T6.tracer','LIKE','SI')
+                        ->Where('T6.tracer','LIKE', $isTracer)
                         ->whereIn('T0.establishment_id',$establishment[$option])
                         ->groupBy('T6.int_code','pro_programming_items.activity_name','pro_programming_items.action_type')
                         ->orderByRaw("CAST(T6.int_code as UNSIGNED) ASC")
@@ -48,13 +48,13 @@ class ProgrammingReportController extends Controller
                         ->orderBy('pro_programming_items.activity_name','ASC')
                         ->get();
 
-        return view('programmings/reports/reportConsolidated', compact('programmingItems', 'year', 'option'));
+        return view('programmings/reports/reportConsolidated', compact('programmingItems', 'year', 'option', 'isTracer'));
     }
 
     public function reportConsolidatedSep(request $request) 
     {
         $year = $request->year ?? date("Y");
-
+        $isTracer = $request->isTracer ?? 'SI';
         $option = $request->commune_filter ?? 'hospicio';
         $establishment = array('hospicio' => [37, 10], 'iquique' => [2, 5, 4, 3], 'pica' => [26], 'huara' => [20], 'pozoalmonte' => [29], 'colchane' => [17], 'camiña' => [15], 'hectorreyno' => [12]);
 
@@ -76,7 +76,7 @@ class ProgrammingReportController extends Controller
                         ->leftjoin('users AS T5', 'T0.user_id', '=', 'T5.id')
                         ->leftjoin('pro_activity_items AS T6', 'pro_programming_items.activity_id', '=', 'T6.id')
                         ->Where('T0.year','LIKE','%'.$year.'%')
-                        ->Where('T6.tracer','LIKE','SI')
+                        ->Where('T6.tracer','LIKE', $isTracer)
                         ->whereIn('T0.establishment_id',$establishment[$option])
                         ->groupBy('T6.int_code','pro_programming_items.activity_name','pro_programming_items.cycle','pro_programming_items.action_type','pro_programming_items.def_target_population','T4.name')
                         ->orderByRaw("CAST(T6.int_code as UNSIGNED) ASC")
@@ -85,7 +85,7 @@ class ProgrammingReportController extends Controller
                         ->orderBy('pro_programming_items.activity_name','ASC')
                         ->get();
 
-        return view('programmings/reports/reportConsolidatedSep', compact('programmingItems', 'year', 'option'));
+        return view('programmings/reports/reportConsolidatedSep', compact('programmingItems', 'year', 'option', 'isTracer'));
     }
 
 

@@ -13,6 +13,12 @@
 <form method="GET" class="form-horizontal small" action="{{ route('programming.reportConsolidatedSep') }}" enctype="multipart/form-data">
 
     <div class="form-row">
+    <div class="form-group col-md-2">
+            <select name="isTracer" id="isTracer" placeholder="Es trazadora" class="form-control" required>
+                     <option value="SI" {{ $isTracer == 'SI' ? 'selected' : ''}}>Trazadoras</option>
+                     <option value="NO" {{ $isTracer == 'NO' ? 'selected' : ''}}>NO trazadoras</option>
+            </select>
+        </div>
         <div class="form-group col-md-3">
             <select style="font-size:70%;" name="commune_filter" id="activity_search_id" placeholder="Tipo de Informe" class="form-control selectpicker"  required>
                     <option style="font-size:70%;" value="hospicio" {{ $option == 'hospicio' ? 'selected' : ''}}>Alto Hospicio</option>
@@ -40,7 +46,7 @@
             <th class="text-center align-middle" colspan="8">INFORME CONSOLIDADO SEP. - {{strtoupper(Request::get('commune_filter')) ?? '' }} </th>
         </tr>
         <tr class="small " style="font-size:60%;">
-            <th class="text-center align-middle">Nº TRAZADORA</th>
+            @if($isTracer == 'SI')<th class="text-center align-middle">Nº TRAZADORA</th>@endif
             <th class="text-center align-middle">PRESTACION O ACTIVIDAD</th>
             <th class="text-center align-middle">CICLO</th>
             <th class="text-center align-middle">ACCIÓN</th>
@@ -53,7 +59,7 @@
     <tbody style="font-size:70%;">
         @foreach($programmingItems as $programmingitem)
         <tr class="small">
-            <td class="text-center align-middle">{{ $programmingitem->int_code }}</td>
+            @if($isTracer == 'SI')<td class="text-center align-middle">{{ $programmingitem->int_code }}</td> @endif
             <td class="text-center align-middle">{{ $programmingitem->activity_name }}</td>
             <td class="text-center align-middle">{{ $programmingitem->cycle }}</td>
             <td class="text-center align-middle">{{ $programmingitem->action_type }}</td>
@@ -66,7 +72,7 @@
     </tbody>
     <tfoot>
         <tr style="font-size:60%;">
-            <td class="text-center" colspan="7">TOTALES</td>
+            <td class="text-center" colspan="{{$isTracer == 'SI' ? 6 : 5}}">TOTALES</td>
             <td class="text-center">{{ $programmingItems ? number_format($programmingItems->sum('activity_total'),0, ',', '.') : '0'}}</td>
         </tr>
     </tfoot>
