@@ -217,6 +217,16 @@ class ServiceRequestController extends Controller
 
   public function delete_signature_flow(Request $request)
   {
+    //flujos de firma siguientes, se les resta 1
+    $signature_flows = SignatureFlow::where('service_request_id',SignatureFlow::find($request->signature_flow_id)->service_request_id)
+                                    ->where('sign_position','>',SignatureFlow::find($request->signature_flow_id)->sign_position)
+                                    ->get();
+    foreach ($signature_flows as $key => $signature_flow) {
+      $signature_flow->sign_position = $signature_flow->sign_position - 1;
+      $signature_flow->save();
+    }
+
+    //elimina el flujo de firma
     $signatureFlow = SignatureFlow::find($request->signature_flow_id);
     $signatureFlow->delete();
 
