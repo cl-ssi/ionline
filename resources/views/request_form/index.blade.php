@@ -20,12 +20,10 @@
         </div>
     </fieldset>
 
-    {{-- dd($createdRequestForms) --}}
-
-
     @if(count($createdRequestForms) > 0)
       </div>
       <div class="col">
+          <h6><i class="fas fa-inbox"></i> Formularios Creados</h6>
           <div class="table-responsive">
               <table class="table table-sm table-striped table-bordered">
                 <thead class="small">
@@ -56,8 +54,8 @@
                                   {{ $requestForm->organizationalUnit->name }}
                               </td>
                               <td>{{ $requestForm->purchaseMechanism->name }}</td>
-                              <td>{{ $requestForm->quantityOfItems() }}</td>
-                              <td>{{ $requestForm->getElapsedTime() }}</td>
+                              <td align="center">{{ $requestForm->quantityOfItems() }}</td>
+                              <td align="center">{{ $requestForm->getElapsedTime() }}</td>
                               <td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
                               <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
                               <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
@@ -88,16 +86,79 @@
 
             </div>
           </div> -->
-      @else
+    @else
+        </div>
+        <div class="col">
+            <h6><i class="fas fa-inbox"></i> Formularios Creados</h6>
             <div class="card mb-3 bg-light">
-              <div class="card-body">
-                Sus formularios están siendo atendidos.
-              </div>
+                <div class="card-body">
+                  Sus formularios están siendo atendidos.
+                </div>
             </div>
+        </div>
     @endif
 
     @if(count($inProgressRequestForms) > 0)
-        <div class="card border border-muted text-black bg-light mb-5">
+        <div class="col">
+            <h6><i class="fas fa-inbox"></i> Formularios en Progreso</h6>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-bordered">
+                  <thead class="small">
+                    <tr class="text-center">
+                      <th>ID</th>
+                      <th style="width: 7%">Fecha Creación</th>
+                      <th>Descripción</th>
+                      <th>Usuario Gestor</th>
+                      <th>Mecanismo de Compra</th>
+                      <th>Items</th>
+                      <th>Espera</th>
+                      {{-- @foreach($createdRequestForms->eventRequestForms as $event) --}}
+                      <th>J</th>
+                      {{-- @endforeach --}}
+                      <th>RP</th>
+                      <th>F</th>
+                      <th>A</th>
+                      <!-- <th colspan="3">Opciones</th> -->
+                    </tr>
+                  </thead>
+                  <tbody class="small">
+                      @foreach($inProgressRequestForms as $requestForm)
+                            <tr>
+                                <td>{{ $requestForm->id }}</td>
+                                <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                                <td>{{ $requestForm->name }}</td>
+                                <td>{{ $requestForm->creator->FullName }}<br>
+                                    {{ $requestForm->organizationalUnit->name }}
+                                </td>
+                                <td>{{ $requestForm->purchaseMechanism->name }}</td>
+                                <td align="center">{{ $requestForm->quantityOfItems() }}</td>
+                                <td align="center">{{ $requestForm->getElapsedTime() }}</td>
+                                <td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                                <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
+                                <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
+                                <td class="align-middle text-center brd-b brd-r">{!! $requestForm->eventSign('supply_event') !!}</td>
+                                <!-- <td class="text-center align-middle brd-b">
+                                  <a href="{{ route('request_forms.edit', $requestForm->id) }}"  class="text-primary" title="Editar">
+                                  <i class="far fa-edit"></i></a>
+                                </td>
+
+                                <td class="text-center align-middle brd-b">
+                                  <a href="{{ route('request_forms.show', $requestForm->id) }}" class="text-info" title="Visualizar">
+                                  <i class="fas fa-binoculars"></i></a>
+                                </td>
+
+                                <td class="text-center align-middle brd-r brd-b">
+                                  <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
+                                  <i class="far fa-trash-alt"></i></a>
+                                </td> -->
+                            </tr>
+                      @endforeach
+                  </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- <div class="card border border-muted text-black bg-light mb-5">
           <div class="card-header text-primary h6"><i class="far fa-paper-plane"></i> Formularios en Progreso</div>
           <div class="card-body">
             <table class="table table-striped table-sm small">
@@ -142,12 +203,16 @@
               </tbody>
             </table>
           </div>
-        </div>
+        </div> -->
     @else
-        <div class="card mb-3 bg-light">
-          <div class="card-body">
-            No hay formularios de requerimiento en progreso.
-          </div>
+        </div>
+        <div class="col">
+            <h6><i class="fas fa-inbox"></i> Formularios en Progreso</h6>
+            <div class="card mb-3 bg-light">
+              <div class="card-body">
+                No hay formularios de requerimiento en progreso.
+              </div>
+            </div>
         </div>
     @endif
 
@@ -192,10 +257,14 @@
           </div>
         </div>
     @else
-        <div class="card mb-3 bg-light">
-          <div class="card-body">
-            No hay formularios de requerimiento finalizados o rechazados.
-          </div>
+        </div>
+        <div class="col">
+            <h6><i class="fas fa-inbox"></i> Formularios en Finalizados o Rechazados</h6>
+            <div class="card mb-3 bg-light">
+                <div class="card-body">
+                  No hay formularios de requerimiento finalizados o rechazados.
+                </div>
+            </div>
         </div>
     @endif
 

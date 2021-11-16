@@ -33,28 +33,27 @@
                   <td>{{$item->article}}</td>
                   <td>{{$item->unit_of_measurement}}</td>
                   <td>{{$item->specification}}</td>
-                  <td>FILE</td>
-                  <td>{{$item->quantity}}</td>
-                  <td>{{$item->unit_value}}</td>
+                  <td align="center">
+                      <a href="{{ route('request_forms.show_item_file', $item) }}" target="_blank">
+                        <i class="fas fa-file"></i>
+                  </td>
+                  <td align="right">{{$item->quantity}}</td>
+                  <td align="right">${{ number_format($item->unit_value,0,",",".") }}</td>
                   <td>{{$item->tax}}</td>
-                  <td>{{$item->expense}}</td>
+                  <td align="right">${{ number_format($item->expense,0,",",".") }}</td>
               </tr>
             @endforeach
           </tbody>
           <tfoot>
               <tr>
                   <td colspan="5" rowspan="2"></td>
-                  <td colspan="3">Cantidad de Items</td>
-                  <td colspan="3">{{count($requestForm->itemRequestForms)}}</td>
-              </tr>
-              <tr>
                   <td colspan="3">Valor Total</td>
-                <td colspan="3">{{$requestForm->estimated_expense}}</td>
+                  <td colspan="3" align="right">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
               </tr>
           </tfoot>
       </table>
       @error('arrayItemRequest') <span class="error text-danger">{{ $message }}</span> @enderror
-      
+
         <div class="card">
             <div class="card-header bg-primary text-white">
                 <i class="fas fa-signature"></i></a> Autorización Refrendación Presupuestaria

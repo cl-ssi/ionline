@@ -200,7 +200,7 @@
                     <th>Artículo</th>
                     <th>UM</th>
                     <th>Especificaciones Técnicas</th>
-                    <th>Archivo</th>
+                    <!-- <th>Archivo</th> -->
                     <th style="text-align:right">Cantidad</th>
                     <th style="text-align:right">Valor U.</th>
                     <th>Impuestos</th>
@@ -215,11 +215,11 @@
                     <td>{{$item['article']}}</td>
                     <td>{{$item['unitOfMeasurement']}}</td>
                     <td>{{$item['technicalSpecifications']}}</td>
-                    <td>fileItem</td>
-                    <td style="text-align:right">{{$item['quantity']}}</td>
-                    <td style="text-align:right">{{$item['unitValue']}}</td>
+                    <!-- <td>{{-- $item['articleFile'] --}}</td> -->
+                    <td style="text-align:right">{{ $item['quantity'] }}</td>
+                    <td style="text-align:right">{{ number_format($item['unitValue'],0,",",".") }}</td>
                     <td>{{$item['taxes']}}</td>
-                    <td align="right">{{$item['totalValue']}}</td>
+                    <td align="right">{{ number_format($item['totalValue'],0,",",".") }}</td>
                     <td align="center" class="brd-l brd-b">
                         <a href="#items" class="text-info" title="Editar" wire:click="editRequestService({{ $key }})"><i class="fas fa-pencil-alt"></i></a>
                     </td>
@@ -233,14 +233,14 @@
                 <tr>
                     <td colspan="6" rowspan="2"></td>
                     <td colspan="2">Valor Total</td>
-                    <td colspan="1" style="text-align:right">{{$totalDocument}}</td>
+                    <td colspan="1" style="text-align:right">{{ number_format($totalDocument,0,",",".") }}</td>
                     <td colspan="2"></td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td class="brd-b" colspan="2">Cantidad de Items</td>
                     <td class="brd-b" colspan="1" style="text-align:right">{{count($items)}}</td>
                     <td colspan="2" class="brd-b"></td>
-                </tr>
+                </tr> -->
             </tfoot>
         </table>
     </div>
