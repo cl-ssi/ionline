@@ -39,7 +39,7 @@
       <label for="for_request_date">C.Responsabilidad</label>
       <input type="text" class="form-control" value="{{$serviceRequest->responsabilityCenter->name}}" disabled style="background-color:#F5A7A7;">
   </fieldset>
-
+  
   <fieldset class="form-group col-12 col-md-3">
       <label for="for_request_date">Responsable</label>
       <input type="text" class="form-control" value="{{$serviceRequest->SignatureFlows->where('sign_position',1)->first()->user->getFullNameAttribute()}}" disabled>

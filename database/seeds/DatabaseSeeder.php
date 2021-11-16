@@ -35,7 +35,8 @@ class DatabaseSeeder extends Seeder
         $this->call(ProfessionManageSeeder::class);
         $this->call(ServiceRequestSeeder::class);
         $this->call(FulfillmentSeeder::class);
-        $this->call(AuthoritySeeder::class);*/
+        $this->call(AuthoritySeeder::class);
+        $this->call(SignatureFlowSeeder::class);*/
 
         /* SEED PARA MANTENEDORES DE REPLACEMENT STAFF */
         // $this->call(ProfileManageSeeder::class);
