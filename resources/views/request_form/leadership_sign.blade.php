@@ -24,8 +24,16 @@
             </thead> -->
             <tbody class="small">
                 <tr>
+                    <th class="table-active" scope="row">Fecha de Creación</th>
+                    <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                </tr>
+                <tr>
+                    <th class="table-active" style="width: 33%">Nombre</th>
+                    <td>{{ $requestForm->name }}</td>
+                </tr>
+                <tr>
                     <th class="table-active" style="width: 33%">Gasto Estimado</th>
-                    <td>${{ $requestForm->estimated_expense }}</td>
+                    <td>${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
                 </tr>
                 <tr>
                     <th class="table-active" scope="row">Nombre del Solicitante</th>
@@ -46,10 +54,6 @@
                 <tr>
                     <th class="table-active" scope="row">Justificación de Adquisición</th>
                     <td>{{ $requestForm->justification }}</td>
-                </tr>
-                <tr>
-                    <th class="table-active" scope="row">Fecha de Creación</th>
-                    <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                 </tr>
             </tbody>
         </table>
@@ -91,31 +95,34 @@
           <th>Total Item</th>
         </tr>
       </thead>
-      <tbody class="text-center small">
-        @foreach($requestForm->itemRequestForms as $key => $item)
+      <tbody class="small">
+        @foreach($requestForm->itemRequestForms as $key => $itemRequestForm)
                 <tr>
                     <td>{{ $key+1 }}</td>
-                    <td>{{ $item->id }}</td>
-                    <td>{{ $item->article }}</td>
-                    <td>{{ $item->unit_of_measurement }}</td>
-                    <td>{{ $item->specification }}</td>
-                    <td>FILE</td>
-                    <td>{{ $item->quantity }}</td>
-                    <td>{{ number_format($item->unit_value,0,",",".") }}</td>
-                    <td>{{ $item->tax }}</td>
-                    <td>{{ number_format($item->expense,0,",",".") }}</td>
+                    <td>{{ $itemRequestForm->id }}</td>
+                    <td>{{ $itemRequestForm->article }}</td>
+                    <td>{{ $itemRequestForm->unit_of_measurement }}</td>
+                    <td>{{ $itemRequestForm->specification }}</td>
+                    <td align="center">
+                      <a href="{{ route('request_forms.show_item_file', $itemRequestForm) }}" target="_blank">
+                        <i class="fas fa-file"></i>
+                    </td>
+                    <td align="right">{{ $itemRequestForm->quantity }}</td>
+                    <td align="right">${{ number_format($itemRequestForm->unit_value,0,",",".") }}</td>
+                    <td>{{ $itemRequestForm->tax }}</td>
+                    <td align="right">${{ number_format($itemRequestForm->expense,0,",",".") }}</td>
                 </tr>
         @endforeach
       </tbody>
       <tfoot class="text-center small">
         <tr>
           <td colspan="5" rowspan="2"></td>
-          <td colspan="3">Cantidad de Items</td>
-          <td colspan="3">{{count($requestForm->itemRequestForms)}}</td>
+          <!-- <td colspan="3">Cantidad de Items</td>
+          <td colspan="3">{{count($requestForm->itemRequestForms)}}</td> -->
         </tr>
         <tr>
           <td colspan="3">Valor Total</td>
-          <td colspan="3">{{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
+          <td colspan="3">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
         </tr>
       </tfoot>
     </table>
