@@ -23,7 +23,7 @@ class CreateArqRequestForms extends Migration
             $table->string('applicant_position');
             $table->unsignedInteger('estimated_expense');
             $table->longText('name');
-            $table->tinyInteger('superior_chief');
+            $table->tinyInteger('superior_chief')->nullable();
             $table->string('program')->nullable();
             $table->longText('justification');
             $table->tinyInteger('chief_approval');

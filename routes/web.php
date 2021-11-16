@@ -16,7 +16,7 @@ use App\Http\Controllers\Suitability\ResultsController;
 use App\Http\Controllers\Suitability\SchoolsController;
 use App\Http\Controllers\Suitability\SchoolUserController;
 
-use App\Http\Controllers\RequestForms\ItemController;
+use App\Http\Controllers\RequestForms\ItemRequestFormController;
 use App\Http\Controllers\RequestForms\PassageController;
 use App\Http\Controllers\RequestForms\RequestFormController;
 use App\Http\Controllers\RequestForms\RequestFormEventController;
@@ -1314,6 +1314,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     Route::get('/download/{requestFormFile}', [RequestFormFileController::class, 'download'])->name('download');
     Route::get('/show_file/{requestFormFile}', [RequestFormFileController::class, 'show_file'])->name('show_file');
+
+    Route::get('/show_item_file/{itemRequestForm}', [ItemRequestFormController::class, 'show_item_file'])->name('show_item_file');
 
     Route::get('/finance_index', [RequestFormController::class, 'financeIndex'])->name('finance_index');
     Route::get('/{requestForm}/finance_sign', [RequestFormController::class, 'financeSign'])->name('finance_sign');
