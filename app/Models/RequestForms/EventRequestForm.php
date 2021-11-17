@@ -80,5 +80,10 @@ class EventRequestForm extends Model
         return true;
     }
 
+    protected $dates = [
+        'signature_date',
+    ];
+
+
     protected $table = 'arq_event_request_forms';
 }

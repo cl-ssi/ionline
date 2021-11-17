@@ -17,11 +17,6 @@
     <div class="table-responsive">
         <h6><i class="fas fa-info-circle"></i> Detalle Formulario</h6>
         <table class="table table-sm table-striped table-bordered">
-            <!-- <thead>
-                <tr class="table-active">
-                    <th colspan="2">Formulario Contratación de Personal </th>
-                </tr>
-            </thead> -->
             <tbody class="small">
                 <tr>
                     <th class="table-active" scope="row">Fecha de Creación</th>

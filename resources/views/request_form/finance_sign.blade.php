@@ -25,7 +25,7 @@
                 <tbody class="small">
                     <tr>
                         <th class="table-active" scope="row">Fecha de Creación</th>
-                        <td>{{ $requestForm->created_at }}</td>
+                        <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                     </tr>
                     <tr>
                         <th class="table-active" style="width: 33%">Nombre</th>
