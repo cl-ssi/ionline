@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use App\Mail\RequestFormDirectorNotification;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\File;
+use PDF;
 
 use App\User;
 
@@ -213,6 +215,17 @@ class RequestFormController extends Controller {
       return view('request_form.supply_sign', compact('requestForm', 'eventType'));
     }
 
+    public function create_form_document(RequestForm $requestForm){
+        //dd($requestForm);
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('request_form.documents.form_document', compact('requestForm'));
+
+        return $pdf->stream('mi-archivo.pdf');
+
+        // $formDocumentFile = PDF::loadView('request_form.documents.form_document', compact('requestForm'));
+        // return $formDocumentFile->download('pdf_file.pdf');
+    }
 
     public function create(){
         $requestForm=null;

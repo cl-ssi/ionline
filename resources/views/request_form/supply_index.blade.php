@@ -68,7 +68,7 @@
         <h6><i class="fas fa-inbox"></i> Formularios Aprobados Por Abastecimiento</h6>
         <table class="table table-sm table-striped table-bordered small">
             <thead>
-                <tr>
+                <tr class="text-center">
                     <th>ID</th>
                     <th style="width: 7%">Fecha Creación</th>
                     <th>Descripción</th>
@@ -76,12 +76,12 @@
                     <th>Mecanismo de Compra</th>
                     <th>Items</th>
                     <th>Espera</th>
-                    <th scope="col">Comprador Asignado</th>
-                    <th scope="col" class="text-center">J</th>
-                    <th scope="col" class="text-center">RP</th>
-                    <th scope="col" class="text-center">F</th>
-                    <th scope="col" class="text-center">A</th>
-                    <th scope="col" class="text-center">V</th>
+                    <th>Comprador Asignado</th>
+                    <th>J</th>
+                    <th>RP</th>
+                    <th>F</th>
+                    <th>A</th>
+                    <th colspan="2">Opciones</th>
                 </tr>
             </thead>
           <tbody>
@@ -96,7 +96,7 @@
                         <td>{{ $requestForm->purchaseMechanism->name }}</td>
                         <td>{{ $requestForm->quantityOfItems() }}</td>
                         <td>{{ $requestForm->getElapsedTime() }}</td>
-                        <td class="align-middle">{{ $requestForm->supervisor ? $requestForm->supervisor->tinnyName() : '-- --' }}</td>
+                        <td>{{ $requestForm->supervisor ? $requestForm->supervisor->tinnyName() : '-- --' }}</td>
                         <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
                         <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
                         <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
@@ -104,6 +104,10 @@
                         <td class="text-center align-middle">
                           <a href="{{ route('request_forms.show', $requestForm->id) }}" class="text-info" title="Visualizar">
                           <i class="fas fa-binoculars"></i></a>
+                        </td>
+                        <td class="text-center align-middle">
+                          <a href="{{ route('request_forms.create_form_document', $requestForm) }}" class="text-info" title="Formulario" target="_blank">
+                          <i class="fas fa-file-alt"></i>
                         </td>
                     </tr>
               @endforeach

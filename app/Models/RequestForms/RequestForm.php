@@ -171,6 +171,15 @@ class RequestForm extends Model implements Auditable
       }
     }
 
+    /* Utilizar esta Función para obtener todos los datos de las visaciones */
+    public function eventSigner($event_type, $status){
+      $event = $this->eventRequestForms()->where('status', $status)->where('event_type',$event_type)->first();
+      if(!is_null($event)){
+        return $event;
+      }
+    }
+
+
     /* TIEMPO TRANSCURRIDO DEL TICKET */
     public function getElapsedTime()
     {
