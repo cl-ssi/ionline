@@ -21,7 +21,7 @@
     })()
 </script>
 
-@if(in_array($prestacion->serie, array('A')))
+@if(in_array($prestacion->serie, []))
 <div class="alert alert-warning" role="alert">
     <i class="fas fa-info-circle"></i> Datos preliminares correspondiente al mes de Octubre 2021.
 </div>
