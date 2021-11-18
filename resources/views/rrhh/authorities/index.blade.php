@@ -83,25 +83,25 @@
                     {{ $item['date'] }}
                     @if($item['manager'])
                     <hr class="mt-1 mb-1" >
-                    {{ $item['manager']->user->name }} <br>
-                    {{ $item['manager']->user->fathers_family }} <br>
-                    {{ $item['manager']->user->mothers_family }} <br>
+                    <a href="{{ route('rrhh.authorities.edit', $authorities[0]->id) }}">
+                        {{ $item['manager']->user->fullName }} <br>
+                    </a>
                     <!-- <hr class="mt-1 mb-1"> -->
                     <em class="text-muted">{{ $item['manager']->position }}</em><br>
                     @endif
                     @if($item['delegate'])
                     <hr class="mt-1 mb-1" >
-                    {{ $item['delegate']->user->name }} <br>
-                    {{ $item['delegate']->user->fathers_family }} <br>
-                    {{ $item['delegate']->user->mothers_family }} <br>
+                    <a href="{{ route('rrhh.authorities.edit', $authorities[0]->id) }}">
+                        {{ $item['delegate']->user->fullName }} <br>
+                    </a>
                     <!-- <hr class="mt-1 mb-1"> -->
                     <em class="text-muted">{{ $item['delegate']->position }}</em><br>
                     @endif
                     @if($item['secretary'])
                     <hr class="mt-1 mb-1" >
-                    {{ $item['secretary']->user->name }} <br>
-                    {{ $item['secretary']->user->fathers_family }} <br>
-                    {{ $item['secretary']->user->mothers_family }} <br>
+                    <a href="{{ route('rrhh.authorities.edit', $authorities[0]->id) }}">
+                        {{ $item['secretary']->user->fullName }} <br>
+                    </a>
                     <!-- <hr class="mt-1 mb-1"> -->
                     <em class="text-muted">{{ $item['secretary']->position }}</em> <br>
                     @endif

@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        /*$this->call(OrganizationalUnitSeeder::class);
+        $this->call(OrganizationalUnitSeeder::class);
         $this->call(RoleAndPermissionSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(CommuneSeeder::class);
@@ -35,21 +35,22 @@ class DatabaseSeeder extends Seeder
         $this->call(ProfessionManageSeeder::class);
         $this->call(ServiceRequestSeeder::class);
         $this->call(FulfillmentSeeder::class);
-        $this->call(AuthoritySeeder::class);*/
+        $this->call(AuthoritySeeder::class);
+        $this->call(SignatureFlowSeeder::class);
 
         /* SEED PARA MANTENEDORES DE REPLACEMENT STAFF */
-        // $this->call(ProfileManageSeeder::class);
-        // $this->call(ProfessionManageSeeder::class);
-        // $this->call(LegalQualityManageSeeder::class);
-        // $this->call(RstFundamentSeeder::class);
-        // $this->call(RstFundamentDetailSeeder::class);
+        $this->call(ProfileManageSeeder::class);
+        $this->call(ProfessionManageSeeder::class);
+        $this->call(LegalQualityManageSeeder::class);
+        $this->call(RstFundamentSeeder::class);
+        $this->call(RstFundamentDetailSeeder::class);
 
         /* SEED PARA MANTENEDORES DE ABASTECIEMIENTOS */
-        // $this->call(PurchaseMechanismSeeder::class);
-        // $this->call(PurchaseTypeSeeder::class);
-        // $this->call(UnitOfMeasurementSeeder::class);
-        // $this->call(BudgetItemSeeder::class);
-        // $this->call(PurchaseUnitSeeder::class);
+        $this->call(PurchaseMechanismSeeder::class);
+        $this->call(PurchaseTypeSeeder::class);
+        $this->call(UnitOfMeasurementSeeder::class);
+        $this->call(BudgetItemSeeder::class);
+        $this->call(PurchaseUnitSeeder::class);
 
     }
 }
