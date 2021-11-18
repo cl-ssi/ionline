@@ -7,24 +7,25 @@
 @include('service_requests.partials.nav')
 
 <div class="form-row">
-    <fieldset class="form-group col-12 col-md-7">
-          <h3>Cumplimiento de solicitud:
-            <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}">{{ $serviceRequest->id }}</a>
-          </h3>
-    </fieldset>
 
-    <div class="row col-md-5">
-        <div class="col-md-7">
-            <span class="form-text">
-            Origen de Financiamiento :
-            </span>
-        </div>
-        <div class="col-md-5">
-            <input type="text" class="form-control" value="{{$serviceRequest->type}}"@if($serviceRequest->type=='Covid')style="background-color:#F5A7A7;" @else style="background-color:#8fbc8f;" @endif disabled>
-        </div>
-    </div>
+  <fieldset class="form-group col-12 col-md-8 mt-4">
+    <h3>Cumplimiento de solicitud:
+      <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}">{{ $serviceRequest->id }}</a>
+    </h3>
+  </fieldset>
 
-  </div>
+  <fieldset class="col-md-4">
+    <label>Origen de Financiamiento :</label>
+    <input type="text" class="form-control" value="{{$serviceRequest->type}}"
+      @if($serviceRequest->type=='Covid')
+        style='background-color:#F5A7A7;'
+      @else
+        style='background-color:#8fbc8f;'
+      @endif
+    disabled>
+  </fieldset>
+
+</div>
 
 
 
@@ -39,7 +40,7 @@
       <label for="for_request_date">C.Responsabilidad</label>
       <input type="text" class="form-control" value="{{$serviceRequest->responsabilityCenter->name}}" disabled style="background-color:#F5A7A7;">
   </fieldset>
-
+  
   <fieldset class="form-group col-12 col-md-3">
       <label for="for_request_date">Responsable</label>
       <input type="text" class="form-control" value="{{$serviceRequest->SignatureFlows->where('sign_position',1)->first()->user->getFullNameAttribute()}}" disabled>

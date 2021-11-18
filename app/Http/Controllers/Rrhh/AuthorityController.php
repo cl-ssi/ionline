@@ -31,7 +31,7 @@ class AuthorityController extends Controller
         if($request->ou) {
             $ou = OrganizationalUnit::Find($request->ou);
             $authorities = Authority::with('user', 'creator')->where('organizational_unit_id',$request->ou)->latest('id')->get();
-            // return $authorities;
+            //return $authorities;
 
             $begin = (clone $today)->modify('-13 days')->modify('-'.$today->format('w').' days');
             //print_r($begin);
@@ -45,8 +45,7 @@ class AuthorityController extends Controller
                 // echo $i->format("Y-m-d"). '
                 // ';
             }
-        }
-        else {
+        } else {
             $ou = false;
         }
 
