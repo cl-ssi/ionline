@@ -19,7 +19,7 @@
 		<div class="form-row">
 			<div class="form-group col-12 col-md-3">
 				<label>Establecimiento</label>
-        <select class="form-control border border-secondary" data-live-search="true" name="establishment_id" data-size="5">
+        <select class="form-control" name="establishment_id">
           <option value="">Todos</option>
           <option value="1" @if($request->establishment_id == 1) selected @endif>Hospital Ernesto Torres Galdames</option>
           <option value="12" @if($request->establishment_id == 12) selected @endif>Dr. Héctor Reyno G.</option>
@@ -28,7 +28,7 @@
       </div>
       <div class="form-group col-12 col-md-3">
         <label>Tipo de Contrato</label>
-        <select class="form-control border border-secondary"  name="type" data-size="5">
+        <select class="form-control" name="type">
           <option value=""></option>
           <option value="Covid" @if($request->input('type')=='Covid') selected @endif>Covid</option>
           <option value="Suma Alzada" @if($request->input('type')=='Suma Alzada') selected @endif>Suma Alzada</option>
@@ -36,7 +36,7 @@
       </div>
       <div class="form-group col-9 col-md-3">
         <label>Estado de aprobacion</label>
-        <select class="form-control border border-secondary"  name="type" data-size="5">
+        <select class="form-control" name="type" disabled>
           <option value=""></option>
           <option value="aprobado">Aprobado</option>
           <option value="pendiente">Pendiente</option>

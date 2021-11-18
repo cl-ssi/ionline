@@ -8,13 +8,13 @@
 
 <div class="form-row">
 
-  <fieldset class="form-group col-12 col-md-7 mt-4">
+  <fieldset class="form-group col-12 col-md-8 mt-4">
     <h3>Cumplimiento de solicitud:
       <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}">{{ $serviceRequest->id }}</a>
     </h3>
   </fieldset>
 
-  <fieldset class="col-md-5">
+  <fieldset class="col-md-4">
     <label>Origen de Financiamiento :</label>
     <input type="text" class="form-control" value="{{$serviceRequest->type}}"
       @if($serviceRequest->type=='Covid')
