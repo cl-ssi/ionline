@@ -22,8 +22,18 @@ class HealthGoalController extends Controller
     public function list($law, $year)
     {
         $healthGoals = HealthGoal::where('law', $law)->where('year', $year)->orderBy('number')->get();
-        if($law == '19813') $healthGoals->load('indicators');
-        return view('indicators.health_goals.list', compact('healthGoals', 'law', 'year'));
+        $communes = null;
+        if($law == '19813'){
+            $healthGoals->load('indicators.values');
+            $communes = Establecimiento::year($year)->where('meta_san', 1)->orderBy('comuna')->select('comuna')->distinct()->pluck('comuna')->toArray();
+            foreach($healthGoals as $healthGoal)
+                foreach($healthGoal->indicators as $indicator){
+                    $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->orderBy('comuna')->get();
+                    $this->loadValuesWithRemSourceLaw19813($year, $indicator);
+                }
+            // return $healthGoals;
+        }
+        return view('indicators.health_goals.list', compact('healthGoals', 'law', 'year', 'communes'));
     }
 
     public function show($law, $year, $health_goal)
