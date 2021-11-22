@@ -22,7 +22,7 @@
       </fieldset>
 
       <fieldset class="form-group col-sm-4">
-          <label for="forNombres" class="form-label">Nombres:</label>
+          <label for="forNombres" class="form-label">Nombre:</label>
           <input class="form-control form-control-sm" type="text" name="" id="nombres" name="nombres" value="{{ auth()->user()->FullName }}" readonly>
       </fieldset>
 

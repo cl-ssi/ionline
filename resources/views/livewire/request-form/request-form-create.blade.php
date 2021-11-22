@@ -28,7 +28,7 @@
                         <label class="form-check-label" for="flexCheckDefault">
                           Sí
                         </label>
-                    <div>
+                    </div>
                 </fieldset>
             </div>
 
