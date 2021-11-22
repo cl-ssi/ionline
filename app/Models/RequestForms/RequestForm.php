@@ -52,16 +52,12 @@ class RequestForm extends Model implements Auditable
         return $this->hasMany('\App\Models\RequestForms\RequestFormFile');
     }
 
-    public function creator() {
-        return $this->belongsTo(User::class, 'creator_user_id');
-    }
-
     public function contractManager() {
         return $this->belongsTo(User::class, 'contract_manager_id');
     }
 
-    public function applicant(){
-      return $this->belongsTo(User::class, 'applicant_user_id');
+    public function purchasers(){
+      return $this->belongsToMany(User::class, 'arq_request_forms_users', 'request_form_id')->withPivot('request_form_id');
     }
 
     public function supervisor(){
