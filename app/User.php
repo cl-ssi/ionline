@@ -75,8 +75,8 @@ class User extends Authenticatable implements Auditable
       return $this->hasMany(RequestForm::class, 'creator_user_id');
     }
 
-    public function applicantRequestForms(){
-      return $this->hasMany(RequestForm::class, 'applicant_user_id');
+    public function userRequestForms(){
+      return $this->belongsToMany(RequestForm::class, 'arq_request_forms_users', 'purchaser_user_id')->withPivot('purchaser_user_id');
     }
 
     public function supervisorRequestForms(){

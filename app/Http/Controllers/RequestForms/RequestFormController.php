@@ -25,10 +25,10 @@ use App\User;
 class RequestFormController extends Controller {
 
     public function index() {
-        $createdRequestForms    = auth()->user()->applicantRequestForms()->where('status', 'created')->get();
-        $inProgressRequestForms = auth()->user()->applicantRequestForms()->where('status', 'in_progress')->get();
-        $approvedRequestForms   = auth()->user()->applicantRequestForms()->where('status', 'approved')->get();
-        $rejectedRequestForms   = auth()->user()->applicantRequestForms()->where('status', 'rejected')->orWhere('status', 'closed')->get();
+        $createdRequestForms    = auth()->user()->userRequestForms()->where('status', 'created')->get();
+        $inProgressRequestForms = auth()->user()->userRequestForms()->where('status', 'in_progress')->get();
+        $approvedRequestForms   = auth()->user()->userRequestForms()->where('status', 'approved')->get();
+        $rejectedRequestForms   = auth()->user()->userRequestForms()->where('status', 'rejected')->orWhere('status', 'closed')->get();
         $empty = false;
         if(count($rejectedRequestForms) == 0 && count($createdRequestForms) == 0 && count($inProgressRequestForms) == 0 && count($approvedRequestForms) ==  0){
             $empty=true;
