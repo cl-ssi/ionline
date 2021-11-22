@@ -17,7 +17,7 @@ use App\Http\Controllers\Suitability\SchoolsController;
 use App\Http\Controllers\Suitability\SchoolUserController;
 
 use App\Http\Controllers\RequestForms\ItemRequestFormController;
-use App\Http\Controllers\RequestForms\PassageController;
+use App\Http\Controllers\RequestForms\PassengerController;
 use App\Http\Controllers\RequestForms\RequestFormController;
 use App\Http\Controllers\RequestForms\RequestFormEventController;
 use App\Http\Controllers\RequestForms\RequestFormFileController;
@@ -1359,38 +1359,13 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     //Route::get('/validaterequest', [RequestFormController::class, 'validaterequest'])->name('validaterequest');
 
 
-    Route::prefix('passages')->as('passages.')->middleware('auth')->group(function () {
-        Route::get('/', [PassageController::class, 'index'])->name('index');
-        Route::get('/create', [PassageController::class, 'create'])->name('create');
+    Route::prefix('passengers')->as('passengers.')->middleware('auth')->group(function () {
+        Route::get('/', [PassengerController::class, 'index'])->name('index');
+        Route::get('/create', [PassengerController::class, 'create'])->name('create');
         //Route::get('/create', [CategoriesController::class, 'create'])->name('create');
         //Route::post('/store', [CategoriesController::class, 'store'])->name('store');
     });
 });
-
-
-
-/*
-Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(function () {
-    //Route::get('{requestForm}/edit', 'RequestFormController@edit')->name('edit');
-    //Route::get('{requestForm}/edit', [ItemController::class, 'edit'])->name('edit');
-    Route::get('/items', 'RequestForms\ItemController@create')->name('items.create')->middleware('auth');
-    //Route::post('/items/{requestForm}', 'RequestForms\ItemController@store')->name('items.store')->middleware('auth');
-    Route::post('items/{requestForm}', [ItemController::class, 'store'])->name('items.store');
-
-
-    Route::delete('/items/{item}', 'RequestForms\ItemController@destroy')->name('items.destroy')->middleware('auth');
-    //Route::get('/passages', 'RequestForms\PassageController@create')->name('passages.create')->middleware('auth');
-    Route::get('/passages', 'RequestForms\PassageController@index')->name('index')->middleware('auth');
-    Route::post('/passages/create_from_previous/{request_form}', 'RequestForms\PassageController@createFromPrevious')->name('passages.createFromPrevious')->middleware('auth');
-    Route::post('/passages/{requestForm}', 'RequestForms\PassageController@store')->name('passages.store')->middleware('auth');
-    Route::delete('/passages/{passage}', 'RequestForms\PassageController@destroy')->name('passages.destroy')->middleware('auth');
-
-    Route::get('/files', 'RequestForms\RequestFormFileController@create')->name('files.create')->middleware('auth');
-    Route::post('/files/{requestForm}', 'RequestForms\RequestFormFileController@store')->name('files.store')->middleware('auth');
-
-});*/
-
-
 
 Route::get('/yomevacuno',[VaccinationController::class,'welcome'])->name('welcome');
 
