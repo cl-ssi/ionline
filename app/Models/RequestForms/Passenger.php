@@ -1,14 +1,12 @@
 <?php
 
-namespace App\RequestForms;
+namespace App\Models\RequestForms;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
-class Passage extends Model
+class Passenger extends Model
 {
-    public $table = "arq_passages";
-
     protected $fillable = [
         'run', 'dv', 'name', 'fathers_family', 'mothers_family', 'birthday',
         'telephone_number', 'email', 'tramo', 'departure_date', 'from_date',
@@ -59,4 +57,6 @@ class Passage extends Model
     public function request_form_item_codes() {
         return $this->belongsTo('App\RequestForms\RequestFormItemCode');
     }
+
+    public $table = "arq_passengers";
 }

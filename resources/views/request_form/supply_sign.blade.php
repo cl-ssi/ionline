@@ -135,4 +135,8 @@
 
 <livewire:request-form.authorization :requestForm="$requestForm" :eventType="$eventType" >
 
+<br>
+
+@include('partials.audit', ['audits' => $requestForm->audits] )
+
 @endsection

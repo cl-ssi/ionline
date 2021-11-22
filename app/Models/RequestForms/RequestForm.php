@@ -17,6 +17,29 @@ class RequestForm extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
+    /* NORMALIZACIÓN JORGE MIRANDA - ALVARO LUPA NOV 2021 */
+
+    /*
+
+    protected $fillable = [
+        'type_form', 'status', 'name', 'user_request_id', 'ou_user_request_id', 'user_request_position',
+        'contract_manager_id', 'superior_chief', 'justification', 'request_form_id'
+    ];
+
+    public function userRequest() {
+        return $this->belongsTo(User::class, 'user_request_id');
+    }
+
+    public function requestformfiles() {
+        return $this->hasMany('\App\RequestForms\RequestFormFile');
+    }
+
+    public function contractManager() {
+        return $this->belongsTo(User::class, 'contract_manager_id');
+    }
+
+    */
+
     protected $fillable = [
         'applicant_position', 'estimated_expense', 'program', 'contract_manager_id',
         'name', 'justification', 'superior_chief',
