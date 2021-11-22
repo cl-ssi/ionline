@@ -189,9 +189,11 @@
                 <div class="row justify-content-md-end mt-0">
                     <div class="col-2">
                         @if($edit)
-                          <button type="button" wire:click="updateTicket" class="btn btn-primary btn-sm float-right">Editar Item</button>
+                          <button class="btn btn-primary btn-sm float-right" type="button"
+                            wire:click="updateTicket">Editar Pasajero</button>
                         @else
-                          <button class="btn btn-primary btn-sm float-right" wire:click="addPassenger">Agregar Ticket</button>
+                          <button class="btn btn-primary btn-sm float-right" type="button"
+                            wire:click="addPassenger">Agregar Pasajero</button>
                         @endif
                     </div>
                     <div class="col-1">
@@ -237,50 +239,52 @@
                     <th colspan="2">Acciones</th>
                 </tr>
             </thead>
-          <tbody>
-            @foreach($items as $key => $item)
-                    <tr>
-                        <td>{{$key+1}}</td>
-                        <td>{{$item['run']."-".$item['dv']}}</td>
-                        <td>{{$item['name']." ".$item['fathers_family']." ".$item['mothers_family']}}</td>
-                        <td>{{$item['birthday']}}</td>
-                        <td>{{$item['phone_number']}}</td>
-                        <td>{{$item['email']}}</td>
-                        <td>{{$item['round_trip']}}</td>
-                        <td>{{$item['origin']}}</td>
-                        <td>{{$item['destination']}}</td>
-                        <td>{{$item['departure_date']}}</td>
-                        <td>{{$item['return_date']}}</td>
-                        <td>{{$item['baggage']}}</td>
-                        <td align="center">
-                          <a class="btn btn-outline-secondary btn-sm" title="Editar" wire:click="editTicket({{ $key }})"><i class="fas fa-pencil-alt"></i></a>
-                        </td>
-                        <td align="center">
-                          <a class="btn btn-outline-secondary btn-sm" title="Eliminar" wire:click="deletePassenger({{ $key }})"><i class="far fa-trash-alt"></i></a>
-                        </td>
-                    </tr>
-            @endforeach
-          </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="8" rowspan="2"></td>
-          <td colspan="3">Cantidad de Items</td>
-          <td colspan="3">{{count($items)}}</td>
-        </tr>
-      </tfoot>
+            <tbody>
+              @foreach($items as $key => $item)
+                      <tr>
+                          <td>{{$key+1}}</td>
+                          <td>{{$item['run']."-".$item['dv']}}</td>
+                          <td>{{$item['name']." ".$item['fathers_family']." ".$item['mothers_family']}}</td>
+                          <td>{{$item['birthday']}}</td>
+                          <td>{{$item['phone_number']}}</td>
+                          <td>{{$item['email']}}</td>
+                          <td>{{$item['round_trip']}}</td>
+                          <td>{{$item['origin']}}</td>
+                          <td>{{$item['destination']}}</td>
+                          <td>{{$item['departure_date']}}</td>
+                          <td>{{$item['return_date']}}</td>
+                          <td>{{$item['baggage']}}</td>
+                          <td align="center">
+                            <a class="btn btn-outline-secondary btn-sm" title="Editar"
+                              wire:click="editTicket({{ $key }})">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                          </td>
+                          <td align="center">
+                            <a class="btn btn-outline-secondary btn-sm" title="Eliminar"
+                              wire:click="deletePassenger({{ $key }})">
+                                <i class="far fa-trash-alt"></i>
+                              </a>
+                          </td>
+                      </tr>
+                @endforeach
+              </tbody>
+          <tfoot>
+              <tr>
+                  <td colspan="8" rowspan="2"></td>
+                  <td colspan="3">Cantidad de Items</td>
+                  <td colspan="3">{{count($items)}}</td>
+              </tr>
+          </tfoot>
     </table>
-  </div><!-- DIV Table Responsive -->
-  </div><!-- DIV para TABLA-->
+    </div>
 
   <div class="row mx-1 mb-4 mt-0 pt-0 px-0">
       <div class="col">
-          <a wire:click="cleanTicket" class="btn btn-secondary float-right">Cancelar</a>
-          <button wire:click="savePassengerRequest"  class="btn btn-primary float-right mr-3">
+          <!-- <a wire:click="cleanTicket" class="btn btn-secondary float-right">Cancelar</a> -->
+          <button wire:click="lupa" type="button" class="btn btn-primary btn-sm float-right">
               <i class="fas fa-save"></i> Guardar
           </button>
-          <!-- <button wire:click="saveRequestForm"  class="btn btn-primary btn-sm float-right " type="button">
-              <i class="fas fa-save"></i> Guardar
-          </button> -->
       </div>
   </div>
 
