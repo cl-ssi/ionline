@@ -32,6 +32,7 @@ class CreateArqPassengersTable extends Migration
             $table->dateTime('departure_date');
             $table->dateTime('return_date');
             $table->string('baggage');
+            $table->unsignedInteger('unit_value');
             $table->foreignId('request_form_id')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users');
