@@ -8,7 +8,7 @@
 
 <h4 class="mb-3">Formulario de Requerimiento - Bienes y/o Servicios (Ejecución Inmediata)</h4>
 
-@include('request_form.nav')
+@include('request_form.partials.nav')
 
 <div class="card">
   <div class="card-header">
