@@ -77,7 +77,7 @@
     </div>
 
     <br>
-    @if(request()->routeIs('request_forms.passengers.create'))
+    @if($route == 'request_forms.passengers.create')
         @livewire('request-form.passenger.passenger-request')
     @else
         @livewire('request-form.item.request-form-items')

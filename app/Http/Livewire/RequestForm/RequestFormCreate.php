@@ -27,7 +27,7 @@ class RequestFormCreate extends Component
     public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF;
     public $budget_item_id, $lstPurchaseMechanism;
 
-    public $searchedUser;
+    public $searchedUser, $route;
 
     // protected $listeners = ['searchedUser'];
 
@@ -57,6 +57,7 @@ class RequestFormCreate extends Component
     ];
 
     public function mount($requestForm){
+      $this->route = request()->route()->getName();
       $this->purchaseMechanism      = "";
       $this->totalDocument          = 0;
       $this->items                  = array();
