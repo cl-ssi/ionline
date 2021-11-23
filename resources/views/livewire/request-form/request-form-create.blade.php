@@ -84,25 +84,6 @@
 
     <br>
 
-    <!-- <div class="card">
-        <div class="card-header">
-          </i><i class="fas fa-paperclip"></i> Adjuntos</h6>
-        </div>
-        <div class="card-body">
-          @foreach($messagePM as $nameFile)
-
-          <div class="form-row">
-                  <div class="col-sm-6">
-                    <label for="for_fileName">{{ $nameFile }}</label>
-                  </div>
-                  <div class="col-sm-6">
-                    <input class="form-control form-control-sm" wire:model.defer="fileRequests" type="file" style="padding:2px 0px 0px 2px;" name="fileRequests" required>
-                  </div>
-          </div>
-          @endforeach
-        </div>
-    </div> -->
-
     @if (\Request::is('request_forms.passengers'))
         @livewire('request-form.passenger.passenger-request')
     @else
