@@ -12,20 +12,14 @@
                 </fieldset>
 
                 <fieldset class="form-group col-sm-4">
-                    <label for="for_user_id">Funcionario*</label>
-                    @livewire('search-select-user')
-                    
-                </fieldset>
-
-                {{--<fieldset class="form-group col-sm-4">
                     <label>Administrador de Contrato:</label><br>
-                    <select wire:model="contractManagerId" name="contractManagerId" class="form-control form-control-sm" required>
+                    <select wire:model.defer="contractManagerId" name="contractManagerId" class="form-control form-control-sm" required>
                       <option>Seleccione...</option>
                       @foreach($users as $user)
                           <option value="{{ $user->id }}">{{ ucfirst(trans($user->FullName)) }}</option>
                       @endforeach
                     </select>
-                </fieldset>--}}
+                </fieldset>
 
                 <fieldset class="form-group col-sm-4">
                     <label for="for_calidad_juridica">Solicitar Autorización de Jefatura Superior</label>

@@ -29,7 +29,7 @@ class RequestFormCreate extends Component
 
     public $searchedUser;
 
-    protected $listeners = ['searchedUser'];
+    // protected $listeners = ['searchedUser'];
 
     protected $rules = [
         'unitValue'           =>  'required|numeric|min:1',
@@ -318,12 +318,12 @@ class RequestFormCreate extends Component
 
     public function render(){
         $this->messageMechanism();
-        $users = User::orderBy('name', 'ASC')->get();
+        $users = User::where('organizational_unit_id', Auth::user()->organizational_unit_id)->orderBy('name', 'ASC')->get();
         return view('livewire.request-form.request-form-create', compact('users'));
     }
 
-    public function searchedUser(User $user){
-      $this->searchedUser = $user;
-      $this->contractManagerId = $user->id;
-  }
+  //   public function searchedUser(User $user){
+  //     $this->searchedUser = $user;
+  //     $this->contractManagerId = $user->id;
+  // }
 }
