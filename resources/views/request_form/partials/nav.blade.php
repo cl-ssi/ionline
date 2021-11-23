@@ -13,7 +13,7 @@
     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
       <a class="dropdown-item" href="{{ route('request_forms.index') }}"><i class="fas fa-inbox"></i> Mis Formularios</a>
       <div class="dropdown-divider"></div>
-      <a class="dropdown-item" href="{{ route('request_forms.create') }}"><i class="fas fa-file-alt"></i> Bienes y/o Servicios</a>
+      <a class="dropdown-item" href="{{ route('request_forms.items.create') }}"><i class="fas fa-file-alt"></i> Bienes y/o Servicios</a>
       <a class="dropdown-item" href="{{ route('request_forms.passengers.create') }}"><i class="fas fa-ticket-alt"></i> Pasajes Aéreos</a>
     </div>
   </li>
