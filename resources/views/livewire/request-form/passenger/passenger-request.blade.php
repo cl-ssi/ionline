@@ -213,27 +213,4 @@
           </tfoot>
     </table>
     </div>
-
-  <div class="row mx-1 mb-4 mt-0 pt-0 px-0">
-      <div class="col">
-          <!-- <a wire:click="cleanTicket" class="btn btn-secondary float-right">Cancelar</a> -->
-          <button wire:click="saveRequestForm" type="button" class="btn btn-primary btn-sm float-right">
-              <i class="fas fa-save"></i> Guardar
-          </button>
-      </div>
-  </div>
-
-  @if (count($errors) > 0 and ($errors->has('program') or $errors->has('justification') or $errors->has('items')))
-   <div class="row justify-content-around mt-0">
-      <div class="alert alert-danger col-6 mt-1">
-       <p>Corrige los siguientes errores:</p>
-          <ul>
-              @foreach ($errors->all() as $message)
-                  <li>{{ $message }}</li>
-              @endforeach
-          </ul>
-      </div>
-   </div>
-  @endif
-
 </div>

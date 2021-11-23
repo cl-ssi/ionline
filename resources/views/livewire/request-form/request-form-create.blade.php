@@ -83,8 +83,7 @@
     </div>
 
     <br>
-
-    @if (\Request::is('request_forms.passengers'))
+    @if(request()->routeIs('request_forms.passengers.create'))
         @livewire('request-form.passenger.passenger-request')
     @else
         @livewire('request-form.item.request-form-items')
