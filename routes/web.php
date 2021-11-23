@@ -1310,11 +1310,11 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/create', [RequestFormController::class, 'create'])->name('create');
 
     Route::prefix('items')->as('items.')->middleware('auth')->group(function () {
-        //Route::get('/create', [PassengerController::class, 'create'])->name('create');
+        Route::get('/create', [RequestFormController::class, 'create'])->name('create');
     });
 
     Route::prefix('passengers')->as('passengers.')->middleware('auth')->group(function () {
-        Route::get('/create', [PassengerController::class, 'create'])->name('create');
+        Route::get('/create', [RequestFormController::class, 'create'])->name('create');
     });
 
 
