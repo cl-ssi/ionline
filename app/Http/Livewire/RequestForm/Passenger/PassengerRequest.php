@@ -1,14 +1,18 @@
 <?php
 
-namespace App\Http\Livewire\RequestForm\Passage;
+namespace App\Http\Livewire\RequestForm\Passenger;
 
 use Livewire\Component;
 use App\User;
+use App\Models\Parameters\PurchaseMechanism;
 
-class TicketRequest extends Component
+class PassengerRequest extends Component
 {
     public $edit, $tittle;
     public $items, $key;
+
+    /* Mantenedores */
+    public $lstPurchaseMechanism;
 
 
     // public $program, $justification, $run, $dv, $names, $fathersName, $mothersName, $birthDay,
@@ -47,7 +51,7 @@ class TicketRequest extends Component
     ];
 
     protected $messages = [
-        'passengerType.required'   => 'Seleccione tipo de Pasajero.',
+        'passengerType.required'    => 'Seleccione tipo de Pasajero.',
         'run.required'              => 'Campo Run es obligatorio.',
         'run.integer'               => 'Run debe ser número entero sin puntos ni dígito verificador.',
         'run.min'                   => 'Run debe ser mayor o igual a 1.',
@@ -99,14 +103,38 @@ class TicketRequest extends Component
         //$this->cancelRequestService();
     }
 
-    public function lupa(){
-        dd('hola');
+    public function cleanPassenger(){
+      //$this->tittle = "Agregar Ticket";
+      $this->edit  = false;
+      $this->resetErrorBag();
+      $this->run=$this->dv=$this->name=$this->fathers_family=
+        $this->mothers_family=$this->birthday=$this->phone_number=$this->email=
+        $this->round_trip=$this->origin=$this->destination=$this->departure_date=
+        $this->departure_date=$this->return_date=$this->baggage = "";
     }
 
     public function saveRequestForm(){
-        dd('hello');
+        $this->validate(
+          // [ 'contractManagerId'            =>  'required',
 
-        
+          [ 'name'                         =>  'required',
+            'purchaseMechanism'            =>  'required',
+            'program'                      =>  'required',
+            'justify'                      =>  'required',
+            'fileRequests'                 =>  'required',
+            'items'                        =>  'required'
+          ],
+          [ 'name.required'                =>  'Debe ingresar un nombre a este formulario.',
+            'contractManagerId.required'   =>  'Debe ingresar un Administrador de Contrato.',
+            'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
+            'program.required'             =>  'Ingrese un Programa Asociado.',
+            //'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
+            'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
+            'items.required'               =>  'Debe agregar al menos un Pasajero para completar formulario'
+          ],
+        );
+
+
 
         // $this->validate(
         //     [
@@ -127,6 +155,7 @@ class TicketRequest extends Component
       // $this->run = $this->searchedUser->run;
 
       $this->items                  = array();
+      $this->lstPurchaseMechanism   = PurchaseMechanism::all();
       // $this->tittle                 = "Agregar Ticket";
       // $this->edit                   = false;
       // $this->dv                     = "";
@@ -245,6 +274,6 @@ class TicketRequest extends Component
 
         $users = User::orderBy('name', 'ASC')->get();
 
-        return view('livewire.request-form.passage.ticket-request', compact('users'));
+        return view('livewire.request-form.passenger.passenger-request', compact('users'));
     }
 }

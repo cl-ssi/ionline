@@ -1307,6 +1307,19 @@ Route::prefix('request_forms')->name('request_forms.')->group(function () {
 
 Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(function () {
     Route::get('/', [RequestFormController::class, 'index'])->name('index');
+    Route::get('/create', [RequestFormController::class, 'create'])->name('create');
+
+    Route::prefix('items')->as('items.')->middleware('auth')->group(function () {
+        //Route::get('/create', [PassengerController::class, 'create'])->name('create');
+    });
+
+    Route::prefix('passengers')->as('passengers.')->middleware('auth')->group(function () {
+        Route::get('/create', [PassengerController::class, 'create'])->name('create');
+    });
+
+
+
+
     Route::get('/{requestForm}/edit', [RequestFormController::class, 'edit'])->name('edit');
 
     Route::get('/leadership_index', [RequestFormController::class, 'leadershipIndex'])->name('leadership_index');
@@ -1338,7 +1351,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::put('/update', [RequestFormController::class, 'update'])->name('update');
     Route::get('/my_request_inbox', [RequestFormController::class, 'myRequestInbox'])->name('my_request_inbox');
     //Route::get('/authorize_inbox', [RequestFormController::class, 'authorizeInbox'])->name('authorize_inbox');
-    Route::get('/create', [RequestFormController::class, 'create'])->name('create');
+
     //Route::get('/finance_inbox', [RequestFormController::class, 'financeInbox'])->name('finance_inbox');
     //Route::get('/tesseract', [RequestFormController::class, 'financeIndex'])->name('tesseract');
     Route::get('/saludo/{name}/{nickname?}', function ($name, $nickname = null) {
@@ -1359,12 +1372,12 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     //Route::get('/validaterequest', [RequestFormController::class, 'validaterequest'])->name('validaterequest');
 
 
-    Route::prefix('passengers')->as('passengers.')->middleware('auth')->group(function () {
-        Route::get('/', [PassengerController::class, 'index'])->name('index');
-        Route::get('/create', [PassengerController::class, 'create'])->name('create');
-        //Route::get('/create', [CategoriesController::class, 'create'])->name('create');
-        //Route::post('/store', [CategoriesController::class, 'store'])->name('store');
-    });
+    // Route::prefix('passengers')->as('passengers.')->middleware('auth')->group(function () {
+    //     Route::get('/', [PassengerController::class, 'index'])->name('index');
+    //     Route::get('/create', [PassengerController::class, 'create'])->name('create');
+    //     //Route::get('/create', [CategoriesController::class, 'create'])->name('create');
+    //     //Route::post('/store', [CategoriesController::class, 'store'])->name('store');
+    // });
 });
 
 Route::get('/yomevacuno',[VaccinationController::class,'welcome'])->name('welcome');
