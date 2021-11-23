@@ -97,6 +97,10 @@
         </div>
     </div> -->
 
+    @if (\Request::is('request_forms.passengers'))
+        Passengers menu
+    @endif
+
     <br>
 
     <div class="card">

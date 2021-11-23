@@ -37,9 +37,9 @@
                     <label>Mecanismo de Compra:</label><br>
                     <select wire:model="purchaseMechanism" name="purchaseMechanism" class="form-control form-control-sm" required>
                       <option>Seleccione...</option>
-                      {{-- @foreach($lstPurchaseMechanism as $val)
+                      @foreach($lstPurchaseMechanism as $val)
                           <option value="{{$val->id}}">{{$val->name}}</option>
-                      @endforeach  --}}
+                      @endforeach
                     </select>
                 </fieldset>
 
@@ -73,8 +73,8 @@
             <div class="form-row">
                 <fieldset class="form-group col-2">
                     <label for="for_passengerType">Pasajero</label>
-                    <select wire:model="passengerType" name="passengerType" class="form-control">
-                        <option value="" selected>Seleccione...</option>
+                    <select wire:model="passengerType" name="passengerType" class="form-control" disabled>
+                        <option value="">Seleccione...</option>
                         <option value="internal">SSI</option>
                         <option value="external">Externo</option>
                     </select>
@@ -197,7 +197,8 @@
                         @endif
                     </div>
                     <div class="col-1">
-                        <button type="button" wire:click="cleanTicket" class="btn btn-secondary btn-sm float-right">Cancelar</button>
+                        <button class="btn btn-secondary btn-sm float-right" type="button"
+                          wire:click="cleanPassenger">Cancelar</button>
                     </div>
                 </div>
 
@@ -282,7 +283,7 @@
   <div class="row mx-1 mb-4 mt-0 pt-0 px-0">
       <div class="col">
           <!-- <a wire:click="cleanTicket" class="btn btn-secondary float-right">Cancelar</a> -->
-          <button wire:click="lupa" type="button" class="btn btn-primary btn-sm float-right">
+          <button wire:click="saveRequestForm" type="button" class="btn btn-primary btn-sm float-right">
               <i class="fas fa-save"></i> Guardar
           </button>
       </div>
