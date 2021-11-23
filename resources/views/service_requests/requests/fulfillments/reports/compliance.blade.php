@@ -8,12 +8,12 @@
 
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.compliance') }}">
     <div class="form-row">
-    <fieldset class="form-group col-md-5">
+    <fieldset class="form-group col-6 col-md-4">
             <label for="for_rut">Rut/Nombre</label>
             <input name="rut" class="form-control" placeholder="Run o nombre" value="{{ old('rut') }}" aucomplete="off">
             </input>
         </fieldset>
-        <fieldset class="form-group col-md-3">
+        <fieldset class="form-group col-6 col-md-3">
             <label for="for_year">Establecimiento</label>
             <select name="establishment" class="form-control">
                 <option value=""></option>
@@ -23,7 +23,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-4 col-md-1">
             <label for="for_year">Año</label>
             <select name="year" class="form-control">
                 <option value=""></option>
@@ -33,7 +33,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-4 col-md-1">
             <label for="for_month">Mes</label>
             <select name="month" class="form-control text-capitalize">
                 <option value=""></option>
@@ -44,10 +44,8 @@
                 @endfor
             </select>
         </fieldset>
-    </div>
 
-    <div class="form-row">
-    <fieldset class="form-group col-md-1">
+    <fieldset class="form-group col-4 col-md-1">
             <label for="for_resolution">Resolución</label>
             <select name="resolution" class="form-control">
                 <option value="">Todas</option>
@@ -55,7 +53,7 @@
                 <option value="No" @if($request->input('resolution')=='No') selected @endif>Sin</option>
             </select>
         </fieldset>
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-6 col-md-2">
             <label for="for_certificate">Certificado</label>
             <select name="certificate" class="form-control">
                 <option value="">Todas</option>
@@ -63,7 +61,7 @@
                 <option value="No" @if($request->input('certificate')=='No') selected @endif>Sin Certificado</option>
             </select>
         </fieldset>
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-6 col-md-2">
             <label for="for_ok_responsable">Responsable</label>
             <select name="ok_responsable" class="form-control">
                 <option value="">Todos</option>
@@ -71,7 +69,7 @@
                 <option value="No" @if($request->input('ok_responsable')=='No')) selected @endif>Sin Aprobar</option>
             </select>
         </fieldset>
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-6 col-md-2">
             <label for="for_ok_rrhh">RRHH</label>
             <select name="ok_rrhh" class="form-control">
                 <option value="">Todos</option>
@@ -79,7 +77,7 @@
                 <option value="No" @if($request->input('ok_rrhh')=='No')) selected @endif>Sin Aprobar</option>
             </select>
         </fieldset>
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-6 col-md-2">
             <label for="for_ok_finances">Finanzas</label>
             <select name="ok_finances" class="form-control">
                 <option value="">Todas</option>
@@ -87,7 +85,7 @@
                 <option value="No" @if($request->input('ok_finances')=='No')) selected @endif>Sin Aprobar</option>
             </select>
         </fieldset>
-        <fieldset class="form-group col-md-1">
+        <fieldset class="form-group col-6 col-md-2">
             <label for="for_invoice">Boleta</label>
             <select name="invoice" class="form-control">
                 <option value="">Todos</option>
@@ -96,7 +94,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-6 col-md-2">
             <label for="for_payment_date">Pago</label>
             <select name="payment_date" class="form-control">
                 <option value="">Todos</option>
@@ -105,11 +103,7 @@
             </select>
         </fieldset>
 
-    </div>
-
-    <div class="form-row">
-
-        <fieldset class="form-group col-md-2">
+        <fieldset class="form-group col-6 col-md-2">
             <label for="for_type">Origen Financiamiento</label>
             <select name="type" class="form-control">
                 <option value="">Todos</option>
@@ -118,8 +112,8 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-2">
-            <label for="for_program_contract_type">Tipo de contrato</label>
+        <fieldset class="form-group col-5 col-md-2">
+            <label for="for_program_contract_type">Tipos de contrato</label>
             <select name="program_contract_type" class="form-control">
                 <option value="">Todos</option>
                 <option value="Mensual" @if($request->input('program_contract_type')=='Mensual') selected @endif>Mensual</option>
@@ -127,7 +121,7 @@
             </select>
         </fieldset>
 
-        <fieldset class="form-group col-md-3">
+        <fieldset class="form-group col-md-6">
             <label for="for_working_day_type">Jornada de Trabajo</label>
             <select name="working_day_type" class="form-control">
                 <option value="">Todas</option>
@@ -145,18 +139,15 @@
             </select>
         </fieldset>
 
-         <fieldset class="form-group col-md-1">
+         <fieldset class="form-group col-5 col-md-2">
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
         </fieldset>
 
-        <div class="col">
-        <fieldset class="form-group col-md-6">
-             <label for="">&nbsp;</label>
-            <button type="submit" class="btn btn-outline-primary" title="Descargar Excel" name="excel">Descargar Excel<i class="fas fa-file-excel"></i> </button>
+        <fieldset class="form-group col-7 col-md-2">
+            <label for="">&nbsp;</label>
+            <button type="submit" class="form-control btn btn-outline-primary" title="Descargar Excel" name="excel">Descargar Excel <i class="fas fa-file-excel"></i> </button>
         </fieldset>
-
-        </div>
 
     </div>
 
@@ -177,7 +168,7 @@
 <h3 class="mb-3">Reporte de cumplimiento</h3>
 
 
-    <table class="table table-sm table-bordered table-stripped" id="tabla_cumplimiento">
+    <table class="table table-sm table-bordered table-responsive table-stripped" id="tabla_cumplimiento">
         <tr>
             <th>Ct.</th>
             <th>Id Sol.</th>
