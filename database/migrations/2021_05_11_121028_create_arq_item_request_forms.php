@@ -27,7 +27,7 @@ class CreateArqItemRequestForms extends Migration
             $table->unsignedInteger('quantity');
             $table->string('type_of_currency');
             $table->string('article_file')->nullable();
-            $table->string('unit_value');
+            $table->unsignedInteger('unit_value');
             $table->longText('specification');
             $table->string('tax');
             $table->unsignedInteger('expense');
