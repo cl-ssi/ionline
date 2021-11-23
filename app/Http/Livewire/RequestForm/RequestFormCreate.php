@@ -27,6 +27,10 @@ class RequestFormCreate extends Component
     public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF;
     public $budget_item_id, $lstPurchaseMechanism;
 
+    public $searchedUser;
+
+    protected $listeners = ['searchedUser'];
+
     protected $rules = [
         'unitValue'           =>  'required|numeric|min:1',
         'quantity'            =>  'required|numeric|min:0.1',
@@ -148,6 +152,7 @@ class RequestFormCreate extends Component
             'typeOfCurrency'           => $this->typeOfCurrency,
             'articleFile'              => $this->articleFile,
       ];
+      // dd($this->items);
       $this->totalForm();
       $this->cancelRequestService();
     }
@@ -242,12 +247,10 @@ class RequestFormCreate extends Component
           'name'                  =>  $this->name,
           'superior_chief'        =>  $this->superiorChief,
           'justification'         =>  $this->justify,
-          'type_form'             =>  '1',
-          'creator_user_id'       =>  Auth()->user()->id,
-          'applicant_user_id'     =>  Auth()->user()->id,
+          'type_form'             =>  'goods and services',
+          'request_user_id'       =>  Auth()->user()->id,
+          'request_user_ou_id'    =>  Auth()->user()->organizationalUnit->id,
           //'supervisor_user_id'    =>  Auth()->user()->id,
-          'applicant_ou_id'       =>  Auth()->user()->organizationalUnit->id,
-          'applicant_position'    =>  Auth()->user()->getPosition(),
           'estimated_expense'     =>  $this->totalDocument,
           'purchase_mechanism_id' =>  $this->purchaseMechanism,
           'program'               =>  $this->program,
@@ -294,7 +297,6 @@ class RequestFormCreate extends Component
     private function saveItem($item, $id){
         $now = Carbon::now()->format('Y_m_d_H_i_s');
         $file_name = $now.'art_file_'.$id;
-
         $req = ItemRequestForm::updateOrCreate(
           [
             'id'                    =>      $item['id'],
@@ -310,7 +312,7 @@ class RequestFormCreate extends Component
             //'budget_item_id'        =>      '1',
             'expense'               =>      $item['totalValue'],
             'type_of_currency'      =>      $item['typeOfCurrency'],
-            'article_file'          =>      $item['articleFile']->storeAs('/ionline/request_forms_dev/item_files/', $file_name.'.'.$item['articleFile']->extension(), 'gcs')
+            'article_file'          =>      $item['articleFile'] ? $item['articleFile']->storeAs('/ionline/request_forms_dev/item_files/', $file_name.'.'.$item['articleFile']->extension(), 'gcs') : null
       ]);
     }
 
@@ -319,4 +321,9 @@ class RequestFormCreate extends Component
         $users = User::orderBy('name', 'ASC')->get();
         return view('livewire.request-form.request-form-create', compact('users'));
     }
+
+    public function searchedUser(User $user){
+      $this->searchedUser = $user;
+      $this->contractManagerId = $user->id;
+  }
 }
