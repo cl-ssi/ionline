@@ -164,11 +164,12 @@ class PassengerRequest extends Component
         $this->passengers[$this->key]['return_date']    = $this->return_date;
         $this->passengers[$this->key]['baggage']        = $this->baggage;
         $this->passengers[$this->key]['unitValue']      = $this->unitValue;
-
+        $this->totalValue();
         $this->cleanPassenger();
     }
 
     public function totalValue(){
+        $this->totalValue = 0;
         foreach($this->passengers as $passenger){
             $this->totalValue = $this->totalValue + $passenger['unitValue'];
         }
