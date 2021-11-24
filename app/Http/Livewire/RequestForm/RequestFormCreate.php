@@ -221,8 +221,8 @@ class RequestFormCreate extends Component
     public function saveRequestForm(){
 
       $this->validate(
-        [ 'contractManagerId'            =>  'required',
-          'name'                         =>  'required',
+        [ 'name'                         =>  'required',
+          'contractManagerId'            =>  'required',
           'purchaseMechanism'            =>  'required',
           'program'                      =>  'required',
           'justify'                      =>  'required',
@@ -233,9 +233,9 @@ class RequestFormCreate extends Component
           'contractManagerId.required'   =>  'Debe ingresar un Administrador de Contrato.',
           'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
           'program.required'             =>  'Ingrese un Programa Asociado.',
-          //'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
+          'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
           'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
-          'items.required'               =>  'Debe agregar al menos un Item para Bien y/o Servicio'
+          'items.required'               =>  $this->route == 'request_forms.passengers.create' ? 'Debe agregar al menos un Pasajero' : 'Debe agregar al menos un Item para Bien y/o Servicio'
         ],
       );
 
