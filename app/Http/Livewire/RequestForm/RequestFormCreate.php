@@ -232,6 +232,7 @@ class RequestFormCreate extends Component
     }
 
     public function saveRequestForm(){
+      // dd($this->items);
       $this->validate(
         [ 'name'                         =>  'required',
           'contractManagerId'            =>  'required',
@@ -290,7 +291,7 @@ class RequestFormCreate extends Component
         }
       } else {
         foreach($this->passengers as $passenger){
-          $this->save($passenger, $req->id);
+          $this->savePassenger($passenger, $req->id);
         }
       }
 
@@ -335,7 +336,7 @@ class RequestFormCreate extends Component
       ]);
     }
 
-    private function savePassenger($passenger, $id){
+    private function savePassenger($item, $id){
         $now = Carbon::now()->format('Y_m_d_H_i_s');
         $file_name = $now.'art_file_'.$id;
         $req = ItemRequestForm::updateOrCreate(
