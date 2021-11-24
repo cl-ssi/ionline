@@ -67,13 +67,13 @@
     <div class="row justify-content-md-end mt-0"><!-- FILA 5 -->
         <div class="col-2">
           @if($edit)
-            <button type="button" wire:click="updateRequestService" class="btn btn-primary btn-sm float-right">Editar Item</button>
+            <button type="button" wire:click="updateItem" class="btn btn-primary btn-sm float-right">Editar Item</button>
           @else
             <button type="button" wire:click="addItem" class="btn btn-primary btn-sm float-right"><i class="fas fa-cart-plus"></i> Agregar</button>
           @endif
         </div>
         <div class="col-1">
-            <button type="button" wire:click="cancelRequestService" class="btn btn-secondary btn-sm float-right">Cancelar</button>
+            <button type="button" wire:click="cleanItem" class="btn btn-secondary btn-sm float-right">Cancelar</button>
         </div>
     </div><!-- FILA 5 --><!--Valida la variable error para que solo contenga validación de los Items-->
 
@@ -121,10 +121,10 @@
                     <td>{{$item['taxes']}}</td>
                     <td align="right">{{ number_format($item['totalValue'],0,",",".") }}</td>
                     <td align="center" class="brd-l brd-b">
-                        <a href="#items" class="text-info" title="Editar" wire:click="editRequestService({{ $key }})"><i class="fas fa-pencil-alt"></i></a>
+                        <a href="#items" class="text-info" title="Editar" wire:click="editItem({{ $key }})"><i class="fas fa-pencil-alt"></i></a>
                     </td>
                     <td class="brd-r brd-b" align="center">
-                        <a href="#items" class="text-danger" title="Eliminar" wire:click="deleteRequestService({{ $key }})"><i class="far fa-trash-alt"></i></a>
+                        <a href="#items" class="text-danger" title="Eliminar" wire:click="deleteItem({{ $key }})"><i class="far fa-trash-alt"></i></a>
                     </td>
                 </tr>
               @endforeach

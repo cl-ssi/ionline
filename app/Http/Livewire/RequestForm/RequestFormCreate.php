@@ -27,9 +27,11 @@ class RequestFormCreate extends Component
     public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF;
     public $budget_item_id, $lstPurchaseMechanism;
 
+    public $passengers;
+
     public $searchedUser, $route;
 
-    protected $listeners = ['savedPassengers'];
+    protected $listeners = ['savedPassengers', 'savedItems'];
 
     protected $rules = [
         'unitValue'           =>  'required|numeric|min:1',
@@ -61,6 +63,7 @@ class RequestFormCreate extends Component
       $this->purchaseMechanism      = "";
       $this->totalDocument          = 0;
       $this->items                  = array();
+      $this->passengers             = array();
       $this->deletedItems           = array();
       $this->title                  = "Agregar Item";
       $this->edit                   = false;
@@ -71,6 +74,16 @@ class RequestFormCreate extends Component
         $this->requestForm = $requestForm;
         $this->setRequestForm();
       }
+    }
+
+    public function savedPassengers($passengers)
+    {
+      $this->passengers = $passengers;
+    }
+
+    public function savedItems($items)
+    {
+      $this->items = $items;
     }
 
     private function setRequestForm(){
@@ -226,7 +239,7 @@ class RequestFormCreate extends Component
           'program'                      =>  'required',
           'justify'                      =>  'required',
           'fileRequests'                 =>  'required',
-          'items'                        =>  'required'
+          $this->route == 'request_forms.passengers.create' ? 'passengers' : 'items' => 'required'
         ],
         [ 'name.required'                =>  'Debe ingresar un nombre a este formulario.',
           'contractManagerId.required'   =>  'Debe ingresar un Administrador de Contrato.',
@@ -234,7 +247,7 @@ class RequestFormCreate extends Component
           'program.required'             =>  'Ingrese un Programa Asociado.',
           'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
           'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
-          'items.required'               =>  $this->route == 'request_forms.passengers.create' ? 'Debe agregar al menos un Pasajero' : 'Debe agregar al menos un Item para Bien y/o Servicio'
+          $this->route == 'request_forms.passengers.create' ? 'passengers.required' : 'items.required' =>  $this->route == 'request_forms.passengers.create' ? 'Debe agregar al menos un Pasajero' : 'Debe agregar al menos un Item para Bien y/o Servicio'
         ],
       );
 
@@ -271,8 +284,14 @@ class RequestFormCreate extends Component
           }
       }
 
-      foreach($this->items as $item){
-        $this->saveItem($item, $req->id);
+      if($this->route == 'request_forms.items.create'){
+        foreach($this->items as $item){
+          $this->saveItem($item, $req->id);
+        }
+      } else {
+        foreach($this->passengers as $passenger){
+          $this->save($passenger, $req->id);
+        }
       }
 
       if($this->editRF){
