@@ -169,7 +169,7 @@ class SingleParameterController extends Controller
 
       $pob_x_establecimientos = Percapita::year($year)
                               ->where('ACEPTADO_RECHAZADO','ACEPTADO')
-                              ->selectRaw('COUNT(*) AS valor, COD_CENTRO')
+                              ->selectRaw('COUNT(*) AS valor, NOMBRE_CENTRO')
                               ->with(['establecimiento' => function($q){
                                   return $q->where('meta_san', 1);
                               }])
@@ -193,8 +193,8 @@ class SingleParameterController extends Controller
                               ->when(count($array) == 1, function ($query) use ($array) {
                                   $query->where('edad','>',$array[0]);
                               })
-                              ->groupBy('COD_CENTRO')
-                              ->orderBy('COD_CENTRO')->get();
+                              ->groupBy('NOMBRE_CENTRO')
+                              ->orderBy('NOMBRE_CENTRO')->get();
 
       $pob_x_generos = Percapita::year($year)
                               ->where('ACEPTADO_RECHAZADO','ACEPTADO')
@@ -308,10 +308,7 @@ class SingleParameterController extends Controller
       }
 
 
-      $establishments = Establishment::where('id','>',0)
-                                     ->whereNotNull('deis')
-                                     ->where('deis','!=','')
-                                     ->get();
+      $establishments = Establecimiento::all();
       foreach ($establishments as $key => $establishment) {
         $establishment->deis = str_replace("-","",$establishment->deis);
       }

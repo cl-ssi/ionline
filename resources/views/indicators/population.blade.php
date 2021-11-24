@@ -24,7 +24,7 @@
         <select class="form-control" name="establishment_id">
           <option value="">Todos</option>
           @foreach($establishments as $establishment)
-            <option value="{{$establishment->deis}}" @if($request->establishment_id == $establishment->deis) selected @endif>{{$establishment->name}}</option>
+            <option value="{{$establishment->Codigo}}" @if($request->establishment_id == $establishment->Codigo) selected @endif>{{$establishment->nombre}}</option>
           @endforeach
         </select>
       </div>
@@ -129,7 +129,7 @@
           // data.addColumn('number', 'Mujeres');
           data.addRows([
               @foreach($pob_x_establecimientos as $key => $pob_x_establecimiento)
-                ['{{$pob_x_establecimiento->COD_CENTRO}}',{{ $pob_x_establecimiento->valor }}],
+                ['{{$pob_x_establecimiento->NOMBRE_CENTRO}}',{{ $pob_x_establecimiento->valor }}],
               @endforeach
           ]);
 
@@ -228,7 +228,7 @@
         ]);
 
         var options = {
-          title: 'My Daily Activities',
+          title: 'Población por género',
           height: 400
         };
 
