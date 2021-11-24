@@ -8,7 +8,7 @@
 
 <h3 class="mb-3">Solicitud de Cotización - Pasajes Aéreos</h3>
 
-@include('request_form.nav')
+@include('request_form.partials.nav')
 
 <div class="card">
     <div class="card-header">
@@ -41,7 +41,7 @@
 
 <br>
 
-@livewire('request-form.passage.ticket-request')
+@livewire('request-form.passenger.passenger-request')
 
 @endsection
 
