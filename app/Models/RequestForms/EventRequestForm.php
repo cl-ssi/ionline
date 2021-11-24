@@ -27,9 +27,9 @@ class EventRequestForm extends Model
 
     public static function createLeadershipEvent(RequestForm $requestForm){
         $event                      =   new EventRequestForm();
-        $event->ou_signer_user      =   $requestForm->applicant->organizationalUnit->id;
-        $event->cardinal_number     =   '10';
-        $event->status              =   'created';
+        $event->ou_signer_user      =   $requestForm->request_user_ou_id;
+        $event->cardinal_number     =   1;
+        $event->status              =   'pending';
         $event->event_type          =   'leader_ship_event';
         $event->requestForm()->associate($requestForm);
         $event->save();
@@ -37,9 +37,9 @@ class EventRequestForm extends Model
         if($requestForm->superior_chief == 1){
             $event                      =   new EventRequestForm();
             $event->ou_signer_user      =   $requestForm->organizationalUnit->father->id;
-            $event->cardinal_number     =   '12';
-            $event->status              =   'created';
-            $event->event_type          =   'leader_ship_event';
+            $event->cardinal_number     =   2;
+            $event->status              =   'pending';
+            $event->event_type          =   'superior_leader_ship_event';
             $event->requestForm()->associate($requestForm);
             $event->save();
         }
@@ -49,9 +49,9 @@ class EventRequestForm extends Model
 
     public static function createPreFinanceEvent(RequestForm $requestForm){
         $event                      =   new EventRequestForm();
-        $event->ou_signer_user      =   '40';
-        $event->cardinal_number     =   '15';
-        $event->status              =   'created';
+        $event->ou_signer_user      =   40;
+        $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 3 : 2;
+        $event->status              =   'pending';
         $event->event_type          =   'pre_finance_event';
         $event->requestForm()->associate($requestForm);
         $event->save();
@@ -60,9 +60,9 @@ class EventRequestForm extends Model
 
     public static function createFinanceEvent(RequestForm $requestForm){
         $event                      =   new EventRequestForm();
-        $event->ou_signer_user      =   '40';
-        $event->cardinal_number     =   '20';
-        $event->status              =   'created';
+        $event->ou_signer_user      =   40;
+        $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 4 : 3;
+        $event->status              =   'pending';
         $event->event_type          =   'finance_event';
         $event->requestForm()->associate($requestForm);
         $event->save();
@@ -71,9 +71,9 @@ class EventRequestForm extends Model
 
     public static function createSupplyEvent(RequestForm $requestForm){
         $event                      =   new EventRequestForm();
-        $event->ou_signer_user      =   '37';
-        $event->cardinal_number     =   '30';
-        $event->status              =   'created';
+        $event->ou_signer_user      =   37;
+        $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 5 : 4;
+        $event->status              =   'pending';
         $event->event_type          =   'supply_event';
         $event->requestForm()->associate($requestForm);
         $event->save();

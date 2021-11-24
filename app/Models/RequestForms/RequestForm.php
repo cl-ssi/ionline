@@ -76,6 +76,10 @@ class RequestForm extends Model implements Auditable
       return $this->belongsTo(PurchaseMechanism::class, 'purchase_mechanism_id');
     }
 
+    public function signer(){
+      return $this->belongsTo(User::class, 'signer_user_id');
+    }
+
     public function organizationalUnit(){
       return $this->belongsTo(OrganizationalUnit::class, 'applicant_ou_id');
     }

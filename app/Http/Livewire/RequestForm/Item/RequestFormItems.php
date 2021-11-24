@@ -88,6 +88,7 @@ class RequestFormItems extends Component
         $this->items[$this->key]['totalValue']              = $this->quantity * $this->unitValue;
         $this->estimateExpense();
         $this->cleanItem();
+        $this->emit('savedItems', $this->items);
     }
 
     public function deleteItem($key)
@@ -97,6 +98,7 @@ class RequestFormItems extends Component
         unset($this->items[$key]);
         $this->estimateExpense();
         $this->cleanItem();
+        $this->emit('savedItems', $this->items);
     }
 
     public function estimateExpense()
