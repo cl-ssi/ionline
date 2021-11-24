@@ -25,6 +25,8 @@ class PassengerRequest extends Component
           $birthday, $phone_number, $email, $round_trip, $origin, $destination,
           $departure_date, $return_date, $baggage, $unitValue;
 
+    public $roundTripValue;
+
     public $passengers, $key;
 
     public $totalValue = 0;
@@ -45,7 +47,7 @@ class PassengerRequest extends Component
         'email'             =>  'required|email',
         'round_trip'        =>  'required',
         'origin'            =>  'required',
-        'destination'       =>  'required',
+        //'destination'       =>  'required',
         'departure_date'    =>  'required',
         'return_date'       =>  'required',
         'baggage'           =>  'required',
@@ -71,7 +73,7 @@ class PassengerRequest extends Component
         'email.email'               => 'E-mail debe contener formato adecuado.',
         'round_trip.required'       => 'Seleccione un tipo de viaje.',
         'origin.required'           => 'Campo Origen es requerido.',
-        'destination.required'      => 'Campo Destino es requerido.',
+        //'destination.required'      => 'Campo Destino es requerido.',
         'departure_date.required'   => 'Campo Fecha de Ida es requerido.',
         'return_date.required'      => 'Campo Fecha de Regreso es requerido.',
         'baggage.required'          => 'Seleccione tipo de equipaje.',
@@ -115,6 +117,57 @@ class PassengerRequest extends Component
         $this->departure_date=$this->return_date=$this->baggage=$this->unitValue = "";
     }
 
+    public function deletePassenger($key){
+      unset($this->passengers[$key]);
+      //$this->cleanTicket();
+    }
+
+    public function editPassenger($key){
+      $this->resetErrorBag();
+      //$this->title                    = "Editar Item Nro ". ($key+1);
+      $this->edit                     = true;
+
+      $this->run            = $this->passengers[$key]['run'];
+      $this->dv             = $this->passengers[$key]['dv'];
+      $this->name           = $this->passengers[$key]['name'];
+      $this->fathers_family = $this->passengers[$key]['fathers_family'];
+      $this->mothers_family = $this->passengers[$key]['mothers_family'];
+      $this->birthday       = $this->passengers[$key]['birthday'];
+      $this->phone_number   = $this->passengers[$key]['phone_number'];
+      $this->email          = $this->passengers[$key]['email'];
+      $this->round_trip     = $this->passengers[$key]['round_trip'];
+      $this->origin         = $this->passengers[$key]['origin'];
+      $this->destination    = $this->passengers[$key]['destination'];
+      $this->departure_date = $this->passengers[$key]['departure_date'];
+      $this->return_date    = $this->passengers[$key]['return_date'];
+      $this->baggage        = $this->passengers[$key]['baggage'];
+      $this->unitValue      = $this->passengers[$key]['unitValue'];
+
+      $this->key                      = $key;
+    }
+
+    public function updatePassenger(){
+        $this->validate();
+        $this->edit                                     = false;
+        $this->passengers[$this->key]['run']            = $this->run;
+        $this->passengers[$this->key]['dv']             = $this->dv;
+        $this->passengers[$this->key]['name']           = $this->name;
+        $this->passengers[$this->key]['fathers_family'] = $this->fathers_family;
+        $this->passengers[$this->key]['mothers_family'] = $this->mothers_family;
+        $this->passengers[$this->key]['birthday']       = $this->birthday;
+        $this->passengers[$this->key]['phone_number']   = $this->phone_number;
+        $this->passengers[$this->key]['email']          = $this->email;
+        $this->passengers[$this->key]['round_trip']     = $this->round_trip;
+        $this->passengers[$this->key]['origin']         = $this->origin;
+        $this->passengers[$this->key]['destination']    = $this->origin;
+        $this->passengers[$this->key]['departure_date'] = $this->departure_date;
+        $this->passengers[$this->key]['return_date']    = $this->return_date;
+        $this->passengers[$this->key]['baggage']        = $this->baggage;
+        $this->passengers[$this->key]['unitValue']      = $this->unitValue;
+
+        $this->cleanPassenger();
+    }
+
     public function totalValue(){
         foreach($this->passengers as $passenger){
             $this->totalValue = $this->totalValue + $passenger['unitValue'];
@@ -126,6 +179,7 @@ class PassengerRequest extends Component
 
       $this->passengers             = array();
       $this->lstPurchaseMechanism   = PurchaseMechanism::all();
+      // $this->roundTripValue();
       // $this->tittle                 = "Agregar Ticket";
       // $this->edit                   = false;
       // $this->dv                     = "";
@@ -158,10 +212,7 @@ class PassengerRequest extends Component
     //   $this->cleanTicket();
     // }
 
-    // public function deletePassenger($key){
-    //   unset($this->items[$key]);
-    //   //$this->cleanTicket();
-    // }
+
 
     // public function editTicket($key){
     //   $this->resetErrorBag();
