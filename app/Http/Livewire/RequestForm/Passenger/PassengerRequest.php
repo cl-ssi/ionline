@@ -101,6 +101,8 @@ class PassengerRequest extends Component
         ];
         $this->totalValue();
         $this->cleanPassenger();
+
+        $this->emit('savedPassengers', $this->passengers);
     }
 
     public function cleanPassenger(){
@@ -117,10 +119,6 @@ class PassengerRequest extends Component
         foreach($this->passengers as $passenger){
             $this->totalValue = $this->totalValue + $passenger['unitValue'];
         }
-    }
-
-    public function saveRequestForm(){
-
     }
 
     public function mount(){
