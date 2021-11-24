@@ -9,7 +9,7 @@ use App\Models\Parameters\PurchaseMechanism;
 class PassengerRequest extends Component
 {
     public $edit, $tittle;
-    public $items, $key;
+    //public $items, $key;
 
     /* Mantenedores */
     public $lstPurchaseMechanism;
@@ -25,7 +25,7 @@ class PassengerRequest extends Component
           $birthday, $phone_number, $email, $round_trip, $origin, $destination,
           $departure_date, $return_date, $baggage;
 
-    public $passengers;
+    public $passengers, $key;
 
     protected $listeners = ['searchedUser'];
 
@@ -74,11 +74,6 @@ class PassengerRequest extends Component
         'baggage.required'          => 'Seleccione tipo de equipaje.',
     ];
 
-    // public function submit(){
-    //     $this->validate();
-    //     dd($this->dv);
-    // }
-
     public function addPassenger(){
         $this->validate();
         $this->items[]=[
@@ -114,41 +109,7 @@ class PassengerRequest extends Component
     }
 
     public function saveRequestForm(){
-        $this->validate(
-          // [ 'contractManagerId'            =>  'required',
 
-          [ 'name'                         =>  'required',
-            'purchaseMechanism'            =>  'required',
-            'program'                      =>  'required',
-            'justify'                      =>  'required',
-            'fileRequests'                 =>  'required',
-            'items'                        =>  'required'
-          ],
-          [ 'name.required'                =>  'Debe ingresar un nombre a este formulario.',
-            'contractManagerId.required'   =>  'Debe ingresar un Administrador de Contrato.',
-            'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
-            'program.required'             =>  'Ingrese un Programa Asociado.',
-            //'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
-            'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
-            'items.required'               =>  'Debe agregar al menos un Pasajero para completar formulario'
-          ],
-        );
-
-
-
-        // $this->validate(
-        //     [
-        //       'program'                      =>  'required',
-        //       'justification'                =>  'required',
-        //       'items'                        =>  'required'
-        //     ],
-        //     [
-        //       'program.required'             =>  'Ingrese un Programa Asociado.',
-        //       'justification.required'       =>  'Campo Justificación en Breve, es requerido.',
-        //       'items.required'               =>  'Debe agregar al menos un Ticket.'
-        //     ],
-        //   );
-        //Codigo para Serialización...
     }
 
     public function mount(){

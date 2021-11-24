@@ -98,12 +98,12 @@
                 </div>
 
                 <div class="form-row">
-                    <fieldset class="form-group col-sm-4">
+                    <fieldset class="form-group col-sm-2">
                         <label for="for_departure_date">Fecha/Hora Ida</label>
                         <input wire:model="departure_date" name="departure_date" class="form-control form-control-sm" type="datetime-local">
                     </fieldset>
 
-                    <fieldset class="form-group col-sm-4">
+                    <fieldset class="form-group col-sm-2">
                         <label for="for_return_date">Fecha/Hora Vuelta</label>
                         <input wire:model="return_date" name="return_date" class="form-control form-control-sm" type="datetime-local">
                     </fieldset>
@@ -117,6 +117,11 @@
                           <option value="baggage">Equipaje de Bodega</option>
                           <option value="oversized baggage">Equipaje Sobredimensionado</option>
                         </select>
+                    </fieldset>
+
+                    <fieldset class="form-group col-sm-4">
+                        <label for="for_origin">Valor Estimado</label>
+                        <input wire:model="unitValue" name="unit_value" class="form-control form-control-sm" type="number">
                     </fieldset>
                 </div>
 
