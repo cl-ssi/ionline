@@ -36,6 +36,11 @@
                             <i class="fas fa-desktop fa-fw"></i> Indicadores - REM
                         </a>
 
+                        <a class="dropdown-item"
+                           href="{{ route('indicators.population') }}">
+                            <i class="fas fa-globe-americas"></i> Población
+                        </a>
+
                         @can('Programming: view')
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item"
