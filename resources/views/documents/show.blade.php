@@ -77,10 +77,10 @@
             <div class="right" style="float: right; width: 300px; padding-top: 76px;">
                 <div class="left" style="padding-bottom: 6px; font-size: 15px; padding-left: 60px;"><strong>{{ $document->type }} N°:</strong> {{ $document->number }}</div>
                 <div style="padding-top:26px"></div>
-                <div class="left" style="padding-bottom: 6px;">
+                <div class="left" style="padding-bottom: 6px; text-align: justify;">
                     <strong>ANT:</strong> {{ $document->antecedent }}
                 </div>
-                <div class="left" style="padding-bottom: 8px;">
+                <div class="left" style="padding-bottom: 8px; text-align: justify;">
                     <strong>MAT:</strong> {{ $document->subject }}
                 </div>
                 <div><br><p></div>
