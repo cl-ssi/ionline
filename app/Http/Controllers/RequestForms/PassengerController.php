@@ -31,7 +31,7 @@ class PassengerController extends Controller
     public function create()
     {
         //$user = User::where('id', Auth::user()->id);
-        return  view('request_form.passage.create');
+        return  view('request_form.passenger.create');
     }
 
     /**
