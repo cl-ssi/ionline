@@ -886,6 +886,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     Route::get('/', function () {
         return view('indicators.index');
     })->name('index');
+    Route::get('/population', 'Indicators\SingleParameterController@population')->name('population');
     Route::resource('single_parameter', 'Indicators\SingleParameterController')->middleware('auth');
 
     Route::prefix('comges')->as('comges.')->group(function () {
