@@ -98,17 +98,17 @@
                 </div>
 
                 <div class="form-row">
-                    <fieldset class="form-group col-sm-2">
+                    <fieldset class="form-group col-sm-3">
                         <label for="for_departure_date">Fecha/Hora Ida</label>
                         <input wire:model="departure_date" name="departure_date" class="form-control form-control-sm" type="datetime-local">
                     </fieldset>
 
-                    <fieldset class="form-group col-sm-2">
+                    <fieldset class="form-group col-sm-3">
                         <label for="for_return_date">Fecha/Hora Vuelta</label>
                         <input wire:model="return_date" name="return_date" class="form-control form-control-sm" type="datetime-local">
                     </fieldset>
 
-                    <fieldset class="form-group col-sm-4">
+                    <fieldset class="form-group col-sm-3">
                         <label for="for_baggage">Tipo de Viaje</label>
                         <select wire:model="baggage" name="baggage" class="form-control form-control-sm">
                           <option value="" selected>Seleccione...</option>
@@ -119,7 +119,7 @@
                         </select>
                     </fieldset>
 
-                    <fieldset class="form-group col-sm-4">
+                    <fieldset class="form-group col-sm-3">
                         <label for="for_origin">Valor Estimado</label>
                         <input wire:model="unitValue" name="unit_value" class="form-control form-control-sm" type="number">
                     </fieldset>
@@ -180,7 +180,7 @@
                 </tr>
             </thead>
             <tbody>
-              @foreach($items as $key => $item)
+              @foreach($passengers as $key => $item)
                       <tr>
                           <td>{{$key+1}}</td>
                           <td>{{$item['run']."-".$item['dv']}}</td>
@@ -196,13 +196,13 @@
                           <td>{{$item['baggage']}}</td>
                           <td align="center">
                             <a class="btn btn-outline-secondary btn-sm" title="Editar"
-                              wire:click="editTicket({{ $key }})">
+                              wire:click="editPassenger({{ $key }})">
                                 <i class="fas fa-pencil-alt"></i>
                             </a>
                           </td>
                           <td align="center">
                             <a class="btn btn-outline-secondary btn-sm" title="Eliminar"
-                              wire:click="deletePassenger({{ $key }})">
+                              wire:click="cleanPassenger({{ $key }})">
                                 <i class="far fa-trash-alt"></i>
                               </a>
                           </td>
@@ -211,9 +211,9 @@
               </tbody>
           <tfoot>
               <tr>
-                  <td colspan="8" rowspan="2"></td>
-                  <td colspan="3">Cantidad de Items</td>
-                  <td colspan="3">{{count($items)}}</td>
+                  <td colspan="10" rowspan="2"></td>
+                  <th colspan="2" class="text-right">Total</th>
+                  <td colspan="2">${{ number_format($totalValue,0,",",".") }}</td>
               </tr>
           </tfoot>
     </table>

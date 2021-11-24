@@ -23,16 +23,18 @@ class PassengerRequest extends Component
 
     public $passengerType, $run, $dv, $name, $fathers_family, $mothers_family,
           $birthday, $phone_number, $email, $round_trip, $origin, $destination,
-          $departure_date, $return_date, $baggage;
+          $departure_date, $return_date, $baggage, $unitValue;
 
     public $passengers, $key;
+
+    public $totalValue = 0;
 
     protected $listeners = ['searchedUser'];
 
     //Para Validar
 
     protected $rules = [
-        'passengerType'     =>  'required',
+        // 'passengerType'     =>  'required',
         'run'               =>  'required|integer|min:1',
         'dv'                =>  'required|numeric|min:1',
         'name'              =>  'required',
@@ -47,11 +49,12 @@ class PassengerRequest extends Component
         'departure_date'    =>  'required',
         'return_date'       =>  'required',
         'baggage'           =>  'required',
+        'unitValue'         =>  'required',
 
     ];
 
     protected $messages = [
-        'passengerType.required'    => 'Seleccione tipo de Pasajero.',
+        // 'passengerType.required'    => 'Seleccione tipo de Pasajero.',
         'run.required'              => 'Campo Run es obligatorio.',
         'run.integer'               => 'Run debe ser número entero sin puntos ni dígito verificador.',
         'run.min'                   => 'Run debe ser mayor o igual a 1.',
@@ -72,11 +75,12 @@ class PassengerRequest extends Component
         'departure_date.required'   => 'Campo Fecha de Ida es requerido.',
         'return_date.required'      => 'Campo Fecha de Regreso es requerido.',
         'baggage.required'          => 'Seleccione tipo de equipaje.',
+        'unitValue.required'        => 'Debe ingresar el valor del pasaje.',
     ];
 
     public function addPassenger(){
         $this->validate();
-        $this->items[]=[
+        $this->passengers[]=[
               'id'                =>  null,
               'passenger_type'    =>  $this->passengerType,
               'run'               =>  $this->run,
@@ -92,20 +96,27 @@ class PassengerRequest extends Component
               'destination'       =>  $this->destination,
               'departure_date'    =>  $this->departure_date,
               'return_date'       =>  $this->return_date,
-              'baggage'           =>  $this->baggage
+              'baggage'           =>  $this->baggage,
+              'unitValue'         =>  $this->unitValue
         ];
-        //$this->totalForm();
-        //$this->cancelRequestService();
+        $this->totalValue();
+        $this->cleanPassenger();
     }
 
     public function cleanPassenger(){
       //$this->tittle = "Agregar Ticket";
       $this->edit  = false;
       $this->resetErrorBag();
-      $this->run=$this->dv=$this->name=$this->fathers_family=
+      $this->run=$this->run=$this->dv=$this->name=$this->fathers_family=
         $this->mothers_family=$this->birthday=$this->phone_number=$this->email=
         $this->round_trip=$this->origin=$this->destination=$this->departure_date=
-        $this->departure_date=$this->return_date=$this->baggage = "";
+        $this->departure_date=$this->return_date=$this->baggage=$this->unitValue = "";
+    }
+
+    public function totalValue(){
+        foreach($this->passengers as $passenger){
+            $this->totalValue = $this->totalValue + $passenger['unitValue'];
+        }
     }
 
     public function saveRequestForm(){
@@ -115,7 +126,7 @@ class PassengerRequest extends Component
     public function mount(){
       // $this->run = $this->searchedUser->run;
 
-      $this->items                  = array();
+      $this->passengers             = array();
       $this->lstPurchaseMechanism   = PurchaseMechanism::all();
       // $this->tittle                 = "Agregar Ticket";
       // $this->edit                   = false;
