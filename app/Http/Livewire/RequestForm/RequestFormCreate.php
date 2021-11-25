@@ -226,10 +226,12 @@ class RequestFormCreate extends Component
       }
     }
 
-    public function totalForm(){
-      $this->totalDocument = 0;
-      foreach($this->items as $item){
-        $this->totalDocument = $this->totalDocument + $item['totalValue'];}
+    public function totalForm($items){
+      $total = 0;
+      foreach($items as $item)
+        $total += $item[$this->route == 'request_forms.passengers.create' ? 'unitValue' : 'totalValue'];
+
+      return $total;
     }
 
     public function saveRequestForm(){
@@ -262,11 +264,11 @@ class RequestFormCreate extends Component
           'name'                  =>  $this->name,
           'superior_chief'        =>  $this->superiorChief,
           'justification'         =>  $this->justify,
-          'type_form'             =>  'goods and services',
+          'type_form'             =>  $this->route == 'request_forms.passengers.create' ? 'passengers' : 'goods and services',
           'request_user_id'       =>  Auth()->user()->id,
           'request_user_ou_id'    =>  Auth()->user()->organizationalUnit->id,
           //'supervisor_user_id'    =>  Auth()->user()->id,
-          'estimated_expense'     =>  $this->totalDocument,
+          'estimated_expense'     =>  $this->totalForm($this->route == 'request_forms.passengers.create' ? $this->passengers : $this->items),
           'purchase_mechanism_id' =>  $this->purchaseMechanism,
           'program'               =>  $this->program,
           'status'                =>  'pending'
