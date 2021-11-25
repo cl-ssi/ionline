@@ -55,12 +55,13 @@
                 </fieldset>
             </div>
             <div class="form-row">
-                <fieldset class="form-group col-sm-8">
+                <fieldset class="form-group col-sm">
                     <label for="exampleFormControlTextarea1" class="form-label">Justificación de Adquisición:</label>
                     <textarea wire:model.defer="justify" name="justify" class="form-control" rows="3"></textarea>
                 </fieldset>
-
-                <fieldset class="form-group col-sm-4">
+            </div>
+            <div class="form-row">
+                <fieldset class="form-group col-sm">
                   @if (count($messagePM) > 0)
                       <label>Documentos que debe adjuntar:</label>
                       <div class="alert alert-warning mx-0 my-0 pt-2 pb-0 px-0" role="alert">
