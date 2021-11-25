@@ -183,43 +183,37 @@ class RequestFormCreate extends Component
    public function messageMechanism(){
       $this->messagePM = array();
       switch ($this->purchaseMechanism) {
-          case 1: //Convenio Marco < 1000 utm
+          case 1: // MENORES A 3 UTM.
+              $this->messagePM[] = "Especificaciones Técnicas";
+              break;
+          case 2: //Convenio Marco
               $this->messagePM[] = "Adjuntar ID Mercado Público";
-              $this->messagePM[] = "Especificaciones Técnicas de Bien y/o Servicios";
-              $this->messagePM[] = "Decretos Presupuestarios";
-              $this->messagePM[] = "Convenios Mandatos";
-              $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
+              $this->messagePM[] = "Especificaciones Técnicas";
+              $this->messagePM[] = "Decretos Presupuestarios, si procede.";
+              $this->messagePM[] = "Convenios Mandatos, si procede.";
+              $this->messagePM[] = "Resoluciones Aprobatorias de Programa Ministeriales, si procede.";
               break;
-          case 2: //Convenio Marco > 1000 utm
-              $this->messagePM[] = "Bases Técnicas y Especificaciones Técnicas de Bien y/o Servicios";
-              $this->messagePM[] = "Decretos Presupuestarios";
-              $this->messagePM[] = "Convenios Mandatos";
-              $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
+          case 3: // Trato Directo
+              $this->messagePM[] = "Términos de Referencia y Especificaciones Técnicas.";
+              $this->messagePM[] = "Decretos Presupuestarios, si procede.";
+              $this->messagePM[] = "Convenios Mandatos, si procede.";
+              $this->messagePM[] = "Resoluciones Aprobatorias de Programa Ministeriales, si procede.";
+              $this->messagePM[] = "En el caso de realizar ADDENDUM O RENOVACIONES en los convenios
+                                    vigentes, se debe adjuntar lo siguiente: Informe técnico que señale
+                                    la justificación de la adquisición, una cotización por parte de la
+                                    empresa que indique la compra asociada, y un correo de respaldo que
+                                    la empresa acepta la nueva adquisición.";
               break;
-          case 3: // Licitación Pública
-              $this->messagePM[] = "Bases Técnicas y Especificaciones Técnicas de Bien y/o Servicios";
-              $this->messagePM[] = "Decretos Presupuestarios";
-              $this->messagePM[] = "Convenios Mandatos";
-              $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
-              break;
-          case 4: // Trato Directo
-              $this->messagePM[] = "Términos de Referencias y Especificaciones Técnicas de Bien y/o Servicios";
-              $this->messagePM[] = "Decretos Presupuestarios";
-              $this->messagePM[] = "Convenios Mandatos";
-              $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
-              break;
-          case 5: //Compra Ágil
-              $this->messagePM[] = "Especificaciones Técnicas de Bien y/o Servicios";
-              $this->messagePM[] = "Decretos Presupuestarios";
-              $this->messagePM[] = "Convenios Mandatos";
-              $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
-              $this->messagePM[] = "Tres Cotizaciones (Opcional)";
-              break;
-          case 6: //Compra Interna
-              $this->messagePM[] = "Especificaciones Técnicas de Bien y/o Servicios";
-              $this->messagePM[] = "Decretos Presupuestarios";
-              $this->messagePM[] = "Convenios Mandatos";
-              $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
+          case 4: //LICITACIÓN PÚBLICA
+              $this->messagePM[] = "Bases y  Especificaciones Técnicas.";
+              $this->messagePM[] = "Decretos Presupuestarios, si procede.";
+              $this->messagePM[] = "Convenios Mandatos, si procede.";
+              $this->messagePM[] = "Resoluciones Aprobatorias de Programa Ministeriales, si procede.";
+              $this->messagePM[] = "En el caso de realizar ADDENDUM O RENOVACIONES en los convenios
+                                    vigentes, se debe adjuntar lo siguiente: Informe técnico que señale
+                                    la justificación de la adquisición, una cotización por parte de la
+                                    empresa que indique la compra asociada, y un correo de respaldo que
+                                    la empresa acepta la nueva adquisición.";
               break;
           case "":
               break;
