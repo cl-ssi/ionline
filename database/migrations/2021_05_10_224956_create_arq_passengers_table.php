@@ -16,9 +16,9 @@ class CreateArqPassengersTable extends Migration
         Schema::create('arq_passengers', function (Blueprint $table) {
             $table->id();
 
-            $table->string('passengerType');
+            $table->string('passenger_type')->nullable();
             $table->foreignId('user_id')->nullable();
-            $table->integer('run')->unsigned()->unique();
+            $table->string('run');
             $table->char('dv',1);
             $table->string('name');
             $table->string('fathers_family');
@@ -30,7 +30,7 @@ class CreateArqPassengersTable extends Migration
             $table->string('origin');
             $table->string('destination');
             $table->dateTime('departure_date');
-            $table->dateTime('return_date');
+            $table->dateTime('return_date')->nullable();
             $table->string('baggage');
             $table->unsignedInteger('unit_value');
             $table->foreignId('request_form_id')->nullable();
