@@ -5,6 +5,7 @@ use Livewire\Component;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\RequestFormFile;
 use App\Models\RequestForms\ItemRequestForm;
+use App\Models\RequestForms\Passenger;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\UnitOfMeasurement;
 use App\Models\Parameters\PurchaseMechanism;
@@ -225,13 +226,16 @@ class RequestFormCreate extends Component
       }
     }
 
-    public function totalForm(){
-      $this->totalDocument = 0;
-      foreach($this->items as $item){
-        $this->totalDocument = $this->totalDocument + $item['totalValue'];}
+    public function totalForm($items){
+      $total = 0;
+      foreach($items as $item)
+        $total += $item[$this->route == 'request_forms.passengers.create' ? 'unitValue' : 'totalValue'];
+
+      return $total;
     }
 
     public function saveRequestForm(){
+      // dd($this->items);
       $this->validate(
         [ 'name'                         =>  'required',
           'contractManagerId'            =>  'required',
@@ -260,14 +264,16 @@ class RequestFormCreate extends Component
           'name'                  =>  $this->name,
           'superior_chief'        =>  $this->superiorChief,
           'justification'         =>  $this->justify,
-          'type_form'             =>  'goods and services',
+          'type_form'             =>  $this->route == 'request_forms.passengers.create' ? 'passengers' : 'goods and services',
           'request_user_id'       =>  Auth()->user()->id,
           'request_user_ou_id'    =>  Auth()->user()->organizationalUnit->id,
           //'supervisor_user_id'    =>  Auth()->user()->id,
-          'estimated_expense'     =>  $this->totalDocument,
+          'estimated_expense'     =>  $this->totalForm($this->route == 'request_forms.passengers.create' ? $this->passengers : $this->items),
           'purchase_mechanism_id' =>  $this->purchaseMechanism,
           'program'               =>  $this->program,
-          'status'                =>  'created'
+          'status'                =>  'pending'
+
+          //'passenger_type'    =>  $this->passengerType,
       ]);
 
       // AQUI GUARDAR ARCHIVOS
@@ -290,7 +296,7 @@ class RequestFormCreate extends Component
         }
       } else {
         foreach($this->passengers as $passenger){
-          $this->save($passenger, $req->id);
+          $this->savePassenger($passenger, $req->id);
         }
       }
 
@@ -338,23 +344,29 @@ class RequestFormCreate extends Component
     private function savePassenger($passenger, $id){
         $now = Carbon::now()->format('Y_m_d_H_i_s');
         $file_name = $now.'art_file_'.$id;
-        $req = ItemRequestForm::updateOrCreate(
-          [
-            'id'                    =>      $item['id'],
-          ],
-          [
-            'request_form_id'       =>      $id,
-            'article'               =>      $item['article'],
-            'unit_of_measurement'   =>      $item['unitOfMeasurement'],
-            'specification'         =>      $item['technicalSpecifications'],
-            'quantity'              =>      $item['quantity'],
-            'unit_value'            =>      $item['unitValue'],
-            'tax'                   =>      $item['taxes'],
-            //'budget_item_id'        =>      '1',
-            'expense'               =>      $item['totalValue'],
-            'type_of_currency'      =>      $item['typeOfCurrency'],
-            'article_file'          =>      $item['articleFile'] ? $item['articleFile']->storeAs('/ionline/request_forms_dev/item_files/', $file_name.'.'.$item['articleFile']->extension(), 'gcs') : null
-      ]);
+        $req = Passenger::updateOrCreate(
+            [
+              'id'                =>  $passenger['id'],
+            ],
+            [
+              'user_id'           =>  Auth()->user()->id,
+              'run'               =>  $passenger['run'],
+              'dv'                =>  $passenger['dv'],
+              'name'              =>  $passenger['name'],
+              'fathers_family'    =>  $passenger['fathers_family'],
+              'mothers_family'    =>  $passenger['mothers_family'],
+              'birthday'          =>  $passenger['birthday'],
+              'phone_number'      =>  $passenger['phone_number'],
+              'email'             =>  $passenger['email'],
+              'round_trip'        =>  $passenger['round_trip'],
+              'origin'            =>  $passenger['origin'],
+              'destination'       =>  $passenger['destination'],
+              'departure_date'    =>  $passenger['departure_date'],
+              'return_date'       =>  $passenger['return_date'],
+              'baggage'           =>  $passenger['baggage'],
+              'unit_value'        =>  $passenger['unitValue'],
+              'request_form_id'   =>  $id
+            ]);
     }
 
     public function render(){

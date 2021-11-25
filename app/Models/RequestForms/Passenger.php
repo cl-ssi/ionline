@@ -8,9 +8,9 @@ use Carbon\Carbon;
 class Passenger extends Model
 {
     protected $fillable = [
-        'run', 'dv', 'name', 'fathers_family', 'mothers_family', 'birthday',
-        'telephone_number', 'email', 'tramo', 'departure_date', 'from_date',
-        'baggage'
+        'user_id', 'run', 'dv' ,'name' ,'fathers_family', 'mothers_family',
+        'birthday', 'phone_number', 'email', 'round_trip', 'origin', 'destination',
+        'departure_date', 'return_date', 'baggage', 'unit_value', 'request_form_id'
     ];
 
     public function getRunFormatAttribute() {
