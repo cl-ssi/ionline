@@ -129,7 +129,7 @@
                     <div class="col-2">
                         @if($edit)
                           <button class="btn btn-primary btn-sm float-right" type="button"
-                            wire:click="updateTicket">Editar Pasajero</button>
+                            wire:click="updatePassenger">Editar Pasajero</button>
                         @else
                           <button class="btn btn-primary btn-sm float-right" type="button"
                             wire:click="addPassenger">Agregar Pasajero</button>
@@ -164,7 +164,7 @@
         <table class="table table-sm table-striped table-bordered small">
             <thead>
                 <tr>
-                    <th>Item</th>
+                    <!-- <th>Item</th> -->
                     <th>Run</th>
                     <th>Nombres y Apellidos</th>
                     <th>Fecha de Nacimiento</th>
@@ -173,27 +173,63 @@
                     <th>Tipo de Viaje</th>
                     <th>Origen</th>
                     <th>Destino</th>
-                    <th>Fecha Ida</th>
-                    <th>Fecha Regreso</th>
+                    <th>Fecha Ida/Regreso</th>
                     <th>Tipo Equipaje</th>
+                    <th>Valor</th>
                     <th colspan="2">Acciones</th>
                 </tr>
             </thead>
             <tbody>
               @foreach($passengers as $key => $item)
                       <tr>
-                          <td>{{$key+1}}</td>
+                          <!-- <td>{{$key+1}}</td> -->
                           <td>{{$item['run']."-".$item['dv']}}</td>
                           <td>{{$item['name']." ".$item['fathers_family']." ".$item['mothers_family']}}</td>
-                          <td>{{$item['birthday']}}</td>
+                          <td>{{ Carbon\Carbon::parse($item['birthday'])->format('d-m-Y') }}</td>
                           <td>{{$item['phone_number']}}</td>
                           <td>{{$item['email']}}</td>
-                          <td>{{$item['round_trip']}}</td>
+                          <td>
+                            @switch($item['round_trip'])
+                                @case('round trip')
+                                    Ida, vuelta
+                                    @break
+
+                                @case('one-way only')
+                                    Ida
+                                    @break
+
+                                @default
+                                  ''
+                            @endswitch
+                          </td>
                           <td>{{$item['origin']}}</td>
                           <td>{{$item['destination']}}</td>
-                          <td>{{$item['departure_date']}}</td>
-                          <td>{{$item['return_date']}}</td>
-                          <td>{{$item['baggage']}}</td>
+                          <td>{{ Carbon\Carbon::parse($item['departure_date'])->format('d-m-Y H:i') }} <br>
+                              {{ Carbon\Carbon::parse($item['return_date'])->format('d-m-Y H:i') }}
+                          </td>
+                          <td>
+                            @switch($item['baggage'])
+                                @case('handbag')
+                                    Bolso de Mano
+                                    @break
+
+                                @case('hand luggage')
+                                    Equipaje de Cabina
+                                    @break
+
+                                @case('baggage')
+                                    Equipaje de Bodega
+                                    @break
+
+                                @case('oversized baggage')
+                                    Equipaje Sobredimensionado
+                                    @break
+
+                                @default
+                                  ''
+                            @endswitch
+                          </td>
+                          <td>${{ number_format($item['unitValue'],0,",",".") }}</td>
                           <td align="center">
                             <a class="btn btn-outline-secondary btn-sm" title="Editar"
                               wire:click="editPassenger({{ $key }})">
@@ -202,7 +238,7 @@
                           </td>
                           <td align="center">
                             <a class="btn btn-outline-secondary btn-sm" title="Eliminar"
-                              wire:click="cleanPassenger({{ $key }})">
+                              wire:click="deletePassenger({{ $key }})">
                                 <i class="far fa-trash-alt"></i>
                               </a>
                           </td>
