@@ -32,6 +32,15 @@
                 @endforeach
             </select>
         </div>
+        <div class="form-group col-md-2">
+            <select name="cycle" id="cycle" class="form-control selectpicker" title="Por ciclo vital">
+                <option value=""></option>
+                @php($cycle_types = array('INFANTIL', 'ADOLESCENTE', 'ADULTO', 'ADULTO MAYOR', 'TRANSVERSAL'))
+                @foreach($cycle_types as $cycle_type)
+                <option value="{{$cycle_type}}" @if($cycle_type == Request::get('cycle')) selected @endif>{{$cycle_type}}</option>
+                @endforeach
+            </select>
+        </div>
         <button type="submit" class="btn btn-light mb-4">Filtrar</button>
     </div>
 
@@ -104,7 +113,8 @@
         </tr>
     </thead>
     <tbody style="font-size:65%;">
-        @foreach($programming->itemsBy('Direct') as $programmingitem)
+        @php($directProgrammingItems = $programming->itemsBy('Direct', Request::has('activity') || Request::has('tracer_number')))
+        @foreach($directProgrammingItems as $programmingitem)
         <tr class="small">
         @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" >
@@ -223,8 +233,8 @@
         </tr>
     </thead>
     <tbody style="font-size:65%;">
-        @foreach($programming->itemsBy('Indirect') as $programmingitemsIndirect)
-        @if($programmingitemsIndirect->activityItem != null)
+    @php($indirectProgrammingItems = $programming->itemsBy('Indirect', Request::has('activity') || Request::has('tracer_number')))
+        @foreach($indirectProgrammingItems as $programmingitemsIndirect)
         <tr class="small">
         @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" >
@@ -285,7 +295,6 @@
             </td>
             @endcan
         </tr>
-        @endif
         @endforeach
     </tbody>
 </table>
@@ -336,8 +345,8 @@
         </tr>
     </thead>
     <tbody style="font-size:65%;">
-        @foreach($programming->itemsBy('Workshop') as $programmingItemworkshop)
-        @if($programmingItemworkshop->activityItem != null)
+    @php($workshopProgrammingItems = $programming->itemsBy('Workshop', Request::has('activity') || Request::has('tracer_number')))
+        @foreach($workshopProgrammingItems as $programmingItemworkshop)
         <tr class="small">
         @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" >
@@ -399,7 +408,6 @@
             </td>
             @endcan
         </tr>
-        @endif
         @endforeach
     </tbody>
 </table>
