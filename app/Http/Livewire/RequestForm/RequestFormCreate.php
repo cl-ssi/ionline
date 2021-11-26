@@ -255,6 +255,7 @@ class RequestFormCreate extends Component
         ],
         [
           'contract_manager_id'   =>  $this->contractManagerId,
+          'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
           'name'                  =>  $this->name,
           'superior_chief'        =>  $this->superiorChief,
           'justification'         =>  $this->justify,

@@ -5,6 +5,7 @@ namespace App\Models\RequestForms;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\RequestForms\RequestForm;
+use App\Rrhh\OrganizationalUnit;
 use App\User;
 
 class EventRequestForm extends Model
@@ -20,6 +21,10 @@ class EventRequestForm extends Model
     public function signerUser(){
         return $this->belongsTo(User::class, 'signer_user_id');
     }
+
+    public function signerOrganizationalUnit(){
+        return $this->belongsTo(OrganizationalUnit::class, 'ou_signer_user');
+      }
 
     public function requestForm() {
         return $this->belongsTo(RequestForm::class, 'request_form_id');
