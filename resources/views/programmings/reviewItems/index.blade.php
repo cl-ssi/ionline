@@ -252,6 +252,7 @@
                     <div class="form-group col-md-12">
                         <label for="forprogram">Evaluar</label>
                         <select name="review" id="review"  class="form-control">
+                                <option value="No hay observaciones. Actividad aceptada">No hay observaciones. Actividad aceptada</option>
                                 <option value="1. La actividad programada ¿se plantea como problema en el diagnóstico de salud? ¿está bien planteado?">1. La actividad programada ¿se plantea como problema en el diagnóstico de salud? ¿está bien planteado?</option>
                                 <option value="2. La actividad programada ¿se encuentra planteada en la matriz de cuidados? ¿tiene un indicador elaborado?">2. La actividad programada ¿se encuentra planteada en la matriz de cuidados? ¿tiene un indicador elaborado?</option>
                                 <option value="3. ¿Se acepta el número de población definido y fuente utilizada?">3. ¿Se acepta el número de población definido y fuente utilizada?</option>
