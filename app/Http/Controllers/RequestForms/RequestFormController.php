@@ -25,15 +25,30 @@ use App\User;
 class RequestFormController extends Controller {
 
     public function index() {
-        $createdRequestForms    = auth()->user()->userRequestForms()->where('status', 'created')->get();
-        $inProgressRequestForms = auth()->user()->userRequestForms()->where('status', 'in_progress')->get();
-        $approvedRequestForms   = auth()->user()->userRequestForms()->where('status', 'approved')->get();
-        $rejectedRequestForms   = auth()->user()->userRequestForms()->where('status', 'rejected')->orWhere('status', 'closed')->get();
-        $empty = false;
-        if(count($rejectedRequestForms) == 0 && count($createdRequestForms) == 0 && count($inProgressRequestForms) == 0 && count($approvedRequestForms) ==  0){
-            $empty=true;
-            return view('request_form.index', compact('empty'));}
-        return view('request_form.index', compact('createdRequestForms', 'inProgressRequestForms', 'rejectedRequestForms','approvedRequestForms', 'empty'));
+        // $createdRequestForms    = auth()->user()->requestForms()->where('status', 'created')->get();
+        // $inProgressRequestForms = auth()->user()->requestForms()->where('status', 'pending')->get();
+        // $approvedRequestForms   = auth()->user()->requestForms()->where('status', 'approved')->get();
+        // $rejectedRequestForms   = auth()->user()->requestForms()->where('status', 'rejected')->orWhere('status', 'closed')->get();
+        // $empty = false;
+        // if(count($rejectedRequestForms) == 0 && count($createdRequestForms) == 0 && count($inProgressRequestForms) == 0 && count($approvedRequestForms) ==  0){
+        //     $empty=true;
+        //     return view('request_form.index', compact('empty'));}
+        // return view('request_form.index', compact('createdRequestForms', 'inProgressRequestForms', 'rejectedRequestForms','approvedRequestForms', 'empty'));
+
+        $my_pending_requests = RequestForm::latest()
+            ->where('request_user_id', Auth::user()->id)
+            ->where('status', 'pending')
+            ->get();
+
+        $my_request = RequestForm::latest()
+            ->where('request_user_id', Auth::user()->id)
+            ->where(function ($q){
+              $q->where('status', 'approved')
+                ->orWhere('status', 'rejected');
+            })
+            ->get();
+
+        return view('request_form.index', compact('my_request', 'my_pending_requests'));
     }
 
 

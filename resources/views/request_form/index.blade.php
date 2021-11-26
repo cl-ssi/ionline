@@ -6,7 +6,7 @@
 <h4 class="mb-3">Formularios de Requerimiento - Bandeja de Entrada</h4>
 
 @include('request_form.partials.nav')
-@if(!$empty)
+@if(count($my_request) > 0 || count($my_pending_requests) > 0)
 
     <fieldset class="form-group">
         <div class="input-group mb-3">
@@ -20,87 +20,10 @@
         </div>
     </fieldset>
 
-    @if(count($createdRequestForms) > 0)
-      </div>
-      <div class="col">
-          <h6><i class="fas fa-inbox"></i> Formularios Creados</h6>
-          <div class="table-responsive">
-              <table class="table table-sm table-striped table-bordered">
-                <thead class="small">
-                  <tr class="text-center">
-                    <th>ID</th>
-                    <th style="width: 7%">Fecha Creación</th>
-                    <th>Descripción</th>
-                    <th>Usuario Gestor</th>
-                    <th>Mecanismo de Compra</th>
-                    <th>Items</th>
-                    <th>Espera</th>
-                    {{-- @foreach($createdRequestForms->eventRequestForms as $event) --}}
-                    <th>J</th>
-                    {{-- @endforeach --}}
-                    <th>RP</th>
-                    <th>F</th>
-                    <th>A</th>
-                    <th colspan="3">Opciones</th>
-                  </tr>
-                </thead>
-                <tbody class="small">
-                    @foreach($createdRequestForms as $requestForm)
-                          <tr>
-                              <td>{{ $requestForm->id }}</td>
-                              <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                              <td>{{ $requestForm->name }}</td>
-                              <td>{{ $requestForm->creator->FullName }}<br>
-                                  {{ $requestForm->organizationalUnit->name }}
-                              </td>
-                              <td>{{ $requestForm->purchaseMechanism->name }}</td>
-                              <td align="center">{{ $requestForm->quantityOfItems() }}</td>
-                              <td align="center">{{ $requestForm->getElapsedTime() }}</td>
-                              <td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                              <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
-                              <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                              <td class="align-middle text-center brd-b brd-r">{!! $requestForm->eventSign('supply_event') !!}</td>
-                              <td class="text-center align-middle brd-b">
-                                <a href="{{ route('request_forms.edit', $requestForm->id) }}"  class="text-primary" title="Editar">
-                                <i class="far fa-edit"></i></a>
-                              </td>
-
-                              <td class="text-center align-middle brd-b">
-                                <a href="{{ route('request_forms.show', $requestForm->id) }}" class="text-info" title="Visualizar">
-                                <i class="fas fa-binoculars"></i></a>
-                              </td>
-
-                              <td class="text-center align-middle brd-r brd-b">
-                                <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
-                                <i class="far fa-trash-alt"></i></a>
-                              </td>
-                          </tr>
-                    @endforeach
-                </tbody>
-              </table>
-          </div>
-      </div>
-          <!-- <div class="card border border-muted text-black bg-light mb-5">
-            <div class="card-header text-primary h6"><i class="fas fa-list"></i> Formularios sin Aprobaciones</div>
-            <div class="card-body">
-
-            </div>
-          </div> -->
-    @else
-        </div>
+    @if(count($my_pending_requests) > 0)
+    </div>
         <div class="col">
-            <h6><i class="fas fa-inbox"></i> Formularios Creados</h6>
-            <div class="card mb-3 bg-light">
-                <div class="card-body">
-                  Sus formularios están siendo atendidos.
-                </div>
-            </div>
-        </div>
-    @endif
-
-    @if(count($inProgressRequestForms) > 0)
-        <div class="col">
-            <h6><i class="fas fa-inbox"></i> Formularios en Progreso</h6>
+            <h6><i class="fas fa-inbox"></i> Formularios pendientes de aprobación</h6>
             <div class="table-responsive">
                 <table class="table table-sm table-striped table-bordered">
                   <thead class="small">
@@ -112,31 +35,43 @@
                       <th>Mecanismo de Compra</th>
                       <th>Items</th>
                       <th>Espera</th>
-                      {{-- @foreach($createdRequestForms->eventRequestForms as $event) --}}
-                      <th>J</th>
-                      {{-- @endforeach --}}
-                      <th>RP</th>
-                      <th>F</th>
-                      <th>A</th>
+                      <th>Estado</th>
                       <!-- <th colspan="3">Opciones</th> -->
                     </tr>
                   </thead>
                   <tbody class="small">
-                      @foreach($inProgressRequestForms as $requestForm)
+                      @foreach($my_pending_requests as $requestForm)
                             <tr>
                                 <td>{{ $requestForm->id }}</td>
                                 <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                                 <td>{{ $requestForm->name }}</td>
-                                <td>{{ $requestForm->creator->FullName }}<br>
-                                    {{ $requestForm->organizationalUnit->name }}
+                                <td>{{ $requestForm->user->FullName }}<br>
+                                    {{ $requestForm->userOrganizationalUnit->name }}
                                 </td>
                                 <td>{{ $requestForm->purchaseMechanism->name }}</td>
                                 <td align="center">{{ $requestForm->quantityOfItems() }}</td>
                                 <td align="center">{{ $requestForm->getElapsedTime() }}</td>
-                                <td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                                {{--<td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
                                 <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
                                 <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                                <td class="align-middle text-center brd-b brd-r">{!! $requestForm->eventSign('supply_event') !!}</td>
+                                <td class="align-middle text-center brd-b brd-r">{!! $requestForm->eventSign('supply_event') !!}</td>--}}
+                                <td class="text-center">
+                                  @foreach($requestForm->eventRequestForms as $sign)
+                                      @if($sign->status == 'pending' || $sign->status == NULL)
+                                          <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                      @endif
+                                      @if($sign->status == 'accepted')
+                                          <span style="color: green;">
+                                              <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                          </span>
+                                      @endif
+                                      @if($sign->status == 'rejected')
+                                          <span style="color: Tomato;">
+                                              <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                          </span>
+                                      @endif
+                                  @endforeach
+                              </td>
                                 <!-- <td class="text-center align-middle brd-b">
                                   <a href="{{ route('request_forms.edit', $requestForm->id) }}"  class="text-primary" title="Editar">
                                   <i class="far fa-edit"></i></a>
@@ -157,53 +92,6 @@
                 </table>
             </div>
         </div>
-
-        <!-- <div class="card border border-muted text-black bg-light mb-5">
-          <div class="card-header text-primary h6"><i class="far fa-paper-plane"></i> Formularios en Progreso</div>
-          <div class="card-body">
-            <table class="table table-striped table-sm small">
-              <thead>
-                <tr>
-                  <th scope="col">Id</th>
-                  <th scope="col">Usuario Gestor</th>
-                  <th scope="col">Justificación</th>
-                  <th scope="col">Fecha Creación</th>
-                  <th scope="col">Espera</th>
-                  <th scope="col">Última Actualziación</th>
-                  <th scope="col">Comprador Asignado</th>
-                  <th scope="col" class="text-center">J</th>
-                  <th scope="col" class="text-center">RP</th>
-                  <th scope="col" class="text-center">F</th>
-                  <th scope="col" class="text-center">A</th>
-                  <th scope="col" class="text-center">V</th>
-                </tr>
-              </thead>
-              <tbody>
-                  @foreach($inProgressRequestForms as $requestForm)
-                        <tr>
-                            <th class="align-middle brd-b brd-l" scope="row">{{ $requestForm->id }}</td>
-                            <td class="align-middle brd-b">{{ $requestForm->creator ? $requestForm->creator->tinnyName() : 'Usuario eliminado' }}</td>
-                            <td class="align-middle brd-b">{{ $requestForm->justification }}</td>
-                            <td class="align-middle brd-b">{{ $requestForm->created_at }}</td>
-                            <td class="align-middle brd-b">{{ $requestForm->getElapsedTime() }}</td>
-                            <td class="align-middle brd-b">{{ $requestForm->updated_at }}</td>
-                            <td class="align-middle brd-b">{{ $requestForm->supervisor ? $requestForm->supervisor->tinnyName() : '-- --' }}</td>
-                            <td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                            <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                            <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
-                            <td class="align-middle text-center brd-b brd-r">{!! $requestForm->eventSign('supply_event') !!}</td>
-
-                            <td class="text-center align-middle brd-b brd-r">
-                              <a href="{{ route('request_forms.show', $requestForm->id) }}" class="text-info" title="Visualizar">
-                              <i class="fas fa-binoculars"></i></a>
-                            </td>
-
-                        </tr>
-                  @endforeach
-              </tbody>
-            </table>
-          </div>
-        </div> -->
     @else
         </div>
         <div class="col">
@@ -216,12 +104,13 @@
         </div>
     @endif
 
-    @if(count($rejectedRequestForms) > 0)
-        <div class="card border border-muted text-black bg-light mb-5">
-          <div class="card-header text-primary h6"><i class="fas fa-archive"></i> Formularios Cerrados o Rechazados</div>
-          <div class="card-body">
-            <table class="table table-striped table-sm small">
-              <thead>
+    @if(count($my_request) > 0)
+    </div>
+        <div class="col">
+            <h6><i class="fas fa-archive"></i> Formularios aprobados, cerrados o rechazados</h6>
+            <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered">
+              <thead class="small">
                 <tr>
                   <th scope="col">Id</th>
                   <th scope="col">Usuario Gestor</th>
@@ -230,26 +119,40 @@
                   <th scope="col">Rechazo</th>
                   <th scope="col">Usuario Rechazo</th>
                   <th scope="col">Comentario</th>
-                  <th scope="col" class="text-center">J</th>
-                  <th scope="col" class="text-center">RP</th>
-                  <th scope="col" class="text-center">F</th>
-                  <th scope="col" class="text-center">A</th>
+                  <th>Estado</th>
                 </tr>
               </thead>
-              <tbody>
-                  @foreach($rejectedRequestForms as $requestForm)
+              <tbody class="small">
+                  @foreach($my_request as $requestForm)
                         <tr>
                             <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
-                            <td class="align-middle">{{ $requestForm->creator ? $requestForm->creator->tinnyName() : 'Usuario eliminado' }}</td>
+                            <td class="align-middle">{{ $requestForm->user ? $requestForm->user->tinnyName() : 'Usuario eliminado' }}</td>
                             <td class="align-middle">{{ $requestForm->justification }}</td>
                             <td class="align-middle">{{ $requestForm->createdDate() }}</td>
                             <td class="align-middle">{{ $requestForm->rejectedTime() }}</td>
                             <td class="align-middle">{{ $requestForm->rejectedName() }}</td>
                             <td class="align-middle">{{ $requestForm->rejectedComment() }}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                            {{--<td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
                             <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>
+                            <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>--}}
+                            <td class="text-center">
+                                  @foreach($requestForm->eventRequestForms as $sign)
+                                      @if($sign->status == 'pending' || $sign->status == NULL)
+                                          <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                      @endif
+                                      @if($sign->status == 'accepted')
+                                          <span style="color: green;">
+                                              <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                          </span>
+                                      @endif
+                                      @if($sign->status == 'rejected')
+                                          <span style="color: Tomato;">
+                                              <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                          </span>
+                                      @endif
+                                  @endforeach
+                              </td>
                         </tr>
                   @endforeach
               </tbody>
