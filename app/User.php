@@ -71,9 +71,9 @@ class User extends Authenticatable implements Auditable
         return $this->hasOne('\App\Models\Rrhh\UserBankAccount','user_id');
     }
 
-    public function requestForms(){
-      return $this->hasMany(RequestForm::class, 'request_user_id');
-    }
+    // public function requestForms(){
+    //   return $this->hasMany(RequestForm::class, 'request_user_id');
+    // }
 
     public function requestForms(){
       return$this->belongsToMany(RequestForm::class, 'arq_request_forms_users', 'purchaser_user_id', 'request_form_id')
