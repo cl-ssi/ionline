@@ -27,8 +27,8 @@ class CreateArqEventRequestForms extends Migration
             $table->foreign('signer_user_id')->references('id')->on('users');
             $table->foreign('ou_signer_user')->references('id')->on('organizational_units');
             $table->foreign('request_form_id')->references('id')->on('arq_request_forms');
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
