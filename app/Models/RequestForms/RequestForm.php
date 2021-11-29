@@ -57,7 +57,8 @@ class RequestForm extends Model implements Auditable
     }
 
     public function purchasers(){
-      return $this->belongsToMany(User::class, 'arq_request_forms_users', 'request_form_id')->withPivot('request_form_id');
+        return$this->belongsToMany(User::class, 'arq_request_forms_users', 'request_form_id', 'purchaser_user_id')
+        ->withTimestamps();
     }
 
     public function supervisor(){

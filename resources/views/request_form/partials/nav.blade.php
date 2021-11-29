@@ -18,6 +18,18 @@
     </div>
   </li>
 
+  @if(Auth()->user()->organizational_unit_id == 37)
+    <li class="nav-item dropdown">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-file-alt"></i> Abastecimiento
+      </a>
+      <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+        <a class="dropdown-item" href="{{ route('request_forms.supply.index') }}"><i class="fas fa-inbox"></i> Comprador</a>
+        <!-- <div class="dropdown-divider"></div> -->
+      </div>
+    </li>
+  @endif
+
   <!-- <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-dice-d6"></i> Bienes y/o Servicios
@@ -52,7 +64,7 @@
         </a>
     </li>
   -->
-    <li class="nav-item">
+    <!-- <li class="nav-item">
         <a class="nav-link"
             href="{{ route('request_forms.leadership_index') }}">
             <i class="fas fa-inbox"></i> Jefatura
@@ -99,6 +111,6 @@
             <i class="fas fa-inbox"></i> Comprador
             <span class="badge badge-secondary"></span></a>
         </a>
-    </li>
+    </li> -->
 
 </ul>

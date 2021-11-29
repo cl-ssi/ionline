@@ -22,6 +22,7 @@ use App\Http\Controllers\RequestForms\RequestFormController;
 use App\Http\Controllers\RequestForms\RequestFormEventController;
 use App\Http\Controllers\RequestForms\RequestFormFileController;
 use App\Http\Controllers\RequestForms\RequestFormCodeController;
+use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
 use App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController;
@@ -1316,6 +1317,10 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     Route::prefix('passengers')->as('passengers.')->middleware('auth')->group(function () {
         Route::get('/create', [RequestFormController::class, 'create'])->name('create');
+    });
+
+    Route::prefix('supply')->as('supply.')->middleware('auth')->group(function () {
+        Route::get('/', [SupplyPurchaseController::class, 'index'])->name('index');
     });
 
 

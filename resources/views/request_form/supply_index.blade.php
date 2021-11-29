@@ -5,7 +5,7 @@
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
 <h4 class="mb-3">Formularios de Requerimiento - Bandeja de Entrada Abastecimiento</h4>
 
-@include('request_form.nav')
+@include('request_form.partials.nav')
 
 </div>
 <div class="col">
