@@ -39,6 +39,8 @@ class ReviewItemController extends Controller
     {
         //dd($request);
         $reviewItem = new ReviewItem($request->All());
+        if($reviewItem->review == 'No hay observaciones. Actividad aceptada')
+            $reviewItem->answer = $reviewItem->rectified = "SI";
         $reviewItem->review_id = 1;
         $reviewItem->user_id = Auth()->user()->id;
         $reviewItem->save();
