@@ -6,7 +6,8 @@
 <h4 class="mb-3">Formularios de Requerimiento - Bandeja de Entrada</h4>
 
 @include('request_form.partials.nav')
-@if(count($my_request) > 0 || count($my_pending_requests) > 0)
+
+@if(count($my_forms_signed) > 0 || count($my_pending_forms_to_signs) > 0)
 
     <fieldset class="form-group">
         <div class="input-group mb-3">
@@ -20,30 +21,32 @@
         </div>
     </fieldset>
 
-    @if(count($my_pending_requests) > 0)
+    @if(count($my_pending_forms_to_signs) > 0)
     </div>
         <div class="col">
-            <h6><i class="fas fa-inbox"></i> Formularios pendientes de aprobación</h6>
+            <h6><i class="fas fa-inbox"></i> Formularios pendientes de firmar</h6>
             <div class="table-responsive">
                 <table class="table table-sm table-striped table-bordered">
                   <thead class="small">
                     <tr class="text-center">
                       <th>ID</th>
                       <th style="width: 7%">Fecha Creación</th>
+                      <th>Tipo</th>
                       <th>Descripción</th>
                       <th>Usuario Gestor</th>
                       <th>Mecanismo de Compra</th>
                       <th>Items</th>
                       <th>Espera</th>
                       <th>Estado</th>
-                      <!-- <th colspan="3">Opciones</th> -->
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody class="small">
-                      @foreach($my_pending_requests as $requestForm)
+                      @foreach($my_pending_forms_to_signs as $requestForm)
                             <tr>
                                 <td>{{ $requestForm->id }}</td>
                                 <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                                <td>{{ $requestForm->type_form }}</td>
                                 <td>{{ $requestForm->name }}</td>
                                 <td>{{ $requestForm->user->FullName }}<br>
                                     {{ $requestForm->userOrganizationalUnit->name }}
@@ -57,10 +60,10 @@
                                 <td class="align-middle text-center brd-b brd-r">{!! $requestForm->eventSign('supply_event') !!}</td>--}}
                                 <td class="text-center">
                                   @foreach($requestForm->eventRequestForms as $sign)
-                                      @if($sign->status == 'pending' || $sign->status == NULL)
+                                      @if($sign->status == 'pending')
                                           <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                       @endif
-                                      @if($sign->status == 'accepted')
+                                      @if($sign->status == 'approved')
                                           <span style="color: green;">
                                               <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                           </span>
@@ -86,6 +89,20 @@
                                   <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
                                   <i class="far fa-trash-alt"></i></a>
                                 </td> -->
+                                <td>
+                                @if($requestForm->eventRequestForms->first()->status == 'pending')
+                                <a href="{{ route('request_forms.edit', $requestForm->id) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
+                                <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="btn btn-outline-secondary btn-sm text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
+                                  <i class="fas fa-trash"></i></a>
+                                @else
+                                <a href="{{ route('request_forms.show', $requestForm->id) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i></a>
+                                @endif
+                                <a href="{{ route('request_forms.leadership_sign', $requestForm->id) }}" class="btn btn-outline-primary btn-sm" title="Aceptar o Rechazar">
+                                  <i class="fas fa-signature"></i>
+                                </a>
+                              </td>
                             </tr>
                       @endforeach
                   </tbody>
@@ -104,7 +121,7 @@
         </div>
     @endif
 
-    @if(count($my_request) > 0)
+    @if(count($my_forms_signed) > 0)
     </div>
         <div class="col">
             <h6><i class="fas fa-archive"></i> Formularios aprobados, cerrados o rechazados</h6>
@@ -123,7 +140,7 @@
                 </tr>
               </thead>
               <tbody class="small">
-                  @foreach($my_request as $requestForm)
+                  @foreach($my_forms_signed as $requestForm)
                         <tr>
                             <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
                             <td class="align-middle">{{ $requestForm->user ? $requestForm->user->tinnyName() : 'Usuario eliminado' }}</td>
@@ -162,10 +179,10 @@
     @else
         </div>
         <div class="col">
-            <h6><i class="fas fa-inbox"></i> Formularios en Finalizados o Rechazados</h6>
+            <h6><i class="fas fa-inbox"></i> Formularios firmados o rechazados</h6>
             <div class="card mb-3 bg-light">
                 <div class="card-body">
-                  No hay formularios de requerimiento finalizados o rechazados.
+                  No hay formularios de requerimiento firmados o rechazados.
                 </div>
             </div>
         </div>

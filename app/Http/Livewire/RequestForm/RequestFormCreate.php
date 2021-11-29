@@ -259,7 +259,7 @@ class RequestFormCreate extends Component
           'name'                  =>  $this->name,
           'superior_chief'        =>  $this->superiorChief,
           'justification'         =>  $this->justify,
-          'type_form'             =>  $this->route == 'request_forms.passengers.create' ? 'passengers' : 'goods and services',
+          'type_form'             =>  $this->route == 'request_forms.passengers.create' ? 'Pasajes Aéreos' : 'Bienes y/o Servicios',
           'request_user_id'       =>  Auth()->user()->id,
           'request_user_ou_id'    =>  Auth()->user()->organizationalUnit->id,
           //'supervisor_user_id'    =>  Auth()->user()->id,
