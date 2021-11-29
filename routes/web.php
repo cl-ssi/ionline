@@ -1308,7 +1308,8 @@ Route::prefix('request_forms')->name('request_forms.')->group(function () {
 */
 
 Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(function () {
-    Route::get('/', [RequestFormController::class, 'index'])->name('index');
+    Route::get('/my_forms', [RequestFormController::class, 'my_forms'])->name('my_forms');
+    Route::get('/pending_forms', [RequestFormController::class, 'pending_forms'])->name('pending_forms');
     Route::get('/create', [RequestFormController::class, 'create'])->name('create');
 
     Route::prefix('items')->as('items.')->middleware('auth')->group(function () {

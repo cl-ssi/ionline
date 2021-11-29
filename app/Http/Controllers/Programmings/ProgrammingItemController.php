@@ -18,17 +18,20 @@ class ProgrammingItemController extends Controller
     {
         $listTracer = $request->tracer_number;
         $activityFilter = $request->activity;
+        $cycleFilter = $request->cycle;
 
         $programming = Programming::whereId($request->programming_id)
-            ->when(!$listTracer && !$activityFilter, function ($q){
+            ->when(!$listTracer && !$activityFilter && !$cycleFilter, function ($q){
                 return $q->with('items.activityItem', 'items.reviewItems', 'items.professionalHour.professional', 'establishment');
             })
-            ->when($listTracer || $activityFilter, function ($q) use ($listTracer, $activityFilter) {
-                return $q->whereHas('items.activityItem', $filter = function($q2) use ($listTracer, $activityFilter) {
+            ->when($listTracer || $activityFilter || $cycleFilter, function ($q) use ($listTracer, $activityFilter, $cycleFilter) {
+                return $q->whereHas('items.activityItem', $filter = function($q2) use ($listTracer, $activityFilter, $cycleFilter) {
                     return $q2->when(!empty($listTracer), function($q3) use ($listTracer){
                                 return $q3->Wherein('int_code', $listTracer);
                             })->when($activityFilter != null, function($q3) use ($activityFilter){
                                 return $q3->whereRaw("UPPER(activity_name) LIKE '%". strtoupper($activityFilter)."%'");
+                            })->when($cycleFilter != null, function($q3) use ($cycleFilter){
+                                return $q3->where('vital_cycle', $cycleFilter);
                             });
                 })->with(['items.activityItem' => $filter, 'items.reviewItems', 'items.professionalHour.professional', 'establishment'])->get();
              })

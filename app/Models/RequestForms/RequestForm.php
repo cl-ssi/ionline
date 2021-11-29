@@ -48,6 +48,10 @@ class RequestForm extends Model implements Auditable
         'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id'
     ];
 
+    public function user() {
+      return $this->belongsTo(User::class, 'request_user_id');
+  }
+
     public function requestFormFiles() {
         return $this->hasMany('\App\Models\RequestForms\RequestFormFile');
     }
@@ -81,8 +85,8 @@ class RequestForm extends Model implements Auditable
       return $this->belongsTo(User::class, 'signer_user_id');
     }
 
-    public function organizationalUnit(){
-      return $this->belongsTo(OrganizationalUnit::class, 'applicant_ou_id');
+    public function userOrganizationalUnit(){
+      return $this->belongsTo(OrganizationalUnit::class, 'request_user_ou_id');
     }
 
     public function itemRequestForms() {
