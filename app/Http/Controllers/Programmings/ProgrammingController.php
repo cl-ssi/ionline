@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Programmings\Programming;
 use App\Establishment;
 use App\Models\Commune;
+use App\Programmings\ActivityItem;
 use App\User;
 
 class ProgrammingController extends Controller
@@ -24,7 +25,11 @@ class ProgrammingController extends Controller
             
         $communes = Commune::where('name', $request->name)->get();
 
-        return view('programmings/programmings/index', compact('programmings', 'request', 'communes', 'year'));
+        $total_tracers = ActivityItem::whereHas('program', function($q) use ($year) {
+            return $q->where('year', $year);
+        })->whereNotNull('int_code')->distinct('int_code')->count('int_code');
+
+        return view('programmings/programmings/index', compact('programmings', 'request', 'communes', 'year', 'total_tracers'));
     }
 
     public function create() 
