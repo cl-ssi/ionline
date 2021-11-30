@@ -16,20 +16,18 @@ class ProgrammingController extends Controller
     public function index(Request $request)
     {
         $year = $request->year ?? Carbon::now()->year + 1;
-        $programmings = Programming::with('items.reviewItems', 'items.activityItem')
+        $programmings = Programming::with('items.reviewItems', 'items.activityItem', 'establishment.commune')
             ->where('year', $year)
             ->when(Auth()->user()->hasAllRoles('Programming: Review') == False && Auth()->user()->hasAllRoles('Programming: Admin') == False, function($q){
                 $q->Where('status','=','active')->Where('access','LIKE','%'.Auth()->user()->id.'%');
             })
             ->get();
-            
-        $communes = Commune::where('name', $request->name)->get();
 
         $total_tracers = ActivityItem::whereHas('program', function($q) use ($year) {
             return $q->where('year', $year);
         })->whereNotNull('int_code')->distinct('int_code')->count('int_code');
 
-        return view('programmings/programmings/index', compact('programmings', 'request', 'communes', 'year', 'total_tracers'));
+        return view('programmings/programmings/index', compact('programmings', 'request', 'year', 'total_tracers'));
     }
 
     public function create() 
