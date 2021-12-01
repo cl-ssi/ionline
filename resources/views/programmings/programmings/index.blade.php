@@ -68,7 +68,7 @@
                     <i class="fas fa-edit"></i></a>
                 </td>
             @endcan
-                <td > <span class="badge badge-info">{{ number_format(($programming->getCountActivities()/51) *100, 0, ',', ' ')}}%</span> </td>
+                <td > <span class="badge badge-info">{{ $total_tracers != 0 ? number_format(($programming->getCountActivities()/$total_tracers) *100, 0, ',', ' ') : 0}}%</span> </td>
                 <td > <span class="badge badge-danger">{{ number_format($programming->countTotalReviewsBy('Not rectified'), 0, ',', ' ')}}</span> </td>
                 <td >
                 {{ $programming->id }}</td>
@@ -126,7 +126,7 @@ $('#updateModalRect').on('show.bs.modal', function (event) {
 })
 
 // Set the date we're counting down to
-var countDownDate = new Date("Dec 21, 2021 00:00:00").getTime();
+var countDownDate = new Date("Dec 1, 2021 00:00:00").getTime();
 
 function timePart(val,text,color="black"){
   return `<h6 class="timer" style="color:${color};">${val}<div>${text}</div></h6>`

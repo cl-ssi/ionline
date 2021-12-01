@@ -44,7 +44,7 @@
 @if($commune_id != 0)
 <div class="tab-content mt-3">
     <h4>
-        <button type="button" class="btn btn-outline-info btn-sm"
+        <button id="export" type="button" class="btn btn-outline-info btn-sm"
             onclick="tableToExcel('tabla_{{ str_replace(" ","_",$comuna) }}', 'Hoja 1')">
             <i class="fas fa-download"></i>
         </button>
@@ -190,12 +190,29 @@
 @endif
 @endsection
 
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>  
 @section('custom_js')
 <script type="text/javascript">
     $('#establishment').on('change', function() {
         // alert( this.value );
         $('.targetDiv').hide();
         $("#" + this.value).show();
+        var clickfun = $("#export").attr("onClick");
+        var funname = clickfun.substring(0,clickfun.indexOf("("));       
+        $("#export").attr("onclick",funname+"('tabla_"+ this.value + "', 'Hoja 1')");
     });
+
+
+    var tableToExcel = (function() {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+        , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8"></head><body><table>{table}</table></body></html>'
+        , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+        , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+        return function(table, name) {
+        if (!table.nodeType) table = document.getElementById(table)
+        var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+        window.location.href = uri + base64(format(template, ctx))
+        }
+    })()
 </script>
 @endsection

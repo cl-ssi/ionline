@@ -70,10 +70,15 @@ class ServiceRequestController extends Controller
           //with responsable_id
           if ($user_id == $signatureFlow->responsable_id) {
             if ($signatureFlow->status == NULL) {
-              if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()->status == NULL) {
-                $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
-              } else {
-                $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
+              if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()) {
+                if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()->status == NULL) {
+                  $serviceRequestsOthersPendings[$serviceRequest->id] = $serviceRequest;
+                } else {
+                  $serviceRequestsMyPendings[$serviceRequest->id] = $serviceRequest;
+                }
+              }
+              else{
+                session()->flash('warning', 'Error con la solicitud ' . $serviceRequest->id . ', contactar al área TIC por este problema.');
               }
             } else {
               $serviceRequestsAnswered[$serviceRequest->id] = $serviceRequest;
@@ -212,6 +217,16 @@ class ServiceRequestController extends Controller
 
   public function delete_signature_flow(Request $request)
   {
+    //flujos de firma siguientes, se les resta 1
+    $signature_flows = SignatureFlow::where('service_request_id',SignatureFlow::find($request->signature_flow_id)->service_request_id)
+                                    ->where('sign_position','>',SignatureFlow::find($request->signature_flow_id)->sign_position)
+                                    ->get();
+    foreach ($signature_flows as $key => $signature_flow) {
+      $signature_flow->sign_position = $signature_flow->sign_position - 1;
+      $signature_flow->save();
+    }
+
+    //elimina el flujo de firma
     $signatureFlow = SignatureFlow::find($request->signature_flow_id);
     $signatureFlow->delete();
 

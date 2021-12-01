@@ -98,7 +98,7 @@
             @endcan   
 
             @can('Reviews: view')
-                <a href="{{ route('reviews.index', ['commune_file_id' => $communeFile->id]) }}" class="btn btb-flat btn-sm btn-primary">
+                <a href="{{ request()->anio > 2021 || $year > 2021 ? route( 'reviews.show', ['review' => $communeFile->id]) : route( 'reviews.index', ['commune_file_id' => $communeFile->id]) }}" class="btn btb-flat btn-sm btn-primary">
                     <i class="fas fa-clipboard-check small"></i>
                     <span class="small">Evaluación Gral.</span> 
                 </a>

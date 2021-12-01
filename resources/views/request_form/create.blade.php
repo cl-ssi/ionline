@@ -8,7 +8,7 @@
 
 <h4 class="mb-3">Formulario de Requerimiento - Bienes y/o Servicios (Ejecución Inmediata)</h4>
 
-@include('request_form.nav')
+@include('request_form.partials.nav')
 
 <div class="card">
   <div class="card-header">
@@ -22,7 +22,7 @@
       </fieldset>
 
       <fieldset class="form-group col-sm-4">
-          <label for="forNombres" class="form-label">Nombres:</label>
+          <label for="forNombres" class="form-label">Nombre:</label>
           <input class="form-control form-control-sm" type="text" name="" id="nombres" name="nombres" value="{{ auth()->user()->FullName }}" readonly>
       </fieldset>
 

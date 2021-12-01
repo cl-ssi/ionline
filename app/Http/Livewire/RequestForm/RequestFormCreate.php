@@ -3,28 +3,43 @@
 namespace App\Http\Livewire\RequestForm;
 use Livewire\Component;
 use App\Models\RequestForms\RequestForm;
+use App\Models\RequestForms\RequestFormFile;
 use App\Models\RequestForms\ItemRequestForm;
+use App\Models\RequestForms\Passenger;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\UnitOfMeasurement;
 use App\Models\Parameters\PurchaseMechanism;
+use App\User;
 use Illuminate\Support\Collection;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class RequestFormCreate extends Component
 {
     use WithFileUploads;
-    public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $typeOfCurrency,
-    $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
-    public $purchaseMechanism, $messagePM, $program, $justify, $totalDocument;
+
+    public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $typeOfCurrency, $articleFile,
+            $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
+
+    public $name, $contractManagerId, $superiorChief, $purchaseMechanism, $messagePM,
+            $program, $fileRequests = [], $justify, $totalDocument;
+
     public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF;
     public $budget_item_id, $lstPurchaseMechanism;
+
+    public $passengers;
+
+    public $searchedUser, $route;
+
+    protected $listeners = ['savedPassengers', 'savedItems'];
 
     protected $rules = [
         'unitValue'           =>  'required|numeric|min:1',
         'quantity'            =>  'required|numeric|min:0.1',
         'article'             =>  'required',
         'unitOfMeasurement'   =>  'required',
+        //'fileItem'            =>  'required',
         'taxes'               =>  'required',
         'typeOfCurrency'      =>  'required'
         //'budget_item_id'      =>  'required',
@@ -40,14 +55,16 @@ class RequestFormCreate extends Component
         'article.required'            => 'Debe ingresar un Artículo.',
         'unitOfMeasurement.required'  => 'Debe seleccionar una Unidad de Medida',
         'taxes.required'              => 'Debe seleccionar un Tipo de Impuesto.',
-        'typeOfCurrency.required'              => 'Debe seleccionar un Tipo de Moneda.',
+        'typeOfCurrency.required'     => 'Debe seleccionar un Tipo de Moneda.',
         //'budget_item_id.required'     => 'Debe seleccionar un Item Presupuestario',
     ];
 
     public function mount($requestForm){
+      $this->route = request()->route()->getName();
       $this->purchaseMechanism      = "";
       $this->totalDocument          = 0;
       $this->items                  = array();
+      $this->passengers             = array();
       $this->deletedItems           = array();
       $this->title                  = "Agregar Item";
       $this->edit                   = false;
@@ -60,7 +77,18 @@ class RequestFormCreate extends Component
       }
     }
 
+    public function savedPassengers($passengers)
+    {
+      $this->passengers = $passengers;
+    }
+
+    public function savedItems($items)
+    {
+      $this->items = $items;
+    }
+
     private function setRequestForm(){
+      $this->name               =   $this->requestForm->name;
       $this->program            =   $this->requestForm->program;
       $this->justify            =   $this->requestForm->justification;
       $this->purchaseMechanism  =   $this->requestForm->purchase_mechanism_id;
@@ -81,7 +109,8 @@ class RequestFormCreate extends Component
             'taxes'                    => $item->tax,
             //'budget_item_id'           => $item->budget_item_id,
             'totalValue'               => $item->quantity * $item->unit_value,
-    ];
+      ];
+
       $this->totalForm();
       $this->cancelRequestService();
     }
@@ -135,7 +164,10 @@ class RequestFormCreate extends Component
             'taxes'                    => $this->taxes,
             //'budget_item_id'           => $this->budget_item_id,
             'totalValue'               => $this->quantity * $this->unitValue,
-    ];
+            'typeOfCurrency'           => $this->typeOfCurrency,
+            'articleFile'              => $this->articleFile,
+      ];
+      // dd($this->items);
       $this->totalForm();
       $this->cancelRequestService();
     }
@@ -151,66 +183,69 @@ class RequestFormCreate extends Component
    public function messageMechanism(){
       $this->messagePM = array();
       switch ($this->purchaseMechanism) {
-          case 1: //Convenio Marco < 1000 utm
+          case 1: // MENORES A 3 UTM.
+              $this->messagePM[] = "Especificaciones Técnicas";
+              break;
+          case 2: //Convenio Marco
               $this->messagePM[] = "Adjuntar ID Mercado Público";
-              $this->messagePM[] = "Especificaciones Técnicas de Bien y/o Servicios";
-              $this->messagePM[] = "Decretos Presupuestarios";
-              $this->messagePM[] = "Convenios Mandatos";
-              $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
+              $this->messagePM[] = "Especificaciones Técnicas";
+              $this->messagePM[] = "Decretos Presupuestarios, si procede.";
+              $this->messagePM[] = "Convenios Mandatos, si procede.";
+              $this->messagePM[] = "Resoluciones Aprobatorias de Programa Ministeriales, si procede.";
               break;
-          case 2: //Convenio Marco > 1000 utm
-              $this->messagePM[] = "Bases Técnicas y Especificaciones Técnicas de Bien y/o Servicios";
-              $this->messagePM[] = "Decretos Presupuestarios";
-              $this->messagePM[] = "Convenios Mandatos";
-              $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
+          case 3: // Trato Directo
+              $this->messagePM[] = "Términos de Referencia y Especificaciones Técnicas.";
+              $this->messagePM[] = "Decretos Presupuestarios, si procede.";
+              $this->messagePM[] = "Convenios Mandatos, si procede.";
+              $this->messagePM[] = "Resoluciones Aprobatorias de Programa Ministeriales, si procede.";
+              $this->messagePM[] = "En el caso de realizar ADDENDUM O RENOVACIONES en los convenios
+                                    vigentes, se debe adjuntar lo siguiente: Informe técnico que señale
+                                    la justificación de la adquisición, una cotización por parte de la
+                                    empresa que indique la compra asociada, y un correo de respaldo que
+                                    la empresa acepta la nueva adquisición.";
               break;
-          case 3: // Licitación Pública
-              $this->messagePM[] = "Bases Técnicas y Especificaciones Técnicas de Bien y/o Servicios";
-              $this->messagePM[] = "Decretos Presupuestarios";
-              $this->messagePM[] = "Convenios Mandatos";
-              $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
-              break;
-          case 4: // Trato Directo
-              $this->messagePM[] = "Términos de Referencias y Especificaciones Técnicas de Bien y/o Servicios";
-              $this->messagePM[] = "Decretos Presupuestarios";
-              $this->messagePM[] = "Convenios Mandatos";
-              $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
-              break;
-          case 5: //Compra Ágil
-              $this->messagePM[] = "Especificaciones Técnicas de Bien y/o Servicios";
-              $this->messagePM[] = "Decretos Presupuestarios";
-              $this->messagePM[] = "Convenios Mandatos";
-              $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
-              $this->messagePM[] = "Tres Cotizaciones (Opcional)";
-              break;
-          case 6: //Compra Interna
-              $this->messagePM[] = "Especificaciones Técnicas de Bien y/o Servicios";
-              $this->messagePM[] = "Decretos Presupuestarios";
-              $this->messagePM[] = "Convenios Mandatos";
-              $this->messagePM[] = "Resoluciones Aprovatorias de Programas Ministeriales";
+          case 4: //LICITACIÓN PÚBLICA
+              $this->messagePM[] = "Bases y  Especificaciones Técnicas.";
+              $this->messagePM[] = "Decretos Presupuestarios, si procede.";
+              $this->messagePM[] = "Convenios Mandatos, si procede.";
+              $this->messagePM[] = "Resoluciones Aprobatorias de Programa Ministeriales, si procede.";
+              $this->messagePM[] = "En el caso de realizar ADDENDUM O RENOVACIONES en los convenios
+                                    vigentes, se debe adjuntar lo siguiente: Informe técnico que señale
+                                    la justificación de la adquisición, una cotización por parte de la
+                                    empresa que indique la compra asociada, y un correo de respaldo que
+                                    la empresa acepta la nueva adquisición.";
               break;
           case "":
               break;
       }
     }
 
-    public function totalForm(){
-      $this->totalDocument = 0;
-      foreach($this->items as $item){
-        $this->totalDocument = $this->totalDocument + $item['totalValue'];}
+    public function totalForm($items){
+      $total = 0;
+      foreach($items as $item)
+        $total += $item[$this->route == 'request_forms.passengers.create' ? 'unitValue' : 'totalValue'];
+
+      return $total;
     }
 
     public function saveRequestForm(){
+      // dd($this->items);
       $this->validate(
-        [ 'purchaseMechanism'            =>  'required',
+        [ 'name'                         =>  'required',
+          'contractManagerId'            =>  'required',
+          'purchaseMechanism'            =>  'required',
           'program'                      =>  'required',
           'justify'                      =>  'required',
-          'items'                        =>  'required'
+          'fileRequests'                 =>  'required',
+          $this->route == 'request_forms.passengers.create' ? 'passengers' : 'items' => 'required'
         ],
-        [ 'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
+        [ 'name.required'                =>  'Debe ingresar un nombre a este formulario.',
+          'contractManagerId.required'   =>  'Debe ingresar un Administrador de Contrato.',
+          'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
           'program.required'             =>  'Ingrese un Programa Asociado.',
+          'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
           'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
-          'items.required'               =>  'Debe agregar al menos un Item para Bien y/o Servicio'
+          $this->route == 'request_forms.passengers.create' ? 'passengers.required' : 'items.required' =>  $this->route == 'request_forms.passengers.create' ? 'Debe agregar al menos un Pasajero' : 'Debe agregar al menos un Item para Bien y/o Servicio'
         ],
       );
 
@@ -219,21 +254,45 @@ class RequestFormCreate extends Component
           'id'                    =>  $this->idRF,
         ],
         [
+          'contract_manager_id'   =>  $this->contractManagerId,
+          'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
+          'name'                  =>  $this->name,
+          'superior_chief'        =>  $this->superiorChief,
           'justification'         =>  $this->justify,
-          'type_form'             =>  '1',
-          'creator_user_id'       =>  Auth()->user()->id,
-          'applicant_user_id'     =>  Auth()->user()->id,
+          'type_form'             =>  $this->route == 'request_forms.passengers.create' ? 'Pasajes Aéreos' : 'Bienes y/o Servicios',
+          'request_user_id'       =>  Auth()->user()->id,
+          'request_user_ou_id'    =>  Auth()->user()->organizationalUnit->id,
           //'supervisor_user_id'    =>  Auth()->user()->id,
-          'applicant_ou_id'       =>  Auth()->user()->organizationalUnit->id,
-          'applicant_position'    =>  Auth()->user()->getPosition(),
-          'estimated_expense'     =>  $this->totalDocument,
+          'estimated_expense'     =>  $this->totalForm($this->route == 'request_forms.passengers.create' ? $this->passengers : $this->items),
           'purchase_mechanism_id' =>  $this->purchaseMechanism,
           'program'               =>  $this->program,
-          'status'                =>  'created'
+          'status'                =>  'pending'
+
+          //'passenger_type'    =>  $this->passengerType,
       ]);
 
-      foreach($this->items as $item){
-        $this->saveItem($item, $req->id);
+      // AQUI GUARDAR ARCHIVOS
+      foreach($this->fileRequests as $nFiles => $fileRequest){
+          $reqFile = new RequestFormFile();
+          if(env('APP_ENV') == 'local' || env('APP_ENV') == 'testing'){
+              $now = Carbon::now()->format('Y_m_d_H_i_s');
+              $file_name = $now.'req_file_'.$nFiles;
+              $reqFile->name = $fileRequest->getClientOriginalName();
+              $reqFile->file = $fileRequest->storeAs('/ionline/request_forms_dev/request_files/', $file_name.'.'.$fileRequest->extension(), 'gcs');
+              $reqFile->request_form_id = $req->id;
+              $reqFile->user_id = Auth()->user()->id;
+              $reqFile->save();
+          }
+      }
+
+      if($this->route == 'request_forms.items.create'){
+        foreach($this->items as $item){
+          $this->saveItem($item, $req->id);
+        }
+      } else {
+        foreach($this->passengers as $passenger){
+          $this->savePassenger($passenger, $req->id);
+        }
       }
 
       if($this->editRF){
@@ -256,6 +315,8 @@ class RequestFormCreate extends Component
     }
 
     private function saveItem($item, $id){
+        $now = Carbon::now()->format('Y_m_d_H_i_s');
+        $file_name = $now.'art_file_'.$id;
         $req = ItemRequestForm::updateOrCreate(
           [
             'id'                    =>      $item['id'],
@@ -269,12 +330,48 @@ class RequestFormCreate extends Component
             'unit_value'            =>      $item['unitValue'],
             'tax'                   =>      $item['taxes'],
             //'budget_item_id'        =>      '1',
-            'expense'               =>      $item['totalValue']
+            'expense'               =>      $item['totalValue'],
+            'type_of_currency'      =>      $item['typeOfCurrency'],
+            'article_file'          =>      $item['articleFile'] ? $item['articleFile']->storeAs('/ionline/request_forms_dev/item_files/', $file_name.'.'.$item['articleFile']->extension(), 'gcs') : null
       ]);
+    }
+
+    private function savePassenger($passenger, $id){
+        $now = Carbon::now()->format('Y_m_d_H_i_s');
+        $file_name = $now.'art_file_'.$id;
+        $req = Passenger::updateOrCreate(
+            [
+              'id'                =>  $passenger['id'],
+            ],
+            [
+              'user_id'           =>  Auth()->user()->id,
+              'run'               =>  $passenger['run'],
+              'dv'                =>  $passenger['dv'],
+              'name'              =>  $passenger['name'],
+              'fathers_family'    =>  $passenger['fathers_family'],
+              'mothers_family'    =>  $passenger['mothers_family'],
+              'birthday'          =>  $passenger['birthday'],
+              'phone_number'      =>  $passenger['phone_number'],
+              'email'             =>  $passenger['email'],
+              'round_trip'        =>  $passenger['round_trip'],
+              'origin'            =>  $passenger['origin'],
+              'destination'       =>  $passenger['destination'],
+              'departure_date'    =>  $passenger['departure_date'],
+              'return_date'       =>  $passenger['return_date'],
+              'baggage'           =>  $passenger['baggage'],
+              'unit_value'        =>  $passenger['unitValue'],
+              'request_form_id'   =>  $id
+            ]);
     }
 
     public function render(){
         $this->messageMechanism();
-        return view('livewire.request-form.request-form-create');
+        $users = User::where('organizational_unit_id', Auth::user()->organizational_unit_id)->orderBy('name', 'ASC')->get();
+        return view('livewire.request-form.request-form-create', compact('users'));
     }
+
+  //   public function searchedUser(User $user){
+  //     $this->searchedUser = $user;
+  //     $this->contractManagerId = $user->id;
+  // }
 }

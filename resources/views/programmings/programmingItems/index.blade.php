@@ -7,51 +7,79 @@
 @include('programmings/nav')
 
 
-
 <a href="{{ route('programmingitems.create',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
-<h4 class="mb-3"> Programación - Horas Directas - {{$programming->establishment->name ?? '' }} {{$programming->year ?? '' }} </h4>
+<h4 class="mb-3"> Programación {{$programming->establishment->name ?? '' }} {{$programming->year ?? '' }} - <a href="{{ route('programming.reportObservation',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-dark mb-1 btn-sm">
+        Observaciones 
+            <span class="badge badge-danger">{{$programming->countTotalReviewsBy('Not rectified')}}</span>
+            <span class="badge badge-warning">{{$programming->countTotalReviewsBy('Regularly rectified')}}</span>
+            <span class="badge badge-primary">{{$programming->countTotalReviewsBy('Accepted rectified')}}</span>
+        </a></h4>
 
 <form method="GET" class="form-horizontal small " action="{{ route('programmingitems.index') }}" enctype="multipart/form-data">
 
     <div class="form-row">
         <div class="form-group col-md-3">
-            <input type="hidden" class="form-control" id="tracer" name="programming_id" value="{{Request::get('programming_id')}}" placeholder="Nro. Trazadora" >
+            <label for="activity" class="sr-only">Nombre actividad</label>
+            <input type="text" class="form-control" id="activity" name="activity" placeholder="Por nombre actividad" value="{{Request::get('activity')}}">
+        </div>
+        <div class="form-group col-md-2">
+            <input type="hidden" class="form-control" id="tracer" name="programming_id" value="{{Request::get('programming_id')}}">
             <!-- <input type="number" class="form-control" id="tracer" name="tracer_number" value="" placeholder="Nro. Trazadora" > -->
       
-            <select name="tracer_number[]" id="tracer_number" class="form-control selectpicker " data-live-search="true" multiple>
+            <select name="tracer_number[]" id="tracer_number" class="form-control selectpicker " data-live-search="true" multiple title="Por N° trazadora">
                 @foreach($tracerNumbers as $tracer)
                     <option value="{{ $tracer }}">{{$tracer}}</option>
                 @endforeach
             </select>
         </div>
-        <button type="submit" class="btn btn-default mb-4">Filtrar</button>
+        <div class="form-group col-md-2">
+            <select name="cycle" id="cycle" class="form-control selectpicker" title="Por ciclo vital">
+                <option value=""></option>
+                @php($cycle_types = array('INFANTIL', 'ADOLESCENTE', 'ADULTO', 'ADULTO MAYOR', 'TRANSVERSAL'))
+                @foreach($cycle_types as $cycle_type)
+                <option value="{{$cycle_type}}" @if($cycle_type == Request::get('cycle')) selected @endif>{{$cycle_type}}</option>
+                @endforeach
+            </select>
+        </div>
+        <button type="submit" class="btn btn-light mb-4">Filtrar</button>
     </div>
 
 </form>
 
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-link active" id="nav-direct-tab" data-toggle="tab" href="#nav-direct" role="tab" aria-controls="nav-direct" aria-selected="true"><h6>Horas Directas</h6></a>
+    <a class="nav-link" id="nav-indirect-tab" data-toggle="tab" href="#nav-indirect" role="tab" aria-controls="nav-indirect" aria-selected="false"><h6>Horas Indirectas</h6></a>
+    <a class="nav-link" id="nav-workshop-tab" data-toggle="tab" href="#nav-workshop" role="tab" aria-controls="nav-workshop" aria-selected="false"><h6>Horas Directas Talleres</h6></a>
+  </div>
+</nav>  
+
+<!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="direct-tab" data-toggle="tab" href="#direct" role="tab" aria-controls="direct" aria-selected="true"><h6>Horas Directas</h6></a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="indirect-tab" data-toggle="tab" href="#indirect" role="tab" aria-controls="indirect" aria-selected="false"><h6>Horas Indirectas</h6></a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="workshop-tab" data-toggle="tab" href="#workshop" role="tab" aria-controls="workshop" aria-selected="false"><h6>Horas Directas Talleres</h6></a>
+    </li>
+</ul> -->
+</div> <!-- close div container -->
+<br>
+<div class="container-fluid">
+<div class="tab-content" id="nav-tabContent">
+    
+<div class="tab-pane fade show active" id="nav-direct" role="tabpanel" aria-labelledby="nav-direct-tab">
 <ul class="list-inline">
-    <li class="list-inline-item">
-        <button onclick="tableExcel('xlsx')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button>
-    </li>
-    <li class="list-inline-item">
-        <a href="{{ route('programming.reportObservation',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-dark mb-1 float-right btn-sm">
-        Observaciones 
-            <span class="badge badge-danger">{{$programming->countTotalReviewsBy('Not rectified')}}</span>
-            <span class="badge badge-warning">{{$programming->countTotalReviewsBy('Regularly rectified')}}</span>
-            <span class="badge badge-primary">{{$programming->countTotalReviewsBy('Accepted rectified')}}</span>
-        </a>
-    </li>
+    <li class="list-inline-item"><i class="fas fa-square text-danger "></i> No Aceptado</li>
+    <li class="list-inline-item"><i class="fas fa-square text-success "></i> Rectificado</li>
+    <li class="list-inline-item"><i class="fas fa-square text-warning "></i> Regularmente Aceptado</li>
+    <li class="list-inline-item"><i class="fas fa-square text-primary "></i> Aceptado</li>
+    <li class="list-inline-item" style="float:right;"><button onclick="tableExcel('xlsx')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button></li>
 </ul>
-
-
-<ul class="list-inline">
-            <li class="list-inline-item"><i class="fas fa-square text-danger "></i> No Aceptado</li>
-            <li class="list-inline-item"><i class="fas fa-square text-success "></i> Rectificado</li>
-            <li class="list-inline-item"><i class="fas fa-square text-warning "></i> Regularmente Aceptado</li>
-            <li class="list-inline-item"><i class="fas fa-square text-primary "></i> Aceptado</li>
-        </ul>
 <!-- ACTIVIDADES DIRECTAS -->
-<table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
+<table id="tblData" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive">
     <thead>
         <tr class="small " style="font-size:50%;">
             @can('ProgrammingItem: evaluate')<th class="text-center align-middle" > Evaluación</th>@endcan
@@ -85,7 +113,8 @@
         </tr>
     </thead>
     <tbody style="font-size:65%;">
-        @foreach($programming->itemsBy('Direct') as $programmingitem)
+        @php($directProgrammingItems = $programming->itemsBy('Direct', Request::has('activity') || Request::has('tracer_number')))
+        @foreach($directProgrammingItems as $programmingitem)
         <tr class="small">
         @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" >
@@ -160,12 +189,16 @@
         @endforeach
     </tbody>
 </table>
+</div>
 
-<!-- ACTIVIDADES INDIRECTAS -->
-
-<h4 class="mb-3"> Programación - Horas Indirectas</h4>
-
-<button onclick="tableExcelIndirect('xlsx')" class="btn btn-success mb-4 float-left btn-sm">Exportar Excel</button>
+<div class="tab-pane fade" id="nav-indirect" role="tabpanel" aria-labelledby="nav-indirect-tab">
+<ul class="list-inline">
+    <li class="list-inline-item"><i class="fas fa-square text-danger "></i> No Aceptado</li>
+    <li class="list-inline-item"><i class="fas fa-square text-success "></i> Rectificado</li>
+    <li class="list-inline-item"><i class="fas fa-square text-warning "></i> Regularmente Aceptado</li>
+    <li class="list-inline-item"><i class="fas fa-square text-primary "></i> Aceptado</li>
+    <li class="list-inline-item" style="float:right;"><button onclick="tableExcelIndirect('xlsx')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button></li>
+</ul>
 
 <table id="tblDataIndirect" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
@@ -200,8 +233,8 @@
         </tr>
     </thead>
     <tbody style="font-size:65%;">
-        @foreach($programming->itemsBy('Indirect') as $programmingitemsIndirect)
-        @if($programmingitemsIndirect->activityItem != null)
+    @php($indirectProgrammingItems = $programming->itemsBy('Indirect', Request::has('activity') || Request::has('tracer_number')))
+        @foreach($indirectProgrammingItems as $programmingitemsIndirect)
         <tr class="small">
         @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" >
@@ -262,15 +295,19 @@
             </td>
             @endcan
         </tr>
-        @endif
         @endforeach
     </tbody>
 </table>
+</div>
 
-
-<h4 class="mb-3"> Programación Talleres - Horas Directas</h4>
-
-<button onclick="tableExcelTaller('xlsx')" class="btn btn-success mb-4 float-left btn-sm">Exportar Excel</button>
+<div class="tab-pane fade" id="nav-workshop" role="tabpanel" aria-labelledby="nav-workshop-tab">
+<ul class="list-inline">
+    <li class="list-inline-item"><i class="fas fa-square text-danger "></i> No Aceptado</li>
+    <li class="list-inline-item"><i class="fas fa-square text-success "></i> Rectificado</li>
+    <li class="list-inline-item"><i class="fas fa-square text-warning "></i> Regularmente Aceptado</li>
+    <li class="list-inline-item"><i class="fas fa-square text-primary "></i> Aceptado</li>
+    <li class="list-inline-item" style="float:right;"><button onclick="tableExcelTaller('xlsx')" class="btn btn-success mb-1 float-left btn-sm">Exportar Excel</button></li>
+</ul>
 
 <table id="tblDataTaller" class="table table-striped  table-sm table-bordered table-condensed fixed_headers table-hover table-responsive  ">
     <thead>
@@ -308,8 +345,8 @@
         </tr>
     </thead>
     <tbody style="font-size:65%;">
-        @foreach($programming->itemsBy('Workshop') as $programmingItemworkshop)
-        @if($programmingItemworkshop->activityItem != null)
+    @php($workshopProgrammingItems = $programming->itemsBy('Workshop', Request::has('activity') || Request::has('tracer_number')))
+        @foreach($workshopProgrammingItems as $programmingItemworkshop)
         <tr class="small">
         @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" >
@@ -371,12 +408,12 @@
             </td>
             @endcan
         </tr>
-        @endif
         @endforeach
     </tbody>
 </table>
-
-
+</div>
+</div>
+</div>
 @endsection
 
 @section('custom_js')

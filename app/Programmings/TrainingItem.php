@@ -12,4 +12,8 @@ class TrainingItem extends Model
     'tec_salud', 'administrativo_salud', 'auxiliares_salud','total', 'num_hr_pedagodicas', 'item_cap',
     'fondo_muni', 'otro_fondo', 'total_presupuesto_est','org_ejecutor', 'coordinador', 'fecha_ejecucion'];
 
+    public function communeFile(){
+        return $this->belongsTo('App\Models\Programmings\CommuneFile', 'programming_id');
+    }
+
 }

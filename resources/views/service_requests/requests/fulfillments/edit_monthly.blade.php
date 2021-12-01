@@ -243,7 +243,7 @@
 				@endif
 				@endcan
 				@can('Service Request: delete signed certificate')
-        		<a class="btn btn-outline-danger" href="{{ route('rrhh.service-request.fulfillment.delete-responsable-vb',$fulfillment) }}" title="Borrar Aprobación Responsable" onclick="return confirm('¿Está seguro que desea eliminar la aprobación del responsable, deberá contactar a responsable para que vuelva a dar VB?')">
+        		<a class="btn btn-outline-danger" href="{{ route('rrhh.service-request.fulfillment.delete-responsable-vb',$fulfillment) }}" title="Borrar Aprobación Responsable" onclick="return confirm('¿Está seguro que desea eliminar las aprobaciones del cumplimiento, deberá contactar a responsable para que vuelva a dar VB')">
 					<i class="fas fa-trash"></i> Aprobación
 				</a>
         		@endcan
@@ -502,7 +502,7 @@
 		@endcan
 
 
-		@if($fulfillment->responsable_approver_id != NULL)
+		@if($fulfillment->responsable_approver_id != NULL || $fulfillment->rrhh_approver_id != NULL || $fulfillment->finances_approver_id != NULL)
 		<h5>Visaciones</h5>
 		<table class="table table-sm small">
 			<thead>
