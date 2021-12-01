@@ -4,6 +4,7 @@ namespace App\Models\Programmings;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class CommuneFile extends Model
 {
@@ -31,4 +32,18 @@ class CommuneFile extends Model
         return $this->hasMany('App\Models\Programmings\Review');
     }
 
+    public function getReviewsCountBy($revisor)
+    {
+        return $this->programming_reviews->filter(function ($review) use ($revisor){
+            return Str::contains($review->revisor, $revisor); 
+        })->count() + ($revisor == 'REVISION JEFATURA DEL DEPARTAMENTO DE APS Y REDES' ? 2 : 0);
+    }
+
+    public function isLastReviewBy($revisor, $item)
+    {
+        $reviews = $this->programming_reviews->filter(function ($review) use ($revisor){
+            return Str::contains($review->revisor, $revisor); 
+        });
+        return $reviews->last() == $item;
+    }
 }

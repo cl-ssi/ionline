@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers\Indicators;
 
+use Illuminate\Support\Facades\DB;
 use App\Indicators\SingleParameter;
 use App\Establishment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
 use Illuminate\Support\Facades\Redirect;
+use App\Indicators\Percapita;
+use App\Indicators\Establecimiento;
+use App\Models\Commune;
+use Carbon\Carbon;
 
 class SingleParameterController extends Controller
 {
@@ -115,5 +120,202 @@ class SingleParameterController extends Controller
     public function destroy(SingleParameter $singleParameter)
     {
         //
+    }
+
+    public function population(Request $request){
+
+      // dd($request->etario_id);
+      set_time_limit(3600);
+      ini_set('memory_limit', '1024M');
+
+      if ($request->year == null) {
+        $now = Carbon::now();
+        $year = $now->year;
+      }else{
+        $year = $request->year;
+      }
+
+      $array = array();
+      if ($request->etario_id != null) {
+        $array = explode(" - ", $request->etario_id);
+      }
+
+      $total_pob = Percapita::year($year)
+                            ->where('ACEPTADO_RECHAZADO','ACEPTADO')
+                            ->with(['establecimiento' => function($q){
+                                return $q->where('meta_san', 1);
+                            }])
+                            ->whereHas('establecimiento', function($q){
+                                return $q->where('meta_san', 1);
+                            })
+                            ->when($request->establishment_id != null, function ($query) use ($request) {
+                                 $query->where('COD_CENTRO',$request->establishment_id);
+                            })
+                            ->when($request->gender_id != null, function ($query) use ($request) {
+                                 $query->where('GENERO',$request->gender_id);
+                            })
+                            ->when($request->commune_name != null, function ($query) use ($request) {
+                                $query->whereHas('establecimiento', function ($query) use ($request) {
+                                     $query->where('comuna',$request->commune_name);
+                                });
+                            })
+                            ->when(count($array) == 2, function ($query) use ($array) {
+                                $query->whereBetween('edad',[$array[0],$array[1]]);
+                            })
+                            ->when(count($array) == 1, function ($query) use ($array) {
+                                $query->where('edad','>',$array[0]);
+                            })
+                            ->count();
+
+      $pob_x_establecimientos = Percapita::year($year)
+                              ->where('ACEPTADO_RECHAZADO','ACEPTADO')
+                              ->selectRaw('COUNT(*) AS valor, NOMBRE_CENTRO')
+                              ->with(['establecimiento' => function($q){
+                                  return $q->where('meta_san', 1);
+                              }])
+                              ->whereHas('establecimiento', function($q){
+                                  return $q->where('meta_san', 1);
+                              })
+                              ->when($request->establishment_id != null, function ($query) use ($request) {
+                                   $query->where('COD_CENTRO',$request->establishment_id);
+                              })
+                              ->when($request->gender_id != null, function ($query) use ($request) {
+                                   $query->where('GENERO',$request->gender_id);
+                              })
+                              ->when($request->commune_name != null, function ($query) use ($request) {
+                                  $query->whereHas('establecimiento', function ($query) use ($request) {
+                                       $query->where('comuna',$request->commune_name);
+                                  });
+                              })
+                              ->when(count($array) == 2, function ($query) use ($array) {
+                                  $query->whereBetween('edad',[$array[0],$array[1]]);
+                              })
+                              ->when(count($array) == 1, function ($query) use ($array) {
+                                  $query->where('edad','>',$array[0]);
+                              })
+                              ->groupBy('NOMBRE_CENTRO')
+                              ->orderBy('NOMBRE_CENTRO')->get();
+
+      $pob_x_generos = Percapita::year($year)
+                              ->where('ACEPTADO_RECHAZADO','ACEPTADO')
+                              ->selectRaw('COUNT(*) AS valor, GENERO')
+                              ->with(['establecimiento' => function($q){
+                                  return $q->where('meta_san', 1);
+                              }])
+                              ->whereHas('establecimiento', function($q){
+                                  return $q->where('meta_san', 1);
+                              })
+                              ->when($request->establishment_id != null, function ($query) use ($request) {
+                                   $query->where('COD_CENTRO',$request->establishment_id);
+                              })
+                              ->when($request->gender_id != null, function ($query) use ($request) {
+                                   $query->where('GENERO',$request->gender_id);
+                              })
+                              ->when($request->commune_name != null, function ($query) use ($request) {
+                                  $query->whereHas('establecimiento', function ($query) use ($request) {
+                                       $query->where('comuna',$request->commune_name);
+                                  });
+                              })
+                              ->when(count($array) == 2, function ($query) use ($array) {
+                                  $query->whereBetween('edad',[$array[0],$array[1]]);
+                              })
+                              ->when(count($array) == 1, function ($query) use ($array) {
+                                  $query->where('edad','>',$array[0]);
+                              })
+                              ->groupBy('GENERO')
+                              ->orderBy('GENERO')->get();
+
+      $pob_x_comunas = Percapita::year($year)
+                            ->where('ACEPTADO_RECHAZADO','ACEPTADO')
+                            ->selectRaw('count(*) AS valor, comuna')
+                            ->join('establecimientos', 'COD_CENTRO', '=', 'establecimientos.Codigo')
+                            ->with(['establecimiento' => function($q){
+                                return $q->where('meta_san', 1);
+                            }])
+                            ->whereHas('establecimiento', function($q){
+                                return $q->where('meta_san', 1);
+                            })
+                            ->when($request->establishment_id != null, function ($query) use ($request) {
+                                 $query->where('COD_CENTRO',$request->establishment_id);
+                            })
+                            ->when($request->gender_id != null, function ($query) use ($request) {
+                                 $query->where('GENERO',$request->gender_id);
+                            })
+                            ->when($request->commune_name != null, function ($query) use ($request) {
+                                $query->whereHas('establecimiento', function ($query) use ($request) {
+                                     $query->where('comuna',$request->commune_name);
+                                });
+                            })
+                            ->when(count($array) == 2, function ($query) use ($array) {
+                                $query->whereBetween('edad',[$array[0],$array[1]]);
+                            })
+                            ->when(count($array) == 1, function ($query) use ($array) {
+                                $query->where('edad','>',$array[0]);
+                            })
+                            ->groupBy('comuna')
+                            ->orderBy('valor', 'DESC')
+                            ->get();
+
+        $pob_x_etarios = Percapita::year($year)
+                              ->where('ACEPTADO_RECHAZADO','ACEPTADO')
+                              ->when($request->establishment_id != null, function ($query) use ($request) {
+                                   $query->where('COD_CENTRO',$request->establishment_id);
+                              })
+                              ->when($request->gender_id != null, function ($query) use ($request) {
+                                   $query->where('GENERO',$request->gender_id);
+                              })
+                              ->when($request->commune_name != null, function ($query) use ($request) {
+                                  $query->whereHas('establecimiento', function ($query) use ($request) {
+                                       $query->where('comuna',$request->commune_name);
+                                  });
+                              })
+                              ->select(
+                                     [DB::raw('(case
+                                                  when EDAD >= 0 && EDAD <= 2 then "00 - 02"
+                                                  when EDAD >= 3 && EDAD <= 4 then "03 - 04"
+                                                  when EDAD >= 5 && EDAD <= 9 then "05 - 09"
+                                                  when EDAD >= 15 && EDAD <= 19 then "15 - 19"
+                                                  when EDAD >= 20 && EDAD <= 24 then "20 - 24"
+                                                  when EDAD >= 25 && EDAD <= 29 then "25 - 29"
+                                                  when EDAD >= 30 && EDAD <= 34 then "30 - 34"
+                                                  when EDAD >= 35 && EDAD <= 39 then "35 - 39"
+                                                  when EDAD >= 40 && EDAD <= 44 then "40 - 44"
+                                                  when EDAD >= 45 && EDAD <= 49 then "45 - 49"
+                                                  when EDAD >= 50 && EDAD <= 54 then "50 - 54"
+                                                  when EDAD >= 55 && EDAD <= 59 then "55 - 59"
+                                                  when EDAD >= 60 && EDAD <= 64 then "60 - 64"
+                                                  when EDAD >= 65 && EDAD <= 69 then "65 - 69"
+                                                  when EDAD >= 70 && EDAD <= 74 then "70 - 74"
+                                                  when EDAD >= 75 && EDAD <= 79 then "75 - 79"
+                                                  when EDAD >= 80 && EDAD <= 84 then "80 - 84"
+                                                  when EDAD >= 85 && EDAD <= 89 then "85 - 89"
+                                                  when EDAD >= 90 && EDAD <= 94 then "90 - 94"
+                                                  when EDAD >= 95 && EDAD <= 99 then "95 - 99"
+                                                  else "Mayor a 99"
+                                                end) as "grupo"'),
+                                      DB::raw('sum(1) as "cantidad"')])
+                              ->groupBy(DB::raw('grupo'))
+                              ->orderBy('cantidad')
+                              ->get();
+
+      //filtro desde vista
+      if ($request->etario_id != null) {
+        foreach ($pob_x_etarios as $key => $pob_x_etario) {
+          if ($pob_x_etario->grupo != $request->etario_id) {
+            unset($pob_x_etarios[$key]);
+          }
+        }
+      }
+
+
+      $establishments = Establecimiento::all();
+      foreach ($establishments as $key => $establishment) {
+        $establishment->deis = str_replace("-","",$establishment->deis);
+      }
+
+      $communes = Commune::all();
+
+      return view('indicators.population',compact('total_pob', 'pob_x_establecimientos','pob_x_comunas','pob_x_etarios','pob_x_generos',
+                                                  'request','establishments','communes'));
     }
 }

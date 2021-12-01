@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Mail;
 use SimpleSoftwareIO\QrCode\Generator;
 use App\Documents\Parte;
 use App\Documents\ParteFile;
+use App\Indicators\Rem;
+use App\Models\ServiceRequests\SignatureFlow;
 use Carbon\Carbon;
 
 /* No se si son necesarias, las puse para el try catch */
@@ -107,162 +109,173 @@ class FirmaDigitalController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function signPdfFlow(Request $request, SignaturesFlow $signaturesFlow)
+    public function signPdfFlow(Request $request, $signaturesFlowId = null)
     {
-        if ($signaturesFlow->signaturesFile->signed_file)
-            $pdfbase64 = base64_encode(Storage::disk('gcs')->get($signaturesFlow->signaturesFile->signed_file));
-        else
-            $pdfbase64 = base64_encode(Storage::disk('gcs')->get($signaturesFlow->signaturesFile->file));
+        $message = '';
 
-        $checksum_pdf = $signaturesFlow->signaturesFile->md5_file;
-        $type = $signaturesFlow->type;
-        $visatorAsSignature = $signaturesFlow->signature->visatorAsSignature;
-        $otp = $request->otp;
-        $modo = self::modoAtendidoProduccion;
-        $verificationCode = Str::random(6);
-        $docId = $signaturesFlow->signaturesFile->id;
-        $custom_x_axis = $signaturesFlow->custom_x_axis;
-        $custom_y_axis = $signaturesFlow->custom_y_axis;
-
-        $ct_firmas_visator = null;
-        $ct_posicion_firmas = null;
-        if ($type === 'visador') {
-            $ct_firmas_visator = $signaturesFlow->signaturesFile->signaturesFlows->where('type', 'visador')->count();
-            $ct_posicion_firmas = $signaturesFlow->sign_position;
+        if(isset($request->pendingSignaturesFlowsIds)){
+            $pendingSignaturesFlowsIdsArray = json_decode($request->pendingSignaturesFlowsIds);
+            $pendingSignaturesFlows = SignaturesFlow::findMany($pendingSignaturesFlowsIdsArray);
+        }else{
+            $pendingSignaturesFlows = SignaturesFlow::where('id', $signaturesFlowId)->get();
         }
 
-        // if($type === 'folio'){
-        //     $modo = self::modoDesatendidoProduccion;
-        // }
+        foreach ($pendingSignaturesFlows as $signaturesFlow) {
+            if ($signaturesFlow->signaturesFile->signed_file)
+                $pdfbase64 = base64_encode(Storage::disk('gcs')->get($signaturesFlow->signaturesFile->signed_file));
+            else
+                $pdfbase64 = base64_encode(Storage::disk('gcs')->get($signaturesFlow->signaturesFile->file));
 
-        $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $type, $docId, $verificationCode,
-            $ct_firmas_visator, $ct_posicion_firmas, $visatorAsSignature, $custom_x_axis, $custom_y_axis);
+            $checksum_pdf = $signaturesFlow->signaturesFile->md5_file;
+            $type = $signaturesFlow->type;
+            $visatorAsSignature = $signaturesFlow->signature->visatorAsSignature;
+            $otp = $request->otp;
+            $modo = self::modoAtendidoProduccion;
+            $verificationCode = Str::random(6);
+            $docId = $signaturesFlow->signaturesFile->id;
+            $custom_x_axis = $signaturesFlow->custom_x_axis;
+            $custom_y_axis = $signaturesFlow->custom_y_axis;
 
-        if (!$responseArray['statusOk']) {
-            session()->flash('warning', "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}");
-            return redirect()->route('documents.signatures.index', ['pendientes']);
-        }
-
-        $signaturesFlow->status = 1;
-        $signaturesFlow->signature_date = now();
-        $signaturesFlow->save();
-
-        if ($signaturesFlow->signaturesFile->signed_file) {
-            $oldFilePath = $signaturesFlow->signaturesFile->signed_file;
-            $filePathWithoutSignatureNumber = explode('_', $oldFilePath)[0];
-            $signatureNumber = Str::between($oldFilePath, '_', '.');
-            $newSignatureNumber = $signatureNumber + 1;
-            $newFilePath = $filePathWithoutSignatureNumber . '_' . ($newSignatureNumber) . '.pdf';
-            $signaturesFlow->signaturesFile->signed_file = $newFilePath;
-            $signaturesFlow->signaturesFile->save();
-            Storage::disk('gcs')->getDriver()->put($newFilePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
-            Storage::disk('gcs')->delete($oldFilePath);
-        }else {
-            $filePath = 'ionline/signatures/signed/' . $signaturesFlow->signaturesFile->id . '_1' . '.pdf';
-            $signaturesFlow->signaturesFile->signed_file = $filePath;
-            $signaturesFlow->signaturesFile->save();
-            Storage::disk('gcs')->getDriver()->put($filePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
-        }
-
-        if ($type === 'firmante') {
-            $signaturesFlow->signaturesFile->verification_code = $verificationCode;
-        }
-        $signaturesFlow->signaturesFile->save();
-
-        //Si ya firmaron todos se envía por correo a destinatarios del doc
-        $signaturesFlow = SignaturesFlow::find($signaturesFlow->id);
-        if ($signaturesFlow->signaturesFile->hasAllFlowsSigned) {
-            $allEmails = $signaturesFlow->signature->recipients . ',' . $signaturesFlow->signature->distribution;
-
-            preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $emails);
-            Mail::to($emails[0])
-                ->send(new SignedDocument($signaturesFlow->signature));
-
-            $destinatarios = $signaturesFlow->signature->recipients;
-
-            $dest_vec=array();
-            $cont=1;
-
-
-            if (strpos($destinatarios, ',') !== false) {
-                $dest_vec = array_map('trim', explode(',', $destinatarios));
-            }
-            else{
-                $dest_vec[0] = $destinatarios;
+            $ct_firmas_visator = null;
+            $ct_posicion_firmas = null;
+            if ($type === 'visador') {
+                $ct_firmas_visator = $signaturesFlow->signaturesFile->signaturesFlows->where('type', 'visador')->count();
+                $ct_posicion_firmas = $signaturesFlow->sign_position;
             }
 
+            // if($type === 'folio'){
+            //     $modo = self::modoDesatendidoProduccion;
+            // }
 
-            foreach ($dest_vec as $dest) {
-                if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl'and $cont===1) 
-                {
-                    $cont=$cont+1;
-                    $tipo = null;
-                    $generador = $signaturesFlow->signature->responsable->fullname;
-                    $unidad = $signaturesFlow->signature->organizationalUnit->name;
-    
-                    switch ($signaturesFlow->signature->document_type) {
-                        case 'Memorando':
-                            $this->tipo = 'Memo';
-                            break;
-                        case 'Resoluciones':
-                            $this->tipo = 'Resolución';
-                            break;
-                        default:
-                            $this->tipo = $signaturesFlow->signature->document_type;
-                            break;
-                    }
-    
-                    $parte = Parte::create([
-                        'entered_at' => Carbon::now(),
-                        'type' => $this->tipo,
-                        'date' => $signaturesFlow->signature->request_date,
-                        'subject' => $signaturesFlow->signature->subject,
-                        'origin' => $unidad . ' (Parte generado desde Solicitud de Firma N°' . $signaturesFlow->signature->id . ' por ' . $generador . ')',
-                    ]);
-    
-                    $distribucion = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)->where('file_type', 'documento')->get();
-                    ParteFile::create([
-                        'parte_id' => $parte->id,
-                        'file' => $distribucion->first()->file,
-                        'name' => $distribucion->first()->id . '.pdf',
-                        'signature_file_id' => $distribucion->first()->id,
-                    ]);
-    
-                    $signaturesFiles = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)->where('file_type', 'anexo')->get();
-                    foreach ($signaturesFiles as $key => $sf) {
+            $responseArray = $this->signPdfApi($pdfbase64, $checksum_pdf, $modo, $otp, $type, $docId, $verificationCode,
+                $ct_firmas_visator, $ct_posicion_firmas, $visatorAsSignature, $custom_x_axis, $custom_y_axis);
+
+            if (!$responseArray['statusOk']) {
+                session()->flash('warning', "Ocurrió un problema al firmar el documento: {$responseArray['errorMsg']}");
+                return redirect()->route('documents.signatures.index', ['pendientes']);
+            }
+
+            $signaturesFlow->status = 1;
+            $signaturesFlow->signature_date = now();
+            $signaturesFlow->save();
+
+            if ($signaturesFlow->signaturesFile->signed_file) {
+                $oldFilePath = $signaturesFlow->signaturesFile->signed_file;
+                $filePathWithoutSignatureNumber = explode('_', $oldFilePath)[0];
+                $signatureNumber = Str::between($oldFilePath, '_', '.');
+                $newSignatureNumber = $signatureNumber + 1;
+                $newFilePath = $filePathWithoutSignatureNumber . '_' . ($newSignatureNumber) . '.pdf';
+                $signaturesFlow->signaturesFile->signed_file = $newFilePath;
+                $signaturesFlow->signaturesFile->save();
+                Storage::disk('gcs')->getDriver()->put($newFilePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
+                Storage::disk('gcs')->delete($oldFilePath);
+            }else {
+                $filePath = 'ionline/signatures/signed/' . $signaturesFlow->signaturesFile->id . '_1' . '.pdf';
+                $signaturesFlow->signaturesFile->signed_file = $filePath;
+                $signaturesFlow->signaturesFile->save();
+                Storage::disk('gcs')->getDriver()->put($filePath, base64_decode($responseArray['content']), ['CacheControl' => 'no-store']);
+            }
+
+            if ($type === 'firmante') {
+                $signaturesFlow->signaturesFile->verification_code = $verificationCode;
+            }
+            $signaturesFlow->signaturesFile->save();
+
+            //Si ya firmaron todos se envía por correo a destinatarios del doc
+            $signaturesFlow = SignaturesFlow::find($signaturesFlow->id);
+            if ($signaturesFlow->signaturesFile->hasAllFlowsSigned) {
+                $allEmails = $signaturesFlow->signature->recipients . ',' . $signaturesFlow->signature->distribution;
+
+                preg_match_all("/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i", $allEmails, $emails);
+                Mail::to($emails[0])
+                    ->send(new SignedDocument($signaturesFlow->signature));
+
+                $destinatarios = $signaturesFlow->signature->recipients;
+
+                $dest_vec=array();
+                $cont=0;
+
+
+                if (strpos($destinatarios, ',') !== false) {
+                    $dest_vec = array_map('trim', explode(',', $destinatarios));
+                }
+                else{
+                    $dest_vec[0] = $destinatarios;
+                }
+
+
+                foreach ($dest_vec as $dest) {
+                    if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl'and $cont===0) 
+                    {
+                        $cont=$cont+1;
+                        $tipo = null;
+                        $generador = $signaturesFlow->signature->responsable->fullname;
+                        $unidad = $signaturesFlow->signature->organizationalUnit->name;
+        
+                        switch ($signaturesFlow->signature->document_type) {
+                            case 'Memorando':
+                                $this->tipo = 'Memo';
+                                break;
+                            case 'Resoluciones':
+                                $this->tipo = 'Resolución';
+                                break;
+                            default:
+                                $this->tipo = $signaturesFlow->signature->document_type;
+                                break;
+                        }
+        
+                        $parte = Parte::create([
+                            'entered_at' => Carbon::now(),
+                            'type' => $this->tipo,
+                            'date' => $signaturesFlow->signature->request_date,
+                            'subject' => $signaturesFlow->signature->subject,
+                            'origin' => $unidad . ' (Parte generado desde Solicitud de Firma N°' . $signaturesFlow->signature->id . ' por ' . $generador . ')',
+                        ]);
+        
+                        $distribucion = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)->where('file_type', 'documento')->get();
                         ParteFile::create([
                             'parte_id' => $parte->id,
-                            'file' => $sf->file,
-                            'name' => $sf->id . '.pdf',
-                            //'signature_file_id' => $sf->id,
+                            'file' => $distribucion->first()->file,
+                            'name' => $distribucion->first()->id . '.pdf',
+                            'signature_file_id' => $distribucion->first()->id,
                         ]);
+        
+                        $signaturesFiles = SignaturesFile::where('signature_id', $signaturesFlow->signature->id)->where('file_type', 'anexo')->get();
+                        foreach ($signaturesFiles as $key => $sf) {
+                            ParteFile::create([
+                                'parte_id' => $parte->id,
+                                'file' => $sf->file,
+                                'name' => $sf->id . '.pdf',
+                                //'signature_file_id' => $sf->id,
+                            ]);
+                        }
                     }
                 }
             }
 
+            //Si es visación en cadena, se envía notificación por correo al siguiente firmador
+            if ($signaturesFlow->signature->endorse_type === 'Visación en cadena de responsabilidad') {
+                if ($signaturesFlow->type === 'visador') {
+                    $nextSignaturesFlowVisation = SignaturesFlow::query()
+                        ->where('signatures_file_id', $signaturesFlow->signatures_file_id)
+                        ->where('sign_position', $signaturesFlow->sign_position + 1)
+                        ->first();
 
-            
-        }
-
-        //Si es visación en cadena, se envía notificación por correo al siguiente firmador
-        if ($signaturesFlow->signature->endorse_type === 'Visación en cadena de responsabilidad') {
-            if ($signaturesFlow->type === 'visador') {
-                $nextSignaturesFlowVisation = SignaturesFlow::query()
-                    ->where('signatures_file_id', $signaturesFlow->signatures_file_id)
-                    ->where('sign_position', $signaturesFlow->sign_position + 1)
-                    ->first();
-
-                if ($nextSignaturesFlowVisation) {
-                    Mail::to($nextSignaturesFlowVisation->userSigner->email)
-                        ->send(new NewSignatureRequest($signaturesFlow));
-                }elseif($signaturesFlow->signature->signaturesFlowSigner && $signaturesFlow->signature->signaturesFlowSigner->status === null){
-                    Mail::to($signaturesFlow->signature->signaturesFlowSigner->userSigner->email)
-                        ->send(new NewSignatureRequest($signaturesFlow));
+                    if ($nextSignaturesFlowVisation) {
+                        Mail::to($nextSignaturesFlowVisation->userSigner->email)
+                            ->send(new NewSignatureRequest($signaturesFlow));
+                    }elseif($signaturesFlow->signature->signaturesFlowSigner && $signaturesFlow->signature->signaturesFlowSigner->status === null){
+                        Mail::to($signaturesFlow->signature->signaturesFlowSigner->userSigner->email)
+                            ->send(new NewSignatureRequest($signaturesFlow));
+                    }
                 }
             }
+
+            $message .= "El documento {$signaturesFlow->signature->id} se ha firmado correctamente. <br>";
+
         }
 
-        session()->flash('info', "El documento {$signaturesFlow->signature->id} se ha firmado correctamente.");
+        session()->flash('info', $message);
         return redirect()->route('documents.signatures.index', ['pendientes']);
     }
 
@@ -270,7 +283,7 @@ class FirmaDigitalController extends Controller
      * Llamada a la API que firma documento
      * @param string $pdfbase64
      * @param string $checksum_pdf
-     * @param $modo
+     * @param $modo Desatendido, atendido, test o producción
      * @param string $otp
      * @param string $signatureType
      * @param int $docId
@@ -284,7 +297,6 @@ class FirmaDigitalController extends Controller
                                int $docId, string $verificationCode, int $ct_firmas_visator = null, int $posicion_firma = null,
                                bool $visatorAsSignature = null, int $custom_x_axis = null, int $custom_y_axis = null): array
     {
-
 //        dd($pdfbase64, $checksum_pdf, $modo, $otp, $signatureType);
         /* Confección del cuadro imagen de la firma */
         $font_light = public_path('fonts/verdana-italic.ttf');

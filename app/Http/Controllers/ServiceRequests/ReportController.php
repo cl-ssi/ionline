@@ -891,6 +891,9 @@ class ReportController extends Controller
         case 'Covid19-APS No Médicos':
           $sirh_program_code = 3903;
           break;
+        default:
+          $sirh_program_code = '';
+          break;
       }
 
       switch ($fila->weekly_hours) {
@@ -1147,6 +1150,10 @@ class ReportController extends Controller
         case "Trabajador Social":
           $sirh_profession_id = 1020;
           $sirh_function_id = 9082; // Atención Clínica
+          break;
+        default:
+          $sirh_profession_id = '';
+          $sirh_function_id = ''; // Atención Clínica
           break;
       }
 

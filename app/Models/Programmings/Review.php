@@ -12,15 +12,18 @@ class Review extends Model
     protected $table = 'pro_programming_reviews';
 
     protected $fillable = [
-        'id','revisor', 'general_features', 'answer', 'observation', 'active', 'user_id', 'updated_by', 'programming_id'
+        'id','revisor', 'general_features', 'score', 'answer', 'observation', 'active', 'user_id', 'updated_by', 'programming_id'
     ];
-
-
-    // public function programming() {
-    //     return $this->belongsTo('App\Programmings\Programming');
-    // }
 
     public function communeFile() {
         return $this->belongsTo('App\Models\Programmings\CommuneFile');
+    }
+
+    public function user() {
+        return $this->belongsTo('App\User');
+    }
+
+    public function updatedBy() {
+        return $this->belongsTo('App\User', 'updated_by');
     }
 }

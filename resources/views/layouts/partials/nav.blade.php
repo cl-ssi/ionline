@@ -36,6 +36,11 @@
                             <i class="fas fa-desktop fa-fw"></i> Indicadores - REM
                         </a>
 
+                        <a class="dropdown-item"
+                           href="{{ route('indicators.population') }}">
+                            <i class="fas fa-globe-americas"></i> Dashboard de población
+                        </a>
+
                         @can('Programming: view')
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item"
@@ -110,11 +115,13 @@
                     </div>
                 </li>
 
+                @if(env('APP_ENV') == 'local' || env('APP_ENV') == 'testing')
                 <li class="nav-item {{ active('request_forms') }}">
-                    <a class="nav-link" href="{{ route('request_forms.index') }}">
+                    <a class="nav-link" href="{{ route('request_forms.my_forms') }}">
                         <i class="fas fa-shopping-cart"></i> Abastecimiento
                     </a>
                 </li>
+                @endif
                 @endauth
 
                 @can('Requirements: create')

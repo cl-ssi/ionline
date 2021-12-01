@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\RequestForms;
 
-use App\RequestForms\Item;
-use App\RequestForms\RequestForm;
-use App\Http\Controllers\Controller;
+use App\Models\RequestForms\SupplyPurchase;
 use Illuminate\Http\Request;
 
-class ItemController extends Controller
+use App\Models\RequestForms\RequestForm;
+use App\User;
+
+use App\Http\Controllers\Controller;
+
+class SupplyPurchaseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +19,16 @@ class ItemController extends Controller
      */
     public function index()
     {
-        //
+        //By Purchser
+        $purchaser = User::with('requestForms')
+            ->latest()
+            ->whereHas('requestForms', function ($q){
+                $q->where('status', 'approved');
+            })
+            ->where('id', Auth()->user()->id)
+            ->first();
+
+        return view('request_form.purchase.index', compact('purchaser'));
     }
 
     /**
@@ -26,7 +38,7 @@ class ItemController extends Controller
      */
     public function create()
     {
-        return  view('request_form.item.create');
+        //
     }
 
     /**
@@ -35,24 +47,18 @@ class ItemController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, RequestForm $requestForm)
+    public function store(Request $request)
     {
-        $item = new Item($request->All());
-        dd('hola');
-        //ASOCIAR ID FOLIO.
-        $item->request_form()->associate($requestForm->id);
-        $item->save();
-        session()->flash('info', 'Su articulo fue ingresado con exito');
-        return redirect()->route('request_forms.edit', compact('requestForm'));
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Item  $item
+     * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-    public function show(Item $item)
+    public function show(Purchase $purchase)
     {
         //
     }
@@ -60,10 +66,10 @@ class ItemController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Item  $item
+     * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-    public function edit(Item $item)
+    public function edit(Purchase $purchase)
     {
         //
     }
@@ -72,10 +78,10 @@ class ItemController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Item  $item
+     * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Item $item)
+    public function update(Request $request, Purchase $purchase)
     {
         //
     }
@@ -83,15 +89,11 @@ class ItemController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Item  $item
+     * @param  \App\Models\Purchase  $purchase
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Item $item)
+    public function destroy(Purchase $purchase)
     {
-        $requestform_id = $item->request_form_id;
-        $item->delete();
-
-        session()->flash('info', 'El pasaje fue ingresado con exito');
-        return redirect()->route('request_forms.edit', compact('requestform_id'));
+        //
     }
 }

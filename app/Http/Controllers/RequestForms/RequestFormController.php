@@ -17,21 +17,56 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use App\Mail\RequestFormDirectorNotification;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\File;
+use PDF;
 
 use App\User;
 
 class RequestFormController extends Controller {
 
-    public function index() {
-        $createdRequestForms    = auth()->user()->applicantRequestForms()->where('status', 'created')->get();
-        $inProgressRequestForms = auth()->user()->applicantRequestForms()->where('status', 'in_progress')->get();
-        $approvedRequestForms   = auth()->user()->applicantRequestForms()->where('status', 'approved')->get();
-        $rejectedRequestForms   = auth()->user()->applicantRequestForms()->where('status', 'rejected')->orWhere('status', 'closed')->get();
-        $empty = false;
-        if(count($rejectedRequestForms) == 0 && count($createdRequestForms) == 0 && count($inProgressRequestForms) == 0 && count($approvedRequestForms) ==  0){
-            $empty=true;
-            return view('request_form.index', compact('empty'));}
-        return view('request_form.index', compact('createdRequestForms', 'inProgressRequestForms', 'rejectedRequestForms','approvedRequestForms', 'empty'));
+    public function my_forms() {
+        // $createdRequestForms    = auth()->user()->requestForms()->where('status', 'created')->get();
+        // $inProgressRequestForms = auth()->user()->requestForms()->where('status', 'pending')->get();
+        // $approvedRequestForms   = auth()->user()->requestForms()->where('status', 'approved')->get();
+        // $rejectedRequestForms   = auth()->user()->requestForms()->where('status', 'rejected')->orWhere('status', 'closed')->get();
+        // $empty = false;
+        // if(count($rejectedRequestForms) == 0 && count($createdRequestForms) == 0 && count($inProgressRequestForms) == 0 && count($approvedRequestForms) ==  0){
+        //     $empty=true;
+        //     return view('request_form.index', compact('empty'));}
+        // return view('request_form.index', compact('createdRequestForms', 'inProgressRequestForms', 'rejectedRequestForms','approvedRequestForms', 'empty'));
+
+        $my_pending_requests = RequestForm::with('eventRequestForms', 'user', 'userOrganizationalUnit', 'purchaseMechanism')
+            ->where('request_user_id', Auth::user()->id)
+            ->where('status', 'pending')
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        $my_requests = RequestForm::with('eventRequestForms', 'user', 'userOrganizationalUnit', 'purchaseMechanism')
+            ->where('request_user_id', Auth::user()->id)
+            ->whereIn('status', ['approved', 'rejected'])
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        return view('request_form.my_forms', compact('my_requests', 'my_pending_requests'));
+    }
+
+    public function pending_forms()
+    {
+        // $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
+        // $ou_finance_id = 40;
+        // $ou_supply_id = 37;
+        // $ou = Authority::getAmIAuthorityFromOu( Carbon::now(), 'manager', auth()->user()->id );
+
+        $my_pending_forms_to_signs = RequestForm::where('status', 'pending')
+                                                ->whereHas('eventRequestForms', $filter = function($q){
+                                                    return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id);
+                                                })->get();
+        
+        $my_forms_signed = RequestForm::whereHas('eventRequestForms', $filter = function($q){
+                                           return $q->where('signer_user_id', Auth::user()->id);
+                                       })->get();
+
+        return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'my_forms_signed'));
     }
 
 
@@ -213,6 +248,17 @@ class RequestFormController extends Controller {
       return view('request_form.supply_sign', compact('requestForm', 'eventType'));
     }
 
+    public function create_form_document(RequestForm $requestForm){
+        //dd($requestForm);
+
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('request_form.documents.form_document', compact('requestForm'));
+
+        return $pdf->stream('mi-archivo.pdf');
+
+        // $formDocumentFile = PDF::loadView('request_form.documents.form_document', compact('requestForm'));
+        // return $formDocumentFile->download('pdf_file.pdf');
+    }
 
     public function create(){
         $requestForm=null;

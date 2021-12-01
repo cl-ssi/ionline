@@ -31,7 +31,7 @@ class AuthorityController extends Controller
         if($request->ou) {
             $ou = OrganizationalUnit::Find($request->ou);
             $authorities = Authority::with('user', 'creator')->where('organizational_unit_id',$request->ou)->latest('id')->get();
-            // return $authorities;
+            //return $authorities;
 
             $begin = (clone $today)->modify('-13 days')->modify('-'.$today->format('w').' days');
             //print_r($begin);
@@ -45,8 +45,7 @@ class AuthorityController extends Controller
                 // echo $i->format("Y-m-d"). '
                 // ';
             }
-        }
-        else {
+        } else {
             $ou = false;
         }
 
@@ -89,12 +88,12 @@ class AuthorityController extends Controller
         //dd($request->establishment_id);
         if($request->establishment_id)
         {
-        //$users = User::orderBy('name')->orderBy('fathers_family')->get();
-        $ous = OrganizationalUnit::All();
-        //$ouTopLevel = OrganizationalUnit::Find(1);
-        $ouTopLevel = OrganizationalUnit::where('level', 1)->where('establishment_id', $request->establishment_id)->first();
-        //dd($ouTopLevel);
-        return view('rrhh.authorities.create', compact('ous','ouTopLevel'));
+            //$users = User::orderBy('name')->orderBy('fathers_family')->get();
+            $ous = OrganizationalUnit::All();
+            //$ouTopLevel = OrganizationalUnit::Find(1);
+            $ouTopLevel = OrganizationalUnit::where('level', 1)->where('establishment_id', $request->establishment_id)->first();
+            //dd($ouTopLevel);
+            return view('rrhh.authorities.create', compact('ous','ouTopLevel'));
         }
 
     }

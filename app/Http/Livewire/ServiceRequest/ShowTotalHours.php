@@ -126,6 +126,50 @@ class ShowTotalHours extends Component
                 $this->totalAmount = $this->totalHours * $this->fulfillment->serviceRequest->gross_amount;
                 break;
 
+            case ($this->fulfillment->serviceRequest->working_day_type == 'TURNO EXTRA' &&
+                  $this->fulfillment->serviceRequest->responsability_center_ou_id == 138 &&
+                  (($this->fulfillment->serviceRequest->start_date >= '2021/11/01 00:00') && ($ServiceRequest->start_date <= '2021/12/31 23:59:59'))):
+                $totalMinutes = 0;
+                $totalMinutesDay = 0;
+                $totalMinutesNight = 0;
+                foreach ($this->fulfillment->shiftControls as $keyShiftControl => $shiftControl) {
+                    $period = new CarbonPeriod($shiftControl->start_date, '1 minute', $shiftControl->end_date);
+                    $minutesDay = 0;
+                    $minutesNight = 0;
+                    foreach ($period as $key => $minute) {
+                        if ($key != 0) {
+                            if ($minute->format('H:i') >= '08:01' && $minute->format('H:i') <= '21:00') {
+                                $minutesDay = $minutesDay + 1;
+                            } else {
+                                $minutesNight = $minutesNight + 1;
+                            }
+                        }
+                    }
+
+                    $hoursDayString = sprintf('%d:%02d', intdiv($minutesDay, 60), ($minutesDay % 60));
+                    $hoursNightString = sprintf('%d:%02d', intdiv($minutesNight, 60), ($minutesNight % 60));
+                    $this->hoursDetailArray[$keyShiftControl]['start_date'] = $shiftControl->start_date->format('d-m-Y H:i');
+                    $this->hoursDetailArray[$keyShiftControl]['end_date'] = $shiftControl->end_date->format('d-m-Y H:i');
+                    $this->hoursDetailArray[$keyShiftControl]['hours_day'] = $hoursDayString;
+                    $this->hoursDetailArray[$keyShiftControl]['hours_night'] = $hoursNightString;
+                    $this->hoursDetailArray[$keyShiftControl]['observation'] = $shiftControl->observation;
+
+                    //Horas noche dia
+                    $totalMinutesDay = $totalMinutesDay + $minutesDay;
+                    $totalMinutesNight = $totalMinutesNight + $minutesNight;
+                    $this->totalHoursDay = sprintf('%d:%02d', intdiv($totalMinutesDay, 60), ($totalMinutesDay % 60));
+                    $this->totalHoursNight = sprintf('%d:%02d', intdiv($totalMinutesNight, 60), ($totalMinutesNight % 60));
+
+
+                    //Calculo total que se ocupa para calcular monto
+                    $diffInMinutes = $shiftControl->start_date->diffInMinutes($shiftControl->end_date);
+                    $totalMinutes = $totalMinutes + $diffInMinutes;
+                }
+
+                $this->totalHours = floor($totalMinutes / 60);
+                $this->totalAmount = $this->totalHours * $value;
+                break;
+
             case 'TERCER TURNO':
             case 'CUARTO TURNO':
             case 'DIURNO':

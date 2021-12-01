@@ -52,6 +52,7 @@ class MonthlyQuotes extends Component
         /* Restar las ausencias */
         $dias_descuento = 0;
         $dias_trabajado_antes_retiro = 0;
+        $hrs_descuento = 0;
 
         foreach ($fulfillment->fulfillmentItems as $item) {
             switch ($item->type) {
@@ -83,6 +84,10 @@ class MonthlyQuotes extends Component
                         $dias_descuento += 1;
                         //dd('soy termino de contrato');
                         break;
+                case 'Atraso':
+                    $mes_completo = false;
+                    $hrs_descuento += $item->end_date->diffInHours($item->start_date);
+                    break;
             }
         }
 
@@ -104,6 +109,12 @@ class MonthlyQuotes extends Component
             //   dd($monto, $total_dias_trabajados, $monto);
             // }
             $total = $total_dias_trabajados * ($monto / 30);
+        }
+
+        if ($hrs_descuento != 0) {
+          $valor_hora = ($monto / 30 / 8.8);
+          $total_dcto_horas = $hrs_descuento * $valor_hora;
+          $total = $total - $total_dcto_horas;
         }
 
         return $total;

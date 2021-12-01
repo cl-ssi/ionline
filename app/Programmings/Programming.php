@@ -43,19 +43,24 @@ class Programming extends Model
     public function getCountActivities(){
         $activities=collect();
         foreach($this->items as $item){
-            if($item->activity_id != null){
+            if($item->activityItem && $item->activityItem->tracer == "SI"){
                 $activities->add($item->activityItem);
             }
         }
         return count($activities->unique('int_code'));
     }
 
-    public function itemsBy($type)
+    public function itemsBy($type, $precision = false)
     {
         return $this->items
         ->where('workshop',$type == 'Workshop' ? '=' : '!=','SI')
         ->when($type != 'Workshop', function($q) use ($type){
             return $q->where('activity_type',$type == 'Indirect' ? '=' : '!=','Indirecta');
+        })
+        ->when($precision, function($q){
+            return $q->filter(function($item){
+                return $item->activityItem;
+            });
         });
     }
 

@@ -17,19 +17,52 @@ class RequestForm extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
 
+    /* NORMALIZACIÓN JORGE MIRANDA - ALVARO LUPA NOV 2021 */
+
+    /*
+
     protected $fillable = [
-        'applicant_position', 'estimated_expense', 'program', 'justification',
-        'type_form', 'bidding_number', 'creator_user_id','supervisor_user_id',
-        'applicant_user_id', 'applicant_ou_id', 'status', 'sigfe',
+        'type_form', 'status', 'name', 'user_request_id', 'ou_user_request_id', 'user_request_position',
+        'contract_manager_id', 'superior_chief', 'justification', 'request_form_id'
+    ];
+
+    public function userRequest() {
+        return $this->belongsTo(User::class, 'user_request_id');
+    }
+
+    public function requestformfiles() {
+        return $this->hasMany('\App\RequestForms\RequestFormFile');
+    }
+
+    public function contractManager() {
+        return $this->belongsTo(User::class, 'contract_manager_id');
+    }
+
+    */
+
+    protected $fillable = [
+        'estimated_expense', 'program', 'contract_manager_id',
+        'name', 'justification', 'superior_chief',
+        'type_form', 'bidding_number', 'request_user_id',
+        'request_user_ou_id', 'contract_manager_ou_id', 'status', 'sigfe',
         'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id'
     ];
 
-    public function creator() {
-        return $this->belongsTo(User::class, 'creator_user_id');
+    public function user() {
+      return $this->belongsTo(User::class, 'request_user_id');
+  }
+
+    public function requestFormFiles() {
+        return $this->hasMany('\App\Models\RequestForms\RequestFormFile');
     }
 
-    public function applicant(){
-      return $this->belongsTo(User::class, 'applicant_user_id');
+    public function contractManager() {
+        return $this->belongsTo(User::class, 'contract_manager_id');
+    }
+
+    public function purchasers(){
+        return$this->belongsToMany(User::class, 'arq_request_forms_users', 'request_form_id', 'purchaser_user_id')
+        ->withTimestamps();
     }
 
     public function supervisor(){
@@ -48,8 +81,12 @@ class RequestForm extends Model implements Auditable
       return $this->belongsTo(PurchaseMechanism::class, 'purchase_mechanism_id');
     }
 
-    public function organizationalUnit(){
-      return $this->belongsTo(OrganizationalUnit::class, 'applicant_ou_id');
+    public function signer(){
+      return $this->belongsTo(User::class, 'signer_user_id');
+    }
+
+    public function userOrganizationalUnit(){
+      return $this->belongsTo(OrganizationalUnit::class, 'request_user_ou_id');
     }
 
     public function itemRequestForms() {
@@ -161,6 +198,15 @@ class RequestForm extends Model implements Auditable
         return $event->signerUser->tinnyName();
       }
     }
+
+    /* Utilizar esta Función para obtener todos los datos de las visaciones */
+    public function eventSigner($event_type, $status){
+      $event = $this->eventRequestForms()->where('status', $status)->where('event_type',$event_type)->first();
+      if(!is_null($event)){
+        return $event;
+      }
+    }
+
 
     /* TIEMPO TRANSCURRIDO DEL TICKET */
     public function getElapsedTime()

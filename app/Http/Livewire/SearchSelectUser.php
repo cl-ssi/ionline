@@ -8,17 +8,17 @@ use App\User;
 class SearchSelectUser extends Component
 {
     /** Uso:
-     * @livewire('search-select-user') 
-     * 
+     * @livewire('search-select-user')
+     *
      * Se puede definir el nombre del campo que almacenará el id de usuario
      * @livewire('search-select-user', ['selected_id' => 'user_id'])
-     * 
+     *
      * Si necesitas que aparezca precargado el usuario
      * @livewire('search-select-user', ['user' => $user])
      */
     public $query;
     public $users;
-    /** Para cuando viene precargado */     
+    /** Para cuando viene precargado */
     public $user;
     public $selectedName;
     public $selected_id = 'user_id';
@@ -61,6 +61,11 @@ class SearchSelectUser extends Component
         else {
             $this->msg_too_many = false;
         }
+    }
+
+    public function addSearchedUser($userId){
+        $this->searchedUser= $userId;
+        $this->emit('searchedUser', $this->searchedUser);
     }
 
     public function render()

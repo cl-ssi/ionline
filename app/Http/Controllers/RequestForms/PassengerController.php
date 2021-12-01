@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\RequestForms;
 
-use App\RequestForms\Passage;
-use App\RequestForms\RequestForm;
-use App\RequestForms\RequestFormItemCode;
+use App\Models\RequestForms\Passenger;
+use App\Models\RequestForms\RequestForm;
+//use App\RequestForms\RequestFormItemCode;
 use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class PassageController extends Controller
+class PassengerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,7 +31,7 @@ class PassageController extends Controller
     public function create()
     {
         //$user = User::where('id', Auth::user()->id);
-        return  view('request_form.passage.create');
+        return  view('request_form.passenger.create');
     }
 
     /**
@@ -42,7 +42,7 @@ class PassageController extends Controller
      */
     public function store(Request $request, RequestForm $requestForm)
     {
-        $item = new Passage($request->All());
+        $item = new Passenger($request->All());
         //ASOCIAR ID FOLIO.
         $item->request_form()->associate($requestForm->id);
         $item->save();
@@ -53,10 +53,10 @@ class PassageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Passage  $passage
+     * @param  \App\Passenger  $passage
      * @return \Illuminate\Http\Response
      */
-    public function show(Passage $passage)
+    public function show(Passenger $passenger)
     {
         //
     }
@@ -67,7 +67,7 @@ class PassageController extends Controller
      * @param  \App\Passage  $passage
      * @return \Illuminate\Http\Response
      */
-    public function edit(Passage $passage)
+    public function edit(Passenger $passenger)
     {
         //
     }
@@ -79,7 +79,7 @@ class PassageController extends Controller
      * @param  \App\Passage  $passage
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Passage $passage)
+    public function update(Request $request, Passenger $passenger)
     {
         //
     }
@@ -87,23 +87,23 @@ class PassageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Passage  $passage
+     * @param  \App\Passenger  $passenger
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Passage $passage)
+    public function destroy(Passenger $passenger)
     {
-        $requestform_id = $passage->request_form->id;
-        $passage->delete();
-
-        session()->flash('info', 'El pasajero fue eliminado con exito');
-        return redirect()->route('request_forms.edit', compact('requestform_id'));
+        // $requestform_id = $passage->request_form->id;
+        // $passage->delete();
+        //
+        // session()->flash('info', 'El pasajero fue eliminado con exito');
+        // return redirect()->route('request_forms.edit', compact('requestform_id'));
     }
 
     public function createFromPrevious(Request $request, RequestForm $requestForm)
     {
-        $previous = User::find($request->run);
-        $requestform_id =  $requestForm->id;
-        //session()->flash('info', 'El pasajero fue eliminado con exito');
-        return redirect()->route('request_forms.edit', compact('requestform_id','previous'));
+        // $previous = User::find($request->run);
+        // $requestform_id =  $requestForm->id;
+        // //session()->flash('info', 'El pasajero fue eliminado con exito');
+        // return redirect()->route('request_forms.edit', compact('requestform_id','previous'));
     }
 }

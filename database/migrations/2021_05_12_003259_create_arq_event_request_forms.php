@@ -15,19 +15,20 @@ class CreateArqEventRequestForms extends Migration
     {
         Schema::create('arq_event_request_forms', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('signer_user_id')->nullable();
             $table->foreignId('request_form_id');
-            $table->integer('ou_signer_user');
+            $table->foreignId('signer_user_id')->nullable();
+            $table->foreignId('ou_signer_user')->nullable();
             $table->string('position_signer_user')->nullable();
             $table->unsignedInteger('cardinal_number')->nullable();
-            $table->enum('status', ['approved', 'rejected', 'created']);
+            $table->enum('status', ['approved', 'rejected', 'pending']);
+            $table->string('event_type')->nullable();
             $table->longText('comment')->nullable();
             $table->dateTime('signature_date', $precision = 0)->nullable();
-            $table->string('event_type');
-            $table->softDeletes();
-            $table->timestamps();
             $table->foreign('signer_user_id')->references('id')->on('users');
+            $table->foreign('ou_signer_user')->references('id')->on('organizational_units');
             $table->foreign('request_form_id')->references('id')->on('arq_request_forms');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 
