@@ -42,12 +42,28 @@ class ProgrammingItemController extends Controller
             $programming->items = collect();
         } 
 
-        $tracerNumbers = ActivityItem::whereHas('program', function($q) use ($programming) {
+        // $tracerNumbers = ActivityItem::whereHas('program', function($q) use ($programming) {
+        //     return $q->where('year', $programming->year);
+        // })->whereNotNull('int_code')->orderByRaw('LENGTH(int_code) ASC')->orderBy('int_code', 'ASC')
+        // ->distinct()->pluck('int_code');
+
+        $q = ActivityItem::whereHas('program', function($q) use ($programming) {
             return $q->where('year', $programming->year);
-        })->whereNotNull('int_code')->orderByRaw('LENGTH(int_code) ASC')->orderBy('int_code', 'ASC')
+        });
+
+        $programActivities = $q->get(['id', 'activity_name', 'tracer', 'def_target_population', 'professional']);
+
+        $scheduledActivities = collect();
+        foreach($programming->items as $item)
+            $scheduledActivities->add(new ActivityItem(['id' => $item->activity_id, 'activity_name' => $item->activity_name]));
+        
+        $diff = $programActivities->diff($scheduledActivities);
+        $pendingActivities = $diff->all();
+
+        $tracerNumbers = $q->whereNotNull('int_code')->orderByRaw('LENGTH(int_code) ASC')->orderBy('int_code', 'ASC')
         ->distinct()->pluck('int_code');
 
-        return view('programmings/programmingItems/index', compact('programming', 'tracerNumbers'));
+        return view('programmings/programmingItems/index', compact('programming', 'tracerNumbers', 'pendingActivities'));
     }
 
     public function create(Request $request)
