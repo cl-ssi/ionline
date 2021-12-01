@@ -44,7 +44,7 @@
 @if($commune_id != 0)
 <div class="tab-content mt-3">
     <h4>
-        <button type="button" class="btn btn-outline-info btn-sm"
+        <button id="export" type="button" class="btn btn-outline-info btn-sm"
             onclick="tableToExcel('tabla_{{ str_replace(" ","_",$comuna) }}', 'Hoja 1')">
             <i class="fas fa-download"></i>
         </button>
@@ -197,6 +197,9 @@
         // alert( this.value );
         $('.targetDiv').hide();
         $("#" + this.value).show();
+        var clickfun = $("#export").attr("onClick");
+        var funname = clickfun.substring(0,clickfun.indexOf("("));       
+        $("#export").attr("onclick",funname+"('tabla_"+ this.value + "', 'Hoja 1')");
     });
 
 
