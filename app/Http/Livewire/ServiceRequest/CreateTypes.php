@@ -72,16 +72,19 @@ class CreateTypes extends Component
                 $this->signatureFlows['Planificación CG RRHH'] = Authority::getAuthorityFromDate(59,now(),['manager'])->user->id; // 59 - Planificación y Control de Gestión de Recursos Humanos
                 $this->signatureFlows['S.G.D.P SSI'] = Authority::getAuthorityFromDate(44,now(),['manager'])->user->id; // 44 - Subdirección de Gestión y Desarrollo de las Personas
                 $this->signatureFlows['S.D.A SSI'] = Authority::getAuthorityFromDate(40,now(),['manager'])->user->id; // 31 - Subdirección de Recursos Físicos y Financieros
-                $this->signatureFlows[Authority::getAuthorityFromDate(1,now(),['manager'])->position . " - " . Authority::getAuthorityFromDate(1,now(),['manager'])->user->organizationalUnit->establishment->name] = Authority::getAuthorityFromDate(1,now(),['manager'])->user->id; // 1 - Dirección
+                //SE COMENTA Y QUITA DEL FLUJO A PETICIÓN DE LA SUBDIRECTORA
+                // $this->signatureFlows[Authority::getAuthorityFromDate(1,now(),['manager'])->position . " - " . Authority::getAuthorityFromDate(1,now(),['manager'])->user->organizationalUnit->establishment->name] = Authority::getAuthorityFromDate(1,now(),['manager'])->user->id; // 1 - Dirección
               }
+
               //servicio de salud iqq
               else{
                 $this->signatureFlows['S.D.G.A SSI'] = Authority::getAuthorityFromDate(2,now(),['manager'])->user->id; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
                 $this->signatureFlows['Planificación CG RRHH'] = Authority::getAuthorityFromDate(59,now(),['manager'])->user->id; // 59 - Planificación y Control de Gestión de Recursos Humanos
                 $this->signatureFlows['S.G.D.P SSI'] = Authority::getAuthorityFromDate(44,now(),['manager'])->user->id; // 44 - Subdirección de Gestión y Desarrollo de las Personas
                 $this->signatureFlows['S.D.A SSI'] = Authority::getAuthorityFromDate(40,now(),['manager'])->user->id; // 31 - Subdirección de Recursos Físicos y Financieros
-                $this->signatureFlows[Authority::getAuthorityFromDate(1,now(),['manager'])->position . " - " . Authority::getAuthorityFromDate(1,now(),['manager'])->user->organizationalUnit->establishment->name] = Authority::getAuthorityFromDate(1,now(),['manager'])->user->id; // 1 - Dirección
+                // $this->signatureFlows[Authority::getAuthorityFromDate(1,now(),['manager'])->position . " - " . Authority::getAuthorityFromDate(1,now(),['manager'])->user->organizationalUnit->establishment->name] = Authority::getAuthorityFromDate(1,now(),['manager'])->user->id; // 1 - Dirección
               }
+              
             }
             //hospital
             elseif(Auth::user()->organizationalUnit->establishment_id == 1){

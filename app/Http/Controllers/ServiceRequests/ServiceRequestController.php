@@ -560,8 +560,10 @@ class ServiceRequestController extends Controller
     $users = User::orderBy('name', 'ASC')->get();
     $establishments = Establishment::orderBy('name', 'ASC')->get();
     $professions = Profession::orderBy('name', 'ASC')->get();
+    $establishment_id = Auth::user()->organizationalUnit->establishment->id;
+    //dd($establishment_id);
 
-    $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->orderBy('name', 'ASC')->get();
+    $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id', $establishment_id)->orderBy('name', 'ASC')->get();
     $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
     $countries = Country::orderBy('name', 'ASC')->get();
 
