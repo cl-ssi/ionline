@@ -53,6 +53,7 @@ class MonthlyQuotes extends Component
         $dias_descuento = 0;
         $dias_trabajado_antes_retiro = 0;
         $hrs_descuento = 0;
+        $mins_descuento = 0;
 
         foreach ($fulfillment->fulfillmentItems as $item) {
             switch ($item->type) {
@@ -86,7 +87,9 @@ class MonthlyQuotes extends Component
                         break;
                 case 'Atraso':
                     $mes_completo = false;
-                    $hrs_descuento += $item->end_date->diffInHours($item->start_date);
+                    //$hrs_descuento += $item->end_date->diffInHours($item->start_date);
+                    $mins_descuento += $item->end_date->diffInMinutes($item->start_date);
+                    //dd($hrs_descuento);
                     break;
             }
         }
@@ -116,6 +119,14 @@ class MonthlyQuotes extends Component
           $total_dcto_horas = $hrs_descuento * $valor_hora;
           $total = $total - $total_dcto_horas;
         }
+
+        if ($mins_descuento >= 60) {
+            //dd('soy minuto descuento diferente a 0'.$mins_descuento);
+            $valor_hora = ($monto / 30 / 8.8);
+            $hrs_descuento = floor($mins_descuento/60);
+            $total_dcto_horas = $hrs_descuento * $valor_hora;
+            $total = $total - $total_dcto_horas;
+          }
 
         return $total;
         // return number_format(round($total), 0, ',', '.');
