@@ -24,7 +24,7 @@
     @if(count($my_pending_forms_to_signs) > 0)
     </div>
         <div class="col">
-            <h6><i class="fas fa-inbox"></i> Formularios pendientes de firmar</h6>
+            <h6><i class="fas fa-inbox"></i> Formularios pendientes de firma</h6>
             <div class="table-responsive">
                 <table class="table table-sm table-striped table-bordered">
                   <thead class="small">
@@ -75,31 +75,9 @@
                                       @endif
                                   @endforeach
                               </td>
-                                <!-- <td class="text-center align-middle brd-b">
-                                  <a href="{{ route('request_forms.edit', $requestForm->id) }}"  class="text-primary" title="Editar">
-                                  <i class="far fa-edit"></i></a>
-                                </td>
-
-                                <td class="text-center align-middle brd-b">
-                                  <a href="{{ route('request_forms.show', $requestForm->id) }}" class="text-info" title="Visualizar">
-                                  <i class="fas fa-binoculars"></i></a>
-                                </td>
-
-                                <td class="text-center align-middle brd-r brd-b">
-                                  <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
-                                  <i class="far fa-trash-alt"></i></a>
-                                </td> -->
-                                <td>
-                                @if($requestForm->eventRequestForms->first()->status == 'pending')
-                                <a href="{{ route('request_forms.edit', $requestForm->id) }}"
-                                    class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
-                                <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="btn btn-outline-secondary btn-sm text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
-                                  <i class="fas fa-trash"></i></a>
-                                @else
-                                <a href="{{ route('request_forms.show', $requestForm->id) }}"
-                                    class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i></a>
-                                @endif
-                                <a href="{{ route('request_forms.leadership_sign', $requestForm->id) }}" class="btn btn-outline-primary btn-sm" title="Aceptar o Rechazar">
+                              <td>
+                                @php($routes = ['leader_ship_event' => 'leadership_sign', 'pre_finance_event' => 'pre_finance_sign', 'finance_event' => 'finance_sign', 'supply_event' => 'supply_sign'])
+                                <a href="{{ route('request_forms.'.$routes[$event_type], $requestForm->id) }}" class="btn btn-outline-primary btn-sm" title="Aceptar o Rechazar">
                                   <i class="fas fa-signature"></i>
                                 </a>
                               </td>
@@ -112,10 +90,10 @@
     @else
         </div>
         <div class="col">
-            <h6><i class="fas fa-inbox"></i> Formularios en Progreso</h6>
+            <h6><i class="fas fa-inbox"></i> Formularios pendientes de firma</h6>
             <div class="card mb-3 bg-light">
               <div class="card-body">
-                No hay formularios de requerimiento en progreso.
+                No hay formularios de requerimiento pendientes de firma.
               </div>
             </div>
         </div>
@@ -158,7 +136,7 @@
                                       @if($sign->status == 'pending' || $sign->status == NULL)
                                           <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                       @endif
-                                      @if($sign->status == 'accepted')
+                                      @if($sign->status == 'approved')
                                           <span style="color: green;">
                                               <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
                                           </span>
