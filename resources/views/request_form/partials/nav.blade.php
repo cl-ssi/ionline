@@ -65,7 +65,7 @@
         </a>
     </li>
   -->
-    {{--<li class="nav-item">
+    <li class="nav-item">
         <a class="nav-link"
             href="{{ route('request_forms.leadership_index') }}">
             <i class="fas fa-inbox"></i> Jefatura
@@ -112,6 +112,6 @@
             <i class="fas fa-inbox"></i> Comprador
             <span class="badge badge-secondary"></span></a>
         </a>
-    </li> --}}
+    </li>
 
 </ul>

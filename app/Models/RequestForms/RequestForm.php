@@ -151,7 +151,7 @@ class RequestForm extends Model implements Auditable
       elseif(!is_null($this->eventRequestForms()->where('status', 'rejected')->where('event_type',$event_type)->first()))
         return 'rejected';//rechazado
       else
-        return 'created';//en espera
+        return 'pending';//en espera
     }
 
     public function rejectedTime() {

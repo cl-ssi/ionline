@@ -10,7 +10,7 @@
 
 <h4 class="mb-3">Formulario de Requerimiento - Autorización Jefatura</h4>
 
-@include('request_form.nav')
+@include('request_form.partials.nav')
 
 <div class="row">
   <div class="col-sm-8">
@@ -32,11 +32,11 @@
                 </tr>
                 <tr>
                     <th class="table-active" scope="row">Nombre del Solicitante</th>
-                    <td>{{ $requestForm->creator->getFullNameAttribute()}}</td>
+                    <td>{{ $requestForm->user->getFullNameAttribute()}}</td>
                 </tr>
                 <tr>
                     <th class="table-active" scope="row">Unidad Organizacional</th>
-                    <td>{{ $requestForm->organizationalUnit->name}}</td>
+                    <td>{{ $requestForm->userOrganizationalUnit->name}}</td>
                 </tr>
                 <tr>
                     <th class="table-active" scope="row">Mecanismo de Compra</th>
@@ -99,8 +99,10 @@
                     <td>{{ $itemRequestForm->unit_of_measurement }}</td>
                     <td>{{ $itemRequestForm->specification }}</td>
                     <td align="center">
+                      @if($itemRequestForm->article_file)
                       <a href="{{ route('request_forms.show_item_file', $itemRequestForm) }}" target="_blank">
                         <i class="fas fa-file"></i>
+                      @endif
                     </td>
                     <td align="right">{{ $itemRequestForm->quantity }}</td>
                     <td align="right">${{ number_format($itemRequestForm->unit_value,0,",",".") }}</td>
