@@ -20,15 +20,27 @@ class SupplyPurchaseController extends Controller
     public function index()
     {
         //By Purchser
-        $purchaser = User::with('requestForms')
-            ->latest()
-            ->whereHas('requestForms', function ($q){
-                $q->where('status', 'approved');
-            })
-            ->where('id', Auth()->user()->id)
-            ->first();
+        if(Auth()->user()->organizational_unit_id == 37){
+            $purchaser = User::with('requestForms')
+                ->latest()
+                ->whereHas('requestForms', function ($q){
+                    $q->where('status', 'approved');
+                })
+                ->where('id', Auth()->user()->id)
+                ->first();
 
-        return view('request_form.purchase.index', compact('purchaser'));
+            return view('request_form.purchase.index', compact('purchaser'));
+        }
+        else{
+          session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
+          return redirect()->route('request_forms.my_forms');
+        }
+
+    }
+
+    public function purchase(RequestForm $requestForm)
+    {
+        return view('request_form.purchase.purchase', compact('requestForm'));
     }
 
     /**
