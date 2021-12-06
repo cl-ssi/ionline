@@ -45,20 +45,20 @@
 		</fieldset>
 
     <fieldset class="form-group col-6 col-md-4">
-		    <label for="for_subdirection_ou_id">Subdirección</label>
-				<select class="form-control selectpicker" data-live-search="true" name="subdirection_ou_id" required="" data-size="5" id="subdirection_ou_id">
-          @foreach($subdirections as $key => $subdirection)
-            <option value="{{$subdirection->id}}" @if($serviceRequest->subdirection_ou_id == $subdirection->id) selected @endif >{{$subdirection->name}}</option>
-          @endforeach
-        </select>
-		</fieldset>
-
-    <fieldset class="form-group col-6 col-md-4">
 		    <label for="for_name">Origen de Financiamiento</label>
 		    <select name="type" class="form-control" id="type" required>
           <option style="background-color:#F5A7A7;" value="Covid" @if($serviceRequest->type == 'Covid') selected @endif>Honorarios - Covid</option>
           <option style="background-color:#8fbc8f;" value="Suma alzada"  @if($serviceRequest->type == 'Suma alzada') selected @endif>Suma alzada</option>
           <!-- <option value="Genérico" @if($serviceRequest->type == 'Genérico') selected @endif >Honorarios - Genérico</option> -->
+        </select>
+		</fieldset>
+
+    <fieldset class="form-group col-6 col-md-4">
+		    <label for="for_subdirection_ou_id">Subdirección</label>
+				<select class="form-control selectpicker" data-live-search="true" name="subdirection_ou_id" required="" data-size="5" id="subdirection_ou_id">
+          @foreach($subdirections as $key => $subdirection)
+            <option value="{{$subdirection->id}}" @if($serviceRequest->subdirection_ou_id == $subdirection->id) selected @endif >{{$subdirection->name}}</option>
+          @endforeach
         </select>
 		</fieldset>
 
