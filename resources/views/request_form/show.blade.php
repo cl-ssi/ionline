@@ -5,7 +5,7 @@
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
 <h4 class="mb-3">Formulario de Requerimiento - Visualizador</h4>
 
-@include('request_form.nav')
+@include('request_form.partials.nav')
 
         <div class="card mx-0">
           <h6 class="card-header text-primary"><i class="fas fa-file-signature"></i> Formulario de Requerimiento</h6>
@@ -24,9 +24,9 @@
 
                   <tr class="d-flex">
                       <th class="text-muted col-3" scope="row">Nombre del Solicitante</th>
-                      <td class="col-3">{{ $requestForm->creator->tinnyName()}}</td>
+                      <td class="col-3">{{ $requestForm->user->tinnyName()}}</td>
                       <th class="text-muted col-3" scope="row">Unidad Organizacional</th>
-                      <td class="col-3">{{ $requestForm->organizationalUnit->getInitialsAttribute() }}</td>
+                      <td class="col-3">{{ $requestForm->userorganizationalUnit->getInitialsAttribute() }}</td>
                   </tr>
 
                   <tr class="d-flex">
