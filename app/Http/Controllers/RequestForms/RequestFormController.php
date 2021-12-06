@@ -56,7 +56,7 @@ class RequestFormController extends Controller {
         $my_pending_forms_to_signs = $my_forms_signed = collect();
         
         // Permisos
-        if(Auth::user()->organizationalUnit->id != 40 && $manager->user_id == Auth::user()->id) $event_type = 'leader_ship_event';
+        if(!in_array(Auth::user()->organizationalUnit->id, [37, 40]) && $manager->user_id == Auth::user()->id) $event_type = 'leader_ship_event';
         elseif(Auth::user()->organizationalUnit->id == 40 && $manager->user_id != Auth::user()->id) $event_type = 'pre_finance_event';
         elseif(Auth::user()->organizationalUnit->id == 40 && $manager->user_id == Auth::user()->id) $event_type = 'finance_event';
         elseif(Auth::user()->organizationalUnit->id == 37 && $manager->user_id == Auth::user()->id) $event_type = 'supply_event';
@@ -196,7 +196,7 @@ class RequestFormController extends Controller {
 
 
     public function financeSign(RequestForm $requestForm){
-      $manager              = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
+      $manager              = Authority::getAuthorityFromDate($requestForm->userOrganizationalUnit->id, Carbon::now(), 'manager');
       $position             = $manager->position;
       $organizationalUnit   = $manager->organizationalUnit->name;
       if(is_null($manager))

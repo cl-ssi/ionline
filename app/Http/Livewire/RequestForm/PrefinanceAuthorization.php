@@ -64,9 +64,9 @@ class PrefinanceAuthorization extends Component
         $item->budget_item_id = $this->arrayItemRequest[$item->id]['budgetId'];
         $item->save();
       }
-      $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'created')->first();
+      $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
-           $this->requestForm->status = 'in_progress';
+          //  $this->requestForm->status = 'pending';
            $this->requestForm->program = $this->program;
            $this->requestForm->sigfe = $this->sigfe;
            $this->requestForm->save();
@@ -76,16 +76,16 @@ class PrefinanceAuthorization extends Component
            $event->signerUser()->associate(auth()->user());
            $event->save();
            session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' AUTORIZADO correctamente!');
-           return redirect()->route('request_forms.prefinance_index');
+           return redirect()->route('request_forms.pending_forms');
           }
       session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' NO se puede Autorizar!');
-      return redirect()->route('request_forms.prefinance_index');
+      return redirect()->route('request_forms.pending_forms');
     }
 
 
     public function rejectRequestForm() {
       $this->validate();
-      $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'created')->first();
+      $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
            $this->requestForm->status = 'rejected';
            $this->requestForm->save();
@@ -96,10 +96,10 @@ class PrefinanceAuthorization extends Component
            $event->signerUser()->associate(auth()->user());
            $event->save();
            session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' fue RECHAZADO!');
-           return redirect()->route('request_forms.prefinance_index');
+           return redirect()->route('request_forms.pending_forms');
           }
       session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' NO se puede Rechazar!');
-      return redirect()->route('request_forms.prefinance_index');
+      return redirect()->route('request_forms.pending_forms');
     }
 
 

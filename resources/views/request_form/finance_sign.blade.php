@@ -10,7 +10,7 @@
 
 <h4 class="mb-3">Formulario de Requerimiento - Autorización Finanzas</h4>
 
-@include('request_form.nav')
+@include('request_form.partials.nav')
 
 <div class="row">
     <div class="col-sm-8">
