@@ -8,14 +8,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Rrhh\Authority;
 use Carbon\Carbon;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Requirement extends Model
+
+class Requirement extends Model implements Auditable
 {
+    
+    use \OwenIt\Auditing\Auditable;
+  
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
+
     protected $fillable = [
         'id', 'subject', 'priority', 'status', //'archived',
         'limit_at', 'user_id','parte_id'

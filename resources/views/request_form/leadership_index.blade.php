@@ -5,7 +5,7 @@
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
 <h4 class="mb-3">Formularios de Requerimiento - Bandeja de Entrada Jefatura</h4>
 
-@include('request_form.nav')
+@include('request_form.partials.nav')
 
 <fieldset class="form-group">
     <div class="input-group mb-3">
