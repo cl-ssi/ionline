@@ -10,10 +10,40 @@
 <a href="{{ route('programmingitems.create',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
 <h4 class="mb-3"> Programación {{$programming->establishment->name ?? '' }} {{$programming->year ?? '' }} - <a href="{{ route('programming.reportObservation',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-dark mb-1 btn-sm">
         Observaciones 
-            <span class="badge badge-danger">{{$programming->countTotalReviewsBy('Not rectified')}}</span>
+            <span class="badge badge-danger">{{$programming->countTotalReviewsBy('Not rectified') + count($pendingActivities)}}</span>
             <span class="badge badge-warning">{{$programming->countTotalReviewsBy('Regularly rectified')}}</span>
             <span class="badge badge-primary">{{$programming->countTotalReviewsBy('Accepted rectified')}}</span>
-        </a></h4>
+        </a>
+        @if($pendingActivities != null)
+        <button type="button" class="btn btn-outline-warning btn-sm mb-1" data-toggle="modal" data-target="#exampleModal">
+        <i class="fas fa-exclamation-triangle"></i> Actividades pendientes <span class="badge badge-warning">{{count($pendingActivities)}}</span>
+        </button> 
+        @endif
+</h4>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Actividades pendientes por programar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <ul>
+        @foreach($pendingActivities as $activity)
+            <li>{{ $activity->tracer }} - 
+                {{ $activity->activity_name }} - 
+                {{ $activity->def_target_population }} - 
+                {{ $activity->professional }}</li>
+        @endforeach
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 
 <form method="GET" class="form-horizontal small " action="{{ route('programmingitems.index') }}" enctype="multipart/form-data">
 

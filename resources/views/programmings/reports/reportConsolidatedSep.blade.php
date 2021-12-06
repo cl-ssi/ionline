@@ -100,7 +100,7 @@
     function tableExcel(type, fn, dl) {
           var elt = document.getElementById('tblData');
           const filename = 'Informe_consolidado'
-          var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS"});
+          var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS", raw: true});
           return dl ?
             XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
             XLSX.writeFile(wb, `${filename}.xlsx`)

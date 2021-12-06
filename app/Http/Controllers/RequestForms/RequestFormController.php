@@ -52,32 +52,46 @@ class RequestFormController extends Controller {
 
     public function pending_forms()
     {
-        // $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
-        // $ou_finance_id = 40;
-        // $ou_supply_id = 37;
-        // $ou = Authority::getAmIAuthorityFromOu( Carbon::now(), 'manager', auth()->user()->id );
-
-        $my_pending_forms_to_signs = RequestForm::where('status', 'pending')
-                                                ->whereHas('eventRequestForms', $filter = function($q){
-                                                    return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id);
-                                                })->get();
+        $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
+        $my_pending_forms_to_signs = $my_forms_signed = collect();
         
-        $my_forms_signed = RequestForm::whereHas('eventRequestForms', $filter = function($q){
-                                           return $q->where('signer_user_id', Auth::user()->id);
-                                       })->get();
+        // Permisos
+        if(Auth::user()->organizationalUnit->id != 40 && $manager->user_id == Auth::user()->id) $event_type = 'leader_ship_event';
+        elseif(Auth::user()->organizationalUnit->id == 40 && $manager->user_id != Auth::user()->id) $event_type = 'pre_finance_event';
+        elseif(Auth::user()->organizationalUnit->id == 40 && $manager->user_id == Auth::user()->id) $event_type = 'finance_event';
+        elseif(Auth::user()->organizationalUnit->id == 37 && $manager->user_id == Auth::user()->id) $event_type = 'supply_event';
+        else $event_type = null;
+        
+        if($event_type){
+            $prev_event_type = $event_type == 'supply_event' ? 'finance_event' : ($event_type == 'finance_event' ? 'pre_finance_event' : ($event_type == 'pre_finance_event' ? 'leader_ship_event' : null));
+            // return $prev_event_type;
+            $my_pending_forms_to_signs = RequestForm::where('status', 'pending')
+                                                    ->whereHas('eventRequestForms', $filter = function($q) use ($event_type){
+                                                        return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', $event_type);
+                                                    })->when($prev_event_type, function($q) use ($prev_event_type) {
+                                                        return $q->whereDoesntHave('eventRequestForms', function ($f) use ($prev_event_type) {
+                                                            $f->where('event_type', $prev_event_type)
+                                                            ->where('status', 'pending');
+                                                        });
+                                                    })->get();
+            
+            $my_forms_signed = RequestForm::whereHas('eventRequestForms', $filter = function($q){
+                                            return $q->where('signer_user_id', Auth::user()->id);
+                                        })->get();
+        }
 
-        return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'my_forms_signed'));
+        return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'my_forms_signed', 'event_type'));
     }
 
 
     public function edit(RequestForm $requestForm) {
-        if($requestForm->applicant_user_id != auth()->user()->id){
+        if($requestForm->request_user_id != auth()->user()->id){
           session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO pertenece a Usuario: '.auth()->user()->getFullNameAttribute());
-          return redirect()->route('request_forms.index');
+          return redirect()->route('request_forms.my_forms');
         }
-        if($requestForm->status != 'created'){
+        if($requestForm->eventRequestForms->first()->status != 'pending'){
           session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO puede ser Modificado!');
-          return redirect()->route('request_forms.index');
+          return redirect()->route('request_forms.my_forms');
         }
         //Obtiene la Autoridad de la Unidad Organizacional del usuario registrado, en la fecha actual.
         $manager = Authority::getAuthorityFromDate(auth()->user()->organizationalUnit->id, Carbon::now(), 'manager');
@@ -94,13 +108,13 @@ class RequestFormController extends Controller {
         $ou = Authority::getAmIAuthorityFromOu( Carbon::now(), 'manager', auth()->user()->id );
         if(empty($ou)) {
             session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no es Autoridad en su U.O. ('.auth()->user()->organizationalUnit->name.')');
-            return redirect()->route('request_forms.index');
+            return redirect()->route('request_forms.my_forms');
         } else {
-              $createdRequestForms   = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)
-                                       ->Where('status','created')->get();
-              $inProgresRequestForms = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)
-                                       ->Where('status','in_progress')->get();
-              $rejectedRequestForms  = RequestForm::where('applicant_ou_id', $ou[0]->organizational_unit_id)
+              $createdRequestForms   = RequestForm::where('request_user_ou_id', $ou[0]->organizational_unit_id)
+                                       ->Where('status','pending')->get();
+              $inProgresRequestForms = RequestForm::where('request_user_ou_id', $ou[0]->organizational_unit_id)
+                                       ->Where('status','pending')->get();
+              $rejectedRequestForms  = RequestForm::where('request_user_ou_id', $ou[0]->organizational_unit_id)
                                        ->Where('status','rejected')->orWhere('status','closed')->get();
         }
         return view('request_form.leadership_index', compact('createdRequestForms', 'inProgresRequestForms', 'rejectedRequestForms'));
@@ -108,7 +122,7 @@ class RequestFormController extends Controller {
 
 
     public function leadershipSign(RequestForm $requestForm) {
-        $manager              = Authority::getAuthorityFromDate($requestForm->organizationalUnit->id, Carbon::now(), 'manager');
+        $manager              = Authority::getAuthorityFromDate($requestForm->userOrganizationalUnit->id, Carbon::now(), 'manager');
         $position             = $manager->position;
         $organizationalUnit   = $manager->organizationalUnit->name;
         if(is_null($manager))

@@ -7,7 +7,7 @@
 <link href="{{ asset('css/steps.css') }}" rel="stylesheet" type="text/css"/>
 <h4 class="mb-3">Formulario de Requerimiento - Edición de Formularios</h4>
 
-@include('request_form.nav')
+@include('request_form.partials.nav')
 
 <div class="table-responsive">
     <h6><i class="fas fa-info-circle"></i> Información General</h6>
@@ -20,11 +20,11 @@
         <tbody class="small">
             <tr>
                 <th class="table-active" style="width: 33%">Nombre del Solicitante</th>
-                <td>{{ $requestForm->creator->getFullNameAttribute() }}</td>
+                <td>{{ $requestForm->user->getFullNameAttribute() }}</td>
             </tr>
             <tr>
                 <th class="table-active" style="width: 33%">Unidad Organizacional</th>
-                <td class="align-middle">{{ $requestForm->organizationalUnit->name}}</td>
+                <td class="align-middle">{{ $requestForm->userOrganizationalUnit->name}}</td>
             </tr>
             <tr>
                 <th class="table-active" style="width: 33%">Fecha de Creación</th>

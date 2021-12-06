@@ -68,7 +68,7 @@
                     <i class="fas fa-edit"></i></a>
                 </td>
             @endcan
-                <td > <span class="badge badge-info">{{ number_format(($programming->getCountActivities()/51) *100, 0, ',', ' ')}}%</span> </td>
+                <td > <span class="badge badge-info">{{ $total_tracers != 0 ? number_format(($programming->getCountActivities()/$total_tracers) *100, 0, ',', ' ') : 0}}%</span> </td>
                 <td > <span class="badge badge-danger">{{ number_format($programming->countTotalReviewsBy('Not rectified'), 0, ',', ' ')}}</span> </td>
                 <td >
                 {{ $programming->id }}</td>

@@ -43,7 +43,7 @@ class Programming extends Model
     public function getCountActivities(){
         $activities=collect();
         foreach($this->items as $item){
-            if($item->activity_id != null){
+            if($item->activityItem && $item->activityItem->tracer == "SI"){
                 $activities->add($item->activityItem);
             }
         }

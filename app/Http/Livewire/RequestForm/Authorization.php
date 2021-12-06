@@ -29,6 +29,7 @@ class Authorization extends Component
     ];
 
     public function mount(RequestForm $requestForm, $eventType) {
+      $this->route = 'request_forms.pending_forms';
       $this->eventType          = $eventType;
       $this->requestForm        = $requestForm;
       $this->rejectedComment    = '';
@@ -46,10 +47,10 @@ class Authorization extends Component
           $this->route = 'request_forms.supply_index';
       }elseif($eventType=='finance_event'){
           $this->title = 'Autorización Finanzas';
-          $this->route = 'request_forms.finance_index';
+          // $this->route = 'request_forms.finance_index';
       }elseif($eventType=='leader_ship_event'){
           $this->title = 'Autorización Jefatura';
-          $this->route = 'request_forms.leadership_index';
+          // $this->route = 'request_forms.leadership_index';
       }
     }
 
@@ -98,10 +99,10 @@ class Authorization extends Component
         $this->createPurchasingProcesses();
       }
 
-      $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'created')->first();
+      $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
-           $this->requestForm->status = 'in_progress';
-           $this->requestForm->save();
+          //  $this->requestForm->status = 'in_progress';
+          //  $this->requestForm->save();
            $event->signature_date = Carbon::now();
            $event->position_signer_user = $this->position;
            $event->status  = 'approved';
@@ -117,7 +118,7 @@ class Authorization extends Component
 
     public function rejectRequestForm() {
       $this->validate();
-      $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'created')->first();
+      $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
            $this->requestForm->status = 'rejected';
            $this->requestForm->save();
