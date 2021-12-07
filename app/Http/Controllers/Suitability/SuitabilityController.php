@@ -210,8 +210,11 @@ class SuitabilityController extends Controller
         $result = Result::find($id);
         $pdf = \PDF::loadView('suitability.results.certificate', compact('result'));
         //$userSigner = User::find(15685508);
+        //Firmante
         $userSigner = User::find(14112543); //Subdirección Gestión y Desarrollo de las Personas
-        $userVisator1 = User::find(13480977); // Siempre Firma
+        
+        //Visadores
+        $userVisator1 = User::find(13480977); // Siempre Visto Buenos María Soraya
         $userVisator1 = User::find(13867504); //13.867.504 Alejandra Aguirre
         
         //$userVisator1 = User::find(13480977);
