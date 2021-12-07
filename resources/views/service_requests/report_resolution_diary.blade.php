@@ -152,7 +152,10 @@
         SUBDIRECCIÓN DE GESTIÓN Y DESARROLLO DE LAS PERSONAS
       </div>
       <div class="seis" style="padding-top: 4px;">
-        N.I.PHUQHAÑA. {{$ServiceRequest->id}} - {{\Carbon\Carbon::now()->format('d/m/Y')}}
+        N.I.PHUQHAÑA. {{$ServiceRequest->id}} - {{\Carbon\Carbon::now()->format('d/m/Y')}} -
+        @foreach($ServiceRequest->SignatureFlows as $SignatureFlow)
+          $SignatureFlow->user->Initials, 
+        @endforeach
       </div>
 
 
