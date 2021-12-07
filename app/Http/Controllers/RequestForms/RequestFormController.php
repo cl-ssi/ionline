@@ -54,31 +54,36 @@ class RequestFormController extends Controller {
     {
         $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
         $my_pending_forms_to_signs = $my_forms_signed = collect();
+
+        //superchief?
+        $result = RequestForm::whereHas('eventRequestForms', function($q){
+            return $q->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', 'superior_leader_ship_event');
+        })->count();
         
         // Permisos
-        if(!in_array(Auth::user()->organizationalUnit->id, [37, 40]) && $manager->user_id == Auth::user()->id) $event_type = 'leader_ship_event';
+        if($result > 0 && $manager->user_id == Auth::user()->id) $event_type = 'superior_leader_ship_event';
+        elseif(!in_array(Auth::user()->organizationalUnit->id, [37, 40]) && $manager->user_id == Auth::user()->id) $event_type = 'leader_ship_event';
         elseif(Auth::user()->organizationalUnit->id == 40 && $manager->user_id != Auth::user()->id) $event_type = 'pre_finance_event';
         elseif(Auth::user()->organizationalUnit->id == 40 && $manager->user_id == Auth::user()->id) $event_type = 'finance_event';
         elseif(Auth::user()->organizationalUnit->id == 37 && $manager->user_id == Auth::user()->id) $event_type = 'supply_event';
         else $event_type = null;
         
         if($event_type){
-            $prev_event_type = $event_type == 'supply_event' ? 'finance_event' : ($event_type == 'finance_event' ? 'pre_finance_event' : ($event_type == 'pre_finance_event' ? 'leader_ship_event' : null));
+            $prev_event_type = $event_type == 'supply_event' ? 'finance_event' : ($event_type == 'finance_event' ? 'pre_finance_event' : ($event_type == 'pre_finance_event' ? ['superior_leader_ship_event', 'leader_ship_event'] : ($event_type == 'superior_leader_ship_event' ? 'leader_ship_event' : null)));
             // return $prev_event_type;
             $my_pending_forms_to_signs = RequestForm::where('status', 'pending')
-                                                    ->whereHas('eventRequestForms', $filter = function($q) use ($event_type){
+                                                    ->whereHas('eventRequestForms', function($q) use ($event_type){
                                                         return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', $event_type);
                                                     })->when($prev_event_type, function($q) use ($prev_event_type) {
                                                         return $q->whereDoesntHave('eventRequestForms', function ($f) use ($prev_event_type) {
-                                                            $f->where('event_type', $prev_event_type)
-                                                            ->where('status', 'pending');
+                                                            return is_array($prev_event_type) ? $f->whereIn('event_type', $prev_event_type)->where('status', 'pending') : $f->where('event_type', $prev_event_type)->where('status', 'pending');
                                                         });
                                                     })->get();
+            }
             
             $my_forms_signed = RequestForm::whereHas('eventRequestForms', $filter = function($q){
                                             return $q->where('signer_user_id', Auth::user()->id);
                                         })->get();
-        }
 
         return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'my_forms_signed', 'event_type'));
     }
@@ -106,7 +111,7 @@ class RequestFormController extends Controller {
     public function sign(RequestForm $requestForm, $eventType)
     {
         $requestForm->load('itemRequestForms');
-        $eventTitles = ['leader_ship_event' => 'Jefatura', 'pre_finance_event' => 'Refrendación Presupuestaria', 'finance_event' => 'Finanzas', 'supply_event' => 'Abastecimiento'];
+        $eventTitles = ['superior_leader_ship_event' => 'Dirección', 'leader_ship_event' => 'Jefatura', 'pre_finance_event' => 'Refrendación Presupuestaria', 'finance_event' => 'Finanzas', 'supply_event' => 'Abastecimiento'];
         $title = 'Formularios de Requerimiento - Autorización ' . $eventTitles[$eventType];
         $manager              = Authority::getAuthorityFromDate($requestForm->userOrganizationalUnit->id, Carbon::now(), 'manager');
         $position             = $manager->position;
