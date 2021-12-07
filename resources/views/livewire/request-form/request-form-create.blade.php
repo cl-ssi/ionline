@@ -33,13 +33,23 @@
             </div>
 
             <div class="form-row">
-                <fieldset class="form-group col-sm-4">
+                <fieldset class="form-group col-sm-2">
                     <label>Mecanismo de Compra:</label><br>
                     <select wire:model="purchaseMechanism" name="purchaseMechanism" class="form-control form-control-sm" required>
                       <option>Seleccione...</option>
                       @foreach($lstPurchaseMechanism as $val)
                           <option value="{{$val->id}}">{{$val->name}}</option>
                       @endforeach
+                    </select>
+                </fieldset>
+
+                <fieldset class="form-group col-sm-2">
+                    <label for="for_type_of_currency">Tipo de Moneda:</label>
+                    <select wire:model.defer="typeOfCurrency" name="typeOfCurrency" class="form-control form-control-sm" required>
+                        <option value="">Seleccione...</option>
+                        <option value="peso">Peso</option>
+                        <option value="dolar">Dolar</option>
+                        <option value="uf">U.F.</option>
                     </select>
                 </fieldset>
 

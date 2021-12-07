@@ -31,6 +31,10 @@
                     <td>${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
                 </tr>
                 <tr>
+                    <th class="table-active" scope="row">Tipo de moneda</th>
+                    <td>{{ $requestForm->type_of_currency}}</td>
+                </tr>
+                <tr>
                     <th class="table-active" scope="row">Nombre del Solicitante</th>
                     <td>{{ $requestForm->user->getFullNameAttribute()}}</td>
                 </tr>

@@ -20,7 +20,7 @@ class RequestFormItems extends Component
         'unitOfMeasurement'   =>  'required',
         //'fileItem'            =>  'required',
         'taxes'               =>  'required',
-        'typeOfCurrency'      =>  'required'
+        // 'typeOfCurrency'      =>  'required'
         //'budget_item_id'      =>  'required',
     ];
 
@@ -34,7 +34,7 @@ class RequestFormItems extends Component
         'article.required'            => 'Debe ingresar un Artículo.',
         'unitOfMeasurement.required'  => 'Debe seleccionar una Unidad de Medida',
         'taxes.required'              => 'Debe seleccionar un Tipo de Impuesto.',
-        'typeOfCurrency.required'     => 'Debe seleccionar un Tipo de Moneda.',
+        // 'typeOfCurrency.required'     => 'Debe seleccionar un Tipo de Moneda.',
         //'budget_item_id.required'     => 'Debe seleccionar un Item Presupuestario',
     ];
 
