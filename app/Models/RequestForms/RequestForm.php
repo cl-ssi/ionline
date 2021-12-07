@@ -47,7 +47,7 @@ class RequestForm extends Model implements Auditable
         'name', 'justification', 'superior_chief',
         'type_form', 'bidding_number', 'request_user_id',
         'request_user_ou_id', 'contract_manager_ou_id', 'status', 'sigfe',
-        'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id'
+        'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id', 'type_of_currency'
     ];
 
     public function user() {

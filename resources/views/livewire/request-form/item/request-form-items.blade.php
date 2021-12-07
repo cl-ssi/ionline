@@ -3,7 +3,7 @@
         <div class="card-body">
             <h5 class="card-title"><i class="fas fa-cart-plus"></i> {{ $title }}</h5>
             <div class="form-row">
-                <fieldset class="form-group col-sm-3">
+                <fieldset class="form-group col-sm-5">
                     <label for="forRut">Artículo:</label>
                     <input wire:model.defer="article" name="article" class="form-control form-control-sm" type="text" value="{{$article}}">
                 </fieldset>
@@ -23,7 +23,7 @@
                     <input wire:model.defer="quantity" name="quantity" class="form-control form-control-sm" type="text">
                 </fieldset>
 
-                <fieldset class="form-group col-sm-2">
+                <!-- <fieldset class="form-group col-sm-2">
                     <label for="for_type_of_currency">Tipo de Moneda:</label>
                     <select wire:model.defer="typeOfCurrency" name="typeOfCurrency" class="form-control form-control-sm" required>
                         <option value="">Seleccione...</option>
@@ -31,7 +31,7 @@
                         <option value="dolar">Dolar</option>
                         <option value="uf">U.F.</option>
                     </select>
-                </fieldset>
+                </fieldset> -->
 
                 <fieldset class="form-group col-sm-2">
                     <label for="for_unit_value">Valor Unitario:</label>
