@@ -4,9 +4,11 @@ namespace App\Models\RequestForms;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RequestFormFile extends Model
 {
+    use SoftDeletes;
     public $table = "arq_request_form_files";
 
     protected $fillable = [

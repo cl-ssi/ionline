@@ -103,25 +103,11 @@ class RequestFormController extends Controller {
         return view('request_form.edit', compact('requestForm', 'manager', 'requestForms'));
     }
 
-
-    public function leadershipIndex() {
-        $ou = Authority::getAmIAuthorityFromOu( Carbon::now(), 'manager', auth()->user()->id );
-        if(empty($ou)) {
-            session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no es Autoridad en su U.O. ('.auth()->user()->organizationalUnit->name.')');
-            return redirect()->route('request_forms.my_forms');
-        } else {
-              $createdRequestForms   = RequestForm::where('request_user_ou_id', $ou[0]->organizational_unit_id)
-                                       ->Where('status','pending')->get();
-              $inProgresRequestForms = RequestForm::where('request_user_ou_id', $ou[0]->organizational_unit_id)
-                                       ->Where('status','pending')->get();
-              $rejectedRequestForms  = RequestForm::where('request_user_ou_id', $ou[0]->organizational_unit_id)
-                                       ->Where('status','rejected')->orWhere('status','closed')->get();
-        }
-        return view('request_form.leadership_index', compact('createdRequestForms', 'inProgresRequestForms', 'rejectedRequestForms'));
-    }
-
-
-    public function leadershipSign(RequestForm $requestForm) {
+    public function sign(RequestForm $requestForm, $eventType)
+    {
+        $requestForm->load('itemRequestForms');
+        $eventTitles = ['leader_ship_event' => 'Jefatura', 'pre_finance_event' => 'Refrendación Presupuestaria', 'finance_event' => 'Finanzas', 'supply_event' => 'Abastecimiento'];
+        $title = 'Formularios de Requerimiento - Autorización ' . $eventTitles[$eventType];
         $manager              = Authority::getAuthorityFromDate($requestForm->userOrganizationalUnit->id, Carbon::now(), 'manager');
         $position             = $manager->position;
         $organizationalUnit   = $manager->organizationalUnit->name;
@@ -129,138 +115,166 @@ class RequestFormController extends Controller {
             $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
         else
             $manager = $manager->user->getFullNameAttribute();
-        $eventType = 'leader_ship_event';
-        return view('request_form.leadership_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit', 'eventType'));
+        return view('request_form.sign', compact('requestForm', 'manager', 'position', 'organizationalUnit', 'eventType', 'title'));
     }
 
-
-    public function prefinanceIndex() {
-      if(auth()->user()->organizationalUnit->id != '40' ){
-          session()->flash('danger', 'Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('40').'.');
-          return redirect()->route('request_forms.index');
-      }else{
-          $waitingRequestForms = RequestForm::where('status', 'in_progress')
-                                 ->whereHas('eventRequestForms', function ($q) {
-                                 $q->where('event_type','leader_ship_event')
-                                ->where('status', 'approved');})
-
-                                ->whereDoesntHave('eventRequestForms', function ($f) {
-                                $f->where('event_type','pre_finance_event')
-                                ->where('status', 'approved');
-
-                                })->get();
-          $approvedRequestForms = RequestForm::where('status', 'in_progress')
-                                 ->whereHas('eventRequestForms', function ($q) {
-                                 $q->where('event_type','pre_finance_event')
-                                 ->where('status', 'approved');})->get();
-          $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
-
-          return view('request_form.prefinance_index', compact('waitingRequestForms', 'rejectedRequestForms', 'approvedRequestForms'));}
-    }
+    // public function leadershipIndex() {
+    //     $ou = Authority::getAmIAuthorityFromOu( Carbon::now(), 'manager', auth()->user()->id );
+    //     if(empty($ou)) {
+    //         session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no es Autoridad en su U.O. ('.auth()->user()->organizationalUnit->name.')');
+    //         return redirect()->route('request_forms.my_forms');
+    //     } else {
+    //           $createdRequestForms   = RequestForm::where('request_user_ou_id', $ou[0]->organizational_unit_id)
+    //                                    ->Where('status','pending')->get();
+    //           $inProgresRequestForms = RequestForm::where('request_user_ou_id', $ou[0]->organizational_unit_id)
+    //                                    ->Where('status','pending')->get();
+    //           $rejectedRequestForms  = RequestForm::where('request_user_ou_id', $ou[0]->organizational_unit_id)
+    //                                    ->Where('status','rejected')->orWhere('status','closed')->get();
+    //     }
+    //     return view('request_form.leadership_index', compact('createdRequestForms', 'inProgresRequestForms', 'rejectedRequestForms'));
+    // }
 
 
-    public function prefinanceSign(RequestForm $requestForm) {
-      $eventType = 'pre_finance_event';
-      return view('request_form.prefinance_sign', compact('requestForm', 'eventType'));
-    }
+    // public function leadershipSign(RequestForm $requestForm) {
+    //     $manager              = Authority::getAuthorityFromDate($requestForm->userOrganizationalUnit->id, Carbon::now(), 'manager');
+    //     $position             = $manager->position;
+    //     $organizationalUnit   = $manager->organizationalUnit->name;
+    //     if(is_null($manager))
+    //         $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
+    //     else
+    //         $manager = $manager->user->getFullNameAttribute();
+    //     $eventType = 'leader_ship_event';
+    //     return view('request_form.leadership_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit', 'eventType'));
+    // }
 
 
-    public function financeIndex(){
-        $ou = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->user()->id);
-        if(empty($ou)){
-            session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no es autoridad.');
-            return redirect()->route('request_forms.index');
-        }elseif($ou[0]->organizational_unit_id != '40' ){
-            session()->flash('danger', 'Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('40').'.');
-            return redirect()->route('request_forms.index');
-        }else{
-            $waitingRequestForms = RequestForm::where('status', 'in_progress')
-                                       ->whereHas('eventRequestForms', function ($q) {
-                                                    $q->where('event_type','pre_finance_event')
-                                                      ->where('status', 'approved');})
-                                       ->whereDoesntHave('eventRequestForms', function ($f) {
-                                                  $f->where('event_type','finance_event')
-                                                  ->where('status', 'approved');
+    // public function prefinanceIndex() {
+    //   if(auth()->user()->organizationalUnit->id != '40' ){
+    //       session()->flash('danger', 'Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('40').'.');
+    //       return redirect()->route('request_forms.index');
+    //   }else{
+    //       $waitingRequestForms = RequestForm::where('status', 'in_progress')
+    //                              ->whereHas('eventRequestForms', function ($q) {
+    //                              $q->where('event_type','leader_ship_event')
+    //                             ->where('status', 'approved');})
 
-                                                    })->get();
-            $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
-            $createdRequestForms     = RequestForm::all();
-            $approvedRequestForms    = RequestForm::where('status', 'in_progress')
-                                       ->whereHas('eventRequestForms', function ($q) {
-                                                    $q->where('event_type','finance_event')
-                                                      ->where('status', 'approved');
-                                                    })->get();
-            return view('request_form.finance_index', compact('waitingRequestForms', 'rejectedRequestForms', 'approvedRequestForms', 'createdRequestForms'));
-          }
-    }
+    //                             ->whereDoesntHave('eventRequestForms', function ($f) {
+    //                             $f->where('event_type','pre_finance_event')
+    //                             ->where('status', 'approved');
+
+    //                             })->get();
+    //       $approvedRequestForms = RequestForm::where('status', 'in_progress')
+    //                              ->whereHas('eventRequestForms', function ($q) {
+    //                              $q->where('event_type','pre_finance_event')
+    //                              ->where('status', 'approved');})->get();
+    //       $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
+
+    //       return view('request_form.prefinance_index', compact('waitingRequestForms', 'rejectedRequestForms', 'approvedRequestForms'));}
+    // }
 
 
-    public function financeSign(RequestForm $requestForm){
-      $manager              = Authority::getAuthorityFromDate($requestForm->userOrganizationalUnit->id, Carbon::now(), 'manager');
-      $position             = $manager->position;
-      $organizationalUnit   = $manager->organizationalUnit->name;
-      if(is_null($manager))
-          $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
-      else
-          $manager = $manager->user->getFullNameAttribute();
-      $eventType = 'finance_event';
-      return view('request_form.finance_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit', 'eventType'));
-    }
+    // public function prefinanceSign(RequestForm $requestForm) {
+    //   $eventType = 'pre_finance_event';
+    //   return view('request_form.prefinance_sign', compact('requestForm', 'eventType'));
+    // }
 
 
-    public function supplyIndex()
-    {
-      $ou = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->user()->id);
-      if(empty($ou)){
-          session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no es autoridad.');
-          return redirect()->route('request_forms.index');
-      }elseif($ou[0]->organizational_unit_id != '37' ){
-          session()->flash('danger', 'Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('37').'.');
-          return redirect()->route('request_forms.index');
-      }else{
-          $waitingRequestForms = RequestForm::where('status', 'in_progress')
-                                     ->whereHas('eventRequestForms', function ($q) {
-                                                  $q->where('event_type','finance_event')
-                                                    ->where('status', 'approved');})
+    // public function financeIndex(){
+    //     $ou = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->user()->id);
+    //     if(empty($ou)){
+    //         session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no es autoridad.');
+    //         return redirect()->route('request_forms.index');
+    //     }elseif($ou[0]->organizational_unit_id != '40' ){
+    //         session()->flash('danger', 'Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('40').'.');
+    //         return redirect()->route('request_forms.index');
+    //     }else{
+    //         $waitingRequestForms = RequestForm::where('status', 'in_progress')
+    //                                    ->whereHas('eventRequestForms', function ($q) {
+    //                                                 $q->where('event_type','pre_finance_event')
+    //                                                   ->where('status', 'approved');})
+    //                                    ->whereDoesntHave('eventRequestForms', function ($f) {
+    //                                               $f->where('event_type','finance_event')
+    //                                               ->where('status', 'approved');
 
-                                     ->whereDoesntHave('eventRequestForms', function ($f) {
-                                                $f->where('event_type','supply_event')
-                                                ->where('status', 'approved');
-
-                                                  })->get();
-
-          $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
-
-          $approvedRequestForms    = RequestForm::where('status', 'in_progress')
-                                     ->whereHas('eventRequestForms', function ($q) {
-                                                  $q->where('event_type','supply_event')
-                                                    ->where('status', 'approved');
-                                                  })->get();
-
-          $allRequestForms = RequestForm::where('status', 'in_progress')
-                                     //->orWhere('status', 'created')
-                                     //->whereHas('eventRequestForms', function ($q) {
-                                      //            $q->where('event_type','finance_event')
-                                      //              ->where('status', 'approved');})
-
-                                     ->whereDoesntHave('eventRequestForms', function ($f) {
-                                                $f->where('event_type','supply_event')
-                                                ->where('status', 'approved');
-
-                                                  })
-                                     ->orWhere('status', 'created')
-
-                                                  ->get();
+    //                                                 })->get();
+    //         $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
+    //         $createdRequestForms     = RequestForm::all();
+    //         $approvedRequestForms    = RequestForm::where('status', 'in_progress')
+    //                                    ->whereHas('eventRequestForms', function ($q) {
+    //                                                 $q->where('event_type','finance_event')
+    //                                                   ->where('status', 'approved');
+    //                                                 })->get();
+    //         return view('request_form.finance_index', compact('waitingRequestForms', 'rejectedRequestForms', 'approvedRequestForms', 'createdRequestForms'));
+    //       }
+    // }
 
 
-          return view('request_form.supply_index', compact('waitingRequestForms', 'rejectedRequestForms', 'approvedRequestForms', 'allRequestForms'));
-    }
-  }
+    // public function financeSign(RequestForm $requestForm){
+    //   $manager              = Authority::getAuthorityFromDate($requestForm->userOrganizationalUnit->id, Carbon::now(), 'manager');
+    //   $position             = $manager->position;
+    //   $organizationalUnit   = $manager->organizationalUnit->name;
+    //   if(is_null($manager))
+    //       $manager = 'No se ha registrado una Autoridad en el módulo correspondiente!';
+    //   else
+    //       $manager = $manager->user->getFullNameAttribute();
+    //   $eventType = 'finance_event';
+    //   return view('request_form.finance_sign', compact('requestForm', 'manager', 'position', 'organizationalUnit', 'eventType'));
+    // }
 
-    public function supplySign(RequestForm $requestForm){
-      $eventType = 'supply_event';
-      return view('request_form.supply_sign', compact('requestForm', 'eventType'));
-    }
+
+//     public function supplyIndex()
+//     {
+//       $ou = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->user()->id);
+//       if(empty($ou)){
+//           session()->flash('danger','Usuario: '.auth()->user()->getFullNameAttribute().' no es autoridad.');
+//           return redirect()->route('request_forms.index');
+//       }elseif($ou[0]->organizational_unit_id != '37' ){
+//           session()->flash('danger', 'Usuario: '.auth()->user()->getFullNameAttribute().' no pertenece a '.OrganizationalUnit::getName('37').'.');
+//           return redirect()->route('request_forms.index');
+//       }else{
+//           $waitingRequestForms = RequestForm::where('status', 'in_progress')
+//                                      ->whereHas('eventRequestForms', function ($q) {
+//                                                   $q->where('event_type','finance_event')
+//                                                     ->where('status', 'approved');})
+
+//                                      ->whereDoesntHave('eventRequestForms', function ($f) {
+//                                                 $f->where('event_type','supply_event')
+//                                                 ->where('status', 'approved');
+
+//                                                   })->get();
+
+//           $rejectedRequestForms    = RequestForm::where('status', 'rejected')->get();
+
+//           $approvedRequestForms    = RequestForm::where('status', 'in_progress')
+//                                      ->whereHas('eventRequestForms', function ($q) {
+//                                                   $q->where('event_type','supply_event')
+//                                                     ->where('status', 'approved');
+//                                                   })->get();
+
+//           $allRequestForms = RequestForm::where('status', 'in_progress')
+//                                      //->orWhere('status', 'created')
+//                                      //->whereHas('eventRequestForms', function ($q) {
+//                                       //            $q->where('event_type','finance_event')
+//                                       //              ->where('status', 'approved');})
+
+//                                      ->whereDoesntHave('eventRequestForms', function ($f) {
+//                                                 $f->where('event_type','supply_event')
+//                                                 ->where('status', 'approved');
+
+//                                                   })
+//                                      ->orWhere('status', 'created')
+
+//                                                   ->get();
+
+
+//           return view('request_form.supply_index', compact('waitingRequestForms', 'rejectedRequestForms', 'approvedRequestForms', 'allRequestForms'));
+//     }
+//   }
+
+    // public function supplySign(RequestForm $requestForm){
+    //   $eventType = 'supply_event';
+    //   return view('request_form.supply_sign', compact('requestForm', 'eventType'));
+    // }
 
     public function create_form_document(RequestForm $requestForm){
         //dd($requestForm);
@@ -284,8 +298,8 @@ class RequestFormController extends Controller {
     {
         $id = $requestForm->id;
         $requestForm->delete();
-        session()->flash('danger', 'El formulario de requerimiento ID '.$id.' ha sido eliminado correctamente.');
-        return redirect()->route('request_forms.index');
+        session()->flash('info', 'El formulario de requerimiento ID '.$id.' ha sido eliminado correctamente.');
+        return redirect()->route('request_forms.my_forms');
     }
 
 

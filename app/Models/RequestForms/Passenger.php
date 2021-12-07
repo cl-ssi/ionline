@@ -4,9 +4,11 @@ namespace App\Models\RequestForms;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Passenger extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'user_id', 'run', 'dv' ,'name' ,'fathers_family', 'mothers_family',
         'birthday', 'phone_number', 'email', 'round_trip', 'origin', 'destination',

@@ -307,11 +307,11 @@ class RequestFormCreate extends Component
         session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue creado con exito.');
       }
 
-      return redirect()->to('/request_forms');
+      return redirect()->to('/request_forms/my_forms');
     }
 
     public function btnCancelRequestForm(){
-      return redirect()->to('/request_forms');
+      return redirect()->to('/request_forms/my_forms');
     }
 
     private function saveItem($item, $id){
@@ -334,6 +334,7 @@ class RequestFormCreate extends Component
             'type_of_currency'      =>      $item['typeOfCurrency'],
             'article_file'          =>      $item['articleFile'] ? $item['articleFile']->storeAs('/ionline/request_forms_dev/item_files/', $file_name.'.'.$item['articleFile']->extension(), 'gcs') : null
       ]);
+      return;
     }
 
     private function savePassenger($passenger, $id){
@@ -362,6 +363,7 @@ class RequestFormCreate extends Component
               'unit_value'        =>  $passenger['unitValue'],
               'request_form_id'   =>  $id
             ]);
+      return;
     }
 
     public function render(){
