@@ -76,8 +76,7 @@
                                   @endforeach
                               </td>
                               <td>
-                                @php($routes = ['leader_ship_event' => 'leadership_sign', 'pre_finance_event' => 'pre_finance_sign', 'finance_event' => 'finance_sign', 'supply_event' => 'supply_sign'])
-                                <a href="{{ route('request_forms.'.$routes[$event_type], $requestForm->id) }}" class="btn btn-outline-primary btn-sm" title="Aceptar o Rechazar">
+                                <a href="{{ route('request_forms.sign', [$requestForm, $event_type]) }}" class="btn btn-outline-primary btn-sm" title="Aceptar o Rechazar">
                                   <i class="fas fa-signature"></i>
                                 </a>
                               </td>

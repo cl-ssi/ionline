@@ -11,11 +11,13 @@ use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseMechanism;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
 class RequestForm extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
+    use SoftDeletes;
 
     /* NORMALIZACIÓN JORGE MIRANDA - ALVARO LUPA NOV 2021 */
 

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\PurchasingProcess;
 use App\Models\Parameters\BudgetItem;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 //use App\Models\Parameters\PurchaseType;
 //use App\Models\Parameters\PurchaseUnit;
@@ -14,6 +15,7 @@ use OwenIt\Auditing\Contracts\Auditable;
 class ItemRequestForm extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
+    use SoftDeletes;
 
     public $table = "arq_item_request_forms";
 
