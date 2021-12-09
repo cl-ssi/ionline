@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\RequestForms\RequestForm;
 use App\User;
+use App\Models\Parameters\Supplier;
 
 use App\Http\Controllers\Controller;
 
@@ -19,7 +20,7 @@ class SupplyPurchaseController extends Controller
      */
     public function index()
     {
-        //By Purchser
+        //By Purchaser
         if(Auth()->user()->organizational_unit_id == 37){
             $purchaser = User::with('requestForms')
                 ->latest()
@@ -35,12 +36,12 @@ class SupplyPurchaseController extends Controller
           session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
           return redirect()->route('request_forms.my_forms');
         }
-
     }
 
     public function purchase(RequestForm $requestForm)
     {
-        return view('request_form.purchase.purchase', compact('requestForm'));
+        $suppliers = Supplier::orderBy('name','asc')->get();
+        return view('request_form.purchase.purchase', compact('requestForm', 'suppliers'));
     }
 
     /**
