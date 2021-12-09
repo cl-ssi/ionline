@@ -35,7 +35,7 @@ class RequestReplacementStaff extends Model
     }
 
     public function fundamentDetailManage() {
-        return $this->belongsTo('App\Models\ReplacementStaff\fundamentDetailManage');
+        return $this->belongsTo('App\Models\ReplacementStaff\FundamentDetailManage');
     }
 
     public function user() {
