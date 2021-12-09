@@ -56,28 +56,26 @@
   <hr>
 
   <div class="form-row">
-
     <fieldset class="form-group col-12">
         <label for="for_service_description">Descripción Servicio*</label>
         <textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50" required></textarea>
+	</fieldset>
 
+	<fieldset class="form-group">
 		<div id="id_descripcion_servicio">
-		<br>
-		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_enfermeros">Enfermeras/os</button>
-		<button type="button" class="btn btn-outline-primary btn-sm col-5" id="alias_kinesiologos">Kinesiólogos/as</button>
-		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_paramedicos">Técnicos paraméricos</button>
-		<button type="button" class="btn btn-outline-primary btn-sm col-5" id="alias_medico">Médico</button>
-		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_auxiliares">Auxiliares de servicio</button>
-		<button type="button" class="btn btn-outline-primary btn-sm col-5" id="alias_psicologo">Psicólogo</button>
-		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_administrativos">Administrativos/as</button>
-		<button type="button" class="btn btn-outline-primary btn-sm col-5" id="alias_matronas">Matronas</button>
-		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_tm_imageneologia">T.M. Imagenología</button>
-		<button type="button" class="btn btn-outline-primary btn-sm col-5" id="alias_fonoaudiologas">Fonoaudiologas</button>
-		<button type="button" class="btn btn-outline-primary btn-sm col-6" id="alias_terapeuta_ocupacional">Terapeuta Ocupacional</button>
+			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_enfermeros">Enfermeras/os</button>
+			<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-3" id="alias_kinesiologos">Kinesiólogos/as</button>
+			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_paramedicos">Técnicos paraméricos</button>
+			<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-2" id="alias_medico">Médico</button>
+			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_auxiliares">Auxiliares de servicio</button>
+			<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-3" id="alias_psicologo">Psicólogo</button>
+			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_administrativos">Administrativos/as</button>
+			<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-2" id="alias_matronas">Matronas</button>
+			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_tm_imageneologia">T.M. Imagenología</button>
+			<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-3" id="alias_fonoaudiologas">Fonoaudiologas</button>
+			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_terapeuta_ocupacional">Terapeuta Ocupacional</button>
 		</div>
-
-    </fieldset>
-
+	</fieldset>
   </div>
 
 	<div id="control_turnos">

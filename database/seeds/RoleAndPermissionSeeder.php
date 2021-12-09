@@ -101,6 +101,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Service Request: additional data oficina partes']);
         Permission::create(['name' => 'Service Request: additional data rrhh']);
         Permission::create(['name' => 'Service Request: consolidated data']);
+        Permission::create(['name' => 'Service Request: change signature flow']);
         Permission::create(['name' => 'Service Request: audit']);
         Permission::create(['name' => 'Service Request: delete request']);
         Permission::create(['name' => 'Service Request: derive requests']);

@@ -9,29 +9,28 @@
 	<h3 class="mb-3">Reporte consolidado</h3>
 
 	<form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.consolidated_data') }}">
-		<div class="input-group mb-3">
+		<div class="form-row mb-3">
 			<!-- <div class="input-group-prepend">
 				<span class="input-group-text">Rango de fechas (Inicio de contrato)</span>
 			</div>
 			<input type="text" value="Todos los datos" disabled> -->
-			<div class="input-group-prepend">
-	      <span class="input-group-text">Establecimiento</span>
-	    </div>
-	    <select class="form-control selectpicker" data-live-search="true" name="establishment_id" data-size="5">
-	      <option value="">Todos</option>
-	      <option value="1" @if($request->establishment_id == "1") selected @endif>Hospital Ernesto Torres Galdames</option>
-	      <option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option>
-	      <option value="0" @if($request->establishment_id == "0") selected @endif>Dirección SSI</option>
-	    </select>
-			<div class="input-group-append">
-					<button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+			<div class="form-group col-10 col-md-11">
+				<label>Establecimiento</label>
+				<select class="form-control" data-live-search="true" name="establishment_id" data-size="5">
+					<option value="">Todos</option>
+					<option value="1" @if($request->establishment_id == "1") selected @endif>Hospital Ernesto Torres Galdames</option>
+					<option value="12" @if($request->establishment_id == "12") selected @endif>Dr. Héctor Reyno G.</option>
+					<option value="0" @if($request->establishment_id == "0") selected @endif>Dirección SSI</option>
+				</select>
+			</div>
+			<div class="form-group col-2 col-md-1">
+				<label>&nbsp;</label>
+				<button type="submit" class="btn btn-primary form-control"><i class="fas fa-search"></i> Buscar</button>
 			</div>
 		</div>
 	</form>
 
 <hr>
-
-</main><main class="py-4">
 
 	<h4>Solicitudes Activas <b>({{count($serviceRequests)}})</b></h4><br>
 	<!-- <a type="button"
