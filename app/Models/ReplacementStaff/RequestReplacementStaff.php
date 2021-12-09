@@ -27,7 +27,7 @@ class RequestReplacementStaff extends Model
     }
 
     public function legalQualityManage() {
-        return $this->belongsTo('App\Models\ReplacementStaff\legalQualityManage');
+        return $this->belongsTo('App\Models\ReplacementStaff\LegalQualityManage');
     }
 
     public function fundamentManage() {
