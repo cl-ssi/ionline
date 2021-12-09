@@ -19,7 +19,7 @@
     </div>
   </li>
 
-  @if(Auth()->user()->organizational_unit_id == 37)
+  {{--@if(Auth()->user()->organizational_unit_id == 37)
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-file-alt"></i> Abastecimiento
@@ -29,7 +29,7 @@
         <!-- <div class="dropdown-divider"></div> -->
       </div>
     </li>
-  @endif
+  @endif--}}
 
   <!-- <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -65,7 +65,11 @@
         </a>
     </li>
   -->
+<<<<<<< HEAD
     <!-- <li class="nav-item">
+=======
+    {{--<li class="nav-item">
+>>>>>>> 30048c5d4ddc8387b53571359bc9cd57fdde7d19
         <a class="nav-link"
             href="{{ route('request_forms.leadership_index') }}">
             <i class="fas fa-inbox"></i> Jefatura
@@ -112,6 +116,10 @@
             <i class="fas fa-inbox"></i> Comprador
             <span class="badge badge-secondary"></span></a>
         </a>
+<<<<<<< HEAD
     </li> -->
+=======
+    </li>--}}
+>>>>>>> 30048c5d4ddc8387b53571359bc9cd57fdde7d19
 
 </ul>

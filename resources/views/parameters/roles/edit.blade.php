@@ -38,7 +38,7 @@
 <form method="POST" class="form-horizontal" action="{{ route('parameters.roles.destroy', $role) }}">
     @csrf
     @method('DELETE')
-    <button type="submit" class="btn btn-danger float-right">Eliminar</button>
-</form>
+    <button type="submit" class="btn btn-danger mt-3 float-right">Eliminar</button>
+</form><br><br>
 
 @endsection

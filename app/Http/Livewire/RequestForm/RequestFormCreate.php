@@ -92,6 +92,8 @@ class RequestFormCreate extends Component
       $this->program            =   $this->requestForm->program;
       $this->justify            =   $this->requestForm->justification;
       $this->purchaseMechanism  =   $this->requestForm->purchase_mechanism_id;
+      $this->type_of_currency   =   $this->requestForm->type_of_currency;
+      $this->estimated_expense  =   $this->requestForm->estimated_expense;
       $this->editRF             =   true;
       $this->idRF               =   $this->requestForm->id;
       foreach($this->requestForm->itemRequestForms as $item)
@@ -111,7 +113,7 @@ class RequestFormCreate extends Component
             'totalValue'               => $item->quantity * $item->unit_value,
       ];
 
-      $this->totalForm();
+      // $this->totalForm();
       $this->cancelRequestService();
     }
 
@@ -264,6 +266,7 @@ class RequestFormCreate extends Component
           'request_user_ou_id'    =>  Auth()->user()->organizationalUnit->id,
           //'supervisor_user_id'    =>  Auth()->user()->id,
           'estimated_expense'     =>  $this->totalForm($this->route == 'request_forms.passengers.create' ? $this->passengers : $this->items),
+          'type_of_currency'      =>  $this->typeOfCurrency,
           'purchase_mechanism_id' =>  $this->purchaseMechanism,
           'program'               =>  $this->program,
           'status'                =>  'pending'
@@ -307,11 +310,11 @@ class RequestFormCreate extends Component
         session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue creado con exito.');
       }
 
-      return redirect()->to('/request_forms');
+      return redirect()->to('/request_forms/my_forms');
     }
 
     public function btnCancelRequestForm(){
-      return redirect()->to('/request_forms');
+      return redirect()->to('/request_forms/my_forms');
     }
 
     private function saveItem($item, $id){
@@ -331,9 +334,10 @@ class RequestFormCreate extends Component
             'tax'                   =>      $item['taxes'],
             //'budget_item_id'        =>      '1',
             'expense'               =>      $item['totalValue'],
-            'type_of_currency'      =>      $item['typeOfCurrency'],
+            // 'type_of_currency'      =>      $item['typeOfCurrency'],
             'article_file'          =>      $item['articleFile'] ? $item['articleFile']->storeAs('/ionline/request_forms_dev/item_files/', $file_name.'.'.$item['articleFile']->extension(), 'gcs') : null
       ]);
+      return;
     }
 
     private function savePassenger($passenger, $id){
@@ -362,6 +366,7 @@ class RequestFormCreate extends Component
               'unit_value'        =>  $passenger['unitValue'],
               'request_form_id'   =>  $id
             ]);
+      return;
     }
 
     public function render(){

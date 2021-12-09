@@ -44,7 +44,7 @@ class Authorization extends Component
           $this->lstPurchaseUnit        = PurchaseUnit::all();
           $this->lstPurchaseMechanism   = PurchaseMechanism::all();
           $this->title = 'Autorización Abastecimiento';
-          $this->route = 'request_forms.supply_index';
+          // $this->route = 'request_forms.supply_index';
       }elseif($eventType=='finance_event'){
           $this->title = 'Autorización Finanzas';
           // $this->route = 'request_forms.finance_index';
@@ -92,17 +92,18 @@ class Authorization extends Component
             'purchaseMechanism.required'  =>  'Seleccione M. de compra.',
          ]
         );
-        $this->requestForm->supervisor_user_id      =  $this->supervisorUser;
+        // $this->requestForm->supervisor_user_id      =  $this->supervisorUser;
         $this->requestForm->purchase_unit_id        =  $this->purchaseUnit;
         $this->requestForm->purchase_type_id        =  $this->purchaseType;
         $this->requestForm->purchase_mechanism_id   =  $this->purchaseMechanism;
-        $this->createPurchasingProcesses();
+        $this->requestForm->purchasers()->attach($this->supervisorUser);
+        $this->requestForm->status = 'approved';
+        $this->requestForm->save();
+        // $this->createPurchasingProcesses();
       }
 
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
-          //  $this->requestForm->status = 'in_progress';
-          //  $this->requestForm->save();
            $event->signature_date = Carbon::now();
            $event->position_signer_user = $this->position;
            $event->status  = 'approved';
