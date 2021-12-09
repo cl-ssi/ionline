@@ -56,7 +56,7 @@
             <input type="date" class="form-control" id="for_date" name="date"
                 value="{{$today->format('Y-m-d')}}" required >
         </div>
-        <button type="submit" class="btn btn-primary mb-2" disabled>Buscar</button>
+        <button type="submit" class="btn btn-primary mb-2">Buscar</button>
     </form>
     @endcan
 
