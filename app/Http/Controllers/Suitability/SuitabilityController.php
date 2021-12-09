@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Throwable;
 use App\Mail\NewPsiRequest;
 use Illuminate\Support\Facades\Mail;
+use App\Rrhh\Authority;
 
 class SuitabilityController extends Controller
 {
@@ -209,9 +210,10 @@ class SuitabilityController extends Controller
     {
         $result = Result::find($id);
         $pdf = \PDF::loadView('suitability.results.certificate', compact('result'));
-        //$userSigner = User::find(15685508);
         //Firmante
-        $userSigner = User::find(14112543); //Subdirección Gestión y Desarrollo de las Personas
+        //$userSigner = User::find(15685508);
+        // $userSigner = User::find(14112543); //Subdirección Gestión y Desarrollo de las Personas
+        $userSigner = Authority::getAuthorityFromDate(44, date('Y-m-d'), 'manager')->user; //Subdirección Gestión y Desarrollo de las Personas
         
         //Visadores
         $userVisator1 = User::find(13480977); // Siempre Visto Buenos María Soraya
