@@ -78,10 +78,10 @@ class RequestReplacementStaff extends Model
           case 'diurnal':
             return 'Diurno';
             break;
-          case 'third_shift':
+          case 'third shift':
             return 'Tercer Turno';
             break;
-          case 'fourth_shift':
+          case 'fourth shift':
             return 'Cuarto Turno';
             break;
           case 'other':
