@@ -20,4 +20,8 @@ class ActivityItem extends Model
     public function programItems(){
         return $this->hasMany('App\Programmings\ProgrammingItem')->orderBy('activity_id', 'ASC');
     }
+
+    public function programming(){
+        return $this->belongsToMany(Programming::class, 'pro_programming_activity_item')->withPivot('requested_by')->whereNull('pro_programming_activity_item.deleted_at')->withTimestamps()->using(ProgrammingActivityItem::class);
+    }
 }
