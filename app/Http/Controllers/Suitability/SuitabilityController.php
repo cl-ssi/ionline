@@ -217,7 +217,7 @@ class SuitabilityController extends Controller
         
         //Visadores
         $userVisator1 = User::find(13480977); // Siempre Visto Buenos María Soraya
-        $userVisator1 = User::find(13867504); //13.867.504 Alejandra Aguirre
+        $userVisator2 = User::find(13867504); //13.867.504 Alejandra Aguirre
         
         //$userVisator1 = User::find(13480977);
         
