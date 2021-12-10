@@ -10,40 +10,97 @@
 <a href="{{ route('programmingitems.create',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-info mb-4 float-right btn-sm">Agregar Item</a>
 <h4 class="mb-3"> Programación {{$programming->establishment->name ?? '' }} {{$programming->year ?? '' }} - <a href="{{ route('programming.reportObservation',['programming_id' => Request::get('programming_id')]) }}" class="btn btn-dark mb-1 btn-sm">
         Observaciones 
-            <span class="badge badge-danger">{{$programming->countTotalReviewsBy('Not rectified') + count($pendingActivities)}}</span>
+            <span class="badge badge-danger">{{$programming->countTotalReviewsBy('Not rectified') + $programming->pendingItems->count()}}</span>
             <span class="badge badge-warning">{{$programming->countTotalReviewsBy('Regularly rectified')}}</span>
             <span class="badge badge-primary">{{$programming->countTotalReviewsBy('Accepted rectified')}}</span>
         </a>
-        @if($pendingActivities != null)
+        @if($programming->pendingItems != null)
         <button type="button" class="btn btn-outline-warning btn-sm mb-1" data-toggle="modal" data-target="#exampleModal">
-        <i class="fas fa-exclamation-triangle"></i> Actividades pendientes <span class="badge badge-warning">{{count($pendingActivities)}}</span>
+        <i class="fas fa-exclamation-triangle"></i> Actividades pendientes <span class="badge badge-warning">{{$programming->pendingItems->count()}}</span>
         </button> 
         @endif
 </h4>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Actividades pendientes por programar</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <ul>
-        @foreach($pendingActivities as $activity)
-            <li>{{ $activity->tracer }} - 
-                {{ $activity->activity_name }} - 
-                {{ $activity->def_target_population }} - 
-                {{ $activity->professional }}</li>
-        @endforeach
-        </ul>
-      </div>
+<div class="modal fade" id="exampleModal" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actividades pendientes por programar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="overflow:hidden;">
+                    @can('ProgrammingItem: evaluate')
+                    <form method="post" action="{{ route('pendingitems.store') }}">
+                    @csrf
+                    <input type="hidden" name="programming_id" value="{{$programming->id}}">
+                    <div class="form-row">
+                        <div class="form-group col-md-11">
+                            <select style="font-size:60%;" name="pendingItemSelectedId" id="pendingItem" class="form-control selectpicker " data-live-search="true" title="Seleccione actividad" data-width="100%" required>
+                                @foreach($pendingActivities as $activity)
+                                    <option style="font-size:60%;" value="{{ $activity->id }}">
+                                        {{ $activity->tracer }} - 
+                                        {{ $activity->activity_name }} - 
+                                        {{ $activity->def_target_population }} - 
+                                        {{ $activity->professional }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <button type="submit" class="btn btn-primary">Agregar</button>
+                        </div>
+                    </div>
+                    </form>
+                    @endcan
+                    <table class="table center table-striped table-sm table-bordered table-condensed fixed_headers table-hover">
+                        <thead class="small" style="font-size:60%;">
+                            <th class="text-center align-middle">T</th>
+                            <th class="text-center align-middle">Nº Trazadora</th>
+                            <th class="text-center align-middle">CICLO</th>
+                            <th class="text-center align-middle">ACCIÓN</th>
+                            <th class="text-center align-middle">PRESTACION O ACTIVIDAD</th>
+                            <th class="text-center align-middle">DEF. POB. OBJETIVO</th>
+                            <th class="text-center align-middle">FUNCIONARIO  QUE OTORGA LA PRESTACIÓN</th>
+                            <th class="text-center align-middle">SOLICITADO POR</th>
+                            @can('ProgrammingItem: evaluate')<th class="text-center align-middle">ACCIONES</th>@endcan
+                        </thead>
+                        <tbody style="font-size:70%;">
+                            @forelse($programming->pendingItems as $item)
+                            <tr class="small">
+                                <td class="text-center align-middle">{{ $item->tracer }}</td>
+                                <td class="text-center align-middle">{{ $item->int_code }}</td>
+                                <td class="text-center align-middle">{{ $item->vital_cycle }}</td>
+                                <td class="text-center align-middle">{{ $item->action_type }}</td>
+                                <td class="text-center align-middle">{{ $item->activity_name }}</td>
+                                <td class="text-center align-middle">{{ $item->def_target_population }}</td>
+                                <td class="text-center align-middle">{{ $item->professional }}</td>
+                                <td class="text-center align-middle">{{ $item->pivot->requestedBy->fullName ?? '' }}</td>
+                                @can('ProgrammingItem: evaluate')
+                                <td class="text-center align-middle">
+                                <form action="{{ route('pendingitems.destroy', $item) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="programming_id" value="{{$programming->id}}">
+                                    <button type="submit" title="delete" style="border: none; background-color:transparent;">
+                                        <i class="fas fa-trash fa-lg text-danger"></i>
+                                    </button>
+                                </form>
+                                </td>
+                                @endcan
+                            </tr>
+                            @empty
+                            <td class="text-center align-middle" colspan="9"><br><br>No hay actividades pendientes<br><br><br></td>
+                            @endforelse
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
 <form method="GET" class="form-horizontal small " action="{{ route('programmingitems.index') }}" enctype="multipart/form-data">
 
@@ -395,7 +452,7 @@
             <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->int_code ?? '' }}</td>
             <td class="text-center align-middle">TALLER</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->cycle : ($programmingItemworkshop->activityItem->vital_cycle ?? $programmingItemworkshop->cycle) }}</td>
-            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->action_type : ($programmingItemworkshop->activityItem->activityItem->action_type ?? $programmingItemworkshop->action_type) }}</td>
+            <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->action_type : ($programmingItemworkshop->activityItem->action_type ?? $programmingItemworkshop->action_type) }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem->activity_name ?? $programmingItemworkshop->activity_name }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->activityItem && $programmingItemworkshop->activityItem->tracer == 'NO' ? $programmingItemworkshop->def_target_population : ($programmingItemworkshop->activityItem->def_target_population ?? $programmingItemworkshop->def_target_population) }}</td>
             <td class="text-center align-middle">{{ $programmingItemworkshop->source_population }}</td>
@@ -450,9 +507,9 @@
 
 <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>  
 <script>
-
-
-
+    $('#exampleModal').on('shown', function(){
+        $('.selectpicker').selectpicker('refresh');
+    });
     function tableExcel(type, fn, dl) {
           var elt = document.getElementById('tblData');
           const filename = 'Informe_HorasDirectas'

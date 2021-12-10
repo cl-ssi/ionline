@@ -69,7 +69,7 @@
                 </td>
             @endcan
                 <td > <span class="badge badge-info">{{ $total_tracers != 0 ? number_format(($programming->getCountActivities()/$total_tracers) *100, 0, ',', ' ') : 0}}%</span> </td>
-                <td > <span class="badge badge-danger">{{ number_format($programming->countTotalReviewsBy('Not rectified'), 0, ',', ' ')}}</span> </td>
+                <td > <span class="badge badge-danger">{{ number_format($programming->countTotalReviewsBy('Not rectified') + $programming->pendingItems->count(), 0, ',', ' ')}}</span> </td>
                 <td >
                 {{ $programming->id }}</td>
                 <td>{{ $programming->establishment->commune->name}}</td>

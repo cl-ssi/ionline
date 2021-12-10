@@ -13,74 +13,75 @@
 </h3>
 <form method="GET" class="form-horizontal" action="{{ route('rrhh.service-request.report.pay-rejected') }}">
 
-  <div class="input-group mb-3">
+  <div class="form-row mb-3">
 
-    <div class="input-group-prepend">
-      <span class="input-group-text">Origen Financiamiento</span>
+    <div class="form-group col-md-4 col-6">
+      <label>Origen Financiamiento</label>
+      <select class="form-control" data-live-search="true" name="type" data-size="5">
+        <option value="">Todos</option>
+        <option value="Covid" @if($request->type == "Covid") selected @endif>Honorarios - Covid</option>
+        <option value="Suma alzada" @if($request->type == "Suma alzada") selected @endif>Suma alzada</option>
+      </select>
     </div>
-    <select class="form-control selectpicker" data-live-search="true" name="type" data-size="5">
-      <option value="">Todos</option>
-      <option value="Covid" @if($request->type == "Covid") selected @endif>Honorarios - Covid</option>
-      <option value="Suma alzada" @if($request->type == "Suma alzada") selected @endif>Suma alzada</option>
-    </select>
 
 
-    <div class="input-group-prepend">
-      <span class="input-group-text">Tipo de Contrato</span>
+    <div class="form-group col-md-4 col-5">
+      <label>Tipos de Contrato</label>
+      <select class="form-control" data-live-search="true" name="program_contract_type" data-size="5">
+        <option value="">Todos</option>
+        <option value="Mensual" @if($request->program_contract_type == "Mensual") selected @endif>Mensual</option>
+        <option value="Horas" @if($request->program_contract_type == "Horas") selected @endif>Horas</option>
+      </select>
     </div>
-    <select class="form-control selectpicker" data-live-search="true" name="program_contract_type" data-size="5">
-      <option value="">Todos</option>
-      <option value="Mensual" @if($request->program_contract_type == "Mensual") selected @endif>Mensual</option>
-      <option value="Horas" @if($request->program_contract_type == "Horas") selected @endif>Horas</option>
-    </select>
 
-    <div class="input-group-prepend">
-      <span class="input-group-text">Jornada</span>
+    <div class="form-group col-md-4">
+      <label>Jornada</label>
+      <select class="form-control" data-live-search="true" name="working_day_type" data-size="5">
+        <option value="">Todos</option>
+        <option value="DIURNO" @if($request->working_day_type == "DIURNO") selected @endif>DIURNO</option>
+        <option value="TERCER TURNO" @if($request->working_day_type == "TERCER TURNO") selected @endif>TERCER TURNO</option>
+        <option value="TERCER TURNO - MODIFICADO" @if($request->working_day_type == "TERCER TURNO - MODIFICADO") selected @endif>TERCER TURNO - MODIFICADO</option>
+        <option value="CUARTO TURNO" @if($request->working_day_type == "CUARTO TURNO") selected @endif>CUARTO TURNO</option>
+        <option value="CUARTO TURNO - MODIFICADO" @if($request->working_day_type == "CUARTO TURNO - MODIFICADO") selected @endif>CUARTO TURNO - MODIFICADO</option>
+        <option value="DIURNO PASADO A TURNO" @if($request->working_day_type == "DIURNO PASADO A TURNO") selected @endif>DIURNO PASADO A TURNO</option>
+        <option value="HORA MÉDICA" @if($request->working_day_type == "HORA MÉDICA") selected @endif>HORA MÉDICA</option>
+        <option value="HORA EXTRA" @if($request->working_day_type == "HORA EXTRA") selected @endif>HORA EXTRA</option>
+        <option value="TURNO EXTRA" @if($request->working_day_type == "TURNO EXTRA") selected @endif>TURNO EXTRA</option>
+        <option value="TURNO DE REEMPLAZO" @if($request->working_day_type == "TURNO DE REEMPLAZO") selected @endif>TURNO DE REEMPLAZO</option>
+      </select>
     </div>
-    <select class="form-control selectpicker" data-live-search="true" name="working_day_type" data-size="5">
-      <option value="">Todos</option>
-      <option value="DIURNO" @if($request->working_day_type == "DIURNO") selected @endif>DIURNO</option>
-      <option value="TERCER TURNO" @if($request->working_day_type == "TERCER TURNO") selected @endif>TERCER TURNO</option>
-      <option value="TERCER TURNO - MODIFICADO" @if($request->working_day_type == "TERCER TURNO - MODIFICADO") selected @endif>TERCER TURNO - MODIFICADO</option>
-      <option value="CUARTO TURNO" @if($request->working_day_type == "CUARTO TURNO") selected @endif>CUARTO TURNO</option>
-      <option value="CUARTO TURNO - MODIFICADO" @if($request->working_day_type == "CUARTO TURNO - MODIFICADO") selected @endif>CUARTO TURNO - MODIFICADO</option>
-      <option value="DIURNO PASADO A TURNO" @if($request->working_day_type == "DIURNO PASADO A TURNO") selected @endif>DIURNO PASADO A TURNO</option>
-      <option value="HORA MÉDICA" @if($request->working_day_type == "HORA MÉDICA") selected @endif>HORA MÉDICA</option>
-      <option value="HORA EXTRA" @if($request->working_day_type == "HORA EXTRA") selected @endif>HORA EXTRA</option>
-      <option value="TURNO EXTRA" @if($request->working_day_type == "TURNO EXTRA") selected @endif>TURNO EXTRA</option>
-      <option value="TURNO DE REEMPLAZO" @if($request->working_day_type == "TURNO DE REEMPLAZO") selected @endif>TURNO DE REEMPLAZO</option>
-    </select>
 
-    <div class="input-group-prepend">
-      <span class="input-group-text">Establecimiento</span>
+    <div class="form-group col-md-5">
+      <label>Establecimiento</label>
+      <select class="form-control" data-live-search="true" name="establishment_id" data-size="5">
+        <option value=""></option>
+        @if($establishments)
+        @foreach($establishments as $key => $establishment)
+        <option value="{{$establishment->id}}" {{ (old('establishment_id')==$establishment->id)?'selected':''}}>{{$establishment->name}}</option>
+        @endforeach
+        @endif
+
+      </select>
     </div>
-    <select class="form-control selectpicker" data-live-search="true" name="establishment_id" data-size="5">
-      <option value=""></option>
-      @if($establishments)
-      @foreach($establishments as $key => $establishment)
-      <option value="{{$establishment->id}}" {{ (old('establishment_id')==$establishment->id)?'selected':''}}>{{$establishment->name}}</option>
-      @endforeach
-      @endif
-
-    </select>
 
 
 
-    <div class="input-group-prepend">
-      <span class="input-group-text">Centro de Responsabilidad</span>
+    <div class="form-group col-md-5">
+      <label>Centro de Responsabilidad</label>
+      <select class="form-control" data-live-search="true" name="responsability_center_ou_id" data-size="5">
+        <option value=""></option>
+        @if($responsabilityCenters)
+        @foreach($responsabilityCenters as $key => $responsabilityCenter)
+        <option value="{{$responsabilityCenter->id}}" {{ (old('responsability_center_ou_id')==$responsabilityCenter->id)?'selected':''}}>{{$responsabilityCenter->name}}</option>
+        @endforeach
+        @endif
+
+      </select>
     </div>
-    <select class="form-control selectpicker" data-live-search="true" name="responsability_center_ou_id" data-size="5">
-      <option value=""></option>
-      @if($responsabilityCenters)
-      @foreach($responsabilityCenters as $key => $responsabilityCenter)
-      <option value="{{$responsabilityCenter->id}}" {{ (old('responsability_center_ou_id')==$responsabilityCenter->id)?'selected':''}}>{{$responsabilityCenter->name}}</option>
-      @endforeach
-      @endif
 
-    </select>
-
-    <div class="input-group-append">
-      <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+    <div class="form-group col-md-2">
+      <label>&nbsp;</label>
+      <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
     </div>
 
 
@@ -90,7 +91,7 @@
 </form>
 
 
-<table class="table table-sm table-bordered table-stripped" id="tabla_rechazado">
+<table class="table table-sm table-bordered table-responsive table-stripped" id="tabla_rechazado">
   <tr>
     <th></th>
     <th>Id</th>

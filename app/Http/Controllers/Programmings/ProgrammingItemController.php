@@ -22,7 +22,7 @@ class ProgrammingItemController extends Controller
 
         $programming = Programming::whereId($request->programming_id)
             ->when(!$listTracer && !$activityFilter && !$cycleFilter, function ($q){
-                return $q->with('items.activityItem', 'items.reviewItems', 'items.professionalHour.professional', 'establishment');
+                return $q->with('items.activityItem', 'items.reviewItems', 'items.professionalHour.professional', 'establishment', 'pendingItems');
             })
             ->when($listTracer || $activityFilter || $cycleFilter, function ($q) use ($listTracer, $activityFilter, $cycleFilter) {
                 return $q->whereHas('items.activityItem', $filter = function($q2) use ($listTracer, $activityFilter, $cycleFilter) {
@@ -33,7 +33,7 @@ class ProgrammingItemController extends Controller
                             })->when($cycleFilter != null, function($q3) use ($cycleFilter){
                                 return $q3->where('vital_cycle', $cycleFilter);
                             });
-                })->with(['items.activityItem' => $filter, 'items.reviewItems', 'items.professionalHour.professional', 'establishment'])->get();
+                })->with(['items.activityItem' => $filter, 'items.reviewItems', 'items.professionalHour.professional', 'establishment', 'pendingItems'])->get();
              })
             ->first();
 
