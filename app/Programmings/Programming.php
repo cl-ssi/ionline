@@ -32,6 +32,10 @@ class Programming extends Model
         return $this->belongsTo('App\Establishment');
     }
 
+    public function pendingItems(){
+        return $this->belongsToMany(ActivityItem::class, 'pro_programming_activity_item')->withPivot('requested_by')->whereNull('pro_programming_activity_item.deleted_at')->withTimestamps()->using(ProgrammingActivityItem::class);
+    }
+
     public function countTotalReviewsBy($status) {
         $total=0;
         foreach($this->items as $item){
