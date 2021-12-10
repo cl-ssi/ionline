@@ -27,7 +27,7 @@ class RequestReplacementStaff extends Model
     }
 
     public function legalQualityManage() {
-        return $this->belongsTo('App\Models\ReplacementStaff\legalQualityManage');
+        return $this->belongsTo('App\Models\ReplacementStaff\LegalQualityManage');
     }
 
     public function fundamentManage() {
@@ -35,7 +35,7 @@ class RequestReplacementStaff extends Model
     }
 
     public function fundamentDetailManage() {
-        return $this->belongsTo('App\Models\ReplacementStaff\fundamentDetailManage');
+        return $this->belongsTo('App\Models\ReplacementStaff\FundamentDetailManage');
     }
 
     public function user() {
@@ -78,10 +78,10 @@ class RequestReplacementStaff extends Model
           case 'diurnal':
             return 'Diurno';
             break;
-          case 'third_shift':
+          case 'third shift':
             return 'Tercer Turno';
             break;
-          case 'fourth_shift':
+          case 'fourth shift':
             return 'Cuarto Turno';
             break;
           case 'other':
