@@ -2,6 +2,28 @@
 
 @section('title', 'Lista de Items')
 
+@section('custom_css')
+<style>
+.modal {
+  padding: 0 !important;
+}
+.modal .modal-dialog {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  margin: 0;
+}
+.modal .modal-content {
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+}
+.modal .modal-body {
+  overflow-y: auto;
+}
+</style>
+@endsection
+
 @section('content')
 
 @include('programmings/nav')
@@ -37,24 +59,27 @@
                     @csrf
                     <input type="hidden" name="programming_id" value="{{$programming->id}}">
                     <div class="form-row">
-                        <div class="form-group col-md-11">
-                            <select style="font-size:60%;" name="pendingItemSelectedId" id="pendingItem" class="form-control selectpicker " data-live-search="true" title="Seleccione actividad" data-width="100%" required>
+                        <div class="form-group col-md-12">
+                            <select style="font-size:70%;" name="pendingItemSelectedId" id="pendingItem" class="form-control selectpicker " data-live-search="true" title="Seleccione actividad" data-width="100%" required>
                                 @foreach($pendingActivities as $activity)
-                                    <option style="font-size:60%;" value="{{ $activity->id }}">
-                                        {{ $activity->tracer }} - 
-                                        {{ $activity->activity_name }} - 
-                                        {{ $activity->def_target_population }} - 
-                                        {{ $activity->professional }}
+                                    <option style="font-size:70%;" value="{{ $activity->id }}">
+                                        {{ Str::limit($activity->tracer.' - '.$activity->activity_name.' - '.$activity->def_target_population.' - '.$activity->professional, 300, '(...)') }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-md-1">
-                            <button type="submit" class="btn btn-primary">Agregar</button>
+                    </div>
+                    <div class="form-row">
+                        <div class="input-group mb-3">
+                            <textarea name="observation" class="form-control custom-control" rows="2" style="resize:none" placeholder="Ingrese observaciones (opcional)"></textarea>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary float-right">Agregar</button>
+                            </div>
                         </div>
                     </div>
                     </form>
                     @endcan
+                    <div class="table-responsive">
                     <table class="table center table-striped table-sm table-bordered table-condensed fixed_headers table-hover">
                         <thead class="small" style="font-size:60%;">
                             <th class="text-center align-middle">T</th>
@@ -63,7 +88,8 @@
                             <th class="text-center align-middle">ACCIÓN</th>
                             <th class="text-center align-middle">PRESTACION O ACTIVIDAD</th>
                             <th class="text-center align-middle">DEF. POB. OBJETIVO</th>
-                            <th class="text-center align-middle">FUNCIONARIO  QUE OTORGA LA PRESTACIÓN</th>
+                            <th class="text-center align-middle">PROFESIONAL QUE OTORGA LA PRESTACIÓN</th>
+                            <th class="text-center align-middle">OBSERVACIONES</th>
                             <th class="text-center align-middle">SOLICITADO POR</th>
                             @can('ProgrammingItem: evaluate')<th class="text-center align-middle">ACCIONES</th>@endcan
                         </thead>
@@ -77,6 +103,20 @@
                                 <td class="text-center align-middle">{{ $item->activity_name }}</td>
                                 <td class="text-center align-middle">{{ $item->def_target_population }}</td>
                                 <td class="text-center align-middle">{{ $item->professional }}</td>
+                                <td class="text-center align-middle">{!! $item->pivot->observation !!}
+                                {{--
+                                @can('ProgrammingItem: evaluate')
+                                <form id="edit-item-{{$item->id}}" action="{{ route('pendingitems.update', $item) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="programming_id" value="{{$programming->id}}">
+                                    <button type="submit" title="Editar observaciones" class="float-right" style="border: none; background-color:transparent;">
+                                        <i class="fas fa-edit fa-lg text-warning"></i>
+                                    </button>
+                                </form>
+                                @endcan
+                                --}}
+                                </td>
                                 <td class="text-center align-middle">{{ $item->pivot->requestedBy->fullName ?? '' }}</td>
                                 @can('ProgrammingItem: evaluate')
                                 <td class="text-center align-middle">
@@ -84,7 +124,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <input type="hidden" name="programming_id" value="{{$programming->id}}">
-                                    <button type="submit" title="delete" style="border: none; background-color:transparent;">
+                                    <button type="submit" title="Eliminar actividad pendiente" style="border: none; background-color:transparent;">
                                         <i class="fas fa-trash fa-lg text-danger"></i>
                                     </button>
                                 </form>
@@ -92,11 +132,13 @@
                                 @endcan
                             </tr>
                             @empty
-                            <td class="text-center align-middle" colspan="9"><br><br>No hay actividades pendientes<br><br><br></td>
+                            <td class="text-center align-middle" colspan="10"><br><br>No hay actividades pendientes<br><br><br></td>
                             @endforelse
 
                         </tbody>
                     </table>
+                    </div>
+                    <br><br>
                 </div>
             </div>
         </div>
@@ -507,9 +549,6 @@
 
 <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>  
 <script>
-    $('#exampleModal').on('shown', function(){
-        $('.selectpicker').selectpicker('refresh');
-    });
     function tableExcel(type, fn, dl) {
           var elt = document.getElementById('tblData');
           const filename = 'Informe_HorasDirectas'

@@ -13,7 +13,7 @@ class ProgrammingActivityItem extends Pivot
     protected $table = 'pro_programming_activity_item';
 
     protected $fillable = [
-        'programming_id', 'activity_item_id', 'requested_by', 'deleted_at'
+        'programming_id', 'activity_item_id', 'requested_by', 'observation', 'deleted_at'
     ];
 
     public function requestedBy() {

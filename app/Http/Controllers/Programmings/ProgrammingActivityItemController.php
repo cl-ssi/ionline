@@ -12,7 +12,7 @@ class ProgrammingActivityItemController extends Controller
     public function store(Request $request)
     {
         $programming = Programming::find($request->programming_id);
-        $programming->pendingItems()->attach($request->pendingItemSelectedId, ['requested_by' => auth()->id()]);
+        $programming->pendingItems()->attach($request->pendingItemSelectedId, ['requested_by' => auth()->id(), 'observation' => $request->observation]);
         session()->flash('info', 'Se agrega actividad pendiente satisfactoriamente.');
         return redirect()->back();
     }
