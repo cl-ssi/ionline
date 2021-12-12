@@ -33,7 +33,7 @@ class Programming extends Model
     }
 
     public function pendingItems(){
-        return $this->belongsToMany(ActivityItem::class, 'pro_programming_activity_item')->withPivot('requested_by')->whereNull('pro_programming_activity_item.deleted_at')->withTimestamps()->using(ProgrammingActivityItem::class);
+        return $this->belongsToMany(ActivityItem::class, 'pro_programming_activity_item')->withPivot('requested_by', 'observation')->whereNull('pro_programming_activity_item.deleted_at')->withTimestamps()->using(ProgrammingActivityItem::class);
     }
 
     public function countTotalReviewsBy($status) {

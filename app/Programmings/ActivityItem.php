@@ -22,6 +22,6 @@ class ActivityItem extends Model
     }
 
     public function programming(){
-        return $this->belongsToMany(Programming::class, 'pro_programming_activity_item')->withPivot('requested_by')->whereNull('pro_programming_activity_item.deleted_at')->withTimestamps()->using(ProgrammingActivityItem::class);
+        return $this->belongsToMany(Programming::class, 'pro_programming_activity_item')->withPivot('requested_by', 'observation')->whereNull('pro_programming_activity_item.deleted_at')->withTimestamps()->using(ProgrammingActivityItem::class);
     }
 }
