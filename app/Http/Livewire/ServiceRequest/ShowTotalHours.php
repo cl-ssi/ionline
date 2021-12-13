@@ -276,11 +276,24 @@ class ShowTotalHours extends Component
               }
               // dd($this->totalHoursDay);
               $totalAmountDayRefund = $this->totalHoursDay * $value;
-              $totalAmountNight = $this->totalHoursNight * $value * 1.5;
-              $this->totalAmount = ($totalAmountNight + $totalAmountDayRefund);
 
+              //cuando es servicio de emergencia hospitalaria, no se multiplica por 1.5
+              if ($this->fulfillment->serviceRequest->responsability_center_ou_id == 138) {
+                $totalAmountNight = $this->totalHoursNight * $value;
+              }else{
+                $totalAmountNight = $this->totalHoursNight * $value * 1.5;
+              }
+
+              $this->totalAmount = ($totalAmountNight + $totalAmountDayRefund);
               $this->totalHoursDay = $this->totalHoursDay . " x " . $value;
-              $this->totalHoursNight = $this->totalHoursNight . " x 1.5 x " . $value;
+
+              //cuando es servicio de emergencia hospitalaria, no se multiplica por 1.5
+              if ($this->fulfillment->serviceRequest->responsability_center_ou_id == 138) {
+                $this->totalHoursNight = $this->totalHoursNight . " x " . $value;
+              }else{
+                $this->totalHoursNight = $this->totalHoursNight . " x 1.5 x " . $value;
+              }
+
 
               break;
 
