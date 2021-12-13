@@ -279,7 +279,7 @@ class ShowTotalHours extends Component
 
               //cuando es servicio de emergencia hospitalaria, no se multiplica por 1.5
               if ($this->fulfillment->serviceRequest->responsability_center_ou_id == 138) {
-                // code...
+                $totalAmountNight = $this->totalHoursNight * $value;
               }else{
                 $totalAmountNight = $this->totalHoursNight * $value * 1.5;
               }
