@@ -83,12 +83,12 @@
                     <table class="table center table-striped table-sm table-bordered table-condensed fixed_headers table-hover">
                         <thead class="small" style="font-size:60%;">
                             <th class="text-center align-middle">T</th>
-                            <th class="text-center align-middle">Nº Trazadora</th>
+                            <th class="text-center align-middle">Nº T</th>
                             <th class="text-center align-middle">CICLO</th>
                             <th class="text-center align-middle">ACCIÓN</th>
                             <th class="text-center align-middle">PRESTACION O ACTIVIDAD</th>
                             <th class="text-center align-middle">DEF. POB. OBJETIVO</th>
-                            <th class="text-center align-middle">PROFESIONAL QUE OTORGA LA PRESTACIÓN</th>
+                            <th class="text-center align-middle">PROF. QUE OTORGA LA PRESTACIÓN</th>
                             <th class="text-center align-middle">OBSERVACIONES</th>
                             <th class="text-center align-middle">SOLICITADO POR</th>
                             @can('ProgrammingItem: evaluate')<th class="text-center align-middle">ACCIONES</th>@endcan
@@ -103,19 +103,28 @@
                                 <td class="text-center align-middle">{{ $item->activity_name }}</td>
                                 <td class="text-center align-middle">{{ $item->def_target_population }}</td>
                                 <td class="text-center align-middle">{{ $item->professional }}</td>
-                                <td class="text-center align-middle">{!! $item->pivot->observation !!}
-                                {{--
-                                @can('ProgrammingItem: evaluate')
-                                <form id="edit-item-{{$item->id}}" action="{{ route('pendingitems.update', $item) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="programming_id" value="{{$programming->id}}">
-                                    <button type="submit" title="Editar observaciones" class="float-right" style="border: none; background-color:transparent;">
+                                <td class="text-center align-middle w-25">
+                                    <div class="editable-txt">{!! $item->pivot->observation !!} 
+                                    @can('ProgrammingItem: evaluate')
+                                    <button id="btn_{{$item->pivot->id}}" title="Editar observaciones" class="float-right edit-btn" style="border: none; background-color:transparent;">
                                         <i class="fas fa-edit fa-lg text-warning"></i>
                                     </button>
-                                </form>
-                                @endcan
-                                --}}
+                                    @endcan
+                                    </div>
+
+                                    @can('ProgrammingItem: evaluate')
+                                    <form id="form_{{$item->pivot->id}}" class="editable-form" action="{{ route('pendingitems.update', $item->pivot->id) }}" method="POST">
+                                        @csrf
+                                        @method('PUT')
+                                        <textarea name="observation" rows="2" class="w-100">{!! $item->pivot->observation !!}</textarea><br>
+                                        <button type="reset" title="Cancelar" class="float-right edit-btn" style="border: none; background-color:transparent;">
+                                            <i class="fas fa-times fa-lg text-danger"></i>
+                                        </button> 
+                                        <button type="submit" title="Guardar" class="float-right" style="border: none; background-color:transparent;">
+                                            <i class="fas fa-check fa-lg text-success"></i>
+                                        </button>
+                                    </form>
+                                    @endcan
                                 </td>
                                 <td class="text-center align-middle">{{ $item->pivot->requestedBy->fullName ?? '' }}</td>
                                 @can('ProgrammingItem: evaluate')
@@ -546,7 +555,6 @@
 @endsection
 
 @section('custom_js')
-
 <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>  
 <script>
     function tableExcel(type, fn, dl) {
@@ -575,5 +583,13 @@
             XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
             XLSX.writeFile(wb, `${filename}.xlsx`)
         }
+    
+    $(document).ready(function(){
+        $('.editable-form').hide();
+        $('.edit-btn').click(function() {
+            $(this).closest('td').find('.editable-form').toggle();
+            $(this).closest('td').find('.editable-txt').toggle();
+        });  
+    });  
 </script>
 @endsection
