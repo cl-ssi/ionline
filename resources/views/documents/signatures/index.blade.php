@@ -64,6 +64,8 @@
             <th scope="col">
                 <div class="mx-4"></div>
             </th>
+
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
@@ -122,6 +124,11 @@
                         class="fas fa-paperclip" title="anexo"></i>&nbsp
                 </a>
                 @endforeach
+            </td>
+            <td>
+                @if($pendingSignaturesFlow->signature->url)
+                    <a href="{{$pendingSignaturesFlow->signature->url}}" target="_blank"> <i class="fa fa-link"></i> </a>
+                @endif
             </td>
         </tr>
         {{--Modal rechazo--}}
@@ -186,6 +193,7 @@
             <th scope="col">
                 <div class="mx-4"></div>
             </th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
@@ -235,6 +243,11 @@
                         class="fas fa-paperclip" title="anexo"></i>&nbsp
                 </a>
                 @endforeach
+                @endif
+            </td>
+            <td>
+                @if($signedSignaturesFlow->signature->url)
+                    <a href="{{$pendingSignaturesFlow->signature->url}}" target="_blank"> <i class="fa fa-link"></i> </a>
                 @endif
             </td>
         </tr>
