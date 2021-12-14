@@ -46,6 +46,14 @@ class PurchasingProcess extends Model
         'status', 'user_id'
     ];
 
+    public function internalPurchaseOrder(){
+        return $this->hasMany(InternalPurchaseOrder::class, 'purchasing_process_id');
+    }
+
+    public function purchaseMechanism(){
+      return $this->belongsTo(PurchaseMechanism::class, 'purchase_mechanism_id');
+    }
+
     // public function purchaseUnit(){
     //   return $this->belongsTo(PurchaseUnit::class, 'purchase_unit_id');
     // }

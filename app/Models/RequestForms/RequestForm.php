@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use App\User;
 use App\Rrhh\OrganizationalUnit;
+use App\Models\RequestForms\PurchasingProcess;
 use App\Models\RequestForms\ItemRequestForm;
 use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\PurchaseType;
@@ -97,6 +98,10 @@ class RequestForm extends Model implements Auditable
 
     public function eventRequestForms() {
         return $this->hasMany(EventRequestForm::class);
+    }
+
+    public function purchasingProcesses() {
+        return $this->hasMany(PurchasingProcess::class);
     }
 
     /*****Elimina RequestForm y tablas relacionadas en cadena*****/
