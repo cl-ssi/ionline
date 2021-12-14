@@ -55,12 +55,13 @@ class PurchasingProcessController extends Controller
         $purchasingProcess->save();
 
         foreach($request->item_id as $item){
-            $internalPurchaseOrder                        = new InternalPurchaseOrder();
-            $internalPurchaseOrder->date                  = Carbon::now();
-            $internalPurchaseOrder->supplier_id           = $item;
-            $internalPurchaseOrder->payment_condition     = $request->payment_condition;
-            $internalPurchaseOrder->user_id               = Auth::user()->id;
-            $internalPurchaseOrder->purchasing_process_id = $purchasingProcess->id;
+            $internalPurchaseOrder                          = new InternalPurchaseOrder();
+            $internalPurchaseOrder->date                    = Carbon::now();
+            $internalPurchaseOrder->supplier_id             = $item;
+            $internalPurchaseOrder->payment_condition       = $request->payment_condition;
+            $internalPurchaseOrder->user_id                 = Auth::user()->id;
+            $internalPurchaseOrder->purchasing_process_id   = $purchasingProcess->id;
+            $internalPurchaseOrder->estimated_delivery_date = $request->estimated_delivery_date;
             $internalPurchaseOrder->save();
         }
 

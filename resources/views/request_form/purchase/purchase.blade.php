@@ -85,13 +85,13 @@
 
 <br>
 
-@if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 2)
-
 <div class="row">
     <div class="col-sm">
         <div class="table-responsive">
             <h6><i class="fas fa-shopping-cart"></i> Lista de Bienes y/o Servicios:</h6>
+            @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 2)
             <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_internal_oc', $requestForm) }}">
+            @endif
             @csrf
             @method('POST')
 
@@ -109,6 +109,7 @@
                         <th>Valor U.</th>
                         <th>Impuestos</th>
                         <th>Total Item</th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -137,6 +138,9 @@
                                 </div>
                             </fieldset>
                         </td>
+                        <td align="center">
+
+                        </td>
                     </tr>
                   @endforeach
                 </tbody>
@@ -155,19 +159,43 @@
 
 <br>
 
+@if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 2)
+
 <div class="card">
     <div class="card-header">
         Orden de Compra Interna
     </div>
     <div class="card-body">
       <div class="form-row">
-          <fieldset class="form-group col-sm-3">
+          <fieldset class="form-group col-sm-2">
               <label for="for_date">Fecha</label>
-              <input type="date" class="form-control" id="for_date" name="date"
+              <input type="date" class="form-control form-control-sm" id="for_date" name="date"
                   value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" readonly>
           </fieldset>
 
-          <fieldset class="form-group col-5">
+          <fieldset class="form-group col-sm-3">
+              <label>Mecanismo de Compra:</label><br>
+              <select wire:model="purchaseMechanism" name="purchaseMechanism" wire:change="changePurchaseMechanism" class="form-control form-control-sm" required>
+                  <option value="">Seleccione...</option>
+                    {{--@foreach($lstPurchaseMechanism as $val)
+                      <option value="{{$val->id}}">{{$val->name}}</option>
+                    @endforeach--}}
+              </select>
+          </fieldset>
+
+          <fieldset class="form-group col-sm-3">
+              <label>Tipo de Compra:</label><br>
+              <select wire:model.defer="purchaseType" wire:click="resetError" name="purchaseType" class="form-control form-control-sm" required>
+                  <option value="">Seleccione...</option>
+                    {{--@foreach($lstPurchaseType as $type)
+                      <option value="{{$type->id}}">{{$type->name}}</option>
+                    @endforeach--}}
+              </select>
+          </fieldset>
+
+      </div>
+      <div class="form-row">
+          <fieldset class="form-group col-sm-4">
               <label for="for_gender" >Proveedor</label>
               <select name="gender" id="for_gender" class="form-control" required>
                   <option value="">Seleccione...</option>
@@ -177,10 +205,16 @@
               </select>
           </fieldset>
 
-          <fieldset class="form-group col-4">
+          <fieldset class="form-group col-2">
               <label for="for_date">Condición de Pago</label>
               <input type="number" class="form-control" id="for_payment_condition" name="payment_condition"
                   value="">
+          </fieldset>
+
+          <fieldset class="form-group col-sm-3">
+              <label for="for_estimated_delivery_date">Fecha</label>
+              <input type="date" class="form-control" id="for_estimated_delivery_date" name="estimated_delivery_date"
+                  value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
           </fieldset>
       </div>
 
@@ -189,6 +223,75 @@
       </button>
 
       </form>
+    </div>
+</div>
+
+<br>
+
+<div class="row">
+    <div class="col-sm">
+        <div class="table-responsive">
+            <h6><i class="fas fa-shopping-cart"></i> OC Asociadas al Proceso de Compra:</h6>
+
+            <table class="table table-sm table-striped table-bordered small">
+                <thead class="text-center">
+                    <tr>
+                        <th>Item</th>
+                        <th>Mecanismo de Compra</th>
+                        <!-- <th>Cod.Presup.</th>
+                        <th>Artículo</th>
+                        <th>UM</th>
+                        <th>Especificaciones Técnicas</th>
+                        <th>Archivo</th>
+                        <th>Cantidad</th>
+                        <th>Valor U.</th>
+                        <th>Impuestos</th>
+                        <th>Total Item</th>
+                        <th></th>
+                        <th></th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($requestForm->purchasingProcesses as $key => $purchasingProcess)
+                    <tr>
+                        <td>{{ $key+1 }}</td>
+                        <td>{{ $purchasingProcess->purchaseMechanism->name }}</td>
+                        <!-- <td>{{ $item->budgetItem()->first()->fullName() }}</td>
+                        <td>{{ $item->article }}</td>
+                        <td>{{ $item->unit_of_measurement }}</td>
+                        <td>{{ $item->specification }}</td>
+                        <td align="center">
+                            <a href="{{ route('request_forms.show_item_file', $item) }}" target="_blank">
+                              <i class="fas fa-file"></i>
+                        </td>
+                        <td align="right">{{ $item->quantity }}</td>
+                        <td align="right">${{ number_format($item->unit_value,0,",",".") }}</td>
+                        <td>{{ $item->tax }}</td>
+                        <td align="right">${{ number_format($item->expense,0,",",".") }}</td>
+                        <td align="center">
+                            <fieldset class="form-group">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="item_id[]" onclick="disabledSaveBtn()"
+                                      id="for_item_id" value="{{ $item->id }}">
+                                </div>
+                            </fieldset>
+                        </td>
+                        <td align="center">
+
+                        </td> -->
+                    </tr>
+                  @endforeach
+                </tbody>
+                <tfoot>
+                    <!-- <tr>
+                      <td colspan="8"></td>
+                      <th class="text-right">Valor Total</td>
+                      <th class="text-right">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
+                    </tr> -->
+
+                </tfoot>
+            </table>
+        </div>
     </div>
 </div>
 
