@@ -11,24 +11,6 @@ use Illuminate\Http\Request;
 
 class ProgrammingActivityItemController extends Controller
 {
-    // public function index(Programming $programming)
-    // {
-    //     $q = ActivityItem::whereHas('program', function($q) use ($programming) {
-    //         return $q->where('year', $programming->year);
-    //     });
-
-    //     $programActivities = $q->get(['id', 'activity_name', 'tracer', 'def_target_population', 'professional']);
-
-    //     $scheduledActivities = collect();
-    //     foreach($programming->items as $item)
-    //         $scheduledActivities->add(new ActivityItem(['id' => $item->activity_id, 'activity_name' => $item->activity_name]));
-        
-    //     $diff = $programActivities->diff($scheduledActivities);
-    //     $pendingActivities = $diff->all();
-
-
-    // }
-
     public function store(Request $request)
     {
         $programming = Programming::find($request->programming_id);
