@@ -70,6 +70,13 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary float-right btn-sm" data-toggle="modal" data-target="#exampleModal">
+            Editar Mecanismo de Compra
+        </button>
+
+        @include('request_form.purchase.modals.select_purchase_mechanism')
     </div>
     <div class="col-sm-4">
         <h6><i class="fas fa-paperclip"></i> Adjuntos</h6>
@@ -173,31 +180,9 @@
                   value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" readonly>
           </fieldset>
 
-          <fieldset class="form-group col-sm-3">
-              <label>Mecanismo de Compra:</label><br>
-              <select wire:model="purchaseMechanism" name="purchaseMechanism" wire:change="changePurchaseMechanism" class="form-control form-control-sm" required>
-                  <option value="">Seleccione...</option>
-                    {{--@foreach($lstPurchaseMechanism as $val)
-                      <option value="{{$val->id}}">{{$val->name}}</option>
-                    @endforeach--}}
-              </select>
-          </fieldset>
-
-          <fieldset class="form-group col-sm-3">
-              <label>Tipo de Compra:</label><br>
-              <select wire:model.defer="purchaseType" wire:click="resetError" name="purchaseType" class="form-control form-control-sm" required>
-                  <option value="">Seleccione...</option>
-                    {{--@foreach($lstPurchaseType as $type)
-                      <option value="{{$type->id}}">{{$type->name}}</option>
-                    @endforeach--}}
-              </select>
-          </fieldset>
-
-      </div>
-      <div class="form-row">
-          <fieldset class="form-group col-sm-4">
+          <fieldset class="form-group col-sm-6">
               <label for="for_gender" >Proveedor</label>
-              <select name="gender" id="for_gender" class="form-control" required>
+              <select name="gender" id="for_gender" class="form-control form-control-sm" required>
                   <option value="">Seleccione...</option>
                   @foreach($suppliers as $supplier)
                       <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
@@ -207,14 +192,14 @@
 
           <fieldset class="form-group col-2">
               <label for="for_date">Condición de Pago</label>
-              <input type="number" class="form-control" id="for_payment_condition" name="payment_condition"
+              <input type="number" class="form-control form-control-sm" id="for_payment_condition" name="payment_condition"
                   value="">
           </fieldset>
 
-          <fieldset class="form-group col-sm-3">
+          <fieldset class="form-group col-sm-2">
               <label for="for_estimated_delivery_date">Fecha</label>
-              <input type="date" class="form-control" id="for_estimated_delivery_date" name="estimated_delivery_date"
-                  value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
+              <input type="date" class="form-control form-control-sm" id="for_estimated_delivery_date" name="estimated_delivery_date"
+                  value="">
           </fieldset>
       </div>
 
