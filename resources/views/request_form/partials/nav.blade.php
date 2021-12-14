@@ -19,7 +19,7 @@
     </div>
   </li>
 
-  {{--@if(Auth()->user()->organizational_unit_id == 37)
+  @if(Auth()->user()->organizational_unit_id == 37)
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-file-alt"></i> Abastecimiento
@@ -29,7 +29,7 @@
         <!-- <div class="dropdown-divider"></div> -->
       </div>
     </li>
-  @endif--}}
+  @endif
 
   <!-- <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

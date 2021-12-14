@@ -134,6 +134,7 @@
                   <th scope="col">Usuario Rechazo</th>
                   <th scope="col">Comentario</th>
                   <th>Estado</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody class="small">
@@ -167,6 +168,10 @@
                                       @endif
                                   @endforeach
                               </td>
+                            <td>
+                              <a href="{{ route('request_forms.create_form_document', $requestForm) }}" class="btn btn-outline-secondary btn-sm" title="Formulario" target="_blank">
+                              <i class="fas fa-file-alt"></i>
+                            </td>
                         </tr>
                   @endforeach
               </tbody>
