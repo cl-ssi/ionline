@@ -38,8 +38,14 @@ class PurchasingProcessController extends Controller
 
     public function purchase(RequestForm $requestForm)
     {
-        $suppliers = Supplier::orderBy('name','asc')->get();
-        return view('request_form.purchase.purchase', compact('requestForm', 'suppliers'));
+        if(Auth()->user()->organizational_unit_id == 37){
+            $suppliers = Supplier::orderBy('name','asc')->get();
+            return view('request_form.purchase.purchase', compact('requestForm', 'suppliers'));
+        }
+        else{
+            session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
+            return redirect()->route('request_forms.my_forms');
+        }
     }
 
     public function create_internal_oc(Request $request, RequestForm $requestForm)
