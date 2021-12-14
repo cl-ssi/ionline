@@ -32,7 +32,22 @@
         </tr>
     </thead>
     <tbody style="font-size:70%;">
-     @foreach($reviewItems as $reviewItem)
+    @foreach($pendingItems as $pendingItem)
+        <tr class="small">
+            <td class="text-center align-middle"></td>
+            <td class="text-center align-middle">{{ $pendingItem->activityItem->int_code ?? '' }}</td>
+            <td class="text-center align-middle">{{ $pendingItem->activityItem->activity_name ?? '' }}</td>
+            <td class="text-center align-middle">{{ $pendingItem->activityItem->vital_cycle ?? '' }}</td>
+            <td class="text-center align-middle">{{ $pendingItem->activityItem->action_type ?? '' }}</td>
+            <td class="text-center align-middle">{{ $pendingItem->activityItem->def_target_population ?? '' }}</td>
+            <td class="text-center align-middle">No se ha programado aún para su evaluación</td>
+            <td class="text-center align-middle"></td>
+            <td class="text-center align-middle">{{ $pendingItem->observation }}</td>
+            <td class="text-center align-middle">{{ $pendingItem->requestedBy->fullName ?? '' }}</td>
+            <td class="text-center align-middle"><a href="{{ route('programmingitems.create', ['programming_id' => $pendingItem->programming_id, 'activity_search_id' => $pendingItem->activity_item_id]) }}" class="btn btb-flat btn-sm btn-light" title="Agregar item a la programación"><i class="fas fa-plus"></i></a></td>
+        </tr>
+    @endforeach
+    @foreach($reviewItems as $reviewItem)
         <tr class="small">
             <td class="text-center align-middle">{{ $reviewItem->id }}</td>
             <td class="text-center align-middle">{{ $reviewItem->programItem->activityItem->int_code ?? '' }}</td>
@@ -46,9 +61,9 @@
             <td class="text-center align-middle">{{ $reviewItem->user->fullName ?? '' }}</td>
             @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" ><a href="{{ route('reviewItems.index', ['programmingItem_id' => $reviewItem->programItem->id]) }}" class="btn btb-flat btn-sm btn-light"><i class="fas fa-clipboard-check"></i></a></td>
-        @endcan
+            @endcan
         </tr>
-        @endforeach
+    @endforeach
     </tbody>
 </table>
 

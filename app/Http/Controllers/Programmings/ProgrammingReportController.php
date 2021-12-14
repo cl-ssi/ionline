@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Programmings\ReviewItem;
+use App\Programmings\ProgrammingActivityItem;
 
 class ProgrammingReportController extends Controller
 {
@@ -98,6 +99,8 @@ class ProgrammingReportController extends Controller
                                     return $q->where('programming_id', $request->programming_id); 
                                  })->orderBy('id')->get();
 
-        return view('programmings/reports/reportObservation', compact('reviewItems'));
+        $pendingItems = ProgrammingActivityItem::with('programming', 'activityItem', 'requestedBy')->where('programming_id', $request->programming_id)->get();
+
+        return view('programmings/reports/reportObservation', compact('reviewItems', 'pendingItems'));
     }
 }

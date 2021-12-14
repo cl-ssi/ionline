@@ -16,6 +16,14 @@ class ProgrammingActivityItem extends Pivot
         'programming_id', 'activity_item_id', 'requested_by', 'observation', 'deleted_at', 'id'
     ];
 
+    public function programming() {
+        return $this->belongsTo(Programming::class);
+    }
+
+    public function activityItem() {
+        return $this->belongsTo(ActivityItem::class);
+    }
+
     public function requestedBy() {
         return $this->belongsTo(User::class, 'requested_by')->select(array('id', 'dv', 'name', 'fathers_family', 'mothers_family'));
     }
