@@ -171,7 +171,7 @@
           </tr>
           <tr>
               <th align="left">Solicitante</th>
-              <td colspan="2">{{ $requestForm->creator ? $requestForm->creator->FullName : 'Usuario eliminado' }}</td>
+              <td colspan="2">{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}</td>
           </tr>
           <tr>
               <th align="left">Nombre Administrador de Contrato</th>
@@ -180,8 +180,8 @@
           <tr>
               <th align="left">Teléfono del Administrador de Contrato</th>
               <td colspan="2">
-                {{ $requestForm->contractManager ? $requestForm->contractManager->telephones->first()->number : 'Usuario eliminado' }} -
-                {{ $requestForm->contractManager ? $requestForm->contractManager->telephones->first()->minsal : 'Usuario eliminado' }}
+                {{ $requestForm->contractManager->telephones->first() ? $requestForm->contractManager->telephones->first()->number : 'Sin teléfono asignado' }} -
+                {{ $requestForm->contractManager->telephones->first() ? $requestForm->contractManager->telephones->first()->minsal : 'Sin teléfono asignado' }}
               </td>
           </tr>
           <tr>
@@ -200,7 +200,6 @@
                 @else
                     -
                 @endif
-
               </td>
           </tr>
           <tr>
@@ -383,8 +382,10 @@
                   <td></td>
               </tr>
               <tr>
-                  <th align="left" style="width: 50%">COMPRADOR ASIGNADO: </th>
-                  <td>{{ $requestForm->supervisor->FullName }}</td>
+                  <th align="left" style="width: 50%">COMPRADOR(ES) ASIGNADO(S): </th>
+                  @foreach($requestForm->purchasers as $purchaser)
+                  <td>{{ $purchaser->FullName }}</td>
+                  @endforeach
               </tr>
           </tbody>
       </table>

@@ -100,7 +100,7 @@
                   </tr>
                   <tr class="d-flex">
                       <th class="text-muted col-3" scope="row">Comprador Asignado</th>
-                      <td class="col-9 font-weight-bold text-primary">{{ $requestForm->supervisor->fullName }}</td>
+                      <td class="col-9 font-weight-bold text-primary">{{ $requestForm->supervisor->fullName ?? '' }}</td>
                   </tr>
                   @endif
 
