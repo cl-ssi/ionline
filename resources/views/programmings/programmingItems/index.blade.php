@@ -377,9 +377,27 @@
         @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" >
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingitemsIndirect->id]) }}" class="btn btb-flat btn-sm btn-light">
-                    @if($programmingitemsIndirect->getCountReviewsBy('Not rectified') > 0)
+                    {{--@if($programmingitemsIndirect->getCountReviewsBy('Not rectified') > 0)
                     <i class="fas fa-clipboard-check text-danger"></i>
                     <span class="badge badge-danger ml-2 ">{{ $programmingitemsIndirect->getCountReviewsBy('Not rectified')}}</span>
+                    @else
+                    <i class="fas fa-clipboard-check "></i>
+                    <span class="badge badge-secondary ml-2 ">0</span>
+                    @endif--}}
+                    @if($programmingitemsIndirect->reviewItems->count() != 0)
+                        <i class="fas fa-clipboard-check text-secondary"></i>
+                        @if($programmingitemsIndirect->getCountReviewsBy('Not rectified') > 0)
+                        <span class="badge badge-danger opacity-1 ml-2 ">{{ $programmingitemsIndirect->getCountReviewsBy('Not rectified')}}</span>
+                        @endif
+                        @if($programmingitemsIndirect->getCountReviewsBy('Rectified') > 0)
+                        <span class="badge badge-success ml-2 ">{{ $programmingitemsIndirect->getCountReviewsBy('Rectified')}}</span>
+                        @endif
+                        @if($programmingitemsIndirect->getCountReviewsBy('Regularly rectified') > 0)
+                        <span class="badge badge-warning ml-2 ">{{ $programmingitemsIndirect->getCountReviewsBy('Regularly rectified')}}</span>
+                        @endif
+                        @if($programmingitemsIndirect->getCountReviewsBy('Accepted rectified') > 0)
+                        <span class="badge badge-primary ml-2 ">{{ $programmingitemsIndirect->getCountReviewsBy('Accepted rectified')}}</span>
+                        @endif
                     @else
                     <i class="fas fa-clipboard-check "></i>
                     <span class="badge badge-secondary ml-2 ">0</span>
@@ -489,9 +507,27 @@
         @can('ProgrammingItem: evaluate')
             <td class="text-center align-middle" >
                 <a href="{{ route('reviewItems.index', ['programmingItem_id' => $programmingItemworkshop->id]) }}" class="btn btb-flat btn-sm btn-light">
-                    @if($programmingItemworkshop->getCountReviewsBy('Not rectified') > 0)
+                    {{--@if($programmingItemworkshop->getCountReviewsBy('Not rectified') > 0)
                     <i class="fas fa-clipboard-check text-danger"></i>
                     <span class="badge badge-danger ml-2 ">{{ $programmingItemworkshop->getCountReviewsBy('Not rectified')}}</span>
+                    @else
+                    <i class="fas fa-clipboard-check "></i>
+                    <span class="badge badge-secondary ml-2 ">0</span>
+                    @endif--}}
+                    @if($programmingItemworkshop->reviewItems->count() != 0)
+                        <i class="fas fa-clipboard-check text-secondary"></i>
+                        @if($programmingItemworkshop->getCountReviewsBy('Not rectified') > 0)
+                        <span class="badge badge-danger opacity-1 ml-2 ">{{ $programmingItemworkshop->getCountReviewsBy('Not rectified')}}</span>
+                        @endif
+                        @if($programmingItemworkshop->getCountReviewsBy('Rectified') > 0)
+                        <span class="badge badge-success ml-2 ">{{ $programmingItemworkshop->getCountReviewsBy('Rectified')}}</span>
+                        @endif
+                        @if($programmingItemworkshop->getCountReviewsBy('Regularly rectified') > 0)
+                        <span class="badge badge-warning ml-2 ">{{ $programmingItemworkshop->getCountReviewsBy('Regularly rectified')}}</span>
+                        @endif
+                        @if($programmingItemworkshop->getCountReviewsBy('Accepted rectified') > 0)
+                        <span class="badge badge-primary ml-2 ">{{ $programmingItemworkshop->getCountReviewsBy('Accepted rectified')}}</span>
+                        @endif
                     @else
                     <i class="fas fa-clipboard-check "></i>
                     <span class="badge badge-secondary ml-2 ">0</span>
