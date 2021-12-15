@@ -9,6 +9,7 @@ use App\Models\RequestForms\RequestForm;
 use App\User;
 use App\Models\Parameters\Supplier;
 use App\Models\RequestForms\InternalPurchaseOrder;
+use App\Models\RequestForms\InternalPmItem;
 
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -63,12 +64,18 @@ class PurchasingProcessController extends Controller
         foreach($request->item_id as $item){
             $internalPurchaseOrder                          = new InternalPurchaseOrder();
             $internalPurchaseOrder->date                    = Carbon::now();
-            $internalPurchaseOrder->supplier_id             = $item;
+            $internalPurchaseOrder->supplier_id             = $request->supplier_id;
             $internalPurchaseOrder->payment_condition       = $request->payment_condition;
             $internalPurchaseOrder->user_id                 = Auth::user()->id;
             $internalPurchaseOrder->purchasing_process_id   = $purchasingProcess->id;
             $internalPurchaseOrder->estimated_delivery_date = $request->estimated_delivery_date;
             $internalPurchaseOrder->save();
+
+            $internalPmItem = new InternalPmItem();
+            $internalPmItem->internal_purchase_order_id = $internalPurchaseOrder->id;
+            $internalPmItem->item_id = $item;
+            $internalPmItem->save();
+
         }
 
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));

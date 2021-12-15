@@ -106,7 +106,7 @@
                 <thead class="text-center">
                     <tr>
                         <th>Item</th>
-                        <!-- <th>ID</th> -->
+                        <th>Estado</th>
                         <th>Cod.Presup.</th>
                         <th>Artículo</th>
                         <th>UM</th>
@@ -124,7 +124,7 @@
                     @foreach($requestForm->itemRequestForms as $key => $item)
                     <tr>
                         <td>{{ $key+1 }}</td>
-                        <!-- <td>{{$item->id}}</td> -->
+                        <td>{{ $item->status }}</td>
                         <td>{{ $item->budgetItem()->first()->fullName() }}</td>
                         <td>{{ $item->article }}</td>
                         <td>{{ $item->unit_of_measurement }}</td>
@@ -133,8 +133,14 @@
                             <a href="{{ route('request_forms.show_item_file', $item) }}" target="_blank">
                               <i class="fas fa-file"></i>
                         </td>
-                        <td align="right">{{ $item->quantity }}</td>
-                        <td align="right">${{ number_format($item->unit_value,0,",",".") }}</td>
+                        <td align="right">
+                          <input type="number" class="form-control form-control-sm" id="for_quantity" name="quantity[]"
+                              value="{{ $item->quantity }}">
+                        </td>
+                        <td align="right">
+                          <input type="number" class="form-control form-control-sm" id="for_unit_value" name="unit_value[]"
+                              value="{{ $item->unit_value }}">
+                        </td>
                         <td>{{ $item->tax }}</td>
                         <td align="right">${{ number_format($item->expense,0,",",".") }}</td>
                         <td align="center">
@@ -146,14 +152,18 @@
                             </fieldset>
                         </td>
                         <td align="center">
-
+                            <a href="">
+                              <span style="color: Tomato;">
+                                <i class="fas fa-times-circle"></i>
+                              </span>
+                            </a>
                         </td>
                     </tr>
                   @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
-                      <td colspan="8"></td>
+                      <td colspan="9"></td>
                       <th class="text-right">Valor Total</td>
                       <th class="text-right">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
                     </tr>
@@ -181,8 +191,8 @@
           </fieldset>
 
           <fieldset class="form-group col-sm-6">
-              <label for="for_gender" >Proveedor</label>
-              <select name="gender" id="for_gender" class="form-control form-control-sm" required>
+              <label for="for_supplier" >Proveedor</label>
+              <select name="supplier_id" id="for_supplier_id" class="form-control form-control-sm" required>
                   <option value="">Seleccione...</option>
                   @foreach($suppliers as $supplier)
                       <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
@@ -212,6 +222,10 @@
 </div>
 
 <br>
+
+@endif
+
+@if($requestForm->purchasingProcesses->count() > 0)
 
 <div class="row">
     <div class="col-sm">
