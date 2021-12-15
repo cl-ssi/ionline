@@ -4,6 +4,19 @@
 
 <link href="{{ asset('css/cu.min.css') }}" rel="stylesheet">
 
+<style>
+    .locallogin {
+        background-color: #e7e7e7; 
+        color: black;
+        border: none;
+        padding: 9px 30px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+    }
+</style>
+
 <div class="container">
     <div class="text-center">
         @isset($url)
@@ -19,7 +32,7 @@
             <a class="btn-cu btn-m btn-color-estandar" href="{{ route('claveunica.autenticar') }}?redirect=L2NsYXZldW5pY2EvbG9naW4tZXh0ZXJuYWw="
                 title="Este es el botón Iniciar sesión de ClaveÚnica">
                 <span class="cl-claveunica"></span>
-                <span class="texto">Externo</span>
+                <span class="texto">Iniciar sesión</span>
             </a>
             @else
             <a class="btn-cu btn-m btn-color-estandar" href="{{ route('claveunica.autenticar') }}?redirect=L2NsYXZldW5pY2EvbG9naW4="
@@ -27,6 +40,14 @@
                 <span class="cl-claveunica"></span>
                 <span class="texto">Iniciar sesión</span>
             </a>
+
+            <div class="row justify-content-center mt-4">
+                <button type="button" class="locallogin" id="show_local_login">
+                    <i class="fas fa-sign-in-alt"></i> 
+                    <u>Iniciar local</u>
+                </button>
+            </div>
+
             @endisset
             <!--./ fin botón-->
         </div>
@@ -34,10 +55,10 @@
     <div class="row justify-content-center mt-4">
         <div class="col-md-8 d-none" id="local_login">
             <div class="card">
-                <div class="card-header justify-content-center">
-                    <h5> {{ isset($url) ? ucwords($url) : ""}} {{ __('Login') }} </h5>
+
+                <div class="card-header">
+                    <h4>{{ __('Iniciar sesión')  }} {{ isset($url) ? ucwords($url) : "sin clave única" }}</h4>
                 </div>
-                <div class="card-header">{{ __('Iniciar sesión')  }} {{ isset($url) ? ucwords($url) : ""}}</div>
 
                 <div class="card-body">
                     @isset($url)
