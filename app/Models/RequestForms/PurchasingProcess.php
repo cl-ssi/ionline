@@ -8,6 +8,7 @@ use App\Models\RequestForms\ItemRequestForm;
 use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseMechanism;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /*
  * Diferentes estados del Proceso de Compra
@@ -35,6 +36,7 @@ firma electronica, enlace bodega
 class PurchasingProcess extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
 
     protected $fillable = [
