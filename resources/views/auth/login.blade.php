@@ -9,7 +9,7 @@
         background-color: #e7e7e7; 
         color: black;
         border: none;
-        padding: 9px 30px;
+        padding: 9px 26px;
         text-align: center;
         text-decoration: none;
         display: inline-block;
@@ -40,16 +40,15 @@
                 <span class="cl-claveunica"></span>
                 <span class="texto">Iniciar sesión</span>
             </a>
-
-            <div class="row justify-content-center mt-4">
+            @endisset
+            <!--./ fin botón-->
+            <div class="row justify-content-center mt-5">
                 <button type="button" class="locallogin" id="show_local_login">
-                    <i class="fas fa-sign-in-alt"></i> 
-                    <u>Iniciar local</u>
+                    <i class="fas fa-lg fa-sign-in-alt"></i> 
+                    <u class="ml-1">Iniciar local</u>
                 </button>
             </div>
 
-            @endisset
-            <!--./ fin botón-->
         </div>
     </div>
     <div class="row justify-content-center mt-4">
@@ -126,9 +125,7 @@
             </div>
         </div>
     </div>
-    <div class="row justify-content-center mt-4">
-        <button type="button" class="btn btn-sm btn btn-outline-light float-right small" style="margin-top: 200px;" id="show_local_login">Inicio local</button>
-    </div>
+
 </div>
 @endsection
 
