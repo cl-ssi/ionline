@@ -279,8 +279,6 @@
 
 <br>
 
-@endif
-
 @if($requestForm->purchasingProcesses->count() > 0)
 
 <div class="row">
@@ -292,8 +290,9 @@
                 <thead class="text-center">
                     <tr>
                         <th>Item</th>
+                        <th>Fecha</th>
                         <th>Mecanismo de Compra</th>
-                        <!-- <th>Cod.Presup.</th>
+                        <th>Cod.Presup.</th>
                         <th>Artículo</th>
                         <th>UM</th>
                         <th>Especificaciones Técnicas</th>
@@ -302,14 +301,15 @@
                         <th>Valor U.</th>
                         <th>Impuestos</th>
                         <th>Total Item</th>
-                        <th></th>
-                        <th></th> -->
+                        <!-- <th></th>
+                        <th></th>  -->
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($requestForm->purchasingProcesses as $key => $purchasingProcess)
                     <tr>
                         <td>{{ $key+1 }}</td>
+                        <td>{{ $purchasingProcess->start_date }}</td>
                         <td>{{ $purchasingProcess->purchaseMechanism->name }}</td>
                         <!-- <td>{{ $item->budgetItem()->first()->fullName() }}</td>
                         <td>{{ $item->article }}</td>
@@ -349,6 +349,8 @@
         </div>
     </div>
 </div>
+
+@endif
 
 <br><br><br>
 
