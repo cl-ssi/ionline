@@ -96,11 +96,14 @@
     <div class="col-sm">
         <div class="table-responsive">
             <h6><i class="fas fa-shopping-cart"></i> Lista de Bienes y/o Servicios:</h6>
+            @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 1)
+            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_petty_cash', $requestForm) }}" enctype="multipart/form-data">
+            @endif
             @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 2)
             <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_internal_oc', $requestForm) }}">
             @endif
-            @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 1)
-            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_petty_cash', $requestForm) }}" enctype="multipart/form-data">
+            @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 3)
+            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_fund_to_be_settled', $requestForm) }}">
             @endif
             @csrf
             @method('POST')
@@ -294,15 +297,15 @@
           </fieldset>
 
           <fieldset class="form-group col-2">
-              <label for="for_receipt_number">N° Memo</label>
-              <input type="number" class="form-control form-control-sm" id="for_receipt_number" name="receipt_number"
-                  value="">
+              <label for="for_memo_number">N° Memo</label>
+              <input type="number" class="form-control form-control-sm" id="for_memo_number" name="memo_number"
+                  value="" required>
           </fieldset>
 
           <fieldset class="form-group col-2">
               <label for="for_amount">Monto total</label>
               <input type="number" class="form-control form-control-sm" id="for_amount" name="amount"
-                  value="">
+                  value="" required>
           </fieldset>
       </div>
       <button type="submit" class="btn btn-primary float-right" id="save_btn">
