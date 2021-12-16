@@ -80,6 +80,10 @@
 							<button class="btn btn-outline-primary" disabled><span class="fas fa-user-check" aria-hidden="true"></span></button>
 						</div>
 						@endif
+					@else
+						<div class="tooltip-wrapper disabled" data-title="Correo electrónico personal verificada">
+							<button class="btn btn-outline-success" disabled><span class="fas fa-user-check" aria-hidden="true"></span></button>
+						</div>
 					@endif
 				@endcan
 
