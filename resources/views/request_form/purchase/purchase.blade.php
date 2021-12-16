@@ -256,13 +256,13 @@
           <fieldset class="form-group col-2">
               <label for="for_receipt_number">Folio</label>
               <input type="number" class="form-control form-control-sm" id="for_receipt_number" name="receipt_number"
-                  value="">
+                  value="" required>
           </fieldset>
 
           <fieldset class="form-group col-2">
               <label for="for_amount">Monto total</label>
               <input type="number" class="form-control form-control-sm" id="for_amount" name="amount"
-                  value="">
+                  value="" required>
           </fieldset>
 
           <fieldset class="form-group col-3">
