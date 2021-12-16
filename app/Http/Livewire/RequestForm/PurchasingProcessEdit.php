@@ -9,7 +9,7 @@ use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseMechanism;
 
-class PurchasingProcess extends Component
+class PurchasingProcessEdit extends Component
 {
   public $requestForm, $purchaseMechanism, $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit,
          $lstPurchaseMechanism, $radioSource, $checkBoxStatus;
