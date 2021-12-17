@@ -154,7 +154,7 @@
                         <td align="center">
                             <fieldset class="form-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="item_id[]" onclick="disabledSaveBtn()"
+                                    <input class="form-check-input" type="checkbox" name="item_id[{{$key}}]" onclick="disabledSaveBtn()"
                                       id="for_item_id" value="{{ $item->id }}">
                                 </div>
                             </fieldset>
@@ -323,7 +323,7 @@
 <div class="row">
     <div class="col-sm">
         <div class="table-responsive">
-            <h6><i class="fas fa-shopping-cart"></i> OC Asociadas al Proceso de Compra:</h6>
+            <h6><i class="fas fa-shopping-cart"></i> {{ $requestForm->purchaseUnit->name }} registradas al Proceso de Compra:</h6>
 
             <table class="table table-sm table-striped table-bordered small">
                 <thead class="text-center">

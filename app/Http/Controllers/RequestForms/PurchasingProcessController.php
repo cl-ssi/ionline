@@ -101,54 +101,62 @@ class PurchasingProcessController extends Controller
 
     public function create_petty_cash(Request $request, RequestForm $requestForm)
     {
-        $purchasingProcess = new PurchasingProcess();
+        $requestForm->load('purchasingProcess');
+        if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
-        $purchasingProcess->purchase_mechanism_id = $requestForm->purchase_mechanism_id;
-        $purchasingProcess->purchase_type_id      = $requestForm->purchase_type_id;
-        $purchasingProcess->start_date            = Carbon::now();
-        $purchasingProcess->status                = 'complete';
-        $purchasingProcess->user_id               = Auth::user()->id;
-        $purchasingProcess->request_form_id       = $requestForm->id;
-        $purchasingProcess->save();
-
-        // foreach($request->item_id as $item){
-            $pettyCash                          = new PettyCash();
-            $pettyCash->date                    = $request->date;
-            $pettyCash->receipt_type            = $request->receipt_type;
-            $pettyCash->receipt_number          = $request->receipt_number;
-            $pettyCash->amount                  = $request->amount;
-            $pettyCash->user_id                 = Auth::user()->id;
-            $pettyCash->purchasing_process_id   = $purchasingProcess->id;
-            $pettyCash->save();
-        // }
+        $pettyCash                          = new PettyCash();
+        $pettyCash->date                    = $request->date;
+        $pettyCash->receipt_type            = $request->receipt_type;
+        $pettyCash->receipt_number          = $request->receipt_number;
+        $pettyCash->amount                  = $request->amount;
+        $pettyCash->user_id                 = Auth::user()->id;
+        $pettyCash->purchasing_process_id   = $requestForm->purchasingProcess->id;
+        $pettyCash->save();
 
         $now = Carbon::now()->format('Y_m_d_H_i_s');
         $file_name = $now.'_petty_cash_file_'.$pettyCash->id;
         $pettyCash->file = $request->file ? $request->file->storeAs('/ionline/request_forms_dev/purchase_item_files', $file_name.'.'.$request->file->extension(), 'gcs') : null;
         $pettyCash->save();
 
+        foreach($request->item_id as $key => $item){
+            $detail = new PurchasingProcessDetail();
+            $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
+            $detail->item_request_form_id       = $item;
+            $detail->petty_cash_id              = $pettyCash->id;
+            $detail->user_id                    = Auth::user()->id;
+            $detail->quantity                   = $request->quantity[$key];
+            $detail->unit_value                 = $request->unit_value[$key];
+            $detail->expense                    = $detail->quantity * $detail->unit_value;
+            $detail->status                     = 'total';
+            $detail->save();
+        }
+
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
     }
 
     public function create_fund_to_be_settled(Request $request, RequestForm $requestForm)
     {
-        $purchasingProcess = new PurchasingProcess();
+        $requestForm->load('purchasingProcess');
+        if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
-        $purchasingProcess->purchase_mechanism_id = $requestForm->purchase_mechanism_id;
-        $purchasingProcess->purchase_type_id      = $requestForm->purchase_type_id;
-        $purchasingProcess->start_date            = Carbon::now();
-        $purchasingProcess->status                = 'complete';
-        $purchasingProcess->user_id               = Auth::user()->id;
-        $purchasingProcess->request_form_id       = $requestForm->id;
-        $purchasingProcess->save();
+        $fundToBeSettled                          = new FundToBeSettled();
+        $fundToBeSettled->date                    = Carbon::now();
+        $fundToBeSettled->amount                  = $request->amount;
+        $fundToBeSettled->document_id             = Document::where('number', $request->memo_number)->where('type', 'Memo')->first()->id;
+        $fundToBeSettled->save();
 
-        // foreach($request->item_id as $item){
-            $fundToBeSettled                          = new FundToBeSettled();
-            $fundToBeSettled->date                    = Carbon::now();
-            $fundToBeSettled->amount                  = $request->amount;
-            $fundToBeSettled->document_id             = Document::where('number', $request->memo_number)->where('type', 'Memo')->first()->id;
-            $fundToBeSettled->save();
-        // }
+        foreach($request->item_id as $key => $item){
+            $detail = new PurchasingProcessDetail();
+            $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
+            $detail->item_request_form_id       = $item;
+            $detail->fund_to_be_settled_id      = $fundToBeSettled->id;
+            $detail->user_id                    = Auth::user()->id;
+            $detail->quantity                   = $request->quantity[$key];
+            $detail->unit_value                 = $request->unit_value[$key];
+            $detail->expense                    = $detail->quantity * $detail->unit_value;
+            $detail->status                     = 'total';
+            $detail->save();
+        }
 
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
     }
