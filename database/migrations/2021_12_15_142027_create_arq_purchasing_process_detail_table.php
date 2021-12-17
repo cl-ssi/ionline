@@ -19,7 +19,7 @@ class CreateArqPurchasingProcessDetailTable extends Migration
             $table->foreignId('item_request_form_id')->constrained('arq_item_request_forms');
             $table->foreignId('internal_purchase_order_id')->nullable()->constrained('arq_internal_purchase_orders');
             $table->foreignId('petty_cash_id')->nullable()->constrained('arq_petty_cash');
-            $table->foreignId('funds_to_be_settled_id')->nullable()->constrained('arq_funds_to_be_settled');
+            $table->foreignId('fund_to_be_settled_id')->nullable()->constrained('arq_funds_to_be_settled');
             $table->foreignId('user_id')->constrained('users'); //Usuario que registró el detalle.
 
             /* Updated items in purchasing process */
