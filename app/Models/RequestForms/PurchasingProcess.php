@@ -61,6 +61,10 @@ class PurchasingProcess extends Model
         return $this->belongsToMany(ItemRequestForm::class, 'arq_purchasing_process_detail')->withPivot('id', 'quantity', 'unit_value', 'expense', 'status')->whereNull('arq_purchasing_process_detail.deleted_at')->withTimestamps()->using(PurchasingProcessDetail::class);
     }
 
+    public function getExpense(){
+        return $this->details->sum('expense');
+    }
+
     // public function purchaseUnit(){
     //   return $this->belongsTo(PurchaseUnit::class, 'purchase_unit_id');
     // }

@@ -13,7 +13,7 @@ class PurchasingProcessDetail extends Pivot
     protected $table = 'arq_purchasing_process_detail';
 
     protected $fillable = [
-        'id', 'purchasing_process_id', 'item_id', 'internal_purchase_order_id', 'petty_cash_id', 'funds_to_be_settled_id', 'user_id',
+        'id', 'purchasing_process_id', 'item_request_form_id', 'internal_purchase_order_id', 'petty_cash_id', 'fund_to_be_settled_id', 'user_id',
         'quantity', 'unit_value', 'expense', 'status'
     ];
 

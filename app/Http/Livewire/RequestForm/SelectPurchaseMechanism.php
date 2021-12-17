@@ -42,7 +42,7 @@ class SelectPurchaseMechanism extends Component
 
     public function savePurchaseMechanism(){
 
-        $save = RequestForm::updateOrCreate(
+        RequestForm::updateOrCreate(
             [
                 'id'                    =>  $this->requestForm->id
             ],
@@ -51,6 +51,10 @@ class SelectPurchaseMechanism extends Component
                 'purchase_type_id'      => $this->selectedPurchaseType
             ]
         );
+
+        $this->requestForm->load('purchasingProcess');
+        if($this->requestForm->purchasingProcess)
+            $this->requestForm->purchasingProcess()->update(['purchase_mechanism_id' => $this->selectedPurchaseMechanism, 'purchase_type_id' => $this->selectedPurchaseType]);
 
         session()->flash('success', 'Estimado Usuario/a: el Mecanismo de Compra fue editado con éxito.');
         return redirect()->route('request_forms.supply.purchase', $this->requestForm);
