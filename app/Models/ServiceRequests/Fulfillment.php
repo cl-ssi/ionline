@@ -283,8 +283,19 @@ class Fulfillment extends Model implements Auditable
     //   $query->whereNull('finances_approbation');
     // }
 
-
     return $query;
+  }
+
+  public function quit_status()
+  {
+    foreach ($this->FulfillmentItems as $key => $fulfillmentItem) {
+      if ($fulfillmentItem->type == "Renuncia voluntaria" ||
+          $fulfillmentItem->type == "Abandono de funciones" ||
+          $fulfillmentItem->type == "Término de contrato anticipado") {
+        return "Sí";
+      }
+    }
+    return "No";
   }
 
   protected $table = 'doc_fulfillments';
