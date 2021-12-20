@@ -40,6 +40,10 @@ class ItemRequestForm extends Model implements Auditable
     public function getPurchasingProcess($status){
         return PurchasingProcess::Where('status',$status)->Where('item_request_form_id', $this->id)->get()->first();
     }
+
+    public function purchasingProcess(){
+      return $this->belongsToMany(PurchasingProcess::class, 'arq_purchasing_process_detail')->withPivot('id', 'quantity', 'unit_value', 'expense', 'status')->whereNull('arq_purchasing_process_detail.deleted_at')->withTimestamps()->using(PurchasingProcessDetail::class);
+    }
 /*
     public function purchaseUnit(){
       return $this->belongsTo(PurchaseUnit::class, 'purchase_unit_id');

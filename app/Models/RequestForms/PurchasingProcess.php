@@ -8,6 +8,7 @@ use App\Models\RequestForms\ItemRequestForm;
 use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseMechanism;
+use CreateArqPurchasingProcessDetailTable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /*
@@ -54,6 +55,14 @@ class PurchasingProcess extends Model
 
     public function purchaseMechanism(){
       return $this->belongsTo(PurchaseMechanism::class, 'purchase_mechanism_id');
+    }
+
+    public function details(){
+        return $this->belongsToMany(ItemRequestForm::class, 'arq_purchasing_process_detail')->withPivot('id', 'quantity', 'unit_value', 'expense', 'status')->whereNull('arq_purchasing_process_detail.deleted_at')->withTimestamps()->using(PurchasingProcessDetail::class);
+    }
+
+    public function getExpense(){
+        return $this->details->sum('expense');
     }
 
     // public function purchaseUnit(){
