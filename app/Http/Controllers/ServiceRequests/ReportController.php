@@ -605,6 +605,7 @@ class ReportController extends Controller
     /* Año actual y año anterior */
     $years[] = now()->format('Y');
     $years[] = now()->subYear('1')->format('Y');
+    $years[] = now()->addYear('1')->format('Y');
 
     $request->flash();
     if ($request->has('excel')) {
