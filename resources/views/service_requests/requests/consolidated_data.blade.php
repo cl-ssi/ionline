@@ -75,6 +75,7 @@
 						<th>ESTADO.SOLICITUD</th>
 						<th>JORNADA TRABAJO</th>
 						<th>TIPO</th>
+						<th>RENUNCIA</th>
         </tr>
     </thead>
     <tbody>
@@ -123,6 +124,7 @@
 										@else Finalizada @endif</td>
 								<td nowrap>{{$serviceRequest->working_day_type}}</td>
 								<td nowrap>{{$serviceRequest->type}}</td>
+								<td nowrap>{{$fulfillment->quit_status()}}</td>
 							</tr>
 						@else
 							@if($fulfillment->bill_number != NULL || $fulfillment->total_hours_paid != NULL || $fulfillment->total_paid != NULL ||
@@ -167,6 +169,7 @@
 												@else Finalizada @endif</td>
 										<td nowrap>{{$serviceRequest->working_day_type}}</td>
 										<td nowrap>{{$serviceRequest->type}}</td>
+										<td nowrap>{{$fulfillment->quit_status()}}</td>
 									</tr>
 							@else
 								<tr class="table-success">
@@ -209,6 +212,7 @@
 											@else Finalizada @endif</td>
 									<td nowrap>{{$serviceRequest->working_day_type}}</td>
 									<td nowrap>{{$serviceRequest->type}}</td>
+									<td nowrap>{{$fulfillment->quit_status()}}</td>
 								</tr>
 							@endif
 						@endif
@@ -255,6 +259,7 @@
 								@else Finalizada @endif</td>
 						<td nowrap>{{$serviceRequest->working_day_type}}</td>
 						<td nowrap>{{$serviceRequest->type}}</td>
+						<td nowrap></td>
 					</tr>
 			  @endif
       @endforeach
