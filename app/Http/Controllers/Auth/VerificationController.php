@@ -57,6 +57,10 @@ class VerificationController extends Controller
     {
         $user = User::findOrFail($request->route('id'));
 
+        if (! hash_equals((string) $request->route('id'), (string) $user->getKey())) {
+            throw new AuthorizationException;
+        }
+
         if (!hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
             throw new AuthorizationException;
         }
@@ -64,6 +68,6 @@ class VerificationController extends Controller
         if ($user->markEmailAsVerified())
             event(new Verified($user));
 
-        return redirect($this->redirectPath())->with('verified', true);
+        return back()->with('success', 'Su dirección de correo electrónico se ha verificado correctamente.');
     }
 }

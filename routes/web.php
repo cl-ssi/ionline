@@ -1331,6 +1331,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::get('/{requestForm}/purchase', [PurchasingProcessController::class, 'purchase'])->name('purchase');
         Route::post('/{requestForm}/create_internal_oc', [PurchasingProcessController::class, 'create_internal_oc'])->name('create_internal_oc');
         Route::post('/{requestForm}/create_petty_cash', [PurchasingProcessController::class, 'create_petty_cash'])->name('create_petty_cash');
+        Route::post('/{requestForm}/create_fund_to_be_settled', [PurchasingProcessController::class, 'create_fund_to_be_settled'])->name('create_fund_to_be_settled');
     });
 
 

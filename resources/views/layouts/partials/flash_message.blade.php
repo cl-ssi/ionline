@@ -6,10 +6,3 @@
 	    </div>
     @endif
 @endforeach
-
-@if(session()->has('verified'))
-        <div class="alert alert-success alert-dismissable">
-			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-			Su dirección de correo electrónico se ha verificado correctamente.
-		</div>
-@endif

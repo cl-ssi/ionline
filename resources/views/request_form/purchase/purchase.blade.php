@@ -96,11 +96,14 @@
     <div class="col-sm">
         <div class="table-responsive">
             <h6><i class="fas fa-shopping-cart"></i> Lista de Bienes y/o Servicios:</h6>
+            @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 1)
+            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_petty_cash', $requestForm) }}" enctype="multipart/form-data">
+            @endif
             @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 2)
             <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_internal_oc', $requestForm) }}">
             @endif
-            @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 1)
-            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_petty_cash', $requestForm) }}" enctype="multipart/form-data">
+            @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 3)
+            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_fund_to_be_settled', $requestForm) }}">
             @endif
             @csrf
             @method('POST')
@@ -151,7 +154,7 @@
                         <td align="center">
                             <fieldset class="form-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="item_id[]" onclick="disabledSaveBtn()"
+                                    <input class="form-check-input" type="checkbox" name="item_id[{{$key}}]" onclick="disabledSaveBtn()"
                                       id="for_item_id" value="{{ $item->id }}">
                                 </div>
                             </fieldset>
@@ -253,13 +256,13 @@
           <fieldset class="form-group col-2">
               <label for="for_receipt_number">Folio</label>
               <input type="number" class="form-control form-control-sm" id="for_receipt_number" name="receipt_number"
-                  value="">
+                  value="" required>
           </fieldset>
 
           <fieldset class="form-group col-2">
               <label for="for_amount">Monto total</label>
               <input type="number" class="form-control form-control-sm" id="for_amount" name="amount"
-                  value="">
+                  value="" required>
           </fieldset>
 
           <fieldset class="form-group col-3">
@@ -294,15 +297,15 @@
           </fieldset>
 
           <fieldset class="form-group col-2">
-              <label for="for_receipt_number">N° Memo</label>
-              <input type="number" class="form-control form-control-sm" id="for_receipt_number" name="receipt_number"
-                  value="">
+              <label for="for_memo_number">N° Memo</label>
+              <input type="number" class="form-control form-control-sm" id="for_memo_number" name="memo_number"
+                  value="" required>
           </fieldset>
 
           <fieldset class="form-group col-2">
               <label for="for_amount">Monto total</label>
               <input type="number" class="form-control form-control-sm" id="for_amount" name="amount"
-                  value="">
+                  value="" required>
           </fieldset>
       </div>
       <button type="submit" class="btn btn-primary float-right" id="save_btn">
@@ -311,15 +314,16 @@
       </form>
     </div>
 </div>
+@endif
 
 <br>
 
-@if($requestForm->purchasingProcesses->count() > 0)
+@if($requestForm->purchasingProcess->details->count() > 0)
 
 <div class="row">
     <div class="col-sm">
         <div class="table-responsive">
-            <h6><i class="fas fa-shopping-cart"></i> OC Asociadas al Proceso de Compra:</h6>
+            <h6><i class="fas fa-shopping-cart"></i> {{ $requestForm->purchaseUnit->name }} registradas al Proceso de Compra:</h6>
 
             <table class="table table-sm table-striped table-bordered small">
                 <thead class="text-center">
@@ -336,28 +340,30 @@
                         <th>Valor U.</th>
                         <th>Impuestos</th>
                         <th>Total Item</th>
-                        <!-- <th></th>
-                        <th></th>  -->
+                        <th></th>
+                        <th></th> 
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($requestForm->purchasingProcesses as $key => $purchasingProcess)
+                    @foreach($requestForm->purchasingProcess->details as $key => $detail)
                     <tr>
                         <td>{{ $key+1 }}</td>
-                        <td>{{ $purchasingProcess->start_date }}</td>
-                        <td>{{ $purchasingProcess->purchaseMechanism->name }}</td>
-                        <!-- <td>{{ $item->budgetItem()->first()->fullName() }}</td>
-                        <td>{{ $item->article }}</td>
-                        <td>{{ $item->unit_of_measurement }}</td>
-                        <td>{{ $item->specification }}</td>
+                        <td>{{ $requestForm->purchasingProcess->start_date }}</td>
+                        <td>{{ $requestForm->purchasingProcess->purchaseMechanism->name }}</td>
+                        <td>{{ $detail->budgetItem->fullName() ?? '' }}</td>
+                        <td>{{ $detail->article }}</td>
+                        <td>{{ $detail->unit_of_measurement }}</td>
+                        <td>{{ $detail->specification }}</td>
                         <td align="center">
-                            <a href="{{ route('request_forms.show_item_file', $item) }}" target="_blank">
-                              <i class="fas fa-file"></i>
+                            @if($detail->article_file)
+                            <a href="{{ route('request_forms.show_item_file', $detail) }}" target="_blank">
+                              <i class="fas fa-file"></i></a>
+                            @endif
                         </td>
-                        <td align="right">{{ $item->quantity }}</td>
-                        <td align="right">${{ number_format($item->unit_value,0,",",".") }}</td>
-                        <td>{{ $item->tax }}</td>
-                        <td align="right">${{ number_format($item->expense,0,",",".") }}</td>
+                        <td align="right">{{ $detail->pivot->quantity }}</td>
+                        <td align="right">${{ number_format($detail->pivot->unit_value,0,",",".") }}</td>
+                        <td>{{ $detail->tax }}</td>
+                        <td align="right">${{ number_format($detail->pivot->expense,0,",",".") }}</td>
                         <td align="center">
                             <fieldset class="form-group">
                                 <div class="form-check">
@@ -368,24 +374,22 @@
                         </td>
                         <td align="center">
 
-                        </td> -->
+                        </td>
                     </tr>
                   @endforeach
                 </tbody>
                 <tfoot>
-                    <!-- <tr>
+                    <tr>
                       <td colspan="8"></td>
                       <th class="text-right">Valor Total</td>
-                      <th class="text-right">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
-                    </tr> -->
+                      <th class="text-right">${{ number_format($requestForm->purchasingProcess->getExpense(),0,",",".") }}</td>
+                    </tr>
 
                 </tfoot>
             </table>
         </div>
     </div>
 </div>
-@endif
-
 @endif
 
 <br><br><br>

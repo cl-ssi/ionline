@@ -12,6 +12,7 @@ use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\PurchaseType;
 use App\Models\Parameters\PurchaseUnit;
 use App\Models\Parameters\PurchaseMechanism;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
@@ -102,6 +103,10 @@ class RequestForm extends Model implements Auditable
 
     public function purchasingProcesses() {
         return $this->hasMany(PurchasingProcess::class);
+    }
+
+    public function purchasingProcess(){
+      return $this->HasOne(PurchasingProcess::class);
     }
 
     /*****Elimina RequestForm y tablas relacionadas en cadena*****/
