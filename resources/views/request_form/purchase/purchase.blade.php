@@ -330,7 +330,8 @@
                     <tr>
                         <th>Item</th>
                         <th>Fecha</th>
-                        <th>Mecanismo de Compra</th>
+                        <!-- <th>Mecanismo de Compra</th> -->
+                        <th>Tipo de compra</th>
                         <th>Cod.Presup.</th>
                         <th>Artículo</th>
                         <th>UM</th>
@@ -341,7 +342,7 @@
                         <th>Impuestos</th>
                         <th>Total Item</th>
                         <th></th>
-                        <th></th> 
+                        <!-- <th></th>  -->
                     </tr>
                 </thead>
                 <tbody>
@@ -349,7 +350,8 @@
                     <tr>
                         <td>{{ $key+1 }}</td>
                         <td>{{ $requestForm->purchasingProcess->start_date }}</td>
-                        <td>{{ $requestForm->purchasingProcess->purchaseMechanism->name }}</td>
+                        <!-- <td>{{ $requestForm->purchasingProcess->purchaseMechanism->name }}</td> -->
+                        <td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
                         <td>{{ $detail->budgetItem->fullName() ?? '' }}</td>
                         <td>{{ $detail->article }}</td>
                         <td>{{ $detail->unit_of_measurement }}</td>
@@ -364,16 +366,20 @@
                         <td align="right">${{ number_format($detail->pivot->unit_value,0,",",".") }}</td>
                         <td>{{ $detail->tax }}</td>
                         <td align="right">${{ number_format($detail->pivot->expense,0,",",".") }}</td>
-                        <td align="center">
+                        <!-- <td align="center">
                             <fieldset class="form-group">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="item_id[]" onclick="disabledSaveBtn()"
                                       id="for_item_id" value="{{ $item->id }}">
                                 </div>
                             </fieldset>
-                        </td>
-                        <td align="center">
-
+                        </td> -->
+                        <td>
+                        <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->id}}">
+                            <i class="fas fa-receipt"></i>
+                        </button>
+                        @include('request_form.purchase.modals.detail_purchase')
+                              
                         </td>
                     </tr>
                   @endforeach
