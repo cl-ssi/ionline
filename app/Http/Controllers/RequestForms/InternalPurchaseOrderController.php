@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\RequestForms;
 
-use App\Models\InternalPurchaseOrder;
+use App\Http\Controllers\Controller;
+use App\Models\RequestForms\InternalPurchaseOrder;
 use Illuminate\Http\Request;
 
 class InternalPurchaseOrderController extends Controller
