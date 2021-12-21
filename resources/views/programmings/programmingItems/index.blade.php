@@ -9,18 +9,24 @@
 }
 .modal .modal-dialog {
   width: 100%;
-  max-width: none;
+  max-width: 100%;
   height: 100%;
   margin: 0;
 }
 .modal .modal-content {
-  height: 100%;
   border: 0;
   border-radius: 0;
+  max-height: 100%; 
+  height: 100%;
 }
 .modal .modal-body {
   overflow-y: auto;
 }
+
+.modal-dialog.modal-dialog-scrollable { max-height: 100%; }
+
+.modal-dialog.modal-dialog-scrollable .modal-content { max-height: 100%; }
+
 </style>
 @endsection
 
@@ -53,7 +59,7 @@
                     <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" style="overflow:hidden;">
+                <div class="modal-body">
                     @can('ProgrammingItem: evaluate')
                     <form method="post" action="{{ route('pendingitems.store') }}">
                     @csrf
@@ -147,7 +153,6 @@
                         </tbody>
                     </table>
                     </div>
-                    <br><br>
                 </div>
             </div>
         </div>
