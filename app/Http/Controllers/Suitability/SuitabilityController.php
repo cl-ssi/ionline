@@ -314,4 +314,9 @@ class SuitabilityController extends Controller
         $myFile = public_path("/manuales/idoneidad/Manual de Usuario Idoneidad Docente. Perfil Administrador.pdf");
     	return response()->download($myFile);
     }
+
+    public function configSignature() {
+        return view('suitability.config_signer');
+    }
+
 }
