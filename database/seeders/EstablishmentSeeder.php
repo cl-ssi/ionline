@@ -50,5 +50,7 @@ class EstablishmentSeeder extends Seeder
         Establishment::Create(['name'=>'Jorge Seguel C.','type'=>'COSAM','deis'=>'102-600','commune_id' => 6]);
         Establishment::Create(['name'=>'Salvador Allende','type'=>'COSAM','deis'=>'102-601','commune_id' => 6]);
         Establishment::Create(['name'=>'Dr. Enrique Paris','type'=>'COSAM','deis'=>'102-602','commune_id' => 7]);
+        Establishment::Create(['name'=>'Dr. Yandry Añazco Montero','type'=>'CESFAM','deis'=>'200-557','commune_id' => 7]);
+        Establishment::Create(['name'=>'Servicio de Salud','type'=>'Hospital','deis'=>'102-100','commune_id' => 6]);
     }
 }

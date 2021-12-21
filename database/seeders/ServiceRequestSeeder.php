@@ -18,7 +18,7 @@ class ServiceRequestSeeder extends Seeder
         ServiceRequest::create([
             'type' => 'Covid',
             'subdirection_ou_id' => '1',
-            'responsability_center_ou_id' => '222',
+            'responsability_center_ou_id' => '2',
             'responsable_id' => '12345678',
             'address' => 'Iquique',
             'phone_number' => '912345678',

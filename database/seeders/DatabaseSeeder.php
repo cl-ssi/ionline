@@ -13,14 +13,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(CountrySeeder::class);
+        $this->call(CommuneSeeder::class);
+        $this->call(EstablishmentSeeder::class);
         $this->call(OrganizationalUnitSeeder::class);
         $this->call(RoleAndPermissionSeeder::class);
         $this->call(UserSeeder::class);
-        $this->call(CommuneSeeder::class);
-        $this->call(EstablishmentSeeder::class);
         $this->call(LocationSeeder::class);
         $this->call(CourtSeeder::class);
-        $this->call(CountrySeeder::class);
         $this->call(PoliceUnitSeeder::class);
         $this->call(SubstanceSeeder::class);
         $this->call(ReceptionSeeder::class);
@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AuthoritySeeder::class);
 
         /* Honorarios Service Request */
-        // fix $this->call(ServiceRequestSeeder::class);
+        $this->call(ServiceRequestSeeder::class);
         // fix $this->call(FulfillmentSeeder::class);
         $this->call(ProfessionalSeeder::class);
         // fix $this->call(SignatureFlowSeeder::class);
