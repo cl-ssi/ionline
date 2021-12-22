@@ -210,6 +210,17 @@ class ServiceRequestController extends Controller
     return redirect()->back();
   }
 
+  public function delete_signature_flow(Request $request)
+  {
+    $signatureFlow = SignatureFlow::find($request->signature_flow_id);
+    $signatureFlow->delete();
+
+    session()->flash('success', 'Se ha eliminado el responsable del flujo de firmas.');
+    return redirect()->back();
+  }
+
+
+
 
 
   /**
@@ -535,7 +546,7 @@ class ServiceRequestController extends Controller
     $establishments = Establishment::orderBy('name', 'ASC')->get();
     $professions = Profession::orderBy('name', 'ASC')->get();
 
-    $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->orderBy('name', 'ASC')->get();
+    $subdirections = OrganizationalUnit::where('name', 'LIKE', '%direc%')->where('establishment_id',Auth::user()->organizationalUnit->id)->orderBy('name', 'ASC')->get();
     $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
     $countries = Country::orderBy('name', 'ASC')->get();
 

@@ -181,7 +181,7 @@ class FirmaDigitalController extends Controller
             $destinatarios = $signaturesFlow->signature->recipients;
 
             $dest_vec=array();
-            $cont=0;
+            $cont=1;
 
 
             if (strpos($destinatarios, ',') !== false) {
@@ -193,7 +193,7 @@ class FirmaDigitalController extends Controller
 
 
             foreach ($dest_vec as $dest) {
-                if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl'and $cont===0) 
+                if ($dest == 'director.ssi@redsalud.gob.cl' or $dest == 'director.ssi@redsalud.gov.cl' or $dest == 'director.ssi1@redsalud.gob.cl'and $cont===1) 
                 {
                     $cont=$cont+1;
                     $tipo = null;

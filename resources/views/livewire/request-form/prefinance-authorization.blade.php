@@ -1,4 +1,32 @@
 <div>
+    <div>
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <i class="fas fa-signature"></i></a> Autorización Refrendación Presupuestaria
+            </div>
+            <div class="card-body">
+                <div class="form-row">
+                    <fieldset class="form-group col-sm-5">
+                        <label for="forRut">Responsable:</label>
+                        <input wire:model="userAuthority" name="userAuthority" class="form-control form-control-sm" type="text" readonly>
+                    </fieldset>
+
+                    <fieldset class="form-group col-sm-2">
+                        <label>Cargo:</label><br>
+                        <input wire:model="position" name="position" class="form-control form-control-sm" type="text" readonly>
+                    </fieldset>
+
+                    <fieldset class="form-group col-sm-2">
+                        <label>Cargo:</label><br>
+                        <input wire:model="position" name="position" class="form-control form-control-sm" type="text" readonly>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
     {{-- The whole world belongs to you. --}}
     <div class="card mx-3 mb-3 mt-0 pt-0">
       <h6 class="card-header bg-primary text-white"><i class="fas fa-signature"></i></a> Autorización Refrendación Presupuestaria</h6>
