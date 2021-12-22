@@ -1465,6 +1465,8 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::post('/test', [TestsController::class, 'store'])->name('test.store');
     Route::get('/pending', [SuitabilityController::class, 'pending'])->name('pending');
     Route::get('/config-signature', [SuitabilityController::class, 'configSignature'])->name('configSignature');
+    Route::post('/config-signature-add', [SuitabilityController::class, 'configSignatureAdd'])->name('configSignatureAdd');
+    Route::get('/config-signature-delete/{signer}', [SuitabilityController::class, 'configSignatureDelete'])->name('configSignatureDelete');
     Route::get('/approved', [SuitabilityController::class, 'approved'])->name('approved');
     Route::get('/rejected', [SuitabilityController::class, 'rejected'])->name('rejected');
     Route::patch('/finalresult/{psirequest}/{result}', [SuitabilityController::class, 'finalresult'])->name('finalresult');

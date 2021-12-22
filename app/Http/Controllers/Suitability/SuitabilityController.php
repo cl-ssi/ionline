@@ -7,6 +7,7 @@ use App\Models\Documents\Signature;
 use App\Models\Documents\SignaturesFile;
 use App\Models\Documents\SignaturesFlow;
 use App\Models\Suitability\Result;
+use App\Models\Suitability\Signer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\User;
@@ -315,8 +316,28 @@ class SuitabilityController extends Controller
     	return response()->download($myFile);
     }
 
-    public function configSignature() {
-        return view('suitability.config_signer');
+    public function configSignature() 
+    {
+        $signers = Signer::all();
+        return view('suitability.config_signer', compact('signers'));
+    }
+
+
+    public function configSignatureAdd(Request $request) 
+    {
+        $newSigner = new Signer($request->All());
+        $newSigner->save();
+
+        $signers = Signer::all();
+        return view('suitability.config_signer', compact('signers'));
+    }
+
+    public function configSignatureDelete(Signer $signer)
+    {
+        $signer->delete();
+
+        $signers = Signer::all();
+        return view('suitability.config_signer', compact('signers'));
     }
 
 }
