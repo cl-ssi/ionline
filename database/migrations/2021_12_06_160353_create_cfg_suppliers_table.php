@@ -18,9 +18,9 @@ class CreateCfgSuppliersTable extends Migration
             $table->unsignedBigInteger('run')->unique();
             $table->char('dv', 1);
             $table->string('name');
-            $table->string('dirección');
-            $table->string('city');
-            $table->string('fono');
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('telephone')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
