@@ -832,7 +832,13 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::post('/store', 'Parameters\PurchaseUnitController@store')->name('store');
     });
 
-
+    Route::prefix('suppliers')->as('suppliers.')->group(function () {
+        Route::get('/', 'Parameters\SupplierController@index')->name('index');
+        // Route::get('/create', 'Parameters\UnitOfMeasurementController@create')->name('create');
+        // Route::get('/edit/{measurement}', 'Parameters\UnitOfMeasurementController@edit')->name('edit');
+        // Route::put('/update/{measurement}', 'Parameters\UnitOfMeasurementController@update')->name('update');
+        // Route::post('/store', 'Parameters\UnitOfMeasurementController@store')->name('store');
+    });
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {
