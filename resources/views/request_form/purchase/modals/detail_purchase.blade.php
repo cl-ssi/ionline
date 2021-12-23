@@ -1,6 +1,6 @@
 <!-- Modal -->
 <div class="modal fade" id="Receipt-{{$detail->id}}" tabindex="-1" aria-labelledby="ReceiptLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="ReceiptLabel"><i class="fas fa-info-circle"></i> Detalle {{$detail->pivot->getPurchasingTypeName()}}</h5>
