@@ -7,7 +7,7 @@
 
 @include('request_form.partials.nav')
 
-@if(count($my_forms_signed) > 0 || count($my_pending_forms_to_signs) > 0)
+@if(count($my_forms_signed) > 0 || count($my_pending_forms_to_signs) > 0 || count($new_budget_pending_to_sign) > 0)
 
     <fieldset class="form-group">
         <div class="input-group mb-3">
@@ -77,6 +77,83 @@
                               </td>
                               <td>
                                 <a href="{{ route('request_forms.sign', [$requestForm, $event_type]) }}" class="btn btn-outline-primary btn-sm" title="Aceptar o Rechazar">
+                                  <i class="fas fa-signature"></i>
+                                </a>
+                              </td>
+                            </tr>
+                      @endforeach
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    @else
+        </div>
+        <div class="col">
+            <h6><i class="fas fa-inbox"></i> Formularios pendientes de firma</h6>
+            <div class="card mb-3 bg-light">
+              <div class="card-body">
+                No hay formularios de requerimiento pendientes de firma.
+              </div>
+            </div>
+        </div>
+    @endif
+
+    @if(count($new_budget_pending_to_sign) > 0)
+    </div>
+        <div class="col">
+            <h6><i class="fas fa-inbox"></i> Formularios con nuevo presupuesto pendiente de firma</h6>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-bordered">
+                  <thead class="small">
+                    <tr class="text-center">
+                      <th>ID</th>
+                      <th style="width: 7%">Fecha Creación</th>
+                      <th>Tipo</th>
+                      <th>Descripción</th>
+                      <th>Usuario Gestor</th>
+                      <th>Mecanismo de Compra</th>
+                      <th>Items</th>
+                      <th>Espera</th>
+                      <th>Estado</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody class="small">
+                      @foreach($new_budget_pending_to_sign as $requestForm)
+                            <tr>
+                                <td>{{ $requestForm->id }}</td>
+                                <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                                <td>{{ $requestForm->type_form }}</td>
+                                <td>{{ $requestForm->name }}</td>
+                                <td>{{ $requestForm->user->FullName }}<br>
+                                    {{ $requestForm->userOrganizationalUnit->name }}
+                                </td>
+                                <td>{{ $requestForm->purchaseMechanism->name }}</td>
+                                <td align="center">{{ $requestForm->quantityOfItems() }}</td>
+                                <td align="center">{{ $requestForm->getElapsedTime() }}</td>
+                                {{--<td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
+                                <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
+                                <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
+                                <td class="align-middle text-center brd-b brd-r">{!! $requestForm->eventSign('supply_event') !!}</td>--}}
+                                <td class="text-center">
+                                  @foreach($requestForm->eventRequestForms as $sign)
+                                      @if($sign->status == 'pending')
+                                          <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                      @endif
+                                      @if($sign->status == 'approved')
+                                          <span style="color: green;">
+                                              <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                          </span>
+                                      @endif
+                                      @if($sign->status == 'rejected')
+                                          <span style="color: Tomato;">
+                                              <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                          </span>
+                                      @endif
+                                  @endforeach
+                              </td>
+                              <td>
+                                <a href="{{ route('request_forms.sign', [$requestForm, 'budget_event']) }}" class="btn btn-outline-primary btn-sm" title="Aceptar o Rechazar">
                                   <i class="fas fa-signature"></i>
                                 </a>
                               </td>
