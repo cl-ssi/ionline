@@ -26,6 +26,7 @@ use App\Http\Controllers\RequestForms\RequestFormCodeController;
 use App\Http\Controllers\RequestForms\PurchasingProcessController;
 use App\Http\Controllers\RequestForms\PettyCashController;
 use App\Http\Controllers\RequestForms\FundToBeSettledController;
+use App\Http\Controllers\RequestForms\InternalPurchaseOrderController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
 use App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController;
@@ -1338,8 +1339,9 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::get('/fund_to_be_settled/{fundToBeSettled}/download', [FundToBeSettledController::class, 'download'])->name('fund_to_be_settled.download');
     });
 
-
-
+    /* DOCUMENTS */
+    Route::get('/create_form_document/{requestForm}', [RequestFormController::class, 'create_form_document'])->name('create_form_document');
+    Route::get('/create_internal_purchase_order_document/{internalPurchaseOrder}', [InternalPurchaseOrderController::class, 'create_internal_purchase_order_document'])->name('create_internal_purchase_order_document');
 
     Route::get('/{requestForm}/edit', [RequestFormController::class, 'edit'])->name('edit');
 
@@ -1351,7 +1353,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     Route::get('/show_item_file/{itemRequestForm}', [ItemRequestFormController::class, 'show_item_file'])->name('show_item_file');
 
-    Route::get('/create_form_document/{requestForm}', [RequestFormController::class, 'create_form_document'])->name('create_form_document');
+
 
     Route::get('/finance_index', [RequestFormController::class, 'financeIndex'])->name('finance_index');
     Route::get('/{requestForm}/finance_sign', [RequestFormController::class, 'financeSign'])->name('finance_sign');

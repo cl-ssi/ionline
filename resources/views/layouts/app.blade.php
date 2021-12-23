@@ -111,6 +111,8 @@
             integrity="sha512-yDlE7vpGDP7o2eftkCiPZ+yuUyEcaBwoJoIhdXv71KZWugFqEphIS3PU60lEkFaz8RxaVsMpSvQxMBaKVwA5xg=="
             crossorigin="anonymous"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
+
     @yield('custom_js')
     @livewireScripts
 </body>

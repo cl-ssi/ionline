@@ -318,7 +318,7 @@
 
 <br>
 
-@if($requestForm->purchasingProcess->details->count() > 0)
+@if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
 
 <div class="row">
     <div class="col-sm">
@@ -379,7 +379,7 @@
                             <i class="fas fa-receipt"></i>
                         </button>
                         @include('request_form.purchase.modals.detail_purchase')
-                              
+
                         </td>
                     </tr>
                   @endforeach
