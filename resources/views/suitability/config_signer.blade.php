@@ -4,36 +4,46 @@
 
 @include('suitability.nav')
 
-<h3 class="mb-3">Firmantes y visadores</h3>
 
-<form method="post" action="{{route('suitability.configSignatureAdd')}}">
-    @csrf
-    @method('POST')
-    <div style="margin-bottom: 10px;" class="row">
+<div class="card">
 
-        <fieldset class="form-group col-lg-9">
-            <label for="">Buscar usuario</label>
-            @livewire('search-select-user') 
-        </fieldset>
-
-
-        <fieldset class="form-group col-lg-3">
-            <label for="for_sign_order">Tipo</label>
-                <select name="type" id="for_type" class="form-control" required>
-                    <option value=""></option>
-                    <option value="signer">Firmador</option>
-                    <option value="visator">Visador</option>
-                </select>
-        </fieldset>
-
-        <div class='col'>
-            <button type="submit" class="btn btn-success">
-                <i class="fas fa-plus"></i> Agregar 
-            </button> 
-        </div>
-
+    <div class="card-header">
+        Agregar firmante o visador
     </div>
-</form>
+
+    <div class="card-body">
+        <form method="post" action="{{route('suitability.configSignatureAdd')}}">
+            @csrf
+            @method('POST')
+            <div style="margin-bottom: 10px;" class="row">
+
+                <fieldset class="form-group col-lg-9">
+                    <label for="">Buscar usuario</label>
+                    @livewire('search-select-user') 
+                </fieldset>
+
+
+                <fieldset class="form-group col-lg-3">
+                    <label for="for_sign_order">Tipo</label>
+                        <select name="type" id="for_type" class="form-control" required>
+                            <option value=""></option>
+                            <option value="signer">Firmante</option>
+                            <option value="visator">Visador</option>
+                        </select>
+                </fieldset>
+
+                <div class='col'>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Agregar 
+                    </button> 
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<h3 class="mb-3 mt-5">Firmantes y visadores</h3>
 
 <table class="table">
     <thead>
