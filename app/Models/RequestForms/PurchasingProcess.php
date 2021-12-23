@@ -65,6 +65,10 @@ class PurchasingProcess extends Model
         return $this->details->sum('expense');
     }
 
+    public function requestForm(){
+        return $this->belongsTo(RequestForm::class);
+    }
+
     // public function purchaseUnit(){
     //   return $this->belongsTo(PurchaseUnit::class, 'purchase_unit_id');
     // }

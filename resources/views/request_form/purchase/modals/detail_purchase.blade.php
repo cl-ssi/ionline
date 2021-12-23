@@ -36,6 +36,12 @@
                         </tbody>
                     </table>
                 </div>
+
+                <a href="{{ route('request_forms.create_internal_purchase_order_document', $detail->pivot->internalPurchaseOrder) }}"
+                  class="btn btn-primary btn-sm float-right" title="Formulario" target="_blank">
+                  Orden de Compra <i class="fas fa-file-alt"></i>
+                </a>
+
                 @endif
 
                 @if($detail->pivot->pettyCash)
