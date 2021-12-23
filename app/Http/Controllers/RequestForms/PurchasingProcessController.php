@@ -78,8 +78,6 @@ class PurchasingProcessController extends Controller
         $internalPurchaseOrder->date                    = Carbon::now();
         $internalPurchaseOrder->supplier_id             = $request->supplier_id;
         $internalPurchaseOrder->payment_condition       = $request->payment_condition;
-        $internalPurchaseOrder->user_id                 = Auth::user()->id;
-        $internalPurchaseOrder->purchasing_process_id   = $requestForm->purchasingProcess->id;
         $internalPurchaseOrder->estimated_delivery_date = $request->estimated_delivery_date;
         $internalPurchaseOrder->save();
 
@@ -109,8 +107,6 @@ class PurchasingProcessController extends Controller
         $pettyCash->receipt_type            = $request->receipt_type;
         $pettyCash->receipt_number          = $request->receipt_number;
         $pettyCash->amount                  = $request->amount;
-        $pettyCash->user_id                 = Auth::user()->id;
-        $pettyCash->purchasing_process_id   = $requestForm->purchasingProcess->id;
         $pettyCash->save();
 
         $now = Carbon::now()->format('Y_m_d_H_i_s');

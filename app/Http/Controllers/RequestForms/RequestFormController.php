@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use App\Mail\RequestFormDirectorNotification;
+use App\Models\RequestForms\EventRequestForm;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\File;
 use PDF;
@@ -121,6 +122,14 @@ class RequestFormController extends Controller {
         else
             $manager = $manager->user->getFullNameAttribute();
         return view('request_form.sign', compact('requestForm', 'manager', 'position', 'organizationalUnit', 'eventType', 'title'));
+    }
+
+    public function create_new_budget(Request $request, RequestForm $requestForm)
+    {
+        $requestForm->newBudget = $request->newBudget;
+        EventRequestForm::createNewBudgetEvent($requestForm);
+        session()->flash('info', 'Se ha solicitado un nuevo presupuesto pendiente de su aprobación, mientras no tenga respuesta de esta solicitud no podrá registrar nuevas compras.');
+        return redirect()->route('request_forms.supply.index');
     }
 
     // public function leadershipIndex() {

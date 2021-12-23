@@ -70,13 +70,22 @@
                 </tbody>
             </table>
         </div>
+        
+        <div class="float-right">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+                Editar Mecanismo de Compra
+            </button>
 
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary float-right btn-sm" data-toggle="modal" data-target="#exampleModal">
-            Editar Mecanismo de Compra
-        </button>
-
-        @include('request_form.purchase.modals.select_purchase_mechanism')
+            @include('request_form.purchase.modals.select_purchase_mechanism')
+    
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#requestBudget">
+                Solicitar presupuesto
+            </button>
+            
+            @include('request_form.purchase.modals.request_new_budget')
+        </div>
     </div>
     <div class="col-sm-4">
         <h6><i class="fas fa-paperclip"></i> Adjuntos</h6>
