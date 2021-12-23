@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Models\RequestForms;
+namespace App\Models\RequestForms;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
