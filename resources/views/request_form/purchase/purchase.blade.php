@@ -70,13 +70,22 @@
                 </tbody>
             </table>
         </div>
+        
+        <div class="float-right">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+                Editar Mecanismo de Compra
+            </button>
 
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary float-right btn-sm" data-toggle="modal" data-target="#exampleModal">
-            Editar Mecanismo de Compra
-        </button>
-
-        @include('request_form.purchase.modals.select_purchase_mechanism')
+            @include('request_form.purchase.modals.select_purchase_mechanism')
+    
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#requestBudget" @if($isBudgetEventSignPending) disabled @endif >
+                Solicitar presupuesto
+            </button>
+            
+            @include('request_form.purchase.modals.request_new_budget')
+        </div>
     </div>
     <div class="col-sm-4">
         <h6><i class="fas fa-paperclip"></i> Adjuntos</h6>
@@ -155,7 +164,7 @@
                             <fieldset class="form-group">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="item_id[{{$key}}]" onclick="disabledSaveBtn()"
-                                      id="for_item_id" value="{{ $item->id }}">
+                                      id="for_item_id" value="{{ $item->id }}" @if($isBudgetEventSignPending) disabled @endif>
                                 </div>
                             </fieldset>
                         </td>
