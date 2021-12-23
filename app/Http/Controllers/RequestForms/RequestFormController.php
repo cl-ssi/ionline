@@ -54,7 +54,7 @@ class RequestFormController extends Controller {
     public function pending_forms()
     {
         $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
-        $my_pending_forms_to_signs = $my_forms_signed = collect();
+        $my_pending_forms_to_signs = $new_budget_pending_to_sign = $my_forms_signed = collect();
 
         //superchief?
         $result = RequestForm::whereHas('eventRequestForms', function($q){
@@ -80,13 +80,20 @@ class RequestFormController extends Controller {
                                                             return is_array($prev_event_type) ? $f->whereIn('event_type', $prev_event_type)->where('status', 'pending') : $f->where('event_type', $prev_event_type)->where('status', 'pending');
                                                         });
                                                     })->get();
-            }
-            
-            $my_forms_signed = RequestForm::whereHas('eventRequestForms', $filter = function($q){
-                                            return $q->where('signer_user_id', Auth::user()->id);
-                                        })->get();
+        }
 
-        return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'my_forms_signed', 'event_type'));
+        if($event_type == 'supply_event'){
+            $new_budget_pending_to_sign = RequestForm::where('status', 'approved')
+                                                    ->whereHas('eventRequestForms', function($q) use ($event_type){
+                                                        return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', 'budget_event');
+                                                    })->get();
+        }
+            
+        $my_forms_signed = RequestForm::whereHas('eventRequestForms', $filter = function($q){
+                                        return $q->where('signer_user_id', Auth::user()->id);
+                                    })->get();
+
+        return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'new_budget_pending_to_sign', 'my_forms_signed', 'event_type'));
     }
 
 
@@ -112,7 +119,7 @@ class RequestFormController extends Controller {
     public function sign(RequestForm $requestForm, $eventType)
     {
         $requestForm->load('itemRequestForms');
-        $eventTitles = ['superior_leader_ship_event' => 'Dirección', 'leader_ship_event' => 'Jefatura', 'pre_finance_event' => 'Refrendación Presupuestaria', 'finance_event' => 'Finanzas', 'supply_event' => 'Abastecimiento'];
+        $eventTitles = ['superior_leader_ship_event' => 'Dirección', 'leader_ship_event' => 'Jefatura', 'pre_finance_event' => 'Refrendación Presupuestaria', 'finance_event' => 'Finanzas', 'supply_event' => 'Abastecimiento', 'budget_event' => 'Nuevo presupuesto'];
         $title = 'Formularios de Requerimiento - Autorización ' . $eventTitles[$eventType];
         $manager              = Authority::getAuthorityFromDate($requestForm->userOrganizationalUnit->id, Carbon::now(), 'manager');
         $position             = $manager->position;
