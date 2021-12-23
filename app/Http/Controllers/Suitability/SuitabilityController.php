@@ -343,6 +343,18 @@ class SuitabilityController extends Controller
     public function configSignatureAdd(Request $request) 
     {
         $newSigner = new Signer($request->All());
+
+        if ($newSigner->type === 'signer'){
+            $signerQuantity = Signer::query()
+                        ->where('type', 'signer')
+                        ->count();
+
+            if($signerQuantity > 0){
+                session()->flash('warning', 'Ya existe un firmante.');
+                return redirect()->back();
+            }
+        }
+
         $newSigner->save();
 
         return redirect()->route('suitability.configSignature');
