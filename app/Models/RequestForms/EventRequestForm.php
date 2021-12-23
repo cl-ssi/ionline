@@ -85,6 +85,19 @@ class EventRequestForm extends Model
         return true;
     }
 
+    public static function createNewBudgetEvent(RequestForm $requestForm){
+        $event = new EventRequestForm();
+        $event->ou_signer_user      =   37;
+        $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 6 : 5;
+        $event->status              =   'pending';
+        $event->event_type          =   'budget_event';
+        $event->purchaser_amount    =   $requestForm->newBudget;
+        $event->purchaser_id        =   Auth()->user()->id;
+        $event->requestForm()->associate($requestForm);
+        $event->save();
+        return true;
+    }
+
     protected $dates = [
         'signature_date',
     ];
