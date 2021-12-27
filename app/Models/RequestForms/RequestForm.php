@@ -167,7 +167,7 @@ class RequestForm extends Model implements Auditable
     }
 
     public function rejectedTime() {
-      $event = $this->eventRequestForms()->where('status', 'rejected')->first();
+      $event = $this->eventRequestForms()->where('status', 'rejected')->where('event_type', '!=', 'budget_event')->first();
       if(!is_null($event)){
         $date = new Carbon($event->signature_date);
         return $date->format('d-m-Y');
@@ -185,13 +185,13 @@ class RequestForm extends Model implements Auditable
     }
 
     public function rejectedName() {
-      $event = $this->eventRequestForms()->where('status', 'rejected')->first();
+      $event = $this->eventRequestForms()->where('status', 'rejected')->where('event_type', '!=', 'budget_event')->first();
       if(!is_null($event))
         return $event->signerUser->tinnyName();
     }
 
     public function rejectedComment() {
-      $event = $this->eventRequestForms()->where('status', 'rejected')->first();
+      $event = $this->eventRequestForms()->where('status', 'rejected')->where('event_type', '!=', 'budget_event')->first();
       if(!is_null($event))
         return $event->comment;
     }
