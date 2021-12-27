@@ -82,9 +82,9 @@ class RequestFormController extends Controller {
                                                     })->get();
         }
 
-        if($event_type == 'supply_event'){
+        if($event_type == 'finance_event'){
             $new_budget_pending_to_sign = RequestForm::where('status', 'approved')
-                                                    ->whereHas('eventRequestForms', function($q) use ($event_type){
+                                                    ->whereHas('eventRequestForms', function($q){
                                                         return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', 'budget_event');
                                                     })->get();
         }
