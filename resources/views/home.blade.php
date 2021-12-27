@@ -4,16 +4,34 @@
 
 @section('content')
 
-<div class="jumbotron mt-4">
+<style>
+    .jumbotron {
+    background-image: url("{{ asset('images/navidad.jpg') }}");
+    background-size: cover;
+    /* opacity: 0.5; */
+}
+</style>
+<div class="jumbotron mt-4 text-light">
     <div class="row">
-        <div class="col-9">
-            <h1 class="display-4">Intranet Online</h1>
-            <p class="lead">{{ env('APP_SS') }}</p>
+        <div class="col-6">
+            <!-- <h1 class="display-4">Intranet Online</h1> -->
+            <!-- <p class="lead">{{ env('APP_SS') }}</p> -->
+            <h1 class="display-4">Feliz Navidad</h1>
+            <p class="lead">
+            <br><br>
+                Hola {{ auth()->user()->firstName }}, el glorioso Departamento de 
+                Informática y Telecomunicaciones, 
+                te desea una muy feliz navidad junto a tus seres queridos, 
+                lleno de alegría, felicidad y lo que tú estés buscando.
+                <br><br><br><br><br><br>
+            </p>
+            
             <hr class="my-4">
+
             <p>Contacto:
                 <a href="mailto:{{ env('APP_SS_EMAIL') }}">{{ env('APP_SS_EMAIL') }}</a>
             </p>
-            <ol>
+            <!-- <ol>
                 <h6>Pasos para solicitud de Firma Electrónica del Gobierno (OTP)</h6>
                 <li>
                 Solicitar a Yeannett Valdivia o Pamela Villagrán crear usuario en sistema de firma digital.
@@ -29,10 +47,11 @@
                 <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Android</a><br>
                 <a href="https://apps.apple.com/cl/app/google-authenticator/id388497605">I-Phone</a>
                 </li>
-            </ol>
+            </ol> -->
         </div>
         <div class="col-md-3 col-12">
-            <img src="{{ asset('images/logo_blanco.png') }}" alt="Logo {{ env('APP_SS') }}" style="background-color: rgb(0, 108, 183);" class="img-thumbnail">
+            <!-- <img src="{{ asset('images/christmas-tree.jpg') }}" class="img-thumbnail rounded" alt="Arbol de navidad">
+            <img src="{{ asset('images/logo_blanco.png') }}" alt="Logo {{ env('APP_SS') }}" style="background-color: rgb(0, 108, 183);" class="img-thumbnail"> -->
         </div>
     </div>
 
@@ -41,16 +60,13 @@
         , quiero contarte que fui desarrollado el año 2018 por <a href="mailto:alvaro.torres@redsalud.gob.cl">
             Alvaro Torres</a> y <a href="mailto:jorge.mirandal@redsalud.gob.cl">Jorge Miranda</a>
         y hoy día soy mantenido por un excelente equipo de desarrollo del Departamento TIC,
-        dónde se incorporó los Estebanes (Rojas + Miranda), Germán Zuñiga, Álvaro Lupa y Oscar Zavala.
+        dónde se incorporó los Estebanes (Rojas + Miranda), Germán Zuñiga y Álvaro Lupa.
         <br>
         El equipo de combate en terreno está formado por
         Yeannett, Adriana, Cristian y Álvaro (si, hay tres Álvaros en el departamento).
         <br>
         Nuestro jefe de departamento es el glorioso Don José Don Oso. <br>
-        Y una mención especial a nuestra ex .... secretaría que aún nos apoya, Pamela.
-
         <hr>
-
         <pre>{{ $phrase ? $phrase->phrase : '' }}</pre>
     </div>
 </div>
