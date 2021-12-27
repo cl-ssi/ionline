@@ -43,6 +43,8 @@ class CreateArqRequestFormsTable extends Migration
             $table->foreign('contract_manager_id')->references('id')->on('users');
             $table->foreign('request_user_ou_id')->references('id')->on('organizational_units');
 
+            $table->foreignId('signatures_file_id')->nullable()->constrained('doc_signatures_files');
+
             $table->timestamps();
             $table->softDeletes();
         });
