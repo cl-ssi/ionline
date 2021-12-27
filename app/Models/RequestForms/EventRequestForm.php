@@ -87,7 +87,7 @@ class EventRequestForm extends Model
 
     public static function createNewBudgetEvent(RequestForm $requestForm){
         $event = new EventRequestForm();
-        $event->ou_signer_user      =   37;
+        $event->ou_signer_user      =   40;
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 6 : 5;
         $event->status              =   'pending';
         $event->event_type          =   'budget_event';
