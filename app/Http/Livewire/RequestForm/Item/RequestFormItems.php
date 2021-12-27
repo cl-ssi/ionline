@@ -55,7 +55,7 @@ class RequestFormItems extends Component
             'unitValue'                => $this->unitValue,
             'taxes'                    => $this->taxes,
             //'budget_item_id'           => $this->budget_item_id,
-            'totalValue'               => $this->quantity * $this->unitValue,
+            'totalValue'               => $this->quantity * ($this->taxes == 'iva' ? $this->unitValue * 1.19 : $this->unitValue),
             'typeOfCurrency'           => $this->typeOfCurrency,
             'articleFile'              => $this->articleFile,
       ];
