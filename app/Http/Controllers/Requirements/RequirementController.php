@@ -42,7 +42,8 @@ class RequirementController extends Controller
     //$parametro_busqueda = $request['text'];
     //      dd($request);
 
-    $users[0] = Auth::user()->id;
+    //$users[0] = Auth::user()->id;
+    $users[0] = array();
     //$ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'), 'secretary', Auth::user()->id);
     $ous_secretary = Authority::getAmIAuthorityFromOu(Carbon::today(), 'secretary', Auth::user()->id);
     foreach ($ous_secretary as $secretary) {
