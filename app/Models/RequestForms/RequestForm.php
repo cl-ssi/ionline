@@ -109,6 +109,11 @@ class RequestForm extends Model implements Auditable
       return $this->HasOne(PurchasingProcess::class);
     }
 
+    public function signedRequestForm()
+    {
+        return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signatures_file_id');
+    }
+
     /*****Elimina RequestForm y tablas relacionadas en cadena*****/
     public static function boot() {
         parent::boot();

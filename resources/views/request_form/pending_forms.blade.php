@@ -131,10 +131,6 @@
                                 <td>{{ $requestForm->purchaseMechanism->name }}</td>
                                 <td align="center">{{ $requestForm->quantityOfItems() }}</td>
                                 <td align="center">{{ $requestForm->getElapsedTime() }}</td>
-                                {{--<td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                                <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
-                                <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                                <td class="align-middle text-center brd-b brd-r">{!! $requestForm->eventSign('supply_event') !!}</td>--}}
                                 <td class="text-center">
                                   @foreach($requestForm->eventRequestForms as $sign)
                                       @if($sign->status == 'pending')
@@ -191,6 +187,7 @@
                   <th scope="col">Usuario Rechazo</th>
                   <th scope="col">Comentario</th>
                   <th>Estado</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody class="small">
@@ -203,10 +200,6 @@
                             <td class="align-middle">{{ $requestForm->rejectedTime() }}</td>
                             <td class="align-middle">{{ $requestForm->rejectedName() }}</td>
                             <td class="align-middle">{{ $requestForm->rejectedComment() }}</td>
-                            {{--<td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>--}}
                             <td class="text-center">
                                   @foreach($requestForm->eventRequestForms as $sign)
                                       @if($sign->status == 'pending' || $sign->status == NULL)
@@ -223,7 +216,36 @@
                                           </span>
                                       @endif
                                   @endforeach
-                              </td>
+                            </td>
+                            <td>
+                                <a href="{{ route('request_forms.show', $requestForm->id) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i></a>
+
+                                @if($requestForm->signatures_file_id)
+                                    <a class="btn btn-info btn-sm"
+                                        title="Ver Formulario de Requerimiento firmado"
+                                        href="{{ route('request_forms.signedRequestFormPDF', $requestForm) }}"
+                                        target="_blank" title="Certificado">
+                                          Form Firmado<i class="fas fa-signature"></i>
+                                    </a>
+                                @else
+                                    {{--modal firmador--}}
+                                    @php $idModelModal = $requestForm->id;
+                                				$routePdfSignModal = "/request_forms/create_form_document/$idModelModal/";
+                                				$routeCallbackSignModal = 'request_forms.callbackSign';
+                                    @endphp
+
+                                    @include('documents.signatures.partials.sign_file')
+
+                                    @if($event_type == 'finance_event')
+                                      <button type="button" data-toggle="modal" class="btn btn-outline-info btn-sm"
+                                          title="Firmar Certificado de Disponibilidad Presupuestaria"
+                                          data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
+                                            Firmar Form. <i class="fas fa-signature"></i>
+                                      </button>
+                                    @endif
+                                @endif
+                            </td>
                         </tr>
                   @endforeach
               </tbody>
