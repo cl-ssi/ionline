@@ -54,10 +54,6 @@
                                 <td>{{ $requestForm->purchaseMechanism->name }}</td>
                                 <td align="center">{{ $requestForm->quantityOfItems() }}</td>
                                 <td align="center">{{ $requestForm->getElapsedTime() }}</td>
-                                {{--<td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                                <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
-                                <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                                <td class="align-middle text-center brd-b brd-r">{!! $requestForm->eventSign('supply_event') !!}</td>--}}
                                 <td class="text-center">
                                   @foreach($requestForm->eventRequestForms as $sign)
                                       @if($sign->status == 'pending')
@@ -75,29 +71,15 @@
                                       @endif
                                   @endforeach
                               </td>
-                                <!-- <td class="text-center align-middle brd-b">
-                                  <a href="{{ route('request_forms.edit', $requestForm->id) }}"  class="text-primary" title="Editar">
-                                  <i class="far fa-edit"></i></a>
-                                </td>
-
-                                <td class="text-center align-middle brd-b">
-                                  <a href="{{ route('request_forms.show', $requestForm->id) }}" class="text-info" title="Visualizar">
-                                  <i class="fas fa-binoculars"></i></a>
-                                </td>
-
-                                <td class="text-center align-middle brd-r brd-b">
-                                  <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
-                                  <i class="far fa-trash-alt"></i></a>
-                                </td> -->
-                                <td>
+                              <td>
                                 @if($requestForm->eventRequestForms->first()->status == 'pending')
                                 <a href="{{ route('request_forms.edit', $requestForm->id) }}"
                                     class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
                                 <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="btn btn-outline-secondary btn-sm text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
                                   <i class="fas fa-trash"></i></a>
                                 @else
-                                    <a href="{{ route('request_forms.show', $requestForm->id) }}"
-                                        class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i></a>
+                                <a href="{{ route('request_forms.show', $requestForm->id) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i></a>
                                 @endif
                               </td>
                             </tr>
@@ -147,10 +129,6 @@
                             <td class="align-middle">{{ $requestForm->rejectedTime() }}</td>
                             <td class="align-middle">{{ $requestForm->rejectedName() }}</td>
                             <td class="align-middle">{{ $requestForm->rejectedComment() }}</td>
-                            {{--<td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>--}}
                             <td class="text-center">
                                   @foreach($requestForm->eventRequestForms as $sign)
                                       @if($sign->status == 'pending' || $sign->status == NULL)
