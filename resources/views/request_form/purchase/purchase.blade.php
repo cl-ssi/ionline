@@ -384,7 +384,7 @@
                             </fieldset>
                         </td> -->
                         <td>
-                        <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->id}}">
+                        <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
                             <i class="fas fa-receipt"></i>
                         </button>
                         @include('request_form.purchase.modals.detail_purchase')
