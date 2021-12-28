@@ -162,10 +162,10 @@
     @else
         </div>
         <div class="col">
-            <h6><i class="fas fa-inbox"></i> Formularios pendientes de firma</h6>
+            <h6><i class="fas fa-inbox"></i> Formularios con nuevo presupuesto pendiente de firma</h6>
             <div class="card mb-3 bg-light">
               <div class="card-body">
-                No hay formularios de requerimiento pendientes de firma.
+                No hay formularios de requerimiento con nuevo presupuesto pendientes de firma.
               </div>
             </div>
         </div>
