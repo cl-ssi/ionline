@@ -84,15 +84,15 @@
                                       @endif
                                   @endforeach
                               </td>
-                                <td>
+                              <td>
                                 @if($requestForm->eventRequestForms->first()->status == 'pending')
                                 <a href="{{ route('request_forms.edit', $requestForm->id) }}"
                                     class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
                                 <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="btn btn-outline-secondary btn-sm text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
                                   <i class="fas fa-trash"></i></a>
                                 @else
-                                    <a href="{{ route('request_forms.show', $requestForm->id) }}"
-                                        class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i></a>
+                                <a href="{{ route('request_forms.show', $requestForm->id) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i></a>
                                 @endif
                               </td>
                             </tr>
