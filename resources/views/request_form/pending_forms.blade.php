@@ -53,11 +53,7 @@
                                 </td>
                                 <td>{{ $requestForm->purchaseMechanism->name }}</td>
                                 <td align="center">{{ $requestForm->quantityOfItems() }}</td>
-                                <td align="center">{{ $requestForm->getElapsedTime() }}</td>
-                                {{--<td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                                <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
-                                <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                                <td class="align-middle text-center brd-b brd-r">{!! $requestForm->eventSign('supply_event') !!}</td>--}}
+                                <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
                                 <td class="text-center">
                                   @foreach($requestForm->eventRequestForms as $sign)
                                       @if($sign->status == 'pending')
@@ -130,7 +126,7 @@
                                 </td>
                                 <td>{{ $requestForm->purchaseMechanism->name }}</td>
                                 <td align="center">{{ $requestForm->quantityOfItems() }}</td>
-                                <td align="center">{{ $requestForm->getElapsedTime() }}</td>
+                                <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
                                 <td class="text-center">
                                   @foreach($requestForm->eventRequestForms as $sign)
                                       @if($sign->status == 'pending')
