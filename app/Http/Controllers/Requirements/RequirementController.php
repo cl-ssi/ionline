@@ -43,11 +43,11 @@ class RequirementController extends Controller
     //      dd($request);
 
     $users[0] = Auth::user()->id;
-    //$ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'), 'secretary', Auth::user()->id);
-    $ous_secretary = Authority::getAmIAuthorityFromOu(Carbon::today(), 'secretary', Auth::user()->id);
+    $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'), 'secretary', Auth::user()->id);
+    //$ous_secretary = Authority::getAmIAuthorityFromOu(Carbon::today(), 'secretary', Auth::user()->id);
     foreach ($ous_secretary as $secretary) {
-      //$users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
-      $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, Carbon::today(), 'manager')->user_id;
+      $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
+      //$users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, Carbon::today(), 'manager')->user_id;
     }
 
     // when($parametro_busqueda, function ($query, $parametro_busqueda) {
