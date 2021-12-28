@@ -24,13 +24,13 @@ class InternalPurchaseOrder extends Model
         return $this->belongsTo(Supplier::class);
     }
 
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
+    // public function user(){
+    //     return $this->belongsTo(User::class);
+    // }
 
-    public function purchasingProcess() {
-        return $this->belongsTo(PurchasingProcess::class);
-    }
+    // public function purchasingProcess() {
+    //     return $this->belongsTo(PurchasingProcess::class);
+    // }
 
     protected $dates = ['date', 'estimated_delivery_date'];
 

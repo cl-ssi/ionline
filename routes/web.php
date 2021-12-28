@@ -1350,7 +1350,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     /* DOCUMENTS */
     Route::get('/create_form_document/{requestForm}', [RequestFormController::class, 'create_form_document'])->name('create_form_document');
-    Route::get('/create_internal_purchase_order_document/{internalPurchaseOrder}', [InternalPurchaseOrderController::class, 'create_internal_purchase_order_document'])->name('create_internal_purchase_order_document');
+    Route::get('/create_internal_purchase_order_document/{purchasingProcessDetail}', [InternalPurchaseOrderController::class, 'create_internal_purchase_order_document'])->name('create_internal_purchase_order_document');
 
     Route::get('/{requestForm}/edit', [RequestFormController::class, 'edit'])->name('edit');
 
