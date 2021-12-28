@@ -24,12 +24,12 @@ class CreateArqItemRequestForms extends Migration
             $table->foreignId('budget_item_id')->nullable();
             $table->string('article');
             $table->string('unit_of_measurement');
-            $table->unsignedInteger('quantity');
+            $table->float('quantity');
             $table->string('article_file')->nullable();
-            $table->unsignedInteger('unit_value');
+            $table->float('unit_value');
             $table->longText('specification');
             $table->string('tax');
-            $table->unsignedInteger('expense');
+            $table->float('expense');
             $table->enum('status', ['in_progress', 'total', 'partial', 'desert',  'timed_out', 'not_available']);
             $table->softDeletes();
             $table->timestamps();

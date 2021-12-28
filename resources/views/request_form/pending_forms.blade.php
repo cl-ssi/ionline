@@ -7,7 +7,7 @@
 
 @include('request_form.partials.nav')
 
-@if(count($my_forms_signed) > 0 || count($my_pending_forms_to_signs) > 0)
+@if(count($my_forms_signed) > 0 || count($my_pending_forms_to_signs) > 0 || count($new_budget_pending_to_sign) > 0)
 
     <fieldset class="form-group">
         <div class="input-group mb-3">
@@ -98,6 +98,79 @@
         </div>
     @endif
 
+    @if(count($new_budget_pending_to_sign) > 0)
+    </div>
+        <div class="col">
+            <h6><i class="fas fa-inbox"></i> Formularios con nuevo presupuesto pendiente de firma</h6>
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-bordered">
+                  <thead class="small">
+                    <tr class="text-center">
+                      <th>ID</th>
+                      <th style="width: 7%">Fecha Creación</th>
+                      <th>Tipo</th>
+                      <th>Descripción</th>
+                      <th>Usuario Gestor</th>
+                      <th>Mecanismo de Compra</th>
+                      <th>Items</th>
+                      <th>Espera</th>
+                      <th>Estado</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody class="small">
+                      @foreach($new_budget_pending_to_sign as $requestForm)
+                            <tr>
+                                <td>{{ $requestForm->id }}</td>
+                                <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                                <td>{{ $requestForm->type_form }}</td>
+                                <td>{{ $requestForm->name }}</td>
+                                <td>{{ $requestForm->user->FullName }}<br>
+                                    {{ $requestForm->userOrganizationalUnit->name }}
+                                </td>
+                                <td>{{ $requestForm->purchaseMechanism->name }}</td>
+                                <td align="center">{{ $requestForm->quantityOfItems() }}</td>
+                                <td align="center">{{ $requestForm->getElapsedTime() }}</td>
+                                <td class="text-center">
+                                  @foreach($requestForm->eventRequestForms as $sign)
+                                      @if($sign->status == 'pending')
+                                          <i class="fas fa-clock fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                      @endif
+                                      @if($sign->status == 'approved')
+                                          <span style="color: green;">
+                                              <i class="fas fa-check-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                          </span>
+                                      @endif
+                                      @if($sign->status == 'rejected')
+                                          <span style="color: Tomato;">
+                                              <i class="fas fa-times-circle fa-2x" title="{{ $sign->signerOrganizationalUnit->name }}"></i>
+                                          </span>
+                                      @endif
+                                  @endforeach
+                              </td>
+                              <td>
+                                <a href="{{ route('request_forms.sign', [$requestForm, 'budget_event']) }}" class="btn btn-outline-primary btn-sm" title="Aceptar o Rechazar">
+                                  <i class="fas fa-signature"></i>
+                                </a>
+                              </td>
+                            </tr>
+                      @endforeach
+                  </tbody>
+                </table>
+            </div>
+        </div>
+    @else
+        </div>
+        <div class="col">
+            <h6><i class="fas fa-inbox"></i> Formularios pendientes de firma</h6>
+            <div class="card mb-3 bg-light">
+              <div class="card-body">
+                No hay formularios de requerimiento pendientes de firma.
+              </div>
+            </div>
+        </div>
+    @endif
+
     @if(count($my_forms_signed) > 0)
     </div>
         <div class="col">
@@ -114,6 +187,7 @@
                   <th scope="col">Usuario Rechazo</th>
                   <th scope="col">Comentario</th>
                   <th>Estado</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody class="small">
@@ -126,10 +200,6 @@
                             <td class="align-middle">{{ $requestForm->rejectedTime() }}</td>
                             <td class="align-middle">{{ $requestForm->rejectedName() }}</td>
                             <td class="align-middle">{{ $requestForm->rejectedComment() }}</td>
-                            {{--<td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>--}}
                             <td class="text-center">
                                   @foreach($requestForm->eventRequestForms as $sign)
                                       @if($sign->status == 'pending' || $sign->status == NULL)
@@ -146,7 +216,36 @@
                                           </span>
                                       @endif
                                   @endforeach
-                              </td>
+                            </td>
+                            <td>
+                                <a href="{{ route('request_forms.show', $requestForm->id) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i></a>
+
+                                @if($requestForm->signatures_file_id)
+                                    <a class="btn btn-info btn-sm"
+                                        title="Ver Formulario de Requerimiento firmado"
+                                        href="{{ route('request_forms.signedRequestFormPDF', $requestForm) }}"
+                                        target="_blank" title="Certificado">
+                                          Form Firmado<i class="fas fa-signature"></i>
+                                    </a>
+                                @else
+                                    {{--modal firmador--}}
+                                    @php $idModelModal = $requestForm->id;
+                                				$routePdfSignModal = "/request_forms/create_form_document/$idModelModal/";
+                                				$routeCallbackSignModal = 'request_forms.callbackSign';
+                                    @endphp
+
+                                    @include('documents.signatures.partials.sign_file')
+
+                                    @if($event_type == 'finance_event')
+                                      <button type="button" data-toggle="modal" class="btn btn-outline-info btn-sm"
+                                          title="Firmar Certificado de Disponibilidad Presupuestaria"
+                                          data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
+                                            Firmar Form. <i class="fas fa-signature"></i>
+                                      </button>
+                                    @endif
+                                @endif
+                            </td>
                         </tr>
                   @endforeach
               </tbody>

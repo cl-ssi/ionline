@@ -19,8 +19,6 @@ class CreateArqInternalPurchaseOrdersTable extends Migration
             $table->foreignId('supplier_id')->constrained('cfg_suppliers');
             $table->string('payment_condition');
             $table->date('estimated_delivery_date')->nullable();
-            $table->foreignId('user_id')->constrained('users'); //Usuario que la orden de compra.
-            $table->foreignId('purchasing_process_id')->constrained('arq_purchasing_processes');
 
             $table->timestamps();
             $table->SoftDeletes();

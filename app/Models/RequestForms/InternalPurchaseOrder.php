@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\User;
+
 class InternalPurchaseOrder extends Model
 {
     use HasFactory;
@@ -20,6 +22,14 @@ class InternalPurchaseOrder extends Model
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function purchasingProcess() {
+        return $this->belongsTo(PurchasingProcess::class);
     }
 
     protected $dates = ['date', 'estimated_delivery_date'];
