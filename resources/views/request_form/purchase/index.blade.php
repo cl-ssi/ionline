@@ -27,8 +27,8 @@
                 </tr>
             </thead>
           <tbody>
-              @if($purchaser)
-                @foreach($purchaser->requestForms as $requestForm)
+              @if($requestForms)
+                @foreach($requestForms as $requestForm)
                         <tr>
                             <td>{{ $requestForm->id }}</td>
                             <td style="width: 7%">{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>

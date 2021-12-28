@@ -45,5 +45,15 @@
 @livewire('request-form.request-form-create', ['requestForm' => $requestForm])
 
 @endsection
-@section('custom_js_head')
+
+@section('custom_js')
+
+<script>
+   $(document).ready(function(){
+      anElement = new AutoNumeric('#quantity_format', AutoNumeric.getPredefinedOptions().commaDecimalCharDotSeparator);
+      anElement = new AutoNumeric('#price_format', AutoNumeric.getPredefinedOptions().commaDecimalCharDotSeparator);
+      anElement.clear();
+  })
+</script>
+
 @endsection

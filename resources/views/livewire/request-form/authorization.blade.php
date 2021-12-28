@@ -69,6 +69,22 @@
           </div>
           @endif
 
+          @if($eventType=='budget_event')
+          <div class="form-row">
+              <fieldset class="form-group col-sm">
+                  <label>Presupuesto actual:</label><br>
+                  <input wire:model="estimated_expense" name="estimated_expense" class="form-control form-control-sm text-right" type="text" readonly>
+                  @error('estimated_expense') <span class="error text-danger">{{ $message }}</span> @enderror
+              </fieldset>
+
+              <fieldset class="form-group col-sm">
+                  <label>Presupuesto nuevo:</label><br>
+                  <input wire:model="purchaser_amount" name="purchaser_amount" class="form-control form-control-sm text-right" type="text" readonly>
+                  @error('purchaser_amount') <span class="error text-danger">{{ $message }}</span> @enderror
+              </fieldset>
+          </div>
+          @endif
+
           <div class="form-row">
               <fieldset class="form-group col-sm">
                   <label for="forRejectedComment">Comentario de Rechazo:</label>

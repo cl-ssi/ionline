@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Parameters;
 
-use App\Models\Supplier;
+use App\Models\Parameters\Supplier;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class SupplierController extends Controller
 {
@@ -14,7 +15,8 @@ class SupplierController extends Controller
      */
     public function index()
     {
-        //
+        $suppliers = Supplier::All();
+        return view('parameters.suppliers.index', compact('suppliers'));
     }
 
     /**

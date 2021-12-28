@@ -31,6 +31,34 @@
     </li>
   @endif
 
+  @can('Request Forms: admin')
+  <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-file-alt"></i> Parámetros
+    </a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+      <a class="dropdown-item" href="{{ route('parameters.budgetitems.index') }}">
+          <i class="fas fa-file-invoice-dollar"></i> Item Presupuestario
+      </a>
+      <a class="dropdown-item" href="{{ route('parameters.measurements.index') }}">
+          <i class="fas fa-ruler-combined"></i> Unidades de Medida
+      </a>
+      <a class="dropdown-item" href="{{ route('parameters.purchasemechanisms.index') }}">
+          <i class="fas fa-shopping-cart"></i> Mecanismos de Compra
+      </a>
+      <a class="dropdown-item" href="{{ route('parameters.purchasetypes.index') }}">
+          <i class="fas fa-shopping-cart"></i> Tipos de Compra
+      </a>
+      <a class="dropdown-item" href="{{ route('parameters.purchaseunits.index') }}">
+          <i class="fas fa-shopping-cart"></i> Unidades de Compra
+      </a>
+      <a class="dropdown-item" href="{{ route('parameters.suppliers.index') }}">
+          <i class="fas fa-truck"></i> Proveedores
+      </a>
+    </div>
+  </li>
+  @endcan
+
   <!-- <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-dice-d6"></i> Bienes y/o Servicios

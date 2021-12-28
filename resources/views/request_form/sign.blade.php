@@ -126,15 +126,12 @@
                 </tr>
         @endforeach
       </tbody>
-      <tfoot class="text-center small">
+      <tfoot class="text-right small">
         <tr>
-          <td colspan="5" rowspan="2"></td>
+          <td colspan="9">Valor Total</td>
+          <td>${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
           <!-- <td colspan="3">Cantidad de Items</td>
           <td colspan="3">{{count($requestForm->itemRequestForms)}}</td> -->
-        </tr>
-        <tr>
-          <td colspan="3">Valor Total</td>
-          <td colspan="3">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
         </tr>
       </tfoot>
     </table>

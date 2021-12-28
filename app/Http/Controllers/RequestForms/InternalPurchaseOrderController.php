@@ -4,6 +4,7 @@ namespace App\Http\Controllers\RequestForms;
 
 use App\Http\Controllers\Controller;
 use App\Models\RequestForms\InternalPurchaseOrder;
+use App\Models\RequestForms\PurchasingProcessDetail;
 use Illuminate\Http\Request;
 
 class InternalPurchaseOrderController extends Controller
@@ -82,5 +83,14 @@ class InternalPurchaseOrderController extends Controller
     public function destroy(InternalPurchaseOrder $internalPurchaseOrder)
     {
         //
+    }
+
+    public function create_internal_purchase_order_document(internalPurchaseOrder $internalPurchaseOrder)
+    {
+        //dd($internalPurchaseOrder);
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('request_form.documents.internal_purchase_order_document', compact('internalPurchaseOrder'));
+
+        return $pdf->stream('oc_'.$internalPurchaseOrder.'.pdf');
     }
 }
