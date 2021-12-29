@@ -195,11 +195,6 @@
                             href="{{ route('rrhh.shiftManag.index') }}">
                             <i class="fa fa-calendar fa-fw"></i> Modulo Turnos
                         </a>
-
-                        <!-- <a class="dropdown-item @active('rrhh.users.index')"
-                            href="{{ route('rrhh.shift-control.index') }}">
-                            <i class="fa fa-calendar fa-fw"></i> Modulo Turnos v2
-                        </a> -->
                         @endcan
 
                         @canany(['Users: service requests'])
