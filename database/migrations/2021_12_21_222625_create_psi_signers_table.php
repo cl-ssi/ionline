@@ -16,7 +16,7 @@ class CreatePsiSignersTable extends Migration
         Schema::create('psi_signers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->integer('sign_order');
+            $table->enum('type', ['signer', 'visator']);
             $table->timestamps();
             $table->softDeletes();
 

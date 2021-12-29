@@ -18,6 +18,7 @@ class Authorization extends Component
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $rejectedComment;
     public $lstSupervisorUser, $supervisorUser, $title, $route;
     public $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit, $lstPurchaseMechanism, $purchaseMechanism;
+    public $estimated_expense, $purchaser_amount;
 
     protected $rules = [
         'rejectedComment' => 'required|min:6',
@@ -44,13 +45,16 @@ class Authorization extends Component
           $this->lstPurchaseUnit        = PurchaseUnit::all();
           $this->lstPurchaseMechanism   = PurchaseMechanism::all();
           $this->title = 'Autorización Abastecimiento';
-          // $this->route = 'request_forms.supply_index';
       }elseif($eventType=='finance_event'){
           $this->title = 'Autorización Finanzas';
-          // $this->route = 'request_forms.finance_index';
       }elseif($eventType=='leader_ship_event'){
           $this->title = 'Autorización Jefatura';
-          // $this->route = 'request_forms.leadership_index';
+      }elseif($eventType=='superior_leader_ship_event'){
+          $this->title = 'Autorización Dirección';
+      }elseif($eventType=='budget_event'){
+          $this->title = 'Autorización Nuevo presupuesto';
+          $this->estimated_expense = $requestForm->estimated_expense;
+          $this->purchaser_amount = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->first()->purchaser_amount;
       }
     }
 
@@ -102,6 +106,10 @@ class Authorization extends Component
         // $this->createPurchasingProcesses();
       }
 
+      if($this->eventType=='budget_event'){
+        $this->requestForm->update(['estimated_expense' => $this->purchaser_amount]);
+      }
+
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
            $event->signature_date = Carbon::now();
@@ -121,8 +129,10 @@ class Authorization extends Component
       $this->validate();
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
-           $this->requestForm->status = 'rejected';
-           $this->requestForm->save();
+          if($this->eventType != 'budget_event'){
+            $this->requestForm->status = 'rejected';
+            $this->requestForm->save();
+          }
            $event->signature_date = Carbon::now();
            $event->comment = $this->rejectedComment;
            $event->position_signer_user = $this->position;

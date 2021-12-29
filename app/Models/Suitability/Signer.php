@@ -22,12 +22,29 @@ class Signer extends Model
 
         protected $fillable = [
         'user_id',
-        'sign_order',
+        'type',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getTypeEspAttribute()
+    {
+        switch ($this->type) {
+            case 'visator':
+                return 'Visador';
+                break;
+            
+            case 'signer':
+                return 'Firmante';
+                break;
+
+            default:
+                return '';
+                break;
+        }
     }
 
 }

@@ -27,8 +27,8 @@
                 </tr>
             </thead>
           <tbody>
-              @if($purchaser)
-                @foreach($purchaser->requestForms as $requestForm)
+              @if($requestForms)
+                @foreach($requestForms as $requestForm)
                         <tr>
                             <td>{{ $requestForm->id }}</td>
                             <td style="width: 7%">{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
@@ -39,7 +39,7 @@
                             </td>
                             <td>{{ $requestForm->purchaseMechanism->name }}</td>
                             <td>{{ $requestForm->quantityOfItems() }}</td>
-                            <td>{{ $requestForm->getElapsedTime() }}</td>
+                            <td>{{ $requestForm->created_at->diffForHumans() }}</td>
                             <td>
                             @foreach($requestForm->eventRequestForms as $sign)
                                 @if($sign->status == 'pending')
