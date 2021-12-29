@@ -37,7 +37,7 @@ figure:focus .menu {
 
                     @livewire( 'rrhh.delete-shift-button',['actuallyShiftUserDay'=>$sis])
 
-                    @livewire( 'rrhh.see-shift-control-form', ['usr'=>$sis->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth], key($loop->index) )
+                    {{--@livewire( 'rrhh.see-shift-control-form', ['usr'=>$sis->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth], key($loop->index) )--}}
 
                     {{ $sis->user->runFormat()}} - {{$sis->user->name}} {{$sis->user->fathers_family}}
                     <small>
