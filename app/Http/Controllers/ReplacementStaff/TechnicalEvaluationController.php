@@ -14,6 +14,10 @@ use Carbon\Carbon;
 use App\User;
 use Illuminate\Support\Facades\Redirect;
 
+use App\Rrhh\Authority;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EndSelectionNotification;
+
 class TechnicalEvaluationController extends Controller
 {
     /**
@@ -145,5 +149,37 @@ class TechnicalEvaluationController extends Controller
     public function destroy(TechnicalEvaluation $technicalEvaluation)
     {
         //
+    }
+
+    public function finalize_selection_process(Request $request, TechnicalEvaluation $technicalEvaluation)
+    {
+        $technicalEvaluation->technical_evaluation_status = 'rejected';
+        $technicalEvaluation->date_end = Carbon::now();
+        $technicalEvaluation->reason = $request->reason;
+        $technicalEvaluation->observation = $request->observation;
+        $technicalEvaluation->save();
+
+        $technicalEvaluation->requestReplacementStaff->request_status = 'rejected';
+        $technicalEvaluation->requestReplacementStaff->save();
+
+        //Request
+        $mail_request = $technicalEvaluation->requestReplacementStaff->user->email;
+        //Manager
+        $type = 'manager';
+        $mail_notification_ou_manager = Authority::getAuthorityFromDate($technicalEvaluation->requestReplacementStaff->user->organizational_unit_id, Carbon::now(), $type);
+
+        $ou_personal_manager = Authority::getAuthorityFromDate(46, Carbon::now(), 'manager');
+        $ou_personal_secretary = Authority::getAuthorityFromDate(46, Carbon::now(), 'secretary');
+
+        $emails = [$mail_request,
+                    $mail_notification_ou_manager->user->email,
+                    $ou_personal_manager->user->email,
+                    $ou_personal_secretary->user->email];
+
+        Mail::to($emails)
+          ->cc(env('APP_RYS_MAIL'))
+          ->send(new EndSelectionNotification($technicalEvaluation));
+
+        return redirect()->route('replacement_staff.request.technical_evaluation.edit',['technicalEvaluation' => $technicalEvaluation]);
     }
 }

@@ -26,11 +26,22 @@
 
   <hr>
 
-  <ul>
-    @foreach($technicalEvaluation->applicants->where('selected', 1) as $applicant)
-      <li><strong>Seleccionado</strong>: {{ $applicant->replacement_staff->FullName }}</li>
-    @endforeach
-  </ul>
+  @if($technicalEvaluation->reason == null)
+
+      <ul>
+        @foreach($technicalEvaluation->applicants->where('selected', 1) as $applicant)
+          <li><strong>Seleccionado</strong>: {{ $applicant->replacement_staff->FullName }}</li>
+        @endforeach
+      </ul>
+
+  @else
+      <p>La presente <strong>Solicitud de Contratación</strong> no se efectúa por:</p>
+      <ul>
+          <li><strong>Motivo:</strong> {{ $technicalEvaluation->ReasonValue }}</li>
+          <li><strong>Observación:</strong> {{ $technicalEvaluation->observation }}</li>
+          <li><strong>Fecha:</strong> {{ $technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</li>
+      </ul>
+  @endif
 
   <hr>
 
