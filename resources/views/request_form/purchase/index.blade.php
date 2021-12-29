@@ -39,7 +39,7 @@
                             </td>
                             <td>{{ $requestForm->purchaseMechanism->name }}</td>
                             <td>{{ $requestForm->quantityOfItems() }}</td>
-                            <td>{{ $requestForm->getElapsedTime() }}</td>
+                            <td>{{ $requestForm->created_at->diffForHumans() }}</td>
                             <td>
                             @foreach($requestForm->eventRequestForms as $sign)
                                 @if($sign->status == 'pending')
