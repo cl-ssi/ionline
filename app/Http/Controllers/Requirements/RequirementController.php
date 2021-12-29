@@ -46,6 +46,7 @@ class RequirementController extends Controller
     //$users[0] = array();
     $ous_secretary = Authority::getAmIAuthorityFromOu(date('Y-m-d'), 'secretary', Auth::user()->id);
     //$ous_secretary = Authority::getAmIAuthorityFromOu(Carbon::today(), 'secretary', Auth::user()->id);
+    //ssdd($ous_secretary);
     foreach ($ous_secretary as $secretary) {
       $users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, date('Y-m-d'), 'manager')->user_id;
       //$users[] = Authority::getAuthorityFromDate($secretary->OrganizationalUnit->id, Carbon::today(), 'manager')->user_id;
