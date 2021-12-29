@@ -1,3 +1,4 @@
+@role('god')
 <ul class="nav nav-tabs mb-3">
     <li class="nav-item">
         <a class="nav-link {{active('parameters.communes.index')}}"
@@ -101,3 +102,4 @@
             <i class="fas fa-money-bill-alt"></i> Valor Hora/Jornada</a>
     </li> -->
 </ul>
+@endrole

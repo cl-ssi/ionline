@@ -20,8 +20,6 @@ class CreateArqPettyCashTable extends Migration
             $table->integer('receipt_number');
             $table->string('receipt_type');
             $table->string('file')->nullable();
-            $table->foreignId('user_id')->constrained('users'); //Usuario que registró el fondo menor.
-            $table->foreignId('purchasing_process_id')->constrained('arq_purchasing_processes');
             $table->timestamps();
             $table->softDeletes();
         });

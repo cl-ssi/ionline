@@ -34,7 +34,7 @@
                 </fieldset> -->
 
                 <fieldset class="form-group col-sm-2">
-                    <label for="for_unit_value">Valor Unitario:</label>
+                    <label for="for_unit_value">Valor Unitario Neto:</label>
                     <input wire:model.defer="unitValue" name="unitValue" class="form-control form-control-sm" type="text">
                 </fieldset>
             </div>
