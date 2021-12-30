@@ -55,7 +55,7 @@ class RequestFormItems extends Component
             'unitValue'                => $this->unitValue,
             'taxes'                    => $this->taxes,
             //'budget_item_id'           => $this->budget_item_id,
-            'totalValue'               => $this->quantity * $this->unitValue,
+            'totalValue'               => $this->quantity * ($this->taxes == 'iva' ? $this->unitValue * 1.19 : $this->unitValue),
             'typeOfCurrency'           => $this->typeOfCurrency,
             'articleFile'              => $this->articleFile,
       ];
@@ -91,7 +91,7 @@ class RequestFormItems extends Component
         $this->items[$this->key]['unitValue']               = $this->unitValue;
         $this->items[$this->key]['taxes']                   = $this->taxes;
         //$this->items[$this->key]['budget_item_id']          = $this->budget_item_id;
-        $this->items[$this->key]['totalValue']              = $this->quantity * $this->unitValue;
+        $this->items[$this->key]['totalValue']              = $this->quantity * ($this->taxes == 'iva' ? $this->unitValue * 1.19 : $this->unitValue);
         $this->estimateExpense();
         $this->cleanItem();
         $this->emit('savedItems', $this->items);

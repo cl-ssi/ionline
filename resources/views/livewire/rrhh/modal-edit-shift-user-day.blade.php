@@ -30,16 +30,16 @@
                         <label for="exampleFormControlInput1"><i class="fa fa-info"></i> INFORMACIÓN {{--$varLog--}} ID <b>#</b>{{ ( isset($shiftUserDay) && $shiftUserDay->ShiftUser ) ? $shiftUserDay->id : '' }}</label>
                        <div  class="table-responsive">
                            
-                       
-                        <table class="table"> 
-                        <thead> 
+
+                        <table class="table">
+                        <thead>
                             <tr>
                                 <th style="text-align: left;">Pertence a</th>
-                                <td> 
-                                    @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser ) 
+                                <td>
+                                    @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser )
                                         {{$shiftUserDay->ShiftUser->user->name}} {{$shiftUserDay->ShiftUser->user->fathers_family}} {{$shiftUserDay->ShiftUser->user->mothers_family}}
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
                                     @endif
@@ -49,16 +49,16 @@
                             <tr>
                                 <th style="text-align: left;">Tipo de jornada</th>
                                 <td>
-                                  
 
-                                    @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser && substr( $shiftUserDay->working_day,0, 1) != "+" ) 
+
+                                    @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser && substr( $shiftUserDay->working_day,0, 1) != "+" )
                                         {{$shiftUserDay->working_day}} - {{strtoupper($tiposJornada[$shiftUserDay->working_day])}}
-                                   
+
                                     @elseif( isset($shiftUserDay) && $shiftUserDay->ShiftUser && substr( $shiftUserDay->working_day,0, 1) == "+" )
 
                                         {{$shiftUserDay->working_day}}
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
                                     @endif
@@ -67,10 +67,10 @@
                             <tr>
                                 <th style="text-align: left;">Fecha</th>
                                 <td>
-                                    @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser ) 
-                                        {{$shiftUserDay->day}} 
+                                    @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser )
+                                        {{$shiftUserDay->day}}
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
                                     @endif
@@ -78,32 +78,32 @@
                             </tr>
                             <tr>
                                 <th style="text-align: left;">Estado  </th>
-                                <td> @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser ) 
+                                <td> @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser )
                                         {{$shiftUserDay->status}} - {{strtoupper($estados[$shiftUserDay->status])}}
                                         <i class="fa fa-circle " style="color:{{$statusColors[$shiftUserDay->status]}}"></i>
                                         @if($shiftUserDay->status==3)
                                             {!! ( $shiftUserDay->confirmationStatus() == 1)?'<small style="color:blue">Confirmado</small>': (( $shiftUserDay->confirmationStatus() == 3)?'<small style="color:red">Rechazado</small>':'<small style="color:red">Sin Confirmar</small>' )  !!}
                                         @endif
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
                                     @endif</td>
                             </tr>
                             <tr>
                                 <th style="text-align: left;">Comentario  </th>
-                                <td> @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser ) 
-                                        {{$shiftUserDay->commentary}} 
+                                <td> @if ( isset($shiftUserDay) && $shiftUserDay->ShiftUser )
+                                        {{$shiftUserDay->commentary}}
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
                                     @endif</td>
                             </tr>
                         </thead>
-                         
+
                         </table>
-                        
+
 
                         </div>
                     </div>
@@ -114,7 +114,7 @@
 
                         <label for="exampleFormControlInput1"><i class="fa fa-cog"></i> ACCION </label>
 
-                      
+
                         <select class="form-control" name="slcAction" wire:model="action" wire:change="changeAction">
                             <option value="0"> <b> </b> - - - </option>
                             <option value="1"> <b> </b>1 - Intercambiar Turno con </option>
@@ -135,23 +135,23 @@
                             <option value="16"> 15 - <b style="color:">Cambiar jornada por necesidad de servicio</b> </option>
                             <option value="14"> 16 - <b style="color:">Agregar horas por necesidad de servicio</b> </option>
                             <option value="17"> 16 - <b style="color:">Marcar como Abandono de funcion</b> </option>
-                            
+
 
                         </select>
-                      
-                       
+
+
                         <span class="text-danger"></span>
 
                     </div>
                     <div class="form-group " style="display: {{$usersSelect}}">
 
                         <label for="exampleFormControlInput1"><i class="fa fa-user"></i> PERSONAL </label>
-                       
+
                          <select class="selectpickerx  form-control" wire:model="userIdtoChange" wire:change="findAvailableExternalDaysToChange">
                             <option value="0" >0 - Dejar disponible </option>
                             @if( isset($users) )
                                 @foreach($users as $u)
-                                
+
                                     <option value="{{$u->id}}" >{{$u->id}} - {{$u->name}} {{ $u->fathers_family }} {{ $u->mothers_family }} </option>
 
                                 @endforeach
@@ -165,7 +165,7 @@
                          <select class="form-control" wire:model="newWorkingDay" name="slcAction">
                             @foreach( $tiposJornada as $index=>$tj )
                                 <option value="{{$index}}">
-                                {{$index}} - {{strtoupper($tj)}} 
+                                {{$index}} - {{strtoupper($tj)}}
                                 </option>
                             @endforeach
                         </select>
@@ -184,7 +184,7 @@
                             <option value="0" >0 - Dejar disponible </option>
                             @if( isset($users) )
                                 @foreach($users as $u)
-                                
+
                                     <option value="{{$u->id}}" >{{$u->id}} - {{$u->name}} {{ $u->fathers_family }} {{ $u->mothers_family }} </option>
 
                                 @endforeach
@@ -197,9 +197,9 @@
                         <input type="checkbox"   wire:model="chkSuplente">
                         </div>
                         </div>
-                       
+
                     </div>
-                    
+
 
                     <div class="form-group" style="display: {{$repeatAction}}">
 
@@ -215,15 +215,15 @@
                             @foreach( $availableOwnDaysToChange as $day )
                             @if(isset($day) && isset($day->id))
                                 <option value="{{$day->id}}">
-                                {{$loop->iteration}} - {{strtoupper($day->day)}} {{ $day->working_day }} 
-                                 @if ( substr( $day->working_day,0, 1) != "+" ) 
+                                {{$loop->iteration}} - {{strtoupper($day->day)}} {{ $day->working_day }}
+                                 @if ( substr( $day->working_day,0, 1) != "+" )
                                     {{ $tiposJornada [ $day->working_day ]}}
                                 @elseif(  substr( $day->working_day,0, 1) == "+" )
-                                    {{-- $day->working_day --}} 
+                                    {{-- $day->working_day --}}
                                     <!-- no cambiar las oras -->
                                 @endif
 
-                                </option> 
+                                </option>
                                 </option>
                             @endif
                             @endforeach
@@ -231,24 +231,24 @@
                         </select>
 
                     </div>
-                    
+
                     @endif
                     <div class="form-group" style="display: {{$availableExternalDaysToChangeVisible}}">
                         <label for="exampleFormControlInput1"><i class="fa fa-calendar"></i> Cambiar día por</label>
                         <select class="form-control" wire:model.defer="dayToToChange">
                             <option value="0"> 0 - No intercambiar por otro día</option>
                             @foreach( $availableExternalDaysToChange as $day )
-                                @if ( isset(  $day->working_day ) && substr( $day->working_day,0, 1) != "+" ) 
+                                @if ( isset(  $day->working_day ) && substr( $day->working_day,0, 1) != "+" )
                                     <option value="{{$day->id}}">
                                         {{$loop->iteration}} - {{strtoupper($day->day)}} {{ $day->working_day }}
 
                                         {{ $tiposJornada [ $day->working_day ]}}
-                                    </option> 
-                                @endif    
+                                    </option>
+                                @endif
                             @endforeach
                         </select>
                     </div>
-                   
+
 
                     <div class="form-group" style="overflow-y:auto;height: 200px;">
 
@@ -257,11 +257,11 @@
                         <label for="exampleFormControlInput1"><i class="fa fa-history "></i> HISTORIAL DE MODIFICACIONES </label>
                             @if( isset($shiftUserDay) && $shiftUserDay->ShiftUser )
                                 @if($shiftUserDay->derived_from != "" && $shiftUserDay->derived_from > 0)
-                                    
+
                                     <p><i>  >> {{  $shiftUserDay->DerivatedShift->created_at }} - La jornada ha sido creada </i></p>
 
                                     @foreach($shiftUserDay->DerivatedShift->shiftUserDayLog as $sDerivatedLog)
-                                      <p><i>  >> {{$sDerivatedLog->created_at}} - {!!$sDerivatedLog->commentary!!} </i></p> 
+                                      <p><i>  >> {{$sDerivatedLog->created_at}} - {!!$sDerivatedLog->commentary!!} </i></p>
                                     @endforeach
 
                                     <p><i>  >> {{  $shiftUserDay->created_at }} - La jornada ha sido asginada </i></p>
@@ -277,7 +277,7 @@
                              </p>
                             @endif
 
-                        
+
                     </div>
                 </form>
 
@@ -286,9 +286,9 @@
             <div class="modal-footer">
                 @if(   isset($shiftUserDay) && $shiftUserDay->ShiftUser && $shiftUserDay->status==3 && $shiftUserDay->confirmationStatus() == 0 )
 
-                    
+
                         <button type="button" class="btn btn-success ml-auto" data-dismiss="modal" wire:click.prevent="confirmExtraDay()">Confirmar <i class="fa fa-check"></i></button>
-                  
+
                 @endif
                 <button type="button" wire:click.prevent="cancel()" class="btn" data-dismiss="modal">Cerrar</button>
 

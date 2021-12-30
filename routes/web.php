@@ -212,6 +212,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::prefix('technical_evaluation')->name('technical_evaluation.')->group(function(){
             Route::get('/{technicalEvaluation}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
             Route::post('/store/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'store'])->name('store');
+            Route::post('/finalize_selection_process/{technicalEvaluation}', [TechnicalEvaluationController::class, 'finalize_selection_process'])->name('finalize_selection_process');
             Route::prefix('commission')->name('commission.')->group(function(){
                 Route::post('/store/{technicalEvaluation}', [CommissionController::class, 'store'])->name('store');
                 Route::delete('{commission}/destroy', [CommissionController::class, 'destroy'])->name('destroy');
@@ -1326,6 +1327,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/pending_forms', [RequestFormController::class, 'pending_forms'])->name('pending_forms');
     Route::get('/create', [RequestFormController::class, 'create'])->name('create');
     Route::get('/{requestForm}/sign/{eventType}', [RequestFormController::class, 'sign'])->name('sign');
+    Route::get('/callback-sign-request-form/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSign'])->name('callbackSign');
+    Route::get('/signed-request-form-pdf/{requestForm}', [RequestFormController::class, 'signedRequestFormPDF'])->name('signedRequestFormPDF');
 
     Route::prefix('items')->as('items.')->middleware('auth')->group(function () {
         Route::get('/create', [RequestFormController::class, 'create'])->name('create');
@@ -1348,7 +1351,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     /* DOCUMENTS */
     Route::get('/create_form_document/{requestForm}', [RequestFormController::class, 'create_form_document'])->name('create_form_document');
-    Route::get('/create_internal_purchase_order_document/{internalPurchaseOrder}', [InternalPurchaseOrderController::class, 'create_internal_purchase_order_document'])->name('create_internal_purchase_order_document');
+    Route::get('/create_internal_purchase_order_document/{purchasingProcessDetail}', [InternalPurchaseOrderController::class, 'create_internal_purchase_order_document'])->name('create_internal_purchase_order_document');
 
     Route::get('/{requestForm}/edit', [RequestFormController::class, 'edit'])->name('edit');
 
@@ -1463,6 +1466,7 @@ Route::prefix('invoice')->as('invoice.')->group(function () {
 /* Nuevas rutas, Laravel 8.0. */
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
+    Route::get('/report', [SuitabilityController::class, 'report'])->name('report');
     Route::delete('{psirequest}/destroy', [SuitabilityController::class, 'destroy'])->name('destroy');
     Route::post('/', [SuitabilityController::class, 'store'])->name('store');
     Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');
@@ -1552,3 +1556,5 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 Route::view('/some', 'some');
 
 Route::get('/test-getip',[TestController::class,'getIp']);
+
+Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
