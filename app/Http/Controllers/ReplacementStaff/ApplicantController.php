@@ -159,12 +159,10 @@ class ApplicantController extends Controller
             $mail_notification_ou_manager = Authority::getAuthorityFromDate($technicalEvaluation->requestReplacementStaff->user->organizational_unit_id, $now, $type);
 
             $ou_personal_manager = Authority::getAuthorityFromDate(46, $now, 'manager');
-            $ou_personal_secretary = Authority::getAuthorityFromDate(46, $now, 'secretary');
 
             $emails = [$mail_request,
                         $mail_notification_ou_manager->user->email,
-                        $ou_personal_manager->user->email,
-                        $ou_personal_secretary->user->email];
+                        $ou_personal_manager->user->email];
 
             Mail::to($emails)
               ->cc(env('APP_RYS_MAIL'))

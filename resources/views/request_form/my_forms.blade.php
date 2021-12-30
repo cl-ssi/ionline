@@ -26,8 +26,8 @@
         <div class="col">
             <h6><i class="fas fa-inbox"></i> Formularios pendientes de aprobación</h6>
             <div class="table-responsive">
-                <table class="table table-sm table-striped table-bordered">
-                  <thead class="small">
+                <table class="table table-sm table-striped table-bordered small">
+                  <thead>
                     <tr class="text-center">
                       <th>ID</th>
                       <th style="width: 7%">Fecha Creación</th>
@@ -41,10 +41,23 @@
                       <th></th>
                     </tr>
                   </thead>
-                  <tbody class="small">
+                  <tbody>
                       @foreach($my_pending_requests as $requestForm)
                             <tr>
-                                <td>{{ $requestForm->id }}</td>
+                                <td>{{ $requestForm->id }} <br>
+                                    @switch($requestForm->getStatus())
+                                        @case('Pendiente')
+                                            <i class="fas fa-clock"></i>
+                                            @break
+
+                                        {{--@case('complete')
+                                            <span style="color: green;">
+                                              <i class="fas fa-check-circle"></i>
+                                            </span>
+                                            @break --}}
+
+                                    @endswitch
+                                </td>
                                 <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
                                 <td>{{ $requestForm->type_form }}</td>
                                 <td>{{ $requestForm->name }}</td>
@@ -53,11 +66,7 @@
                                 </td>
                                 <td>{{ $requestForm->purchaseMechanism->name }}</td>
                                 <td align="center">{{ $requestForm->quantityOfItems() }}</td>
-                                <td align="center">{{ $requestForm->getElapsedTime() }}</td>
-                                {{--<td class="align-middle text-center brd-b brd-l">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                                <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('finance_event') !!}</td>
-                                <td class="align-middle text-center brd-b">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                                <td class="align-middle text-center brd-b brd-r">{!! $requestForm->eventSign('supply_event') !!}</td>--}}
+                                <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
                                 <td class="text-center">
                                   @foreach($requestForm->eventRequestForms as $sign)
                                       @if($sign->status == 'pending')
@@ -75,29 +84,15 @@
                                       @endif
                                   @endforeach
                               </td>
-                                <!-- <td class="text-center align-middle brd-b">
-                                  <a href="{{ route('request_forms.edit', $requestForm->id) }}"  class="text-primary" title="Editar">
-                                  <i class="far fa-edit"></i></a>
-                                </td>
-
-                                <td class="text-center align-middle brd-b">
-                                  <a href="{{ route('request_forms.show', $requestForm->id) }}" class="text-info" title="Visualizar">
-                                  <i class="fas fa-binoculars"></i></a>
-                                </td>
-
-                                <td class="text-center align-middle brd-r brd-b">
-                                  <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
-                                  <i class="far fa-trash-alt"></i></a>
-                                </td> -->
-                                <td>
+                              <td>
                                 @if($requestForm->eventRequestForms->first()->status == 'pending')
                                 <a href="{{ route('request_forms.edit', $requestForm->id) }}"
                                     class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-edit"></i></a>
                                 <a href="#" data-href="{{ route('request_forms.destroy', $requestForm->id) }}" data-id="{{ $requestForm->id }}" class="btn btn-outline-secondary btn-sm text-danger" title="Eliminar" data-toggle="modal" data-target="#confirm" role="button">
                                   <i class="fas fa-trash"></i></a>
                                 @else
-                                    <a href="{{ route('request_forms.show', $requestForm->id) }}"
-                                        class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i></a>
+                                <a href="{{ route('request_forms.show', $requestForm->id) }}"
+                                    class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i></a>
                                 @endif
                               </td>
                             </tr>
@@ -123,34 +118,55 @@
         <div class="col">
             <h6><i class="fas fa-archive"></i> Formularios aprobados, cerrados o rechazados</h6>
             <div class="table-responsive">
-            <table class="table table-sm table-striped table-bordered">
-              <thead class="small">
-                <tr>
-                  <th scope="col">Id</th>
-                  <th scope="col">Usuario Gestor</th>
-                  <th scope="col">Justificación</th>
-                  <th scope="col">Creación</th>
-                  <th scope="col">Rechazo</th>
-                  <th scope="col">Usuario Rechazo</th>
-                  <th scope="col">Comentario</th>
+            <table class="table table-sm table-striped table-bordered small">
+              <thead>
+                <tr class="text-center">
+                  <th>ID</th>
+                  <th style="width: 7%">Fecha Creación</th>
+                  <th>Tipo</th>
+                  <th>Descripción</th>
+                  <th>Usuario Gestor</th>
+                  <th>Mecanismo de Compra</th>
+                  <th>Items</th>
+                  <th>Espera</th>
                   <th>Estado</th>
                   <th></th>
                 </tr>
               </thead>
-              <tbody class="small">
+              <tbody>
                   @foreach($my_requests as $requestForm)
                         <tr>
-                            <th class="align-middle" scope="row">{{ $requestForm->id }}</td>
-                            <td class="align-middle">{{ $requestForm->user ? $requestForm->user->tinnyName() : 'Usuario eliminado' }}</td>
-                            <td class="align-middle">{{ $requestForm->justification }}</td>
-                            <td class="align-middle">{{ $requestForm->createdDate() }}</td>
-                            <td class="align-middle">{{ $requestForm->rejectedTime() }}</td>
-                            <td class="align-middle">{{ $requestForm->rejectedName() }}</td>
-                            <td class="align-middle">{{ $requestForm->rejectedComment() }}</td>
-                            {{--<td class="align-middle text-center">{!! $requestForm->eventSign('leader_ship_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('pre_finance_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('finance_event') !!}</td>
-                            <td class="align-middle text-center">{!! $requestForm->eventSign('supply_event') !!}</td>--}}
+                            <th>{{ $requestForm->id }} <br>
+                                @switch($requestForm->getStatus())
+                                    @case('Pendiente')
+                                        <i class="fas fa-clock"></i>
+                                        @break
+
+                                    @case('Aprobado')
+                                        <span style="color: green;">
+                                          <i class="fas fa-check-circle" title="{{ $requestForm->getStatus() }}"></i>
+                                        </span>
+                                        @break
+
+                                    @case('Rechazado')
+                                        <a href="">
+                                            <span style="color: Tomato;">
+                                                <i class="fas fa-times-circle" title="{{ $requestForm->getStatus() }}"></i>
+                                            </span>
+                                        </a>
+                                        @break
+
+                                @endswitch
+                            </th>
+                            <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                            <td>{{ $requestForm->type_form }}</td>
+                            <td>{{ $requestForm->name }}</td>
+                            <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
+                                {{ $requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
+                            </td>
+                            <td>{{ $requestForm->purchaseMechanism->name }}</td>
+                            <td align="center">{{ $requestForm->quantityOfItems() }}</td>
+                            <td align="center">{{ $requestForm->getElapsedTime() }}</td>
                             <td class="text-center">
                                   @foreach($requestForm->eventRequestForms as $sign)
                                       @if($sign->status == 'pending' || $sign->status == NULL)
@@ -169,8 +185,25 @@
                                   @endforeach
                               </td>
                             <td>
-                              <a href="{{ route('request_forms.create_form_document', $requestForm) }}" class="btn btn-outline-secondary btn-sm" title="Formulario" target="_blank">
-                              <i class="fas fa-file-alt"></i>
+                              @if($requestForm->signatures_file_id)
+                                  <a href="{{ route('request_forms.show', $requestForm->id) }}"
+                                      class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i>
+                                  </a>
+                                  <a class="btn btn-info btn-sm"
+                                      title="Ver Formulario de Requerimiento firmado"
+                                      href="{{ route('request_forms.signedRequestFormPDF', $requestForm) }}"
+                                      target="_blank" title="Certificado">
+                                        <i class="fas fa-file-contract"></i>
+                                  </a>
+                              @else
+                                  <a href="{{ route('request_forms.show', $requestForm->id) }}"
+                                      class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i>
+                                  </a>
+                                  <a href="{{ route('request_forms.create_form_document', $requestForm) }}" class="btn btn-outline-secondary btn-sm" title="Formulario" target="_blank">
+                                      <i class="fas fa-file-alt"></i>
+                                  </a>
+
+                              @endif
                             </td>
                         </tr>
                   @endforeach
