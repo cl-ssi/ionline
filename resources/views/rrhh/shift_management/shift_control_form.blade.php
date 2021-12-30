@@ -133,7 +133,7 @@
             border-left-style:hidden;
             border-bottom-style:hidden;
             border-right-style:hidden;
-            
+
         }
         </style>
     </head>
@@ -152,11 +152,11 @@
                     </div>
                 </div>
                 <br><br>
-                <table class="table tblShiftControlForm table-striped"> 
-                    <thead> 
+                <table class="table tblShiftControlForm table-striped">
+                    <thead>
                         <tr>
                                 <th style="font-size: 12px;text-align:center;" class="rightfield">RUT: </th>
-                                <td> 
+                                <td>
                                     @if( isset( $usr ) )
                                         {{strtoupper($usr->runFormat())}}
                                     @else
@@ -175,75 +175,75 @@
                         <tr>
                                 <th  class="rightfield" >MES</th>
                                 <td>
-                                    @if ( isset( $usr ) )  
+                                    @if ( isset( $usr ) )
                                         {{ strtoupper($months[$actuallyMonth]) }}
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
                                     @endif
                                 </td>
                                 <th  class="middlefield">GRADO</th>
                                 <td>
-                                    @if ( isset( $usr ) ) 
-                                        N/A   
+                                    @if ( isset( $usr ) )
+                                        N/A
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
                                     @endif
-                                    
+
                                 </td>
                         </tr>
                         <tr>
                                 <th  class="rightfield">SERVICIO</th>
                                 <td>
                                     @if ( isset( $usr ) )
-                                        N/A   
-                                     
+                                        N/A
+
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
                                     @endif
                                 </td>
                                 <th  class="middlefield">CALIDAD</th>
                                 <td>
-                                       @if ( isset( $usr ) ) 
-                                        N/A   
-                                       
+                                       @if ( isset( $usr ) )
+                                        N/A
+
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
                                     @endif
-                                    
+
                                 </td>
                         </tr>
                         <tr>
                                 <th  class="rightfield">TURNO  </th>
-                                <td> @if (isset( $usr ) ) 
-                                        N/A   
-                                     
+                                <td> @if (isset( $usr ) )
+                                        N/A
+
                                      @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
                                     @endif
                                 </td>
                                 <th  class="middlefield">N°CREDENCIAL</th>
                                 <td>
-                                      @if ( isset( $usr ) ) 
-                                        N/A   
-                                       
+                                      @if ( isset( $usr ) )
+                                        N/A
+
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
-                                    @endif 
-                                       
-                                    
+                                    @endif
+
+
                                 </td>
-                        </tr> 
+                        </tr>
                         <tr>
                         </tr>
                     </thead>
@@ -252,17 +252,17 @@
                 <table class="siete">
                     <thead>
                         <tr>
-                            <td>    
-                                @if ( isset( $usr ) ) 
-                                {{strtoupper($usr->fathers_family)}} 
-                                   
+                            <td>
+                                @if ( isset( $usr ) )
+                                {{strtoupper($usr->fathers_family)}}
+
                                 @endif
                             </td>
                             <td>    {{strtoupper($usr->mothers_family) }} </td>
                             <td>
-                                @if ( isset( $usr ) ) 
+                                @if ( isset( $usr ) )
                                     {{strtoupper($usr->getFirstNameAttribute())         }}
-                          
+
                                 @endif
                             </td>
                         </tr>
@@ -275,8 +275,8 @@
                 </table>
                 <br>
 
-                <table class="table tblShiftControlForm"> 
-                    <thead> 
+                <table class="table tblShiftControlForm">
+                    <thead>
                         <tr>
                             <th>FECHA</th>
                             <th>DÍA</th>
@@ -295,19 +295,19 @@
                         $total = 0;
                     @endphp
                     <tbody>
-                     @if($close == 0)   
-                        @if(isset($days) && $days  > 0)  
+                     @if($close == 0)
+                        @if(isset($days) && $days  > 0)
                             @for($i = 1; $i < ($days+1); $i++ )
                                     @php
-                                        $date2 = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYears."-".$actuallyMonth."-".$i);  
+                                        $date2 = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYears."-".$actuallyMonth."-".$i);
                                         $date =explode(" ",$date2);
-                                        $d = $shifsUsr->days->where('day',$date[0]);
+                                        $d = $shifsUsr->days()->where('day',$date[0])->get();
                                     @endphp
                                     @foreach($d as $dd)
                                         <tr>
                                             <td style="text-align:center;">{{$i}}  </td>
                                             <td>
-                                                {{ ($dd["working_day"]!="F")?$dd["working_day"]:"-"  }}                
+                                                {{ ($dd["working_day"]!="F")?$dd["working_day"]:"-"  }}
                                             </td>
                                             @if($date2->isPast())
                                                 <td>{{ (isset($timePerDay[$dd["working_day"]]))?$timePerDay[$dd["working_day"]]["from"]:""  }}</td>
@@ -316,7 +316,7 @@
                                                 @php
                                                     if(  substr($dd["working_day"],0, 1) != "+" )
                                                          $total+=   (isset($timePerDay[$dd["working_day"]]))?$timePerDay[$dd["working_day"]]["time"]:0  ;
-                                                    else 
+                                                    else
                                                         $total+= intval( substr( $dd["working_day"],1,2) );
                                                 @endphp
                                             @else
@@ -339,7 +339,7 @@
                         @php
                             $ranges = \Carbon\CarbonPeriod::create($cierreDelMes->init_date, $cierreDelMes->close_date);
                         @endphp
-                        @foreach ($ranges as $date) 
+                        @foreach ($ranges as $date)
 
                             @php
                                $d = $daysForClose->where('day',$date->format("Y-m-d"));
@@ -348,7 +348,7 @@
                                         <tr>
                                             <td style="text-align:center;">{{$date->format("d/m")}}     </td>
                                             <td>
-                                                {{ ($dd["working_day"]!="F")?$dd["working_day"]:"-"  }}                
+                                                {{ ($dd["working_day"]!="F")?$dd["working_day"]:"-"  }}
                                             </td>
                                             @if($date->isPast())
                                                 <td>{{ (isset($timePerDay[$dd["working_day"]]))?$timePerDay[$dd["working_day"]]["from"]:""  }}</td>
@@ -357,7 +357,7 @@
                                                 @php
                                                     if(  substr($dd["working_day"],0, 1) != "+" )
                                                          $total+=   (isset($timePerDay[$dd["working_day"]]))?$timePerDay[$dd["working_day"]]["time"]:0  ;
-                                                    else 
+                                                    else
                                                         $total+= intval( substr( $dd["working_day"],1,2) );
                                                 @endphp
                                             @else
@@ -368,38 +368,38 @@
                                         </tr>
                                 @endforeach
                         @endforeach
-                    @endif                
+                    @endif
                         <tr>
-                            <th>TOTAL</th>  
-                            <td>{{$total}}</td> 
-                            <td></td>   
-                            <td></td>   
-                            <td></td>   
+                            <th>TOTAL</th>
+                            <td>{{$total}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
-                    </tbody> 
+                    </tbody>
                 </table>
                 <br><br>
 
         <table>
-            <tbody> 
+            <tbody>
                 <tr class="hide_all">
-                    <td><b>JEFE DIRECTO</b></td>   
-                    <td><b>FUNCIONARIO</b></td>   
-                    <td><b>SUBDIRECCION CUIDADO DEL PACIENTE</b></td>   
+                    <td><b>JEFE DIRECTO</b></td>
+                    <td><b>FUNCIONARIO</b></td>
+                    <td><b>SUBDIRECCION CUIDADO DEL PACIENTE</b></td>
                 </tr>
                 <tr class="hide_all">
-                    <td><b style="font-size: 10px;">NOMBRE, FIRMA Y TIMBRE</b></td>   
-                    <td><b style="font-size: 10px;">FIRMA</b></td>   
-                    <td><b style="font-size: 10px;">FIRMA Y TIMBRE</b></td>   
+                    <td><b style="font-size: 10px;">NOMBRE, FIRMA Y TIMBRE</b></td>
+                    <td><b style="font-size: 10px;">FIRMA</b></td>
+                    <td><b style="font-size: 10px;">FIRMA Y TIMBRE</b></td>
                 </tr>
-            </tbody> 
+            </tbody>
                 </table>
 <br><br>
                 <b style="text-align: center">Los cambios de turno son solo días por noche y noche por día en el mismo día.</b>
             </div>
         </div>
 
-      
+
 
 
         <br style="padding-bottom: 10px;">

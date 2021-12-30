@@ -18,19 +18,19 @@
             </div>
 
             <div class="modal-body">
-                
-                  <table class="table tblShiftControlForm table-striped"> 
-                        <thead> 
+
+                  <table class="table tblShiftControlForm table-striped">
+                        <thead>
 
                         	<tr>
                                 <th style="text-align: left;">RUT</th>
-                                <td> 
+                                <td>
                                     @if( isset( $usr ) )
                                     	{{strtoupper($usr->runFormat())}}
                                     @else
                                         <i class="fas fa-spinner fa-pulse"></i>
                                     @endif
-                                    
+
 
                                  </td>
                                 <th style="text-align: left;">CARGO</th>
@@ -40,31 +40,31 @@
                                     @else
                                         actuallyMonth <i class="fas fa-spinner fa-pulse"></i>
                                     @endif
-                                                                	
+
                                 </td>
 
                             </tr>
                             <tr>
                                 <th style="text-align: left;">MES</th>
                                 <td>
-                                    @if ( isset( $usr ) )  
+                                    @if ( isset( $usr ) )
                                         {{ strtoupper($months[$actuallyMonth]) }}
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
                                     @endif
                                 </td>
                                 <th style="text-align: left;">GRADO</th>
                                 <td>
-                                    @if ( isset( $usr ) ) 
-                                    	N/A   
+                                    @if ( isset( $usr ) )
+                                    	N/A
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
                                     @endif
-                                	
+
                                 </td>
 
                             </tr>
@@ -72,92 +72,92 @@
                                 <th style="text-align: left;">SERVICIO</th>
                                 <td>
                                     @if ( isset( $usr ) )
-                                    	N/A   
-                                     
+                                    	N/A
+
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
                                     @endif
                                 </td>
                                 <th style="text-align: left;">CALIDAD</th>
                                 <td>
-                                       @if ( isset( $usr ) ) 
-                                    	N/A   
-                                       
+                                       @if ( isset( $usr ) )
+                                    	N/A
+
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
                                     @endif
-                                	
+
                                 </td>
 
                             </tr>
                             <tr>
                                 <th style="text-align: left;">TURNO  </th>
-                                <td> @if (isset( $usr ) ) 
-                                    	N/A   
-                                     
+                                <td> @if (isset( $usr ) )
+                                    	N/A
+
                                      @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
                                     @endif
                                 </td>
                                 <th style="text-align: left;">N°CREDENCIAL</th>
                                 <td>
-                                      @if ( isset( $usr ) ) 
-                                    	N/A   
-                                       
+                                      @if ( isset( $usr ) )
+                                    	N/A
+
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
-                                    @endif 
-                                       
-                                	
+                                    @endif
+
+
                                 </td>
 
                             </tr>
                             <tr>
                                 <th style="text-align: left;">APELLIDOS  </th>
-                                <td> 
-                                	@if ( isset( $usr ) ) 
-                                	{{strtoupper($usr->fathers_family)}} 
+                                <td>
+                                	@if ( isset( $usr ) )
+                                	{{strtoupper($usr->fathers_family)}}
                                        {{strtoupper($usr->mothers_family) }}
 
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
                                     @endif
                                 </td>
                                 <th style="text-align: left;">NOMBRES</th>
                                 <td>
-                                    @if ( isset( $usr ) ) 
+                                    @if ( isset( $usr ) )
                                        {{$usr->getFirstNameAttribute()}}
-                                       
+
                                     @else
-                                    
+
                                         <i class="fas fa-spinner fa-pulse"></i>
 
                                     @endif
-                                	
+
                                 </td>
 
                             </tr>
                         	</tr>
                         	<tr>
-                     
+
                         </thead>
                         <tbody>
-                        	
-                        </tbody> 
+
+                        </tbody>
                         </table>
                         <div class="table-responsive">
-                        	
- 							<table class="table tblShiftControlForm"> 
-                				<thead> 
+
+ 							<table class="table tblShiftControlForm">
+                				<thead>
                 					<tr>
                 						<th>FECHAx</th>
                 						<th>DÍA</th>
@@ -173,20 +173,20 @@
 									</tr>
 								</thead>
                 				<tbody>
-                      
-                        			@if($days > 0)	
+
+                        			@if($days > 0)
                         				@for($i = 1; $i < ($days+1); $i++ )
-                                          
+
                         					<tr>
                         						<td>{{$i}}	</td>
                         						<td>
                                                     @php
-                                                        $date = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$j);  
+                                                        $date = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$j);
                                                         $date =explode(" ",$date);
-                                                        $d = $shifsUsr->days->where('day',$date[0]);
+                                                        $d = $shifsUsr->days()->where('day',$date[0])->get();
                                                         $d = $d->first();
                                                     @endphp
-                                                  $date {{$date}}; actuallyYear {{$actuallyYear}} ; d {{ $d}} ; {{$d->working_day}} ; 
+                                                  $date {{$date}}; actuallyYear {{$actuallyYear}} ; d {{ $d}} ; {{$d->working_day}} ;
                                                 </td>
                         						<td></td>
                         						<td></td>
@@ -195,22 +195,22 @@
                         				@endfor
                         			@else
                                         <tr><td>
-                                        	
+
                                         	<i class="fas fa-spinner fa-pulse"></i>
                                         </td>
                                         </tr>
 
                         			@endif
                         			<tr>
-                        				<th>TOTAL</th>	
-                        				<td></td>	
-                        				<td></td>	
-                        				<td></td>	
-                        				<td></td>	
+                        				<th>TOTAL</th>
+                        				<td></td>
+                        				<td></td>
+                        				<td></td>
+                        				<td></td>
                         			</tr>
-                				</tbody> 
+                				</tbody>
            					</table>
-                        
+
                         </div>
 
             </div>
@@ -218,7 +218,7 @@
 
                 <button type="button" wire:click.prevent="cancel()" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
 
-                
+
 
                 <form action="{{ route('rrhh.shiftManag.shiftManag.downloadform') }}" >
                     @csrf

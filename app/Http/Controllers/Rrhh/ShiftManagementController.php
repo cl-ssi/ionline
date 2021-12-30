@@ -214,7 +214,7 @@ class ShiftManagementController extends Controller
         }else{ // Todos los turnos
 
             $this->groupsnames = array();
-            
+
             $staffInShift = $staffInShift->where('organizational_units_id', $actuallyOrgUnit->id )
                 ->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-".$days)
                 ->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-".$days)
@@ -638,7 +638,7 @@ class ShiftManagementController extends Controller
                 }
                 $date = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$j);
                 $date =explode(" ",$date);
-                $d = $sis->days->where('day',$date[0]);
+                $d = $sis->days()->where('day',$date[0])->get();
 
                 /* $sheet->setCellValue($cell.$i,
                  ( ( isset($d) && count($d) )? ( ($d->first()->working_day!="F")?$d->first()->working_day:"-" ) :"n/a" )
@@ -646,7 +646,7 @@ class ShiftManagementController extends Controller
 
                 /*actualizacion, por si tiene mas de 1 jornada x dia*/
                 $cellTextValue = "";
-                if(isset($d) && count($d)){
+                if(isset($d)){
                     $cellTextValue ="";
                     $count = 0;
                     foreach($d as $dd){
@@ -791,11 +791,11 @@ class ShiftManagementController extends Controller
                     }
                     $date = \Carbon\Carbon::createFromFormat('Y-m-d',  $actuallyYear."-".$actuallyMonth."-".$j);
                     $date =explode(" ",$date);
-                    $d = $sis->days->where('day',$date[0]);
+                    $d = $sis->days()->where('day',$date[0])->get();
 
                     /*actualizacion, por si tiene mas de 1 jornada x dia*/
                     $cellTextValue = "";
-                    if(isset($d) && count($d)){
+                    if(isset($d)){
                         $cellTextValue ="";
                         $count = 0;
                         foreach($d as $dd){

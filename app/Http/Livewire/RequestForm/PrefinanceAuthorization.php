@@ -55,7 +55,7 @@ class PrefinanceAuthorization extends Component
             'arrayItemRequest'             =>  'required|min:'.(count($this->requestForm->itemRequestForms)+1)
         ],
         [
-            'sigfe.required'               =>  'Infrese valor para  SIGFE.',
+            'sigfe.required'               =>  'Ingrese valor para  SIGFE.',
             'program.required'             =>  'Ingrese un Programa Asociado.',
             'arrayItemRequest.min'         =>  'Debe seleccionar todos los items presupuestario.',
         ],
