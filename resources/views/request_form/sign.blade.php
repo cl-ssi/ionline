@@ -95,6 +95,7 @@
         <tr>
           <th>Item</th>
           <th>ID</th>
+          @if(in_array($eventType, ['finance_event', 'supply_event'])) <th>Item Pres.</th> @endif
           <th>Artículo</th>
           <th>UM</th>
           <th>Especificaciones Técnicas</th>
@@ -110,6 +111,9 @@
                 <tr>
                     <td>{{ $key+1 }}</td>
                     <td>{{ $itemRequestForm->id }}</td>
+                    @if(in_array($eventType, ['finance_event', 'supply_event']))
+                    <td>{{ $itemRequestForm->budgetItem->fullName() ?? '' }}</td>
+                    @endif
                     <td>{{ $itemRequestForm->article }}</td>
                     <td>{{ $itemRequestForm->unit_of_measurement }}</td>
                     <td>{{ $itemRequestForm->specification }}</td>

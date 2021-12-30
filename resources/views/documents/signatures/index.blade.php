@@ -247,7 +247,7 @@
             </td>
             <td>
                 @if($signedSignaturesFlow->signature && $signedSignaturesFlow->signature->url)
-                    <a href="{{$pendingSignaturesFlow->signature->url}}" target="_blank"> <i class="fa fa-link"></i> </a>
+                    <a href="{{$signedSignaturesFlow->signature->url}}" target="_blank"> <i class="fa fa-link"></i> </a>
                 @endif
             </td>
         </tr>

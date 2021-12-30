@@ -85,12 +85,14 @@ class InternalPurchaseOrderController extends Controller
         //
     }
 
-    public function create_internal_purchase_order_document(internalPurchaseOrder $internalPurchaseOrder)
+    public function create_internal_purchase_order_document(PurchasingProcessDetail $purchasingProcessDetail)
     {
-        //dd($internalPurchaseOrder);
+        $purchasingProcessDetail->load('user', 'internalPurchaseOrder.supplier', 'purchasingProcess');
+        $details = PurchasingProcessDetail::where('internal_purchase_order_id', $purchasingProcessDetail->internal_purchase_order_id)->get();
+        // return $details;
         $pdf = app('dompdf.wrapper');
-        $pdf->loadView('request_form.documents.internal_purchase_order_document', compact('internalPurchaseOrder'));
+        $pdf->loadView('request_form.documents.internal_purchase_order_document', compact('purchasingProcessDetail', 'details'));
 
-        return $pdf->stream('oc_'.$internalPurchaseOrder.'.pdf');
+        return $pdf->stream('oc_'.$purchasingProcessDetail->internal_purchase_order_id.'.pdf');
     }
 }

@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="Receipt-{{$detail->id}}" tabindex="-1" aria-labelledby="ReceiptLabel" aria-hidden="true">
+<div class="modal fade" id="Receipt-{{$detail->pivot->id}}" tabindex="-1" aria-labelledby="ReceiptLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -37,7 +37,7 @@
                     </table>
                 </div>
 
-                <a href="{{ route('request_forms.create_internal_purchase_order_document', $detail->pivot->internalPurchaseOrder) }}"
+                <a href="{{ route('request_forms.create_internal_purchase_order_document', $detail->pivot->id) }}"
                   class="btn btn-primary btn-sm float-right" title="Formulario" target="_blank">
                   Orden de Compra <i class="fas fa-file-alt"></i>
                 </a>

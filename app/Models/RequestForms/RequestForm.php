@@ -131,22 +131,17 @@ class RequestForm extends Model implements Auditable
 
     public function getStatus(){
       switch ($this->status) {
+          case "pending":
+              return 'Pendiente';
+              break;
           case "rejected":
-              return '<span class="font-weight-bold text-danger">Rechazado.</span>';
-              break;
-          case "in_progress":
-              return '<span class="font-weight-bold text-success">En progreso.</span>';
-              break;
-          case "created":
-              return '<span class="font-weight-bold text-warning">No revisado.</span>';
+              return 'Rechazado';
               break;
           case "approved":
-              return '<span class="font-weight-bold text-success">Aprovado.</span>';
+              return 'Aprobado';
               break;
           case "closed":
-              return '<span class="font-weight-bold text-warning">Cerrado.</span>';
-              break;
-              case "":
+              return 'Cerado';
               break;
       }
     }
