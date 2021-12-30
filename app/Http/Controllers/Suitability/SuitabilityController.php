@@ -212,13 +212,6 @@ class SuitabilityController extends Controller
         $result = Result::find($id);
         $pdf = \PDF::loadView('suitability.results.certificate', compact('result'));
 
-        //Firmante
-        // $userSigner = Authority::getAuthorityFromDate(44, date('Y-m-d'), 'manager')->user; //Subdirección Gestión y Desarrollo de las Personas
-        
-        //Visadores
-        // $userVisator1 = User::find(13480977); // Siempre Visto Buenos María Soraya
-        // $userVisator2 = User::find(13867504); //13.867.504 Alejandra Aguirre
-        
         $signer = Signer::query()
                     ->where('type', 'signer')
                     ->first();
@@ -238,10 +231,7 @@ class SuitabilityController extends Controller
             $signature->document_type = 'Carta';
             $signature->subject = 'Informe Idoneidad';
             $signature->description = "{$result->user->fullname} , Rut: {$result->user->id}-{$result->user->dv}, Establecimiento:{$result->psirequest->school->name} ";
-//            $signature->endorse_type = 'Visación opcional';
             $signature->endorse_type = 'Visación en cadena de responsabilidad';
-//            $signature->recipients = $userSigner->email . ',' . $userVisator1->email . ',' . $userVisator2->email;
-            // $signature->distribution = $userSigner->email . ',' . $userVisator1->email . ',' . $userVisator2->email;
 
             $signature->distribution = $signer->user->email;
             foreach ($visators as $key => $visator) {
@@ -252,7 +242,6 @@ class SuitabilityController extends Controller
             $signature->save();
 
             $signaturesFile = new SignaturesFile();
-//            $signaturesFile->file = base64_encode($pdf->output());
             $signaturesFile->md5_file = md5($pdf->output());
             $signaturesFile->file_type = 'documento';
             $signaturesFile->signature_id = $signature->id;
@@ -266,27 +255,9 @@ class SuitabilityController extends Controller
             $signaturesFlow = new SignaturesFlow();
             $signaturesFlow->signatures_file_id = $signaturesFile->id;
             $signaturesFlow->type = 'firmante';
-            // $signaturesFlow->user_id = $userSigner->id;
-            // $signaturesFlow->ou_id = $userSigner->organizational_unit_id;
             $signaturesFlow->user_id = $signer->user->id;
             $signaturesFlow->ou_id = $signer->user->organizational_unit_id;
             $signaturesFlow->save();
-
-            // $signaturesFlow = new SignaturesFlow();
-            // $signaturesFlow->signatures_file_id = $signaturesFile->id;
-            // $signaturesFlow->type = 'visador';
-            // $signaturesFlow->user_id = $userVisator1->id;
-            // $signaturesFlow->ou_id = $userVisator1->organizational_unit_id;
-            // $signaturesFlow->sign_position = 1;
-            // $signaturesFlow->save();
-
-            // $signaturesFlow = new SignaturesFlow();
-            // $signaturesFlow->signatures_file_id = $signaturesFile->id;
-            // $signaturesFlow->type = 'visador';
-            // $signaturesFlow->user_id = $userVisator2->id;
-            // $signaturesFlow->ou_id = $userVisator2->organizational_unit_id;
-            // $signaturesFlow->sign_position = 2;
-            // $signaturesFlow->save();
 
             foreach ($visators as $key => $visator) {
                 $signaturesFlow = new SignaturesFlow();
