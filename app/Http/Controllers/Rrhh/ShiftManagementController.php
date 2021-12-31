@@ -1773,4 +1773,70 @@ class ShiftManagementController extends Controller
 
         return redirect()->route('rrhh.shiftManag.index',["groupname"=>Session::get('groupname')]);
     }
+
+    public function seeShiftControlForm(Request $request)
+    {
+      $usr = User::find($request->usr);
+  	  $actuallyMonth = $request->actuallyMonth;
+  	  $actuallyYears = $request->actuallyYears;
+      $close=0;
+      $daysForClose=0;
+
+      $days=0;
+  		$log="mounted";
+  		$dateFiltered = Carbon::createFromFormat('Y-m-d',  $actuallyYears."-".$actuallyMonth."-01", 'Europe/London');
+  		// $usr2 = User::find($usr);
+      $days = $dateFiltered->daysInMonth;
+      $shifsUsr = ShiftUser::where('date_up','>=',$actuallyYears."-".$actuallyMonth."-".$days)
+                           ->where('date_from','<=',$actuallyYears."-".$actuallyMonth."-".$days)
+                           ->where("user_id",$usr->id)
+                           ->first();
+
+      $timePerDay = array(
+
+          'L' => array("from"=>"08:00","to"=>"20:00","time"=>12),
+          'N' => array("from"=>"20:00","to"=>"08:00","time"=>12),
+          'D' => array("from"=>"08:00","to"=>"17:00","time"=>8),
+          'F' => array("from"=>"","to"=>"","time"=>0),
+       );
+
+      $shiftStatus = array(
+          1=>"Asignado",
+             2=>"Completado",
+             3=>"Turno extra",
+             4=>"Intercambio de turno con",
+             5=>"Licencia medica",
+             6=>"Fuero gremial",
+             7=>"Feriado legal",
+             8=>"Permiso excepcional",
+             9 => "Permiso sin goce de sueldo",
+             10 => "Descanzo Compensatorio",
+             11 => "Permiso Administrativo Completo",
+             12 => "Permiso Administrativo Medio Turno Diurno",
+             13 => "Permiso Administrativo Medio Turno Nocturno",
+             14 => "Permiso a Curso",
+             15 => "Ausencia sin justificar",
+             16 => "Cambiado por necesidad de servicio",
+      );
+
+      $months = array(
+
+          '01'=>'Enero',
+          '02'=>'Febrero',
+          '03'=>'Marzo',
+          '04'=>'Abril',
+          '05'=>'Mayo',
+          '06'=>'Junio',
+          '07'=>'Julio',
+          '08'=>'Agosto',
+          '09'=>'Septiembre',
+          '10'=>'Octubre',
+          '11'=>'Noviembre',
+          '12'=>'Diciembre',
+      );
+
+      return view('rrhh.shift_management.see-shift-control-form', compact('usr','actuallyMonth','actuallyYears','days',
+                                                                          'log','shifsUsr','close','daysForClose',
+                                                                          'timePerDay','shiftStatus','months'));
+    }
 }
