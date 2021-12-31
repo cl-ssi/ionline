@@ -5,9 +5,11 @@ namespace App\Models\ReplacementStaff;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class TechnicalEvaluation extends Model
+class TechnicalEvaluation extends Model implements Auditable
 {
+    use \OwenIt\Auditing\Auditable;
     use HasFactory;
     use softDeletes;
 
@@ -45,6 +47,14 @@ class TechnicalEvaluation extends Model
             break;
           case 'rejected':
             return 'Completa';
+            break;
+        }
+    }
+
+    public function getReasonValueAttribute() {
+        switch($this->reason) {
+          case 'falta oferta laboral':
+            return 'Falta de oferta laboral';
             break;
         }
     }

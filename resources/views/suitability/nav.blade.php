@@ -47,6 +47,13 @@
         </a>
     </li>
 
+    <li class="nav-item">
+        <a class="nav-link"
+                      href="{{ route('suitability.report') }}">
+            <i class="fas fa-book-open"></i> Reporte
+        </a>
+    </li>
+
 
     <div class="dropdown show">
         <a class="nav-link  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" >
