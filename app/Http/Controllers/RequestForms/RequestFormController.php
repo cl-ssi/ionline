@@ -56,7 +56,8 @@ class RequestFormController extends Controller {
     public function pending_forms()
     {
         $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
-        $my_pending_forms_to_signs = $new_budget_pending_to_sign = $my_forms_signed = collect();
+        // return $manager;
+        $my_pending_forms_to_signs = $approved_forms_pending_to_sign = $new_budget_pending_to_sign = $my_forms_signed = collect();
 
         //superchief?
         $result = RequestForm::whereHas('eventRequestForms', function($q){
@@ -70,6 +71,8 @@ class RequestFormController extends Controller {
         elseif(Auth::user()->organizationalUnit->id == 40 && $manager->user_id == Auth::user()->id) $event_type = 'finance_event';
         elseif(Auth::user()->organizationalUnit->id == 37 && $manager->user_id == Auth::user()->id) $event_type = 'supply_event';
         else $event_type = null;
+
+        // return $event_type;
 
         if($event_type){
             $prev_event_type = $event_type == 'supply_event' ? 'finance_event' : ($event_type == 'finance_event' ? 'pre_finance_event' : ($event_type == 'pre_finance_event' ? ['superior_leader_ship_event', 'leader_ship_event'] : ($event_type == 'superior_leader_ship_event' ? 'leader_ship_event' : null)));
@@ -89,13 +92,15 @@ class RequestFormController extends Controller {
                                                     ->whereHas('eventRequestForms', function($q){
                                                         return $q->where('status', 'pending')->where('ou_signer_user', Auth::user()->organizationalUnit->id)->where('event_type', 'budget_event');
                                                     })->get();
+
+            $approved_forms_pending_to_sign = RequestForm::where('status', 'approved')->whereNull('signatures_file_id')->get();
         }
 
         $my_forms_signed = RequestForm::whereHas('eventRequestForms', $filter = function($q){
                                         return $q->where('signer_user_id', Auth::user()->id);
                                     })->get();
 
-        return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'new_budget_pending_to_sign', 'my_forms_signed', 'event_type'));
+        return view('request_form.pending_forms', compact('my_pending_forms_to_signs', 'approved_forms_pending_to_sign', 'new_budget_pending_to_sign', 'my_forms_signed', 'event_type'));
     }
 
 
