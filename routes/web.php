@@ -439,6 +439,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/prev', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'goToPreviousMonth'])->name('shiftManag.prevMonth')->middleware('auth');
 
            Route::get('/myshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShift'])->name('shiftManag.myshift')->middleware('auth');
+           Route::get('/seeShiftControlForm', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'seeShiftControlForm'])->name('shiftManag.seeShiftControlForm')->middleware('auth');
+
 
            Route::get('/closeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeShift'])->name('shiftManag.closeShift')->middleware('auth');
            Route::post('/closeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeShift'])->name('shiftManag.closeShift')->middleware('auth');
