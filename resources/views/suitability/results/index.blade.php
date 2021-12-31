@@ -22,7 +22,7 @@
             <label for="for_year">Estados</label>
             <select name="estado" class="form-control selectpicker" >
                 <option value="">Todos los estados</option>
-                @php($states = array('Aprobado', 'Esperando Test', 'Test Finalizado'))
+                @php($states = array('Aprobado', 'Rechazado', 'Test Finalizado'))
                 @foreach($states as $state)
                 <option value="{{$state}}" @if(isset($estado) && $estado == $state) selected @endif >{{$state}}</option>
                 @endforeach
