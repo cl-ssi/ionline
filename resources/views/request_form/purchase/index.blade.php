@@ -7,6 +7,7 @@
 
 @include('request_form.partials.nav')
 
+@if(!$requestForms->isEmpty())
 </div>
 <div class="col">
     <div class="table-responsive">
@@ -27,7 +28,6 @@
                 </tr>
             </thead>
           <tbody>
-              @if($requestForms)
                 @foreach($requestForms as $requestForm)
                         <tr>
                             <td>{{ $requestForm->id }}</td>
@@ -65,13 +65,17 @@
                             </td>
                         </tr>
                 @endforeach
-            @else
-                <tr><td colspan="10" class="text-center">Estimado usuario, no tiene requerimientos asignados.</td></tr>
-            @endif
           </tbody>
         </table>
     </div>
 </div>
+@else
+        <div class="card">
+          <div class="card-body">
+            No hay formularios de requerimiento para mostrar.
+          </div>
+        </div>
+@endif
 
 @endsection
 

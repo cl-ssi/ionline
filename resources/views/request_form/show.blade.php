@@ -47,11 +47,11 @@
                     </tr>
                     <tr>
                         <th class="table-active" scope="row">Tipo de Compra</th>
-                        <td>{{ $requestForm->purchaseType->name }}</td>
+                        <td>{{ $requestForm->purchaseType->name ?? '' }}</td>
                     </tr>
                     <tr>
                         <th class="table-active" scope="row">Unidad de Compra</th>
-                        <td>{{ $requestForm->purchaseUnit->name  }}</td>
+                        <td>{{ $requestForm->purchaseUnit->name ?? '' }}</td>
                     </tr>
                     <tr>
                         <th class="table-active" scope="row">Programa Asociado</th>

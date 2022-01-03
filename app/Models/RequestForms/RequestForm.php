@@ -57,7 +57,7 @@ class RequestForm extends Model implements Auditable
   }
 
     public function requestFormFiles() {
-        return $this->hasMany('\App\Models\RequestForms\RequestFormFile');
+        return $this->hasMany(RequestFormFile::class);
     }
 
     public function contractManager() {
@@ -120,6 +120,7 @@ class RequestForm extends Model implements Auditable
         static::deleting(function($requestForm) { // before delete() method call this
              $requestForm->eventRequestForms()->delete();
              $requestForm->itemRequestForms()->delete();
+             $requestForm->requestFormFiles()->delete();
              // do the rest of the cleanup...
         });
     }

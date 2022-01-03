@@ -28,7 +28,7 @@ class PurchasingProcessController extends Controller
             return redirect()->route('request_forms.my_forms');
         }
 
-        $requestForms = RequestForm::where('status', 'approved')
+        $requestForms = RequestForm::where('status', 'approved')->whereNotNull('signatures_file_id')
             ->whereHas('purchasers', function ($q){
                 return $q->where('users.id', Auth()->user()->id);
             })->latest()->get();
