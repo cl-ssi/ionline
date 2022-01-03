@@ -12,11 +12,17 @@
     @csrf
     @method('POST')
 
-    <div class="row">
+    <div class="form-row">
 
-    <fieldset class="form-group col-6 col-md-3">
+        <fieldset class="form-group col-12 col-md-4">
             <label for="for_name">Nombre*</label>
             <input type="text" class="form-control" id="for_name" name="name" required>
+        </fieldset>
+
+        <fieldset class="form-group col-12 col-md-6">
+            <label for="for_descripcion">Descripción</label>
+            <input type="text" class="form-control" id="for_descripcion" name="descripcion"
+                    >
         </fieldset>
 
         <fieldset class="form-group col-6 col-md-2">
@@ -25,13 +31,7 @@
                 value="{{$guard}}">
         </fieldset>
 
-        <fieldset class="form-group col-12 col-md-7">
-            <label for="for_descripcion">Descripción</label>
-            <input type="text" class="form-control" id="for_descripcion" name="descripcion"
-                 >
-        </fieldset>
     </div>
-    
 
     <button type="submit" class="btn btn-primary">Guardar</button>
 
