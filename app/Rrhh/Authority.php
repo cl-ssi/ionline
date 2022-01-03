@@ -33,6 +33,10 @@ class Authority extends Model
     }
 
     public static function getAuthorityFromDate($ou_id, $date, $type) {
+        if (!is_string($date)) {
+          $date = $date->format('Y-m-d');
+        }
+
         return Authority::with('user','organizationalUnit')
             ->where('organizational_unit_id', $ou_id)
             ->when($type, function ($q) use ($type) {
@@ -42,6 +46,10 @@ class Authority extends Model
     }
 
     public static function getAmIAuthorityFromOu($date, $type, $user_id) {
+        if (!is_string($date)) {
+          $date = $date->format('Y-m-d');
+        }
+
         // Pregunto por cada unidad organizacional si el user_id existe segun el tipo y fecha de la consulta
         $ous = OrganizationalUnit::whereHas('authorities', function($q) use ($type, $date, $user_id){
                                     $q->where('user_id', $user_id)

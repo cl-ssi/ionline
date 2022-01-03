@@ -10,10 +10,12 @@ use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\UnitOfMeasurement;
 use App\Models\Parameters\PurchaseMechanism;
 use App\User;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
+use Livewire\TemporaryUploadedFile;
 
 class RequestFormCreate extends Component
 {
@@ -39,10 +41,8 @@ class RequestFormCreate extends Component
         'quantity'            =>  'required|numeric|min:0.1',
         'article'             =>  'required',
         'unitOfMeasurement'   =>  'required',
-        //'fileItem'            =>  'required',
         'taxes'               =>  'required',
         'typeOfCurrency'      =>  'required'
-        //'budget_item_id'      =>  'required',
     ];
 
     protected $messages = [
@@ -56,7 +56,6 @@ class RequestFormCreate extends Component
         'unitOfMeasurement.required'  => 'Debe seleccionar una Unidad de Medida',
         'taxes.required'              => 'Debe seleccionar un Tipo de Impuesto.',
         'typeOfCurrency.required'     => 'Debe seleccionar un Tipo de Moneda.',
-        //'budget_item_id.required'     => 'Debe seleccionar un Item Presupuestario',
     ];
 
     public function mount($requestForm){
@@ -251,64 +250,68 @@ class RequestFormCreate extends Component
         ],
       );
 
-      $req = RequestForm::updateOrCreate(
-        [
-          'id'                    =>  $this->idRF,
-        ],
-        [
-          'contract_manager_id'   =>  $this->contractManagerId,
-          'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
-          'name'                  =>  $this->name,
-          'superior_chief'        =>  $this->superiorChief,
-          'justification'         =>  $this->justify,
-          'type_form'             =>  $this->route == 'request_forms.passengers.create' ? 'Pasajes Aéreos' : 'Bienes y/o Servicios',
-          'request_user_id'       =>  Auth()->user()->id,
-          'request_user_ou_id'    =>  Auth()->user()->organizationalUnit->id,
-          //'supervisor_user_id'    =>  Auth()->user()->id,
-          'estimated_expense'     =>  $this->totalForm($this->route == 'request_forms.passengers.create' ? $this->passengers : $this->items),
-          'type_of_currency'      =>  $this->typeOfCurrency,
-          'purchase_mechanism_id' =>  $this->purchaseMechanism,
-          'program'               =>  $this->program,
-          'status'                =>  'pending'
+      DB::transaction(function () {
 
-          //'passenger_type'    =>  $this->passengerType,
-      ]);
+        $req = RequestForm::updateOrCreate(
+          [
+            'id'                    =>  $this->idRF,
+          ],
+          [
+            'contract_manager_id'   =>  $this->contractManagerId,
+            'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
+            'name'                  =>  $this->name,
+            'superior_chief'        =>  $this->superiorChief,
+            'justification'         =>  $this->justify,
+            'type_form'             =>  $this->route == 'request_forms.passengers.create' ? 'Pasajes Aéreos' : 'Bienes y/o Servicios',
+            'request_user_id'       =>  Auth()->user()->id,
+            'request_user_ou_id'    =>  Auth()->user()->organizationalUnit->id,
+            //'supervisor_user_id'    =>  Auth()->user()->id,
+            'estimated_expense'     =>  $this->totalForm($this->route == 'request_forms.passengers.create' ? $this->passengers : $this->items),
+            'type_of_currency'      =>  $this->typeOfCurrency,
+            'purchase_mechanism_id' =>  $this->purchaseMechanism,
+            'program'               =>  $this->program,
+            'status'                =>  'pending'
 
-      // AQUI GUARDAR ARCHIVOS
-      foreach($this->fileRequests as $nFiles => $fileRequest){
-          $reqFile = new RequestFormFile();
-          if(env('APP_ENV') == 'local' || env('APP_ENV') == 'testing'){
-              $now = Carbon::now()->format('Y_m_d_H_i_s');
-              $file_name = $now.'req_file_'.$nFiles;
-              $reqFile->name = $fileRequest->getClientOriginalName();
-              $reqFile->file = $fileRequest->storeAs('/ionline/request_forms_dev/request_files/', $file_name.'.'.$fileRequest->extension(), 'gcs');
-              $reqFile->request_form_id = $req->id;
-              $reqFile->user_id = Auth()->user()->id;
-              $reqFile->save();
+            //'passenger_type'    =>  $this->passengerType,
+        ]);
+
+        // AQUI GUARDAR ARCHIVOS
+        foreach($this->fileRequests as $nFiles => $fileRequest){
+            $reqFile = new RequestFormFile();
+            if(env('APP_ENV') == 'local' || env('APP_ENV') == 'testing'){
+                $now = Carbon::now()->format('Y_m_d_H_i_s');
+                $file_name = $now.'_req_file_'.$nFiles;
+                $reqFile->name = $fileRequest->getClientOriginalName();
+                $reqFile->file = $fileRequest->storeAs('/ionline/request_forms_dev/request_files/', $file_name.'.'.$fileRequest->extension(), 'gcs');
+                $reqFile->request_form_id = $req->id;
+                $reqFile->user_id = Auth()->user()->id;
+                $reqFile->save();
+            }
+        }
+
+        if($this->route == 'request_forms.items.create'){
+          foreach($this->items as $item){
+            $this->saveItem($item, $req->id);
           }
-      }
-
-      if($this->route == 'request_forms.items.create'){
-        foreach($this->items as $item){
-          $this->saveItem($item, $req->id);
+        } else {
+          foreach($this->passengers as $passenger){
+            $this->savePassenger($passenger, $req->id);
+          }
         }
-      } else {
-        foreach($this->passengers as $passenger){
-          $this->savePassenger($passenger, $req->id);
-        }
-      }
 
-      if($this->editRF){
-        ItemRequestForm::destroy($this->deletedItems);
-        session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue editado con exito.');
-      }
-      else{
-        EventRequestform::createLeadershipEvent($req);
-        EventRequestform::createPreFinanceEvent($req);
-        EventRequestform::createFinanceEvent($req);
-        EventRequestform::createSupplyEvent($req);
-        session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue creado con exito.');
-      }
+        if($this->editRF){
+          ItemRequestForm::destroy($this->deletedItems);
+          session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue editado con exito.');
+        }
+        else{
+          EventRequestform::createLeadershipEvent($req);
+          EventRequestform::createPreFinanceEvent($req);
+          EventRequestform::createFinanceEvent($req);
+          EventRequestform::createSupplyEvent($req);
+          session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue creado con exito.');
+        }
+
+      });
 
       return redirect()->to('/request_forms/my_forms');
     }
@@ -318,9 +321,11 @@ class RequestFormCreate extends Component
     }
 
     private function saveItem($item, $id){
+        // dd($item['articleFile']);
+        // if($item['articleFile']) $item['articleFile'] = new TemporaryUploadedFile($item['articleFile'], config('filesystems.default'));
         $now = Carbon::now()->format('Y_m_d_H_i_s');
-        $file_name = $now.'art_file_'.$id;
-        $req = ItemRequestForm::updateOrCreate(
+        $file_name = $now.'item_file_'.$id;
+        ItemRequestForm::updateOrCreate(
           [
             'id'                    =>      $item['id'],
           ],
@@ -332,10 +337,8 @@ class RequestFormCreate extends Component
             'quantity'              =>      $item['quantity'],
             'unit_value'            =>      $item['unitValue'],
             'tax'                   =>      $item['taxes'],
-            //'budget_item_id'        =>      '1',
             'expense'               =>      $item['totalValue'],
-            // 'type_of_currency'      =>      $item['typeOfCurrency'],
-            'article_file'          =>      $item['articleFile'] ? $item['articleFile']->storeAs('/ionline/request_forms_dev/item_files/', $file_name.'.'.$item['articleFile']->extension(), 'gcs') : null
+            'article_file'          =>      $item['articleFile'] ? $item['articleFile']->storeAs('/ionline/request_forms_dev/item_files/', $file_name.'.'.pathinfo($item['articleFile'], PATHINFO_EXTENSION), 'gcs') : null
       ]);
       return;
     }

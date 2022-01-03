@@ -12,9 +12,11 @@
     <table class="table table-sm table-bordered table-responsive text-center align-middle" id="tabla_estado_residencias">
         <thead>
             <th nowrap>N°</th>
-            <th nowrap>Colegio</th>
-            <th nowrap>Total Solicitudes Aprobadas</th>
+            <th nowrap>Colegio</th>            
             <th nowrap>Total Solicitudes Esperando Test</th>
+            <th nowrap>Total Solicitudes Finalizadas</th>
+            <th nowrap>Total Solicitudes Aprobadas</th>
+
         </thead>
         <tbody>
             @foreach($dataArray as $data)
@@ -22,13 +24,15 @@
             <tr>
                 <td nowrap>{{$loop->iteration}}</td>
                 <td nowrap>{{$data['name_school'] }}</td>
-                <td nowrap>{{$data['counteraprobado'] }}</td>
                 <td nowrap>{{$data['counteresperando'] }}</td>
+                <td nowrap>{{$data['counterfinalizado'] }}</td>
+                <td nowrap>{{$data['counteraprobado'] }}</td>
             </tr>
             @else
             <th colspan="2">Totales</th>
-            <th nowrap>{{$data['sumaprobado'] }}</th>
             <th nowrap>{{$data['sumesperando'] }}</th>
+            <th nowrap>{{$data['sumfinalizado'] }}</th>
+            <th nowrap>{{$data['sumaprobado'] }}</th>
 
             @endif
             @endforeach

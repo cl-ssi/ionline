@@ -24,12 +24,12 @@
 
         <fieldset class="form-group col-md-3">
             <label for="for_from">Desde*</label>
-            <input type="date" class="form-control" min="2020-01-01" max="{{Carbon\Carbon::now()->toDateString()}}" name="from" value="{{ old('from') }}" required>
+            <input type="date" class="form-control" min="2020-01-01" name="from" value="{{ old('from') }}" required>
         </fieldset>
 
         <fieldset class="form-group col-md-3">
             <label for="for_to">Hasta*</label>
-            <input type="date" class="form-control" min="2020-01-01" max="2022-01-01" name="to" value="{{ old('to') }}" required>
+            <input type="date" class="form-control" min="2020-01-01"name="to" value="{{ old('to') }}" required>
         </fieldset>
 
         <fieldset class="form-group col-md-3">
@@ -81,7 +81,7 @@
         <th>Rut</th>
         <th>Nombre</th>
         <th>Unidad Organizacional</th>
-        
+
         <th>Inicio Contrato</th>
         <th>Término Contrato</th>
         <th>Fecha Solicitud</th>
@@ -89,13 +89,13 @@
     </tr>
 
     @foreach($srs as $sr)
-    <tr>        
+    <tr>
 
 
         <td>
-        <a href="{{ route('rrhh.service-request.fulfillment.edit',$sr) }}" target="_blank">                    
+        <a href="{{ route('rrhh.service-request.fulfillment.edit',$sr) }}" target="_blank">
             {{ $sr->id ?? '' }}
-            </a>        
+            </a>
         </td>
         <td>{{ $sr->program_contract_type ?? '' }}</td>
         <td>{{ $sr->type ?? '' }}</td>
@@ -115,7 +115,7 @@
 
     </tr>
     @endforeach
-    
+
 </table>
 
 {{ $srs->appends(request()->query())->links() }}
