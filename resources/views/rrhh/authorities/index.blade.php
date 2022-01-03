@@ -83,15 +83,15 @@
                     {{ $item['date'] }}
                     @if($item['manager'])
                     <hr class="mt-1 mb-1" >
-                    <a href="{{ route('rrhh.authorities.edit', $authorities[0]->id) }}">
-                        {{ $item['manager']->user->fullName }} <br>
+                    <a href="{{ route('rrhh.authorities.edit', $item['manager']->id) }}">
+                        {{ optional($item['manager']->user)->fullName }} <br>
                     </a>
                     <!-- <hr class="mt-1 mb-1"> -->
                     <em class="text-muted">{{ $item['manager']->position }}</em><br>
                     @endif
                     @if($item['delegate'])
                     <hr class="mt-1 mb-1" >
-                    <a href="{{ route('rrhh.authorities.edit', $authorities[0]->id) }}">
+                    <a href="{{ route('rrhh.authorities.edit', $item['delegate']->id) }}">
                         {{ $item['delegate']->user->fullName }} <br>
                     </a>
                     <!-- <hr class="mt-1 mb-1"> -->
@@ -99,7 +99,7 @@
                     @endif
                     @if($item['secretary'])
                     <hr class="mt-1 mb-1" >
-                    <a href="{{ route('rrhh.authorities.edit', $authorities[0]->id) }}">
+                    <a href="{{ route('rrhh.authorities.edit', $item['secretary']->id) }}">
                         {{ $item['secretary']->user->fullName }} <br>
                     </a>
                     <!-- <hr class="mt-1 mb-1"> -->
@@ -125,9 +125,9 @@
             <tbody>
                 @foreach($authorities as $authority)
                     @if($authority)
-                    @if($authority->user)
+
                     <tr class="small">
-                        <td>{{ $authority->user->fullName }}</td>
+                        <td>{{ optional($authority->user)->fullName }}</td>
                         <td nowrap>{{ $authority->from->format('d-m-Y') }}</td>
                         <td nowrap>{{ ($authority->to) ? $authority->to->format('d-m-Y') : '' }}</td>
                         <td>{{ $authority->position }}</td>
@@ -142,7 +142,7 @@
                             @endcan
                         </th>
                     </tr>
-                    @endif
+
                     @endif
                 @endforeach
 
