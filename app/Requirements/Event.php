@@ -23,11 +23,11 @@ class Event extends Model
     }
 
     public function from_user() {
-        return $this->belongsTo('App\User', 'from_user_id');
+        return $this->belongsTo('App\User', 'from_user_id')->withTrashed();
     }
 
     public function from_ou() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'from_ou');
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'from_ou')->withTrashed();
     }
 
     public function to_user() {
@@ -35,7 +35,7 @@ class Event extends Model
     }
 
     public function to_ou() {
-        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'to_ou_id');
+        return $this->belongsTo('App\Rrhh\OrganizationalUnit', 'to_ou_id')->withTrashed();
     }
 
     public function requirement() {
