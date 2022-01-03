@@ -137,8 +137,8 @@
                     'OrganizationalUnits: create',
                     'OrganizationalUnits: edit',
                     'OrganizationalUnits: delete',
-                    'Authorities: manager',
                     'Authorities: view',
+                    'Authorities: create',
                     'Users: service requests',
                     'Service Request',
                     'Replacement Staff: create request'])
