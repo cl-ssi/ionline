@@ -19,23 +19,19 @@
 
         </thead>
         <tbody>
-            @foreach($dataArray as $data)
-            @if(!$loop->last)
+            @foreach($dataArray as $data)            
             <tr>
                 <td nowrap>{{$loop->iteration}}</td>
                 <td nowrap>{{$data['name_school'] }}</td>
                 <td nowrap>{{$data['counteresperando'] }}</td>
                 <td nowrap>{{$data['counterfinalizado'] }}</td>
                 <td nowrap>{{$data['counteraprobado'] }}</td>
-            </tr>
-            @else
+            </tr>            
+            @endforeach
             <th colspan="2">Totales</th>
             <th nowrap>{{$data['sumesperando'] }}</th>
             <th nowrap>{{$data['sumfinalizado'] }}</th>
             <th nowrap>{{$data['sumaprobado'] }}</th>
-
-            @endif
-            @endforeach
 
         </tbody>
     </table>
