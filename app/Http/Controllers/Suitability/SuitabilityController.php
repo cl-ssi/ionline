@@ -50,7 +50,7 @@ class SuitabilityController extends Controller
             $sumaprobado += $counteraprobado;
             $sumesperando += $counteresperando;
             $sumfinalizado += $counterfinalizado;
-            //if ($counteraprobado or $counteresperando or $counterfinalizado) {
+            if ($counteraprobado >= 1 or $counteresperando >=1 or $counterfinalizado >=1) {
                 array_push(
                     $dataArray,
                     array(
@@ -63,7 +63,7 @@ class SuitabilityController extends Controller
                         'sumfinalizado' => $sumfinalizado,
                     )
                 );
-            //}
+            }
         }
         return view('suitability.report', compact('dataArray'));
     }
