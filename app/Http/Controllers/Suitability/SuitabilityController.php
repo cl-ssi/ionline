@@ -50,7 +50,7 @@ class SuitabilityController extends Controller
             $sumaprobado += $counteraprobado;
             $sumesperando += $counteresperando;
             $sumfinalizado += $counterfinalizado;
-            if ($counteraprobado or $counteresperando) {
+            if ($counteraprobado or $counteresperando or $counterfinalizado) {
                 array_push(
                     $dataArray,
                     array(
