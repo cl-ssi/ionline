@@ -6,7 +6,7 @@
 @foreach($ouTopLevels as $ouTopLevel)
 <h3 class="mb-3">Autoridades</h3>
 <h4 class="mb-3">{{($ouTopLevel->establishment->name)}}</h4>
-@can('Authorities: manager')
+@can('Authorities: create')
 @if($ouTopLevel->establishment_id == Auth::user()->organizationalUnit->establishment->id)
 <a href="{{ route('rrhh.authorities.create') }}?establishment_id={{$ouTopLevel->establishment_id}}" class="btn btn-primary">Crear Autoridad del {{($ouTopLevel->establishment->name)}}</a><br><br>
 @endif
@@ -44,7 +44,7 @@
 
     <div class="col-7">
 
-    @can('Authorities: manager')
+    @can('Authorities: create')
     <form method="POST" class="form-inline" action="{{ route('rrhh.authorities.index') }}?ou=">
         @csrf
         @method('GET')

@@ -166,7 +166,7 @@
 
 
 
-                        @canany(['Authorities: manager', 'Authorities: view'])
+                        @canany(['Authorities: view', 'Authorities: create'])
                             <a class="dropdown-item"
                                href="{{ route('rrhh.authorities.index') }}">
                                 <i class="fas fa-chess-king fa-fw"></i> Autoridades
