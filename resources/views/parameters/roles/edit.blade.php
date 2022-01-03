@@ -23,7 +23,7 @@
         <fieldset class="form-group col">
             <label for="for_description">Descripción</label>
             <input type="text" class="form-control" id="for_description" name="description"
-                value="{{ $role->description }}" required>
+                value="{{ $role->description }}">
         </fieldset>
 
     </div>
