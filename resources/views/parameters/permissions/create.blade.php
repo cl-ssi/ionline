@@ -20,9 +20,8 @@
         </fieldset>
 
         <fieldset class="form-group col-12 col-md-6">
-            <label for="for_descripcion">Descripción</label>
-            <input type="text" class="form-control" id="for_descripcion" name="descripcion"
-                    >
+            <label for="for_description">Descripción</label>
+            <input type="text" class="form-control" id="for_description" name="description">
         </fieldset>
 
         <fieldset class="form-group col-6 col-md-2">

@@ -135,7 +135,7 @@
                             <small>{{ $authority->creator->fullName }}</small>
                         </td>
                         <th>
-                            @can('be god')
+                            @can('Authorities: edit')
                             <a href="{{ route('rrhh.authorities.edit', $authority->id) }}" class="btn btn-outline-secondary btn-sm">
     					        <span class="fas fa-edit" aria-hidden="true"></span></a>
                             @endcan
