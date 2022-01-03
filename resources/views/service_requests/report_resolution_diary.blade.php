@@ -348,7 +348,10 @@
 
 
       <p class="justify">
-        <strong>DÉCIMO:</strong> El prestador cumplirá una jornada que deberá ser acreditada mediante copia del registro de asistencia, que deberán ser entregado a la Subdirección Médica, se deja establecido que, la copia del registro de asistencia, se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R
+        <strong>DÉCIMO:</strong> El prestador cumplirá una jornada que deberá ser acreditada mediante copia del registro de asistencia, 
+        que deberán ser entregado a la Subdirección Médica, se deja establecido que, la copia del registro de asistencia, 
+        se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza jurídica del convenio, 
+        en virtud del Dictamen N°26.092/2017 de la C.G.R. Si durante una jornada de trabajo existiese un cambio de hora, se pagarán las horas efectivamente trabajadas.
       </p>
 
 

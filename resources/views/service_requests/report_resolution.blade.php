@@ -545,15 +545,19 @@
 
         Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador,
         se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza
-        jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R.,
+        jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R., 
+        Si durante una jornada de trabajo existiese un cambio de hora, se pagarán las horas efectivamente trabajadas.
         los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente,
         como también los días de inasistencia, los cuales deberán quedar informados en el respectivo
-        informe de prestaciones mensual. Los reiterados atrasos e inasistencias deberán ser amonestados.
+        informe de prestaciones mensual. 
+        Los reiterados atrasos e inasistencias deberán ser amonestados.
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
       @if($ServiceRequest->estate == "Profesional Médico")
       <p class="justify">
-        <strong>DÉCIMO:</strong> Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador, se indican con el fin de verificar la realización de éstos, sin que se altere la naturaleza jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R., los atrasos superiores a una hora, serán descontados de sus horas realizadas.
+        <strong>DÉCIMO:</strong> Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador, 
+        se indican con el fin de verificar la realización de éstos, sin que se altere la naturaleza jurídica del convenio, 
+        en virtud del Dictamen N°26.092/2017 de la C.G.R., los atrasos superiores a una hora, serán descontados de sus horas realizadas.
       </p>
       @else
       <p class="justify">
