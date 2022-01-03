@@ -124,10 +124,9 @@
             </thead>
             <tbody>
                 @foreach($authorities as $authority)
-                    @if($authority)
 
                     <tr class="small">
-                        <td>{{ optional($authority->user)->fullName }}</td>
+                        <td>{{ optional($authority->user)->fullName }} {{ trashed($authority->user) }}</td>
                         <td nowrap>{{ $authority->from->format('d-m-Y') }}</td>
                         <td nowrap>{{ ($authority->to) ? $authority->to->format('d-m-Y') : '' }}</td>
                         <td>{{ $authority->position }}</td>
@@ -143,7 +142,7 @@
                         </th>
                     </tr>
 
-                    @endif
+
                 @endforeach
 
             </tbody>

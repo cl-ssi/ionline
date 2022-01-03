@@ -30,17 +30,20 @@ class AuthorityController extends Controller
         $calendar = array();
         if($request->ou) {
             $ou = OrganizationalUnit::Find($request->ou);
-            $authorities = Authority::with('user', 'creator')
-                            ->where('organizational_unit_id',$request->ou)
-                            ->latest('id')
-                            ->get();
-            //return $authorities;
 
             $begin = (clone $today)->modify('-13 days')->modify('-'.$today->format('w').' days');
             //print_r($begin);
 
             $end   = (clone $today)->modify('+13 days')->modify('+'.(8-$today->format('w')).' days');
             //print_r($end);
+
+            $authorities = Authority::with('user', 'creator')
+                            ->where('from', '<=', $end)
+                            ->where('to','>=', $begin)
+                            ->where('organizational_unit_id',$request->ou)
+                            ->latest('id')
+                            ->get();
+            //return $authorities;
 
             for($i = $begin; $i <= $end; $i->modify('+1 day')){
                 $calendar[] = [

@@ -21,11 +21,11 @@ class Authority extends Model
     }
 
     public function user() {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User')->withTrashed();
     }
 
     public function creator() {
-        return $this->belongsTo('App\User','creator_id');
+        return $this->belongsTo('App\User','creator_id')->withTrashed();
     }
 
     public function agreement() {
