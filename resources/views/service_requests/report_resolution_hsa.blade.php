@@ -407,8 +407,9 @@
 
         Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador,
         se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza
-        jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R.,
-        los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente,
+        jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R., 
+        si durante una jornada de trabajo existiese un cambio de hora, se pagarán las horas efectivamente trabajadas.
+        Los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente,
         como también los días de inasistencia, los cuales deberán quedar informados en el respectivo
         informe de prestaciones mensual. Los reiterados atrasos e inasistencias deberán ser amonestados.
       </p>
