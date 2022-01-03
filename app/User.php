@@ -386,4 +386,13 @@ class User extends Authenticatable implements Auditable
      * @var array
      */
     protected $dates = ['deleted_at', 'birthday'];
+
+    /**
+     * Attributes to exclude from the Audit.
+     *
+     * @var array
+     */
+    protected $auditExclude = [
+    	'remember_token', 'password'
+	];
 }

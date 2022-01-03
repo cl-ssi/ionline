@@ -83,7 +83,7 @@ use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 //maqueteo calendario
 Route::get('/calendar', function () {
@@ -1415,7 +1415,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     // });
 });
 
-Route::get('/yomevacuno',[VaccinationController::class,'welcome'])->name('welcome');
+Route::get('/yomevacuno',[VaccinationController::class,'welcome']);
 
 Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::get('/welcome',[VaccinationController::class,'welcome'])->name('welcome');
