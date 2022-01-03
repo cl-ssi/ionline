@@ -30,7 +30,10 @@ class AuthorityController extends Controller
         $calendar = array();
         if($request->ou) {
             $ou = OrganizationalUnit::Find($request->ou);
-            $authorities = Authority::with('user', 'creator')->where('organizational_unit_id',$request->ou)->latest('id')->get();
+            $authorities = Authority::with('user', 'creator')
+                            ->where('organizational_unit_id',$request->ou)
+                            ->latest('id')
+                            ->get();
             //return $authorities;
 
             $begin = (clone $today)->modify('-13 days')->modify('-'.$today->format('w').' days');
@@ -40,7 +43,12 @@ class AuthorityController extends Controller
             //print_r($end);
 
             for($i = $begin; $i <= $end; $i->modify('+1 day')){
-                $calendar[] = ['date' => $i->format("Y-m-d"), 'manager' => Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'manager'), 'delegate' => Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'delegate'), 'secretary' => Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'secretary')]; 
+                $calendar[] = [
+                    'date' => $i->format("Y-m-d"), 
+                    'manager' => Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'manager'), 
+                    'delegate' => Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'delegate'), 
+                    'secretary' => Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'secretary')
+                ]; 
                 // $calendar[$i->format("Y-m-d")] = Authority::getAuthorityFromDate($request->ou, $i->format("Y-m-d"),'manager');
                 // echo $i->format("Y-m-d"). '
                 // ';
