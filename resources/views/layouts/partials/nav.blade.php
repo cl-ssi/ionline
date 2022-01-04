@@ -235,6 +235,15 @@
                                 @endif
                             </a>
                         @endif
+
+                        @if(Auth::user()->hasRole('Replacement Staff: personal'))
+                            <div class="dropdown-divider"></div>
+
+                            <a class="dropdown-item @active('replacement_staff.request.personal_index')"
+                               href="{{ route('replacement_staff.request.personal_index') }}">
+                                <i class="far fa-id-card"></i> Solicitudes de Contratación
+                            </a>
+                        @endif
                     </div>
 
                 </li>

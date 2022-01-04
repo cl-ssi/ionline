@@ -100,6 +100,26 @@ class RequestReplacementStaffController extends Controller
         return view('replacement_staff.request.own_index', compact('my_request', 'my_pending_requests'));
     }
 
+    public function personal_index()
+    {
+        // $my_pending_requests = RequestReplacementStaff::latest()
+        //     ->where('user_id', Auth::user()->id)
+        //     ->where('request_status', 'pending')
+        //     ->get();
+
+        $requests = RequestReplacementStaff::latest()
+            //->where('user_id', Auth::user()->id)
+            ->where(function ($q){
+              $q->where('request_status', 'complete')
+                ->orWhere('request_status', 'rejected');
+            })
+            ->get();
+
+        //dd($requests);
+
+        return view('replacement_staff.request.personal_index', compact('requests'));
+    }
+
     // public function ou_index()
     // {
     //     $ou_request = RequestReplacementStaff::where('organizational_unit_id', Auth::user()->organizationalUnit->id)
