@@ -13,8 +13,6 @@
 
   <div class="col-sm-3">
     <p>
-        <a class="btn btn-primary" href="{{ route('replacement_staff.request.create') }}">
-            <i class="fas fa-plus"></i> Nueva</a>
         <a class="btn btn-primary disabled" data-toggle="collapse" href="#collapseSearch" role="button" aria-expanded="false" aria-controls="collapseExample">
             <i class="fas fa-filter"></i> Filtros
         </a>
