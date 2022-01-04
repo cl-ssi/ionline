@@ -31,9 +31,9 @@
   </div>
 </div>
 
-</div>
-
 <br> -->
+
+</div>
 
 <div class="col">
     <h5><i class="fas fa-inbox"></i> Solicitudes Finalizadas</h5>
