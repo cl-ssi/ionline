@@ -6,7 +6,7 @@
 
 @include('replacement_staff.nav')
 
-<div class="row">
+<!-- <div class="row">
   <div class="col-sm-3">
       <h4 class="mb-3">Mis Solicitudes: </h4>
   </div>
@@ -33,7 +33,7 @@
 
 </div>
 
-<br>
+<br> -->
 
 <div class="col">
     <h5><i class="fas fa-inbox"></i> Solicitudes Finalizadas</h5>
