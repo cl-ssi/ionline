@@ -192,4 +192,17 @@ class ClaveUnicaController extends Controller
         }
     }
 
+    public function logout() {
+        
+        if(env('APP_ENV') == 'local'){
+            return redirect()->route('logout');
+        }else{
+            $url_logout = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
+            $url_redirect = "https://www.saludiquique.app/logout";
+            $url = $url_logout.urlencode($url_redirect);
+        }        
+
+        return redirect()->to($url)->send();
+    }
+
 }

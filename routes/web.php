@@ -83,7 +83,7 @@ use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 //maqueteo calendario
 Route::get('/calendar', function () {
@@ -440,6 +440,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/prev', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'goToPreviousMonth'])->name('shiftManag.prevMonth')->middleware('auth');
 
            Route::get('/myshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShift'])->name('shiftManag.myshift')->middleware('auth');
+           Route::get('/seeShiftControlForm', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'seeShiftControlForm'])->name('shiftManag.seeShiftControlForm')->middleware('auth');
+
 
            Route::get('/closeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeShift'])->name('shiftManag.closeShift')->middleware('auth');
            Route::post('/closeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeShift'])->name('shiftManag.closeShift')->middleware('auth');
@@ -1413,7 +1415,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     // });
 });
 
-Route::get('/yomevacuno',[VaccinationController::class,'welcome'])->name('welcome');
+Route::get('/yomevacuno',[VaccinationController::class,'welcome']);
 
 Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::get('/welcome',[VaccinationController::class,'welcome'])->name('welcome');
@@ -1556,3 +1558,5 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 Route::view('/some', 'some');
 
 Route::get('/test-getip',[TestController::class,'getIp']);
+
+Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);

@@ -44,10 +44,10 @@
 					@endif
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" name="permissions[]"
-							value="{{ $permission->name }}" id="{{$permission->name}}"
+							value="{{ $permission->name }}" id="{{ $permission->name }}"
 							{{ $user->can($permission->name)? 'checked':'' }}>
-						<label class="form-check-label" for="{{$permission->name}}">{{$permission->name}}</label>
-						<label><small>({{ $permission->descripcion }})</small></label>
+						<label class="form-check-label" for="{{ $permission->name }}">{{$permission->name}}</label>
+						<small class="form-text text-muted">{{ $permission->description }}</small>
 					</div>
 				@endif
 			@endforeach
