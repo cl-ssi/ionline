@@ -193,6 +193,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index')->middleware('permission:Replacement Staff: assign request');
         Route::get('/assign_index', [RequestReplacementStaffController::class, 'assign_index'])->name('assign_index')->middleware('permission:Replacement Staff: technical evaluation');
         Route::get('/own_index', [RequestReplacementStaffController::class, 'own_index'])->name('own_index');
+        Route::get('/personal_index', [RequestReplacementStaffController::class, 'personal_index'])->name('personal_index');
         Route::get('/ou_index', [RequestReplacementStaffController::class, 'ou_index'])->name('ou_index');
         Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
         Route::get('/{requestReplacementStaff}/create_extension', [RequestReplacementStaffController::class, 'create_extension'])->name('create_extension');
