@@ -30,6 +30,20 @@ class EventRequestForm extends Model
         return $this->belongsTo(RequestForm::class, 'request_form_id');
     }
 
+    public function getStatusValueAttribute(){
+      switch ($this->status) {
+          case "pending":
+              return 'Pendiente';
+              break;
+          case "rejected":
+              return 'Rechazado';
+              break;
+          case "approved":
+              return 'Aprobado';
+              break;
+      }
+    }
+
     public static function createLeadershipEvent(RequestForm $requestForm){
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   $requestForm->request_user_ou_id;
