@@ -9,6 +9,18 @@ figure:focus .menu {
     display: visible;
 }
 </style>
+
+<style type="text/css">
+
+	.seeBtn {
+		color:blue;
+	}
+	.seeBtn:hover  {
+		color:lightblue;
+	}
+
+</style>
+
 <div>
    <div wire:loading>
               <i class="fas fa-spinner fa-pulse"></i>
@@ -38,6 +50,11 @@ figure:focus .menu {
                     @livewire( 'rrhh.delete-shift-button',['actuallyShiftUserDay'=>$sis])
 
                     {{--@livewire( 'rrhh.see-shift-control-form', ['usr'=>$sis->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth], key($loop->index) )--}}
+                    <!-- <a href="{{ route('rrhh.shiftManag.seeShiftControlForm',['usr'=>$sis->user, 'actuallyYears'=>$actuallyYear,'actuallyMonth'=>$actuallyMonth]) }}">
+                      <button class="only-icon seeBtn"  >
+                        <i class="fa fa-eye seeBtn"></i>
+                      </button>
+  									</a> -->
 
                     {{ $sis->user->runFormat()}} - {{$sis->user->name}} {{$sis->user->fathers_family}}
                     <small>

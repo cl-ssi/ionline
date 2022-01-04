@@ -12,14 +12,19 @@
     @csrf
     @method('POST')
 
-    <div class="row">
+    <div class="form-row">
 
-        <fieldset class="form-group col">
+        <fieldset class="form-group col-12 col-md-4">
             <label for="for_name">Nombre</label>
             <input type="text" class="form-control" id="for_name"
-                placeholder="nombre del rol" name="name" required>
+                placeholder="Nombre del rol" name="name" required>
         </fieldset>
 
+        <fieldset class="form-group col-md-6">
+            <label for="for_description">Descripción</label>
+            <input type="text" class="form-control" id="for_description"
+                placeholder="Descripciól del rol" name="description">
+        </fieldset>
     </div>
 
     @foreach($permissions as $permission)

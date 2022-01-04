@@ -5,7 +5,7 @@
 @section('content')
 <h3 class="mb-3">Editar Autoridad</h3>
 
-@can('Authorities: manager')
+@can('Authorities: edit')
 <form method="POST" class="form-horizontal" action="{{ route('rrhh.authorities.update',$authority->id) }}">
     @csrf
     @method('PUT')

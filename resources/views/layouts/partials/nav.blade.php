@@ -137,8 +137,8 @@
                     'OrganizationalUnits: create',
                     'OrganizationalUnits: edit',
                     'OrganizationalUnits: delete',
-                    'Authorities: manager',
                     'Authorities: view',
+                    'Authorities: create',
                     'Users: service requests',
                     'Service Request',
                     'Replacement Staff: create request'])
@@ -166,7 +166,7 @@
 
 
 
-                        @canany(['Authorities: manager', 'Authorities: view'])
+                        @canany(['Authorities: view', 'Authorities: create'])
                             <a class="dropdown-item"
                                href="{{ route('rrhh.authorities.index') }}">
                                 <i class="fas fa-chess-king fa-fw"></i> Autoridades
