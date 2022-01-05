@@ -132,7 +132,7 @@
                         <th>Impuestos</th>
                         <th>Total Item</th>
                         <th></th>
-                        <th></th>
+                        <!-- <th></th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -181,10 +181,9 @@
                 <tfoot>
                     <tr>
                       <td colspan="9"></td>
-                      <th class="text-right">Valor Total</td>
-                      <th class="text-right">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
+                      <td class="text-right">Valor Total</td>
+                      <td class="text-right">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
                     </tr>
-
                 </tfoot>
             </table>
         </div>
@@ -223,7 +222,7 @@
           </fieldset>
 
           <fieldset class="form-group col-sm-2">
-              <label for="for_estimated_delivery_date">Fecha</label>
+              <label for="for_estimated_delivery_date">Fecha estimada entrega</label>
               <input type="date" class="form-control form-control-sm" id="for_estimated_delivery_date" name="estimated_delivery_date"
                   value="">
           </fieldset>
@@ -384,7 +383,7 @@
                             </fieldset>
                         </td> -->
                         <td>
-                        <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->id}}">
+                        <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
                             <i class="fas fa-receipt"></i>
                         </button>
                         @include('request_form.purchase.modals.detail_purchase')
@@ -395,11 +394,10 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                      <td colspan="8"></td>
+                      <td colspan="10"></td>
                       <th class="text-right">Valor Total</td>
                       <th class="text-right">${{ number_format($requestForm->purchasingProcess->getExpense(),0,",",".") }}</td>
                     </tr>
-
                 </tfoot>
             </table>
         </div>

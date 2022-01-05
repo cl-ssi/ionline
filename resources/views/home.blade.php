@@ -6,7 +6,7 @@
 
 <style>
     .jumbotron {
-    background-image: url("{{ asset('images/navidad.jpg') }}");
+    background-image: url("{{ asset('images/new-year.webp') }}");
     background-size: cover;
     /* opacity: 0.5; */
 }
@@ -16,13 +16,10 @@
         <div class="col-6">
             <!-- <h1 class="display-4">Intranet Online</h1> -->
             <!-- <p class="lead">{{ env('APP_SS') }}</p> -->
-            <h1 class="display-4">Feliz Navidad</h1>
+            <h2 class="display-4"></h2>
             <p class="lead">
-            <br><br>
-                Hola {{ auth()->user()->firstName }}, el glorioso Departamento de 
-                Informática y Telecomunicaciones, 
-                te desea una muy feliz navidad junto a tus seres queridos, 
-                lleno de alegría, felicidad y lo que tú estés buscando.
+            <br><br><br><br><br><br><br><br>
+
                 <br><br><br><br><br><br>
             </p>
             

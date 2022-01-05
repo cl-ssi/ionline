@@ -7,6 +7,8 @@ use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Storage;
 use App\Rrhh\OrganizationalUnit;
 use Illuminate\Support\Facades\DB;
+use App\Models\WebService\MercadoPublico;
+use Carbon\Carbon;
 
 class TestController extends Controller
 {
@@ -42,4 +44,9 @@ class TestController extends Controller
     /*
     curl -X PATCH -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/cl-ssi/urgency/issues/22 -d '{"title":"Second Up"}'
     */
+
+    public function getMercadoPublicoTender($date){
+        $tenders = MercadoPublico::getTender(Carbon::parse($date));
+        dd($tenders);
+    }
 }

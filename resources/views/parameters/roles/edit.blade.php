@@ -12,12 +12,18 @@
     @csrf
     @method('PUT')
 
-    <div class="row">
+    <div class="form-row">
 
         <fieldset class="form-group col">
             <label for="for_name">Nombre</label>
             <input type="text" class="form-control" id="for_name" name="name"
                 value="{{ $role->name }}" required>
+        </fieldset>
+
+        <fieldset class="form-group col">
+            <label for="for_description">Descripción</label>
+            <input type="text" class="form-control" id="for_description" name="description"
+                value="{{ $role->description }}">
         </fieldset>
 
     </div>
