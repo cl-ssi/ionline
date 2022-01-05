@@ -6,7 +6,7 @@
 @foreach($ouTopLevels as $ouTopLevel)
 <h3 class="mb-3">Autoridades</h3>
 <h4 class="mb-3">{{($ouTopLevel->establishment->name)}}</h4>
-@can('Authorities: manager')
+@can('Authorities: create')
 @if($ouTopLevel->establishment_id == Auth::user()->organizationalUnit->establishment->id)
 <a href="{{ route('rrhh.authorities.create') }}?establishment_id={{$ouTopLevel->establishment_id}}" class="btn btn-primary">Crear Autoridad del {{($ouTopLevel->establishment->name)}}</a><br><br>
 @endif
@@ -44,7 +44,7 @@
 
     <div class="col-7">
 
-    @can('Authorities: manager')
+    @can('Authorities: create')
     <form method="POST" class="form-inline" action="{{ route('rrhh.authorities.index') }}?ou=">
         @csrf
         @method('GET')
@@ -83,15 +83,15 @@
                     {{ $item['date'] }}
                     @if($item['manager'])
                     <hr class="mt-1 mb-1" >
-                    <a href="{{ route('rrhh.authorities.edit', $authorities[0]->id) }}">
-                        {{ $item['manager']->user->fullName }} <br>
+                    <a href="{{ route('rrhh.authorities.edit', $item['manager']->id) }}">
+                        {{ optional($item['manager']->user)->fullName }} <br>
                     </a>
                     <!-- <hr class="mt-1 mb-1"> -->
                     <em class="text-muted">{{ $item['manager']->position }}</em><br>
                     @endif
                     @if($item['delegate'])
                     <hr class="mt-1 mb-1" >
-                    <a href="{{ route('rrhh.authorities.edit', $authorities[0]->id) }}">
+                    <a href="{{ route('rrhh.authorities.edit', $item['delegate']->id) }}">
                         {{ $item['delegate']->user->fullName }} <br>
                     </a>
                     <!-- <hr class="mt-1 mb-1"> -->
@@ -99,7 +99,7 @@
                     @endif
                     @if($item['secretary'])
                     <hr class="mt-1 mb-1" >
-                    <a href="{{ route('rrhh.authorities.edit', $authorities[0]->id) }}">
+                    <a href="{{ route('rrhh.authorities.edit', $item['secretary']->id) }}">
                         {{ $item['secretary']->user->fullName }} <br>
                     </a>
                     <!-- <hr class="mt-1 mb-1"> -->
@@ -124,10 +124,9 @@
             </thead>
             <tbody>
                 @foreach($authorities as $authority)
-                    @if($authority)
-                    @if($authority->user)
+
                     <tr class="small">
-                        <td>{{ $authority->user->fullName }}</td>
+                        <td>{{ optional($authority->user)->fullName }} {{ trashed($authority->user) }}</td>
                         <td nowrap>{{ $authority->from->format('d-m-Y') }}</td>
                         <td nowrap>{{ ($authority->to) ? $authority->to->format('d-m-Y') : '' }}</td>
                         <td>{{ $authority->position }}</td>
@@ -136,14 +135,14 @@
                             <small>{{ $authority->creator->fullName }}</small>
                         </td>
                         <th>
-                            @can('be god')
+                            @can('Authorities: edit')
                             <a href="{{ route('rrhh.authorities.edit', $authority->id) }}" class="btn btn-outline-secondary btn-sm">
     					        <span class="fas fa-edit" aria-hidden="true"></span></a>
                             @endcan
                         </th>
                     </tr>
-                    @endif
-                    @endif
+
+
                 @endforeach
 
             </tbody>

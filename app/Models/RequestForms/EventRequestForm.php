@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\RequestForms\RequestForm;
 use App\Rrhh\OrganizationalUnit;
 use App\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EventRequestForm extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'signer_user_id', 'request_form_id', 'ou_signer_user', 'position_signer_user', 'cardinal_number', 'status',
@@ -28,6 +30,20 @@ class EventRequestForm extends Model
 
     public function requestForm() {
         return $this->belongsTo(RequestForm::class, 'request_form_id');
+    }
+
+    public function getStatusValueAttribute(){
+      switch ($this->status) {
+          case "pending":
+              return 'Pendiente';
+              break;
+          case "rejected":
+              return 'Rechazado';
+              break;
+          case "approved":
+              return 'Aprobado';
+              break;
+      }
     }
 
     public static function createLeadershipEvent(RequestForm $requestForm){

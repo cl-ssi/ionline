@@ -68,8 +68,9 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Indicators: view']);
         Permission::create(['name' => 'Indicators: manager']);
 
-        Permission::create(['name' => 'Authorities: manager']);
-        Permission::create(['name' => 'Authorities: view']);
+        Permission::create(['name' => 'Authorities: view', 'description' => 'Permite tener acceso al módulo de autoridades']);
+        Permission::create(['name' => 'Authorities: create', 'description' => 'Permite crear una autoridad']);
+        Permission::create(['name' => 'Authorities: edit', 'description' => 'Permite editar una autoridad']);
 
         Permission::create(['name' => 'Requirements: create']);
 

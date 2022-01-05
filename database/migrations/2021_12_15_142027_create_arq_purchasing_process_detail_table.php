@@ -23,9 +23,9 @@ class CreateArqPurchasingProcessDetailTable extends Migration
             $table->foreignId('user_id')->constrained('users'); //Usuario que registró el detalle.
 
             /* Updated items in purchasing process */
-            $table->unsignedInteger('quantity')->nullable();
-            $table->unsignedInteger('unit_value')->nullable();
-            $table->unsignedInteger('expense')->nullable();
+            $table->float('quantity')->nullable();
+            $table->float('unit_value')->nullable();
+            $table->float('expense')->nullable();
             $table->enum('status', ['pending', 'total', 'partial', 'desert', 'timed_out', 'not_available'])->nullable();
 
             $table->timestamps();

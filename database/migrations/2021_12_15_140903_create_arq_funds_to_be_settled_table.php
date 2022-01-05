@@ -16,7 +16,7 @@ class CreateArqFundsToBeSettledTable extends Migration
         Schema::create('arq_funds_to_be_settled', function (Blueprint $table) {
             $table->id();
             $table->dateTime('date', $precision = 0);
-            $table->integer('amount');
+            $table->float('amount');
             $table->foreignId('document_id')->constrained('documents');
             $table->timestamps();
             $table->softDeletes();

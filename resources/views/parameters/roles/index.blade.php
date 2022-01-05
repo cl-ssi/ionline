@@ -15,6 +15,7 @@
         <tr>
             <th>Id</th>
             <th>Rol</th>
+            <th>Descripción</th>
             <th>Permisos</th>
             <th></th>
         </tr>
@@ -24,6 +25,7 @@
         <tr>
             <td>{{ $rol->id }}</td>
             <td>{{ $rol->name }}</td>
+            <td>{{ $rol->description }}</td>
             <td>
                 <ul>
                     @foreach($rol->permissions as $permission)

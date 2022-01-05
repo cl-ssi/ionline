@@ -31,19 +31,54 @@ class SuitabilityController extends Controller
         //return view('replacement_staff.index', compact('request'));
     }
 
+    public function report()
+    {
+        $dataArray = array();
+        $schools = School::orderBy('name', 'asc')->get();
+        $result = Result::has('signedCertificate')->with('psirequest');
+        //$schools = School::orderBy('name', 'asc')->get();        
+        $sumesperando = 0;
+        $sumfinalizado = 0;
+        $sumaprobado = 0;
+
+
+        //dd($result);
+        foreach ($schools as $school) {
+            $counteraprobado = PsiRequest::where('school_id', $school->id)->where('status','Aprobado')->get()->count();
+            $counteresperando = PsiRequest::where('school_id', $school->id)->where('status','Esperando Test')->get()->count();
+            $counterfinalizado = PsiRequest::where('school_id', $school->id)->where('status','Test Finalizado')->get()->count();
+            $sumaprobado += $counteraprobado;
+            $sumesperando += $counteresperando;
+            $sumfinalizado += $counterfinalizado;
+            if ($counteraprobado >= 1 or $counteresperando >=1 or $counterfinalizado >=1) {
+                array_push(
+                    $dataArray,
+                    array(
+                        'name_school' => $school->name,
+                        'counteraprobado' => $counteraprobado,
+                        'counteresperando' => $counteresperando,
+                        'counterfinalizado' => $counterfinalizado,
+                        'sumaprobado' => $sumaprobado,
+                        'sumesperando' => $sumesperando,
+                        'sumfinalizado' => $sumfinalizado,
+                    )
+                );
+            }
+        }
+        return view('suitability.report', compact('dataArray'));
+    }
+
     public function createExternal(School $school)
     {
 
-        return view('external.suitability.create',compact('school'));
+        return view('external.suitability.create', compact('school'));
     }
 
     public function listOwn($school)
     {
 
-        $psirequests = PsiRequest::where('school_id',$school)->get();
-        return view('external.suitability.index',compact('psirequests'));
-
-
+        $psirequests = PsiRequest::where('school_id', $school)->get();
+        return view('external.suitability.index', compact('psirequests'));
     }
 
 
@@ -52,24 +87,23 @@ class SuitabilityController extends Controller
 
         $school_id = $request->colegio;
         $schools = School::orderBy("name", "asc")->get();
-        $psirequests = PsiRequest::where('status','Test Finalizado')
-        ->when($school_id != null, function ($q) use ($school_id) 
-        {            
-            return $q->where('school_id', $school_id);
-        })        
-        ->get();
-        return view('suitability.pending', compact('psirequests','schools','school_id'));
+        $psirequests = PsiRequest::where('status', 'Test Finalizado')
+            ->when($school_id != null, function ($q) use ($school_id) {
+                return $q->where('school_id', $school_id);
+            })
+            ->get();
+        return view('suitability.pending', compact('psirequests', 'schools', 'school_id'));
     }
 
     public function approved()
     {
-        $psirequests = PsiRequest::where('status','Aprobado')->get();
+        $psirequests = PsiRequest::where('status', 'Aprobado')->get();
         return view('suitability.approved', compact('psirequests'));
     }
 
     public function rejected()
     {
-        $psirequests = PsiRequest::where('status','Rechazado')->get();
+        $psirequests = PsiRequest::where('status', 'Rechazado')->get();
         return view('suitability.rejected', compact('psirequests'));
     }
 
@@ -88,8 +122,7 @@ class SuitabilityController extends Controller
         if ($result === 'Aprobado') {
             $signatureId =  $this->sendForSignature($psirequest->result()->first()->id);
             session()->flash('success', "Se dio resultado de manera correcta y se creó solicitud de firma $signatureId");
-        }
-        else{
+        } else {
             session()->flash('success', "Se dio resultado de manera correcta.");
         }
         return redirect()->back();
@@ -102,13 +135,12 @@ class SuitabilityController extends Controller
     public function indexOwn(Request $request)
     {
         $school_id = $request->colegio;
-        $psirequests = PsiRequest::when($school_id != null, function ($q) use ($school_id) 
-        {                        
+        $psirequests = PsiRequest::when($school_id != null, function ($q) use ($school_id) {
             return $q->where('school_id', $school_id);
         })
-        ->get();
+            ->get();
         $schools = School::orderBy("name", "asc")->get();
-        return view('suitability.indexown', compact('psirequests', 'schools','school_id'));
+        return view('suitability.indexown', compact('psirequests', 'schools', 'school_id'));
     }
 
 
@@ -130,26 +162,22 @@ class SuitabilityController extends Controller
         // {
         //     dd("Si existe");
         // }
-        return redirect()->route('suitability.create',$request->run);
+        return redirect()->route('suitability.create', $request->run);
     }
 
 
 
     public function create($run)
     {
-        $user = User::firstOrNew(['id'=>$run]);
-        return view('suitability.create',compact('run','user'));
-
+        $user = User::firstOrNew(['id' => $run]);
+        return view('suitability.create', compact('run', 'user'));
     }
     public function storeSuitabilityExternal(Request $request)
     {
         $userexternal = new UserExternal($request->All());
-        if(UserExternal::find(request('id')))
-        {
+        if (UserExternal::find(request('id'))) {
             $userexternal->update();
-        }
-        else
-        {
+        } else {
             $userexternal->save();
         }
         $psirequest = new PsiRequest();
@@ -163,8 +191,8 @@ class SuitabilityController extends Controller
         $psirequest->school_id = $request->input('school_id');
         $psirequest->save();
         Mail::to('maria.zuniga@redsalud.gob.cl')
-        // Mail::to('tebiccr@gmail.com')
-                        ->send(new NewPsiRequest($psirequest));
+            // Mail::to('tebiccr@gmail.com')
+            ->send(new NewPsiRequest($psirequest));
 
 
         session()->flash('success', 'Solicitud Creada Exitosamente, ahora el asistente puede ingresar a este mismo sitio con los datos de clave única a realizar la prueba');
@@ -177,14 +205,11 @@ class SuitabilityController extends Controller
         $user->email_personal = $request->email;
         $user->external = 1;
         $user->givePermissionTo('Suitability: test');
-        if(User::find(request('id')))
-        {
-        $user->update();
-        }
-        else
-        {
-        $user->password = bcrypt('123456');
-        $user->save();
+        if (User::find(request('id'))) {
+            $user->update();
+        } else {
+            $user->password = bcrypt('123456');
+            $user->save();
         }
 
         $psirequest = new PsiRequest();
@@ -200,8 +225,6 @@ class SuitabilityController extends Controller
         session()->flash('success', 'Solicitud Creada Exitosamente');
 
         return redirect()->route('suitability.own');
-
-
     }
 
     /**
@@ -214,18 +237,18 @@ class SuitabilityController extends Controller
 
         //Firmante
         // $userSigner = Authority::getAuthorityFromDate(44, date('Y-m-d'), 'manager')->user; //Subdirección Gestión y Desarrollo de las Personas
-        
+
         //Visadores
         // $userVisator1 = User::find(13480977); // Siempre Visto Buenos María Soraya
         // $userVisator2 = User::find(13867504); //13.867.504 Alejandra Aguirre
-        
+
         $signer = Signer::query()
-                    ->where('type', 'signer')
-                    ->first();
+            ->where('type', 'signer')
+            ->first();
 
         $visators = Signer::query()
-                    ->where('type', 'visator')
-                    ->get();
+            ->where('type', 'visator')
+            ->get();
 
         DB::beginTransaction();
 
@@ -238,9 +261,9 @@ class SuitabilityController extends Controller
             $signature->document_type = 'Carta';
             $signature->subject = 'Informe Idoneidad';
             $signature->description = "{$result->user->fullname} , Rut: {$result->user->id}-{$result->user->dv}, Establecimiento:{$result->psirequest->school->name} ";
-//            $signature->endorse_type = 'Visación opcional';
+            //            $signature->endorse_type = 'Visación opcional';
             $signature->endorse_type = 'Visación en cadena de responsabilidad';
-//            $signature->recipients = $userSigner->email . ',' . $userVisator1->email . ',' . $userVisator2->email;
+            //            $signature->recipients = $userSigner->email . ',' . $userVisator1->email . ',' . $userVisator2->email;
             // $signature->distribution = $userSigner->email . ',' . $userVisator1->email . ',' . $userVisator2->email;
 
             $signature->distribution = $signer->user->email;
@@ -252,7 +275,7 @@ class SuitabilityController extends Controller
             $signature->save();
 
             $signaturesFile = new SignaturesFile();
-//            $signaturesFile->file = base64_encode($pdf->output());
+            //            $signaturesFile->file = base64_encode($pdf->output());
             $signaturesFile->md5_file = md5($pdf->output());
             $signaturesFile->file_type = 'documento';
             $signaturesFile->signature_id = $signature->id;
@@ -266,27 +289,9 @@ class SuitabilityController extends Controller
             $signaturesFlow = new SignaturesFlow();
             $signaturesFlow->signatures_file_id = $signaturesFile->id;
             $signaturesFlow->type = 'firmante';
-            // $signaturesFlow->user_id = $userSigner->id;
-            // $signaturesFlow->ou_id = $userSigner->organizational_unit_id;
             $signaturesFlow->user_id = $signer->user->id;
             $signaturesFlow->ou_id = $signer->user->organizational_unit_id;
             $signaturesFlow->save();
-
-            // $signaturesFlow = new SignaturesFlow();
-            // $signaturesFlow->signatures_file_id = $signaturesFile->id;
-            // $signaturesFlow->type = 'visador';
-            // $signaturesFlow->user_id = $userVisator1->id;
-            // $signaturesFlow->ou_id = $userVisator1->organizational_unit_id;
-            // $signaturesFlow->sign_position = 1;
-            // $signaturesFlow->save();
-
-            // $signaturesFlow = new SignaturesFlow();
-            // $signaturesFlow->signatures_file_id = $signaturesFile->id;
-            // $signaturesFlow->type = 'visador';
-            // $signaturesFlow->user_id = $userVisator2->id;
-            // $signaturesFlow->ou_id = $userVisator2->organizational_unit_id;
-            // $signaturesFlow->sign_position = 2;
-            // $signaturesFlow->save();
 
             foreach ($visators as $key => $visator) {
                 $signaturesFlow = new SignaturesFlow();
@@ -302,7 +307,6 @@ class SuitabilityController extends Controller
             $result->save();
 
             DB::commit();
-
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
@@ -315,41 +319,41 @@ class SuitabilityController extends Controller
     {
         $result = Result::find($id);
         return Storage::disk('gcs')->response($result->signedCertificate->signed_file);
-//        header('Content-Type: application/pdf');
-//        if (isset($result->signedCertificate)) {
-//            echo base64_decode($result->signedCertificate->signed_file);
-//        }
+        //        header('Content-Type: application/pdf');
+        //        if (isset($result->signedCertificate)) {
+        //            echo base64_decode($result->signedCertificate->signed_file);
+        //        }
     }
 
     public function downloadManualUser()
     {
         $myFile = public_path("/manuales/idoneidad/Manual de Usuario Idoneidad Docente. Perfil Usuario.pdf");
-    	return response()->download($myFile);
+        return response()->download($myFile);
     }
 
     public function downloadManualAdministrator()
     {
         $myFile = public_path("/manuales/idoneidad/Manual de Usuario Idoneidad Docente. Perfil Administrador.pdf");
-    	return response()->download($myFile);
+        return response()->download($myFile);
     }
 
-    public function configSignature() 
+    public function configSignature()
     {
         $signers = Signer::all()->sortBy('sign_order');
         return view('suitability.config_signer', compact('signers'));
     }
 
 
-    public function configSignatureAdd(Request $request) 
+    public function configSignatureAdd(Request $request)
     {
         $newSigner = new Signer($request->All());
 
-        if ($newSigner->type === 'signer'){
+        if ($newSigner->type === 'signer') {
             $signerQuantity = Signer::query()
-                        ->where('type', 'signer')
-                        ->count();
+                ->where('type', 'signer')
+                ->count();
 
-            if($signerQuantity > 0){
+            if ($signerQuantity > 0) {
                 session()->flash('warning', 'Ya existe un firmante.');
                 return redirect()->back();
             }
@@ -366,5 +370,4 @@ class SuitabilityController extends Controller
 
         return redirect()->route('suitability.configSignature');
     }
-
 }

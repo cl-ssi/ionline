@@ -282,8 +282,8 @@
                   <td>{{ $requestForm->eventSigner('leader_ship_event', 'approved')->signature_date->format('d-m-Y H:i') }}</td>
               </tr>
               <tr>
-                  <th align="left" style="width: 50%">Firma</th>
-                  <td></td>
+                  <th align="left" style="width: 50%">Estado</th>
+                  <td>{{ $requestForm->eventSigner('leader_ship_event', 'approved')->StatusValue }}</td>
               </tr>
           </tbody>
       </table>
@@ -350,8 +350,8 @@
                   <td>{{ $requestForm->eventSigner('finance_event', 'approved')->signature_date->format('d-m-Y H:i') }}</td>
               </tr>
               <tr>
-                  <th align="left" style="width: 50%">Firma</th>
-                  <td></td>
+                  <th align="left" style="width: 50%">Estado</th>
+                  <td>{{ $requestForm->eventSigner('finance_event', 'approved')->StatusValue }}</td>
               </tr>
           </tbody>
       </table>
@@ -378,8 +378,8 @@
                   <td>{{ $requestForm->eventSigner('supply_event', 'approved')->signature_date->format('d-m-Y H:i') }}</td>
               </tr>
               <tr>
-                  <th align="left" style="width: 50%">Firma</th>
-                  <td></td>
+                  <th align="left" style="width: 50%">Estado</th>
+                  <td>{{ $requestForm->eventSigner('supply_event', 'approved')->StatusValue }}</td>
               </tr>
               <tr>
                   <th align="left" style="width: 50%">COMPRADOR(ES) ASIGNADO(S): </th>

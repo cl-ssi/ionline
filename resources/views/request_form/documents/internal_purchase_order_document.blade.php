@@ -155,7 +155,7 @@
 
       <div class="right" style="float: right;">
         <div class="left" style="padding-bottom: 6px;">
-          <strong>FECHA DE ORDEN: {{ $internalPurchaseOrder->created_at->format('d-m-Y') }}</strong>
+          <strong>FECHA DE ORDEN: {{ $purchasingProcessDetail->internalPurchaseOrder->created_at->format('d-m-Y') }}</strong>
         </div>
       </div>
 
@@ -163,7 +163,7 @@
 
       <div class="center">
         <div class="titulo" style="padding-bottom: 6px;">
-          <strong>ORDEN DE COMPRA Nº {{ $internalPurchaseOrder->id }} / {{ $internalPurchaseOrder->created_at->format('Y') }}</strong>
+          <strong>ORDEN DE COMPRA Nº {{ $purchasingProcessDetail->internalPurchaseOrder->id }} / {{ $purchasingProcessDetail->internalPurchaseOrder->created_at->format('Y') }}</strong>
         </div>
       </div>
 
@@ -172,11 +172,11 @@
       <table>
           <tr>
               <th align="left" width="10 px">PROVEEDOR</th>
-              <td>{{ $internalPurchaseOrder->supplier->name }}</td>
+              <td>{{ $purchasingProcessDetail->internalPurchaseOrder->supplier->name }}</td>
               <th align="left" width="10 px">RUN</th>
-              <td>{{ $internalPurchaseOrder->supplier->run }}-{{ $internalPurchaseOrder->supplier->dv }}</td>
+              <td>{{ $purchasingProcessDetail->internalPurchaseOrder->supplier->run }}-{{ $purchasingProcessDetail->internalPurchaseOrder->supplier->dv }}</td>
               <th align="left" width="10 px">EMISOR</th>
-              <td>{{ $internalPurchaseOrder->user->FullName }}</td>
+              <td>{{ $purchasingProcessDetail->user->FullName }}</td>
           </tr>
           <tr>
               <th align="left">DIRECCION</th>
@@ -184,13 +184,13 @@
               <th align="left">CIUDAD</th>
               <td></td>
               <th align="left">REQ. FOLIO</th>
-              <td>{{ $internalPurchaseOrder->purchasingProcess->requestForm->id }}</td>
+              <td>{{ $purchasingProcessDetail->purchasingProcess->request_form_id }}</td>
           </tr>
           <tr>
               <th align="left">FONO</th>
               <td></td>
               <th align="left">COND. PAGO</th>
-              <td>{{ $internalPurchaseOrder->payment_condition }}</td>
+              <td>{{ $purchasingProcessDetail->internalPurchaseOrder->payment_condition }}</td>
               <th align="left"></th>
               <td></td>
           </tr>
@@ -214,30 +214,32 @@
           </tr>
         </thead>
         <tbody>
-          @foreach($internalPurchaseOrder->purchasingProcess->details as $key => $detail)
+          @php($total = 0)
+          @foreach($details as $key => $detail)
           <tr>
               <td width="">{{ $key+1 }}</td>
-              <td>{{ $detail->article }}</td>
+              <td>{{ $detail->itemRequestForm->article }}</td>
               <td></td>
-              <td align="right">{{ $detail->pivot->quantity }}</td>
-              <td align="right">${{ number_format($detail->pivot->unit_value,0,",",".") }}</td>
-              <td align="right">${{ number_format($detail->pivot->expense,0,",",".") }}</td>
+              <td align="right">{{ $detail->quantity }}</td>
+              <td align="right">${{ number_format($detail->unit_value,0,",",".") }}</td>
+              <td align="right">${{ number_format($detail->expense,0,",",".") }}</td>
           </tr>
+          @php( $total += $detail->expense)
           @endforeach
-          <tr>
+          <tr align="right">
               <td colspan="4"></td>
-              <th align="right">TOTAL NETO</th>
-              <td></td>
+              <th>TOTAL NETO</th>
+              <td>${{ number_format($total * 0.81,0,",",".") }}</td>
           </tr>
-          <tr>
+          <tr align="right">
               <td colspan="4"></td>
-              <th align="right">IVA</th>
-              <td></td>
+              <th>IVA</th>
+              <td>${{ number_format($total * 0.19,0,",",".") }}</td>
           </tr>
-          <tr>
+          <tr align="right">
               <td colspan="4"></td>
-              <th align="right">TOTAL</th>
-              <td></td>
+              <th>TOTAL</th>
+              <td>${{ number_format($total,0,",",".") }}</td>
           </tr>
         </tbody>
       </table>
