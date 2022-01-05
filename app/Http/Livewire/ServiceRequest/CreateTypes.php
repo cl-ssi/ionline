@@ -93,12 +93,13 @@ class CreateTypes extends Component
 
             }
             //hospital
+            // se comenta 2 y 44, ya que se solicitó quitar autoridades del ssi de flujo de hospital
             elseif(Auth::user()->organizationalUnit->establishment_id == 1){
               $this->signatureFlows['Subdirector'] = Authority::getAuthorityFromDate(88,now(),['manager'])->user->id; // 88 - Subdirección Médica - 9882506 - (iriondo)
-              $this->signatureFlows['S.D.G.A SSI'] = Authority::getAuthorityFromDate(2,now(),['manager'])->user->id; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+              // $this->signatureFlows['S.D.G.A SSI'] = Authority::getAuthorityFromDate(2,now(),['manager'])->user->id; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
               $this->signatureFlows['S.G.D.P Hospital'] = Authority::getAuthorityFromDate(86,now(),['manager'])->user->id; // 86 - Subdirección de Gestión de Desarrollo de las Personas
               $this->signatureFlows['Jefe Finanzas'] = Authority::getAuthorityFromDate(111,now(),['manager'])->user->id; // 11 - Departamento de Finanzas
-              $this->signatureFlows['S.G.D.P SSI'] = Authority::getAuthorityFromDate(44,now(),['manager'])->user->id; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+              // $this->signatureFlows['S.G.D.P SSI'] = Authority::getAuthorityFromDate(44,now(),['manager'])->user->id; // 44 - Subdirección de Gestión y Desarrollo de las Personas
               $this->signatureFlows[Authority::getAuthorityFromDate(84,now(),['manager'])->position . " - " . Authority::getAuthorityFromDate(84,now(),['manager'])->user->organizationalUnit->establishment->name] = Authority::getAuthorityFromDate(84,now(),['manager'])->user->id; // 84 - Dirección
             }
           }elseif ($this->program_contract_type == "Horas") {
