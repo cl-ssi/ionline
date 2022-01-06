@@ -127,6 +127,8 @@
               </div>
           </div>
 
+          <br>
+
           @if($requestReplacementStaff->technicalEvaluation &&
                   $requestReplacementStaff->technicalEvaluation->commissions->count() > 0)
           <div class="card" id="commission">
@@ -193,6 +195,16 @@
                           </tbody>
                       </table>
                   </div>
+
+                  @if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete')
+                    <div class="alert alert-success" role="alert">
+                        <h6><i class="fas fa-exclamation-circle"></i> Periodo Efectivo </h6>
+                        <ul>
+                            <li><strong>Ingreso:</strong> {{ $requestReplacementStaff->technicalEvaluation->applicants->first()->start_date->format('d-m-Y') }}</li>
+                            <li><strong>Término:</strong> {{ $requestReplacementStaff->technicalEvaluation->applicants->first()->end_date->format('d-m-Y') }}</li>
+                        </ul>
+                    </div>
+                  @endif
               </div>
           </div>
 

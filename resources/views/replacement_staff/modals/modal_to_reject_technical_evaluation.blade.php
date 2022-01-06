@@ -18,6 +18,7 @@
                   <select name="reason" class="form-control" required>
                       <option value="">Seleccione</option>
                       <option value="falta oferta laboral">Falta de oferta laboral</option>
+                      <option value="rechazo oferta laboral">Rechazo de oferta laboral</option>
                   </select>
               </fieldset>
 
