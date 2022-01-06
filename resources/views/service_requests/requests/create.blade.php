@@ -211,6 +211,7 @@
 			<!-- <input type="text" class="form-control" id="for_programm_name" placeholder="" name="programm_name"> -->
 			<select name="programm_name" class="form-control" required id="programm_name">
 				<option value=""></option>
+				<option value="Covid 2022">Covid 2022</option>
 				<option value="Covid19-APS No Médicos">Covid19-APS No Médicos</option>
 				<option value="Covid19-APS Médicos">Covid19-APS Médicos</option>
 				<option value="Covid19 No Médicos">Covid19 No Médicos</option>
