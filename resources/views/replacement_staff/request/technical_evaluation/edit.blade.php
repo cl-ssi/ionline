@@ -417,6 +417,16 @@
         </div>
       @endif
 
+      @if($technicalEvaluation->technical_evaluation_status == 'complete')
+        <div class="alert alert-success small" role="alert">
+            <h6><i class="fas fa-exclamation-circle"></i> Periodo Efectivo </h6>
+            <ul>
+                <li><strong>Ingreso:</strong> {{ $technicalEvaluation->applicants->first()->start_date->format('d-m-Y') }}</li>
+                <li><strong>Término:</strong> {{ $technicalEvaluation->applicants->first()->end_date->format('d-m-Y') }}</li>
+            </ul>
+        </div>
+      @endif
+
       @if($technicalEvaluation->applicants->count() > 0 && $technicalEvaluation->date_end == NULL)
 
           @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
