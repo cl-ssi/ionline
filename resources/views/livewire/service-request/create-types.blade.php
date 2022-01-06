@@ -19,6 +19,34 @@
   </fieldset>
 
   <fieldset class="form-group col-12 col-md-4">
+    <label for="for_users">Responsable</label>
+    <div id="div_responsable_id" wire:ignore>
+      <select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" data-size="5" required data-container="#div_responsable_id">
+        <option value=""></option>
+        @if($users)
+          @foreach($users as $key => $user)
+            <option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
+          @endforeach
+        @endif
+      </select>
+    </div>
+  </fieldset>
+
+  <fieldset class="form-group col-12 col-md-4">
+    <label for="for_users">Supervisor</label>
+    <div id="div_users" wire:ignore>
+      <select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" data-size="5" required data-container="#div_users">
+        <option value=""></option>
+        @if($users)
+          @foreach($users as $key => $user)
+            <option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
+          @endforeach
+        @endif
+      </select>
+    </div>
+  </fieldset>
+
+  <fieldset class="form-group col-12 col-md-4">
     <label for="for_subdirection_ou_id">Subdirección</label>
     <div id="div_subdirection_ou_id" wire:ignore>
       <select class="form-control selectpicker" data-live-search="true" wire:model.lazy="subdirection_ou_id" id="subdirection_ou_id" name="subdirection_ou_id" required data-size="5" data-container="#div_subdirection_ou_id">
@@ -46,33 +74,6 @@
     </div>
   </fieldset>
 
-  <fieldset class="form-group col-12 col-md-4">
-    <label for="for_users">Responsable</label>
-    <div id="div_responsable_id" wire:ignore>
-      <select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" data-size="5" required data-container="#div_responsable_id">
-        <option value=""></option>
-        @if($users)
-          @foreach($users as $key => $user)
-            <option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
-          @endforeach
-        @endif
-      </select>
-    </div>
-  </fieldset>
-
-  <fieldset class="form-group col-12 col-md-4">
-    <label for="for_users">Supervisor</label>
-    <div id="div_users" wire:ignore>
-      <select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" data-size="5" required data-container="#div_users">
-        <option value=""></option>
-        @if($users)
-          @foreach($users as $key => $user)
-            <option value="{{$user->id}}">{{$user->getFullNameAttribute()}}</option>
-          @endforeach
-        @endif
-      </select>
-    </div>
-  </fieldset>
 </div>
 
 <div class="row" wire:loading.remove>
