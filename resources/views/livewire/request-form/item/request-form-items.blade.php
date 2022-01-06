@@ -34,7 +34,7 @@
                 </fieldset> -->
 
                 <fieldset class="form-group col-sm-2">
-                    <label for="for_unit_value">Valor Unitario:</label>
+                    <label for="for_unit_value">Valor Unitario Neto:</label>
                     <input wire:model.defer="unitValue" name="unitValue" class="form-control form-control-sm" type="text">
                 </fieldset>
             </div>
@@ -48,7 +48,7 @@
                       <select wire:model.defer="taxes" name="taxes" class="form-control form-control-sm" required>
                         <option value="">Seleccione...</option>
                         <option value="iva">I.V.A. 19%</option>
-                        <option value="bh">Boleta de Honorarios 11.75%</option>
+                        <option value="bh">Boleta de Honorarios {{isset($this->withholding_tax[date('Y')]) ? $this->withholding_tax[date('Y')] * 100 : end($this->withholding_tax) * 100 }}%</option>
                         <option value="srf">S.R.F Zona Franca 0%</option>
                         <option value="e">Excento 0%</option>
                         <option value="nd">No Definido</option>

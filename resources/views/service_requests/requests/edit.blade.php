@@ -891,10 +891,10 @@
           </thead>
           <tbody>
             <tr>
-              <td>{{$serviceRequest->created_at}}</td>
-              <td>{{$serviceRequest->creator->organizationalUnit->name}}</td>
-              <td>{{$serviceRequest->creator->position}}</td>
-              <td>{{$serviceRequest->creator->getFullNameAttribute()}}</td>
+              <td>{{ $serviceRequest->created_at }}</td>
+              <td>{!! optional($serviceRequest->creator->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
+              <td>{{ $serviceRequest->creator->position }}</td>
+              <td>{{ $serviceRequest->creator->getFullNameAttribute() }}</td>
               <td>Creador</td>
               <td>Creada</td>
               <td></td>
@@ -912,7 +912,7 @@
                   <tr class="bg-warning">
                 @endif
                    <td>{{ $SignatureFlow->signature_date}}</td>
-                   <td>{{ $SignatureFlow->user->organizationalUnit->name}}</td>
+                   <td>{!! optional($SignatureFlow->user->organizationalUnit)->name ?? '<span class="text-danger">SIN UNIDAD ORGANIZACIONAL</span>' !!}</td>
                    <td>{{ $SignatureFlow->user->position }}</td>
                    <td>{{ $SignatureFlow->user->getFullNameAttribute() }}</td>
                    @if($SignatureFlow->sign_position == 1)

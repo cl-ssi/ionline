@@ -24,6 +24,9 @@ use App\Http\Controllers\RequestForms\RequestFormFileController;
 use App\Http\Controllers\RequestForms\RequestFormCodeController;
 //use App\Http\Controllers\RequestForms\SupplyPurchaseController;
 use App\Http\Controllers\RequestForms\PurchasingProcessController;
+use App\Http\Controllers\RequestForms\PettyCashController;
+use App\Http\Controllers\RequestForms\FundToBeSettledController;
+use App\Http\Controllers\RequestForms\InternalPurchaseOrderController;
 
 use App\Http\Controllers\ReplacementStaff\ReplacementStaffController;
 use App\Http\Controllers\ReplacementStaff\RequestReplacementStaffController;
@@ -80,7 +83,7 @@ use Illuminate\Http\Request;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
 //maqueteo calendario
 Route::get('/calendar', function () {
@@ -190,6 +193,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/', [RequestReplacementStaffController::class, 'index'])->name('index')->middleware('permission:Replacement Staff: assign request');
         Route::get('/assign_index', [RequestReplacementStaffController::class, 'assign_index'])->name('assign_index')->middleware('permission:Replacement Staff: technical evaluation');
         Route::get('/own_index', [RequestReplacementStaffController::class, 'own_index'])->name('own_index');
+        Route::get('/personal_index', [RequestReplacementStaffController::class, 'personal_index'])->name('personal_index');
         Route::get('/ou_index', [RequestReplacementStaffController::class, 'ou_index'])->name('ou_index');
         Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
         Route::get('/{requestReplacementStaff}/create_extension', [RequestReplacementStaffController::class, 'create_extension'])->name('create_extension');
@@ -209,6 +213,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::prefix('technical_evaluation')->name('technical_evaluation.')->group(function(){
             Route::get('/{technicalEvaluation}/edit', [TechnicalEvaluationController::class, 'edit'])->name('edit');
             Route::post('/store/{requestReplacementStaff}', [TechnicalEvaluationController::class, 'store'])->name('store');
+            Route::post('/finalize_selection_process/{technicalEvaluation}', [TechnicalEvaluationController::class, 'finalize_selection_process'])->name('finalize_selection_process');
             Route::prefix('commission')->name('commission.')->group(function(){
                 Route::post('/store/{technicalEvaluation}', [CommissionController::class, 'store'])->name('store');
                 Route::delete('{commission}/destroy', [CommissionController::class, 'destroy'])->name('destroy');
@@ -436,6 +441,8 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::get('/prev', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'goToPreviousMonth'])->name('shiftManag.prevMonth')->middleware('auth');
 
            Route::get('/myshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'myShift'])->name('shiftManag.myshift')->middleware('auth');
+           Route::get('/seeShiftControlForm', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'seeShiftControlForm'])->name('shiftManag.seeShiftControlForm')->middleware('auth');
+
 
            Route::get('/closeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeShift'])->name('shiftManag.closeShift')->middleware('auth');
            Route::post('/closeshift', [App\Http\Controllers\Rrhh\ShiftManagementController::class,'closeShift'])->name('shiftManag.closeShift')->middleware('auth');
@@ -829,7 +836,13 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::post('/store', 'Parameters\PurchaseUnitController@store')->name('store');
     });
 
-
+    Route::prefix('suppliers')->as('suppliers.')->group(function () {
+        Route::get('/', 'Parameters\SupplierController@index')->name('index');
+        // Route::get('/create', 'Parameters\UnitOfMeasurementController@create')->name('create');
+        // Route::get('/edit/{measurement}', 'Parameters\UnitOfMeasurementController@edit')->name('edit');
+        // Route::put('/update/{measurement}', 'Parameters\UnitOfMeasurementController@update')->name('update');
+        // Route::post('/store', 'Parameters\UnitOfMeasurementController@store')->name('store');
+    });
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {
@@ -1317,6 +1330,8 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/pending_forms', [RequestFormController::class, 'pending_forms'])->name('pending_forms');
     Route::get('/create', [RequestFormController::class, 'create'])->name('create');
     Route::get('/{requestForm}/sign/{eventType}', [RequestFormController::class, 'sign'])->name('sign');
+    Route::get('/callback-sign-request-form/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSign'])->name('callbackSign');
+    Route::get('/signed-request-form-pdf/{requestForm}', [RequestFormController::class, 'signedRequestFormPDF'])->name('signedRequestFormPDF');
 
     Route::prefix('items')->as('items.')->middleware('auth')->group(function () {
         Route::get('/create', [RequestFormController::class, 'create'])->name('create');
@@ -1332,10 +1347,14 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::post('/{requestForm}/create_internal_oc', [PurchasingProcessController::class, 'create_internal_oc'])->name('create_internal_oc');
         Route::post('/{requestForm}/create_petty_cash', [PurchasingProcessController::class, 'create_petty_cash'])->name('create_petty_cash');
         Route::post('/{requestForm}/create_fund_to_be_settled', [PurchasingProcessController::class, 'create_fund_to_be_settled'])->name('create_fund_to_be_settled');
+        Route::post('{requestForm}/create_new_budget', [RequestFormController::class, 'create_new_budget'])->name('create_new_budget');
+        Route::get('/petty_cash/{pettyCash}/download', [PettyCashController::class, 'download'])->name('petty_cash.download');
+        Route::get('/fund_to_be_settled/{fundToBeSettled}/download', [FundToBeSettledController::class, 'download'])->name('fund_to_be_settled.download');
     });
 
-
-
+    /* DOCUMENTS */
+    Route::get('/create_form_document/{requestForm}', [RequestFormController::class, 'create_form_document'])->name('create_form_document');
+    Route::get('/create_internal_purchase_order_document/{purchasingProcessDetail}', [InternalPurchaseOrderController::class, 'create_internal_purchase_order_document'])->name('create_internal_purchase_order_document');
 
     Route::get('/{requestForm}/edit', [RequestFormController::class, 'edit'])->name('edit');
 
@@ -1347,7 +1366,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
 
     Route::get('/show_item_file/{itemRequestForm}', [ItemRequestFormController::class, 'show_item_file'])->name('show_item_file');
 
-    Route::get('/create_form_document/{requestForm}', [RequestFormController::class, 'create_form_document'])->name('create_form_document');
+
 
     Route::get('/finance_index', [RequestFormController::class, 'financeIndex'])->name('finance_index');
     Route::get('/{requestForm}/finance_sign', [RequestFormController::class, 'financeSign'])->name('finance_sign');
@@ -1397,7 +1416,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     // });
 });
 
-Route::get('/yomevacuno',[VaccinationController::class,'welcome'])->name('welcome');
+Route::get('/yomevacuno',[VaccinationController::class,'welcome']);
 
 Route::prefix('vaccination')->as('vaccination.')->group(function () {
     Route::get('/welcome',[VaccinationController::class,'welcome'])->name('welcome');
@@ -1450,6 +1469,7 @@ Route::prefix('invoice')->as('invoice.')->group(function () {
 /* Nuevas rutas, Laravel 8.0. */
 Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(function () {
     Route::get('/', [SuitabilityController::class, 'indexOwn'])->name('own');
+    Route::get('/report', [SuitabilityController::class, 'report'])->name('report');
     Route::delete('{psirequest}/destroy', [SuitabilityController::class, 'destroy'])->name('destroy');
     Route::post('/', [SuitabilityController::class, 'store'])->name('store');
     Route::get('/own', [SuitabilityController::class, 'indexOwn'])->name('own');
@@ -1460,6 +1480,9 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
     Route::get('/test/{psi_request_id?}', [TestsController::class, 'index'])->name('test');
     Route::post('/test', [TestsController::class, 'store'])->name('test.store');
     Route::get('/pending', [SuitabilityController::class, 'pending'])->name('pending');
+    Route::get('/config-signature', [SuitabilityController::class, 'configSignature'])->name('configSignature');
+    Route::post('/config-signature-add', [SuitabilityController::class, 'configSignatureAdd'])->name('configSignatureAdd');
+    Route::get('/config-signature-delete/{signer}', [SuitabilityController::class, 'configSignatureDelete'])->name('configSignatureDelete');
     Route::get('/approved', [SuitabilityController::class, 'approved'])->name('approved');
     Route::get('/rejected', [SuitabilityController::class, 'rejected'])->name('rejected');
     Route::patch('/finalresult/{psirequest}/{result}', [SuitabilityController::class, 'finalresult'])->name('finalresult');
@@ -1536,3 +1559,5 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 Route::view('/some', 'some');
 
 Route::get('/test-getip',[TestController::class,'getIp']);
+Route::get('/ous',[TestController::class,'ous']);
+Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);

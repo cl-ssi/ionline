@@ -183,6 +183,34 @@
 
 <br>
 
+<div class="row">
+    <div class="col">
+        @if($technicalEvaluation->reason == NULL)
+            @if(($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+              Auth::user()->hasRole('Replacement Staff: admin')) && $technicalEvaluation->applicants->count() == 0)
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-danger btn-sm float-right" data-toggle="modal"
+                  data-target="#exampleModal-reject-{{ $technicalEvaluation->id }}">
+                    <i class="fas fa-window-close"></i> Finalizar Proceso Selección
+                </button>
+
+                @include('replacement_staff.modals.modal_to_reject_technical_evaluation')
+            @endif
+        @else
+            <div class="alert alert-danger" role="alert">
+                <h6><i class="fas fa-exclamation-circle"></i> Proceso Selección Finalizado</h6>
+                <ul>
+                    <li><strong>Motivo:</strong> {{ $technicalEvaluation->ReasonValue }}</li>
+                    <li><strong>Observación:</strong> {{ $technicalEvaluation->observation }}</li>
+                    <li><strong>Fecha:</strong> {{ $technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</li>
+                </ul>
+            </div>
+        @endif
+    </div>
+</div>
+
+<br>
+
 <div class="card" id="commission">
     <div class="card-header">
         <h6>Integrantes Comisión</h6>

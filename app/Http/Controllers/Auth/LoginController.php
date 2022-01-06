@@ -63,23 +63,19 @@ class LoginController extends Controller
     {
 		if(Auth::check())
 		{
-			//Auth::guard('external')->logout();
-            Auth::logout();           
-            
-            
+            Auth::logout();
+
             request()->session()->invalidate();
             request()->session()->regenerateToken();
 
-            $url_logout = "https://accounts.claveunica.gob.cl/api/v1/accounts/app/logout?redirect=";
-            $url_redirect = env('APP_URL')."/logout";
-            $url = $url_logout.urlencode($url_redirect);
-            return redirect()->to($url)->send();
+            return redirect()->route('welcome');
 		}
 
         if(Auth::guard('external')->check()) // significa que es un usuario externo
         {
             Auth::guard('external')->logout();
-            return redirect('/');
+            
+            return redirect()->route('welcome');
         }
 
 		return redirect('/');

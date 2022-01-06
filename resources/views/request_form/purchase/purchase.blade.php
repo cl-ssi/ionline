@@ -70,13 +70,22 @@
                 </tbody>
             </table>
         </div>
+        
+        <div class="float-right">
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
+                Editar Mecanismo de Compra
+            </button>
 
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary float-right btn-sm" data-toggle="modal" data-target="#exampleModal">
-            Editar Mecanismo de Compra
-        </button>
-
-        @include('request_form.purchase.modals.select_purchase_mechanism')
+            @include('request_form.purchase.modals.select_purchase_mechanism')
+    
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#requestBudget" @if($isBudgetEventSignPending) disabled @endif >
+                Solicitar presupuesto
+            </button>
+            
+            @include('request_form.purchase.modals.request_new_budget')
+        </div>
     </div>
     <div class="col-sm-4">
         <h6><i class="fas fa-paperclip"></i> Adjuntos</h6>
@@ -123,7 +132,7 @@
                         <th>Impuestos</th>
                         <th>Total Item</th>
                         <th></th>
-                        <th></th>
+                        <!-- <th></th> -->
                     </tr>
                 </thead>
                 <tbody>
@@ -155,7 +164,7 @@
                             <fieldset class="form-group">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="item_id[{{$key}}]" onclick="disabledSaveBtn()"
-                                      id="for_item_id" value="{{ $item->id }}">
+                                      id="for_item_id" value="{{ $item->id }}" @if($isBudgetEventSignPending) disabled @endif>
                                 </div>
                             </fieldset>
                         </td>
@@ -172,10 +181,9 @@
                 <tfoot>
                     <tr>
                       <td colspan="9"></td>
-                      <th class="text-right">Valor Total</td>
-                      <th class="text-right">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
+                      <td class="text-right">Valor Total</td>
+                      <td class="text-right">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
                     </tr>
-
                 </tfoot>
             </table>
         </div>
@@ -214,7 +222,7 @@
           </fieldset>
 
           <fieldset class="form-group col-sm-2">
-              <label for="for_estimated_delivery_date">Fecha</label>
+              <label for="for_estimated_delivery_date">Fecha estimada entrega</label>
               <input type="date" class="form-control form-control-sm" id="for_estimated_delivery_date" name="estimated_delivery_date"
                   value="">
           </fieldset>
@@ -318,7 +326,7 @@
 
 <br>
 
-@if($requestForm->purchasingProcess->details->count() > 0)
+@if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
 
 <div class="row">
     <div class="col-sm">
@@ -330,7 +338,8 @@
                     <tr>
                         <th>Item</th>
                         <th>Fecha</th>
-                        <th>Mecanismo de Compra</th>
+                        <!-- <th>Mecanismo de Compra</th> -->
+                        <th>Tipo de compra</th>
                         <th>Cod.Presup.</th>
                         <th>Artículo</th>
                         <th>UM</th>
@@ -341,7 +350,7 @@
                         <th>Impuestos</th>
                         <th>Total Item</th>
                         <th></th>
-                        <th></th> 
+                        <!-- <th></th>  -->
                     </tr>
                 </thead>
                 <tbody>
@@ -349,7 +358,8 @@
                     <tr>
                         <td>{{ $key+1 }}</td>
                         <td>{{ $requestForm->purchasingProcess->start_date }}</td>
-                        <td>{{ $requestForm->purchasingProcess->purchaseMechanism->name }}</td>
+                        <!-- <td>{{ $requestForm->purchasingProcess->purchaseMechanism->name }}</td> -->
+                        <td>{{ $detail->pivot->getPurchasingTypeName() }}</td>
                         <td>{{ $detail->budgetItem->fullName() ?? '' }}</td>
                         <td>{{ $detail->article }}</td>
                         <td>{{ $detail->unit_of_measurement }}</td>
@@ -364,15 +374,19 @@
                         <td align="right">${{ number_format($detail->pivot->unit_value,0,",",".") }}</td>
                         <td>{{ $detail->tax }}</td>
                         <td align="right">${{ number_format($detail->pivot->expense,0,",",".") }}</td>
-                        <td align="center">
+                        <!-- <td align="center">
                             <fieldset class="form-group">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="item_id[]" onclick="disabledSaveBtn()"
                                       id="for_item_id" value="{{ $item->id }}">
                                 </div>
                             </fieldset>
-                        </td>
-                        <td align="center">
+                        </td> -->
+                        <td>
+                        <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
+                            <i class="fas fa-receipt"></i>
+                        </button>
+                        @include('request_form.purchase.modals.detail_purchase')
 
                         </td>
                     </tr>
@@ -380,11 +394,10 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                      <td colspan="8"></td>
+                      <td colspan="10"></td>
                       <th class="text-right">Valor Total</td>
                       <th class="text-right">${{ number_format($requestForm->purchasingProcess->getExpense(),0,",",".") }}</td>
                     </tr>
-
                 </tfoot>
             </table>
         </div>

@@ -7,6 +7,7 @@
 
 @include('request_form.partials.nav')
 
+@if(!$requestForms->isEmpty())
 </div>
 <div class="col">
     <div class="table-responsive">
@@ -27,8 +28,7 @@
                 </tr>
             </thead>
           <tbody>
-              @if($purchaser)
-                @foreach($purchaser->requestForms as $requestForm)
+                @foreach($requestForms as $requestForm)
                         <tr>
                             <td>{{ $requestForm->id }}</td>
                             <td style="width: 7%">{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
@@ -39,7 +39,7 @@
                             </td>
                             <td>{{ $requestForm->purchaseMechanism->name }}</td>
                             <td>{{ $requestForm->quantityOfItems() }}</td>
-                            <td>{{ $requestForm->getElapsedTime() }}</td>
+                            <td>{{ $requestForm->created_at->diffForHumans() }}</td>
                             <td>
                             @foreach($requestForm->eventRequestForms as $sign)
                                 @if($sign->status == 'pending')
@@ -65,13 +65,17 @@
                             </td>
                         </tr>
                 @endforeach
-            @else
-                <tr><td colspan="10" class="text-center">Estimado usuario, no tiene requerimientos asignados.</td></tr>
-            @endif
           </tbody>
         </table>
     </div>
 </div>
+@else
+        <div class="card">
+          <div class="card-body">
+            No hay formularios de requerimiento para mostrar.
+          </div>
+        </div>
+@endif
 
 @endsection
 

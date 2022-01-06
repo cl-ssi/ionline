@@ -24,4 +24,8 @@ class PettyCash extends Model
     public function purchasingProcess() {
         return $this->belongsTo(PurchasingProcess::class);
     }
+
+    protected $dates = [
+        'date',
+    ];
 }

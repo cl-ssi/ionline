@@ -32,6 +32,7 @@
         </a>        
         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">            
             <a class="dropdown-item" href="{{ route('suitability.pending') }}"><i class="fas fa-list"></i>  Aceptar/Rechazar</a>
+            <a class="dropdown-item" href="{{ route('suitability.configSignature') }}"><i class="fas fa-signature"></i>  Configurar Firmantes</a>
             <hr>            
             <a class="dropdown-item" href="{{ route('suitability.approved') }}"><i class="fas fa-check"></i>  Listado Aceptados</a>
             <a class="dropdown-item" href="{{ route('suitability.rejected') }}"><i class="fas fa-minus-circle"></i>  Listado Rechazados</a>            
@@ -43,6 +44,13 @@
         <a class="nav-link"
                       href="{{ route('suitability.results.index') }}">
             <i class="fas fa-trophy"></i> Resultados Test
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link"
+                      href="{{ route('suitability.report') }}">
+            <i class="fas fa-book-open"></i> Reporte
         </a>
     </li>
 

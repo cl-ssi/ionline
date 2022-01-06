@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Models\RequestForms;
+namespace App\Models\RequestForms;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
@@ -57,7 +57,7 @@ class RequestForm extends Model implements Auditable
   }
 
     public function requestFormFiles() {
-        return $this->hasMany('\App\Models\RequestForms\RequestFormFile');
+        return $this->hasMany(RequestFormFile::class);
     }
 
     public function contractManager() {
@@ -109,12 +109,18 @@ class RequestForm extends Model implements Auditable
       return $this->HasOne(PurchasingProcess::class);
     }
 
+    public function signedRequestForm()
+    {
+        return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signatures_file_id');
+    }
+
     /*****Elimina RequestForm y tablas relacionadas en cadena*****/
     public static function boot() {
         parent::boot();
         static::deleting(function($requestForm) { // before delete() method call this
              $requestForm->eventRequestForms()->delete();
              $requestForm->itemRequestForms()->delete();
+             $requestForm->requestFormFiles()->delete();
              // do the rest of the cleanup...
         });
     }
@@ -126,22 +132,17 @@ class RequestForm extends Model implements Auditable
 
     public function getStatus(){
       switch ($this->status) {
+          case "pending":
+              return 'Pendiente';
+              break;
           case "rejected":
-              return '<span class="font-weight-bold text-danger">Rechazado.</span>';
-              break;
-          case "in_progress":
-              return '<span class="font-weight-bold text-success">En progreso.</span>';
-              break;
-          case "created":
-              return '<span class="font-weight-bold text-warning">No revisado.</span>';
+              return 'Rechazado';
               break;
           case "approved":
-              return '<span class="font-weight-bold text-success">Aprovado.</span>';
+              return 'Aprobado';
               break;
           case "closed":
-              return '<span class="font-weight-bold text-warning">Cerrado.</span>';
-              break;
-              case "":
+              return 'Cerado';
               break;
       }
     }
@@ -167,7 +168,7 @@ class RequestForm extends Model implements Auditable
     }
 
     public function rejectedTime() {
-      $event = $this->eventRequestForms()->where('status', 'rejected')->first();
+      $event = $this->eventRequestForms()->where('status', 'rejected')->where('event_type', '!=', 'budget_event')->first();
       if(!is_null($event)){
         $date = new Carbon($event->signature_date);
         return $date->format('d-m-Y');
@@ -185,13 +186,13 @@ class RequestForm extends Model implements Auditable
     }
 
     public function rejectedName() {
-      $event = $this->eventRequestForms()->where('status', 'rejected')->first();
+      $event = $this->eventRequestForms()->where('status', 'rejected')->where('event_type', '!=', 'budget_event')->first();
       if(!is_null($event))
         return $event->signerUser->tinnyName();
     }
 
     public function rejectedComment() {
-      $event = $this->eventRequestForms()->where('status', 'rejected')->first();
+      $event = $this->eventRequestForms()->where('status', 'rejected')->where('event_type', '!=', 'budget_event')->first();
       if(!is_null($event))
         return $event->comment;
     }

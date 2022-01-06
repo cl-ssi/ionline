@@ -27,35 +27,41 @@ class CreateTypes extends Component
 
     public function render()
     {
-        if (Authority::getAuthorityFromDate(1,now(),['manager']) == null) {
-          dd("falta ingresar autoridad de " . OrganizationalUnit::find(1)->name);
+        //hospital
+        if (Auth::user()->organizationalUnit->establishment_id == 38) {
+          if (Authority::getAuthorityFromDate(1,now(),['manager']) == null) {
+            dd("falta ingresar autoridad de " . OrganizationalUnit::find(1)->name);
+          }
+          if (Authority::getAuthorityFromDate(40,now(),['manager']) == null) {
+            dd("falta ingresar autoridad de " . OrganizationalUnit::find(40)->name);
+          }
+          if (Authority::getAuthorityFromDate(44,now(),['manager']) == null) {
+            dd("falta ingresar autoridad de " . OrganizationalUnit::find(44)->name);
+          }
+          if (Authority::getAuthorityFromDate(59,now(),['manager']) == null) {
+            dd("falta ingresar autoridad de " . OrganizationalUnit::find(59)->name);
+          }
+          if (Authority::getAuthorityFromDate(2,now(),['manager']) == null) {
+            dd("falta ingresar autoridad de " . OrganizationalUnit::find(2)->name);
+          }
+          // if (Authority::getAuthorityFromDate(24,now(),['manager']) == null) {
+          //   dd("falta ingresar autoridad de " . OrganizationalUnit::find(24)->name);
+          // }
         }
-        if (Authority::getAuthorityFromDate(84,now(),['manager']) == null) {
-          dd("falta ingresar autoridad de " . OrganizationalUnit::find(84)->name);
-        }
-        if (Authority::getAuthorityFromDate(40,now(),['manager']) == null) {
-          dd("falta ingresar autoridad de " . OrganizationalUnit::find(40)->name);
-        }
-        if (Authority::getAuthorityFromDate(44,now(),['manager']) == null) {
-          dd("falta ingresar autoridad de " . OrganizationalUnit::find(44)->name);
-        }
-        if (Authority::getAuthorityFromDate(59,now(),['manager']) == null) {
-          dd("falta ingresar autoridad de " . OrganizationalUnit::find(59)->name);
-        }
-        if (Authority::getAuthorityFromDate(2,now(),['manager']) == null) {
-          dd("falta ingresar autoridad de " . OrganizationalUnit::find(2)->name);
-        }
-        if (Authority::getAuthorityFromDate(24,now(),['manager']) == null) {
-          dd("falta ingresar autoridad de " . OrganizationalUnit::find(24)->name);
-        }
-        if (Authority::getAuthorityFromDate(111,now(),['manager']) == null) {
-          dd("falta ingresar autoridad de " . OrganizationalUnit::find(111)->name);
-        }
-        if (Authority::getAuthorityFromDate(88,now(),['manager']) == null) {
-          dd("falta ingresar autoridad de " . OrganizationalUnit::find(88)->name);
-        }
-        if (Authority::getAuthorityFromDate(86,now(),['manager']) == null) {
-          dd("falta ingresar autoridad de " . OrganizationalUnit::find(86)->name);
+        //servicio de salud
+        else{
+          if (Authority::getAuthorityFromDate(84,now(),['manager']) == null) {
+            dd("falta ingresar autoridad de " . OrganizationalUnit::find(84)->name);
+          }
+          if (Authority::getAuthorityFromDate(88,now(),['manager']) == null) {
+            dd("falta ingresar autoridad de " . OrganizationalUnit::find(88)->name);
+          }
+          if (Authority::getAuthorityFromDate(86,now(),['manager']) == null) {
+            dd("falta ingresar autoridad de " . OrganizationalUnit::find(86)->name);
+          }
+          if (Authority::getAuthorityFromDate(111,now(),['manager']) == null) {
+            dd("falta ingresar autoridad de " . OrganizationalUnit::find(111)->name);
+          }
         }
 
 
@@ -84,15 +90,16 @@ class CreateTypes extends Component
                 $this->signatureFlows['S.D.A SSI'] = Authority::getAuthorityFromDate(40,now(),['manager'])->user->id; // 31 - Subdirección de Recursos Físicos y Financieros
                 // $this->signatureFlows[Authority::getAuthorityFromDate(1,now(),['manager'])->position . " - " . Authority::getAuthorityFromDate(1,now(),['manager'])->user->organizationalUnit->establishment->name] = Authority::getAuthorityFromDate(1,now(),['manager'])->user->id; // 1 - Dirección
               }
-              
+
             }
             //hospital
+            // se comenta 2 y 44, ya que se solicitó quitar autoridades del ssi de flujo de hospital
             elseif(Auth::user()->organizationalUnit->establishment_id == 1){
               $this->signatureFlows['Subdirector'] = Authority::getAuthorityFromDate(88,now(),['manager'])->user->id; // 88 - Subdirección Médica - 9882506 - (iriondo)
-              $this->signatureFlows['S.D.G.A SSI'] = Authority::getAuthorityFromDate(2,now(),['manager'])->user->id; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
+              // $this->signatureFlows['S.D.G.A SSI'] = Authority::getAuthorityFromDate(2,now(),['manager'])->user->id; // 2 - Subdirección de Gestion Asistencial / Subdirección Médica
               $this->signatureFlows['S.G.D.P Hospital'] = Authority::getAuthorityFromDate(86,now(),['manager'])->user->id; // 86 - Subdirección de Gestión de Desarrollo de las Personas
               $this->signatureFlows['Jefe Finanzas'] = Authority::getAuthorityFromDate(111,now(),['manager'])->user->id; // 11 - Departamento de Finanzas
-              $this->signatureFlows['S.G.D.P SSI'] = Authority::getAuthorityFromDate(44,now(),['manager'])->user->id; // 44 - Subdirección de Gestión y Desarrollo de las Personas
+              // $this->signatureFlows['S.G.D.P SSI'] = Authority::getAuthorityFromDate(44,now(),['manager'])->user->id; // 44 - Subdirección de Gestión y Desarrollo de las Personas
               $this->signatureFlows[Authority::getAuthorityFromDate(84,now(),['manager'])->position . " - " . Authority::getAuthorityFromDate(84,now(),['manager'])->user->organizationalUnit->establishment->name] = Authority::getAuthorityFromDate(84,now(),['manager'])->user->id; // 84 - Dirección
             }
           }elseif ($this->program_contract_type == "Horas") {
