@@ -7,20 +7,20 @@ use App\Models\Rrhh\ShiftUserDay;
 use App\User;
 use App\Models\Rrhh\ShiftUser;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Rrhh\ShiftDayHistoryOfChanges;	
+use App\Models\Rrhh\ShiftDayHistoryOfChanges;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Session;
 
 class ModalEditShiftUserDay extends Component
-{	
+{
 
 	public $action = 0;
 	public $users;
 	public $userIdtoChange =0;
 	public $userIdtoChange2 =0;
-	public $shiftUserDay;	
-	public $shiftUser;	
+	public $shiftUserDay;
+	public $shiftUser;
 	public $usersSelect ="none";
 	public $usersSelect2 ="none";
 	public $changeDayType ="none";
@@ -91,9 +91,9 @@ class ModalEditShiftUserDay extends Component
     protected $listeners = ['setshiftUserDay','clearModal','ChangeWorkingDay'=>'enableChangeTypeOfWorkingDay','findAvailableOwnDaysToChange'];
     // public function mount(array $headers){
     public function mount(){
-		
+
 		// $this->headers = old('http_client_headers', $headers);
-		$this->varLog = "mont";		
+		$this->varLog = "mont";
 
 		$this->usersSelect ="none";
 		$this->changeDayType = "none";
@@ -118,11 +118,11 @@ class ModalEditShiftUserDay extends Component
 		$this->repeatToDate = $this->shiftUserDay->day;
 		// $this->users = $this->shiftUserDay->where
 		$this->users  = User::where('organizational_unit_id', $this->shiftUserDay->ShiftUser->organizational_units_id)->get();
-		$this->varLog = "X";		
-		$this->shiftUser = $this->shiftUserDay->ShiftUser->days;
+		$this->varLog = "X";
+		$this->shiftUser = $this->shiftUserDay->ShiftUser;
 		// $this->varLog ="Users Prev: ".json_encode($this->users)."<br>";
 		foreach ($this->users as $index => $u) {
-			// $this->varLog .= ">> foreach( Index:".$index."; U:".json_encode($u).")  <br>"; 
+			// $this->varLog .= ">> foreach( Index:".$index."; U:".json_encode($u).")  <br>";
 			$shiftUser = ShiftUser::where("user_id",$u->id)->get();
 			// if( ShiftUser::where("user_id",$u->id)->get() ){
 			$this->varLog .=">> shiftUser day: " .$this->shiftUserDay->day."<br>";
@@ -130,8 +130,9 @@ class ModalEditShiftUserDay extends Component
 
 					foreach ($shiftUser as  $suser) {
 						// $this->varLog .=" >> foreach  shiftUser <br> ".">> uShiftDays:".json_encode($suser)."<br>";
-						if ( isset($suser->days) && $suser->days->where("day",$this->shiftUserDay->day) != null){
-							$sUDay = $suser->days->where("day",$this->shiftUserDay->day)->first();
+						// if ( isset($suser->days) && $suser->days()->where("day",$this->shiftUserDay->day)->get() != null){
+						if ($suser->days()->where("day",$this->shiftUserDay->day)->get() != null){
+							$sUDay = $suser->days()->where("day",$this->shiftUserDay->day)->get()->first();
 							// $this->varLog .=" >> foreach:"."<p align='center'>"." suser : ".$sUDay['working_day']."</p><br>" ;
 
 							if($sUDay['working_day'] !="F" && $sUDay['working_day'] != "" ){
@@ -154,9 +155,9 @@ class ModalEditShiftUserDay extends Component
 		// $this->render();
 	}
 	public function cancel(){
-    
+
     	$this->reset();
-		// 
+		//
 		// $this->emit('clearModal');
 	}
 	public function changeAction(){//funcion que asina estados a varibles para ocultar o mostrar div crrspondientes a cada accion
@@ -174,7 +175,7 @@ class ModalEditShiftUserDay extends Component
 
 
 		}elseif($this->action ==2 ){ //cumplido
-			$this->newStatus = 2; 	
+			$this->newStatus = 2;
 			$this->usersSelect ="none";
 			$this->changeDayType ="none";
 			$this->repeatAction="visible";
@@ -217,7 +218,7 @@ class ModalEditShiftUserDay extends Component
 			$this->availableOwnDaysToChangeVisible  = "none";
 			$this->availableExternalDaysToChangeVisible = "none";
 
-			
+
 		}elseif($this->action ==6 ){ // PErmiso excepcional
 			$this->newStatus = 8;
 			$this->usersSelect ="none";
@@ -228,7 +229,7 @@ class ModalEditShiftUserDay extends Component
 			$this->availableOwnDaysToChangeVisible  = "none";
 			$this->availableExternalDaysToChangeVisible = "none";
 
-		
+
 		}elseif($this->action ==7 ){ // Cambiar tipo de jornada
 			// $this->newStatus = 8;
 			$this->usersSelect ="none";
@@ -248,7 +249,7 @@ class ModalEditShiftUserDay extends Component
 			$this->addHours = "none" ;
 			$this->availableOwnDaysToChangeVisible  = "none";
 			$this->availableExternalDaysToChangeVisible = "none";
-		
+
 		}elseif($this->action ==9 ){ // Descanzo Compensatorio
 			$this->newStatus = 10;
 			$this->usersSelect ="none";
@@ -318,7 +319,7 @@ class ModalEditShiftUserDay extends Component
            12 => "Permiso Administrativo Medio Turno Diurno",
            13 => "Permiso Administrativo Medio Turno Nocturno",
            14 => "Permiso a Curso", */
-		
+
 		}elseif($this->action ==15 ){ // Permiso a curso
 			$this->newStatus = 15;
 			$this->usersSelect ="none";
@@ -357,27 +358,27 @@ class ModalEditShiftUserDay extends Component
 			$this->usersSelect ="none";
 		}
 	}
-	public function findAvailableOwnDaysToChange($user_id){ // funcion que se activa cuando cambio la jornada de un usuario, esta funcion busca todos los dias que tiene asignado ese usuario $user_id, y los almacean en un arreglo para posteriormente mostrarlos en el select 
+	public function findAvailableOwnDaysToChange($user_id){ // funcion que se activa cuando cambio la jornada de un usuario, esta funcion busca todos los dias que tiene asignado ese usuario $user_id, y los almacean en un arreglo para posteriormente mostrarlos en el select
 		$this->dayToToChange2 = 0;
 		$this->availableOwnDaysToChange =  array();
 		if(Session::has('actuallyMonth') && Session::get('actuallyMonth') != "")
             $actuallyMonth = Session::get('actuallyMonth');
         else
             $actuallyMonth = Carbon::now()->format('m');
- 		
+
  		if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
             $actuallyYear = Session::get('actuallyYear');
         else
             $actuallyYear = Carbon::now()->format('Y');
 
 		 $ShiftUser = ShiftUser::where('user_id',$user_id )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-31")->get();
-		 
+
 		 foreach ($ShiftUser as $s ) {
-		 	 
+
 			foreach ($s->days as $day ) {
 				if( $this->shiftUserDay->id != $day->id )
 			 		array_push($this->availableOwnDaysToChange, $day);
-			 } 
+			 }
 
 		 }
 	}
@@ -388,20 +389,20 @@ class ModalEditShiftUserDay extends Component
             $actuallyMonth = Session::get('actuallyMonth');
         else
             $actuallyMonth = Carbon::now()->format('m');
- 		
+
  		if(Session::has('actuallyYear') && Session::get('actuallyYear') != "")
             $actuallyYear = Session::get('actuallyYear');
         else
             $actuallyYear = Carbon::now()->format('Y');
 
 		 $ShiftUser = ShiftUser::where('user_id',$this->userIdtoChange )->where('date_up','>=',$actuallyYear."-".$actuallyMonth."-01")->where('date_from','<=',$actuallyYear."-".$actuallyMonth."-31")->get();
-		 
+
 		 foreach ($ShiftUser as $s ) {
-		 	 
+
 			foreach ($s->days as $day ) {
 				if( $this->shiftUserDay->id != $day->id )
 			 		array_push($this->availableExternalDaysToChange, $day);
-			 } 
+			 }
 
 		 }
 	}
@@ -428,15 +429,15 @@ class ModalEditShiftUserDay extends Component
 						$splitDay = explode("-", $this->shiftUserDay->day);
 						$from = date($splitDay[0].'-'.$splitDay[1].'-01');
 						$to = date($splitDay[0].'-'.$splitDay[1].'-'.$daysOfMonth->daysInMonth);
-				
+
         				$days = $daysOfMonth->daysInMonth;
 
-				
-						$bTurno = ShiftUser::where("user_id",$this->userIdtoChange2)->where("date_from",">=",$from)->where("date_up","<=",$to)->first(); 
+
+						$bTurno = ShiftUser::where("user_id",$this->userIdtoChange2)->where("date_from",">=",$from)->where("date_up","<=",$to)->first();
 						if( !isset($bTurno) || $bTurno == ""){ // si no tiene ningun turno asociado a ese rango, se le crea
 							$bTurno = new ShiftUser;
 							$bTurno->date_from = $from;
-							$bTurno->date_up = $to;	
+							$bTurno->date_up = $to;
 							$bTurno->asigned_by = Auth::user()->id;
 							$bTurno->user_id = $this->userIdtoChange2;
 							$bTurno->shift_types_id = $this->shiftUserDay->ShiftUser->shift_types_id;
@@ -448,7 +449,7 @@ class ModalEditShiftUserDay extends Component
 
 							if($this->chkSuplente)
 								$bTurno->commentary = "Suplente:".$this->shiftUserDay->shift_user_id;
-							
+
 
 							$bTurno->save();
 						}
@@ -468,7 +469,7 @@ class ModalEditShiftUserDay extends Component
 						$nDay->shift_user_id = $bTurno->id;
 						$nDay->working_day = $this->shiftUserDay->working_day;
 						$nDay->derived_from = $this->shiftUserDay->id;
-						$nDay->save();	
+						$nDay->save();
 
 						if($this->chkSuplente){
 
@@ -524,10 +525,10 @@ class ModalEditShiftUserDay extends Component
 					$ranges = CarbonPeriod::create($this->shiftUserDay->day, $this->repeatToDate ); // creo los rangos con los valores qe rescato de los input repetir hasta en el modal
 						foreach ($ranges as $date) {
 
-							
+
 							$day = $this->shiftUser->where('day',$date->format('Y-m-d'))->first();
 							// $day = $day[0] ;
-							$day->status = $this->newStatus; 
+							$day->status = $this->newStatus;
 							$day->update();
 
 
@@ -548,11 +549,11 @@ class ModalEditShiftUserDay extends Component
 								$from = date($splitDay[0].'-'.$splitDay[1].'-01');
 								$to = date($splitDay[0].'-'.$splitDay[1].'-'.$daysOfMonth->daysInMonth);
         						$days = $daysOfMonth->daysInMonth;
-								$bTurno = ShiftUser::where("user_id",$this->userIdtoChange2)->where("date_from",">=",$from)->where("date_up","<=",$to)->first(); 
+								$bTurno = ShiftUser::where("user_id",$this->userIdtoChange2)->where("date_from",">=",$from)->where("date_up","<=",$to)->first();
 								if( !isset($bTurno) || $bTurno == ""){ // si no tiene ningun turno asociado a ese rango, se le crea
 									$bTurno = new ShiftUser;
 									$bTurno->date_from = $from;
-									$bTurno->date_up = $to;	
+									$bTurno->date_up = $to;
 									$bTurno->asigned_by = Auth::user()->id;
 									$bTurno->user_id = $this->userIdtoChange2;
 									$bTurno->shift_types_id = $day->ShiftUser->shift_types_id;
@@ -590,18 +591,18 @@ class ModalEditShiftUserDay extends Component
 								$nDay->shift_user_id = $bTurno->id;
 								$nDay->working_day = $day->working_day;
 								$nDay->derived_from = $day->id;
-								$nDay->save();	
+								$nDay->save();
 								//si tiene turno creado para ese mes y ese tipo de turno
 
 
 								$nHistory = new ShiftDayHistoryOfChanges;
-								
+
 
 								$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $day->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange2."\"";
 								$nHistory->shift_user_day_id = $day->id;
 								$nHistory->modified_by = Auth()->user()->id;
 								$nHistory->change_type = 2;//1:cambio estado, 2 cambio de tipo de jornada, 3 intercambio con otro usuario
-								
+
 
 								$nHistory->day =  $day->day;
 								$nHistory->previous_value = $this->previousStatus;
@@ -620,7 +621,7 @@ class ModalEditShiftUserDay extends Component
 								$nHistory->current_value = $this->newStatus;
 								$nHistory->save();
 							}
-								
+
 						}
 				}
 		}elseif( $this->action == 7  && isset($this->shiftUserDay) ){ // Cambiar jornada laboral
@@ -649,16 +650,16 @@ class ModalEditShiftUserDay extends Component
 				$splitDay = explode("-", $this->shiftUserDay->day);
 				$from = date($splitDay[0].'-'.$splitDay[1].'-01');
 				$to = date($splitDay[0].'-'.$splitDay[1].'-'.$daysOfMonth->daysInMonth);
-				
+
         		$days = $daysOfMonth->daysInMonth;
         		if($this->dayToToChange == 0 ){ //osea NO  intercambiar por ningun dia, sino solo traspasar el dia
 
 					// busco si tiene turno entre las fechas de donde corresponde el dia
-					$bTurno = ShiftUser::where("user_id",$this->userIdtoChange)->where("date_from",">=",$from)->where("date_up","<=",$to)->first(); 
+					$bTurno = ShiftUser::where("user_id",$this->userIdtoChange)->where("date_from",">=",$from)->where("date_up","<=",$to)->first();
 					if( !isset($bTurno) || $bTurno == ""){ // si no tiene ningun turno asociado a ese rango, se le crea
 						$bTurno = new ShiftUser;
 						$bTurno->date_from = $from;
-						$bTurno->date_up = $to;	
+						$bTurno->date_up = $to;
 						$bTurno->asigned_by = Auth::user()->id;
 						$bTurno->user_id = $this->userIdtoChange;
 						$bTurno->shift_types_id = $this->shiftUserDay->ShiftUser->shift_types_id;
@@ -676,7 +677,7 @@ class ModalEditShiftUserDay extends Component
 					$nDay->shift_user_id = $bTurno->id;
 					$nDay->working_day = $this->shiftUserDay->working_day;
 					$nDay->derived_from = $this->shiftUserDay->id;
-					$nDay->save();	
+					$nDay->save();
 					//si tiene turno creado para ese mes y ese tipo de turno
 					$nHistory = new ShiftDayHistoryOfChanges;
 					$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha cambiado la asignacion del dia</b> del usuario \"". $this->shiftUserDay->ShiftUser->user_id . "\" al usuario \"" .$this->userIdtoChange."\"";
@@ -708,7 +709,7 @@ class ModalEditShiftUserDay extends Component
 					$myFreeDay = ShiftUserDay::where("shift_user_id",$ownDayShiftId)->where("day",$extDayShiftDay)->where("working_day","F")->first();
 					//dd($myFreeDay);
 					// si lo encuentro le cambio el dia al dia que entrege
-				
+
 					if(isset($myFreeDay) && $myFreeDay->id)
 					{
 						$myFreeDay->day =$ownDayShiftDay;
@@ -749,7 +750,7 @@ class ModalEditShiftUserDay extends Component
 					$nHistory->current_value = $this->newStatus;
 					$nHistory->save();
 
-					
+
 				}
 			}else{ // si el id es = 0 osea DEJAR DIA DISPONIBLE
 
@@ -774,15 +775,15 @@ class ModalEditShiftUserDay extends Component
 		}elseif( $this->action == 16 && isset($this->shiftUserDay) ){ // intercambio de dia del mes por otro dia del mes del mismo usuario
 			// dd($this->dayToToChange2);
 			$dateOfDay1 =$this->shiftUserDay->day;  // guardo la fecha en que era originalmente el dia
-			
+
 			$bDay = ShiftUserDay::find($this->dayToToChange2); // busco el ID del dia con el cual lo vo a intercambiar
-			$dateOfDay2 = $bDay->day; // cuando lo encuentro seteo el valor del DAY 
-			
+			$dateOfDay2 = $bDay->day; // cuando lo encuentro seteo el valor del DAY
+
 			$bDay->day = $dateOfDay1;
 			$bDay->update();
 
 			$this->shiftUserDay->day = $dateOfDay2;
-			$this->shiftUserDay->update();	
+			$this->shiftUserDay->update();
 
 			$nHistory = new ShiftDayHistoryOfChanges;
 			$nHistory->commentary = "El usuario \"".Auth()->user()->name." ". Auth()->user()->fathers_family ." ". Auth()->user()->mothers_family ."\" <b>ha generado el intercambio en la asignacion del dia</b> del usuario por necesidad del servicio \"". $this->shiftUserDay->ShiftUser->user_id;
@@ -809,10 +810,10 @@ class ModalEditShiftUserDay extends Component
 		$this->emitSelf('changeColor',["color"=>$this->colors[$this->shiftUserDay->status]]);
 		 $this->reset();
 		    return redirect('/rrhh/shift-management/'.(( Session::has('groupname') && Session::get('groupname') != ""  )?Session::get('groupname'):""));
-	}	
+	}
 	public function confirmExtraDay(){
 
-		 return redirect()->route('rrhh.shiftManag.confirmDay',[$this->shiftUserDay]);	 
+		 return redirect()->route('rrhh.shiftManag.confirmDay',[$this->shiftUserDay]);
 	}
 	public function changeDay(){
     	dd($this->dayToToChange);

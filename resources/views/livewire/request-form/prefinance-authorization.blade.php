@@ -34,8 +34,10 @@
                   <td>{{$item->unit_of_measurement}}</td>
                   <td>{{$item->specification}}</td>
                   <td align="center">
+                    @if($item->article_file)
                       <a href="{{ route('request_forms.show_item_file', $item) }}" target="_blank">
                         <i class="fas fa-file"></i>
+                    @endif
                   </td>
                   <td align="right">{{$item->quantity}}</td>
                   <td align="right">${{ number_format($item->unit_value,0,",",".") }}</td>

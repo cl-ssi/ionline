@@ -15,5 +15,7 @@ class FundToBeSettled extends Model
         'date', 'amount', 'document_id'
     ];
 
+    protected $dates = ['date'];
+
     protected $table = 'arq_funds_to_be_settled';
 }

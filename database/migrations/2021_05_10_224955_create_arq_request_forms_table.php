@@ -20,7 +20,7 @@ class CreateArqRequestFormsTable extends Migration
             $table->foreignId('contract_manager_id');
             $table->foreignId('contract_manager_ou_id');//u.o. del responsable
             $table->longText('name');
-            $table->unsignedInteger('estimated_expense');
+            $table->float('estimated_expense');
             $table->string('type_of_currency');
             $table->tinyInteger('superior_chief')->nullable();
             $table->string('program')->nullable();
@@ -42,6 +42,8 @@ class CreateArqRequestFormsTable extends Migration
             $table->foreign('request_user_id')->references('id')->on('users');
             $table->foreign('contract_manager_id')->references('id')->on('users');
             $table->foreign('request_user_ou_id')->references('id')->on('organizational_units');
+
+            $table->foreignId('signatures_file_id')->nullable()->constrained('doc_signatures_files');
 
             $table->timestamps();
             $table->softDeletes();

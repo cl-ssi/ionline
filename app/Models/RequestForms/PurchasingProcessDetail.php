@@ -2,7 +2,8 @@
 
 namespace App\Models\RequestForms;
 
-use app\Models\RequestForms\ItemRequestForm;
+use App\Models\RequestForms\ItemRequestForm;
+use App\User;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -39,5 +40,13 @@ class PurchasingProcessDetail extends Pivot
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    public function getPurchasingTypeName(){
+        return $this->internalPurchaseOrder ? 'OC interna' : ($this->pettyCash ? 'Fondo menor' : ($this->fundToBeSettled ? 'Fondo a rendir' : ''));
+    }
+
+    public function getPurchaseType(){
+        return $this->internalPurchaseOrder ? $this->internalPurchaseOrder : ($this->pettyCash ? $this->pettyCash : ($this->fundToBeSettled ? $this->fundToBeSettled : null));
     }
 }

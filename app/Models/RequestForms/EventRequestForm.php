@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\RequestForms\RequestForm;
 use App\Rrhh\OrganizationalUnit;
 use App\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EventRequestForm extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'signer_user_id', 'request_form_id', 'ou_signer_user', 'position_signer_user', 'cardinal_number', 'status',
@@ -28,6 +30,20 @@ class EventRequestForm extends Model
 
     public function requestForm() {
         return $this->belongsTo(RequestForm::class, 'request_form_id');
+    }
+
+    public function getStatusValueAttribute(){
+      switch ($this->status) {
+          case "pending":
+              return 'Pendiente';
+              break;
+          case "rejected":
+              return 'Rechazado';
+              break;
+          case "approved":
+              return 'Aprobado';
+              break;
+      }
     }
 
     public static function createLeadershipEvent(RequestForm $requestForm){
@@ -80,6 +96,19 @@ class EventRequestForm extends Model
         $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 5 : 4;
         $event->status              =   'pending';
         $event->event_type          =   'supply_event';
+        $event->requestForm()->associate($requestForm);
+        $event->save();
+        return true;
+    }
+
+    public static function createNewBudgetEvent(RequestForm $requestForm){
+        $event = new EventRequestForm();
+        $event->ou_signer_user      =   40;
+        $event->cardinal_number     =   $requestForm->superior_chief == 1 ? 6 : 5;
+        $event->status              =   'pending';
+        $event->event_type          =   'budget_event';
+        $event->purchaser_amount    =   $requestForm->newBudget;
+        $event->purchaser_id        =   Auth()->user()->id;
         $event->requestForm()->associate($requestForm);
         $event->save();
         return true;

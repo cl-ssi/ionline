@@ -23,31 +23,28 @@ class PurchasingProcessController extends Controller
 {
     public function index()
     {
-        //By Purchaser
-        if(Auth()->user()->organizational_unit_id == 37){
-            $purchaser = User::with('requestForms')
-                ->latest()
-                ->whereHas('requestForms', function ($q){
-                    $q->where('status', 'approved');
-                })
-                ->where('id', Auth()->user()->id)
-                ->first();
+        if(Auth()->user()->organizational_unit_id != 37){
+            session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
+            return redirect()->route('request_forms.my_forms');
+        }
 
-            return view('request_form.purchase.index', compact('purchaser'));
-        }
-        else{
-          session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
-          return redirect()->route('request_forms.my_forms');
-        }
+        $requestForms = RequestForm::where('status', 'approved')->whereNotNull('signatures_file_id')
+            ->whereHas('purchasers', function ($q){
+                return $q->where('users.id', Auth()->user()->id);
+            })->latest()->get();
+
+        return view('request_form.purchase.index', compact('requestForms'));
     }
 
     public function purchase(RequestForm $requestForm)
     {
         if(Auth()->user()->organizational_unit_id == 37){
             $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details');
-            // return $requestForm->purchasingProcess->details->count();
+            // return $requestForm;
+            $isBudgetEventSignPending = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->count() > 0;
+            if($isBudgetEventSignPending) session()->flash('warning', 'Estimado/a usuario/a: El formulario de requerimiento tiene una firma pendiente de aprobación por concepto de presupuesto, por lo que no podrá agregar o quitar compras hasta que no se haya notificado de la resolución de la firma.');
             $suppliers = Supplier::orderBy('name','asc')->get();
-            return view('request_form.purchase.purchase', compact('requestForm', 'suppliers'));
+            return view('request_form.purchase.purchase', compact('requestForm', 'suppliers', 'isBudgetEventSignPending'));
         }
         else{
             session()->flash('danger', 'Estimado Usuario/a: Usted no pertence a la Unidad de Abastecimiento.');
@@ -78,8 +75,6 @@ class PurchasingProcessController extends Controller
         $internalPurchaseOrder->date                    = Carbon::now();
         $internalPurchaseOrder->supplier_id             = $request->supplier_id;
         $internalPurchaseOrder->payment_condition       = $request->payment_condition;
-        $internalPurchaseOrder->user_id                 = Auth::user()->id;
-        $internalPurchaseOrder->purchasing_process_id   = $requestForm->purchasingProcess->id;
         $internalPurchaseOrder->estimated_delivery_date = $request->estimated_delivery_date;
         $internalPurchaseOrder->save();
 
@@ -109,8 +104,6 @@ class PurchasingProcessController extends Controller
         $pettyCash->receipt_type            = $request->receipt_type;
         $pettyCash->receipt_number          = $request->receipt_number;
         $pettyCash->amount                  = $request->amount;
-        $pettyCash->user_id                 = Auth::user()->id;
-        $pettyCash->purchasing_process_id   = $requestForm->purchasingProcess->id;
         $pettyCash->save();
 
         $now = Carbon::now()->format('Y_m_d_H_i_s');
