@@ -1,6 +1,6 @@
 <div>
 <div class="form-row" wire:loading.remove>
-  <fieldset class="form-group col-4 col-md-4">
+  <fieldset class="form-group col-4 col-md-2">
       <label for="for_program_contract_type">Tipo</label>
       <select name="program_contract_type" class="form-control" wire:model.lazy="program_contract_type" id="program_contract_type" required>
         <option value=""></option>
@@ -9,12 +9,12 @@
       </select>
   </fieldset>
 
-  <fieldset class="form-group col-8 col-md-4">
+  <fieldset class="form-group col-8 col-md-2">
       <label for="for_type">Origen Financiamiento</label>
       <select name="type" class="form-control" wire:model.lazy="type" required id="type">
         <option value=""></option>
-        <option value="Covid">Honorarios - Covid</option>
         <option value="Suma alzada">Suma alzada</option>
+        <option value="Covid">Covid (Sólo 2021)</option>
       </select>
   </fieldset>
 

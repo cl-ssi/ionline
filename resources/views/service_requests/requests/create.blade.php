@@ -55,27 +55,102 @@
 
   <hr>
 
-  <div class="form-row">
-    <fieldset class="form-group col-12">
-        <label for="for_service_description">Descripción Servicio*</label>
-        <textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50" required></textarea>
-	</fieldset>
+	<div class="form-row">
 
-	<fieldset class="form-group">
-		<div id="id_descripcion_servicio">
-			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_enfermeros">Enfermeras/os</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-3" id="alias_kinesiologos">Kinesiólogos/as</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_paramedicos">Técnicos paraméricos</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-2" id="alias_medico">Médico</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_auxiliares">Auxiliares de servicio</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-3" id="alias_psicologo">Psicólogo</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_administrativos">Administrativos/as</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-2" id="alias_matronas">Matronas</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_tm_imageneologia">T.M. Imagenología</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-3" id="alias_fonoaudiologas">Fonoaudiologas</button>
-			<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_terapeuta_ocupacional">Terapeuta Ocupacional</button>
-		</div>
-	</fieldset>
+		<fieldset class="form-group col-12 col-md-4">
+			<label for="for_establishment_id">Establecimiento</label>
+			<select name="establishment_id" class="form-control" required>
+				<option value=""></option>
+				@foreach($establishments as $key => $establishment)
+				<option value="{{$establishment->id}}" @if($establishment->id == 1) selected @endif>{{$establishment->name}}</option>
+				@endforeach
+			</select>
+		</fieldset>
+
+		<fieldset class="form-group col-6 col-md-3">
+			<label for="for_profession_id">Profesión</label>
+			<select name="profession_id" class="form-control" required id="profession_id">
+				<option value=""></option>
+				@foreach($professions as $profession)
+					<option value="{{$profession->id}}">{{$profession->name}}</option>
+				@endforeach
+			</select>
+		</fieldset>
+
+		<fieldset class="form-group col-6 col-md-2">
+			<label for="for_weekly_hours">Hrs.Semanales</label>
+			<select name="weekly_hours" class="form-control" id="for_weekly_hours">
+				<option value=""></option>
+				<option value="44">44</option>
+				<option value="33">33</option>
+				<option value="30">30</option>
+				<option value="28">28</option>
+				<option value="22">22</option>
+				<option value="20">20</option>
+				<option value="16">16</option>
+				<option value="15">15</option>
+				<option value="11">11</option>
+				<option value="9">9</option>
+				<option value="8.5">8.5</option>
+				<option value="7.5">7.5</option>
+				<option value="5">5</option>
+				<option value="4">4</option>
+				<option value="3">3</option>
+			</select>
+		</fieldset>
+
+
+		<fieldset class="form-group col-6 col-md-3">
+			<label for="for_working_day_type">Jornada de Trabajo</label>
+			<select name="working_day_type" class="form-control" required id="working_day_type">
+				<option value=""></option>
+				<option value="DIURNO">DIURNO</option>
+				<option value="VESPERTINO">VESPERTINO</option>
+				<option value="TERCER TURNO">TERCER TURNO</option>
+				<option value="TERCER TURNO - MODIFICADO">TERCER TURNO - MODIFICADO</option>
+				<option value="CUARTO TURNO">CUARTO TURNO</option>
+				<option value="CUARTO TURNO - MODIFICADO">CUARTO TURNO - MODIFICADO</option>
+				<option value="DIURNO PASADO A TURNO">DIURNO PASADO A TURNO</option>
+				<option value="HORA MÉDICA">HORA MÉDICA</option>
+				<option value="HORA EXTRA">HORA EXTRA</option>
+				<option value="TURNO EXTRA">TURNO EXTRA</option>
+				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
+				<option value="QUIRURGICO">QUIRÚRGICO</option>
+				<!-- <option value="OTRO">OTRO</option> -->
+				<option value=""></option>
+				<option value="DIARIO">DIARIO</option>
+			</select>
+		</fieldset>
+
+		<fieldset class="form-group col-12 col-md-12">
+			<label for="for_working_day_type_other">Otra jornada de trabajo<small> (Saldrá en la resolución luego del horario)</small></label>
+			<input type="text" class="form-control" id="for_working_day_type_other" placeholder="" name="working_day_type_other">
+		</fieldset>
+
+	</div>
+
+	<div class="form-row">
+    
+		<fieldset class="form-group col-12">
+			<label for="for_service_description">Descripción Servicio*</label>
+			<textarea id="service_description" name="service_description" class="form-control" rows="4" cols="50" required></textarea>
+		</fieldset>
+
+		<fieldset class="form-group">
+			<div id="id_descripcion_servicio">
+				<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_enfermeros">Enfermeras/os</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-3" id="alias_kinesiologos">Kinesiólogos/as</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_paramedicos">Técnicos paraméricos</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-2" id="alias_medico">Médico</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_auxiliares">Auxiliares de servicio</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-3" id="alias_psicologo">Psicólogo</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_administrativos">Administrativos/as</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-2" id="alias_matronas">Matronas</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_tm_imageneologia">T.M. Imagenología</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-5 col-md-3" id="alias_fonoaudiologas">Fonoaudiologas</button>
+				<button type="button" class="btn btn-outline-primary btn-sm col-6 col-md-3" id="alias_terapeuta_ocupacional">Terapeuta Ocupacional</button>
+			</div>
+		</fieldset>
   </div>
 
 	<div id="control_turnos">
@@ -88,28 +163,28 @@
 		    <li class="list-group-item">
 					<div class="row">
 						<fieldset class="form-group col-3">
-								<label for="for_estate">Entrada</label>
-								<input type="date" class="form-control" name="shift_start_date" id="shift_start_date">
+							<label for="for_estate">Entrada</label>
+							<input type="date" class="form-control" name="shift_start_date" id="shift_start_date">
 						</fieldset>
 						<fieldset class="form-group col">
-								<label for="for_estate">Hora</label>
-								<input type="time" class="form-control" name="start_hour" id="start_hour">
+							<label for="for_estate">Hora</label>
+							<input type="time" class="form-control" name="start_hour" id="start_hour">
 						</fieldset>
 						<fieldset class="form-group col-3">
-								<label for="for_estate">Salida</label>
-								<input type="date" class="form-control" name="shift_end_date" id="shift_end_date">
+							<label for="for_estate">Salida</label>
+							<input type="date" class="form-control" name="shift_end_date" id="shift_end_date">
 						</fieldset>
 						<fieldset class="form-group col">
-								<label for="for_estate">Hora</label>
-								<input type="time" class="form-control" name="end_hour" id="end_hour">
+							<label for="for_estate">Hora</label>
+							<input type="time" class="form-control" name="end_hour" id="end_hour">
 						</fieldset>
 						<fieldset class="form-group col">
-								<label for="for_estate">Observación</label>
-								<input type="text" class="form-control" name="observation" id="observation">
+							<label for="for_estate">Observación</label>
+							<input type="text" class="form-control" name="observation" id="observation">
 						</fieldset>
 						<fieldset class="form-group col">
-								<label for="for_estate"><br/></label>
-								<button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
+							<label for="for_estate"><br/></label>
+							<button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
 						</fieldset>
 					</div>
 
@@ -136,88 +211,20 @@
 		<br>
 	</div>
 
-  <div class="form-row">
-	<fieldset class="form-group col-12 col-md-3">
-		<label for="for_estate">Estamento al que corresponde CS</label>
-		<select name="estate" class="form-control" required id="estate">
-			<option value=""></option>
-			<option value="Profesional Médico">Profesional Médico</option>
-			<option value="Profesional">Profesional</option>
-			<option value="Técnico">Técnico</option>
-			<option value="Administrativo">Administrativo</option>
-			<option value="Farmaceutico">Farmaceutico</option>
-			<option value="Odontólogo">Odontólogo</option>
-			<option value="Bioquímico">Bioquímico</option>
-			<option value="Auxiliar">Auxiliar</option>
-			<!--
-			<option value="Otro (justificar)">Otro (justificar)</option>
-			-->
-		</select>
-	</fieldset>
+  	<div class="form-row">
 
-	<fieldset class="form-group col-6 col-md-3">
-		<label for="for_contractual_condition">Calidad Contractual</label>
-		<select name="contractual_condition" class="form-control" id="contractual_condition" disabled>
-		<option value=""></option>
-		<option value="SUPLENTE" >SUPLENTE</option>
-		<option value="CONTRATA" >CONTRATA</option>
-		<option value="TITULAR" >TITULAR</option>
-		<!--
-		<option value="HONORARIO COVID" >HONORARIO COVID</option>
-		<option value="SUMA ALZADA" >SUMA ALZADA</option>
-		-->
-		</select>
-	</fieldset>
-
-	<fieldset class="form-group col-6 col-md-2">
-		<label for="for_weekly_hours">Hrs.Semanales</label>
-		<select name="weekly_hours" class="form-control" id="for_weekly_hours">
-			<option value=""></option>
-			<option value="44">44</option>
-			<option value="33">33</option>
-			<option value="30">30</option>
-			<option value="28">28</option>
-			<option value="22">22</option>
-			<option value="20">20</option>
-			<option value="16">16</option>
-			<option value="15">15</option>
-			<option value="11">11</option>
-			<option value="9">9</option>
-			<option value="8.5">8.5</option>
-			<option value="7.5">7.5</option>
-			<option value="5">5</option>
-			<option value="4">4</option>
-			<option value="3">3</option>
-		</select>
-	</fieldset>
-
-	<fieldset class="form-group col">
-		<label for="for_establishment_id">Establecimiento</label>
-		<select name="establishment_id" class="form-control" required>
-			<option value=""></option>
-			@foreach($establishments as $key => $establishment)
-			<option value="{{$establishment->id}}" @if($establishment->id == 1) selected @endif>{{$establishment->name}}</option>
-			@endforeach
-		</select>
-	</fieldset>
-
-
-  </div>
-
-	<div class="form-row">
-
-		<fieldset class="form-group col-6 col-md-3">
+  		<fieldset class="form-group col-6 col-md-3">
 			<label for="for_programm_name">Nombre Programa</label>
 			<!-- <input type="text" class="form-control" id="for_programm_name" placeholder="" name="programm_name"> -->
 			<select name="programm_name" class="form-control" required id="programm_name">
 				<option value=""></option>
-				<option value="Covid 2022">Covid 2022</option>
 				<option value="Covid19-APS No Médicos">Covid19-APS No Médicos</option>
 				<option value="Covid19-APS Médicos">Covid19-APS Médicos</option>
 				<option value="Covid19 No Médicos">Covid19 No Médicos</option>
 				<option value="Covid19 Médicos">Covid19 Médicos</option>
 
 				@if(Auth::user()->organizationalUnit->establishment_id == 1)
+					<option value="Covid 2022">Covid 2022</option>
 					<option value="CONSULTORIO DE LLAMADA">CONSULTORIO DE LLAMADA</option>
 					<option value="33 MIL HORAS">33 MIL HORAS</option>
 					<option value="DFL">DFL</option>
@@ -248,116 +255,37 @@
 		</fieldset>
 
 		<fieldset class="form-group col-6 col-md-3">
-			<label for="for_working_day_type">Jornada de Trabajo</label>
-			<select name="working_day_type" class="form-control" required id="working_day_type">
-				<option value=""></option>
-				<option value="DIURNO">DIURNO</option>
-				<option value="VESPERTINO">VESPERTINO</option>
-				<option value="TERCER TURNO">TERCER TURNO</option>
-				<option value="TERCER TURNO - MODIFICADO">TERCER TURNO - MODIFICADO</option>
-				<option value="CUARTO TURNO">CUARTO TURNO</option>
-				<option value="CUARTO TURNO - MODIFICADO">CUARTO TURNO - MODIFICADO</option>
-				<option value="DIURNO PASADO A TURNO">DIURNO PASADO A TURNO</option>
-				<option value="HORA MÉDICA">HORA MÉDICA</option>
-				<option value="HORA EXTRA">HORA EXTRA</option>
-				<option value="TURNO EXTRA">TURNO EXTRA</option>
-				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
-				<option value="QUIRURGICO">QUIRÚRGICO</option>
-				<!-- <option value="OTRO">OTRO</option> -->
-				<option value=""></option>
-				<option value="DIARIO">DIARIO</option>
-			</select>
-		</fieldset>
-
-		<fieldset class="form-group col-12 col-md-6">
-			<label for="for_estate_other">Detalle estamento</label>
-			<input type="text" class="form-control" id="for_estate_other" placeholder="" name="estate_other">
-		</fieldset>
-
-		<fieldset class="form-group col-12 col-md-12">
-			<label for="for_working_day_type_other">Otro<small> (Saldrá en la resolución luego del horario)</small></label>
-			<input type="text" class="form-control" id="for_working_day_type_other" placeholder="" name="working_day_type_other">
-		</fieldset>
-
-  	</div>
-
-	<div class="form-row">
-		<fieldset class="form-group col-6 col-md-3">
-			<label for="for_profession_id">Profesión</label>
-			<select name="profession_id" class="form-control" required id="profession_id">
-				<option value=""></option>
-				@foreach($professions as $profession)
-					<option value="{{$profession->id}}">{{$profession->name}}</option>
-				@endforeach
-			</select>
-		</fieldset>
-
-		<fieldset class="form-group col-6 col-md-3">
-			<label for="for_rrhh_team">Equipo RRHH*</label>
-			<select name="rrhh_team" class="form-control" id="rrhh_team" required>
-				<option value=""></option>
-				<option value="Residencia Médica" >Residencia Médica</option>
-				<option value="Médico Diurno" >Médico Diurno</option>
-				<option value="Enfermera Supervisora">Enfermera Supervisora</option>
-				<option value="Enfermera Diurna" >Enfermera Diurna</option>
-				<option value="Enfermera Turno" >Enfermera Turno</option>
-				<option value="Kinesiólogo Diurno" >Kinesiólogo Diurno</option>
-				<option value="Kinesiólogo Turno">Kinesiólogo Turno</option>
-				<option value="Téc.Paramédicos Diurno">Téc.Paramédicos Diurno</option>
-				<option value="Téc.Paramédicos Turno" >Téc.Paramédicos Turno</option>
-				<option value="Auxiliar Diurno" >Auxiliar Diurno</option>
-				<option value="Auxiliar Turno">Auxiliar Turno</option>
-				<option value="Terapeuta Ocupacional" >Terapeuta Ocupacional</option>
-				<option value="Químico Farmacéutico" >Químico Farmacéutico</option>
-				<option value="Bioquímico" >Bioquímico</option>
-				<option value="Fonoaudiologo" >Fonoaudiologo</option>
-				<option value="Prevencionista Diurno">Prevencionista Diurno</option>
-				<option value="Administrativo Diurno" >Administrativo Diurno</option>
-				<option value="Administrativo Turno" >Administrativo Turno</option>
-				<option value="Biotecnólogo Turno" >Biotecnólogo Turno</option>
-				<option value="Matrona Turno" >Matrona Turno</option>
-				<option value="Matrona Diurno" >Matrona Diurno</option>
-				<option value="Otros técnicos" >Otros técnicos</option>
-				<option value="Psicólogo" >Psicólogo</option>
-				<option value="Tecn. Médico Diurno" >Tecn. Médico Diurno</option>
-				<option value="Tecn. Médico Turno" >Tecn. Médico Turno</option>
-				<option value="Trabajador Social" >Trabajador Social</option>
-				<option value="Nutricionista Diurno" >Nutricionista Diurno</option>
-				<option value="Prevencionista de Riesgo" >Prevencionista de Riesgo</option>
-				<option value="Nutricionista turno" >Nutricionista turno</option>
-				<option value="Informático">Informático</option>
-				<option value="Ingeniero">Ingeniero</option>
-				<option value="Constructor civil">Constructor civil</option>
-				<option value="Arquitecto">Arquitecto</option>
-				<option value="Dibujante técnico proyectista">Dibujante técnico proyectista</option>
-				<option value="Técnico en rehabilitación">Técnico en rehabilitación</option>
-				<option value="Psiquiatra">Psiquiatra</option>
-				<option value="Monitor/a">Monitor/a</option>
-				<option value="Preparador físico">Preparador físico</option>
-				<option value="Otros técnicos">Otros técnicos</option>
-				<option value="Otros profesionales">Otros profesionales</option>
-				<option value="Médico por prestación">Médico por prestación</option>
-			</select>
-		</fieldset>
-
-		<fieldset class="form-group col-6 col-md-3">
 			<label for="for_digera_strategy">Estrategia Digera C.</label>
 			<select name="digera_strategy" class="form-control" id="digera_strategy" required>
 				<option value=""></option>
-				<option value="Camas MEDIAS Aperturadas" >Camas MEDIAS Aperturadas</option>
-				<option value="Camas MEDIAS Complejizadas" >Camas MEDIAS Complejizadas</option>
-				<option value="Camas UCI Aperturadas" >Camas UCI Aperturadas</option>
-				<option value="Camas UCI Complejizadas" >Camas UCI Complejizadas</option>
-				<option value="Camas UTI Aperturadas" >Camas UTI Aperturadas</option>
-				<option value="Camas UTI Complejizadas" >Camas UTI Complejizadas</option>
-				<option value="Cupos Hosp. Domiciliaria" >Cupos Hosp. Domiciliaria</option>
-				<option value="Refuerzo Anatomía Patologica" >Refuerzo Anatomía Patologica</option>
-				<option value="Refuerzo Laboratorio" >Refuerzo Laboratorio</option>
-				<option value="Refuerzo SAMU" >Refuerzo SAMU</option>
-				<option value="Refuerzo UEH" >Refuerzo UEH</option>
+				<option value="Camas MEDIAS Aperturadas">Camas MEDIAS Aperturadas</option>
+				<option value="Camas MEDIAS Complejizadas">Camas MEDIAS Complejizadas</option>
+				<option value="Camas UCI Aperturadas">Camas UCI Aperturadas</option>
+				<option value="Camas UCI Complejizadas">Camas UCI Complejizadas</option>
+				<option value="Camas UTI Aperturadas">Camas UTI Aperturadas</option>
+				<option value="Camas UTI Complejizadas">Camas UTI Complejizadas</option>
+				<option value="Cupos Hosp. Domiciliaria">Cupos Hosp. Domiciliaria</option>
+				<option value="Refuerzo Anatomía Patologica">Refuerzo Anatomía Patologica</option>
+				<option value="Refuerzo Laboratorio">Refuerzo Laboratorio</option>
+				<option value="Refuerzo SAMU">Refuerzo SAMU</option>
+				<option value="Refuerzo UEH">Refuerzo UEH</option>
 				@if(Auth::user()->organizationalUnit->establishment_id == 1)
-					<option value="Migración Colchane" >Migración Colchane</option>
+					<option value="Migración Colchane">Migración Colchane</option>
 				@endif
+			</select>
+		</fieldset>
+
+		<fieldset class="form-group col-6 col-md-3">
+			<label for="for_contractual_condition">Calidad Contractual</label>
+			<select name="contractual_condition" class="form-control" id="contractual_condition" disabled>
+			<option value=""></option>
+			<option value="SUPLENTE">SUPLENTE</option>
+			<option value="CONTRATA">CONTRATA</option>
+			<option value="TITULAR">TITULAR</option>
+			<!--
+			<option value="HONORARIO COVID">HONORARIO COVID</option>
+			<option value="SUMA ALZADA">SUMA ALZADA</option>
+			-->
 			</select>
 		</fieldset>
 
@@ -377,8 +305,86 @@
 			<input type="text" class="form-control" id="for_hsa_schedule_detail" placeholder="" name="hsa_schedule_detail">
 		</fieldset>
 
+	</div>
+
+	{{--
+	<div class="form-row">
+
+		<fieldset class="form-group col-12 col-md-3">
+			<label for="for_estate">Estamento al que corresponde CS</label>
+			<select name="estate" class="form-control" required id="estate" disabled>
+				<option value=""></option>
+				<option value="Profesional Médico">Profesional Médico</option>
+				<option value="Profesional">Profesional</option>
+				<option value="Técnico">Técnico</option>
+				<option value="Administrativo">Administrativo</option>
+				<option value="Farmaceutico">Farmaceutico</option>
+				<option value="Odontólogo">Odontólogo</option>
+				<option value="Bioquímico">Bioquímico</option>
+				<option value="Auxiliar">Auxiliar</option>
+				<!--
+				<option value="Otro (justificar)">Otro (justificar)</option>
+				-->
+			</select>
+		</fieldset>
+
+		<fieldset class="form-group col-12 col-md-6">
+			<label for="for_estate_other">Detalle estamento</label>
+			<input type="text" class="form-control" id="for_estate_other" placeholder="" name="estate_other">
+		</fieldset>
+
+
+		<fieldset class="form-group col-6 col-md-3">
+			<label for="for_rrhh_team">Equipo RRHH*</label>
+			<select name="rrhh_team" class="form-control" id="rrhh_team" required>
+				<option value=""></option>
+				<option value="Residencia Médica">Residencia Médica</option>
+				<option value="Médico Diurno">Médico Diurno</option>
+				<option value="Enfermera Supervisora">Enfermera Supervisora</option>
+				<option value="Enfermera Diurna">Enfermera Diurna</option>
+				<option value="Enfermera Turno">Enfermera Turno</option>
+				<option value="Kinesiólogo Diurno">Kinesiólogo Diurno</option>
+				<option value="Kinesiólogo Turno">Kinesiólogo Turno</option>
+				<option value="Téc.Paramédicos Diurno">Téc.Paramédicos Diurno</option>
+				<option value="Téc.Paramédicos Turno">Téc.Paramédicos Turno</option>
+				<option value="Auxiliar Diurno">Auxiliar Diurno</option>
+				<option value="Auxiliar Turno">Auxiliar Turno</option>
+				<option value="Terapeuta Ocupacional">Terapeuta Ocupacional</option>
+				<option value="Químico Farmacéutico">Químico Farmacéutico</option>
+				<option value="Bioquímico">Bioquímico</option>
+				<option value="Fonoaudiologo">Fonoaudiologo</option>
+				<option value="Prevencionista Diurno">Prevencionista Diurno</option>
+				<option value="Administrativo Diurno">Administrativo Diurno</option>
+				<option value="Administrativo Turno">Administrativo Turno</option>
+				<option value="Biotecnólogo Turno">Biotecnólogo Turno</option>
+				<option value="Matrona Turno">Matrona Turno</option>
+				<option value="Matrona Diurno">Matrona Diurno</option>
+				<option value="Otros técnicos">Otros técnicos</option>
+				<option value="Psicólogo">Psicólogo</option>
+				<option value="Tecn. Médico Diurno">Tecn. Médico Diurno</option>
+				<option value="Tecn. Médico Turno">Tecn. Médico Turno</option>
+				<option value="Trabajador Social">Trabajador Social</option>
+				<option value="Nutricionista Diurno">Nutricionista Diurno</option>
+				<option value="Prevencionista de Riesgo">Prevencionista de Riesgo</option>
+				<option value="Nutricionista turno">Nutricionista turno</option>
+				<option value="Informático">Informático</option>
+				<option value="Ingeniero">Ingeniero</option>
+				<option value="Constructor civil">Constructor civil</option>
+				<option value="Arquitecto">Arquitecto</option>
+				<option value="Dibujante técnico proyectista">Dibujante técnico proyectista</option>
+				<option value="Técnico en rehabilitación">Técnico en rehabilitación</option>
+				<option value="Psiquiatra">Psiquiatra</option>
+				<option value="Monitor/a">Monitor/a</option>
+				<option value="Preparador físico">Preparador físico</option>
+				<option value="Otros técnicos">Otros técnicos</option>
+				<option value="Otros profesionales">Otros profesionales</option>
+				<option value="Médico por prestación">Médico por prestación</option>
+			</select>
+		</fieldset>
 
 	</div>
+
+	--}}
 
 	<div class="form-row" id="div_objectives" style="display: none">
 		<fieldset class="form-group col">
@@ -415,25 +421,21 @@
 
 	<div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_estate">Beneficios adicionales (se inserta en cláusula 14)</label>
-				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50" disabled></textarea>
+			<label for="for_estate">Beneficios adicionales (se inserta en cláusula 14)</label>
+			<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50" disabled></textarea>
 
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
+			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
+			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_ausentarse_motivos_particulares">Ausentarse por motivos particulares</button>
 
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
-				@if(Auth::user()->organizationalUnit->establishment_id == 1)
-				@else
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
-				@endif
-				<button type="button" class="btn btn-outline-primary btn-sm" id="alias_devolucion">Devolución de tiempo</button>
-
-
+			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_capacitacion">Capacitación</button>
+			@if(Auth::user()->organizationalUnit->establishment_id == 1)
+			@else
+			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_fiestas_patrias">Aguinaldo fiestas patrias</button>
+			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_navidad">Aguinaldo navidad</button>
+			@endif
+			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_devolucion">Devolución de tiempo</button>
 		</fieldset>
 	</div>
-
-
 
 	<br>
 	<button type="submit" id="principal_form" class="btn btn-primary">Crear</button>
