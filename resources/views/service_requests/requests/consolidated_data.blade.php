@@ -100,9 +100,9 @@
 								<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
 								<td nowrap>{{$serviceRequest->weekly_hours}}</td>
 								<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
-								<td nowrap>{{$serviceRequest->profession->category}}</td>
+								<td nowrap>{{$serviceRequest->profession->estamento}}</td>
 								<td nowrap>
-										@if($serviceRequest2->profession->category == "Administrativo")
+										@if($serviceRequest2->profession->category == "E")
 											Apoyo Administrativo
 										@else
 											Apoyo Clínico
@@ -147,9 +147,9 @@
 										<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
 										<td nowrap>{{$serviceRequest->weekly_hours}}</td>
 										<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
-										<td nowrap>{{$serviceRequest->profession->category}}</td>
+										<td nowrap>{{$serviceRequest->profession->estamento}}</td>
 										<td nowrap>
-												@if($serviceRequest->profession->category == "Administrativo")
+												@if($serviceRequest->profession->category == "E")
 													Apoyo Administrativo
 												@else
 													Apoyo Clínico
@@ -192,9 +192,9 @@
 									<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
 									<td nowrap>{{$serviceRequest->weekly_hours}}</td>
 									<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
-									<td nowrap>{{$serviceRequest->profession->category}}</td>
+									<td nowrap>{{$serviceRequest->profession->estamento}}</td>
 									<td nowrap>
-											@if($serviceRequest->profession->category == "Administrativo")
+											@if($serviceRequest->profession->category == "E")
 												Apoyo Administrativo
 											@else
 												Apoyo Clínico
@@ -241,9 +241,9 @@
 						<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
 						<td nowrap>{{$serviceRequest->weekly_hours}}</td>
 						<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
-						<td nowrap>{{$serviceRequest->profession->category}}</td>
+						<td nowrap>{{$serviceRequest->profession->estamento}}</td>
 						<td nowrap>
-								@if($serviceRequest->profession->category == "Administrativo")
+								@if($serviceRequest->profession->category == "E")
 									Apoyo Administrativo
 								@else
 									Apoyo Clínico
@@ -328,9 +328,9 @@
           <td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
           <td nowrap>{{$serviceRequest->weekly_hours}}</td>
           <td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
-					<td nowrap>{{$serviceRequest->profession->category}}</td>
+					<td nowrap>{{$serviceRequest->profession->estamento}}</td>
 					<td nowrap>
-							@if($serviceRequest->profession->category == "Administrativo")
+							@if($serviceRequest->profession->category == "E")
 								Apoyo Administrativo
 							@else
 								Apoyo Clínico
