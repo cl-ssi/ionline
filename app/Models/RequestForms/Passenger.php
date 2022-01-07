@@ -61,4 +61,6 @@ class Passenger extends Model
     }
 
     public $table = "arq_passengers";
+
+    public $dates = ['departure_date', 'return_date'];
 }
