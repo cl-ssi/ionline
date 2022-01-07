@@ -1,5 +1,6 @@
 <div>
     <div class="table-responsive">
+      @if($requestForm->type_form == 'Bienes y/o Servicios')
       <h6><i class="fas fa-info-circle"></i> Lista de Bienes y/o Servicios</h6>
       <table class="table table-condensed table-hover table-bordered table-sm small">
           <thead>
@@ -55,6 +56,52 @@
           </tfoot>
       </table>
       @error('arrayItemRequest') <span class="error text-danger">{{ $message }}</span> @enderror
+      @else
+      <!-- Pasajeros -->
+        <h6><i class="fas fa-info-circle"></i> Lista de Pasajeros</h6>
+        <table class="table table-condensed table-hover table-bordered table-sm">
+        <thead class="text-center small">
+            <tr>
+            <th>#</th>
+            <th>RUT</th>
+            <th>Nombres</th>
+            <th>Apellidos</th>
+            <th>Item Pres.</th>
+            <th>Tipo viaje</th>
+            <th>Origen</th>
+            <th>Destino</th>
+            <th>Fecha ida</th>
+            <th>Fecha vuelta</th>
+            <th>Equipaje</th>
+            <th>Total pasaje</th>
+            </tr>
+        </thead>
+        <tbody class="small">
+            @foreach($requestForm->passengers as $key => $passenger)
+                    <tr>
+                        <td>{{ $key+1 }}</td>
+                        <td>{{ number_format($passenger->run, 0, ",", ".") }}-{{ $passenger->dv }}</td>
+                        <td>{{ $passenger->name }}</td>
+                        <td>{{ $passenger->fathers_family }} {{ $passenger->mothers_family }}</td>
+                        <td>-</td>
+                        <td>{{ isset($round_trips[$passenger->round_trip]) ? $round_trips[$passenger->round_trip] : '' }}</td>
+                        <td>{{ $passenger->origin }}</td>
+                        <td>{{ $passenger->destination }}</td>
+                        <td>{{ $passenger->departure_date }}</td>
+                        <td>{{ $passenger->return_date }}</td>
+                        <td>{{ isset($baggages[$passenger->baggage]) ? $baggages[$passenger->baggage] : '' }}</td>
+                        <td align="right">${{ number_format($passenger->unit_value, $requestForm->type_of_currency == 'peso' ? 0 : 2, ",", ".") }}</td>
+                    </tr>
+            @endforeach
+        </tbody>
+        <tfoot class="text-right small">
+            <tr>
+            <td colspan="11">Valor Total</td>
+            <td>${{ number_format($requestForm->estimated_expense, $requestForm->type_of_currency == 'peso' ? 0 : 2,",",".") }}</td>
+            </tr>
+        </tfoot>
+        </table>
+    @endif
 
         <div class="card">
             <div class="card-header bg-primary text-white">

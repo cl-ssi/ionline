@@ -94,7 +94,12 @@ class RequestForm extends Model implements Auditable
     }
 
     public function itemRequestForms() {
-        return $this->hasMany(ItemRequestForm::class);
+      return $this->hasMany(ItemRequestForm::class);
+    }
+
+    public function passengers()
+    {
+      return $this->hasMany(Passenger::class);
     }
 
     public function eventRequestForms() {
@@ -232,7 +237,7 @@ class RequestForm extends Model implements Auditable
     }
 
     public function quantityOfItems(){
-      return count($this->itemRequestForms);
+      return $this->type_form == 'Bienes y/o Servicios' ? count($this->itemRequestForms) : count($this->passengers);
     }
 
 
