@@ -365,7 +365,7 @@
                 <tbody class="small">
                     @foreach($technicalEvaluation->applicants->sortByDesc('score') as $applicant)
                     <tr class="{{ ($applicant->selected == 1)?'table-success':''}}">
-                        <td>{{ $applicant->replacement_staff->FullName }}</td>
+                        <td><a href="">{{ $applicant->replacement_staff->FullName }}<a></td>
                         <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
                         <td class="text-center">{{ $applicant->technical_evaluation_score }} <br> {{ $applicant->TechEvaScore }}</td>
                         <td>{{ $applicant->observations }}</td>

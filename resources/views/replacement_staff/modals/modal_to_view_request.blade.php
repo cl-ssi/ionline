@@ -164,7 +164,8 @@
 
           @endif
 
-          @if($requestReplacementStaff->technicalEvaluation->reason != NULL)
+          @if($requestReplacementStaff->technicalEvaluation &&
+            $requestReplacementStaff->technicalEvaluation->reason != NULL)
 
           <div class="row">
               <div class="col">
