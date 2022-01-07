@@ -58,7 +58,7 @@
 	<div class="form-row">
 
 		<fieldset class="form-group col-12 col-md-4">
-			<label for="for_establishment_id">Establecimiento</label>
+			<label for="for_establishment_id">Establecimiento*</label>
 			<select name="establishment_id" class="form-control" required>
 				<option value=""></option>
 				@foreach($establishments as $key => $establishment)
@@ -68,8 +68,8 @@
 		</fieldset>
 
 		<fieldset class="form-group col-6 col-md-3">
-			<label for="for_profession_id">Profesión</label>
-			<select name="profession_id" class="form-control" required id="profession_id">
+			<label for="for_profession_id">Profesión*</label>
+			<select name="profession_id" class="form-control" required id="profession_id" required>
 				<option value=""></option>
 				@foreach($professions as $profession)
 					<option value="{{$profession->id}}">{{$profession->name}}</option>
@@ -117,7 +117,6 @@
 				<option value="TURNO DE REEMPLAZO">TURNO DE REEMPLAZO</option>
 				<option value="QUIRURGICO">QUIRÚRGICO</option>
 				<!-- <option value="OTRO">OTRO</option> -->
-				<option value=""></option>
 				<option value="DIARIO">DIARIO</option>
 			</select>
 		</fieldset>
@@ -163,27 +162,27 @@
 		    <li class="list-group-item">
 					<div class="row">
 						<fieldset class="form-group col-3">
-							<label for="for_estate">Entrada</label>
+							<label for="for_shift_start_date">Entrada</label>
 							<input type="date" class="form-control" name="shift_start_date" id="shift_start_date">
 						</fieldset>
 						<fieldset class="form-group col">
-							<label for="for_estate">Hora</label>
+							<label for="for_start_hour">Hora</label>
 							<input type="time" class="form-control" name="start_hour" id="start_hour">
 						</fieldset>
 						<fieldset class="form-group col-3">
-							<label for="for_estate">Salida</label>
+							<label for="for_shift_end_date">Salida</label>
 							<input type="date" class="form-control" name="shift_end_date" id="shift_end_date">
 						</fieldset>
 						<fieldset class="form-group col">
-							<label for="for_estate">Hora</label>
+							<label for="for_end_hour">Hora</label>
 							<input type="time" class="form-control" name="end_hour" id="end_hour">
 						</fieldset>
 						<fieldset class="form-group col">
-							<label for="for_estate">Observación</label>
+							<label for="for_observation">Observación</label>
 							<input type="text" class="form-control" name="observation" id="observation">
 						</fieldset>
 						<fieldset class="form-group col">
-							<label for="for_estate"><br/></label>
+							<label for="for_shift_button_add"><br/></label>
 							<button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
 						</fieldset>
 					</div>
@@ -214,7 +213,7 @@
   	<div class="form-row">
 
   		<fieldset class="form-group col-6 col-md-3">
-			<label for="for_programm_name">Nombre Programa</label>
+			<label for="for_programm_name">Nombre Programa*</label>
 			<!-- <input type="text" class="form-control" id="for_programm_name" placeholder="" name="programm_name"> -->
 			<select name="programm_name" class="form-control" required id="programm_name">
 				<option value=""></option>
@@ -309,8 +308,8 @@
 
 	
 
-
 	{{--
+	
 	<div class="form-row">
 
 		<fieldset class="form-group col-12 col-md-3">
@@ -387,20 +386,20 @@
 
 	</div>
 
+	
 	--}}
-
 
 
 	<div class="form-row" id="div_objectives" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_estate">Objetivos*</label>
+				<label for="for_objectives">Objetivos*</label>
 				<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50" disabled></textarea>
 		</fieldset>
 	</div>
 
 	<!-- <div class="form-row" id="div_resolve" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_estate">Resuelvo</label>
+				<label for="for_resolve">Resuelvo</label>
 				<textarea id="resolve" name="resolve" class="form-control" rows="4" cols="50" disabled></textarea>
 		</fieldset>
 	</div> -->
@@ -419,14 +418,14 @@
 
 	<div class="form-row">
 		<fieldset class="form-group col">
-				<label for="for_estate">Aguinaldos (se inserta en cláusula 8va)</label>
+				<label for="for_bonus_indications">Aguinaldos (se inserta en cláusula 8va)</label>
 				<textarea name="bonus_indications" class="form-control" rows="4" cols="50" placeholder="ej: en septiembre un bono de 53.000 por concepto de aguinaldo de fiestas patrias"></textarea>
 		</fieldset>
 	</div>
 
 	<div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
-			<label for="for_estate">Beneficios adicionales (se inserta en cláusula 14)</label>
+			<label for="for_additional_benefits">Beneficios adicionales (se inserta en cláusula 14)</label>
 			<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50" disabled></textarea>
 
 			<button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
@@ -536,16 +535,16 @@
 			}
 		});
 
-		$('#estate').on('change', function() {
-			if (this.value == "Profesional" || this.value == "Técnico" || this.value == "Administrativo" || this.value == "Auxiliar") {
-				$('#programm_name').val('Covid19 No Médicos');
-				$('#programm_name').selectpicker('refresh');
-			}
-			if (this.value == "Profesional Médico" || this.value == "Farmaceutico" || this.value == "Odontólogo" || this.value == "Bioquímico") {
-				$('#programm_name').val('Covid19 Médicos');
-				$('#programm_name').selectpicker('refresh');
-			}
-		});
+		// $('#estate').on('change', function() {
+		// 	if (this.value == "Profesional" || this.value == "Técnico" || this.value == "Administrativo" || this.value == "Auxiliar") {
+		// 		$('#programm_name').val('Covid19 No Médicos');
+		// 		$('#programm_name').selectpicker('refresh');
+		// 	}
+		// 	if (this.value == "Profesional Médico" || this.value == "Farmaceutico" || this.value == "Odontólogo" || this.value == "Bioquímico") {
+		// 		$('#programm_name').val('Covid19 Médicos');
+		// 		$('#programm_name').selectpicker('refresh');
+		// 	}
+		// });
 
 		$('#working_day_type').on('change', function() {
 			$('#schedule_detail').attr('disabled', 'disabled');
