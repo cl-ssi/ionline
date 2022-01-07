@@ -7,27 +7,27 @@
       <li class="list-group-item">
         <div class="form-row">
           <fieldset class="form-group col-3">
-              <label for="for_estate">Entrada</label>
+              <label for="for_shift_start_date">Entrada</label>
               <input type="date" class="form-control" wire:model="shift_start_date" id="shift_start_date">
           </fieldset>
           <fieldset class="form-group col">
-              <label for="for_estate">Hora</label>
+              <label for="for_start_hour">Hora</label>
               <input type="time" class="form-control" wire:model="start_hour" id="start_hour">
           </fieldset>
           <fieldset class="form-group col-3">
-              <label for="for_estate">Salida</label>
+              <label for="for_shift_end_date">Salida</label>
               <input type="date" class="form-control" wire:model="shift_end_date" id="shift_end_date">
           </fieldset>
           <fieldset class="form-group col">
-              <label for="for_estate">Hora</label>
+              <label for="for_end_hour">Hora</label>
               <input type="time" class="form-control" wire:model="end_hour" id="end_hour">
           </fieldset>
           <fieldset class="form-group col">
-              <label for="for_estate">Observación</label>
+              <label for="for_observation">Observación</label>
               <input type="text" class="form-control" wire:model="observation" id="observation">
           </fieldset>
           <fieldset class="form-group col">
-              <label for="for_estate"><br/></label>
+              <label for="for_label"><br/></label>
 
               @can('Service Request: fulfillments rrhh')
                 <button type="button" class="btn btn-primary form-control add-row" wire:click="save()">Ingresar</button>

@@ -221,7 +221,7 @@
         <tr>
           <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
+          <td style="text-align:center">{{$ServiceRequest->profession->category}} ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}})</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
           <td style="text-align:center">${{number_format($ServiceRequest->gross_amount)}}</td>
@@ -348,9 +348,9 @@
 
 
       <p class="justify">
-        <strong>DÉCIMO:</strong> El prestador cumplirá una jornada que deberá ser acreditada mediante copia del registro de asistencia, 
-        que deberán ser entregado a la Subdirección Médica, se deja establecido que, la copia del registro de asistencia, 
-        se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza jurídica del convenio, 
+        <strong>DÉCIMO:</strong> El prestador cumplirá una jornada que deberá ser acreditada mediante copia del registro de asistencia,
+        que deberán ser entregado a la Subdirección Médica, se deja establecido que, la copia del registro de asistencia,
+        se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza jurídica del convenio,
         en virtud del Dictamen N°26.092/2017 de la C.G.R. Si durante una jornada de trabajo existiese un cambio de hora, se pagarán las horas efectivamente trabajadas.
       </p>
 
@@ -361,7 +361,7 @@
 
 
       <p class="justify">
-        <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que la {{$ServiceRequest->estate}}, se regirá por el procedimiento establecido en el “Manual de Procedimientos de Denuncia, Prevención y Sanación del Maltrato, Acoso Laboral y/o Sexual y Discriminación, conforme resolución vigente en el Servicio de Salud Iquique.
+        <strong>DÉCIMO SEGUNDO:</strong> Déjese establecido que la {{$ServiceRequest->profession->category}}, se regirá por el procedimiento establecido en el “Manual de Procedimientos de Denuncia, Prevención y Sanación del Maltrato, Acoso Laboral y/o Sexual y Discriminación, conforme resolución vigente en el Servicio de Salud Iquique.
       </p>
 
       Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribute()}} <br><br>

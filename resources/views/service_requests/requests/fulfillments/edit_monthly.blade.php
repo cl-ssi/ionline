@@ -19,61 +19,29 @@
 					</select>
 				</fieldset>
 				<fieldset class="form-group col-6 col-md-2">
-					<label for="for_estate">Inicio</label>
+					<label for="for_start_date">Inicio</label>
 					<input type="date" class="form-control" name="start_date" value="{{$fulfillment->start_date->format('Y-m-d')}}" required>
 				</fieldset>
 				<fieldset class="form-group col-6 col-md-2">
-					<label for="for_estate">Término</label>
+					<label for="for_end_date">Término</label>
 					<input type="date" class="form-control" name="end_date" value="{{$fulfillment->end_date->format('Y-m-d')}}" required>
 				</fieldset>
 				<fieldset class="form-group col-12 col-md-4">
-					<label for="for_estate">Observación</label>
+					<label for="for_observation">Observación</label>
 					<input type="text" class="form-control" name="observation" value="{{$fulfillment->observation}}">
 				</fieldset>
 
-				<!-- @can('Service Request: fulfillments responsable')
-				@if($fulfillment->responsable_approver_id == NULL)
-				<fieldset class="form-group col">
-					<label for="for_estate"><br /></label>
-					<button type="submit" class="btn btn-primary">Guardar</button>
-				</fieldset>
-				@else
-				<fieldset class="form-group col">
-					<label for="for_estate"><br /></label>
-					<button type="submit" class="btn btn-primary" disabled>Guardar</button>
-				</fieldset>
-				@endif
-				@endcan -->
-
-
 				<fieldset class="form-group col-2">
-					<label for="for_estate"><br /></label>
+					<label for="for_submit"><br /></label>
 					@can('Service Request: fulfillments rrhh')
 					<button type="submit" class="form-control btn btn-primary">Guardar</button>
 					@endcan
 				</fieldset>
 
-
-				<!-- @can('Service Request: fulfillments finance')
-				@if($fulfillment->finances_approver_id == NULL)
-				<fieldset class="form-group col">
-					<label for="for_estate"><br /></label>
-					<button type="submit" class="btn btn-primary">Guardar</button>
-				</fieldset>
-				@else
-				<fieldset class="form-group col">
-					<label for="for_estate"><br /></label>
-					<button type="submit" class="btn btn-primary" disabled>Guardar</button>
-				</fieldset>
-				@endif
-				@endcan -->
 			</div>
 		</form>
 
 		<hr>
-		<!--acaaaaaaaaaaaaaaaaaaaaaaaaaaaa-->
-
-
 
 		<div class="card border-success mb-3">
 			<div class="card-header bg-success text-white">
@@ -81,115 +49,11 @@
 			</div>
 		<div class="card-body">
 
-
 		@if($serviceRequest->working_day_type == "DIARIO")
 			@livewire('service-request.shift-control-add-day', ['fulfillment' => $fulfillment])
 		@else
 			@livewire('service-request.fulfillment-absences', ['fulfillment' => $fulfillment])
 		@endif
-		<!-- <form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.store') }}" enctype="multipart/form-data">
-			@csrf
-			<div class="form-row">
-				<input type="hidden" name="fulfillment_id" value="{{$fulfillment->id}}">
-				<fieldset class="form-group col-12 col-md">
-					<label for="for_type">Tipo</label>
-					<select name="type" class="form-control for_type" required>
-						<option value=""></option>
-						<option value="Inasistencia Injustificada">INASISTENCIA INJUSTIFICADA</option>
-						<option value="Licencia médica">LICENCIA MÉDICA</option>
-						<option value="Licencia no covid">LICENCIA MÉDICA - NO COVID</option>
-						<option value="Renuncia voluntaria">RENUNCIA VOLUNTARIA</option>
-						<option value="Abandono de funciones">ABANDONO DE FUNCIONES</option>
-					</select>
-				</fieldset>
-				<fieldset class="form-group col-12 col-md">
-					<label for="for_estate">Observación</label>
-					<input type="text" class="form-control" name="observation">
-				</fieldset>
-			</div>
-			@php
-			$ano = \Carbon\Carbon::now()->format('Y');
-			$anopasado = $ano-1;
-			@endphp
-			<div class="form-row">
-				<fieldset class="form-group col-6 col-md-3">
-					<label for="for_estate">Entrada</label>
-					<input type="date" class="form-control start_date" name="start_date" min="{{$anopasado}}-01-01" max="{{$ano}}-12-31"  required>
-				</fieldset>
-				<fieldset class="form-group col-6 col-md">
-					<label for="for_estate">Hora</label>
-					<input type="time" class="form-control start_hour" name="start_hour" required>
-				</fieldset>
-				<fieldset class="form-group col-6 col-md-3">
-					<label for="for_estate">Salida</label>
-					<input type="date" class="form-control end_date" name="end_date" min="{{$anopasado}}-01-01" max="{{$ano}}-12-31" required>
-				</fieldset>
-				<fieldset class="form-group col-6 col-md">
-					<label for="for_estate">Hora</label>
-					<input type="time" class="form-control end_hour" name="end_hour" required>
-				</fieldset>
-				@can('Service Request: fulfillments responsable')
-					@if($fulfillment->responsable_approver_id == NULL)
-					<fieldset class="form-group col">
-						<label for="for_estate"><br/></label>
-						<button type="submit" class="btn form-control btn-primary">Guardar</button>
-					</fieldset>
-					@else
-					<fieldset class="form-group col">
-						<label for="for_estate"><br/></label>
-						<button type="submit" class="btn form-control btn-primary" disabled>Guardar</button>
-					</fieldset>
-					@endif
-				@endcan
-				@can('Service Request: fulfillments rrhh')
-					@if($fulfillment->rrhh_approver_id == NULL)
-					<fieldset class="form-group col">
-						<label for="for_estate"><br/></label>
-						<button type="submit" class="btn form-control btn-primary">Guardar</button>
-					</fieldset>
-					@else
-					<fieldset class="form-group col">
-						<label for="for_estate"><br/></label>
-						<button type="submit" class="btn form-control btn-primary" disabled>Guardar</button>
-					</fieldset>
-					@endif
-				@endcan
-			</div>
-		</form>
-		<table class="table table-sm">
-			<thead>
-				<tr>
-					<th></th>
-					<th>Tipo</th>
-					<th>Inicio</th>
-					<th>Término</th>
-					<th>Observación</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach($fulfillment->FulfillmentItems as $key => $FulfillmentItem)
-				<tr>
-					<td>
-						@can('Service Request: fulfillments responsable')
-						@if($fulfillment->responsable_approver_id == NULL)
-						<form method="POST" action="{{ route('rrhh.service-request.fulfillment.item.destroy', $FulfillmentItem) }}" class="d-inline">
-							@csrf
-							@method('DELETE')
-							<button type="submit" class="btn btn-outline-secondary btn-sm" onclick="return confirm('¿Está seguro de eliminar la información?');">
-							<span class="fas fa-trash-alt" aria-hidden="true"></span>
-							</button>
-						</form>
-						@endif
-						@endcan
-					</td>
-					<td>{{$FulfillmentItem->type}}</td>
-					<td>@if($FulfillmentItem->start_date){{$FulfillmentItem->start_date->format('Y-m-d H:i')}}@endif</td>
-					<td>@if($FulfillmentItem->end_date){{$FulfillmentItem->end_date->format('Y-m-d H:i')}}@endif</td>
-					<td>{{$FulfillmentItem->observation}}</td>
-				</tr>
-				@endforeach
-			</tbody>
-		</table> -->
 
 		<div class="form-row">
 			<fieldset class="form-group col">

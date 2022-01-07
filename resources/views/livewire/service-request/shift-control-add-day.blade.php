@@ -7,15 +7,15 @@
       <li class="list-group-item">
         <div class="form-row">
           <fieldset class="form-group col-3">
-              <label for="for_estate">Entrada</label>
+              <label for="for_shift_start_date">Entrada</label>
               <input type="date" class="form-control" wire:model="shift_start_date" id="shift_start_date">
           </fieldset>
           <fieldset class="form-group col">
-              <label for="for_estate">Observación</label>
+              <label for="for_observation">Observación</label>
               <input type="text" class="form-control" wire:model="observation" id="observation">
           </fieldset>
           <fieldset class="form-group col">
-              <label for="for_estate"><br/></label>
+              <label for="for_label"><br/></label>
 
               @can('Service Request: fulfillments rrhh')
                 <button type="button" class="btn btn-primary form-control add-row" wire:click="save()">Ingresar</button>

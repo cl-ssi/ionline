@@ -230,7 +230,7 @@
         <tr>
           <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
+          <td style="text-align:center">{{$ServiceRequest->profession->category}} ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}})</td>
           <td style="text-align:center">{{$ServiceRequest->weekly_hours}}</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
@@ -254,7 +254,7 @@
         <tr>
           <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
+          <td style="text-align:center">{{$ServiceRequest->profession->category}} ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}})</td>
           <td style="text-align:center">{{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
@@ -276,7 +276,7 @@
         <tr>
           <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->estate}} ({{$ServiceRequest->rrhh_team}})</td>
+          <td style="text-align:center">{{$ServiceRequest->profession->category}} ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}})</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
@@ -307,9 +307,9 @@
       <p class="justify">
         <strong>PRIMERO:</strong>
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-        Don {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
+        Don {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(84,now(),['manager'])->position}} del Hospital “Dr. Ernesto Torres Galdames” de Iquique, contrata a {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Hospital de Iquique bajo la modalidad de Honorarios a Suma Alzada.
         @else
-        D. {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}} del Servicio de Salud Iquique de Iquique, contrata a {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->rrhh_team}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
+        D. {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->user->FullNameUpper}}, en su calidad de {{App\Rrhh\Authority::getAuthorityFromDate(1,now(),['manager'])->position}} del Servicio de Salud Iquique de Iquique, contrata a {{$ServiceRequest->employee->getFullNameAttribute()}}, ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}), para que preste servicios en el {{$ServiceRequest->responsabilityCenter->name}} del Servicio de Salud Iquique bajo la modalidad de Honorarios a Suma Alzada.
         @endif
       </p>
 
@@ -545,20 +545,20 @@
 
         Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador,
         se indica con el fin de verificar la realización de éstos, sin que altere la naturaleza
-        jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R., 
-        Si durante una jornada de trabajo existiese un cambio de hora, se pagarán las horas efectivamente trabajadas. 
+        jurídica del convenio, en virtud del Dictamen N°26.092/2017 de la C.G.R.,
+        Si durante una jornada de trabajo existiese un cambio de hora, se pagarán las horas efectivamente trabajadas.
         Los atrasos superiores a una hora, serán descontados de la cuota mensual correspondiente,
         como también los días de inasistencia, los cuales deberán quedar informados en el respectivo
-        informe de prestaciones mensual. 
+        informe de prestaciones mensual.
         Los reiterados atrasos e inasistencias deberán ser amonestados.
       </p>
       @elseif($ServiceRequest->program_contract_type == "Horas")
       @if($ServiceRequest->estate == "Profesional Médico")
       <p class="justify">
-        <strong>DÉCIMO:</strong> Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador, 
-        se indican con el fin de verificar la realización de éstos, sin que se altere la naturaleza jurídica del convenio, 
-        en virtud del Dictamen N°26.092/2017 de la C.G.R., 
-        si durante una jornada de trabajo existiese un cambio de hora, se pagarán las horas efectivamente trabajadas. 
+        <strong>DÉCIMO:</strong> Se deja establecido que, el horario en el cual debe realizar sus servicios el prestador,
+        se indican con el fin de verificar la realización de éstos, sin que se altere la naturaleza jurídica del convenio,
+        en virtud del Dictamen N°26.092/2017 de la C.G.R.,
+        si durante una jornada de trabajo existiese un cambio de hora, se pagarán las horas efectivamente trabajadas.
         Los atrasos superiores a una hora, serán descontados de sus horas realizadas.
       </p>
       @else
