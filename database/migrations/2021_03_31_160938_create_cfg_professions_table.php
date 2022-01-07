@@ -16,7 +16,8 @@ class CreateCfgProfessionTable extends Migration
         Schema::create('cfg_professions', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('category')->nullable();;
+            $table->string('category')->nullable();
+            $table->string('estamento')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
