@@ -15,7 +15,7 @@ class PrefinanceAuthorization extends Component
     public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $rejectedComment,
            $lstBudgetItem, $program, $sigfe, $codigo;
     public $arrayItemRequest = [['budgetId' => '']];
-
+    public $round_trips, $baggages;
 
     protected $rules = [
         'rejectedComment' => 'required|min:6',
@@ -28,9 +28,11 @@ class PrefinanceAuthorization extends Component
     ];
 
 
-    public function mount(RequestForm $requestForm, $eventType) {
+    public function mount(RequestForm $requestForm, $eventType, $roundTrips, $baggages) {
       $this->eventType          = $eventType;
       $this->requestForm        = $requestForm;
+      $this->round_trips        = $roundTrips;
+      $this->baggages           = $baggages;
       $this->rejectedComment    = '';
       $this->codigo             = '';
       $this->lstBudgetItem      = BudgetItem::all();

@@ -104,23 +104,28 @@ class RequestFormController extends Controller {
     }
 
 
-    public function edit(RequestForm $requestForm) {
-        if($requestForm->request_user_id != auth()->user()->id){
-          session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO pertenece a Usuario: '.auth()->user()->getFullNameAttribute());
-          return redirect()->route('request_forms.my_forms');
-        }
-        if($requestForm->eventRequestForms->first()->status != 'pending'){
-          session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO puede ser Modificado!');
-          return redirect()->route('request_forms.my_forms');
-        }
-        //Obtiene la Autoridad de la Unidad Organizacional del usuario registrado, en la fecha actual.
-        $manager = Authority::getAuthorityFromDate(auth()->user()->organizationalUnit->id, Carbon::now(), 'manager');
-        if(is_null($manager))
-            $manager= '<h6 class="text-danger">'.auth()->user()->organizationalUnit->name.', no registra una Autoridad.</h6>';
-        else
-            $manager = $manager->user->getFullNameAttribute();
-        $requestForms = RequestForm::all();
-        return view('request_form.edit', compact('requestForm', 'manager', 'requestForms'));
+    // public function edit(RequestForm $requestForm) {
+    //     if($requestForm->request_user_id != auth()->user()->id){
+    //       session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO pertenece a Usuario: '.auth()->user()->getFullNameAttribute());
+    //       return redirect()->route('request_forms.my_forms');
+    //     }
+    //     if($requestForm->eventRequestForms->first()->status != 'pending'){
+    //       session()->flash('danger', 'Formulario de Requerimiento N° '.$requestForm->id.' NO puede ser Modificado!');
+    //       return redirect()->route('request_forms.my_forms');
+    //     }
+    //     //Obtiene la Autoridad de la Unidad Organizacional del usuario registrado, en la fecha actual.
+    //     $manager = Authority::getAuthorityFromDate(auth()->user()->organizationalUnit->id, Carbon::now(), 'manager');
+    //     if(is_null($manager))
+    //         $manager= '<h6 class="text-danger">'.auth()->user()->organizationalUnit->name.', no registra una Autoridad.</h6>';
+    //     else
+    //         $manager = $manager->user->getFullNameAttribute();
+    //     $requestForms = RequestForm::all();
+    //     return view('request_form.edit', compact('requestForm', 'manager', 'requestForms'));
+    // }
+
+    public function edit(RequestForm $requestForm){
+        // $requestForm=null;
+        return  view('request_form.create', compact('requestForm'));
     }
 
     public function sign(RequestForm $requestForm, $eventType)
