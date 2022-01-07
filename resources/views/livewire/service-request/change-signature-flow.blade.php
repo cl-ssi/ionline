@@ -1,11 +1,11 @@
 <div>
 <div class="row">
   <fieldset class="form-group col-2">
-      <label for="for_estate">Id solicitud</label>
+      <label for="for_text">Id solicitud</label>
       <input type="text" class="form-control" wire:model="service_request_id">
   </fieldset>
   <fieldset class="form-group col-2">
-      <label for="for_estate"><br/></label>
+      <label for="for_button"><br/></label>
       <button type="button" class="btn btn-primary form-control" wire:click="search()">Buscar</button>
   </fieldset>
 </div>
