@@ -339,7 +339,7 @@ class MonthlyQuotes extends Component
                 if ($diff_in_months < 1) {
                     $string = "1 cuota de $";
                     $string .= number_format($serviceRequest->gross_amount);
-                    $valores_mensualizados[$serviceRequest->start_date->month] = number_format($this->monto_con_inasistencias(false, $serviceRequest->start_date->month, $serviceRequest->gross_amount));
+                    $valores_mensualizados[$serviceRequest->start_date->month] = number_format($this->monto_con_inasistencias(false, $serviceRequest->start_date->month, $serviceRequest->net_amount));
 
                 } else {
 

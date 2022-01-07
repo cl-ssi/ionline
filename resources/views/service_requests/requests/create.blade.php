@@ -310,7 +310,7 @@
 	
 
 
-
+	{{--
 	<div class="form-row">
 
 		<fieldset class="form-group col-12 col-md-3">
@@ -387,9 +387,9 @@
 
 	</div>
 
-	
+	--}}
 
-	
+
 
 	<div class="form-row" id="div_objectives" style="display: none">
 		<fieldset class="form-group col">
