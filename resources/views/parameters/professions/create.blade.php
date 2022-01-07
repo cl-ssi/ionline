@@ -12,27 +12,40 @@
     @csrf
     @method('POST')
 
-    <div class="row">
+    <div class="form-row">
 
-    <fieldset class="form-group col-12 col-md-3">
+        <fieldset class="form-group col-12 col-md-4">
             <label for="for_name">Nombre*</label>
             <input type="text" class="form-control" id="for_name" name="name"required>
-        </fieldset>        
+        </fieldset>
 
         <fieldset class="form-group col-12 col-md-3">
-            <label for="for_category">Categoría</label>
-            <select class="form-control" name="category" id="for_category" require>
+            <label for="for_category">Categoría*</label>
+            <select class="form-control" name="category" id="for_category" required>
                 <option value=""></option>
                 <option value="A">A (Medicos, Odontologos, Quimicos)</option>
                 <option value="B">B (Profesionales)</option>
                 <option value="C">C (Técnicos Nivel Superior)</option>
-                <option value="D">D (Técnicos Paramédicos)</option>
+                <option value="D">D (Técnicos Nivel Medio)</option>
                 <option value="E">E (Administrativos)</option>
-                <option value="F">F (Choferes)</option>
+                <option value="F">F (Auxiliares, Choferes)</option>
             </select>
         </fieldset>
+
+
+        <fieldset class="form-group col-12 col-md-4">
+            <label for="for_estamento">Estamento*</label>
+            <select name="estamento" class="form-control" id="for_estamento" required>
+                <option value=""></option>
+                <option value="Ley 19.664">Ley 19.664 Médico/Farmacéutico/Odontólogo</option>
+                <option value="Profesional">Profesional</option>
+                <option value="Técnico">Técnico</option>
+                <option value="Administrativo">Administrativo</option>
+                <option value="Auxiliar">Auxiliar</option>
+            </select>
+        </fieldset>
+
     </div>
-    
 
     <button type="submit" class="btn btn-primary">Guardar</button>
 

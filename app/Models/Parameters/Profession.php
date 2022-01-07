@@ -12,8 +12,7 @@ class Profession extends Model
     public $table = 'cfg_professions';
 
     protected $fillable = [
-        'name', 'category'
+        'name', 'category', 'estamento'
     ];
-
 
 }
