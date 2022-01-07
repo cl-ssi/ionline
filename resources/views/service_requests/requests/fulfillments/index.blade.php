@@ -31,7 +31,7 @@
         </fieldset>
 
         <fieldset class="form-group col-6 col-md">
-            <label>Estam.</label>
+            <!-- <label>Estam.</label>
             <select class="form-control" data-live-search="true" name="estate" data-size="5">
                 <option value="">Ninguno</option>
                 <option value="Profesional Médico" @if($request->estate == "Profesional Médico") selected @endif>Profesional Médico</option>
@@ -42,6 +42,13 @@
                 <option value="Odontólogo" @if($request->estate == "Odontólogo") selected @endif>Odontólogo</option>
                 <option value="Bioquímico" @if($request->estate == "Bioquímico") selected @endif>Bioquímico</option>
                 <option value="Auxiliar" @if($request->estate == "Auxiliar") selected @endif>Auxiliar</option>
+            </select> -->
+            <label>Profesión</label>
+            <select class="form-control selectpicker" data-live-search="true" name="profession_id" data-size="5">
+              <option value="">Todos</option>
+              @foreach($professions as $key => $profession)
+                <option value="{{$profession->id}}" @if($profession->id == $request->profession_id) selected @endif>{{$profession->name}}</option>
+              @endforeach
             </select>
         </fieldset>
 

@@ -9,6 +9,7 @@ use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Fulfillment;
 use App\Models\ServiceRequests\FulfillmentItem;
 use App\Models\ServiceRequests\ShiftControl;
+use App\Models\Parameters\Profession;
 use App\Rrhh\OrganizationalUnit;
 use DateTime;
 use DatePeriod;
@@ -34,7 +35,8 @@ class FulfillmentController extends Controller
 
         $responsability_center_ou_id = $request->responsability_center_ou_id;
         $program_contract_type = $request->program_contract_type;
-        $estate = $request->estate;
+        // $estate = $request->estate;
+        $profession_id = $request->profession_id;
         $name = $request->name;
         $id = $request->id;
 
@@ -60,9 +62,12 @@ class FulfillmentController extends Controller
                                           ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
                                                  return $q->where('program_contract_type',$program_contract_type);
                                                })
-                                          ->when($estate != NULL, function ($q) use ($estate) {
-                                                return $q->where('estate',$estate);
-                                               })
+                                          // ->when($estate != NULL, function ($q) use ($estate) {
+                                          //       return $q->where('estate',$estate);
+                                          //      })
+                                          ->when($profession_id != NULL, function ($q) use ($profession_id) {
+                                            return $q->where('profession_id', $profession_id);
+                                          })
                                            ->when(($name != NULL), function ($q) use ($name) {
                                                    return $q->whereHas("employee", function($subQuery) use ($name){
                                                               $subQuery->where('name','LIKE','%'.$name.'%');
@@ -92,9 +97,12 @@ class FulfillmentController extends Controller
                                           ->when($program_contract_type != NULL, function ($q) use ($program_contract_type) {
                                                  return $q->where('program_contract_type',$program_contract_type);
                                                })
-                                           ->when($estate != NULL, function ($q) use ($estate) {
-                                                 return $q->where('estate',$estate);
-                                                })
+                                           // ->when($estate != NULL, function ($q) use ($estate) {
+                                           //       return $q->where('estate',$estate);
+                                           //      })
+                                           ->when($profession_id != NULL, function ($q) use ($profession_id) {
+                                             return $q->where('profession_id', $profession_id);
+                                           })
                                            ->when(($name != NULL), function ($q) use ($name) {
                                                    return $q->whereHas("employee", function($subQuery) use ($name){
                                                               $subQuery->where('name','LIKE','%'.$name.'%');
@@ -143,8 +151,9 @@ class FulfillmentController extends Controller
         }
 
         $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
+        $professions = Profession::orderBy('name', 'ASC')->get();
 
-        return view('service_requests.requests.fulfillments.index',compact('serviceRequests','responsabilityCenters','request'));
+        return view('service_requests.requests.fulfillments.index',compact('serviceRequests','responsabilityCenters','request','professions'));
     }
 
     /**
