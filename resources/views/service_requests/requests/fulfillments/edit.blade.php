@@ -96,7 +96,7 @@
 
   <fieldset class="form-group col-12 col-md-3">
       <label for="for_end_date">Estamento</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->profession->category}}" disabled>
+      <input type="text" class="form-control" value="{{$serviceRequest->profession->estamento}}" disabled>
   </fieldset>
 
 </div>
