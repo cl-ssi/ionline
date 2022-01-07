@@ -20,7 +20,7 @@
                 <option value="">Seleccionar</option>
                 @foreach($establishments as $establishment)
                 <option value="{{$establishment->id}}">{{$establishment->name}}</option>
-                @endforeach                
+                @endforeach
             </select>
         </fieldset>
 
