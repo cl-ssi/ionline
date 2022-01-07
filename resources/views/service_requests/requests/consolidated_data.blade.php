@@ -97,7 +97,11 @@
 								<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
 								<td nowrap>{{$serviceRequest->programm_name}}</td>
 								<td nowrap>{{$serviceRequest->digera_strategy}}</td>
-								<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+								@if($serviceRequest->profession)
+									<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+								@else
+									<td nowrap>{{$serviceRequest->rrhh_team}}</td>
+								@endif
 								<td nowrap>{{$serviceRequest->weekly_hours}}</td>
 								<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
 								@if($serviceRequest->profession)
@@ -155,7 +159,11 @@
 										<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
 										<td nowrap>{{$serviceRequest->programm_name}}</td>
 										<td nowrap>{{$serviceRequest->digera_strategy}}</td>
-										<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+										@if($serviceRequest->profession)
+											<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+										@else
+											<td nowrap>{{$serviceRequest->rrhh_team}}</td>
+										@endif
 										<td nowrap>{{$serviceRequest->weekly_hours}}</td>
 										<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
 										@if($serviceRequest->profession)
@@ -211,7 +219,11 @@
 									<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
 									<td nowrap>{{$serviceRequest->programm_name}}</td>
 									<td nowrap>{{$serviceRequest->digera_strategy}}</td>
-									<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+									@if($serviceRequest->profession)
+										<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+									@else
+										<td nowrap>{{$serviceRequest->rrhh_team}}</td>
+									@endif
 									<td nowrap>{{$serviceRequest->weekly_hours}}</td>
 									<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
 									@if($serviceRequest->profession)
@@ -271,7 +283,11 @@
 						<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
 						<td nowrap>{{$serviceRequest->programm_name}}</td>
 						<td nowrap>{{$serviceRequest->digera_strategy}}</td>
-						<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+						@if($serviceRequest->profession)
+							<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+						@else
+							<td nowrap>{{$serviceRequest->rrhh_team}}</td>
+						@endif
 						<td nowrap>{{$serviceRequest->weekly_hours}}</td>
 						<td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
 						@if($serviceRequest->profession)
@@ -369,7 +385,11 @@
 					<td nowrap>@if($serviceRequest->employee->country){{$serviceRequest->employee->country->name}}@endif</td>
           <td nowrap>{{$serviceRequest->programm_name}}</td>
           <td nowrap>{{$serviceRequest->digera_strategy}}</td>
-          <td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+					@if($serviceRequest->profession)
+						<td nowrap>{{$serviceRequest->profession->name}} - {{$serviceRequest->working_day_type}}</td>
+					@else
+						<td nowrap>{{$serviceRequest->rrhh_team}}</td>
+					@endif
           <td nowrap>{{$serviceRequest->weekly_hours}}</td>
           <td nowrap>{{$serviceRequest->responsabilityCenter->name}}</td>
 					@if($serviceRequest->profession)
