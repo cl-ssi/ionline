@@ -12,7 +12,24 @@
           <table class="table table-sm table-bordered">
             <thead>
                 <tr class="table-active">
-                    <th colspan="3">Formulario Contratación de Personal - Solicitud Nº {{ $requestReplacementStaff->id }}</th>
+                    <th colspan="3">Formulario Contratación de Personal - Solicitud Nº {{ $requestReplacementStaff->id }}
+                        @switch($requestReplacementStaff->request_status)
+                            @case('pending')
+                                <span class="badge bg-warning">{{ $requestReplacementStaff->StatusValue }}</span>
+                                @break
+
+                            @case('complete')
+                                <span class="badge bg-success">{{ $requestReplacementStaff->StatusValue }}</span>
+                                @break
+
+                            @case('rejected')
+                                <span class="badge bg-danger">{{ $requestReplacementStaff->StatusValue }}</span>
+                                @break
+
+                            @default
+                                Default case...
+                        @endswitch
+                    </th>
                 </tr>
             </thead>
               <tbody>
@@ -206,7 +223,7 @@
                           <tbody>
                               @foreach($requestReplacementStaff->technicalEvaluation->applicants->sortByDesc('score') as $applicant)
                               <tr class="{{ ($applicant->selected == 1)?'table-success':''}}">
-                                  <td>{{ $applicant->replacement_staff->FullName }}</td>
+                                  <td><a href="{{ route('replacement_staff.show_replacement_staff', $applicant->replacementStaff) }}" target="_blank">{{ $applicant->replacementStaff->FullName }}</a></td>
                                   <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
                                   <td class="text-center">{{ $applicant->technical_evaluation_score }} <br> {{ $applicant->TechEvaScore }}</td>
                                   <td>{{ $applicant->observations }}</td>
