@@ -284,103 +284,7 @@
 
   </div>
 
-  <!-- <div class="card" id="control_turnos">
-    <div class="card-header">
-      Control de Turnos
-    </div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item">
-        <div class="form-row">
-          <fieldset class="form-group col-3">
-              <label for="for_estate">Entrada</label>
-              <input type="date" class="form-control" name="shift_start_date" id="shift_start_date">
-          </fieldset>
-          <fieldset class="form-group col">
-              <label for="for_estate">Hora</label>
-              <input type="time" class="form-control" name="start_hour" id="start_hour">
-          </fieldset>
-          <fieldset class="form-group col-3">
-              <label for="for_estate">Salida</label>
-              <input type="date" class="form-control" name="shift_end_date" id="shift_end_date">
-          </fieldset>
-          <fieldset class="form-group col">
-              <label for="for_estate">Hora</label>
-              <input type="time" class="form-control" name="end_hour" id="end_hour">
-          </fieldset>
-          <fieldset class="form-group col">
-              <label for="for_estate">Observación</label>
-              <input type="text" class="form-control" name="observation" id="observation">
-          </fieldset>
-          <fieldset class="form-group col">
-              <label for="for_estate"><br/></label>
 
-              @can('Service Request: additional data rrhh')
-
-                <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
-
-              @else
-
-                @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-                  @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-                    <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
-                  @else
-                    <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate">Ingresar</button>
-                  @endif
-                @else
-                  <button type="button" class="btn btn-primary form-control add-row" id="shift_button_add" formnovalidate="formnovalidate" disabled>Ingresar</button>
-                @endif
-
-              @endcan
-
-          </fieldset>
-        </div>
-
-        <table class="table table-sm">
-            <thead>
-                <tr>
-                    <th>Select</th>
-                    <th>Entrada</th>
-                    <th>H.Inicio</th>
-                    <th>Salida</th>
-                    <th>H.Término</th>
-                    <th>Observación</th>
-                </tr>
-            </thead>
-            <tbody>
-              @foreach($serviceRequest->shiftControls as $key => $shiftControl)
-                <tr>
-                  <td><input type='checkbox' name='record'></td>
-                  <td><input type="hidden" class="form-control" name="shift_start_date[]" value="{{Carbon\Carbon::parse($shiftControl->start_date)->format('Y-m-d')}}">{{Carbon\Carbon::parse($shiftControl->start_date)->format('Y-m-d')}}</td>
-                  <td><input type="hidden" class="form-control" name="shift_start_hour[]" value="{{Carbon\Carbon::parse($shiftControl->start_date)->format('H:i')}}">{{Carbon\Carbon::parse($shiftControl->start_date)->format('H:i')}}</td>
-                  <td><input type="hidden" class="form-control" name="shift_end_date[]" value="{{Carbon\Carbon::parse($shiftControl->end_date)->format('Y-m-d')}}">{{Carbon\Carbon::parse($shiftControl->end_date)->format('Y-m-d')}}</td>
-                  <td><input type="hidden" class="form-control" name="shift_end_hour[]" value="{{Carbon\Carbon::parse($shiftControl->end_date)->format('H:i')}}">{{Carbon\Carbon::parse($shiftControl->end_date)->format('H:i')}}</td>
-                  <td><input type="hidden" class="form-control" name="shift_observation[]" value="{{$shiftControl->observation}}">{{$shiftControl->observation}}</td>
-                </tr>
-              @endforeach
-            </tbody>
-        </table>
-
-        @can('Service Request: additional data rrhh')
-
-          <button type="button" class="btn btn-danger delete-row">Eliminar filas</button>
-
-        @else
-
-          @if($serviceRequest->where('user_id', Auth::user()->id)->orwhere('responsable_id',Auth::user()->id)->count() > 0)
-            @if($serviceRequest->SignatureFlows->where('type','!=','creador')->whereNotNull('status')->count() > 0)
-              <button type="button" class="btn btn-danger delete-row" disabled>Eliminar filas</button>
-            @else
-              <button type="button" class="btn btn-danger delete-row">Eliminar filas</button>
-            @endif
-          @else
-            <button type="button" class="btn btn-danger delete-row" disabled>Eliminar filas</button>
-          @endif
-
-        @endcan
-
-      </li>
-    </ul>
-  </div> -->
 
 @if($serviceRequest->fulfillments->count()>0)
   @if($serviceRequest->working_day_type != "DIARIO")
@@ -494,6 +398,8 @@
 
 	</div>
 
+
+	{{--
 	<div class="form-row">
 
 		<fieldset class="form-group col-12 col-md">
@@ -548,12 +454,11 @@
 			<option value="Trabajador Social" @if($serviceRequest->rrhh_team == "Trabajador Social") selected @endif>Trabajador Social</option>
 
 			<option value="Nutricionista Diurno" @if($serviceRequest->rrhh_team == "Nutricionista Diurno") selected @endif>Nutricionista Diurno</option>
-						<option value="Prevencionista de Riesgo" @if($serviceRequest->rrhh_team == "Prevencionista de Riesgo") selected @endif>Prevencionista de Riesgo</option>
+			<option value="Prevencionista de Riesgo" @if($serviceRequest->rrhh_team == "Prevencionista de Riesgo") selected @endif>Prevencionista de Riesgo</option>
 
 			<option value="Nutricionista turno" @if($serviceRequest->rrhh_team == "Nutricionista turno") selected @endif>Nutricionista turno</option>
 			<option value="Informático" @if($serviceRequest->rrhh_team == "Informático") selected @endif>Informático</option>
 			<option value="Ingeniero" @if($serviceRequest->rrhh_team == "Ingeniero") selected @endif>Ingeniero</option>
-
 
 			<option value="Técnico en rehabilitación" @if($serviceRequest->rrhh_team == "Técnico en rehabilitación") selected @endif>Técnico en rehabilitación</option>
 			<option value="Psiquiatra" @if($serviceRequest->rrhh_team == "Psiquiatra") selected @endif>Psiquiatra</option>
@@ -565,18 +470,18 @@
 		</fieldset>
 
 	</div>
-
+	--}}
 
 	<div class="form-row" id="div_objectives" style="display: none">
 		<fieldset class="form-group col">
-			<label for="for_estate">Objetivos</label>
+			<label for="for_objectives">Objetivos</label>
 			<textarea id="objectives" name="objectives" class="form-control" rows="4" cols="50">{{ $serviceRequest->objectives }}</textarea>
 		</fieldset>
 	</div>
 
 	<!-- <div class="form-row" id="div_resolve">
 		<fieldset class="form-group col">
-				<label for="for_estate">Resuelvo</label>
+				<label for="for_resolve">Resuelvo</label>
 				<textarea id="resolve" name="resolve" class="form-control" rows="4" cols="50">{{ $serviceRequest->resolve }}</textarea>
 		</fieldset>
 	</div> -->
@@ -590,14 +495,14 @@
 
   <div class="form-row">
 		<fieldset class="form-group col">
-				<label for="for_estate">Aguinaldos (se inserta en cláusula 8va)</label>
+				<label for="for_bonus_indications">Aguinaldos (se inserta en cláusula 8va)</label>
 				<textarea name="bonus_indications" class="form-control" rows="4" cols="50">{{ html_entity_decode($serviceRequest->bonus_indications) }}</textarea>
 		</fieldset>
 	</div>
 
   <div class="form-row" id="div_additional_benefits" style="display: none">
 		<fieldset class="form-group col">
-				<label for="for_estate">Beneficios adicionales (se inserta en cláusula 14)</label>
+				<label for="for_additional_benetifs">Beneficios adicionales (se inserta en cláusula 14)</label>
 				<textarea id="additional_benefits" name="additional_benefits" class="form-control" rows="4" cols="50">{{ html_entity_decode($serviceRequest->additional_benefits) }}</textarea>
 
         <button type="button" class="btn btn-outline-primary btn-sm" id="alias_dias_descanzo">Días de descanso</button>
@@ -720,31 +625,31 @@
 
         <div class="form-row">
 
-          <fieldset class="form-group col-6 col-md-3">
-					    <label for="for_net_amount">Monto Mensualizado</label>
-              <input type="text" class="form-control" name="net_amount" value="{{$serviceRequest->net_amount}}" required>
-					</fieldset>
+		<fieldset class="form-group col-6 col-md-3">
+			<label for="for_net_amount">Monto Mensualizado*</label>
+			<input type="text" class="form-control" name="net_amount" value="{{$serviceRequest->net_amount}}" required>
+		</fieldset>
 
-          <fieldset class="form-group col-6 col-md-3">
-					    <label for="for_gross_amount">Monto Bruto/Valor Hora</label>
-              <input type="text" class="form-control" name="gross_amount" value="{{$serviceRequest->gross_amount}}">
-					</fieldset>
+		<fieldset class="form-group col-6 col-md-3">
+			<label for="for_gross_amount">Monto Bruto/Valor Hora</label>
+			<input type="text" class="form-control" name="gross_amount" value="{{$serviceRequest->gross_amount}}">
+		</fieldset>
 
-          <fieldset class="form-group col-6 col-md-2">
-              <label for="for_sirh_contract_registration">Registrado en SIRH</label>
-              <select name="sirh_contract_registration" class="form-control">
-                <option value=""></option>
-                <option value="1"  @if($serviceRequest->sirh_contract_registration == '1') selected @endif>Sí</option>
-                <option value="0"  @if($serviceRequest->sirh_contract_registration == '0') selected @endif>No</option>
-              </select>
-          </fieldset>
+		<fieldset class="form-group col-6 col-md-2">
+			<label for="for_sirh_contract_registration">Registrado en SIRH</label>
+			<select name="sirh_contract_registration" class="form-control">
+				<option value=""></option>
+				<option value="1"  @if($serviceRequest->sirh_contract_registration == '1') selected @endif>Sí</option>
+				<option value="0"  @if($serviceRequest->sirh_contract_registration == '0') selected @endif>No</option>
+			</select>
+		</fieldset>
 
-          <fieldset class="form-group col">
-            <label for="">&nbsp;</label>
-            <div>
-            <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
-          </fieldset>
+		<fieldset class="form-group col">
+			<label for="">&nbsp;</label>
+			<div>
+				<button type="submit" class="btn btn-primary">Guardar</button>
+			</div>
+		</fieldset>
 
         </div>
 
@@ -766,108 +671,43 @@
   </form>
   @endcan
 
-  <!--
-  @canany(['Service Request: additional data finanzas'])
-  <form method="POST" action="{{ route('rrhh.service-request.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
-  @csrf
-  @method('PUT')
+  
 
-  <div class="card border-info mb-3">
-    <div class="card-header bg-info text-white">
-      Datos adicionales - Finanzas
-    </div>
-      <div class="card-body">
+	@canany(['Service Request: additional data oficina partes'])
+	<form method="POST" action="{{ route('rrhh.service-request.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
+		@csrf
+		@method('PUT')
 
-        <div class="form-row">
-          <fieldset class="form-group col-5 col-md-2">
-					    <label for="for_resolution_number">N° Resolución</label>
-              <input type="text" class="form-control" disabled name="resolution_number" value="{{$serviceRequest->resolution_number}}">
+		<div class="card border-success mb-3">
+			<div class="card-header bg-success text-white">
+				Datos adicionales - Oficina de Partes
+			</div>
+			<div class="card-body">
+				<div class="form-row">
+
+					<fieldset class="form-group col-5 col-md-2">
+						<label for="for_resolution_number">N° Resolución</label>
+						<input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
 					</fieldset>
 
-          <fieldset class="form-group col-7 col-md-3">
-              <label for="for_resolution_date">Fecha Resolución</label>
-              <input type="date" class="form-control" id="for_resolution_date" disabled name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
-          </fieldset>
-        </div>
-
-        <div class="form-row">
-
-          <fieldset class="form-group col-6 col-md-2">
-              <label for="for_bill_number">N° Boleta</label>
-              <input type="text" class="form-control" name="bill_number" value="{{$serviceRequest->bill_number}}">
-          </fieldset>
-
-          <fieldset class="form-group col-6 col-md-2">
-              <label for="for_total_hours_paid">Tot. hrs pagadas per.</label>
-              <input type="text" class="form-control" name="total_hours_paid" value="{{$serviceRequest->total_hours_paid}}">
-          </fieldset>
-
-          <fieldset class="form-group col-6 col-md-2">
-              <label for="for_total_paid">Total pagado</label>
-              <input type="text" class="form-control" name="total_paid" value="{{$serviceRequest->total_paid}}">
-          </fieldset>
-
-          <fieldset class="form-group col-6 col-md-3">
-              <label for="for_payment_date">Fecha pago</label>
-              <input type="date" class="form-control" id="for_payment_date" name="payment_date" required @if($serviceRequest->payment_date) value="{{$serviceRequest->payment_date->format('Y-m-d')}}" @endif>
-          </fieldset>
-
-          <fieldset class="form-group col-6 col-md-3">
-            <label for="">&nbsp;</label>
-            <div>
-              <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
-          </fieldset>
-
-        </div>
-
-
-
-      </div>
-
-  </div>
-
-  <br>
-  </form>
-  @endcan
-  -->
-
-
-  @canany(['Service Request: additional data oficina partes'])
-  <form method="POST" action="{{ route('rrhh.service-request.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
-  @csrf
-  @method('PUT')
-
-  <div class="card border-success mb-3">
-    <div class="card-header bg-success text-white">
-      Datos adicionales - Oficina de Partes
-    </div>
-      <div class="card-body">
-
-        <div class="form-row">
-
-          <fieldset class="form-group col-5 col-md-2">
-					    <label for="for_resolution_number">N° Resolución</label>
-              <input type="text" class="form-control" name="resolution_number" value="{{$serviceRequest->resolution_number}}">
+					<fieldset class="form-group col-7 col-md-3">
+						<label for="for_resolution_date">Fecha Resolución</label>
+						<input type="date" class="form-control" id="for_resolution_date" name="resolution_date" 
+							@if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
 					</fieldset>
 
-          <fieldset class="form-group col-7 col-md-3">
-              <label for="for_resolution_date">Fecha Resolución</label>
-              <input type="date" class="form-control" id="for_resolution_date" name="resolution_date" @if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
-          </fieldset>
+					<fieldset class="form-group col-5 col-md-2">
+						<label for="">&nbsp;</label>
+						<div>
+							<button type="submit" class="btn btn-primary">Guardar</button>
+						</div>
+					</fieldset>
+				</div>
+			</div>
+		</div>
 
-          <fieldset class="form-group col-5 col-md-2">
-            <label for="">&nbsp;</label>
-            <div>
-            <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
-          </fieldset>
-        </div>
-      </div>
-  </div>
-
-  </form>
-  @endcan
+	</form>
+	@endcan
 
 <hr>
 
@@ -1157,60 +997,60 @@
     // });
 
     $('#program_contract_type').on('change', function() {
-			if (this.value == "Horas") {
-				$('#for_daily_hours').val("");
-				$('#for_nightly_hours').val("");
-				$('#for_daily_hours').attr('readonly', true);
-				$('#for_nightly_hours').attr('readonly', true);
-				$('#for_weekly_hours').attr('disabled', 'disabled');
-				$("#control_turnos").show();
+		if (this.value == "Horas") {
+			$('#for_daily_hours').val("");
+			$('#for_nightly_hours').val("");
+			$('#for_daily_hours').attr('readonly', true);
+			$('#for_nightly_hours').attr('readonly', true);
+			$('#for_weekly_hours').attr('disabled', 'disabled');
+			$("#control_turnos").show();
 
-				$("#working_day_type option[value='DIURNO']").hide();
-				$("#working_day_type option[value='TERCER TURNO']").hide();
-				$("#working_day_type option[value='TERCER TURNO - MODIFICADO']").hide();
-				$("#working_day_type option[value='CUARTO TURNO']").hide();
-				$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").hide();
-        $("#working_day_type option[value='DIARIO']").hide();
+			$("#working_day_type option[value='DIURNO']").hide();
+			$("#working_day_type option[value='TERCER TURNO']").hide();
+			$("#working_day_type option[value='TERCER TURNO - MODIFICADO']").hide();
+			$("#working_day_type option[value='CUARTO TURNO']").hide();
+			$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").hide();
+			$("#working_day_type option[value='DIARIO']").hide();
 
-				$("#working_day_type option[value='DIURNO PASADO A TURNO']").show();
-				$("#working_day_type option[value='HORA MÉDICA']").show();
-				$("#working_day_type option[value='HORA EXTRA']").show();
-				$("#working_day_type option[value='TURNO EXTRA']").show();
+			$("#working_day_type option[value='DIURNO PASADO A TURNO']").show();
+			$("#working_day_type option[value='HORA MÉDICA']").show();
+			$("#working_day_type option[value='HORA EXTRA']").show();
+			$("#working_day_type option[value='TURNO EXTRA']").show();
 
-				$("#contractual_condition").prop('required',true);
+			$("#contractual_condition").prop('required',true);
 
-			}else{
-				$('#for_daily_hours').attr('readonly', false);
-				$('#for_nightly_hours').attr('readonly', false);
-				$('#for_weekly_hours').removeAttr('disabled');
-				$("#control_turnos").hide();
+		}else{
+			$('#for_daily_hours').attr('readonly', false);
+			$('#for_nightly_hours').attr('readonly', false);
+			$('#for_weekly_hours').removeAttr('disabled');
+			$("#control_turnos").hide();
 
-				$("#working_day_type option[value='DIURNO']").show();
-				$("#working_day_type option[value='TERCER TURNO']").show();
-				$("#working_day_type option[value='TERCER TURNO - MODIFICADO']").show();
-				$("#working_day_type option[value='CUARTO TURNO']").show();
-				$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").show();
-        $("#working_day_type option[value='DIARIO']").show();
+			$("#working_day_type option[value='DIURNO']").show();
+			$("#working_day_type option[value='TERCER TURNO']").show();
+			$("#working_day_type option[value='TERCER TURNO - MODIFICADO']").show();
+			$("#working_day_type option[value='CUARTO TURNO']").show();
+			$("#working_day_type option[value='CUARTO TURNO - MODIFICADO']").show();
+			$("#working_day_type option[value='DIARIO']").show();
 
-				$("#working_day_type option[value='DIURNO PASADO A TURNO']").hide();
-				$("#working_day_type option[value='HORA MÉDICA']").hide();
-				$("#working_day_type option[value='HORA EXTRA']").hide();
-				$("#working_day_type option[value='TURNO EXTRA']").hide();
+			$("#working_day_type option[value='DIURNO PASADO A TURNO']").hide();
+			$("#working_day_type option[value='HORA MÉDICA']").hide();
+			$("#working_day_type option[value='HORA EXTRA']").hide();
+			$("#working_day_type option[value='TURNO EXTRA']").hide();
 
-				$("#contractual_condition").prop('required',false);
-			}
-		});
+			$("#contractual_condition").prop('required',false);
+		}
+	});
 
-		$('#estate').on('change', function() {
-			if (this.value == "Profesional" || this.value == "Técnico" || this.value == "Administrativo" || this.value == "Auxiliar") {
-				$('#programm_name').val('Covid19 No Médicos');
-				$('#programm_name').selectpicker('refresh');
-			}
-			if (this.value == "Profesional Médico" || this.value == "Farmaceutico" || this.value == "Odontólogo" || this.value == "Bioquímico") {
-				$('#programm_name').val('Covid19 Médicos');
-				$('#programm_name').selectpicker('refresh');
-			}
-		});
+		// $('#estate').on('change', function() {
+		// 	if (this.value == "Profesional" || this.value == "Técnico" || this.value == "Administrativo" || this.value == "Auxiliar") {
+		// 		$('#programm_name').val('Covid19 No Médicos');
+		// 		$('#programm_name').selectpicker('refresh');
+		// 	}
+		// 	if (this.value == "Profesional Médico" || this.value == "Farmaceutico" || this.value == "Odontólogo" || this.value == "Bioquímico") {
+		// 		$('#programm_name').val('Covid19 Médicos');
+		// 		$('#programm_name').selectpicker('refresh');
+		// 	}
+		// });
 
 		$('#working_day_type').on('change', function() {
 			$('#schedule_detail').attr('disabled', 'disabled');
@@ -1241,24 +1081,24 @@
 
 		$('#responsability_center_ou_id').on('change', function() {
 			if ($("#responsability_center_ou_id option:selected").text() == "Departamento de Salud Ocupacional" ||
-		      $("#responsability_center_ou_id option:selected").text() == "Extensión Hospital -Estadio" ||
-					$("#responsability_center_ou_id option:selected").text() == "Sección Administrativa Honorarios Covid" ||
-					$("#responsability_center_ou_id option:selected").text() == "Servicio de Cirugía" ||
-					$("#responsability_center_ou_id option:selected").text() == "Servicio de Ginecología y Obstetricia" ||
-					$("#responsability_center_ou_id option:selected").text() == "Servicio de Medicina" ||
-					$("#responsability_center_ou_id option:selected").text() == "Unidad de Alimentación y Nutrición" ||
-					$("#responsability_center_ou_id option:selected").text() == "Unidad de Gestión de Camas" ||
-					$("#responsability_center_ou_id option:selected").text() == "Unidad de Ginecología" ||
-					$("#responsability_center_ou_id option:selected").text() == "Unidad de Medicina Física y Rehabilitación" ||
-					$("#responsability_center_ou_id option:selected").text() == "Unidad de Movilización" ||
-					$("#responsability_center_ou_id option:selected").text() == "Unidad de Salud Ocupacional" ||
-					$("#responsability_center_ou_id option:selected").text() == "Unidad Imagenología") {
+				$("#responsability_center_ou_id option:selected").text() == "Extensión Hospital -Estadio" ||
+				$("#responsability_center_ou_id option:selected").text() == "Sección Administrativa Honorarios Covid" ||
+				$("#responsability_center_ou_id option:selected").text() == "Servicio de Cirugía" ||
+				$("#responsability_center_ou_id option:selected").text() == "Servicio de Ginecología y Obstetricia" ||
+				$("#responsability_center_ou_id option:selected").text() == "Servicio de Medicina" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad de Alimentación y Nutrición" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad de Gestión de Camas" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad de Ginecología" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad de Medicina Física y Rehabilitación" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad de Movilización" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad de Salud Ocupacional" ||
+				$("#responsability_center_ou_id option:selected").text() == "Unidad Imagenología") {
 				$('#digera_strategy').val('Camas MEDIAS Complejizadas');
 				$('#digera_strategy').selectpicker('refresh');
 			}
 			if ($("#responsability_center_ou_id option:selected").text() == "Servicio de Anestesia y Pabellones" ||
-		      $("#responsability_center_ou_id option:selected").text() == "Servicio Unidad Paciente Crítico Adulto" ||
-					$("#responsability_center_ou_id option:selected").text() == "Servicio Unidad Paciente Crítico Pediatrico") {
+		    $("#responsability_center_ou_id option:selected").text() == "Servicio Unidad Paciente Crítico Adulto" ||
+			$("#responsability_center_ou_id option:selected").text() == "Servicio Unidad Paciente Crítico Pediatrico") {
 				$('#digera_strategy').val('Camas UCI Complejizadas');
 				$('#digera_strategy').selectpicker('refresh');
 			}
@@ -1267,7 +1107,7 @@
 				$('#digera_strategy').selectpicker('refresh');
 			}
 			if ($("#responsability_center_ou_id option:selected").text() == "Subdirección de Gestion Asistencial / Subdirección Médica" ||
-		      $("#responsability_center_ou_id option:selected").text() == "Unidad Laboratorio Clínico") {
+		    $("#responsability_center_ou_id option:selected").text() == "Unidad Laboratorio Clínico") {
 				$('#digera_strategy').val('Refuerzo Laboratorio');
 				$('#digera_strategy').selectpicker('refresh');
 			}
@@ -1276,8 +1116,8 @@
 				$('#digera_strategy').selectpicker('refresh');
 			}
 			if ($("#responsability_center_ou_id option:selected").text() == "Consultorio General Urbano Dr. Hector Reyno" ||
-		      $("#responsability_center_ou_id option:selected").text() == "Servicio de Emergencia Hospitalaria" ||
-					$("#responsability_center_ou_id option:selected").text() == "Servicio Urgencia Ginecoobstetricia") {
+		    $("#responsability_center_ou_id option:selected").text() == "Servicio de Emergencia Hospitalaria" ||
+			$("#responsability_center_ou_id option:selected").text() == "Servicio Urgencia Ginecoobstetricia") {
 				$('#digera_strategy').val('Refuerzo UEH');
 				$('#digera_strategy').selectpicker('refresh');
 			}
@@ -1318,24 +1158,23 @@
   		var value = this.value;
   		if (value == "Suma alzada") {
 
-  			$("#programm_name option[value='Covid19-APS No Médicos']").hide();
-  			$("#programm_name option[value='Covid19-APS Médicos']").hide();
-  			$("#programm_name option[value='Covid19 No Médicos']").hide();
-  			$("#programm_name option[value='Covid19 Médicos']").hide();
-  			$('#digera_strategy').attr('disabled', 'disabled');
+			$("#programm_name option[value='Covid19-APS No Médicos']").hide();
+			$("#programm_name option[value='Covid19-APS Médicos']").hide();
+			$("#programm_name option[value='Covid19 No Médicos']").hide();
+			$("#programm_name option[value='Covid19 Médicos']").hide();
+			$('#digera_strategy').attr('disabled', 'disabled');
 
+			$("#div_hsa_schedule").show();
+			$("#div_covid_schedule").hide();
 
-        $("#div_hsa_schedule").show();
-			  $("#div_covid_schedule").hide();
-
-        $('#objectives').removeAttr('disabled');
-        $('#subt31').removeAttr('disabled');
-        $("#div_subt31").show();
-  			// $('#resolve').removeAttr('disabled');
-  			$('#additional_benefits').removeAttr('disabled');
-  			$("#div_objectives").show();
-  			// $("#div_resolve").show();
-  			$("#div_additional_benefits").show();
+			$('#objectives').removeAttr('disabled');
+			$('#subt31').removeAttr('disabled');
+			$("#div_subt31").show();
+			// $('#resolve').removeAttr('disabled');
+			$('#additional_benefits').removeAttr('disabled');
+			$("#div_objectives").show();
+			// $("#div_resolve").show();
+			$("#div_additional_benefits").show();
 
 
   			if ({{Auth::user()->organizationalUnit->establishment_id}} == 1) {
@@ -1346,13 +1185,13 @@
   				$("#programm_name option[value='LISTA ESPERA']").hide();
   				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
 
-          $("#programm_name option[value='ADP DIRECTOR']").hide();
-          $("#programm_name option[value='SENDA']").hide();
-          $("#programm_name option[value='SENDA LEY ALCOHOLES']").hide();
-          $("#programm_name option[value='SENDA UHCIP']").hide();
-          $("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
-          $("#programm_name option[value='SENADIS']").hide();
-          $("#programm_name option[value='SUBT.31']").hide();
+				$("#programm_name option[value='ADP DIRECTOR']").hide();
+				$("#programm_name option[value='SENDA']").hide();
+				$("#programm_name option[value='SENDA LEY ALCOHOLES']").hide();
+				$("#programm_name option[value='SENDA UHCIP']").hide();
+				$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
+				$("#programm_name option[value='SENADIS']").hide();
+				$("#programm_name option[value='SUBT.31']").hide();
 
   				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").show();
   				$("#programm_name option[value='33 MIL HORAS']").show();
@@ -1364,8 +1203,8 @@
   				$("#programm_name option[value='PABELLON GINE']").show();
   				$("#programm_name option[value='TURNO DE RESIDENCIA']").show();
   			}
-        else
-        {
+			else
+			{
   				$("#programm_name option[value='PRAPS']").show();
   				$("#programm_name option[value='PESPI']").show();
   				$("#programm_name option[value='CHILE CRECE CONTIGO']").show();
@@ -1373,41 +1212,41 @@
   				$("#programm_name option[value='LISTA ESPERA']").show();
   				$("#programm_name option[value='CAMPAÑA INVIERNO']").show();
 
-          $("#programm_name option[value='ADP DIRECTOR']").show();
-          $("#programm_name option[value='SENDA']").show();
-          $("#programm_name option[value='SENDA LEY ALCOHOLES']").show();
-          $("#programm_name option[value='SENDA UHCIP']").show();
-          $("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").show();
-          $("#programm_name option[value='SENADIS']").show();
-          $("#programm_name option[value='SUBT.31']").show();
+				$("#programm_name option[value='ADP DIRECTOR']").show();
+				$("#programm_name option[value='SENDA']").show();
+				$("#programm_name option[value='SENDA LEY ALCOHOLES']").show();
+				$("#programm_name option[value='SENDA UHCIP']").show();
+				$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").show();
+				$("#programm_name option[value='SENADIS']").show();
+				$("#programm_name option[value='SUBT.31']").show();
 
-  				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
-  				$("#programm_name option[value='33 MIL HORAS']").hide();
-  				$("#programm_name option[value='DFL']").hide();
-  				$("#programm_name option[value='TURNOS VACANTES']").hide();
-  				$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
-  				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
-  				$("#programm_name option[value='PABELLON TARDE']").hide();
-  				$("#programm_name option[value='PABELLON GINE']").hide();
-  				$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+				$("#programm_name option[value='CONSULTORIO DE LLAMADA']").hide();
+				$("#programm_name option[value='33 MIL HORAS']").hide();
+				$("#programm_name option[value='DFL']").hide();
+				$("#programm_name option[value='TURNOS VACANTES']").hide();
+				$("#programm_name option[value='OTROS PROGRAMAS HETG']").hide();
+				$("#programm_name option[value='CAMPAÑA INVIERNO']").hide();
+				$("#programm_name option[value='PABELLON TARDE']").hide();
+				$("#programm_name option[value='PABELLON GINE']").hide();
+				$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
   			}
   		}
   		else
   		{
-        $("#div_hsa_schedule").hide();
-			  $("#div_covid_schedule").show();
-        $("#programm_name option[value='Covid19-APS No Médicos']").show();
-  			$("#programm_name option[value='Covid19-APS Médicos']").show();
-  			$("#programm_name option[value='Covid19 No Médicos']").show();
-  			$("#programm_name option[value='Covid19 Médicos']").show();
-  			$('#digera_strategy').removeAttr('disabled');
+			$("#div_hsa_schedule").hide();
+			$("#div_covid_schedule").show();
+			$("#programm_name option[value='Covid19-APS No Médicos']").show();
+			$("#programm_name option[value='Covid19-APS Médicos']").show();
+			$("#programm_name option[value='Covid19 No Médicos']").show();
+			$("#programm_name option[value='Covid19 Médicos']").show();
+			$('#digera_strategy').removeAttr('disabled');
 
-        $('#objectives').attr('disabled', 'disabled');
-  			// $('#resolve').attr('disabled', 'disabled');
-  			$('#additional_benefits').attr('disabled', 'disabled');
-  			$("#div_objectives").hide();
-  			// $("#div_resolve").hide();
-  			$("#div_additional_benefits").hide();
+			$('#objectives').attr('disabled', 'disabled');
+			// $('#resolve').attr('disabled', 'disabled');
+			$('#additional_benefits').attr('disabled', 'disabled');
+			$("#div_objectives").hide();
+			// $("#div_resolve").hide();
+			$("#div_additional_benefits").hide();
 
 
   			$("#programm_name option[value='PRAPS']").hide();
