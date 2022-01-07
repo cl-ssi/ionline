@@ -19,7 +19,7 @@
         </select>
       </fieldset>
       <fieldset class="form-group col-12 col-md">
-        <label for="for_estate">Observación</label>
+        <label for="for_observation">Observación</label>
         <input type="text" class="form-control" name="observation" wire:model.lazy="observation">
       </fieldset>
     </div>
@@ -29,11 +29,11 @@
     @endphp
     <div class="form-row">
       <fieldset class="form-group col-6 col-md-3">
-        <label for="for_estate">Entrada</label>
+        <label for="for_start_date">Entrada</label>
         <input type="date" class="form-control start_date" name="start_date" {{$select_start_date}} wire:model.lazy="start_date" min="{{$anopasado}}-01-01" max="{{$ano}}-12-31"  required>
       </fieldset>
       <fieldset class="form-group col-6 col-md">
-        <label for="for_estate">Hora</label>
+        <label for="for_start_hour">Hora</label>
         <input type="time" class="form-control start_hour" {{$select_start_hour}} name="start_hour" wire:model.lazy="start_hour" required>
       </fieldset>
       <fieldset class="form-group col-6 col-md-3">
@@ -41,19 +41,19 @@
         <input type="date" class="form-control end_date" name="end_date" {{$select_end_date}} wire:model.lazy="end_date" min="{{$anopasado}}-01-01" max="{{$ano}}-12-31" required>
       </fieldset>
       <fieldset class="form-group col-6 col-md">
-        <label for="for_estate">Hora</label>
+        <label for="for_end_hour">Hora</label>
         <input type="time" class="form-control end_hour" name="end_hour" {{$select_end_hour}} wire:model.lazy="end_hour" required>
       </fieldset>
 
       @canany(['Service Request: fulfillments responsable','Service Request: fulfillments rrhh'])
         @if($fulfillment->responsable_approver_id == NULL)
         <fieldset class="form-group col">
-          <label for="for_estate"><br/></label>
+          <label for="for_submit"><br/></label>
           <button type="submit" class="btn form-control btn-primary" wire:click="save()">Guardar</button>
         </fieldset>
         @else
         <fieldset class="form-group col">
-          <label for="for_estate"><br/></label>
+          <label for="for_label"><br/></label>
           Ya está aprobada por el responsable
         </fieldset>
         @endif
