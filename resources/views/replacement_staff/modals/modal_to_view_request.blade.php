@@ -164,6 +164,25 @@
 
           @endif
 
+          @if($requestReplacementStaff->technicalEvaluation->reason != NULL)
+
+          <div class="row">
+              <div class="col">
+                  <div class="alert alert-danger" role="alert">
+                      <h6><i class="fas fa-exclamation-circle"></i> Proceso Selección Finalizado</h6>
+                      <ul>
+                          <li><strong>Motivo:</strong> {{ $requestReplacementStaff->technicalEvaluation->ReasonValue }}</li>
+                          <li><strong>Observación:</strong> {{ $requestReplacementStaff->technicalEvaluation->observation }}</li>
+                          <li><strong>Fecha:</strong> {{ $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</li>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+
+          <br>
+
+          @endif
+
           @if($requestReplacementStaff->technicalEvaluation &&
                   $requestReplacementStaff->technicalEvaluation->applicants->count() > 0)
 
