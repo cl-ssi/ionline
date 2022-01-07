@@ -137,7 +137,8 @@ class ServiceRequestController extends Controller
     $responsability_center_ou_id = $request->responsability_center_ou_id;
     $program_contract_type = $request->program_contract_type;
     $name = $request->name;
-    $estate = $request->estate;
+    // $estate = $request->estate;
+    $profession_id = $request->profession_id;
     $id = $request->id;
     $type = $request->type;
 
@@ -154,8 +155,11 @@ class ServiceRequestController extends Controller
       ->when($type != NULL, function ($q) use ($type) {
         return $q->where('type', $type);
       })
-      ->when($estate != NULL, function ($q) use ($estate) {
-        return $q->where('estate', $estate);
+      // ->when($estate != NULL, function ($q) use ($estate) {
+      //   return $q->where('estate', $estate);
+      // })
+      ->when($profession_id != NULL, function ($q) use ($profession_id) {
+        return $q->where('profession_id', $profession_id);
       })
       ->when(($name != NULL), function ($q) use ($name) {
         return $q->whereHas("employee", function ($subQuery) use ($name) {
@@ -177,7 +181,9 @@ class ServiceRequestController extends Controller
       ->paginate(100);
     // ->get();
     $responsabilityCenters = OrganizationalUnit::orderBy('name', 'ASC')->get();
-    return view('service_requests.requests.aditional_data_list', compact('serviceRequests', 'responsabilityCenters', 'request'));
+    $professions = Profession::orderBy('name', 'ASC')->get();
+
+    return view('service_requests.requests.aditional_data_list', compact('serviceRequests', 'responsabilityCenters', 'request','professions'));
   }
 
   public function transfer_requests(Request $request)

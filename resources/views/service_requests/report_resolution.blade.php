@@ -230,7 +230,7 @@
         <tr>
           <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->profession->category}} ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}})</td>
+          <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->weekly_hours}}</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
@@ -254,7 +254,7 @@
         <tr>
           <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->profession->category}} ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}})</td>
+          <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
@@ -276,7 +276,7 @@
         <tr>
           <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
-          <td style="text-align:center">{{$ServiceRequest->profession->category}} ({{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}})</td>
+          <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
