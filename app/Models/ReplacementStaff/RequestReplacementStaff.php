@@ -116,6 +116,20 @@ class RequestReplacementStaff extends Model
         }
     }
 
+    public function getStatusValueAttribute() {
+        switch($this->request_status) {
+          case 'pending':
+            return 'Pendiente';
+            break;
+          case 'complete':
+            return 'Completa';
+            break;
+          case 'rejected':
+            return 'Rechazada';
+            break;
+        }
+    }
+
     public static function getPendingRequestToSign(){
         $date = Carbon::now();
         $type = 'manager';

@@ -17,7 +17,7 @@ class Applicant extends Model
         'replacement_reason', 'ou_of_performance_id'
     ];
 
-    public function replacement_staff() {
+    public function replacementStaff() {
         return $this->belongsTo('App\Models\ReplacementStaff\ReplacementStaff');
     }
 
