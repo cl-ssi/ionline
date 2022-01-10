@@ -56,6 +56,10 @@ class TechnicalEvaluation extends Model implements Auditable
           case 'falta oferta laboral':
             return 'Falta de oferta laboral';
             break;
+
+          case 'rechazo oferta laboral':
+            return 'Rechazo de oferta laboral';
+            break;
         }
     }
 

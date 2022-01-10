@@ -30,7 +30,7 @@
 
       <ul>
         @foreach($technicalEvaluation->applicants->where('selected', 1) as $applicant)
-          <li><strong>Seleccionado</strong>: {{ $applicant->replacement_staff->FullName }}</li>
+          <li><strong>Seleccionado</strong>: {{ $applicant->replacementStaff->FullName }}</li>
         @endforeach
       </ul>
 
