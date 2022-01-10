@@ -203,6 +203,9 @@
 <div class="row">
     <div class="col">
         @if($technicalEvaluation->reason == NULL)
+            {{-- @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+              Auth::user()->hasRole('Replacement Staff: admin')) --}}
+
             @if(($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
               Auth::user()->hasRole('Replacement Staff: admin')) && $technicalEvaluation->applicants->count() == 0)
                 <!-- Button trigger modal -->
@@ -363,6 +366,15 @@
         </div>
       @endif
 
+      @if (session('message-success-aplicant-desist'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('message-success-aplicant-finish') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      @endif
+
       @if($technicalEvaluation->applicants->count() > 0)
       <h6>Postulantes a cargo(s)</h6>
         <div class="table-responsive">
@@ -381,8 +393,18 @@
                 </thead>
                 <tbody class="small">
                     @foreach($technicalEvaluation->applicants->sortByDesc('score') as $applicant)
-                    <tr class="{{ ($applicant->selected == 1)?'table-success':''}}">
-                        <td><a href="{{ route('replacement_staff.show_replacement_staff', $applicant->replacementStaff) }}" target="_blank">{{ $applicant->replacementStaff->FullName }}<a></td>
+                    <tr class="{{ ($applicant->selected == 1 && $applicant->desist == NULL)?'table-success':''}}">
+                        <td>
+                          <a href="{{ route('replacement_staff.show_replacement_staff', $applicant->replacementStaff) }}"
+                            target="_blank">{{ $applicant->replacementStaff->FullName }}
+                          <a>
+                          @if($applicant->selected == 1 && $applicant->desist == NULL)
+                            <span class="badge bg-success">Seleccionado</span>
+                          @endif
+                          @if($applicant->desist == 1)
+                            <span class="badge bg-danger">Desiste Selección</span>
+                          @endif
+                        </td>
                         <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
                         <td class="text-center">{{ $applicant->technical_evaluation_score }} <br> {{ $applicant->TechEvaScore }}</td>
                         <td>{{ $applicant->observations }}</td>
@@ -399,13 +421,13 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                             </form>
-                            @else
-                            <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.destroy', $applicant) }}">
+                            @elseif($applicant->selected == 1 && $applicant->desist == NULL)
+                            <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.decline_selected_applicant', $applicant) }}">
                                 @csrf
-                                @method('DELETE')
+                                @method('POST')
                                     <button type="submit" class="btn btn-outline-danger btn-sm"
-                                        onclick="return confirm('¿Está seguro que desea eliminar el Postulante?')" disabled>
-                                        <i class="fas fa-trash"></i>
+                                        onclick="return confirm('¿Está seguro que el Postulante Rechazó Oferta Laboral?')">
+                                        <i class="fas fa-window-close"></i>
                                     </button>
                             </form>
                             @endif
