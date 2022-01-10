@@ -152,17 +152,4 @@ class ReplacementStaffController extends Controller
 
         return view('replacement_staff.show_replacement_staff', compact('replacementStaff', 'professionManage', 'profileManage'));
     }
-
-    public function replacement_staff_selected_report(){
-        //$replacementStaff = ReplacementStaff::where('status', 'selected')->get();
-
-        $applicants = Applicant::where('selected', 1)
-            ->latest()
-            ->whereDate('end_date', '<=', Carbon::now()->toDateString())
-            ->get();
-
-        // dd($applicants);
-
-        return view('replacement_staff.reports.replacement_staff_selected_report', compact('applicants'));
-    }
 }
