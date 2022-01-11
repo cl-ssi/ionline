@@ -104,7 +104,7 @@ class ApplicantController extends Controller
 
         return redirect()
           ->to(route('replacement_staff.request.technical_evaluation.edit', $applicant->technical_evaluation_id).'#applicant')
-          ->with('message-success-evaluate-applicants', 'Calificación ingresada para: '.$applicant->replacement_staff->FullName);
+          ->with('message-success-evaluate-applicants', 'Calificación ingresada para: '.$applicant->replacementStaff->FullName);
     }
 
     /**
