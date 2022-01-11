@@ -459,10 +459,14 @@
       @if($technicalEvaluation->technical_evaluation_status == 'complete')
         <div class="alert alert-success small" role="alert">
             <h6><i class="fas fa-exclamation-circle"></i> Periodo Efectivo </h6>
-            <ul>
-                <li><strong>Ingreso:</strong> {{ $technicalEvaluation->applicants->first()->start_date->format('d-m-Y') }}</li>
-                <li><strong>Término:</strong> {{ $technicalEvaluation->applicants->first()->end_date->format('d-m-Y') }}</li>
-            </ul>
+            @foreach($technicalEvaluation->applicants)
+              @if($technicalEvaluation->applicants->start_date != NULL)
+              <ul>
+                  <li><strong>Ingreso:</strong> {{ $technicalEvaluation->applicants->start_date->format('d-m-Y') }}</li>
+                  <li><strong>Término:</strong> {{ $technicalEvaluation->applicants->end_date->format('d-m-Y') }}</li>
+              </ul>
+              @endif
+            @endforeach
         </div>
       @endif
 
