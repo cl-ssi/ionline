@@ -381,12 +381,14 @@
             <table class="table table-sm table-striped table-bordered">
                 <thead class="text-center small">
                     <tr>
-                      <th style="width: 22%">Nombre</th>
-                      <th style="width: 22%">Calificación Evaluación Psicolaboral</th>
-                      <th style="width: 22%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
+                      <th style="width: 15%">Nombre</th>
+                      <th style="width: 18%">Calificación Evaluación Psicolaboral</th>
+                      <th style="width: 18%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
                       <th style="width: 22%">Observaciones</th>
                       @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
                           Auth::user()->hasRole('Replacement Staff: admin'))
+                      <th>Ingreso Efectivo</th>
+                      <th>Fin</th>
                       <th colspan="2"></th>
                       @endif
                     </tr>
@@ -398,6 +400,7 @@
                           <a href="{{ route('replacement_staff.show_replacement_staff', $applicant->replacementStaff) }}"
                             target="_blank">{{ $applicant->replacementStaff->FullName }}
                           <a>
+                          <br>
                           @if($applicant->selected == 1 && $applicant->desist == NULL)
                             <span class="badge bg-success">Seleccionado</span>
                           @endif
@@ -408,6 +411,8 @@
                         <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
                         <td class="text-center">{{ $applicant->technical_evaluation_score }} <br> {{ $applicant->TechEvaScore }}</td>
                         <td>{{ $applicant->observations }}</td>
+                        <td class="text-center">{{ ($applicant->start_date) ? $applicant->start_date->format('d-m-Y') : '' }}</td>
+                        <td class="text-center">{{ ($applicant->end_date) ? $applicant->end_date->format('d-m-Y') : '' }}</td>
                         @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
                             Auth::user()->hasRole('Replacement Staff: admin'))
                         <td style="width: 4%">
@@ -453,20 +458,6 @@
                     @endforeach
                 </tbody>
             </table>
-        </div>
-      @endif
-
-      @if($technicalEvaluation->technical_evaluation_status == 'complete')
-        <div class="alert alert-success small" role="alert">
-            <h6><i class="fas fa-exclamation-circle"></i> Periodo Efectivo </h6>
-            @foreach($technicalEvaluation->applicants)
-              @if($technicalEvaluation->applicants->start_date != NULL)
-              <ul>
-                  <li><strong>Ingreso:</strong> {{ $technicalEvaluation->applicants->start_date->format('d-m-Y') }}</li>
-                  <li><strong>Término:</strong> {{ $technicalEvaluation->applicants->end_date->format('d-m-Y') }}</li>
-              </ul>
-              @endif
-            @endforeach
         </div>
       @endif
 
