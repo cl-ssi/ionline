@@ -64,8 +64,11 @@
         </a>
 
         <div class="dropdown-menu">
+            <a class="dropdown-item" href="{{ route('replacement_staff.request.pending_personal_index') }}">
+              <i class="fas fa-inbox"></i> Solicitudes Pendientes
+            </a>
             <a class="dropdown-item" href="{{ route('replacement_staff.request.personal_index') }}">
-              <i class="fas fa-inbox"></i> Reclutamientos Finalizados
+              <i class="fas fa-inbox"></i> Solicitudes Finalizadas
             </a>
         </div>
     </li>

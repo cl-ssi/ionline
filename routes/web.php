@@ -195,6 +195,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/assign_index', [RequestReplacementStaffController::class, 'assign_index'])->name('assign_index')->middleware('permission:Replacement Staff: technical evaluation');
         Route::get('/own_index', [RequestReplacementStaffController::class, 'own_index'])->name('own_index');
         Route::get('/personal_index', [RequestReplacementStaffController::class, 'personal_index'])->name('personal_index');
+        Route::get('/pending_personal_index', [RequestReplacementStaffController::class, 'pending_personal_index'])->name('pending_personal_index');
         Route::get('/ou_index', [RequestReplacementStaffController::class, 'ou_index'])->name('ou_index');
         Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
         Route::get('/{requestReplacementStaff}/create_extension', [RequestReplacementStaffController::class, 'create_extension'])->name('create_extension');
@@ -858,7 +859,7 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         Route::put('{log}', [LogController::class, 'update'])->name('update');
         Route::get('{log}/destroy', [LogController::class, 'destroy'])->name('destroy');
     });
-    
+
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {
