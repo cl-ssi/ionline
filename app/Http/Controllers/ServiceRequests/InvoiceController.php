@@ -21,11 +21,11 @@ class InvoiceController extends Controller
         return view('service_requests.invoice.welcome');
     }
 
-    public function login($access_token)
+    public function login($access_token = null)
     {
         if ($access_token) {
             // dd("");
-            if (env('APP_ENV') == 'production') {
+            if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
                 // $access_token = session()->get('access_token');
                 Log::info($access_token);
                 $url_base = "https://www.claveunica.gob.cl/openid/userinfo/";
