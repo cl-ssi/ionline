@@ -80,23 +80,23 @@
 <div class="form-row">
 
   <fieldset class="form-group col-6 col-md-3">
-      <label for="for_request_date">Rut</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->employee->runNotFormat()}}" disabled>
+      <label for="for_rut">Run</label>
+      <input type="text" class="form-control" value="{{ $serviceRequest->employee->runNotFormat() }}" disabled>
   </fieldset>
 
   <fieldset class="form-group col-12 col-md-6">
-      <label for="for_start_date">Funcionario</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->employee->getFullNameAttribute()}}" disabled>
+      <label for="for_name">Funcionario</label>
+      <input type="text" class="form-control" value="{{ $serviceRequest->employee->getFullNameAttribute() }}" disabled>
   </fieldset>
 
   <!-- <fieldset class="form-group col-12 col-md-3">
-      <label for="for_end_date">Estamento</label>
+      <label for="for_estate">Estamento</label>
       <input type="text" class="form-control" value="{{$serviceRequest->estate}}" disabled>
   </fieldset> -->
 
   <fieldset class="form-group col-12 col-md-3">
-      <label for="for_end_date">Estamento</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->profession->estamento}}" disabled>
+      <label for="for_estamento">Estamento</label>
+      <input type="text" class="form-control" value="{{ ($serviceRequest->profession) ? $serviceRequest->profession->estamento : $serviceRequest->estate }}" disabled>
   </fieldset>
 
 </div>

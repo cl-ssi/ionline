@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\ServiceRequests\ServiceRequest;
 use App\Models\ServiceRequests\Fulfillment;
 use App\User;
+use Illuminate\Support\Facades\Log;
 
 
 class InvoiceController extends Controller
@@ -26,9 +27,11 @@ class InvoiceController extends Controller
             // dd("");
             if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
                 // $access_token = session()->get('access_token');
+                Log::info($access_token);
                 $url_base = "https://www.claveunica.gob.cl/openid/userinfo/";
                 $response = Http::withToken($access_token)->post($url_base);
                 $user_cu = json_decode($response);
+                Log::info($response);
                 $user_id = $user_cu->RolUnico->numero;
                 // $user = $user.'-'.$user_cu->RolUnico->DV;
 
