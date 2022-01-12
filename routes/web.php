@@ -66,6 +66,7 @@ use App\Http\Controllers\Pharmacies\PurchaseController;
 use App\Pharmacies\Purchase;
 use App\User;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\Parameters\LogController;
 
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -849,6 +850,15 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         // Route::put('/update/{measurement}', 'Parameters\UnitOfMeasurementController@update')->name('update');
         // Route::post('/store', 'Parameters\UnitOfMeasurementController@store')->name('store');
     });
+
+    Route::prefix('logs')->name('logs.')->middleware('auth')->group(function () {
+        Route::get('/', [LogController::class, 'index'])->name('index');
+        Route::get('{log}', [LogController::class, 'show'])->name('show')->where('id', '[0-9]+');
+        Route::get('{log}/edit', [LogController::class, 'edit'])->name('edit');
+        Route::put('{log}', [LogController::class, 'update'])->name('update');
+        Route::get('{log}/destroy', [LogController::class, 'destroy'])->name('destroy');
+    });
+    
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {
@@ -1560,6 +1570,9 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 
 
 });
+
+
+
 
 
 Route::view('/some', 'some');

@@ -37,6 +37,6 @@ class DatabaseHandler extends AbstractProcessingHandler{
        );
        DB::connection()->table($this->table)->insert($data);
 
-       dd($record);
+       //dd($record);
     }
 }
