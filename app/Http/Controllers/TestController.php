@@ -9,6 +9,7 @@ use App\Rrhh\OrganizationalUnit;
 use Illuminate\Support\Facades\DB;
 use App\Models\WebService\MercadoPublico;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class TestController extends Controller
 {
@@ -48,5 +49,13 @@ class TestController extends Controller
     public function getMercadoPublicoTender($date){
         $tenders = MercadoPublico::getTender(Carbon::parse($date));
         dd($tenders);
+    }
+
+    public function log()
+    {
+        $user = \App\User::find(1528758);
+        echo $user->name;
+        Log::info('primer log');
+        echo "Primer log";
     }
 }

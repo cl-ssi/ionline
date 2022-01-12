@@ -1564,5 +1564,6 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 Route::view('/some', 'some');
 
 Route::get('/test-getip',[TestController::class,'getIp']);
+Route::get('/log',[TestController::class,'log']);
 Route::get('/ous',[TestController::class,'ous']);
 Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
