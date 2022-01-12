@@ -140,17 +140,20 @@ class ApplicantController extends Controller
             $applicant_evaluated->selected = 1;
             $applicant_evaluated->save();
 
-            $technicalEvaluation = TechnicalEvaluation::Find($applicant->technicalEvaluation)->first();
+            $technicalEvaluation = TechnicalEvaluation::
+              where('id', $applicant_evaluated->technical_evaluation_id)
+              ->first();
+
             $now = Carbon::now();
             $technicalEvaluation->date_end = $now;
             $technicalEvaluation->technical_evaluation_status = 'complete';
             $technicalEvaluation->save();
 
+            $technicalEvaluation->requestReplacementStaff->request_status = 'complete';
+            $technicalEvaluation->requestReplacementStaff->save();
+
             $applicant_evaluated->replacementStaff->status = 'selected';
             $applicant_evaluated->replacementStaff->save();
-
-            $applicant_evaluated->technicalEvaluation->requestReplacementStaff->request_status = 'complete';
-            $applicant_evaluated->technicalEvaluation->requestReplacementStaff->save();
 
             //Request
             $mail_request = $technicalEvaluation->requestReplacementStaff->user->email;
