@@ -154,7 +154,7 @@ class WordTestController extends Controller
         $templateProcesor->setValue('art8', !Str::contains($directorApelativo, '(S)') ? 'Art. 8 del ' : '');
 
         // CLONE BLOCK PARA LISTAR COMPONENTES
-        if(env('APP_ENV') == 'local') ini_set("pcre.backtrack_limit", -1);
+        ini_set("pcre.backtrack_limit", -1);
         $templateProcesor->cloneBlock('componentesListado', 0, true, false,$arrayComponent);
         // CLONE BLOCK PARA LISTAR CUOTAS
         $templateProcesor->cloneBlock('cuotasListado', 0, true, false,$arrayQuota);
