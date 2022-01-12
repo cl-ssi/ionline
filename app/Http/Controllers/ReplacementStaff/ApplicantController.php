@@ -196,8 +196,8 @@ class ApplicantController extends Controller
             $applicant->technicalEvaluation->requestReplacementStaff->request_status = 'rejected';
             $applicant->technicalEvaluation->requestReplacementStaff->save();
 
-            $applicants->replacementStaff->status = 'immediate_availability';
-            $applicants->replacementStaff->save();
+            $applicant->replacementStaff->status = 'immediate_availability';
+            $applicant->replacementStaff->save();
 
             //Request
             $mail_request = $applicant->technicalEvaluation->requestReplacementStaff->user->email;
