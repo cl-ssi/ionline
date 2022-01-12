@@ -120,6 +120,15 @@ class RequestReplacementStaffController extends Controller
         return view('replacement_staff.request.personal_index', compact('requests'));
     }
 
+    public function pending_personal_index()
+    {
+        $requests = RequestReplacementStaff::latest()
+            ->where('request_status', 'pending')
+            ->get();
+
+        return view('replacement_staff.request.pending_personal_index', compact('requests'));
+    }
+
     public function ou_index()
     {
         $ou_pending_requests = RequestReplacementStaff::latest()
