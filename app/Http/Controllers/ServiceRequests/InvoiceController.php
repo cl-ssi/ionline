@@ -38,6 +38,7 @@ class InvoiceController extends Controller
                 }
                 else
                 {
+                    Log::info('Redireccionó a: ', ['access_token' => $access_token]);
                     return redirect()->route('invoice.welcome');
                 }
                 // $user = $user.'-'.$user_cu->RolUnico->DV;
