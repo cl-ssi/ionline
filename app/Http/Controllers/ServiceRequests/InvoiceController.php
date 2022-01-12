@@ -31,7 +31,7 @@ class InvoiceController extends Controller
                 $url_base = "https://www.claveunica.gob.cl/openid/userinfo/";
                 $response = Http::withToken($access_token)->post($url_base);
                 $user_cu = json_decode($response);
-                Log::info($user_cu);
+                Log::info($response);
                 $user_id = $user_cu->RolUnico->numero;
                 // $user = $user.'-'.$user_cu->RolUnico->DV;
 
