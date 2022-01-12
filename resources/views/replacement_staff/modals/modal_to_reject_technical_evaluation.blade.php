@@ -17,8 +17,12 @@
                   <label for="for_reason">Motivo</label>
                   <select name="reason" class="form-control" required>
                       <option value="">Seleccione</option>
+                      @if($technicalEvaluation->applicants->count() == 0)
                       <option value="falta oferta laboral">Falta de oferta laboral</option>
+                      @endif
+                      @if($technicalEvaluation->applicants->count() > 0)
                       <option value="rechazo oferta laboral">Rechazo de oferta laboral</option>
+                      @endif
                   </select>
               </fieldset>
 
