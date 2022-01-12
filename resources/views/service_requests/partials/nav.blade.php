@@ -116,7 +116,8 @@
             active('rrhh.service-request.report.contract'),
             active('rrhh.service-request.report.duplicate-contracts'),
             active('rrhh.service-request.report.with-resolution-file'),
-            active('rrhh.service-request.report.without-resolution-file')
+            active('rrhh.service-request.report.without-resolution-file'),
+            active('rrhh.service-request.report.service-request-continuity')
         }}"
         data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-archive"></i> Reportes
@@ -225,6 +226,11 @@
                     <i class="fas fa-clipboard"></i> Solicitudes sin resolución cargada
                 </a>
             @endcan
+
+            <a class="dropdown-item {{ active('rrhh.service-request.report.service-request-continuity') }}"
+                href="{{ route('rrhh.service-request.report.service-request-continuity') }}">
+                <i class="fas fa-clone"></i> Continuidad de contratos
+            </a>
 
 
             <!-- <div class="dropdown-divider"></div>
