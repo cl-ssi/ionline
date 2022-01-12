@@ -14,7 +14,7 @@
 
     <div class="form-row">
 
-    <fieldset class="form-group col-6 col-md-4">
+        <fieldset class="form-group col-6 col-md-4">
             <label for="for_name">Nombre*</label>
             <input type="text" class="form-control" id="for_name" name="name" value="{{$profession->name}}" autocomplete="off" required>
         </fieldset>        
@@ -46,7 +46,6 @@
 
     </div>
     
-
     <button type="submit" class="btn btn-primary">Actualizar</button>
 
 </form>
