@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewStaffNotificationUser;
+use App\Models\ReplacementStaff\Applicant;
 
 class ReplacementStaffController extends Controller
 {
@@ -146,9 +147,9 @@ class ReplacementStaffController extends Controller
     }
 
     public function show_replacement_staff(ReplacementStaff $replacementStaff){
-      $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
-      $profileManage = ProfileManage::orderBy('name', 'ASC')->get();
+        $professionManage = ProfessionManage::orderBy('name', 'ASC')->get();
+        $profileManage = ProfileManage::orderBy('name', 'ASC')->get();
 
-      return view('replacement_staff.show_replacement_staff', compact('replacementStaff', 'professionManage', 'profileManage'));
+        return view('replacement_staff.show_replacement_staff', compact('replacementStaff', 'professionManage', 'profileManage'));
     }
 }
