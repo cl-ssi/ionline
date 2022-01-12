@@ -1213,4 +1213,67 @@ class ReportController extends Controller
     // dd($fila);
     return $response;
   }
+
+  public function service_request_continuity(Request $request){
+    if ($request->from != null && $request->to != null) {
+      $serviceRequests = ServiceRequest::where('program_contract_type','Mensual')
+                                      ->where('type','Covid')
+                                      ->where('start_date','<=',$request->from)
+                                      ->where('end_date','>',$request->from)
+                                      ->orderBy('start_date','asc')
+                                      ->get(['user_id','id','start_date','end_date'])
+                                      ->unique('user_id');
+
+                                      // dd($serviceRequests[0]);
+
+      $results = array();
+      // dd($serviceRequests->count());
+      if ($serviceRequests->count()>0) {
+
+
+        foreach ($serviceRequests as $key => $serviceRequest) {
+          $id = $serviceRequest->id;
+          $user_id = $serviceRequest->user_id;
+          $start_date = $serviceRequest->start_date;
+          $end_date = $serviceRequest->end_date;
+
+          $results[$serviceRequest->employee->getFullNameAttribute()][$serviceRequest->start_date->format('Y-m-d') . " - " . $serviceRequest->end_date->format('Y-m-d')] = $serviceRequest;
+          do {
+            $serviceRequest_aux = ServiceRequest::where('program_contract_type','Mensual')
+                                                ->where('type','Covid')
+                                                ->where('start_date','>=',$request->from)
+                                                ->where('id','!=',$id)
+                                                ->where('user_id',$user_id)
+                                                ->where('start_date',$end_date->addDay(1))
+                                                ->whereHas('SignatureFlows', function($q) {
+                                                    return $q->where('status', 1);
+                                                })
+                                                ->first();
+
+            if ($serviceRequest_aux) {
+              $id = $serviceRequest_aux->id;
+              $user_id = $serviceRequest_aux->user_id;
+              $start_date = $serviceRequest_aux->start_date;
+              $end_date = $serviceRequest_aux->end_date;
+
+              $results[$serviceRequest->employee->getFullNameAttribute()][$start_date->format('Y-m-d') . " - " . $end_date->format('Y-m-d')] = $serviceRequest_aux;
+
+              // print_r($serviceRequest->employee->getFullNameAttribute() ." - ". $end_date."<br>");
+            }else{
+              // $results[$serviceRequest->employee->getFullNameAttribute()][$end_date->format('Y-m-d') . " - xx"] = 0; //muestra los contratos que debiesen estar pero no existen
+              unset($results[$serviceRequest->employee->getFullNameAttribute()]); //elimina los que no son consecutivos
+            }
+
+
+          }while ($serviceRequest_aux && $end_date <= $request->to);
+
+        }
+        // dd($end_date);
+      }
+
+      // dd($results);
+
+    }
+    return view('service_requests.reports.service_request_continuity',compact('request','results'));
+  }
 }
