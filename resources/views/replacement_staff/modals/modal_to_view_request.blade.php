@@ -129,6 +129,17 @@
                         </td>
                       @endforeach
                   </tr>
+                  @if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' ||
+                    $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected')
+                  <tr>
+                      <th class="table-active">Estado de Solicitud</th>
+                      <td colspan="2">{{ $requestReplacementStaff->StatusValue }}</td>
+                  </tr>
+                  <tr>
+                      <th class="table-active">Fecha de Cierre</th>
+                      <td colspan="2">{{ $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</td>
+                  </tr>
+                  @endif
               </tbody>
           </table>
 
