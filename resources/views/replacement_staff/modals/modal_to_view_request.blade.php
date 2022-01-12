@@ -129,6 +129,19 @@
                         </td>
                       @endforeach
                   </tr>
+                  @if($requestReplacementStaff->technicalEvaluation)
+                    @if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete' ||
+                      $requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'rejected')
+                      <tr>
+                          <th class="table-active">Estado de Solicitud</th>
+                          <td colspan="2">{{ $requestReplacementStaff->StatusValue }}</td>
+                      </tr>
+                      <tr>
+                          <th class="table-active">Fecha de Cierre</th>
+                          <td colspan="2">{{ $requestReplacementStaff->technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</td>
+                      </tr>
+                    @endif
+                  @endif
               </tbody>
           </table>
 
@@ -214,34 +227,39 @@
                       <table class="table table-sm table-striped table-bordered">
                           <thead class="text-center">
                               <tr>
-                                <th style="width: 22%">Nombre</th>
-                                <th style="width: 22%">Calificación Evaluación Psicolaboral</th>
-                                <th style="width: 22%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
+                                <th style="width: 15%">Nombre</th>
+                                <th style="width: 18%">Calificación Evaluación Psicolaboral</th>
+                                <th style="width: 18%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
                                 <th style="width: 22%">Observaciones</th>
+                                <th>Ingreso Efectivo</th>
+                                <th>Fin</th>
                               </tr>
                           </thead>
                           <tbody>
                               @foreach($requestReplacementStaff->technicalEvaluation->applicants->sortByDesc('score') as $applicant)
                               <tr class="{{ ($applicant->selected == 1)?'table-success':''}}">
-                                  <td><a href="{{ route('replacement_staff.show_replacement_staff', $applicant->replacementStaff) }}" target="_blank">{{ $applicant->replacementStaff->FullName }}</a></td>
+                                  <td>
+                                    <a href="{{ route('replacement_staff.show_replacement_staff', $applicant->replacementStaff) }}"
+                                      target="_blank">{{ $applicant->replacementStaff->FullName }}
+                                    </a>
+                                    <br>
+                                    @if($applicant->selected == 1 && $applicant->desist == NULL)
+                                      <span class="badge bg-success">Seleccionado</span>
+                                    @endif
+                                    @if($applicant->desist == 1)
+                                      <span class="badge bg-danger">Desiste Selección</span>
+                                    @endif
+                                  </td>
                                   <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
                                   <td class="text-center">{{ $applicant->technical_evaluation_score }} <br> {{ $applicant->TechEvaScore }}</td>
                                   <td>{{ $applicant->observations }}</td>
+                                  <td class="text-center">{{ ($applicant->start_date) ? $applicant->start_date->format('d-m-Y') : '' }}</td>
+                                  <td class="text-center">{{ ($applicant->end_date) ? $applicant->end_date->format('d-m-Y') : '' }}</td>
                               </tr>
                               @endforeach
                           </tbody>
                       </table>
                   </div>
-
-                  @if($requestReplacementStaff->technicalEvaluation->technical_evaluation_status == 'complete')
-                    <div class="alert alert-success" role="alert">
-                        <h6><i class="fas fa-exclamation-circle"></i> Periodo Efectivo </h6>
-                        <ul>
-                            <li><strong>Ingreso:</strong> {{ $requestReplacementStaff->technicalEvaluation->applicants->first()->start_date->format('d-m-Y') }}</li>
-                            <li><strong>Término:</strong> {{ $requestReplacementStaff->technicalEvaluation->applicants->first()->end_date->format('d-m-Y') }}</li>
-                        </ul>
-                    </div>
-                  @endif
               </div>
           </div>
 

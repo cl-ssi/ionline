@@ -77,11 +77,6 @@
         <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
             <i class="fas fa-file"></i> Reportes
         </a>
-        <div class="dropdown-menu">
-            @can('Replacement Staff: manage')
-            <a class="dropdown-item" href=""><i class="fas fa-file"></i> Evaluaciones por RR.HH.</a>
-            @endcan
-        </div>
    </li>
    @endcan
 

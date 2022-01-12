@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\CleanTempDirectory::class,
+        Commands\ChangeStaffStatus::class,
     ];
 
     /**
@@ -25,6 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('clean:tempDir')->daily();
+        $schedule->command('change:staffStatus')->daily();
     }
 
     /**

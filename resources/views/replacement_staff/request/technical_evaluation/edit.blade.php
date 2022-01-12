@@ -149,6 +149,17 @@
                   </td>
                 @endforeach
             </tr>
+            @if($technicalEvaluation->technical_evaluation_status == 'complete' ||
+              $technicalEvaluation->technical_evaluation_status == 'rejected')
+            <tr>
+                <th class="table-active">Estado de Solicitud</th>
+                <td colspan="2">{{ $technicalEvaluation->requestReplacementStaff->StatusValue }}</td>
+            </tr>
+            <tr>
+                <th class="table-active">Fecha de Cierre</th>
+                <td colspan="2">{{ $technicalEvaluation->date_end->format('d-m-Y H:i:s') }}</td>
+            </tr>
+            @endif
         </tbody>
     </table>
 </div>
@@ -203,6 +214,9 @@
 <div class="row">
     <div class="col">
         @if($technicalEvaluation->reason == NULL)
+            {{-- @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
+              Auth::user()->hasRole('Replacement Staff: admin')) --}}
+
             @if(($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
               Auth::user()->hasRole('Replacement Staff: admin')) && $technicalEvaluation->applicants->count() == 0)
                 <!-- Button trigger modal -->
@@ -363,29 +377,53 @@
         </div>
       @endif
 
+      @if (session('message-success-aplicant-desist'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('message-success-aplicant-finish') }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+      @endif
+
       @if($technicalEvaluation->applicants->count() > 0)
       <h6>Postulantes a cargo(s)</h6>
         <div class="table-responsive">
             <table class="table table-sm table-striped table-bordered">
                 <thead class="text-center small">
                     <tr>
-                      <th style="width: 22%">Nombre</th>
-                      <th style="width: 22%">Calificación Evaluación Psicolaboral</th>
-                      <th style="width: 22%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
+                      <th style="width: 15%">Nombre</th>
+                      <th style="width: 18%">Calificación Evaluación Psicolaboral</th>
+                      <th style="width: 18%">Calificación Evaluación Técnica y/o de Apreciación Global</th>
                       <th style="width: 22%">Observaciones</th>
                       @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
                           Auth::user()->hasRole('Replacement Staff: admin'))
+                      <th>Ingreso Efectivo</th>
+                      <th>Fin</th>
                       <th colspan="2"></th>
                       @endif
                     </tr>
                 </thead>
                 <tbody class="small">
                     @foreach($technicalEvaluation->applicants->sortByDesc('score') as $applicant)
-                    <tr class="{{ ($applicant->selected == 1)?'table-success':''}}">
-                        <td><a href="{{ route('replacement_staff.show_replacement_staff', $applicant->replacementStaff) }}" target="_blank">{{ $applicant->replacementStaff->FullName }}<a></td>
+                    <tr class="{{ ($applicant->selected == 1 && $applicant->desist == NULL)?'table-success':''}}">
+                        <td>
+                          <a href="{{ route('replacement_staff.show_replacement_staff', $applicant->replacementStaff) }}"
+                            target="_blank">{{ $applicant->replacementStaff->FullName }}
+                          <a>
+                          <br>
+                          @if($applicant->selected == 1 && $applicant->desist == NULL)
+                            <span class="badge bg-success">Seleccionado</span>
+                          @endif
+                          @if($applicant->desist == 1)
+                            <span class="badge bg-danger">Desiste Selección</span>
+                          @endif
+                        </td>
                         <td class="text-center">{{ $applicant->psycholabor_evaluation_score }} <br> {{ $applicant->PsyEvaScore }}</td>
                         <td class="text-center">{{ $applicant->technical_evaluation_score }} <br> {{ $applicant->TechEvaScore }}</td>
                         <td>{{ $applicant->observations }}</td>
+                        <td class="text-center">{{ ($applicant->start_date) ? $applicant->start_date->format('d-m-Y') : '' }}</td>
+                        <td class="text-center">{{ ($applicant->end_date) ? $applicant->end_date->format('d-m-Y') : '' }}</td>
                         @if($technicalEvaluation->requestReplacementStaff->assignEvaluations->last()->to_user_id == Auth::user()->id ||
                             Auth::user()->hasRole('Replacement Staff: admin'))
                         <td style="width: 4%">
@@ -399,13 +437,13 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                             </form>
-                            @else
-                            <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.destroy', $applicant) }}">
+                            @elseif($applicant->selected == 1 && $applicant->desist == NULL)
+                            <form method="POST" class="form-horizontal" action="{{ route('replacement_staff.request.technical_evaluation.applicant.decline_selected_applicant', $applicant) }}">
                                 @csrf
-                                @method('DELETE')
+                                @method('POST')
                                     <button type="submit" class="btn btn-outline-danger btn-sm"
-                                        onclick="return confirm('¿Está seguro que desea eliminar el Postulante?')" disabled>
-                                        <i class="fas fa-trash"></i>
+                                        onclick="return confirm('¿Está seguro que el Postulante Rechazó Oferta Laboral?')">
+                                        <i class="fas fa-window-close"></i>
                                     </button>
                             </form>
                             @endif
@@ -431,16 +469,6 @@
                     @endforeach
                 </tbody>
             </table>
-        </div>
-      @endif
-
-      @if($technicalEvaluation->technical_evaluation_status == 'complete')
-        <div class="alert alert-success small" role="alert">
-            <h6><i class="fas fa-exclamation-circle"></i> Periodo Efectivo </h6>
-            <ul>
-                <li><strong>Ingreso:</strong> {{ $technicalEvaluation->applicants->first()->start_date->format('d-m-Y') }}</li>
-                <li><strong>Término:</strong> {{ $technicalEvaluation->applicants->first()->end_date->format('d-m-Y') }}</li>
-            </ul>
         </div>
       @endif
 
