@@ -27,11 +27,9 @@ class InvoiceController extends Controller
             // dd("");
             if (env('APP_ENV') == 'production' OR env('APP_ENV') == 'testing') {
                 // $access_token = session()->get('access_token');
-                Log::info($access_token);
                 $url_base = "https://www.claveunica.gob.cl/openid/userinfo/";
                 $response = Http::withToken($access_token)->post($url_base);
                 $user_cu = json_decode($response);
-                Log::info($response);
                 if($user_cu)
                 {
                     $user_id = $user_cu->RolUnico->numero;
@@ -39,6 +37,7 @@ class InvoiceController extends Controller
                 else
                 {
                     Log::info('Redireccionó a: ', ['access_token' => $access_token]);
+                    Log::info($response);
                     return redirect()->route('invoice.welcome');
                 }
                 // $user = $user.'-'.$user_cu->RolUnico->DV;
