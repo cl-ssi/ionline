@@ -146,11 +146,11 @@ class ApplicantController extends Controller
             $technicalEvaluation->technical_evaluation_status = 'complete';
             $technicalEvaluation->save();
 
-            $technicalEvaluation->applicants->find($applicant_evaluated)->replacementStaff->status = 'selected';
-            $technicalEvaluation->applicants->find($applicant_evaluated)->replacementStaff->save();
+            $applicant_evaluated->replacementStaff->status = 'selected';
+            $applicant_evaluated->replacementStaff->save();
 
-            $technicalEvaluation->requestReplacementStaff->request_status = 'complete';
-            $technicalEvaluation->requestReplacementStaff->save();
+            $applicant_evaluated->technicalEvaluation->requestReplacementStaff->request_status = 'complete';
+            $applicant_evaluated->technicalEvaluation->requestReplacementStaff->save();
 
             //Request
             $mail_request = $technicalEvaluation->requestReplacementStaff->user->email;
@@ -192,6 +192,9 @@ class ApplicantController extends Controller
 
             $applicant->technicalEvaluation->requestReplacementStaff->request_status = 'rejected';
             $applicant->technicalEvaluation->requestReplacementStaff->save();
+
+            $applicants->replacementStaff->status = 'immediate_availability';
+            $applicants->replacementStaff->save();
 
             //Request
             $mail_request = $applicant->technicalEvaluation->requestReplacementStaff->user->email;
