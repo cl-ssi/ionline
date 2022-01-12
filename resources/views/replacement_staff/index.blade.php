@@ -127,7 +127,7 @@
 </div>
 
 <div class="col">
-  {{ $replacementStaff->links() }}
+  {{ $replacementStaff->appends(request()->input())->links() }}
 </div>
 
 @endsection
