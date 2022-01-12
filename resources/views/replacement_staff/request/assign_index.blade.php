@@ -35,7 +35,7 @@
 <br>
 
 <div class="col">
-    <h5><i class="fas fa-inbox"></i> Solicitudes Pendientes</h5>
+    <h5><i class="fas fa-inbox"></i> Solicitudes Pendientes ({{ Carbon\Carbon::now()->format('d-m-Y H:i:s') }})</h5>
 </div>
 
 <div class="col">
