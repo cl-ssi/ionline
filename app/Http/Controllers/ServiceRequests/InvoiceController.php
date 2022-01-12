@@ -32,7 +32,7 @@ class InvoiceController extends Controller
                 $response = Http::withToken($access_token)->post($url_base);
                 $user_cu = json_decode($response);
                 Log::info($response);
-                if($user_cu->RolUnico)
+                if($user_cu)
                 {
                     $user_id = $user_cu->RolUnico->numero;
                 }
