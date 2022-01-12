@@ -32,7 +32,14 @@ class InvoiceController extends Controller
                 $response = Http::withToken($access_token)->post($url_base);
                 $user_cu = json_decode($response);
                 Log::info($response);
-                $user_id = $user_cu->RolUnico->numero;
+                if($response)
+                {
+                    $user_id = $user_cu->RolUnico->numero;
+                }
+                else
+                {
+                    return redirect()->route('invoice.welcome');
+                }
                 // $user = $user.'-'.$user_cu->RolUnico->DV;
 
 
