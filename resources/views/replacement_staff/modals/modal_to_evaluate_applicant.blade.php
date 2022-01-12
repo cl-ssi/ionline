@@ -14,23 +14,23 @@
                 <div class="form-row">
                     <fieldset class="form-group col-sm-2">
                         <label for="for_run">RUT</label>
-                        <input type="text" class="form-control" value="{{ $applicant->replacement_staff->run }}" readonly>
+                        <input type="text" class="form-control" value="{{ $applicant->replacementStaff->run }}" readonly>
                     </fieldset>
                     <fieldset class="form-group col-sm-1">
                         <label for="for_dv">DV</label>
-                        <input type="text" class="form-control" value="{{ $applicant->replacement_staff->dv }}" readonly>
+                        <input type="text" class="form-control" value="{{ $applicant->replacementStaff->dv }}" readonly>
                     </fieldset>
                     <fieldset class="form-group col-3">
                         <label for="for_name">Nombres</label>
-                        <input type="text" class="form-control" value="{{ $applicant->replacement_staff->name }}" readonly>
+                        <input type="text" class="form-control" value="{{ $applicant->replacementStaff->name }}" readonly>
                     </fieldset>
                     <fieldset class="form-group col-3">
                         <label for="for_name">Apellido Paterno</label>
-                        <input type="text" class="form-control" value="{{ $applicant->replacement_staff->fathers_family }}" readonly>
+                        <input type="text" class="form-control" value="{{ $applicant->replacementStaff->fathers_family }}" readonly>
                     </fieldset>
                     <fieldset class="form-group col-3">
                         <label for="for_name">Apellido Materno</label>
-                        <input type="text" class="form-control" value="{{ $applicant->replacement_staff->mothers_family }}" readonly>
+                        <input type="text" class="form-control" value="{{ $applicant->replacementStaff->mothers_family }}" readonly>
                     </fieldset>
                 </div>
                 <hr>

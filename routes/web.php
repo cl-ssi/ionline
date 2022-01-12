@@ -223,6 +223,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
                 Route::put('/{applicant}/update', [ApplicantController::class, 'update'])->name('update');
                 Route::put('/{applicant}/update_to_select', [ApplicantController::class, 'update_to_select'])->name('update_to_select');
                 Route::delete('{applicant}/destroy', [ApplicantController::class, 'destroy'])->name('destroy');
+                Route::post('/decline_selected_applicant/{applicant}', [ApplicantController::class, 'decline_selected_applicant'])->name('decline_selected_applicant');
             });
             Route::prefix('file')->name('file.')->group(function(){
                 Route::post('/store/{technicalEvaluation}', [TechnicalEvaluationFileController::class, 'store'])->name('store');
@@ -232,6 +233,10 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
             });
         });
 
+    });
+
+    Route::prefix('reports')->name('reports.')->group(function(){
+        Route::get('/replacement_staff_selected_report', [ReplacementStaffController::class, 'replacement_staff_selected_report'])->name('replacement_staff_selected_report');
     });
 
     Route::prefix('profile')->name('profile.')->group(function(){
@@ -1560,5 +1565,6 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 Route::view('/some', 'some');
 
 Route::get('/test-getip',[TestController::class,'getIp']);
+Route::get('/log',[TestController::class,'log']);
 Route::get('/ous',[TestController::class,'ous']);
 Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);

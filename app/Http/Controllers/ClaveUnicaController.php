@@ -100,8 +100,8 @@ class ClaveUnicaController extends Controller
                     $user->id = $user_cu->RolUnico->numero;
                     $user->dv = $user_cu->RolUnico->DV;
                     $user->name = implode(' ', $user_cu->name->nombres);
-                    $user->fathers_family = $user_cu->name->apellidos[0];
-                    $user->mothers_family = $user_cu->name->apellidos[1];
+                    $user->fathers_family = (array_key_exists(0, $user_cu->name->apellidos)) ? $user_cu->name->apellidos[0] : '';
+                    $user->mothers_family = (array_key_exists(1, $user_cu->name->apellidos)) ? $user_cu->name->apellidos[1] : '';
                     if(isset($user_cu->email)) {
                         $user->email = $user_cu->email;
                     }
