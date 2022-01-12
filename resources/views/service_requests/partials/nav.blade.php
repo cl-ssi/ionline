@@ -234,10 +234,12 @@
                 </a>
             @endcan
 
-            <a class="dropdown-item {{ active('rrhh.service-request.report.service-request-continuity') }}"
-                href="{{ route('rrhh.service-request.report.service-request-continuity') }}">
-                <i class="fas fa-clone"></i> Continuidad de contratos
-            </a>
+            @canany(['Service Request: report sr continuity'])
+              <a class="dropdown-item {{ active('rrhh.service-request.report.service-request-continuity') }}"
+                  href="{{ route('rrhh.service-request.report.service-request-continuity') }}">
+                  <i class="fas fa-clone"></i> Continuidad de contratos
+              </a>
+            @endcan
 
 
             <!-- <div class="dropdown-divider"></div>
