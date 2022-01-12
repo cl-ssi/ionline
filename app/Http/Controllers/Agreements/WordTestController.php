@@ -69,7 +69,7 @@ class WordTestController extends Controller
 
     	// ARRAY PARA OBTENER LOS COMPONENTES ASOCIADOS AL CONVENIO
     	foreach ($amounts as $key => $amount) {
-			$arrayComponent[] = array('index' => $key+1, 'componenteNombre' => $amount->program_component->name);
+			$arrayComponent[] = array('componenteIndex' => $key+1, 'componenteNombre' => $amount->program_component->name);
     	}
 
         // SE CONVIERTE EL VALOR TOTAL DEL CONVENIO EN PALABRAS
