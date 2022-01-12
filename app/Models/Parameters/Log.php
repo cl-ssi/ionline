@@ -14,5 +14,22 @@ class Log extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getColorAttribute()
+    {
+        switch($this->level_name)
+        {
+            case 'INFO':
+            case 'NOTICE': 
+                $color='info'; break;
+            case 'WARNING':
+                $color='warning'; break;
+            case 'ERROR': 
+                $color='danger'; break;
+            default: 
+                $color='danger'; break;
+        }
+        return $color;
+    }
     
 }
