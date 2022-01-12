@@ -18,8 +18,8 @@
     <tbody>
         @foreach($logs as $log)
         <tr>
-            <th class="table-danger">Error</th>
-            <th class="table-danger">
+            <th class="table-{{ $log->color }}">{{ $log->level_name }}</th>
+            <th class="table-{{ $log->color }}">
             <!-- <a href="{{ route('parameters.logs.edit', $log) }}">
                     <i class="fas fa-edit"></i>
                 </a> -->
