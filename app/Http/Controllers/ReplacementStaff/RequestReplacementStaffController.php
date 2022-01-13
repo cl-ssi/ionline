@@ -120,14 +120,38 @@ class RequestReplacementStaffController extends Controller
         return view('replacement_staff.request.personal_index', compact('requests'));
     }
 
-    // public function ou_index()
-    // {
-    //     $ou_request = RequestReplacementStaff::where('organizational_unit_id', Auth::user()->organizationalUnit->id)
-    //         ->orderBy('id', 'DESC')
-    //         ->paginate(10);
-    //
-    //     return view('replacement_staff.request.ou_index', compact('ou_request'));
-    // }
+    public function pending_personal_index()
+    {
+        $requests = RequestReplacementStaff::latest()
+            ->where('request_status', 'pending')
+            ->get();
+
+        return view('replacement_staff.request.pending_personal_index', compact('requests'));
+    }
+
+    public function ou_index()
+    {
+        $ou_pending_requests = RequestReplacementStaff::latest()
+            ->where(function ($q){
+              $q->where('user_id', Auth::user()->id)
+                ->orWhere('organizational_unit_id', Auth::user()->organizationalUnit->id);
+            })
+            ->where('request_status', 'pending')
+            ->get();
+
+        $ou_requests = RequestReplacementStaff::latest()
+            ->where(function ($q){
+              $q->where('user_id', Auth::user()->id)
+                ->orWhere('organizational_unit_id', Auth::user()->organizationalUnit->id);
+            })
+            ->where(function ($q){
+              $q->where('request_status', 'complete')
+                ->orWhere('request_status', 'rejected');
+            })
+            ->paginate(10);
+
+        return view('replacement_staff.request.ou_index', compact('ou_pending_requests', 'ou_requests'));
+    }
 
     public function to_sign(RequestReplacementStaff $requestReplacementStaff)
     {

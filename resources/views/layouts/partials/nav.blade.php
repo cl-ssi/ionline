@@ -347,6 +347,11 @@
                                href="{{ route('parameters.index') }}">
                                 <i class="fas fa-cog fa-fw"></i> Mantenedores
                             </a>
+
+                            <a class="dropdown-item"
+                               href="{{ route('parameters.logs.index') }}">
+                                <i class="fas fa-bomb fa-fw"></i> Log de errores
+                            </a>
                             @endrole
 
 

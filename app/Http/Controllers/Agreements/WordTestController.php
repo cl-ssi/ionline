@@ -69,7 +69,7 @@ class WordTestController extends Controller
 
     	// ARRAY PARA OBTENER LOS COMPONENTES ASOCIADOS AL CONVENIO
     	foreach ($amounts as $key => $amount) {
-			$arrayComponent[] = array('index' => $key+1, 'componenteNombre' => $amount->program_component->name);
+			$arrayComponent[] = array('componenteIndex' => $key+1, 'componenteNombre' => $amount->program_component->name);
     	}
 
         // SE CONVIERTE EL VALOR TOTAL DEL CONVENIO EN PALABRAS
@@ -82,14 +82,16 @@ class WordTestController extends Controller
         foreach ($quotas as $key => $quota) {
                 $cuotaConvenioLetras = $this->correctAmountText($formatter->toMoney($quota->amount,0, 'pesos',''));
                 $arrayQuota[] = array('index' => ($this->ordinal($key+1))
+                                      ,'percentage' => $quota->percentage ?? 0
                                       ,'cuotaDescripcion' => $quota->description . ($key+1 == 1 ? ' del total de los recursos del convenio una vez aprobada la resolución exenta que aprueba el presente instrumento y recibidos los recursos del Ministerio de Salud.' : ' restante del total de recursos y se enviará en el mes de octubre, según resultados obtenidos en la primera evaluación definida en la cláusula anterior. Así también, dependerá de la recepción de dichos recursos desde Ministerio de Salud y existencia de rendición financiera según lo establece la resolución N°30 del año 2015, de la Contraloría General de la República que fija normas sobre procedimiento de rendición de cuentas de la Contraloría General de la Republica, por parte de la “MUNICIPALIDAD”.')
                                       ,'cuotaMonto' => number_format($quota->amount,0,",",".")
                                       ,'cuotaLetra' => $cuotaConvenioLetras);
              } 
 
         $totalQuotas = mb_strtolower($formatter->toMoney(count($quotas),0));
+        if($totalQuotas == 'un ') $totalQuotas = 'una cuota'; else $totalQuotas .= 'cuotas';
 
-    	$templateProcesor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/convenio2021.docx'));
+    	$templateProcesor = new \PhpOffice\PhpWord\TemplateProcessor(public_path('word-template/convenio'.$agreements->period.'.docx'));
 
     	$periodoConvenio = $agreements->period;
     	// $fechaConvenio = $agreements->date;
@@ -152,10 +154,29 @@ class WordTestController extends Controller
         $templateProcesor->setValue('art8', !Str::contains($directorApelativo, '(S)') ? 'Art. 8 del ' : '');
 
         // CLONE BLOCK PARA LISTAR COMPONENTES
-        if(env('APP_ENV') == 'local') ini_set("pcre.backtrack_limit", -1);
+        ini_set("pcre.backtrack_limit", -1);
         $templateProcesor->cloneBlock('componentesListado', 0, true, false,$arrayComponent);
         // CLONE BLOCK PARA LISTAR CUOTAS
         $templateProcesor->cloneBlock('cuotasListado', 0, true, false,$arrayQuota);
+        //CLONE BLOCK PARA 1, 2, 3 Y 12 CUOTAS
+        $blocks = [1 => 'ONE_QUOTA_BLOCK', 2 => 'TWO_QUOTAS_BLOCK', 3 => 'THREE_QUOTAS_BLOCK', 12 => 'TWELVE_QUOTAS_BLOCK'];
+
+        foreach($blocks as $n => $block){
+            if(count($quotas) == $n){
+                if($n == 1){
+                    $templateProcesor->cloneBlock($block, 1, true, false, $arrayQuota);
+                } else {
+                    $templateProcesor->cloneBlock($block, 1, true, false);
+                    foreach ($arrayQuota as $key => $item){
+                        foreach ($item as $search => $replace){
+                            $templateProcesor->setValue($search."#".($key+1), $replace, ($n == 12 && ($key+1) == 1) ? 2 : 1); //repeat values (only first quota) 2 times when twelve quotas block is cloned 
+                        }
+                    }
+                }
+            } else {
+                $templateProcesor->cloneBlock($block, 0); //Borrar este bloque no se va a ocupar
+            }
+        }
 
         $templateProcesor->setValue('establecimientosListado',$arrayEstablishmentConcat);
 
