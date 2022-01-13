@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('parameters.nav')
-
 <style>
     pre {
     white-space: pre-wrap;
@@ -19,13 +17,13 @@
         @foreach($logs as $log)
         <tr>
             <th class="table-{{ $log->color }}">
-                <!-- <a href="{{ route('parameters.logs.edit', $log) }}">
-                    <i class="fas fa-edit"></i>
-                </a> -->
                 <a href="{{ route('parameters.logs.destroy', $log) }}" class="ml-3">
                     <i class="fas fa-trash text-{{ $log->color }}"></i>
                 </a>
-                <span class="ml-3"> {{ $log->level_name }} </span>
+                <span class="ml-3 mr-3"> {{ $log->level_name }} {{ $log->id }}</span>
+                <a href="{{ route('parameters.logs.show', $log) }}">
+                    <i class="fas fa-eye"></i>
+                </a>
             </th>
         </tr>
         <tr>
