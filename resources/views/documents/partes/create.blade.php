@@ -14,9 +14,9 @@
 
     <div class="row">
         <fieldset class="form-group col-3">
-            <label for="for_entered_at">Fecha Ingreso</label>
+            <label for="for_entered_at">Fecha Ingreso*</label>
             <input type="datetime-local" class="form-control" id="for_entered_at"
-                name="entered_at">
+                name="entered_at" required>
         </fieldset>
 
         <fieldset class="form-group col">
@@ -25,8 +25,8 @@
         </fieldset>
 
         <fieldset class="form-group col">
-            <label for="for_type">Tipo</label>
-            <select name="type" id="for_type" class="form-control">
+            <label for="for_type">Tipo*</label>
+            <select name="type" id="for_type" class="form-control" required>
                 <option value="Carta">Carta</option>
                 <option value="Circular">Circular</option>
                 <option value="Decreto">Decreto</option>
@@ -60,13 +60,13 @@
 
 
     <fieldset class="form-group">
-        <label for="for_orign">Origen</label>
+        <label for="for_orign">Origen*</label>
         <input type="text" class="form-control" id="for_orign" name="origin" required>
         <small id="emailHelp" class="form-text text-muted">Desde donde viene el documento.</small>
     </fieldset>
 
     <fieldset class="form-group">
-        <label for="for_subject">Asunto</label>
+        <label for="for_subject">Asunto*</label>
         <input type="text" class="form-control" id="for_subject" name="subject" required>
     </fieldset>
 
