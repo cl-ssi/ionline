@@ -21,7 +21,7 @@ class DatabaseHandler extends AbstractProcessingHandler{
        $data = array(
            'user_id'       => auth()->user()->id ?? '',
            'message'       => $record['message'],
-           'uri'           => $_SERVER['REQUEST_URI'],
+           'uri'           => $_SERVER['REQUEST_URI'] ?? '',
            'formatted'     => $record['formatted'],
 
            'context'       => json_encode($record['context']),
