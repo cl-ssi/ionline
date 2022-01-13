@@ -12,7 +12,7 @@
     @csrf
     @method('POST')
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-3">
             <label for="for_entered_at">Fecha Ingreso*</label>
             <input type="datetime-local" class="form-control" id="for_entered_at"
@@ -72,7 +72,7 @@
 
 
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-5">
             <!--<label for="for_file">Archivo</label>-->
             <div class="custom-file">
