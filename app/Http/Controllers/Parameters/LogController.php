@@ -49,7 +49,7 @@ class LogController extends Controller
      */
     public function show(Log $log)
     {
-        //
+        return view('parameters.logs.show', compact('log'));
     }
 
     /**
