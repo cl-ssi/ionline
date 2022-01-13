@@ -20,7 +20,8 @@ class Log extends Model
         switch($this->level_name)
         {
             case 'INFO':
-            case 'NOTICE': 
+            case 'NOTICE':
+            case 'DEBUG':
                 $color='info'; break;
             case 'WARNING':
                 $color='warning'; break;
