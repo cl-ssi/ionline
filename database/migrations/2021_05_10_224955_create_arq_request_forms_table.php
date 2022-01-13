@@ -26,6 +26,7 @@ class CreateArqRequestFormsTable extends Migration
             $table->string('program')->nullable();
             $table->longText('justification');
             $table->string('type_form');
+            $table->string('subtype')->nullable();
             $table->string('sigfe')->nullable();
             $table->string('bidding_number')->nullable();//id nro. de licitación.
 
