@@ -20,6 +20,8 @@
     </a>
 </h3>
 
+<a target="_blank" href="{{ $log->uri }}">[{{ $log->uri }}]</a>
+
 <pre>
     {{ print_r($log->toArray()) }} {{ optional($log->user)->fullName }}
 </pre>

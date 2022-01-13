@@ -10,7 +10,7 @@
 }
 </style>
 
-<h3 class="mb-3">Logs</h3>
+<h3 class="mb-3">Logs <small> registros totales: {{ $logs->count() }}</small></h3>
 
 
 <table class="table table-sm">
@@ -27,7 +27,7 @@
                 </a>
             </th>
         </tr>
-        <tr><td><b>[uri] = </b> {{ $log->uri }} <a href="{{ $log->uri }}">[ir]</a></td></tr>
+        <tr><td><b>[uri] = </b> {{ $log->uri }} <a target="_blank" href="{{ $log->uri }}">[ir]</a></td></tr>
         <tr><td><b>[message] = </b>{{ $log->message }}</td></tr>
         <tr><td><b>[formatted] = </b><pre>{{ substr($log->formatted, 0,1000) }}...</pre></td></tr>
         <tr><td><b>[context] = </b><pre>{{ substr($log->context, 0, 1000) }}...</pre></td></tr>
