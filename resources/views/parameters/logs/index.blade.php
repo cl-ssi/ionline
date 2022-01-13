@@ -4,8 +4,6 @@
 
 @section('content')
 
-@include('parameters.nav')
-
 <style>
     pre {
     white-space: pre-wrap;
@@ -14,27 +12,33 @@
 
 <h3 class="mb-3">Logs</h3>
 
+
 <table class="table table-sm">
     <tbody>
         @foreach($logs as $log)
         <tr>
-            <th class="table-{{ $log->color }}">{{ $log->level_name }}</th>
             <th class="table-{{ $log->color }}">
-            <!-- <a href="{{ route('parameters.logs.edit', $log) }}">
-                    <i class="fas fa-edit"></i>
-                </a> -->
-                <a href="{{ route('parameters.logs.destroy', $log) }}">
-                    <i class="fas fa-trash text-danger"></i>
+                <a href="{{ route('parameters.logs.destroy', $log) }}" class="ml-3">
+                    <i class="fas fa-trash text-{{ $log->color }}"></i>
+                </a>
+                <span class="ml-3 mr-3"> {{ $log->level_name }} #{{ $log->id }}</span>
+                <a href="{{ route('parameters.logs.show', $log) }}">
+                    <i class="fas fa-eye"></i>
                 </a>
             </th>
         </tr>
-        <tr>
-            <td>
-                <pre>
-                    {{ print_r($log->toArray()) }} {{ optional($log->user)->fullName }}
-                </pre>
-            </td>
-        </tr>
+        <tr><td><b>[uri] = </b> {{ $log->uri }} <a href="{{ $log->uri }}">[ir]</a></td></tr>
+        <tr><td><b>[message] = </b>{{ $log->message }}</td></tr>
+        <tr><td><b>[formatted] = </b><pre>{{ substr($log->formatted, 0,1000) }}...</pre></td></tr>
+        <tr><td><b>[context] = </b><pre>{{ substr($log->context, 0, 1000) }}...</pre></td></tr>
+        <tr><td><b>[level] = </b>{{ $log->level }}</td></tr>
+        <tr><td><b>[channel] = </b>{{ $log->channel }}</td></tr>
+        <tr><td><b>[extra] = </b>{{ $log->extra }}</td></tr>
+        <tr><td><b>[remote_addr] = </b>{{ $log->remote_addr }}</td></tr>
+        <tr><td><b>[user_agent] = </b>{{ $log->user_agent }}</td></tr>
+        <tr><td><b>[record_datetime] = </b>{{ $log->record_datetime }}</td></tr>
+        <tr><td><b>[user_id] = </b>{{ $log->user_id }}</td></tr>
+        <tr><td><b>Usuario = </b>{{ optional($log->user)->fullName }}</td></tr>
         @endforeach
     </tbody>
 </table>

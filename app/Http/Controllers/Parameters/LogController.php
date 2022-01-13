@@ -49,7 +49,7 @@ class LogController extends Controller
      */
     public function show(Log $log)
     {
-        //
+        return view('parameters.logs.show', compact('log'));
     }
 
     /**
@@ -84,6 +84,6 @@ class LogController extends Controller
     public function destroy(Log $log)
     {
         $log->delete();
-        return redirect()->back();
+        return redirect()->route('parameters.logs.index');
     }
 }
