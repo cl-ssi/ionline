@@ -66,6 +66,7 @@ use App\Http\Controllers\Pharmacies\PurchaseController;
 use App\Pharmacies\Purchase;
 use App\User;
 use App\Http\Controllers\TestController;
+use App\Http\Controllers\Parameters\LogController;
 
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -194,6 +195,7 @@ Route::prefix('replacement_staff')->as('replacement_staff.')->middleware('auth')
         Route::get('/assign_index', [RequestReplacementStaffController::class, 'assign_index'])->name('assign_index')->middleware('permission:Replacement Staff: technical evaluation');
         Route::get('/own_index', [RequestReplacementStaffController::class, 'own_index'])->name('own_index');
         Route::get('/personal_index', [RequestReplacementStaffController::class, 'personal_index'])->name('personal_index');
+        Route::get('/pending_personal_index', [RequestReplacementStaffController::class, 'pending_personal_index'])->name('pending_personal_index');
         Route::get('/ou_index', [RequestReplacementStaffController::class, 'ou_index'])->name('ou_index');
         Route::get('/create', [RequestReplacementStaffController::class, 'create'])->name('create');
         Route::get('/{requestReplacementStaff}/create_extension', [RequestReplacementStaffController::class, 'create_extension'])->name('create_extension');
@@ -618,6 +620,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/pending-resolutions', [ReportController::class, 'pendingResolutions'])->name('pending-resolutions');
             Route::get('/contract', [ReportController::class, 'contract'])->name('contract');
             Route::get('/duplicate-contracts', [ReportController::class, 'duplicateContracts'])->name('duplicate-contracts');
+            Route::get('/service-request-continuity', [ReportController::class, 'service_request_continuity'])->name('service-request-continuity');
             Route::get('/resolution-pdf/{ServiceRequest}', [ReportController::class, 'resolutionPDF'])->name('resolution-pdf');
             Route::get('/resolution-pdf-hsa/{ServiceRequest}', [ReportController::class, 'resolutionPDFhsa'])->name('resolution-pdf-hsa');
             Route::get('/bank-payment-file/{establishment_id?}', [ReportController::class, 'bankPaymentFile'])->name('bank-payment-file');
@@ -848,6 +851,15 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
         // Route::put('/update/{measurement}', 'Parameters\UnitOfMeasurementController@update')->name('update');
         // Route::post('/store', 'Parameters\UnitOfMeasurementController@store')->name('store');
     });
+
+    Route::prefix('logs')->name('logs.')->middleware('auth')->group(function () {
+        Route::get('/', [LogController::class, 'index'])->name('index');
+        Route::get('{log}', [LogController::class, 'show'])->name('show')->where('id', '[0-9]+');
+        // Route::get('{log}/edit', [LogController::class, 'edit'])->name('edit');
+        // Route::put('{log}', [LogController::class, 'update'])->name('update');
+        Route::get('{log}/destroy', [LogController::class, 'destroy'])->name('destroy');
+    });
+
 });
 
 Route::prefix('documents')->as('documents.')->middleware('auth')->group(function () {
@@ -1561,8 +1573,12 @@ Route::prefix('suitability')->as('suitability.')->middleware('auth')->group(func
 });
 
 
+
+
+
 Route::view('/some', 'some');
 
 Route::get('/test-getip',[TestController::class,'getIp']);
+Route::get('/log',[TestController::class,'log']);
 Route::get('/ous',[TestController::class,'ous']);
 Route::get('/test-mercado-publico-api/{date}', [TestController::class, 'getMercadoPublicoTender']);
