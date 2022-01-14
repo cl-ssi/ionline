@@ -382,7 +382,7 @@
         11-40-504 <b>SENDA</b> (Fondos Extrapresupuestario) asociado al convenio SENDA 1,
         @elseif($ServiceRequest->programm_name == "SENDA UHCIP")
         11450602
-        @elseif($ServiceRequest->programm_name == "SENDA LEY ALCOHOLES")
+        @elseif($ServiceRequest->programm_name == "ley alcoholes")
         114050601
         @elseif($ServiceRequest->programm_name == "SENDA PSIQUIATRIA ADULTO")
         11450602
