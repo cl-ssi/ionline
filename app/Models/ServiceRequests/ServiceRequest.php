@@ -88,15 +88,15 @@ class ServiceRequest extends Model implements Auditable
     }
 
     public function responsable(){
-      return $this->belongsTo('App\User','responsable_id');
+      return $this->belongsTo('App\User','responsable_id')->withTrashed();
     }
 
     public function employee(){
-      return $this->belongsTo('App\User','user_id');
+      return $this->belongsTo('App\User','user_id')->withTrashed();
     }
 
     public function creator(){
-      return $this->belongsTo('App\User','creator_id');
+      return $this->belongsTo('App\User','creator_id')->withTrashed();
     }
 
     public function SignatureFlows() {
