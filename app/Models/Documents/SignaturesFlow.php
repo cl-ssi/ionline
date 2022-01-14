@@ -30,7 +30,7 @@ class SignaturesFlow extends Model Implements Auditable
 
     public function userSigner()
     {
-        return $this->belongsTo('App\User', 'user_id');
+        return $this->belongsTo('App\User', 'user_id')->withTrashed();
     }
 
     public function signature(){
