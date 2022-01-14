@@ -104,6 +104,7 @@
                         <option value="">Seleccione...</option>
                         <option value="immediate_availability" {{ ($replacementStaff->status == 'immediate_availability')?'selected':'' }}>Inmediata</option>
                         <option value="working_external" {{ ($replacementStaff->status == 'working_external')?'selected':'' }}>Trabajando</option>
+                        <option value="selected" {{ ($replacementStaff->status == 'selected')?'selected':'' }}>Seleccionado</option>
                     </select>
                 </fieldset>
                 <fieldset class="form-group col-5">
