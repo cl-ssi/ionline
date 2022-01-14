@@ -54,6 +54,12 @@ class DeliverController extends Controller
                                             ->whereNotIn('id', [1185, 1186, 1231])
                                             ->orderBy('name', 'ASC')->get();
         } else {
+
+            if (Auth::user()->establishments->count()==0) {
+              session()->flash('warning', 'El usuario no tiene asignado establecimiento. Contacte a secretaría de informática.');
+              return redirect()->route('pharmacies.index');
+            }
+
             $filter = Auth::user()->establishments->first();
             $filterEstablishment = function($query) use ($filter) {
                 $query->where('establishment_id', $filter->id);
@@ -78,7 +84,7 @@ class DeliverController extends Controller
             $pending_deliveries_list = Deliver::with('establishment:id,name', 'product:id,name')
                                         ->where('remarks', 'PENDIENTE')
                                         ->where('establishment_id', $filter->id)->get();
-        
+
             $pendings_by_product = $pending_deliveries_list->groupBy('product_id')->map(function($row){
                     return $row->sum('quantity');
             });
@@ -95,6 +101,12 @@ class DeliverController extends Controller
      */
     public function create(Request $request)
     {
+
+        if (Auth::user()->establishments->count()==0) {
+          session()->flash('warning', 'El usuario no tiene asignado establecimiento. Contacte a secretaría de informática.');
+          return redirect()->route('pharmacies.index');
+        }
+
         $establishment_id = Auth::user()->establishments->first()->id;
         $filterEstablishment = function($query) use ($establishment_id) {
             $query->where('establishment_id', $establishment_id);
