@@ -382,7 +382,13 @@
         @else
         Servicio de Salud Iquique,
         @endif
-        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 10 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas
+        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
+        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+        10
+        @else
+        5
+        @endif
+        del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         del Hospital Dr. Ernesto Torres Galdames de Iquique,
         @else
@@ -399,7 +405,13 @@
         @else
         Servicio de Salud Iquique,
         @endif
-        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 10 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
+        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 
+        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+        10
+        @else
+        5
+        @endif
+        del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del Hospital Dr. Ernesto Torres Galdames de Iquique, el cual debe venir con las debidas observaciones de la Jefatura directa.
       </p>
       @endif
       @endif
@@ -423,7 +435,13 @@
       @else
       Servicio de Salud Iquique,
       @endif
-      en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 10 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas
+      en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
+      @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+      10
+      @else
+      5
+      @endif
+      del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Hospital retendrá y pagará el impuesto correspondiente por los honorarios pactados. Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       del Hospital Dr. Ernesto Torres Galdames de Iquique,
       @else
@@ -455,7 +473,13 @@
         @else
         Servicio de Salud Iquique,
         @endif
-        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 10 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
+        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día 
+        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+        10
+        @else
+        5
+        @endif
+        del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
         <br>
         Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Subdirección de Gestión y Desarrollo de las Personas del
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
@@ -475,7 +499,13 @@
         Jefe
         @endif del {{$ServiceRequest->responsabilityCenter->name}} o por la jefatura inmediatamente superior, deberá certificar las horas realizadas por el profesional médico de manera presencial (no es aceptable la suplantación de personas). Debiendo, además, adjuntar el registro de asistencia efectuado en el respectivo servicio, los cuales serán indispensables para su cancelación, sin perjuicio de las funciones de control de la Subdirección de Gestión y Desarrollo de las Personas del Hospital de Iquique,
         <br><br>
-        El pago será efectuado el día 10 del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
+        El pago será efectuado el día 
+        @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
+        10
+        @else
+        5
+        @endif
+        del mes siguiente, y si este cae en día inhábil, se efectuará el día hábil más cercano una vez que el establecimiento dé su conformidad a la prestación realizada y previa presentación de la boleta de honorario respectiva. El Servicio retendrá y pagará el impuesto correspondiente por los honorarios pactados.
         <br><br>
         Asimismo, el prestador deberá entregar dentro de los primeros 5 días del mes siguiente el certificado de servicios prestados realizados, a la Unidad de Honorarios Covid del
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
