@@ -37,8 +37,7 @@
         <tr><td><b>[remote_addr] = </b>{{ $log->remote_addr }}</td></tr>
         <tr><td><b>[user_agent] = </b>{{ $log->user_agent }}</td></tr>
         <tr><td><b>[record_datetime] = </b>{{ $log->record_datetime }}</td></tr>
-        <tr><td><b>[user_id] = </b>{{ $log->user_id }}</td></tr>
-        <tr><td><b>Usuario = </b>{{ optional($log->user)->fullName }}</td></tr>
+        <tr><td><b>[user_id] = </b>{{ $log->user_id }} - {{ optional($log->user)->fullName }}</td></tr>
         @endforeach
     </tbody>
 </table>
