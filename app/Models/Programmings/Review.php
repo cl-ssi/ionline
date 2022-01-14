@@ -20,10 +20,10 @@ class Review extends Model
     }
 
     public function user() {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User')->withTrashed();
     }
 
     public function updatedBy() {
-        return $this->belongsTo('App\User', 'updated_by');
+        return $this->belongsTo('App\User', 'updated_by')->withTrashed();
     }
 }
