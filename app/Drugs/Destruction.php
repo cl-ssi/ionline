@@ -13,23 +13,23 @@ class Destruction extends Model
     }
 
     public function user() {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User')->withTrashed();
     }
 
     public function manager() {
-        return $this->belongsTo('App\User', 'manager_id');
+        return $this->belongsTo('App\User', 'manager_id')->withTrashed();
     }
 
     public function lawyer() {
-        return $this->belongsTo('App\User', 'lawyer_id');
+        return $this->belongsTo('App\User', 'lawyer_id')->withTrashed();
     }
 
     public function observer() {
-        return $this->belongsTo('App\User', 'observer_id');
+        return $this->belongsTo('App\User', 'observer_id')->withTrashed();
     }
 
     public function lawyer_observer() {
-        return $this->belongsTo('App\User', 'lawyer_observer_id');
+        return $this->belongsTo('App\User', 'lawyer_observer_id')->withTrashed();
     }
 
     /**

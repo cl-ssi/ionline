@@ -35,10 +35,10 @@ class Value extends Model
     }
 
     public function creator(){
-        return $this->belongsTo('App\User','created_by');
+        return $this->belongsTo('App\User','created_by')->withTrashed();
     }
 
     public function editor(){
-        return $this->belongsTo('App\IUser','edited_by');
+        return $this->belongsTo('App\IUser','edited_by')->withTrashed();
     }
 }
