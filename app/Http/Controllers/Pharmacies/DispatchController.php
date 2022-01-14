@@ -237,8 +237,12 @@ class DispatchController extends Controller
           $cont = $cont + 1;
         }
       }
-      $matrix_due_date=array_unique($matrix_due_date);
-      $matrix_batch=array_unique($matrix_batch);
+      if ($matrix_due_date!=null) {
+        $matrix_due_date=array_unique($matrix_due_date);
+      }
+      if ($matrix_batch!=null) {
+        $matrix_batch=array_unique($matrix_batch);
+      }
       //dd(array_unique($matrix_due_date));
       //dd($matrix_due_date, $matrix_batch);
 

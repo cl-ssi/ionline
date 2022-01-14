@@ -715,7 +715,7 @@ class ReportController extends Controller
     ->has('serviceRequests', '>=', 2)->get('id');
     foreach($users as $user)
     {
-      
+
       foreach($user->serviceRequests as $sr)
       {
         //dd($sr);
@@ -725,12 +725,12 @@ class ReportController extends Controller
          if ($srtemporal->start_date >= $sr->start_date and $srtemporal->end_date <= $sr->end_date)
          {
           //dd("encontre algo ".$sr->user_id);
-          $sr->srsolapados->push($srtemporal); 
+          $sr->srsolapados->push($srtemporal);
           dd($sr->srsolapados);
          }
 
         }
-        
+
       }
 
     }
@@ -739,7 +739,7 @@ class ReportController extends Controller
 
     }
 
-    
+
 
   	public function contract(Request $request)
   	{
@@ -1258,6 +1258,8 @@ class ReportController extends Controller
   }
 
   public function service_request_continuity(Request $request){
+
+    $results = array();
     if ($request->from != null && $request->to != null) {
       $serviceRequests = ServiceRequest::where('program_contract_type','Mensual')
                                       ->where('type','Covid')
@@ -1269,7 +1271,7 @@ class ReportController extends Controller
 
                                       // dd($serviceRequests[0]);
 
-      $results = array();
+
       // dd($serviceRequests->count());
       if ($serviceRequests->count()>0) {
 

@@ -43,12 +43,20 @@
 
   <fieldset class="form-group col-12 col-md-3">
       <label for="for_request_date">Responsable</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->SignatureFlows->where('sign_position',1)->first()->user->getFullNameAttribute()}}" disabled>
+      @if($serviceRequest->SignatureFlows->isNotEmpty())
+      <input type="text" class="form-control" value="{{ optional(optional($serviceRequest->SignatureFlows->where('sign_position',1)->first())->user)->getFullNameAttribute() }}" disabled>
+      @else
+			<span class="form-control is-invalid">Error, contacte a informática</span>
+			@endif
   </fieldset>
 
   <fieldset class="form-group col-12 col-md-3">
       <label for="for_start_date">Supervisor</label>
-      <input type="text" class="form-control" value="{{$serviceRequest->SignatureFlows->where('sign_position',2)->first()->user->getFullNameAttribute()}}" disabled>
+      @if($serviceRequest->SignatureFlows->isNotEmpty())
+      <input type="text" class="form-control" value="{{ optional(optional($serviceRequest->SignatureFlows->where('sign_position',2)->first())->user)->getFullNameAttribute() }}" disabled>
+      @else
+			<span class="form-control is-invalid">Error, contacte a informática</span>
+			@endif
   </fieldset>
 
 </div>

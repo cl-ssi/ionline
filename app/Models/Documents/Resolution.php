@@ -26,11 +26,11 @@ class Resolution extends Model implements Auditable
     }
 
     public function user(){
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User')->withTrashed();
     }
 
     public function responsable(){
-        return $this->belongsTo('App\User','responsable_id');
+        return $this->belongsTo('App\User','responsable_id')->withTrashed();
     }
 
     public function organizationalUnit(){
