@@ -22,6 +22,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ComplianceExport;
 use App\Exports\PayedExport;
 use App\Exports\ContractExport;
+use App\User;
 
 
 class ReportController extends Controller
@@ -697,6 +698,48 @@ class ReportController extends Controller
     //$serviceRequests = $serviceRequests->paginate(100);
     return view('service_requests.reports.duplicate_contracts', compact('request', 'serviceRequests'));
   }
+
+  public function overlappingContracts(Request $request)
+  {
+
+    //se
+///$users = User::with(['posts' => function ($query) {
+//   $query->orderBy('created_at', 'desc');
+// }])->get();
+
+
+    $users = User::with(['serviceRequests'
+    => function ($query) {
+        $query->orderBy('start_date', 'asc');
+      }])
+    ->has('serviceRequests', '>=', 2)->get('id');
+    foreach($users as $user)
+    {
+      
+      foreach($user->serviceRequests as $sr)
+      {
+        //dd($sr);
+        foreach($user->serviceRequests as $srtemporal)
+        if($sr != $srtemporal)
+        {
+         if ($srtemporal->start_date >= $sr->start_date and $srtemporal->end_date <= $sr->end_date)
+         {
+          //dd("encontre algo ".$sr->user_id);
+          $sr->srsolapados->push($srtemporal); 
+          dd($sr->srsolapados);
+         }
+
+        }
+        
+      }
+
+    }
+
+
+
+    }
+
+    
 
   	public function contract(Request $request)
   	{

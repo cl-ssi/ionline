@@ -212,11 +212,12 @@
                 <i class="fas fa-clone"></i> Contratos Duplicados
             </a>
             @endcan
+            
 
             @canany(['Service Request: pending requests'])
             <a class="dropdown-item {{ active('rrhh.service-request.report.overlapping-contracts') }}"
-                href="{{ route('rrhh.service-request.report.duplicate-contracts') }}">
-                <i class="fas fa-clone"></i> Contratos Solapados
+                href="{{ route('rrhh.service-request.report.overlapping-contracts') }}">
+                <i class="fas fa-grip-vertical"></i> Contratos Solapados
             </a>
             @endcan
 
