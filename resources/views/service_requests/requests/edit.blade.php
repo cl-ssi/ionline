@@ -329,7 +329,7 @@
 
 				<option value="ADP DIRECTOR" @if($serviceRequest->programm_name == 'ADP DIRECTOR') selected @endif>ADP DIRECTOR</option>
 				<option value="SENDA" @if($serviceRequest->programm_name == 'SENDA') selected @endif>SENDA</option>
-				<option value="ley alcoholes" @if($serviceRequest->programm_name == 'ley alcoholes') selected @endif>ley alcoholes</option>
+				<option value="LEY DE ALCOHOL" @if($serviceRequest->programm_name == 'LEY DE ALCOHOL') selected @endif>LEY DE ALCOHOL</option>
 				<option value="SENDA UHCIP" @if($serviceRequest->programm_name == 'SENDA UHCIP') selected @endif>SENDA UHCIP</option>
 				<option value="SENDA PSIQUIATRIA ADULTO" @if($serviceRequest->programm_name == 'SENDA PSIQUIATRIA ADULTO') selected @endif>SENDA PSIQUIATRIA ADULTO</option>
 				<option value="SENADIS" @if($serviceRequest->programm_name == 'SENADIS') selected @endif>SENADIS</option>
@@ -1187,7 +1187,7 @@
 
 				$("#programm_name option[value='ADP DIRECTOR']").hide();
 				$("#programm_name option[value='SENDA']").hide();
-				$("#programm_name option[value='ley alcoholes']").hide();
+				$("#programm_name option[value='LEY DE ALCOHOL']").hide();
 				$("#programm_name option[value='SENDA UHCIP']").hide();
 				$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
 				$("#programm_name option[value='SENADIS']").hide();
@@ -1214,7 +1214,7 @@
 
 				$("#programm_name option[value='ADP DIRECTOR']").show();
 				$("#programm_name option[value='SENDA']").show();
-				$("#programm_name option[value='ley alcoholes']").show();
+				$("#programm_name option[value='LEY DE ALCOHOL']").show();
 				$("#programm_name option[value='SENDA UHCIP']").show();
 				$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").show();
 				$("#programm_name option[value='SENADIS']").show();
