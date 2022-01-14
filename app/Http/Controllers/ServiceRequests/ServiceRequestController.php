@@ -563,6 +563,13 @@ class ServiceRequestController extends Controller
       }
     }
 
+    if($serviceRequest->SignatureFlows->isEmpty())
+    {
+      /* Envío al log de errores el id para su chequeo */
+      logger("El ServiceRequest no tiene signature flows creados", ['id' => $serviceRequest->id]);
+    }
+
+
     $users = User::orderBy('name', 'ASC')->get();
     $establishments = Establishment::orderBy('name', 'ASC')->get();
     $professions = Profession::orderBy('name', 'ASC')->get();

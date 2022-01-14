@@ -232,7 +232,12 @@ class FulfillmentController extends Controller
 
     public function edit_fulfillment(ServiceRequest $serviceRequest)
     {
-
+      if($serviceRequest->SignatureFlows->isEmpty())
+      {
+        /* Envío al log de errores el id para su chequeo */
+        logger("El ServiceRequest no tiene signature flows creados", ['id' => $serviceRequest->id]);
+      }
+      
       //se hizo esto para los casos en que no existan fulfillments
       if ($serviceRequest->fulfillments->count() == 0) {
 
