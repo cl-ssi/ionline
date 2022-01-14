@@ -15,7 +15,7 @@
               <div class="form-row">
                   <fieldset class="form-group col">
                       <label for="for_to_user_id">Funcionario</label>
-                      <select name="to_user_id" id="for_to_user_id" class="form-control">
+                      <select name="to_user_id" id="for_to_user_id" class="form-control" required>
                           <option value="">Seleccione...</option>
                           @foreach($users_rys as $user_rys)
                               <option value="{{ $user_rys->id }}">{{ $user_rys->FullName }}</option>
@@ -26,7 +26,7 @@
               <div class="form-row">
                   <fieldset class="form-group col">
                       <label for="for_observation" class="form-label">Observaciones</label>
-                      <textarea class="form-control" name="observation" id="for_observation" rows="3"></textarea>
+                      <textarea class="form-control" name="observation" id="for_observation" rows="3" required></textarea>
                   </fieldset>
               </div>
 
