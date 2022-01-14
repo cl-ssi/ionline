@@ -244,7 +244,7 @@
 
 					<option value="ADP DIRECTOR">ADP DIRECTOR</option>
 					<option value="SENDA">SENDA</option>
-					<option value="SENDA LEY ALCOHOLES">SENDA LEY ALCOHOLES</option>
+					<option value="LEY DE ALCOHOL">LEY DE ALCOHOL</option>
 					<option value="SENDA UHCIP">SENDA UHCIP</option>
 					<option value="SENDA PSIQUIATRIA ADULTO">SENDA PSIQUIATRIA ADULTO</option>
 					<option value="SENADIS">SENADIS</option>
@@ -309,7 +309,7 @@
 
 
 	{{--
-	
+
 	<div class="form-row">
 
 		<fieldset class="form-group col-12 col-md-3">
@@ -386,7 +386,7 @@
 
 	</div>
 
-	
+
 	--}}
 
 
@@ -468,7 +468,7 @@
 
 		$("#programm_name option[value='ADP DIRECTOR']").hide();
 		$("#programm_name option[value='SENDA']").hide();
-		$("#programm_name option[value='SENDA LEY ALCOHOLES']").hide();
+		$("#programm_name option[value='LEY DE ALCOHOL']").hide();
 		$("#programm_name option[value='SENDA UHCIP']").hide();
 		$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
 		$("#programm_name option[value='SENADIS']").hide();
@@ -675,7 +675,7 @@
 
 				$("#programm_name option[value='ADP DIRECTOR']").hide();
 				$("#programm_name option[value='SENDA']").hide();
-				$("#programm_name option[value='SENDA LEY ALCOHOLES']").hide();
+				$("#programm_name option[value='LEY DE ALCOHOL']").hide();
 				$("#programm_name option[value='SENDA UHCIP']").hide();
 				$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
 				$("#programm_name option[value='SENADIS']").hide();
@@ -704,7 +704,7 @@
 
 				$("#programm_name option[value='ADP DIRECTOR']").show();
 				$("#programm_name option[value='SENDA']").show();
-				$("#programm_name option[value='SENDA LEY ALCOHOLES']").show();
+				$("#programm_name option[value='LEY DE ALCOHOL']").show();
 				$("#programm_name option[value='SENDA UHCIP']").show();
 				$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").show();
 				$("#programm_name option[value='SENADIS']").show();
@@ -752,7 +752,7 @@
 
 			$("#programm_name option[value='ADP DIRECTOR']").hide();
 			$("#programm_name option[value='SENDA']").hide();
-			$("#programm_name option[value='SENDA LEY ALCOHOLES']").hide();
+			$("#programm_name option[value='LEY DE ALCOHOL']").hide();
 			$("#programm_name option[value='SENDA UHCIP']").hide();
 			$("#programm_name option[value='SENDA PSIQUIATRIA ADULTO']").hide();
 			$("#programm_name option[value='SENADIS']").hide();
