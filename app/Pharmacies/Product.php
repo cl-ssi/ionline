@@ -460,7 +460,6 @@ class Product extends Model
 
       //usort($final, array($this, "ordenamiento_fecha_vencimiento"));
       //usort($final, 'order');
-
       $data = null;
       foreach ($final as $key => $i) {
         if($program != NULL){
@@ -484,11 +483,13 @@ class Product extends Model
                 $data[$key]['program'] = $i->product->program->name;
             }
         }else{
+          if ($i!=null) {
             $data[$key]['name'] = $i->product->name;
             $data[$key]['due_date'] = $i->due_date;//Carbon::parse();
             $data[$key]['batch'] = $i->batch;
             $data[$key]['cantidad'] = $i->cantidad;
             $data[$key]['program'] = $i->product->program->name;
+          }
         }
       }
 
