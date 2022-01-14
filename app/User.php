@@ -151,6 +151,10 @@ class User extends Authenticatable implements Auditable
         return $name[0].$fathers[0].$mothers[0];
     }
 
+    public function serviceRequests() {
+      return $this->hasMany('\App\Models\ServiceRequests\ServiceRequest');
+  }
+
     public function documentEvents() {
         return $this->hasMany('\App\Documents\DocumentEvent');
     }

@@ -620,6 +620,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
             Route::get('/pending-resolutions', [ReportController::class, 'pendingResolutions'])->name('pending-resolutions');
             Route::get('/contract', [ReportController::class, 'contract'])->name('contract');
             Route::get('/duplicate-contracts', [ReportController::class, 'duplicateContracts'])->name('duplicate-contracts');
+            Route::get('/overlapping-contracts', [ReportController::class, 'overlappingContracts'])->name('overlapping-contracts');
             Route::get('/service-request-continuity', [ReportController::class, 'service_request_continuity'])->name('service-request-continuity');
             Route::get('/resolution-pdf/{ServiceRequest}', [ReportController::class, 'resolutionPDF'])->name('resolution-pdf');
             Route::get('/resolution-pdf-hsa/{ServiceRequest}', [ReportController::class, 'resolutionPDFhsa'])->name('resolution-pdf-hsa');
