@@ -55,20 +55,28 @@
 
 		<fieldset class="form-group col-6 col-md-4">
 			<label for="for_users">Responsable</label>
+			@if($serviceRequest->SignatureFlows->isNotEmpty())
 			<select name="responsable_id" id="responsable_id" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 				@foreach($users as $key => $user)
 					<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',1)->first()->responsable_id) selected @endif >{{$user->getFullNameAttribute()}}</option>
 				@endforeach
 			</select>
+			@else
+			<span class="form-control is-invalid">Error en la creacion: contacte a informática</span>
+			@endif
 		</fieldset>
 
 		<fieldset class="form-group col-6 col-md-4">
 			<label for="for_users">Supervisor</label>
+			@if($serviceRequest->SignatureFlows->isNotEmpty())
 			<select name="users[]" id="users" class="form-control selectpicker" data-live-search="true" required="" data-size="5" disabled>
 				@foreach($users as $key => $user)
 					<option value="{{$user->id}}" @if($user->id == $serviceRequest->SignatureFlows->where('sign_position',2)->first()->responsable_id) selected @endif >{{$user->getFullNameAttribute()}}</option>
 				@endforeach
 			</select>
+			@else
+			<span class="form-control is-invalid">Error en la creacion: contacte a informática</span>
+			@endif
 		</fieldset>
 
     <fieldset class="form-group col-6 col-md-4">
