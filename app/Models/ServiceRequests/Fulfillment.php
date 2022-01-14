@@ -90,7 +90,7 @@ class Fulfillment extends Model implements Auditable
 
   public function responsableUser()
   {
-    return $this->belongsTo('App\User', 'responsable_approver_id')->withTrashed();;
+    return $this->belongsTo('App\User', 'responsable_approver_id')->withTrashed();
   }
 
   public function rrhhUser()
@@ -100,7 +100,7 @@ class Fulfillment extends Model implements Auditable
 
   public function financesUser()
   {
-    return $this->belongsTo('App\User', 'finances_approver_id')->withTrashed();;
+    return $this->belongsTo('App\User', 'finances_approver_id')->withTrashed();
   }
 
   public function signedCertificate()
