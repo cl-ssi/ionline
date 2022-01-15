@@ -67,7 +67,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-sm">
                     <label for="exampleFormControlTextarea1" class="form-label">Justificación de Adquisición:</label>
-                    <textarea wire:model.defer="justify" name="justify" class="form-control" rows="3"></textarea>
+                    <textarea wire:model.defer="justify" name="justify" class="form-control form-control-sm" rows="3"></textarea>
                 </fieldset>
             </div>
             <div class="form-row">
@@ -84,14 +84,34 @@
                   @endif
                 </fieldset>
             </div>
+            @if($savedFiles && !$savedFiles->isEmpty())
+            <div class="form-row">
+                <fieldset class="form-group col-sm">
+                      <label>Documentos adjuntados:</label>
+                      
+                        <ul class="list-group">
+                          @foreach ($savedFiles as $file)
+                            <li class="list-group-item py-2">
+                                {{ $file->name }}
+                                <a onclick="return confirm('¿Está seguro de eliminar archivo con nombre {{$file->name}}?') || event.stopImmediatePropagation()" wire:click="destroyFile({{$file->id}})"
+                                    class="btn btn-link btn-sm float-right" title="Eliminar"><i class="far fa-trash-alt" style="color:red"></i></a>
+                                <a href="{{ route('request_forms.show_file', $file->id) }}"
+                                    class="btn btn-link btn-sm float-right" title="Ver"><i class="far fa-eye"></i></a> 
+                            </li>
+                          @endforeach
+                        </ul>
+                      
+                </fieldset>
+            </div>
+            @endif
         </div>
     </div>
 
     <br>
-    @if($route == 'request_forms.passengers.create')
-        @livewire('request-form.passenger.passenger-request')
+    @if($isRFItems)
+        @livewire('request-form.item.request-form-items', ['savedItems' => $requestForm->itemRequestForms ?? null])
     @else
-        @livewire('request-form.item.request-form-items')
+        @livewire('request-form.passenger.passenger-request', ['savedPassengers' => $requestForm->passengers ?? null])
     @endif
 
     <div class="row justify-content-md-end mt-0">
