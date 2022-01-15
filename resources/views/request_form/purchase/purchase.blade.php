@@ -192,136 +192,20 @@
 
 <br>
 
-@if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 2)
-<div class="card">
-    <div class="card-header">
-        Orden de Compra Interna
-    </div>
-    <div class="card-body">
-      <div class="form-row">
-          <fieldset class="form-group col-sm-2">
-              <label for="for_date">Fecha</label>
-              <input type="date" class="form-control form-control-sm" id="for_date" name="date"
-                  value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" readonly>
-          </fieldset>
+<!-- Menores a 3 UTM -->
+@if($requestForm->purchase_mechanism_id == 1)
+    @if($requestForm->purchase_type_id == 1)
+    @include('request_form.purchase.partials.petty_cash_form')
+    @endif
 
-          <fieldset class="form-group col-sm-6">
-              <label for="for_supplier" >Proveedor</label>
-              <select name="supplier_id" id="for_supplier_id" class="form-control form-control-sm" required>
-                  <option value="">Seleccione...</option>
-                  @foreach($suppliers as $supplier)
-                      <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
-                  @endforeach
-              </select>
-          </fieldset>
+    @if($requestForm->purchase_type_id == 2)
+    @include('request_form.purchase.partials.internal_purchase_order_form')
+    @endif
 
-          <fieldset class="form-group col-2">
-              <label for="for_date">Condición de Pago</label>
-              <input type="number" class="form-control form-control-sm" id="for_payment_condition" name="payment_condition"
-                  value="">
-          </fieldset>
+    @if($requestForm->purchase_type_id == 3)
+    @include('request_form.purchase.partials.fund_to_be_settled_form')
+    @endif
 
-          <fieldset class="form-group col-sm-2">
-              <label for="for_estimated_delivery_date">Fecha estimada entrega</label>
-              <input type="date" class="form-control form-control-sm" id="for_estimated_delivery_date" name="estimated_delivery_date"
-                  value="">
-          </fieldset>
-      </div>
-
-      <button type="submit" class="btn btn-primary float-right" id="save_btn">
-          <i class="fas fa-save"></i> Guardar
-      </button>
-
-      </form>
-    </div>
-</div>
-@endif
-
-@if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 1)
-<div class="card">
-    <div class="card-header">
-        Fondo menor (Caja chica)
-    </div>
-    <div class="card-body">
-      <div class="form-row">
-          <fieldset class="form-group col-sm-2">
-              <label for="for_date">Fecha emisión</label>
-              <input type="date" class="form-control form-control-sm" id="for_date" name="date"
-                  value="{{ Carbon\Carbon::now()->format('Y-m-d') }}">
-          </fieldset>
-
-          <fieldset class="form-group col-sm-3">
-              <label for="for_receipt_type" >Tipo de documento</label>
-              <select name="receipt_type" id="for_receipt_type" class="form-control form-control-sm" required>
-                  <option value="">Seleccione...</option>
-                  @php($doc_types = ['Boleta electrónica', 'Boleta electrónica exenta', 'Comprobante pago electrónico', 'Factura electrónica', 'Factura No afecta o exenta electrónica' ])
-                  @foreach($doc_types as $doc_type)
-                      <option value="{{ $doc_type }}">{{ $doc_type }}</option>
-                  @endforeach
-              </select>
-          </fieldset>
-
-          <fieldset class="form-group col-2">
-              <label for="for_receipt_number">Folio</label>
-              <input type="number" class="form-control form-control-sm" id="for_receipt_number" name="receipt_number"
-                  value="" required>
-          </fieldset>
-
-          <fieldset class="form-group col-2">
-              <label for="for_amount">Monto total</label>
-              <input type="number" class="form-control form-control-sm" id="for_amount" name="amount"
-                  value="" required>
-          </fieldset>
-
-          <fieldset class="form-group col-3">
-               <label for="forFile">Adjuntar archivo</label>
-               <input type="file" class="form-control-file" id="forFile" name="file">
-          </fieldset>
-      </div>
-
-      <button type="submit" class="btn btn-primary float-right" id="save_btn">
-          <i class="fas fa-save"></i> Guardar
-      </button>
-
-      </form>
-    </div>
-</div>
-
-<br>
-
-@endif
-
-@if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 3)
-<div class="card">
-    <div class="card-header">
-        Fondo a rendir
-    </div>
-    <div class="card-body">
-      <div class="form-row align-items-center">
-          <fieldset class="form-group col-2">
-              <label for="for_date">Fecha</label>
-              <input type="date" class="form-control form-control-sm" id="for_date" name="date"
-                  value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" readonly>
-          </fieldset>
-
-          <fieldset class="form-group col-2">
-              <label for="for_memo_number">N° Memo</label>
-              <input type="number" class="form-control form-control-sm" id="for_memo_number" name="memo_number"
-                  value="" required>
-          </fieldset>
-
-          <fieldset class="form-group col-2">
-              <label for="for_amount">Monto total</label>
-              <input type="number" class="form-control form-control-sm" id="for_amount" name="amount"
-                  value="" required>
-          </fieldset>
-      </div>
-      <button type="submit" class="btn btn-primary float-right" id="save_btn">
-          <i class="fas fa-save"></i> Guardar
-      </button>
-      </form>
-    </div>
-</div>
 @endif
 
 <br>
