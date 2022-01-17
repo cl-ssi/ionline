@@ -77,6 +77,46 @@
     </div>
 </div>
 
+<br>
+
+<div class="table-responsive">
+    <h6><i class="fas fa-signature"></i> Proceso de Firmas</h6>
+    <table class="table table-sm table-striped table-bordered">
+        <tbody class="text-center small">
+            <tr>
+              @foreach($requestForm->eventRequestForms as $event)
+                <th>{{ $event->signerOrganizationalUnit->name }}</th>
+              @endforeach
+            </tr>
+            <tr>
+              @foreach($requestForm->eventRequestForms as $event)
+                <td>
+                  @if($event->StatusValue == 'Pendiente')
+                    <span>
+                      <i class="fas fa-clock"></i> {{ $event->StatusValue }} <br>
+                    </span>
+                  @endif
+                  @if($event->StatusValue == 'Aprobado')
+                    <span style="color: green;">
+                      <i class="fas fa-check-circle"></i> {{ $event->StatusValue }} <br>
+                    </span>
+                    <i class="fas fa-user"></i> {{ $event->signerUser->FullName }}<br>
+                    <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->signature_date)->format('d-m-Y H:i:s') }}<br>
+                  @endif
+                  @if($event->StatusValue == 'Rechazado')
+                    <span style="color: Tomato;">
+                      <i class="fas fa-times-circle"></i> {{ $event->StatusValue }} <br>
+                    </span>
+                    <i class="fas fa-user"></i> {{ $event->signerUser->FullName }}<br>
+                    <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->signature_date)->format('d-m-Y H:i:s') }}<br>
+                  @endif
+                </td>
+              @endforeach
+            </tr>
+        </tbody>
+    </table>
+</div>
+
 @if($eventType == 'pre_finance_event')
 
 <livewire:request-form.prefinance-authorization :requestForm="$requestForm" :eventType="$eventType" :round_trips="$round_trips" :baggages="$baggages" >
@@ -85,11 +125,10 @@
 
 <br>
 
-
-
-<br>
-
 @if($requestForm->type_form == 'Bienes y/o Servicios')
+
+
+
 <div class="table-responsive">
     <h6><i class="fas fa-info-circle"></i> Lista de Bienes y/o Servicios</h6>
     <table class="table table-condensed table-hover table-bordered table-sm">
@@ -134,7 +173,11 @@
       </tbody>
       <tfoot class="text-right small">
         <tr>
+          @if(in_array($eventType, ['finance_event', 'supply_event', 'budget_event']))
           <td colspan="10">Valor Total</td>
+          @else
+          <td colspan="9">Valor Total</td>
+          @endif
           <td>${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
           <!-- <td colspan="3">Cantidad de Items</td>
           <td colspan="3">{{count($requestForm->itemRequestForms)}}</td> -->
