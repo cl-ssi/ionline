@@ -39,7 +39,14 @@
 
 <ol class="breadcrumb bg-light justify-content-end small">
     <li class="nav-item">
+        @if($agreement->period >= 2022)
+        <a href="#" class="nav-link text-secondary" data-toggle="modal"
+                        data-target="#selectEvalOption"
+                        data-formaction="{{ route('agreements.createWord', $agreement )}}">
+                        <i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
+        @else
         <a class="nav-link text-secondary" href="{{ route('agreements.createWord', $agreement) }}"><i class="fas fa-file-download"></i> Descargar borrador Convenio</a>
+        @endif
     </li>
 
     @if($agreement->file != null)
@@ -445,6 +452,7 @@
     @include('agreements/agreements/modal_add_addendum')
     @include('agreements/agreements/modal_edit_addendum')
     @include('agreements/agreements/modal_select_signer_res')
+    @include('agreements/agreements/modal_select_evaluation_option')
 
 @endsection
 
@@ -520,14 +528,14 @@
         modal.find('.selectpicker').selectpicker('refresh')
     })
 
-    $('#selectSignerRes').on('show.bs.modal', function (event) {
+    $('#selectSignerRes,#selectEvalOption').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var modal  = $(this)
         modal.find("#form-edit").attr('action', button.data('formaction'))
     })
 
-    $('#SubmitSignerSelected').click(function() {
-        $('#selectSignerRes').modal('hide');
+    $('#SubmitSignerSelected,#SubmitEvalSelected').click(function() {
+        $('#selectSignerRes, #selectEvalOption').modal('hide');
     })
 
     // $('#authority_id').on('change', function(e){
