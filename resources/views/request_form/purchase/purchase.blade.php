@@ -159,12 +159,12 @@
                               value="{{ $item->unit_value }}">
                         </td>
                         <td>{{ $item->tax }}</td>
-                        <td align="right">${{ number_format($item->expense,0,",",".") }}</td>
+                        <td align="right" id="item_total_{{$key}}">${{ number_format($item->expense,0,",",".") }}</td>
                         <td align="center">
                             <fieldset class="form-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="item_id[{{$key}}]" onclick="disabledSaveBtn()"
-                                      id="for_item_id" value="{{ $item->id }}" @if($isBudgetEventSignPending) disabled @endif>
+                                    <input class="form-check-input" type="checkbox" onclick="disabledSaveBtn('{{$key}}')"
+                                      id="item_id_{{$key}}" value="{{ $item->id }}" @if($isBudgetEventSignPending) disabled @endif>
                                 </div>
                             </fieldset>
                         </td>
@@ -267,7 +267,7 @@
                             </fieldset>
                         </td> -->
                         <td>
-                        <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
+                        <button type="button" id="btn_items_{{$key}}" class="btn btn-link btn-sm" data-toggle="modal" data-target="#Receipt-{{$detail->pivot->id}}">
                             <i class="fas fa-receipt"></i>
                         </button>
                         @include('request_form.purchase.modals.detail_purchase')
@@ -300,14 +300,33 @@
 
 document.getElementById("save_btn").disabled = true;
 
-function disabledSaveBtn() {
+function disabledSaveBtn(key) {
     // Get the checkbox
+    var key =key;    
     var checkBox = document.getElementById("for_applicant_id");
 
     // If the checkbox is checked, display the output text
-    if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){
+    //if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){
+    if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){        
+        var valor_actual = $(".amount").val();
+        var total_item = $("#item_total_"+key).html().replace('$', '');        
+        total_item = total_item.replace('.', '');
+        total_item = Number(total_item);
+        valor_actual = Number(valor_actual);
+        var valor_sumado = valor_actual+total_item;
+        $(".amount").val(valor_sumado);
         document.getElementById("save_btn").disabled = false;
     } else {
+        //alert("entre aca");
+        var valor_actual = $(".amount").val();
+        var total_item = $("#item_total_"+key).html().replace('$', '');
+        total_item = total_item.replace('.', '');
+        total_item = Number(total_item);
+        valor_actual = Number(valor_actual);
+        //alert("la resta es total_item"+total_item);
+        //alert("la resta es valor_actual"+valor_actual);
+        var valor_restado = valor_actual-total_item;
+        $(".amount").val(valor_restado);
         document.getElementById("save_btn").disabled = true;
     }
 }
