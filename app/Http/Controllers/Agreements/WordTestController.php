@@ -30,7 +30,7 @@ use PhpOffice\PhpWord\SimpleType\TblWidth;
 
 class WordTestController extends Controller
 {
-    public function createWordDocx($id)
+    public function createWordDocx(Request $request, $id)
     {
     	// SE OBTIENEN DATOS RELACIONADOS AL CONVENIO
     	$agreements     = Agreement::with('Program','Commune','agreement_amounts','director_signer.user')->where('id', $id)->first();
@@ -178,6 +178,16 @@ class WordTestController extends Controller
             }
         }
 
+        if($request->has('eval_option')){
+            //CLONE BLOCK PARA OPCIONES EVALUACIONES TECNICAS
+            $blocks = [1 => 'FIRST_EVAL_OPTION_BLOCK', 2 => 'SECOND_EVAL_OPTION_BLOCK', 3 => 'THIRD_EVAL_OPTION_BLOCK'];
+            foreach($blocks as $n => $block)
+                if($n == $request->eval_option)
+                    $templateProcesor->cloneBlock($block, 1, true, false);
+                else
+                    $templateProcesor->cloneBlock($block, 0); //Borrar este bloque no se va a ocupar
+        }
+
         $templateProcesor->setValue('establecimientosListado',$arrayEstablishmentConcat);
 
     	$templateProcesor->saveAs(storage_path('app/public/Prev-Conv.docx')); //'Prev-RESOL'.$numResolucion.'.docx'
@@ -200,9 +210,9 @@ class WordTestController extends Controller
         $totalConvenioLetras = $this->correctAmountText($formatter->toMoney($totalConvenio, 0, 'pesos',''));
         
         // Se abren los archivos doc para unirlos en uno solo en el orden en que se lista a continuacion
-        $mainTemplateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionhead.docx'));
+        $mainTemplateProcessor = new OpenTemplateProcessor(public_path('word-template/resolucionhead'.$agreements->period.'.docx'));
         $midTemplateProcessor = new OpenTemplateProcessor($file); //convenio doc
-        $mainTemplateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionfooter.docx'));
+        $mainTemplateProcessorEnd = new OpenTemplateProcessor(public_path('word-template/resolucionfooter'.$agreements->period.'.docx'));
 
         // Parametros a imprimir en los archivos abiertos
         $periodoConvenio = $agreements->period;
@@ -218,6 +228,7 @@ class WordTestController extends Controller
         $comuna = $agreements->Commune->name; 
         $first_word = explode(' ',trim($agreements->Program->name))[0];
         $programa = $first_word == 'Programa' ? substr(strstr($agreements->Program->name," "), 1) : $agreements->Program->name;
+        if($agreements->period >= 2022) $programa = mb_strtoupper($programa);
         
         //Director ssi quien firma a la fecha de hoy
         $director = Signer::find($request->signer_id);
@@ -252,15 +263,19 @@ class WordTestController extends Controller
         // extract internal xml from template that will be merged inside main template
         $innerXml = $midTemplateProcessor->tempDocumentMainPart;
         $innerXml = preg_replace('/^[\s\S]*<w:body>(.*)<\/w:body>.*/', '$1', $innerXml);
-        
+        // dd($innerXml);
         // remove tag containing header, footer, images
         // $innerXml = preg_replace('/<w:sectPr>.*<\/w:sectPr>/', '', $innerXml);
         
         //remove signature blocks
-        $innerXml = Str::beforeLast($innerXml, 'Reforzamiento Municipal del Presupuesto');
-        // dd($innerXml);
-        $innerXml .= 'Reforzamiento Municipal del Presupuesto vigente del Servicio de Salud Iquique año 2021”.</w:t></w:r></w:p>';
-        
+        if($agreements->period >= 2022){
+            $innerXml = Str::beforeLast($innerXml, 'Presupuesto vigente del Servicio de Salud Iquique año');
+            $innerXml .= 'Presupuesto vigente del Servicio de Salud Iquique año '.$agreements->period.'”.</w:t></w:r></w:p>';
+        }else{
+            $innerXml = Str::beforeLast($innerXml, 'Reforzamiento Municipal del Presupuesto');
+            $innerXml .= 'Reforzamiento Municipal del Presupuesto vigente del Servicio de Salud Iquique año '.$agreements->period.'”.</w:t></w:r></w:p>';
+        }
+
         $mainXmlEnd = $mainTemplateProcessorEnd->tempDocumentMainPart;
 
         $mainXmlEnd = preg_replace('/^[\s\S]*<w:body>(.*)<\/w:body>.*/', '$1', $mainXmlEnd);
