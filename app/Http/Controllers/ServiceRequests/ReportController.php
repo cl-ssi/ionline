@@ -23,6 +23,7 @@ use App\Exports\ComplianceExport;
 use App\Exports\PayedExport;
 use App\Exports\ContractExport;
 use App\User;
+use App\Models\Parameters\Profession;
 
 
 class ReportController extends Controller
@@ -725,8 +726,10 @@ class ReportController extends Controller
          if ($srtemporal->start_date >= $sr->start_date and $srtemporal->end_date <= $sr->end_date)
          {
           //dd("encontre algo ".$sr->user_id);
-          $sr->srsolapados->push($srtemporal);
-          dd($sr->srsolapados);
+          if ($sr->srsolapados != null) {
+            $sr->srsolapados->push($srtemporal);
+            dd($sr->srsolapados);
+          }
          }
 
         }
@@ -748,6 +751,7 @@ class ReportController extends Controller
 
 		$srs = array();
 		$total_srs = 0;
+    $profession_id = $request->profession_id;
 
 		if(isset($request->option))
 		{
@@ -800,6 +804,10 @@ class ReportController extends Controller
         ->orderBy('start_date');
 			}
 
+      $srs->when($profession_id != NULL, function ($q) use ($profession_id) {
+        return $q->where('profession_id', $profession_id);
+      });
+
 			$total_srs = $srs->count();
 
 			$srs = $srs->paginate(100);
@@ -807,8 +815,11 @@ class ReportController extends Controller
 			$request->flash(); // envía los inputs de regreso
 
 		}
+
+    $professions = Profession::orderBy('name', 'ASC')->get();
+
     	return view('service_requests.reports.contract',
-			compact('request', 'responsabilityCenters','srs','total_srs'));
+			compact('request', 'responsabilityCenters','srs','total_srs','professions'));
   	}
 
   public function export_sirh_txt(Request $request)
