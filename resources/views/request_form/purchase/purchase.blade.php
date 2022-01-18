@@ -151,20 +151,26 @@
                             @endif
                         </td>
                         <td align="right">
-                          <input type="number" class="form-control form-control-sm" id="for_quantity" name="quantity[]"
+                          <input type="number" class="form-control form-control-sm text-right" step="0.01" min="0.1" id="for_quantity" name="quantity[]"
                               value="{{ $item->quantity }}">
                         </td>
                         <td align="right">
-                          <input type="number" class="form-control form-control-sm" id="for_unit_value" name="unit_value[]"
+                          <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_unit_value" name="unit_value[]"
                               value="{{ $item->unit_value }}">
                         </td>
-                        <td>{{ $item->tax }}</td>
-                        <td align="right" id="item_total_{{$key}}">${{ number_format($item->expense,0,",",".") }}</td>
+                        <td align="right">
+                          <input type="text" class="form-control form-control-sm text-right" id="for_tax" name="tax[]"
+                              value="{{ $item->tax }}" readonly>
+                        </td>
+                        <td align="right">
+                          <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_item_total" name="item_total[]"
+                              value="{{ $item->expense }}" readonly>
+                        </td>
                         <td align="center">
                             <fieldset class="form-group">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" onclick="disabledSaveBtn('{{$key}}')"
-                                      id="item_id_{{$key}}" value="{{ $item->id }}" @if($isBudgetEventSignPending) disabled @endif>
+                                    <input class="form-check-input" type="checkbox" name="item_id[{{$key}}]" onclick="disabledSaveBtn()"
+                                        id="for_item_id" value="{{ $item->id }}" @if($isBudgetEventSignPending) disabled @endif>
                                 </div>
                             </fieldset>
                         </td>
@@ -182,7 +188,9 @@
                     <tr>
                       <td colspan="9"></td>
                       <td class="text-right">Valor Total</td>
-                      <td class="text-right">${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
+                      <td align="right">
+                          <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount" name="total_amount" readonly>
+                        </td>
                     </tr>
                 </tfoot>
             </table>
@@ -298,37 +306,63 @@
 
 <script type="text/javascript">
 
+var withholding_tax = {2021: 0.115, 2022: 0.1225, 2023: 0.13, 2024: 0.1375, 2025: 0.145, 2026: 0.1525, 2027: 0.16, 2028: 0.17}
+var year = new Date().getFullYear();
+
+calculateAmount();
+
+function totalValueWithTaxes(value, tax){
+    if(tax == 'iva') return value * 1.19;
+    if(tax == 'bh') return withholding_tax[year] ? Math.round(value / (1 - withholding_tax[year])) : Math.round(value / (1 - withholding_tax[Object.keys(withholding_tax).pop()]));
+    return value;
+}
+
+$('#for_quantity,#for_unit_value').on('change keyup',function(){
+    var tr    = $(this).closest('tr')
+    var qty   = tr.find('input[name="quantity[]"]')
+    var price = tr.find('input[name="unit_value[]"]')
+    var tax   = tr.find('input[name="tax[]"]')
+    var total = tr.find('input[name="item_total[]"]')
+    var grand_total = $('#total_amount')
+
+    total.val(Math.round(qty.val() * totalValueWithTaxes(price.val(), tax.val())));
+      
+    var grandTotal=0;
+    $('table').find('input[name="item_total[]"]').each(function(){
+        if(!isNaN($(this).val()))
+            grandTotal += parseInt($(this).val());
+    });
+
+    if(isNaN(grandTotal))
+        grandTotal = 0;
+    grand_total.val(grandTotal)
+
+    calculateAmount(true)
+});
+
 document.getElementById("save_btn").disabled = true;
 
-function disabledSaveBtn(key) {
+function disabledSaveBtn() {
     // Get the checkbox
-    var key =key;    
     var checkBox = document.getElementById("for_applicant_id");
-
     // If the checkbox is checked, display the output text
-    //if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){
-    if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){        
-        var valor_actual = $(".amount").val();
-        var total_item = $("#item_total_"+key).html().replace('$', '');        
-        total_item = total_item.replace('.', '');
-        total_item = Number(total_item);
-        valor_actual = Number(valor_actual);
-        var valor_sumado = valor_actual+total_item;
-        $(".amount").val(valor_sumado);
+    if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){
         document.getElementById("save_btn").disabled = false;
+        calculateAmount(true);
     } else {
-        //alert("entre aca");
-        var valor_actual = $(".amount").val();
-        var total_item = $("#item_total_"+key).html().replace('$', '');
-        total_item = total_item.replace('.', '');
-        total_item = Number(total_item);
-        valor_actual = Number(valor_actual);
-        //alert("la resta es total_item"+total_item);
-        //alert("la resta es valor_actual"+valor_actual);
-        var valor_restado = valor_actual-total_item;
-        $(".amount").val(valor_restado);
         document.getElementById("save_btn").disabled = true;
+        calculateAmount(true);
     }
+}
+
+function calculateAmount(checked = false) {
+    var total = 0;
+    $('input[type="checkbox"]' + (checked ? ':checked' : '')).each(function(){
+        var val = Math.round($(this).parents("tr").find('input[name="item_total[]"]').val());
+        total += val;
+    });
+
+    $(checked ? '#for_amount' : '#total_amount').val(total);
 }
 </script>
 
