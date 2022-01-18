@@ -70,7 +70,7 @@
                 </tbody>
             </table>
         </div>
-        
+
         <div class="float-right">
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
@@ -78,12 +78,12 @@
             </button>
 
             @include('request_form.purchase.modals.select_purchase_mechanism')
-    
+
             <!-- Button trigger modal -->
             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#requestBudget" @if($isBudgetEventSignPending) disabled @endif >
                 Solicitar presupuesto
             </button>
-            
+
             @include('request_form.purchase.modals.request_new_budget')
         </div>
     </div>
@@ -97,6 +97,46 @@
             @endforeach
         </div>
     </div>
+</div>
+
+<br>
+
+<div class="table-responsive">
+    <h6><i class="fas fa-signature"></i> Proceso de Firmas</h6>
+    <table class="table table-sm table-striped table-bordered">
+        <tbody class="text-center small">
+            <tr>
+              @foreach($requestForm->eventRequestForms as $event)
+                <th>{{ $event->signerOrganizationalUnit->name }}</th>
+              @endforeach
+            </tr>
+            <tr>
+              @foreach($requestForm->eventRequestForms as $event)
+                <td>
+                  @if($event->StatusValue == 'Pendiente')
+                    <span>
+                      <i class="fas fa-clock"></i> {{ $event->StatusValue }} <br>
+                    </span>
+                  @endif
+                  @if($event->StatusValue == 'Aprobado')
+                    <span style="color: green;">
+                      <i class="fas fa-check-circle"></i> {{ $event->StatusValue }} <br>
+                    </span>
+                    <i class="fas fa-user"></i> {{ $event->signerUser->FullName }}<br>
+                    <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->signature_date)->format('d-m-Y H:i:s') }}<br>
+                  @endif
+                  @if($event->StatusValue == 'Rechazado')
+                    <span style="color: Tomato;">
+                      <i class="fas fa-times-circle"></i> {{ $event->StatusValue }} <br>
+                    </span>
+                    <i class="fas fa-user"></i> {{ $event->signerUser->FullName }}<br>
+                    <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->signature_date)->format('d-m-Y H:i:s') }}<br>
+                  @endif
+                </td>
+              @endforeach
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <br>
@@ -214,6 +254,13 @@
     @include('request_form.purchase.partials.fund_to_be_settled_form')
     @endif
 
+@endif
+
+<!-- Menores a 3 UTM -->
+@if($requestForm->purchase_mechanism_id == 4)
+    @if($requestForm->purchase_type_id == 12)
+      @include('request_form.purchase.partials.tender_form')
+    @endif
 @endif
 
 <br>
@@ -344,9 +391,25 @@ document.getElementById("save_btn").disabled = true;
 
 function disabledSaveBtn() {
     // Get the checkbox
+<<<<<<< HEAD
+    var key =key;
+=======
+>>>>>>> 43c85c5a2c77bfcd8dd96273a31b1595f899b358
     var checkBox = document.getElementById("for_applicant_id");
     // If the checkbox is checked, display the output text
+<<<<<<< HEAD
+    //if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){
     if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){
+        var valor_actual = $(".amount").val();
+        var total_item = $("#item_total_"+key).html().replace('$', '');
+        total_item = total_item.replace('.', '');
+        total_item = Number(total_item);
+        valor_actual = Number(valor_actual);
+        var valor_sumado = valor_actual+total_item;
+        $(".amount").val(valor_sumado);
+=======
+    if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){
+>>>>>>> 43c85c5a2c77bfcd8dd96273a31b1595f899b358
         document.getElementById("save_btn").disabled = false;
         calculateAmount(true);
     } else {
