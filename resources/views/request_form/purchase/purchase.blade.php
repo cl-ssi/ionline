@@ -373,7 +373,7 @@ $('#for_quantity,#for_unit_value').on('change keyup',function(){
     var grand_total = $('#total_amount')
 
     total.val(Math.round(qty.val() * totalValueWithTaxes(price.val(), tax.val())));
-      
+
     var grandTotal=0;
     $('table').find('input[name="item_total[]"]').each(function(){
         if(!isNaN($(this).val()))
@@ -391,13 +391,9 @@ document.getElementById("save_btn").disabled = true;
 
 function disabledSaveBtn() {
     // Get the checkbox
-<<<<<<< HEAD
     var key =key;
-=======
->>>>>>> 43c85c5a2c77bfcd8dd96273a31b1595f899b358
     var checkBox = document.getElementById("for_applicant_id");
     // If the checkbox is checked, display the output text
-<<<<<<< HEAD
     //if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){
     if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){
         var valor_actual = $(".amount").val();
@@ -407,9 +403,6 @@ function disabledSaveBtn() {
         valor_actual = Number(valor_actual);
         var valor_sumado = valor_actual+total_item;
         $(".amount").val(valor_sumado);
-=======
-    if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){
->>>>>>> 43c85c5a2c77bfcd8dd96273a31b1595f899b358
         document.getElementById("save_btn").disabled = false;
         calculateAmount(true);
     } else {
