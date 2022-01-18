@@ -55,11 +55,11 @@
           </fieldset>
 
           <fieldset class="form-group col-sm-3">
-              <label for="for_status" >Estado de la Licitación</label>
-              <select name="status" id="for_status" class="form-control form-control-sm" required>
+              <label for="for_status" >Estilo de Compra</label>
+              <select name="type_of_purchase" id="for_type_of_purchase" class="form-control form-control-sm" required>
                   <option value="">Seleccione...</option>
-                  <option value="adjudicada">Adjudicada</option>
-                  <option value="desierta">Desierta</option>
+                  <option value="suministro">Suministro</option>
+                  <option value="compra inmediata">Compra Inmediata</option>
               </select>
           </fieldset>
       </div>
