@@ -171,7 +171,7 @@
                         <th>Valor U.</th>
                         <th>Impuestos</th>
                         <th>Total Item</th>
-                        <th></th>
+                        <th colspan="2"></th>
                         <!-- <th></th> -->
                     </tr>
                 </thead>
