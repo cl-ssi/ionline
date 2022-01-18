@@ -86,7 +86,7 @@ class PurchasingProcessController extends Controller
             $detail->user_id                    = Auth::user()->id;
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
-            $detail->expense                    = $detail->quantity * $detail->unit_value;
+            $detail->expense                    = $request->item_total[$key];
             $detail->status                     = 'total';
             $detail->save();
         }
@@ -119,7 +119,7 @@ class PurchasingProcessController extends Controller
             $detail->user_id                    = Auth::user()->id;
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
-            $detail->expense                    = $detail->quantity * $detail->unit_value;
+            $detail->expense                    = $request->item_total[$key];
             $detail->status                     = 'total';
             $detail->save();
         }
@@ -146,7 +146,7 @@ class PurchasingProcessController extends Controller
             $detail->user_id                    = Auth::user()->id;
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
-            $detail->expense                    = $detail->quantity * $detail->unit_value;
+            $detail->expense                    = $request->item_total[$key];
             $detail->status                     = 'total';
             $detail->save();
         }
