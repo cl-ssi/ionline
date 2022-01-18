@@ -10,12 +10,7 @@
     <div class="col-sm-8">
         <div class="table-responsive">
             <h6><i class="fas fa-info-circle"></i> Detalle Formulario</h6>
-            <table class="table table-sm table-striped table-bordered">
-                <!-- <thead>
-                    <tr class="table-active">
-                        <th colspan="2">Formulario Contratación de Personal </th>
-                    </tr>
-                </thead> -->
+            <table class="table table-sm table-striped table-bordered">                
                 <tbody class="small">
                     <tr>
                         <th class="table-active" scope="row">Fecha de Creación</th>
@@ -74,7 +69,7 @@
         <h6><i class="fas fa-paperclip"></i> Adjuntos</h6>
         <div class="list-group">
             @foreach($requestForm->requestFormFiles as $requestFormFile)
-              <a href="{{ route('request_forms.show_file', $requestFormFile) }}" class="list-group-item list-group-item-action py-2 small" target="_blank">
+            <a href="{{ route('request_forms.show_file', $requestFormFile) }}" class="list-group-item list-group-item-action py-2 small" target="_blank">
                 <i class="fas fa-file"></i> {{ $requestFormFile->name }} -
                 <i class="fas fa-calendar-day"></i> {{ $requestFormFile->created_at->format('d-m-Y H:i') }}</a>
             @endforeach
@@ -82,217 +77,135 @@
     </div>
 </div>
 
-        <div class="card mx-0">
-          <h6 class="card-header text-primary"><i class="fas fa-file-signature"></i> Formulario de Requerimiento</h6>
-          <div class="card-body mx-4 px-0">
+<div class="card mx-0">
+    <h6 class="card-header text-primary"><i class="fas fa-file-signature"></i> Formulario de Requerimiento</h6>
 
-            <div class="container-fluid row mx-0 mb-3 mt-3 pt-0"> <!-- DIV para TABLA-->
 
-              <table class="table table-condensed table-hover table-sm small">
-
-                <tr class="d-flex">
-                    <th class="text-muted col-3" scope="row">ID</th>
-                    <td class="col-3 font-weight-bold">{{ $requestForm->id}}</td>
-                    <th class="text-muted col-3" scope="row">Estado</th>
-                    <td class="col-3">{!! $requestForm->getStatus() !!}</td>
-                </tr>
-
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">Nombre del Solicitante</th>
-                      <td class="col-3">{{ $requestForm->user->tinnyName()}}</td>
-                      <th class="text-muted col-3" scope="row">Unidad Organizacional</th>
-                      <td class="col-3">{{ $requestForm->userorganizationalUnit->getInitialsAttribute() }}</td>
-                  </tr>
-
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">Gasto Estimado</th>
-                      <td class="col-3">{{ $requestForm->estimatedExpense() }}</td>
-                      <th class="text-muted col-3" scope="row">Fecha de Creación</th>
-                      <td class="col-3">{{ $requestForm->createdDate() }}</td>
-                  </tr>
-
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">Archivos</th>
-                      <td class="col-3">FILE01 - FILE02 - FILE03 - FILE04</td>
-                      <th class="text-muted col-3" scope="row">Tiempo transcurrido</th>
-                      <td class="col-3">{{ $requestForm->getElapsedTime() }}</td>
-                  </tr>
-
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">Programa Asociado</th>
-                      <td class="col-3">{{ $requestForm->program }}</td>
-                      <th class="text-muted col-3" scope="row">Mecanismo de Compra</th>
-                      <td class="col-3">{{ $requestForm->getPurchaseMechanism()}}</td>
-                  </tr>
-
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">Justificación de Adquisición</th>
-                      <td class="col-3">{{ $requestForm->justification }}</td>
-                      <th class="text-muted col-3" scope="row">Folio Requerimiento SIGFE</th>
-                      <td class="col-3">{{ $requestForm->sigfe }}</td>
-                  </tr>
-
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">Tipo de Compra</th>
-                      <td class="col-3">{{ $requestForm->purchaseType ? $requestForm->purchaseType->getName() : ' ' }}</td>
-                      <th class="text-muted col-3" scope="row">Unidad de Compra</th>
-                      <td class="col-3">{{ $requestForm->purchaseUnit ? $requestForm->purchaseUnit->getName() : ' ' }}</td>
-                  </tr>
-
-                  @if($requestForm->eventSingStatus('leader_ship_event')=='approved')
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('leader_ship_event')!!} Aprobación Jefatura</th>
-                      <td class="col-3">{{ $requestForm->eventSignatureDate('leader_ship_event', 'approved') }}</td>
-                      <th class="text-muted col-3" scope="row">Visador Jefatura</th>
-                      <td class="col-3">{{ $requestForm->eventSignerName('leader_ship_event', 'approved') }}</td>
-                  </tr>
+    <div class="table-responsive">
+    <h6><i class="fas fa-signature"></i> Proceso de Firmas</h6>
+    <table class="table table-sm table-striped table-bordered">
+        <tbody class="text-center small">
+            <tr>
+              @foreach($requestForm->eventRequestForms as $event)
+                <th>{{ $event->signerOrganizationalUnit->name }}</th>
+              @endforeach
+            </tr>
+            <tr>
+              @foreach($requestForm->eventRequestForms as $event)
+                <td>
+                  @if($event->StatusValue == 'Pendiente')
+                    <span>
+                      <i class="fas fa-clock"></i> {{ $event->StatusValue }} <br>
+                    </span>
                   @endif
-
-                  @if($requestForm->eventSingStatus('pre_finance_event')=='approved')
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('pre_finance_event')!!} Aprobación Refrendación Pres.</th>
-                      <td class="col-3">{{ $requestForm->eventSignatureDate('pre_finance_event', 'approved') }}</td>
-                      <th class="text-muted col-3" scope="row">Visador Refrendación Pres.</th>
-                      <td class="col-3">{{ $requestForm->eventSignerName('pre_finance_event', 'approved') }}</td>
-                  </tr>
+                  @if($event->StatusValue == 'Aprobado')
+                    <span style="color: green;">
+                      <i class="fas fa-check-circle"></i> {{ $event->StatusValue }} <br>
+                    </span>
+                    <i class="fas fa-user"></i> {{ $event->signerUser->FullName }}<br>
+                    <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->signature_date)->format('d-m-Y H:i:s') }}<br>
                   @endif
-
-                  @if($requestForm->eventSingStatus('finance_event')=='approved')
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('finance_event')!!} Aprobación Finanzas</th>
-                      <td class="col-3">{{ $requestForm->eventSignatureDate('finance_event', 'approved') }}</td>
-                      <th class="text-muted col-3" scope="row">Visador Finanzas</th>
-                      <td class="col-3">{{ $requestForm->eventSignerName('finance_event', 'approved') }}</td>
-                  </tr>
+                  @if($event->StatusValue == 'Rechazado')
+                    <span style="color: Tomato;">
+                      <i class="fas fa-times-circle"></i> {{ $event->StatusValue }} <br>
+                    </span>
+                    <i class="fas fa-user"></i> {{ $event->signerUser->FullName }}<br>
+                    <i class="fas fa-calendar-alt"></i> {{ Carbon\Carbon::parse($event->signature_date)->format('d-m-Y H:i:s') }}<br>
                   @endif
-
-                  @if($requestForm->eventSingStatus('supply_event')=='approved')
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('supply_event')!!} Aprobación Abastecimiento</th>
-                      <td class="col-3">{{ $requestForm->eventSignatureDate('supply_event', 'approved') }}</td>
-                      <th class="text-muted col-3" scope="row">Visador Abastecimiento</th>
-                      <td class="col-3">{{ $requestForm->eventSignerName('supply_event', 'approved') }}</td>
-                  </tr>
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">Comprador Asignado</th>
-                      <td class="col-9 font-weight-bold text-primary">{{ $requestForm->supervisor->fullName ?? '' }}</td>
-                  </tr>
-                  @endif
-
-                  @if($requestForm->eventSingStatus('leader_ship_event')=='rejected')
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('leader_ship_event')!!} Rechazado por Jefatura</th>
-                      <td class="col-3">{{ $requestForm->eventSignatureDate('leader_ship_event', 'rejected') }}</td>
-                      <th class="text-muted col-3" scope="row">Visador Jefatura</th>
-                      <td class="col-3">{{ $requestForm->eventSignerName('leader_ship_event', 'rejected') }}</td>
-                  </tr>
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">Comentario</th>
-                      <td class="col-9">{{ $requestForm->rejectedComment() }}</td>
-                  </tr>
-                  @endif
-
-                  @if($requestForm->eventSingStatus('pre_finance_event')=='rejected')
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('pre_finance_event')!!} Rechazado por Refrendación Pres.</th>
-                      <td class="col-3">{{ $requestForm->eventSignatureDate('pre_finance_event', 'rejected') }}</td>
-                      <th class="text-muted col-3" scope="row">Visador Refrendación Pres.</th>
-                      <td class="col-3">{{ $requestForm->eventSignerName('pre_finance_event', 'rejected') }}</td>
-                  </tr>
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">Comentario</th>
-                      <td class="col-9">{{ $requestForm->rejectedComment() }}</td>
-                  </tr>
-                  @endif
-
-                  @if($requestForm->eventSingStatus('finance_event')=='rejected')
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('finance_event')!!} Rechazado por Finanzas</th>
-                      <td class="col-3">{{ $requestForm->eventSignatureDate('finance_event', 'rejected') }}</td>
-                      <th class="text-muted col-3" scope="row">Visador Finanzas</th>
-                      <td class="col-3">{{ $requestForm->eventSignerName('finance_event', 'rejected') }}</td>
-                  </tr>
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">Comentario</th>
-                      <td class="col-9">{{ $requestForm->rejectedComment() }}</td>
-                  </tr>
-                  @endif
-
-                  @if($requestForm->eventSingStatus('supply_event')=='rejected')
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">{!!$requestForm->eventSign('supply_event')!!} Rechazado por Abastecimiento</th>
-                      <td class="col-3">{{ $requestForm->eventSignatureDate('supply_event', 'rejected') }}</td>
-                      <th class="text-muted col-3" scope="row">Visador Abastecimiento</th>
-                      <td class="col-3">{{ $requestForm->eventSignerName('supply_event', 'rejected') }}</td>
-                  </tr>
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row">Comentario</th>
-                      <td class="col-9">{{ $requestForm->rejectedComment() }}</td>
-                  </tr>
-                  @endif
-
-                  <tr class="d-flex">
-                      <th class="text-muted col-3" scope="row"></th>
-                      <td class="col-3"></td>
-                      <th class="text-muted col-3" scope="row"></th>
-                      <td class="col-3"></td>
-                  </tr>
-              </table>
-            </div><!-- div para TABLA -->
-
-            <div class="row mx-3 mb-3 mt-3 pt-0"> <!-- DIV para TABLA-->
-              <h6 class="card-subtitle mt-0 mb-2 text-primary">Lista de Bienes y/o Servicios:</h6>
-              <table class="table table-condensed table-hover table-bordered table-sm small">
-                <thead>
-                  <tr>
-                    <th>Item</th>
-                    <th>ID</th>
-                    <th>Cod.Presup.</th>
-                    <th>Artículo</th>
-                    <th>UM</th>
-                    <th>Especificaciones Técnicas</th>
-                    <th>Archivo</th>
-                    <th>Cantidad</th>
-                    <th>Valor U.</th>
-                    <th>Impuestos</th>
-                    <th>Total Item</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @foreach($requestForm->itemRequestForms as $key => $item)
-                          <tr>
-                              <td>{{ $key+1 }}</td>
-                              <td>{{ $item->id }}</td>
-                              <td>{{ $item->budgetItem ? $item->budgetItem()->first()->fullName() : ' -- ' }}</td>
-                              <td>{{ $item->article }}</td>
-                              <td>{{ $item->unit_of_measurement }}</td>
-                              <td>{{ $item->specification }}</td>
-                              <td>FILE</td>
-                              <td align='right'>{{ $item->quantity }}</td>
-                              <td align='right'>{{ $item->unit_value }}</td>
-                              <td>{{ $item->tax }}</td>
-                              <td align='right'>{{ $item->formatExpense() }}</td>
-                          </tr>
-                  @endforeach
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <td colspan="7" rowspan="2"></td>
-                    <td colspan="2" align='right'>Cantidad de Items</td>
-                    <td colspan="2" align='right'>{{count($requestForm->itemRequestForms)}}</td>
-                  </tr>
-                  <tr>
-                    <td colspan="2" align='right'>Valor Total</td>
-                    <td colspan="2" align='right'>{{$requestForm->estimatedExpense()}}</td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div><!-- DIV para TABLA-->
+                </td>
+              @endforeach
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 
 
-          </div><!-- card-body -->
-        </div><!-- card-principal -->
+    @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 1)
+    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_petty_cash', $requestForm) }}" enctype="multipart/form-data">
+        @endif
+        @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 2)
+        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_internal_oc', $requestForm) }}">
+            @endif
+            @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 3)
+            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_fund_to_be_settled', $requestForm) }}">
+                @endif
+                @csrf
+                @method('POST')
+
+                <table class="table table-sm table-striped table-bordered small">
+                    <thead class="text-center">
+                        <tr>
+                            <th>Item</th>
+                            <th>Estado</th>
+                            <th>Cod.Presup.</th>
+                            <th>Artículo</th>
+                            <th>UM</th>
+                            <th>Especificaciones Técnicas</th>
+                            <th>Archivo</th>
+                            <th>Cantidad</th>
+                            <th>Valor U.</th>
+                            <th>Impuestos</th>
+                            <th>Total Item</th>
+                            <th colspan="2"></th>
+                            <!-- <th></th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($requestForm->itemRequestForms as $key => $item)
+                        <tr>
+                            <td>{{ $key+1 }}</td>
+                            <td>{{ $item->status }}</td>
+                            <td>{{ $item->budgetItem()->first()->fullName() }}</td>
+                            <td>{{ $item->article }}</td>
+                            <td>{{ $item->unit_of_measurement }}</td>
+                            <td>{{ $item->specification }}</td>
+                            <td align="center">
+                                @if($item->article_file)
+                                <a href="{{ route('request_forms.show_item_file', $item) }}" target="_blank">
+                                    <i class="fas fa-file"></i></a>
+                                @endif
+                            </td>
+                            <td align="right">
+                                <input type="number" class="form-control form-control-sm text-right" step="0.01" min="0.1" id="for_quantity" name="quantity[]" value="{{ $item->quantity }}">
+                            </td>
+                            <td align="right">
+                                <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_unit_value" name="unit_value[]" value="{{ $item->unit_value }}">
+                            </td>
+                            <td align="right">
+                                <input type="text" class="form-control form-control-sm text-right" id="for_tax" name="tax[]" value="{{ $item->tax }}" readonly>
+                            </td>
+                            <td align="right">
+                                <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_item_total" name="item_total[]" value="{{ $item->expense }}" readonly>
+                            </td>
+
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="9"></td>
+                            <td class="text-right">Valor Total</td>
+                            <td align="right">
+                                <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount" value="{{$requestForm->estimated_expense}}" name="total_amount" readonly>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+
+
+
+
+
+</div><!-- DIV para TABLA-->
+
+
+
+</div> -->
+
+<!-- card-body -->
+</div>
+<!-- card-principal -->
 
 @endsection
 @section('custom_js')
