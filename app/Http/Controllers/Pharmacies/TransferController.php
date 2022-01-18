@@ -59,6 +59,11 @@ class TransferController extends Controller
 
             $transfers = Transfer::with('establishment_from:id,name', 'establishment_to:id,name', 'product:id,name', 'user:id,name,fathers_family')->orderBy('id','DESC')->paginate(15, ['*'], 'p3');
         } else {
+            if (Auth::user()->establishments->count()==0) {
+                session()->flash('warning', 'El usuario no tiene asignado establecimiento. Contacte a secretaría de informática.');
+                return redirect()->route('pharmacies.index');
+            }
+
             $filter = Auth::user()->establishments->first()->id;
             $establishment = Establishment::find($filter);
             $filterEstablishment = function($query) use ($filter) {
