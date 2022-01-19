@@ -11,7 +11,7 @@
                     {{-- @error('name') <span class="error">{{ $message }}</span> @enderror --}}
                 </fieldset>
 
-                <fieldset class="form-group col-sm-4">
+                <fieldset class="form-group col-sm-3">
                     <label>Administrador de Contrato:</label><br>
                     <select wire:model.defer="contractManagerId" name="contractManagerId" class="form-control form-control-sm" required>
                       <option>Seleccione...</option>
@@ -21,8 +21,17 @@
                     </select>
                 </fieldset>
 
-                <fieldset class="form-group col-sm-4">
-                    <label for="for_calidad_juridica">Solicitar Autorización de Jefatura Superior</label>
+                <fieldset class="form-group col-sm-2">
+                    <label>Tipo:</label><br>
+                    <select wire:model.defer="subtype" name="subtype" class="form-control form-control-sm" required>
+                        <option>Seleccione...</option>
+                        <option value="bien">Bien</option>
+                        <option value="servicio">Servicio</option>
+                    </select>
+                </fieldset>
+
+                <fieldset class="form-group col-sm-3">
+                    <label for="for_calidad_juridica">Autoriza Jefatura Superior</label>
                     <div class="mt-1 ml-4">
                         <input class="form-check-input" type="checkbox" value="1" wire:model="superiorChief" name="superiorChief">
                         <label class="form-check-label" for="flexCheckDefault">
