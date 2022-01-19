@@ -3,7 +3,8 @@
 @section('title', 'Formulario de requerimiento')
 
 @section('content')
-
+@php($round_trips = ['round trip' => 'Ida y Vuelta', 'one-way only' => 'Solo Ida'])
+@php($baggages    = ['handbag' => 'Bolso de Mano', 'hand luggage' => 'Equipaje de Cabina', 'baggage' => 'Equipaje de Bodega', 'oversized baggage' => 'Equipaje Sobredimensionado'])
 @include('request_form.partials.nav')
 
 <div class="row">
@@ -77,11 +78,7 @@
     </div>
 </div>
 
-<div class="card mx-0">
-    <h6 class="card-header text-primary"><i class="fas fa-file-signature"></i> Formulario de Requerimiento</h6>
-
-
-    <div class="table-responsive">
+<div class="table-responsive">
     <h6><i class="fas fa-signature"></i> Proceso de Firmas</h6>
     <table class="table table-sm table-striped table-bordered">
         <tbody class="text-center small">
@@ -119,93 +116,107 @@
     </table>
 </div>
 
-
-
-    @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 1)
-    <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_petty_cash', $requestForm) }}" enctype="multipart/form-data">
-        @endif
-        @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 2)
-        <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_internal_oc', $requestForm) }}">
-            @endif
-            @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 3)
-            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_fund_to_be_settled', $requestForm) }}">
-                @endif
-                @csrf
-                @method('POST')
-
-                <table class="table table-sm table-striped table-bordered small">
-                    <thead class="text-center">
-                        <tr>
-                            <th>Item</th>
-                            <th>Estado</th>
-                            <th>Cod.Presup.</th>
-                            <th>Artículo</th>
-                            <th>UM</th>
-                            <th>Especificaciones Técnicas</th>
-                            <th>Archivo</th>
-                            <th>Cantidad</th>
-                            <th>Valor U.</th>
-                            <th>Impuestos</th>
-                            <th>Total Item</th>
-                            <th colspan="2"></th>
-                            <!-- <th></th> -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($requestForm->itemRequestForms as $key => $item)
-                        <tr>
-                            <td>{{ $key+1 }}</td>
-                            <td>{{ $item->status }}</td>
-                            <td>{{ $item->budgetItem()->first()->fullName() }}</td>
-                            <td>{{ $item->article }}</td>
-                            <td>{{ $item->unit_of_measurement }}</td>
-                            <td>{{ $item->specification }}</td>
-                            <td align="center">
-                                @if($item->article_file)
-                                <a href="{{ route('request_forms.show_item_file', $item) }}" target="_blank">
-                                    <i class="fas fa-file"></i></a>
-                                @endif
-                            </td>
-                            <td align="right">
-                                <input type="number" class="form-control form-control-sm text-right" step="0.01" min="0.1" id="for_quantity" name="quantity[]" value="{{ $item->quantity }}">
-                            </td>
-                            <td align="right">
-                                <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_unit_value" name="unit_value[]" value="{{ $item->unit_value }}">
-                            </td>
-                            <td align="right">
-                                <input type="text" class="form-control form-control-sm text-right" id="for_tax" name="tax[]" value="{{ $item->tax }}" readonly>
-                            </td>
-                            <td align="right">
-                                <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_item_total" name="item_total[]" value="{{ $item->expense }}" readonly>
-                            </td>
-
-                        </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="9"></td>
-                            <td class="text-right">Valor Total</td>
-                            <td align="right">
-                                <input type="number" step="0.01" min="1" class="form-control form-control-sm text-right" id="total_amount" value="{{$requestForm->estimated_expense}}" name="total_amount" readonly>
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
-
-
-
-
-
-</div><!-- DIV para TABLA-->
-
-
-
-</div> -->
-
-<!-- card-body -->
+@if($requestForm->type_form == 'bienes y/o servicios')
+<div class="table-responsive">
+    <h6><i class="fas fa-info-circle"></i> Lista de Bienes y/o Servicios</h6>
+    <table class="table table-condensed table-hover table-bordered table-sm">
+      <thead class="text-center small">
+        <tr>
+          <th>Item</th>
+          <th>ID</th>
+          <th>Item Pres.</th>
+          <th>Artículo</th>
+          <th>UM</th>
+          <th>Especificaciones Técnicas</th>
+          <th>Archivo</th>
+          <th>Cantidad</th>
+          <th>Valor U.</th>
+          <th>Impuestos</th>
+          <th>Total Item</th>
+        </tr>
+      </thead>
+      <tbody class="small">
+        @foreach($requestForm->itemRequestForms as $key => $itemRequestForm)
+                <tr>
+                    <td>{{ $key+1 }}</td>
+                    <td>{{ $itemRequestForm->id }}</td>
+                    <td>{{ $itemRequestForm->budgetItem ? $itemRequestForm->budgetItem->fullName() : '' }}</td>
+                    <td>{{ $itemRequestForm->article }}</td>
+                    <td>{{ $itemRequestForm->unit_of_measurement }}</td>
+                    <td>{{ $itemRequestForm->specification }}</td>
+                    <td align="center">
+                      @if($itemRequestForm->article_file)
+                      <a href="{{ route('request_forms.show_item_file', $itemRequestForm) }}" target="_blank">
+                        <i class="fas fa-file"></i>
+                      @endif
+                    </td>
+                    <td align="right">{{ $itemRequestForm->quantity }}</td>
+                    <td align="right">${{ number_format($itemRequestForm->unit_value,0,",",".") }}</td>
+                    <td align="center">{{ $itemRequestForm->tax }}</td>
+                    <td align="right">${{ number_format($itemRequestForm->expense,0,",",".") }}</td>
+                </tr>
+        @endforeach
+      </tbody>
+      <tfoot class="text-right small">
+        <tr>
+          <td colspan="10">Valor Total</td>
+          <td>${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
+        </tr>
+        <tr>
+          <td colspan="10">Cantidad de Items</td>
+          <td>{{count($requestForm->itemRequestForms)}}</td>
+        </tr>
+      </tfoot>
+    </table>
 </div>
-<!-- card-principal -->
+@else
+<!-- Pasajeros -->
+<div class="table-responsive">
+    <h6><i class="fas fa-info-circle"></i> Lista de Pasajeros</h6>
+    <table class="table table-sm table-striped table-bordered small">
+      <thead class="text-center small">
+        <tr>
+          <th>#</th>
+          <th>RUT</th>
+          <th>Nombres</th>
+          <th>Apellidos</th>
+          <th>Cod. Pres.</th>
+          <th>Tipo viaje</th>
+          <th>Origen</th>
+          <th>Destino</th>
+          <th>Fecha ida</th>
+          <th>Fecha vuelta</th>
+          <th>Equipaje</th>
+          <th>Total pasaje</th>
+        </tr>
+      </thead>
+      <tbody class="small">
+        @foreach($requestForm->passengers as $key => $passenger)
+                <tr>
+                    <td>{{ $key+1 }}</td>
+                    <td>{{ number_format($passenger->run, 0, ",", ".") }}-{{ $passenger->dv }}</td>
+                    <td>{{ $passenger->name }}</td>
+                    <td>{{ $passenger->fathers_family }} {{ $passenger->mothers_family }}</td>
+                    <td>-</td>
+                    <td>{{ isset($round_trips[$passenger->round_trip]) ? $round_trips[$passenger->round_trip] : '' }}</td>
+                    <td>{{ $passenger->origin }}</td>
+                    <td>{{ $passenger->destination }}</td>
+                    <td>{{ $passenger->departure_date->format('d-m-Y H:i') }}</td>
+                    <td>{{ $passenger->return_date->format('d-m-Y H:i') }}</td>
+                    <td>{{ isset($baggages[$passenger->baggage]) ? $baggages[$passenger->baggage] : '' }}</td>
+                    <td align="right">${{ number_format($passenger->unit_value, $requestForm->type_of_currency == 'peso' ? 0 : 2, ",", ".") }}</td>
+                </tr>
+        @endforeach
+      </tbody>
+      <tfoot class="text-right small">
+        <tr>
+          <td colspan="{{ in_array($eventType, ['finance_event', 'supply_event', 'budget_event']) ? 11 : 10 }}">Valor Total</td>
+          <td>${{ number_format($requestForm->estimated_expense, $requestForm->type_of_currency == 'peso' ? 0 : 2,",",".") }}</td>
+        </tr>
+      </tfoot>
+    </table>
+</div>
+@endif
 
 @endsection
 @section('custom_js')

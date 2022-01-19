@@ -59,7 +59,7 @@ class RequestFormCreate extends Component
     ];
 
     public function mount($requestForm){
-      $this->isRFItems = request()->route()->getName() == 'request_forms.items.create' || ($requestForm && $requestForm->type_form == 'Bienes y/o Servicios');
+      $this->isRFItems = request()->route()->getName() == 'request_forms.items.create' || ($requestForm && $requestForm->type_form == 'bienes y/o servicios');
       $this->purchaseMechanism      = "";
       $this->totalDocument          = 0;
       $this->items                  = array();
