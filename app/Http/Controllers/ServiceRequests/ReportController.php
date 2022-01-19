@@ -454,7 +454,15 @@ class ReportController extends Controller
     if ($ServiceRequest->working_day_type == "DIARIO") {
       $pdf->loadView('service_requests.report_resolution_diary', compact('ServiceRequest'));
     }else{
-      $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+      //$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+      if ($ServiceRequest->start_date >= "2022-01-01 00:00:00")
+            {
+              $pdf->loadView('service_requests.report_resolution_hsa_2022', compact('ServiceRequest'));
+            }
+            else
+            {
+              $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+            }
     }
 
 
