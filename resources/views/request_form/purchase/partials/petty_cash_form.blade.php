@@ -16,7 +16,7 @@
                   <option value="">Seleccione...</option>
                   @php($doc_types = ['Boleta electrónica', 'Boleta electrónica exenta', 'Comprobante pago electrónico', 'Factura electrónica', 'Factura No afecta o exenta electrónica' ])
                   @foreach($doc_types as $doc_type)
-                      <option value="{{ $doc_type }}">{{ $doc_type }}</option>
+                      <option value="{{ $doc_type }}" {{ $doc_type == old('receipt_type', '') ? 'selected' : '' }} >{{ $doc_type }}</option>
                   @endforeach
               </select>
           </fieldset>
@@ -24,13 +24,13 @@
           <fieldset class="form-group col-2">
               <label for="for_receipt_number">Folio</label>
               <input type="number" class="form-control form-control-sm" id="for_receipt_number" name="receipt_number"
-                  value="" required>
+                  value="{{ old('receipt_number') }}" required>
           </fieldset>
 
           <fieldset class="form-group col-2">
               <label for="for_amount">Monto total</label>
               <input type="number" class="form-control form-control-sm amount" id="for_amount" name="amount"
-                  value="" required>
+                  value="{{ old('amount') }}" required>
           </fieldset>
 
           <fieldset class="form-group col-3">

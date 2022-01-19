@@ -13,13 +13,13 @@
           <fieldset class="form-group col-2">
               <label for="for_memo_number">N° Memo</label>
               <input type="number" class="form-control form-control-sm" id="for_memo_number" name="memo_number"
-                  value="" required>
+                  value="{{ old('memo_number') }}" required>
           </fieldset>
 
           <fieldset class="form-group col-2">
               <label for="for_amount">Monto total</label>
               <input type="number" class="form-control form-control-sm amount" id="for_amount" name="amount"
-                  value="" required>
+                  value="{{ old('amount') }}" required>
           </fieldset>
       </div>
       <button type="submit" class="btn btn-primary float-right" id="save_btn">

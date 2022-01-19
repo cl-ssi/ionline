@@ -145,14 +145,16 @@
     <div class="col-sm">
         <div class="table-responsive">
             <h6><i class="fas fa-shopping-cart"></i> Lista de Bienes y/o Servicios:</h6>
-            @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 1)
-            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_petty_cash', $requestForm) }}" enctype="multipart/form-data">
-            @endif
-            @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 2)
-            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_internal_oc', $requestForm) }}">
-            @endif
-            @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 3)
-            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_fund_to_be_settled', $requestForm) }}">
+            @if($requestForm->purchase_mechanism_id == 1)
+                @if($requestForm->purchase_type_id == 1)
+                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_petty_cash', $requestForm) }}" enctype="multipart/form-data">
+                @endif
+                @if($requestForm->purchase_type_id == 2)
+                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_internal_oc', $requestForm) }}">
+                @endif
+                @if($requestForm->purchase_type_id == 3)
+                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_fund_to_be_settled', $requestForm) }}">
+                @endif
             @endif
 
             @if($requestForm->purchase_mechanism_id == 4 && $requestForm->purchase_type_id == 12)
@@ -197,11 +199,11 @@
                         </td>
                         <td align="right">
                           <input type="number" class="form-control form-control-sm text-right" step="0.01" min="0.1" id="for_quantity" name="quantity[]"
-                              value="{{ $item->quantity }}">
+                              value="{{ old('quantity.'.$key, $item->quantity) }}">
                         </td>
                         <td align="right">
                           <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_unit_value" name="unit_value[]"
-                              value="{{ $item->unit_value }}">
+                              value="{{ old('unit_value.'.$key, $item->unit_value) }}">
                         </td>
                         <td align="right">
                           <input type="text" class="form-control form-control-sm text-right" id="for_tax" name="tax[]"
@@ -209,13 +211,13 @@
                         </td>
                         <td align="right">
                           <input type="number" class="form-control form-control-sm text-right" step="0.01" min="1" id="for_item_total" name="item_total[]"
-                              value="{{ $item->expense }}" readonly>
+                              value="{{ old('item_total.'.$key, $item->expense) }}" readonly>
                         </td>
                         <td align="center">
                             <fieldset class="form-group">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="item_id[{{$key}}]" onclick="disabledSaveBtn()"
-                                        id="for_item_id" value="{{ $item->id }}" @if($isBudgetEventSignPending) disabled @endif>
+                                        id="for_item_id" value="{{ $item->id }}" {{ $item->id == old('item_id.'.$key, '') ? 'checked' : '' }} @if($isBudgetEventSignPending) disabled @endif>
                                 </div>
                             </fieldset>
                         </td>
@@ -392,22 +394,13 @@ $('#for_quantity,#for_unit_value').on('change keyup',function(){
     calculateAmount(true)
 });
 
-document.getElementById("save_btn").disabled = true;
+document.getElementById("save_btn").disabled = {{ old('_token') === null ? 'true' : 'false' }}
 
 function disabledSaveBtn() {
     // Get the checkbox
-    var key =key;
     var checkBox = document.getElementById("for_applicant_id");
     // If the checkbox is checked, display the output text
-    //if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){
     if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0){
-        var valor_actual = $(".amount").val();
-        var total_item = $("#item_total_"+key).html().replace('$', '');
-        total_item = total_item.replace('.', '');
-        total_item = Number(total_item);
-        valor_actual = Number(valor_actual);
-        var valor_sumado = valor_actual+total_item;
-        $(".amount").val(valor_sumado);
         document.getElementById("save_btn").disabled = false;
         calculateAmount(true);
     } else {

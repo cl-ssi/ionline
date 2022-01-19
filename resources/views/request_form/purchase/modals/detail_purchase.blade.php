@@ -71,8 +71,10 @@
                         </tbody>
                     </table>
                 </div>
+                @if($detail->pivot->pettyCash->file)
                 <object type="application/pdf" data="{{ route('request_forms.supply.petty_cash.download', $detail->pivot->pettyCash->id) }}" width="100%" height="400" style="height: 85vh;"><a href="{{ route('request_forms.supply.petty_cash.download', $detail->pivot->pettyCash->id) }}" target="_blank">
                               <i class="fas fa-file"></i> Ver documento</a></object>
+                @endif
                 @endif
 
                 @if($detail->pivot->fundToBeSettled)
@@ -96,7 +98,6 @@
                 </div>
                 <object type="application/pdf" data="{{ route('request_forms.supply.fund_to_be_settled.download', $detail->pivot->fundToBeSettled->id) }}" width="100%" height="400" style="height: 85vh;"><a href="{{ route('request_forms.supply.fund_to_be_settled.download', $detail->pivot->fundToBeSettled->id) }}" target="_blank">
                               <i class="fas fa-file"></i> Ver documento</a></object>
-                @endif
             </div>
         </div>
     </div>
