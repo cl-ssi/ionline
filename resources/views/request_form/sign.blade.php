@@ -125,7 +125,7 @@
 
 <br>
 
-@if($requestForm->type_form == 'Bienes y/o Servicios')
+@if($requestForm->type_form == 'bienes y/o servicios')
 
 
 

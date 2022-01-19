@@ -237,7 +237,7 @@ class RequestForm extends Model implements Auditable
     }
 
     public function quantityOfItems(){
-      return $this->type_form == 'Bienes y/o Servicios' ? count($this->itemRequestForms) : count($this->passengers);
+      return $this->type_form == 'bienes y/o servicios' ? count($this->itemRequestForms) : count($this->passengers);
     }
 
 
