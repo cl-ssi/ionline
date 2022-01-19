@@ -154,6 +154,11 @@
             @if($requestForm->purchase_mechanism_id == 1 && $requestForm->purchase_type_id == 3)
             <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_fund_to_be_settled', $requestForm) }}">
             @endif
+
+            @if($requestForm->purchase_mechanism_id == 4 && $requestForm->purchase_type_id == 12)
+            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_fund_to_be_settled', $requestForm) }}">
+            @endif
+
             @csrf
             @method('POST')
 
@@ -256,7 +261,7 @@
 
 @endif
 
-<!-- Menores a 3 UTM -->
+<!-- LICITACIÓN PUBLICA -->
 @if($requestForm->purchase_mechanism_id == 4)
     @if($requestForm->purchase_type_id == 12)
       @include('request_form.purchase.partials.tender_form')
