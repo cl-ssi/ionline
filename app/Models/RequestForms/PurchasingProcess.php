@@ -46,7 +46,7 @@ class PurchasingProcess extends Model
         // 'id_offer', 'id_quotation', 'item_request_form_id',
 
         'purchase_mechanism_id', 'purchase_type_id', 'start_date', 'end_date',
-        'status', 'user_id'
+        'status', 'observation', 'user_id'
     ];
 
     public function internalPurchaseOrder(){
@@ -62,7 +62,7 @@ class PurchasingProcess extends Model
     }
 
     public function getExpense(){
-        return $this->details->sum('expense');
+        return $this->details->sum('pivot.expense');
     }
 
     public function requestForm(){
