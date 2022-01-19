@@ -41,10 +41,9 @@
                   class="btn btn-primary btn-sm float-right" title="Formulario" target="_blank">
                   Orden de Compra <i class="fas fa-file-alt"></i>
                 </a>
+            @endif
 
-                @endif
-
-                @if($detail->pivot->pettyCash)
+            @if($detail->pivot->pettyCash)
                 <div class="table-responsive">
                     <table class="table table-sm table-striped table-bordered">
                         <tbody>
@@ -73,11 +72,11 @@
                 </div>
                 @if($detail->pivot->pettyCash->file)
                 <object type="application/pdf" data="{{ route('request_forms.supply.petty_cash.download', $detail->pivot->pettyCash->id) }}" width="100%" height="400" style="height: 85vh;"><a href="{{ route('request_forms.supply.petty_cash.download', $detail->pivot->pettyCash->id) }}" target="_blank">
-                              <i class="fas fa-file"></i> Ver documento</a></object>
+                            <i class="fas fa-file"></i> Ver documento</a></object>
                 @endif
-                @endif
+            @endif
 
-                @if($detail->pivot->fundToBeSettled)
+            @if($detail->pivot->fundToBeSettled)
                 <div class="table-responsive">
                     <table class="table table-sm table-striped table-bordered">
                         <tbody>
@@ -98,6 +97,7 @@
                 </div>
                 <object type="application/pdf" data="{{ route('request_forms.supply.fund_to_be_settled.download', $detail->pivot->fundToBeSettled->id) }}" width="100%" height="400" style="height: 85vh;"><a href="{{ route('request_forms.supply.fund_to_be_settled.download', $detail->pivot->fundToBeSettled->id) }}" target="_blank">
                               <i class="fas fa-file"></i> Ver documento</a></object>
+            @endif
             </div>
         </div>
     </div>

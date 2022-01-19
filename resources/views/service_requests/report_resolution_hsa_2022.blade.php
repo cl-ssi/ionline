@@ -331,7 +331,7 @@
             @else
             Servicio de Salud Iquique,
             @endif
-            en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
+            en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado hasta el día
             @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
             10
             @else
