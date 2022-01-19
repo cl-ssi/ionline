@@ -62,7 +62,7 @@ class PurchasingProcess extends Model
     }
 
     public function getExpense(){
-        return $this->details->sum('expense');
+        return $this->details->sum('pivot.expense');
     }
 
     public function requestForm(){
