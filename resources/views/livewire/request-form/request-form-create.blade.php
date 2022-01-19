@@ -25,8 +25,8 @@
                     <label>Tipo:</label><br>
                     <select wire:model.defer="subtype" name="subtype" class="form-control form-control-sm" required>
                         <option>Seleccione...</option>
-                        <option value="bien">Bien</option>
-                        <option value="servicio">Servicio</option>
+                        <option value="compra inmediata">Compra inmediata</option>
+                        <option value="suministros">Suministros</option>
                     </select>
                 </fieldset>
 

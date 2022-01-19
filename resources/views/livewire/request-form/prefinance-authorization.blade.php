@@ -1,6 +1,6 @@
 <div>
     <div class="table-responsive">
-      @if($requestForm->type_form == 'Bienes y/o Servicios')
+      @if($requestForm->type_form == 'bienes y/o servicios')
       <h6><i class="fas fa-info-circle"></i> Lista de Bienes y/o Servicios</h6>
       <table class="table table-condensed table-hover table-bordered table-sm small">
           <thead>
