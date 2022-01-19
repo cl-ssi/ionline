@@ -70,7 +70,7 @@ class PurchasingProcessController extends Controller
     {
         //total del monto por items seleccionados + item registrados no debe sobrepasar el total del presupuesto asignado al formulario de requerimiento
         $totalItemPurchased = 0;
-        if($requestForm->purchasingProcess->details) $totalItemPurchased = $requestForm->purchasingProcess->getExpense();
+        if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details) $totalItemPurchased = $requestForm->purchasingProcess->getExpense();
 
         $totalItemSelected = 0;
         foreach(request()->item_id as $key => $item)
