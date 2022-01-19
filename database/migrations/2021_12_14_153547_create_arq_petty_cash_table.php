@@ -16,7 +16,7 @@ class CreateArqPettyCashTable extends Migration
         Schema::create('arq_petty_cash', function (Blueprint $table) {
             $table->id();
             $table->dateTime('date', $precision = 0);
-            $table->integer('amount');
+            $table->float('amount', 15, 2);
             $table->integer('receipt_number');
             $table->string('receipt_type');
             $table->string('file')->nullable();
