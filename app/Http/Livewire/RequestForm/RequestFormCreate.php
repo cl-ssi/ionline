@@ -59,7 +59,7 @@ class RequestFormCreate extends Component
     ];
 
     public function mount($requestForm){
-      $this->isRFItems = request()->route()->getName() == 'request_forms.items.create' || ($requestForm && $requestForm->type_form == 'Bienes y/o Servicios');
+      $this->isRFItems = request()->route()->getName() == 'request_forms.items.create' || ($requestForm && $requestForm->type_form == 'bienes y/o servicios');
       $this->purchaseMechanism      = "";
       $this->totalDocument          = 0;
       $this->items                  = array();
@@ -237,7 +237,7 @@ class RequestFormCreate extends Component
             'name'                  =>  $this->name,
             'superior_chief'        =>  $this->superiorChief,
             'justification'         =>  $this->justify,
-            'type_form'             =>  $this->isRFItems ? 'Bienes y/o Servicios' : 'Pasajes Aéreos',
+            'type_form'             =>  $this->isRFItems ? 'bienes y/o servicios' : 'pasajes aéreos',
             'request_user_id'       =>  Auth()->user()->id,
             'request_user_ou_id'    =>  Auth()->user()->organizationalUnit->id,
             'estimated_expense'     =>  $this->totalForm(),
