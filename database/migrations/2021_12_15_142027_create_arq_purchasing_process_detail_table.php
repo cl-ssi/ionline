@@ -25,8 +25,8 @@ class CreateArqPurchasingProcessDetailTable extends Migration
 
             /* Updated items in purchasing process */
             $table->float('quantity')->nullable();
-            $table->float('unit_value')->nullable();
-            $table->float('expense')->nullable();
+            $table->float('unit_value', 15, 2)->nullable();
+            $table->float('expense', 15, 2)->nullable();
             $table->enum('status', ['pending', 'total', 'partial', 'desert', 'timed_out', 'not_available'])->nullable();
 
             $table->timestamps();

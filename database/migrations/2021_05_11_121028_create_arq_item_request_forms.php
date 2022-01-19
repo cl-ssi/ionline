@@ -26,10 +26,10 @@ class CreateArqItemRequestForms extends Migration
             $table->string('unit_of_measurement');
             $table->float('quantity');
             $table->string('article_file')->nullable();
-            $table->float('unit_value');
+            $table->float('unit_value', 15, 2);
             $table->longText('specification');
             $table->string('tax');
-            $table->float('expense');
+            $table->float('expense', 15, 2);
             $table->enum('status', ['in_progress', 'total', 'partial', 'desert',  'timed_out', 'not_available']);
             $table->softDeletes();
             $table->timestamps();
