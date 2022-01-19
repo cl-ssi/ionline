@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateArqImmediatePurchasesTable extends Migration
+class CreateArqTenderPurchasesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateArqImmediatePurchasesTable extends Migration
      */
     public function up()
     {
-        Schema::create('arq_immediate_purchases', function (Blueprint $table) {
+        Schema::create('arq_tender_purchases', function (Blueprint $table) {
             $table->id();
             $table->date('po_date')->nullable();
             $table->date('po_sent_date')->nullable();
@@ -37,6 +37,6 @@ class CreateArqImmediatePurchasesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('arq_immediate_purchases');
+        Schema::dropIfExists('arq_tender_purchases');
     }
 }
