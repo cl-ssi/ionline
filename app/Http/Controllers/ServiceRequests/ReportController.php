@@ -455,7 +455,7 @@ class ReportController extends Controller
       $pdf->loadView('service_requests.report_resolution_diary', compact('ServiceRequest'));
     }else{
       //$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
-      if ($ServiceRequest->start_date >= "2022-01-01 00:00:00")
+      if ($ServiceRequest->start_date >= "2022-01-01 00:00:00" and $ServiceRequest->programm_name!="Covid 2022")
             {
               $pdf->loadView('service_requests.report_resolution_hsa_2022', compact('ServiceRequest'));
             }

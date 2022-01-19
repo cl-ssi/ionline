@@ -62,9 +62,9 @@
                                 <td>{{ $requestForm->type_form }}</td>
                                 <td>{{ $requestForm->name }}</td>
                                 <td>{{ $requestForm->user->FullName }}<br>
-                                    {{ $requestForm->userOrganizationalUnit->name }}
+                                    {{ $requestForm->userOrganizationalUnit->name ?? '' }}
                                 </td>
-                                <td>{{ $requestForm->purchaseMechanism->name }}</td>
+                                <td>{{ $requestForm->purchaseMechanism->name ?? '' }}</td>
                                 <td align="center">{{ $requestForm->quantityOfItems() }}</td>
                                 <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
                                 <td class="text-center">
