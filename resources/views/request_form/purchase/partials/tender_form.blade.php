@@ -61,8 +61,41 @@
                   <option value="suministro" {{ old('type_of_purchase', '') == 'suministro' ? 'selected' : '' }} >Suministro</option>
                   <option value="compra inmediata" {{ old('type_of_purchase', '') == 'compra inmediata' ? 'selected' : '' }}>Compra Inmediata</option>
               </select>
-          </fieldset>
+          </fieldset>   
       </div>
+
+      <div class="form-row">
+        <fieldset class="form-group col-sm-6">
+            <label for="forFile">Adjuntar archivo Res. Bases Administrativas</label>
+            <input type="file" class="form-control-file" id="forFile" name="resol_administrative_bases_file">
+        </fieldset>
+        <fieldset class="form-group col-sm-6">
+            <label for="forFile">Adjuntar archivo Res. Adjudicación/Desierta</label>
+            <input type="file" class="form-control-file" id="forFile" name="resol_adjudication_deserted_file">
+        </fieldset>
+      </div>
+      <!-- Licitacion LP/LQ -->
+      @if(in_array($requestForm->purchase_type_id, [14,15,16,17,18]))
+      <div class="form-row">
+        <fieldset class="form-group col-sm-6">
+            <label for="forFile">Adjuntar archivo Res. de Contrato</label>
+            <input type="file" class="form-control-file" id="forFile" name="resol_contract_file">
+        </fieldset>
+        <fieldset class="form-group col-sm-6">
+            <label for="forFile">Adjuntar archivo Boleta de garantía</label>
+            <input type="file" class="form-control-file" id="forFile" name="guarantee_ticket_file">
+        </fieldset>
+      </div>
+      @endif
+      <!-- Licitacion LR MAYOR-->
+      @if(in_array($requestForm->purchase_type_id, [16,17,18]))
+      <div class="form-row">
+        <fieldset class="form-group col-12">
+            <label for="forFile">Adjuntar archivo Res. Toma de Razón</label>
+            <input type="file" class="form-control-file" id="forFile" name="taking_of_reason_file">
+        </fieldset>
+      </div>
+      @endif
 
       <button type="submit" class="btn btn-primary float-right" id="save_btn">
           <i class="fas fa-save"></i> Guardar
