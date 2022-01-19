@@ -265,9 +265,7 @@
 
 <!-- LICITACIÓN PUBLICA -->
 @if($requestForm->purchase_mechanism_id == 4)
-    @if($requestForm->purchase_type_id == 12)
-      @include('request_form.purchase.partials.tender_form')
-    @endif
+    @include('request_form.purchase.partials.tender_form')
 @endif
 
 <br>
