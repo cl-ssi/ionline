@@ -54,8 +54,8 @@ class ClaveUnicaController extends Controller
                 'state' => $state,
             ]);
         } catch (ConnectException | RequestException | Exception $e) {
-            logger("Error en callback de clave unica ", ['e' => $e]);
-            return redirect()->route('claveunica.autenticar');
+            logger("Error en callback de clave unica, redirecionando al login ", ['e' => $e]);
+            return redirect()->route('login');
         }
 
 
