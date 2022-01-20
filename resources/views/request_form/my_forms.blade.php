@@ -59,7 +59,7 @@
                                     @endswitch
                                 </td>
                                 <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                                <td>{{ $requestForm->type_form }}</td>
+                                <td>{{ $requestForm->type_form }}<br>{{$requestForm->subtype}}</td>
                                 <td>{{ $requestForm->name }}</td>
                                 <td>{{ $requestForm->user->FullName }}<br>
                                     {{ $requestForm->userOrganizationalUnit->name ?? '' }}
@@ -159,7 +159,7 @@
                                 @endswitch
                             </th>
                             <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                            <td>{{ $requestForm->type_form }}</td>
+                            <td>{{ $requestForm->type_form }}<br>{{$requestForm->subtype}}</td>
                             <td>{{ $requestForm->name }}</td>
                             <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
                                 {{ $requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
@@ -195,6 +195,11 @@
                                       target="_blank" title="Certificado">
                                         <i class="fas fa-file-contract"></i>
                                   </a>
+                                  @if($requestForm->subtype == 'ejecución')
+                                  <a onclick="return confirm('¿Está seguro/a de crear nuevo formulario de suministro?')" href="{{ route('request_forms.create_provision', $requestForm->id) }}"
+                                      class="btn btn-outline-secondary btn-sm" title="Nuevo formulario de suministro"><i class="fas fa-plus"></i>
+                                  </a>
+                                  @endif
                               @else
                                   <a href="{{ route('request_forms.show', $requestForm->id) }}"
                                       class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i>
@@ -202,7 +207,6 @@
                                   <a href="{{ route('request_forms.create_form_document', $requestForm) }}" class="btn btn-outline-secondary btn-sm" title="Formulario" target="_blank">
                                       <i class="fas fa-file-alt"></i>
                                   </a>
-
                               @endif
                             </td>
                         </tr>

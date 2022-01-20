@@ -27,8 +27,17 @@
                         <option>Seleccione...</option>
                         <option value="compra inmediata">Compra inmediata</option>
                         <option value="suministros">Suministros</option>
+                        <option value="ejecución">Ejecución</option>
                     </select>
                 </fieldset>
+
+                @if($subtype == 'ejecución')
+                <fieldset class="form-group col-sm-4">
+                    <label for="forRut">ID RF:</label>
+                    <input wire:model.defer="request_form_id" name="request_form_id" class="form-control form-control-sm" type="text" value="">
+                    {{-- @error('name') <span class="error">{{ $message }}</span> @enderror --}}
+                </fieldset>
+                @endif
 
                 <fieldset class="form-group col-sm-3">
                     <label for="for_calidad_juridica">Autoriza Jefatura Superior</label>
