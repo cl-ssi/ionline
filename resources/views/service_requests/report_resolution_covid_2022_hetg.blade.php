@@ -204,7 +204,7 @@
         <li>Que, la Contraloría General de la República mediante el dictamen N°E173171 del 10 de enero 2022, “Imparte instrucciones respecto de las contrataciones a honorarios en los órganos de la administración del estado”.
         </li>
 
-        <li>Que, en razón de lo dispuesto en el considerando anterior el presente convenio se ajusta a los contratos excluidos de dictamen ya citado que dice en relación con “Contratos a honorarios convenidos con el personal el área de la salud, al fin de cubrir la recarga de las tareas provocadas por la pandemia de COVID-19”.
+        <li>Que, en razón de lo dispuesto en el considerando anterior el presente convenio se ajusta a los convenios excluidos de dictamen ya citado que dice en relación con “convenios a honorarios convenidos con el personal el área de la salud, al fin de cubrir la recarga de las tareas provocadas por la pandemia de COVID-19”.
         </li>
 
         <li>
@@ -216,7 +216,7 @@
         </li>
 
         <li>
-        Que, el Hospital Ernesto Torres Galdames, cuenta con las disponibilidades presupuestarias suficientes para solventar tal convenio.
+        Que, el Hospital "Dr. Ernesto Torres Galdames", cuenta con las disponibilidades presupuestarias suficientes para solventar tal convenio.
         </li>
 
       </ol>
@@ -235,7 +235,7 @@
           <th>Nombre</th>
           <th>Run</th>
           <th>Función</th>
-          <th>Jornada Laboral</th>
+          <!-- <th>Jornada Laboral</th> -->
           <th>Desde</th>
           <th>Hasta</th>
           <th>Lugar de Trabajo</th>
@@ -245,7 +245,7 @@
           <td style="text-align:center">{{$ServiceRequest->employee->getFullNameAttribute()}}</td>
           <td style="text-align:center">{{$ServiceRequest->employee->runFormat()}}</td>
           <td style="text-align:center">{{$ServiceRequest->profession->name}} - {{$ServiceRequest->working_day_type}}</td>
-          <td style="text-align:center">{{$ServiceRequest->weekly_hours}}</td>
+          <!-- <td style="text-align:center">{{$ServiceRequest->weekly_hours}}</td> -->
           <td style="text-align:center">{{$ServiceRequest->start_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->end_date->format('d/m/Y')}}</td>
           <td style="text-align:center">{{$ServiceRequest->responsabilityCenter->name}}</td>
@@ -335,7 +335,7 @@
       </p>
 
       <p class="justify">
-        <strong>CUARTO:</strong> El prestador de Servicios contratante a través de la declaración jurada señaló no estar afecto a ninguna de las inhabilidades establecidas en los arts. 54, 55 y 56 de la Ley Nº 18.575, Orgánica Constitucional de las Bases Generales de la Administración del Estado. Dichas disposiciones relativas a inhabilidades e incompatibilidades administrativas serán aplicables al prestador, con quién se suscribe el presente contrato a Honorarios a Suma Alzada.
+        <strong>CUARTO:</strong> El prestador de Servicios contratante a través de la declaración jurada señaló no estar afecto a ninguna de las inhabilidades establecidas en los arts. 54, 55 y 56 de la Ley Nº 18.575, Orgánica Constitucional de las Bases Generales de la Administración del Estado. Dichas disposiciones relativas a inhabilidades e incompatibilidades administrativas serán aplicables al prestador, con quién se suscribe el presente convenio a Honorarios a Suma Alzada.
       </p>
 
       <p class="justify">
@@ -369,7 +369,7 @@
         @else
         Servicio de Salud Iquique,
         @endif
-        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
+        en que conste el cumplimiento de las labores estipuladas en el convenio. El pago será efectuado el día
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         10
         @else
@@ -385,7 +385,7 @@
         En el desempeño de sus funciones, el prestador cumplió con un total de {{number_format($ServiceRequest->Fulfillments->first()->total_hours_to_pay)}} Horas por extensión horaria en el mes de {{$ServiceRequest->start_date->monthName}}, cuya suma alzada totas es de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}}.- ({{$ServiceRequest->fulfillments->first()->total_to_pay_description}}) impuesto incluido, en conformidad a lo dispuesto en el inciso segundo del Art. 2º del Decreto Nº 98 de 1991 del Ministerio de Hacienda y se cancelará en una cuota de ${{number_format($ServiceRequest->Fulfillments->first()->total_to_pay)}} el mes de {{$ServiceRequest->start_date->monthName}}; se deberá acreditar contra presentación de certificado extendido por el Jefe del {{$ServiceRequest->responsabilityCenter->name}}, dependiente del
         Hospital Regional de Iquique,
 
-        en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
+        en que conste el cumplimiento de las labores estipuladas en el convenio. El pago será efectuado el día
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         10
         @else
@@ -415,7 +415,7 @@
       @else
       Servicio de Salud Iquique,
       @endif
-      en que conste el cumplimiento de las labores estipuladas en el contrato. El pago será efectuado el día
+      en que conste el cumplimiento de las labores estipuladas en el convenio. El pago será efectuado el día
       @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
       10
       @else
@@ -536,7 +536,7 @@
         </p>
         @else
         <p class="justify">
-          <strong>DÉCIMO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implica la caducidad inmediata de éste.
+          <strong>DÉCIMO:</strong> Déjese establecido que el incumplimiento de los términos del presente convenio implica la caducidad inmediata de éste.
         </p>
         @endif
         @endif
@@ -544,12 +544,12 @@
         @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
         @if($ServiceRequest->program_contract_type == "Mensual")
         <p class="justify">
-          <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implica la caducidad inmediata de éste.
+          <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente convenio implica la caducidad inmediata de éste.
         </p>
         @elseif($ServiceRequest->program_contract_type == "Horas")
         @if($ServiceRequest->estate == "Profesional Médico")
         <p class="justify">
-          <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implica la caducidad inmediata de éste.
+          <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente convenio implica la caducidad inmediata de éste.
         </p>
         @else
         <p class="justify">
@@ -562,7 +562,7 @@
         @else
         @if($ServiceRequest->program_contract_type == "Mensual")
         <p class="justify">
-          <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente contrato implica la caducidad inmediata de éste.
+          <strong>DÉCIMO PRIMERO:</strong> Déjese establecido que el incumplimiento de los términos del presente convenio implica la caducidad inmediata de éste.
         </p>
         @elseif($ServiceRequest->program_contract_type == "Horas")
         <p class="justify">
@@ -596,11 +596,12 @@
         <p class="justify">
           <strong>DECIMO CUARTO:</strong> El prestador (a) individualizado (a) en la presente resolución tendrá los siguientes beneficios adicionales:<br><br>
 
-          Feriado Legal:
-          Derecho a días de descanso, correspondiente a 20 días hábiles, después de un año de prestación de servicio continúo en calidad de honorario, sin opción de acumulación, previa autorización de la jefatura de la unidad que se desempeña.
+          <ins>Feriado Legal:</ins><br>
+          Derecho a días de descanso, correspondiente a 20 días hábiles, después de un año de prestación de servicio continúo en calidad de honorario, sin opción de acumulación, previa autorización de la jefatura de la unidad que se desempeña.<br><br>
 
-          Permiso Administrativo:
-          Permisos para ausentarse de sus labores por motivos particulares por un día hábil durante el periodo del presente convenio, con goce de prestación. Dicho permiso podrá fraccionarse por 1 día o 2 medio día y serán resueltos por la Coordinadora del área correspondiente.
+          
+          <ins>Permiso Administrativo:</ins><br>
+          Permisos para ausentarse de sus labores por motivos particulares por un día hábil durante el periodo del presente convenio, con goce de prestación. Dicho permiso podrá fraccionarse por 1 día o 2 medio día y serán resueltos por la Coordinadora del área correspondiente.<br> <br>
 
 
           {!! nl2br($ServiceRequest->additional_benefits) !!}
@@ -609,7 +610,7 @@
         <p class="justify">
           <strong>DECIMO QUINTO:</strong>
           El prestador tiene la obligación de adherirse a una mutualidad a objeto de estar cubierto por la ley 16.744, sobre accidentes y enfermedades profesionales.
-          El prestador deberá entregar en la unidad de honorarios covid y en un plazo no superior a 30 días de la fecha de inicio del contrato el certificado de adhesión a una mutualidad.
+          El prestador deberá entregar en la unidad de honorarios covid y en un plazo no superior a 30 días de la fecha de inicio del convenio el certificado de adhesión a una mutualidad.
         </p>
 
 
@@ -684,7 +685,7 @@
             <br style="padding-bottom: 4px;">
             Lo que me permito transcribe a usted para su conocimiento y fines consiguientes.
 
-            <br><br><br>
+            <br><br><br><br><br><br><br><br><br>
             <br style="padding-bottom: 4px;">
             MINISTRO DE FE
             @else
