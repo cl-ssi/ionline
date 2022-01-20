@@ -8,10 +8,21 @@
 
 <div class="form-row">
 
-  <fieldset class="form-group col-12 col-md-8 mt-4">
+  <fieldset class="form-group col-12 col-md-5 mt-4">
     <h3>Cumplimiento de solicitud:
       <a href="{{ route('rrhh.service-request.edit', $serviceRequest) }}">{{ $serviceRequest->id }}</a>
     </h3>
+  </fieldset>
+
+  <fieldset class="col-md-3">
+    <label>Programa :</label>
+    <input type="text" class="form-control" value="{{$serviceRequest->programm_name}}"
+      @if($serviceRequest->type=='Covid 2022')
+        style='background-color:#F5A7A7;'
+      @else
+        style='background-color:#8fbc8f;'
+      @endif
+    disabled>
   </fieldset>
 
   <fieldset class="col-md-4">

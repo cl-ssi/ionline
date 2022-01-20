@@ -618,7 +618,11 @@
         <div class="page-break"></div>
         @endif
 
-        Para constancia firman: <br><br> {{$ServiceRequest->employee->getFullNameAttribute()}} <br><br>
+        
+
+        Para constancia firman: <br><br><br><br><br><br><br><br><br><br><br>        
+        {{$ServiceRequest->employee->getFullNameAttribute()}} 
+        <br><br>
 
         <p class="">
           <strong>2.</strong> El convenio que por este acto se aprueban, se entiende que forman parte integrante de la presente Resolución.
