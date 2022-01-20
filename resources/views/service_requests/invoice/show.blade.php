@@ -6,7 +6,7 @@
 
 @if($user)
 
-	@if(empty($fulfillments))
+	@if($fulfillments->isEmpty())
 		<div class="alert alert-danger">
 			<h4 class="alert-heading">No existen contratos de honorarios con cumplimientos para pago con este run.</h4>
 		</div>
