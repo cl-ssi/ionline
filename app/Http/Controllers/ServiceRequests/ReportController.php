@@ -1276,11 +1276,16 @@ class ReportController extends Controller
   {
 
     $results = array();
+    //dd($request->type);
     if ($request->from != null && $request->to != null) {
       $serviceRequests = ServiceRequest::where('program_contract_type', 'Mensual')
         ->where('type', 'Covid')
         ->where('start_date', '<=', $request->from)
         ->where('end_date', '>', $request->from)
+        
+        ->when($request->type != null, function ($q) use ($request) {
+          return $q->where('type',  $request->type);
+        })
         ->orderBy('start_date', 'asc')
         ->get(['user_id', 'id', 'start_date', 'end_date'])
         ->unique('user_id');
@@ -1316,8 +1321,9 @@ class ReportController extends Controller
               $user_id = $serviceRequest_aux->user_id;
               $start_date = $serviceRequest_aux->start_date;
               $end_date = $serviceRequest_aux->end_date;
+              $type = $serviceRequest_aux->type;
 
-              $results[$serviceRequest->employee->getFullNameAttribute()][$start_date->format('Y-m-d') . " - " . $end_date->format('Y-m-d')] = $serviceRequest_aux;
+              $results[$serviceRequest->employee->getFullNameAttribute()][$start_date->format('Y-m-d') . " - " . $end_date->format('Y-m-d')."(".($type).")"] = $serviceRequest_aux;
 
               // print_r($serviceRequest->employee->getFullNameAttribute() ." - ". $end_date."<br>");
             } else {
