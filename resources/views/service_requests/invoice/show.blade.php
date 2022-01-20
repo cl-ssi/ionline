@@ -151,7 +151,10 @@
 
 @else
 	<div class="alert alert-danger">
-		<h4 class="alert-heading">No existe un usuario con este run en nuestros registros.</h4>
+		<h4 class="alert-heading">No existe un usuario con este run en nuestros registros. </h4>
+		<p>Si tiene alguna duda respecto a algún contrato, puede ponerse en contacto con el área de RRHH a través de del anexo 57 9819 o bién a través de 
+		<a href="https://wa.me/message/IBHMJ3XRQZA3P1" data-toggle="tooltip" title="<img src='{{ asset('images/qr_wp_rrhh.svg') }}' />">WhatsApp</a>. <br>
+		El horario de atención es de 8:30 a 16:00.</p>
 	</div>
 @endif
 
