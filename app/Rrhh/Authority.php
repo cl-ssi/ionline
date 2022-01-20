@@ -3,6 +3,7 @@
 namespace App\Rrhh;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Rrhh\OrganizationalUnit;
 
 class Authority extends Model
 {
@@ -43,6 +44,33 @@ class Authority extends Model
                 is_array($type) ? $q->whereIn('type', $type) : $q->where('type', $type);
               })
             ->where('from','<=',$date)->where('to','>=',$date)->get()->last();
+    }
+
+    public static function getBossFromUser($ou_id, $date) {
+        if (!is_string($date)) {
+          $date = $date->format('Y-m-d');
+        }
+
+        $result = Authority::with('user','organizationalUnit')
+            ->where('organizational_unit_id', $ou_id)
+            ->where('type','manager')            
+            ->where('from','<=',$date)->where('to','>=',$date)->get()->last();
+        if($result == null)
+        {
+            $oujefe = OrganizationalUnit::find($ou_id);
+            return Authority::with('user','organizationalUnit')
+            ->where('organizational_unit_id', $oujefe->father->id)
+            ->where('type','manager')            
+            ->where('from','<=',$date)->where('to','>=',$date)->get()->last();            
+        }
+        else
+        {
+            return $result;
+
+            
+
+        }
+        
     }
 
     public static function getAmIAuthorityFromOu($date, $type, $user_id) {
