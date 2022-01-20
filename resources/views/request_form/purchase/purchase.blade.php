@@ -80,7 +80,7 @@
             @include('request_form.purchase.modals.select_purchase_mechanism')
 
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#requestBudget" @if($isBudgetEventSignPending) disabled @endif >
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#requestBudget" @if($isBudgetEventSignPending) disabled @endif disabled >
                 Solicitar presupuesto
             </button>
 
@@ -157,8 +157,8 @@
                 @endif
             @endif
 
-            @if($requestForm->purchase_mechanism_id == 4 && $requestForm->purchase_type_id == 12)
-            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_fund_to_be_settled', $requestForm) }}">
+            @if($requestForm->purchase_mechanism_id == 4)
+            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_tender', $requestForm) }}">
             @endif
 
             @csrf
