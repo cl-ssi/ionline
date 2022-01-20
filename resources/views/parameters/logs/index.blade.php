@@ -6,8 +6,8 @@
 
 <style>
     pre {
-    white-space: pre-wrap;
-}
+    	white-space: pre-wrap;
+	}
 </style>
 
 <h3 class="mb-3">Logs <small> registros totales: {{ $logs->count() }}</small></h3>
@@ -27,7 +27,8 @@
                 </a>
             </th>
         </tr>
-        <tr><td><b>[uri] = </b> {{ $log->uri }} <a target="_blank" href="{{ $log->uri }}">[ir]</a></td></tr>
+        <tr><td><b>[user_id] = </b>{{ $log->user_id }} - {{ optional($log->user)->fullName }}</td></tr>
+        <tr><td><b>[uri] = </b> <a target="_blank" href="{{ $log->uri }}">{{ $log->uri }}</a></td></tr>
         <tr><td><b>[message] = </b>{{ $log->message }}</td></tr>
         <tr><td><b>[formatted] = </b><pre>{{ substr($log->formatted, 0,1000) }}...</pre></td></tr>
         <tr><td><b>[context] = </b><pre>{{ substr($log->context, 0, 1000) }}...</pre></td></tr>
@@ -37,7 +38,6 @@
         <tr><td><b>[remote_addr] = </b>{{ $log->remote_addr }}</td></tr>
         <tr><td><b>[user_agent] = </b>{{ $log->user_agent }}</td></tr>
         <tr><td><b>[record_datetime] = </b>{{ $log->record_datetime }}</td></tr>
-        <tr><td><b>[user_id] = </b>{{ $log->user_id }} - {{ optional($log->user)->fullName }}</td></tr>
         @endforeach
     </tbody>
 </table>
