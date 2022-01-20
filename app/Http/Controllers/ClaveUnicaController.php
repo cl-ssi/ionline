@@ -8,6 +8,11 @@ use Illuminate\Support\Facades\Auth;
 use App\User;
 use App\Models\UserExternal;
 
+/* No se si son necesarias, las puse para el try catch */
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
+use Exception;
+
 class ClaveUnicaController extends Controller
 {
     public function autenticar(Request $request){
@@ -39,14 +44,20 @@ class ClaveUnicaController extends Controller
         //$state = csrf_token();
         //$scope = 'openid+run+name+email';
 
-        $response = Http::asForm()->post($url_base, [
-            'client_id' => $client_id,
-            'client_secret' => $client_secret,
-            'redirect_uri' => $redirect_uri,
-            'grant_type' => 'authorization_code',
-            'code' => $code,
-            'state' => $state,
-        ]);
+        try {
+            $response = Http::asForm()->post($url_base, [
+                'client_id' => $client_id,
+                'client_secret' => $client_secret,
+                'redirect_uri' => $redirect_uri,
+                'grant_type' => 'authorization_code',
+                'code' => $code,
+                'state' => $state,
+            ]);
+        } catch (ConnectException | RequestException | Exception $e) {
+            logger("Error en callback de clave unica ", ['e' => $e]);
+            return redirect()->route('claveunica.autenticar');
+        }
+
 
         /* Paso especial de SSI */
         /* Obtengo la url del sistema al que voy a redireccionar el login true */
