@@ -53,11 +53,10 @@ class RequestFormController extends Controller {
         return view('request_form.my_forms', compact('my_requests', 'my_pending_requests'));
     }
 
-    public function pending_forms()
+    public function get_event_type_user()
     {
         $manager = Authority::getAuthorityFromDate(Auth::user()->organizationalUnit->id, Carbon::now(), 'manager');
         // return $manager;
-        $my_pending_forms_to_signs = $approved_forms_pending_to_sign = $new_budget_pending_to_sign = $my_forms_signed = collect();
 
         //superchief?
         $result = RequestForm::whereHas('eventRequestForms', function($q){
@@ -72,7 +71,14 @@ class RequestFormController extends Controller {
         elseif(Auth::user()->organizationalUnit->id == 37 && $manager->user_id == Auth::user()->id) $event_type = 'supply_event';
         else $event_type = null;
 
-        // return $event_type;
+        return $event_type;
+    }
+
+    public function pending_forms()
+    {
+        $my_pending_forms_to_signs = $approved_forms_pending_to_sign = $new_budget_pending_to_sign = $my_forms_signed = collect();
+
+        $event_type = $this->get_event_type_user();
 
         if($event_type){
             $prev_event_type = $event_type == 'supply_event' ? 'finance_event' : ($event_type == 'finance_event' ? 'pre_finance_event' : ($event_type == 'pre_finance_event' ? ['superior_leader_ship_event', 'leader_ship_event'] : ($event_type == 'superior_leader_ship_event' ? 'leader_ship_event' : null)));
@@ -130,8 +136,16 @@ class RequestFormController extends Controller {
 
     public function sign(RequestForm $requestForm, $eventType)
     {
-        $requestForm->load('itemRequestForms');
         $eventTitles = ['superior_leader_ship_event' => 'Dirección', 'leader_ship_event' => 'Jefatura', 'pre_finance_event' => 'Refrendación Presupuestaria', 'finance_event' => 'Finanzas', 'supply_event' => 'Abastecimiento', 'budget_event' => 'Nuevo presupuesto'];
+
+        $event_type_user = $this->get_event_type_user();
+        if($event_type_user != $eventType){
+            session()->flash('danger', 'Estimado Usuario/a: Ud. no tiene los permisos para la autorización como '.$eventTitles[$eventType].'.');
+            return redirect()->route('request_forms.my_forms');
+        }
+
+        $requestForm->load('itemRequestForms');
+        
         $title = 'Formularios de Requerimiento - Autorización ' . $eventTitles[$eventType];
         $manager              = Authority::getAuthorityFromDate($requestForm->userOrganizationalUnit->id, Carbon::now(), 'manager');
         $position             = $manager->position;

@@ -41,7 +41,7 @@
             <div class="form-row">
                   <fieldset class="form-group col-sm-5">
                       <label for="exampleFormControlTextarea1" class="form-label">Especificaciones Técnicas:</label>
-                      <textarea wire:model.defer="technicalSpecifications" name="technicalSpecifications" class="form-control" rows="2"></textarea>
+                      <textarea wire:model.defer="technicalSpecifications" name="technicalSpecifications" class="form-control form-control-sm" rows="2"></textarea>
                   </fieldset>
                   <fieldset class="form-group col-sm-3">
                       <label>Tipo de Impuestos:</label><br>

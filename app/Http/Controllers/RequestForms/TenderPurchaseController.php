@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ImmediatePurchase;
+use App\Models\TenderPurchase;
 use Illuminate\Http\Request;
 
-class ImmediatePurchaseController extends Controller
+class TenderPurchaseController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class ImmediatePurchaseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\ImmediatePurchase  $immediatePurchase
+     * @param  \App\Models\TenderPurchase  $tenderPurchase
      * @return \Illuminate\Http\Response
      */
-    public function show(ImmediatePurchase $immediatePurchase)
+    public function show(TenderPurchase $tenderPurchase)
     {
         //
     }
@@ -52,10 +52,10 @@ class ImmediatePurchaseController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\ImmediatePurchase  $immediatePurchase
+     * @param  \App\Models\TenderPurchase  $tenderPurchase
      * @return \Illuminate\Http\Response
      */
-    public function edit(ImmediatePurchase $immediatePurchase)
+    public function edit(TenderPurchase $tenderPurchase)
     {
         //
     }
@@ -64,10 +64,10 @@ class ImmediatePurchaseController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ImmediatePurchase  $immediatePurchase
+     * @param  \App\Models\TenderPurchase  $tenderPurchase
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ImmediatePurchase $immediatePurchase)
+    public function update(Request $request, TenderPurchase $tenderPurchase)
     {
         //
     }
@@ -75,10 +75,10 @@ class ImmediatePurchaseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\ImmediatePurchase  $immediatePurchase
+     * @param  \App\Models\TenderPurchase  $tenderPurchase
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ImmediatePurchase $immediatePurchase)
+    public function destroy(TenderPurchase $tenderPurchase)
     {
         //
     }

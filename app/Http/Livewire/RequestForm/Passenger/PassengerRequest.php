@@ -5,6 +5,7 @@ namespace App\Http\Livewire\RequestForm\Passenger;
 use Livewire\Component;
 use App\User;
 use App\Models\Parameters\PurchaseMechanism;
+use Carbon\Carbon;
 
 class PassengerRequest extends Component
 {
@@ -27,7 +28,7 @@ class PassengerRequest extends Component
 
     public $roundTripValue;
 
-    public $passengers, $key;
+    public $passengers, $key, $editRF, $savedPassengers, $deletedPassengers;
 
     public $totalValue = 0;
 
@@ -118,8 +119,15 @@ class PassengerRequest extends Component
     }
 
     public function deletePassenger($key){
-      unset($this->passengers[$key]);
-      //$this->cleanTicket();
+        if($this->editRF && array_key_exists('id',$this->passengers[$key])){
+            $this->deletedPassengers[]=$this->passengers[$key]['id'];
+            $this->emitUp('deletedPassengers', $this->deletedPassengers);
+            }
+        unset($this->passengers[$key]);
+        $this->totalValue();
+        $this->cleanPassenger();
+        $this->emit('savedPassengers', $this->passengers);
+        //$this->cleanTicket();
     }
 
     public function editPassenger($key){
@@ -138,8 +146,8 @@ class PassengerRequest extends Component
       $this->round_trip     = $this->passengers[$key]['round_trip'];
       $this->origin         = $this->passengers[$key]['origin'];
       $this->destination    = $this->passengers[$key]['destination'];
-      $this->departure_date = $this->passengers[$key]['departure_date'];
-      $this->return_date    = $this->passengers[$key]['return_date'];
+      $this->departure_date = Carbon::parse($this->passengers[$key]['departure_date'])->format('Y-m-d\TH:i:s');
+      $this->return_date    = Carbon::parse($this->passengers[$key]['return_date'])->format('Y-m-d\TH:i:s');
       $this->baggage        = $this->passengers[$key]['baggage'];
       $this->unitValue      = $this->passengers[$key]['unitValue'];
 
@@ -159,13 +167,14 @@ class PassengerRequest extends Component
         $this->passengers[$this->key]['email']          = $this->email;
         $this->passengers[$this->key]['round_trip']     = $this->round_trip;
         $this->passengers[$this->key]['origin']         = $this->origin;
-        $this->passengers[$this->key]['destination']    = $this->origin;
+        $this->passengers[$this->key]['destination']    = $this->destination;
         $this->passengers[$this->key]['departure_date'] = $this->departure_date;
         $this->passengers[$this->key]['return_date']    = $this->return_date;
         $this->passengers[$this->key]['baggage']        = $this->baggage;
         $this->passengers[$this->key]['unitValue']      = $this->unitValue;
         $this->totalValue();
         $this->cleanPassenger();
+        $this->emit('savedPassengers', $this->passengers);
     }
 
     public function totalValue(){
@@ -175,19 +184,44 @@ class PassengerRequest extends Component
         }
     }
 
-    public function mount(){
+    public function mount($savedPassengers){
       // $this->run = $this->searchedUser->run;
 
       $this->passengers             = array();
       $this->lstPurchaseMechanism   = PurchaseMechanism::all();
-      // $this->roundTripValue();
-      // $this->tittle                 = "Agregar Ticket";
-      // $this->edit                   = false;
-      // $this->dv                     = "";
-      // //$this->run                    = "";
-      // if(old('run')) {
-      //     $this->run = old('run');
-      // }
+      $this->editRF                 = false;
+      if(!is_null($savedPassengers)){
+        $this->editRF = true;
+        $this->savedPassengers = $savedPassengers;
+        $this->setSavedPassengers();
+      }
+    }
+
+    private function setSavedPassengers()
+    {
+        foreach($this->savedPassengers as $passenger){
+            $this->passengers[]=[
+                'id'                =>  $passenger->id,
+                'passenger_type'    =>  $passenger->passenger_type,
+                'run'               =>  $passenger->run,
+                'dv'                =>  $passenger->dv,
+                'name'              =>  $passenger->name,
+                'fathers_family'    =>  $passenger->fathers_family,
+                'mothers_family'    =>  $passenger->mothers_family,
+                'birthday'          =>  $passenger->birthday,
+                'phone_number'      =>  $passenger->phone_number,
+                'email'             =>  $passenger->email,
+                'round_trip'        =>  $passenger->round_trip,
+                'origin'            =>  $passenger->origin,
+                'destination'       =>  $passenger->destination,
+                'departure_date'    =>  $passenger->departure_date,
+                'return_date'       =>  $passenger->return_date,
+                'baggage'           =>  $passenger->baggage,
+                'unitValue'         =>  $passenger->unit_value
+          ];
+        
+          $this->totalValue();
+        }
     }
 
     public function searchedUser(User $user){

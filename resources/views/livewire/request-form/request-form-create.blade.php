@@ -11,7 +11,7 @@
                     {{-- @error('name') <span class="error">{{ $message }}</span> @enderror --}}
                 </fieldset>
 
-                <fieldset class="form-group col-sm-4">
+                <fieldset class="form-group col-sm-3">
                     <label>Administrador de Contrato:</label><br>
                     <select wire:model.defer="contractManagerId" name="contractManagerId" class="form-control form-control-sm" required>
                       <option>Seleccione...</option>
@@ -21,8 +21,17 @@
                     </select>
                 </fieldset>
 
-                <fieldset class="form-group col-sm-4">
-                    <label for="for_calidad_juridica">Solicitar Autorización de Jefatura Superior</label>
+                <fieldset class="form-group col-sm-2">
+                    <label>Tipo:</label><br>
+                    <select wire:model.defer="subtype" name="subtype" class="form-control form-control-sm" required>
+                        <option>Seleccione...</option>
+                        <option value="compra inmediata">Compra inmediata</option>
+                        <option value="suministros">Suministros</option>
+                    </select>
+                </fieldset>
+
+                <fieldset class="form-group col-sm-3">
+                    <label for="for_calidad_juridica">Autoriza Jefatura Superior</label>
                     <div class="mt-1 ml-4">
                         <input class="form-check-input" type="checkbox" value="1" wire:model="superiorChief" name="superiorChief">
                         <label class="form-check-label" for="flexCheckDefault">
@@ -67,7 +76,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-sm">
                     <label for="exampleFormControlTextarea1" class="form-label">Justificación de Adquisición:</label>
-                    <textarea wire:model.defer="justify" name="justify" class="form-control" rows="3"></textarea>
+                    <textarea wire:model.defer="justify" name="justify" class="form-control form-control-sm" rows="3"></textarea>
                 </fieldset>
             </div>
             <div class="form-row">
@@ -84,14 +93,34 @@
                   @endif
                 </fieldset>
             </div>
+            @if($savedFiles && !$savedFiles->isEmpty())
+            <div class="form-row">
+                <fieldset class="form-group col-sm">
+                      <label>Documentos adjuntados:</label>
+                      
+                        <ul class="list-group">
+                          @foreach ($savedFiles as $file)
+                            <li class="list-group-item py-2">
+                                {{ $file->name }}
+                                <a onclick="return confirm('¿Está seguro de eliminar archivo con nombre {{$file->name}}?') || event.stopImmediatePropagation()" wire:click="destroyFile({{$file->id}})"
+                                    class="btn btn-link btn-sm float-right" title="Eliminar"><i class="far fa-trash-alt" style="color:red"></i></a>
+                                <a href="{{ route('request_forms.show_file', $file->id) }}"
+                                    class="btn btn-link btn-sm float-right" title="Ver"><i class="far fa-eye"></i></a> 
+                            </li>
+                          @endforeach
+                        </ul>
+                      
+                </fieldset>
+            </div>
+            @endif
         </div>
     </div>
 
     <br>
-    @if($route == 'request_forms.passengers.create')
-        @livewire('request-form.passenger.passenger-request')
+    @if($isRFItems)
+        @livewire('request-form.item.request-form-items', ['savedItems' => $requestForm->itemRequestForms ?? null])
     @else
-        @livewire('request-form.item.request-form-items')
+        @livewire('request-form.passenger.passenger-request', ['savedPassengers' => $requestForm->passengers ?? null])
     @endif
 
     <div class="row justify-content-md-end mt-0">

@@ -39,7 +39,7 @@ class PurchasingProcessController extends Controller
     public function purchase(RequestForm $requestForm)
     {
         if(Auth()->user()->organizational_unit_id == 37){
-            $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details');
+            $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser');
             // return $requestForm;
             $isBudgetEventSignPending = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->count() > 0;
             if($isBudgetEventSignPending) session()->flash('warning', 'Estimado/a usuario/a: El formulario de requerimiento tiene una firma pendiente de aprobación por concepto de presupuesto, por lo que no podrá agregar o quitar compras hasta que no se haya notificado de la resolución de la firma.');
@@ -59,16 +59,34 @@ class PurchasingProcessController extends Controller
         $purchasingProcess->purchase_mechanism_id = $requestForm->purchase_mechanism_id;
         $purchasingProcess->purchase_type_id      = $requestForm->purchase_type_id;
         $purchasingProcess->start_date            = Carbon::now();
-        $purchasingProcess->status                = 'pending';
+        $purchasingProcess->status                = 'in_process';
         $purchasingProcess->user_id               = Auth::user()->id;
         $purchasingProcess->request_form_id       = $requestForm->id;
         $purchasingProcess->save();
         return $purchasingProcess;
     }
 
+    public function estimated_expense_exceeded(RequestForm $requestForm)
+    {
+        //total del monto por items seleccionados + item registrados no debe sobrepasar el total del presupuesto asignado al formulario de requerimiento
+        $totalItemPurchased = 0;
+        if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details) $totalItemPurchased = $requestForm->purchasingProcess->getExpense();
+
+        $totalItemSelected = 0;
+        foreach(request()->item_id as $key => $item)
+            $totalItemSelected += request()->item_total[$key];
+
+        return $totalItemPurchased + $totalItemSelected > $requestForm->estimated_expense;
+    }
+
     public function create_internal_oc(Request $request, RequestForm $requestForm)
     {
-        $requestForm->load('purchasingProcess');
+        $requestForm->load('purchasingProcess.details');
+        if($this->estimated_expense_exceeded($requestForm)){
+            session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
+            return redirect()->back()->withInput();
+        }
+
         if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $internalPurchaseOrder                          = new InternalPurchaseOrder();
@@ -86,7 +104,7 @@ class PurchasingProcessController extends Controller
             $detail->user_id                    = Auth::user()->id;
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
-            $detail->expense                    = $detail->quantity * $detail->unit_value;
+            $detail->expense                    = $request->item_total[$key];
             $detail->status                     = 'total';
             $detail->save();
         }
@@ -96,7 +114,12 @@ class PurchasingProcessController extends Controller
 
     public function create_petty_cash(Request $request, RequestForm $requestForm)
     {
-        $requestForm->load('purchasingProcess');
+        $requestForm->load('purchasingProcess.details');
+        if($this->estimated_expense_exceeded($requestForm)){
+            session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
+            return redirect()->back()->withInput();
+        }
+
         if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $pettyCash                          = new PettyCash();
@@ -119,7 +142,7 @@ class PurchasingProcessController extends Controller
             $detail->user_id                    = Auth::user()->id;
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
-            $detail->expense                    = $detail->quantity * $detail->unit_value;
+            $detail->expense                    = $request->item_total[$key];
             $detail->status                     = 'total';
             $detail->save();
         }
@@ -129,7 +152,12 @@ class PurchasingProcessController extends Controller
 
     public function create_fund_to_be_settled(Request $request, RequestForm $requestForm)
     {
-        $requestForm->load('purchasingProcess');
+        $requestForm->load('purchasingProcess.details');
+        if($this->estimated_expense_exceeded($requestForm)){
+            session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
+            return redirect()->back()->withInput();
+        }
+
         if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
 
         $fundToBeSettled                          = new FundToBeSettled();
@@ -146,7 +174,7 @@ class PurchasingProcessController extends Controller
             $detail->user_id                    = Auth::user()->id;
             $detail->quantity                   = $request->quantity[$key];
             $detail->unit_value                 = $request->unit_value[$key];
-            $detail->expense                    = $detail->quantity * $detail->unit_value;
+            $detail->expense                    = $request->item_total[$key];
             $detail->status                     = 'total';
             $detail->save();
         }

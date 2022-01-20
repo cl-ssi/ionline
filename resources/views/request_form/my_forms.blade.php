@@ -9,7 +9,7 @@
 
 @if(count($my_requests) > 0 || count($my_pending_requests) > 0)
 
-    <fieldset class="form-group">
+    <!-- <fieldset class="form-group">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-search"></i></span>
@@ -19,7 +19,7 @@
                 <a class="btn btn-primary" href="{{ route('request_forms.create') }}"><i class="fas fa-plus"></i> Nuevo Formulario</a>
             </div>
         </div>
-    </fieldset>
+    </fieldset> -->
 
     @if(count($my_pending_requests) > 0)
     </div>
@@ -62,9 +62,9 @@
                                 <td>{{ $requestForm->type_form }}</td>
                                 <td>{{ $requestForm->name }}</td>
                                 <td>{{ $requestForm->user->FullName }}<br>
-                                    {{ $requestForm->userOrganizationalUnit->name }}
+                                    {{ $requestForm->userOrganizationalUnit->name ?? '' }}
                                 </td>
-                                <td>{{ $requestForm->purchaseMechanism->name }}</td>
+                                <td>{{ $requestForm->purchaseMechanism->name ?? '' }}</td>
                                 <td align="center">{{ $requestForm->quantityOfItems() }}</td>
                                 <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
                                 <td class="text-center">

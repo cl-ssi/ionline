@@ -4,10 +4,10 @@ namespace App\Models\RequestForms;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class ImmediatePurchase extends Model implements Auditable
+class TenderPurchase extends Model
 {
     use \OwenIt\Auditing\Auditable;
     use HasFactory;
@@ -23,5 +23,5 @@ class ImmediatePurchase extends Model implements Auditable
         'estimated_delivery_date'
     ];
 
-    protected $table = 'arq_immediate_purchases';
+    protected $table = 'arq_tender_purchases';
 }

@@ -27,6 +27,17 @@
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
         </fieldset>
+
+        <!-- <fieldset class="form-group col-md-1">
+            <label for="">&nbsp;</label>
+            <button type="button" class="form-control btn btn-secondary" id="downloadLink" onclick="exportF(this)" ><i class="fas fa-file-excel"></i></button>
+        </fieldset> -->
+
+        <fieldset class="form-group col-md-1">
+        <label for="">&nbsp;</label>
+        <a class="btn btn-outline-success btn-sm mb-1" id="downloadLink" onclick="exportF(this)">Excel Resultados</a>
+        </fieldset>
+
     </div>
 </form>
 
@@ -59,5 +70,29 @@
 
 </table>
 @endif
+
+@endsection
+
+@section('custom_js')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+let date = new Date()
+let day = date.getDate()
+let month = date.getMonth() + 1
+let year = date.getFullYear()
+let hour = date.getHours()
+let minute = date.getMinutes()
+    function exportF(elem) {
+        var table = document.getElementById("tabla_contrato");
+        var html = table.outerHTML;
+        var html_no_links = html.replace(/<a[^>]*>|<\/a>/g, ""); //remove if u want links in your table
+        var url = 'data:application/vnd.ms-excel,' + escape(html_no_links); // Set your html table into url
+        elem.setAttribute("href", url);
+        elem.setAttribute("download", "tabla_contrato_continuidad_"+day+"_"+month+"_"+year+".xls"); // Choose the file name
+        return false;
+    }
+</script>
+
 
 @endsection

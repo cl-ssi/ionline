@@ -46,7 +46,7 @@ class RequestForm extends Model implements Auditable
 
     protected $fillable = [
         'estimated_expense', 'program', 'contract_manager_id',
-        'name', 'justification', 'superior_chief',
+        'name', 'subtype', 'justification', 'superior_chief',
         'type_form', 'bidding_number', 'request_user_id',
         'request_user_ou_id', 'contract_manager_ou_id', 'status', 'sigfe',
         'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id', 'type_of_currency'
@@ -237,7 +237,7 @@ class RequestForm extends Model implements Auditable
     }
 
     public function quantityOfItems(){
-      return $this->type_form == 'Bienes y/o Servicios' ? count($this->itemRequestForms) : count($this->passengers);
+      return $this->type_form == 'bienes y/o servicios' ? count($this->itemRequestForms) : count($this->passengers);
     }
 
 

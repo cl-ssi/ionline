@@ -23,6 +23,7 @@ use App\Exports\ComplianceExport;
 use App\Exports\PayedExport;
 use App\Exports\ContractExport;
 use App\User;
+use App\Models\Parameters\Profession;
 
 
 class ReportController extends Controller
@@ -124,7 +125,7 @@ class ReportController extends Controller
         });
       })
       ->when($from != null, function ($q) use ($from, $to) {
-        return $q->whereBetween('payment_date',[$from, $to]);
+        return $q->whereBetween('payment_date', [$from, $to]);
       })
       ->where('has_invoice_file', 1)
       ->whereIn('type', ['Mensual', 'Parcial'])
@@ -153,7 +154,7 @@ class ReportController extends Controller
         });
       })
       ->when($from != null, function ($q) use ($from, $to) {
-        return $q->whereBetween('payment_date',[$from, $to]);
+        return $q->whereBetween('payment_date', [$from, $to]);
       })
       ->where('has_invoice_file', 1)
       ->whereNotIn('type', ['Mensual', 'Parcial'])
@@ -167,57 +168,57 @@ class ReportController extends Controller
     return view('service_requests.reports.payed', compact('payed_fulfillments', 'request'));
   }
 
-  public function export(){
+  public function export()
+  {
 
-      $headers = array(
-          "Content-type" => "text/csv",
-          "Content-Disposition" => "attachment; filename=export_data.csv",
-          "Pragma" => "no-cache",
-          "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-          "Expires" => "0"
-      );
+    $headers = array(
+      "Content-type" => "text/csv",
+      "Content-Disposition" => "attachment; filename=export_data.csv",
+      "Pragma" => "no-cache",
+      "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+      "Expires" => "0"
+    );
 
-      $filas = ServiceRequest::all();
+    $filas = ServiceRequest::all();
 
-      $columnas = array(
-          'ID'
-          // 'Establecimiento',
-          // 'Unidad Organizacional',
-          // 'Informado a través',
-          // 'Nombre',
-          // 'A.Paterno',
-          // 'A.Materno',
-          // 'RUN',
-          // '1° Dosis Cita',
-          // '1° Suministrada',
-          // '2° Dosis Cita',
-          // '2° Suministrada'
-      );
+    $columnas = array(
+      'ID'
+      // 'Establecimiento',
+      // 'Unidad Organizacional',
+      // 'Informado a través',
+      // 'Nombre',
+      // 'A.Paterno',
+      // 'A.Materno',
+      // 'RUN',
+      // '1° Dosis Cita',
+      // '1° Suministrada',
+      // '2° Dosis Cita',
+      // '2° Suministrada'
+    );
 
-      $callback = function() use ($filas, $columnas)
-      {
-          $file = fopen('php://output', 'w');
-          fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
-          fputcsv($file, $columnas,';');
-          foreach($filas as $fila) {
-              fputcsv($file, array(
-                  $fila->id
-                  // $fila->aliasEstab,
-                  // $fila->organizationalUnit,
-                  // $fila->aliasInformMethod,
-                  // $fila->name,
-                  // $fila->fathers_family,
-                  // $fila->mothers_family,
-                  // $fila->runFormat,
-                  // $fila->first_dose,
-                  // $fila->first_dose_at,
-                  // $fila->second_dose,
-                  // $fila->second_dose_at,
-              ),';');
-          }
-          fclose($file);
-      };
-      return response()->stream($callback, 200, $headers);
+    $callback = function () use ($filas, $columnas) {
+      $file = fopen('php://output', 'w');
+      fputs($file, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+      fputcsv($file, $columnas, ';');
+      foreach ($filas as $fila) {
+        fputcsv($file, array(
+          $fila->id
+          // $fila->aliasEstab,
+          // $fila->organizationalUnit,
+          // $fila->aliasInformMethod,
+          // $fila->name,
+          // $fila->fathers_family,
+          // $fila->mothers_family,
+          // $fila->runFormat,
+          // $fila->first_dose,
+          // $fila->first_dose_at,
+          // $fila->second_dose,
+          // $fila->second_dose_at,
+        ), ';');
+      }
+      fclose($file);
+    };
+    return response()->stream($callback, 200, $headers);
   }
 
 
@@ -318,8 +319,8 @@ class ReportController extends Controller
   public function pendingResolutions(Request $request)
   {
     $serviceRequests = ServiceRequest::whereNull('has_resolution_file')->orWhere('has_resolution_file', '===', 0)
-    ->paginate(100);
-      //->get();
+      ->paginate(100);
+    //->get();
     foreach ($serviceRequests as $key => $serviceRequest) {
       //only completed
       if ($serviceRequest->SignatureFlows->where('status', '===', 0)->count() == 0 && $serviceRequest->SignatureFlows->whereNull('status')->count() == 0) {
@@ -355,47 +356,46 @@ class ReportController extends Controller
   public function exportCsv()
   {
     $headers = array(
-            "Content-type" => "text/csv",
-            "Content-Disposition" => "attachment; filename=exportacion.csv",
-            "Pragma" => "no-cache",
-            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
-            "Expires" => "0"
-        );
+      "Content-type" => "text/csv",
+      "Content-Disposition" => "attachment; filename=exportacion.csv",
+      "Pragma" => "no-cache",
+      "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+      "Expires" => "0"
+    );
 
-        $filas = UserBankAccount::all();
+    $filas = UserBankAccount::all();
 
-        $columnas = array(
-            'RUT',
-            'NOMBRE',
-            'DIRECCIÓN',
-            'TELEFONO',
-            'EMAIL',
-            'BANCO',
-            'NUMERO DE CUENTA',
-            'TIPO DE PAGO'
-        );
+    $columnas = array(
+      'RUT',
+      'NOMBRE',
+      'DIRECCIÓN',
+      'TELEFONO',
+      'EMAIL',
+      'BANCO',
+      'NUMERO DE CUENTA',
+      'TIPO DE PAGO'
+    );
 
-        $callback = function() use ($filas, $columnas)
-        {
-            $file = fopen('php://output', 'w');
-            fputs($file, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) ));
-            fputcsv($file, $columnas,';');
+    $callback = function () use ($filas, $columnas) {
+      $file = fopen('php://output', 'w');
+      fputs($file, $bom = (chr(0xEF) . chr(0xBB) . chr(0xBF)));
+      fputcsv($file, $columnas, ';');
 
-            foreach($filas as $fila) {
-                fputcsv($file, array(
-                  $fila->user->runFormat(),
-                  $fila->user->getFullNameAttribute(),
-                  $fila->user->address,
-                  $fila->user->phone_number,
-                  $fila->user->email,
-                  $fila->bank->name,
-                  $fila->number,
-                  $fila->getTypeText()
-                ),';');
-            }
-            fclose($file);
-        };
-        return response()->stream($callback, 200, $headers);
+      foreach ($filas as $fila) {
+        fputcsv($file, array(
+          $fila->user->runFormat(),
+          $fila->user->getFullNameAttribute(),
+          $fila->user->address,
+          $fila->user->phone_number,
+          $fila->user->email,
+          $fila->bank->name,
+          $fila->number,
+          $fila->getTypeText()
+        ), ';');
+      }
+      fclose($file);
+    };
+    return response()->stream($callback, 200, $headers);
   }
 
   public function indexWithResolutionFile()
@@ -429,7 +429,13 @@ class ReportController extends Controller
     }
 
     $pdf = app('dompdf.wrapper');
-    $pdf->loadView('service_requests.report_resolution', compact('ServiceRequest'));
+    if ($ServiceRequest->responsabilityCenter->establishment_id == 1  and $ServiceRequest->start_date >= "2022-01-01 00:00:00" and $ServiceRequest->programm_name = "Covid 2022") {
+      $pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
+    } 
+    else {
+      $pdf->loadView('service_requests.report_resolution', compact('ServiceRequest'));
+    }
+
 
     return $pdf->stream('mi-archivo.pdf');
     // return view('service_requests.report_resolution', compact('serviceRequest'));
@@ -452,8 +458,13 @@ class ReportController extends Controller
 
     if ($ServiceRequest->working_day_type == "DIARIO") {
       $pdf->loadView('service_requests.report_resolution_diary', compact('ServiceRequest'));
-    }else{
-      $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+    } else {
+      //$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+      if ($ServiceRequest->start_date >= "2022-01-01 00:00:00" and $ServiceRequest->programm_name != "Covid 2022") {
+        $pdf->loadView('service_requests.report_resolution_hsa_2022', compact('ServiceRequest'));
+      } else {
+        $pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
+      }
     }
 
 
@@ -703,113 +714,112 @@ class ReportController extends Controller
   {
 
     //se
-///$users = User::with(['posts' => function ($query) {
-//   $query->orderBy('created_at', 'desc');
-// }])->get();
+    ///$users = User::with(['posts' => function ($query) {
+    //   $query->orderBy('created_at', 'desc');
+    // }])->get();
 
 
     $users = User::with(['serviceRequests'
     => function ($query) {
-        $query->orderBy('start_date', 'asc');
-      }])
-    ->has('serviceRequests', '>=', 2)->get('id');
-    foreach($users as $user)
-    {
+      $query->orderBy('start_date', 'asc');
+    }])
+      ->has('serviceRequests', '>=', 2)->get('id');
+    foreach ($users as $user) {
 
-      foreach($user->serviceRequests as $sr)
-      {
+      foreach ($user->serviceRequests as $sr) {
         //dd($sr);
-        foreach($user->serviceRequests as $srtemporal)
-        if($sr != $srtemporal)
-        {
-         if ($srtemporal->start_date >= $sr->start_date and $srtemporal->end_date <= $sr->end_date)
-         {
-          //dd("encontre algo ".$sr->user_id);
-          $sr->srsolapados->push($srtemporal);
-          dd($sr->srsolapados);
-         }
+        foreach ($user->serviceRequests as $srtemporal)
+          if ($sr != $srtemporal) {
+            if ($srtemporal->start_date >= $sr->start_date and $srtemporal->end_date <= $sr->end_date) {
+              //dd("encontre algo ".$sr->user_id);
+              if ($sr->srsolapados != null) {
+                $sr->srsolapados->push($srtemporal);
+                dd($sr->srsolapados);
+              }
+            }
+          }
+      }
+    }
+  }
 
-        }
 
+
+  public function contract(Request $request)
+  {
+    $responsabilityCenters = OrganizationalUnit::where('establishment_id', Auth::user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
+    //dd($responsabilityCenters);
+
+    $srs = array();
+    $total_srs = 0;
+    $profession_id = $request->profession_id;
+
+    if (isset($request->option)) {
+
+      $srs = ServiceRequest::query();
+
+      if ($request->has('excel')) {
+        return Excel::download(new ContractExport($request), 'reporte-de-contrato.xlsx');
       }
 
+      //lista los que no son vigente, creados, solicitados, que comiencen, que terminen entre
+      if ($request->option != 'vigenci') {
+        if ($request->has('from')) {
+          $srs = $srs->whereBetween($request->option, [$request->from, $request->to])
+            ->when($request->uo != null, function ($q) use ($request) {
+              return $q->where('responsability_center_ou_id', $request->uo);
+            })
+            ->when($request->type != null, function ($q) use ($request) {
+              return $q->where('type',  $request->type);
+            })
+            ->orderBy($request->option);
+        }
+      } else //aca son solo los vigentes
+      {
+        $srs = $srs->whereDate('start_date', '>=', $request->from)
+          ->whereDate('end_date', '<=', $request->to)
+          ->when($request->uo != null, function ($q) use ($request) {
+            return $q->where('responsability_center_ou_id', $request->uo);
+          })
+          ->when($request->type != null, function ($q) use ($request) {
+            return $q->where('type',  $request->type);
+          })
+          ->whereDoesntHave("fulfillments", function ($subQuery) {
+            $subQuery->whereHas("FulfillmentItems", function ($subQuery) {
+              $subQuery->where('type', 'Renuncia voluntaria');
+            });
+          })
+          ->whereDoesntHave("fulfillments", function ($subQuery) {
+            $subQuery->whereHas("FulfillmentItems", function ($subQuery) {
+              $subQuery->where('type', 'Abandono de funciones');
+            });
+          })
+          ->whereDoesntHave("fulfillments", function ($subQuery) {
+            $subQuery->whereHas("FulfillmentItems", function ($subQuery) {
+              $subQuery->where('type', 'Término de contrato anticipado');
+            });
+          })
+          ->orderBy('start_date');
+      }
+
+      $srs->when($profession_id != NULL, function ($q) use ($profession_id) {
+        return $q->where('profession_id', $profession_id);
+      });
+
+      $total_srs = $srs->count();
+
+      $srs = $srs->paginate(100);
+
+      $request->flash(); // envía los inputs de regreso
+
     }
 
+    $professions = Profession::orderBy('name', 'ASC')->get();
 
-
-    }
-
-
-
-  	public function contract(Request $request)
-  	{
-    	$responsabilityCenters = OrganizationalUnit::where('establishment_id', Auth::user()->organizationalUnit->establishment_id)->orderBy('name', 'ASC')->get();
-    	//dd($responsabilityCenters);
-
-		$srs = array();
-		$total_srs = 0;
-
-		if(isset($request->option))
-		{
-
-			$srs = ServiceRequest::query();
-
-			if ($request->has('excel')) {
-				return Excel::download(new ContractExport($request), 'reporte-de-contrato.xlsx');
-			}
-
-			//lista los que no son vigente, creados, solicitados, que comiencen, que terminen entre
-			if ($request->option != 'vigenci') {
-				if ($request->has('from')) {
-					$srs = $srs->whereBetween($request->option, [$request->from, $request->to])
-						->when($request->uo != null, function ($q) use ($request) {
-							return $q->where('responsability_center_ou_id', $request->uo);
-					})
-					->when($request->type != null, function ($q) use ($request) {
-						return $q->where('type',  $request->type);
-					})
-					->orderBy($request->option);
-				}
-			}
-
-			else //aca son solo los vigentes
-			{
-				$srs = $srs->whereDate('start_date','>=',$request->from)
-        ->whereDate('end_date','<=',$request->to)
-        ->when($request->uo != null, function ($q) use ($request) {
-          return $q->where('responsability_center_ou_id', $request->uo);
-        })
-        ->when($request->type != null, function ($q) use ($request) {
-          return $q->where('type',  $request->type);
-        })
-        ->whereDoesntHave("fulfillments", function ($subQuery) {
-          $subQuery->whereHas("FulfillmentItems", function ($subQuery) {
-                        $subQuery->where('type','Renuncia voluntaria');
-                });
-        })
-        ->whereDoesntHave("fulfillments", function ($subQuery) {
-          $subQuery->whereHas("FulfillmentItems", function ($subQuery) {
-                        $subQuery->where('type','Abandono de funciones');
-                });
-        })
-        ->whereDoesntHave("fulfillments", function ($subQuery) {
-          $subQuery->whereHas("FulfillmentItems", function ($subQuery) {
-                        $subQuery->where('type','Término de contrato anticipado');
-                });
-        })
-        ->orderBy('start_date');
-			}
-
-			$total_srs = $srs->count();
-
-			$srs = $srs->paginate(100);
-
-			$request->flash(); // envía los inputs de regreso
-
-		}
-    	return view('service_requests.reports.contract',
-			compact('request', 'responsabilityCenters','srs','total_srs'));
-  	}
+    return view(
+      'service_requests.reports.contract',
+      compact('request', 'responsabilityCenters', 'srs', 'total_srs', 'professions')
+    );
+  }
 
   public function export_sirh_txt(Request $request)
   {
@@ -1257,23 +1267,24 @@ class ReportController extends Controller
     return $response;
   }
 
-  public function service_request_continuity(Request $request){
+  public function service_request_continuity(Request $request)
+  {
 
     $results = array();
     if ($request->from != null && $request->to != null) {
-      $serviceRequests = ServiceRequest::where('program_contract_type','Mensual')
-                                      ->where('type','Covid')
-                                      ->where('start_date','<=',$request->from)
-                                      ->where('end_date','>',$request->from)
-                                      ->orderBy('start_date','asc')
-                                      ->get(['user_id','id','start_date','end_date'])
-                                      ->unique('user_id');
+      $serviceRequests = ServiceRequest::where('program_contract_type', 'Mensual')
+        ->where('type', 'Covid')
+        ->where('start_date', '<=', $request->from)
+        ->where('end_date', '>', $request->from)
+        ->orderBy('start_date', 'asc')
+        ->get(['user_id', 'id', 'start_date', 'end_date'])
+        ->unique('user_id');
 
-                                      // dd($serviceRequests[0]);
+      // dd($serviceRequests[0]);
 
 
       // dd($serviceRequests->count());
-      if ($serviceRequests->count()>0) {
+      if ($serviceRequests->count() > 0) {
 
 
         foreach ($serviceRequests as $key => $serviceRequest) {
@@ -1284,16 +1295,16 @@ class ReportController extends Controller
 
           $results[$serviceRequest->employee->getFullNameAttribute()][$serviceRequest->start_date->format('Y-m-d') . " - " . $serviceRequest->end_date->format('Y-m-d')] = $serviceRequest;
           do {
-            $serviceRequest_aux = ServiceRequest::where('program_contract_type','Mensual')
-                                                ->where('type','Covid')
-                                                ->where('start_date','>=',$request->from)
-                                                ->where('id','!=',$id)
-                                                ->where('user_id',$user_id)
-                                                ->where('start_date',$end_date->addDay(1))
-                                                ->whereHas('SignatureFlows', function($q) {
-                                                    return $q->where('status', 1);
-                                                })
-                                                ->first();
+            $serviceRequest_aux = ServiceRequest::where('program_contract_type', 'Mensual')
+              ->where('type', 'Covid')
+              ->where('start_date', '>=', $request->from)
+              ->where('id', '!=', $id)
+              ->where('user_id', $user_id)
+              ->where('start_date', $end_date->addDay(1))
+              ->whereHas('SignatureFlows', function ($q) {
+                return $q->where('status', 1);
+              })
+              ->first();
 
             if ($serviceRequest_aux) {
               $id = $serviceRequest_aux->id;
@@ -1304,14 +1315,11 @@ class ReportController extends Controller
               $results[$serviceRequest->employee->getFullNameAttribute()][$start_date->format('Y-m-d') . " - " . $end_date->format('Y-m-d')] = $serviceRequest_aux;
 
               // print_r($serviceRequest->employee->getFullNameAttribute() ." - ". $end_date."<br>");
-            }else{
+            } else {
               // $results[$serviceRequest->employee->getFullNameAttribute()][$end_date->format('Y-m-d') . " - xx"] = 0; //muestra los contratos que debiesen estar pero no existen
               unset($results[$serviceRequest->employee->getFullNameAttribute()]); //elimina los que no son consecutivos
             }
-
-
-          }while ($serviceRequest_aux && $end_date <= $request->to);
-
+          } while ($serviceRequest_aux && $end_date <= $request->to);
         }
         // dd($end_date);
       }
@@ -1319,6 +1327,6 @@ class ReportController extends Controller
       // dd($results);
 
     }
-    return view('service_requests.reports.service_request_continuity',compact('request','results'));
+    return view('service_requests.reports.service_request_continuity', compact('request', 'results'));
   }
 }
