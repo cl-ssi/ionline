@@ -52,7 +52,7 @@ class RequestForm extends Model implements Auditable
         'purchase_unit_id', 'purchase_type_id', 'purchase_mechanism_id', 'type_of_currency'
     ];
 
-    public function requestForm(){
+    public function father(){
       return $this->belongsTo(RequestForm::class, 'request_form_id');
     }
 
