@@ -11,7 +11,7 @@
     <div class="col-sm-8">
         <div class="table-responsive">
             <h6><i class="fas fa-info-circle"></i> Detalle Formulario</h6>
-            <table class="table table-sm table-striped table-bordered">                
+            <table class="table table-sm table-striped table-bordered">
                 <tbody class="small">
                     <tr>
                         <th class="table-active" scope="row">Fecha de Creación</th>
@@ -74,6 +74,14 @@
                 <i class="fas fa-file"></i> {{ $requestFormFile->name }} -
                 <i class="fas fa-calendar-day"></i> {{ $requestFormFile->created_at->format('d-m-Y H:i') }}</a>
             @endforeach
+
+            @if($requestForm->father)
+                @foreach($requestForm->father->requestFormFiles as $requestFormFile)
+                  <a href="{{ route('request_forms.show_file', $requestFormFile) }}" class="list-group-item list-group-item-action py-2 small" target="_blank">
+                    <i class="fas fa-file"></i> {{ $requestFormFile->name }} -
+                    <i class="fas fa-calendar-day"></i> {{ $requestFormFile->created_at->format('d-m-Y H:i') }}</a>
+                @endforeach
+            @endif
         </div>
     </div>
 </div>
