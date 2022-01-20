@@ -273,7 +273,7 @@
 @endif
 
 <!-- LICITACIÓN PUBLICA -->
-@if($requestForm->purchase_mechanism_id == 4)
+@if($requestForm->purchase_mechanism_id == 4 && $requestForm->request_form_id)
     @include('request_form.purchase.partials.tender_form')
 @endif
 
