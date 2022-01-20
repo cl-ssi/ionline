@@ -270,8 +270,25 @@
 
 <br>
 
-@if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
+<!--Observaciones al proceso de compra -->
+@if($requestForm->purchasingProcess)
+<h6><i class="fas fa-eye"></i> Observaciones al proceso de compra</h6>
+<div class="row">
+    <div class="col-sm">
+        <form action="">
+        <div class="form-group">
+            <textarea name="observation" class="form-control form-control-sm" rows="3">{{ old('observation', $requestForm->purchasingProcess->observation ?? '') }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary float-right" id="save_btn" disabled>
+            <i class="fas fa-save"></i> Guardar
+        </button>
+        </form>
+    </div>
+</div>
+<br>
+@endif
 
+@if($requestForm->purchasingProcess && $requestForm->purchasingProcess->details->count() > 0)
 <div class="row">
     <div class="col-sm">
         <div class="table-responsive">
