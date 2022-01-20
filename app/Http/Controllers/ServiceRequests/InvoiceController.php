@@ -51,8 +51,6 @@ class InvoiceController extends Controller
 
         //$fulfillment = Fulfillment::whereHas('ServiceRequest', function($query, use $user_id) { $query->where('user_id',$user_id);})->orderBy('payment_date')->get();
 
-
-
         $fulfillments = Fulfillment::whereHas('ServiceRequest', function($query) use ($user_id) {
             $query->where('user_id',$user_id);}
             )->orderBy('year', 'DESC')->orderBy('month', 'DESC')->get();
