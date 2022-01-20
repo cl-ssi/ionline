@@ -411,7 +411,8 @@ function calculateAmount(checked = false) {
     var total = 0;
     $('input[type="checkbox"]' + (checked ? ':checked' : '')).each(function(){
         var val = Math.round($(this).parents("tr").find('input[name="item_total[]"]').val());
-        total += val;
+        if(!isNaN(val))
+            total += val;
     });
 
     $(checked ? '#for_amount' : '#total_amount').val(total);
