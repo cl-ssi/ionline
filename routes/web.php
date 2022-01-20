@@ -513,6 +513,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
 
     Route::prefix('service-request')->name('service-request.')->middleware('auth')->group(function () {
         // Rutas de service request
+        Route::get('/test', [ServiceRequestController::class, 'test'])->name('test');
         Route::get('/home', function () { return view('service_requests.home'); })->name('home');
 
         Route::match(['get', 'post'],'/user', [ServiceRequestController::class, 'user'])->name('user');

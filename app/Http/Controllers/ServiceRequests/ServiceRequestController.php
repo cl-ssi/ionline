@@ -44,6 +44,22 @@ class ServiceRequestController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
+  public function test()
+
+  {
+    //16.152.174-
+    $a1 = User::find(16055586);
+    //dd($a1);
+    
+    $au = Authority::getBossFromUser($a1->organizationalUnit->id,Carbon::now());
+
+
+    //$au = Authority::getBossFromUser(Auth::user()->organizationalUnit->id,Carbon::now());
+    dd($au);
+
+  }
+
+
   public function index()
   {
     $user_id = Auth::user()->id;
