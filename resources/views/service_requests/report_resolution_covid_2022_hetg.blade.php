@@ -188,26 +188,23 @@
 
       <p class="justify">
         <strong>CONSIDERANDO:</strong><br>
-        Que, mediante Decreto N°52 de fecha 16 de diciembre de 2021 del Ministerio de Salud, prorroga vigencia del Decreto N° 4 de fecha 05 de enero de 2020 del Ministerio de Salud, que decreta alerta sanitaria por el período que se señala y otorga facultades extraordinarias que indica por emergencia de salud pública de importancia internacional (ESPII) por brote del nuevo coronavirus (2019-ncov) hasta el 31 de marzo del 2022
+        1)Que, mediante Decreto N°52 de fecha 16 de diciembre de 2021 del Ministerio de Salud, prorroga vigencia del Decreto N° 4 de fecha 05 de enero de 2020 del Ministerio de Salud, que decreta alerta sanitaria por el período que se señala y otorga facultades extraordinarias que indica por emergencia de salud pública de importancia internacional (ESPII) por brote del nuevo coronavirus (2019-ncov) hasta el 31 de marzo del 2022
 
-        Que, el Hospital “Dr. Ernesto Torres Galdames” de Iquique debido a la contingencia ha debido implementar diversas estrategias asociadas a la complejización e incremento de camas básicas a medias y de alta complejidad a modo de satisfacer y dar cobertura a las necesidades de la población, producto de la pandemia sanitaria.
+        2)Que, el Hospital “Dr. Ernesto Torres Galdames” de Iquique debido a la contingencia ha debido implementar diversas estrategias asociadas a la complejización e incremento de camas básicas a medias y de alta complejidad a modo de satisfacer y dar cobertura a las necesidades de la población, producto de la pandemia sanitaria.        
 
-        Que, el Hospital “Dr. Ernesto Torres Galdames” de Iquique debido a la contingencia ha debido implementar diversas estrategias asociadas a la complejización e incremento de camas básicas a medias y de alta complejidad a modo de satisfacer y dar cobertura a las necesidades de la población, producto de la pandemia sanitaria.
+        3)Que, el Hospital “Dr. Ernesto Torres Galdames” de Iquique, producto de esta contingencia ha debido mantener los servicios de personal para reforzar los equipos de salud, además de reforzando las unidades de apoyo que deben ponerse a disposición para enfrentar la pandemia.
 
-        Que, el Hospital “Dr. Ernesto Torres Galdames” de Iquique, producto de esta contingencia ha debido mantener los servicios de personal para reforzar los equipos de salud, además de reforzando las unidades de apoyo que deben ponerse a disposición para enfrentar la pandemia.
+        4)Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido por el Jefe de División de Gestión y Desarrollo de las Personas del Minsal, se envía instrucciones para la construcción de nómina gasto en honorarios Covid-19 año 2021, con la finalidad de gestionar los recursos financieros extraordinarios ante DIPRES, como también tener un control respecto de todas las contrataciones adicionales que deberán ser consideradas en el presupuesto 2021.
 
+        5)Que, la Contraloría General de la República mediante el dictamen N°E173171 del 10 de enero 2022, “Imparte instrucciones respecto de las contrataciones a honorarios en los órganos de la administración del estado”.
 
-        Que, mediante Memorándum C31/ N°55 de fecha 24 de diciembre de 2020, emitido por el Jefe de División de Gestión y Desarrollo de las Personas del Minsal, se envía instrucciones para la construcción de nómina gasto en honorarios Covid-19 año 2021, con la finalidad de gestionar los recursos financieros extraordinarios ante DIPRES, como también tener un control respecto de todas las contrataciones adicionales que deberán ser consideradas en el presupuesto 2021.
+        6)Que, en razón de lo dispuesto en el considerando anterior el presente convenio se ajusta a los contratos excluidos de dictamen ya citado que dice en relación con “Contratos a honorarios convenidos con el personal el área de la salud, al fin de cubrir la recarga de las tareas provocadas por la pandemia de COVID-19”.
 
-        Que, la Contraloría General de la República mediante el dictamen N°E173171 del 10 de enero 2022, “Imparte instrucciones respecto de las contrataciones a honorarios en los órganos de la administración del estado”.
+        7)Que, esta labor no puede cumplirse con los recursos humanos propios de la institución no por carecer de ellos, sino porque éstos tienen relación con labores accidentales y no habituales de la Institución, de tal forma de encuadrarse en el Art. 11 Ley N°18.834, sobre Estatuto Administrativo
 
-        Que, en razón de lo dispuesto en el considerando anterior el presente convenio se ajusta a los contratos excluidos de dictamen ya citado que dice en relación con “Contratos a honorarios convenidos con el personal el área de la salud, al fin de cubrir la recarga de las tareas provocadas por la pandemia de COVID-19”.
+        8)Que, por la índole del servicio que debe realizarse es más recomendable fijar un honorario consistente en una suma alzada.
 
-        Que, esta labor no puede cumplirse con los recursos humanos propios de la institución no por carecer de ellos, sino porque éstos tienen relación con labores accidentales y no habituales de la Institución, de tal forma de encuadrarse en el Art. 11 Ley N°18.834, sobre Estatuto Administrativo
-
-        Que, por la índole del servicio que debe realizarse es más recomendable fijar un honorario consistente en una suma alzada.
-
-        Que, el Hospital Ernesto Torres Galdames, cuenta con las disponibilidades presupuestarias suficientes para solventar tal convenio.
+        9)Que, el Hospital Ernesto Torres Galdames, cuenta con las disponibilidades presupuestarias suficientes para solventar tal convenio.
 
       </p>
 
