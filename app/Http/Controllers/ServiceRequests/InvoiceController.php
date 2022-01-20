@@ -59,7 +59,8 @@ class InvoiceController extends Controller
 
         $user = User::find($user_id);
 
-
+        if(!$user)  logger("Invocie Login: No existe el usuario en la bd ", ['user_id' => $user_id]);
+        
         return view('service_requests.invoice.show', compact('fulfillments','bankaccount','user'));
     }
 
