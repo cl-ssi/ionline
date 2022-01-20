@@ -95,6 +95,15 @@
                 <i class="fas fa-file"></i> {{ $requestFormFile->name }} -
                 <i class="fas fa-calendar-day"></i> {{ $requestFormFile->created_at->format('d-m-Y H:i') }}</a>
             @endforeach
+
+            @if($requestForm->father)
+                @foreach($requestForm->father->requestFormFiles as $requestFormFile)
+                  <a href="{{ route('request_forms.show_file', $requestFormFile) }}" class="list-group-item list-group-item-action py-2 small" target="_blank">
+                    <i class="fas fa-file"></i> {{ $requestFormFile->name }} -
+                    <i class="fas fa-calendar-day"></i> {{ $requestFormFile->created_at->format('d-m-Y H:i') }}</a>
+                @endforeach
+            @endif
+
         </div>
     </div>
 </div>
@@ -292,7 +301,10 @@
 <div class="row">
     <div class="col-sm">
         <div class="table-responsive">
-            <h6><i class="fas fa-shopping-cart"></i> {{ $requestForm->purchaseUnit->name }} registradas al Proceso de Compra:</h6>
+            @if($requestForm->purchase_mechanism_id == 4)
+            <h6><i class="fas fa-shopping-cart"></i> {{ $requestForm->purchaseMechanism->name }}</h6>
+            @endif
+
 
             <table class="table table-sm table-striped table-bordered small">
                 <thead class="text-center">
