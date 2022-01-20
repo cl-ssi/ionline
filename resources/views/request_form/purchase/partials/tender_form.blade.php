@@ -99,11 +99,11 @@
         <div class="form-row">
             <fieldset class="form-group col-sm-6">
                 <label for="forFile">Adjuntar archivo Res. Bases Administrativas</label>
-                <input type="file" class="form-control-file" id="forFile" name="resol_administrative_bases_file">
+                <input type="file" class="form-control-file" id="forFile" name="resol_administrative_bases_file" required>
             </fieldset>
             <fieldset class="form-group col-sm-6">
                 <label for="forFile">Adjuntar archivo Res. Adjudicación/Desierta</label>
-                <input type="file" class="form-control-file" id="forFile" name="resol_adjudication_deserted_file">
+                <input type="file" class="form-control-file" id="forFile" name="resol_adjudication_deserted_file" required>
             </fieldset>
         </div>
         <!-- Licitacion LP/LQ -->
@@ -111,11 +111,11 @@
         <div class="form-row">
             <fieldset class="form-group col-sm-6">
                 <label for="forFile">Adjuntar archivo Res. de Contrato</label>
-                <input type="file" class="form-control-file" id="forFile" name="resol_contract_file">
+                <input type="file" class="form-control-file" id="forFile" name="resol_contract_file" required>
             </fieldset>
             <fieldset class="form-group col-sm-6">
                 <label for="forFile">Adjuntar archivo Boleta de Garantía</label>
-                <input type="file" class="form-control-file" id="forFile" name="guarantee_ticket_file">
+                <input type="file" class="form-control-file" id="forFile" name="guarantee_ticket_file" required>
             </fieldset>
         </div>
         @endif
@@ -124,7 +124,7 @@
         <div class="form-row">
             <fieldset class="form-group col-12">
                 <label for="forFile">Adjuntar archivo Res. Toma de Razón</label>
-                <input type="file" class="form-control-file" id="forFile" name="taking_of_reason_file">
+                <input type="file" class="form-control-file" id="forFile" name="taking_of_reason_file" required>
             </fieldset>
         </div>
         @endif
