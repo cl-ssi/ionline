@@ -254,15 +254,19 @@ class RequestFormController extends Controller {
         $newRequestForm->signatures_file_id = null;
         $newRequestForm->push();
 
+        $total = 0;
         foreach($requestForm->getRelations() as $relation => $items){
             foreach($items as $item){
                 unset($item->id);
                 $item->request_form_id = $newRequestForm->id;
                 $item->quantity = 1;
-                $item->expense = 0;
+                $item->expense = $this->totalValueWithTaxes($item->tax, $item->unit_value);
+                $total += $item->expense;
                 $newRequestForm->{$relation}()->create($item->toArray());
             }
         }
+
+        $newRequestForm->update(['estimated_expense' => $total]);
 
         EventRequestform::createLeadershipEvent($newRequestForm);
         EventRequestform::createPreFinanceEvent($newRequestForm);
@@ -271,5 +275,15 @@ class RequestFormController extends Controller {
 
         session()->flash('info', 'Formulario de requerimiento N° '.$newRequestForm->id.' fue creado con éxito a partir de formulario N° '.$requestForm->id.'. Se solicita que modifique y guarde los cambios en los items para el nuevo gasto estimado de su formulario de requerimiento.');
         return redirect()->route('request_forms.edit', $newRequestForm);
+    }
+
+    public function totalValueWithTaxes($tax, $value)
+    {
+        // Porcentaje retención boleta de honorarios según el año vigente
+        $withholding_tax = [2021 => 0.115, 2022 => 0.1225, 2023 => 0.13, 2024 => 0.1375, 2025 => 0.145, 2026 => 0.1525, 2027 => 0.16, 2028 => 0.17];
+        
+        if($tax == 'iva') return $value * 1.19;
+        if($tax == 'bh') return isset($withholding_tax[date('Y')]) ? round($value / (1 - $withholding_tax[date('Y')])) : round($value / (1 - end($withholding_tax)));
+        return $value;
     }
 }
