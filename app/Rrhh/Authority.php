@@ -4,6 +4,7 @@ namespace App\Rrhh;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Rrhh\OrganizationalUnit;
+use App\User;
 
 class Authority extends Model
 {
@@ -46,18 +47,20 @@ class Authority extends Model
             ->where('from','<=',$date)->where('to','>=',$date)->get()->last();
     }
 
-    public static function getBossFromUser($ou_id, $date) {
+    public static function getBossFromUser($rut, $date) {
         if (!is_string($date)) {
           $date = $date->format('Y-m-d');
         }
 
+        $u1 = User::find($rut);
+
         $result = Authority::with('user','organizationalUnit')
-            ->where('organizational_unit_id', $ou_id)
+            ->where('organizational_unit_id', $u1->organizational_unit_id)
             ->where('type','manager')            
             ->where('from','<=',$date)->where('to','>=',$date)->get()->last();
         if($result == null)
         {
-            $oujefe = OrganizationalUnit::find($ou_id);
+            $oujefe = OrganizationalUnit::find($u1->organizational_unit_id);
             return Authority::with('user','organizationalUnit')
             ->where('organizational_unit_id', $oujefe->father->id)
             ->where('type','manager')            
@@ -65,9 +68,7 @@ class Authority extends Model
         }
         else
         {
-            return $result;
-
-            
+            return $result;   
 
         }
         

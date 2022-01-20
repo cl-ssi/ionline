@@ -3,7 +3,7 @@
         <input
             type="text"
             class="form-control"
-            placeholder="Nombre"
+            placeholder="Nombre Funcionario"
             aria-label="Nombre"
             wire:keydown.escape="resetx"
         @if(!$user)

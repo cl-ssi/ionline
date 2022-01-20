@@ -23,6 +23,18 @@
             <input type="date" class="form-control" name="to" value="{{ $request->to }}" required>
         </fieldset>
 
+       
+
+        <fieldset class="form-group col-md-3">
+            <label for="for_to">Origen de Financiamiento</label>
+            <select name="type" class="form-control" value="{{ $request->type }}">
+            <option value=""></option>
+            <option value="Suma alzada" @if($request->type == 'Covid') selected @endif>Covid (Sólo 2021)</option>
+            <option value="Covid" @if($request->type == 'Suma alzada') selected @endif>Suma alzada</option>
+        </select>
+
+        </fieldset>
+
         <fieldset class="form-group col-md-1">
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
@@ -34,8 +46,8 @@
         </fieldset> -->
 
         <fieldset class="form-group col-md-1">
-        <label for="">&nbsp;</label>
-        <a class="btn btn-outline-success btn-sm mb-1" id="downloadLink" onclick="exportF(this)">Excel Resultados</a>
+            <label for="">&nbsp;</label>
+            <a class="btn btn-outline-success btn-sm mb-1" id="downloadLink" onclick="exportF(this)">Excel Resultados</a>
         </fieldset>
 
     </div>
@@ -53,18 +65,18 @@
 
     @foreach($results as $key => $result)
     <tr>
-      <td>{{$key}}</td>
-      @foreach($result as $key2 => $serviceRequest)
-        <tr>
-          <td></td>
-          <td>
+        <td>{{$key}}</td>
+        @foreach($result as $key2 => $serviceRequest)
+    <tr>
+        <td></td>
+        <td>
             <a href="{{ route('rrhh.service-request.edit',$serviceRequest) }}" target="_blank">
                 {{ $serviceRequest->id ?? '' }}
             </a>
-          </td>
-          <td>{{$key2}}</td>
-        </tr>
-      @endforeach
+        </td>
+        <td>{{$key2}}</td>        
+    </tr>
+    @endforeach
     </tr>
     @endforeach
 
@@ -77,19 +89,20 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <script type="text/javascript">
-let date = new Date()
-let day = date.getDate()
-let month = date.getMonth() + 1
-let year = date.getFullYear()
-let hour = date.getHours()
-let minute = date.getMinutes()
+    let date = new Date()
+    let day = date.getDate()
+    let month = date.getMonth() + 1
+    let year = date.getFullYear()
+    let hour = date.getHours()
+    let minute = date.getMinutes()
+
     function exportF(elem) {
         var table = document.getElementById("tabla_contrato");
         var html = table.outerHTML;
         var html_no_links = html.replace(/<a[^>]*>|<\/a>/g, ""); //remove if u want links in your table
         var url = 'data:application/vnd.ms-excel,' + escape(html_no_links); // Set your html table into url
         elem.setAttribute("href", url);
-        elem.setAttribute("download", "tabla_contrato_continuidad_"+day+"_"+month+"_"+year+".xls"); // Choose the file name
+        elem.setAttribute("download", "tabla_contrato_continuidad_" + day + "_" + month + "_" + year + ".xls"); // Choose the file name
         return false;
     }
 </script>

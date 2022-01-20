@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Livewire\TemporaryUploadedFile;
+use App\Rrhh\Authority;
 
 class RequestFormCreate extends Component
 {
@@ -206,7 +207,7 @@ class RequestFormCreate extends Component
       // dd($this->items);
       $this->validate(
         [ 'name'                         =>  'required',
-          'contractManagerId'            =>  'required',
+          //'contractManagerId'            =>  'required',
           'subtype'                      =>  'required',
           'purchaseMechanism'            =>  'required',
           'program'                      =>  'required',
@@ -215,7 +216,7 @@ class RequestFormCreate extends Component
           ($this->isRFItems ? 'items' : 'passengers') => 'required'
         ],
         [ 'name.required'                =>  'Debe ingresar un nombre a este formulario.',
-          'contractManagerId.required'   =>  'Debe ingresar un Administrador de Contrato.',
+          //'contractManagerId.required'   =>  'Debe ingresar un Administrador de Contrato.',
           'subtype.required'             =>  'Seleccione el tipo para este formulario.',
           'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
           'program.required'             =>  'Ingrese un Programa Asociado.',
@@ -227,6 +228,8 @@ class RequestFormCreate extends Component
 
       DB::transaction(function () {
 
+        //dd("chequear por jefatura");
+
         $req = RequestForm::updateOrCreate(
           [
             'id'                    =>  $this->idRF,
@@ -234,7 +237,10 @@ class RequestFormCreate extends Component
           [
             'subtype'               =>  $this->subtype,
             'contract_manager_id'   =>  $this->contractManagerId,
-            'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
+            //contractManagerId
+            //'contract_manager_id'   =>  Authority::getBossFromUser$this->contractManagerId,
+            //'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
+            'contract_manager_ou_id' => Authority::getBossFromUser($this->contractManagerId,Carbon::now())->organizational_unit_id,
             'name'                  =>  $this->name,
             'superior_chief'        =>  $this->superiorChief,
             'justification'         =>  $this->justify,
