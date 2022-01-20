@@ -21,20 +21,20 @@ class RequestFormCreate extends Component
 {
     use WithFileUploads;
 
-    public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $typeOfCurrency, $articleFile,
+    public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $typeOfCurrency, $articleFile, $subtype,
             $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
 
     public $name, $contractManagerId, $superiorChief, $purchaseMechanism, $messagePM,
             $program, $fileRequests = [], $justify, $totalDocument;
 
-    public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF;
+    public $items, $lstBudgetItem, $requestForm, $editRF, $deletedItems, $idRF, $savedFiles;
     public $budget_item_id, $lstPurchaseMechanism;
 
-    public $passengers;
+    public $passengers, $deletedPassengers;
 
-    public $searchedUser, $route;
+    public $searchedUser, $isRFItems;
 
-    protected $listeners = ['savedPassengers', 'savedItems'];
+    protected $listeners = ['savedPassengers', 'savedItems', 'deletedItems', 'deletedPassengers'];
 
     protected $rules = [
         'unitValue'           =>  'required|numeric|min:1',
@@ -59,7 +59,7 @@ class RequestFormCreate extends Component
     ];
 
     public function mount($requestForm){
-      $this->route = request()->route()->getName();
+      $this->isRFItems = request()->route()->getName() == 'request_forms.items.create' || ($requestForm && $requestForm->type_form == 'bienes y/o servicios');
       $this->purchaseMechanism      = "";
       $this->totalDocument          = 0;
       $this->items                  = array();
@@ -86,20 +86,38 @@ class RequestFormCreate extends Component
       $this->items = $items;
     }
 
+    public function deletedItems($items)
+    {
+      $this->deletedItems = $items;
+    }
+
+    public function deletedPassengers($items)
+    {
+      $this->deletedPassengers = $items;
+    }
+
     private function setRequestForm(){
+      $this->subtype            =   $this->requestForm->subtype;
       $this->name               =   $this->requestForm->name;
+      $this->contractManagerId  =   $this->requestForm->contract_manager_id;
+      $this->superiorChief      =   $this->requestForm->superior_chief;
       $this->program            =   $this->requestForm->program;
       $this->justify            =   $this->requestForm->justification;
       $this->purchaseMechanism  =   $this->requestForm->purchase_mechanism_id;
-      $this->type_of_currency   =   $this->requestForm->type_of_currency;
+      $this->typeOfCurrency     =   $this->requestForm->type_of_currency;
       $this->estimated_expense  =   $this->requestForm->estimated_expense;
       $this->editRF             =   true;
       $this->idRF               =   $this->requestForm->id;
-      foreach($this->requestForm->itemRequestForms as $item)
-        $this->setRequestService($item);
+      $this->savedFiles         =   $this->requestForm->requestFormFiles;
+      if($this->isRFItems)
+        foreach($this->requestForm->itemRequestForms as $item)
+          $this->setItems($item);
+      else
+        foreach($this->requestForm->passengers as $passenger)
+          $this->setPassengers($passenger);
     }
 
-    private function setRequestService($item){
+    private function setItems($item){
       $this->items[]=[
             'id'                       => $item->id,
             'article'                  => $item->article,
@@ -108,77 +126,31 @@ class RequestFormCreate extends Component
             'quantity'                 => $item->quantity,
             'unitValue'                => $item->unit_value,
             'taxes'                    => $item->tax,
-            //'budget_item_id'           => $item->budget_item_id,
-            'totalValue'               => $item->quantity * $item->unit_value,
+            'totalValue'               => $item->expense,
       ];
-
-      // $this->totalForm();
-      $this->cancelRequestService();
     }
 
-    public function deleteRequestService($key){
-      if($this->editRF && array_key_exists('id',$this->items[$key]))
-        $this->deletedItems[]=$this->items[$key]['id'];
-      unset($this->items[$key]);
-      $this->totalForm();
-      $this->cancelRequestService();
-    }
-
-    public function editRequestService($key){
-      $this->resetErrorBag();
-      $this->title                    = "Editar Item Nro ". ($key+1);
-      $this->edit                     = true;
-      $this->article                  = $this->items[$key]['article'];
-      $this->unitOfMeasurement        = $this->items[$key]['unitOfMeasurement'];
-      $this->technicalSpecifications  = $this->items[$key]['technicalSpecifications'];
-      $this->quantity                 = $this->items[$key]['quantity'];
-      $this->unitValue                = $this->items[$key]['unitValue'];
-      $this->taxes                    = $this->items[$key]['taxes'];
-      //$this->budget_item_id           = $this->items[$key]['budget_item_id'];
-      $this->key                      = $key;
-    }
-
-    public function updateRequestService(){
-      $this->validate();
-      $this->edit                                         = false;
-      $this->items[$this->key]['article']                 = $this->article;
-      $this->items[$this->key]['unitOfMeasurement']       = $this->unitOfMeasurement;
-      $this->items[$this->key]['technicalSpecifications'] = $this->technicalSpecifications;
-      $this->items[$this->key]['quantity']                = $this->quantity;
-      $this->items[$this->key]['unitValue']               = $this->unitValue;
-      $this->items[$this->key]['taxes']                   = $this->taxes;
-      //$this->items[$this->key]['budget_item_id']          = $this->budget_item_id;
-      $this->items[$this->key]['totalValue']              = $this->quantity * $this->unitValue;
-      $this->totalForm();
-      $this->cancelRequestService();
-    }
-
-    public function addRequestService(){
-      $this->validate();
-      $this->items[]=[
-            'id'                       => null,
-            'article'                  => $this->article,
-            'unitOfMeasurement'        => $this->unitOfMeasurement,
-            'technicalSpecifications'  => $this->technicalSpecifications,
-            'quantity'                 => $this->quantity,
-            'unitValue'                => $this->unitValue,
-            'taxes'                    => $this->taxes,
-            //'budget_item_id'           => $this->budget_item_id,
-            'totalValue'               => $this->quantity * $this->unitValue,
-            'typeOfCurrency'           => $this->typeOfCurrency,
-            'articleFile'              => $this->articleFile,
+    private function setPassengers($passenger)
+    {
+      $this->passengers[]=[
+            'id'                =>  $passenger->id,
+            'passenger_type'    =>  $passenger->passenger_type,
+            'run'               =>  $passenger->run,
+            'dv'                =>  $passenger->dv,
+            'name'              =>  $passenger->name,
+            'fathers_family'    =>  $passenger->fathers_family,
+            'mothers_family'    =>  $passenger->mothers_family,
+            'birthday'          =>  $passenger->birthday,
+            'phone_number'      =>  $passenger->phone_number,
+            'email'             =>  $passenger->email,
+            'round_trip'        =>  $passenger->round_trip,
+            'origin'            =>  $passenger->origin,
+            'destination'       =>  $passenger->destination,
+            'departure_date'    =>  $passenger->departure_date,
+            'return_date'       =>  $passenger->return_date,
+            'baggage'           =>  $passenger->baggage,
+            'unitValue'         =>  $passenger->unit_value
       ];
-      // dd($this->items);
-      $this->totalForm();
-      $this->cancelRequestService();
-    }
-
-    public function cancelRequestService(){
-      $this->title = "Agregar Item";
-      $this->edit  = false;
-      $this->resetErrorBag();
-      $this->article=$this->technicalSpecifications=$this->quantity=$this->unitValue="";
-      $this->taxes=$this->budget_item_id=$this->unitOfMeasurement="";
     }
 
    public function messageMechanism(){
@@ -221,10 +193,10 @@ class RequestFormCreate extends Component
       }
     }
 
-    public function totalForm($items){
+    public function totalForm(){
       $total = 0;
-      foreach($items as $item)
-        $total += $item[$this->route == 'request_forms.passengers.create' ? 'unitValue' : 'totalValue'];
+      foreach($this->isRFItems ? $this->items : $this->passengers as $item)
+        $total += $item[$this->isRFItems ? 'totalValue' : 'unitValue'];
 
       return $total;
     }
@@ -234,19 +206,21 @@ class RequestFormCreate extends Component
       $this->validate(
         [ 'name'                         =>  'required',
           'contractManagerId'            =>  'required',
+          'subtype'                      =>  'required',
           'purchaseMechanism'            =>  'required',
           'program'                      =>  'required',
           'justify'                      =>  'required',
-          'fileRequests'                 =>  'required',
-          $this->route == 'request_forms.passengers.create' ? 'passengers' : 'items' => 'required'
+          'fileRequests'                 =>  (!$this->editRF) ? 'required' : '',
+          ($this->isRFItems ? 'items' : 'passengers') => 'required'
         ],
         [ 'name.required'                =>  'Debe ingresar un nombre a este formulario.',
           'contractManagerId.required'   =>  'Debe ingresar un Administrador de Contrato.',
+          'subtype.required'             =>  'Seleccione el tipo para este formulario.',
           'purchaseMechanism.required'   =>  'Seleccione un Mecanismo de Compra.',
           'program.required'             =>  'Ingrese un Programa Asociado.',
           'fileRequests.required'        =>  'Debe agregar los archivos solicitados',
           'justify.required'             =>  'Campo Justificación de Adquisición es requerido',
-          $this->route == 'request_forms.passengers.create' ? 'passengers.required' : 'items.required' =>  $this->route == 'request_forms.passengers.create' ? 'Debe agregar al menos un Pasajero' : 'Debe agregar al menos un Item para Bien y/o Servicio'
+          ($this->isRFItems ? 'items.required' : 'passengers.required') => ($this->isRFItems ? 'Debe agregar al menos un Item para Bien y/o Servicio' : 'Debe agregar al menos un Pasajero')
         ],
       );
 
@@ -257,50 +231,72 @@ class RequestFormCreate extends Component
             'id'                    =>  $this->idRF,
           ],
           [
+            'subtype'               =>  $this->subtype,
             'contract_manager_id'   =>  $this->contractManagerId,
             'contract_manager_ou_id' => User::with('organizationalUnit')->find($this->contractManagerId)->organizationalUnit->id,
             'name'                  =>  $this->name,
             'superior_chief'        =>  $this->superiorChief,
             'justification'         =>  $this->justify,
-            'type_form'             =>  $this->route == 'request_forms.passengers.create' ? 'Pasajes Aéreos' : 'Bienes y/o Servicios',
+            'type_form'             =>  $this->isRFItems ? 'bienes y/o servicios' : 'pasajes aéreos',
             'request_user_id'       =>  Auth()->user()->id,
             'request_user_ou_id'    =>  Auth()->user()->organizationalUnit->id,
-            //'supervisor_user_id'    =>  Auth()->user()->id,
-            'estimated_expense'     =>  $this->totalForm($this->route == 'request_forms.passengers.create' ? $this->passengers : $this->items),
+            'estimated_expense'     =>  $this->totalForm(),
             'type_of_currency'      =>  $this->typeOfCurrency,
             'purchase_mechanism_id' =>  $this->purchaseMechanism,
             'program'               =>  $this->program,
             'status'                =>  'pending'
-
-            //'passenger_type'    =>  $this->passengerType,
         ]);
 
-        // AQUI GUARDAR ARCHIVOS
-        foreach($this->fileRequests as $nFiles => $fileRequest){
-            $reqFile = new RequestFormFile();
-            if(env('APP_ENV') == 'local' || env('APP_ENV') == 'testing'){
-                $now = Carbon::now()->format('Y_m_d_H_i_s');
-                $file_name = $now.'_req_file_'.$nFiles;
-                $reqFile->name = $fileRequest->getClientOriginalName();
-                $reqFile->file = $fileRequest->storeAs('/ionline/request_forms_dev/request_files/', $file_name.'.'.$fileRequest->extension(), 'gcs');
-                $reqFile->request_form_id = $req->id;
-                $reqFile->user_id = Auth()->user()->id;
-                $reqFile->save();
-            }
-        }
-
-        if($this->route == 'request_forms.items.create'){
+        if($this->isRFItems){
+          // save items
           foreach($this->items as $item){
-            $this->saveItem($item, $req->id);
+            ItemRequestForm::updateOrCreate(
+              [
+                'id'                    =>      $item['id'],
+              ],
+              [
+                'request_form_id'       =>      $req->id,
+                'article'               =>      $item['article'],
+                'unit_of_measurement'   =>      $item['unitOfMeasurement'],
+                'specification'         =>      $item['technicalSpecifications'],
+                'quantity'              =>      $item['quantity'],
+                'unit_value'            =>      $item['unitValue'],
+                'tax'                   =>      $item['taxes'],
+                'expense'               =>      $item['totalValue'],
+                // 'article_file'          =>      $item['articleFile'] ? $item['articleFile']->storeAs('/ionline/request_forms_dev/item_files/', $file_name.'.'.pathinfo($item['articleFile'], PATHINFO_EXTENSION), 'gcs') : null
+            ]);
           }
         } else {
           foreach($this->passengers as $passenger){
-            $this->savePassenger($passenger, $req->id);
+            // save passengers
+            Passenger::updateOrCreate(
+              [
+                'id'                =>  $passenger['id'],
+              ],
+              [
+                'user_id'           =>  Auth()->user()->id,
+                'run'               =>  $passenger['run'],
+                'dv'                =>  $passenger['dv'],
+                'name'              =>  $passenger['name'],
+                'fathers_family'    =>  $passenger['fathers_family'],
+                'mothers_family'    =>  $passenger['mothers_family'],
+                'birthday'          =>  $passenger['birthday'],
+                'phone_number'      =>  $passenger['phone_number'],
+                'email'             =>  $passenger['email'],
+                'round_trip'        =>  $passenger['round_trip'],
+                'origin'            =>  $passenger['origin'],
+                'destination'       =>  $passenger['destination'],
+                'departure_date'    =>  $passenger['departure_date'],
+                'return_date'       =>  $passenger['return_date'],
+                'baggage'           =>  $passenger['baggage'],
+                'unit_value'        =>  $passenger['unitValue'],
+                'request_form_id'   =>  $req->id
+              ]);
           }
         }
 
         if($this->editRF){
-          ItemRequestForm::destroy($this->deletedItems);
+          $this->isRFItems ? ItemRequestForm::destroy($this->deletedItems) : Passenger::destroy($this->deletedPassengers);
           session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue editado con exito.');
         }
         else{
@@ -311,6 +307,20 @@ class RequestFormCreate extends Component
           session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue creado con exito.');
         }
 
+        // Se guarda los archivos del form req cuando ya todo lo anteior se guardó exitosamente
+        foreach($this->fileRequests as $nFiles => $fileRequest){
+          $reqFile = new RequestFormFile();
+          if(env('APP_ENV') == 'local' || env('APP_ENV') == 'testing'){
+              $now = Carbon::now()->format('Y_m_d_H_i_s');
+              $file_name = $now.'_req_file_'.$nFiles;
+              $reqFile->name = $fileRequest->getClientOriginalName();
+              $reqFile->file = $fileRequest->storeAs('/ionline/request_forms_dev/request_files/', $file_name.'.'.$fileRequest->extension(), 'gcs');
+              $reqFile->request_form_id = $req->id;
+              $reqFile->user_id = Auth()->user()->id;
+              $reqFile->save();
+          }
+      }
+
       });
 
       return redirect()->to('/request_forms/my_forms');
@@ -320,56 +330,13 @@ class RequestFormCreate extends Component
       return redirect()->to('/request_forms/my_forms');
     }
 
-    private function saveItem($item, $id){
-        // dd($item['articleFile']);
-        // if($item['articleFile']) $item['articleFile'] = new TemporaryUploadedFile($item['articleFile'], config('filesystems.default'));
-        $now = Carbon::now()->format('Y_m_d_H_i_s');
-        $file_name = $now.'item_file_'.$id;
-        ItemRequestForm::updateOrCreate(
-          [
-            'id'                    =>      $item['id'],
-          ],
-          [
-            'request_form_id'       =>      $id,
-            'article'               =>      $item['article'],
-            'unit_of_measurement'   =>      $item['unitOfMeasurement'],
-            'specification'         =>      $item['technicalSpecifications'],
-            'quantity'              =>      $item['quantity'],
-            'unit_value'            =>      $item['unitValue'],
-            'tax'                   =>      $item['taxes'],
-            'expense'               =>      $item['totalValue'],
-            'article_file'          =>      $item['articleFile'] ? $item['articleFile']->storeAs('/ionline/request_forms_dev/item_files/', $file_name.'.'.pathinfo($item['articleFile'], PATHINFO_EXTENSION), 'gcs') : null
-      ]);
-      return;
-    }
+    public function destroyFile($id)
+    {
+      $requestFormFile = RequestFormFile::find($id);
+      Storage::delete($requestFormFile->file);
+      $requestFormFile->delete();
 
-    private function savePassenger($passenger, $id){
-        $now = Carbon::now()->format('Y_m_d_H_i_s');
-        $file_name = $now.'art_file_'.$id;
-        $req = Passenger::updateOrCreate(
-            [
-              'id'                =>  $passenger['id'],
-            ],
-            [
-              'user_id'           =>  Auth()->user()->id,
-              'run'               =>  $passenger['run'],
-              'dv'                =>  $passenger['dv'],
-              'name'              =>  $passenger['name'],
-              'fathers_family'    =>  $passenger['fathers_family'],
-              'mothers_family'    =>  $passenger['mothers_family'],
-              'birthday'          =>  $passenger['birthday'],
-              'phone_number'      =>  $passenger['phone_number'],
-              'email'             =>  $passenger['email'],
-              'round_trip'        =>  $passenger['round_trip'],
-              'origin'            =>  $passenger['origin'],
-              'destination'       =>  $passenger['destination'],
-              'departure_date'    =>  $passenger['departure_date'],
-              'return_date'       =>  $passenger['return_date'],
-              'baggage'           =>  $passenger['baggage'],
-              'unit_value'        =>  $passenger['unitValue'],
-              'request_form_id'   =>  $id
-            ]);
-      return;
+      $this->savedFiles = RequestFormFile::where('request_form_id', $this->requestForm->id)->get();
     }
 
     public function render(){
@@ -377,9 +344,4 @@ class RequestFormCreate extends Component
         $users = User::where('organizational_unit_id', Auth::user()->organizational_unit_id)->orderBy('name', 'ASC')->get();
         return view('livewire.request-form.request-form-create', compact('users'));
     }
-
-  //   public function searchedUser(User $user){
-  //     $this->searchedUser = $user;
-  //     $this->contractManagerId = $user->id;
-  // }
 }

@@ -6,7 +6,7 @@
 
 <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" type="text/css"/>
 
-<h4 class="mb-3">Formulario de Requerimiento - Bienes y/o Servicios (Ejecución Inmediata)</h4>
+<h4 class="mb-3">Formulario de Requerimiento - {{ request()->route()->getName() == 'request_forms.items.create' || ($requestForm && $requestForm->type_form == 'bienes y/o servicios') ? 'Bienes y/o Servicios' : 'Pasajes Aéreos' }}</h4>
 
 @include('request_form.partials.nav')
 

@@ -53,6 +53,16 @@
             </select>
         </fieldset>
 
+        <fieldset class="form-group col-md-5">
+            <label for="for_to">Profesión</label>
+            <select class="form-control selectpicker" data-live-search="true" name="profession_id" data-size="5">
+              <option value="">Todos</option>
+              @foreach($professions as $key => $profession)
+                <option value="{{$profession->id}}" @if($profession->id == $request->profession_id) selected @endif>{{$profession->name}}</option>
+              @endforeach
+            </select>
+        </fieldset>
+
         <fieldset class="form-group col-md-1">
             <label for="">&nbsp;</label>
             <button type="submit" class="form-control btn btn-primary"><i class="fas fa-search"></i></button>
@@ -65,7 +75,7 @@
         </fieldset>
     </div>
 
-    <!-- @livewire('select-organizational-unit') -->
+    {{-- @livewire('select-organizational-unit') --}}
 
 </form>
 

@@ -20,7 +20,7 @@ class CreateArqRequestFormsTable extends Migration
             $table->foreignId('contract_manager_id');
             $table->foreignId('contract_manager_ou_id');//u.o. del responsable
             $table->longText('name');
-            $table->float('estimated_expense');
+            $table->float('estimated_expense', 15, 2);
             $table->string('type_of_currency');
             $table->tinyInteger('superior_chief')->nullable();
             $table->string('program')->nullable();
