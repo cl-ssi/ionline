@@ -239,4 +239,37 @@ class RequestFormController extends Controller {
     {
       return Storage::disk('gcs')->response($requestForm->signedRequestForm->signed_file);
     }
+
+    public function create_provision(RequestForm $requestForm)
+    {
+        $requestForm->load('itemRequestForms');
+        $newRequestForm = $requestForm->replicate();
+        $newRequestForm->request_form_id = $requestForm->id;
+        $newRequestForm->request_user_id = Auth::id();
+        $newRequestForm->request_user_ou_id = Auth::user()->organizationalUnit->id;
+        $newRequestForm->estimated_expense = 0;
+        $newRequestForm->subtype = 'suministros';
+        $newRequestForm->sigfe = null;
+        $newRequestForm->status = 'pending';
+        $newRequestForm->signatures_file_id = null;
+        $newRequestForm->push();
+
+        foreach($requestForm->getRelations() as $relation => $items){
+            foreach($items as $item){
+                unset($item->id);
+                $item->request_form_id = $newRequestForm->id;
+                $item->quantity = 1;
+                $item->expense = 0;
+                $newRequestForm->{$relation}()->create($item->toArray());
+            }
+        }
+
+        EventRequestform::createLeadershipEvent($newRequestForm);
+        EventRequestform::createPreFinanceEvent($newRequestForm);
+        EventRequestform::createFinanceEvent($newRequestForm);
+        EventRequestform::createSupplyEvent($newRequestForm);
+
+        session()->flash('info', 'Formulario de requerimiento N° '.$newRequestForm->id.' fue creado con éxito a partir de formulario N° '.$requestForm->id.'. Se solicita que modifique y guarde los cambios en los items para el nuevo gasto estimado de su formulario de requerimiento.');
+        return redirect()->route('request_forms.edit', $newRequestForm);
+    }
 }
