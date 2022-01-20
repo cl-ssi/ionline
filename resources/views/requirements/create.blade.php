@@ -61,7 +61,7 @@
 
 <hr> -->
 
-<div class="row">
+<div class="form-row">
     @if($parte->id <> 0)
         <div class="col-8">
             @if($parte->files->first() != null)
@@ -82,7 +82,7 @@
 
             <input type="hidden" class="form-control" id="for_parte_id" name="parte_id" value="{{$parte->id}}" >
 
-            <div class="row">
+            <div class="form-row">
 
 
 
@@ -188,7 +188,7 @@
             </table>
 
 
-            <div class="row">
+            <div class="form-row">
                 <fieldset class="form-group @if($parte->id <> 0) col-12 @else col-6 @endif">
                     <label for="for_date">Asunto</label>
                     <input type="text" class="form-control" id="for_subject"

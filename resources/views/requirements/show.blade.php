@@ -224,9 +224,9 @@ bottom: 5px;
 
   	 $(document).ready(function(){
        var array = new Array;
-      //  $("#ou").val({{$lastEvent->from_user->organizationalUnit->id}}); //select que se actualiza automáticamente
+      //  $("#ou").val( $lastEvent->from_user->organizationalUnit->id ); //select que se actualiza automáticamente
       //  $("#ou").trigger("change", [true]);
-      //  $("#user").val({{$lastEvent->from_user->id}}); //select que se actualiza automáticamente
+      //  $("#user").val( $lastEvent->from_user->id ); //select que se actualiza automáticamente
       //  $("#user").trigger("change");
        $("#status").trigger("change", [true]);
 
@@ -324,9 +324,9 @@ bottom: 5px;
          $("#tabla_funcionarios").append(markup);
 
          // if($("#status").val() == "respondido"){
-         //   $("#ou").val({{$lastEvent->from_user->organizationalUnit->id}});
+         //   $("#ou").val( $lastEvent->from_user->organizationalUnit->id );
          //   $("#ou").trigger("change");
-         //   $("#user").val({{$lastEvent->from_user->id}});
+         //   $("#user").val( $lastEvent->from_user->id );
          // }
 
        });
@@ -361,8 +361,8 @@ bottom: 5px;
                 });
           }else{
             if(document.getElementById("status").value == "respondido" || document.getElementById("status").value == "reabierto"){
-              $("#user").val({{$lastEvent->from_user->id}});
-              $('#to').val({{$lastEvent->from_user->id}});
+              $("#user").val({{ optional(optional($lastEvent)->from_user)->id}});
+              $('#to').val({{ optional(optional($lastEvent)->from_user)->id}});
             }else if(document.getElementById("status").value == "cerrado"){
               @if($firstEvent <> null)
                 $("#user").val({{$firstEvent->from_user_id}});

@@ -900,8 +900,14 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
 Route::resource('documents', 'Documents\DocumentController')->middleware('auth');
 
 Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(function () {
-    //Route::get('/', 'Requirements\RequirementController@inbox')->name('index');
-    Route::get('download/{file}',  'Requirements\EventController@download')->name('download')->middleware('auth');
+    Route::get('/', 'Requirements\RequirementController@outbox')->name('index');
+    Route::get('/create', 'Requirements\RequirementController@show')->name('create');
+    Route::post('/', 'Requirements\RequirementController@store')->name('store');
+    Route::get('/show/{requirement}', 'Requirements\RequirementController@show')->name('show');
+    Route::delete('/{requirement}', 'Requirements\RequirementController@destroy')->name('destroy');
+
+    /** Custom routes */
+    Route::get('download/{file}',  'Requirements\EventController@download')->name('download');
     Route::get('inbox', 'Requirements\RequirementController@inbox')->name('inbox');
     Route::get('outbox', 'Requirements\RequirementController@outbox')->name('outbox');
     Route::get('archive_requirement/{requirement}', 'Requirements\RequirementController@archive_requirement')->name('archive_requirement');
@@ -915,7 +921,7 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
     Route::get('report1', 'Requirements\RequirementController@report1')->name('report1');
     // Route::get('report_reqs_by_org', 'Requirements\RequirementController@report_reqs_by_org')->name('report_reqs_by_org');
 });
-Route::resource('requirements', 'Requirements\RequirementController')->middleware('auth');
+//Route::resource('requirements', 'Requirements\RequirementController')->middleware('auth');
 
 Route::view('calendars', 'calendars.index')->name('calendars');
 
