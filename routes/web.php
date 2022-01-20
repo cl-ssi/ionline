@@ -903,7 +903,7 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
     Route::get('/', 'Requirements\RequirementController@outbox')->name('index');
     Route::get('/create', 'Requirements\RequirementController@show')->name('create');
     Route::post('/', 'Requirements\RequirementController@store')->name('store');
-    Route::get('/show/{requirement}', 'Requirements\RequirementController@show')->name('show');
+    Route::get('/{requirement}', 'Requirements\RequirementController@show')->name('show');
     Route::delete('/{requirement}', 'Requirements\RequirementController@destroy')->name('destroy');
 
     /** Custom routes */
