@@ -22,7 +22,7 @@ class RequestFormCreate extends Component
     use WithFileUploads;
 
     public $article, $unitOfMeasurement, $technicalSpecifications, $quantity, $typeOfCurrency, $articleFile, $subtype,
-            $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key;
+            $unitValue, $taxes, $fileItem, $totalValue, $lstUnitOfMeasurement, $title, $edit, $key, $request_form_id;
 
     public $name, $contractManagerId, $superiorChief, $purchaseMechanism, $messagePM,
             $program, $fileRequests = [], $justify, $totalDocument;
@@ -97,6 +97,7 @@ class RequestFormCreate extends Component
     }
 
     private function setRequestForm(){
+      $this->request_form_id    =   $this->requestForm->request_form_id;
       $this->subtype            =   $this->requestForm->subtype;
       $this->name               =   $this->requestForm->name;
       $this->contractManagerId  =   $this->requestForm->contract_manager_id;
