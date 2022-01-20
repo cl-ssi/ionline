@@ -145,7 +145,7 @@ class RequestFormController extends Controller {
         }
 
         $requestForm->load('itemRequestForms');
-        
+
         $title = 'Formularios de Requerimiento - Autorización ' . $eventTitles[$eventType];
         $manager              = Authority::getAuthorityFromDate($requestForm->userOrganizationalUnit->id, Carbon::now(), 'manager');
         $position             = $manager->position;
@@ -273,7 +273,9 @@ class RequestFormController extends Controller {
         EventRequestform::createFinanceEvent($newRequestForm);
         EventRequestform::createSupplyEvent($newRequestForm);
 
-        session()->flash('info', 'Formulario de requerimiento N° '.$newRequestForm->id.' fue creado con éxito a partir de formulario N° '.$requestForm->id.'. Se solicita que modifique y guarde los cambios en los items para el nuevo gasto estimado de su formulario de requerimiento.');
+        session()->flash('info', 'Formulario de requerimiento N° '.$newRequestForm->id.' fue creado con éxito. <br>
+                                  Recuerde que es un formulario dependiente de ID N° '.$requestForm->id.'. <br>
+                                  Se solicita que modifique y guarde los cambios en los items para el nuevo gasto estimado de su formulario de requerimiento.');
         return redirect()->route('request_forms.edit', $newRequestForm);
     }
 
@@ -281,7 +283,7 @@ class RequestFormController extends Controller {
     {
         // Porcentaje retención boleta de honorarios según el año vigente
         $withholding_tax = [2021 => 0.115, 2022 => 0.1225, 2023 => 0.13, 2024 => 0.1375, 2025 => 0.145, 2026 => 0.1525, 2027 => 0.16, 2028 => 0.17];
-        
+
         if($tax == 'iva') return $value * 1.19;
         if($tax == 'bh') return isset($withholding_tax[date('Y')]) ? round($value / (1 - $withholding_tax[date('Y')])) : round($value / (1 - end($withholding_tax)));
         return $value;

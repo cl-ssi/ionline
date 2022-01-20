@@ -27,6 +27,7 @@
                         <option>Seleccione...</option>
                         <option value="compra inmediata">Compra inmediata</option>
                         <option value="ejecución">Ejecución</option>
+                        <option value="suministros">Suministros</option>
                     </select>
                 </fieldset>
 
