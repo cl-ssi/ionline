@@ -900,12 +900,6 @@ Route::prefix('documents')->as('documents.')->middleware('auth')->group(function
 Route::resource('documents', 'Documents\DocumentController')->middleware('auth');
 
 Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(function () {
-    Route::get('/', 'Requirements\RequirementController@outbox')->name('index');
-    Route::get('/create', 'Requirements\RequirementController@show')->name('create');
-    Route::post('/', 'Requirements\RequirementController@store')->name('store');
-    Route::get('/{requirement}', 'Requirements\RequirementController@show')->name('show');
-    Route::delete('/{requirement}', 'Requirements\RequirementController@destroy')->name('destroy');
-
     /** Custom routes */
     Route::get('download/{file}',  'Requirements\EventController@download')->name('download');
     Route::get('inbox', 'Requirements\RequirementController@inbox')->name('inbox');
@@ -920,6 +914,12 @@ Route::prefix('requirements')->as('requirements.')->middleware('auth')->group(fu
     Route::resource('events', 'Requirements\EventController');
     Route::get('report1', 'Requirements\RequirementController@report1')->name('report1');
     // Route::get('report_reqs_by_org', 'Requirements\RequirementController@report_reqs_by_org')->name('report_reqs_by_org');
+
+    Route::get('/', 'Requirements\RequirementController@outbox')->name('index');
+    Route::get('/create', 'Requirements\RequirementController@show')->name('create');
+    Route::post('/', 'Requirements\RequirementController@store')->name('store');
+    Route::get('/{requirement}', 'Requirements\RequirementController@show')->name('show');
+    Route::delete('/{requirement}', 'Requirements\RequirementController@destroy')->name('destroy');
 });
 //Route::resource('requirements', 'Requirements\RequirementController')->middleware('auth');
 
@@ -1353,6 +1353,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
     Route::get('/my_forms', [RequestFormController::class, 'my_forms'])->name('my_forms');
     Route::get('/pending_forms', [RequestFormController::class, 'pending_forms'])->name('pending_forms');
     Route::get('/create', [RequestFormController::class, 'create'])->name('create');
+    Route::get('/{requestForm}/create_provision', [RequestFormController::class, 'create_provision'])->name('create_provision');
     Route::get('/{requestForm}/sign/{eventType}', [RequestFormController::class, 'sign'])->name('sign');
     Route::get('/callback-sign-request-form/{message}/{modelId}/{signaturesFile?}', [RequestFormController::class, 'callbackSign'])->name('callbackSign');
     Route::get('/signed-request-form-pdf/{requestForm}', [RequestFormController::class, 'signedRequestFormPDF'])->name('signedRequestFormPDF');
