@@ -26,18 +26,9 @@
                     <select wire:model.defer="subtype" name="subtype" class="form-control form-control-sm" required>
                         <option>Seleccione...</option>
                         <option value="compra inmediata">Compra inmediata</option>
-                        <option value="suministros">Suministros</option>
                         <option value="ejecución">Ejecución</option>
                     </select>
                 </fieldset>
-
-                @if($subtype == 'ejecución')
-                <fieldset class="form-group col-sm-4">
-                    <label for="forRut">ID RF:</label>
-                    <input wire:model.defer="request_form_id" name="request_form_id" class="form-control form-control-sm" type="text" value="">
-                    {{-- @error('name') <span class="error">{{ $message }}</span> @enderror --}}
-                </fieldset>
-                @endif
 
                 <fieldset class="form-group col-sm-3">
                     <label for="for_calidad_juridica">Autoriza Jefatura Superior</label>
@@ -106,7 +97,7 @@
             <div class="form-row">
                 <fieldset class="form-group col-sm">
                       <label>Documentos adjuntados:</label>
-                      
+
                         <ul class="list-group">
                           @foreach ($savedFiles as $file)
                             <li class="list-group-item py-2">
@@ -114,11 +105,11 @@
                                 <a onclick="return confirm('¿Está seguro de eliminar archivo con nombre {{$file->name}}?') || event.stopImmediatePropagation()" wire:click="destroyFile({{$file->id}})"
                                     class="btn btn-link btn-sm float-right" title="Eliminar"><i class="far fa-trash-alt" style="color:red"></i></a>
                                 <a href="{{ route('request_forms.show_file', $file->id) }}"
-                                    class="btn btn-link btn-sm float-right" title="Ver"><i class="far fa-eye"></i></a> 
+                                    class="btn btn-link btn-sm float-right" title="Ver"><i class="far fa-eye"></i></a>
                             </li>
                           @endforeach
                         </ul>
-                      
+
                 </fieldset>
             </div>
             @endif
