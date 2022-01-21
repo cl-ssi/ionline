@@ -600,7 +600,7 @@
           Derecho a días de descanso, correspondiente a 20 días hábiles, después de un año de prestación de servicio continúo en calidad de honorario, sin opción de acumulación, previa autorización de la jefatura de la unidad que se desempeña.<br><br>
 
           
-          <ins>Permiso Administrativo:</ins><br>
+          <ins>Permiso Administrativo (Solo para convenios por 3 meses):</ins><br>
           Permisos para ausentarse de sus labores por motivos particulares por un día hábil durante el periodo del presente convenio, con goce de prestación. Dicho permiso podrá fraccionarse por 1 día o 2 medio día y serán resueltos por la Coordinadora del área correspondiente.<br> <br>
 
 
