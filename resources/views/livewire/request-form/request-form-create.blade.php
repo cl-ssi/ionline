@@ -11,56 +11,17 @@
                     {{-- @error('name') <span class="error">{{ $message }}</span> @enderror --}}
                 </fieldset>
 
-                <fieldset class="form-group col-sm-3">
+                <fieldset class="form-group col-sm-4">
                     <label>Administrador de Contrato:</label><br>
-                    <select wire:model.defer="contractManagerId" name="contractManagerId" class="form-control form-control-sm" required>
-                      <option>Seleccione...</option>
-                      @foreach($users as $user)
-                          <option value="{{ $user->id }}">{{ ucfirst(trans($user->FullName)) }}</option>
-                      @endforeach
-                    </select>
-                </fieldset>
-
-                <fieldset class="form-group col-sm-2">
-                    <label>Tipo:</label><br>
-                    <select wire:model.defer="subtype" name="subtype" class="form-control form-control-sm" required>
+                    <div wire:ignore id="for-bootstrap-select">
+                      <select wire:model.defer="contractManagerId" name="contractManagerId" data-container="#for-bootstrap-select"
+                        class="form-control form-control-sm selectpicker show-tick" data-live-search="true" data-size="5" required>
                         <option>Seleccione...</option>
-                        <option value="compra inmediata">Compra inmediata</option>
-                        <option value="ejecución">Ejecución</option>
-                        <option value="suministros">Suministros</option>
-                    </select>
-                </fieldset>
-
-                <fieldset class="form-group col-sm-3">
-                    <label for="for_calidad_juridica">Autoriza Jefatura Superior</label>
-                    <div class="mt-1 ml-4">
-                        <input class="form-check-input" type="checkbox" value="1" wire:model="superiorChief" name="superiorChief">
-                        <label class="form-check-label" for="flexCheckDefault">
-                          Sí
-                        </label>
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}">{{ ucfirst(trans($user->FullName)) }}</option>
+                        @endforeach
+                      </select>
                     </div>
-                </fieldset>
-            </div>
-
-            <div class="form-row">
-                <fieldset class="form-group col-sm-2">
-                    <label>Mecanismo de Compra:</label><br>
-                    <select wire:model="purchaseMechanism" name="purchaseMechanism" class="form-control form-control-sm" required>
-                      <option>Seleccione...</option>
-                      @foreach($lstPurchaseMechanism as $val)
-                          <option value="{{$val->id}}">{{$val->name}}</option>
-                      @endforeach
-                    </select>
-                </fieldset>
-
-                <fieldset class="form-group col-sm-2">
-                    <label for="for_type_of_currency">Tipo de Moneda:</label>
-                    <select wire:model.defer="typeOfCurrency" name="typeOfCurrency" class="form-control form-control-sm" required>
-                        <option value="">Seleccione...</option>
-                        <option value="peso">Peso</option>
-                        <option value="dolar">Dolar</option>
-                        <option value="uf">U.F.</option>
-                    </select>
                 </fieldset>
 
                 <fieldset class="form-group col-sm-4">
@@ -69,11 +30,59 @@
                     {{-- @error('program') <span class="error">{{ $message }}</span> @enderror --}}
                 </fieldset>
 
+            </div>
+
+            <div class="form-row">
+                <fieldset class="form-group col-sm-4">
+                    <label>Mecanismo de Compra:</label><br>
+                    <select wire:model="purchaseMechanism" name="purchaseMechanism" class="form-control form-control-sm " required>
+                        <option>Seleccione...</option>
+                        @foreach($lstPurchaseMechanism as $val)
+                            <option value="{{$val->id}}">{{$val->name}}</option>
+                        @endforeach
+                    </select>
+                </fieldset>
+
+                <fieldset class="form-group col-sm-4">
+                    <label>Tipo:</label><br>
+                    <select wire:model.defer="subtype" name="subtype" class="form-control form-control-sm" required>
+                        <option>Seleccione...</option>
+                        <option value="bienes ejecución inmediata">Bienes Ejecución Inmediata</option>
+                        <option value="bienes ejecución tiempo">Bienes Ejecución En Tiempo</option>
+                        <option value="servicios ejecución inmediata">Servicios Ejecución Inmediata</option>
+                        <option value="servicios ejecución tiempo">Servicios Ejecución En Tiempo</option>
+                    </select>
+                </fieldset>
+
+                <fieldset class="form-group col-sm-4">
+                    <label for="for_type_of_currency">Tipo de Moneda:</label>
+                    <select wire:model.defer="typeOfCurrency" name="typeOfCurrency" class="form-control form-control-sm" required>
+                        <option value="">Seleccione...</option>
+                        <option value="peso">Peso</option>
+                        <option value="dolar">Dolar</option>
+                        <option value="uf">U.F.</option>
+                    </select>
+                </fieldset>
+            </div>
+
+            <div class="form-row">
+
+                    <fieldset class="form-group col-sm-4">
+                        <label for="for_calidad_juridica">Autoriza Jefatura Superior</label>
+                        <div class="mt-1 ml-4">
+                            <input class="form-check-input" type="checkbox" value="1" wire:model="superiorChief" name="superiorChief">
+                            <label class="form-check-label" for="flexCheckDefault">
+                              Sí
+                            </label>
+                        </div>
+                    </fieldset>
+
                 <fieldset class="form-group col-sm-4">
                     <label for="for_fileRequests" class="form-label">Documento de Respaldo:</label>
                     <input class="form-control form-control-sm" wire:model.defer="fileRequests" type="file" style="padding:2px 0px 0px 2px;" name="fileRequests[]" multiple>
                 </fieldset>
             </div>
+
             <div class="form-row">
                 <fieldset class="form-group col-sm">
                     <label for="exampleFormControlTextarea1" class="form-label">Justificación de Adquisición:</label>
