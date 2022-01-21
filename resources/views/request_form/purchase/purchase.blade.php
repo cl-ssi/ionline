@@ -167,7 +167,7 @@
             @endif
 
             @if($requestForm->purchase_mechanism_id == 4)
-            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_tender', $requestForm) }}">
+            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_tender', $requestForm) }}" enctype="multipart/form-data">
             @endif
 
             @csrf
@@ -273,7 +273,7 @@
 @endif
 
 <!-- LICITACIÓN PUBLICA -->
-@if($requestForm->purchase_mechanism_id == 4 && $requestForm->request_form_id)
+@if($requestForm->purchase_mechanism_id == 4 && !$requestForm->father)
     @include('request_form.purchase.partials.tender_form')
 @endif
 
@@ -301,9 +301,7 @@
 <div class="row">
     <div class="col-sm">
         <div class="table-responsive">
-            @if($requestForm->purchase_mechanism_id == 4)
-            <h6><i class="fas fa-shopping-cart"></i> {{ $requestForm->purchaseMechanism->name }}</h6>
-            @endif
+            <h6><i class="fas fa-shopping-cart"></i> Historial de compras</h6>
 
 
             <table class="table table-sm table-striped table-bordered small">

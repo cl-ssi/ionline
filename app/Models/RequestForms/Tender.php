@@ -2,6 +2,7 @@
 
 namespace App\Models\RequestForms;
 
+use App\Models\Parameters\PurchaseType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,10 +15,20 @@ class Tender extends Model implements Auditable
     use SoftDeletes;
 
     protected $fillable = [
-        'tender_type', 'description', 'resol_administrative_bases', 'resol_adjudication',
+        'purchase_type_id', 'tender_number', 'description', 'resol_administrative_bases', 'resol_adjudication',
         'resol_deserted', 'resol_contract', 'guarantee_ticket', 'has_taking_of_reason',
         'status', 'type_of_purchase', 'supplier_id'
     ];
 
     protected $table = 'arq_tenders';
+
+    public function purchaseType()
+    {
+        return $this->belongsTo(PurchaseType::class, 'purchase_type_id');
+    }
+
+    public function attachedFiles() 
+    {
+        return $this->hasMany(AttachedFile::class);
+    }
 }

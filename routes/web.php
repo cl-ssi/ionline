@@ -67,7 +67,7 @@ use App\Pharmacies\Purchase;
 use App\User;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Parameters\LogController;
-
+use App\Http\Controllers\RequestForms\AttachedFilesController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -1377,6 +1377,7 @@ Route::prefix('request_forms')->as('request_forms.')->middleware('auth')->group(
         Route::post('{requestForm}/create_new_budget', [RequestFormController::class, 'create_new_budget'])->name('create_new_budget');
         Route::get('/petty_cash/{pettyCash}/download', [PettyCashController::class, 'download'])->name('petty_cash.download');
         Route::get('/fund_to_be_settled/{fundToBeSettled}/download', [FundToBeSettledController::class, 'download'])->name('fund_to_be_settled.download');
+        Route::get('/attached_file/{attachFile}/download', [AttachedFilesController::class, 'download'])->name('attached_file.download');
         Route::post('/{requestForm}/create_tender', [PurchasingProcessController::class, 'create_tender'])->name('create_tender');
     });
 
