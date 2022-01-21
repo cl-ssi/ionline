@@ -770,6 +770,15 @@
 		}
 	});
 
+	$('#programm_name').on('change', function() {
+		var value = this.value;
+		if (value == "Covid 2022") {
+			$('#additional_benefits').attr('disabled', 'disabled');
+		}else{
+			$('#additional_benefits').removeAttr('disabled');
+		}
+	});
+
 
 
 	// $('#working_day_type').on('change', function() {
