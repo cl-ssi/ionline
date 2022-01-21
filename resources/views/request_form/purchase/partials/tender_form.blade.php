@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-header">
         {{ $requestForm->purchaseMechanism->name }} - <strong>{{ $requestForm->purchaseType->name }}</strong>
-        <input type="hidden" name="tender_type" value="{{ $requestForm->purchaseType->name }}">
+        <input type="hidden" name="purchase_type_id" value="{{ $requestForm->purchaseType->id }}">
     </div>
     <div class="card-body">
         <div class="form-row">

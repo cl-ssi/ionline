@@ -48,10 +48,6 @@ class PurchasingProcessDetail extends Pivot
     }
 
     public function getPurchasingTypeName(){
-        return $this->internalPurchaseOrder ? 'OC interna' : ($this->pettyCash ? 'Fondo menor' : ($this->fundToBeSettled ? 'Fondo a rendir' : ($this->tender ? $this->tender->tender_type : '')));
-    }
-
-    public function getPurchaseType(){
-        return $this->internalPurchaseOrder ? $this->internalPurchaseOrder : ($this->pettyCash ? $this->pettyCash : ($this->fundToBeSettled ? $this->fundToBeSettled : ($this->tender ? $this->tender : null)));
+        return $this->internalPurchaseOrder ? 'OC interna' : ($this->pettyCash ? 'Fondo menor' : ($this->fundToBeSettled ? 'Fondo a rendir' : ($this->tender ? $this->tender->purchaseType->name : '')));
     }
 }

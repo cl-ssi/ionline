@@ -16,7 +16,7 @@ class CreateArqTendersTable extends Migration
         Schema::create('arq_tenders', function (Blueprint $table) {
             $table->id();
             $table->string('tender_type');
-            $table->string('tender_number');
+            $table->string('tender_number')->nullable();
             $table->string('description');
             $table->string('resol_administrative_bases');
             $table->string('resol_adjudication')->nullable();

@@ -186,6 +186,7 @@ class PurchasingProcessController extends Controller
 
     public function create_tender(Request $request, RequestForm $requestForm)
     {
+        dd($request->file('resol_administrative_bases_file'));
         $requestForm->load('purchasingProcess.details');
         if($this->estimated_expense_exceeded($requestForm)){
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
@@ -217,9 +218,10 @@ class PurchasingProcessController extends Controller
         $files = ['resol_administrative_bases_file', 'resol_adjudication_deserted_file', 'resol_contract_file', 'guarantee_ticket_file', 'taking_of_reason_file'];
         foreach($files as $file){
             if($request->hasFile($file)){
+                $archivo = $request->file($file);
                 $file_name = $now.'_'.$file.'_'.$tender->id;
                 $attachedFile = new AttachedFile();
-                $attachedFile->file = $request->resol_administrative_bases_file->storeAs('/ionline/request_forms/attached_files', $file_name.'.'.$request->file->extension(), 'gcs');
+                $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name.'.'.$archivo->extension(), 'gcs');
                 $attachedFile->document_type = $file;
                 $attachedFile->tender_id = $tender->id;
                 $attachedFile->save();
