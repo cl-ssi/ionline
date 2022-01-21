@@ -275,7 +275,7 @@
 				<option value="DIARIO" @if($serviceRequest->working_day_type == 'DIARIO') selected @endif>DIARIO</option>
         	</select>
 		</fieldset>
-		
+
 		<fieldset class="form-group col-12 col-md-12">
 		    <label for="for_working_day_type_other">Otro <small>(Saldrá en la resolución luego del horario)</small></label>
 		    <input type="text" class="form-control" id="for_working_day_type_other" placeholder="" name="working_day_type_other" value="{{ $serviceRequest->working_day_type_other }}">
@@ -679,7 +679,7 @@
   </form>
   @endcan
 
-  
+
 
 	@canany(['Service Request: additional data oficina partes'])
 	<form method="POST" action="{{ route('rrhh.service-request.update_aditional_data', $serviceRequest) }}" enctype="multipart/form-data">
@@ -700,7 +700,7 @@
 
 					<fieldset class="form-group col-7 col-md-3">
 						<label for="for_resolution_date">Fecha Resolución</label>
-						<input type="date" class="form-control" id="for_resolution_date" name="resolution_date" 
+						<input type="date" class="form-control" id="for_resolution_date" name="resolution_date"
 							@if($serviceRequest->resolution_date) value="{{$serviceRequest->resolution_date->format('Y-m-d')}}" @endif>
 					</fieldset>
 
@@ -1273,6 +1273,15 @@
   			$("#programm_name option[value='PABELLON TARDE']").hide();
   			$("#programm_name option[value='PABELLON GINE']").hide();
   			$("#programm_name option[value='TURNO DE RESIDENCIA']").hide();
+  		}
+  	});
+
+    $('#programm_name').on('change', function() {
+  		var value = this.value;
+  		if (value == "Covid 2022") {
+  			$('#additional_benefits').attr('disabled', 'disabled');
+  		}else{
+  			$('#additional_benefits').removeAttr('disabled');
   		}
   	});
 
