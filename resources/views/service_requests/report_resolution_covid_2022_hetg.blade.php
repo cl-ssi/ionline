@@ -620,7 +620,7 @@
 
         
 
-        Para constancia firman: <br><br><br><br><br><br><br><br><br><br><br>        
+        Para constancia firman: <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
         {{$ServiceRequest->employee->getFullNameAttribute()}} 
         <br><br>
 
