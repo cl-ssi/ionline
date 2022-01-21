@@ -140,22 +140,41 @@ class RequestForm extends Model implements Auditable
     }
 
     public function getStatus(){
-      switch ($this->status) {
-          case "pending":
-              return 'Pendiente';
-              break;
-          case "rejected":
-              return 'Rechazado';
-              break;
-          case "approved":
-              return 'Aprobado';
-              break;
-          case "closed":
-              return 'Cerado';
-              break;
-      }
+        switch ($this->status) {
+            case "pending":
+                return 'Pendiente';
+                break;
+            case "rejected":
+                return 'Rechazado';
+                break;
+            case "approved":
+                return 'Aprobado';
+                break;
+            case "closed":
+                return 'Cerado';
+                break;
+        }
     }
 
+    public function getSubtypeValueAttribute(){
+        switch ($this->subtype) {
+            case "bienes ejecución inmediata":
+                return 'Bienes Ejecución Inmediata';
+                break;
+
+            case "bienes ejecución tiempo":
+                return '>Bienes Ejecución En Tiempo';
+                break;
+
+            case "servicios ejecución inmediata":
+                return 'Servicios Ejecución Inmediata';
+                break;
+
+            case "servicios ejecución tiempo":
+                return 'Servicios Ejecución En Tiempo';
+                break;
+        }
+    }
 
     /*Regresa Icono del estado de firma de Eventos [argumento:  tipo de Evento]*/
     public function eventSign($event_type) {
