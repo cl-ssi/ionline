@@ -11,9 +11,9 @@ class AttachedFilesController extends Controller
 {
     public function download(AttachedFile $attachedFile)
     {
-        $filename = $attachedFile->document_type . ' ' .
-            $attachedFile->tender_id . '.' .
-            File::extension($attachedFile->file);
-        Storage::disk('gcs')->response($attachedFile->file);
+        // $filename = $attachedFile->document_type . ' ' .
+        //     $attachedFile->tender_id . '.' .
+        //     File::extension($attachedFile->file);
+        return Storage::disk('gcs')->response($attachedFile->file);
     }
 }

@@ -104,6 +104,10 @@
                     <table class="table table-sm table-striped table-bordered">
                         <tbody>
                             <tr>
+                                <th class="table-active" style="width: 33%">Fecha creacion</th>
+                                <td>{{ $detail->pivot->tender->created_at->format('d-m-Y H:i') }}</td>
+                            </tr>
+                            <tr>
                                 <th class="table-active" style="width: 33%">ID de la licitación</th>
                                 <td>{{ $detail->pivot->tender->tender_number }}</td>
                             </tr>
@@ -147,9 +151,8 @@
                 <h6><i class="fas fas fa-paperclip" aria-hidden="true"></i> Anexos</h6>
                 <div class="list-group">
                     @forelse($detail->pivot->tender->attachedFiles as $attachedFile)
-                    <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}" class="list-group-item list-group-item-action py-2 small" target="_blank">
-                        <i class="fas fa-file"></i> {{ $attachedFile->document_type }} - 
-                        <i class="fas fa-calendar-day"></i> {{ $attachedFile->created_at->format('d-m-Y H:i') }}</a>
+                    <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}" class="list-group-item list-group-item-action py-2" target="_blank">
+                        <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
                     @empty
                     <p>No existen archivos adjuntos a esta licitación.</p>
                     @endforelse

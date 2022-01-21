@@ -32,7 +32,7 @@
                         <tr>
                             <td>{{ $requestForm->id }}</td>
                             <td style="width: 7%">{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                            <td>{{ $requestForm->type_form }}</td>
+                            <td>{{ $requestForm->type_form }}<br>{{$requestForm->subtype}}</td>
                             <td>{{ $requestForm->name }}</td>
                             <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
                                 {{ $requestForm->user ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
