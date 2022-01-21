@@ -600,7 +600,7 @@ class RequirementController extends Controller
         ->get();
     }
 
-    //dd('entro aca');
+    
     return view('requirements.show', compact('ous', 'ouRoots' , 'requirement', 'categories', 'requirementCategories', 'lastEvent', 'firstEvent', 'documents', 'groupedRequirements'));
   }
 

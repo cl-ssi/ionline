@@ -464,11 +464,11 @@ class ReportController extends Controller
       
       //$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
       if ($ServiceRequest->start_date >= "2022-01-01 00:00:00" and $ServiceRequest->programm_name != "Covid 2022") {
-        //dd('entro aca');
+        
         $pdf->loadView('service_requests.report_resolution_hsa_2022', compact('ServiceRequest'));      
       }
       else if ($ServiceRequest->responsabilityCenter->establishment_id == 1  and $ServiceRequest->start_date >= "2022-01-01 00:00:00" and $ServiceRequest->programm_name = "Covid 2022") {
-        dd('entro aca');
+        
         $pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
       }
       
