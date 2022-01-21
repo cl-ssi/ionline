@@ -186,7 +186,6 @@ class PurchasingProcessController extends Controller
 
     public function create_tender(Request $request, RequestForm $requestForm)
     {
-        dd($request->file('resol_administrative_bases_file'));
         $requestForm->load('purchasingProcess.details');
         if($this->estimated_expense_exceeded($requestForm)){
             session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
