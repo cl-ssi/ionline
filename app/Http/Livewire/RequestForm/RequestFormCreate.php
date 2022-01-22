@@ -17,6 +17,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Livewire\TemporaryUploadedFile;
 use App\Rrhh\Authority;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\NewRequestFormNotification;
 
 class RequestFormCreate extends Component
 {
@@ -311,6 +313,26 @@ class RequestFormCreate extends Component
           EventRequestform::createPreFinanceEvent($req);
           EventRequestform::createFinanceEvent($req);
           EventRequestform::createSupplyEvent($req);
+
+          //Envío de notificación.
+
+          $mail_contract_manager = User::select('email')
+            ->where('id', $req->contract_manager_id)
+            ->first();
+
+          // //manager
+          // $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->contract_manager_ou_id, $date, $type);
+          // //secretary
+          // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->contract_manager_ou_id, $date, $type_adm);
+
+          $emails = [$mail_contract_manager];
+
+          //dd($emails);
+
+          Mail::to($emails)
+            ->cc(env('APP_RF_MAIL'))
+            ->send(new NewRequestFormNotification($req));
+
           session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue creado con exito.');
         }
 
@@ -326,7 +348,7 @@ class RequestFormCreate extends Component
               $reqFile->user_id = Auth()->user()->id;
               $reqFile->save();
           // }
-      }
+        }
 
       });
 
