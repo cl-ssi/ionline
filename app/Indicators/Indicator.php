@@ -12,8 +12,8 @@ class Indicator extends Model
     use SoftDeletes;
     
     protected $fillable = ['number', 'name', 'weighting_by_section', 'evaluated_section_states', 'numerator',  
-                           'numerator_source', 'denominator', 'denominator_source',
-                           'numerator_cods', 'numerator_cols', 'denominator_cods',
+                           'numerator_source', 'denominator', 'denominator_source', 'numerator_acum_last_year',
+                           'numerator_cods', 'numerator_cols', 'denominator_cods', 'denominator_acum_last_year',
                            'denominator_cols', 'goal', 'weighting', 'precision', 'establishment_cods'];
 
     public function indicatorable()

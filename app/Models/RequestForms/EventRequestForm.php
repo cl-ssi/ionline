@@ -48,7 +48,7 @@ class EventRequestForm extends Model
 
     public static function createLeadershipEvent(RequestForm $requestForm){
         $event                      =   new EventRequestForm();
-        $event->ou_signer_user      =   $requestForm->request_user_ou_id;
+        $event->ou_signer_user      =   $requestForm->contract_manager_ou_id;
         $event->cardinal_number     =   1;
         $event->status              =   'pending';
         $event->event_type          =   'leader_ship_event';
