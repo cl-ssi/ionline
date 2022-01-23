@@ -4,7 +4,7 @@
     </div>
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
-            <a href="{{ route('indicators.health_goals.list', [19813, 2021]) }}">2021</a> <span class="badge badge-warning">En Desarrollo</span>
+            <a href="{{ route('indicators.health_goals.list', [19813, 2021]) }}">2021</a> <span class="badge badge-warning">En revisión</span>
         </li>
         <li class="list-group-item">
             <a href="{{ route('indicators.19813.2020.index') }}">2020</a>
