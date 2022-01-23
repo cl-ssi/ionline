@@ -43,23 +43,32 @@ class HealthGoalController extends Controller
             $indicator->load('values');
             $indicator->establishments = Establecimiento::year($year)->where('meta_san', 1)->orderBy('comuna')->get();
             $this->loadValuesWithRemSourceLaw19813($year, $indicator);
-        } else {
+        } else { // ley 18834 o 19664
             $healthGoal = HealthGoal::where('law', $law)->where('year', $year)->where('number', $health_goal)->firstOrFail();
-            // $healthGoal->indicators()->with('values')->orderBy('number')->get();
             $healthGoal->load('indicators.values');
-            $this->loadValuesWithRemSource($law, $year, $healthGoal);
+            $this->loadValuesWithRemSource($healthGoal);
         }
         return view('indicators.health_goals.show', compact($law == '19813' ? 'indicator' : 'healthGoal'));
     }
 
-    private function loadValuesWithRemSource($law, $year, $healthGoal)
+    private function loadValuesWithRemSource($healthGoal)
     {
         foreach($healthGoal->indicators as $indicator){
-            $establishment_cods = $indicator->establishment_cods != null ? array_map('trim', explode(',',$indicator->establishment_cods)) : null; //para el filtrado especial de algunas metas
+            $establishment_cods = $indicator->establishment_cods != null ? array_map('trim', explode(',',$indicator->establishment_cods)) : null; //para el filtrado por establecimientos
+            $where_clause = 'WhereIn';
+            if($establishment_cods){
+                foreach($establishment_cods as $key => $value){
+                    if (strpos($value, "!") !== false) {
+                        $establishment_cods[$key] = substr($value, 1); //le quitamos el signo de exclamacion al codigo establecimiento
+                        $where_clause = 'WhereNotIn'; // cualquier codigo de establecimiento que tenga un signo de exclamacion es por que necesitamos consultar al resto de establecimientos
+                    }
+                }
+            }
 
             foreach(array('numerador', 'denominador') as $factor){
                 $factor_cods = $factor == 'numerador' ? $indicator->numerator_cods : $indicator->denominator_cods;
                 $factor_cols = $factor == 'numerador' ? $indicator->numerator_cols : $indicator->denominator_cols;
+                $isRemP = $factor == 'numerador' ? $indicator->numerator_acum_last_year : $indicator->denominator_acum_last_year;
 
                 if($factor_cods != null && $factor_cols != null){
                     //procesamos los datos necesarios para las consultas rem
@@ -69,63 +78,10 @@ class HealthGoalController extends Controller
                     foreach($cols as $col)
                         $raws .= next($cols) ? 'SUM(COALESCE('.$col.', 0)) + ' : 'SUM(COALESCE('.$col.', 0))';
                     $raws .= ' AS valor, Mes';
-
-                    //Es rem P la consulta?
-                    $isRemP = Rem::year($year-1)->select('Mes')
-                                ->when($healthGoal->name == 'Hospital Dr. Ernesto Torres Galdames', function($query){
-                                    return $query->where('IdEstablecimiento', 102100);
-                                })
-                                ->when($healthGoal->name == 'Consultorio General Urbano Dr. Héctor Reyno Gutiérrez', function($query){
-                                    return $query->where('IdEstablecimiento', 102307);
-                                })
-                                ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && Str::contains($indicator->name, 'UEH'), function($query){
-                                    return $query->where('IdEstablecimiento', 102100);
-                                })
-                                ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && $law == '19664' && $establishment_cods == null, function($query){
-                                    return $query->where('IdEstablecimiento','!=', 102100);
-                                })
-                                ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && $law == '19664' && $establishment_cods != null, function($query) use ($establishment_cods){
-                                    return $query->whereIn('IdEstablecimiento', $establishment_cods);
-                                })
-                                ->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->get()->count() == 2;
-                    
-                    if($isRemP){
-                        $acum_last_year = Rem::year($year-1)
-                        ->when($healthGoal->name == 'Hospital Dr. Ernesto Torres Galdames', function($query){
-                            return $query->where('IdEstablecimiento', 102100);
-                        })
-                        ->when($healthGoal->name == 'Consultorio General Urbano Dr. Héctor Reyno Gutiérrez', function($query){
-                            return $query->where('IdEstablecimiento', 102307);
-                        })
-                        ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && Str::contains($indicator->name, 'UEH'), function($query){
-                            return $query->where('IdEstablecimiento', 102100);
-                        })
-                        ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && $law == '19664' && $establishment_cods == null, function($query){
-                            return $query->where('IdEstablecimiento','!=', 102100);
-                        })
-                        ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && $law == '19664' && $establishment_cods != null, function($query) use ($establishment_cods){
-                            return $query->whereIn('IdEstablecimiento', $establishment_cods);
-                        })
-                        ->where('Mes', 12)->whereIn('CodigoPrestacion', $cods)->sum(reset($cols));
-
-                        $factor == 'numerador' ? $indicator->numerator_acum_last_year = $acum_last_year : $indicator->denominator_acum_last_year = $acum_last_year;
-                    }
     
-                    $result = Rem::year($year)->selectRaw($raws)
-                                ->when($healthGoal->name == 'Hospital Dr. Ernesto Torres Galdames', function($query){
-                                    return $query->where('IdEstablecimiento', 102100);
-                                })
-                                ->when($healthGoal->name == 'Consultorio General Urbano Dr. Héctor Reyno Gutiérrez', function($query){
-                                    return $query->where('IdEstablecimiento', 102307);
-                                })
-                                ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && Str::contains($indicator->name, 'UEH'), function($query){
-                                    return $query->where('IdEstablecimiento', 102100);
-                                })
-                                ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && $law == '19664' && $establishment_cods == null, function($query){
-                                    return $query->where('IdEstablecimiento','!=', 102100);
-                                })
-                                ->when($healthGoal->name == 'Dirección Servicio Salud Iquique' && $law == '19664' && $establishment_cods != null, function($query) use ($establishment_cods){
-                                    return $query->whereIn('IdEstablecimiento', $establishment_cods);
+                    $result = Rem::year($healthGoal->year)->selectRaw($raws)
+                                ->when($establishment_cods, function($query) use ($establishment_cods, $where_clause){
+                                    return $query->{$where_clause}('IdEstablecimiento', $establishment_cods);
                                 })
                                 ->when($isRemP, function($query){
                                     return $query->whereIn('Mes', [6,12]);
@@ -141,6 +97,8 @@ class HealthGoalController extends Controller
 
     private function loadValuesWithRemSourceLaw19813($year, $indicator)
     {
+        $establishment_cods = $indicator->establishment_cods != null ? array_map('trim', explode(',',$indicator->establishment_cods)) : null; //para el filtrado especial de algunas metas
+
         foreach(array('numerador', 'denominador') as $factor){
             $factor_cods = $factor == 'numerador' ? $indicator->numerator_cods : $indicator->denominator_cods;
             $factor_cols = $factor == 'numerador' ? $indicator->numerator_cols : $indicator->denominator_cols;
@@ -158,11 +116,11 @@ class HealthGoalController extends Controller
 
                     if($source == 'FONASA'){
                         $result = Percapita::year($year)->selectRaw('COUNT(*)*'.reset($cols).' AS valor, COD_CENTRO')
-                                                ->with(['establecimiento' => function($q){ 
-                                                    return $q->where('meta_san', 1);
+                                                ->with(['establecimiento' => function($q) use ($establishment_cods){ 
+                                                    return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1); //meta_san es un campo que se empezó a ocupar en el año 2021
                                                 }])
-                                                ->whereHas('establecimiento', function($q){
-                                                    return $q->where('meta_san', 1);
+                                                ->whereHas('establecimiento', function($q) use ($establishment_cods){
+                                                    return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1);
                                                 })
                                                 ->whereRaw(implode(' AND ', $cods))
                                                 ->groupBy('COD_CENTRO')->orderBy('COD_CENTRO')->get();
@@ -210,16 +168,18 @@ class HealthGoalController extends Controller
 
                         //Es rem P la consulta?
                         $isRemP = Rem::year($year-1)->select('Mes')
-                                    ->whereHas('establecimiento',function($q){ return $q->where('meta_san', 1); })
+                                    ->whereHas('establecimiento',function($q) use ($establishment_cods){ 
+                                        return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1);
+                                    })
                                     ->whereIn('CodigoPrestacion', $cods)->groupBy('Mes')->get()->count() == 2;
                         if($isRemP) $factor == 'numerador' ? $indicator->isNumRemP = true : $indicator->isDenRemP = true;
 
                         $result = Rem::year($year)->selectRaw($raws)
-                                    ->with(['establecimiento' => function($q){ 
-                                        return $q->where('meta_san', 1);
+                                    ->with(['establecimiento' => function($q) use ($establishment_cods){ 
+                                        return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1);
                                     }])
-                                    ->whereHas('establecimiento', function($q){
-                                        return $q->where('meta_san', 1);
+                                    ->whereHas('establecimiento', function($q) use ($establishment_cods){
+                                        return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1);
                                     })
                                     ->when($isRemP, function($query){
                                         return $query->whereIn('Mes', [6,12]);
@@ -236,16 +196,18 @@ class HealthGoalController extends Controller
                         if($cods2 != null){
                             //Es rem P la consulta?
                             $isRemP = Rem::year($year-1)->select('Mes')
-                                        ->whereHas('establecimiento',function($q){ return $q->where('meta_san', 1); })
+                                        ->whereHas('establecimiento',function($q) use ($establishment_cods){ 
+                                            return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1); 
+                                        })
                                         ->whereIn('CodigoPrestacion', $cods2)->groupBy('Mes')->get()->count() == 2;
                             if($isRemP) $factor == 'numerador' ? $indicator->isNumRemP = true : $indicator->isDenRemP = true;
 
                             $result = Rem::year($year)->selectRaw($raws)
-                                        ->with(['establecimiento' => function($q){ 
-                                            return $q->where('meta_san', 1);
+                                        ->with(['establecimiento' => function($q) use ($establishment_cods){ 
+                                            return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1);
                                         }])
-                                        ->whereHas('establecimiento', function($q){
-                                            return $q->where('meta_san', 1);
+                                        ->whereHas('establecimiento', function($q) use ($establishment_cods){
+                                            return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1);
                                         })
                                         ->when($isRemP, function($query){
                                             return $query->whereIn('Mes', [6,12]);
