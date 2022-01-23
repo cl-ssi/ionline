@@ -19,6 +19,7 @@ use Livewire\TemporaryUploadedFile;
 use App\Rrhh\Authority;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\NewRequestFormNotification;
+use App\Mail\RequestFormSignNotification;
 
 class RequestFormCreate extends Component
 {
@@ -314,24 +315,36 @@ class RequestFormCreate extends Component
           EventRequestform::createFinanceEvent($req);
           EventRequestform::createSupplyEvent($req);
 
-          //Envío de notificación.
-
+          //Envío de notificación a Adm de Contrato y abastecimiento.
           $mail_contract_manager = User::select('email')
             ->where('id', $req->contract_manager_id)
             ->first();
 
-          // //manager
-          // $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->contract_manager_ou_id, $date, $type);
-          // //secretary
-          // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->contract_manager_ou_id, $date, $type_adm);
+          if($mail_contract_manager){
+              $emails = [$mail_contract_manager];
+              Mail::to($emails)
+                ->cc(env('APP_RF_MAIL'))
+                ->send(new NewRequestFormNotification($req));
+          }
+          //---------------------------------------------------------
 
-          $emails = [$mail_contract_manager];
+          //Envío de notificación para visación.
+          $now = Carbon::now();
+          //manager
+          $type = 'manager';
+          $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type);
+          //secretary
+          $type_adm = 'secretary';
+          $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
 
-          //dd($emails);
+          $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
 
-          Mail::to($emails)
-            ->cc(env('APP_RF_MAIL'))
-            ->send(new NewRequestFormNotification($req));
+          if($mail_notification_ou_secretary && $mail_notification_ou_secretary){
+              Mail::to($emails)
+                ->cc(env('APP_RF_MAIL'))
+                ->send(new RequestFormSignNotification($req));
+          }
+          //---------------------------------------------------------
 
           session()->flash('info', 'Formulario de requrimiento N° '.$req->id.' fue creado con exito.');
         }
