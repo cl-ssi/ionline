@@ -64,8 +64,8 @@
 	<div class="col-md-6">
 		@foreach($users as $user)
 
-		<address class="border p-2 mb-3">
-			<span class="raya azul">━━━━━</span><span class="raya rojo">━━━━━━━━</span><br>
+		<address class="border p-2 mb-3 small">
+			<span class="raya azul">━━━</span><span class="raya rojo">━━━━━</span><br>
 			<strong>{{ $user->fullName }}</strong>
 
 			@if($user->position)
