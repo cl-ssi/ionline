@@ -13,13 +13,13 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('rrhh.users.directory') }}">
-                        <i class="fas fa-address-book" title="Teléfonos"></i> Tel.
+                        <i class="fas fa-address-book" title="Teléfonos"></i>
                     </a>
                 </li>
 
                 <li class="nav-item {{ active('calendars') }}">
                     <a class="nav-link" href="{{ route('calendars') }}">
-                        <i class="fas fa-calendar-alt" title="Calendarios"></i> Cal.
+                        <i class="fas fa-calendar-alt" title="Calendarios"></i>
                     </a>
                 </li>
 
