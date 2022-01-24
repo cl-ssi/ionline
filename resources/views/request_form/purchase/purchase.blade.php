@@ -376,7 +376,80 @@
 </div>
 @endif
 
-<br><br><br>
+<br>
+
+@if(Str::contains($requestForm->subtype, 'tiempo'))
+<div class="row">
+    <div class="col-sm">
+        <div class="table-responsive">
+            <h6><i class="fas fa-shopping-cart"></i> Historial de bienes y/o servicios ejecución inmediata</h6>
+            <table class="table table-sm table-striped table-bordered small">
+                <thead class="text-center">
+                    <tr>
+                        <th>Item</th>
+                        <th>ID</th>
+                        <th style="width: 7%">Fecha Creación</th>
+                        <th>Tipo</th>
+                        <th>Descripción</th>
+                        <th>Usuario Gestor</th>
+                        <th>Mecanismo de Compra</th>
+                        <th>Items</th>
+                        <th>Monto</th>
+                        <!-- <th>Estado</th> -->
+                        <!-- <th></th>  -->
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($requestForm->children as $child)
+                    <tr>
+                        <td>{{ $key+1 }}</td>
+                        <td><a href="{{ route('request_forms.supply.purchase', $child) }}">{{ $child->id }}</a><br>
+                        @switch($child->getStatus())
+                                    @case('Pendiente')
+                                        <i class="fas fa-clock"></i>
+                                        @break
+
+                                    @case('Aprobado')
+                                        <span style="color: green;">
+                                          <i class="fas fa-check-circle" title="{{ $requestForm->getStatus() }}"></i>
+                                        </span>
+                                        @break
+
+                                    @case('Rechazado')
+                                        <a href="">
+                                            <span style="color: Tomato;">
+                                                <i class="fas fa-times-circle" title="{{ $requestForm->getStatus() }}"></i>
+                                            </span>
+                                        </a>
+                                        @break
+
+                                @endswitch
+                        </td>
+                        <td>{{ $child->created_at->format('d-m-Y H:i') }}</td>
+                        <td>{{ $child->SubtypeValue }}</td>
+                        <td><a href="{{ route('request_forms.supply.purchase', $child) }}">{{ $child->name }}</a></td>
+                        <td>{{ $child->user ? $child->user->FullName : 'Usuario eliminado' }}<br>
+                        {{ $child->userOrganizationalUnit ? $child->userOrganizationalUnit->name : 'Usuario eliminado' }}</td>
+                        <td>{{ $child->purchaseMechanism->name }}</td>
+                        <td align="center">{{ $child->quantityOfItems() }}</td>
+                        <td align="right">${{ number_format($child->estimated_expense,0,",",".") }}</td>
+                    </tr>
+                  @empty
+                    <tr><td colspan="100%" class="text-center">No existen bienes y/o servicios de ejecución inmediata asociados a este formulario de requerimiento.</td></tr>
+                  @endforelse
+                </tbody>
+                {{--<tfoot>
+                    <tr>
+                      <td colspan="10"></td>
+                      <th class="text-right">Valor Total</td>
+                      <th class="text-right">${{ number_format($requestForm->purchasingProcess->getExpense(),0,",",".") }}</td>
+                    </tr>
+                </tfoot>--}}
+            </table>
+        </div>
+    </div>
+</div>
+@endif
 
 
 @endsection
