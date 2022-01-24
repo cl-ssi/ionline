@@ -67,7 +67,7 @@ class ProgramApsController extends Controller
                             });
                     })
                     ->whereIn('CodigoPrestacion', $cods)
-                    ->whereIn('Mes',[1,2,3,4,5,6,7,8,9,10,11])
+                    // ->whereIn('Mes',[1,2,3,4,5,6,7,8,9,10,11])
                     ->whereNotIn('IdEstablecimiento', ['102100','102600','102601','102602','102011'])
                     ->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
 
