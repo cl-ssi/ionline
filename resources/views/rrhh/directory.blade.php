@@ -66,7 +66,7 @@
 
 		<address class="border p-2 mb-3">
 			<span class="raya azul">━━━━━</span><span class="raya rojo">━━━━━━━━</span><br>
-			<strong>{{ $user->name }} {{ $user->fathers_family }} {{ $user->mothers_family }}</strong>
+			<strong>{{ $user->fullName }}</strong>
 
 			@if($user->position)
 				<span class="text-muted">
