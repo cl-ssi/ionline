@@ -272,6 +272,12 @@
 
 @endif
 
+<!-- Trato Directo -->
+@if($requestForm->purchase_mechanism_id == 3)
+    @include('request_form.purchase.partials.direct_deal_form')
+
+@endif
+
 <!-- LICITACIÓN PUBLICA -->
 @if($requestForm->purchase_mechanism_id == 4 && !$requestForm->father)
     @include('request_form.purchase.partials.tender_form')
