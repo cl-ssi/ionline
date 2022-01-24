@@ -5,17 +5,17 @@
 @section('content')
 
 <style>
-	.raya.rojo {
+	.raya_rojo {
 		color: #EE3A43;
 		display: inline-block;
-		font-family: 'Helvetica', sans-serif;
-		font-size: 24px;
+		font-family: "Arial Black",sans-serif;
+		font-size: 24.0pt;
 	}
-	.raya.azul {
+	.raya_azul {
 		color: #0168B3;
 		display: inline-block;
-		font-family: 'Helvetica', sans-serif;
-		font-size: 24px;
+		font-family: "Arial Black",sans-serif;
+		font-size: 24.0pt;
 	}
 }
 </style>
@@ -64,12 +64,14 @@
 	<div class="col-md-6">
 		@foreach($users as $user)
 
-		<address class="border p-2 mb-3 small">
-			<span class="raya azul">━━━</span><span class="raya rojo">━━━━━</span><br>
-			<strong>{{ $user->fullName }}</strong>
+		<address class="border p-2 mb-3">
+		
+			<span class="raya_azul">━━━</span><span class="raya_rojo">━━━━━</span><br>
+
+			<span class="small"><strong>{{ $user->fullName }}</strong></span>
 
 			@if($user->position)
-				<span class="text-muted">
+				<span class="text-muted small">
 					<br>
 					@if($user->position == 'Jefe' OR
 						$user->position == 'Director' OR
@@ -84,23 +86,23 @@
 			
 			@if($user->organizationalunit)
 				<br>
-				{{ $user->organizationalunit->name }}
+				<span class="small">{{ $user->organizationalunit->name }}</span>
 			@endif
 
 
 			@foreach($user->telephones as $telephone)
 				<br>
-				Teléfono: <a href="tel:+56{{ $telephone->number }}">+56 {{ $telephone->number }}</a> /  
-				Anexo: {{ $telephone->minsal }}
+				<span class="small">Teléfono: <a href="tel:+56{{ $telephone->number }}">+56 {{ $telephone->number }}</a> /  
+				Anexo: {{ $telephone->minsal }}</span>
 			@endforeach
 
 			@if($user->email)
 				<br>
-				<a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
+				<span class="small"><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></span>
 			@endif
 
 			<br>
-			<strong class="text-muted"><br>{{ env('APP_SS') }}<br>Gobierno de Chile</strong>
+			<span class="small"><strong class="text-muted"><br>{{ env('APP_SS') }}<br>Gobierno de Chile</strong></span>
 
 		</address>
 		@endforeach
