@@ -40,21 +40,17 @@ class UserController extends Controller
         if ($request->get('ou')) {
             $users = User::getUsersBySearch($request->name)
                 ->with('organizationalunit')
-                ->has('telephones')
                 ->where('organizational_unit_id',$request->get('ou'))
+                ->withTrashed(false)
                 ->orderBy('name')
-                ->paginate(20);
+                ->paginate(40);
             //$users = User::has('telephones')->where('organizational_unit_id',$request->get('ou'))->orderBy('name')->paginate(20);
             //$users = $users->has('telephones')->where('organizational_unit_id',$request->get('ou'))->orderBy('name')->paginate(20);
         }
         else {
             //$users = User::has('telephones')->Search($request->get('name'))->orderBy('name','Asc')->paginate(20);
             //$users = $users->has('telephones')->Search($request->get('name'))->orderBy('name','Asc')->paginate(20);
-            $users = User::getUsersBySearch($request->name)
-                ->with('organizationalunit')
-                ->has('telephones')
-                ->orderBy('name','Asc')
-                ->paginate(20);
+            $users = collect();
         }
 
         /* Devuelve sólo Dirección, ya que de él dependen todas las unidades organizacionales hacia abajo */
