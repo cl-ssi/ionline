@@ -15,7 +15,7 @@
                     <label>Administrador de Contrato:</label><br>
                     <div wire:ignore id="for-bootstrap-select">
                       <select wire:model.defer="contractManagerId" name="contractManagerId" data-container="#for-bootstrap-select"
-                        class="form-control form-control-sm selectpicker show-tick" data-live-search="true" data-size="5" required>
+                        class="form-control form-control-sm selectpicker show-tick" data-live-search="true" data-size="5" {{ $editRF ? 'disabled' : 'required' }} >
                         <option>Seleccione...</option>
                         @foreach($users as $user)
                             <option value="{{ $user->id }}">{{ ucfirst(trans($user->FullName)) }}</option>
@@ -66,11 +66,10 @@
             </div>
 
             <div class="form-row">
-
                     <fieldset class="form-group col-sm-4">
                         <label for="for_calidad_juridica">Autoriza Jefatura Superior</label>
                         <div class="mt-1 ml-4">
-                            <input class="form-check-input" type="checkbox" value="1" wire:model="superiorChief" name="superiorChief">
+                            <input class="form-check-input" type="checkbox" value="1" wire:model="superiorChief" name="superiorChief" @if($editRF) disabled @endif>
                             <label class="form-check-label" for="flexCheckDefault">
                               Sí
                             </label>
