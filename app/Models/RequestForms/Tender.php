@@ -31,4 +31,9 @@ class Tender extends Model implements Auditable
     {
         return $this->hasMany(AttachedFile::class);
     }
+
+    public function purchases()
+    {
+        return $this->hasMany(TenderPurchase::class);
+    }
 }
