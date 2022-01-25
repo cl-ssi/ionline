@@ -22,9 +22,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\File;
 use PDF;
 use Illuminate\Support\Facades\Storage;
-use App\Mail\PurchaserNotification;
-
+use Illuminate\Support\Str;
 use App\User;
+use App\Mail\PurchaserNotification;
 
 class RequestFormController extends Controller {
 
@@ -258,7 +258,7 @@ class RequestFormController extends Controller {
         $newRequestForm->request_user_id = Auth::id();
         $newRequestForm->request_user_ou_id = Auth::user()->organizationalUnit->id;
         $newRequestForm->estimated_expense = 0;
-        $newRequestForm->subtype = 'suministros';
+        $newRequestForm->subtype = Str::contains($requestForm->subtype, 'bienes') ? 'bienes ejecución inmediata' : 'servicios ejecución inmediata';
         $newRequestForm->sigfe = null;
         $newRequestForm->status = 'pending';
         $newRequestForm->signatures_file_id = null;

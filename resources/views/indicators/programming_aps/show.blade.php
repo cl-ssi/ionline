@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @php
-    $months = array (1=>'Ene',2=>'Feb',3=>'Mar',4=>'Abr',5=>'May',6=>'Jun',7=>'Jul',8=>'Ago',9=>'Sep',10=>'Oct',11=>'Nov');
+    $months = array (1=>'Ene',2=>'Feb',3=>'Mar',4=>'Abr',5=>'May',6=>'Jun',7=>'Jul',8=>'Ago',9=>'Sep',10=>'Oct',11=>'Nov',12=>'Dic');
     $comuna = $commune_id != 0 ? $program_aps->communes[$commune_id] : 'RESUMEN';
 @endphp
 @section('title', $program_aps->name)
@@ -39,11 +39,11 @@
         </a>
     </li>
 </ul>
-
+</div> <!-- cierre div main content -->
 <!-- Tab panes -->
 @if($commune_id != 0)
-<div class="tab-content mt-3">
-    <h4>
+<div class="tab-content m-3">
+    <h4 class="mb-3">
         <button id="export" type="button" class="btn btn-outline-info btn-sm"
             onclick="tableToExcel('tabla_{{ str_replace(" ","_",$comuna) }}', 'Hoja 1')">
             <i class="fas fa-download"></i>
@@ -139,8 +139,8 @@
     @endforeach
 </div>
 @else
-<div class="tab-content mt-3">
-    <h4>
+<div class="tab-content m-3">
+    <h4 class="mb-3">
         <button type="button" class="btn btn-outline-info btn-sm"
             onclick="tableToExcel('tabla_resumen', 'Hoja 1')">
             <i class="fas fa-download"></i>

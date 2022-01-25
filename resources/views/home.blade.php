@@ -5,50 +5,35 @@
 @section('content')
 
 <style>
+    .bg-cover {
+        background-attachment: static;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
     .jumbotron {
-    background-image: url("{{ asset('images/new-year.webp') }}");
-    background-size: cover;
-    /* opacity: 0.5; */
-}
+        background-image: linear-gradient(to bottom, rgba(255,255,255,0.8) 0%,rgba(255,255,255,0.9) 100%), 
+            url("{{ asset('images/new-year.webp') }}");
+        /* background-size: cover; */
+        /* opacity: 0.5; */
+    }
 </style>
-<div class="jumbotron mt-4 text-light">
-    <div class="row">
-        <div class="col-6">
-            <!-- <h1 class="display-4">Intranet Online</h1> -->
-            <!-- <p class="lead">{{ env('APP_SS') }}</p> -->
-            <h2 class="display-4"></h2>
-            <p class="lead">
-            <br><br><br><br><br><br><br><br>
 
-                <br><br><br><br><br><br>
-            </p>
-            
+<div class="jumbotron mt-4 bg-cover">
+    <div class="row">
+        <div class="col-9">
+            <h1 class="display-4">Intranet Online</h1>
+            <p class="lead">{{ env('APP_SS') }}</p>
+
             <hr class="my-4">
 
             <p>Contacto:
                 <a href="mailto:{{ env('APP_SS_EMAIL') }}">{{ env('APP_SS_EMAIL') }}</a>
             </p>
-            <!-- <ol>
-                <h6>Pasos para solicitud de Firma Electrónica del Gobierno (OTP)</h6>
-                <li>
-                Solicitar a Yeannett Valdivia o Pamela Villagrán crear usuario en sistema de firma digital.
-                </li>
-                <li>
-                Ingresar al link <a href="https://firma.digital.gob.cl/ra/" target="_blank">firma.digital.gob.cl</a> usando clave única y obtener un certificado de "propósito general".
-                </li>
-                <li>
-                Contactar al ministro de fe Paula Tapia o José Donoso para solicitar la aprobación por parte del ministro de fe.
-                </li>
-                <li>
-                Volver a ingresar a <a href="https://firma.digital.gob.cl/ra/" target="_blank">firma.digital.gob.cl</a> y escanear el código QR de certificado generado, para escanear utilizar alguna aplicación autentificadora, ejemplo Google Authenticator.<br>
-                <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Android</a><br>
-                <a href="https://apps.apple.com/cl/app/google-authenticator/id388497605">I-Phone</a>
-                </li>
-            </ol> -->
         </div>
         <div class="col-md-3 col-12">
-            <!-- <img src="{{ asset('images/christmas-tree.jpg') }}" class="img-thumbnail rounded" alt="Arbol de navidad">
-            <img src="{{ asset('images/logo_blanco.png') }}" alt="Logo {{ env('APP_SS') }}" style="background-color: rgb(0, 108, 183);" class="img-thumbnail"> -->
+            <!-- <img src="{{ asset('images/christmas-tree.jpg') }}" class="img-thumbnail rounded" alt="Arbol de navidad"> -->
+            <img src="{{ asset('images/logo_blanco.png') }}" alt="Logo {{ env('APP_SS') }}" style="background-color: rgb(0, 108, 183);" class="img-thumbnail">
         </div>
     </div>
 
@@ -66,19 +51,46 @@
         <hr>
         <pre>{{ $phrase ? $phrase->phrase : '' }}</pre>
     </div>
+
+    <h6>Pasos para solicitud de Firma Electrónica del Gobierno (OTP)</h6>
+    <ol>
+        <li>
+            Solicitar a Yeannett Valdivia (yeannett.valdivia@redsalud.gob.cl) o 
+            Pamela Villagrán la creación del usuario firma.digital.gob.cl indicando los siguientes datos:
+        </li>
+        <ul>
+            <li>Run</li>
+            <li>Nombre completo</li>
+            <li>Correo electrónico</li>
+            <li>Cargo</li>
+        </ul>
+        <li>
+            Ingresar al link <a href="https://firma.digital.gob.cl/ra/" target="_blank">firma.digital.gob.cl</a> 
+            usando su clave única y obtener un certificado de "propósito general".
+        </li>
+        <li>
+        Contactar al ministro de fe Paula Tapia o José Donoso para solicitar la aprobación por parte del ministro de fe.
+        </li>
+        <li>
+        Volver a ingresar a <a href="https://firma.digital.gob.cl/ra/" target="_blank">firma.digital.gob.cl</a> 
+        y escanear el código QR de certificado generado, para escanear utilizar alguna aplicación de segundo factor, como Google Authenticator: 
+        <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2">Android</a> - 
+        <a href="https://apps.apple.com/cl/app/google-authenticator/id388497605">iPhone</a>
+        </li>
+    </ol>
 </div>
 
-    @endsection
+@endsection
 
-    @section('custom_js')
+@section('custom_js')
 
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("body").keydown(function(event) {
-                /* 65=a, 74=j*/
-                if (event.which == 65 || event.which == 74) $("#developers").toggle("slow");
-            });
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("body").keydown(function(event) {
+            /* 65=a, 74=j*/
+            if (event.which == 65 || event.which == 74) $("#developers").toggle("slow");
         });
-    </script>
+    });
+</script>
 
-    @endsection
+@endsection

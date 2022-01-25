@@ -56,6 +56,10 @@ class RequestForm extends Model implements Auditable
       return $this->belongsTo(RequestForm::class, 'request_form_id');
     }
 
+    public function children(){
+      return $this->hasMany(RequestForm::class);
+    }
+
     public function user() {
       return $this->belongsTo(User::class, 'request_user_id');
   }
@@ -163,7 +167,7 @@ class RequestForm extends Model implements Auditable
                 break;
 
             case "bienes ejecución tiempo":
-                return '>Bienes Ejecución En Tiempo';
+                return 'Bienes Ejecución En Tiempo';
                 break;
 
             case "servicios ejecución inmediata":

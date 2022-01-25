@@ -2,12 +2,13 @@
 
 namespace App\Models\RequestForms;
 
+use App\Models\Parameters\Supplier;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
 
-class TenderPurchase extends Model
+class TenderPurchase extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     use HasFactory;
@@ -24,4 +25,11 @@ class TenderPurchase extends Model
     ];
 
     protected $table = 'arq_tender_purchases';
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class);
+    }
+
+
 }
