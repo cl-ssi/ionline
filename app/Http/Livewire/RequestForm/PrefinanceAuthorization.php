@@ -8,7 +8,8 @@ use App\Models\RequestForms\EventRequestForm;
 use App\Models\Parameters\BudgetItem;
 use App\Rrhh\Authority;
 use Carbon\Carbon;
-//use App\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RequestFormSignNotification;
 
 class PrefinanceAuthorization extends Component
 {
@@ -69,14 +70,36 @@ class PrefinanceAuthorization extends Component
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
           //  $this->requestForm->status = 'pending';
-           $this->requestForm->program = $this->program;
-           $this->requestForm->sigfe = $this->sigfe;
-           $this->requestForm->save();
-           $event->signature_date = Carbon::now();
-           $event->position_signer_user = $this->position;
-           $event->status  = 'approved';
-           $event->signerUser()->associate(auth()->user());
-           $event->save();
+          $this->requestForm->program = $this->program;
+          $this->requestForm->sigfe = $this->sigfe;
+          $this->requestForm->save();
+          $event->signature_date = Carbon::now();
+          $event->position_signer_user = $this->position;
+          $event->status  = 'approved';
+          $event->signerUser()->associate(auth()->user());
+          $event->save();
+
+          $nextEvent = $event->requestForm->eventRequestForms->where('cardinal_number', $event->cardinal_number + 1);
+
+           if(!$nextEvent->isEmpty()){
+               //Envío de notificación para visación.
+               $now = Carbon::now();
+               //manager
+               $type = 'manager';
+               $mail_notification_ou_manager = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type);
+               //secretary
+               // $type_adm = 'secretary';
+               // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type_adm);
+
+               $emails = [$mail_notification_ou_manager->user->email];
+
+               if($mail_notification_ou_manager){
+                  Mail::to($emails)
+                    ->cc(env('APP_RF_MAIL'))
+                    ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
+               }
+           }
+
            session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' AUTORIZADO correctamente!');
            return redirect()->route('request_forms.pending_forms');
           }

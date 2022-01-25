@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\File;
 use PDF;
 use Illuminate\Support\Facades\Storage;
+use App\Mail\PurchaserNotification;
 
 use App\User;
 
@@ -231,6 +232,15 @@ class RequestFormController extends Controller {
         }
         $requestForm->signatures_file_id = $signaturesFile->id;
         $requestForm->save();
+
+        //Envío de notificación para comprador.
+        if($requestForm->purchasers->first()->email){
+            Mail::to($requestForm->purchasers->first()->email)
+              ->cc(env('APP_RF_MAIL'))
+              ->send(new PurchaserNotification($requestForm));
+        }
+        //--------------------------------------
+
         session()->flash('success', $message);
         return redirect()->route('request_forms.pending_forms');
     }

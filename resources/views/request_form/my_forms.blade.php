@@ -202,7 +202,7 @@
                                   @endif
                               @else
                                   <a href="{{ route('request_forms.show', $requestForm->id) }}"
-                                      class="btn btn-outline-secondary btn-sm" title="Selección"><i class="fas fa-eye"></i>
+                                      class="btn btn-outline-secondary btn-sm" title="Ir"><i class="fas fa-eye"></i>
                                   </a>
                                   <a href="{{ route('request_forms.create_form_document', $requestForm) }}" class="btn btn-outline-secondary btn-sm" title="Formulario" target="_blank">
                                       <i class="fas fa-file-alt"></i>

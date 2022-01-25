@@ -46,6 +46,29 @@ class EventRequestForm extends Model
       }
     }
 
+    public function getEventTypeValueAttribute(){
+        switch ($this->event_type) {
+            case "leader_ship_event":
+                return 'Firma Jefatura Directa';
+                break;
+            case "superior_leader_ship_event":
+                return 'Firma Jefatura Superior';
+                break;
+            case "pre_finance_event":
+                return 'Refrendación Presupuestaria';
+                break;
+            case "finance_event":
+                return 'Firma Finanzas';
+                break;
+            case "supply_event":
+                return 'Firma Abastecimiento';
+                break;
+            case "budget_event":
+                return 'Firma Solicitud Nuevo Presupuesto';
+                break;
+        }
+    }
+
     public static function createLeadershipEvent(RequestForm $requestForm){
         $event                      =   new EventRequestForm();
         $event->ou_signer_user      =   $requestForm->contract_manager_ou_id;

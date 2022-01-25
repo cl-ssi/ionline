@@ -9,15 +9,14 @@
   <br>
 
   <p>A través del presente, se informa que se encuentra disponible en {{ env('APP_NAME') }}
-    un formulario de requerimiento de compras correspondiente a su Unidad Organizacional, favor ingresar
-    al módulo de <strong>Abastecimento</strong> para aceptar o declinar la Solicitud.
+    un formulario de requerimiento de compras pendiente de firma digital, favor ingresar
+    al módulo de <strong>Abastecimento</strong> para firmar documento.
   </p>
 
   <ul>
       <li><strong>Nº Solicitud</strong>: {{ $req->id }}</li>
       <li><strong>Fecha Solicitud</strong>: {{ $req->created_at->format('d-m-Y H:i:s') }}</li>
       <li><strong>Nombre Solicitud</strong>: {{ $req->name }}</li>
-      <li><strong>Tipo de Visación</strong>: {{ $event->EventTypeValue }}</li>
   </ul>
 
   <hr>
