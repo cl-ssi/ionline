@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        {{ $requestForm->purchaseMechanism->name }} - <strong>{{ $requestForm->purchaseType->name }}</strong>s
+        {{ $requestForm->purchaseMechanism->name }} - <strong>{{ $requestForm->purchaseType->name }}</strong>
     </div>
 
     <div class="card-body">
