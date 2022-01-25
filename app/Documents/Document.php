@@ -5,14 +5,20 @@ namespace App\Documents;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Document extends Model
+
+class Document extends Model implements Auditable
 {
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
+    use \OwenIt\Auditing\Auditable;
+    use SoftDeletes;
+
+
     protected $fillable = [
         'number', 'date', 'type', 'antecedent', 'responsible', 'subject',
         'from', 'for', 'greater_hierarchy', 'distribution', 'content', 'file_to_sign_id',
@@ -126,7 +132,6 @@ class Document extends Model
         return $this->belongsTo('App\Models\Documents\SignaturesFile', 'file_to_sign_id');
     }
 
-    use SoftDeletes;
 
     /**
      * The attributes that should be mutated to dates.
