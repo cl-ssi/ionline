@@ -157,49 +157,55 @@
                     <p>No existen archivos adjuntos a esta licitación.</p>
                     @endforelse
                 </div>
-                @if(Str::contains($requestForm->subtype, 'inmediata'))
-                <br>
-                <h6><i class="fas fa-shopping-cart" aria-hidden="true"></i> Historial de Ordenes de Compra</h6>
-                <div class="table-responsive">
-                    <table class="table table-sm table-striped table-bordered small">
-                        <thead class="text-center">
-                            <tr>
-                                <th>Item</th>
-                                <th>ID OC</th>
-                                <th>Fecha OC</th>
-                                <th>Fecha OC enviada a proveedor</th>
-                                <th>Fecha OC aceptada</th>
-                                <th>Fecha estimada entrega</th>
-                                <th>Fecha OC recepción conforme</th>
-                                <th>Descripción</th>
-                                <th>RUT proveedor</th>
-                                <th>Nombre proveedor</th>
-                                <th>Monto</th>
-                                <!-- <th></th>  -->
-                            </tr>
-                        </thead>
+            @endif
+
+            @if($detail->pivot->immediatePurchase)
+            <div class="table-responsive">
+                    <table class="table table-sm table-striped table-bordered">
                         <tbody>
-                            @forelse($detail->pivot->tender->purchases as $purchase)
                             <tr>
-                                <td>{{ $key+1 }}</td>
-                                <td>{{ $purchase->po_id }}</td>
-                                <td>{{ $purchase->po_sent_date->format('d-m-Y') ?? '' }}</td>
-                                <td>{{ $purchase->po_sent_date->format('d-m-Y') ?? '' }}</td>
-                                <td>{{ $purchase->po_accepted_date->format('d-m-Y') ?? '' }}</td>
-                                <td>{{ $purchase->estimated_delivery_date->format('d-m-Y') ?? '' }}</td>
-                                <td>{{ $purchase->po_with_confirmed_receipt_date->format('d-m-Y') ?? '' }}</td>
-                                <td>{{ $purchase->description }}</td>
-                                <td>{{ number_format($purchase->supplier->run,0,",",".") }}-{{ $purchase->supplier->dv }}</td>
-                                <td>{{ $purchase->supplier->name }}</td>
-                                <td>{{ number_format($purchase->po_amount,0,",",".") }}</td>
+                                <th class="table-active" style="width: 33%">ID OC</th>
+                                <td>{{ $detail->pivot->immediatePurchase->po_id }}</td>
                             </tr>
-                            @empty
-                                <tr><td colspan="100%" class="text-center">No existen Ordenes de compra adjuntos a esta licitación.</td></tr>
-                            @endforelse
+                            <tr>
+                                <th class="table-active" scope="row">Descripción</th>
+                                <td>{{ $detail->pivot->immediatePurchase->description }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">RUT proveedor</th>
+                                <td>{{ number_format($detail->pivot->immediatePurchase->supplier->run,0,",",".") }}-{{ $detail->pivot->immediatePurchase->supplier->dv }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Nombre proveedor</th>
+                                <td>{{ $detail->pivot->immediatePurchase->supplier->name }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Fecha OC enviada a proveedor</th>
+                                <td>{{ $detail->pivot->immediatePurchase->po_sent_date->format('d-m-Y') ?? '' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" scope="row">Fecha OC aceptada</th>
+                                <td>{{ $detail->pivot->immediatePurchase->po_accepted_date->format('d-m-Y') ?? '' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" scope="row">Fecha estimada entrega</th>
+                                <td>{{ $detail->pivot->immediatePurchase->estimated_delivery_date->format('d-m-Y') ?? '' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" scope="row">Fecha OC recepción conforme</th>
+                                <td>{{ $detail->pivot->immediatePurchase->po_with_confirmed_receipt_date->format('d-m-Y') ?? '' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Monto total</th>
+                                <td>${{ number_format($detail->pivot->immediatePurchase->po_amount,0,",",".") }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Registrado por</th>
+                                <td>{{ $detail->pivot->user->fullName ?? '' }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-                @endif
             @endif
             </div>
         </div>
