@@ -33,25 +33,65 @@
                   @endforeach
               </select>
           </fieldset>
-          <fieldset class="form-group col-sm-3">
+            <fieldset class="form-group col-sm-3">
                 <label for="">Monto de la OC:</label>
                 <input type="number" class="form-control form-control-sm">
             </fieldset>
             <fieldset class="form-group col-sm-3">
                 <label for="">Fecha Estimada de Entrega:</label>
                 <input type="date" class="form-control form-control-sm">
+            </fieldset>            
+        </div>
+        <!-- Datos que comparten lo siguiente
+        TRATO DIRECTO MAYOR A 30 Y MENOR A 1.000 UTM
+        y
+        TRATO DIRECTO MAYOR A 1.000 Y MENOR A 5.000 UTM -->
+        @if($requestForm->purchase_type_id == 8 or $requestForm->purchase_type_id == 9)
+        <div class="form-row">
+            <fieldset class="form-group col-sm-3">
+                <label for="">N° Resolución Trato Directo:</label>
+                <input type="number" class="form-control form-control-sm">
             </fieldset>
+
             <fieldset class="form-group col-sm-6">
-                <label for="forFile">Adjuntar Orden de Compra</label>
-                <input type="file" class="form-control-file" id="forFile" name="" >
+              <label for="for_supplier" >Estado de Compra</label>
+              <select name="supplier_id" id="for_supplier_id" class="form-control form-control-sm" required>
+                  <option value="">Seleccione...</option>
+                      <option value="Suministro">Suministro</option>
+                      <option value="Compra Inmediata">Compra Inmediata</option>
+              </select>
             </fieldset>
         </div>
 
-        @if($requestForm->purchase_type_id == 1)
+            <div class="form-row">
+            <fieldset class="form-group col-sm-6">
+                <label for="forFile">Adjuntar Trato Directo</label>
+                <input type="file" class="form-control-file" id="forFile" name="" required>
+            </fieldset>
+
+            <fieldset class="form-group col-sm-6">
+                <label for="forFile">Adjuntar Orden de Compra (Si procede)</label>
+                <input type="file" class="form-control-file" id="forFile" name="" >
+            </fieldset>
 
         @endif
 
+        @if($requestForm->purchase_type_id == 9)
+            <fieldset class="form-group col-sm-6">
+                <label for="forFile">Adjuntar archivo Res. de Contrato</label>
+                <input type="file" class="form-control-file" id="forFile" name="resol_contract_file" required>
+            </fieldset>
+
+            <fieldset class="form-group col-sm-6">
+                <label for="forFile">Adjuntar archivo Boleta de Garantía</label>
+                <input type="file" class="form-control-file" id="forFile" name="guarantee_ticket_file" required>
+            </fieldset>
         @endif
+
+            
+        </div>
+        
+
 
     </div>
 
