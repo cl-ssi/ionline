@@ -167,7 +167,11 @@
             @endif
 
             @if($requestForm->purchase_mechanism_id == 4)
-            <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_tender', $requestForm) }}" enctype="multipart/form-data">
+                @if($requestForm->father)
+                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}">
+                @else
+                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_tender', $requestForm) }}" enctype="multipart/form-data">
+                @endif
             @endif
 
             @csrf
@@ -273,14 +277,23 @@
 @endif
 
 <!-- Trato Directo -->
+@if($requestForm->purchase_mechanism_id == 2)
+    @include('request_form.purchase.partials.convenio_marco_form')
+@endif
+
+<!-- Trato Directo -->
 @if($requestForm->purchase_mechanism_id == 3)
     @include('request_form.purchase.partials.direct_deal_form')
-
 @endif
 
 <!-- LICITACIÓN PUBLICA -->
 @if($requestForm->purchase_mechanism_id == 4 && !$requestForm->father)
     @include('request_form.purchase.partials.tender_form')
+@endif
+
+<!-- COMPRA INMEDIATA -->
+@if($requestForm->purchase_mechanism_id == 4 && $requestForm->father)
+    @include('request_form.purchase.partials.immediate_purchase_form')
 @endif
 
 <br>
@@ -406,7 +419,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($requestForm->children as $child)
+                    @forelse($requestForm->children as $key => $child)
                     <tr>
                         <td>{{ $key+1 }}</td>
                         <td><a href="{{ route('request_forms.supply.purchase', $child) }}">{{ $child->id }}</a><br>

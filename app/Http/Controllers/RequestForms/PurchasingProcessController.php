@@ -15,6 +15,7 @@ use App\Models\RequestForms\InternalPmItem;
 use App\Http\Controllers\Controller;
 use App\Models\RequestForms\AttachedFile;
 use App\Models\RequestForms\FundToBeSettled;
+use App\Models\RequestForms\ImmediatePurchase;
 use App\Models\RequestForms\PettyCash;
 use App\Models\RequestForms\PurchasingProcessDetail;
 use App\Models\RequestForms\Tender;
@@ -227,6 +228,36 @@ class PurchasingProcessController extends Controller
             }
         }
 
+        return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
+
+    }
+
+    public function create_oc(Request $request, RequestForm $requestForm)
+    {
+        $requestForm->load('purchasingProcess.details');
+        if($this->estimated_expense_exceeded($requestForm)){
+            session()->flash('danger', 'Estimado Usuario/a: El monto total por los items que está seleccionando más los ya registrados sobrepasa el monto total del presupuesto.');
+            return redirect()->back()->withInput();
+        }
+
+        if(!$requestForm->purchasingProcess) $requestForm->purchasingProcess = $this->create($requestForm);
+
+        $oc = new ImmediatePurchase($request->all());
+        $oc->save();
+
+        foreach($request->item_id as $key => $item){
+            $detail = new PurchasingProcessDetail();
+            $detail->purchasing_process_id      = $requestForm->purchasingProcess->id;
+            $detail->item_request_form_id       = $item;
+            $detail->immediate_purchase_id      = $oc->id;
+            $detail->user_id                    = Auth::user()->id;
+            $detail->quantity                   = $request->quantity[$key];
+            $detail->unit_value                 = $request->unit_value[$key];
+            $detail->expense                    = $request->item_total[$key];
+            $detail->status                     = 'total';
+            $detail->save();
+        }
+        
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
 
     }
