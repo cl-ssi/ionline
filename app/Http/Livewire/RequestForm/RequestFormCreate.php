@@ -339,7 +339,7 @@ class RequestFormCreate extends Component
 
           $emails = [$mail_notification_ou_manager->user->email];
 
-          if($mail_notification_ou_secretary && $mail_notification_ou_secretary){
+          if($mail_notification_ou_manager){
               Mail::to($emails)
                 ->cc(env('APP_RF_MAIL'))
                 ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));

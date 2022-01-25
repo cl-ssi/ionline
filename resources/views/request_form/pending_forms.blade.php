@@ -59,7 +59,7 @@
                                     @endswitch
                                 </td>
                                 <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                                <td>{{ $requestForm->type_form }}</td>
+                                <td>{{ $requestForm->SubtypeValue }}</td>
                                 <td>{{ $requestForm->name }}</td>
                                 <td>{{ $requestForm->user->FullName }}<br>
                                     {{ $requestForm->userOrganizationalUnit->name }}
@@ -134,7 +134,7 @@
                             <tr>
                                 <td>{{ $requestForm->id }}</td>
                                 <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                                <td>{{ $requestForm->type_form }}</td>
+                                <td>{{ $requestForm->SubtypeValue }}</td>
                                 <td>{{ $requestForm->name }}</td>
                                 <td>{{ $requestForm->user->FullName }}<br>
                                     {{ $requestForm->userOrganizationalUnit->name }}
@@ -220,7 +220,7 @@
                             <tr>
                                 <td>{{ $requestForm->id }}</td>
                                 <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                                <td>{{ $requestForm->type_form }}</td>
+                                <td>{{ $requestForm->SubtypeValue }}</td>
                                 <td>{{ $requestForm->name }}</td>
                                 <td>{{ $requestForm->user->FullName }}<br>
                                     {{ $requestForm->userOrganizationalUnit->name }}
@@ -317,7 +317,7 @@
                                 @endswitch
                             </th>
                             <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                            <td>{{ $requestForm->type_form }}</td>
+                            <td>{{ $requestForm->SubtypeValue }}</td>
                             <td>{{ $requestForm->name }}</td>
                             <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}<br>
                                 {{ $requestForm->userOrganizationalUnit ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}
@@ -355,9 +355,11 @@
                                           <i class="fas fa-file-contract"></i>
                                     </a>
                                 @else
+                                    @if($requestForm->status == 'approved')
                                     <a href="{{ route('request_forms.create_form_document', $requestForm) }}" class="btn btn-outline-secondary btn-sm" title="Formulario" target="_blank">
                                         <i class="fas fa-file-alt"></i>
                                     </a>
+                                    @endif
                                 @endif
                             </td>
                         </tr>

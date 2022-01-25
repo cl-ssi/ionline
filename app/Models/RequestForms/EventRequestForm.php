@@ -80,7 +80,7 @@ class EventRequestForm extends Model
 
         if($requestForm->superior_chief == 1){
             $event                      =   new EventRequestForm();
-            $event->ou_signer_user      =   $requestForm->userOrganizationalUnit->father->id;
+            $event->ou_signer_user      =   $requestForm->contractOrganizationalUnit->father->id;
             $event->cardinal_number     =   2;
             $event->status              =   'pending';
             $event->event_type          =   'superior_leader_ship_event';

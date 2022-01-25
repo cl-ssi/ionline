@@ -101,6 +101,10 @@ class RequestForm extends Model implements Auditable
       return $this->belongsTo(OrganizationalUnit::class, 'request_user_ou_id');
     }
 
+    public function contractOrganizationalUnit(){
+      return $this->belongsTo(OrganizationalUnit::class, 'contract_manager_ou_id');
+    }
+
     public function itemRequestForms() {
       return $this->hasMany(ItemRequestForm::class);
     }
