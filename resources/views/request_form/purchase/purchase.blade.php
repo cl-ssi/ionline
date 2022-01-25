@@ -277,6 +277,11 @@
 @endif
 
 <!-- Trato Directo -->
+@if($requestForm->purchase_mechanism_id == 2)
+    @include('request_form.purchase.partials.convenio_marco_form')
+@endif
+
+<!-- Trato Directo -->
 @if($requestForm->purchase_mechanism_id == 3)
     @include('request_form.purchase.partials.direct_deal_form')
 @endif
