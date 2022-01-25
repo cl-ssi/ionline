@@ -848,10 +848,10 @@ Route::prefix('parameters')->as('parameters.')->middleware('auth')->group(functi
 
     Route::prefix('suppliers')->as('suppliers.')->group(function () {
         Route::get('/', 'Parameters\SupplierController@index')->name('index');
-        // Route::get('/create', 'Parameters\UnitOfMeasurementController@create')->name('create');
-        // Route::get('/edit/{measurement}', 'Parameters\UnitOfMeasurementController@edit')->name('edit');
-        // Route::put('/update/{measurement}', 'Parameters\UnitOfMeasurementController@update')->name('update');
-        // Route::post('/store', 'Parameters\UnitOfMeasurementController@store')->name('store');
+        Route::get('/create', 'Parameters\SupplierController@create')->name('create');
+        Route::post('/store', 'Parameters\SupplierController@store')->name('store');
+        Route::get('/edit/{supplier}', 'Parameters\SupplierController@edit')->name('edit');
+        Route::put('/update/{supplier}', 'Parameters\SupplierController@update')->name('update');
     });
 
     Route::prefix('logs')->name('logs.')->middleware('auth')->group(function () {

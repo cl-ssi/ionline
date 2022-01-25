@@ -83,7 +83,7 @@
         <a class="nav-link"
             href="{{ route('parameters.purchasemechanisms.index') }}">
             <i class="fas fa-shopping-cart"></i> Mecanismos de Compra</a>
-    </li
+    </li>
 
     <li class="nav-item">
         <a class="nav-link"
@@ -95,6 +95,12 @@
         <a class="nav-link"
             href="{{ route('parameters.purchaseunits.index') }}">
             <i class="fas fa-shopping-cart"></i> Unidades de Compra</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link"
+            href="{{ route('parameters.suppliers.index') }}">
+            <i class="fas fa-shopping-cart"></i> Proveedores</a>
     </li>
     <!-- <li class="nav-item">
         <a class="nav-link"
