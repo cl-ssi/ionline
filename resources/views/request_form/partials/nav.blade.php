@@ -31,7 +31,8 @@
     </li>
   @endif
 
-  @can('Request Forms: admin')
+  @if(App\Rrhh\Authority::getAuthorityFromDate(37, Carbon\Carbon::now(), 'manager')->user_id == Auth::user()->id ||
+    Auth::user()->hasPermissionTo('Request Forms: config'))
   <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <i class="fas fa-file-alt"></i> Parámetros
@@ -57,7 +58,7 @@
       </a>
     </div>
   </li>
-  @endcan
+  @endif
 
   <!-- <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

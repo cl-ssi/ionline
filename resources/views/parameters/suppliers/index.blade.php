@@ -8,7 +8,7 @@
 
 <h3 class="mb-3">Mantenedor de Proveedores</h3>
 
-<a class="btn btn-primary mb-3" href="{{-- route('parameters.purchasemechanisms.create') --}}">
+<a class="btn btn-primary mb-3" href="{{ route('parameters.suppliers.create') }}">
     Crear
 </a>
 
@@ -35,7 +35,7 @@
                 <td>{{ $supplier->city }}</td>
                 <td>{{ $supplier->telephone }}</td>
                 <td>
-                    <a href="">
+                    <a href="{{ route('parameters.suppliers.edit', $supplier) }}">
                       <i class="fas fa-edit"></i>
                     </a>
                 </td>

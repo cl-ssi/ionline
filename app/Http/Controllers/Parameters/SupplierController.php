@@ -26,7 +26,7 @@ class SupplierController extends Controller
      */
     public function create()
     {
-        //
+        return view('parameters.suppliers.create');
     }
 
     /**
@@ -37,7 +37,19 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $supplierExist = Supplier::where('run', $request->run);
+
+        if($supplierExist->count() == 0){
+            $supplier = new Supplier($request->All());
+            $supplier->save();
+
+            session()->flash('success', 'Proveedor  '.$supplier->name.' ha sido creado.');
+            return redirect()->route('parameters.suppliers.index');
+        }
+        else{
+            session()->flash('danger', 'Proveedor creado con anterioridad.');
+            return redirect()->route('parameters.suppliers.index');
+        }
     }
 
     /**
@@ -59,7 +71,7 @@ class SupplierController extends Controller
      */
     public function edit(Supplier $supplier)
     {
-        //
+        return view('parameters.suppliers.edit', compact('supplier'));
     }
 
     /**
@@ -71,7 +83,11 @@ class SupplierController extends Controller
      */
     public function update(Request $request, Supplier $supplier)
     {
-        //
+        $supplier->fill($request->all());
+        $supplier->save();
+
+        session()->flash('info', 'El Proveedor  '.$supplier->name.' ha sido actualizado correctamente.');
+        return redirect()->route('parameters.suppliers.index');
     }
 
     /**
