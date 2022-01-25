@@ -422,7 +422,7 @@
                     @forelse($requestForm->children as $key => $child)
                     <tr>
                         <td>{{ $key+1 }}</td>
-                        <td><a href="{{ route('request_forms.supply.purchase', $child) }}">{{ $child->id }}</a><br>
+                        <td>@if($child->status == 'approved')<a href="{{ route('request_forms.supply.purchase', $child) }}">{{ $child->id }}</a> @else {{ $child->id }} @endif<br>
                         @switch($child->getStatus())
                                     @case('Pendiente')
                                         <i class="fas fa-clock"></i>
@@ -446,7 +446,7 @@
                         </td>
                         <td>{{ $child->created_at->format('d-m-Y H:i') }}</td>
                         <td>{{ $child->SubtypeValue }}</td>
-                        <td><a href="{{ route('request_forms.supply.purchase', $child) }}">{{ $child->name }}</a></td>
+                        <td>@if($child->status == 'approved')<a href="{{ route('request_forms.supply.purchase', $child) }}">{{ $child->name }}</a> @else {{ $child->name }} @endif</td>
                         <td>{{ $child->user ? $child->user->FullName : 'Usuario eliminado' }}<br>
                         {{ $child->userOrganizationalUnit ? $child->userOrganizationalUnit->name : 'Usuario eliminado' }}</td>
                         <td>{{ $child->purchaseMechanism->name }}</td>
