@@ -12,6 +12,9 @@ use App\Models\Parameters\PurchaseMechanism;
 use App\Rrhh\Authority;
 use Carbon\Carbon;
 use App\User;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\RequestFormSignNotification;
+use App\Mail\RfElectronicSignatureNotification;
 
 class Authorization extends Component
 {
@@ -112,14 +115,58 @@ class Authorization extends Component
 
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
-           $event->signature_date = Carbon::now();
-           $event->position_signer_user = $this->position;
-           $event->status  = 'approved';
-           $event->signerUser()->associate(auth()->user());
-           $event->save();
-           session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' AUTORIZADO correctamente!');
-           return redirect()->route($this->route);
+          $event->signature_date = Carbon::now();
+          $event->position_signer_user = $this->position;
+          $event->status  = 'approved';
+          $event->signerUser()->associate(auth()->user());
+          $event->save();
+
+          $nextEvent = $event->requestForm->eventRequestForms->where('cardinal_number', $event->cardinal_number + 1);
+
+          if(!$nextEvent->isEmpty()){
+              //Envío de notificación para visación.
+              $now = Carbon::now();
+              //manager
+              $type = 'manager';
+              $mail_notification_ou_manager = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type);
+
+              //secretary
+              // $type_adm = 'secretary';
+              // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($nextEvent->first()->ou_signer_user, Carbon::now(), $type_adm);
+
+              $emails = [$mail_notification_ou_manager->user->email];
+
+              if($mail_notification_ou_manager){
+                if($nextEvent->first()->event_type == 'pre_finance_event'){
+                  Mail::to($emails)
+                    ->cc([env('APP_RF_MAIL'), 'yazmin.galleguillos@redsalud.gob.cl'])
+                    ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
+                }
+                // elseif($nextEvent->event_type = 'supply_event'){
+                //   Mail::to($mail_notification_ou_manager)
+                //     ->cc(env('APP_RF_MAIL'))
+                //     ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
+                // }
+                else{
+                  Mail::to($emails)
+                    ->cc(env('APP_RF_MAIL'))
+                    ->send(new RequestFormSignNotification($event->requestForm, $nextEvent->first()));
+                }
+              }
           }
+          else{
+              if($event->event_type == 'supply_event'){
+                  $type = 'manager';
+                  $mail_notification_ou_manager = Authority::getAuthorityFromDate(40, Carbon::now(), $type);
+                  $emails = [$mail_notification_ou_manager->user->email];
+                  Mail::to($emails)
+                    ->cc(env('APP_RF_MAIL'))
+                    ->send(new RfElectronicSignatureNotification($event->requestForm));
+              }
+          }
+          session()->flash('info', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' AUTORIZADO correctamente!');
+          return redirect()->route($this->route);
+      }
       session()->flash('danger', 'Formulario de Requerimientos Nro.'.$this->requestForm->id.' NO se puede Autorizar!');
       return redirect()->route($this->route);
     }

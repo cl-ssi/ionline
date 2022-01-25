@@ -160,6 +160,9 @@
                                   @endforeach
                               </td>
                               <td>
+                                    <a href="{{ route('request_forms.show', $requestForm->id) }}"
+                                        class="btn btn-outline-secondary btn-sm" title="ir"><i class="fas fa-eye"></i>
+                                    </a>
                                     {{--modal firmador--}}
                                     @php $idModelModal = $requestForm->id;
                                 				$routePdfSignModal = "/request_forms/create_form_document/$idModelModal/";
@@ -169,7 +172,7 @@
                                     @include('documents.signatures.partials.sign_file')
 
                                     <button type="button" data-toggle="modal" class="btn btn-outline-info btn-sm"
-                                        title="Firmar Certificado de Disponibilidad Presupuestaria"
+                                        title="Firma Digital"
                                         data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
                                           Firmar Form. <i class="fas fa-signature"></i>
                                     </button>
@@ -190,7 +193,7 @@
               </div>
             </div>
         </div>
-    @endif                                      
+    @endif
 
     @if(count($new_budget_pending_to_sign) > 0)
     </div>
@@ -350,6 +353,10 @@
                                         href="{{ route('request_forms.signedRequestFormPDF', $requestForm) }}"
                                         target="_blank" title="Certificado">
                                           <i class="fas fa-file-contract"></i>
+                                    </a>
+                                @else
+                                    <a href="{{ route('request_forms.create_form_document', $requestForm) }}" class="btn btn-outline-secondary btn-sm" title="Formulario" target="_blank">
+                                        <i class="fas fa-file-alt"></i>
                                     </a>
                                 @endif
                             </td>

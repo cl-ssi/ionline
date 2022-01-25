@@ -334,15 +334,15 @@ class RequestFormCreate extends Component
           $type = 'manager';
           $mail_notification_ou_manager = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type);
           //secretary
-          $type_adm = 'secretary';
-          $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
+          // $type_adm = 'secretary';
+          // $mail_notification_ou_secretary = Authority::getAuthorityFromDate($req->eventRequestForms->first()->ou_signer_user, Carbon::now(), $type_adm);
 
-          $emails = [$mail_notification_ou_manager->user->email, $mail_notification_ou_secretary->user->email];
+          $emails = [$mail_notification_ou_manager->user->email];
 
           if($mail_notification_ou_secretary && $mail_notification_ou_secretary){
               Mail::to($emails)
                 ->cc(env('APP_RF_MAIL'))
-                ->send(new RequestFormSignNotification($req));
+                ->send(new RequestFormSignNotification($req, $req->eventRequestForms->first()));
           }
           //---------------------------------------------------------
 

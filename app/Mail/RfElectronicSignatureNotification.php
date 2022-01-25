@@ -9,22 +9,20 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\RequestForms\RequestForm;
 use App\Models\RequestForms\EventRequestForm;
 
-class RequestFormSignNotification extends Mailable
+class RfElectronicSignatureNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $req;
-    public $event;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(RequestForm $req, EventRequestForm $event)
+    public function __construct(RequestForm $req)
     {
         $this->req = $req;
-        $this->event = $event;
     }
 
     /**
@@ -34,7 +32,7 @@ class RequestFormSignNotification extends Mailable
      */
     public function build()
     {
-        return $this->view('request_form.mail.requestformsignnotification')
-          ->subject('Formulario disponible para firma');
+        return $this->view('request_form.mail.rfelectronicsignaturenotification')
+          ->subject('Formulario disponible para firma electrónica');
     }
 }
