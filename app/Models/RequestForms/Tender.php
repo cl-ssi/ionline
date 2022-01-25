@@ -34,6 +34,6 @@ class Tender extends Model implements Auditable
 
     public function purchases()
     {
-        return $this->hasMany(TenderPurchase::class);
+        return $this->hasMany(ImmediatePurchase::class);
     }
 }
