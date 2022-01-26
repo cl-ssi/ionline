@@ -1,6 +1,6 @@
-<meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8">
+<!-- <meta http-equiv="content-type" content="application/vnd.ms-excel; charset=UTF-8"> -->
 <!--    Exportar a Excel     -->
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     var tableToExcel = (function () {
         var uri = 'data:application/vnd.ms-excel;base64,'
             ,
@@ -19,7 +19,7 @@
             window.location.href = uri + base64(format(template, ctx))
         }
     })()
-</script>
+</script> -->
 
 @if(in_array($prestacion->serie, []))
 <div class="alert alert-warning" role="alert">
@@ -68,7 +68,7 @@
             <div class="col-sm-2">
                 @if($establecimiento AND $periodo)
                 <button type="button" class="btn btn-outline-success"
-                    onclick="tableToExcel('contenedor', '{{ strtoupper(collect(request()->segments())->last()) }}')">
+                    onclick="tableExcel('REM {{$year}} - Serie {{$prestacion->Nserie}}')">
                     <i class="fas fa-file-excel"></i> Exportar
                 </button>
                 @endif
@@ -85,5 +85,17 @@
 @section('custom_js')
 
 <script src="{{ asset('js/show_hide_tab.js') }}"></script>
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+
+<script>
+    function tableExcel(filename, type, fn, dl) {
+          var elt = document.getElementById('contenedor');
+        //   const filename = 'REM'
+          var wb = XLSX.utils.table_to_book(elt, {sheet:"Sheet JS", raw: true});
+          return dl ?
+            XLSX.write(wb, {bookType:type, bookSST:true, type: 'base64'}) :
+            XLSX.writeFile(wb, `${filename}.xlsx`)
+        }
+</script>
 
 @endsection
