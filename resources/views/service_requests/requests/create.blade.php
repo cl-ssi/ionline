@@ -221,6 +221,7 @@
 				<option value="Covid19-APS Médicos">Covid19-APS Médicos</option>
 				<option value="Covid19 No Médicos">Covid19 No Médicos</option>
 				<option value="Covid19 Médicos">Covid19 Médicos</option>
+				
 
 				@if(Auth::user()->organizationalUnit->establishment_id == 1)
 					<option value="Covid 2022">Covid 2022</option>
@@ -235,6 +236,7 @@
 					<option value="TURNO DE RESIDENCIA">TURNO DE RESIDENCIA</option>
 					<option value="SENDA">SENDA</option>
 				@else
+					<option value="Covid 2022">Covid 2022</option>
 					<option value="PRAPS">PRAPS</option>
 					<option value="PESPI">PESPI</option>
 					<option value="CHILE CRECE CONTIGO">CHILE CRECE CONTIGO</option>
