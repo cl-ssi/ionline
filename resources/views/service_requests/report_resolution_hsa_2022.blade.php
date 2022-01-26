@@ -392,8 +392,11 @@
 
             @switch($ServiceRequest->working_day_type)
             @case('DIURNO')
-            <!-- DIURNA de lunes a viernes de 08:00 a 16:48 hrs. -->
-            {{$ServiceRequest->schedule_detail}}.
+              <!-- DIURNA de lunes a viernes de 08:00 a 16:48 hrs. -->
+              {{$ServiceRequest->schedule_detail}}.
+            @break
+            @case('VESPERTINO')
+              {{$ServiceRequest->schedule_detail}}.
             @break
             @case('TERCER TURNO')
             de turnos rotativos, en TERCER TURNO, 2 largo de 08:00 a 20:00 hrs, 2 noche de 20:00 a 08:00 hrs y 2 días libres.
@@ -455,7 +458,7 @@
 
         <p class="justify">
             <strong>DECIMO QUINTO:</strong> El prestador tiene la obligación de adherirse a una mutualidad a objeto de estar cubierto por la ley 16.744, sobre accidentes y enfermedades profesionales. El prestador deberá entregar en el Departamento de Gestión de las Personas y en un plazo no superior a 30 días de la fecha de inicio del contrato el certificado de adhesión a una mutualidad.<br><br>
-            
+
         </p>
 
         @if($ServiceRequest->signature_page_break)
