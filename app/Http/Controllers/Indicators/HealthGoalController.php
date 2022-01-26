@@ -276,13 +276,8 @@ class HealthGoalController extends Controller
                 else
                 $indicator->values()->where('factor', 'denominador')->where('month', $index + 1)->delete();
         }
-
-        //Regresamos a los indicadores con sus respectivos valores. Es lo mismo que hay en el método show salvo por el mensaje de confirmación.
-        $healthGoal = $indicator->indicatorable;
-        // $indicators = $healthGoal->indicators()->with('values')->orderBy('number')->get();
-        $indicators = $healthGoal->load('indicators.values');
-        $this->loadValuesWithRemSource($law, $year, $healthGoal, $indicators);
-
-        return view('indicators.health_goals.show', compact('indicators', 'healthGoal'))->with('success', 'Registros actualizados satisfactoriamente');
+        
+        session()->flash('success', 'Registros actualizados satisfactoriamente.');
+        return redirect()->route('indicators.health_goals.show', [$law, $year, $health_goal]);
     }
 }
