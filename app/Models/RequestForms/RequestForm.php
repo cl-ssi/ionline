@@ -131,6 +131,26 @@ class RequestForm extends Model implements Auditable
         return $this->belongsTo('App\Models\Documents\SignaturesFile', 'signatures_file_id');
     }
 
+    public function getTotalEstimatedExpense()
+    {
+      $total = 0;
+      foreach($this->children as $child){
+        if($child->status == 'approved')
+          $total += $child->estimated_expense;
+      }
+      return $total;
+    }
+
+    public function getTotalExpense()
+    {
+      $total = 0;
+      foreach($this->children as $child){
+        if($child->purchasingProcess)
+          $total += $child->purchasingProcess->getExpense();
+      }
+      return $total;
+    }
+
     /*****Elimina RequestForm y tablas relacionadas en cadena*****/
     public static function boot() {
         parent::boot();

@@ -160,7 +160,7 @@
             @endif
 
             @if($detail->pivot->immediatePurchase)
-            <div class="table-responsive">
+                <div class="table-responsive">
                     <table class="table table-sm table-striped table-bordered">
                         <tbody>
                             <tr>
@@ -205,6 +205,15 @@
                             </tr>
                         </tbody>
                     </table>
+                </div>
+                <h6><i class="fas fas fa-paperclip" aria-hidden="true"></i> Anexos</h6>
+                <div class="list-group">
+                    @forelse($detail->pivot->immediatePurchase->attachedFiles as $attachedFile)
+                    <a href="{{ route('request_forms.supply.attached_file.download', $attachedFile) }}" class="list-group-item list-group-item-action py-2" target="_blank">
+                        <i class="fas fa-file"></i> {{ $attachedFile->document_type }} </a>
+                    @empty
+                    <p>No existen archivos adjuntos a esta OC.</p>
+                    @endforelse
                 </div>
             @endif
             </div>
