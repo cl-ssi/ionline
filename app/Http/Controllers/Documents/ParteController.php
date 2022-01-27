@@ -156,11 +156,17 @@ class ParteController extends Controller
      */
     public function destroy(Parte $parte)
     {
-        // foreach($parte->events as $event) {
-        //     $event->forceDelete();
-        // }
-        // $parte->forceDelete();
-        // return redirect()->route('documents.partes.index');
+        foreach($parte->events as $event) {
+            $event->forceDelete();
+        }
+        foreach($parte->files as $file) {
+            Storage::disk('gcs')->delete($file->file);
+            //$file->delete();
+            $file->forceDelete();
+        }
+
+        $parte->forceDelete();
+        return redirect()->route('documents.partes.index');
     }
 
     public function inbox()
