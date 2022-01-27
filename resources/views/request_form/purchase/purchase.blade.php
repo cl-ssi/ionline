@@ -167,8 +167,8 @@
             @endif
 
             @if($requestForm->purchase_mechanism_id == 4)
-                @if($requestForm->father)
-                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}">
+                @if($requestForm->father) <!-- OC ejecución inmediata desde licitacion con ejecucion en el tiempo -->
+                <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_oc', $requestForm) }}" enctype="multipart/form-data">
                 @else
                 <form method="POST" class="form-horizontal" action="{{ route('request_forms.supply.create_tender', $requestForm) }}" enctype="multipart/form-data">
                 @endif
@@ -388,6 +388,11 @@
                       <th class="text-right">Valor Total</td>
                       <th class="text-right">${{ number_format($requestForm->purchasingProcess->getExpense(),0,",",".") }}</td>
                     </tr>
+                    <tr>
+                      <td colspan="10"></td>
+                      <th class="text-right">Disponible</td>
+                      <th class="text-right">${{ number_format($requestForm->estimated_expense - $requestForm->purchasingProcess->getExpense(),0,",",".") }}</td>
+                    </tr>
                 </tfoot>
             </table>
         </div>
@@ -413,14 +418,16 @@
                         <th>Usuario Gestor</th>
                         <th>Mecanismo de Compra</th>
                         <th>Items</th>
-                        <th>Monto</th>
+                        <th>Monto total</th>
+                        <th>Monto utilizado</th>
+                        <!-- <th>Saldo disponible</th> -->
                         <!-- <th>Estado</th> -->
                         <!-- <th></th>  -->
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($requestForm->children as $key => $child)
-                    <tr>
+                    <tr @if($child->status != 'approved') class="text-muted" @endif>
                         <td>{{ $key+1 }}</td>
                         <td>@if($child->status == 'approved')<a href="{{ route('request_forms.supply.purchase', $child) }}">{{ $child->id }}</a> @else {{ $child->id }} @endif<br>
                         @switch($child->getStatus())
@@ -452,18 +459,27 @@
                         <td>{{ $child->purchaseMechanism->name }}</td>
                         <td align="center">{{ $child->quantityOfItems() }}</td>
                         <td align="right">${{ number_format($child->estimated_expense,0,",",".") }}</td>
+                        <td align="right">{{ $child->purchasingProcess ? '$ '.number_format($child->purchasingProcess->getExpense(),0,",",".") : '-' }}</td>
+                        {{--<td align="right">{{ $child->purchasingProcess ? '$ '.number_format($child->estimated_expense - $child->purchasingProcess->getExpense(),0,",",".") : '-' }}</td>--}}
                     </tr>
                   @empty
                     <tr><td colspan="100%" class="text-center">No existen bienes y/o servicios de ejecución inmediata asociados a este formulario de requerimiento.</td></tr>
                   @endforelse
                 </tbody>
-                {{--<tfoot>
+                <tfoot>
                     <tr>
-                      <td colspan="10"></td>
-                      <th class="text-right">Valor Total</td>
-                      <th class="text-right">${{ number_format($requestForm->purchasingProcess->getExpense(),0,",",".") }}</td>
+                      <td colspan="7"></td>
+                      <th class="text-right">Totales</td>
+                      <th class="text-right">${{ number_format($requestForm->getTotalEstimatedExpense(),0,",",".") }}</td>
+                      <th class="text-right">${{ number_format($requestForm->getTotalExpense(),0,",",".") }}</td>
+                      {{--<th class="text-right">${{ number_format($requestForm->getTotalEstimatedExpense() - $requestForm->getTotalExpense(),0,",",".") }}</td>--}}
                     </tr>
-                </tfoot>--}}
+                    <tr>
+                      <td colspan="8"></td>
+                      <th class="text-right">Disponible</td>
+                      <th class="text-right">${{ number_format($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense(),0,",",".") }}</td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>

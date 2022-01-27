@@ -42,7 +42,7 @@ class PurchasingProcessController extends Controller
     public function purchase(RequestForm $requestForm)
     {
         if(Auth()->user()->organizational_unit_id == 37){
-            $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser');
+            $requestForm->load('user', 'userOrganizationalUnit', 'contractManager', 'requestFormFiles', 'purchasingProcess.details', 'eventRequestForms.signerOrganizationalUnit', 'eventRequestForms.signerUser', 'purchaseMechanism', 'purchaseType', 'children');
             // return $requestForm;
             $isBudgetEventSignPending = $requestForm->eventRequestForms()->where('status', 'pending')->where('event_type', 'budget_event')->count() > 0;
             if($isBudgetEventSignPending) session()->flash('warning', 'Estimado/a usuario/a: El formulario de requerimiento tiene una firma pendiente de aprobación por concepto de presupuesto, por lo que no podrá agregar o quitar compras hasta que no se haya notificado de la resolución de la firma.');
@@ -256,6 +256,18 @@ class PurchasingProcessController extends Controller
             $detail->expense                    = $request->item_total[$key];
             $detail->status                     = 'total';
             $detail->save();
+        }
+
+        $file = 'oc_file';
+        $now = Carbon::now()->format('Y_m_d_H_i_s');
+        if($request->hasFile($file)){
+            $archivo = $request->file($file);
+            $file_name = $now.'_'.$file.'_'.$oc->id;
+            $attachedFile = new AttachedFile();
+            $attachedFile->file = $archivo->storeAs('/ionline/request_forms/attached_files', $file_name.'.'.$archivo->extension(), 'gcs');
+            $attachedFile->document_type = $file;
+            $attachedFile->immediate_purchase_id = $oc->id;
+            $attachedFile->save();
         }
         
         return redirect()->route('request_forms.supply.purchase', compact('requestForm'));
