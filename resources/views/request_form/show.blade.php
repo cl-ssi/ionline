@@ -11,58 +11,61 @@
     <div class="col-sm-8">
         <div class="table-responsive">
             <h6><i class="fas fa-info-circle"></i> Detalle Formulario</h6>
-            <table class="table table-sm table-striped table-bordered">
-                <tbody class="small">
-                    <tr>
-                        <th class="table-active" scope="row">Fecha de Creación</th>
-                        <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                    </tr>
-                    <tr>
-                        <th class="table-active" style="width: 33%">Nombre</th>
-                        <td>{{ $requestForm->name }}</td>
-                    </tr>
-                    <tr>
-                        <th class="table-active" style="width: 33%">Gasto Estimado</th>
-                        <td>${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
-                    </tr>
-                    <tr>
-                        <th class="table-active" scope="row">Nombre del Solicitante</th>
-                        <td>{{ $requestForm->user ? $requestForm->user->FullName : 'Usuario eliminado' }}</td>
-                    </tr>
-                    <tr>
-                        <th class="table-active" scope="row">Unidad Organizacional</th>
-                        <td>{{ $requestForm->user ? $requestForm->userOrganizationalUnit->name : 'Usuario eliminado' }}</td>
-                    </tr>
-                    <tr>
-                        <th class="table-active" scope="row">Adminitrador de Contrato</th>
-                        <td>{{ $requestForm->contractManager ? $requestForm->contractManager->FullName : 'Usuario eliminado' }}</td>
-                    </tr>
-                    <tr>
-                        <th class="table-active" scope="row">Mecanismo de Compra</th>
-                        <td>{{ $requestForm->getPurchaseMechanism()}}</td>
-                    </tr>
-                    <tr>
-                        <th class="table-active" scope="row">Tipo de Compra</th>
-                        <td>{{ $requestForm->purchaseType->name ?? '' }}</td>
-                    </tr>
-                    <tr>
-                        <th class="table-active" scope="row">Unidad de Compra</th>
-                        <td>{{ $requestForm->purchaseUnit->name ?? '' }}</td>
-                    </tr>
-                    <tr>
-                        <th class="table-active" scope="row">Programa Asociado</th>
-                        <td>{{ $requestForm->program }}</td>
-                    </tr>
-                    <tr>
-                        <th class="table-active" scope="row">Folio SIGFE</th>
-                        <td>{{ $requestForm->sigfe }}</td>
-                    </tr>
-                    <tr>
-                        <th class="table-active" scope="row">Justificación de Adquisición</th>
-                        <td>{{ $requestForm->justification }}</td>
-                    </tr>
-
-                </tbody>
+            <table class="table table-sm table-bordered">
+              <tbody class="small">
+                  <tr>
+                      <th class="table-active" colspan="2" scope="row">Fecha de Creación</th>
+                      <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
+                  </tr>
+                  <tr>
+                      <th class="table-active" colspan="2" style="width: 33%">Nombre</th>
+                      <td>{{ $requestForm->name }}</td>
+                  </tr>
+                  <tr>
+                      <th class="table-active" colspan="2" style="width: 33%">Gasto Estimado</th>
+                      <td>${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
+                  </tr>
+                  <tr>
+                      <th class="table-active" colspan="2" scope="row">Tipo de moneda</th>
+                      <td>{{ $requestForm->TypeOfCurrencyValue }}</td>
+                  </tr>
+                  <tr>
+                      <th class="table-active" rowspan="2" scope="row">Gestor</th>
+                      <th class="table-active" scope="row">Usuario</th>
+                      <td>{{ $requestForm->user->getFullNameAttribute()}}</td>
+                  </tr>
+                  <tr>
+                      <th class="table-active" scope="row">Unidad Organizacional</th>
+                      <td>{{ $requestForm->userOrganizationalUnit->name}}</td>
+                  </tr>
+                  <tr>
+                      <th class="table-active" rowspan="2" scope="row">Administrador de Contrato</th>
+                      <th class="table-active" scope="row">Usuario</th>
+                      <td>{{ $requestForm->contractManager->name }}</td>
+                  </tr>
+                  <tr>
+                      <th class="table-active" scope="row">Unidad Organizacional</th>
+                      <td>{{ $requestForm->contractOrganizationalUnit->name}}</td>
+                  </tr>
+                  <tr>
+                      <th class="table-active" colspan="2" scope="row">Mecanismo de Compra</th>
+                      <td>{{ $requestForm->purchaseMechanism->PurchaseMechanismValue }}</td>
+                  </tr>
+                  <tr>
+                      <th class="table-active" colspan="2" scope="row">Programa Asociado</th>
+                      <td>{{ $requestForm->program }}</td>
+                  </tr>
+                  @if(in_array($eventType, ['finance_event', 'supply_event']))
+                  <tr>
+                      <th class="table-active" colspan="2" scope="row">Folio SIGFE</th>
+                      <td>{{ $requestForm->sigfe }}</td>
+                  </tr>
+                  @endif
+                  <tr>
+                      <th class="table-active" colspan="2" scope="row">Justificación de Adquisición</th>
+                      <td>{{ $requestForm->justification }}</td>
+                  </tr>
+              </tbody>
             </table>
         </div>
     </div>

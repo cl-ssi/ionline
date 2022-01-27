@@ -184,6 +184,26 @@ class RequestForm extends Model implements Auditable
         }
     }
 
+    public function getTypeOfCurrencyValueAttribute(){
+        switch ($this->type_of_currency) {
+            case "peso":
+                return 'Peso';
+                break;
+
+            case "bienes ejecución tiempo":
+                return 'Bienes Ejecución En Tiempo';
+                break;
+
+            case "servicios ejecución inmediata":
+                return 'Servicios Ejecución Inmediata';
+                break;
+
+            case "servicios ejecución tiempo":
+                return 'Servicios Ejecución En Tiempo';
+                break;
+        }
+    }
+
     /*Regresa Icono del estado de firma de Eventos [argumento:  tipo de Evento]*/
     public function eventSign($event_type) {
       if(!is_null($this->eventRequestForms()->where('status', 'approved')->where('event_type',$event_type)->first()))

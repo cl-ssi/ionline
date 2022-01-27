@@ -32,6 +32,30 @@ class PurchaseMechanism extends Model
       return $this->belongsToMany(PurchaseType::class, 'cfg_purchase_mechanism_type', 'purchase_mechanism_id', 'purchase_type_id')->withTimestamps();
   }
 
+  public function getPurchaseMechanismValueAttribute(){
+      switch ($this->name) {
+          case "MENORES A 3 UTM":
+              return 'Menores a 3 U.T.M.';
+              break;
+
+          case "CONVENIO MARCO":
+              return 'Convenio Marco';
+              break;
+
+          case "TRATO DIRECTO":
+              return 'Trato Directo';
+              break;
+
+          case "LICITACIÓN PÚBLICA":
+              return 'Licitación Pública';
+              break;
+
+          case "COMPRA ÁGIL (TRATO DIRECTO)":
+              return 'Compra Ágil (Trato Directo)';
+              break;
+      }
+  }
+
   protected $table = 'cfg_purchase_mechanisms';
 
 }

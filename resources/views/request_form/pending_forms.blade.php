@@ -64,7 +64,7 @@
                                 <td>{{ $requestForm->user->FullName }}<br>
                                     {{ $requestForm->userOrganizationalUnit->name }}
                                 </td>
-                                <td>{{ $requestForm->purchaseMechanism->name }}</td>
+                                <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}</td>
                                 <td align="center">{{ $requestForm->quantityOfItems() }}</td>
                                 <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
                                 <td class="text-center">
