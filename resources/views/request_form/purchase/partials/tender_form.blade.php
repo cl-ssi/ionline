@@ -83,15 +83,6 @@
                     <option value="desierta" {{ old('status', '') == 'desierta' ? 'selected' : '' }}>Desierta</option>
                 </select>
             </fieldset>
-
-            <fieldset class="form-group col-sm-3">
-                <label for="for_status">Característica de Compra</label>
-                <select name="type_of_purchase" id="for_type_of_purchase" class="form-control form-control-sm" required>
-                    <option value="">Seleccione...</option>
-                    <option value="suministro" {{ old('type_of_purchase', '') == 'suministro' ? 'selected' : '' }}>Suministro</option>
-                    <option value="compra inmediata" {{ old('type_of_purchase', '') == 'compra inmediata' ? 'selected' : '' }}>Compra Inmediata</option>
-                </select>
-            </fieldset>
         </div>
 
         <hr>
