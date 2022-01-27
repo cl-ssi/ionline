@@ -17,17 +17,15 @@ class Tender extends Model implements Auditable
     protected $fillable = [
         'purchase_type_id', 'tender_number', 'description', 'resol_administrative_bases', 'resol_adjudication',
         'resol_deserted', 'resol_contract', 'guarantee_ticket', 'has_taking_of_reason',
-        'status', 'type_of_purchase', 'supplier_id'
+        'status', 'supplier_id'
     ];
-
-    protected $table = 'arq_tenders';
 
     public function purchaseType()
     {
         return $this->belongsTo(PurchaseType::class, 'purchase_type_id');
     }
 
-    public function attachedFiles() 
+    public function attachedFiles()
     {
         return $this->hasMany(AttachedFile::class);
     }
@@ -36,4 +34,6 @@ class Tender extends Model implements Auditable
     {
         return $this->hasMany(ImmediatePurchase::class);
     }
+
+    protected $table = 'arq_tenders';
 }
