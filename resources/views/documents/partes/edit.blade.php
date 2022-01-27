@@ -151,7 +151,7 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">
-                            
+                            <i class="fas fa-trash"></i> Eliminar
                         </button>
                     </form>
                     @else
