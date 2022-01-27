@@ -133,6 +133,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Partes: user']);
         Permission::create(['name' => 'Partes: director']);
         Permission::create(['name' => 'Partes: oficina']);
+        Permission::create(['name' => 'Partes: delete']);
 
 
         Permission::create(['name' => 'Replacement Staff: create request']);
