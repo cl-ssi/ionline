@@ -52,6 +52,10 @@
                       <td>{{ $requestForm->purchaseMechanism->PurchaseMechanismValue }}</td>
                   </tr>
                   <tr>
+                      <th class="table-active" colspan="2" scope="row">Tipo de Formulario</th>
+                      <td>{{ $requestForm->SubtypeValue }}</td>
+                  </tr>
+                  <tr>
                       <th class="table-active" colspan="2" scope="row">Programa Asociado</th>
                       <td>{{ $requestForm->program }}</td>
                   </tr>
@@ -95,7 +99,9 @@
         <tbody class="text-center small">
             <tr>
               @foreach($requestForm->eventRequestForms as $event)
-                <th>{{ $event->signerOrganizationalUnit->name }}</th>
+                <td><strong>{{ $event->EventTypeValue }}</strong><br>
+                    {{ $event->signerOrganizationalUnit->name }}
+                </td>
               @endforeach
             </tr>
             <tr>

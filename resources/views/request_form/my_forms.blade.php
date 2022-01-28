@@ -31,10 +31,9 @@
                     <tr class="text-center">
                       <th>ID</th>
                       <th style="width: 7%">Fecha Creación</th>
-                      <th>Tipo</th>
+                      <th>Tipo / Mecanismo de Compra</th>
                       <th>Descripción</th>
                       <th>Usuario Gestor</th>
-                      <th>Mecanismo de Compra</th>
                       <th>Items</th>
                       <th>Espera</th>
                       <th>Estado</th>
@@ -59,12 +58,13 @@
                                     @endswitch
                                 </td>
                                 <td>{{ $requestForm->created_at->format('d-m-Y H:i') }}</td>
-                                <td>{{ $requestForm->SubtypeValue }}</td>
+                                <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}<br>
+                                    {{ $requestForm->SubtypeValue }}
+                                </td>
                                 <td>{{ $requestForm->name }}</td>
                                 <td>{{ $requestForm->user->FullName }}<br>
                                     {{ $requestForm->userOrganizationalUnit->name ?? '' }}
                                 </td>
-                                <td>{{ ($requestForm->purchaseMechanism) ? $requestForm->purchaseMechanism->PurchaseMechanismValue : '' }}</td>
                                 <td align="center">{{ $requestForm->quantityOfItems() }}</td>
                                 <td align="center">{{ $requestForm->created_at->diffForHumans() }}</td>
                                 <td class="text-center">
