@@ -1240,6 +1240,8 @@ Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs','auth')->group(func
     Route::resource('police_units','Drugs\PoliceUnitController');
     Route::resource('substances','Drugs\SubstanceController');
 
+    Route::get('users','Rrhh\UserController@drugs')->name('users');
+
     Route::get('receptions/report','Drugs\ReceptionController@report')->name('receptions.report');
     Route::get('receptions/{reception}/record','Drugs\ReceptionController@showRecord')->name('receptions.record');
     Route::get('receptions/{receptionitem}/edit_item','Drugs\ReceptionController@editItem')->name('receptions.edit_item');

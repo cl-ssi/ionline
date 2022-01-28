@@ -639,29 +639,30 @@
           @endif
           del presupuesto del
           @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-          Hospital “Dr. Ernesto Torres Galdames” de Iquique.
+          Hospital “Dr. Ernesto Torres Galdames” de Iquique,
           @else
           Servicio Salud Iquique.
           @endif
+          Unidad demandante COVID-19.
         </p>
         @elseif($ServiceRequest->program_contract_type == "Horas")
         @if($ServiceRequest->estate == "Profesional Médico")
         <p class="">
+
+
           <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico del presupuesto del
-          @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-          Hospital “Dr. Ernesto Torres Galdames” de Iquique.
-          @else
-          Servicio Salud Iquique.
-          @endif
+
+          IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-03 Honorario Suma Alzada Personal Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique, Unidad demandante COVID-19.
+
+          
+
+          
+          
         </p>
         @else
         <p class="">
-          <strong>3.</strong> IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del
-          @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-          Hospital “Dr. Ernesto Torres Galdames” de Iquique.
-          @else
-          Servicio Salud Iquique.
-          @endif
+          <strong>3.</strong>
+          IMPÚTESE el gasto correspondiente al ítem 21-03-001-001-02 Honorario Suma Alzada Personal No Médico, del presupuesto del Hospital “Dr. Ernesto Torres Galdames” de Iquique, Unidad demandante COVID-19.                   
         </p>
         @endif
         @endif
