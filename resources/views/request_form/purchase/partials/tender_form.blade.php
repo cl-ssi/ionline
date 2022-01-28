@@ -16,12 +16,39 @@
         </div>
 
         <div class="form-row">
-            <!-- <fieldset class="form-group col-sm-2">
-              <label for="for_date">Fecha</label>
-              <input type="date" class="form-control form-control-sm" id="for_date" name="date"
-                  value="{{ Carbon\Carbon::now()->format('Y-m-d') }}" readonly>
-          </fieldset> -->
+            <fieldset class="form-group col-sm-6">
+                <label for="for_supplier">Proveedor</label>
+                <select name="supplier_id" id="for_supplier_id" class="form-control form-control-sm" required>
+                    <option value="">Seleccione...</option>
+                    @foreach($suppliers as $supplier)
+                    <option value="{{ $supplier->id }}" {{ $supplier->id == old('supplier_id', '') ? 'selected' : '' }}>{{ $supplier->name }}</option>
+                    @endforeach
+                </select>
+            </fieldset>
 
+            <fieldset class="form-group col-sm-2">
+                <label for="for_status">Estado de la Licitación</label>
+                <select name="status" id="for_status" class="form-control form-control-sm" required>
+                    <option value="">Seleccione...</option>
+                    <option value="adjudicada" {{ old('status', '') == 'adjudicada' ? 'selected' : '' }}>Adjudicada</option>
+                    <option value="desierta" {{ old('status', '') == 'desierta' ? 'selected' : '' }}>Desierta</option>
+                </select>
+            </fieldset>
+
+            <fieldset class="form-group col-sm-2">
+              <label for="for_start_date">Fecha inicio</label>
+              <input type="date" class="form-control form-control-sm" id="for_start_date" name="start_date"
+                  value="{{ old('start_date') }}">
+            </fieldset>
+            <fieldset class="form-group col-sm-2">
+                <label for="for_duration">Plazo vigencia en días</label>
+                <input type="number" min="1" class="form-control form-control-sm" id="for_duration" name="duration" value="{{ old('duration') }}">
+            </fieldset>
+        </div>
+
+        <br>
+
+        <div class="form-row">
             <fieldset class="form-group col-sm-4">
                 <label for="for_resol_administrative_bases">Nº Resol. de las Bases Administrativas:</label>
                 <input type="text" class="form-control form-control-sm" id="for_resol_administrative_bases" name="resol_administrative_bases" value="{{ old('resol_administrative_bases') }}" required>
@@ -62,27 +89,6 @@
                 </div>
             </fieldset>
             @endif
-        </div>
-
-        <div class="form-row">
-            <fieldset class="form-group col-sm-6">
-                <label for="for_supplier">Proveedor</label>
-                <select name="supplier_id" id="for_supplier_id" class="form-control form-control-sm" required>
-                    <option value="">Seleccione...</option>
-                    @foreach($suppliers as $supplier)
-                    <option value="{{ $supplier->id }}" {{ $supplier->id == old('supplier_id', '') ? 'selected' : '' }}>{{ $supplier->name }}</option>
-                    @endforeach
-                </select>
-            </fieldset>
-
-            <fieldset class="form-group col-sm-3">
-                <label for="for_status">Estado de la Licitación</label>
-                <select name="status" id="for_status" class="form-control form-control-sm" required>
-                    <option value="">Seleccione...</option>
-                    <option value="adjudicada" {{ old('status', '') == 'adjudicada' ? 'selected' : '' }}>Adjudicada</option>
-                    <option value="desierta" {{ old('status', '') == 'desierta' ? 'selected' : '' }}>Desierta</option>
-                </select>
-            </fieldset>
         </div>
 
         <hr>

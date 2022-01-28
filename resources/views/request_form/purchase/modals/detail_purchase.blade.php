@@ -104,16 +104,28 @@
                     <table class="table table-sm table-striped table-bordered">
                         <tbody>
                             <tr>
-                                <th class="table-active" style="width: 33%">Fecha creacion</th>
-                                <td>{{ $detail->pivot->tender->created_at->format('d-m-Y H:i') }}</td>
-                            </tr>
-                            <tr>
                                 <th class="table-active" style="width: 33%">ID de la licitación</th>
                                 <td>{{ $detail->pivot->tender->tender_number }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Descripción de la licitación</th>
                                 <td>{{ $detail->pivot->tender->description }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">RUT proveedor</th>
+                                <td>{{ number_format($detail->pivot->tender->supplier->run,0,",",".") }}-{{ $detail->pivot->tender->supplier->dv }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Nombre proveedor</th>
+                                <td>{{ $detail->pivot->tender->supplier->name }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" style="width: 33%">Fecha inicio</th>
+                                <td>{{ $detail->pivot->tender->start_date ? $detail->pivot->tender->start_date->format('d-m-Y') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th class="table-active" scope="row">Plazo vigencia en días</th>
+                                <td>{{ $detail->pivot->tender->duration }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" scope="row">Nº Resol. de las Bases Administrativas</th>
@@ -181,19 +193,19 @@
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Fecha OC enviada a proveedor</th>
-                                <td>{{ $detail->pivot->immediatePurchase->po_sent_date->format('d-m-Y') ?? '' }}</td>
+                                <td>{{ $detail->pivot->immediatePurchase->po_sent_date ? $detail->pivot->immediatePurchase->po_sent_date->format('d-m-Y') : '' }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" scope="row">Fecha OC aceptada</th>
-                                <td>{{ $detail->pivot->immediatePurchase->po_accepted_date->format('d-m-Y') ?? '' }}</td>
+                                <td>{{ $detail->pivot->immediatePurchase->po_accepted_date ? $detail->pivot->immediatePurchase->po_accepted_date->format('d-m-Y') : '' }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" scope="row">Fecha estimada entrega</th>
-                                <td>{{ $detail->pivot->immediatePurchase->estimated_delivery_date->format('d-m-Y') ?? '' }}</td>
+                                <td>{{ $detail->pivot->immediatePurchase->estimated_delivery_date ? $detail->pivot->immediatePurchase->estimated_delivery_date->format('d-m-Y') : '' }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" scope="row">Fecha OC recepción conforme</th>
-                                <td>{{ $detail->pivot->immediatePurchase->po_with_confirmed_receipt_date->format('d-m-Y') ?? '' }}</td>
+                                <td>{{ $detail->pivot->immediatePurchase->po_with_confirmed_receipt_date ? $detail->pivot->immediatePurchase->po_with_confirmed_receipt_date->format('d-m-Y') : '' }}</td>
                             </tr>
                             <tr>
                                 <th class="table-active" style="width: 33%">Monto total</th>
