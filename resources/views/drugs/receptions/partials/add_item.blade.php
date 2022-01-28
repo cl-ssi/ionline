@@ -73,7 +73,11 @@
                     <label for="for_description">Descripción</label>
                     <textarea name="description" class="form-control" id="for_description" rows="3" required="required"></textarea>
                 </fieldset>
-                <button type="submit" class="btn btn-primary nolabel"><i class="fas fa-save"></i> Agregar</button>
+                
+                <div class="col-2">
+                    <label for="">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary form-control"><i class="fas fa-save"></i> Guardar</button>
+                </div>
             </div>
 
         </form>
