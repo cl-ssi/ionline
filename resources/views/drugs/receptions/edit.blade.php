@@ -10,11 +10,11 @@
 
 <!-- FIXME: Ver como restringir acceso a esta página de otra forma -->
 @can('Drugs: edit receptions')
-<form method="POST" class="form-horizontal" action="{{ route('drugs.receptions.update', ['reception' => $reception->id] ) }}">
+<form method="POST" class="form-horizontal" action="{{ route('drugs.receptions.update', $reception->id ) }}">
     @method('PUT')
     @csrf
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="parte_label" id="inlineRadio1" value="Parte"
@@ -34,7 +34,7 @@
         </fieldset>
     </div>
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-2">
             <label for="for_parte">Número *</label>
             <input type="text" class="form-control" id="for_parte" name="parte" value="{{ $reception->parte }}">
@@ -64,7 +64,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-2">
             <label for="fordocument">Número Oficio</label>
             <input type="text" class="form-control" id="fordocument"
@@ -90,7 +90,7 @@
         </fieldset>
     </div>
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-4">
             <label for="for_delivery">Funcionario que entrega *</label>
             <input type="text" class="form-control" id="for_delivery"
@@ -110,7 +110,7 @@
         </fieldset>
     </div>
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-4">
             <label for="forimputed">Nombre Imputado</label>
             <input type="text" class="form-control" id="forimputed"
@@ -128,7 +128,7 @@
             <button type="submit" class="btn btn-primary">Actualizar</button>
         </fieldset>
     </div>
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col">
             <label for="forobservation">Observación</label>
             <input type="text" class="form-control" id="forobservation"

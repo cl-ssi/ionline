@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Drugs;
 
-use App\Models\Drugs\PoliceUnit;
+use App\Models\Drugs\RosterAnalisisToAdmin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class PoliceUnitController extends Controller
+class RosterAnalisisToAdminController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,8 +15,9 @@ class PoliceUnitController extends Controller
      */
     public function index()
     {
-        $policeUnits = PoliceUnit::All()->SortBy('name');
-        return view('drugs.police_units.index')->withPoliceUnits($policeUnits);
+        $rosters = RosterAnalisisToAdmin::All();
+
+        dd($rosters);
     }
 
     /**
@@ -26,7 +27,7 @@ class PoliceUnitController extends Controller
      */
     public function create()
     {
-        return view('drugs/police_units/create');
+        //
     }
 
     /**
@@ -37,54 +38,52 @@ class PoliceUnitController extends Controller
      */
     public function store(Request $request)
     {
-      $policeUnits = new PoliceUnit($request->All());
-      $policeUnits->save();
-      return redirect()->route('drugs.police_units.index');
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Drugs\PoliceUnit  $policeUnit
+     * @param  \App\Models\Drugs\RosterAnalisisToAdmin  $rosterAnalisisToAdmin
      * @return \Illuminate\Http\Response
      */
-    public function show(PoliceUnit $policeUnit)
+    public function show(RosterAnalisisToAdmin $rosterAnalisisToAdmin)
     {
-        //
+        //$rosters = RosterAnalisisToAdmin::Find();
+
+        dd($rosters);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Drugs\PoliceUnit  $policeUnit
+     * @param  \App\Models\Drugs\RosterAnalisisToAdmin  $rosterAnalisisToAdmin
      * @return \Illuminate\Http\Response
      */
-    public function edit(PoliceUnit $policeUnit)
+    public function edit(RosterAnalisisToAdmin $rosterAnalisisToAdmin)
     {
-        return view('drugs/police_units/edit')->withPoliceUnit($policeUnit);
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Drugs\PoliceUnit  $policeUnit
+     * @param  \App\Models\Drugs\RosterAnalisisToAdmin  $rosterAnalisisToAdmin
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PoliceUnit $policeUnit)
+    public function update(Request $request, RosterAnalisisToAdmin $rosterAnalisisToAdmin)
     {
-      $policeUnit->fill($request->all());
-      $policeUnit->save();
-      return redirect()->route('drugs.police_units.index');
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Drugs\PoliceUnit  $policeUnit
+     * @param  \App\Models\Drugs\RosterAnalisisToAdmin  $rosterAnalisisToAdmin
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PoliceUnit $policeUnit)
+    public function destroy(RosterAnalisisToAdmin $rosterAnalisisToAdmin)
     {
         //
     }

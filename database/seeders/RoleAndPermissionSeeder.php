@@ -22,38 +22,39 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'I play with madness']);
 
         // create permissions
-        Permission::create(['name' => 'Users: must change password']);
+        Permission::create(['name' => 'Users: must change password', 'description' => 'Para obligar a cambiar su clave (sin uso)']);
 
-        Permission::create(['name' => 'Users: create']);
-        Permission::create(['name' => 'Users: edit']);
-        Permission::create(['name' => 'Users: delete']);
-        Permission::create(['name' => 'Users: assign permission']);
+        Permission::create(['name' => 'Users: create', 'description' => 'Permite crear ususarios']);
+        Permission::create(['name' => 'Users: edit', 'description' => 'Editar usuarios']);
+        Permission::create(['name' => 'Users: delete', 'description' => 'Borrar usuarios']);
+        Permission::create(['name' => 'Users: assign permission', 'description' => 'Asignar permisos a usuarios']);
 
-        Permission::create(['name' => 'OrganizationalUnits: create']);
-        Permission::create(['name' => 'OrganizationalUnits: edit']);
-        Permission::create(['name' => 'OrganizationalUnits: delete']);
+        Permission::create(['name' => 'OrganizationalUnits: create', 'description' => 'Crear unidades organizacionales']);
+        Permission::create(['name' => 'OrganizationalUnits: edit', 'description' => 'Editar unidades organizacionales']);
+        Permission::create(['name' => 'OrganizationalUnits: delete', 'description' => 'Borrar unidades organizacionales']);
 
-        Permission::create(['name' => 'Documents: create']);
-        Permission::create(['name' => 'Documents: edit']);
-        Permission::create(['name' => 'Documents: add number']);
-        Permission::create(['name' => 'Documents: signatures and distribution']);
+        Permission::create(['name' => 'Documents: create', 'description' => 'Crear documentos']);
+        Permission::create(['name' => 'Documents: edit', 'description' => 'Editar documentos']);
+        Permission::create(['name' => 'Documents: add number', 'description' => 'Agregar número a documento y subir archivo']);
+        Permission::create(['name' => 'Documents: signatures and distribution', 'description' => 'Firmas y distribución']);
 
-        Permission::create(['name' => 'Resources: create']);
-        Permission::create(['name' => 'Resources: edit']);
-        Permission::create(['name' => 'Resources: delete']);
+        Permission::create(['name' => 'Resources: create', 'description' => 'Crear un recurso']);
+        Permission::create(['name' => 'Resources: edit', 'description' => 'Editar un recurso']);
+        Permission::create(['name' => 'Resources: delete', 'description' => 'Borrar un recurso']);
 
-        Permission::create(['name' => 'Drugs: view receptions']);
-        Permission::create(['name' => 'Drugs: create receptions']);
-        Permission::create(['name' => 'Drugs: edit receptions']);
-        Permission::create(['name' => 'Drugs: destroy drugs']);
-        Permission::create(['name' => 'Drugs: view reports']);
-        Permission::create(['name' => 'Drugs: manage parameters']);
-        Permission::create(['name' => 'Drugs: manage substances']);
-        Permission::create(['name' => 'Drugs: manage courts']);
-        Permission::create(['name' => 'Drugs: manage police units']);
-        Permission::create(['name' => 'Drugs: delete destructions']);
-        Permission::create(['name' => 'Drugs: add results from ISP']);
-        Permission::create(['name' => 'Drugs: add protocols']);
+        Permission::create(['name' => 'Drugs', 'description' => 'Permite acceder al menú del módulo de Drogas']);
+        Permission::create(['name' => 'Drugs: view receptions' , 'description' => 'Permite ver actas de recepción']);
+        Permission::create(['name' => 'Drugs: create receptions', 'description' => 'Crear actas de recepciones']);
+        Permission::create(['name' => 'Drugs: edit receptions', 'description' => 'Editar actas de recepción']);
+        Permission::create(['name' => 'Drugs: destroy drugs', 'description' => 'Crear actas de destrucción']);
+        Permission::create(['name' => 'Drugs: view reports', 'description' => 'Ver reporte']);
+        Permission::create(['name' => 'Drugs: manage parameters', 'description' => 'Modificar parametros del módulo de drogas']);
+        Permission::create(['name' => 'Drugs: manage substances', 'description' => 'Mantenedor de sustancias']);
+        Permission::create(['name' => 'Drugs: manage courts', 'description' => 'Mantenedor de Juzgados']);
+        Permission::create(['name' => 'Drugs: manage police units', 'description' => 'Mantenedor de unidades policiales']);
+        Permission::create(['name' => 'Drugs: delete destructions', 'description' => 'Borrar actas de destrucción']);
+        Permission::create(['name' => 'Drugs: add results from ISP', 'description' => 'Agregar resultados del ISP']);
+        Permission::create(['name' => 'Drugs: add protocols', 'description' => 'Crear protocolos (resultados de análisis)']);
 
 
         Permission::create(['name' => 'Tickets: create']);
@@ -72,7 +73,7 @@ class RoleAndPermissionSeeder extends Seeder
         Permission::create(['name' => 'Authorities: create', 'description' => 'Permite crear una autoridad']);
         Permission::create(['name' => 'Authorities: edit', 'description' => 'Permite editar una autoridad']);
 
-        Permission::create(['name' => 'Requirements: create']);
+        Permission::create(['name' => 'Requirements: create', 'description' => 'Acceso al SGR']);
 
         Permission::create(['name' => 'Agreements: user']);
         Permission::create(['name' => 'Agreements: manager']);
@@ -154,35 +155,41 @@ class RoleAndPermissionSeeder extends Seeder
         //$role->givePermissionTo(Permission::all());
 
         $role = Role::create(['name' => 'Drugs: admin']);
-        $role->givePermissionTo(['Drugs: view receptions',
-                                'Drugs: create receptions',
-                                'Drugs: edit receptions',
-                                'Drugs: destroy drugs',
-                                'Drugs: view reports',
-                                'Drugs: manage parameters',
-                                'Drugs: manage substances',
-                                'Drugs: manage courts',
-                                'Drugs: manage police units',
-                                'Drugs: delete destructions',
-                                'Drugs: add results from ISP',
-                                'Drugs: add protocols']);
+        $role->givePermissionTo([
+            'Drugs',
+            'Drugs: view receptions',
+            'Drugs: create receptions',
+            'Drugs: edit receptions',
+            'Drugs: destroy drugs',
+            'Drugs: view reports',
+            'Drugs: manage parameters',
+            'Drugs: manage substances',
+            'Drugs: manage courts',
+            'Drugs: manage police units',
+            'Drugs: delete destructions',
+            'Drugs: add results from ISP',
+            'Drugs: add protocols']);
 
         $role = Role::create(['name' => 'Drugs: receptionist']);
-        $role->givePermissionTo(['Drugs: view receptions',
-                                'Drugs: create receptions',
-                                'Drugs: edit receptions',
-                                'Drugs: destroy drugs',
-                                'Drugs: view reports',
-                                'Drugs: manage substances',
-                                'Drugs: manage courts',
-                                'Drugs: manage police units',
-                                'Drugs: add protocols']);
+        $role->givePermissionTo([
+            'Drugs',
+            'Drugs: view receptions',
+            'Drugs: create receptions',
+            'Drugs: edit receptions',
+            'Drugs: destroy drugs',
+            'Drugs: view reports',
+            'Drugs: manage substances',
+            'Drugs: manage courts',
+            'Drugs: manage police units',
+            'Drugs: add protocols']);
 
         $role = Role::create(['name' => 'Drugs: basic']);
-        $role->givePermissionTo(['Drugs: view receptions',
-                                'Drugs: destroy drugs',
-                                'Drugs: view reports',
-                                'Drugs: add results from ISP']);
+        $role->givePermissionTo([
+            'Drugs',
+            'Drugs: view receptions',
+            'Drugs: destroy drugs',
+            'Drugs: view reports',
+            'Drugs: add results from ISP']);
 
         $role = Role::create(['name' => 'RRHH: admin']);
         $role->givePermissionTo(['Users: create', 'Users: edit', 'Users: delete', 'Users: assign permission']);

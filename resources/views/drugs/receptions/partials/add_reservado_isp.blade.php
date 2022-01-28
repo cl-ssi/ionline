@@ -7,7 +7,7 @@
             @csrf
             @method('POST')
 
-            <div class="row">
+            <div class="form-row">
 
                 <fieldset class="form-group col-2">
                     <label for="for_envelope_weight">Peso sobre</label>
@@ -35,7 +35,10 @@
                         name="observation" value="{{ $reception->sampleToIsp ? $reception->sampleToIsp->observation : '' }}">
                 </fieldset>
 
-                <button type="submit" class="btn btn-primary nolabel"><i class="fas fa-save"></i> Guardar</button>
+                <div class="col-2">
+                    <label for="">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary form-control"><i class="fas fa-save"></i> Guardar</button>
+                </div>
 
                 @if($reception->sampleToIsp AND $reception->sampleToIsp->envelope_weight)
                     <a class="btn btn-secondary nolabel" target="_blank"
@@ -59,7 +62,7 @@
             @csrf
             @method('PUT')
 
-            <div class="row">
+            <div class="form-row">
 
                 <fieldset class="form-group col-2">
                     <label for="for_reservado_isp_number">N° de Documento</label>
