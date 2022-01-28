@@ -70,7 +70,7 @@
 
     <div class="float-right">
         <a href="{{ route('drugs.substances.index') }}" class="btn btn-outline-secondary">Cancelar</a>
-        <button class="btn btn-outline-secondary" type="submit"><i class="fas fa-save"></i> Crear</button>
+        <button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> Crear</button>
     </div>
 
 </form>

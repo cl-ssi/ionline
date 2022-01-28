@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Drugs\PoliceUnit;
+use App\Models\Drugs\PoliceUnit;
 use Illuminate\Database\Seeder;
 
 class PoliceUnitSeeder extends Seeder

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Drugs;
+namespace App\Models\Drugs;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,7 +16,7 @@ class Substance extends Model
     ];
 
     public function items() {
-        return $this->hasMany('App\Drugs\ReceptionItem');
+        return $this->hasMany('App\Models\Drugs\ReceptionItem');
     }
 
     // TODO: asociar result_substance en ReceptionItem a otro item.
