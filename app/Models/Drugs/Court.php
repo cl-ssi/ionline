@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Drugs;
+namespace App\Models\Drugs;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,7 +16,7 @@ class Court extends Model
     ];
 
     public function Receptions() {
-        return $this->hasMany('App\Drugs\Reception');
+        return $this->hasMany('App\Models\Drugs\Reception');
     }
 
     /**

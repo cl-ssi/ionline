@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Drugs\Substance;
+use App\Models\Drugs\Substance;
 use Illuminate\Database\Seeder;
 
 class SubstanceSeeder extends Seeder

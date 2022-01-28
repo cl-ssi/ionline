@@ -704,7 +704,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::delete('{organizationalUnit}/destroy', 'Rrhh\OrganizationalUnitController@destroy')->name('destroy')->middleware('auth');
     });
     Route::prefix('users')->name('users.')->group(function () {
-        Route::get('ou/{ou_id?}', 'Rrhh\UserController@getFromOu')->name('get.from.ou')->middleware('auth');
+        Route::get('ou/{ou_id?}', 'UserController@getFromOu')->name('get.from.ou')->middleware('auth');
         Route::get('autority/{ou_id?}', 'Rrhh\UserController@getAutorityFromOu')->name('get.autority.from.ou')->middleware('auth');
         Route::put('{user}/password', 'Rrhh\UserController@resetPassword')->name('password.reset')->middleware('auth');
         Route::get('{user}/switch', 'Rrhh\UserController@switch')->name('switch')->middleware('auth');
@@ -1235,36 +1235,65 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     });
 });
 
-Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function () {
-    //fixme convertir a gets, put, delete
-    Route::resource('courts', 'Drugs\CourtController');
-    Route::resource('police_units', 'Drugs\PoliceUnitController');
-    Route::resource('substances', 'Drugs\SubstanceController');
+Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs','auth')->group(function(){
+    Route::resource('courts','Drugs\CourtController');
+    Route::resource('police_units','Drugs\PoliceUnitController');
+    Route::resource('substances','Drugs\SubstanceController');
 
-    Route::get('receptions/report', 'Drugs\ReceptionController@report')->name('receptions.report');
-    Route::get('receptions/{reception}/record', 'Drugs\ReceptionController@showRecord')->name('receptions.record');
+    Route::get('users','Rrhh\UserController@drugs')->name('users');
 
-    Route::get('receptions/{receptionitem}/edit_item', 'Drugs\ReceptionController@editItem')->name('receptions.edit_item');
-    Route::put('receptions/{receptionitem}/update_item', 'Drugs\ReceptionController@updateItem')->name('receptions.update_item');
-    Route::delete('receptions/{receptionitem}/destroy_item', 'Drugs\ReceptionController@destroyItem')->name('receptions.destroy_item');
-    Route::put('receptions/{receptionitem}/store_protocol', 'Drugs\ReceptionController@storeProtocol')->name('receptions.store_protocol');
+    Route::get('receptions/report','Drugs\ReceptionController@report')->name('receptions.report');
+    Route::get('receptions/{reception}/record','Drugs\ReceptionController@showRecord')->name('receptions.record');
+    Route::get('receptions/{receptionitem}/edit_item','Drugs\ReceptionController@editItem')->name('receptions.edit_item');
+    Route::put('receptions/{receptionitem}/update_item','Drugs\ReceptionController@updateItem')->name('receptions.update_item');
+    Route::delete('receptions/{receptionitem}/destroy_item','Drugs\ReceptionController@destroyItem')->name('receptions.destroy_item');
+    Route::put('receptions/{receptionitem}/store_result','Drugs\ReceptionController@storeResult')->name('receptions.store_result');
+    Route::put('receptions/{receptionitem}/store_protocol','Drugs\ReceptionController@storeProtocol')->name('receptions.store_protocol');
+    Route::get('receptions/protocols/{protocol}','Drugs\ReceptionController@showProtocol')->name('receptions.protocols.show');
+    Route::post('receptions/{reception}/item','Drugs\ReceptionController@storeItem')->name('receptions.storeitem');
+    Route::get('receptions/{reception}/doc_fiscal','Drugs\ReceptionController@showDocFiscal')->name('receptions.doc_fiscal');
+    Route::get('receptions/{reception}/sample_to_isp','Drugs\SampleToIspController@show')->name('receptions.sample_to_isp.show');
+    Route::post('receptions/{reception}/sample_to_isp','Drugs\SampleToIspController@store')->name('receptions.sample_to_isp.store');
+    Route::get('receptions/{reception}/record_to_court','Drugs\RecordToCourtController@show')->name('receptions.record_to_court.show');
+    Route::post('receptions/{reception}/record_to_court','Drugs\RecordToCourtController@store')->name('receptions.record_to_court.store');
+    Route::resource('receptions','Drugs\ReceptionController');
 
-    Route::get('receptions/{reception}/sample_to_isp', 'Drugs\SampleToIspController@show')->name('receptions.sample_to_isp.show');
-    Route::get('receptions/{reception}/record_to_court', 'Drugs\RecordToCourtController@show')->name('receptions.record_to_court.show');
+    Route::resource('destructions','Drugs\DestructionController')->except(['create']);
 
-
-    Route::post('receptions/{reception}/item', 'Drugs\ReceptionController@storeItem')->name('receptions.storeitem');
-    Route::post('receptions/{reception}/sample_to_isp', 'Drugs\SampleToIspController@store')->name('receptions.sample_to_isp.store');
-    Route::post('receptions/{reception}/record_to_court', 'Drugs\RecordToCourtController@store')->name('receptions.record_to_court.store');
-
-    Route::get('receptions/', 'Drugs\ReceptionController@index')->name('receptions.index');
-    Route::get('receptions/create', 'Drugs\ReceptionController@create')->name('receptions.create');
-    Route::get('receptions/show/{reception}', 'Drugs\ReceptionController@show')->name('receptions.show');
-    Route::post('receptions/store', 'Drugs\ReceptionController@store')->name('receptions.store');
-    Route::get('receptions/edit/{reception}', 'Drugs\ReceptionController@edit')->name('receptions.edit');
-    Route::put('receptions/update/{reception}', 'Drugs\ReceptionController@update')->name('receptions.update');
-    //    Route::resource('receptions','Drugs\ReceptionController');
+    Route::get('rosters/analisis_to_admin','Drugs\RosterAnalisisToAdminController@index')->name('roster.analisis_to_admin.index');
+    Route::get('rosters/analisis_to_admin/{id}','Drugs\RosterAnalisisToAdminController@show')->name('roster.analisis_to_admin.show');
 });
+
+// Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function () {
+//     //fixme convertir a gets, put, delete
+//     Route::resource('courts', 'Drugs\CourtController');
+//     Route::resource('police_units', 'Drugs\PoliceUnitController');
+//     Route::resource('substances', 'Drugs\SubstanceController');
+
+//     Route::get('receptions/report', 'Drugs\ReceptionController@report')->name('receptions.report');
+//     Route::get('receptions/{reception}/record', 'Drugs\ReceptionController@showRecord')->name('receptions.record');
+
+//     Route::get('receptions/{receptionitem}/edit_item', 'Drugs\ReceptionController@editItem')->name('receptions.edit_item');
+//     Route::put('receptions/{receptionitem}/update_item', 'Drugs\ReceptionController@updateItem')->name('receptions.update_item');
+//     Route::delete('receptions/{receptionitem}/destroy_item', 'Drugs\ReceptionController@destroyItem')->name('receptions.destroy_item');
+//     Route::put('receptions/{receptionitem}/store_protocol', 'Drugs\ReceptionController@storeProtocol')->name('receptions.store_protocol');
+
+//     Route::get('receptions/{reception}/sample_to_isp', 'Drugs\SampleToIspController@show')->name('receptions.sample_to_isp.show');
+//     Route::get('receptions/{reception}/record_to_court', 'Drugs\RecordToCourtController@show')->name('receptions.record_to_court.show');
+
+
+//     Route::post('receptions/{reception}/item', 'Drugs\ReceptionController@storeItem')->name('receptions.storeitem');
+//     Route::post('receptions/{reception}/sample_to_isp', 'Drugs\SampleToIspController@store')->name('receptions.sample_to_isp.store');
+//     Route::post('receptions/{reception}/record_to_court', 'Drugs\RecordToCourtController@store')->name('receptions.record_to_court.store');
+
+//     Route::get('receptions/', 'Drugs\ReceptionController@index')->name('receptions.index');
+//     Route::get('receptions/create', 'Drugs\ReceptionController@create')->name('receptions.create');
+//     Route::get('receptions/show/{reception}', 'Drugs\ReceptionController@show')->name('receptions.show');
+//     Route::post('receptions/store', 'Drugs\ReceptionController@store')->name('receptions.store');
+//     Route::get('receptions/edit/{reception}', 'Drugs\ReceptionController@edit')->name('receptions.edit');
+//     Route::put('receptions/update/{reception}', 'Drugs\ReceptionController@update')->name('receptions.update');
+//     //    Route::resource('receptions','Drugs\ReceptionController');
+// });
 
 Route::get('health_plan/{comuna}', 'HealthPlan\HealthPlanController@index')->middleware('auth')->name('health_plan.index');
 Route::get('health_plan/{comuna}/{file}',  'HealthPlan\HealthPlanController@download')->middleware('auth')->name('health_plan.download');

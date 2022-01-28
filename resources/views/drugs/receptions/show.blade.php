@@ -18,7 +18,7 @@
 
         <td colspan="2">
             @can('Drugs: edit receptions')
-                <a href="{{ route('drugs.receptions.edit', ['reception' => $reception->id]) }}"> <i class="fas fa-edit"></i> Editar </a>
+                <a href="{{ route('drugs.receptions.edit', $reception->id) }}"> <i class="fas fa-edit"></i> Editar </a>
             @endcan
              |
             @if( $reception->haveItems() )

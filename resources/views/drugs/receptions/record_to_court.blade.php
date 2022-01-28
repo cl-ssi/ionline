@@ -127,7 +127,7 @@
 </p>
 
 
-<div id="firmas">
+<!-- <div id="firmas">
     <div class="center" style="width: 100%;">
         <p class="uppercase">
             {{ $recordToCourt->lawyer->FullName }}<br>
@@ -135,7 +135,7 @@
             {{ config('app.ss') }}
         </p>
     </div>
-</div>
+</div> -->
 
 
 <div class="row">
@@ -150,13 +150,13 @@
         </p>
     </div>
 
-    <div class="column right">
+    <!-- <div class="column right">
             <p style="padding-right: 117px">
                 <strong>Responsables:</strong>
-            </p>
+            </p> -->
             <!--li>Departamento de Asesoría Jurídica  {{ $reception->recordToCourt->lawyer->Initials }}  _______</li-->
-            Unidad de Drogas &nbsp;&nbsp; {{ $reception->recordToCourt->manager->Initials }} &nbsp;&nbsp; _______
-    </div>
+            <!-- Unidad de Drogas &nbsp;&nbsp; {{ $reception->recordToCourt->manager->Initials }} &nbsp;&nbsp; _______
+    </div> -->
 </div>
 
 @endsection
