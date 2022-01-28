@@ -224,7 +224,14 @@ class RequestFormController extends Controller {
 
     public function callbackSign($message, $modelId, SignaturesFile $signaturesFile = null)
     {
+        dd('hola');
         $requestForm = RequestForm::find($modelId);
+
+        $event->signature_date = Carbon::now();
+        $event->position_signer_user = $this->position;
+        $event->status  = 'approved';
+        $event->signerUser()->associate(auth()->user());
+        $event->save();
 
         if (!$signaturesFile) {
             session()->flash('danger', $message);
