@@ -14,7 +14,7 @@
 <div class="titulo">ACTA DE DESTRUCCIÓN N° {{ $destruction->reception->id }}</div>
 
 <p class="justify indent">
-    En Iquique, a <strong>{{ $destruction->destructed_at->translatedFormat('d \de F \d\e\l Y') }}</strong>
+    En Iquique, a <strong>{{ $destruction->destructed_at->day }} de {{ $destruction->destructed_at->monthName }} del {{ $destruction->destructed_at->year }}</strong>
     en conformidad a la ley 20.000/2005, en presencia de los funcionarios
     que más abajo se indica y de <strong>{{ $destruction->police }}</strong>,
     institución que acompaña, se procede a la desctrucción de
