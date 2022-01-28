@@ -249,12 +249,12 @@
                 </li>
                 @endcan
 
-                @role('Drugs: admin|Drugs: receptionist|Drugs: basic')
+                @can('Drugs')
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('drugs.receptions.index') }}">
                         <i class="fas fa-cannabis"></i> Drogas</a>
                 </li>
-                @endrole
+                @endcan
 
                 @canany(['Asignacion Estimulos'])
                   <li class="nav-item">
