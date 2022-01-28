@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Editar sustancia')
+@section('title', 'Crear Banda Ancha Movil')
 
 @section('content')
 
