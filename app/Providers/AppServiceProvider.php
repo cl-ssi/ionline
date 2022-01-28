@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
+use Carbon\Carbon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Carbon::setUTF8(true); 
+        Carbon::setLocale(config('app.locale'));
+
         Blade::directive('active', function ($route) {
             //$route = array('home','login');
             if( is_array( $route ) ){
