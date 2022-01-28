@@ -38,7 +38,7 @@
             <td>{{ $police_unit->name }}</td>
             <td>{{ $police_unit->status }}</td>
             <td>
-              <a href="{{ route('drugs.police_units.edit', $police_unit->id) }}" class="btn btn-outline-secondary btn-sm"><i class="fas fa-edit"></i> Editar</a>
+              <a href="{{ route('drugs.police_units.edit', $police_unit->id) }}" class="btn btn-outline-primary btn-sm"><i class="fas fa-edit"></i> Editar</a>
               <!--<button class="btn btn-danger btn-sm" formaction=""><i class="fas fa-trash"></i> Eliminar</button>-->
             </td>
         </tr>

@@ -7,7 +7,7 @@
             <form method="POST" class="form-horizontal" action="{{ route('drugs.destructions.store') }}">
                 @csrf
                 <input type="hidden" name="reception_id" value="{{ $reception->id }}">
-                <div class="row">
+                <div class="form-row">
 
                     <fieldset class="form-group col">
                         <label for="for_police">Policia</label>
@@ -23,7 +23,10 @@
                         <input type="date" class="form-control" id="for_destructed_at" name="destructed_at" required="">
                     </fieldset>
 
-                    <button type="submit" class="btn btn-primary nolabel"><i class="fas fa-trash"></i> Destruir</button>
+                    <div class="col-2">
+                        <label for="">&nbsp;</label>
+                        <button type="submit" class="form-control btn btn-primary"><i class="fas fa-trash"></i> Destruir</button>
+                    </div>
 
                 </div>
                 <div class="row mb-3">

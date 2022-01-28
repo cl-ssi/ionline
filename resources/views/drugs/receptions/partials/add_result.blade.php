@@ -7,7 +7,7 @@
             <form method="POST" class="form-horizontal" action="{{ route('drugs.receptions.store_result', $item->id) }}">
                 @csrf
                 @method('PUT')
-                <div class="row">
+                <div class="form-row">
 
                     <fieldset class="form-group col-2">
                         <label for="for_result_number">N° de Documento</label>
