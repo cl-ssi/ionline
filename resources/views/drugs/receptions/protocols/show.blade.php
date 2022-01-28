@@ -4,8 +4,6 @@
 
 @section('content')
 
-<?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
-
 <div class="siete" style="padding-top: 3px;">Unidad de Análisis</div>
 <div class="siete" style="padding-top: 4px;">
     {{ $protocol->user->Initials }}
@@ -13,7 +11,7 @@
 
 <div class="titulo">PROTOCOLO DE ANÁLISIS N°: {{ $protocol->id }}</div>
 
-Iquique, <strong>{{ $protocol->created_at->formatLocalized('%d de %B del %Y') }}</strong>.
+Iquique, <strong>{{ $protocol->created_at->translatedFormat('d \de F \d\e\l Y') }}</strong>.
 
 <p>
     Antecedentes:
@@ -79,7 +77,6 @@ Iquique, <strong>{{ $protocol->created_at->formatLocalized('%d de %B del %Y') }}
 </div>
 
 
-
 <div class="page-break"></div>
 
 
@@ -93,7 +90,7 @@ Iquique, <strong>{{ $protocol->created_at->formatLocalized('%d de %B del %Y') }}
 <div class="titulo">ACTA DE DESTRUCCIÓN DE MUESTRA <br> PROTOCOLO DE ANALISIS: {{ $protocol->id }}</div>
 
 <p class="justify indent">
-    En Iquique, a <strong>{{ $protocol->created_at->formatLocalized('%d de %B del %Y') }}</strong>
+    En Iquique, a <strong>{{ $protocol->created_at->translatedFormat('d \de F \d\e\l Y') }}</strong>
     en conformidad a la ley 20.000/2005, se procede al análisis y posterior
     destrucción química de la siguiente muestra de sustancia:
 </p>
