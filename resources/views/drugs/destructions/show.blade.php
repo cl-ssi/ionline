@@ -4,9 +4,8 @@
 
 @section('content')
 
-<?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
-
 <div class="siete" style="padding-top: 3px;">Unidad de Drogas</div>
+
 <div class="siete" style="padding-top: 4px;">
     {{ $destruction->lawyer->Initials }}/
     {{ $destruction->manager->Initials }}/
@@ -15,7 +14,7 @@
 <div class="titulo">ACTA DE DESTRUCCIÓN N° {{ $destruction->reception->id }}</div>
 
 <p class="justify indent">
-    En Iquique, a <strong>{{ $destruction->destructed_at->formatLocalized('%d de %B del %Y') }}</strong>
+    En Iquique, a <strong>{{ $destruction->destructed_at->translatedFormat('d \de F \d\e\l Y') }}</strong>
     en conformidad a la ley 20.000/2005, en presencia de los funcionarios
     que más abajo se indica y de <strong>{{ $destruction->police }}</strong>,
     institución que acompaña, se procede a la desctrucción de

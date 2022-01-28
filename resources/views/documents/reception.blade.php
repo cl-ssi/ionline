@@ -64,7 +64,7 @@
             }
         </style>
     </head>
-    <?php setlocale(LC_ALL, 'es'); ?>
+
     <body>
 
         <div class="content">
@@ -74,7 +74,7 @@
 
             <div class="right" style="float: right; width: 300px;">
                 <div class="left" style="padding-bottom: 6px;"><strong>N°:</strong> {{ $document->number }}</div>
-                <div class="left" style="padding-bottom: 2px;">Iquique, {{ $document->date ? $document->date->formatLocalized('%d %B del %Y'): '' }}</div>
+                <div class="left" style="padding-bottom: 2px;">Iquique, {{ $document->date ? $document->date->translatedFormat('d \de F \d\e\l Y'): '' }}</div>
 
             </div>
 
