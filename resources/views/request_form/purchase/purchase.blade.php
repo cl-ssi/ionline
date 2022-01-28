@@ -55,6 +55,10 @@
                         <td>{{ $requestForm->purchaseUnit->name  }}</td>
                     </tr>
                     <tr>
+                        <th class="table-active" scope="row">Caracteristica de Compra</th>
+                        <td>{{ $requestForm->SubtypeValue }}</td>
+                    </tr>
+                    <tr>
                         <th class="table-active" scope="row">Programa Asociado</th>
                         <td>{{ $requestForm->program }}</td>
                     </tr>
@@ -466,13 +470,13 @@
                     <tr><td colspan="100%" class="text-center">No existen bienes y/o servicios de ejecución inmediata asociados a este formulario de requerimiento.</td></tr>
                   @endforelse
                 </tbody>
+                @if($requestForm->children->count() > 0)
                 <tfoot>
                     <tr>
                       <td colspan="7"></td>
                       <th class="text-right">Totales</td>
                       <th class="text-right">${{ number_format($requestForm->getTotalEstimatedExpense(),0,",",".") }}</td>
                       <th class="text-right">${{ number_format($requestForm->getTotalExpense(),0,",",".") }}</td>
-                      {{--<th class="text-right">${{ number_format($requestForm->getTotalEstimatedExpense() - $requestForm->getTotalExpense(),0,",",".") }}</td>--}}
                     </tr>
                     <tr>
                       <td colspan="8"></td>
@@ -480,6 +484,7 @@
                       <th class="text-right">${{ number_format($requestForm->purchasingProcess->getExpense() - $requestForm->getTotalExpense(),0,",",".") }}</td>
                     </tr>
                 </tfoot>
+                @endif
             </table>
         </div>
     </div>
