@@ -10,13 +10,6 @@
             <div class="form-row">
 
                 <fieldset class="form-group col-2">
-                    <label for="for_envelope_weight">Peso sobre</label>
-                    <input type="number" step="any" class="form-control" id="for_envelope_weight"
-                        name="envelope_weight" required
-                        value="{{ $reception->sampleToIsp ? $reception->sampleToIsp->envelope_weight : '' }}">
-                </fieldset>
-
-                <fieldset class="form-group col-2">
                     <label for="for_number">N° de Documento</label>
                     <input type="number" class="form-control" id="for_number"
                         name="number" value="{{ $reception->sampleToIsp ? $reception->sampleToIsp->number : '' }}">
@@ -33,6 +26,13 @@
                     <label for="for_number">Observación</label>
                     <input type="text" class="form-control" id="for_observation"
                         name="observation" value="{{ $reception->sampleToIsp ? $reception->sampleToIsp->observation : '' }}">
+                </fieldset>
+
+                <fieldset class="form-group col-2">
+                    <label for="for_envelope_weight">Peso sobre</label>
+                    <input type="number" step="any" class="form-control" id="for_envelope_weight"
+                        name="envelope_weight" required
+                        value="{{ $reception->sampleToIsp ? $reception->sampleToIsp->envelope_weight : '' }}">
                 </fieldset>
 
                 <div class="col-1">
