@@ -1,8 +1,10 @@
 @extends('layouts.report')
-<!-- FIXME : Aparece codigo laravel en vez del id -->
+
 @section('title', "Acta de recepción - $reception->id")
 
 @section('content')
+
+<?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
 
 <div class="siete" style="padding-top: 3px;">Unidad de Decomisos</div>
 <div class="siete" style="padding-top: 4px;">
