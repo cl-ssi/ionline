@@ -94,9 +94,33 @@
           </div>
 
           <div class="row justify-content-md-end mt-0">
+              @if($eventType=='finance_event')
+                <div class="col-2">
+                  <a href="{{ route('request_forms.create_form_document', $requestForm) }}"
+                    class="btn btn-outline-secondary btn-sm float-right" title="Formulario" target="_blank">
+                      <i class="fas fa-file-alt"></i>
+                  </a>
+                </div>
+                <div class="col-2">
+                  {{--modal firmador--}}
+                  @php $idModelModal = $requestForm->id;
+                      $routePdfSignModal = "/request_forms/create_form_document/$idModelModal/";
+                      $routeCallbackSignModal = 'request_forms.callbackSign';
+                  @endphp
+
+                  @include('documents.signatures.partials.sign_file')
+
+                  <button type="button" data-toggle="modal" class="btn btn-primary btn-sm float-right"
+                      title="Firma Digital"
+                      data-target="#signPdfModal{{$idModelModal}}" title="Firmar">
+                        Firmar Form. <i class="fas fa-signature"></i>
+                  </button>
+                </div>
+              @else
               <div class="col-2">
                   <button type="button" wire:click="acceptRequestForm" class="btn btn-primary btn-sm float-right">Autorizar</button>
               </div>
+              @endif
               <div class="col-1">
                   <button type="button" wire:click="rejectRequestForm" class="btn btn-secondary btn-sm float-right">Rechazar</button>
               </div>
