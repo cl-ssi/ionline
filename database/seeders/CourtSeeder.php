@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Drugs\Court;
+use App\Models\Drugs\Court;
 
 class CourtSeeder extends Seeder
 {

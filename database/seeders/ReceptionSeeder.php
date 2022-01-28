@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Drugs\Reception;
-use App\Drugs\ReceptionItem;
+use App\Models\Drugs\Reception;
+use App\Models\Drugs\ReceptionItem;
 use Illuminate\Database\Seeder;
 
 class ReceptionSeeder extends Seeder

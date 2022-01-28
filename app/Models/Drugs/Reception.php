@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Drugs;
+namespace App\Models\Drugs;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,35 +23,35 @@ class Reception extends Model
     ];
 
     public function items() {
-        return $this->hasMany('App\Drugs\ReceptionItem');
+        return $this->hasMany('App\Models\Drugs\ReceptionItem');
     }
 
     public function court() {
-        return $this->belongsTo('App\Drugs\Court');
+        return $this->belongsTo('App\Models\Drugs\Court');
     }
 
     public function partePoliceUnit() {
-        return $this->belongsTo('App\Drugs\PoliceUnit', 'parte_police_unit_id');
+        return $this->belongsTo('App\Models\Drugs\PoliceUnit', 'parte_police_unit_id');
     }
 
     public function documentPoliceUnit() {
-        return $this->belongsTo('App\Drugs\PoliceUnit', 'document_police_unit_id');
+        return $this->belongsTo('App\Models\Drugs\PoliceUnit', 'document_police_unit_id');
     }
 
     public function user() {
-        return $this->belongsTo('App\User')->withTrashed();
+        return $this->belongsTo('App\User');
     }
 
     public function manager() {
-        return $this->belongsTo('App\User', 'manager_id')->withTrashed();
+        return $this->belongsTo('App\User', 'manager_id');
     }
 
     public function lawyer() {
-        return $this->belongsTo('App\User', 'lawyer_id')->withTrashed();
+        return $this->belongsTo('App\User', 'lawyer_id');
     }
 
     public function destruction() {
-        return $this->hasOne('App\Drugs\Destruction');
+        return $this->hasOne('App\Models\Drugs\Destruction');
     }
 
     public function wasDestructed() {
@@ -79,11 +79,11 @@ class Reception extends Model
     }
 
     public function sampleToIsp() {
-        return $this->hasOne('App\Drugs\SampleToIsp');
+        return $this->hasOne('App\Models\Drugs\SampleToIsp');
     }
 
     public function recordToCourt() {
-        return $this->hasOne('App\Drugs\RecordToCourt');
+        return $this->hasOne('App\Models\Drugs\RecordToCourt');
     }
 
     use SoftDeletes;
