@@ -157,7 +157,7 @@
           <strong>NÚMERO DE FORMULARIO DE REQUERIMIENTO: {{ number_format($requestForm->id,0,",",".") }}</strong>
         </div>
         <div class="left" style="padding-bottom: 2px;">
-          <strong>Iquique, {{ $requestForm->eventSignatureDate('supply_event', 'approved') }}</strong>
+          <strong>Iquique, {{ $requestForm->eventSignatureDate('finance_event', 'approved') }}</strong>
         </div>
       </div>
 
@@ -207,6 +207,10 @@
               <td colspan="2">{{ $requestForm->program }}</td>
           </tr>
           <tr>
+              <th align="left">Justificación</th>
+              <td colspan="2">{{ $requestForm->justification }}</td>
+          </tr>
+          <tr>
               <th align="left" rowspan="4">Mecanismo de adquisición</th>
               <td>Menores a 3 UTM</td>
               <td align="center">@if($requestForm->getPurchaseMechanism() == 'MENORES A 3 UTM')
@@ -242,23 +246,63 @@
       <table class="siete">
           <thead>
               <tr>
-                  <th style="width: 5%">Ítem</th>
-                  <th style="width: 40%">Articulo</th>
-                  <th style="width: 10%">Cantidad</th>
-                  <th style="width: 45%">Especificaciones Técnicas</th>
+                  <th>#</th>
+                  <th>Ítem Presupuestario</th>
+                  <th>Articulo</th>
+                  <th>Especificaciones Técnicas</th>
+                  <th>Cantidad</th>
+                  <th>Valor Unitario Neto</th>
+                  <th>Valor Total *</th>
               </tr>
           </thead>
           <tbody>
               @foreach($requestForm->itemRequestForms as $key => $item)
               <tr>
                   <td>{{ $key+1 }}</td>
+                  <td>{{ $item->budgetItem->code }}</td>
                   <td>{{ $item->article }}</td>
-                  <td align="right">{{ $item->quantity }}</td>
                   <td>{{ $item->specification }}</td>
+                  <td align="right">{{ number_format($item->quantity,0,",",".") }}</td>
+                  <td align="right">
+                    @if($requestForm->type_of_currency == 'peso')
+                      ${{ number_format($item->unit_value,0,",",".") }}
+                    @elseif($requestForm->type_of_currency == 'dolar')
+                      USD ${{ number_format($item->unit_value,2,",",".") }}
+                    @else
+                      UF ${{ number_format($item->unit_value,2,",",".") }}
+                    @endif
+                  </td>
+                  <td align="right">
+                    @if($requestForm->type_of_currency == 'peso')
+                      ${{ number_format($item->expense,0,",",".") }}
+                    @elseif($requestForm->type_of_currency == 'dolar')
+                      USD ${{ number_format($item->expense,2,",",".") }}
+                    @else
+                      UF ${{ number_format($item->expense,2,",",".") }}
+                    @endif
+                  </td>
               </tr>
               @endforeach
           </tbody>
+          <tfoot>
+              <tr align="right">
+                  <th colspan="6">Total</th>
+                  <th>
+                    @if($requestForm->type_of_currency == 'peso')
+                      ${{ number_format($requestForm->estimated_expense,0,",",".") }}
+                    @elseif($requestForm->type_of_currency == 'dolar')
+                      USD ${{ number_format($requestForm->estimated_expense,2,",",".") }}
+                    @else
+                      UF ${{ number_format($requestForm->estimated_expense,2,",",".") }}
+                    @endif
+                  </th>
+              </tr>
+          </tfoot>
       </table>
+
+      <div>
+          <p align="right">* El valor total presenta impuestos incluidos.</p>
+      </div>
 
       <div style="clear: both; padding-bottom: 20px">&nbsp;</div>
 
@@ -310,14 +354,6 @@
                   <td></td>
               </tr>
               <tr>
-                  <th align="left" style="width: 50%">Ítem Presupuestario</th>
-                  <td>
-                      @foreach($requestForm->itemRequestForms as $item)
-                          {{ $item->budgetItem->code }}
-                      @endforeach
-                  </td>
-              </tr>
-              <tr>
                   <th align="left" style="width: 50%">Monto $</th>
                   <td>${{ number_format($requestForm->estimated_expense,0,",",".") }}</td>
               </tr>
@@ -356,7 +392,7 @@
           </tbody>
       </table>
 
-      <div style="clear: both; padding-bottom: 20px">&nbsp;</div>
+      {{-- <div style="clear: both; padding-bottom: 20px">&nbsp;</div>
 
       <table class="siete">
           <thead>
@@ -388,7 +424,7 @@
                   @endforeach
               </tr>
           </tbody>
-      </table>
+      </table> --}}
 
     </div>
 </body>
