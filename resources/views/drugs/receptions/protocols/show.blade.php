@@ -11,7 +11,7 @@
 
 <div class="titulo">PROTOCOLO DE ANÁLISIS N°: {{ $protocol->id }}</div>
 
-Iquique, <strong>{{ $protocol->created_at->translatedFormat('d \de F \d\e\l Y') }}</strong>.
+Iquique, <strong>{{ $protocol->created_at->day }} de {{ $protocol->created_at->monthName }} del {{ $protocol->created_at->year }}</strong>.
 
 <p>
     Antecedentes:
@@ -90,7 +90,7 @@ Iquique, <strong>{{ $protocol->created_at->translatedFormat('d \de F \d\e\l Y') 
 <div class="titulo">ACTA DE DESTRUCCIÓN DE MUESTRA <br> PROTOCOLO DE ANALISIS: {{ $protocol->id }}</div>
 
 <p class="justify indent">
-    En Iquique, a <strong>{{ $protocol->created_at->translatedFormat('d \de F \d\e\l Y') }}</strong>
+    En Iquique, a <strong>{{ $protocol->created_at->day }} de {{ $protocol->created_at->monthName }} del {{ $protocol->created_at->year }}</strong>
     en conformidad a la ley 20.000/2005, se procede al análisis y posterior
     destrucción química de la siguiente muestra de sustancia:
 </p>

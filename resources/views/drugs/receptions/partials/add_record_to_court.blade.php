@@ -22,22 +22,25 @@
                         value="{{ ($reception->recordToCourt AND $reception->recordToCourt->document_date) ? $reception->recordToCourt->document_date->format('Y-m-d') : '' }}">
                 </fieldset>
 
-                <fieldset class="form-group col-2">
+                <fieldset class="form-group col-5">
                     <label for="for_number">Observación</label>
                     <input type="text" class="form-control" id="for_observation"
                         name="observation" value="{{ $reception->recordToCourt ? $reception->recordToCourt->observation : '' }}">
                 </fieldset>
 
-                <div class="col-2">
+                <div class="col-1">
                     <label for="">&nbsp;</label>
-                    <button type="submit" class="btn btn-primary form-control"><i class="fas fa-save"></i> Guardar</button>
+                    <button type="submit" class="btn btn-primary form-control"><i class="fas fa-save"></i></button>
                 </div>
 
-                @if($reception->recordToCourt)
-                    <a class="btn btn-secondary nolabel" target="_blank"
+                @if($reception->recordToCourt && $reception->recordToCourt->document_date)
+                <div class="col-1">
+                    <label for="">&nbsp;</label>
+                    <a class="btn btn-outline-secondary form-control" target="_blank"
                         href="{{ route('drugs.receptions.record_to_court.show', $reception )}}">
                         <i class="fas fa-file-alt"></i>
                     </a>
+                </div>
                 @endif
             </div>
 

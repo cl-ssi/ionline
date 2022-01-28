@@ -27,9 +27,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Carbon::setUTF8(true); 
-        Carbon::setLocale(config('app.locale'));
-
         Blade::directive('active', function ($route) {
             //$route = array('home','login');
             if( is_array( $route ) ){

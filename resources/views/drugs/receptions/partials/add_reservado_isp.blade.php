@@ -29,22 +29,25 @@
                         value="{{ ($reception->sampleToIsp AND $reception->sampleToIsp->document_date) ? $reception->sampleToIsp->document_date->format('Y-m-d') : '' }}">
                 </fieldset>
 
-                <fieldset class="form-group col-2">
+                <fieldset class="form-group col-3">
                     <label for="for_number">Observación</label>
                     <input type="text" class="form-control" id="for_observation"
                         name="observation" value="{{ $reception->sampleToIsp ? $reception->sampleToIsp->observation : '' }}">
                 </fieldset>
 
-                <div class="col-2">
+                <div class="col-1">
                     <label for="">&nbsp;</label>
-                    <button type="submit" class="btn btn-primary form-control"><i class="fas fa-save"></i> Guardar</button>
+                    <button type="submit" class="btn btn-primary form-control"><i class="fas fa-save"></i> </button>
                 </div>
 
                 @if($reception->sampleToIsp AND $reception->sampleToIsp->envelope_weight)
-                    <a class="btn btn-secondary nolabel" target="_blank"
+                <div class="col-1">
+                    <label for="">&nbsp;</label>
+                    <a class="btn btn-outline-secondary form-control" target="_blank"
                         href="{{ route('drugs.receptions.sample_to_isp.show', $reception )}}">
                         <i class="fas fa-file-alt"></i>
                     </a>
+                </div>
                 @endif
             </div>
 
