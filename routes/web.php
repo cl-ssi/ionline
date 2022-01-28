@@ -704,7 +704,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::delete('{organizationalUnit}/destroy', 'Rrhh\OrganizationalUnitController@destroy')->name('destroy')->middleware('auth');
     });
     Route::prefix('users')->name('users.')->group(function () {
-        Route::get('ou/{ou_id?}', 'Rrhh\UserController@getFromOu')->name('get.from.ou')->middleware('auth');
+        Route::get('ou/{ou_id?}', 'UserController@getFromOu')->name('get.from.ou')->middleware('auth');
         Route::get('autority/{ou_id?}', 'Rrhh\UserController@getAutorityFromOu')->name('get.autority.from.ou')->middleware('auth');
         Route::put('{user}/password', 'Rrhh\UserController@resetPassword')->name('password.reset')->middleware('auth');
         Route::get('{user}/switch', 'Rrhh\UserController@switch')->name('switch')->middleware('auth');
@@ -1239,6 +1239,8 @@ Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs','auth')->group(func
     Route::resource('courts','Drugs\CourtController');
     Route::resource('police_units','Drugs\PoliceUnitController');
     Route::resource('substances','Drugs\SubstanceController');
+
+    Route::get('users','Rrhh\UserController@drugs')->name('users');
 
     Route::get('receptions/report','Drugs\ReceptionController@report')->name('receptions.report');
     Route::get('receptions/{reception}/record','Drugs\ReceptionController@showRecord')->name('receptions.record');

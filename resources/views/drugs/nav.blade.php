@@ -63,4 +63,13 @@
     </li>
     @endcan
 
+    @can('Drugs')
+    <li class="nav-item">
+        <a class="nav-link {{ active('drugs.users') }}"
+                      href="{{ route('drugs.users') }}">
+            <i class="fas fa-user"></i> 
+        </a>
+    </li>
+    @endcan
+
 </ul>
