@@ -103,8 +103,6 @@
 
 
 
-
-
         <fieldset class="form-group col-2">
             <label for="for_file">&nbsp;</label>
             <div>
@@ -114,7 +112,7 @@
 
         </form>
 
-        <fieldset class="form-group col-5">
+        <fieldset class="form-group col-10">
             <label for="for_file">Archivos</label>
             <div>
             @if($parte->files->count()>0)
@@ -142,6 +140,31 @@
             @endif
             </div>
         </fieldset>
+
+        @can('Partes: delete')
+            <fieldset class="form-group col-2">
+                <label for="for_delete">&nbsp;</label>
+                <div>
+                    @if($parte->created_at->diffInDays('now') <= 5)
+                    <form method="POST" style="display:inline-block;"
+                        action="{{ route('documents.partes.destroy', $parte) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    </form>
+                    @else
+                        <button type="button" class="btn btn-outline-secondary" title="Han pasado más de 5 días" disabled>
+                            <i class="fas fa-trash"></i> Eliminar
+                        </button>
+                    @endif
+                </div>
+            </fieldset>
+            
+            
+        @endcan
+        
 
     </div>
 

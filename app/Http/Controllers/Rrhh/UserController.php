@@ -456,5 +456,9 @@ class UserController extends Controller
         return redirect()->route('rrhh.users.service_requests.index');
     }
 
-
+    public function drugs()
+    {
+        $users = User::permission('Drugs')->get();
+        return view('drugs.users',compact('users'));
+    }
 }

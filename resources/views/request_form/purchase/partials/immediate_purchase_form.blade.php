@@ -52,6 +52,10 @@
                 <input type="number" class="form-control form-control-sm amount" id="for_amount" name="po_amount"
                     value="{{ old('po_amount') }}" required>
             </fieldset>
+            <fieldset class="form-group col-sm-4">
+                <label for="forFile">Adjuntar Orden de Compra (Si procede)</label>
+                <input type="file" class="form-control-file" id="forFile" name="oc_file">
+            </fieldset>
         </div>
         <button type="submit" class="btn btn-primary float-right" id="save_btn">
           <i class="fas fa-save"></i> Guardar
