@@ -22,11 +22,15 @@
                         value="{{ ($reception->recordToCourt AND $reception->recordToCourt->document_date) ? $reception->recordToCourt->document_date->format('Y-m-d') : '' }}">
                 </fieldset>
 
-                <fieldset class="form-group col-5">
+                <fieldset class="form-group col-3">
                     <label for="for_number">Observación</label>
                     <input type="text" class="form-control" id="for_observation"
                         name="observation" value="{{ $reception->recordToCourt ? $reception->recordToCourt->observation : '' }}">
                 </fieldset>
+
+                <div class="col-2">
+                    
+                </div>
 
                 <div class="col-1">
                     <label for="">&nbsp;</label>
