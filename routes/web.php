@@ -1235,7 +1235,7 @@ Route::prefix('indicators')->as('indicators.')->group(function () {
     });
 });
 
-Route::prefix('drugs')->as('drugs.')->middleware('auth')->group(function(){
+Route::prefix('drugs')->as('drugs.')->middleware('can:Drugs','auth')->group(function(){
     Route::resource('courts','Drugs\CourtController');
     Route::resource('police_units','Drugs\PoliceUnitController');
     Route::resource('substances','Drugs\SubstanceController');
