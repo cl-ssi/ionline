@@ -639,10 +639,11 @@
           @endif
           del presupuesto del
           @if($ServiceRequest->responsabilityCenter->establishment_id == 1)
-          Hospital “Dr. Ernesto Torres Galdames” de Iquique.
+          Hospital “Dr. Ernesto Torres Galdames” de Iquique,
           @else
           Servicio Salud Iquique.
           @endif
+          Unidad demandante COVID-19.
         </p>
         @elseif($ServiceRequest->program_contract_type == "Horas")
         @if($ServiceRequest->estate == "Profesional Médico")
