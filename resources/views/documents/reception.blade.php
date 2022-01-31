@@ -1,4 +1,3 @@
-<?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
 <html lang="es">
     <!-- FIXME: hacer un layout en vez de tener el codigo acá, quizá utilizar
         el de reportes de ilícios.
@@ -64,7 +63,7 @@
             }
         </style>
     </head>
-    <?php setlocale(LC_ALL, 'es'); ?>
+
     <body>
 
         <div class="content">
@@ -74,7 +73,8 @@
 
             <div class="right" style="float: right; width: 300px;">
                 <div class="left" style="padding-bottom: 6px;"><strong>N°:</strong> {{ $document->number }}</div>
-                <div class="left" style="padding-bottom: 2px;">Iquique, {{ $document->date ? $document->date->formatLocalized('%d %B del %Y'): '' }}</div>
+                <div class="left" style="padding-bottom: 2px;">Iquique, 
+                {{ $document->date ? $document->date->day . " de " . $document->date->monthName ." del ". $document->date->year: '' }}</div>
 
             </div>
 

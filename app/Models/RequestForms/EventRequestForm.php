@@ -49,22 +49,22 @@ class EventRequestForm extends Model
     public function getEventTypeValueAttribute(){
         switch ($this->event_type) {
             case "leader_ship_event":
-                return 'Firma Jefatura Directa';
+                return 'Jefatura Directa';
                 break;
             case "superior_leader_ship_event":
-                return 'Firma Jefatura Superior';
+                return 'Jefatura Superior';
                 break;
             case "pre_finance_event":
                 return 'Refrendación Presupuestaria';
                 break;
             case "finance_event":
-                return 'Firma Finanzas';
+                return 'Finanzas';
                 break;
             case "supply_event":
-                return 'Firma Abastecimiento';
+                return 'Abastecimiento';
                 break;
             case "budget_event":
-                return 'Firma Solicitud Nuevo Presupuesto';
+                return 'Solicitud Nuevo Presupuesto';
                 break;
         }
     }

@@ -1,10 +1,8 @@
 @extends('layouts.report')
-<!-- FIXME : Aparece codigo laravel en vez del id -->
+
 @section('title', "Acta de recepción - $reception->id")
 
 @section('content')
-
-<?php setlocale(LC_ALL, 'es_CL.UTF-8');?>
 
 <div class="siete" style="padding-top: 3px;">Unidad de Decomisos</div>
 <div class="siete" style="padding-top: 4px;">
@@ -16,7 +14,7 @@
 <div class="titulo">ACTA DE RECEPCIÓN N° {{ $reception->id }}</div>
 
 <p class="justify indent">
-    En Iquique, a <strong>{{ $reception->created_at->formatLocalized('%d de %B del %Y') }}</strong>
+    En Iquique, a <strong>{{ $reception->created_at->day }} de {{ $reception->created_at->monthName }} del {{ $reception->created_at->year }}</strong>
     siendo las <strong>{{ $reception->created_at->format('H:i') }}</strong> horas
     en la Unidad de Drogas de Servicio de Salud de Iquique,
     en conformidad a la ley 20.000/2005, se ha recibido el

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Drugs;
+namespace App\Models\Drugs;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,19 +19,19 @@ class ReceptionItem extends Model
     ];
 
     public function reception() {
-        return $this->belongsTo('App\Drugs\Reception');
+        return $this->belongsTo('App\Models\Drugs\Reception');
     }
 
     public function substance() {
-        return $this->belongsTo('App\Drugs\Substance');
+        return $this->belongsTo('App\Models\Drugs\Substance');
     }
 
     public function resultSubstance() {
-        return $this->belongsTo('App\Drugs\Substance', 'result_substance_id');
+        return $this->belongsTo('App\Models\Drugs\Substance', 'result_substance_id');
     }
 
     public function protocols() {
-        return $this->hasMany('App\Drugs\Protocol');
+        return $this->hasMany('App\Models\Drugs\Protocol');
     }
 
     use SoftDeletes;

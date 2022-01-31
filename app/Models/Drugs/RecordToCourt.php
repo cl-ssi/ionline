@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Drugs;
+namespace App\Models\Drugs;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SampleToIsp extends Model
+class RecordToCourt extends Model
 {
     use SoftDeletes;
 
@@ -15,24 +15,24 @@ class SampleToIsp extends Model
      * @var array
      */
     protected $fillable = [
-        'number', 'document_date', 'envelope_weight', 'observation',
+        'number', 'document_date', 'observation',
         'reception_id', 'user_id', 'manager_id', 'lawyer_id'
     ];
 
     public function reception() {
-        return $this->belongsTo('App\Drugs\Reception');
+        return $this->belongsTo('App\Models\Drugs\Reception');
     }
 
     public function user() {
-        return $this->belongsTo('App\User')->withTrashed();
+        return $this->belongsTo('App\User');
     }
 
     public function manager() {
-        return $this->belongsTo('App\User', 'manager_id')->withTrashed();
+        return $this->belongsTo('App\User', 'manager_id');
     }
 
     public function lawyer() {
-        return $this->belongsTo('App\User', 'lawyer_id')->withTrashed();
+        return $this->belongsTo('App\User', 'lawyer_id');
     }
 
     /**
@@ -42,5 +42,5 @@ class SampleToIsp extends Model
      */
     protected $dates = ['document_date', 'deleted_at'];
 
-    protected $table = 'drg_sample_to_isps';
+    protected $table = 'drg_record_to_court';
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Drugs;
+namespace App\Models\Drugs;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,11 +18,11 @@ class Protocol extends Model
 
 
     public function receptionItem() {
-        return $this->belongsTo('App\Drugs\ReceptionItem');
+        return $this->belongsTo('App\Models\Drugs\ReceptionItem');
     }
 
     public function user() {
-        return $this->belongsTo('App\User')->withTrashed();
+        return $this->belongsTo('App\User');
     }
 
 

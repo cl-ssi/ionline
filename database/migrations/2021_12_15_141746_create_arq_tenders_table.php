@@ -25,7 +25,7 @@ class CreateArqTendersTable extends Migration
             $table->string('guarantee_ticket')->nullable();
             $table->boolean('has_taking_of_reason')->nullable();
             $table->string('status');
-            $table->string('type_of_purchase');
+            // $table->string('type_of_purchase');
 
             $table->foreignId('supplier_id')->nullable()->constrained('cfg_suppliers');
 

@@ -17,6 +17,7 @@ class PurchaseMechanismSeeder extends Seeder
         PurchaseMechanism::Create(['name'=>'MENORES A 3 UTM']);
         PurchaseMechanism::Create(['name'=>'CONVENIO MARCO']);
         PurchaseMechanism::Create(['name'=>'TRATO DIRECTO']);
-        PurchaseMechanism::Create(['name'=>'LICITACIÓN PUBLICA']);
+        PurchaseMechanism::Create(['name'=>'LICITACIÓN PÚBLICA']);
+        PurchaseMechanism::Create(['name'=>'COMPRA ÁGIL (TRATO DIRECTO)']);
     }
 }

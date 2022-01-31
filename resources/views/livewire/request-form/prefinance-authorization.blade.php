@@ -7,7 +7,7 @@
               <tr>
                   <th>Item</th>
                   <th>ID</th>
-                  <th>Item Pres.</th>
+                  <th width="250 px">Item Pres.</th>
                   <th>Artículo</th>
                   <th>UM</th>
                   <th>Especificaciones Técnicas</th>
@@ -24,8 +24,9 @@
                   <td class="text-center">{{$key+1}}</td>
                   <td class="text-center">{{$item->id}}</td>
                   <td>
-                      <select  wire:model.defer="arrayItemRequest.{{ $item->id }}.budgetId"  wire:click="resetError" class="form-control form-control-sm" required>
-                          <option value="">Seleccione...</option>
+                      <select  wire:model.defer="arrayItemRequest.{{ $item->id }}.budgetId"  wire:click="resetError"
+                        class="form-control form-control-sm selectpicker" data-size="5" data-live-search="true" title="Seleccione..." required>
+                          <!-- <option value="">Seleccione...</option> -->
                           @foreach($lstBudgetItem as $val)
                             <option value="{{$val->id}}">{{$val->code.' - '.$val->name}}</option>
                           @endforeach

@@ -11,7 +11,7 @@
 <form method="POST" class="form-horizontal" action="{{ route('drugs.receptions.store') }}">
     @csrf
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col">
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="parte_label"
@@ -32,7 +32,7 @@
     </div>
 
 
-    <div class="row">
+    <div class="form-row">
 
         <fieldset class="form-group col-2">
             <label for="for_parte">Parte/Of.Res/RUC</label>
@@ -60,7 +60,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="form-row">
 
         <fieldset class="form-group col-2">
             <label for="fordocument">Número Oficio *</label>
@@ -86,7 +86,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-4">
             <label for="for_delivery">Funcionario que entrega</label>
             <input type="text" class="form-control" id="for_delivery"
@@ -106,7 +106,7 @@
         </fieldset>
     </div>
 
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col-4">
             <label for="forimputed">Nombre Imputado</label>
             <input type="text" class="form-control" id="forimputed"
@@ -124,7 +124,7 @@
             <button type="submit" class="btn btn-primary">Guardar</button>
         </fieldset>
     </div>
-    <div class="row">
+    <div class="form-row">
         <fieldset class="form-group col">
             <label for="forobservation">Observación</label>
             <input type="text" class="form-control" id="forobservation"
