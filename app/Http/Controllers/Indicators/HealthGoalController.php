@@ -152,6 +152,7 @@ class HealthGoalController extends Controller
                             }
                         }
                     } else { // fuente REM
+                        // dd($indicator);
                         //buscamos por codigos de prestacion con valor negativo indica que existe otra consulta que necesita ser procesada para sumarle (resta) a primera consulta
                         $cods2 = null;
                         foreach($cods as $key => $value){
@@ -184,6 +185,9 @@ class HealthGoalController extends Controller
                                     ->when($isRemP, function($query){
                                         return $query->whereIn('Mes', [6,12]);
                                     })
+                                    ->when($indicator->id == 76 && $factor == 'denominador', function($query){ //N° de niños y niñas de 12 a 23 meses diagnosticados con riesgo de DSM en su primera evaluación en control de los 18 meses, período enero a septiembre 2021
+                                        return $query->whereIn('Mes', [1,2,3,4,5,6,7,8,9]);
+                                    })
                                     ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
 
                         foreach($result as $item){
@@ -192,6 +196,27 @@ class HealthGoalController extends Controller
                             $value->establishment = $item->establecimiento->alias_estab;
                             $indicator->values->add($value);
                         }
+
+                        if($indicator->id == 76 && $factor == 'denominador'){
+                            // N° de niños y niñas de 12 a 23 meses diagnosticados con riesgo de DSM en su primera evaluación en control de los 18 meses, período octubre 2020 a diciembre del 2020
+                            $result = Rem::year($year-1)->selectRaw($raws)
+                                    ->with(['establecimiento' => function($q) use ($establishment_cods){ 
+                                        return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1);
+                                    }])
+                                    ->whereHas('establecimiento', function($q) use ($establishment_cods){
+                                        return $establishment_cods ? $q->whereIn('Codigo', $establishment_cods) : $q->where('meta_san', 1);
+                                    })
+                                    ->whereIn('Mes', [10,11,12])
+                                    ->whereIn('CodigoPrestacion', $cods)->groupBy('IdEstablecimiento','Mes')->orderBy('Mes')->get();
+
+                            foreach($result as $item){
+                                $value = new Value(['month' => $item->Mes, 'factor' => $factor, 'value' => $item->valor]);
+                                $value->commune = $item->establecimiento->comuna;
+                                $value->establishment = $item->establecimiento->alias_estab;
+                                $indicator->values->add($value);
+                            }
+                        }
+
                         //Existe otra consulta que ejecutar con valores negativos para sumarlos a la primera consulta
                         if($cods2 != null){
                             //Es rem P la consulta?
