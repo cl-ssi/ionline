@@ -17,7 +17,7 @@ class ImmediatePurchase extends Model implements Auditable
 
     protected $fillable = [
         'purchase_type_id', 'po_id', 'po_date', 'po_sent_date', 'po_accepted_date', 'po_with_confirmed_receipt_date',
-        'po_amount', 'estimated_delivery_date', 'description', 'supplier_id', 'tender_id'
+        'po_amount', 'estimated_delivery_date', 'days_type_delivery', 'days_delivery', 'description', 'supplier_id', 'tender_id'
     ];
 
     public $dates = [
