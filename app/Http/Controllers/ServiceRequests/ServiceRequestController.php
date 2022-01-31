@@ -50,7 +50,7 @@ class ServiceRequestController extends Controller
     //16.152.174-
     $a1 = User::find(16055586);
     //dd($a1);
-    
+
     $au = Authority::getBossFromUser($a1->organizationalUnit->id,Carbon::now());
 
 
@@ -1216,6 +1216,59 @@ class ServiceRequestController extends Controller
     }
 
     session()->flash('info', $cont . ' solicitudes fueron derivadas.');
+    return redirect()->route('rrhh.service-request.index');
+  }
+
+  public function accept_all_requests()
+  {
+    $user_id = Auth::user()->id;
+
+    $serviceRequestsMyPendings = array();
+
+    $serviceRequests = ServiceRequest::whereHas("SignatureFlows", function($subQuery) use($user_id){
+                                         $subQuery->where('responsable_id',$user_id);
+                                         //$subQuery->where('status', '<>', 2);
+                                         $subQuery->orwhere('user_id',$user_id);
+                                         //$subQuery->whereNull('derive_date');
+
+                                       })->with("SignatureFlows")
+
+                                       ->orderBy('id','asc')
+                                       ->get();
+
+    $cont = 0;
+    foreach ($serviceRequests as $key => $serviceRequest) {
+      if ($serviceRequest->SignatureFlows->where('status','===',0)->count() == 0) {
+        foreach ($serviceRequest->SignatureFlows->sortBy('sign_position') as $key2 => $signatureFlow) {
+          if ($user_id == $signatureFlow->responsable_id) {
+            if ($signatureFlow->status == NULL) {
+              if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()) {
+                if ($serviceRequest->SignatureFlows->where('status', '!=', 2)->where('sign_position', $signatureFlow->sign_position - 1)->first()->status == NULL) {
+                }else{
+                  $serviceRequestsMyPendings[$cont] = $serviceRequest;
+                  $cont += 1;
+                }
+              }
+            }else{
+            }
+          }
+        }
+      }
+    }
+
+    //se aceptan todas las solicitudes
+    $count = 0;
+    foreach ($serviceRequestsMyPendings as $key => $serviceRequest) {
+      $SignatureFlow = $serviceRequest->SignatureFlows->where('responsable_id',$user_id)->whereNull('status')->first();
+      if ($SignatureFlow!=null) {
+        $SignatureFlow->signature_date = Carbon::now();
+        $SignatureFlow->status = 1;
+        $SignatureFlow->save();
+        $count += 1;
+      }
+    }
+
+    session()->flash('info', $count . ' solicitudes fueron aceptadas.');
     return redirect()->route('rrhh.service-request.index');
   }
 
