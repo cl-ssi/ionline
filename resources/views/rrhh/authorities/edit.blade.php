@@ -19,18 +19,10 @@
     <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_organizational_unit_id">Unidad Organizacional*</label>
-            <select required name="organizational_unit_id" id="for_organizational_unit_id" class="form-control" style="font-family:monospace; font-size: 15px;">
-                <option value="{{ $ouTopLevel->id }}" {{ ($ouTopLevel->id == $authority->organizational_unit_id)?'selected':''}} >{{ $ouTopLevel->name }}</option>
-                @foreach($ouTopLevel->childs as $child_level_1)
-                    <option value="{{ $child_level_1->id }}" {{ ($child_level_1->id == $authority->organizational_unit_id)?'selected':''}}> - {{ $child_level_1->name }}</option>
-                        @foreach($child_level_1->childs as $child_level_2)
-                            <option value="{{ $child_level_2->id }}" {{ ($child_level_2->id == $authority->organizational_unit_id)?'selected':''}}> - - {{ $child_level_2->name }}</option>
-                                @foreach($child_level_2->childs as $child_level_3)
-                                    <option value="{{ $child_level_3->id }}" {{ ($child_level_3->id == $authority->organizational_unit_id)?'selected':''}}> - - - {{ $child_level_3->name }}</option>
-                                @endforeach
-                        @endforeach
-                @endforeach
-            </select>
+            @livewire('select-organizational-unit', [
+                'establishment_id' => $ouTopLevel->establishment->id, 
+                'organizational_unit_id' => $authority->organizational_unit_id
+            ])
         </fieldset>
     </div>
 
