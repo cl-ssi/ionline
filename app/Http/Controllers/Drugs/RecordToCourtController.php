@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Drugs;
 
-use App\Drugs\RecordToCourt;
-use App\Drugs\Reception;
+use App\Models\Drugs\RecordToCourt;
+use App\Models\Drugs\Reception;
 use App\Parameters\Parameter;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -36,7 +36,7 @@ class RecordToCourtController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Drugs\RecordToCourt  $recordToCourt
+     * @param  \App\Models\Drugs\RecordToCourt  $recordToCourt
      * @return \Illuminate\Http\Response
      */
     public function show(Reception $reception)

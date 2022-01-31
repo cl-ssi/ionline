@@ -34,7 +34,7 @@
 
   <div class="float-right">
     <a href="{{ route('drugs.courts.index') }}" class="btn btn-outline-secondary">Cancelar</a>
-    <button class="btn btn-outline-secondary" type="submit"><i class="fas fa-save"></i> Enviar</button>
+    <button class="btn btn-primary" type="submit"><i class="fas fa-save"></i> Guardar</button>
   </div>
 </form>
 

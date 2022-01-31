@@ -8,7 +8,7 @@
             @csrf
             @method('PUT')
 
-            <div class="row">
+            <div class="form-row">
 
                 <fieldset class="form-group col-2">
                     <label for="for_nue">NUE</label>
@@ -42,7 +42,7 @@
 
             </div>
 
-            <div class="row">
+            <div class="form-row">
 
                 <fieldset class="form-group col">
                     <label for="for_gross_weight">Peso Bruto *</label>
@@ -83,7 +83,7 @@
 
             </div>
 
-            <div class="row">
+            <div class="form-row">
                 <fieldset class="form-group col">
                     <label for="for_description">Descripción</label>
                     <textarea name="description" class="form-control" id="for_description" rows="3" required="required">{{ $item->description }}</textarea>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Drugs;
 
-use App\Drugs\Court;
+use App\Models\Drugs\Court;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -45,7 +45,7 @@ class CourtController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Drugs\Court  $court
+     * @param  \App\Models\Drugs\Court  $court
      * @return \Illuminate\Http\Response
      */
     public function show(Court $court)
@@ -56,7 +56,7 @@ class CourtController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Drugs\Court  $court
+     * @param  \App\Models\Drugs\Court  $court
      * @return \Illuminate\Http\Response
      */
     public function edit(Court $court)
@@ -68,7 +68,7 @@ class CourtController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Drugs\Court  $court
+     * @param  \App\Models\Drugs\Court  $court
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Court $court)
@@ -81,7 +81,7 @@ class CourtController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Drugs\Court  $court
+     * @param  \App\Models\Drugs\Court  $court
      * @return \Illuminate\Http\Response
      */
     public function destroy(Court $court)

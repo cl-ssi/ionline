@@ -15,7 +15,7 @@ class AttachedFile extends Model implements Auditable
 
     protected $table = 'arq_attached_files';
     protected $fillable = [
-        'file', 'document_type', 'tender_id'
+        'file', 'document_type', 'tender_id', 'immediate_purchase_id'
     ];
 
 

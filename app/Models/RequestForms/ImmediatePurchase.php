@@ -41,4 +41,9 @@ class ImmediatePurchase extends Model implements Auditable
     {
         return $this->belongsTo(PurchaseType::class, 'purchase_type_id');
     }
+
+    public function attachedFiles()
+    {
+        return $this->hasMany(AttachedFile::class);
+    }
 }
