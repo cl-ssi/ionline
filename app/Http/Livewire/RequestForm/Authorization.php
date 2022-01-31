@@ -116,7 +116,9 @@ class Authorization extends Component
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
           $event->signature_date = Carbon::now();
-          $event->position_signer_user = $this->position;
+
+          $amIAuthorityFromOu = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->id());
+          $event->position_signer_user = $amIAuthorityFromOu[0]->position;
           $event->status  = 'approved';
           $event->signerUser()->associate(auth()->user());
           $event->save();
