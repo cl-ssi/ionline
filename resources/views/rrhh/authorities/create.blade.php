@@ -8,33 +8,14 @@
 @can('Authorities: create')
 <form method="POST" class="form-horizontal" action="{{ route('rrhh.authorities.store') }}">
     @csrf
-
+    
     <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_organizational_unit_id">Unidad Organizacional*</label>
-            <select name="organizational_unit_id" 
-                id="for_organizational_unit_id" 
-                class="form-control" 
-                style="font-family:monospace; font-size: 15px;" 
-                required>
-                <option value="{{ $ouTopLevel->id }}">{{ $ouTopLevel->name }}</option>
-                @foreach($ouTopLevel->childs as $child_level_1)
-                    <option value="{{ $child_level_1->id }}"> - {{ $child_level_1->name }}</option>
-                        @foreach($child_level_1->childs as $child_level_2)
-                            <option value="{{ $child_level_2->id }}"> - - {{ $child_level_2->name }}</option>
-                                @foreach($child_level_2->childs as $child_level_3)
-                                    <option value="{{ $child_level_3->id }}"> - - - {{ $child_level_3->name }}</option>
-                                        @foreach($child_level_3->childs as $child_level_4)
-                                        <option value="{{ $child_level_4->id }}"> - - - - {{ $child_level_4->name }}</option>
-                                            @foreach($child_level_4->childs as $child_level_5)
-                                            <option value="{{ $child_level_5->id }}"> - - - - - {{ $child_level_5->name }}</option>
-                                            @endforeach
-                                        @endforeach
-                                @endforeach
-                        @endforeach
-                @endforeach
-
-            </select>
+            @livewire('select-organizational-unit', [
+                'establishment_id' => $ouTopLevel->establishment->id, 
+                'organizational_unit_id' => $ou
+            ])
         </fieldset>
     </div>
 
