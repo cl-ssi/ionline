@@ -103,7 +103,9 @@
         <tbody class="text-center small">
             <tr>
               @foreach($requestForm->eventRequestForms as $event)
-                <th>{{ $event->signerOrganizationalUnit->name }}</th>
+                <td><strong>{{ $event->EventTypeValue }}</strong><br>
+                    {{ $event->signerOrganizationalUnit->name }}
+                </td>
               @endforeach
             </tr>
             <tr>
