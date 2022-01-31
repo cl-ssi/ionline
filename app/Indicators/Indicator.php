@@ -114,6 +114,7 @@ class Indicator extends Model
 
     public function getContribution()
     {
+        if($this->values->isEmpty()) return 0;
         if(Str::contains(str_replace('≤', '<=', $this->goal), '<=')) return $this->getCompliance() <= preg_replace('/[^0-9.]/', '', $this->goal) ? $this->weighting : 0;
         $result = ($this->getCompliance() * $this->weighting) / preg_replace('/[^0-9.]/', '', $this->goal);
         return $result > $this->weighting ? $this->weighting : (!$this->precision ? $result : 0);
