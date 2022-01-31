@@ -76,11 +76,21 @@ class MonthlyQuotes extends Component
                     break;
                 case 'Renuncia voluntaria':
                     $mes_completo = false;
+                    // evita ocurrir error si no existe end_date
+                    if ($item->end_date == null) {
+                      $dias_trabajado_antes_retiro = 0;
+                      break;
+                    }
                     $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
                     $dias_descuento += 1;
                     break;
                 case 'Término de contrato anticipado':
                         $mes_completo = false;
+                        // evita ocurrir error si no existe end_date
+                        if ($item->end_date == null) {
+                          $dias_trabajado_antes_retiro = 0;
+                          break;
+                        }
                         $dias_trabajado_antes_retiro = (int)$item->end_date->format("d") - 1;
                         $dias_descuento += 1;
                         //dd('soy termino de contrato');
