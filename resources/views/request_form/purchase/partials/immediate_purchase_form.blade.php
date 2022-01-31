@@ -17,19 +17,26 @@
         </div>
         <div class="form-row">
             <fieldset class="form-group col-sm-3">
-              <label for="for_po_sent_date">Fecha OC enviada a proveedor</label>
-              <input type="date" class="form-control form-control-sm" id="for_po_sent_date" name="po_sent_date"
-                  value="{{ old('po_sent_date') }}">
-            </fieldset>
-            <fieldset class="form-group col-sm-3">
               <label for="for_po_accepted_date">Fecha OC aceptada</label>
               <input type="date" class="form-control form-control-sm" id="for_po_accepted_date" name="po_accepted_date"
                   value="{{ old('po_accepted_date') }}">
             </fieldset>
-            <fieldset class="form-group col-sm-3">
+            <fieldset class="form-group col-sm-2">
+                <label for="for_days_type_delivery">Días</label>
+                <select name="days_type_delivery" id="for_days_type_delivery" class="form-control form-control-sm" required>
+                    <option value="">Seleccione...</option>
+                    <option value="hábiles" {{ old('days_type_delivery', '') == 'hábiles' ? 'selected' : '' }}>Hábiles</option>
+                    <option value="corridos" {{ old('days_type_delivery', '') == 'corridos' ? 'selected' : '' }}>Corridos</option>
+                </select>
+            </fieldset>
+            <fieldset class="form-group col-sm-2">
+                <label for="for_days_delivery">Plazo entrega en días</label>
+                <input type="number" min="1" class="form-control form-control-sm" id="for_days_delivery" name="days_delivery" value="{{ old('days_delivery') }}">
+            </fieldset>
+            <fieldset class="form-group col-sm-2">
               <label for="for_estimated_delivery_date">Fecha estimada entrega</label>
               <input type="date" class="form-control form-control-sm" id="for_estimated_delivery_date" name="estimated_delivery_date"
-                  value="{{ old('estimated_delivery_date') }}">
+                  value="{{ old('estimated_delivery_date') }}"  disabled required>
             </fieldset>
             <fieldset class="form-group col-sm-3">
               <label for="for_po_with_confirmed_receipt_date">Fecha OC con recepción conforme</label>
@@ -47,7 +54,12 @@
                     @endforeach
                 </select>
             </fieldset>
-            <fieldset class="form-group col-2">
+            <fieldset class="form-group col-sm-3">
+              <label for="for_po_sent_date">Fecha OC enviada a proveedor</label>
+              <input type="date" class="form-control form-control-sm" id="for_po_sent_date" name="po_sent_date"
+                  value="{{ old('po_sent_date') }}">
+            </fieldset>
+            <fieldset class="form-group col-3">
                 <label for="for_amount">Monto total</label>
                 <input type="number" class="form-control form-control-sm amount" id="for_amount" name="po_amount"
                     value="{{ old('po_amount') }}" required>
