@@ -5,6 +5,12 @@
 @section('content')
 <h3 class="mb-3">Editar Autoridad</h3>
 
+<div class="alert alert-warning" role="alert">
+    <b>Atención:</b> Si las fechas corresponden a un nuevo período, debe crear una nueva autoridad, con el botón "Crear" de la página anterior. <br>
+    Nunca edite las fechas de una autoridad que ya existe, de lo contrario se perderá el histórico.
+</div>
+
+
 @can('Authorities: edit')
 <form method="POST" class="form-horizontal" action="{{ route('rrhh.authorities.update',$authority->id) }}">
     @csrf
