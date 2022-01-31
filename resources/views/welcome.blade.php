@@ -105,9 +105,15 @@
 
             <div class="card shadow-sm">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Estado de urgencias</h4>
+                    <h4 class="my-0 font-weight-normal">Estado de urgencias (No disponible Temporalmente)</h4>
                 </div>
-
+                <div class="card-body">
+                <br>
+                <br>
+                <br>
+                <i class="fas fa-clock fa-5x"></i>
+                </div>
+<!-- 
                 @php($array = json_decode(file_get_contents('status.json'),true))
 
                 <p class="text-muted mt-2 mb-2">Ultima actualización: {{ $array['updated'] }}</p>
@@ -125,7 +131,7 @@
                             <td>{{ $element['En box'] }}</td>
                         </tr>
                     @endforeach
-                </table>
+                </table> -->
 
             </div>
 
