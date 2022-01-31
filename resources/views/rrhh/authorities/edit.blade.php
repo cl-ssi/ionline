@@ -5,6 +5,12 @@
 @section('content')
 <h3 class="mb-3">Editar Autoridad</h3>
 
+<div class="alert alert-warning" role="alert">
+    <b>Atención:</b> Si las fechas corresponden a un nuevo período, debe crear una nueva autoridad, con el botón "Crear" de la página anterior. <br>
+    Nunca edite las fechas de una autoridad que ya existe, de lo contrario se perderá el histórico.
+</div>
+
+
 @can('Authorities: edit')
 <form method="POST" class="form-horizontal" action="{{ route('rrhh.authorities.update',$authority->id) }}">
     @csrf
@@ -13,18 +19,10 @@
     <div class="form-row">
         <fieldset class="form-group col">
             <label for="for_organizational_unit_id">Unidad Organizacional*</label>
-            <select required name="organizational_unit_id" id="for_organizational_unit_id" class="form-control" style="font-family:monospace; font-size: 15px;">
-                <option value="{{ $ouTopLevel->id }}" {{ ($ouTopLevel->id == $authority->organizational_unit_id)?'selected':''}} >{{ $ouTopLevel->name }}</option>
-                @foreach($ouTopLevel->childs as $child_level_1)
-                    <option value="{{ $child_level_1->id }}" {{ ($child_level_1->id == $authority->organizational_unit_id)?'selected':''}}> - {{ $child_level_1->name }}</option>
-                        @foreach($child_level_1->childs as $child_level_2)
-                            <option value="{{ $child_level_2->id }}" {{ ($child_level_2->id == $authority->organizational_unit_id)?'selected':''}}> - - {{ $child_level_2->name }}</option>
-                                @foreach($child_level_2->childs as $child_level_3)
-                                    <option value="{{ $child_level_3->id }}" {{ ($child_level_3->id == $authority->organizational_unit_id)?'selected':''}}> - - - {{ $child_level_3->name }}</option>
-                                @endforeach
-                        @endforeach
-                @endforeach
-            </select>
+            @livewire('select-organizational-unit', [
+                'establishment_id' => $ouTopLevel->establishment->id, 
+                'organizational_unit_id' => $authority->organizational_unit_id
+            ])
         </fieldset>
     </div>
 
