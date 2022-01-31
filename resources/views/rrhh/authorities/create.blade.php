@@ -17,17 +17,17 @@
                 class="form-control" 
                 style="font-family:monospace; font-size: 15px;" 
                 required>
-                <option value="{{ $ouTopLevel->id }}">{{ $ouTopLevel->name }}</option>
+                <option value="{{ $ouTopLevel->id }}" {{ ($ouTopLevel->id == $ou) ? 'selected' : '' }}>{{ $ouTopLevel->name }}</option>
                 @foreach($ouTopLevel->childs as $child_level_1)
-                    <option value="{{ $child_level_1->id }}"> - {{ $child_level_1->name }}</option>
+                    <option value="{{ $child_level_1->id }}" {{ ($child_level_1->id == $ou) ? 'selected' : '' }}> - {{ $child_level_1->name }}</option>
                         @foreach($child_level_1->childs as $child_level_2)
-                            <option value="{{ $child_level_2->id }}"> - - {{ $child_level_2->name }}</option>
+                            <option value="{{ $child_level_2->id }}" {{ ($child_level_2->id == $ou) ? 'selected' : '' }}> - - {{ $child_level_2->name }}</option>
                                 @foreach($child_level_2->childs as $child_level_3)
-                                    <option value="{{ $child_level_3->id }}"> - - - {{ $child_level_3->name }}</option>
+                                    <option value="{{ $child_level_3->id }}" {{ ($child_level_3->id == $ou) ? 'selected' : '' }}> - - - {{ $child_level_3->name }}</option>
                                         @foreach($child_level_3->childs as $child_level_4)
-                                        <option value="{{ $child_level_4->id }}"> - - - - {{ $child_level_4->name }}</option>
+                                        <option value="{{ $child_level_4->id }}" {{ ($child_level_4->id == $ou) ? 'selected' : '' }}> - - - - {{ $child_level_4->name }}</option>
                                             @foreach($child_level_4->childs as $child_level_5)
-                                            <option value="{{ $child_level_5->id }}"> - - - - - {{ $child_level_5->name }}</option>
+                                            <option value="{{ $child_level_5->id }}" {{ ($child_level_5->id == $ou) ? 'selected' : '' }}> - - - - - {{ $child_level_5->name }}</option>
                                             @endforeach
                                         @endforeach
                                 @endforeach
