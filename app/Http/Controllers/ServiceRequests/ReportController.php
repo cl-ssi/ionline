@@ -429,13 +429,13 @@ class ReportController extends Controller
 		}
 
 		$pdf = app('dompdf.wrapper');
-		if ($ServiceRequest->responsabilityCenter->establishment_id == 1 and 
-			$ServiceRequest->start_date >= "2022-01-01 00:00:00" and 
+		if ($ServiceRequest->responsabilityCenter->establishment_id == 1 and
+			$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
 			$ServiceRequest->programm_name = "Covid 2022") {
 			$pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
 		}
-		else if ($ServiceRequest->responsabilityCenter->establishment_id == 38 and 
-			$ServiceRequest->start_date >= "2022-01-01 00:00:00" and 
+		else if ($ServiceRequest->responsabilityCenter->establishment_id == 38 and
+			$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
 			$ServiceRequest->programm_name = "Covid 2022") {
 			$pdf->loadView('service_requests.report_resolution_covid_2022_ssi', compact('ServiceRequest'));
 		}
@@ -466,11 +466,11 @@ class ReportController extends Controller
 
 		if ($ServiceRequest->working_day_type == "DIARIO") {
 			$pdf->loadView('service_requests.report_resolution_diary', compact('ServiceRequest'));
-		} 
+		}
 		else {
 			//$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
-			if ($ServiceRequest->responsabilityCenter->establishment_id == 1 and 
-				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and 
+			if ($ServiceRequest->responsabilityCenter->establishment_id == 1 and
+				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
 				$ServiceRequest->programm_name != "Covid 2022") {
 				if ($ServiceRequest->working_day_type == "HORA MÉDICA") {
 					$pdf->loadView('service_requests.report_resolution_hsa_2022_hora_medica', compact('ServiceRequest'));
@@ -478,25 +478,24 @@ class ReportController extends Controller
 					$pdf->loadView('service_requests.report_resolution_hsa_2022', compact('ServiceRequest'));
 				}
 			}
-			else if ($ServiceRequest->responsabilityCenter->establishment_id == 1 and 
-				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and 
+			else if ($ServiceRequest->responsabilityCenter->establishment_id == 1 and
+				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
 				$ServiceRequest->programm_name == "Covid 2022") {
 				$pdf->loadView('service_requests.report_resolution_covid_2022_hetg', compact('ServiceRequest'));
 			}
-			else if ($ServiceRequest->responsabilityCenter->establishment_id == 38 and 
-				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and 
+			else if ($ServiceRequest->responsabilityCenter->establishment_id == 38 and
+				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
 				$ServiceRequest->programm_name == "Covid 2022") {
         //dd($ServiceRequest->programm_name);
 				$pdf->loadView('service_requests.report_resolution_covid_2022_ssi', compact('ServiceRequest'));
 			}
-      else if ($ServiceRequest->responsabilityCenter->establishment_id == 38 and 
-				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and 
+      else if ($ServiceRequest->responsabilityCenter->establishment_id == 38 and
+				$ServiceRequest->start_date >= "2022-01-01 00:00:00" and
 				$ServiceRequest->programm_name != "Covid 2022") {
         //dd('No es Covid');
 				$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
 			}
 			else {
-        dd('entro aca 4');
 				$pdf->loadView('service_requests.report_resolution_hsa', compact('ServiceRequest'));
 			}
 		}

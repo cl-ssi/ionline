@@ -557,6 +557,36 @@ function calculateAmount(checked = false) {
 
     $(checked ? '#for_amount' : '#total_amount').val(total);
 }
+
+// Calcular fecha de entrega a partir de la suma de dias habiles o corridos con la fecha de la OC aceptada
+$('#for_po_accepted_date,#for_days_delivery,#for_days_type_delivery').on('change keyup',function(){
+    var fechaAceptada = $('#for_po_accepted_date').val();
+    var dias = $('#for_days_delivery').val();
+    var tipo = $('#for_days_type_delivery option:selected').val();
+
+    if(fechaAceptada && dias && tipo){
+        var fechaEstimada = new Date(fechaAceptada + "T00:00:00");
+        if(tipo == 'corridos'){
+            fechaEstimada.setDate(fechaEstimada.getDate() + parseInt(dias));
+        }else{ // dias hábiles
+            while(parseInt(dias)){
+                fechaEstimada.setDate(fechaEstimada.getDate() + 1);
+                switch(fechaEstimada.getDay()){
+                    case 0: case 6: break; // domingo y sábado no se contabilizan
+                    default: dias--;
+                }
+            }
+        }
+        $('#for_estimated_delivery_date').val(formatDateInput(fechaEstimada));
+    }else{
+        $('#for_estimated_delivery_date').val("");
+    }
+});
+
+function formatDateInput(date) {
+    return date.getFullYear() + "-" + ("0"+(date.getMonth()+1)).slice(-2) +"-"+("0" + date.getDate()).slice(-2);
+}
+
 </script>
 
 @endsection
