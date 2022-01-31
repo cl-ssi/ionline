@@ -532,6 +532,7 @@ Route::prefix('rrhh')->as('rrhh.')->group(function () {
         Route::post('/change-signature-flow', [ServiceRequestController::class, 'change_signature_flow'])->name('change_signature_flow');
         Route::post('/delete-signature-flow', [ServiceRequestController::class, 'delete_signature_flow'])->name('delete_signature_flow');
         Route::post('/derive', [ServiceRequestController::class, 'derive'])->name('derive');
+        Route::get('/accept_all_requests', [ServiceRequestController::class, 'accept_all_requests'])->name('accept_all_requests');
 
         Route::post('/destroy-with-parameters', [ServiceRequestController::class, 'destroy_with_parameters'])->name('destroy-with-parameters');
         Route::get('/pending-requests', [ServiceRequestController::class, 'pending_requests'])->name('pending-requests');
