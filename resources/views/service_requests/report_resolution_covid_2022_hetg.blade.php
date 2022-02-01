@@ -579,36 +579,51 @@
           Déjese establecido que el trabajador le será aplicable el procedimiento establecido en el “Manual de Procedimientos de Denuncia, Prevención y Sanción del Maltrato, Acoso Laboral y/o Sexual y Discriminación, conforme resolución vigente en el Servicio de Salud Iquique N°4294 del 10 de octubre del 2019.
         </p>
 
-
+        @php
+          $text = "DÉCIMO TERCERO:";
+        @endphp
 
         @if($ServiceRequest->program_contract_type == "Mensual")
         <p class="justify">
-          <strong>DÉCIMO TERCERO:</strong> Déjese establecido que el prestador tendrá derecho a presentar licencias médicas,
+          <strong>{{$text}}</strong> Déjese establecido que el prestador tendrá derecho a presentar licencias médicas,
           la cual sólo justificará los días de inasistencia, no procediendo el pago de éstos y siendo responsabilidad del prestador del servicio, la tramitación de la licencia médica ante el organismo que corresponda; además deberá dejar copia de licencia médica en la Subdirección de Gestión y Desarrollo de las Personas. Las ausencias por esta causa serán descontadas de la cuota mensual.
           <br><br>
           A contar del 01 de enero del 2019 el personal a honorarios estará obligado a imponer, tanto en salud como en AFP, de manera personal, como lo indica la Ley N°20.894, por lo tanto, deberá realizar el cobro del subsidio de salud directamente en la institución correspondiente, ya sea Fonasa o Isapre.
 
           Las mujeres podrán solicitar permiso post-natal parental, los cuales sólo justificará los días de inasistencia, no procediendo el pago por los días mientras dure el permiso; el beneficio es sólo para la persona definida en el convenio e intransferible
         </p>
+
+        @php
+          $text = "DÉCIMO CUARTO:";
+        @endphp
+
         @endif
 
 
+        @if($ServiceRequest->program_contract_type == "Horas")
+          @if($ServiceRequest->profession->category != "A")
+            <p class="justify">
+              <strong>{{$text}}</strong> El prestador (a) individualizado (a) en la presente resolución tendrá los siguientes beneficios adicionales:<br><br>
+
+              <ins>Feriado Legal:</ins><br>
+              Derecho a días de descanso, correspondiente a 20 días hábiles, después de un año de prestación de servicio continúo en calidad de honorario, sin opción de acumulación, previa autorización de la jefatura de la unidad que se desempeña.<br><br>
+
+
+              <ins>Permiso Administrativo (Solo para convenios por 3 meses):</ins><br>
+              Permisos para ausentarse de sus labores por motivos particulares por un día hábil durante el periodo del presente convenio, con goce de prestación. Dicho permiso podrá fraccionarse por 1 día o 2 medio día y serán resueltos por la Coordinadora del área correspondiente.<br> <br>
+
+
+              {!! nl2br($ServiceRequest->additional_benefits) !!}
+            </p>
+
+            @php
+              $text = "DÉCIMO QUINTO:";
+            @endphp
+          @endif
+        @endif
+
         <p class="justify">
-          <strong>DECIMO CUARTO:</strong> El prestador (a) individualizado (a) en la presente resolución tendrá los siguientes beneficios adicionales:<br><br>
-
-          <ins>Feriado Legal:</ins><br>
-          Derecho a días de descanso, correspondiente a 20 días hábiles, después de un año de prestación de servicio continúo en calidad de honorario, sin opción de acumulación, previa autorización de la jefatura de la unidad que se desempeña.<br><br>
-
-
-          <ins>Permiso Administrativo (Solo para convenios por 3 meses):</ins><br>
-          Permisos para ausentarse de sus labores por motivos particulares por un día hábil durante el periodo del presente convenio, con goce de prestación. Dicho permiso podrá fraccionarse por 1 día o 2 medio día y serán resueltos por la Coordinadora del área correspondiente.<br> <br>
-
-
-          {!! nl2br($ServiceRequest->additional_benefits) !!}
-        </p>
-
-        <p class="justify">
-          <strong>DECIMO QUINTO:</strong>
+          <strong>{{$text}}</strong>
           El prestador tiene la obligación de adherirse a una mutualidad a objeto de estar cubierto por la ley 16.744, sobre accidentes y enfermedades profesionales.
           El prestador deberá entregar en la unidad de honorarios covid y en un plazo no superior a 30 días de la fecha de inicio del convenio el certificado de adhesión a una mutualidad.
         </p>
