@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\User;
 use App\Mail\PurchaserNotification;
+use Illuminate\Http\Response;
 
 class RequestFormController extends Controller {
 
@@ -178,6 +179,20 @@ class RequestFormController extends Controller {
         // return $formDocumentFile->download('pdf_file.pdf');
     }
 
+    public function create_view_document(RequestForm $requestForm){
+
+        $pdf = app('dompdf.wrapper');
+
+        $pdf->loadView('request_form.documents.form_document', compact('requestForm'));
+
+        $output = $pdf->output();
+
+        return new Response($output, 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' =>  'inline; filename="formulario_requerimiento.pdf"']
+        );
+    }
+
     public function create(){
         $requestForm=null;
         return  view('request_form.create', compact('requestForm'));
@@ -224,14 +239,19 @@ class RequestFormController extends Controller {
 
     public function callbackSign($message, $modelId, SignaturesFile $signaturesFile = null)
     {
-        dd('hola');
         $requestForm = RequestForm::find($modelId);
 
-        $event->signature_date = Carbon::now();
-        $event->position_signer_user = $this->position;
-        $event->status  = 'approved';
-        $event->signerUser()->associate(auth()->user());
-        $event->save();
+        //ACTUALIZAO EVENTO DE FINANZAS
+        $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->update([
+          'signature_date'       => Carbon::now(),
+          'position_signer_user' => auth()->user()->position,
+          'status'               => 'approved',
+          'signer_user_id'       => auth()->id()
+        ]);
+        // $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->position_signer_user = auth()->user()->position;
+        // $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->status  = 'approved';
+        // $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->signerUser()->associate(auth()->user());
+        // $requestForm->eventRequestForms->where('event_type', 'finance_event')->first()->save();
 
         if (!$signaturesFile) {
             session()->flash('danger', $message);
@@ -241,11 +261,11 @@ class RequestFormController extends Controller {
         $requestForm->save();
 
         //Envío de notificación para comprador.
-        if($requestForm->purchasers->first()->email){
-            Mail::to($requestForm->purchasers->first()->email)
-              ->cc(env('APP_RF_MAIL'))
-              ->send(new PurchaserNotification($requestForm));
-        }
+        // if($requestForm->purchasers->first()->email){
+        //     Mail::to($requestForm->purchasers->first()->email)
+        //       ->cc(env('APP_RF_MAIL'))
+        //       ->send(new PurchaserNotification($requestForm));
+        // }
         //--------------------------------------
 
         session()->flash('success', $message);

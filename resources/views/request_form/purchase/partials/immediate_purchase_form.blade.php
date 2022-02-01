@@ -1,6 +1,10 @@
 <div class="card">
     <div class="card-header">
-        ORDEN DE COMPRA
+        @if($requestForm->father) 
+            ORDEN DE COMPRA
+        @else
+            {{ $requestForm->purchaseMechanism->name }} - <strong>{{ $requestForm->purchaseType->name }}</strong>
+        @endif
         <input type="hidden" name="purchase_type_id" value="{{ $requestForm->purchaseType->id }}">
     </div>
 
@@ -10,10 +14,22 @@
                 <label for="for_tender_number">ID de la OC:</label>
                 <input type="text" class="form-control form-control-sm" name="po_id" value="{{ old('po_id') }}" >
             </fieldset>
+            @if($requestForm->purchase_mechanism_id == 5)
+            <fieldset class="form-group col-sm-2">
+                <label for="for_tender_number">ID de la cotización:</label>
+                <input type="text" class="form-control form-control-sm" name="cot_id" value="{{ old('cot_id') }}" >
+            </fieldset>
+            @endif
             <fieldset class="form-group col-sm-10">
                 <label for="for_description">Descripción de la OC:</label>
                 <input type="text" class="form-control form-control-sm" id="for_description" name="description" value="{{ old('description') }}" required>
             </fieldset>
+            @if($requestForm->purchase_mechanism_id == 5)
+            <fieldset class="form-group col-sm-2">
+                <label for="for_tender_number">Fecha creación OC:</label>
+                <input type="date" class="form-control form-control-sm" name="po_date" value="{{ old('po_date') }}" >
+            </fieldset>
+            @endif
         </div>
         <div class="form-row">
             <fieldset class="form-group col-sm-3">

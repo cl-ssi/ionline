@@ -50,7 +50,7 @@
                         <option value="iva">I.V.A. 19%</option>
                         <option value="bh">Boleta de Honorarios {{isset($this->withholding_tax[date('Y')]) ? $this->withholding_tax[date('Y')] * 100 : end($this->withholding_tax) * 100 }}%</option>
                         <option value="srf">S.R.F Zona Franca 0%</option>
-                        <option value="e">Excento 0%</option>
+                        <option value="e">Exento 0%</option>
                         <option value="nd">No Definido</option>
                       </select>
                   </fieldset>

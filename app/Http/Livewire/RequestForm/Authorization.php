@@ -18,25 +18,25 @@ use App\Mail\RfElectronicSignatureNotification;
 
 class Authorization extends Component
 {
-    public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $rejectedComment;
+    public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $comment;
     public $lstSupervisorUser, $supervisorUser, $title, $route;
     public $purchaseUnit, $purchaseType, $lstPurchaseType, $lstPurchaseUnit, $lstPurchaseMechanism, $purchaseMechanism;
     public $estimated_expense, $purchaser_amount;
 
     protected $rules = [
-        'rejectedComment' => 'required|min:6',
+        'comment' => 'required|min:6',
     ];
 
     protected $messages = [
-        'rejectedComment.required'  => 'Debe ingresar un comentario antes de rechazar Formulario.',
-        'rejectedComment.min'       => 'Mínimo 6 caracteres.',
+        'comment.required'  => 'Debe ingresar un comentario antes de rechazar Formulario.',
+        'comment.min'       => 'Mínimo 6 caracteres.',
     ];
 
     public function mount(RequestForm $requestForm, $eventType) {
       $this->route = 'request_forms.pending_forms';
       $this->eventType          = $eventType;
       $this->requestForm        = $requestForm;
-      $this->rejectedComment    = '';
+      $this->comment    = '';
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
       $this->userAuthority      = auth()->user()->getFullNameAttribute();
       $this->position           = auth()->user()->position;
@@ -116,8 +116,10 @@ class Authorization extends Component
       $event = $this->requestForm->eventRequestForms()->where('event_type', $this->eventType)->where('status', 'pending')->first();
       if(!is_null($event)){
           $event->signature_date = Carbon::now();
-          $event->position_signer_user = $this->position;
+          $amIAuthorityFromOu = Authority::getAmIAuthorityFromOu(Carbon::now(), 'manager', auth()->id());
+          $event->position_signer_user = $amIAuthorityFromOu[0]->position;
           $event->status  = 'approved';
+          $event->comment = $this->comment;
           $event->signerUser()->associate(auth()->user());
           $event->save();
 
@@ -181,7 +183,7 @@ class Authorization extends Component
             $this->requestForm->save();
           }
            $event->signature_date = Carbon::now();
-           $event->comment = $this->rejectedComment;
+           $event->comment = $this->comment;
            $event->position_signer_user = $this->position;
            $event->status = 'rejected';
            $event->signerUser()->associate(auth()->user());

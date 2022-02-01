@@ -13,19 +13,19 @@ use App\Mail\RequestFormSignNotification;
 
 class PrefinanceAuthorization extends Component
 {
-    public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $rejectedComment,
+    public $organizationalUnit, $userAuthority, $position, $requestForm, $eventType, $comment,
            $lstBudgetItem, $program, $sigfe, $codigo;
     public $arrayItemRequest = [['budgetId' => '']];
     public $round_trips, $baggages;
 
     protected $rules = [
-        'rejectedComment' => 'required|min:6',
+        'comment' => 'required|min:6',
     ];
 
 
     protected $messages = [
-        'rejectedComment.required'  => 'Debe ingresar un comentario antes de rechazar Formulario.',
-        'rejectedComment.min'       => 'Mínimo 6 caracteres.',
+        'comment.required'  => 'Debe ingresar un comentario antes de rechazar Formulario.',
+        'comment.min'       => 'Mínimo 6 caracteres.',
     ];
 
 
@@ -34,7 +34,7 @@ class PrefinanceAuthorization extends Component
       $this->requestForm        = $requestForm;
       $this->round_trips        = $roundTrips;
       $this->baggages           = $baggages;
-      $this->rejectedComment    = '';
+      $this->comment    = '';
       $this->codigo             = '';
       $this->lstBudgetItem      = BudgetItem::all();
       $this->organizationalUnit = auth()->user()->organizationalUnit->name;
@@ -76,6 +76,7 @@ class PrefinanceAuthorization extends Component
           $event->signature_date = Carbon::now();
           $event->position_signer_user = $this->position;
           $event->status  = 'approved';
+          $event->comment = $this->comment;
           $event->signerUser()->associate(auth()->user());
           $event->save();
 
@@ -115,7 +116,7 @@ class PrefinanceAuthorization extends Component
            $this->requestForm->status = 'rejected';
            $this->requestForm->save();
            $event->signature_date = Carbon::now();
-           $event->comment = $this->rejectedComment;
+           $event->comment = $this->comment;
            $event->position_signer_user = $this->position;
            $event->status = 'rejected';
            $event->signerUser()->associate(auth()->user());
